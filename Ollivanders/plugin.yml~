@@ -1,8 +1,0 @@
-name: Ollivanders
-main: me.cakenggt.Ollivanders.Ollivanders
-version: 0.01
-author: cakenggt
-commands:
-  kit:
-    description: This command gives an op the starting kit.
-    usage: Example usage /kit
