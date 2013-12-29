@@ -119,7 +119,8 @@ public class Ollivanders extends JavaPlugin{
 	   			}
 	   			//give them books
 	   			List<ItemStack> books = SpellBookParser.makeBooks();
-	   			HashMap<Integer, ItemStack> leftover = player.getInventory().addItem((ItemStack[]) books.toArray());
+	   			ItemStack[] booksArray = books.toArray(new ItemStack[books.size()]);
+	   			HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(booksArray);
 	   			for (ItemStack item : leftover.values()){
 	   				player.getWorld().dropItem(loc, item);
 	   			}

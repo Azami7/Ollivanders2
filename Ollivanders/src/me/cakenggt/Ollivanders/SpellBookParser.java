@@ -125,7 +125,7 @@ public class SpellBookParser{
 		bm.setTitle(title);
 		String inside = "";
 		for (String str : spellList()){
-			inside.concat(str + " ");
+			inside += str + " ";
 		}
 		bm.setPages(splitEqually(inside, 250));
 		bm = kitEncode(bm);
