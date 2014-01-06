@@ -21,7 +21,7 @@ public class LUMOS_DUO extends SpellProjectile implements Spell{
 	List<Block> line = new ArrayList<Block>();
 	
 	public LUMOS_DUO(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 		lifeTicks = (int)(-(usesModifier*20));
 	}

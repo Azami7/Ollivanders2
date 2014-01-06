@@ -16,7 +16,7 @@ import me.cakenggt.Ollivanders.StationarySpells;
 public class NULLUM_EVANESCUNT extends SpellProjectile implements Spell{
 
 	public NULLUM_EVANESCUNT(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

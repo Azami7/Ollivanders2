@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class BOMBARDA extends SpellProjectile implements Spell{
 	
-	public BOMBARDA(Ollivanders p, Player player, Spells name, Integer rightWand){
+	public BOMBARDA(Ollivanders p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

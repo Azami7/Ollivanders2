@@ -28,7 +28,7 @@ public class SpellProjectile{
 	public int lifeTicks;
 	public boolean kill;
 	public Ollivanders p;
-	public int rightWand;
+	public double rightWand;
 	public int spellUses;
 	public double usesModifier;
 	public Effect moveEffect = Effect.STEP_SOUND;
@@ -39,7 +39,7 @@ public class SpellProjectile{
 	//Constructor
 	//In the chat distance dropoff code, there will be code that turns the spoken
 	//words into a Spells object.
-	public SpellProjectile(Ollivanders plugin, Player player, Spells name, Integer rightWand){
+	public SpellProjectile(Ollivanders plugin, Player player, Spells name, Double rightWand){
 		location = player.getEyeLocation();
 		vector = location.getDirection().normalize();
 		location.add(vector);

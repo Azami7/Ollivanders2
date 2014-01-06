@@ -17,7 +17,7 @@ public class AQUA_ERUCTO extends SpellProjectile implements Spell{
 	private boolean isWater;
 	private double lifeTime;
 	
-	public AQUA_ERUCTO(Ollivanders p, Player player, Spells name, Integer rightWand){
+	public AQUA_ERUCTO(Ollivanders p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 		lifeTime = usesModifier*16;
 		isWater = false;

@@ -8,6 +8,9 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import me.cakenggt.Ollivanders.Effects;
+import me.cakenggt.Ollivanders.OEffect;
+import me.cakenggt.Ollivanders.OPlayer;
 import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
@@ -15,6 +18,7 @@ import me.cakenggt.Ollivanders.StationarySpellObj;
 
 /**
  * Gives information on LivingEntity (health) and StationarySpellObj (duration)
+ * and weather (duration) and Player (spell effects). Range of spell depends on level.
  * @author lownes
  *
  */
@@ -23,10 +27,12 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 	List <LivingEntity> iEntity = new ArrayList<LivingEntity>();
 	List <StationarySpellObj> iSpell = new ArrayList<StationarySpellObj>();
 	boolean toldWeather = false;
+	private double lifeTime;
 
 	public INFORMOUS(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
+		lifeTime = usesModifier*16;
 	}
 
 	public void checkEffect() {
@@ -34,6 +40,13 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 		for (LivingEntity entity : getLivingEntities(1)){
 			if (!iEntity.contains(entity)){
 				player.sendMessage(entity.getType().toString() + " has " + ((Damageable)entity).getHealth() + " health.");
+				if (entity instanceof Player){
+					Player ePlayer = (Player)entity;
+					OPlayer eoplayer = p.getOPlayer(ePlayer);
+					for (OEffect effect : eoplayer.getEffects()){
+						player.sendMessage(ePlayer.getDisplayName() + " has " + Effects.recode(effect.name) + ".");
+					}
+				}
 				iEntity.add(entity);
 			}
 		}
@@ -60,6 +73,9 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 			if (thunder){
 				player.sendMessage("There will be thunder for " + thunderTime/20 + " more seconds.");
 			}
+		}
+		if (lifeTicks > lifeTime){
+			kill();
 		}
 	}
 

@@ -18,7 +18,7 @@ import me.cakenggt.Ollivanders.Transfiguration;
 public class GEMINIO extends Transfiguration implements Spell{
 
 	public GEMINIO(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

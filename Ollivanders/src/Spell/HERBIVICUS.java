@@ -18,7 +18,7 @@ import me.cakenggt.Ollivanders.Spells;
 public class HERBIVICUS extends SpellProjectile implements Spell{
 
 	public HERBIVICUS(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

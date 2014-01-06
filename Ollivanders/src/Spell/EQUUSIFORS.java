@@ -15,7 +15,7 @@ import me.cakenggt.Ollivanders.Transfiguration;
 public class EQUUSIFORS extends Transfiguration implements Spell{
 
 	public EQUUSIFORS(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

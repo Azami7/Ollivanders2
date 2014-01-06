@@ -18,7 +18,7 @@ public class LUMOS_MAXIMA extends SpellProjectile implements Spell{
 	boolean lit;
 
 	public LUMOS_MAXIMA(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 		lit = false;
 	}

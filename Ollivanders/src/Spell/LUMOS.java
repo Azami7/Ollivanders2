@@ -17,7 +17,7 @@ import me.cakenggt.Ollivanders.Spells;
 public class LUMOS extends SpellProjectile implements Spell{
 
 	public LUMOS(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

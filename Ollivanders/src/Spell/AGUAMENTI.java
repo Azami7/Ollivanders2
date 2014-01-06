@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
  */
 public class AGUAMENTI extends SpellProjectile implements Spell{
 
-	public AGUAMENTI(Ollivanders p, Player player, Spells name, Integer rightWand){
+	public AGUAMENTI(Ollivanders p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

@@ -16,7 +16,7 @@ import me.cakenggt.Ollivanders.StationarySpells;
 public class SPONGIFY extends SpellProjectile implements Spell{
 
 	public SPONGIFY(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

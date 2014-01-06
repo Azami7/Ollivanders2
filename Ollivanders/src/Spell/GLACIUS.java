@@ -11,7 +11,7 @@ import me.cakenggt.Ollivanders.Spells;
 public class GLACIUS extends SpellProjectile implements Spell{
 
 	public GLACIUS(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 
@@ -32,9 +32,9 @@ public class GLACIUS extends SpellProjectile implements Spell{
 				else if (changeType == Material.LAVA || changeType == Material.STATIONARY_LAVA){
 					block.setType(Material.OBSIDIAN);
 				}
-//				else if (changeType == Material.ICE){
-//					block.setType(Material.PACKED_ICE);
-//				}
+				else if (changeType == Material.ICE){
+					block.setType(Material.PACKED_ICE);
+				}
 			}
 			kill();
 		}

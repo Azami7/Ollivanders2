@@ -18,7 +18,7 @@ import me.cakenggt.Ollivanders.StationarySpellObj;
 public class FIANTO_DURI extends SpellProjectile implements Spell{
 
 	public FIANTO_DURI(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

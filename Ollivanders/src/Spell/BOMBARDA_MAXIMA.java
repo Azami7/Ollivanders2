@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class BOMBARDA_MAXIMA extends SpellProjectile implements Spell{
 
-	public BOMBARDA_MAXIMA(Ollivanders p, Player player, Spells name, Integer rightWand){
+	public BOMBARDA_MAXIMA(Ollivanders p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

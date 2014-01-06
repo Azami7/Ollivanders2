@@ -24,7 +24,7 @@ import me.cakenggt.Ollivanders.StationarySpells;
 public class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends SpellProjectile implements Spell{
 
 	public ET_INTERFICIAM_ANIMAM_LIGAVERIS(Ollivanders plugin, Player player,
-			Spells name, Integer rightWand) {
+			Spells name, Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

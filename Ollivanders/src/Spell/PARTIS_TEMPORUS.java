@@ -17,7 +17,7 @@ public class PARTIS_TEMPORUS extends SpellProjectile implements Spell{
 	public boolean move;
 	
 	public PARTIS_TEMPORUS(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 		move = true;
 	}

@@ -19,7 +19,7 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class CONFUNDO extends SpellProjectile implements Spell{
 
-	public CONFUNDO(Ollivanders p, Player player, Spells name, Integer rightWand){
+	public CONFUNDO(Ollivanders p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

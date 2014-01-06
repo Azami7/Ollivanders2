@@ -18,7 +18,7 @@ import me.cakenggt.Ollivanders.StationarySpellObj;
 public class APARECIUM extends SpellProjectile implements Spell{
 
 	public APARECIUM(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

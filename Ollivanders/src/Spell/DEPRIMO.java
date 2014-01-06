@@ -17,7 +17,7 @@ import me.cakenggt.Ollivanders.Spells;
 public class DEPRIMO extends SpellProjectile implements Spell{
 
 	public DEPRIMO(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

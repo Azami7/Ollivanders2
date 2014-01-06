@@ -20,7 +20,7 @@ import me.cakenggt.Ollivanders.Spells;
 public class SILENCIO extends SpellProjectile implements Spell{
 
 	public SILENCIO(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 
@@ -34,6 +34,7 @@ public class SILENCIO extends SpellProjectile implements Spell{
 				int dur = (int)(usesModifier*1200);
 				oply.addEffect(new Effect.SILENCIO(player, Effects.SILENCIO, dur));
 				p.setOPlayer(ply, oply);
+				kill();
 			}
 		}
 	}

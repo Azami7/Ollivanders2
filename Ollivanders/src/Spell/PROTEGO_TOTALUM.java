@@ -16,7 +16,7 @@ import me.cakenggt.Ollivanders.StationarySpells;
 public class PROTEGO_TOTALUM extends SpellProjectile implements Spell{
 
 	public PROTEGO_TOTALUM(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

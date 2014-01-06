@@ -19,7 +19,7 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class IMPEDIMENTA extends SpellProjectile implements Spell{
 
-	public IMPEDIMENTA(Ollivanders p, Player player, Spells name, Integer rightWand){
+	public IMPEDIMENTA(Ollivanders p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

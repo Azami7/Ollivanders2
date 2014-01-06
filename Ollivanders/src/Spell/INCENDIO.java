@@ -23,7 +23,7 @@ public class INCENDIO extends SpellProjectile implements Spell{
 	private double lifeTime;
 	
 	public INCENDIO(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 		lifeTime = usesModifier*16;
 	}

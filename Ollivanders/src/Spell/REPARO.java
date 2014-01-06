@@ -18,7 +18,7 @@ import me.cakenggt.Ollivanders.Spells;
 public class REPARO extends SpellProjectile implements Spell{
 
 	public REPARO(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

@@ -30,7 +30,7 @@ public class WINGARDIUM_LEVIOSA extends SpellProjectile implements Spell{
 	boolean dropBlocks = true;	//If the blocks should be converted to fallingBlocks after the end of the spell.
 	
 	public WINGARDIUM_LEVIOSA(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

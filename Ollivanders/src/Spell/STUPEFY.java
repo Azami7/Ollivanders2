@@ -19,7 +19,7 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class STUPEFY extends SpellProjectile implements Spell{
 
-	public STUPEFY(Ollivanders p, Player player, Spells name, Integer rightWand){
+	public STUPEFY(Ollivanders p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

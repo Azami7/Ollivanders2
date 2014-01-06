@@ -20,7 +20,7 @@ import me.cakenggt.Ollivanders.Spells;
 public class IMMOBULUS extends SpellProjectile implements Spell{
 
 	public IMMOBULUS(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

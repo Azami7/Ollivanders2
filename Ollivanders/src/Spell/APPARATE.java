@@ -18,7 +18,7 @@ import me.cakenggt.Ollivanders.StationarySpellObj;
 public class APPARATE extends SpellProjectile implements Spell{
 
 	public APPARATE(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

@@ -40,7 +40,6 @@ class OllivandersSchedule implements Runnable{
 			if (oply.getEffects() != null && onlinePlayers.contains(p.getServer().getPlayer(name))){
 				List<OEffect> effects2 = new ArrayList<OEffect>(oply.getEffects());
 				for (OEffect effect : effects2){
-					System.out.println(effect.name + " " + effect.duration);
 					((Effect) effect).checkEffect(p);
 					if (effect.kill){
 						oply.remEffect(effect);

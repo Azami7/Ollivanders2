@@ -19,7 +19,7 @@ import me.cakenggt.Ollivanders.Spells;
 public class OBLIVIATE extends SpellProjectile implements Spell{
 
 	public OBLIVIATE(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

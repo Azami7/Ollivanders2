@@ -10,7 +10,7 @@ import me.cakenggt.Ollivanders.StationarySpells;
 public class PROTEGO extends SpellProjectile implements Spell{
 
 	public PROTEGO(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

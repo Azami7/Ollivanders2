@@ -16,7 +16,7 @@ import me.cakenggt.Ollivanders.StationarySpells;
 public class NULLUM_APPAREBIT extends SpellProjectile implements Spell{
 
 	public NULLUM_APPAREBIT(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

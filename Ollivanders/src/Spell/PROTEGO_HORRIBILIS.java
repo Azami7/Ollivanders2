@@ -11,7 +11,7 @@ import me.cakenggt.Ollivanders.StationarySpells;
 public class PROTEGO_HORRIBILIS extends SpellProjectile implements Spell{
 
 	public PROTEGO_HORRIBILIS(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

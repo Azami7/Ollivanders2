@@ -21,7 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class FRANGE_LIGNEA extends SpellProjectile implements Spell{
 
-	public FRANGE_LIGNEA(Ollivanders p, Player player, Spells name, Integer rightWand){
+	public FRANGE_LIGNEA(Ollivanders p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

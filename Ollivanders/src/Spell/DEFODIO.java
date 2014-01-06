@@ -22,7 +22,7 @@ public class DEFODIO extends SpellProjectile implements Spell{
 	int depth;
 
 	public DEFODIO(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 		depth = (int)usesModifier;
 	}

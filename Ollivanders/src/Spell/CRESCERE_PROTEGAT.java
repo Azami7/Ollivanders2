@@ -18,7 +18,7 @@ import me.cakenggt.Ollivanders.StationarySpellObj;
 public class CRESCERE_PROTEGAT extends SpellProjectile implements Spell{
 
 	public CRESCERE_PROTEGAT(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

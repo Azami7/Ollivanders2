@@ -18,7 +18,7 @@ import me.cakenggt.Ollivanders.StationarySpellObj;
 public class SCUTO_CONTERAM extends SpellProjectile implements Spell{
 
 	public SCUTO_CONTERAM(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

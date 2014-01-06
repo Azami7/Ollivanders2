@@ -17,7 +17,7 @@ import me.cakenggt.Ollivanders.Transfiguration;
 public class DURO extends Transfiguration implements Spell{
 	
 	public DURO(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

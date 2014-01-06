@@ -18,7 +18,7 @@ import me.cakenggt.Ollivanders.StationarySpells;
 public class MUFFLIATO extends SpellProjectile implements Spell{
 
 	public MUFFLIATO(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

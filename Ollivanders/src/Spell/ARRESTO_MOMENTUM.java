@@ -18,7 +18,7 @@ import org.bukkit.entity.Player;
  */
 public class ARRESTO_MOMENTUM extends SpellProjectile implements Spell{
 
-	public ARRESTO_MOMENTUM(Ollivanders p, Player player, Spells name, Integer rightWand){
+	public ARRESTO_MOMENTUM(Ollivanders p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

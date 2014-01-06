@@ -24,7 +24,7 @@ import me.cakenggt.Ollivanders.StationarySpells;
  */
 public class FIENDFYRE extends SpellProjectile implements Spell{
 
-	public FIENDFYRE(Ollivanders plugin, Player player, Spells name, Integer rightWand) {
+	public FIENDFYRE(Ollivanders plugin, Player player, Spells name, Double rightWand) {
 		super(plugin, player, name, rightWand);
 		moveEffect = Effect.MOBSPAWNER_FLAMES;
 		moveEffectData = 0;

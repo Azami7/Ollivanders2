@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  */
 public class REDUCTO extends SpellProjectile implements Spell{
 	
-	public REDUCTO(Ollivanders p, Player player, Spells name, Integer rightWand){
+	public REDUCTO(Ollivanders p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

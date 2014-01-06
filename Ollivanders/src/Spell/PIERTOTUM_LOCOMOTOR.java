@@ -17,7 +17,7 @@ import me.cakenggt.Ollivanders.Transfiguration;
 public class PIERTOTUM_LOCOMOTOR extends Transfiguration implements Spell{
 
 	public PIERTOTUM_LOCOMOTOR(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

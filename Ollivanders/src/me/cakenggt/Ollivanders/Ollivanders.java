@@ -13,6 +13,7 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -81,6 +82,9 @@ public class Ollivanders extends JavaPlugin{
     	} catch (Exception e) {
 			System.out.println("Did not find at least one of the two files.");
 		}
+    	if (!new File(this.getDataFolder(), "config.yml").exists()){
+    		this.saveDefaultConfig();
+    	}
 		//finished loading data
     	fillAllSpellCount();
     	this.schedule = new OllivandersSchedule(this);
@@ -99,9 +103,14 @@ public class Ollivanders extends JavaPlugin{
 	   			sender.sendMessage("This command can only be run by a player");
 	   			return false;
 	   		}
+	   		if (!inWorld(player.getWorld())){
+	   			return false;
+	   		}
 	   		if (player.isOp()){
 	   			//give them the kit
 	   			Location loc = player.getEyeLocation();
+	   			List<ItemStack> kit = new ArrayList<ItemStack>();
+	   			//Give 1 of each type of wand
 	   			String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
 	   			String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};
 	   			for (String i : woodArray){
@@ -113,14 +122,23 @@ public class Ollivanders extends JavaPlugin{
 	   					meta.setLore(lore);
 	   					meta.setDisplayName("Wand");
 	   					wand.setItemMeta(meta);
-	   					//player.getInventory().addItem(wand);
-	   					player.getWorld().dropItem(loc, wand);
+	   					kit.add(wand);
 	   				}
 	   			}
+	   			//Give Elder Wand
+	   			ItemStack wand = new ItemStack(Material.BLAZE_ROD);
+	   			List<String> lore = new ArrayList<String>();
+	   			lore.add("Blaze and Ender Pearl");
+	   			ItemMeta meta = wand.getItemMeta();
+	   			meta.setLore(lore);
+	   			meta.setDisplayName("Elder Wand");
+	   			wand.setItemMeta(meta);
+	   			kit.add(wand);
 	   			//give them books
 	   			List<ItemStack> books = SpellBookParser.makeBooks();
-	   			ItemStack[] booksArray = books.toArray(new ItemStack[books.size()]);
-	   			HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(booksArray);
+	   			kit.addAll(books);
+	   			ItemStack[] kitArray = kit.toArray(new ItemStack[kit.size()]);
+	   			HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(kitArray);
 	   			for (ItemStack item : leftover.values()){
 	   				player.getWorld().dropItem(loc, item);
 	   			}
@@ -274,6 +292,19 @@ public class Ollivanders extends JavaPlugin{
 			}
 			op.setSpellCount(spellCount);
 			OPlayerMap.put(name, op);
+		}
+	}
+	
+	public boolean inWorld(World world){
+		List<String> worlds = this.getConfig().getStringList("worlds");
+		if (worlds.size() == 0){
+			return true;
+		}
+		if (worlds.contains(world.getName())){
+			return true;
+		}
+		else{
+			return false;
 		}
 	}
 	

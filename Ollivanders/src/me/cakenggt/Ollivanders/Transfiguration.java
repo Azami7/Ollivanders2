@@ -23,7 +23,7 @@ public class Transfiguration extends SpellProjectile{
 	private boolean hasTransfigured;
 
 	public Transfiguration(Ollivanders plugin, Player player, Spells name,
-			Integer rightWand) {
+			Double rightWand) {
 		super(plugin, player, name, rightWand);
 		hasTransfigured = false;
 	}	
