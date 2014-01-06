@@ -14,13 +14,13 @@ import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
 
 /**
- * Places a geminio affect on the item.
+ * Places a flagrante affect on the item.
  * @author lownes
  *
  */
-public class GEMINIO extends SpellProjectile implements Spell{
+public class FLAGRANTE extends SpellProjectile implements Spell{
 
-	public GEMINIO(Ollivanders plugin, Player player, Spells name,
+	public FLAGRANTE(Ollivanders plugin, Player player, Spells name,
 			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
@@ -39,21 +39,21 @@ public class GEMINIO extends SpellProjectile implements Spell{
 			if (meta.hasLore()){
 				lore = meta.getLore();
 				for (int i = 0; i < lore.size(); i++){
-					if (lore.get(i).contains("Geminio ")){
+					if (lore.get(i).contains("Flagrante ")){
 						String[] loreParts = lore.get(i).split(" ");
 						int magnitude = Integer.parseInt(loreParts[1]);
 						if (magnitude < usesModifier){
 							magnitude = (int)usesModifier;
 						}
-						lore.set(i, "Geminio " + magnitude);
+						lore.set(i, "Flagrante " + magnitude);
 					}
 					else{
-						lore.add("Geminio " + (int)usesModifier);
+						lore.add("Flagrante " + (int)usesModifier);
 					}
 				}
 			}
 			else{
-				lore.add("Geminio " + (int)usesModifier);
+				lore.add("Flagrante " + (int)usesModifier);
 			}
 			meta.setLore(lore);
 			stack.setItemMeta(meta);

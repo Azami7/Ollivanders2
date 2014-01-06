@@ -479,13 +479,17 @@ public class OllivandersPlayerListener implements Listener {
 	 * @return True if the player holds a wand. False if not.
 	 */
 	public boolean holdsWand(Player player){
-		ItemStack held;
 		if (player.getItemInHand() != null){
-			held = player.getItemInHand();
+			ItemStack held = player.getItemInHand();
 			if (held.getType() == Material.STICK || held.getType() == Material.BLAZE_ROD){
-				List<String> lore = held.getItemMeta().getLore();
-				if (lore.get(0).split(" and ").length == 2){
-					return true;
+				if (held.getItemMeta().hasLore()){
+					List<String> lore = held.getItemMeta().getLore();
+					if (lore.get(0).split(" and ").length == 2){
+						return true;
+					}
+					else{
+						return false;
+					}
 				}
 				else{
 					return false;
@@ -581,7 +585,7 @@ public class OllivandersPlayerListener implements Listener {
 			}
 		}
 	}
-	
+
 	/**If a wand is not already allied with a player, this allies it.
 	 * @param player - Player holding a wand.
 	 */

@@ -32,9 +32,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class Ollivanders extends JavaPlugin{
 
-	private Map<String, OPlayer> OPlayerMap;
-	private List<SpellProjectile> projectiles;
-	private List<StationarySpellObj> stationary;
+	private Map<String, OPlayer> OPlayerMap = new HashMap<String, OPlayer>();
+	private List<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
+	private List<StationarySpellObj> stationary = new ArrayList<StationarySpellObj>();;
 	private Listener playerListener;
 	private int chatDistance = 50;
 	private OllivandersSchedule schedule;
