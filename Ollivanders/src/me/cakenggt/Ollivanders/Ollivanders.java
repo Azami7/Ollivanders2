@@ -3,6 +3,7 @@ package me.cakenggt.Ollivanders;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -82,6 +83,12 @@ public class Ollivanders extends JavaPlugin{
     	} catch (Exception e) {
 			System.out.println("Did not find at least one of the two files.");
 		}
+    	try {
+    	    MetricsLite metrics = new MetricsLite(this);
+    	    metrics.start();
+    	} catch (IOException e) {
+    	    // Failed to submit the stats :-(
+    	}
     	if (!new File(this.getDataFolder(), "config.yml").exists()){
     		this.saveDefaultConfig();
     	}
