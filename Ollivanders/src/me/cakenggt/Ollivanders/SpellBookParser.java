@@ -18,6 +18,139 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class SpellBookParser{
 	
+	public final static String ACCIO = "Accio will pull an item toward you. The strength "
+			+ "of the pull is determined by your experience.";
+	public final static String AGUAMENTI = "Aguamenti will cause water to erupt against "
+			+ "the surface you cast it on.";
+	public final static String ALARTE_ASCENDARE = "Alarte Ascendare will shoot the target "
+			+ "high into the air. It's strength is determined by your experience.";
+	public final static String APARECIUM = "Aparecium will cause any area spells to reveal "
+			+ "their borders. The amount of revealing depends on your experience.";
+	public final static String APPARATE = "Apparition is a two sided spell. To apparate to "
+			+ "a predetermined location, simply say apparate and list your x, y, and z "
+			+ "coordinates. To apparate to the location of your cursor, within 140 meters, "
+			+ "just say the word apparate. Your accuracy is determined by the distance "
+			+ "traveled and your experience.";
+	public final static String AQUA_ERUCTO = "Aqua eructo shoots a jet of water from your "
+			+ "wand tip. The range of this jet is determined by your experience.";
+	public final static String ARRESTO_MOMENTUM = "Arresto momentum will immediately slow down "
+			+ "any entity. The amount an entity is slowed down is determined by your experience.";
+	public final static String AVADA_KEDAVRA = "Avada kedavra is a forbidden curse which will "
+			+ "directly damage a living being. The amount of damage done is determiend "
+			+ "by your experience.";
+	public final static String AVIS = "Avis will cause a bat to fly out of the end of your wand. "
+			+ "The amount of time the bat is alive depends on your experience.";
+	public final static String BOMBARDA = "Bombarda creates an explosion which doesn't damage "
+			+ "the terrain. The strength of the explosion depends on your experience.";
+	public final static String BOMBARDA_MAXIMA = "Bombarda maxima creates an explosion which doesn't "
+			+ "damage the terrain. The explosion is twice as large as the one created by "
+			+ "bombarda. The strength of the explosion depends on your experience.";
+	public final static String CONFUNDO = "Confundo causes the target to become confused. The duration "
+			+ "of this confusion is determined by your experience.";
+	public final static String CRESCERE_PROTEGAT = "Crescere Protegat will grow a stationary spell's "
+			+ "radius, up to a limit determined by your experience. Only the creator of the "
+			+ "stationary spell can affect it with this spell.";
+	public final static String DEFODIO = "Defodio is a gouging spell that will mine a line of blocks, "
+			+ "the length of which is determined by your experience.";
+	public final static String DELETRIUS = "Deletrius will cause an item entity to stop existing.";
+	public final static String DEPRIMO = "Deprimo creates an immense downward pressure which will "
+			+ "cause all blocks within a radius to fall like sand. The radius is determined "
+			+ "by your experience.";
+	public final static String DUCKLIFORS = "Ducklifors will transfigure an entity into a chicken. "
+			+ "The length of the transfiguration depends on your experience.";
+	public final static String DURO = "Duro will transfigure an entity into a stone. The length "
+			+ "of the transfiguration depends on your experience. If the stone is destroyed, "
+			+ "then the entity will die.";
+	public final static String EBUBLIO = "Ebublio, the bubble head charm, will grant your target the ability "
+			+ "to breathe underwater. The duration of this effect depends on your experience.";
+	public final static String EQUUSIFORS = "Equusifors will transfigure an entity into a horse. "
+			+ "The length of the transfiguration depends on your experience.";
+	public final static String ET_INTERFICIAM_ANIMAM_LIGAVERIS = "The unholy incantation, "
+			+ "et interficiam animam ligaveris, will create a horcrux.";
+	public final static String EVANESCO = "Evanesco will vanish an entity. "
+			+ "The length of the vanishment depends on your experience.";
+	public final static String EXPELLIARMUS = "Expelliarmus will cause an entity's "
+			+ "held item to be flung at you with a force which depends on your experience.";
+	public final static String FIANTO_DURI = "Fianto duri will lengthen the duration of a stationary "
+			+ "spell, by an amount depending on your experience.";
+	public final static String FIENDFYRE = "Fiendfyre is a hellish curse which summons living flames. "
+			+ "You will find that the curse is indiscriminate in it's targets unless you have "
+			+ "sufficient experience.";
+	public final static String FLAGRANTE = "Flagrante will cause an item to burn it's bearer when picked "
+			+ "up. The length of the burn depends on your experience.";
+	public final static String FRANGE_LIGNEA = "Frange lignea will cause a log of the spruce, oak, birch, or "
+			+ "jungle species to explode into coreless wands. The number of wands dropped depends "
+			+ "on your experience.";
+	public final static String GEMINIO = "Geminio will cause an item to duplicate when held "
+			+ "by a person. The amount of duplications depends on your experience.";
+	public final static String GLACIUS = "Glacius will cause a great cold to descend in a radius "
+			+ "from it's impact point which freezes blocks. The radius depends on your experience.";
+	public final static String HERBIVICUS = "Herbivicus causes crops within a radius to grow. The radius "
+			+ "is determined by your experience.";
+	public final static String HORREAT_PROTEGAT = "Horreat Protegat will shrink a stationary spell's "
+			+ "radius, down to a limit determined by your experience. Only the creator of the "
+			+ "stationary spell can affect it with this spell.";
+	public final static String IMMOBULUS = "Immobulus immobilizes an entity for an amount of time depending "
+			+ "on your experience.";
+	public final static String IMPEDIMENTA = "Impedimenta will slow an entity by a degree and for an amount "
+			+ "of time depending on your experience.";
+	public final static String INCENDIO = "Incendio will burn blocks and entities it passes by. It's range "
+			+ "depends on your experience.";
+	public final static String INCENDIO_DUO = "Incendio duo will burn blocks and entities iti passes by. It's "
+			+ "radius is twice that of incendio. It's range depends on your experience.";
+	public final static String INFORMOUS = "Informous will give information on a stationary spell, an entity, or, "
+			+ "if pointed into the sky and allowed to travel far enough, the weather. It's range "
+			+ "depends on your experience.";
+	public final static String LIGATIS_COR = "Ligatis cor will bind one of the four types of coreless wands to one "
+			+ "of the four types of wand cores: spider eye, rotten flesh, bone, and sulfur. Make sure the two "
+			+ "items are near each other when this spell is cast. You can only use this on one coreless wand and "
+			+ "one core material at a time.";
+	public final static String LUMOS = "Lumos will cause you to gain sight in the dark for an amount of time "
+			+ "determined by your experience.";
+	public final static String LUMOS_DUO = "Lumos duo will create a line of glowstone along your line of sight. "
+			+ "The duration of the glowstone depends on your experience.";
+	public final static String LUMOS_MAXIMA = "Lumos maxima will spawn a glowstone at the impact site that will "
+			+ "exist for a duration depending on your experience.";
+	public final static String MUFFLIATO = "Muffliato creates a stationary spell which only allows the people "
+			+ "inside to hear anything spoken inside the effect. The duration of the spell depends on "
+			+ "your experience.";
+	public final static String NULLUM_APPAREBIT = "Nullum apparebit creates a stationary spell which will not "
+			+ "allow apparition into it. The duration depends on your experience.";
+	public final static String NULLUM_EVANESCUNT = "Nullum evanescunt creates a stationary spell which will not "
+			+ "allow disapparition out of it. The duration depends on your experience.";
+	public final static String OBLIVIATE = "Obliviate will cause the target to forget some of their magical experience, "
+			+ "how much depending on your experience.";
+	public final static String OPPUGNO = "Oppugno will cause any entities transfigured by you to attack the targeted "
+			+ "entity.";
+	public final static String PARTIS_TEMPORUS = "Partis temporus, if cast at a stationary spell that you have cast, "
+			+ "will cause that stationary spell's effects to stop for a short time.";
+	public final static String PIERTOTUM_LOCOMOTOR = "Piertotum locomotor, if cast at an iron or snow block, will "
+			+ "transfigure that block into an iron or snow golem. This transfiguration's duration depends "
+			+ "on your experience.";
+	public final static String PROTEGO = "Protego is a shield spell which, while you are crouching, will cause any spells "
+			+ "cast at it to bounce off.";
+	public final static String PROTEGO_HORRIBILIS = "Protego horribilis is a stationary spell which will destroy any "
+			+ "spells crossing it's barrier. It's duration depends on your experience.";
+	public final static String PROTEGO_MAXIMA = "Protego maxima is a stationary spell which will hurt any entities close "
+			+ "to it's boundary. It's duration depends on your experience.";
+	public final static String PROTEGO_TOTALUM = "Protego totalum is a stationary spell which will prevent any entities "
+			+ "from crossing it's boundary. It's duration depends on your experience.";
+	public final static String REDUCTO = "Reducto creates an explosion which will damage the terrain. It's power depends "
+			+ "on your experience.";
+	public final static String REPARIFARGE = "Reparifarge will cause the duration of the transfiguration on the targeted "
+			+ "entity to decrease by an amount that depends on your experience.";
+	public final static String REPARO = "Reparo will repair the duration of a tool.";
+	public final static String SCUTO_CONTERAM = "Scuto conteram will shorten the duration of a stationary "
+			+ "spell, by an amount depending on your experience.";
+	public final static String SILENCIO = "Silencio silences the target for a duration depending on your experience. "
+			+ "During this time, the target can only cast nonverbal spells.";
+	public final static String SPONGIFY = "Spongify softens the ground in a radius around the site. All fall damage "
+			+ "will be negated in this radius for a time duration depending on your experience.";
+	public final static String STUPEFY = "Stupefy will stun an opponent for a duration depending on your experience.";
+	public final static String WINGARDIUM_LEVIOSA = "Wingardium leviosa will allow you to lift up blocks within a radius of "
+			+ "the spell's impact, as long as you are crouching. The radius depends on your experience. When you drop "
+			+ "the blocks, they will fall like sand.";
+	
 	/**
 	 * Encodes in the lore of the book the spells and levels the author is at
 	 * @param p - The plugin
@@ -111,7 +244,7 @@ public class SpellBookParser{
 			bm.setAuthor("cakenggt");
 			bm.setTitle(title);
 			bm.setPages(splitEqually(bookMap.get(title), 250));
-			bm = kitEncode(bm);
+			bm = kitEncode(bm, 20);
 			item.setItemMeta(bm);
 			System.out.println(title);
 			System.out.println("Adding " + bm.getTitle());
@@ -128,7 +261,7 @@ public class SpellBookParser{
 			inside += str + " ";
 		}
 		bm.setPages(splitEqually(inside, 250));
-		bm = kitEncode(bm);
+		bm = kitEncode(bm, 200);
 		item.setItemMeta(bm);
 		System.out.println(title);
 		System.out.println("Adding " + bm.getTitle());
@@ -151,19 +284,18 @@ public class SpellBookParser{
 	}
 	
 	/**
-	 * Encodes in the lore of the book the spells and levels the author is at
-	 * @param p - The plugin
-	 * @param player - The author
+	 * Encodes in the lore of the book the spells and levels specified in the kit
 	 * @param meta - The BookMeta of the book
+	 * @param level - The level to encode the spells in
 	 * @return newMeta - The new BookMeta of the book, which is passed to the event
 	 */
-	private static BookMeta kitEncode(BookMeta meta){
+	private static BookMeta kitEncode(BookMeta meta, int level){
 		String pageString = getPageString(meta);
 		List<String> spellStrings = spellList();
 		List<String> lore = new ArrayList<String>();
 		for (String spell : spellStrings){
 			if (pageString.contains(spell)){
-				String newLore = spell + ":" + 200;
+				String newLore = spell + ":" + level;
 				lore.add(newLore);
 			}
 		}
@@ -179,20 +311,117 @@ public class SpellBookParser{
 	private static Map<String, String> books(){
 		Map<String, String> bookMap = new HashMap<String, String>();
 		// \n is a newline
+		bookMap.put("Achievements in Charming",
+				AGUAMENTI + "\n" + EBUBLIO + "\n" + HERBIVICUS + "\n" +
+				LUMOS_DUO + "\n" + LUMOS_MAXIMA);
+		bookMap.put("Extreme Incantations",
+				ALARTE_ASCENDARE + "\n" + LUMOS_MAXIMA + "\n" + 
+				OBLIVIATE);
+		bookMap.put("Quintessence: A Quest",
+				CRESCERE_PROTEGAT + "\n" + FIANTO_DURI + "\n" + HORREAT_PROTEGAT + "\n" + 
+				NULLUM_APPAREBIT + "\n" + NULLUM_EVANESCUNT + "\n" + PARTIS_TEMPORUS + "\n" + 
+				PROTEGO_HORRIBILIS + "\n" + PROTEGO_MAXIMA + "\n" + PROTEGO_TOTALUM + "\n" + 
+				SCUTO_CONTERAM);
 		bookMap.put("The Standard Book of Spells, Grade 1",
-				"The beginning wizard will find great fun with the " +
-				"spell bombarda, which blasts the target area.\n" +
-				"But perhaps too much fun, too much. Apparate.");
+				INCENDIO + "\n" + LUMOS + "\n" + REPARO + "\n" + SPONGIFY + "\n" + 
+				WINGARDIUM_LEVIOSA);
+		bookMap.put("The Standard Book of Spells, Grade 2", 
+				EXPELLIARMUS + "\n" + IMMOBULUS + "\n" + INCENDIO + "\n" + LUMOS + "\n" + 
+				OBLIVIATE);
+		bookMap.put("The Standard Book of Spells, Grade 3", 
+				AQUA_ERUCTO + "\n" + BOMBARDA + "\n" + EXPELLIARMUS + "\n" + 
+				GLACIUS + "\n" + LUMOS_DUO + "\n" + REPARO);
+		bookMap.put("The Standard Book of Spells, Grade 4", 
+				ACCIO + "\n" + ARRESTO_MOMENTUM + "\n" + BOMBARDA_MAXIMA + "\n" + 
+				DUCKLIFORS + "\n" + FIANTO_DURI + "\n" + PROTEGO_HORRIBILIS + "\n" + 
+				PROTEGO_MAXIMA + "\n" + PROTEGO_TOTALUM);
+		bookMap.put("The Standard Book of Spells, Grade 5", 
+				ACCIO + "\n" + EQUUSIFORS + "\n" + EXPELLIARMUS + "\n" + INCENDIO + "\n" + 
+				PROTEGO + "\n" + REPARO + "\n" + SCUTO_CONTERAM + "\n" + STUPEFY + "\n" + 
+				WINGARDIUM_LEVIOSA);
+		bookMap.put("The Standard Book of Spells, Grade 6", 
+				APPARATE + "\n" + CRESCERE_PROTEGAT + "\n" + HORREAT_PROTEGAT + "\n" + 
+				INCENDIO_DUO);
+		bookMap.put("The Standard Book of Spells, Grade 7", 
+				NULLUM_APPAREBIT + "\n" + NULLUM_EVANESCUNT + "\n" + PARTIS_TEMPORUS + "\n" + 
+				PIERTOTUM_LOCOMOTOR);
+		bookMap.put("Basic Hexes for the Busy and Vexed", 
+				IMMOBULUS);
+		bookMap.put("A Compendium of Common Curses and Their Counter-Actions", 
+				INCENDIO_DUO + "\n" + SILENCIO);
+		bookMap.put("Confronting the Faceless", 
+				AVADA_KEDAVRA + "\n" + IMPEDIMENTA);
+		bookMap.put("Curses and Counter-Curses",
+				"");
+		bookMap.put("Dark Arts Defence: Basics for Beginners", 
+				ARRESTO_MOMENTUM);
+		bookMap.put("Defensive Magical Theory", 
+				INFORMOUS + "\n" + SILENCIO);
+		bookMap.put("The Dark Arts Outsmarted",
+				AVADA_KEDAVRA + "\n" + FIENDFYRE + "\n" + INFORMOUS);
+		bookMap.put("The Dark Forces: A Guide to Self-Protection", 
+				LUMOS);
+		bookMap.put("Guide to Advanced Occlumency", 
+				"");
+		bookMap.put("Jinxes for the Jinxed", 
+				MUFFLIATO + "\n" + SPONGIFY);
+		bookMap.put("Practical Defensive Magic and Its Use Against the Dark Arts",
+				"");
+		bookMap.put("Self-Defensive Spellwork", 
+				APARECIUM + "\n" + DEPRIMO);
+		bookMap.put("Updated Counter-Curse Handbook (Second Revised Edition)", 
+				ALARTE_ASCENDARE);
+		bookMap.put("Magick Moste Evile",
+				FIENDFYRE);
+		bookMap.put("Secrets of the Darkest Art", 
+				"The most horrifying and destructive act man can do is the "
+				+ "creation of a horcrux. By splitting one's soul, one is able "
+				+ "to resurrect with all of their magical experience intact. "
+				+ "However, this action has a terrible cost, for as long as "
+				+ "the soul is split, when the body takes damage, it will take "
+				+ "a multiplied amount, based on the number of horcruxes one has"
+				+ "made.\n" + 
+				ET_INTERFICIAM_ANIMAM_LIGAVERIS);
+		bookMap.put("A Beginner's Guide to Transfiguration", 
+				"Transfiguration involves the transformation of one entity into "
+				+ "another. All transfiguration has a time duration, after which "
+				+ "the entity will transfigure back into it's previous state.\n" + 
+				DELETRIUS + "\n" + DUCKLIFORS + "\n" + REPARIFARGE);
+		bookMap.put("A Guide to Advanced Transfiguration", 
+				AVIS + "\n" + DURO + "\n" + EVANESCO + "\n" + PIERTOTUM_LOCOMOTOR);
+		bookMap.put("Intermediate Transfiguration", 
+				AVIS + "\n" + EQUUSIFORS + "\n" + OPPUGNO);
+		bookMap.put("Theories of Transubstantial Transfiguration", 
+				"Transubstantial transfiguration encompasses the spells which "
+				+ "seem to break the rules of transfiguration, namely that an "
+				+ "entity must be transfigured into another entity and that "
+				+ "the transfiguration has a time duration.\n" + 
+				EVANESCO + "\n" + GEMINIO + "\n" + REPARIFARGE);
+		bookMap.put("Madcap Magic for Wacky Warlocks", 
+				DEPRIMO);
+		bookMap.put("Saucy Tricks for Tricky Sorts", 
+				CONFUNDO);
+		bookMap.put("Book of Spells", 
+				ACCIO + "\n" + AGUAMENTI + "\n" + APARECIUM + "\n" + AVIS + "\n" + 
+				DEFODIO + "\n" + DURO + "\n" + EBUBLIO + "\n" + EXPELLIARMUS + "\n" + 
+				GEMINIO + "\n" + IMPEDIMENTA + "\n" + INCENDIO + "\n" + LUMOS + "\n" + 
+				OPPUGNO + "\n" + PROTEGO + "\n" + REDUCTO + "\n" + REPARO + "\n" + 
+				STUPEFY + "\n" + WINGARDIUM_LEVIOSA);
+		bookMap.put("Easy Spells to Fool Muggles", 
+				CONFUNDO);
+		bookMap.put("Wizard's Spells, Volume 1", 
+				GLACIUS);
+		bookMap.put("Wizard's Spells, Volume 2", 
+				BOMBARDA + "\n" + MUFFLIATO + "\n" + REDUCTO);
+		bookMap.put("Wizard's Spells, Volume 3", 
+				BOMBARDA_MAXIMA);
+		bookMap.put("Practical Magic", 
+				APPARATE + "\n" + AQUA_ERUCTO + "\n" + DEFODIO + "\n" + DELETRIUS + "\n" + 
+				HERBIVICUS);
 		bookMap.put("The Secrets of Wandlore",
 				"The secrets of wandlore are not to be easily had, however " +
 				"they will be related in this book with the greatest of ease.\n" +
-				"Frange lignea will split a log in twain, producing coreless " +
-				"wands. Those wands can be paired with cores using the spell " +
-				"ligatis cor, but only one wand and core at a time.");
-		bookMap.put("Magick Moste Evile", "Fiendfyre is a dark sort of magic which " +
-				"summons magefire in an unpredictable way. Only those skilled in " +
-				"the use of this spell may even hope to use it effectively in " +
-				"dueling.");
+				FRANGE_LIGNEA + "\n" + LIGATIS_COR);
 		return bookMap;
 	}
 }

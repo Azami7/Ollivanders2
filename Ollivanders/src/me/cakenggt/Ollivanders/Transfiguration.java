@@ -19,7 +19,7 @@ public class Transfiguration extends SpellProjectile{
 
 	private EntityType fromEType;
 	private ItemStack fromStack;
-	private int toID;
+	private int toID = -1;
 	private boolean hasTransfigured;
 
 	public Transfiguration(Ollivanders plugin, Player player, Spells name,

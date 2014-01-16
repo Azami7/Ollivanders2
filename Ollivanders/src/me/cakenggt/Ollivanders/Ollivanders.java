@@ -110,7 +110,9 @@ public class Ollivanders extends JavaPlugin{
 	   			sender.sendMessage("This command can only be run by a player");
 	   			return false;
 	   		}
+	   		sender.sendMessage("Ollivanders " + this.getDescription().getVersion());
 	   		if (!inWorld(player.getWorld())){
+	   			sender.sendMessage("Ollivander's is not turned on for this world");
 	   			return false;
 	   		}
 	   		if (player.isOp()){
@@ -149,6 +151,9 @@ public class Ollivanders extends JavaPlugin{
 	   			for (ItemStack item : leftover.values()){
 	   				player.getWorld().dropItem(loc, item);
 	   			}
+	   		}
+	   		else{
+	   			sender.sendMessage("Only server ops can use the /Okit command.");
 	   		}
 	   		return true;
 	   	}
@@ -225,7 +230,14 @@ public class Ollivanders extends JavaPlugin{
 	 * @return Oplayer of playername s
 	 */
 	public OPlayer getOPlayer(Player p){
-		return OPlayerMap.get(p.getDisplayName());
+		if (OPlayerMap.containsKey(p.getDisplayName())){
+			return OPlayerMap.get(p.getDisplayName());
+		}
+		else{
+			OPlayerMap.put(p.getDisplayName(), new OPlayer());
+			System.out.println("Put in new OPlayer.");
+			return OPlayerMap.get(p.getDisplayName());
+		}
 	}
 	
 	/**

@@ -15,6 +15,10 @@ import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
 
+/**Herbivicus causes crops in a radius to grow.
+ * @author lownes
+ *
+ */
 public class HERBIVICUS extends SpellProjectile implements Spell{
 
 	public HERBIVICUS(Ollivanders plugin, Player player, Spells name,

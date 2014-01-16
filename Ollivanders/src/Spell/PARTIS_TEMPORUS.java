@@ -8,7 +8,7 @@ import me.cakenggt.Ollivanders.Spells;
 import me.cakenggt.Ollivanders.StationarySpellObj;
 
 /**
- * Temporarily disables a stationary spell's effects
+ * Temporarily disables a stationary spell's effects if it is your spell.
  * @author lownes
  *
  */
@@ -30,7 +30,7 @@ public class PARTIS_TEMPORUS extends SpellProjectile implements Spell{
 			lifeTicks ++;
 		}
 		for (StationarySpellObj spell : p.getStationary()){
-			if (spell.isInside(location)){
+			if (spell.isInside(location) && spell.player.equals(player)){
 				spell.active = false;
 				spell.flair(10);
 				move = false;
