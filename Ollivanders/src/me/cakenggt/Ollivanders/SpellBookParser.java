@@ -73,9 +73,10 @@ public class SpellBookParser{
 			+ "held item to be flung at you with a force which depends on your experience.";
 	public final static String FIANTO_DURI = "Fianto duri will lengthen the duration of a stationary "
 			+ "spell, by an amount depending on your experience.";
-	public final static String FIENDFYRE = "Fiendfyre is a hellish curse which summons living flames. "
-			+ "You will find that the curse is indiscriminate in it's targets unless you have "
-			+ "sufficient experience.";
+	public final static String FIENDFYRE = "Fiendfyre is a hellish curse which summons cursed creatures. "
+			+ "A mix of magma cubes, blazes, and ghasts are spawned depending on your experience with "
+			+ "the spell. These creatures will be spawned if the spell hits a block or if the spell reaches "
+			+ "the edge of it's range, which is determined by your experience.";
 	public final static String FLAGRANTE = "Flagrante will cause an item to burn it's bearer when picked "
 			+ "up. The length of the burn depends on your experience.";
 	public final static String FRANGE_LIGNEA = "Frange lignea will cause a log of the spruce, oak, birch, or "
@@ -380,7 +381,7 @@ public class SpellBookParser{
 				+ "However, this action has a terrible cost, for as long as "
 				+ "the soul is split, when the body takes damage, it will take "
 				+ "a multiplied amount, based on the number of horcruxes one has"
-				+ "made.\n" + 
+				+ "made. The only known way of destroying a horcrux is with fiendfyre.\n" + 
 				ET_INTERFICIAM_ANIMAM_LIGAVERIS);
 		bookMap.put("A Beginner's Guide to Transfiguration", 
 				"Transfiguration involves the transformation of one entity into "

@@ -344,7 +344,7 @@ public class OllivandersPlayerListener implements Listener {
 				createSpellProjectile(event.getPlayer(), spell, wandC);
 				int spellc = p.getSpellNum(event.getPlayer(), spell);
 				System.out.println(spellc);
-				if (spellc < 100){
+				if (spellc < 100 || spell == Spells.AVADA_KEDAVRA){
 					oplayer.setSpell(null);
 					opmap.put(event.getPlayer().getDisplayName(), oplayer);
 					p.setOPlayerMap(opmap);
