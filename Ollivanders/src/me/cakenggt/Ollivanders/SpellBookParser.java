@@ -24,6 +24,8 @@ public class SpellBookParser{
 			+ "the surface you cast it on.";
 	public final static String ALARTE_ASCENDARE = "Alarte Ascendare will shoot the target "
 			+ "high into the air. It's strength is determined by your experience.";
+	public final static String ALOHOMORA = "Alohomora is a spell used to unlock the effects "
+			+ "of the locking spell.";
 	public final static String APARECIUM = "Aparecium will cause any area spells to reveal "
 			+ "their borders. The amount of revealing depends on your experience.";
 	public final static String APPARATE = "Apparition is a two sided spell. To apparate to "
@@ -45,6 +47,9 @@ public class SpellBookParser{
 	public final static String BOMBARDA_MAXIMA = "Bombarda maxima creates an explosion which doesn't "
 			+ "damage the terrain. The explosion is twice as large as the one created by "
 			+ "bombarda. The strength of the explosion depends on your experience.";
+	public final static String COLLOPORTUS = "Colloportus will lock all blocks within it's area into "
+			+ "place, not letting them be changed. This spell will not age like other area spells do, "
+			+ "and must be cancelled with the unlocking spell.";
 	public final static String CONFUNDO = "Confundo causes the target to become confused. The duration "
 			+ "of this confusion is determined by your experience.";
 	public final static String CRESCERE_PROTEGAT = "Crescere Protegat will grow a stationary spell's "
@@ -325,10 +330,10 @@ public class SpellBookParser{
 				SCUTO_CONTERAM);
 		bookMap.put("The Standard Book of Spells, Grade 1",
 				INCENDIO + "\n" + LUMOS + "\n" + REPARO + "\n" + SPONGIFY + "\n" + 
-				WINGARDIUM_LEVIOSA);
+				WINGARDIUM_LEVIOSA + "\n" + COLLOPORTUS + "\n" + ALOHOMORA);
 		bookMap.put("The Standard Book of Spells, Grade 2", 
 				EXPELLIARMUS + "\n" + IMMOBULUS + "\n" + INCENDIO + "\n" + LUMOS + "\n" + 
-				OBLIVIATE);
+				OBLIVIATE + "\n" + ALOHOMORA);
 		bookMap.put("The Standard Book of Spells, Grade 3", 
 				AQUA_ERUCTO + "\n" + BOMBARDA + "\n" + EXPELLIARMUS + "\n" + 
 				GLACIUS + "\n" + LUMOS_DUO + "\n" + REPARO);
@@ -407,11 +412,11 @@ public class SpellBookParser{
 				DEFODIO + "\n" + DURO + "\n" + EBUBLIO + "\n" + EXPELLIARMUS + "\n" + 
 				GEMINIO + "\n" + IMPEDIMENTA + "\n" + INCENDIO + "\n" + LUMOS + "\n" + 
 				OPPUGNO + "\n" + PROTEGO + "\n" + REDUCTO + "\n" + REPARO + "\n" + 
-				STUPEFY + "\n" + WINGARDIUM_LEVIOSA);
+				STUPEFY + "\n" + WINGARDIUM_LEVIOSA + "\n" + ALOHOMORA);
 		bookMap.put("Easy Spells to Fool Muggles", 
 				CONFUNDO);
 		bookMap.put("Wizard's Spells, Volume 1", 
-				GLACIUS);
+				GLACIUS + "\n" + COLLOPORTUS);
 		bookMap.put("Wizard's Spells, Volume 2", 
 				BOMBARDA + "\n" + MUFFLIATO + "\n" + REDUCTO);
 		bookMap.put("Wizard's Spells, Volume 3", 

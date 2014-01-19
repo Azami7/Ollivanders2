@@ -58,6 +58,17 @@ public class StationarySpellObj implements Serializable{
 			kill();
 		}
 	}
+	
+	/**
+	 * Ages the StationarySpellObj
+	 * @param i - amount to age
+	 */
+	public void age(int i){
+		duration -= i;
+		if (duration < 0){
+			kill();
+		}
+	}
 
 	/**
 	 * This kills the stationarySpellObj.

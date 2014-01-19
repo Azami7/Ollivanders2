@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,8 +15,11 @@ import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
@@ -26,6 +28,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -38,6 +45,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import StationarySpell.COLLOPORTUS;
 import StationarySpell.SPONGIFY;
 
 /**
@@ -106,10 +114,18 @@ public class OllivandersPlayerListener implements Listener {
 		if (messageWords[0].equalsIgnoreCase("Apparate")){
 			message = messageWords[0];
 		}
-		int rec = 0;
+		Spells spell;
+		//System.out.println("Decoding spell");
+		spell = Spells.decode(message);
+		if (spell != null){
+			if (sender.isPermissionSet("Ollivanders."+spell.toString())){
+				if (!sender.hasPermission("Ollivanders." + spell.toString())){
+					sender.sendMessage("You do not have permission to use " + spell.toString());
+					spell = null;
+				}
+			}
+		}
 		double chatDistance = (double)this.p.getChatDistance();
-		if (chatDistance == -5)
-			return;
 		List<StationarySpellObj> stationaries = p.checkForStationary(sender.getLocation());
 		List<StationarySpellObj> muffliatos = new ArrayList<StationarySpellObj>();
 		for (StationarySpellObj stationary : stationaries){
@@ -118,9 +134,9 @@ public class OllivandersPlayerListener implements Listener {
 			}
 		}
 		for (Player recipient : recipients){
-			if (recipient.getLocation().getWorld() == sender.getLocation().getWorld()) {
-				double distance = recipient.getLocation().distance(
-						sender.getLocation());
+			double distance = recipient.getLocation().distance(
+					sender.getLocation());
+			if (spell == null){
 				if (muffliatos.size() > 0){
 					boolean send = false;
 					ArrayList<StationarySpellObj> recMuffliatos = new ArrayList<StationarySpellObj>();
@@ -135,33 +151,38 @@ public class OllivandersPlayerListener implements Listener {
 						}
 					}
 					if (send){
-						recipient.sendMessage(ChatColor.GREEN
-								+ sender.getPlayerListName() + ": " + message);
-						rec ++;
+						recipient.sendMessage(sender.getPlayerListName() + ": " + message);
 					}
 				}
-				else if (distance <= chatDistance/2) {
-					recipient.sendMessage(ChatColor.GREEN
-							+ sender.getPlayerListName() + ": " + message);
-					rec ++;
+				else{
+					recipient.sendMessage(sender.getPlayerListName() + ": " + message);
 				}
-				else if (distance > chatDistance/2 && distance <= chatDistance) {
-					int messageLength = message.length();
-					double percent = (distance - 25) / 25;
-					int amountRemoved = (int) (percent * ((double) messageLength));
-					char[] charString = message.toCharArray();
-					for (int k = 0; k < amountRemoved; k++) {
-						int removalPoint = (int) (Math.random() * (charString.length - 1));
-						charString[removalPoint] = ' ';
+			}
+			else{
+				if (distance <= chatDistance){
+					if (muffliatos.size() > 0){
+						boolean send = false;
+						ArrayList<StationarySpellObj> recMuffliatos = new ArrayList<StationarySpellObj>();
+						for (StationarySpellObj muffliato : p.checkForStationary(recipient.getLocation())){
+							if (muffliato.name.equals(StationarySpells.MUFFLIATO)){
+								recMuffliatos.add(muffliato);
+							}
+						}
+						for (StationarySpellObj recMuffliato : recMuffliatos){
+							if (muffliatos.contains(recMuffliato)){
+								send = true;
+							}
+						}
+						if (send){
+							recipient.sendMessage(sender.getPlayerListName() + ": " + message);
+						}
 					}
-					String charMessage = new String(charString);
-					recipient.sendMessage(ChatColor.GREEN
-							+ sender.getPlayerListName() + ": " + charMessage);
-					rec ++;
+					else {
+						recipient.sendMessage(sender.getPlayerListName() + ": " + message);
+					}
 				}
 			}
 		}
-		System.out.println("Message received by " + rec + " players.");
 		//End code for chat falloff
 
 		//Begin code for spell parsing
@@ -173,9 +194,6 @@ public class OllivandersPlayerListener implements Listener {
 			}
 			//If it wasn't apparate, then this
 			else{
-				Spells spell;
-				System.out.println("Decoding spell");
-				spell = Spells.decode(message);
 				if (spell!=null){
 					//If the spell is valid, run this code
 					System.out.println("Spell is " + spell.toString());
@@ -467,10 +485,112 @@ public class OllivandersPlayerListener implements Listener {
 		return false;
 	}
 
+	/**If a player is signing a book, try to encode any spells in the book.
+	 * @param event - PlayerEditBookEvent
+	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerBook(PlayerEditBookEvent event){
 		if (event.isSigning()){
 			event.setNewBookMeta(SpellBookParser.encode(p, event.getPlayer(), event.getNewBookMeta()));
+		}
+	}
+
+	/**Cancels any block place event inside of a colloportus object
+	 * @param event - BlockEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onColloBlockPlaceEvent(BlockPlaceEvent event){
+		if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation())){
+			event.getBlock().breakNaturally();
+			return;
+		}
+	}	
+
+	/**Cancels any block break event inside of a colloportus object
+	 * @param event - BlockEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onColloBlockBreakEvent(BlockBreakEvent event){
+		if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation())){
+			event.setCancelled(true);
+			return;
+		}
+	}
+
+	/**Cancels any block physics event inside of a colloportus object
+	 * @param event - BlockEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onColloBlockPhysicsEvent(BlockPhysicsEvent event){
+		if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation())){
+			event.setCancelled(true);
+			return;
+		}
+	}
+
+	/**Cancels any block interact event inside a colloportus object
+	 * @param event - PlayerInteractEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onColloPlayerInteract(PlayerInteractEvent event){
+		if (event.getAction() == Action.LEFT_CLICK_BLOCK || 
+				event.getAction() == Action.RIGHT_CLICK_BLOCK){
+			if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getClickedBlock().getLocation())){
+				event.setCancelled(true);
+				return;
+			}
+		}
+	}
+
+	/**Cancels any piston extend event inside a colloportus
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onColloPistonExtend(BlockPistonExtendEvent event){
+		ArrayList<COLLOPORTUS> collos = new ArrayList<COLLOPORTUS>();
+		for (StationarySpellObj stat : p.getStationary()){
+			if (stat instanceof COLLOPORTUS){
+				collos.add((COLLOPORTUS) stat);
+			}
+		}
+		List<Block> blocks = event.getBlocks();
+		BlockFace direction = event.getDirection();
+		for (Block block : blocks){
+			Block newBlock = block.getRelative(direction.getModX(), direction.getModY(), direction.getModZ());
+			for (COLLOPORTUS collo : collos){
+				if (collo.isInside(newBlock.getLocation()) || collo.isInside(block.getLocation())){
+					event.setCancelled(true);
+					return;
+				}
+			}
+		}
+	}
+
+	/**Cancels any piston retract event inside of a colloportus
+	 * @param event - BlockPistonRetractEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onColloPistonRetract(BlockPistonRetractEvent event){
+		if (event.isSticky()){
+			if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getRetractLocation())){
+				event.setCancelled(true);
+				return;
+			}
+		}
+	}
+
+	/**Cancels any block change by an entity inside of a colloportus
+	 * @param event - EntityChangeBlockEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onColloEntityChangeBlock(EntityChangeBlockEvent event){
+		Location loc = event.getBlock().getLocation();
+		Entity entity = event.getEntity();
+		if (p.isInsideOf(StationarySpells.COLLOPORTUS, loc)){
+			event.setCancelled(true);
+			if (event.getEntityType() == EntityType.FALLING_BLOCK){
+				loc.getWorld().dropItemNaturally(loc, new ItemStack(((FallingBlock)entity).getMaterial()));
+			}
 		}
 	}
 
@@ -561,7 +681,7 @@ public class OllivandersPlayerListener implements Listener {
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onBlockBreak(BlockBreakEvent event){
+	public void onTemporaryBlockBreak(BlockBreakEvent event){
 		Block block = event.getBlock();
 		List<Block> tempBlocks = p.getTempBlocks();
 		if (tempBlocks.contains(block)){
@@ -571,7 +691,7 @@ public class OllivandersPlayerListener implements Listener {
 		}
 	}
 
-	/**If a block is a tempBlock, then don't blow it up.
+	/**If a block is a tempBlock or is inside colloportus, then don't blow it up.
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -582,6 +702,13 @@ public class OllivandersPlayerListener implements Listener {
 		for (Block block : blockListCopy) {
 			if (tempBlocks.contains(block)){
 				event.blockList().remove(block);
+			}
+			for (StationarySpellObj stat : p.getStationary()){
+				if (stat instanceof COLLOPORTUS){
+					if (stat.isInside(block.getLocation())){
+						event.blockList().remove(block);
+					}
+				}
 			}
 		}
 	}

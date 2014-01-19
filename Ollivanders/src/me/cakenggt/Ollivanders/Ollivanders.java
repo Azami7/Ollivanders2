@@ -297,6 +297,17 @@ public class Ollivanders extends JavaPlugin{
 		return tempBlocks;
 	}
 	
+	public boolean isInsideOf(StationarySpells statName, Location loc){
+		for (StationarySpellObj stat : getStationary()){
+			if (stat.name == statName){
+				if (stat.isInside(loc)){
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	/**Fills every OPlayer's spell list with all possible spells that aren't there set to 0
 	 * 
 	 */

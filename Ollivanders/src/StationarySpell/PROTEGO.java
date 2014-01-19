@@ -27,6 +27,10 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell{
 
 	public void checkEffect(Ollivanders p) {
 		Player ply = p.getServer().getPlayer(player);
+		if (ply == null){
+			kill();
+			return;
+		}
 		int rightWand = rightWand(ply);
 		if (ply.isSneaking() && rightWand != -1){
 			location = new OLocation(ply.getEyeLocation());
