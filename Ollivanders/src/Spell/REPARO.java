@@ -27,8 +27,14 @@ public class REPARO extends SpellProjectile implements Spell{
 		List<Item> items = getItems(1);
 		for (Item item : items){
 			ItemStack stack = item.getItemStack();
-			item.getWorld().dropItem(item.getLocation(), new ItemStack(stack.getType(), stack.getAmount()));
-			item.remove();
+			int max = stack.getType().getMaxDurability();
+			int dur = stack.getDurability();
+			dur += usesModifier*usesModifier;
+			if (dur > max){
+				dur = max;
+			}
+			stack.setDurability((short) dur);
+			item.setItemStack(stack);
 			kill();
 		}
 	}

@@ -2,6 +2,7 @@ package Spell;
 
 import java.util.List;
 
+import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -23,6 +24,11 @@ public class REPARIFARGE extends SpellProjectile implements Spell{
 		for (Entity entity : entities){
 			for (SpellProjectile proj : p.getProjectiles()){
 				if (proj instanceof Transfiguration){
+					if (entity instanceof EnderDragonPart){
+						entity = ((EnderDragonPart)entity).getParent();
+					}
+					System.out.println(entity.getType());
+					System.out.println(entity.getEntityId());
 					if (entity.getEntityId() == ((Transfiguration) proj).getToID()){
 						proj.lifeTicks = proj.lifeTicks + (int)(usesModifier*1200) + 160;
 					}

@@ -24,8 +24,8 @@ public class DURO extends Transfiguration implements Spell{
 	public void checkEffect() {
 		if (!hasTransfigured()){
 			move();
-			for (Entity e : player.getWorld().getEntities()){
-				if (e.getType() != EntityType.PLAYER && e.getLocation().distance(location)<1){
+			for (Entity e : getCloseEntities(1)){
+				if (e.getType() != EntityType.PLAYER){
 					location = e.getLocation();
 					location.getBlock().setType(Material.STONE);
 					transfigureEntity(e, null, null);

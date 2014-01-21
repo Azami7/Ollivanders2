@@ -21,6 +21,8 @@ public class Transfiguration extends SpellProjectile{
 	private ItemStack fromStack;
 	private int toID = -1;
 	private boolean hasTransfigured;
+	private int timeMultiplier = 1200;
+	
 
 	public Transfiguration(Ollivanders plugin, Player player, Spells name,
 			Double rightWand) {
@@ -74,7 +76,7 @@ public class Transfiguration extends SpellProjectile{
 		else{
 			toID = newEntity.getEntityId();
 		}
-		this.lifeTicks = (int)(usesModifier*-1200);
+		this.lifeTicks = (int)(usesModifier * -1 * timeMultiplier);
 		return newEntity;
 	}
 
@@ -139,9 +141,10 @@ public class Transfiguration extends SpellProjectile{
 	public void simpleTransfigure(EntityType type, ItemStack stack){
 		if (!hasTransfigured()){
 			move();
-			for (Entity e : player.getWorld().getEntities()){
-				if (e.getType() != EntityType.PLAYER && e.getLocation().distance(location)<1){
+			for (Entity e : getCloseEntities(1)){
+				if (e.getType() != EntityType.PLAYER){
 					transfigureEntity(e, type, stack);
+					System.out.println(getToID());
 				}
 			}
 		}
@@ -162,5 +165,12 @@ public class Transfiguration extends SpellProjectile{
 	 */
 	public int getToID(){
 		return toID;
+	}
+	
+	/**Sets the time multiplier for the Transfiguration.
+	 * @param mult - Multiplier so that the duration is 8 plus (mult/20) seconds.
+	 */
+	public void setTimeMultiplier(int mult){
+		timeMultiplier = mult;
 	}
 }

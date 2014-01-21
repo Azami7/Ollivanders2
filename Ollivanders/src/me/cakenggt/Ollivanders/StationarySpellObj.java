@@ -84,7 +84,13 @@ public class StationarySpellObj implements Serializable{
 	 * @return true if yes, false if no.
 	 */
 	public boolean isInside(Location loc){
-		if (loc.distance(location.toLocation()) < radius){
+		double distance;
+		try {
+			distance = loc.distance(location.toLocation());
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+		if (distance < radius){
 			return true;
 		}
 		else{

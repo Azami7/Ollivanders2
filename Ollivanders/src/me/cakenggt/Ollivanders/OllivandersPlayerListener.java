@@ -730,4 +730,21 @@ public class OllivandersPlayerListener implements Listener {
 			return;
 		}
 	}
+	
+	/**Prevenets a dragon spawned by draconifors from changing any blocks.
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void draconiforsBlockChange(EntityExplodeEvent event){
+		if (event.getEntityType() == EntityType.ENDER_DRAGON){
+			for (SpellProjectile proj : p.getProjectiles()){
+				if (proj instanceof Transfiguration){
+					Transfiguration trans = (Transfiguration) proj;
+					if (trans.getToID() == event.getEntity().getEntityId()){
+						event.setCancelled(true);
+					}
+				}
+			}
+		}
+	}
 }

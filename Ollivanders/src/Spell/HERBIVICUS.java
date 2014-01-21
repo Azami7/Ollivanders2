@@ -32,7 +32,7 @@ public class HERBIVICUS extends SpellProjectile implements Spell{
 		if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER && getBlock().getType() != Material.LAVA && getBlock().getType() != Material.STATIONARY_LAVA){
 			for (Block block : getBlocksInRadius(location, radius)){
 				//if (block.getType() == Material.CROPS || block.getType() == Material.CARROT || block.getType() == Material.MELON || block.getType() == Material.NETHER_WARTS || block.getType() == Material.POTATO || block.getType() == Material.PUMPKIN_STEM){
-				if (block.getType() == Material.CROPS){	
+				if (block.getState().getData() instanceof Crops){
 					//System.out.println("Found Crop!");
 					List<CropState> stateList = new ArrayList<CropState>();
 					stateList.add(CropState.SEEDED);
@@ -65,5 +65,5 @@ public class HERBIVICUS extends SpellProjectile implements Spell{
 			kill();
 		}
 	}
-	
+
 }

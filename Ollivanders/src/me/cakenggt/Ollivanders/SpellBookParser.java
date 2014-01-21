@@ -66,6 +66,8 @@ public class SpellBookParser{
 	public final static String DURO = "Duro will transfigure an entity into a stone. The length "
 			+ "of the transfiguration depends on your experience. If the stone is destroyed, "
 			+ "then the entity will die.";
+	public final static String DRACONIFORS = "Ducklifors will transfigure an entity into a Dragon. "
+			+ "The length of the transfiguration depends on your experience.";
 	public final static String EBUBLIO = "Ebublio, the bubble head charm, will grant your target the ability "
 			+ "to breathe underwater. The duration of this effect depends on your experience.";
 	public final static String EQUUSIFORS = "Equusifors will transfigure an entity into a horse. "
@@ -336,7 +338,7 @@ public class SpellBookParser{
 				OBLIVIATE + "\n" + ALOHOMORA);
 		bookMap.put("The Standard Book of Spells, Grade 3", 
 				AQUA_ERUCTO + "\n" + BOMBARDA + "\n" + EXPELLIARMUS + "\n" + 
-				GLACIUS + "\n" + LUMOS_DUO + "\n" + REPARO);
+				GLACIUS + "\n" + LUMOS_DUO + "\n" + REPARO + "\n" + DRACONIFORS);
 		bookMap.put("The Standard Book of Spells, Grade 4", 
 				ACCIO + "\n" + ARRESTO_MOMENTUM + "\n" + BOMBARDA_MAXIMA + "\n" + 
 				DUCKLIFORS + "\n" + FIANTO_DURI + "\n" + PROTEGO_HORRIBILIS + "\n" + 
@@ -396,7 +398,7 @@ public class SpellBookParser{
 		bookMap.put("A Guide to Advanced Transfiguration", 
 				AVIS + "\n" + DURO + "\n" + EVANESCO + "\n" + PIERTOTUM_LOCOMOTOR);
 		bookMap.put("Intermediate Transfiguration", 
-				AVIS + "\n" + EQUUSIFORS + "\n" + OPPUGNO);
+				AVIS + "\n" + EQUUSIFORS + "\n" + OPPUGNO + "\n" + DRACONIFORS);
 		bookMap.put("Theories of Transubstantial Transfiguration", 
 				"Transubstantial transfiguration encompasses the spells which "
 				+ "seem to break the rules of transfiguration, namely that an "
