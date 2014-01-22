@@ -143,6 +143,15 @@ public class Ollivanders extends JavaPlugin{
 	   			meta.setDisplayName("Elder Wand");
 	   			wand.setItemMeta(meta);
 	   			kit.add(wand);
+	   			//Give Invisibility Cloak
+	   			ItemStack cloak = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+	   			List<String> cloakLore = new ArrayList<String>();
+	   			cloakLore.add("Silvery Transparent Cloak");
+	   			ItemMeta cloakMeta = cloak.getItemMeta();
+	   			cloakMeta.setLore(cloakLore);
+	   			cloakMeta.setDisplayName("Cloak of Invisibility");
+	   			cloak.setItemMeta(cloakMeta);
+	   			kit.add(cloak);
 	   			//give them books
 	   			List<ItemStack> books = SpellBookParser.makeBooks();
 	   			kit.addAll(books);

@@ -21,6 +21,7 @@ public class OPlayer implements Serializable{
 	//This is the spell loaded into the wand for casting with left click
 	private Spells spell;
 	private int souls;
+	private boolean invisible = false;
 	
 	public OPlayer(){
 		Spells[] spells = Spells.values();
@@ -81,5 +82,13 @@ public class OPlayer implements Serializable{
 	
 	public void resetEffects(){
 		effects.clear();
+	}
+	
+	public boolean isInvisible(){
+		return invisible;
+	}
+	
+	public void setInvisible(boolean invisible){
+		this.invisible = invisible;
 	}
 }

@@ -135,6 +135,15 @@ public class SpellBookParser{
 	public final static String PIERTOTUM_LOCOMOTOR = "Piertotum locomotor, if cast at an iron or snow block, will "
 			+ "transfigure that block into an iron or snow golem. This transfiguration's duration depends "
 			+ "on your experience.";
+	public final static String PORTUS = "Portus is a spell which creates a portkey. To cast it, hold a wand in your hand "
+			+ "and look directly at the item you wish to enchant. Then say 'Portus x y z', where x y and z are the coordinates "
+			+ "you wish the portkey to link to. When this item is picked up, the holder and the entities around them will be "
+			+ "transported to the destination. Anti-apparition and anti-disapparition spells will stop this, but only if present "
+			+ "during the creation of the portkey, and will cause the creation to fail. If the portkey is successfully made, then "
+			+ "it can be used to go to that location regardless of the spells put on it. A portkey creation will not fail if the "
+			+ "caster of the protective enchantments is the portkey maker. Portkeys can be used to cross worlds as well, if you use "
+			+ "a portkey which was made in a different world. If the enchantment is said incorrectly, then the portkey will be created "
+			+ "linking to the caster's current location.";
 	public final static String PROTEGO = "Protego is a shield spell which, while you are crouching, will cause any spells "
 			+ "cast at it to bounce off.";
 	public final static String PROTEGO_HORRIBILIS = "Protego horribilis is a stationary spell which will destroy any "
@@ -352,7 +361,7 @@ public class SpellBookParser{
 				INCENDIO_DUO);
 		bookMap.put("The Standard Book of Spells, Grade 7", 
 				NULLUM_APPAREBIT + "\n" + NULLUM_EVANESCUNT + "\n" + PARTIS_TEMPORUS + "\n" + 
-				PIERTOTUM_LOCOMOTOR);
+				PIERTOTUM_LOCOMOTOR + "\n" + PORTUS);
 		bookMap.put("Basic Hexes for the Busy and Vexed", 
 				IMMOBULUS);
 		bookMap.put("A Compendium of Common Curses and Their Counter-Actions", 
@@ -425,7 +434,7 @@ public class SpellBookParser{
 				BOMBARDA_MAXIMA);
 		bookMap.put("Practical Magic", 
 				APPARATE + "\n" + AQUA_ERUCTO + "\n" + DEFODIO + "\n" + DELETRIUS + "\n" + 
-				HERBIVICUS);
+				HERBIVICUS + "\n" + PORTUS);
 		bookMap.put("The Secrets of Wandlore",
 				"The secrets of wandlore are not to be easily had, however " +
 				"they will be related in this book with the greatest of ease.\n" +

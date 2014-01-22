@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -36,15 +37,18 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import Spell.PORTUS;
 import StationarySpell.COLLOPORTUS;
 import StationarySpell.SPONGIFY;
 
@@ -192,7 +196,11 @@ public class OllivandersPlayerListener implements Listener {
 			if (words[0].equalsIgnoreCase("Apparate")){
 				apparate(sender, words);
 			}
-			//If it wasn't apparate, then this
+			//If it was portus, then this
+			else if (words[0].equalsIgnoreCase("Portus")){
+				p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+			}
+			//If it wasn't apparate or portus, then this
 			else{
 				if (spell!=null){
 					//If the spell is valid, run this code
@@ -744,6 +752,57 @@ public class OllivandersPlayerListener implements Listener {
 						event.setCancelled(true);
 					}
 				}
+			}
+		}
+	}
+	
+	/**When an item is picked up by a player, if the item is a portkey, the player will be teleported there.
+	 * @param event - PlayerPickupItemEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void portkeyPickUp(PlayerPickupItemEvent event){
+		Player player = event.getPlayer();
+		Item item = event.getItem();
+		ItemMeta meta = item.getItemStack().getItemMeta();
+		List<String> lore;
+		if (meta.hasLore()){
+			lore = meta.getLore();
+		}
+		else{
+			lore = new ArrayList<String>();
+		}
+		for (String s : lore){
+			if (s.startsWith("Portkey")){
+				String[] portArray = s.split(" ");
+				Location to;
+				to = new Location(Bukkit.getServer().getWorld(portArray[1]),
+						Double.parseDouble(portArray[2]),
+						Double.parseDouble(portArray[3]),
+						Double.parseDouble(portArray[4]));
+				to.setDirection(player.getLocation().getDirection());
+				for (Entity e : player.getWorld().getEntities()) {
+					if (player.getLocation().distance(e.getLocation()) <= 2) {
+						e.teleport(to);
+					}
+				}
+				player.teleport(to);
+				lore.remove(lore.indexOf(s));
+				meta.setLore(lore);
+				item.getItemStack().setItemMeta(meta);
+				return;
+			}
+		}
+	}
+	
+	/**Cancels any targeting of players with the Cloak of Invisibility
+	 * @param event - EntityTargetEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void cloakPlayer(EntityTargetEvent event){
+		Entity target = event.getTarget();
+		if (target instanceof Player){
+			if (p.getOPlayer((Player)target).isInvisible()){
+				event.setCancelled(true);
 			}
 		}
 	}

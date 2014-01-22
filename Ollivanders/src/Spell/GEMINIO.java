@@ -29,7 +29,7 @@ public class GEMINIO extends SpellProjectile implements Spell{
 		move();
 		List<Item> items = getItems(1);
 		for (Item item : items){
-			if (isWand(item.getItemStack())){
+			if (isWand(item.getItemStack()) || isCloak(item.getItemStack())){
 				return;
 			}
 			ItemStack stack = item.getItemStack().clone();
@@ -69,22 +69,17 @@ public class GEMINIO extends SpellProjectile implements Spell{
 			return;
 		}
 	}
-	
+
 	/**Is the item a wand?
-	 * @param item - Player to check.
+	 * @param held - item to check.
 	 * @return True if wand, false if not.
 	 */
 	public boolean isWand(ItemStack held){
-		if (player.getItemInHand() != null){
-			if (held.getType() == Material.STICK || held.getType() == Material.BLAZE_ROD){
-				if (held.getItemMeta().hasLore()){
-					List<String> lore = held.getItemMeta().getLore();
-					if (lore.get(0).split(" and ").length == 2){
-						return true;
-					}
-					else{
-						return false;
-					}
+		if (held.getType() == Material.STICK || held.getType() == Material.BLAZE_ROD){
+			if (held.getItemMeta().hasLore()){
+				List<String> lore = held.getItemMeta().getLore();
+				if (lore.get(0).split(" and ").length == 2){
+					return true;
 				}
 				else{
 					return false;
@@ -99,4 +94,27 @@ public class GEMINIO extends SpellProjectile implements Spell{
 		}
 	}
 
+	/**Is the item the cloak of invsibility?
+	 * @param held - item to check.
+	 * @return True if cloak, false if not.
+	 */
+	public boolean isCloak(ItemStack held){
+		if (held.getType() == Material.CHAINMAIL_CHESTPLATE){
+			if (held.getItemMeta().hasLore()){
+				List<String> lore = held.getItemMeta().getLore();
+				if (lore.get(0).equals("Silvery Transparent Cloak")){
+					return true;
+				}
+				else{
+					return false;
+				}
+			}
+			else{
+				return false;
+			}
+		}
+		else{
+			return false;
+		}
+	}
 }

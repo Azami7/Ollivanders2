@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -33,6 +36,9 @@ class OllivandersSchedule implements Runnable{
 		stationarySched();
 		if (counter %20 == 0){
 			itemCurseSched();
+		}
+		if (counter %20 == 1){
+			invisCloak();
 		}
 		counter = (counter+1)%20;
 	}
@@ -185,5 +191,54 @@ class OllivandersSchedule implements Runnable{
 		int currentFire = player.getFireTicks();
 		int newFire = currentFire + (item.getAmount()*160);
 		player.setFireTicks(newFire);
+	}
+	
+	/**Hides a player with the Cloak of Invisibility from other players.
+	 * Also sets any Creature targeting this player to have null target.
+	 * 
+	 */
+	private void invisCloak(){
+		for (Player player : p.getServer().getOnlinePlayers()){
+			OPlayer oplayer = p.getOPlayer(player);
+			if (hasCloak(player)){
+				for (Player viewer : p.getServer().getOnlinePlayers()){
+					viewer.hidePlayer(player);
+				}
+				for (Entity entity : player.getWorld().getEntities()){
+					if (entity instanceof Creature){
+						Creature creature = (Creature)entity;
+						if (creature.getTarget() == player){
+							creature.setTarget(null);
+						}
+					}
+				}
+				oplayer.setInvisible(true);
+			}
+			else if (oplayer.isInvisible()){
+				for (Player viewer : p.getServer().getOnlinePlayers()){
+					viewer.showPlayer(player);
+				}
+				oplayer.setInvisible(false);
+			}
+		}
+	}
+	
+	/**Does the player have the Cloak of Invisibility
+	 * @param player - Player to be checked
+	 * @return - True if yes, false if no
+	 */
+	private boolean hasCloak(Player player){
+		ItemStack chestPlate = player.getInventory().getChestplate();
+		if (chestPlate != null){
+			if (chestPlate.getType() == Material.CHAINMAIL_CHESTPLATE){
+				if (chestPlate.getItemMeta().hasLore()){
+					List<String> lore = chestPlate.getItemMeta().getLore();
+					if (lore.get(0).equals("Silvery Transparent Cloak")){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }
