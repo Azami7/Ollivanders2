@@ -252,7 +252,7 @@ public class SpellBookParser{
 	 * This creates the books for the /Okit command
 	 * @return - A list of books
 	 */
-	public static List<ItemStack> makeBooks(){
+	public static List<ItemStack> makeBooks(int amount){
 		Map<String, String> bookMap = books();
 		List<ItemStack> books = new ArrayList<ItemStack>();
 		for (String title : bookMap.keySet()){
@@ -263,6 +263,7 @@ public class SpellBookParser{
 			bm.setPages(splitEqually(bookMap.get(title), 250));
 			bm = kitEncode(bm, 20);
 			item.setItemMeta(bm);
+			item.setAmount(amount);
 			System.out.println(title);
 			System.out.println("Adding " + bm.getTitle());
 			books.add(item);
@@ -280,6 +281,7 @@ public class SpellBookParser{
 		bm.setPages(splitEqually(inside, 250));
 		bm = kitEncode(bm, 200);
 		item.setItemMeta(bm);
+		item.setAmount(amount);
 		System.out.println(title);
 		System.out.println("Adding " + bm.getTitle());
 		books.add(item);
@@ -381,13 +383,13 @@ public class SpellBookParser{
 		bookMap.put("Guide to Advanced Occlumency", 
 				"");
 		bookMap.put("Jinxes for the Jinxed", 
-				MUFFLIATO + "\n" + SPONGIFY);
+				MUFFLIATO + "\n" + SPONGIFY + "\n" + FLAGRANTE);
 		bookMap.put("Practical Defensive Magic and Its Use Against the Dark Arts",
 				"");
 		bookMap.put("Self-Defensive Spellwork", 
 				APARECIUM + "\n" + DEPRIMO);
 		bookMap.put("Updated Counter-Curse Handbook (Second Revised Edition)", 
-				ALARTE_ASCENDARE);
+				ALARTE_ASCENDARE + "\n" + FLAGRANTE);
 		bookMap.put("Magick Moste Evile",
 				FIENDFYRE);
 		bookMap.put("Secrets of the Darkest Art", 

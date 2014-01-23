@@ -3,6 +3,7 @@ package me.cakenggt.Ollivanders;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -101,22 +102,22 @@ public class OllivandersPlayerListener implements Listener {
 		if (!p.inWorld(sender.getWorld())){
 			return;
 		}
+		String message = event.getMessage();
 		List<OEffect> effects = p.getOPlayer(sender).getEffects();
-		event.setCancelled(true);
 		if (effects != null){
 			for (OEffect effect : effects){
 				if (effect.name == Effects.SILENCIO){
+					System.out.println("<" + sender.getPlayerListName() + "> " + message);
+					event.setCancelled(true);
 					return;
 				}
 			}
 		}
 		Set<Player> recipients = event.getRecipients();
-		String message = event.getMessage();
-		System.out.println("<" + sender.getPlayerListName() + "> " + message);
 		String[] messageWords = message.split(" ");
 		String message2 = new String(message);
 		if (messageWords[0].equalsIgnoreCase("Apparate")){
-			message = messageWords[0];
+			event.setMessage(messageWords[0]);
 		}
 		Spells spell;
 		//System.out.println("Decoding spell");
@@ -137,54 +138,46 @@ public class OllivandersPlayerListener implements Listener {
 				muffliatos.add(stationary);
 			}
 		}
+		Set<Player> remRecipients = new HashSet<Player>();
 		for (Player recipient : recipients){
 			double distance = recipient.getLocation().distance(
 					sender.getLocation());
+			ArrayList<StationarySpellObj> recMuffliatos = new ArrayList<StationarySpellObj>();
+			for (StationarySpellObj muffliato : p.checkForStationary(recipient.getLocation())){
+				if (muffliato.name.equals(StationarySpells.MUFFLIATO)){
+					recMuffliatos.add(muffliato);
+				}
+			}
 			if (spell == null){
 				if (muffliatos.size() > 0){
-					boolean send = false;
-					ArrayList<StationarySpellObj> recMuffliatos = new ArrayList<StationarySpellObj>();
-					for (StationarySpellObj muffliato : p.checkForStationary(recipient.getLocation())){
-						if (muffliato.name.equals(StationarySpells.MUFFLIATO)){
-							recMuffliatos.add(muffliato);
-						}
-					}
 					for (StationarySpellObj recMuffliato : recMuffliatos){
-						if (muffliatos.contains(recMuffliato)){
-							send = true;
+						if (!muffliatos.contains(recMuffliato)){
+							remRecipients.add(recipient);
 						}
 					}
-					if (send){
-						recipient.sendMessage(sender.getPlayerListName() + ": " + message);
-					}
-				}
-				else{
-					recipient.sendMessage(sender.getPlayerListName() + ": " + message);
 				}
 			}
 			else{
 				if (distance <= chatDistance){
 					if (muffliatos.size() > 0){
-						boolean send = false;
-						ArrayList<StationarySpellObj> recMuffliatos = new ArrayList<StationarySpellObj>();
-						for (StationarySpellObj muffliato : p.checkForStationary(recipient.getLocation())){
-							if (muffliato.name.equals(StationarySpells.MUFFLIATO)){
-								recMuffliatos.add(muffliato);
-							}
-						}
 						for (StationarySpellObj recMuffliato : recMuffliatos){
-							if (muffliatos.contains(recMuffliato)){
-								send = true;
+							if (!muffliatos.contains(recMuffliato)){
+								remRecipients.add(recipient);
 							}
 						}
-						if (send){
-							recipient.sendMessage(sender.getPlayerListName() + ": " + message);
-						}
-					}
-					else {
-						recipient.sendMessage(sender.getPlayerListName() + ": " + message);
 					}
 				}
+				else{
+					remRecipients.add(recipient);
+				}
+			}
+		}
+		for (Player remRec : remRecipients){
+			try {
+				recipients.remove(remRec);
+			} catch (UnsupportedOperationException e) {
+				System.out.println("Chat was unable to be removed due "
+						+ "to a unmodifiable set.");
 			}
 		}
 		//End code for chat falloff
@@ -198,13 +191,23 @@ public class OllivandersPlayerListener implements Listener {
 			}
 			//If it was portus, then this
 			else if (words[0].equalsIgnoreCase("Portus")){
-				p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+				if (sender.isPermissionSet("Ollivanders.PORTUS")){
+					if (!sender.hasPermission("Ollivanders.PORTUS")){
+						sender.sendMessage("You do not have permission to use PORTUS");
+					}
+					else{
+						p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+					}
+				}
+				else{
+					p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+				}
 			}
 			//If it wasn't apparate or portus, then this
 			else{
 				if (spell!=null){
 					//If the spell is valid, run this code
-					System.out.println("Spell is " + spell.toString());
+					//System.out.println("Spell is " + spell.toString());
 					Map<String, OPlayer> opmap = p.getOPlayerMap();
 					OPlayer oplayer = opmap.get(sender.getDisplayName());
 					oplayer.setSpell(spell);
@@ -270,7 +273,9 @@ public class OllivandersPlayerListener implements Listener {
 				}
 			}
 			if (canApparateIn) {
+				sender.getWorld().createExplosion(sender.getLocation(), 0);
 				sender.teleport(to);
+				sender.getWorld().createExplosion(sender.getLocation(), 0);
 				for (Entity e : sender.getWorld().getEntities()) {
 					if (from.distance(e.getLocation()) <= 2) {
 						e.teleport(to);
@@ -369,7 +374,7 @@ public class OllivandersPlayerListener implements Listener {
 				allyWand(event.getPlayer());
 				createSpellProjectile(event.getPlayer(), spell, wandC);
 				int spellc = p.getSpellNum(event.getPlayer(), spell);
-				System.out.println(spellc);
+				//System.out.println(spellc);
 				if (spellc < 100 || spell == Spells.AVADA_KEDAVRA){
 					oplayer.setSpell(null);
 					opmap.put(event.getPlayer().getDisplayName(), oplayer);

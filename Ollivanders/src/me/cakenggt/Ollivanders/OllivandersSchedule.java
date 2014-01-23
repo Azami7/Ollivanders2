@@ -192,7 +192,7 @@ class OllivandersSchedule implements Runnable{
 		int newFire = currentFire + (item.getAmount()*160);
 		player.setFireTicks(newFire);
 	}
-	
+
 	/**Hides a player with the Cloak of Invisibility from other players.
 	 * Also sets any Creature targeting this player to have null target.
 	 * 
@@ -204,15 +204,17 @@ class OllivandersSchedule implements Runnable{
 				for (Player viewer : p.getServer().getOnlinePlayers()){
 					viewer.hidePlayer(player);
 				}
-				for (Entity entity : player.getWorld().getEntities()){
-					if (entity instanceof Creature){
-						Creature creature = (Creature)entity;
-						if (creature.getTarget() == player){
-							creature.setTarget(null);
+				if (!oplayer.isInvisible()){
+					for (Entity entity : player.getWorld().getEntities()){
+						if (entity instanceof Creature){
+							Creature creature = (Creature)entity;
+							if (creature.getTarget() == player){
+								creature.setTarget(null);
+							}
 						}
 					}
+					oplayer.setInvisible(true);
 				}
-				oplayer.setInvisible(true);
 			}
 			else if (oplayer.isInvisible()){
 				for (Player viewer : p.getServer().getOnlinePlayers()){
@@ -222,7 +224,7 @@ class OllivandersSchedule implements Runnable{
 			}
 		}
 	}
-	
+
 	/**Does the player have the Cloak of Invisibility
 	 * @param player - Player to be checked
 	 * @return - True if yes, false if no
