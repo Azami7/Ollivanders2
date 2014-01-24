@@ -77,7 +77,7 @@ public class EXPELLIARMUS extends SpellProjectile implements Spell{
 	private void allyWand(ItemStack wand){
 		ItemMeta wandMeta = wand.getItemMeta();
 		List<String> wandLore = wandMeta.getLore();
-		wandLore.set(1, player.getDisplayName());
+		wandLore.set(1, player.getName());
 		wandMeta.setLore(wandLore);
 		wand.setItemMeta(wandMeta);
 	}

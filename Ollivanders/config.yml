@@ -1,1 +1,6 @@
-worlds:
+zones:
+  default-world:
+    type: World
+    world: world
+    allowed-spells:
+      - ALL

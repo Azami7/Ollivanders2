@@ -42,7 +42,7 @@ public class StationarySpellObj implements Serializable{
 	public StationarySpellObj(Player player, Location location, StationarySpells name, Integer radius, Integer duration){
 		this.location = new OLocation(location);
 		this.name = name;
-		this.player = player.getDisplayName();
+		this.player = player.getName();
 		kill = false;
 		this.duration = duration;
 		this.radius = radius;
@@ -244,11 +244,11 @@ public class StationarySpellObj implements Serializable{
 
 	private int wandCheck(Player player){
 		String charList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-		int wood = player.getDisplayName().length()%4;
+		int wood = player.getName().length()%4;
 		String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
 		String woodString = woodArray[wood];
 		int core = 0;
-		for (char a : player.getDisplayName().toCharArray()){
+		for (char a : player.getName().toCharArray()){
 			core += charList.indexOf(a)+1;
 		}
 		String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};

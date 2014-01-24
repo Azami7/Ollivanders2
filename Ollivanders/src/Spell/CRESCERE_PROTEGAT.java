@@ -34,7 +34,7 @@ public class CRESCERE_PROTEGAT extends SpellProjectile implements Spell{
 		//int limit = (int)(usesModifier/inside.size());
 		int limit = (int)usesModifier;
 		for (StationarySpellObj spell : inside){
-			if (spell.radius < limit && spell.player.equals(player.getDisplayName())){
+			if (spell.radius < limit && spell.player.equals(player.getName())){
 				spell.radius ++;
 				spell.flair(10);
 			}

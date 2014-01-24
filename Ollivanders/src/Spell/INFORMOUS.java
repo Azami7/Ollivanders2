@@ -44,7 +44,7 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 					Player ePlayer = (Player)entity;
 					OPlayer eoplayer = p.getOPlayer(ePlayer);
 					for (OEffect effect : eoplayer.getEffects()){
-						player.sendMessage(ePlayer.getDisplayName() + " has " + Effects.recode(effect.name) + ".");
+						player.sendMessage(ePlayer.getName() + " has " + Effects.recode(effect.name) + ".");
 					}
 				}
 				iEntity.add(entity);

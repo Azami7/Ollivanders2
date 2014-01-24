@@ -72,7 +72,7 @@ public enum Spells {
 	/**
 	 * Find the Spell that corresponds to a string.
 	 * @param s - string, doesn't have to correspond to a spell
-	 * @return spell such that the spell resembles the string in spelling
+	 * @return spell such that the spell resembles the string in spelling. null if no such spell exists
 	 */
 	public static Spells decode(String s){
 		//System.out.println(s);

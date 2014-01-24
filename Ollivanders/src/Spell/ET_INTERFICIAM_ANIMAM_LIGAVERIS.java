@@ -48,7 +48,7 @@ public class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends SpellProjectile implements 
 			if ((((Damageable)player).getHealth()-damage)<= 0){
 				List<StationarySpellObj> stationarys = p.getStationary();
 				for(StationarySpellObj stationary : stationarys){
-					if (stationary.name == StationarySpells.HORCRUX && stationary.player.equals(player.getDisplayName())){
+					if (stationary.name == StationarySpells.HORCRUX && stationary.player.equals(player.getName())){
 						Location tp = stationary.location.toLocation();
 						tp.setY(tp.getY()+1);
 						player.teleport(tp);

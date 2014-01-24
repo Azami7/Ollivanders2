@@ -199,7 +199,7 @@ public class SpellBookParser{
 		List<String> pages = meta.getPages();
 		String pageString = "";
 		for (String page : pages){
-			pageString = pageString.concat(page + " ");
+			pageString = pageString.concat(page);
 		}
 		pageString = pageString.toLowerCase();
 		pageString = pageString.replace('\n', ' ');

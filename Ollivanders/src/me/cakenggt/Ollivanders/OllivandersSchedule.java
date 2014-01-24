@@ -106,32 +106,30 @@ class OllivandersSchedule implements Runnable{
 	 */
 	private void itemCurseSched(){
 		for (World world : p.getServer().getWorlds()){
-			if (p.inWorld(world)){
-				for (Player player : world.getPlayers()){
-					List<ItemStack> geminioIS = new ArrayList<ItemStack>();
-					ListIterator<ItemStack> invIt = player.getInventory().iterator();
-					while (invIt.hasNext()){
-						ItemStack item = invIt.next();
-						if (item != null){
-							ItemMeta meta = item.getItemMeta();
-							if (meta.hasLore()){
-								List<String> lored = meta.getLore();
-								for (String lore : lored){
-									if (lore.contains("Geminio ")){
-										geminioIS.add(geminio(item.clone()));
-										invIt.set(null);
-									}
-									if (lore.contains("Flagrante ")){
-										flagrante(player, item);
-									}
+			for (Player player : world.getPlayers()){
+				List<ItemStack> geminioIS = new ArrayList<ItemStack>();
+				ListIterator<ItemStack> invIt = player.getInventory().iterator();
+				while (invIt.hasNext()){
+					ItemStack item = invIt.next();
+					if (item != null){
+						ItemMeta meta = item.getItemMeta();
+						if (meta.hasLore()){
+							List<String> lored = meta.getLore();
+							for (String lore : lored){
+								if (lore.contains("Geminio ")){
+									geminioIS.add(geminio(item.clone()));
+									invIt.set(null);
+								}
+								if (lore.contains("Flagrante ")){
+									flagrante(player, item);
 								}
 							}
 						}
 					}
-					HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(geminioIS.toArray(new ItemStack[geminioIS.size()]));
-					for (ItemStack item : leftover.values()){
-						player.getWorld().dropItem(player.getLocation(), item);
-					}
+				}
+				HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(geminioIS.toArray(new ItemStack[geminioIS.size()]));
+				for (ItemStack item : leftover.values()){
+					player.getWorld().dropItem(player.getLocation(), item);
 				}
 			}
 		}

@@ -1,8 +1,10 @@
 package me.cakenggt.Ollivanders;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -35,6 +37,7 @@ public class SpellProjectile{
 	public Effect moveEffect = Effect.STEP_SOUND;
 	@SuppressWarnings("deprecation")
 	public int moveEffectData = Material.SPONGE.getId();
+	public Set<Block> changed = new HashSet<Block>();
 
 
 	//Constructor
@@ -205,99 +208,11 @@ public class SpellProjectile{
 		}
 		return returnList;
 	}
+	
+	/**Reverts any changes made to blocks if the effects are temporary.
+	 * Changed blocks are in this.changed
+	 */
+	public void revert(){
+		
+	}
 }
-
-		//	//for each metadatable, it will check what the effect
-		//	//will be given the spell's name
-		//	public void spellEffect(Metadatable m){
-		//		int spellUses = p.getOPlayer(player).getSpellCount().get(name);
-		//		//spells go here, using any of the three types of m
-		//		String spellClass = "Spell." + name.toString();
-		//		@SuppressWarnings("rawtypes")
-		//		Constructor c = null;
-		//		try {
-		//			//Maybe you have to use Integer.TYPE here instead of Integer.class
-		//			c = Class.forName(spellClass).getConstructor(Player.class, Integer.class, Integer.class);
-		//		} catch (SecurityException e) {
-		//			e.printStackTrace();
-		//		} catch (NoSuchMethodException e) {
-		//			e.printStackTrace();
-		//		} catch (ClassNotFoundException e) {
-		//			e.printStackTrace();
-		//		}
-		//		try {
-		//			c.newInstance(player, m, spellUses, rightWand);
-		//		} catch (IllegalArgumentException e) {
-		//			e.printStackTrace();
-		//		} catch (InstantiationException e) {
-		//			e.printStackTrace();
-		//		} catch (IllegalAccessException e) {
-		//			e.printStackTrace();
-		//		} catch (InvocationTargetException e) {
-		//			e.printStackTrace();
-		//		}
-		//		if (name.equals(Spells.BOMBARDA)){
-		//			if (block != null){
-		//				block.getLocation().getWorld().createExplosion(block.getLocation(), (float)(Math.sqrt(spellUses)*0.4/rightWand));
-		//			}
-		//		}
-		//		if (name.equals(Spells.FRANGE_LIGNEA)){
-		//			if (block != null){
-		//				if (block.getType() == Material.LOG){
-		//					block.getLocation().getWorld().createExplosion(block.getLocation(), 0);
-		//					int data = block.getData()%4;
-		//					String[] woodTypes = {"Oak","Spruce","Birch","Jungle"};
-		//					int number = (int)(Math.sqrt(spellUses)*0.4/rightWand);
-		//					if (number > 0){
-		//						ItemStack shellStack = new ItemStack(Material.STICK, number);
-		//						ItemMeta shellM = shellStack.getItemMeta();
-		//						shellM.setDisplayName("Coreless Wand");
-		//						List<String> lore = new ArrayList<String>();
-		//						lore.add(woodTypes[data]);
-		//						shellM.setLore(lore);
-		//						shellStack.setItemMeta(shellM);
-		//						player.getWorld().dropItemNaturally(block.getLocation(), shellStack);
-		//					}
-		//					block.setType(Material.AIR);
-		//				}
-		//			}
-		//		}
-		//		if (name.equals(Spells.LIGATIS_COR)){
-		//			if (item != null){
-		//				ItemMeta corM = item.getItemStack().getItemMeta();
-		//				String[] woodTypes = {"Oak","Spruce","Birch","Jungle"};
-		//				if (corM.hasLore()){
-		//					if (Arrays.asList(woodTypes).contains(corM.getLore().get(0))){
-		//						List<Entity> entities = item.getNearbyEntities(2, 2, 2);
-		//						for (Entity e : entities){
-		//							if (e instanceof Item){
-		//								Item e2 = (Item)e;
-		//								Material mat = e2.getItemStack().getType();
-		//								Material[] cores = {Material.SPIDER_EYE,Material.ROTTEN_FLESH,Material.BONE,Material.SULPHUR};
-		//								if (Arrays.asList(cores).contains(mat)){
-		//									Map<Material, String> matMap = new HashMap<Material, String>();
-		//									matMap.put(Material.SPIDER_EYE, "Spider Eye");
-		//									matMap.put(Material.ROTTEN_FLESH, "Rotten Flesh");
-		//									matMap.put(Material.BONE, "Bone");
-		//									matMap.put(Material.SULPHUR, "Gunpowder");
-		//									String lore = corM.getLore().get(0);
-		//									lore = lore.concat(" and ");
-		//									lore = lore.concat(matMap.get(mat));
-		//									System.out.println(lore);
-		//									corM.setDisplayName("Wand");
-		//									List<String> loreL = new ArrayList<String>();
-		//									loreL.add(lore);
-		//									corM.setLore(loreL);
-		//									ItemStack coreStack = item.getItemStack();
-		//									coreStack.setAmount(1);
-		//									coreStack.setItemMeta(corM);
-		//									item.setItemStack(coreStack);
-		//									e2.remove();
-		//								}
-		//							}
-		//						}
-		//					}
-		//				}
-		//			}
-		//		}
-		//	}

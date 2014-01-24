@@ -99,9 +99,6 @@ public class OllivandersPlayerListener implements Listener {
 	public void onPlayerChat(AsyncPlayerChatEvent event){
 		//Begin code for chat falloff
 		Player sender = event.getPlayer();
-		if (!p.inWorld(sender.getWorld())){
-			return;
-		}
 		String message = event.getMessage();
 		List<OEffect> effects = p.getOPlayer(sender).getEffects();
 		if (effects != null){
@@ -123,11 +120,8 @@ public class OllivandersPlayerListener implements Listener {
 		//System.out.println("Decoding spell");
 		spell = Spells.decode(message);
 		if (spell != null){
-			if (sender.isPermissionSet("Ollivanders."+spell.toString())){
-				if (!sender.hasPermission("Ollivanders." + spell.toString())){
-					sender.sendMessage("You do not have permission to use " + spell.toString());
-					spell = null;
-				}
+			if (!p.canCast(sender, spell)){
+				spell = null;
 			}
 		}
 		double chatDistance = (double)this.p.getChatDistance();
@@ -142,16 +136,10 @@ public class OllivandersPlayerListener implements Listener {
 		for (Player recipient : recipients){
 			double distance = recipient.getLocation().distance(
 					sender.getLocation());
-			ArrayList<StationarySpellObj> recMuffliatos = new ArrayList<StationarySpellObj>();
-			for (StationarySpellObj muffliato : p.checkForStationary(recipient.getLocation())){
-				if (muffliato.name.equals(StationarySpells.MUFFLIATO)){
-					recMuffliatos.add(muffliato);
-				}
-			}
 			if (spell == null){
 				if (muffliatos.size() > 0){
-					for (StationarySpellObj recMuffliato : recMuffliatos){
-						if (!muffliatos.contains(recMuffliato)){
+					for (StationarySpellObj muffliato : muffliatos){
+						if (!muffliato.isInside(recipient.getLocation())){
 							remRecipients.add(recipient);
 						}
 					}
@@ -160,8 +148,8 @@ public class OllivandersPlayerListener implements Listener {
 			else{
 				if (distance <= chatDistance){
 					if (muffliatos.size() > 0){
-						for (StationarySpellObj recMuffliato : recMuffliatos){
-							if (!muffliatos.contains(recMuffliato)){
+						for (StationarySpellObj muffliato : muffliatos){
+							if (!muffliato.isInside(recipient.getLocation())){
 								remRecipients.add(recipient);
 							}
 						}
@@ -186,22 +174,12 @@ public class OllivandersPlayerListener implements Listener {
 		if (holdsWand(sender)){
 			String[] words = message2.split(" ");
 			//If it was apparate, then this
-			if (words[0].equalsIgnoreCase("Apparate")){
+			if (words[0].equalsIgnoreCase("Apparate") && p.canCast(sender, Spells.APPARATE)){
 				apparate(sender, words);
 			}
 			//If it was portus, then this
-			else if (words[0].equalsIgnoreCase("Portus")){
-				if (sender.isPermissionSet("Ollivanders.PORTUS")){
-					if (!sender.hasPermission("Ollivanders.PORTUS")){
-						sender.sendMessage("You do not have permission to use PORTUS");
-					}
-					else{
-						p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
-					}
-				}
-				else{
-					p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
-				}
+			else if (words[0].equalsIgnoreCase("Portus") && p.canCast(sender, Spells.PORTUS)){
+				p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
 			}
 			//If it wasn't apparate or portus, then this
 			else{
@@ -209,9 +187,9 @@ public class OllivandersPlayerListener implements Listener {
 					//If the spell is valid, run this code
 					//System.out.println("Spell is " + spell.toString());
 					Map<String, OPlayer> opmap = p.getOPlayerMap();
-					OPlayer oplayer = opmap.get(sender.getDisplayName());
+					OPlayer oplayer = opmap.get(sender.getName());
 					oplayer.setSpell(spell);
-					opmap.put(sender.getDisplayName(), oplayer);
+					opmap.put(sender.getName(), oplayer);
 					p.setOPlayerMap(opmap);
 				}
 			}
@@ -377,7 +355,7 @@ public class OllivandersPlayerListener implements Listener {
 				//System.out.println(spellc);
 				if (spellc < 100 || spell == Spells.AVADA_KEDAVRA){
 					oplayer.setSpell(null);
-					opmap.put(event.getPlayer().getDisplayName(), oplayer);
+					opmap.put(event.getPlayer().getName(), oplayer);
 					p.setOPlayerMap(opmap);
 				}
 			}
@@ -388,7 +366,7 @@ public class OllivandersPlayerListener implements Listener {
 				Location location = event.getPlayer().getLocation();
 				location.setY(location.getY() + 1.6);
 				Map<String, OPlayer> opmap = p.getOPlayerMap();
-				OPlayer oplayer = opmap.get(event.getPlayer().getDisplayName());
+				OPlayer oplayer = opmap.get(event.getPlayer().getName());
 				Spells spell = oplayer.getSpell();
 				if (spell == null){
 					event.getPlayer().getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
@@ -433,8 +411,8 @@ public class OllivandersPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(PlayerLoginEvent event){
 		Map<String, OPlayer> map = p.getOPlayerMap();
-		if (!map.containsKey(event.getPlayer().getDisplayName())){
-			map.put(event.getPlayer().getDisplayName(), new OPlayer());
+		if (!map.containsKey(event.getPlayer().getName())){
+			map.put(event.getPlayer().getName(), new OPlayer());
 			System.out.println("Put in new OPlayer.");
 		}
 	}
@@ -442,12 +420,12 @@ public class OllivandersPlayerListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent event){
 		Map<String, OPlayer> map = p.getOPlayerMap();
-		OPlayer oply = map.get(event.getEntity().getDisplayName());
+		OPlayer oply = map.get(event.getEntity().getName());
 		oply.resetSpellCount();
 		oply.setSpell(null);
 		oply.resetSouls();
 		oply.resetEffects();
-		map.put(event.getEntity().getDisplayName(), oply);
+		map.put(event.getEntity().getName(), oply);
 		p.setOPlayerMap(map);
 	}
 
@@ -460,7 +438,7 @@ public class OllivandersPlayerListener implements Listener {
 		List<StationarySpellObj> stationarys = p.getStationary();
 		if (event.getEntity() instanceof Player){
 			Damageable plyr = (Damageable) event.getEntity();
-			String name = ((Player)event.getEntity()).getDisplayName();
+			String name = ((Player)event.getEntity()).getName();
 			double damage = event.getDamage()*(p.getOPlayer(p.getServer().getPlayer(name)).getSouls());
 			event.setDamage(damage);
 			if (((double)plyr.getHealth()-damage)<= 0){
@@ -647,11 +625,11 @@ public class OllivandersPlayerListener implements Listener {
 	 */
 	public double wandCheck(Player player){
 		String charList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-		int wood = player.getDisplayName().length()%4;
+		int wood = player.getName().length()%4;
 		String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
 		String woodString = woodArray[wood];
 		int core = 0;
-		for (char a : player.getDisplayName().toCharArray()){
+		for (char a : player.getName().toCharArray()){
 			core += charList.indexOf(a)+1;
 		}
 		String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};
@@ -659,7 +637,7 @@ public class OllivandersPlayerListener implements Listener {
 		List<String> lore = player.getItemInHand().getItemMeta().getLore();
 		if (lore.get(0).equals("Blaze and Ender Pearl")){
 			if (lore.size() == 2){
-				if (lore.get(1).equals(player.getDisplayName())){
+				if (lore.get(1).equals(player.getName())){
 					return 0.5;
 				}
 				else{
@@ -673,7 +651,7 @@ public class OllivandersPlayerListener implements Listener {
 		String[] comps = lore.get(0).split(" and ");
 		if (woodString.equals(comps[0]) && coreString.equals(comps[1])){
 			if (lore.size() == 2){
-				if (lore.get(1).equals(player.getDisplayName())){
+				if (lore.get(1).equals(player.getName())){
 					return 1;
 				}
 				else{
@@ -734,7 +712,7 @@ public class OllivandersPlayerListener implements Listener {
 		ItemMeta wandMeta = wand.getItemMeta();
 		List<String> wandLore = wandMeta.getLore();
 		if (wandLore.size() == 1){
-			wandLore.add(player.getDisplayName());
+			wandLore.add(player.getName());
 			wandMeta.setLore(wandLore);
 			wand.setItemMeta(wandMeta);
 			player.setItemInHand(wand);
@@ -743,24 +721,26 @@ public class OllivandersPlayerListener implements Listener {
 			return;
 		}
 	}
-	
+
 	/**Prevenets a dragon spawned by draconifors from changing any blocks.
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void draconiforsBlockChange(EntityExplodeEvent event){
-		if (event.getEntityType() == EntityType.ENDER_DRAGON){
-			for (SpellProjectile proj : p.getProjectiles()){
-				if (proj instanceof Transfiguration){
-					Transfiguration trans = (Transfiguration) proj;
-					if (trans.getToID() == event.getEntity().getEntityId()){
-						event.setCancelled(true);
+		if (event.getEntity() != null){
+			if (event.getEntityType() == EntityType.ENDER_DRAGON){
+				for (SpellProjectile proj : p.getProjectiles()){
+					if (proj instanceof Transfiguration){
+						Transfiguration trans = (Transfiguration) proj;
+						if (trans.getToID() == event.getEntity().getEntityId()){
+							event.setCancelled(true);
+						}
 					}
 				}
 			}
 		}
 	}
-	
+
 	/**When an item is picked up by a player, if the item is a portkey, the player will be teleported there.
 	 * @param event - PlayerPickupItemEvent
 	 */
@@ -798,7 +778,7 @@ public class OllivandersPlayerListener implements Listener {
 			}
 		}
 	}
-	
+
 	/**Cancels any targeting of players with the Cloak of Invisibility
 	 * @param event - EntityTargetEvent
 	 */

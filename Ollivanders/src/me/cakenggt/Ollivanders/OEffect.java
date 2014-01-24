@@ -16,7 +16,7 @@ public class OEffect implements Serializable{
 	public boolean kill;
 	
 	public OEffect(Player sender, Effects effect, int duration){
-		caster = sender.getDisplayName();
+		caster = sender.getName();
 		this.duration = duration;
 		name = effect;
 		kill = false;

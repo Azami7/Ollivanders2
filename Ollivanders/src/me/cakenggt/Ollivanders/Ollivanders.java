@@ -14,7 +14,6 @@ import java.util.Map;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -24,6 +23,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.command.Command;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -50,6 +51,7 @@ public class Ollivanders extends JavaPlugin{
 				System.out.println("Ended transfiguration");
 				((Transfiguration)proj).endTransfigure();
 			}
+			proj.revert();
 		}
 		for (StationarySpellObj stat : stationary){
 			stat.active = true;
@@ -111,10 +113,6 @@ public class Ollivanders extends JavaPlugin{
 				return false;
 			}
 			sender.sendMessage("Ollivanders " + this.getDescription().getVersion());
-			if (!inWorld(player.getWorld())){
-				sender.sendMessage("Ollivander's is not turned on for this world");
-				return false;
-			}
 			//Arguments of command
 			boolean wands = true;
 			boolean books = true;
@@ -156,24 +154,26 @@ public class Ollivanders extends JavaPlugin{
 						}
 					}
 				}
-				//Give Elder Wand
-				ItemStack wand = new ItemStack(Material.BLAZE_ROD);
-				List<String> lore = new ArrayList<String>();
-				lore.add("Blaze and Ender Pearl");
-				ItemMeta meta = wand.getItemMeta();
-				meta.setLore(lore);
-				meta.setDisplayName("Elder Wand");
-				wand.setItemMeta(meta);
-				kit.add(wand);
-				//Give Invisibility Cloak
-				ItemStack cloak = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-				List<String> cloakLore = new ArrayList<String>();
-				cloakLore.add("Silvery Transparent Cloak");
-				ItemMeta cloakMeta = cloak.getItemMeta();
-				cloakMeta.setLore(cloakLore);
-				cloakMeta.setDisplayName("Cloak of Invisibility");
-				cloak.setItemMeta(cloakMeta);
-				kit.add(cloak);
+				if (wands && books){
+					//Give Elder Wand
+					ItemStack wand = new ItemStack(Material.BLAZE_ROD);
+					List<String> lore = new ArrayList<String>();
+					lore.add("Blaze and Ender Pearl");
+					ItemMeta meta = wand.getItemMeta();
+					meta.setLore(lore);
+					meta.setDisplayName("Elder Wand");
+					wand.setItemMeta(meta);
+					kit.add(wand);
+					//Give Invisibility Cloak
+					ItemStack cloak = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+					List<String> cloakLore = new ArrayList<String>();
+					cloakLore.add("Silvery Transparent Cloak");
+					ItemMeta cloakMeta = cloak.getItemMeta();
+					cloakMeta.setLore(cloakLore);
+					cloakMeta.setDisplayName("Cloak of Invisibility");
+					cloak.setItemMeta(cloakMeta);
+					kit.add(cloak);
+				}
 				//give them books
 				if (books){
 					List<ItemStack> booksList = SpellBookParser.makeBooks(amount);
@@ -248,12 +248,12 @@ public class Ollivanders extends JavaPlugin{
 
 	public int incSpellCount(Player player, Spells s){
 		//returns the incremented spell count
-		OPlayer oply = OPlayerMap.get(player.getDisplayName());
+		OPlayer oply = OPlayerMap.get(player.getName());
 		Map<Spells, Integer> spellMap = oply.getSpellCount();
 		int next = spellMap.get(s)+1;
 		spellMap.put(s, next);
 		oply.setSpellCount(spellMap);
-		OPlayerMap.put(player.getDisplayName(), oply);
+		OPlayerMap.put(player.getName(), oply);
 		return next;
 	}
 
@@ -263,13 +263,13 @@ public class Ollivanders extends JavaPlugin{
 	 * @return Oplayer of playername s
 	 */
 	public OPlayer getOPlayer(Player p){
-		if (OPlayerMap.containsKey(p.getDisplayName())){
-			return OPlayerMap.get(p.getDisplayName());
+		if (OPlayerMap.containsKey(p.getName())){
+			return OPlayerMap.get(p.getName());
 		}
 		else{
-			OPlayerMap.put(p.getDisplayName(), new OPlayer());
+			OPlayerMap.put(p.getName(), new OPlayer());
 			System.out.println("Put in new OPlayer.");
-			return OPlayerMap.get(p.getDisplayName());
+			return OPlayerMap.get(p.getName());
 		}
 	}
 
@@ -279,7 +279,7 @@ public class Ollivanders extends JavaPlugin{
 	 * @param player the OPlayer associated with the player
 	 */
 	public void setOPlayer(Player p, OPlayer player){
-		OPlayerMap.put(p.getDisplayName(), player);
+		OPlayerMap.put(p.getName(), player);
 	}
 
 	/**
@@ -333,7 +333,7 @@ public class Ollivanders extends JavaPlugin{
 	public boolean isInsideOf(StationarySpells statName, Location loc){
 		for (StationarySpellObj stat : getStationary()){
 			if (stat.name == statName){
-				if (stat.isInside(loc)){
+				if (stat.isInside(loc) && stat.active){
 					return true;
 				}
 			}
@@ -358,17 +358,102 @@ public class Ollivanders extends JavaPlugin{
 		}
 	}
 
-	public boolean inWorld(World world){
-		List<String> worlds = this.getConfig().getStringList("worlds");
-		if (worlds.size() == 0){
-			return true;
+	/**Can this player cast this spell?
+	 * @param player - Player to check
+	 * @param spell - Spell to check
+	 * @return True if yes, false if not
+	 */
+	public boolean canCast(Player player, Spells spell){
+		if (player.isPermissionSet("Ollivanders."+spell.toString())){
+			if (!player.hasPermission("Ollivanders." + spell.toString())){
+				player.sendMessage("You do not have permission to use " + spell.toString());
+				return false;
+			}
 		}
-		if (worlds.contains(world.getName())){
-			return true;
+		FileConfiguration fileConfig = this.getConfig();
+		/*
+		 * cast is whether or not the spell can be cast.
+		 * set to false whenever it can't be
+		 * return true whenever it is in allowed-spells
+		 */
+		boolean cast = true;
+		String message = "";
+		if (fileConfig.contains("zones")){
+			ConfigurationSection config = fileConfig.getConfigurationSection("zones");
+			for (String zone : config.getKeys(false)){
+				String prefix = zone + ".";
+				String type = config.getString(prefix + "type");
+				String world = config.getString(prefix + "world");
+				//String region = config.getString(prefix + "region");
+				List<Integer> area = config.getIntegerList(prefix + "area");
+				boolean allAllowed = false;
+				boolean allDisallowed = false;
+				List<Spells> allowedSpells = new ArrayList<Spells>();
+				for (String spellString : config.getStringList(prefix + "allowed-spells")){
+					if (spellString.equalsIgnoreCase("ALL")){
+						allAllowed = true;
+					}
+					else{
+						allowedSpells.add(Spells.decode(spellString));
+					}
+				}
+				List<Spells> disallowedSpells = new ArrayList<Spells>();
+				for (String spellString : config.getStringList(prefix + "disallowed-spells")){
+					if (spellString.equalsIgnoreCase("ALL")){
+						allDisallowed = true;
+					}
+					else{
+						disallowedSpells.add(Spells.decode(spellString));
+					}
+				}
+				if (type.equalsIgnoreCase("World")){
+					System.out.println("Is world");
+					if (player.getWorld().getName().equals(world)){
+						System.out.println("is in this world");
+						if (allowedSpells.contains(spell) || allAllowed){
+							System.out.println(allowedSpells.contains(spell));
+							System.out.println(allAllowed);
+							return true;
+						}
+						System.out.println(spell);
+						System.out.println(disallowedSpells);
+						if (disallowedSpells.contains(spell) || allDisallowed){
+							message = "Casting of " + spell.toString() + " is not allowed in " + zone;
+							cast = false;
+						}
+					}
+				}
+				if (type.equalsIgnoreCase("Cuboid")){
+					if (player.getWorld().getName().equals(world)){
+						double x = player.getLocation().getX();
+						double y = player.getLocation().getY();
+						double z = player.getLocation().getZ();
+						if ((area.get(0) < x) && (x < area.get(3))){
+							if ((area.get(1) < y) && (y < area.get(4))){
+								if ((area.get(2) < z) && (z < area.get(5))){
+									if (allowedSpells.contains(spell) || allAllowed){
+										return true;
+									}
+									if (disallowedSpells.contains(spell) || allDisallowed){
+										message = "Casting of " + spell.toString() + " is not allowed in " + zone;
+										cast = false;
+									}
+								}
+							}
+						}
+					}
+				}
+				/*
+				if (type.equalsIgnoreCase("WorldGuard")){
+				
+				}
+				*/
+			}
 		}
-		else{
-			return false;
+		if (!cast){
+			player.sendMessage(message);
 		}
+		return cast;
 	}
 
 	/** SLAPI = Saving/Loading API
