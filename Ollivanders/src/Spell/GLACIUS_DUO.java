@@ -8,11 +8,11 @@ import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
 
-public class GLACIUS extends SpellProjectile implements Spell{
+public class GLACIUS_DUO extends SpellProjectile implements Spell{
 
 	boolean move;
 
-	public GLACIUS(Ollivanders plugin, Player player, Spells name,
+	public GLACIUS_DUO(Ollivanders plugin, Player player, Spells name,
 			Double rightWand) {
 		super(plugin, player, name, rightWand);
 		move = true;
@@ -23,7 +23,7 @@ public class GLACIUS extends SpellProjectile implements Spell{
 			move();
 			Block center = getBlock();
 			Material type = center.getType();
-			double radius = usesModifier/2;
+			double radius = usesModifier;
 			if (type != Material.AIR){
 				for (Block block : getBlocksInRadius(location, radius)){
 					Material changeType = block.getType();
@@ -46,7 +46,7 @@ public class GLACIUS extends SpellProjectile implements Spell{
 				}
 				kill = false;
 				move = false;
-				lifeTicks = (int)(-(usesModifier*1200));
+				lifeTicks = (int)(-(usesModifier*1200/2));
 			}
 		}
 		else{

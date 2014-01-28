@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,9 +39,9 @@ public class Ollivanders extends JavaPlugin{
 	private List<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
 	private List<StationarySpellObj> stationary = new ArrayList<StationarySpellObj>();;
 	private Listener playerListener;
-	private int chatDistance = 50;
 	private OllivandersSchedule schedule;
 	private List<Block> tempBlocks = new ArrayList<Block>();
+	private FileConfiguration fileConfig;
 
 	public void onDisable() {
 		for (Block block : tempBlocks){
@@ -94,6 +95,7 @@ public class Ollivanders extends JavaPlugin{
 		if (!new File(this.getDataFolder(), "config.yml").exists()){
 			this.saveDefaultConfig();
 		}
+		fileConfig = getConfig();
 		//finished loading data
 		fillAllSpellCount();
 		this.schedule = new OllivandersSchedule(this);
@@ -202,7 +204,7 @@ public class Ollivanders extends JavaPlugin{
 	}
 
 	public int getChatDistance(){
-		return chatDistance;
+		return fileConfig.getInt("chatDropoff");
 	}
 
 	public List<SpellProjectile> getProjectiles(){
@@ -307,7 +309,7 @@ public class Ollivanders extends JavaPlugin{
 	}
 
 	/**
-	 * Checks if the location is within one or more stationary spell objects
+	 * Checks if the location is within one or more stationary spell objects, regardless of whether or not they are active.
 	 * @param location - location to check
 	 * @return List of StationarySpellObj that the location is inside
 	 */
@@ -315,8 +317,10 @@ public class Ollivanders extends JavaPlugin{
 		List<StationarySpellObj> stationaries = getStationary();
 		List<StationarySpellObj> inside = new ArrayList<StationarySpellObj>();
 		for (StationarySpellObj stationary: stationaries){
-			if (stationary.location.distance(location) < stationary.radius){
-				inside.add(stationary);
+			if (stationary.location.getWorld().equals(location.getWorld().getName())){
+				if (stationary.location.distance(location) < stationary.radius){
+					inside.add(stationary);
+				}
 			}
 		}
 		return inside;
@@ -370,7 +374,6 @@ public class Ollivanders extends JavaPlugin{
 				return false;
 			}
 		}
-		FileConfiguration fileConfig = this.getConfig();
 		/*
 		 * cast is whether or not the spell can be cast.
 		 * set to false whenever it can't be
@@ -385,7 +388,7 @@ public class Ollivanders extends JavaPlugin{
 				String type = config.getString(prefix + "type");
 				String world = config.getString(prefix + "world");
 				//String region = config.getString(prefix + "region");
-				List<Integer> area = config.getIntegerList(prefix + "area");
+				String areaString = config.getString(prefix + "area");
 				boolean allAllowed = false;
 				boolean allDisallowed = false;
 				List<Spells> allowedSpells = new ArrayList<Spells>();
@@ -407,16 +410,10 @@ public class Ollivanders extends JavaPlugin{
 					}
 				}
 				if (type.equalsIgnoreCase("World")){
-					System.out.println("Is world");
 					if (player.getWorld().getName().equals(world)){
-						System.out.println("is in this world");
 						if (allowedSpells.contains(spell) || allAllowed){
-							System.out.println(allowedSpells.contains(spell));
-							System.out.println(allAllowed);
 							return true;
 						}
-						System.out.println(spell);
-						System.out.println(disallowedSpells);
 						if (disallowedSpells.contains(spell) || allDisallowed){
 							message = "Casting of " + spell.toString() + " is not allowed in " + zone;
 							cast = false;
@@ -424,6 +421,16 @@ public class Ollivanders extends JavaPlugin{
 					}
 				}
 				if (type.equalsIgnoreCase("Cuboid")){
+					List<String> areaStringList = Arrays.asList(areaString.split(" "));
+					List<Integer> area = new ArrayList<Integer>();
+					for (int i = 0; i < areaStringList.size(); i++){
+						area.add(Integer.parseInt(areaStringList.get(i)));
+					}
+					if (area.size() < 6){
+						for (int i = 0; i < 6; i++){
+							area.set(i, 0);
+						}
+					}
 					if (player.getWorld().getName().equals(world)){
 						double x = player.getLocation().getX();
 						double y = player.getLocation().getY();
@@ -445,15 +452,22 @@ public class Ollivanders extends JavaPlugin{
 				}
 				/*
 				if (type.equalsIgnoreCase("WorldGuard")){
-				
+
 				}
-				*/
+				 */
 			}
 		}
 		if (!cast){
 			player.sendMessage(message);
 		}
 		return cast;
+	}
+	
+	/**Get the file configuration
+	 * @return FileConfiguration
+	 */
+	public FileConfiguration getFileConfig(){
+		return fileConfig;
 	}
 
 	/** SLAPI = Saving/Loading API

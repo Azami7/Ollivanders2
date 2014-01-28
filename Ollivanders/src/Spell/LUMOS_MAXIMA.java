@@ -45,12 +45,16 @@ public class LUMOS_MAXIMA extends SpellProjectile implements Spell{
 			}
 		}
 		if (lifeTicks >= 159){
-			if (getBlock().getType() == Material.GLOWSTONE){
-				location.getBlock().setType(Material.AIR);
-			}
-			p.getTempBlocks().remove(location.getBlock());
-			kill = true;
+			revert();
+			kill();
 		}
+	}
+	
+	public void revert(){
+		if (getBlock().getType() == Material.GLOWSTONE){
+			location.getBlock().setType(Material.AIR);
+		}
+		p.getTempBlocks().remove(location.getBlock());
 	}
 
 }

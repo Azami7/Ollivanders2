@@ -69,14 +69,19 @@ public class SpellProjectile{
 	 * Moves the projectile forward, creating a particle effect
 	 */
 	public void move(){
-		location.add(vector);
-		location.getWorld().playEffect(location, moveEffect, moveEffectData);
-		if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER && getBlock().getType() != Material.STATIONARY_LAVA && getBlock().getType() != Material.LAVA){
-			kill = true;
+		if (p.canCast(player, name)){
+			location.add(vector);
+			location.getWorld().playEffect(location, moveEffect, moveEffectData);
+			if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER && getBlock().getType() != Material.STATIONARY_LAVA && getBlock().getType() != Material.LAVA){
+				kill = true;
+			}
+			lifeTicks ++;
+			if (lifeTicks > 160){
+				kill = true;
+			}
 		}
-		lifeTicks ++;
-		if (lifeTicks > 160){
-			kill = true;
+		else{
+			kill();
 		}
 	}
 
@@ -208,11 +213,11 @@ public class SpellProjectile{
 		}
 		return returnList;
 	}
-	
+
 	/**Reverts any changes made to blocks if the effects are temporary.
 	 * Changed blocks are in this.changed
 	 */
 	public void revert(){
-		
+
 	}
 }

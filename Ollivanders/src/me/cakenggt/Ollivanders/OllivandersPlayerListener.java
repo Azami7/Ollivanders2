@@ -124,9 +124,9 @@ public class OllivandersPlayerListener implements Listener {
 				spell = null;
 			}
 		}
-		double chatDistance = (double)this.p.getChatDistance();
+		double chatDistance = (double)p.getChatDistance();
 		List<StationarySpellObj> stationaries = p.checkForStationary(sender.getLocation());
-		List<StationarySpellObj> muffliatos = new ArrayList<StationarySpellObj>();
+		Set<StationarySpellObj> muffliatos = new HashSet<StationarySpellObj>();
 		for (StationarySpellObj stationary : stationaries){
 			if (stationary.name.equals(StationarySpells.MUFFLIATO) && stationary.active){
 				muffliatos.add(stationary);
@@ -136,27 +136,17 @@ public class OllivandersPlayerListener implements Listener {
 		for (Player recipient : recipients){
 			double distance = recipient.getLocation().distance(
 					sender.getLocation());
-			if (spell == null){
-				if (muffliatos.size() > 0){
-					for (StationarySpellObj muffliato : muffliatos){
-						if (!muffliato.isInside(recipient.getLocation())){
-							remRecipients.add(recipient);
-						}
-					}
+			if (spell != null){
+				if (distance > chatDistance){
+					remRecipients.add(recipient);
 				}
 			}
-			else{
-				if (distance <= chatDistance){
-					if (muffliatos.size() > 0){
-						for (StationarySpellObj muffliato : muffliatos){
-							if (!muffliato.isInside(recipient.getLocation())){
-								remRecipients.add(recipient);
-							}
-						}
+			if (muffliatos.size() > 0){
+				for (StationarySpellObj muffliato : muffliatos){
+					Location recLoc = recipient.getLocation();
+					if (!muffliato.isInside(recLoc)){
+						remRecipients.add(recipient);
 					}
-				}
-				else{
-					remRecipients.add(recipient);
 				}
 			}
 		}
@@ -174,12 +164,16 @@ public class OllivandersPlayerListener implements Listener {
 		if (holdsWand(sender)){
 			String[] words = message2.split(" ");
 			//If it was apparate, then this
-			if (words[0].equalsIgnoreCase("Apparate") && p.canCast(sender, Spells.APPARATE)){
-				apparate(sender, words);
+			if (words[0].equalsIgnoreCase("Apparate")){
+				if (p.canCast(sender, Spells.APPARATE)){
+					apparate(sender, words);
+				}
 			}
 			//If it was portus, then this
-			else if (words[0].equalsIgnoreCase("Portus") && p.canCast(sender, Spells.PORTUS)){
-				p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+			else if (words[0].equalsIgnoreCase("Portus")){
+				if (p.canCast(sender, Spells.PORTUS)){
+					p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+				}
 			}
 			//If it wasn't apparate or portus, then this
 			else{

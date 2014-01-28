@@ -26,7 +26,7 @@ public class MUFFLIATO extends SpellProjectile implements Spell{
 		move();
 		if (super.getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER){
 			int duration = (int)usesModifier*1200;
-			StationarySpell.MUFFLIATO muffliato = new StationarySpell.MUFFLIATO(player, location, StationarySpells.HORCRUX, 5, duration);
+			StationarySpell.MUFFLIATO muffliato = new StationarySpell.MUFFLIATO(player, location, StationarySpells.MUFFLIATO, 5, duration);
 			muffliato.flair(20);
 			p.addStationary(muffliato);
 		}
