@@ -8,21 +8,19 @@ import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
 
-/**
- * Gives nightvision for an amount of time depending on the player's
- * spell level.
+/**Gives player healing effect for usesModifier seconds
  * @author lownes
  *
  */
-public class LUMOS extends SpellProjectile implements Spell{
+public class EPISKEY extends SpellProjectile implements Spell{
 
-	public LUMOS(Ollivanders plugin, Player player, Spells name,
+	public EPISKEY(Ollivanders plugin, Player player, Spells name,
 			Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 
 	public void checkEffect() {
-		player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, (int) (usesModifier*1200), 1), true);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, (int) (usesModifier*20), 1), true);
 		kill();
 	}
 	

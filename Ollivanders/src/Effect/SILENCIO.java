@@ -18,7 +18,7 @@ public class SILENCIO extends OEffect implements Effect{
 	}
 
 	public void checkEffect(Ollivanders p) {
-		age();
+		age(1);
 	}
 	
 }

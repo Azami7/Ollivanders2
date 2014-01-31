@@ -25,8 +25,8 @@ public class OEffect implements Serializable{
 	/**
 	 * Ages the OEffect
 	 */
-	public void age(){
-		duration--;
+	public void age(int i){
+		duration -= i;
 		if (duration < 0){
 			kill();
 		}

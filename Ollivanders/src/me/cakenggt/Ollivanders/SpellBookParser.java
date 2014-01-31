@@ -37,6 +37,8 @@ public class SpellBookParser{
 			+ "wand tip. The range of this jet is determined by your experience.";
 	public final static String ARRESTO_MOMENTUM = "Arresto momentum will immediately slow down "
 			+ "any entity. The amount an entity is slowed down is determined by your experience.";
+	public final static String ASCENDIO = "Ascendio will propel the caster into the air. The "
+			+ "strength of the propulsion depends on your experience.";
 	public final static String AVADA_KEDAVRA = "Avada kedavra is a forbidden curse which will "
 			+ "directly damage a living being. The amount of damage done is determiend "
 			+ "by your experience.";
@@ -47,6 +49,8 @@ public class SpellBookParser{
 	public final static String BOMBARDA_MAXIMA = "Bombarda maxima creates an explosion which doesn't "
 			+ "damage the terrain. The explosion is twice as large as the one created by "
 			+ "bombarda. The strength of the explosion depends on your experience.";
+	public final static String CARPE_RETRACTUM = "Carpe Retractum will pull a living entity towards "
+			+ "you. The strength of the pull depends on your experience.";
 	public final static String COLLOPORTUS = "Colloportus will lock all blocks within it's area into "
 			+ "place, not letting them be changed. This spell will not age like other area spells do, "
 			+ "and must be cancelled with the unlocking spell.";
@@ -61,6 +65,11 @@ public class SpellBookParser{
 	public final static String DEPRIMO = "Deprimo creates an immense downward pressure which will "
 			+ "cause all blocks within a radius to fall like sand. The radius is determined "
 			+ "by your experience.";
+	public final static String DEPULSO = "Depulso will repel any entity you hit with it. The strength "
+			+ "of the repulsion depends on your experience.";
+	public final static String DIMMINUENDO = "Dimminuendo will cause any creature hit to turn into "
+			+ "a smaller version. The time duration, for some of the creatures, will depend on your "
+			+ "experience.";
 	public final static String DUCKLIFORS = "Ducklifors will transfigure an entity into a chicken. "
 			+ "The length of the transfiguration depends on your experience.";
 	public final static String DURO = "Duro will transfigure an entity into a stone. The length "
@@ -70,12 +79,19 @@ public class SpellBookParser{
 			+ "The length of the transfiguration depends on your experience.";
 	public final static String EBUBLIO = "Ebublio, the bubble head charm, will grant your target the ability "
 			+ "to breathe underwater. The duration of this effect depends on your experience.";
+	public final static String ENGORGIO = "Engorgio will grow a baby animal, grow a slime, and grow a zombie "
+			+ "from a baby into an adult or from adult into a giant. The effects of this spell depend on your "
+			+ "experience. Growing giants is not possible until complete mastery of the spell is achieved.";
+	public final static String EPISKEY = "Episkey will heal minor injuries. The duration of the healing "
+			+ "effect depends on your experience.";
 	public final static String EQUUSIFORS = "Equusifors will transfigure an entity into a horse. "
 			+ "The length of the transfiguration depends on your experience.";
 	public final static String ET_INTERFICIAM_ANIMAM_LIGAVERIS = "The unholy incantation, "
 			+ "et interficiam animam ligaveris, will create a horcrux.";
 	public final static String EVANESCO = "Evanesco will vanish an entity. "
 			+ "The length of the vanishment depends on your experience.";
+	public final static String EVERTE_STATUM = "Everte Statum will throw another player backwards. "
+			+ "The force of the throw depends on your experience.";
 	public final static String EXPELLIARMUS = "Expelliarmus will cause an entity's "
 			+ "held item to be flung at you with a force which depends on your experience.";
 	public final static String FIANTO_DURI = "Fianto duri will lengthen the duration of a stationary "
@@ -84,6 +100,9 @@ public class SpellBookParser{
 			+ "A mix of magma cubes, blazes, and ghasts are spawned depending on your experience with "
 			+ "the spell. These creatures will be spawned if the spell hits a block or if the spell reaches "
 			+ "the edge of it's range, which is determined by your experience.";
+	public final static String FINITE_INCANTATEM = "Finite Incantatem will reduce the duration of an effect "
+			+ "on a player. It can also lessen the effects of a spell on an item. It's strength depends on "
+			+ "your experience in the spell.";
 	public final static String FLAGRANTE = "Flagrante will cause an item to burn it's bearer when picked "
 			+ "up. The length of the burn depends on your experience.";
 	public final static String FRANGE_LIGNEA = "Frange lignea will cause a log of the spruce, oak, birch, or "
@@ -129,6 +148,7 @@ public class SpellBookParser{
 			+ "The duration of the glowstone depends on your experience.";
 	public final static String LUMOS_MAXIMA = "Lumos maxima will spawn a glowstone at the impact site that will "
 			+ "exist for a duration depending on your experience.";
+	public final static String MELOFORS = "Places a melon on the target's head.";
 	public final static String MUFFLIATO = "Muffliato creates a stationary spell which only allows the people "
 			+ "inside to hear anything spoken inside the effect. The duration of the spell depends on "
 			+ "your experience.";
@@ -344,66 +364,72 @@ public class SpellBookParser{
 	private static Map<String, String> books(){
 		Map<String, String> bookMap = new HashMap<String, String>();
 		// \n is a newline
+		final String N = "\n";
 		bookMap.put("Achievements in Charming",
-				AGUAMENTI + "\n" + EBUBLIO + "\n" + HERBIVICUS + "\n" +
-						LUMOS_DUO + "\n" + LUMOS_MAXIMA);
+				AGUAMENTI + N + EBUBLIO + N + HERBIVICUS + N +
+						LUMOS_DUO + N + LUMOS_MAXIMA + N + DIMMINUENDO + N + 
+						EPISKEY);
 		bookMap.put("Extreme Incantations",
-				ALARTE_ASCENDARE + "\n" + LUMOS_MAXIMA + "\n" + 
-						OBLIVIATE);
+				ALARTE_ASCENDARE + N + LUMOS_MAXIMA + N + 
+						OBLIVIATE + N + ASCENDIO);
 		bookMap.put("Quintessence: A Quest",
-				CRESCERE_PROTEGAT + "\n" + FIANTO_DURI + "\n" + HORREAT_PROTEGAT + "\n" + 
-						NULLUM_APPAREBIT + "\n" + NULLUM_EVANESCUNT + "\n" + PARTIS_TEMPORUS + "\n" + 
-						PROTEGO_HORRIBILIS + "\n" + PROTEGO_MAXIMA + "\n" + PROTEGO_TOTALUM + "\n" + 
+				CRESCERE_PROTEGAT + N + FIANTO_DURI + N + HORREAT_PROTEGAT + N + 
+						NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
+						PROTEGO_HORRIBILIS + N + PROTEGO_MAXIMA + N + PROTEGO_TOTALUM + N + 
 						SCUTO_CONTERAM);
 		bookMap.put("The Standard Book of Spells, Grade 1",
-				INCENDIO + "\n" + LUMOS + "\n" + REPARO + "\n" + SPONGIFY + "\n" + 
-						WINGARDIUM_LEVIOSA + "\n" + COLLOPORTUS + "\n" + ALOHOMORA);
+				INCENDIO + N + LUMOS + N + REPARO + N + SPONGIFY + N + 
+						WINGARDIUM_LEVIOSA + N + COLLOPORTUS + N + ALOHOMORA);
 		bookMap.put("The Standard Book of Spells, Grade 2", 
-				EXPELLIARMUS + "\n" + IMMOBULUS + "\n" + INCENDIO + "\n" + LUMOS + "\n" + 
-						OBLIVIATE + "\n" + ALOHOMORA);
+				EXPELLIARMUS + N + IMMOBULUS + N + INCENDIO + N + LUMOS + N + 
+						OBLIVIATE + N + ALOHOMORA + N + ENGORGIO + N + 
+						FINITE_INCANTATEM);
 		bookMap.put("The Standard Book of Spells, Grade 3", 
-				AQUA_ERUCTO + "\n" + BOMBARDA + "\n" + EXPELLIARMUS + "\n" + 
-						GLACIUS + "\n" + LUMOS_DUO + "\n" + REPARO + "\n" + DRACONIFORS);
+				AQUA_ERUCTO + N + BOMBARDA + N + EXPELLIARMUS + N + 
+						GLACIUS + N + LUMOS_DUO + N + REPARO + N + DRACONIFORS + N + 
+						CARPE_RETRACTUM);
 		bookMap.put("The Standard Book of Spells, Grade 4", 
-				ACCIO + "\n" + ARRESTO_MOMENTUM + "\n" + BOMBARDA_MAXIMA + "\n" + 
-						DUCKLIFORS + "\n" + FIANTO_DURI + "\n" + PROTEGO_HORRIBILIS + "\n" + 
-						PROTEGO_MAXIMA + "\n" + PROTEGO_TOTALUM + "\n" + GLACIUS_DUO);
+				ACCIO + N + ARRESTO_MOMENTUM + N + BOMBARDA_MAXIMA + N + 
+						DUCKLIFORS + N + FIANTO_DURI + N + PROTEGO_HORRIBILIS + N + 
+						PROTEGO_MAXIMA + N + PROTEGO_TOTALUM + N + GLACIUS_DUO);
 		bookMap.put("The Standard Book of Spells, Grade 5", 
-				ACCIO + "\n" + EQUUSIFORS + "\n" + EXPELLIARMUS + "\n" + INCENDIO + "\n" + 
-						PROTEGO + "\n" + REPARO + "\n" + SCUTO_CONTERAM + "\n" + STUPEFY + "\n" + 
-						WINGARDIUM_LEVIOSA + "\n" + GLACIUS_TRIA);
+				ACCIO + N + EQUUSIFORS + N + EXPELLIARMUS + N + INCENDIO + N + 
+						PROTEGO + N + REPARO + N + SCUTO_CONTERAM + N + STUPEFY + N + 
+						WINGARDIUM_LEVIOSA + N + GLACIUS_TRIA + N + DEPULSO);
 		bookMap.put("The Standard Book of Spells, Grade 6", 
-				APPARATE + "\n" + CRESCERE_PROTEGAT + "\n" + HORREAT_PROTEGAT + "\n" + 
+				APPARATE + N + CRESCERE_PROTEGAT + N + HORREAT_PROTEGAT + N + 
 						INCENDIO_DUO);
 		bookMap.put("The Standard Book of Spells, Grade 7", 
-				NULLUM_APPAREBIT + "\n" + NULLUM_EVANESCUNT + "\n" + PARTIS_TEMPORUS + "\n" + 
-						PIERTOTUM_LOCOMOTOR + "\n" + PORTUS + "\n" + INCENDIO_TRIA);
+				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
+						PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA);
 		bookMap.put("Basic Hexes for the Busy and Vexed", 
 				IMMOBULUS);
 		bookMap.put("A Compendium of Common Curses and Their Counter-Actions", 
-				INCENDIO_DUO + "\n" + SILENCIO);
+				INCENDIO_DUO + N + SILENCIO);
 		bookMap.put("Confronting the Faceless", 
-				AVADA_KEDAVRA + "\n" + IMPEDIMENTA);
+				AVADA_KEDAVRA + N + IMPEDIMENTA);
 		bookMap.put("Curses and Counter-Curses",
 				"");
 		bookMap.put("Dark Arts Defence: Basics for Beginners", 
-				ARRESTO_MOMENTUM + "\n" + HARMONIA_NECTERE_PASSUS);
+				ARRESTO_MOMENTUM + N + HARMONIA_NECTERE_PASSUS + N + EPISKEY);
 		bookMap.put("Defensive Magical Theory", 
-				INFORMOUS + "\n" + SILENCIO);
+				INFORMOUS + N + SILENCIO + N + ASCENDIO);
 		bookMap.put("The Dark Arts Outsmarted",
-				AVADA_KEDAVRA + "\n" + FIENDFYRE + "\n" + INFORMOUS + "\n" + HARMONIA_NECTERE_PASSUS);
+				AVADA_KEDAVRA + N + FIENDFYRE + N + INFORMOUS + N + HARMONIA_NECTERE_PASSUS);
 		bookMap.put("The Dark Forces: A Guide to Self-Protection", 
 				LUMOS);
 		bookMap.put("Guide to Advanced Occlumency", 
 				"");
 		bookMap.put("Jinxes for the Jinxed", 
-				MUFFLIATO + "\n" + SPONGIFY + "\n" + FLAGRANTE);
+				MUFFLIATO + N + SPONGIFY + N + FLAGRANTE + N + DIMMINUENDO + N + 
+				FINITE_INCANTATEM);
 		bookMap.put("Practical Defensive Magic and Its Use Against the Dark Arts",
 				"");
 		bookMap.put("Self-Defensive Spellwork", 
-				APARECIUM + "\n" + DEPRIMO);
+				APARECIUM + N + DEPRIMO + N + DEPULSO);
 		bookMap.put("Updated Counter-Curse Handbook (Second Revised Edition)", 
-				ALARTE_ASCENDARE + "\n" + FLAGRANTE + "\n" + INCENDIO_TRIA);
+				ALARTE_ASCENDARE + N + FLAGRANTE + N + INCENDIO_TRIA + N + 
+				FINITE_INCANTATEM);
 		bookMap.put("Magick Moste Evile",
 				FIENDFYRE);
 		bookMap.put("Secrets of the Darkest Art", 
@@ -419,42 +445,43 @@ public class SpellBookParser{
 				"Transfiguration involves the transformation of one entity into "
 						+ "another. All transfiguration has a time duration, after which "
 						+ "the entity will transfigure back into it's previous state.\n" + 
-						DELETRIUS + "\n" + DUCKLIFORS + "\n" + REPARIFARGE);
+						DELETRIUS + N + DUCKLIFORS + N + REPARIFARGE);
 		bookMap.put("A Guide to Advanced Transfiguration", 
-				AVIS + "\n" + DURO + "\n" + EVANESCO + "\n" + PIERTOTUM_LOCOMOTOR);
+				AVIS + N + DURO + N + EVANESCO + N + PIERTOTUM_LOCOMOTOR);
 		bookMap.put("Intermediate Transfiguration", 
-				AVIS + "\n" + EQUUSIFORS + "\n" + OPPUGNO + "\n" + DRACONIFORS);
+				AVIS + N + EQUUSIFORS + N + OPPUGNO + N + DRACONIFORS);
 		bookMap.put("Theories of Transubstantial Transfiguration", 
 				"Transubstantial transfiguration encompasses the spells which "
 						+ "seem to break the rules of transfiguration, namely that an "
 						+ "entity must be transfigured into another entity and that "
 						+ "the transfiguration has a time duration.\n" + 
-						EVANESCO + "\n" + GEMINIO + "\n" + REPARIFARGE);
+						EVANESCO + N + GEMINIO + N + REPARIFARGE);
 		bookMap.put("Madcap Magic for Wacky Warlocks", 
-				DEPRIMO);
+				DEPRIMO + N + MELOFORS);
 		bookMap.put("Saucy Tricks for Tricky Sorts", 
-				CONFUNDO);
+				CONFUNDO + N + EVERTE_STATUM + N + MELOFORS);
 		bookMap.put("Book of Spells", 
-				ACCIO + "\n" + AGUAMENTI + "\n" + APARECIUM + "\n" + AVIS + "\n" + 
-						DEFODIO + "\n" + DURO + "\n" + EBUBLIO + "\n" + EXPELLIARMUS + "\n" + 
-						GEMINIO + "\n" + IMPEDIMENTA + "\n" + INCENDIO + "\n" + LUMOS + "\n" + 
-						OPPUGNO + "\n" + PROTEGO + "\n" + REDUCTO + "\n" + REPARO + "\n" + 
-						STUPEFY + "\n" + WINGARDIUM_LEVIOSA + "\n" + ALOHOMORA);
+				ACCIO + N + AGUAMENTI + N + APARECIUM + N + AVIS + N + 
+						DEFODIO + N + DURO + N + EBUBLIO + N + EXPELLIARMUS + N + 
+						GEMINIO + N + IMPEDIMENTA + N + INCENDIO + N + LUMOS + N + 
+						OPPUGNO + N + PROTEGO + N + REDUCTO + N + REPARO + N + 
+						STUPEFY + N + WINGARDIUM_LEVIOSA + N + ALOHOMORA + N + 
+						ENGORGIO);
 		bookMap.put("Easy Spells to Fool Muggles", 
-				CONFUNDO);
+				CONFUNDO + N + EVERTE_STATUM);
 		bookMap.put("Wizard's Spells, Volume 1", 
-				GLACIUS + "\n" + COLLOPORTUS + "\n" + TERGEO);
+				GLACIUS + N + COLLOPORTUS + N + TERGEO + N + CARPE_RETRACTUM);
 		bookMap.put("Wizard's Spells, Volume 2", 
-				BOMBARDA + "\n" + MUFFLIATO + "\n" + REDUCTO + "\n" + GLACIUS_DUO);
+				BOMBARDA + N + MUFFLIATO + N + REDUCTO + N + GLACIUS_DUO);
 		bookMap.put("Wizard's Spells, Volume 3", 
-				BOMBARDA_MAXIMA + "\n" + PACK + "\n" + GLACIUS_TRIA);
+				BOMBARDA_MAXIMA + N + PACK + N + GLACIUS_TRIA);
 		bookMap.put("Practical Magic", 
-				APPARATE + "\n" + AQUA_ERUCTO + "\n" + DEFODIO + "\n" + DELETRIUS + "\n" + 
-						HERBIVICUS + "\n" + PORTUS + "\n" + TERGEO + "\n" + PACK);
+				APPARATE + N + AQUA_ERUCTO + N + DEFODIO + N + DELETRIUS + N + 
+						HERBIVICUS + N + PORTUS + N + TERGEO + N + PACK);
 		bookMap.put("The Secrets of Wandlore",
 				"The secrets of wandlore are not to be easily had, however " +
 						"they will be related in this book with the greatest of ease.\n" +
-						FRANGE_LIGNEA + "\n" + LIGATIS_COR);
+						FRANGE_LIGNEA + N + LIGATIS_COR);
 		return bookMap;
 	}
 }

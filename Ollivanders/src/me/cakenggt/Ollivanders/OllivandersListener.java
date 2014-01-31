@@ -37,6 +37,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -58,11 +59,11 @@ import StationarySpell.SPONGIFY;
  * @author lownes
  *
  */
-public class OllivandersPlayerListener implements Listener {
+public class OllivandersListener implements Listener {
 
 	Ollivanders p;
 
-	public OllivandersPlayerListener(Ollivanders plugin) {
+	public OllivandersListener(Ollivanders plugin) {
 		p = plugin;
 	}
 
@@ -134,10 +135,14 @@ public class OllivandersPlayerListener implements Listener {
 		}
 		Set<Player> remRecipients = new HashSet<Player>();
 		for (Player recipient : recipients){
-			double distance = recipient.getLocation().distance(
-					sender.getLocation());
+			double distance;
+			try {
+				distance = recipient.getLocation().distance(sender.getLocation());
+			} catch (IllegalArgumentException e) {
+				distance = -1;
+			}
 			if (spell != null){
-				if (distance > chatDistance){
+				if (distance > chatDistance || distance == -1){
 					remRecipients.add(recipient);
 				}
 			}
@@ -783,6 +788,27 @@ public class OllivandersPlayerListener implements Listener {
 			if (p.getOPlayer((Player)target).isInvisible()){
 				event.setCancelled(true);
 			}
+		}
+	}
+
+	/**This drops a random wand when a witch dies
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void witchWandDrop(EntityDeathEvent event){
+		if (event.getEntityType() == EntityType.WITCH && p.getConfig().getBoolean("witchDrop")){
+			int wandType = (int) (Math.random()*4);
+			int coreType = (int) (Math.random()*4);
+			String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
+			String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};
+			ItemStack wand = new ItemStack(Material.STICK);
+			List<String> lore = new ArrayList<String>();
+			lore.add(woodArray[wandType] + " and " + coreArray[coreType]);
+			ItemMeta meta = wand.getItemMeta();
+			meta.setLore(lore);
+			meta.setDisplayName("Wand");
+			wand.setItemMeta(meta);
+			event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
 		}
 	}
 }

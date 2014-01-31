@@ -70,7 +70,7 @@ public class Ollivanders extends JavaPlugin{
 
 	@SuppressWarnings("unchecked")
 	public void onEnable() {
-		playerListener = new OllivandersPlayerListener(this);
+		playerListener = new OllivandersListener(this);
 		getServer().getPluginManager().registerEvents(playerListener, this);
 		//loads data
 		if (new File("plugins/Ollivanders/").mkdirs())
@@ -97,6 +97,10 @@ public class Ollivanders extends JavaPlugin{
 		}
 		fileConfig = getConfig();
 		//finished loading data
+		if (fileConfig.getBoolean("update")){
+			@SuppressWarnings("unused")
+			Updater updater = new Updater(this, 72117, this.getFile(), Updater.UpdateType.DEFAULT, false);
+		}
 		fillAllSpellCount();
 		this.schedule = new OllivandersSchedule(this);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.schedule, 20L, 1L);
@@ -106,13 +110,85 @@ public class Ollivanders extends JavaPlugin{
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
 		if(cmd.getName().equalsIgnoreCase("Okit")){
+			String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
+			String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};
 			Player player = null;
 			if (sender instanceof Player) {
 				player = (Player) sender;
 			}
-			if (player == null) {
-				sender.sendMessage("This command can only be run by a player");
-				return false;
+			if (player == null){
+				if (args.length >= 4){
+					if (args[0].equalsIgnoreCase("wand")){
+						Player receiver = Bukkit.getPlayer(args[1]);
+						if (receiver != null){
+							String wood = "";
+							String core = "";
+							if (args[2].startsWith("*")){
+								wood = woodArray[(int) (Math.random()*4)];
+							}
+							else{
+								for (String w : woodArray){
+									if (w.toLowerCase().startsWith(args[2].toLowerCase())){
+										wood = w;
+										break;
+									}
+								}
+							}
+							if (args[3].startsWith("*")){
+								core = coreArray[(int) (Math.random()*4)];
+							}
+							else{
+								for (String c : coreArray){
+									if (c.toLowerCase().startsWith(args[3].toLowerCase())){
+										core = c;
+										break;
+									}
+								}
+							}
+							ItemStack wand = new ItemStack(Material.STICK);
+							List<String> lore = new ArrayList<String>();
+							lore.add(wood + " and " + core);
+							ItemMeta meta = wand.getItemMeta();
+							meta.setLore(lore);
+							meta.setDisplayName("Wand");
+							wand.setItemMeta(meta);
+							boolean add = true;
+							if (args.length == 5){
+								int wandIndex = 0;
+								boolean changeWand = false;
+								for (ItemStack item : receiver.getInventory()){
+									if (isWand(item)){
+										add = false;
+										if (args[4].equalsIgnoreCase("t")){
+											wandIndex = receiver.getInventory().first(item);
+											changeWand = true;
+										}
+										else if (args[4].equalsIgnoreCase("f")){
+											if (!destinedWand(receiver, item)){
+												wandIndex = receiver.getInventory().first(item);
+												changeWand = true;
+											}
+										}
+										break;
+									}
+								}
+								if (changeWand){
+									receiver.getInventory().setItem(wandIndex, wand);
+								}
+							}
+							if (add){
+								if (receiver.getInventory().addItem(wand).size() != 0){
+									receiver.getWorld().dropItem(receiver.getLocation(), wand);
+								}
+							}
+						}
+					}
+					return true;
+				}
+				else{
+					sender.sendMessage("This command can only be run by a player");
+					return false;
+				}
 			}
 			sender.sendMessage("Ollivanders " + this.getDescription().getVersion());
 			//Arguments of command
@@ -140,8 +216,6 @@ public class Ollivanders extends JavaPlugin{
 				List<ItemStack> kit = new ArrayList<ItemStack>();
 				//Give amount of each type of wand
 				if (wands){
-					String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
-					String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};
 					for (String i : woodArray){
 						for (String j : coreArray){
 							ItemStack wand = new ItemStack(Material.STICK);
@@ -462,12 +536,72 @@ public class Ollivanders extends JavaPlugin{
 		}
 		return cast;
 	}
-	
+
 	/**Get the file configuration
 	 * @return FileConfiguration
 	 */
 	public FileConfiguration getFileConfig(){
 		return fileConfig;
+	}
+
+	/**Is this item stack a wand?
+	 * @param stack - stack to be checked
+	 * @return true if yes, false if no
+	 */
+	public static boolean isWand(ItemStack stack){
+		if (stack != null){
+			if (stack.getType() == Material.STICK || stack.getType() == Material.BLAZE_ROD){
+				if (stack.getItemMeta().hasLore()){
+					List<String> lore = stack.getItemMeta().getLore();
+					if (lore.get(0).split(" and ").length == 2){
+						return true;
+					}
+					else{
+						return false;
+					}
+				}
+				else{
+					return false;
+				}
+			}
+			else{
+				return false;
+			}
+		}
+		else{
+			return false;
+		}
+	}
+
+	/**Is this itemstack the player's destined wand?
+	 * @param player - Player to check the stack against.
+	 * @param stack - Itemstack to be checked
+	 * @return true if yes, false if no
+	 */
+	public static boolean destinedWand(Player player, ItemStack stack){
+		if (isWand(stack)){
+			String charList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
+			int wood = player.getName().length()%4;
+			String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
+			String woodString = woodArray[wood];
+			int core = 0;
+			for (char a : player.getName().toCharArray()){
+				core += charList.indexOf(a)+1;
+			}
+			String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};
+			String coreString = coreArray[core%4];
+			List<String> lore = stack.getItemMeta().getLore();
+			String[] comps = lore.get(0).split(" and ");
+			if (woodString.equals(comps[0]) && coreString.equals(comps[1])){
+				return true;
+			}
+			else{
+				return false;
+			}
+		}
+		else{
+			return false;
+		}
 	}
 
 	/** SLAPI = Saving/Loading API
