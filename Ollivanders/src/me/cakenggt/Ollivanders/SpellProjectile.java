@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Giant;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -110,7 +111,7 @@ public class SpellProjectile{
 		List<Entity> close = new ArrayList<Entity>();
 		for (Entity e : entities){
 			if (e instanceof LivingEntity){
-				if (((LivingEntity) e).getEyeLocation().distance(location) < radius || (e instanceof EnderDragon && ((LivingEntity) e).getEyeLocation().distance(location) < (radius + 5))){
+				if (((LivingEntity) e).getEyeLocation().distance(location) < radius || ((e instanceof EnderDragon || e instanceof Giant) && ((LivingEntity) e).getEyeLocation().distance(location) < (radius + 5))){
 					if (!e.equals(player)){
 						close.add(e);
 					}

@@ -17,7 +17,7 @@ public class SILENCIO extends OEffect implements Effect{
 		super(sender, effect, duration);
 	}
 
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders p, Player owner) {
 		age(1);
 	}
 	

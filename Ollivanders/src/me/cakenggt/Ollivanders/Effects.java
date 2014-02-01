@@ -6,6 +6,7 @@ package me.cakenggt.Ollivanders;
  *
  */
 public enum Effects{
+	MUCUS_AD_NAUSEAM,
 	SILENCIO;
 	
 	/**

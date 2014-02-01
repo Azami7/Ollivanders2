@@ -1,5 +1,7 @@
 package Effect;
 
+import org.bukkit.entity.Player;
+
 import me.cakenggt.Ollivanders.Ollivanders;
 
 /**
@@ -13,5 +15,5 @@ public interface Effect{
 	 * in this if you want the effect to age and die eventually.
 	 * @param p The plugin, so that it can access the list of stationary and projectile spells
 	 */
-	public void checkEffect(Ollivanders p);
+	public void checkEffect(Ollivanders p, Player owner);
 }

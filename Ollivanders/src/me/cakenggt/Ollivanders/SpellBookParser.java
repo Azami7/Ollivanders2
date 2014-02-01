@@ -148,10 +148,18 @@ public class SpellBookParser{
 			+ "The duration of the glowstone depends on your experience.";
 	public final static String LUMOS_MAXIMA = "Lumos maxima will spawn a glowstone at the impact site that will "
 			+ "exist for a duration depending on your experience.";
-	public final static String MELOFORS = "Places a melon on the target's head.";
+	public final static String MELOFORS = "Melofors places a melon on the target's head.";
+	public final static String METEOLOJINX = "Meteolojinx will turn a sunny day into a storm for a duration which "
+			+ "depends on your experience.";
+	public final static String METEOLOJINX_RECANTO = "Meteolojinx Recanto will turn a storm into a sunny day for "
+			+ "a duration which depends on your experience.";
+	public final static String MUCUS_AD_NAUSEAM = "Mucus Ad Nauseam will cause your opponent to drip with slime for "
+			+ "a duration dependent on your experience.";
 	public final static String MUFFLIATO = "Muffliato creates a stationary spell which only allows the people "
 			+ "inside to hear anything spoken inside the effect. The duration of the spell depends on "
 			+ "your experience.";
+	public final static String MULTICORFORS = "Multicorfors changes the dye color of a sheep or the block color in a "
+			+ "radius to another color randomly. The radius depends on your experience.";
 	public final static String NULLUM_APPAREBIT = "Nullum apparebit creates a stationary spell which will not "
 			+ "allow apparition into it. The duration depends on your experience.";
 	public final static String NULLUM_EVANESCUNT = "Nullum evanescunt creates a stationary spell which will not "
@@ -164,6 +172,8 @@ public class SpellBookParser{
 			+ "dependent on your experience.";
 	public final static String PARTIS_TEMPORUS = "Partis temporus, if cast at a stationary spell that you have cast, "
 			+ "will cause that stationary spell's effects to stop for a short time.";
+	public final static String PERICULUM = "Periculum shoots red sparks. The height of the sparks depends on your "
+			+ "experience.";
 	public final static String PIERTOTUM_LOCOMOTOR = "Piertotum locomotor, if cast at an iron or snow block, will "
 			+ "transfigure that block into an iron or snow golem. This transfiguration's duration depends "
 			+ "on your experience.";
@@ -184,6 +194,8 @@ public class SpellBookParser{
 			+ "to it's boundary. It's duration depends on your experience.";
 	public final static String PROTEGO_TOTALUM = "Protego totalum is a stationary spell which will prevent any entities "
 			+ "from crossing it's boundary. It's duration depends on your experience.";
+	public final static String REDUCIO = "Reducio will shrink a zombie giant to normal size. It's radius of effect, and thus "
+			+ "how accurate you have to be, depends on your experience.";
 	public final static String REDUCTO = "Reducto creates an explosion which will damage the terrain. It's power depends "
 			+ "on your experience.";
 	public final static String REPARIFARGE = "Reparifarge will cause the duration of the transfiguration on the targeted "
@@ -383,7 +395,7 @@ public class SpellBookParser{
 		bookMap.put("The Standard Book of Spells, Grade 2", 
 				EXPELLIARMUS + N + IMMOBULUS + N + INCENDIO + N + LUMOS + N + 
 						OBLIVIATE + N + ALOHOMORA + N + ENGORGIO + N + 
-						FINITE_INCANTATEM);
+						FINITE_INCANTATEM + N + REDUCIO);
 		bookMap.put("The Standard Book of Spells, Grade 3", 
 				AQUA_ERUCTO + N + BOMBARDA + N + EXPELLIARMUS + N + 
 						GLACIUS + N + LUMOS_DUO + N + REPARO + N + DRACONIFORS + N + 
@@ -398,7 +410,7 @@ public class SpellBookParser{
 						WINGARDIUM_LEVIOSA + N + GLACIUS_TRIA + N + DEPULSO);
 		bookMap.put("The Standard Book of Spells, Grade 6", 
 				APPARATE + N + CRESCERE_PROTEGAT + N + HORREAT_PROTEGAT + N + 
-						INCENDIO_DUO);
+						INCENDIO_DUO + N + MULTICORFORS);
 		bookMap.put("The Standard Book of Spells, Grade 7", 
 				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
 						PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA);
@@ -407,17 +419,19 @@ public class SpellBookParser{
 		bookMap.put("A Compendium of Common Curses and Their Counter-Actions", 
 				INCENDIO_DUO + N + SILENCIO);
 		bookMap.put("Confronting the Faceless", 
-				AVADA_KEDAVRA + N + IMPEDIMENTA);
+				AVADA_KEDAVRA + N + IMPEDIMENTA + N + METEOLOJINX);
 		bookMap.put("Curses and Counter-Curses",
-				"");
+				METEOLOJINX_RECANTO);
 		bookMap.put("Dark Arts Defence: Basics for Beginners", 
-				ARRESTO_MOMENTUM + N + HARMONIA_NECTERE_PASSUS + N + EPISKEY);
+				ARRESTO_MOMENTUM + N + HARMONIA_NECTERE_PASSUS + N + EPISKEY + N + 
+				METEOLOJINX + N + PERICULUM);
 		bookMap.put("Defensive Magical Theory", 
-				INFORMOUS + N + SILENCIO + N + ASCENDIO);
+				INFORMOUS + N + SILENCIO + N + ASCENDIO + N + PERICULUM);
 		bookMap.put("The Dark Arts Outsmarted",
-				AVADA_KEDAVRA + N + FIENDFYRE + N + INFORMOUS + N + HARMONIA_NECTERE_PASSUS);
+				AVADA_KEDAVRA + N + FIENDFYRE + N + INFORMOUS + N + HARMONIA_NECTERE_PASSUS + N + 
+				METEOLOJINX_RECANTO);
 		bookMap.put("The Dark Forces: A Guide to Self-Protection", 
-				LUMOS);
+				LUMOS + N + MUCUS_AD_NAUSEAM);
 		bookMap.put("Guide to Advanced Occlumency", 
 				"");
 		bookMap.put("Jinxes for the Jinxed", 
@@ -457,16 +471,16 @@ public class SpellBookParser{
 						+ "the transfiguration has a time duration.\n" + 
 						EVANESCO + N + GEMINIO + N + REPARIFARGE);
 		bookMap.put("Madcap Magic for Wacky Warlocks", 
-				DEPRIMO + N + MELOFORS);
+				DEPRIMO + N + MELOFORS + N + MULTICORFORS);
 		bookMap.put("Saucy Tricks for Tricky Sorts", 
-				CONFUNDO + N + EVERTE_STATUM + N + MELOFORS);
+				CONFUNDO + N + EVERTE_STATUM + N + MELOFORS + N + MUCUS_AD_NAUSEAM);
 		bookMap.put("Book of Spells", 
 				ACCIO + N + AGUAMENTI + N + APARECIUM + N + AVIS + N + 
 						DEFODIO + N + DURO + N + EBUBLIO + N + EXPELLIARMUS + N + 
 						GEMINIO + N + IMPEDIMENTA + N + INCENDIO + N + LUMOS + N + 
 						OPPUGNO + N + PROTEGO + N + REDUCTO + N + REPARO + N + 
 						STUPEFY + N + WINGARDIUM_LEVIOSA + N + ALOHOMORA + N + 
-						ENGORGIO);
+						ENGORGIO + N + REDUCIO);
 		bookMap.put("Easy Spells to Fool Muggles", 
 				CONFUNDO + N + EVERTE_STATUM);
 		bookMap.put("Wizard's Spells, Volume 1", 

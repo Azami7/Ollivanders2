@@ -78,6 +78,12 @@ public class Ollivanders extends JavaPlugin{
 		OPlayerMap = new HashMap<String, OPlayer>();
 		projectiles = new ArrayList<SpellProjectile>();
 		stationary = new ArrayList<StationarySpellObj>();
+		fileConfig = getConfig();
+		//finished loading data
+		if (fileConfig.getBoolean("update")){
+			@SuppressWarnings("unused")
+			Updater updater = new Updater(this, 72117, this.getFile(), Updater.UpdateType.DEFAULT, true);
+		}
 		try {
 			OPlayerMap = (HashMap<String, OPlayer>) SLAPI
 					.load("plugins/Ollivanders/OPlayerMap.bin");
@@ -94,12 +100,6 @@ public class Ollivanders extends JavaPlugin{
 		}
 		if (!new File(this.getDataFolder(), "config.yml").exists()){
 			this.saveDefaultConfig();
-		}
-		fileConfig = getConfig();
-		//finished loading data
-		if (fileConfig.getBoolean("update")){
-			@SuppressWarnings("unused")
-			Updater updater = new Updater(this, 72117, this.getFile(), Updater.UpdateType.DEFAULT, false);
 		}
 		fillAllSpellCount();
 		this.schedule = new OllivandersSchedule(this);

@@ -20,7 +20,7 @@ public class EPISKEY extends SpellProjectile implements Spell{
 	}
 
 	public void checkEffect() {
-		player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, (int) (usesModifier*20), 1), true);
+		player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int) (usesModifier*20), 0), true);
 		kill();
 	}
 	

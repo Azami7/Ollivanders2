@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Creature;
@@ -71,7 +72,7 @@ class OllivandersSchedule implements Runnable{
 			if (oply.getEffects() != null && onlinePlayers.contains(p.getServer().getPlayer(name))){
 				List<OEffect> effects2 = new ArrayList<OEffect>(oply.getEffects());
 				for (OEffect effect : effects2){
-					((Effect) effect).checkEffect(p);
+					((Effect) effect).checkEffect(p, Bukkit.getPlayer(name));
 					if (effect.kill){
 						oply.remEffect(effect);
 					}
