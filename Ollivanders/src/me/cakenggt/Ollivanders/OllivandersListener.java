@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
@@ -50,6 +49,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import Spell.FORSKNING;
 import Spell.PORTUS;
 import StationarySpell.COLLOPORTUS;
 import StationarySpell.SPONGIFY;
@@ -108,6 +108,13 @@ public class OllivandersListener implements Listener {
 					System.out.println("<" + sender.getPlayerListName() + "> " + message);
 					event.setCancelled(true);
 					return;
+				}
+			}
+		}
+		for (SpellProjectile proj : p.getProjectiles()){
+			if (proj instanceof FORSKNING && proj.location.getWorld() == sender.getWorld()){
+				if (proj.location.distance(sender.getLocation()) <= 10){
+					((FORSKNING)proj).research(message);
 				}
 			}
 		}
@@ -281,21 +288,28 @@ public class OllivandersListener implements Listener {
 						if (cat.isTamed()){
 							for (Entity item : world.getEntities()){
 								if (item instanceof Item && item.getLocation().distance(cat.getLocation()) <= 2){
-									OfflinePlayer off = server.getOfflinePlayer(splited[2]);
-									if (off.isOnline()){
-										Player recipient = off.getPlayer();
-										if (recipient.getWorld().getName().equals(world.getName())){
-											world.playSound(cat.getLocation(),Sound.CAT_MEOW,1, 0);
-											cat.teleport(recipient.getLocation());
-											item.teleport(recipient.getLocation());
-											world.playSound(cat.getLocation(),Sound.CAT_MEOW,1, 0);
+									Player recipient = server.getPlayer(splited[2]);
+									if (recipient != null){
+										if (recipient.isOnline()){
+											if (recipient.getWorld().getName().equals(world.getName())){
+												world.playSound(cat.getLocation(),Sound.CAT_MEOW,1, 0);
+												cat.teleport(recipient.getLocation());
+												item.teleport(recipient.getLocation());
+												world.playSound(cat.getLocation(),Sound.CAT_MEOW,1, 0);
+											}
+											else{
+												world.playSound(cat.getLocation(),Sound.CAT_HISS,1, 0);
+												sender.sendMessage(splited[2] + " is not in this world.");
+											}
 										}
 										else{
 											world.playSound(cat.getLocation(),Sound.CAT_HISS,1, 0);
+											sender.sendMessage(splited[2] + " is not online.");
 										}
 									}
 									else{
 										world.playSound(cat.getLocation(),Sound.CAT_HISS,1, 0);
+										sender.sendMessage(splited[2] + " is not online.");
 									}
 									return;
 								}
@@ -721,19 +735,17 @@ public class OllivandersListener implements Listener {
 		}
 	}
 
-	/**Prevenets a dragon spawned by draconifors from changing any blocks.
+	/**Prevents a transfigured entity from changing any blocks by exploding.
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void draconiforsBlockChange(EntityExplodeEvent event){
+	public void transfiguredEntityExplodeCancel(EntityExplodeEvent event){
 		if (event.getEntity() != null){
-			if (event.getEntityType() == EntityType.ENDER_DRAGON){
-				for (SpellProjectile proj : p.getProjectiles()){
-					if (proj instanceof Transfiguration){
-						Transfiguration trans = (Transfiguration) proj;
-						if (trans.getToID() == event.getEntity().getEntityId()){
-							event.setCancelled(true);
-						}
+			for (SpellProjectile proj : p.getProjectiles()){
+				if (proj instanceof Transfiguration){
+					Transfiguration trans = (Transfiguration) proj;
+					if (trans.getToID() == event.getEntity().getEntityId()){
+						event.setCancelled(true);
 					}
 				}
 			}

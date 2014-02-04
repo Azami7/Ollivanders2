@@ -59,12 +59,14 @@ public class APPARATE extends SpellProjectile implements Spell{
 				}
 			}
 			if (canApparateIn) {
+				player.getWorld().createExplosion(player.getLocation(), 0);
 				player.teleport(to);
 				for (Entity e : player.getWorld().getEntities()) {
 					if (from.distance(e.getLocation()) <= 2) {
 						e.teleport(to);
 					}
 				}
+				player.getWorld().createExplosion(player.getLocation(), 0);
 			}
 		}
 	}

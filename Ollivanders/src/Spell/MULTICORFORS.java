@@ -3,10 +3,12 @@ package Spell;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 import org.bukkit.material.Colorable;
+import org.bukkit.material.MaterialData;
 
 import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
@@ -36,9 +38,12 @@ public class MULTICORFORS extends SpellProjectile implements Spell{
 		}
 		if (getBlock().getType() != Material.AIR){
 			for (Block block : getBlocksInRadius(location, usesModifier)){
-				if (block instanceof Colorable){
-					Colorable colorable = (Colorable)block;
+				if (block.getState().getData() instanceof Colorable){
+					BlockState bs = block.getState();
+					Colorable colorable = (Colorable) bs.getData();
 					colorable.setColor(newColor);
+					bs.setData((MaterialData) colorable);
+					bs.update();
 				}
 				kill();
 			}

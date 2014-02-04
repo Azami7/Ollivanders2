@@ -71,9 +71,7 @@ public class OPlayer implements Serializable{
 	}
 	
 	public void addEffect(OEffect e){
-		System.out.println("Adding: " + e);
 		effects.add(e);
-		System.out.println("Added");
 	}
 	
 	public void remEffect(OEffect e){

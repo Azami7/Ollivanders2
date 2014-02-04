@@ -64,7 +64,7 @@ public class FLAGRANTE extends SpellProjectile implements Spell{
 			else{
 				item.remove();
 			}
-			item.getWorld().dropItemNaturally(item.getLocation(), stack);
+			item.getWorld().dropItem(item.getLocation(), stack);
 			kill();
 			return;
 		}

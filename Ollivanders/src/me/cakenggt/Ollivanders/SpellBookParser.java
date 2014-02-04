@@ -67,6 +67,10 @@ public class SpellBookParser{
 			+ "by your experience.";
 	public final static String DEPULSO = "Depulso will repel any entity you hit with it. The strength "
 			+ "of the repulsion depends on your experience.";
+	public final static String DIFFINDO = "Diffindo, if it hits a log, will break any logs within a "
+			+ "radius of it's impact. The radius depends on your experience. It will also split the "
+			+ "backpack of any player it hits, spilling out their items. How many items are spilled "
+			+ "with this event depends on your experience.";
 	public final static String DIMMINUENDO = "Dimminuendo will cause any creature hit to turn into "
 			+ "a smaller version. The time duration, for some of the creatures, will depend on your "
 			+ "experience.";
@@ -105,6 +109,11 @@ public class SpellBookParser{
 			+ "your experience in the spell.";
 	public final static String FLAGRANTE = "Flagrante will cause an item to burn it's bearer when picked "
 			+ "up. The length of the burn depends on your experience.";
+	public final static String FORSKNING = "Forskning will allow you to transfigure a wand into a research "
+			+ "platform. This transfiguration unspools a wand's magical energy to create the platform, and "
+			+ "as such is extremely sensitive to any kind of perturbation. The slightest damage will cause "
+			+ "it to explode violently. While close to this research platform, begin saying letters. Notes "
+			+ "will show you when you are on the right path to discovering a spell.";
 	public final static String FRANGE_LIGNEA = "Frange lignea will cause a log of the spruce, oak, birch, or "
 			+ "jungle species to explode into coreless wands. The number of wands dropped depends "
 			+ "on your experience.";
@@ -383,19 +392,23 @@ public class SpellBookParser{
 						EPISKEY);
 		bookMap.put("Extreme Incantations",
 				ALARTE_ASCENDARE + N + LUMOS_MAXIMA + N + 
-						OBLIVIATE + N + ASCENDIO);
+						OBLIVIATE + N + ASCENDIO + N + FORSKNING);
 		bookMap.put("Quintessence: A Quest",
+				"The five major wards are described as follows: " + N + 
+				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PROTEGO_HORRIBILIS + N + 
+				PROTEGO_TOTALUM + N + COLLOPORTUS + N + 
+				"Following are described several ward modifiers and two minor wards: " + N + 
 				CRESCERE_PROTEGAT + N + FIANTO_DURI + N + HORREAT_PROTEGAT + N + 
-						NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
-						PROTEGO_HORRIBILIS + N + PROTEGO_MAXIMA + N + PROTEGO_TOTALUM + N + 
-						SCUTO_CONTERAM);
+				PARTIS_TEMPORUS + N + SCUTO_CONTERAM + N + PROTEGO + N + 
+				PROTEGO_MAXIMA);
 		bookMap.put("The Standard Book of Spells, Grade 1",
 				INCENDIO + N + LUMOS + N + REPARO + N + SPONGIFY + N + 
-						WINGARDIUM_LEVIOSA + N + COLLOPORTUS + N + ALOHOMORA);
+						WINGARDIUM_LEVIOSA + N + COLLOPORTUS + N + ALOHOMORA + N + 
+						DIFFINDO);
 		bookMap.put("The Standard Book of Spells, Grade 2", 
 				EXPELLIARMUS + N + IMMOBULUS + N + INCENDIO + N + LUMOS + N + 
 						OBLIVIATE + N + ALOHOMORA + N + ENGORGIO + N + 
-						FINITE_INCANTATEM + N + REDUCIO);
+						FINITE_INCANTATEM + N + REDUCIO + N + DIFFINDO);
 		bookMap.put("The Standard Book of Spells, Grade 3", 
 				AQUA_ERUCTO + N + BOMBARDA + N + EXPELLIARMUS + N + 
 						GLACIUS + N + LUMOS_DUO + N + REPARO + N + DRACONIFORS + N + 
@@ -480,7 +493,7 @@ public class SpellBookParser{
 						GEMINIO + N + IMPEDIMENTA + N + INCENDIO + N + LUMOS + N + 
 						OPPUGNO + N + PROTEGO + N + REDUCTO + N + REPARO + N + 
 						STUPEFY + N + WINGARDIUM_LEVIOSA + N + ALOHOMORA + N + 
-						ENGORGIO + N + REDUCIO);
+						ENGORGIO + N + REDUCIO + N + DIFFINDO);
 		bookMap.put("Easy Spells to Fool Muggles", 
 				CONFUNDO + N + EVERTE_STATUM);
 		bookMap.put("Wizard's Spells, Volume 1", 

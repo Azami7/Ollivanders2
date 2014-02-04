@@ -116,155 +116,156 @@ public class Ollivanders extends JavaPlugin{
 			if (sender instanceof Player) {
 				player = (Player) sender;
 			}
-			if (player == null){
-				if (args.length >= 4){
-					if (args[0].equalsIgnoreCase("wand")){
-						Player receiver = Bukkit.getPlayer(args[1]);
-						if (receiver != null){
-							String wood = "";
-							String core = "";
-							if (args[2].startsWith("*")){
-								wood = woodArray[(int) (Math.random()*4)];
-							}
-							else{
-								for (String w : woodArray){
-									if (w.toLowerCase().startsWith(args[2].toLowerCase())){
-										wood = w;
-										break;
-									}
+			if (args.length >= 4){
+				if (player != null){
+					if (!player.isOp()){
+						sender.sendMessage("Only server ops can use the /Okit command.");
+					}
+				}
+				if (args[0].equalsIgnoreCase("wand")){
+					Player receiver = Bukkit.getPlayer(args[1]);
+					if (receiver != null){
+						String wood = "";
+						String core = "";
+						if (args[2].startsWith("*")){
+							wood = woodArray[(int) (Math.random()*4)];
+						}
+						else{
+							for (String w : woodArray){
+								if (w.toLowerCase().startsWith(args[2].toLowerCase())){
+									wood = w;
+									break;
 								}
 							}
-							if (args[3].startsWith("*")){
-								core = coreArray[(int) (Math.random()*4)];
-							}
-							else{
-								for (String c : coreArray){
-									if (c.toLowerCase().startsWith(args[3].toLowerCase())){
-										core = c;
-										break;
-									}
+						}
+						if (args[3].startsWith("*")){
+							core = coreArray[(int) (Math.random()*4)];
+						}
+						else{
+							for (String c : coreArray){
+								if (c.toLowerCase().startsWith(args[3].toLowerCase())){
+									core = c;
+									break;
 								}
 							}
-							ItemStack wand = new ItemStack(Material.STICK);
-							List<String> lore = new ArrayList<String>();
-							lore.add(wood + " and " + core);
-							ItemMeta meta = wand.getItemMeta();
-							meta.setLore(lore);
-							meta.setDisplayName("Wand");
-							wand.setItemMeta(meta);
-							boolean add = true;
-							if (args.length == 5){
-								int wandIndex = 0;
-								boolean changeWand = false;
-								for (ItemStack item : receiver.getInventory()){
-									if (isWand(item)){
-										add = false;
-										if (args[4].equalsIgnoreCase("t")){
+						}
+						ItemStack wand = new ItemStack(Material.STICK);
+						List<String> lore = new ArrayList<String>();
+						lore.add(wood + " and " + core);
+						ItemMeta meta = wand.getItemMeta();
+						meta.setLore(lore);
+						meta.setDisplayName("Wand");
+						wand.setItemMeta(meta);
+						boolean add = true;
+						if (args.length == 5){
+							int wandIndex = 0;
+							boolean changeWand = false;
+							for (ItemStack item : receiver.getInventory()){
+								if (isWand(item)){
+									add = false;
+									if (args[4].equalsIgnoreCase("t")){
+										wandIndex = receiver.getInventory().first(item);
+										changeWand = true;
+									}
+									else if (args[4].equalsIgnoreCase("f")){
+										if (!destinedWand(receiver, item)){
 											wandIndex = receiver.getInventory().first(item);
 											changeWand = true;
 										}
-										else if (args[4].equalsIgnoreCase("f")){
-											if (!destinedWand(receiver, item)){
-												wandIndex = receiver.getInventory().first(item);
-												changeWand = true;
-											}
-										}
-										break;
 									}
-								}
-								if (changeWand){
-									receiver.getInventory().setItem(wandIndex, wand);
+									break;
 								}
 							}
-							if (add){
-								if (receiver.getInventory().addItem(wand).size() != 0){
-									receiver.getWorld().dropItem(receiver.getLocation(), wand);
-								}
+							if (changeWand){
+								receiver.getInventory().setItem(wandIndex, wand);
+							}
+						}
+						if (add){
+							if (receiver.getInventory().addItem(wand).size() != 0){
+								receiver.getWorld().dropItem(receiver.getLocation(), wand);
 							}
 						}
 					}
-					return true;
+				}
+				return true;
+			}
+			else if (player != null){
+				sender.sendMessage("Ollivanders " + this.getDescription().getVersion());
+				//Arguments of command
+				boolean wands = true;
+				boolean books = true;
+				int amount = 1;
+				if (args.length > 0){
+					if (args[0].equalsIgnoreCase("wands")){
+						books = false;
+					}
+					else if (args[0].equalsIgnoreCase("books")){
+						wands = false;
+					}
+					if (args.length == 2){
+						try {  
+							amount = Integer.parseInt(args[1]);  
+						}  
+						catch(NumberFormatException nfe) { 
+						}  
+					}
+				}
+				if (player.isOp()){
+					//give them the kit
+					Location loc = player.getEyeLocation();
+					List<ItemStack> kit = new ArrayList<ItemStack>();
+					//Give amount of each type of wand
+					if (wands){
+						for (String i : woodArray){
+							for (String j : coreArray){
+								ItemStack wand = new ItemStack(Material.STICK);
+								List<String> lore = new ArrayList<String>();
+								lore.add(i + " and " + j);
+								ItemMeta meta = wand.getItemMeta();
+								meta.setLore(lore);
+								meta.setDisplayName("Wand");
+								wand.setItemMeta(meta);
+								wand.setAmount(amount);
+								kit.add(wand);
+							}
+						}
+					}
+					if (wands && books){
+						//Give Elder Wand
+						ItemStack wand = new ItemStack(Material.BLAZE_ROD);
+						List<String> lore = new ArrayList<String>();
+						lore.add("Blaze and Ender Pearl");
+						ItemMeta meta = wand.getItemMeta();
+						meta.setLore(lore);
+						meta.setDisplayName("Elder Wand");
+						wand.setItemMeta(meta);
+						kit.add(wand);
+						//Give Invisibility Cloak
+						ItemStack cloak = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+						List<String> cloakLore = new ArrayList<String>();
+						cloakLore.add("Silvery Transparent Cloak");
+						ItemMeta cloakMeta = cloak.getItemMeta();
+						cloakMeta.setLore(cloakLore);
+						cloakMeta.setDisplayName("Cloak of Invisibility");
+						cloak.setItemMeta(cloakMeta);
+						kit.add(cloak);
+					}
+					//give them books
+					if (books){
+						List<ItemStack> booksList = SpellBookParser.makeBooks(amount);
+						kit.addAll(booksList);
+					}
+					ItemStack[] kitArray = kit.toArray(new ItemStack[kit.size()]);
+					HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(kitArray);
+					for (ItemStack item : leftover.values()){
+						player.getWorld().dropItem(loc, item);
+					}
 				}
 				else{
-					sender.sendMessage("This command can only be run by a player");
-					return false;
+					sender.sendMessage("Only server ops can use the /Okit command.");
 				}
+				return true;
 			}
-			sender.sendMessage("Ollivanders " + this.getDescription().getVersion());
-			//Arguments of command
-			boolean wands = true;
-			boolean books = true;
-			int amount = 1;
-			if (args.length > 0){
-				if (args[0].equalsIgnoreCase("wands")){
-					books = false;
-				}
-				else if (args[0].equalsIgnoreCase("books")){
-					wands = false;
-				}
-				if (args.length == 2){
-					try {  
-						amount = Integer.parseInt(args[1]);  
-					}  
-					catch(NumberFormatException nfe) { 
-					}  
-				}
-			}
-			if (player.isOp()){
-				//give them the kit
-				Location loc = player.getEyeLocation();
-				List<ItemStack> kit = new ArrayList<ItemStack>();
-				//Give amount of each type of wand
-				if (wands){
-					for (String i : woodArray){
-						for (String j : coreArray){
-							ItemStack wand = new ItemStack(Material.STICK);
-							List<String> lore = new ArrayList<String>();
-							lore.add(i + " and " + j);
-							ItemMeta meta = wand.getItemMeta();
-							meta.setLore(lore);
-							meta.setDisplayName("Wand");
-							wand.setItemMeta(meta);
-							wand.setAmount(amount);
-							kit.add(wand);
-						}
-					}
-				}
-				if (wands && books){
-					//Give Elder Wand
-					ItemStack wand = new ItemStack(Material.BLAZE_ROD);
-					List<String> lore = new ArrayList<String>();
-					lore.add("Blaze and Ender Pearl");
-					ItemMeta meta = wand.getItemMeta();
-					meta.setLore(lore);
-					meta.setDisplayName("Elder Wand");
-					wand.setItemMeta(meta);
-					kit.add(wand);
-					//Give Invisibility Cloak
-					ItemStack cloak = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-					List<String> cloakLore = new ArrayList<String>();
-					cloakLore.add("Silvery Transparent Cloak");
-					ItemMeta cloakMeta = cloak.getItemMeta();
-					cloakMeta.setLore(cloakLore);
-					cloakMeta.setDisplayName("Cloak of Invisibility");
-					cloak.setItemMeta(cloakMeta);
-					kit.add(cloak);
-				}
-				//give them books
-				if (books){
-					List<ItemStack> booksList = SpellBookParser.makeBooks(amount);
-					kit.addAll(booksList);
-				}
-				ItemStack[] kitArray = kit.toArray(new ItemStack[kit.size()]);
-				HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(kitArray);
-				for (ItemStack item : leftover.values()){
-					player.getWorld().dropItem(loc, item);
-				}
-			}
-			else{
-				sender.sendMessage("Only server ops can use the /Okit command.");
-			}
-			return true;
 		}
 		return false;
 	}
