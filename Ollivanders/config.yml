@@ -1,6 +1,19 @@
+update: true
+chatDropoff: 50
+witchDrop: false
 zones:
   default-world:
     type: World
     world: world
     allowed-spells:
-      - ALL
+      - 
+    disallowed-spells:
+      - 
+  default-cuboid:
+    type: Cuboid
+    world: world
+    area: 0 0 0 0 0 0
+    allowed-spells:
+      - 
+    disallowed-spells:
+      - 

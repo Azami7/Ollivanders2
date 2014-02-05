@@ -1,6 +1,6 @@
 name: Ollivanders
 main: me.cakenggt.Ollivanders.Ollivanders
-version: 0.09
+version: 0.11
 author: cakenggt
 commands:
   Okit:
