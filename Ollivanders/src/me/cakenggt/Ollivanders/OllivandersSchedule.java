@@ -3,8 +3,10 @@ package me.cakenggt.Ollivanders;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -17,6 +19,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import Effect.Effect;
 import Spell.Spell;
+import StationarySpell.REPELLO_MUGGLETON;
 import StationarySpell.StationarySpell;
 
 /**
@@ -39,7 +42,7 @@ class OllivandersSchedule implements Runnable{
 			itemCurseSched();
 		}
 		if (counter %20 == 1){
-			invisCloak();
+			invisPlayer();
 		}
 		counter = (counter+1)%20;
 	}
@@ -171,49 +174,67 @@ class OllivandersSchedule implements Runnable{
 	private void flagrante(Player player, ItemStack item){
 		ItemMeta meta = item.getItemMeta();
 		List<String> lore = meta.getLore();
-		ArrayList<String> newLore = new ArrayList<String>();
+		int magnitude = 0;
 		for (int i = 0; i < lore.size(); i++){
 			if (lore.get(i).contains("Flagrante ")){
 				String[] loreParts = lore.get(i).split(" ");
-				int magnitude = Integer.parseInt(loreParts[1]);
-				if (magnitude > 1){
-					magnitude --;
-					newLore.add("Flagrante " + magnitude);
-				}
-			}
-			else{
-				newLore.add(lore.get(i));
+				magnitude = Integer.parseInt(loreParts[1]);
 			}
 		}
-		meta.setLore(newLore);
-		item.setItemMeta(meta);
-		int currentFire = player.getFireTicks();
-		int newFire = currentFire + (item.getAmount()*160);
-		player.setFireTicks(newFire);
+		player.damage(magnitude * 0.05 * item.getAmount());
+		player.setFireTicks(160);
 	}
 
 	/**Hides a player with the Cloak of Invisibility from other players.
+	 * Also hides players in Repello Muggleton from players not in that same spell.
 	 * Also sets any Creature targeting this player to have null target.
 	 * 
 	 */
-	private void invisCloak(){
+	private void invisPlayer(){
 		for (Player player : p.getServer().getOnlinePlayers()){
 			OPlayer oplayer = p.getOPlayer(player);
-			if (hasCloak(player)){
+			Set<REPELLO_MUGGLETON> muggletons = new HashSet<REPELLO_MUGGLETON>();
+			for (StationarySpellObj stat : p.getStationary()){
+				if (stat instanceof REPELLO_MUGGLETON){
+					if (stat.isInside(player.getLocation())){
+						muggletons.add((REPELLO_MUGGLETON) stat);
+					}
+				}
+			}
+			boolean hasCloak = hasCloak(player);
+			if (hasCloak || muggletons.size() > 0){
 				for (Player viewer : p.getServer().getOnlinePlayers()){
-					viewer.hidePlayer(player);
+					if (muggletons.size() == 0){
+						viewer.hidePlayer(player);
+					}
+					else{
+						for (REPELLO_MUGGLETON muggleton : muggletons){
+							if (hasCloak || !muggleton.isInside(viewer.getLocation())){
+								viewer.hidePlayer(player);
+							}
+						}
+					}
 				}
 				if (!oplayer.isInvisible()){
 					for (Entity entity : player.getWorld().getEntities()){
 						if (entity instanceof Creature){
 							Creature creature = (Creature)entity;
 							if (creature.getTarget() == player){
-								creature.setTarget(null);
+								if (muggletons.size() == 0){
+									creature.setTarget(null);
+								}
+								else{
+									for (REPELLO_MUGGLETON muggleton : muggletons){
+										if (hasCloak || !muggleton.isInside(creature.getLocation())){
+											creature.setTarget(null);
+										}
+									}
+								}
 							}
 						}
 					}
-					oplayer.setInvisible(true);
 				}
+				oplayer.setInvisible(hasCloak);
 			}
 			else if (oplayer.isInvisible()){
 				for (Player viewer : p.getServer().getOnlinePlayers()){

@@ -117,7 +117,7 @@ public class SpellProjectile{
 					}
 					else{
 						if (lifeTicks > 1){
-							//System.out.println(((LivingEntity) e).getEyeLocation().distance(location));
+							//getLogger().info(((LivingEntity) e).getEyeLocation().distance(location));
 							close.add(e);
 						}
 					}

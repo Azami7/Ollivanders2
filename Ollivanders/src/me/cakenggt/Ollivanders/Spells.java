@@ -12,14 +12,18 @@ public enum Spells {
 	APARECIUM,
 	APPARATE,
 	AQUA_ERUCTO,
+	ARANIA_EXUMAI,
 	ARRESTO_MOMENTUM,
 	ASCENDIO,
 	AVADA_KEDAVRA,
+	AVIFORS,
 	AVIS,
 	BOMBARDA,
 	BOMBARDA_MAXIMA,
+	BRACKIUM_EMENDO,
 	CARPE_RETRACTUM,
 	COLLOPORTUS,
+	COLOVARIA,
 	CONFUNDO,
 	CRESCERE_PROTEGAT,
 	DEFODIO,
@@ -33,6 +37,7 @@ public enum Spells {
 	DRACONIFORS,
 	EBUBLIO,
 	ENGORGIO,
+	ENTOMORPHIS,
 	EPISKEY,
 	EQUUSIFORS,
 	ET_INTERFICIAM_ANIMAM_LIGAVERIS,
@@ -85,6 +90,7 @@ public enum Spells {
 	REDUCTO,
 	REPARIFARGE,
 	REPARO,
+	REPELLO_MUGGLETON,
 	SCUTO_CONTERAM,
 	SILENCIO,
 	SPONGIFY,
@@ -98,19 +104,19 @@ public enum Spells {
 	 * @return spell such that the spell resembles the string in spelling. null if no such spell exists
 	 */
 	public static Spells decode(String s){
-		//System.out.println(s);
+		//getLogger().info(s);
 		String[] words = s.split(" ");
-		//System.out.println(words.length);
+		//getLogger().info(words.length);
 		for (int i = 0; i < words.length; i++){
 			words[i] = words[i].toUpperCase();
 		}
-		//System.out.println(words.length);
+		//getLogger().info(words.length);
 		String complete = "";
 		for (String word : words){
 			complete = complete.concat(word);
 			complete = complete.concat("_");
 		}
-		//System.out.println(complete);
+		//getLogger().info(complete);
 		complete = complete.substring(0, complete.length()-1);
 		Spells spell;
 		try {

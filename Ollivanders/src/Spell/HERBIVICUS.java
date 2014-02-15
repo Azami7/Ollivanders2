@@ -33,7 +33,7 @@ public class HERBIVICUS extends SpellProjectile implements Spell{
 			for (Block block : getBlocksInRadius(location, radius)){
 				//if (block.getType() == Material.CROPS || block.getType() == Material.CARROT || block.getType() == Material.MELON || block.getType() == Material.NETHER_WARTS || block.getType() == Material.POTATO || block.getType() == Material.PUMPKIN_STEM){
 				if (block.getState().getData() instanceof Crops){
-					//System.out.println("Found Crop!");
+					//getLogger().info("Found Crop!");
 					List<CropState> stateList = new ArrayList<CropState>();
 					stateList.add(CropState.SEEDED);
 					stateList.add(CropState.GERMINATED);
@@ -51,15 +51,15 @@ public class HERBIVICUS extends SpellProjectile implements Spell{
 					BlockState blockState = block.getState();
 					MaterialData blockData = blockState.getData();
 					CropState newCropState = stateList.get(newState);
-					//System.out.println(currentState);
-					//System.out.println(newState);
-					//System.out.println("currentState " + ((Crops)block.getState().getData()).getState());
-					//System.out.println("newCropState " + newCropState);
+					//getLogger().info(currentState);
+					//getLogger().info(newState);
+					//getLogger().info("currentState " + ((Crops)block.getState().getData()).getState());
+					//getLogger().info("newCropState " + newCropState);
 					((Crops)blockData).setState(newCropState);
-					//System.out.println("1 " + ((Crops)blockData).getState());
+					//getLogger().info("1 " + ((Crops)blockData).getState());
 					blockState.setData(blockData);
 					blockState.update();
-					//System.out.println("2 " + ((Crops)blockState.getData()).getState());
+					//getLogger().info("2 " + ((Crops)blockState.getData()).getState());
 				}
 			}
 			kill();

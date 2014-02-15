@@ -32,18 +32,13 @@ public class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends SpellProjectile implements 
 		move();
 		if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER){
 			double health = ((Damageable)player).getHealth();
-			System.out.println("soulpre: " + p.getOPlayer(player).getSouls());
 			p.getOPlayer(player).addSoul();
-			System.out.println("soulpost: " + p.getOPlayer(player).getSouls());
 			int souls = p.getOPlayer(player).getSouls();
 			if (health-(4*souls) > 0){
 				HORCRUX horcrux = new HORCRUX(player, location, StationarySpells.HORCRUX, 5, 10);
-				System.out.println(horcrux);
-				System.out.println(horcrux.player);
 				horcrux.flair(10);
 				p.addStationary(horcrux);
 			}
-			System.out.println("Souls: " + souls);
 			double damage = 3.0*souls;
 			if ((((Damageable)player).getHealth()-damage)<= 0){
 				List<StationarySpellObj> stationarys = p.getStationary();

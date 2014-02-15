@@ -1,20 +1,17 @@
 package Spell;
 
-import org.bukkit.DyeColor;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
+import org.bukkit.Color;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Sheep;
-import org.bukkit.material.Colorable;
-import org.bukkit.material.MaterialData;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
 
-/**Changes color of sheep and colorable blocks
+/**If an entity has leather armor on, then this changes it's color
  * @author lownes
  *
  */
@@ -27,25 +24,22 @@ public class MULTICORFORS extends SpellProjectile implements Spell{
 
 	public void checkEffect() {
 		move();
-		DyeColor[] values = DyeColor.values();
-		DyeColor newColor = values[(int) (Math.random()*values.length)];
 		for (LivingEntity live : getLivingEntities(1)){
-			if (live instanceof Sheep){
-				Sheep sheep = (Sheep)live;
-				sheep.setColor(newColor);
-				kill();
-			}
-		}
-		if (getBlock().getType() != Material.AIR){
-			for (Block block : getBlocksInRadius(location, usesModifier)){
-				if (block.getState().getData() instanceof Colorable){
-					BlockState bs = block.getState();
-					Colorable colorable = (Colorable) bs.getData();
-					colorable.setColor(newColor);
-					bs.setData((MaterialData) colorable);
-					bs.update();
+			EntityEquipment equipment = live.getEquipment();
+			for (ItemStack armor : equipment.getArmorContents()){
+				if (armor.getItemMeta() instanceof LeatherArmorMeta){
+					LeatherArmorMeta meta = (LeatherArmorMeta) armor.getItemMeta();
+					Color curColor = meta.getColor();
+					int modifier = (int) (Math.random()*usesModifier*40);
+					modifier = modifier - modifier/2;
+					int blue = (curColor.getBlue() + modifier)%256;
+					int green = (curColor.getGreen() + modifier)%256;
+					int red = (curColor.getRed() + modifier)%256;
+					Color newColor = Color.fromRGB(red, green, blue);
+					meta.setColor(newColor);
+					armor.setItemMeta(meta);
+					kill();
 				}
-				kill();
 			}
 		}
 	}

@@ -52,6 +52,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import Spell.FORSKNING;
 import Spell.PORTUS;
 import StationarySpell.COLLOPORTUS;
+import StationarySpell.REPELLO_MUGGLETON;
 import StationarySpell.SPONGIFY;
 
 /**
@@ -84,7 +85,9 @@ public class OllivandersListener implements Listener {
 		Location toLoc = event.getTo();
 		Location fromLoc = event.getFrom();
 		for (StationarySpellObj spell : p.getStationary()){
-			if (spell instanceof StationarySpell.PROTEGO_TOTALUM) {
+			if (spell instanceof StationarySpell.PROTEGO_TOTALUM && 
+					toLoc.getWorld().getName().equals(spell.location.getWorld()) &&
+					fromLoc.getWorld().getName().equals(spell.location.getWorld())) {
 				int radius = spell.radius;
 				Location spellLoc = spell.location.toLocation();
 				if (((fromLoc.distance(spellLoc) < radius-0.5 && toLoc.distance(spellLoc) > radius-0.5)
@@ -105,14 +108,13 @@ public class OllivandersListener implements Listener {
 		if (effects != null){
 			for (OEffect effect : effects){
 				if (effect.name == Effects.SILENCIO){
-					System.out.println("<" + sender.getPlayerListName() + "> " + message);
-					event.setCancelled(true);
+					event.getRecipients().clear();
 					return;
 				}
 			}
 		}
 		for (SpellProjectile proj : p.getProjectiles()){
-			if (proj instanceof FORSKNING && proj.location.getWorld() == sender.getWorld()){
+			if (proj instanceof FORSKNING && proj.location.getWorld().getName().equals(sender.getWorld().getName())){
 				if (proj.location.distance(sender.getLocation()) <= 10){
 					((FORSKNING)proj).research(message);
 				}
@@ -124,8 +126,11 @@ public class OllivandersListener implements Listener {
 		if (messageWords[0].equalsIgnoreCase("Apparate")){
 			event.setMessage(messageWords[0]);
 		}
+		else if (messageWords[0].equalsIgnoreCase("Portus")){
+			event.setMessage(messageWords[0]);
+		}
 		Spells spell;
-		//System.out.println("Decoding spell");
+		//getLogger().info("Decoding spell");
 		spell = Spells.decode(message);
 		if (spell != null){
 			if (!p.canCast(sender, spell)){
@@ -166,37 +171,47 @@ public class OllivandersListener implements Listener {
 			try {
 				recipients.remove(remRec);
 			} catch (UnsupportedOperationException e) {
-				System.out.println("Chat was unable to be removed due "
+				p.getLogger().warning("Chat was unable to be removed due "
 						+ "to a unmodifiable set.");
 			}
 		}
 		//End code for chat falloff
 
 		//Begin code for spell parsing
-		if (holdsWand(sender)){
-			String[] words = message2.split(" ");
-			//If it was apparate, then this
-			if (words[0].equalsIgnoreCase("Apparate")){
-				if (p.canCast(sender, Spells.APPARATE)){
-					apparate(sender, words);
-				}
+		if (spell != null){
+			boolean castSuccess;
+			if (holdsWand(sender)){
+				castSuccess = true;
 			}
-			//If it was portus, then this
-			else if (words[0].equalsIgnoreCase("Portus")){
-				if (p.canCast(sender, Spells.PORTUS)){
-					p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
-				}
-			}
-			//If it wasn't apparate or portus, then this
 			else{
-				if (spell!=null){
-					//If the spell is valid, run this code
-					//System.out.println("Spell is " + spell.toString());
-					Map<String, OPlayer> opmap = p.getOPlayerMap();
-					OPlayer oplayer = opmap.get(sender.getName());
-					oplayer.setSpell(spell);
-					opmap.put(sender.getName(), oplayer);
-					p.setOPlayerMap(opmap);
+				int uses = p.getOPlayer(sender).getSpellCount().get(spell);
+				castSuccess = Math.random() < (1.0-(100.0/(uses+100.0)));
+			}
+			if (castSuccess){
+				String[] words = message2.split(" ");
+				//If it was apparate, then this
+				if (spell == Spells.APPARATE){
+					if (p.canCast(sender, Spells.APPARATE)){
+						apparate(sender, words);
+					}
+				}
+				//If it was portus, then this
+				else if (spell == Spells.PORTUS){
+					if (p.canCast(sender, Spells.PORTUS)){
+						p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+					}
+				}
+				//If it wasn't apparate or portus, then this
+				else{
+					if (spell!=null){
+						//If the spell is valid, run this code
+						//getLogger().info("Spell is " + spell.toString());
+						Map<String, OPlayer> opmap = p.getOPlayerMap();
+						OPlayer oplayer = opmap.get(sender.getName());
+						oplayer.setSpell(spell);
+						opmap.put(sender.getName(), oplayer);
+						p.setOPlayerMap(opmap);
+					}
 				}
 			}
 		}
@@ -244,7 +259,13 @@ public class OllivandersListener implements Listener {
 			to.setPitch(from.getPitch());
 			to.setYaw(from.getYaw());
 			Double distance = from.distance(to);
-			Double radius = 1/Math.sqrt(uses)*distance*0.1*wandCheck(sender);
+			Double radius;
+			if (holdsWand(sender)){
+				radius = 1/Math.sqrt(uses)*distance*0.1*wandCheck(sender);
+			}
+			else{
+				radius = 1/Math.sqrt(uses)*distance*0.01;
+			}
 			Double newX = to.getX()-(radius/2)+(radius * Math.random());
 			Double newZ = to.getZ()-(radius/2)+(radius * Math.random());
 			to.setX(newX);
@@ -356,16 +377,22 @@ public class OllivandersListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		//Casting an effect
-		if (holdsWand(event.getPlayer()) && (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)){
+		if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK){
 			Map<String, OPlayer> opmap = p.getOPlayerMap();
 			OPlayer oplayer = p.getOPlayer(event.getPlayer());
 			Spells spell = oplayer.getSpell();
 			if (spell!=null){
-				double wandC = wandCheck(event.getPlayer());
-				allyWand(event.getPlayer());
+				double wandC;
+				if (holdsWand(event.getPlayer())){
+					wandC = wandCheck(event.getPlayer());
+					allyWand(event.getPlayer());
+				}
+				else{
+					wandC = 0.1;
+				}
 				createSpellProjectile(event.getPlayer(), spell, wandC);
 				int spellc = p.getSpellNum(event.getPlayer(), spell);
-				//System.out.println(spellc);
+				//getLogger().info(spellc);
 				if (spellc < 100 || spell == Spells.AVADA_KEDAVRA){
 					oplayer.setSpell(null);
 					opmap.put(event.getPlayer().getName(), oplayer);
@@ -426,7 +453,7 @@ public class OllivandersListener implements Listener {
 		Map<String, OPlayer> map = p.getOPlayerMap();
 		if (!map.containsKey(event.getPlayer().getName())){
 			map.put(event.getPlayer().getName(), new OPlayer());
-			System.out.println("Put in new OPlayer.");
+			p.getLogger().info("Put in new OPlayer.");
 		}
 	}
 
@@ -791,6 +818,8 @@ public class OllivandersListener implements Listener {
 	}
 
 	/**Cancels any targeting of players with the Cloak of Invisibility
+	 * or inside of a REPELLO_MUGGLETON while the targeting entity is
+	 * outside it.
 	 * @param event - EntityTargetEvent
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -799,6 +828,17 @@ public class OllivandersListener implements Listener {
 		if (target instanceof Player){
 			if (p.getOPlayer((Player)target).isInvisible()){
 				event.setCancelled(true);
+			}
+		}
+		if (target != null){
+			for (StationarySpellObj stat : p.getStationary()){
+				if (stat instanceof REPELLO_MUGGLETON){
+					if (stat.isInside(target.getLocation())){
+						if (!stat.isInside(event.getEntity().getLocation())){
+							event.setCancelled(true);
+						}
+					}
+				}
 			}
 		}
 	}

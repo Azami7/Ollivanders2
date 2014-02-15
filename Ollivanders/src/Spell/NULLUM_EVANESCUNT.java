@@ -27,6 +27,7 @@ public class NULLUM_EVANESCUNT extends SpellProjectile implements Spell{
 			StationarySpell.NULLUM_EVANESCUNT nullum = new StationarySpell.NULLUM_EVANESCUNT(player, location, StationarySpells.NULLUM_EVANESCUNT, 5, duration);
 			nullum.flair(10);
 			p.addStationary(nullum);
+			kill();
 		}
 	}
 	

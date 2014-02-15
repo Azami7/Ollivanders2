@@ -53,7 +53,6 @@ public class LIGATIS_COR extends SpellProjectile implements Spell{
 								String lore = corM.getLore().get(0);
 								lore = lore.concat(" and ");
 								lore = lore.concat(matMap.get(mat));
-								System.out.println(lore);
 								corM.setDisplayName("Wand");
 								List<String> loreL = new ArrayList<String>();
 								loreL.add(lore);

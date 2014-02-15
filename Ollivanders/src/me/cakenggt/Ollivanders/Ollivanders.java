@@ -49,7 +49,7 @@ public class Ollivanders extends JavaPlugin{
 		}
 		for (SpellProjectile proj : projectiles){
 			if (proj instanceof Transfiguration){
-				System.out.println("Ended transfiguration");
+				getLogger().info("Ended transfiguration");
 				((Transfiguration)proj).endTransfigure();
 			}
 			proj.revert();
@@ -60,12 +60,12 @@ public class Ollivanders extends JavaPlugin{
 		try {
 			SLAPI.save(OPlayerMap, "plugins/Ollivanders/OPlayerMap.bin");
 			SLAPI.save(stationary, "plugins/Ollivanders/stationary.bin");
-			System.out.println("Saved both files successfully!");
+			getLogger().info("Saved both files successfully!");
 		} catch (Exception e) {
-			System.out.println("Could not save at least one of the files.");
+			getLogger().info("Could not save at least one of the files.");
 			e.printStackTrace();
 		}
-		System.out.println(this + " is now disabled!");
+		getLogger().info(this + " is now disabled!");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -74,7 +74,7 @@ public class Ollivanders extends JavaPlugin{
 		getServer().getPluginManager().registerEvents(playerListener, this);
 		//loads data
 		if (new File("plugins/Ollivanders/").mkdirs())
-			System.out.println("File created for Ollivanders");
+			getLogger().info("File created for Ollivanders");
 		OPlayerMap = new HashMap<String, OPlayer>();
 		projectiles = new ArrayList<SpellProjectile>();
 		stationary = new ArrayList<StationarySpellObj>();
@@ -88,9 +88,9 @@ public class Ollivanders extends JavaPlugin{
 			OPlayerMap = (HashMap<String, OPlayer>) SLAPI
 					.load("plugins/Ollivanders/OPlayerMap.bin");
 			stationary = (List<StationarySpellObj>) SLAPI.load("plugins/Ollivanders/stationary.bin");
-			System.out.println("Loaded both files successfully!");
+			getLogger().info("Loaded both files successfully!");
 		} catch (Exception e) {
-			System.out.println("Did not find at least one of the two files.");
+			getLogger().warning("Did not find at least one of the two files.");
 		}
 		try {
 			MetricsLite metrics = new MetricsLite(this);
@@ -104,7 +104,7 @@ public class Ollivanders extends JavaPlugin{
 		fillAllSpellCount();
 		this.schedule = new OllivandersSchedule(this);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.schedule, 20L, 1L);
-		System.out.println(this + " is now enabled!");
+		getLogger().info(this + " is now enabled!");
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -345,7 +345,7 @@ public class Ollivanders extends JavaPlugin{
 		}
 		else{
 			OPlayerMap.put(p.getName(), new OPlayer());
-			System.out.println("Put in new OPlayer.");
+			getLogger().info("Put in new OPlayer.");
 			return OPlayerMap.get(p.getName());
 		}
 	}

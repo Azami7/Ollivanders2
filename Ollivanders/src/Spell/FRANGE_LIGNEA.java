@@ -33,7 +33,7 @@ public class FRANGE_LIGNEA extends SpellProjectile implements Spell{
 			@SuppressWarnings("deprecation")
 			int data = block.getData()%4;
 			String[] woodTypes = {"Oak","Spruce","Birch","Jungle"};
-			int number = (int)(usesModifier*0.4);
+			int number = (int)(usesModifier*0.8);
 			if (number > 0){
 				ItemStack shellStack = new ItemStack(Material.STICK, number);
 				ItemMeta shellM = shellStack.getItemMeta();

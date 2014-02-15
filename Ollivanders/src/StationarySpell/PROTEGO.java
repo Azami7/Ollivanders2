@@ -46,8 +46,6 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell{
 							double b = p.getSpellNum(ply, Spells.PROTEGO)/rightWand/10;
 							b += 1;
 							Vector V = proj.vector.clone();
-							System.out.println(proj.lifeTicks);
-							System.out.println(proj.vector.length());
 							proj.vector = N.multiply((V.dot(N))).multiply(-2).add(V).multiply(b);
 							flair(10);
 						}

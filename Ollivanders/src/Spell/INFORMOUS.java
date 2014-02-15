@@ -52,7 +52,12 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 		}
 		for (StationarySpellObj spell : p.getStationary()){
 			if (spell.isInside(location) && !iSpell.contains(spell)){
-				player.sendMessage(spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration/20 + " seconds left.");
+				if (spell instanceof StationarySpell.COLLOPORTUS){
+					player.sendMessage(spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration/1200 + " power left.");
+				}
+				else{
+					player.sendMessage(spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration/20 + " seconds left.");
+				}
 				iSpell.add(spell);
 			}
 		}

@@ -276,5 +276,31 @@ public class StationarySpellObj implements Serializable{
 			return -1;
 		}
 	}
+	
+	/**
+	 * Gets the blocks in a radius of a location.
+	 * @param loc - The Location that is the center of the block list
+	 * @param radius - The radius of the block list
+	 * @return List of blocks that are within radius of the location.
+	 */
+	public List<Block> getBlocksInRadius(Location loc, double radius){
+		Block center = loc.getBlock();
+		int blockRadius = (int)(radius+1);
+		List<Block> blockList = new ArrayList<Block>();
+		for (int x = -blockRadius; x <= blockRadius; x++){
+			for (int y = -blockRadius; y <= blockRadius; y++){
+				for (int z = -blockRadius; z <= blockRadius; z++){
+					blockList.add(center.getRelative(x, y, z));
+				}
+			}
+		}
+		ArrayList<Block> returnList = new ArrayList<Block>();
+		for (Block block : blockList){
+			if (block.getLocation().distance(center.getLocation()) < radius){
+				returnList.add(block);
+			}
+		}
+		return returnList;
+	}
 
 }

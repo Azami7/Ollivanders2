@@ -26,6 +26,7 @@ public class COLLOPORTUS extends SpellProjectile implements Spell{
 			StationarySpell.COLLOPORTUS total = new StationarySpell.COLLOPORTUS(player, location, StationarySpells.COLLOPORTUS, 5, duration);
 			total.flair(10);
 			p.addStationary(total);
+			kill();
 		}
 	}
 	

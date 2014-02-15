@@ -27,6 +27,7 @@ public class NULLUM_APPAREBIT extends SpellProjectile implements Spell{
 			StationarySpell.NULLUM_APPAREBIT nullum = new StationarySpell.NULLUM_APPAREBIT(player, location, StationarySpells.NULLUM_APPAREBIT, 5, duration);
 			nullum.flair(10);
 			p.addStationary(nullum);
+			kill();
 		}
 	}
 	

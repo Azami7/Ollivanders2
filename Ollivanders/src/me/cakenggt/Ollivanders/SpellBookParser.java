@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -35,6 +36,8 @@ public class SpellBookParser{
 			+ "traveled and your experience.";
 	public final static String AQUA_ERUCTO = "Aqua eructo shoots a jet of water from your "
 			+ "wand tip. The range of this jet is determined by your experience.";
+	public final static String ARANIA_EXUMAI = "Arania Exumai will blast away spiders with "
+			+ "a force dependent on your experience.";
 	public final static String ARRESTO_MOMENTUM = "Arresto momentum will immediately slow down "
 			+ "any entity. The amount an entity is slowed down is determined by your experience.";
 	public final static String ASCENDIO = "Ascendio will propel the caster into the air. The "
@@ -42,6 +45,8 @@ public class SpellBookParser{
 	public final static String AVADA_KEDAVRA = "Avada kedavra is a forbidden curse which will "
 			+ "directly damage a living being. The amount of damage done is determiend "
 			+ "by your experience.";
+	public final static String AVIFORS = "Avifors will transfigure the target into a bat for a "
+			+ "time dependent on your experience.";
 	public final static String AVIS = "Avis will cause a bat to fly out of the end of your wand. "
 			+ "The amount of time the bat is alive depends on your experience.";
 	public final static String BOMBARDA = "Bombarda creates an explosion which doesn't damage "
@@ -49,11 +54,15 @@ public class SpellBookParser{
 	public final static String BOMBARDA_MAXIMA = "Bombarda maxima creates an explosion which doesn't "
 			+ "damage the terrain. The explosion is twice as large as the one created by "
 			+ "bombarda. The strength of the explosion depends on your experience.";
+	public final static String BRACKIUM_EMENDO = "Brackium Emendo will hurt any entity which is "
+			+ "skeleton based by an amount dependent on your experience.";
 	public final static String CARPE_RETRACTUM = "Carpe Retractum will pull a living entity towards "
 			+ "you. The strength of the pull depends on your experience.";
 	public final static String COLLOPORTUS = "Colloportus will lock all blocks within it's area into "
 			+ "place, not letting them be changed. This spell will not age like other area spells do, "
 			+ "and must be cancelled with the unlocking spell.";
+	public final static String COLOVARIA = "Colovaria changes the dye color of a sheep or the block color in a "
+			+ "radius to another color randomly. The radius depends on your experience.";
 	public final static String CONFUNDO = "Confundo causes the target to become confused. The duration "
 			+ "of this confusion is determined by your experience.";
 	public final static String CRESCERE_PROTEGAT = "Crescere Protegat will grow a stationary spell's "
@@ -86,6 +95,9 @@ public class SpellBookParser{
 	public final static String ENGORGIO = "Engorgio will grow a baby animal, grow a slime, and grow a zombie "
 			+ "from a baby into an adult or from adult into a giant. The effects of this spell depend on your "
 			+ "experience. Growing giants is not possible until complete mastery of the spell is achieved.";
+	public final static String ENTOMORPHIS = "Entomorphis will transfigure an entity into a silverfish for "
+			+ "a duration dependent on your experience. If it hits a stone brick, cobblestone, or chiseled stone, "
+			+ "it will turn that into a silverfish monster egg.";
 	public final static String EPISKEY = "Episkey will heal minor injuries. The duration of the healing "
 			+ "effect depends on your experience.";
 	public final static String EQUUSIFORS = "Equusifors will transfigure an entity into a horse. "
@@ -167,8 +179,8 @@ public class SpellBookParser{
 	public final static String MUFFLIATO = "Muffliato creates a stationary spell which only allows the people "
 			+ "inside to hear anything spoken inside the effect. The duration of the spell depends on "
 			+ "your experience.";
-	public final static String MULTICORFORS = "Multicorfors changes the dye color of a sheep or the block color in a "
-			+ "radius to another color randomly. The radius depends on your experience.";
+	public final static String MULTICORFORS = "Multicorfors will change the color of leather armor of the target. How "
+			+ "different the new color is depends on your experience.";
 	public final static String NULLUM_APPAREBIT = "Nullum apparebit creates a stationary spell which will not "
 			+ "allow apparition into it. The duration depends on your experience.";
 	public final static String NULLUM_EVANESCUNT = "Nullum evanescunt creates a stationary spell which will not "
@@ -210,6 +222,8 @@ public class SpellBookParser{
 	public final static String REPARIFARGE = "Reparifarge will cause the duration of the transfiguration on the targeted "
 			+ "entity to decrease by an amount that depends on your experience.";
 	public final static String REPARO = "Reparo will repair the duration of a tool.";
+	public final static String REPELLO_MUGGLETON = "Repello Muggleton will hide any blocks and players in it's radius "
+			+ "from those outside of it.";
 	public final static String SCUTO_CONTERAM = "Scuto conteram will shorten the duration of a stationary "
 			+ "spell, by an amount depending on your experience.";
 	public final static String SILENCIO = "Silencio silences the target for a duration depending on your experience. "
@@ -319,8 +333,8 @@ public class SpellBookParser{
 			bm = kitEncode(bm, 20);
 			item.setItemMeta(bm);
 			item.setAmount(amount);
-			System.out.println(title);
-			System.out.println("Adding " + bm.getTitle());
+			Bukkit.getLogger().info(title);
+			Bukkit.getLogger().info("Adding " + bm.getTitle());
 			books.add(item);
 		}
 		//code for the debug book
@@ -337,8 +351,8 @@ public class SpellBookParser{
 		bm = kitEncode(bm, 200);
 		item.setItemMeta(bm);
 		item.setAmount(amount);
-		System.out.println(title);
-		System.out.println("Adding " + bm.getTitle());
+		Bukkit.getLogger().info(title);
+		Bukkit.getLogger().info("Adding " + bm.getTitle());
 		books.add(item);
 		return books;
 	}
@@ -397,10 +411,10 @@ public class SpellBookParser{
 				"The five major wards are described as follows: " + N + 
 				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PROTEGO_HORRIBILIS + N + 
 				PROTEGO_TOTALUM + N + COLLOPORTUS + N + 
-				"Following are described several ward modifiers and two minor wards: " + N + 
+				"Following are described several ward modifiers and minor wards: " + N + 
 				CRESCERE_PROTEGAT + N + FIANTO_DURI + N + HORREAT_PROTEGAT + N + 
 				PARTIS_TEMPORUS + N + SCUTO_CONTERAM + N + PROTEGO + N + 
-				PROTEGO_MAXIMA);
+				PROTEGO_MAXIMA + N + REPELLO_MUGGLETON);
 		bookMap.put("The Standard Book of Spells, Grade 1",
 				INCENDIO + N + LUMOS + N + REPARO + N + SPONGIFY + N + 
 						WINGARDIUM_LEVIOSA + N + COLLOPORTUS + N + ALOHOMORA + N + 
@@ -408,7 +422,8 @@ public class SpellBookParser{
 		bookMap.put("The Standard Book of Spells, Grade 2", 
 				EXPELLIARMUS + N + IMMOBULUS + N + INCENDIO + N + LUMOS + N + 
 						OBLIVIATE + N + ALOHOMORA + N + ENGORGIO + N + 
-						FINITE_INCANTATEM + N + REDUCIO + N + DIFFINDO);
+						FINITE_INCANTATEM + N + REDUCIO + N + DIFFINDO + N + 
+						AVIFORS);
 		bookMap.put("The Standard Book of Spells, Grade 3", 
 				AQUA_ERUCTO + N + BOMBARDA + N + EXPELLIARMUS + N + 
 						GLACIUS + N + LUMOS_DUO + N + REPARO + N + DRACONIFORS + N + 
@@ -423,10 +438,11 @@ public class SpellBookParser{
 						WINGARDIUM_LEVIOSA + N + GLACIUS_TRIA + N + DEPULSO);
 		bookMap.put("The Standard Book of Spells, Grade 6", 
 				APPARATE + N + CRESCERE_PROTEGAT + N + HORREAT_PROTEGAT + N + 
-						INCENDIO_DUO + N + MULTICORFORS);
+						INCENDIO_DUO + N + COLOVARIA + N + MULTICORFORS);
 		bookMap.put("The Standard Book of Spells, Grade 7", 
 				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
-						PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA);
+						PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA + N + 
+						REPELLO_MUGGLETON);
 		bookMap.put("Basic Hexes for the Busy and Vexed", 
 				IMMOBULUS);
 		bookMap.put("A Compendium of Common Curses and Their Counter-Actions", 
@@ -437,9 +453,10 @@ public class SpellBookParser{
 				METEOLOJINX_RECANTO);
 		bookMap.put("Dark Arts Defence: Basics for Beginners", 
 				ARRESTO_MOMENTUM + N + HARMONIA_NECTERE_PASSUS + N + EPISKEY + N + 
-				METEOLOJINX + N + PERICULUM);
+				METEOLOJINX + N + PERICULUM + N + ARANIA_EXUMAI);
 		bookMap.put("Defensive Magical Theory", 
-				INFORMOUS + N + SILENCIO + N + ASCENDIO + N + PERICULUM);
+				INFORMOUS + N + SILENCIO + N + ASCENDIO + N + PERICULUM + N + 
+				ARANIA_EXUMAI);
 		bookMap.put("The Dark Arts Outsmarted",
 				AVADA_KEDAVRA + N + FIENDFYRE + N + INFORMOUS + N + HARMONIA_NECTERE_PASSUS + N + 
 				METEOLOJINX_RECANTO);
@@ -451,7 +468,7 @@ public class SpellBookParser{
 				MUFFLIATO + N + SPONGIFY + N + FLAGRANTE + N + DIMMINUENDO + N + 
 				FINITE_INCANTATEM);
 		bookMap.put("Practical Defensive Magic and Its Use Against the Dark Arts",
-				"");
+				"BRACKIUM_EMENDO");
 		bookMap.put("Self-Defensive Spellwork", 
 				APARECIUM + N + DEPRIMO + N + DEPULSO);
 		bookMap.put("Updated Counter-Curse Handbook (Second Revised Edition)", 
@@ -472,9 +489,10 @@ public class SpellBookParser{
 				"Transfiguration involves the transformation of one entity into "
 						+ "another. All transfiguration has a time duration, after which "
 						+ "the entity will transfigure back into it's previous state.\n" + 
-						DELETRIUS + N + DUCKLIFORS + N + REPARIFARGE);
+						DELETRIUS + N + DUCKLIFORS + N + REPARIFARGE + N + AVIFORS);
 		bookMap.put("A Guide to Advanced Transfiguration", 
-				AVIS + N + DURO + N + EVANESCO + N + PIERTOTUM_LOCOMOTOR);
+				AVIS + N + DURO + N + EVANESCO + N + PIERTOTUM_LOCOMOTOR + N + 
+				ENTOMORPHIS);
 		bookMap.put("Intermediate Transfiguration", 
 				AVIS + N + EQUUSIFORS + N + OPPUGNO + N + DRACONIFORS);
 		bookMap.put("Theories of Transubstantial Transfiguration", 
@@ -484,7 +502,7 @@ public class SpellBookParser{
 						+ "the transfiguration has a time duration.\n" + 
 						EVANESCO + N + GEMINIO + N + REPARIFARGE);
 		bookMap.put("Madcap Magic for Wacky Warlocks", 
-				DEPRIMO + N + MELOFORS + N + MULTICORFORS);
+				DEPRIMO + N + MELOFORS + N + COLOVARIA + N + MULTICORFORS);
 		bookMap.put("Saucy Tricks for Tricky Sorts", 
 				CONFUNDO + N + EVERTE_STATUM + N + MELOFORS + N + MUCUS_AD_NAUSEAM);
 		bookMap.put("Book of Spells", 
@@ -495,9 +513,10 @@ public class SpellBookParser{
 						STUPEFY + N + WINGARDIUM_LEVIOSA + N + ALOHOMORA + N + 
 						ENGORGIO + N + REDUCIO + N + DIFFINDO);
 		bookMap.put("Easy Spells to Fool Muggles", 
-				CONFUNDO + N + EVERTE_STATUM);
+				CONFUNDO + N + EVERTE_STATUM + N + ENTOMORPHIS);
 		bookMap.put("Wizard's Spells, Volume 1", 
-				GLACIUS + N + COLLOPORTUS + N + TERGEO + N + CARPE_RETRACTUM);
+				GLACIUS + N + COLLOPORTUS + N + TERGEO + N + CARPE_RETRACTUM + N + 
+				BRACKIUM_EMENDO);
 		bookMap.put("Wizard's Spells, Volume 2", 
 				BOMBARDA + N + MUFFLIATO + N + REDUCTO + N + GLACIUS_DUO);
 		bookMap.put("Wizard's Spells, Volume 3", 

@@ -27,6 +27,7 @@ public class SPONGIFY extends SpellProjectile implements Spell{
 			StationarySpell.SPONGIFY sponge = new StationarySpell.SPONGIFY(player, location, StationarySpells.SPONGIFY, 5, duration);
 			sponge.flair(10);
 			p.addStationary(sponge);
+			kill();
 		}
 	}
 	

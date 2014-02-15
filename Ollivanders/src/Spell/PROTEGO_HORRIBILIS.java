@@ -22,6 +22,7 @@ public class PROTEGO_HORRIBILIS extends SpellProjectile implements Spell{
 			StationarySpell.PROTEGO_HORRIBILIS total = new StationarySpell.PROTEGO_HORRIBILIS(player, location, StationarySpells.PROTEGO_HORRIBILIS, 5, duration);
 			total.flair(10);
 			p.addStationary(total);
+			kill();
 		}
 	}
 	

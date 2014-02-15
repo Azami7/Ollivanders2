@@ -29,6 +29,7 @@ public class MUFFLIATO extends SpellProjectile implements Spell{
 			StationarySpell.MUFFLIATO muffliato = new StationarySpell.MUFFLIATO(player, location, StationarySpells.MUFFLIATO, 5, duration);
 			muffliato.flair(20);
 			p.addStationary(muffliato);
+			kill();
 		}
 	}
 	

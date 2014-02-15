@@ -27,6 +27,7 @@ public class PROTEGO_TOTALUM extends SpellProjectile implements Spell{
 			StationarySpell.PROTEGO_TOTALUM total = new StationarySpell.PROTEGO_TOTALUM(player, location, StationarySpells.PROTEGO_TOTALUM, 5, duration);
 			total.flair(10);
 			p.addStationary(total);
+			kill();
 		}
 	}
 	

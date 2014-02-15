@@ -31,7 +31,7 @@ public class OPPUGNO extends SpellProjectile implements Spell{
 						for (Entity entity : player.getWorld().getEntities()){
 							if (entity.getEntityId() == ((Transfiguration)spell).getToID()){
 								if (entity instanceof LivingEntity){
-									//System.out.println(entity.getType() + " is now targeting " + e.getType());
+									//getLogger().info(entity.getType() + " is now targeting " + e.getType());
 									//((Creature)entity).setTarget(e);
 									((Creature)entity).damage(0.0, e);
 									kill();
