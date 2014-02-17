@@ -7,6 +7,7 @@ import java.util.Map;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -129,6 +130,11 @@ public class SpellBookParser{
 	public final static String FRANGE_LIGNEA = "Frange lignea will cause a log of the spruce, oak, birch, or "
 			+ "jungle species to explode into coreless wands. The number of wands dropped depends "
 			+ "on your experience.";
+	public final static String FUMOS = "Fumos will cause those in an area to be blinded by a smoke cloud. "
+			+ "The blindness lasts for a time determined by your experience.";
+	public final static String FUMOS_DUO = "Fumos Duo will cause those in an area to be blinded by a smoke cloud. "
+			+ "The blindness lasts for a time twice as long as that created by Fumos, and is determined by your "
+			+ "experience.";
 	public final static String GEMINIO = "Geminio will cause an item to duplicate when held "
 			+ "by a person. The amount of duplications depends on your experience.";
 	public final static String GLACIUS = "Glacius will cause a great cold to descend in a radius "
@@ -159,6 +165,11 @@ public class SpellBookParser{
 	public final static String INFORMOUS = "Informous will give information on a stationary spell, an entity, or, "
 			+ "if pointed into the sky and allowed to travel far enough, the weather. It's range "
 			+ "depends on your experience.";
+	public final static String LACARNUM_INFLAMARAE = "Lacarnum Inflamarae will shoot a fire charge out of the "
+			+ "tip of your wand. This fire charge is not a spell, and thus can pass through normal anti-spell "
+			+ "barriers.";
+	public final static String LEGILIMENS = "Legilimens, when cast at a player, will allow you to open their inventory "
+			+ "if your level in legilimens is higher than theirs.";
 	public final static String LIGATIS_COR = "Ligatis cor will bind one of the four types of coreless wands to one "
 			+ "of the four types of wand cores: spider eye, rotten flesh, bone, and sulfur. Make sure the two "
 			+ "items are near each other when this spell is cast. You can only use this on one coreless wand and "
@@ -333,8 +344,6 @@ public class SpellBookParser{
 			bm = kitEncode(bm, 20);
 			item.setItemMeta(bm);
 			item.setAmount(amount);
-			Bukkit.getLogger().info(title);
-			Bukkit.getLogger().info("Adding " + bm.getTitle());
 			books.add(item);
 		}
 		//code for the debug book
@@ -351,8 +360,6 @@ public class SpellBookParser{
 		bm = kitEncode(bm, 200);
 		item.setItemMeta(bm);
 		item.setAmount(amount);
-		Bukkit.getLogger().info(title);
-		Bukkit.getLogger().info("Adding " + bm.getTitle());
 		books.add(item);
 		return books;
 	}
@@ -396,17 +403,17 @@ public class SpellBookParser{
 	 * Returns a map of all books mapped to their titles
 	 * @return Map whose keys are the titles, entries are the book text
 	 */
+	@SuppressWarnings("deprecation")
 	private static Map<String, String> books(){
 		Map<String, String> bookMap = new HashMap<String, String>();
-		// \n is a newline
 		final String N = "\n";
 		bookMap.put("Achievements in Charming",
 				AGUAMENTI + N + EBUBLIO + N + HERBIVICUS + N +
-						LUMOS_DUO + N + LUMOS_MAXIMA + N + DIMMINUENDO + N + 
-						EPISKEY);
+				LUMOS_DUO + N + LUMOS_MAXIMA + N + DIMMINUENDO + N + 
+				EPISKEY);
 		bookMap.put("Extreme Incantations",
 				ALARTE_ASCENDARE + N + LUMOS_MAXIMA + N + 
-						OBLIVIATE + N + ASCENDIO + N + FORSKNING);
+				OBLIVIATE + N + ASCENDIO + N + FORSKNING);
 		bookMap.put("Quintessence: A Quest",
 				"The five major wards are described as follows: " + N + 
 				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PROTEGO_HORRIBILIS + N + 
@@ -417,32 +424,32 @@ public class SpellBookParser{
 				PROTEGO_MAXIMA + N + REPELLO_MUGGLETON);
 		bookMap.put("The Standard Book of Spells, Grade 1",
 				INCENDIO + N + LUMOS + N + REPARO + N + SPONGIFY + N + 
-						WINGARDIUM_LEVIOSA + N + COLLOPORTUS + N + ALOHOMORA + N + 
-						DIFFINDO);
+				WINGARDIUM_LEVIOSA + N + COLLOPORTUS + N + ALOHOMORA + N + 
+				DIFFINDO);
 		bookMap.put("The Standard Book of Spells, Grade 2", 
 				EXPELLIARMUS + N + IMMOBULUS + N + INCENDIO + N + LUMOS + N + 
-						OBLIVIATE + N + ALOHOMORA + N + ENGORGIO + N + 
-						FINITE_INCANTATEM + N + REDUCIO + N + DIFFINDO + N + 
-						AVIFORS);
+				OBLIVIATE + N + ALOHOMORA + N + ENGORGIO + N + 
+				FINITE_INCANTATEM + N + REDUCIO + N + DIFFINDO + N + 
+				AVIFORS);
 		bookMap.put("The Standard Book of Spells, Grade 3", 
 				AQUA_ERUCTO + N + BOMBARDA + N + EXPELLIARMUS + N + 
-						GLACIUS + N + LUMOS_DUO + N + REPARO + N + DRACONIFORS + N + 
-						CARPE_RETRACTUM);
+				GLACIUS + N + LUMOS_DUO + N + REPARO + N + DRACONIFORS + N + 
+				CARPE_RETRACTUM);
 		bookMap.put("The Standard Book of Spells, Grade 4", 
 				ACCIO + N + ARRESTO_MOMENTUM + N + BOMBARDA_MAXIMA + N + 
-						DUCKLIFORS + N + FIANTO_DURI + N + PROTEGO_HORRIBILIS + N + 
-						PROTEGO_MAXIMA + N + PROTEGO_TOTALUM + N + GLACIUS_DUO);
+				DUCKLIFORS + N + FIANTO_DURI + N + PROTEGO_HORRIBILIS + N + 
+				PROTEGO_MAXIMA + N + PROTEGO_TOTALUM + N + GLACIUS_DUO);
 		bookMap.put("The Standard Book of Spells, Grade 5", 
 				ACCIO + N + EQUUSIFORS + N + EXPELLIARMUS + N + INCENDIO + N + 
-						PROTEGO + N + REPARO + N + SCUTO_CONTERAM + N + STUPEFY + N + 
-						WINGARDIUM_LEVIOSA + N + GLACIUS_TRIA + N + DEPULSO);
+				PROTEGO + N + REPARO + N + SCUTO_CONTERAM + N + STUPEFY + N + 
+				WINGARDIUM_LEVIOSA + N + GLACIUS_TRIA + N + DEPULSO);
 		bookMap.put("The Standard Book of Spells, Grade 6", 
 				APPARATE + N + CRESCERE_PROTEGAT + N + HORREAT_PROTEGAT + N + 
-						INCENDIO_DUO + N + COLOVARIA + N + MULTICORFORS);
+				INCENDIO_DUO + N + COLOVARIA + N + MULTICORFORS);
 		bookMap.put("The Standard Book of Spells, Grade 7", 
 				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
-						PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA + N + 
-						REPELLO_MUGGLETON);
+				PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA + N + 
+				REPELLO_MUGGLETON);
 		bookMap.put("Basic Hexes for the Busy and Vexed", 
 				IMMOBULUS);
 		bookMap.put("A Compendium of Common Curses and Their Counter-Actions", 
@@ -459,18 +466,18 @@ public class SpellBookParser{
 				ARANIA_EXUMAI);
 		bookMap.put("The Dark Arts Outsmarted",
 				AVADA_KEDAVRA + N + FIENDFYRE + N + INFORMOUS + N + HARMONIA_NECTERE_PASSUS + N + 
-				METEOLOJINX_RECANTO);
+				METEOLOJINX_RECANTO + N + FUMOS_DUO);
 		bookMap.put("The Dark Forces: A Guide to Self-Protection", 
-				LUMOS + N + MUCUS_AD_NAUSEAM);
+				LUMOS + N + MUCUS_AD_NAUSEAM + N + FUMOS);
 		bookMap.put("Guide to Advanced Occlumency", 
-				"");
+				LEGILIMENS);
 		bookMap.put("Jinxes for the Jinxed", 
 				MUFFLIATO + N + SPONGIFY + N + FLAGRANTE + N + DIMMINUENDO + N + 
 				FINITE_INCANTATEM);
 		bookMap.put("Practical Defensive Magic and Its Use Against the Dark Arts",
-				"BRACKIUM_EMENDO");
+				BRACKIUM_EMENDO + N + FUMOS_DUO);
 		bookMap.put("Self-Defensive Spellwork", 
-				APARECIUM + N + DEPRIMO + N + DEPULSO);
+				APARECIUM + N + DEPRIMO + N + DEPULSO + N + FUMOS);
 		bookMap.put("Updated Counter-Curse Handbook (Second Revised Edition)", 
 				ALARTE_ASCENDARE + N + FLAGRANTE + N + INCENDIO_TRIA + N + 
 				FINITE_INCANTATEM);
@@ -507,27 +514,45 @@ public class SpellBookParser{
 				CONFUNDO + N + EVERTE_STATUM + N + MELOFORS + N + MUCUS_AD_NAUSEAM);
 		bookMap.put("Book of Spells", 
 				ACCIO + N + AGUAMENTI + N + APARECIUM + N + AVIS + N + 
-						DEFODIO + N + DURO + N + EBUBLIO + N + EXPELLIARMUS + N + 
-						GEMINIO + N + IMPEDIMENTA + N + INCENDIO + N + LUMOS + N + 
-						OPPUGNO + N + PROTEGO + N + REDUCTO + N + REPARO + N + 
-						STUPEFY + N + WINGARDIUM_LEVIOSA + N + ALOHOMORA + N + 
-						ENGORGIO + N + REDUCIO + N + DIFFINDO);
+				DEFODIO + N + DURO + N + EBUBLIO + N + EXPELLIARMUS + N + 
+				GEMINIO + N + IMPEDIMENTA + N + INCENDIO + N + LUMOS + N + 
+				OPPUGNO + N + PROTEGO + N + REDUCTO + N + REPARO + N + 
+				STUPEFY + N + WINGARDIUM_LEVIOSA + N + ALOHOMORA + N + 
+				ENGORGIO + N + REDUCIO + N + DIFFINDO);
 		bookMap.put("Easy Spells to Fool Muggles", 
-				CONFUNDO + N + EVERTE_STATUM + N + ENTOMORPHIS);
+				CONFUNDO + N + EVERTE_STATUM + N + ENTOMORPHIS + N + 
+				LACARNUM_INFLAMARAE);
 		bookMap.put("Wizard's Spells, Volume 1", 
 				GLACIUS + N + COLLOPORTUS + N + TERGEO + N + CARPE_RETRACTUM + N + 
 				BRACKIUM_EMENDO);
 		bookMap.put("Wizard's Spells, Volume 2", 
 				BOMBARDA + N + MUFFLIATO + N + REDUCTO + N + GLACIUS_DUO);
 		bookMap.put("Wizard's Spells, Volume 3", 
-				BOMBARDA_MAXIMA + N + PACK + N + GLACIUS_TRIA);
+				BOMBARDA_MAXIMA + N + PACK + N + GLACIUS_TRIA + N + LACARNUM_INFLAMARAE);
 		bookMap.put("Practical Magic", 
 				APPARATE + N + AQUA_ERUCTO + N + DEFODIO + N + DELETRIUS + N + 
-						HERBIVICUS + N + PORTUS + N + TERGEO + N + PACK);
+				HERBIVICUS + N + PORTUS + N + TERGEO + N + PACK);
 		bookMap.put("The Secrets of Wandlore",
 				"The secrets of wandlore are not to be easily had, however " +
 						"they will be related in this book with the greatest of ease.\n" +
 						FRANGE_LIGNEA + N + LIGATIS_COR);
+		FileConfiguration config = Bukkit.getPluginManager().getPlugin("Ollivanders").getConfig();
+		if (config.getBoolean("divination")){
+			bookMap.put("Unfogging the Future", 
+					"Divination is a complex and monumental area of study for "
+					+ "any Seer to undertake. To divine the future, you need to "
+					+ "have a crystal ball to look into. This instrument can be "
+					+ "represented by any block of " + Material.getMaterial(config.getInt("divinationBlock"))
+					+ ". Once you have this block set in front of you, sneak and "
+					+ "stare into it." + N + "Your level of curiosity will determine roughly "
+					+ "how long you will have to stare until you receive a prophecy. "
+					+ "Your level of curiosity can be heightened by casting a certain "
+					+ "spell which tells you information about it's targets." + N 
+					+ "If you are holding a stack of " + Material.getMaterial(config.getInt("divinationBlock"))
+					+ " in your hand when you receive a prophecy, one of them will "
+					+ "become a prophecy record and it's lore will contain the prophecy "
+					+ "you received.");
+		}
 		return bookMap;
 	}
 }

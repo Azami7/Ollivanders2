@@ -392,8 +392,7 @@ public class OllivandersListener implements Listener {
 				}
 				createSpellProjectile(event.getPlayer(), spell, wandC);
 				int spellc = p.getSpellNum(event.getPlayer(), spell);
-				//getLogger().info(spellc);
-				if (spellc < 100 || spell == Spells.AVADA_KEDAVRA){
+				if (spellc < 100 || spell == Spells.AVADA_KEDAVRA || !holdsWand(event.getPlayer())){
 					oplayer.setSpell(null);
 					opmap.put(event.getPlayer().getName(), oplayer);
 					p.setOPlayerMap(opmap);
@@ -479,7 +478,7 @@ public class OllivandersListener implements Listener {
 		if (event.getEntity() instanceof Player){
 			Damageable plyr = (Damageable) event.getEntity();
 			String name = ((Player)event.getEntity()).getName();
-			double damage = event.getDamage()*(p.getOPlayer(p.getServer().getPlayer(name)).getSouls());
+			double damage = event.getDamage()*(p.getOPlayer((Player)event.getEntity()).getSouls());
 			event.setDamage(damage);
 			if (((double)plyr.getHealth()-damage)<= 0){
 				for(StationarySpellObj stationary : stationarys){

@@ -9,8 +9,10 @@ import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -38,6 +40,7 @@ public class Ollivanders extends JavaPlugin{
 	private Map<String, OPlayer> OPlayerMap = new HashMap<String, OPlayer>();
 	private List<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
 	private List<StationarySpellObj> stationary = new ArrayList<StationarySpellObj>();;
+	private Set<Prophecy> prophecy = new HashSet<Prophecy>();
 	private Listener playerListener;
 	private OllivandersSchedule schedule;
 	private List<Block> tempBlocks = new ArrayList<Block>();
@@ -59,11 +62,21 @@ public class Ollivanders extends JavaPlugin{
 		}
 		try {
 			SLAPI.save(OPlayerMap, "plugins/Ollivanders/OPlayerMap.bin");
-			SLAPI.save(stationary, "plugins/Ollivanders/stationary.bin");
-			getLogger().info("Saved both files successfully!");
+			getLogger().info("Saved OPlayerMap.bin");
 		} catch (Exception e) {
-			getLogger().info("Could not save at least one of the files.");
-			e.printStackTrace();
+			getLogger().info("Could not save OPlayerMap.bin");
+		}
+		try {
+			SLAPI.save(stationary, "plugins/Ollivanders/stationary.bin");
+			getLogger().info("Saved stationary.bin");
+		} catch (Exception e) {
+			getLogger().info("Could not save stationary.bin");
+		}
+		try {
+			SLAPI.save(prophecy, "plugins/Ollivanders/prophecy.bin");
+			getLogger().info("Saved prophecy.bin");
+		} catch (Exception e) {
+			getLogger().info("Could not save prophecy.bin");
 		}
 		getLogger().info(this + " is now disabled!");
 	}
@@ -78,6 +91,7 @@ public class Ollivanders extends JavaPlugin{
 		OPlayerMap = new HashMap<String, OPlayer>();
 		projectiles = new ArrayList<SpellProjectile>();
 		stationary = new ArrayList<StationarySpellObj>();
+		prophecy = new HashSet<Prophecy>();
 		fileConfig = getConfig();
 		//finished loading data
 		if (fileConfig.getBoolean("update")){
@@ -87,10 +101,23 @@ public class Ollivanders extends JavaPlugin{
 		try {
 			OPlayerMap = (HashMap<String, OPlayer>) SLAPI
 					.load("plugins/Ollivanders/OPlayerMap.bin");
-			stationary = (List<StationarySpellObj>) SLAPI.load("plugins/Ollivanders/stationary.bin");
-			getLogger().info("Loaded both files successfully!");
+			getLogger().finest("Loaded OPlayerMap.bin");
 		} catch (Exception e) {
-			getLogger().warning("Did not find at least one of the two files.");
+			getLogger().warning("Did not find OPlayerMap.bin");
+		}
+		try {
+			stationary = (List<StationarySpellObj>) SLAPI
+					.load("plugins/Ollivanders/stationary.bin");
+			getLogger().finest("Loaded stationary.bin");
+		} catch (Exception e) {
+			getLogger().warning("Did not find stationary.bin");
+		}
+		try {
+			prophecy = (HashSet<Prophecy>) SLAPI
+					.load("plugins/Ollivanders/prophecy.bin");
+			getLogger().finest("Loaded prophecy.bin");
+		} catch (Exception e) {
+			getLogger().warning("Did not find prophecy.bin");
 		}
 		try {
 			MetricsLite metrics = new MetricsLite(this);
@@ -365,6 +392,13 @@ public class Ollivanders extends JavaPlugin{
 	 */
 	public List<StationarySpellObj> getStationary(){
 		return stationary;
+	}
+	
+	/**Gets the set of prophecy objects
+	 * @return Set of prophecy objects in server
+	 */
+	public Set<Prophecy> getProphecy(){
+		return prophecy;
 	}
 
 	/**

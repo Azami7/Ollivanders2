@@ -1,6 +1,8 @@
 update: true
 chatDropoff: 50
 witchDrop: false
+divination: true
+divinationBlock: 20
 zones:
   default-world:
     type: World
