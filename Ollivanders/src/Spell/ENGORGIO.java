@@ -45,6 +45,7 @@ public class ENGORGIO extends SpellProjectile implements Spell{
 				slime.setSize((int)(slime.getSize()+usesModifier));
 			}
 			kill();
+			return;
 		}
 	}
 	

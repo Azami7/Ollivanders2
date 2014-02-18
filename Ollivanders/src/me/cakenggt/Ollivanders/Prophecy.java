@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -26,7 +28,6 @@ public class Prophecy implements Serializable{
 	private final int minute = second * 60;
 	private final int hour = minute * 60;
 	private final int day = hour * 24;
-	private final int week = day * 7;
 
 	public Prophecy(Player player) {
 		name = player.getName();
@@ -37,10 +38,11 @@ public class Prophecy implements Serializable{
 		}
 		effect = possible.getName();
 		long currentTime = System.currentTimeMillis();
-		//The start can be any time within the next week
-		start = currentTime + (long)(Math.random()*week);
-		//The duration can be up to a day long
-		duration = (int)(Math.random()*day);
+		FileConfiguration config = Bukkit.getPluginManager().getPlugin("Ollivanders").getConfig();
+		long maxDuration = config.getLong("divinationMaxDuration");
+		long maxStartOffset = config.getLong("divinationMaxStartOffset");
+		start = currentTime + (long)(Math.random()*maxStartOffset);
+		duration = (int)(Math.random()*maxDuration);
 	}
 
 	public Prophecy(Player player, long start, int duration){

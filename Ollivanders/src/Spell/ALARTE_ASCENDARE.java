@@ -30,9 +30,11 @@ public class ALARTE_ASCENDARE extends SpellProjectile implements Spell{
 		Vector vec = new Vector(0, up, 0);
 		for (LivingEntity lentity : getLivingEntities(1)){
 			lentity.setVelocity(lentity.getVelocity().add(vec));
+			return;
 		}
 		for (Item item : getItems(1)){
 			item.setVelocity(item.getVelocity().add(vec));
+			return;
 		}
 	}
 	

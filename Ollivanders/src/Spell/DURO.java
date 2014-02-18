@@ -29,6 +29,7 @@ public class DURO extends Transfiguration implements Spell{
 					location = e.getLocation();
 					location.getBlock().setType(Material.STONE);
 					transfigureEntity(e, null, null);
+					return;
 				}
 			}
 		}

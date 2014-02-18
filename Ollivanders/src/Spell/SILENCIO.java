@@ -35,6 +35,7 @@ public class SILENCIO extends SpellProjectile implements Spell{
 				oply.addEffect(new Effect.SILENCIO(player, Effects.SILENCIO, dur));
 				p.setOPlayer(ply, oply);
 				kill();
+				return;
 			}
 		}
 	}

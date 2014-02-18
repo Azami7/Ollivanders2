@@ -32,7 +32,8 @@ public class CONFUNDO extends SpellProjectile implements Spell{
 			int modifier = (int)usesModifier;
 			PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, modifier * 20, modifier);
 			entity.addPotionEffect(confusion);
-			kill = true;
+			kill();
+			return;
 		}
 	}
 }

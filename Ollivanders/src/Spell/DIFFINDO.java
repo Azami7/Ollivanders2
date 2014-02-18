@@ -42,6 +42,7 @@ public class DIFFINDO extends SpellProjectile implements Spell{
 					live.getWorld().dropItemNaturally(live.getLocation(), rem);
 				}
 				kill();
+				return;
 			}
 		}
 		if (getBlock().getType() == Material.LOG){

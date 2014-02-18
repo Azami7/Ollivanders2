@@ -3,6 +3,8 @@ chatDropoff: 50
 witchDrop: false
 divination: true
 divinationBlock: 20
+divinationMaxDuration: 86400000
+divinationMaxStartOffset: 604800000
 zones:
   default-world:
     type: World

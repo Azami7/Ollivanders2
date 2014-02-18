@@ -32,6 +32,7 @@ public class AVADA_KEDAVRA extends SpellProjectile implements Spell{
 			LivingEntity entity = entities.get(0);
 			entity.damage(usesModifier*2, player);
 			kill = true;
+			return;
 		}
 	}
 }

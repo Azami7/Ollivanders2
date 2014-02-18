@@ -144,6 +144,7 @@ public class Transfiguration extends SpellProjectile{
 			for (Entity e : getCloseEntities(1)){
 				if (e.getType() != EntityType.PLAYER){
 					transfigureEntity(e, type, stack);
+					return;
 				}
 			}
 		}

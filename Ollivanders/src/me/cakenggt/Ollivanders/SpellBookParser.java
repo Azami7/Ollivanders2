@@ -170,6 +170,10 @@ public class SpellBookParser{
 			+ "barriers.";
 	public final static String LEGILIMENS = "Legilimens, when cast at a player, will allow you to open their inventory "
 			+ "if your level in legilimens is higher than theirs.";
+	public final static String LEVICORPUS = "Levicorpus will hoist a player up into the air and keep them there "
+			+ "for an amount of time determined by your experience.";
+	public final static String LIBERACORPUS = "Liberacorpus will reduce the time left on any levicorpus effects "
+			+ "on the target by an amount determined by your experience.";
 	public final static String LIGATIS_COR = "Ligatis cor will bind one of the four types of coreless wands to one "
 			+ "of the four types of wand cores: spider eye, rotten flesh, bone, and sulfur. Make sure the two "
 			+ "items are near each other when this spell is cast. You can only use this on one coreless wand and "
@@ -180,6 +184,9 @@ public class SpellBookParser{
 			+ "The duration of the glowstone depends on your experience.";
 	public final static String LUMOS_MAXIMA = "Lumos maxima will spawn a glowstone at the impact site that will "
 			+ "exist for a duration depending on your experience.";
+	public final static String LUMOS_SOLEM = "Lumos Solem will cause a sun-like light to erupt in an area around "
+			+ "the impact which will burn entities sensitive to sun. The radius of the light is dependent on your "
+			+ "experience.";
 	public final static String MELOFORS = "Melofors places a melon on the target's head.";
 	public final static String METEOLOJINX = "Meteolojinx will turn a sunny day into a storm for a duration which "
 			+ "depends on your experience.";
@@ -198,6 +205,7 @@ public class SpellBookParser{
 			+ "allow disapparition out of it. The duration depends on your experience.";
 	public final static String OBLIVIATE = "Obliviate will cause the target to forget some of their magical experience, "
 			+ "how much depending on your experience.";
+	public final static String OBSCURO = "Obscuro will blind the target for a length of time dependent on your experience.";
 	public final static String OPPUGNO = "Oppugno will cause any entities transfigured by you to attack the targeted "
 			+ "entity.";
 	public final static String PACK = "When this hits a chest, it will suck any items nearby into it. The radius is "
@@ -438,11 +446,13 @@ public class SpellBookParser{
 		bookMap.put("The Standard Book of Spells, Grade 4", 
 				ACCIO + N + ARRESTO_MOMENTUM + N + BOMBARDA_MAXIMA + N + 
 				DUCKLIFORS + N + FIANTO_DURI + N + PROTEGO_HORRIBILIS + N + 
-				PROTEGO_MAXIMA + N + PROTEGO_TOTALUM + N + GLACIUS_DUO);
+				PROTEGO_MAXIMA + N + PROTEGO_TOTALUM + N + GLACIUS_DUO + N + 
+				LUMOS_SOLEM);
 		bookMap.put("The Standard Book of Spells, Grade 5", 
 				ACCIO + N + EQUUSIFORS + N + EXPELLIARMUS + N + INCENDIO + N + 
 				PROTEGO + N + REPARO + N + SCUTO_CONTERAM + N + STUPEFY + N + 
-				WINGARDIUM_LEVIOSA + N + GLACIUS_TRIA + N + DEPULSO);
+				WINGARDIUM_LEVIOSA + N + GLACIUS_TRIA + N + DEPULSO + N + 
+				LEVICORPUS);
 		bookMap.put("The Standard Book of Spells, Grade 6", 
 				APPARATE + N + CRESCERE_PROTEGAT + N + HORREAT_PROTEGAT + N + 
 				INCENDIO_DUO + N + COLOVARIA + N + MULTICORFORS);
@@ -451,11 +461,12 @@ public class SpellBookParser{
 				PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA + N + 
 				REPELLO_MUGGLETON);
 		bookMap.put("Basic Hexes for the Busy and Vexed", 
-				IMMOBULUS);
+				IMMOBULUS + N + OBSCURO);
 		bookMap.put("A Compendium of Common Curses and Their Counter-Actions", 
-				INCENDIO_DUO + N + SILENCIO);
+				INCENDIO_DUO + N + SILENCIO + N + LEVICORPUS + N + LIBERACORPUS);
 		bookMap.put("Confronting the Faceless", 
-				AVADA_KEDAVRA + N + IMPEDIMENTA + N + METEOLOJINX);
+				AVADA_KEDAVRA + N + IMPEDIMENTA + N + METEOLOJINX + N + 
+				LUMOS_SOLEM);
 		bookMap.put("Curses and Counter-Curses",
 				METEOLOJINX_RECANTO);
 		bookMap.put("Dark Arts Defence: Basics for Beginners", 
@@ -463,7 +474,7 @@ public class SpellBookParser{
 				METEOLOJINX + N + PERICULUM + N + ARANIA_EXUMAI);
 		bookMap.put("Defensive Magical Theory", 
 				INFORMOUS + N + SILENCIO + N + ASCENDIO + N + PERICULUM + N + 
-				ARANIA_EXUMAI);
+				ARANIA_EXUMAI + N + OBSCURO);
 		bookMap.put("The Dark Arts Outsmarted",
 				AVADA_KEDAVRA + N + FIENDFYRE + N + INFORMOUS + N + HARMONIA_NECTERE_PASSUS + N + 
 				METEOLOJINX_RECANTO + N + FUMOS_DUO);
@@ -480,7 +491,7 @@ public class SpellBookParser{
 				APARECIUM + N + DEPRIMO + N + DEPULSO + N + FUMOS);
 		bookMap.put("Updated Counter-Curse Handbook (Second Revised Edition)", 
 				ALARTE_ASCENDARE + N + FLAGRANTE + N + INCENDIO_TRIA + N + 
-				FINITE_INCANTATEM);
+				FINITE_INCANTATEM + N + LIBERACORPUS);
 		bookMap.put("Magick Moste Evile",
 				FIENDFYRE);
 		bookMap.put("Secrets of the Darkest Art", 

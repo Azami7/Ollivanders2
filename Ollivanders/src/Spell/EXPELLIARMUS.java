@@ -28,9 +28,7 @@ public class EXPELLIARMUS extends SpellProjectile implements Spell{
 
 	public void checkEffect() {
 		move();
-		List<LivingEntity> entities = getLivingEntities(1);
-		if (entities.size() > 0){
-			LivingEntity entity = entities.get(0);
+		for (LivingEntity entity : getLivingEntities(1)){
 			ItemStack itemInHand = entity.getEquipment().getItemInHand().clone();
 			if (itemInHand.getType() != Material.AIR){
 				if (holdsWand(entity)){
@@ -41,7 +39,8 @@ public class EXPELLIARMUS extends SpellProjectile implements Spell{
 				Item item = entity.getWorld().dropItem(entity.getEyeLocation(), itemInHand);
 				item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(usesModifier/10));
 			}
-			kill = true;
+			kill();
+			return;
 		}
 	}
 

@@ -32,12 +32,14 @@ public class ARRESTO_MOMENTUM extends SpellProjectile implements Spell{
 			entity.setVelocity(entity.getVelocity().normalize().multiply(speed));
 			entity.setFallDistance((float) (entity.getFallDistance()/modifier));
 			kill = true;
+			return;
 		}
 		List<Item> items = getItems(1);
 		for (Item item : items){
 			double speed = item.getVelocity().length()/(Math.pow(modifier, 2));
 			item.setVelocity(item.getVelocity().normalize().multiply(speed));
 			kill = true;
+			return;
 		}
 	}
 }

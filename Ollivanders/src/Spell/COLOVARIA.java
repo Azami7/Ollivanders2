@@ -34,6 +34,7 @@ public class COLOVARIA extends SpellProjectile implements Spell{
 				Sheep sheep = (Sheep)live;
 				sheep.setColor(newColor);
 				kill();
+				return;
 			}
 		}
 		if (getBlock().getType() != Material.AIR){
@@ -44,8 +45,8 @@ public class COLOVARIA extends SpellProjectile implements Spell{
 					colorable.setColor(newColor);
 					bs.setData((MaterialData) colorable);
 					bs.update();
+					kill();
 				}
-				kill();
 			}
 		}
 	}
