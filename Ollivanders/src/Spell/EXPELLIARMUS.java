@@ -35,7 +35,6 @@ public class EXPELLIARMUS extends SpellProjectile implements Spell{
 					allyWand(itemInHand);
 				}
 				entity.getEquipment().setItemInHand(null);
-				allyWand(itemInHand);
 				Item item = entity.getWorld().dropItem(entity.getEyeLocation(), itemInHand);
 				item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(usesModifier/10));
 			}

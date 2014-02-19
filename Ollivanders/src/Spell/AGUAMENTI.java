@@ -46,7 +46,7 @@ public class AGUAMENTI extends SpellProjectile implements Spell{
 	public void revert(){
 		for (Block block : changed){
 			Material mat = block.getType();
-			if (mat == Material.WATER){
+			if (mat == Material.WATER || mat == Material.STATIONARY_WATER){
 				block.setType(Material.AIR);
 			}
 		}
