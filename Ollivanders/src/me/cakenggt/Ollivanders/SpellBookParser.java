@@ -165,7 +165,7 @@ public class SpellBookParser{
 	public final static String INFORMOUS = "Informous will give information on a stationary spell, an entity, or, "
 			+ "if pointed into the sky and allowed to travel far enough, the weather. It's range "
 			+ "depends on your experience.";
-	public final static String LACARNUM_INFLAMARAE = "Lacarnum Inflamarae will shoot a fire charge out of the "
+	public final static String LACARNUM_INFLAMARI = "Lacarnum Inflamarae will shoot a fire charge out of the "
 			+ "tip of your wand. This fire charge is not a spell, and thus can pass through normal anti-spell "
 			+ "barriers.";
 	public final static String LEGILIMENS = "Legilimens, when cast at a player, will allow you to open their inventory "
@@ -532,14 +532,14 @@ public class SpellBookParser{
 				ENGORGIO + N + REDUCIO + N + DIFFINDO);
 		bookMap.put("Easy Spells to Fool Muggles", 
 				CONFUNDO + N + EVERTE_STATUM + N + ENTOMORPHIS + N + 
-				LACARNUM_INFLAMARAE);
+				LACARNUM_INFLAMARI);
 		bookMap.put("Wizard's Spells, Volume 1", 
 				GLACIUS + N + COLLOPORTUS + N + TERGEO + N + CARPE_RETRACTUM + N + 
 				BRACKIUM_EMENDO);
 		bookMap.put("Wizard's Spells, Volume 2", 
 				BOMBARDA + N + MUFFLIATO + N + REDUCTO + N + GLACIUS_DUO);
 		bookMap.put("Wizard's Spells, Volume 3", 
-				BOMBARDA_MAXIMA + N + PACK + N + GLACIUS_TRIA + N + LACARNUM_INFLAMARAE);
+				BOMBARDA_MAXIMA + N + PACK + N + GLACIUS_TRIA + N + LACARNUM_INFLAMARI);
 		bookMap.put("Practical Magic", 
 				APPARATE + N + AQUA_ERUCTO + N + DEFODIO + N + DELETRIUS + N + 
 				HERBIVICUS + N + PORTUS + N + TERGEO + N + PACK);
