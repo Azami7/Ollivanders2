@@ -185,7 +185,7 @@ public class OllivandersListener implements Listener {
 			}
 			else{
 				int uses = p.getOPlayer(sender).getSpellCount().get(spell);
-				castSuccess = Math.random() < (1.0-(100.0/(uses+100.0)));
+				castSuccess = Math.random() < (1.0-(100.0/(uses+101.0)));
 			}
 			if (castSuccess){
 				String[] words = message2.split(" ");
