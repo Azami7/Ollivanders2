@@ -205,7 +205,6 @@ public class OllivandersListener implements Listener {
 				else{
 					if (spell!=null){
 						//If the spell is valid, run this code
-						//getLogger().info("Spell is " + spell.toString());
 						Map<String, OPlayer> opmap = p.getOPlayerMap();
 						OPlayer oplayer = opmap.get(sender.getName());
 						oplayer.setSpell(spell);
