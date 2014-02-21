@@ -208,6 +208,7 @@ class OllivandersSchedule implements Runnable{
 			}
 			boolean hasCloak = hasCloak(player);
 			if (hasCloak || muggletons.size() > 0){
+				oplayer.setMuggleton(true);
 				for (Player viewer : p.getServer().getOnlinePlayers()){
 					if (muggletons.size() == 0){
 						viewer.hidePlayer(player);
@@ -216,6 +217,9 @@ class OllivandersSchedule implements Runnable{
 						for (REPELLO_MUGGLETON muggleton : muggletons){
 							if (hasCloak || !muggleton.isInside(viewer.getLocation())){
 								viewer.hidePlayer(player);
+							}
+							else{
+								viewer.showPlayer(player);
 							}
 						}
 					}
@@ -241,11 +245,12 @@ class OllivandersSchedule implements Runnable{
 				}
 				oplayer.setInvisible(hasCloak);
 			}
-			else if (oplayer.isInvisible()){
+			else if (oplayer.isInvisible() || oplayer.isMuggleton()){
 				for (Player viewer : p.getServer().getOnlinePlayers()){
 					viewer.showPlayer(player);
 				}
 				oplayer.setInvisible(false);
+				oplayer.setMuggleton(false);
 			}
 		}
 	}

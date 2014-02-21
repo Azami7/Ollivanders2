@@ -22,6 +22,7 @@ public class OPlayer implements Serializable{
 	private Spells spell;
 	private int souls;
 	private boolean invisible = false;
+	private boolean muggleton = false;
 	
 	public OPlayer(){
 		Spells[] spells = Spells.values();
@@ -88,5 +89,16 @@ public class OPlayer implements Serializable{
 	
 	public void setInvisible(boolean invisible){
 		this.invisible = invisible;
+	}
+	
+	/**Has the player been rendered invisible from all other players by repello muggleton
+	 * @return
+	 */
+	public boolean isMuggleton(){
+		return muggleton;
+	}
+	
+	public void setMuggleton(boolean mug){
+		muggleton = mug;
 	}
 }

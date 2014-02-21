@@ -123,15 +123,17 @@ public class OllivandersListener implements Listener {
 		Set<Player> recipients = event.getRecipients();
 		String[] messageWords = message.split(" ");
 		String message2 = new String(message);
-		if (messageWords[0].equalsIgnoreCase("Apparate")){
-			event.setMessage(messageWords[0]);
-		}
-		else if (messageWords[0].equalsIgnoreCase("Portus")){
-			event.setMessage(messageWords[0]);
-		}
 		Spells spell;
 		//getLogger().info("Decoding spell");
 		spell = Spells.decode(message);
+		if (messageWords[0].equalsIgnoreCase("Apparate")){
+			event.setMessage(messageWords[0]);
+			spell = Spells.APPARATE;
+		}
+		else if (messageWords[0].equalsIgnoreCase("Portus")){
+			event.setMessage(messageWords[0]);
+			spell = Spells.PORTUS;
+		}
 		if (spell != null){
 			if (!p.canCast(sender, spell)){
 				spell = null;
@@ -193,12 +195,14 @@ public class OllivandersListener implements Listener {
 				if (spell == Spells.APPARATE){
 					if (p.canCast(sender, Spells.APPARATE)){
 						apparate(sender, words);
+						spell = null;
 					}
 				}
 				//If it was portus, then this
 				else if (spell == Spells.PORTUS){
 					if (p.canCast(sender, Spells.PORTUS)){
 						p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+						spell = null;
 					}
 				}
 				//If it wasn't apparate or portus, then this

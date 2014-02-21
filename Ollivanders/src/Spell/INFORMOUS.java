@@ -55,6 +55,9 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 				if (spell instanceof StationarySpell.COLLOPORTUS){
 					player.sendMessage(spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration/1200 + " power left.");
 				}
+				else if (spell instanceof StationarySpell.HORCRUX){
+					player.sendMessage(spell.name.toString() + " of player " + spell.player + " of radius " + spell.radius);
+				}
 				else{
 					player.sendMessage(spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration/20 + " seconds left.");
 				}

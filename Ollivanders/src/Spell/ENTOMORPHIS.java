@@ -25,7 +25,7 @@ public class ENTOMORPHIS extends Transfiguration implements Spell{
 	public void checkEffect() {
 		if (!hasTransfigured()){
 			move();
-			for (Entity entity : getLivingEntities(1)){
+			for (Entity entity : getCloseEntities(1)){
 				transfigureEntity(entity, EntityType.SILVERFISH, null);
 				return;
 			}

@@ -210,20 +210,18 @@ public class StationarySpellObj implements Serializable{
 		return ret;
 	}
 
-	private boolean holdsWand(Player player){
-		ItemStack held;
-		if (player != null){
-			if (player.isOnline()){
-				if (player.getItemInHand() != null){
-					held = player.getItemInHand();
-					if (held.getType() == Material.STICK){
-						List<String> lore = held.getItemMeta().getLore();
-						if (lore.get(0).split(" and ").length == 2){
-							return true;
-						}
-						else{
-							return false;
-						}
+	/**Does the player hold a wand item?
+	 * @param player - Player to check.
+	 * @return True if the player holds a wand. False if not.
+	 */
+	public boolean holdsWand(Player player){
+		if (player.getItemInHand() != null){
+			ItemStack held = player.getItemInHand();
+			if (held.getType() == Material.STICK || held.getType() == Material.BLAZE_ROD){
+				if (held.getItemMeta().hasLore()){
+					List<String> lore = held.getItemMeta().getLore();
+					if (lore.get(0).split(" and ").length == 2){
+						return true;
 					}
 					else{
 						return false;
@@ -242,7 +240,15 @@ public class StationarySpellObj implements Serializable{
 		}
 	}
 
-	private int wandCheck(Player player){
+	/**
+	 * Checks what kind of wand a player holds. Returns a value based on the
+	 * wand and it's relation to the player.
+	 * @param player - Player being checked.
+	 * @return 2 - The wand is not your type AND/OR is not allied to you.<p>
+	 * 1 - The wand is your type and is allied to you OR the wand is the elder wand and is not allied to you.<p>
+	 * 0.5 - The wand is the elder wand and it is allied to you.
+	 */
+	public double wandCheck(Player player){
 		String charList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
 		int wood = player.getName().length()%4;
 		String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
@@ -254,9 +260,32 @@ public class StationarySpellObj implements Serializable{
 		String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};
 		String coreString = coreArray[core%4];
 		List<String> lore = player.getItemInHand().getItemMeta().getLore();
+		if (lore.get(0).equals("Blaze and Ender Pearl")){
+			if (lore.size() == 2){
+				if (lore.get(1).equals(player.getName())){
+					return 0.5;
+				}
+				else{
+					return 1;
+				}
+			}
+			else{
+				return 0.5;
+			}
+		}
 		String[] comps = lore.get(0).split(" and ");
 		if (woodString.equals(comps[0]) && coreString.equals(comps[1])){
-			return 1;
+			if (lore.size() == 2){
+				if (lore.get(1).equals(player.getName())){
+					return 1;
+				}
+				else{
+					return 2;
+				}
+			}
+			else{
+				return 1;
+			}
 		}
 		else{
 			return 2;
@@ -270,7 +299,7 @@ public class StationarySpellObj implements Serializable{
 	 */
 	public int rightWand(Player player){
 		if (holdsWand(player)){
-			return wandCheck(player);
+			return (int)wandCheck(player);
 		}
 		else{
 			return -1;

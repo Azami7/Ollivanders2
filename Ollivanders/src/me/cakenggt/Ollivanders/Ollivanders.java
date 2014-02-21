@@ -52,7 +52,7 @@ public class Ollivanders extends JavaPlugin{
 		}
 		for (SpellProjectile proj : projectiles){
 			if (proj instanceof Transfiguration){
-				getLogger().info("Ended transfiguration");
+				getLogger().finest("Ended transfiguration");
 				((Transfiguration)proj).endTransfigure();
 			}
 			proj.revert();
@@ -62,21 +62,21 @@ public class Ollivanders extends JavaPlugin{
 		}
 		try {
 			SLAPI.save(OPlayerMap, "plugins/Ollivanders/OPlayerMap.bin");
-			getLogger().info("Saved OPlayerMap.bin");
+			getLogger().finest("Saved OPlayerMap.bin");
 		} catch (Exception e) {
-			getLogger().info("Could not save OPlayerMap.bin");
+			getLogger().warning("Could not save OPlayerMap.bin");
 		}
 		try {
 			SLAPI.save(stationary, "plugins/Ollivanders/stationary.bin");
-			getLogger().info("Saved stationary.bin");
+			getLogger().finest("Saved stationary.bin");
 		} catch (Exception e) {
-			getLogger().info("Could not save stationary.bin");
+			getLogger().warning("Could not save stationary.bin");
 		}
 		try {
 			SLAPI.save(prophecy, "plugins/Ollivanders/prophecy.bin");
-			getLogger().info("Saved prophecy.bin");
+			getLogger().finest("Saved prophecy.bin");
 		} catch (Exception e) {
-			getLogger().info("Could not save prophecy.bin");
+			getLogger().warning("Could not save prophecy.bin");
 		}
 		getLogger().info(this + " is now disabled!");
 	}
