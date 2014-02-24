@@ -29,7 +29,7 @@ public class OPlayer implements Serializable{
 		for (Spells spell : spells){
 			SpellCount.put(spell, 0);
 		}
-		souls = 1;
+		souls = 0;
 	}
 	
 	public Map<Spells, Integer> getSpellCount(){
@@ -60,11 +60,15 @@ public class OPlayer implements Serializable{
 	}
 	
 	public void resetSouls(){
-		souls = 1;
+		souls = 0;
 	}
 	
 	public void addSoul(){
 		souls ++;
+	}
+	
+	public void subSoul(){
+		souls --;
 	}
 	
 	public List<OEffect> getEffects(){

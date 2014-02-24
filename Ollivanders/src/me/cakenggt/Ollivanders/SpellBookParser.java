@@ -496,12 +496,13 @@ public class SpellBookParser{
 				FIENDFYRE);
 		bookMap.put("Secrets of the Darkest Art", 
 				"The most horrifying and destructive act man can do is the "
-						+ "creation of a horcrux. By splitting one's soul, one is able "
+						+ "creation of a horcrux. Through splitting one's soul through "
+						+ "the murder of another player, one is able "
 						+ "to resurrect with all of their magical experience intact. "
 						+ "However, this action has a terrible cost, for as long as "
-						+ "the soul is split, when the body takes damage, it will take "
-						+ "a multiplied amount, based on the number of horcruxes one has"
-						+ "made. The only known way of destroying a horcrux is with fiendfyre.\n" + 
+						+ "the soul is split, the player's maximum health is halved for "
+						+ "each horcrux they have made. "
+						+ "The only known way of destroying a horcrux is with fiendfyre.\n" + 
 						ET_INTERFICIAM_ANIMAM_LIGAVERIS);
 		bookMap.put("A Beginner's Guide to Transfiguration", 
 				"Transfiguration involves the transformation of one entity into "

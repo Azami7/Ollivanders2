@@ -217,6 +217,7 @@ class OllivandersSchedule implements Runnable{
 						for (REPELLO_MUGGLETON muggleton : muggletons){
 							if (hasCloak || !muggleton.isInside(viewer.getLocation())){
 								viewer.hidePlayer(player);
+								break;
 							}
 							else{
 								viewer.showPlayer(player);

@@ -34,6 +34,7 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -99,7 +100,7 @@ public class OllivandersListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.LOW)
 	public void onPlayerChat(AsyncPlayerChatEvent event){
 		//Begin code for chat falloff
 		Player sender = event.getPlayer();
@@ -469,6 +470,22 @@ public class OllivandersListener implements Listener {
 		oply.resetEffects();
 		map.put(event.getEntity().getName(), oply);
 		p.setOPlayerMap(map);
+		event.getEntity().setMaxHealth(20.0);
+	}
+	
+	/**This checks if a player kills another player, and if so, adds a soul
+	 * to the attacking player's oplayer
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onEntityDamage(EntityDamageByEntityEvent event){
+		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player){
+			Player damaged = (Player) event.getEntity();
+			Player attacker = (Player) event.getDamager();
+			if (((Damageable)damaged).getHealth() - event.getDamage() <= 0){
+				p.getOPlayer(attacker).addSoul();
+			}
+		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
@@ -481,9 +498,7 @@ public class OllivandersListener implements Listener {
 		if (event.getEntity() instanceof Player){
 			Damageable plyr = (Damageable) event.getEntity();
 			String name = ((Player)event.getEntity()).getName();
-			double damage = event.getDamage()*(p.getOPlayer((Player)event.getEntity()).getSouls());
-			event.setDamage(damage);
-			if (((double)plyr.getHealth()-damage)<= 0){
+			if (((double)plyr.getHealth()-event.getDamage())<= 0){
 				for(StationarySpellObj stationary : stationarys){
 					if (stationary.name == StationarySpells.HORCRUX && stationary.player.equals(name)){
 						Location tp = stationary.location.toLocation();
@@ -491,7 +506,7 @@ public class OllivandersListener implements Listener {
 						plyr.teleport(tp);
 						p.getOPlayer((Player) plyr).resetEffects();
 						event.setCancelled(true);
-						plyr.setHealth(20.0);
+						plyr.setHealth(plyr.getMaxHealth());
 						p.remStationary(stationary);
 						return;
 					}
