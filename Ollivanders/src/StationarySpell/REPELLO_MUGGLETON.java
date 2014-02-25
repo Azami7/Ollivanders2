@@ -31,17 +31,26 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
 	@SuppressWarnings("deprecation")
 	public void checkEffect(Ollivanders p) {
 		age();
-		if (duration % 20 == 0){
-			Material toMat = getBlock().getType();
-			byte toDat = getBlock().getData();
-			double viewDistance = Math.sqrt(2*Math.pow(((Bukkit.getServer().getViewDistance()+1)*16),2));
-			for (Player ply : getBlock().getWorld().getPlayers()){
-				if (ply.getLocation().distance(location.toLocation()) < viewDistance && !isInside(ply.getLocation()) && duration > 1){
-					for (Block block : getBlocksInRadius(location.toLocation(), radius)){
-						ply.sendBlockChange(block.getLocation(), toMat, toDat);
+		if (p.getConfig().getBoolean("muggletonBlockChange")){
+			if (duration % 20 == 0){
+				Material toMat = getBlock().getType();
+				byte toDat = getBlock().getData();
+				double viewDistance = Math.sqrt(2*Math.pow(((Bukkit.getServer().getViewDistance()+1)*16),2));
+				for (Player ply : getBlock().getWorld().getPlayers()){
+					if (ply.getLocation().distance(location.toLocation()) < viewDistance && !isInside(ply.getLocation())){
+						for (Block block : getBlocksInRadius(location.toLocation(), radius)){
+							ply.sendBlockChange(block.getLocation(), toMat, toDat);
+						}
+					}
+					else if(isInside(ply.getLocation())){
+						for (Block block : getBlocksInRadius(location.toLocation(), radius)){
+							ply.sendBlockChange(block.getLocation(), block.getType(), block.getData());
+						}
 					}
 				}
-				else if(isInside(ply.getLocation()) || duration <= 1){
+			}
+			if (duration <= 1){
+				for (Player ply : getBlock().getWorld().getPlayers()){
 					for (Block block : getBlocksInRadius(location.toLocation(), radius)){
 						ply.sendBlockChange(block.getLocation(), block.getType(), block.getData());
 					}

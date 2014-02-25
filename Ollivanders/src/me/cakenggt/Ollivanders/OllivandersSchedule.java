@@ -201,7 +201,7 @@ class OllivandersSchedule implements Runnable{
 			Set<REPELLO_MUGGLETON> muggletons = new HashSet<REPELLO_MUGGLETON>();
 			for (StationarySpellObj stat : p.getStationary()){
 				if (stat instanceof REPELLO_MUGGLETON){
-					if (stat.isInside(player.getLocation())){
+					if (stat.isInside(player.getLocation()) && stat.active){
 						muggletons.add((REPELLO_MUGGLETON) stat);
 					}
 				}
@@ -215,7 +215,7 @@ class OllivandersSchedule implements Runnable{
 					}
 					else{
 						for (REPELLO_MUGGLETON muggleton : muggletons){
-							if (hasCloak || !muggleton.isInside(viewer.getLocation())){
+							if (hasCloak || (!muggleton.isInside(viewer.getLocation()) && muggleton.active)){
 								viewer.hidePlayer(player);
 								break;
 							}
@@ -235,7 +235,7 @@ class OllivandersSchedule implements Runnable{
 								}
 								else{
 									for (REPELLO_MUGGLETON muggleton : muggletons){
-										if (hasCloak || !muggleton.isInside(creature.getLocation())){
+										if (hasCloak || (!muggleton.isInside(creature.getLocation()) && muggleton.active)){
 											creature.setTarget(null);
 										}
 									}

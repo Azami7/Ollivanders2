@@ -5,6 +5,7 @@ divination: true
 divinationBlock: 20
 divinationMaxDuration: 86400000
 divinationMaxStartOffset: 604800000
+muggletonBlockChange: true
 zones:
   default-world:
     type: World

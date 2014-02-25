@@ -392,7 +392,7 @@ public class OllivandersListener implements Listener {
 					allyWand(event.getPlayer());
 				}
 				else{
-					wandC = 0.1;
+					wandC = 10;
 				}
 				createSpellProjectile(event.getPlayer(), spell, wandC);
 				int spellc = p.getSpellNum(event.getPlayer(), spell);
@@ -435,7 +435,11 @@ public class OllivandersListener implements Listener {
 					oplayer.setSpell(knownSpells.get(0));
 				}
 				else{
-					oplayer.setSpell(knownSpells.get((ind + 1)%knownSpells.size()));
+					int offset = 1;
+					if (event.getPlayer().isSneaking()){
+						offset = -1;
+					}
+					oplayer.setSpell(knownSpells.get((ind + offset)%knownSpells.size()));
 				}
 				p.setOPlayer(event.getPlayer(), oplayer);
 				event.getPlayer().sendMessage(Spells.recode(oplayer.getSpell()));

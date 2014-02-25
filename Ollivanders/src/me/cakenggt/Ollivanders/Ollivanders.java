@@ -143,6 +143,19 @@ public class Ollivanders extends JavaPlugin{
 			if (sender instanceof Player) {
 				player = (Player) sender;
 			}
+			if (args.length == 1){
+				if (args[0].equalsIgnoreCase("reload")){
+					if (player != null){
+						if (!player.isOp()){
+							sender.sendMessage("Only server ops can use the /Okit command.");
+							return true;
+						}
+					}
+					reloadConfig();
+					sender.sendMessage("Config reloaded");
+					return true;
+				}
+			}
 			if (args.length >= 4){
 				if (player != null){
 					if (!player.isOp()){
