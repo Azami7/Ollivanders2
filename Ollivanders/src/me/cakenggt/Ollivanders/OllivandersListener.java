@@ -24,6 +24,7 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -50,6 +51,7 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import Effect.LYCANTHROPY;
 import Spell.FORSKNING;
 import Spell.PORTUS;
 import StationarySpell.COLLOPORTUS;
@@ -476,18 +478,35 @@ public class OllivandersListener implements Listener {
 		p.setOPlayerMap(map);
 		event.getEntity().setMaxHealth(20.0);
 	}
-	
+
 	/**This checks if a player kills another player, and if so, adds a soul
 	 * to the attacking player's oplayer
 	 * @param event
 	 */
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onEntityDamage(EntityDamageByEntityEvent event){
-		if (event.getEntity() instanceof Player && event.getDamager() instanceof Player){
+		if (event.getEntity() instanceof Player){
 			Player damaged = (Player) event.getEntity();
-			Player attacker = (Player) event.getDamager();
-			if (((Damageable)damaged).getHealth() - event.getDamage() <= 0){
-				p.getOPlayer(attacker).addSoul();
+			if (event.getDamager() instanceof Player){
+				Player attacker = (Player) event.getDamager();
+				if (((Damageable)damaged).getHealth() - event.getDamage() <= 0){
+					p.getOPlayer(attacker).addSoul();
+				}
+			}
+			if (event.getDamager() instanceof Wolf){
+				Wolf wolf = (Wolf) event.getDamager();
+				if (wolf.isAngry()){
+					boolean hasLy = false;
+					OPlayer oply = p.getOPlayer(damaged);
+					for (OEffect effect : oply.getEffects()){
+						if (effect.name == Effects.LYCANTHROPY){
+							hasLy = true;
+						}
+					}
+					if (!hasLy){
+						oply.addEffect(new LYCANTHROPY(damaged, Effects.LYCANTHROPY, 100));
+					}
+				}
 			}
 		}
 	}

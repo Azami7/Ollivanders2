@@ -26,6 +26,7 @@ public class LEVICORPUS extends OEffect implements Effect {
 
 	@Override
 	public void checkEffect(Ollivanders p, Player owner) {
+		age(1);
 		owner.setAllowFlight(duration > 1);
 		Location curLoc = owner.getLocation();
 		Location newLoc = new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), curLoc.getYaw(), 90);
