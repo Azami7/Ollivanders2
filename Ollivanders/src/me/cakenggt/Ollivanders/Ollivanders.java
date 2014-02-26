@@ -28,7 +28,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.command.Command;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 /**
  * Ollivanders plugin object
@@ -483,6 +488,20 @@ public class Ollivanders extends JavaPlugin{
 			OPlayerMap.put(name, op);
 		}
 	}
+	
+	/**Gets the worldguard plugin, if it exists.
+	 * @return WorldGuardPlugin or null
+	 */
+	private WorldGuardPlugin getWorldGuard() {
+	    Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+	 
+	    // WorldGuard may not be loaded
+	    if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
+	        return null; // Maybe you want throw an exception instead
+	    }
+	 
+	    return (WorldGuardPlugin) plugin;
+	}
 
 	/**Can this player cast this spell?
 	 * @param player - Player to check
@@ -502,6 +521,9 @@ public class Ollivanders extends JavaPlugin{
 		 * return true whenever it is in allowed-spells
 		 */
 		boolean cast = true;
+		double x = player.getLocation().getX();
+		double y = player.getLocation().getY();
+		double z = player.getLocation().getZ();
 		String message = "";
 		if (fileConfig.contains("zones")){
 			ConfigurationSection config = fileConfig.getConfigurationSection("zones");
@@ -509,7 +531,7 @@ public class Ollivanders extends JavaPlugin{
 				String prefix = zone + ".";
 				String type = config.getString(prefix + "type");
 				String world = config.getString(prefix + "world");
-				//String region = config.getString(prefix + "region");
+				String region = config.getString(prefix + "region");
 				String areaString = config.getString(prefix + "area");
 				boolean allAllowed = false;
 				boolean allDisallowed = false;
@@ -554,9 +576,6 @@ public class Ollivanders extends JavaPlugin{
 						}
 					}
 					if (player.getWorld().getName().equals(world)){
-						double x = player.getLocation().getX();
-						double y = player.getLocation().getY();
-						double z = player.getLocation().getZ();
 						if ((area.get(0) < x) && (x < area.get(3))){
 							if ((area.get(1) < y) && (y < area.get(4))){
 								if ((area.get(2) < z) && (z < area.get(5))){
@@ -572,11 +591,26 @@ public class Ollivanders extends JavaPlugin{
 						}
 					}
 				}
-				/*
 				if (type.equalsIgnoreCase("WorldGuard")){
-
+					WorldGuardPlugin worldGuard = getWorldGuard();
+					if (worldGuard != null){
+						RegionManager regionManager = worldGuard.getRegionManager(Bukkit.getWorld(world));
+						if (regionManager != null){
+							ProtectedRegion protRegion = regionManager.getRegion(region);
+							if (protRegion != null){
+								if (protRegion.contains((int)x, (int)y, (int)z)){
+									if (allowedSpells.contains(spell) || allAllowed){
+										return true;
+									}
+									if (disallowedSpells.contains(spell) || allDisallowed){
+										message = "Casting of " + spell.toString() + " is not allowed in " + zone;
+										cast = false;
+									}
+								}
+							}
+						}
+					}
 				}
-				 */
 			}
 		}
 		if (!cast){

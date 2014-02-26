@@ -4,6 +4,7 @@ import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -23,7 +24,8 @@ public class REDUCTO extends SpellProjectile implements Spell{
 	public void checkEffect() {
 		move();
 		if (super.getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER){
-			super.location.getWorld().createExplosion(super.location, (float)(usesModifier*0.4));
+			Location backLoc = super.location.clone().subtract(vector);
+			backLoc.getWorld().createExplosion(backLoc, (float)(usesModifier*0.4));
 		}
 	}
 }

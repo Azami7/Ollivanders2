@@ -4,6 +4,7 @@ import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -23,7 +24,8 @@ public class BOMBARDA extends SpellProjectile implements Spell{
 	public void checkEffect() {
 		move();
 		if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER){
-			location.getWorld().createExplosion(location.getX(), location.getY(), location.getZ(), (float)(0.8*usesModifier), false, false);
+			Location backLoc = super.location.clone().subtract(vector);
+			backLoc.getWorld().createExplosion(backLoc.getX(), backLoc.getY(), backLoc.getZ(), (float)(0.8*usesModifier), false, false);
 		}
 	}
 }
