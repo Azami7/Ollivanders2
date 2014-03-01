@@ -70,7 +70,7 @@ public class SpellProjectile{
 	 * Moves the projectile forward, creating a particle effect
 	 */
 	public void move(){
-		if (p.canCast(player, name)){
+		if (p.canCast(player, name, true)){
 			location.add(vector);
 			location.getWorld().playEffect(location, moveEffect, moveEffectData);
 			if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER && getBlock().getType() != Material.STATIONARY_LAVA && getBlock().getType() != Material.LAVA){

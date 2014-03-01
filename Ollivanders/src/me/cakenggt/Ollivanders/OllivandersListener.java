@@ -138,7 +138,7 @@ public class OllivandersListener implements Listener {
 			spell = Spells.PORTUS;
 		}
 		if (spell != null){
-			if (!p.canCast(sender, spell)){
+			if (!p.canCast(sender, spell, true)){
 				spell = null;
 			}
 		}
@@ -196,17 +196,13 @@ public class OllivandersListener implements Listener {
 				String[] words = message2.split(" ");
 				//If it was apparate, then this
 				if (spell == Spells.APPARATE){
-					if (p.canCast(sender, Spells.APPARATE)){
-						apparate(sender, words);
-						spell = null;
-					}
+					apparate(sender, words);
+					spell = null;
 				}
 				//If it was portus, then this
 				else if (spell == Spells.PORTUS){
-					if (p.canCast(sender, Spells.PORTUS)){
-						p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
-						spell = null;
-					}
+					p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+					spell = null;
 				}
 				//If it wasn't apparate or portus, then this
 				else{

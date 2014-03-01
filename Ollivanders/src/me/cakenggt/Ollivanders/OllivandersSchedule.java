@@ -282,7 +282,7 @@ class OllivandersSchedule implements Runnable{
 	private void scry(){
 		Material ball = Material.getMaterial(p.getConfig().getInt("divinationBlock"));
 		for (Player player : p.getServer().getOnlinePlayers()){
-			if (!p.canCast(player, Spells.INFORMOUS) || !player.isSneaking()){
+			if (!p.canCast(player, Spells.INFORMOUS, false) || !player.isSneaking()){
 				return;
 			}
 			if (player.getTargetBlock(null, 100).getType() != ball){

@@ -411,7 +411,7 @@ public class Ollivanders extends JavaPlugin{
 	public List<StationarySpellObj> getStationary(){
 		return stationary;
 	}
-	
+
 	/**Gets the set of prophecy objects
 	 * @return Set of prophecy objects in server
 	 */
@@ -488,30 +488,33 @@ public class Ollivanders extends JavaPlugin{
 			OPlayerMap.put(name, op);
 		}
 	}
-	
+
 	/**Gets the worldguard plugin, if it exists.
 	 * @return WorldGuardPlugin or null
 	 */
 	private WorldGuardPlugin getWorldGuard() {
-	    Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
-	 
-	    // WorldGuard may not be loaded
-	    if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
-	        return null; // Maybe you want throw an exception instead
-	    }
-	 
-	    return (WorldGuardPlugin) plugin;
+		Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
+
+		// WorldGuard may not be loaded
+		if (plugin == null || !(plugin instanceof WorldGuardPlugin)) {
+			return null; // Maybe you want throw an exception instead
+		}
+
+		return (WorldGuardPlugin) plugin;
 	}
 
 	/**Can this player cast this spell?
 	 * @param player - Player to check
 	 * @param spell - Spell to check
+	 * @param verbose - Whether or not to inform the player of why they cannot cast a spell
 	 * @return True if yes, false if not
 	 */
-	public boolean canCast(Player player, Spells spell){
+	public boolean canCast(Player player, Spells spell, boolean verbose){
 		if (player.isPermissionSet("Ollivanders."+spell.toString())){
 			if (!player.hasPermission("Ollivanders." + spell.toString())){
-				player.sendMessage("You do not have permission to use " + spell.toString());
+				if (verbose){
+					player.sendMessage("You do not have permission to use " + spell.toString());
+				}
 				return false;
 			}
 		}
@@ -613,7 +616,7 @@ public class Ollivanders extends JavaPlugin{
 				}
 			}
 		}
-		if (!cast){
+		if (!cast && verbose){
 			player.sendMessage(message);
 		}
 		return cast;
