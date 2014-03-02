@@ -84,6 +84,9 @@ public class SpellBookParser{
 	public final static String DIMMINUENDO = "Dimminuendo will cause any creature hit to turn into "
 			+ "a smaller version. The time duration, for some of the creatures, will depend on your "
 			+ "experience.";
+	public final static String DISSENDIUM = "Dissendium will open a door or trapdoor for a few seconds. "
+			+ "To open a door, aim at the bottom half. "
+			+ "The distance away which you can open the door depends on your experience.";
 	public final static String DUCKLIFORS = "Ducklifors will transfigure an entity into a chicken. "
 			+ "The length of the transfiguration depends on your experience.";
 	public final static String DURO = "Duro will transfigure an entity into a stone. The length "
@@ -455,7 +458,7 @@ public class SpellBookParser{
 				LEVICORPUS);
 		bookMap.put("The Standard Book of Spells, Grade 6", 
 				APPARATE + N + CRESCERE_PROTEGAT + N + HORREAT_PROTEGAT + N + 
-				INCENDIO_DUO + N + COLOVARIA + N + MULTICORFORS);
+				INCENDIO_DUO + N + COLOVARIA + N + MULTICORFORS + N + DISSENDIUM);
 		bookMap.put("The Standard Book of Spells, Grade 7", 
 				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
 				PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA + N + 
@@ -540,7 +543,8 @@ public class SpellBookParser{
 		bookMap.put("Wizard's Spells, Volume 2", 
 				BOMBARDA + N + MUFFLIATO + N + REDUCTO + N + GLACIUS_DUO);
 		bookMap.put("Wizard's Spells, Volume 3", 
-				BOMBARDA_MAXIMA + N + PACK + N + GLACIUS_TRIA + N + LACARNUM_INFLAMARI);
+				BOMBARDA_MAXIMA + N + PACK + N + GLACIUS_TRIA + N + LACARNUM_INFLAMARI + N + 
+				DISSENDIUM);
 		bookMap.put("Practical Magic", 
 				APPARATE + N + AQUA_ERUCTO + N + DEFODIO + N + DELETRIUS + N + 
 				HERBIVICUS + N + PORTUS + N + TERGEO + N + PACK);
