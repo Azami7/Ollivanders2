@@ -462,7 +462,7 @@ public class SpellBookParser{
 				APPARATE + N + CRESCERE_PROTEGAT + N + HORREAT_PROTEGAT + N + 
 				INCENDIO_DUO + N + COLOVARIA + N + MULTICORFORS + N + DISSENDIUM);
 		bookMap.put("The Standard Book of Spells, Grade 7", 
-				"blablabla " + NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
+				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
 				PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA + N + 
 				REPELLO_MUGGLETON);
 		bookMap.put("Basic Hexes for the Busy and Vexed", 

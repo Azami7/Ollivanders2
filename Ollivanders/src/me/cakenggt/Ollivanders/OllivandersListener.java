@@ -453,6 +453,9 @@ public class OllivandersListener implements Listener {
 				if (bookM.getAuthor().equals("cakenggt")){
 					for (ItemStack madeBook : SpellBookParser.makeBooks(1)){
 						if (((BookMeta)madeBook.getItemMeta()).getTitle().equals(bookM.getTitle())){
+							if (item.getAmount() != 1){
+								madeBook.setAmount(item.getAmount());
+							}
 							event.getPlayer().setItemInHand(madeBook);
 							imeta = madeBook.getItemMeta();
 							break;
