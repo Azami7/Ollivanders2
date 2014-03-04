@@ -49,6 +49,7 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import Effect.LYCANTHROPY;
@@ -448,6 +449,16 @@ public class OllivandersListener implements Listener {
 			if (event.getItem().getType() == Material.WRITTEN_BOOK){
 				ItemStack item = event.getItem();
 				ItemMeta imeta = item.getItemMeta();
+				BookMeta bookM = (BookMeta)imeta;
+				if (bookM.getAuthor().equals("cakenggt")){
+					for (ItemStack madeBook : SpellBookParser.makeBooks(1)){
+						if (((BookMeta)madeBook.getItemMeta()).getTitle().equals(bookM.getTitle())){
+							event.getPlayer().setItemInHand(madeBook);
+							imeta = madeBook.getItemMeta();
+							break;
+						}
+					}
+				}
 				SpellBookParser.decode(p, event.getPlayer(), imeta);
 			}
 		}

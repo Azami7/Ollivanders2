@@ -34,7 +34,8 @@ public class SpellBookParser{
 			+ "a predetermined location, simply say apparate and list your x, y, and z "
 			+ "coordinates. To apparate to the location of your cursor, within 140 meters, "
 			+ "just say the word apparate. Your accuracy is determined by the distance "
-			+ "traveled and your experience.";
+			+ "traveled and your experience. If there are any entities close to you when "
+			+ "you apparate, they will be taken with you as well by side-along apparition.";
 	public final static String AQUA_ERUCTO = "Aqua eructo shoots a jet of water from your "
 			+ "wand tip. The range of this jet is determined by your experience.";
 	public final static String ARANIA_EXUMAI = "Arania Exumai will blast away spiders with "
@@ -341,6 +342,7 @@ public class SpellBookParser{
 
 	/**
 	 * This creates the books for the /Okit command
+	 * @param amount - number of copies of each book
 	 * @return - A list of books
 	 */
 	public static List<ItemStack> makeBooks(int amount){
@@ -415,7 +417,7 @@ public class SpellBookParser{
 	 * @return Map whose keys are the titles, entries are the book text
 	 */
 	@SuppressWarnings("deprecation")
-	private static Map<String, String> books(){
+	public static Map<String, String> books(){
 		Map<String, String> bookMap = new HashMap<String, String>();
 		final String N = "\n";
 		bookMap.put("Achievements in Charming",
@@ -460,7 +462,7 @@ public class SpellBookParser{
 				APPARATE + N + CRESCERE_PROTEGAT + N + HORREAT_PROTEGAT + N + 
 				INCENDIO_DUO + N + COLOVARIA + N + MULTICORFORS + N + DISSENDIUM);
 		bookMap.put("The Standard Book of Spells, Grade 7", 
-				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
+				"blablabla " + NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
 				PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA + N + 
 				REPELLO_MUGGLETON);
 		bookMap.put("Basic Hexes for the Busy and Vexed", 

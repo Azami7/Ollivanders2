@@ -8,6 +8,7 @@ import org.bukkit.material.Openable;
 import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
+import me.cakenggt.Ollivanders.StationarySpells;
 
 /**Opens a trapdoor or door.
  * @author lownes
@@ -33,6 +34,10 @@ public class DISSENDIUM extends SpellProjectile implements Spell {
 	public void checkEffect() {
 		if (move){
 			move();
+			if (p.isInsideOf(StationarySpells.COLLOPORTUS, location)){
+				kill();
+				return;
+			}
 			if (getBlock().getState().getData() instanceof Openable){
 				kill = false;
 				move = false;
