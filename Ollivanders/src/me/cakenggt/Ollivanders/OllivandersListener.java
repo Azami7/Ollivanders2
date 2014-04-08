@@ -3,6 +3,7 @@ package me.cakenggt.Ollivanders;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -51,10 +52,12 @@ import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 
 import Effect.LYCANTHROPY;
 import Spell.FORSKNING;
 import Spell.PORTUS;
+import StationarySpell.ALIQUAM_FLOO;
 import StationarySpell.COLLOPORTUS;
 import StationarySpell.REPELLO_MUGGLETON;
 import StationarySpell.SPONGIFY;
@@ -98,6 +101,44 @@ public class OllivandersListener implements Listener {
 						|| (toLoc.distance(spellLoc) < radius+0.5 && fromLoc.distance(spellLoc) > radius+0.5)) && spell.active) {
 					event.setCancelled(true);
 					spell.flair(10);
+				}
+			}
+		}
+	}
+
+	/**Checks if a player is inside an active floo fireplace and is saying a destination
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.LOW)
+	public void onFlooChat(AsyncPlayerChatEvent event){
+		Player player = event.getPlayer();
+		String chat = event.getMessage();
+		for (StationarySpellObj stat : p.getStationary()){
+			if (stat instanceof StationarySpell.ALIQUAM_FLOO){
+				StationarySpell.ALIQUAM_FLOO aliquam = (ALIQUAM_FLOO) stat;
+				if (player.getLocation().getBlock().equals(aliquam.getBlock()) && aliquam.isWorking()){
+					aliquam.stopWorking();
+					List<ALIQUAM_FLOO> alis = new ArrayList<ALIQUAM_FLOO>();
+					Location destination;
+					for (StationarySpellObj ali : p.getStationary()){
+						if (stat instanceof StationarySpell.ALIQUAM_FLOO){
+							StationarySpell.ALIQUAM_FLOO dest = (ALIQUAM_FLOO) ali;
+							alis.add(dest);
+							if (dest.getFlooName().equals(chat.trim().toLowerCase())){
+								destination = dest.location.toLocation();
+								destination.setPitch(player.getLocation().getPitch());
+								destination.setYaw(player.getLocation().getYaw());
+								player.teleport(destination);
+								return;
+							}
+						}
+					}
+					int randomIndex = (int) (alis.size()*Math.random());
+					destination = alis.get(randomIndex).location.toLocation();
+					destination.setPitch(player.getLocation().getPitch());
+					destination.setYaw(player.getLocation().getYaw());
+					player.teleport(destination);
+					return;
 				}
 			}
 		}
@@ -538,6 +579,10 @@ public class OllivandersListener implements Listener {
 						tp.setY(tp.getY()+1);
 						plyr.teleport(tp);
 						p.getOPlayer((Player) plyr).resetEffects();
+						Collection<PotionEffect> potions = ((Player)event.getEntity()).getActivePotionEffects();
+						for (PotionEffect potion : potions){
+							((Player)event.getEntity()).removePotionEffect(potion.getType());
+						}
 						event.setCancelled(true);
 						plyr.setHealth(plyr.getMaxHealth());
 						p.remStationary(stationary);
