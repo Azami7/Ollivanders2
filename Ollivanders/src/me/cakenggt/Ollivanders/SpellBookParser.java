@@ -26,6 +26,15 @@ public class SpellBookParser{
 			+ "the surface you cast it on.";
 	public final static String ALARTE_ASCENDARE = "Alarte Ascendare will shoot the target "
 			+ "high into the air. It's strength is determined by your experience.";
+	public final static String ALIQUAM_FLOO = "Aliquam Floo will register a fireplace with "
+			+ "the Floo Network. Simply place a sign above a fire with the name of the "
+			+ "fireplace on the sign and cast this spell at the fire. Once your fireplace "
+			+ "is registered, you can destroy the sign and even put out the fire, but you "
+			+ "must not place a solid block where the fire was, or you will have to re-register"
+			+ " your fireplace. Now, people can come "
+			+ "to your fireplace via Floo powder, which is made by smelting ender pearl. "
+			+ "Toss the powder into a fireplace that is registered, walk into the fire, and "
+			+ "say the name of your destination.";
 	public final static String ALOHOMORA = "Alohomora is a spell used to unlock the effects "
 			+ "of the locking spell.";
 	public final static String APARECIUM = "Aparecium will cause any area spells to reveal "
@@ -148,8 +157,8 @@ public class SpellBookParser{
 			+ "glacius, but for half the time.";
 	public final static String GLACIUS_TRIA = "Glacius Tria will freeze blocks in a radius four times "
 			+ "that of glacius, but for one quarter the time.";
-	public final static String HARMONIA_NECTERE_PASSUS = "Harmonia Nectere Passus, if inside of a "
-			+ "vanishing cabinet, will transport you to it's twin.";
+	public final static String HARMONIA_NECTERE_PASSUS = "Harmonia Nectere Passus will create a pair of "
+			+ "vanishing cabinets if the cabinets on both ends are configured correctly.";
 	public final static String HERBIVICUS = "Herbivicus causes crops within a radius to grow. The radius "
 			+ "is determined by your experience.";
 	public final static String HORREAT_PROTEGAT = "Horreat Protegat will shrink a stationary spell's "
@@ -423,7 +432,7 @@ public class SpellBookParser{
 		bookMap.put("Achievements in Charming",
 				AGUAMENTI + N + EBUBLIO + N + HERBIVICUS + N +
 				LUMOS_DUO + N + LUMOS_MAXIMA + N + DIMMINUENDO + N + 
-				EPISKEY);
+				EPISKEY + N + ALIQUAM_FLOO);
 		bookMap.put("Extreme Incantations",
 				ALARTE_ASCENDARE + N + LUMOS_MAXIMA + N + 
 				OBLIVIATE + N + ASCENDIO + N + FORSKNING);
@@ -549,7 +558,7 @@ public class SpellBookParser{
 				DISSENDIUM);
 		bookMap.put("Practical Magic", 
 				APPARATE + N + AQUA_ERUCTO + N + DEFODIO + N + DELETRIUS + N + 
-				HERBIVICUS + N + PORTUS + N + TERGEO + N + PACK);
+				HERBIVICUS + N + PORTUS + N + TERGEO + N + PACK + N + ALIQUAM_FLOO);
 		bookMap.put("The Secrets of Wandlore",
 				"The secrets of wandlore are not to be easily had, however " +
 						"they will be related in this book with the greatest of ease.\n" +

@@ -23,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.command.Command;
@@ -31,6 +32,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -136,6 +138,14 @@ public class Ollivanders extends JavaPlugin{
 		fillAllSpellCount();
 		this.schedule = new OllivandersSchedule(this);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.schedule, 20L, 1L);
+		ItemStack flooPowder = new ItemStack(Material.REDSTONE, 8);
+		ItemMeta meta = flooPowder.getItemMeta();
+		meta.setDisplayName("Floo Powder");
+		List<String> lore = new ArrayList<String>();
+		lore.add("Glittery, silver powder");
+		meta.setLore(lore);
+		flooPowder.setItemMeta(meta);
+		getServer().addRecipe(new FurnaceRecipe(flooPowder, Material.ENDER_PEARL));
 		getLogger().info(this + " is now enabled!");
 	}
 
@@ -157,6 +167,7 @@ public class Ollivanders extends JavaPlugin{
 						}
 					}
 					reloadConfig();
+					fileConfig = getConfig();
 					sender.sendMessage("Config reloaded");
 					return true;
 				}
@@ -518,16 +529,23 @@ public class Ollivanders extends JavaPlugin{
 				return false;
 			}
 		}
+		boolean cast = canLive(player.getLocation(), spell);
+		if (!cast && verbose){
+			player.sendMessage("Casting of " + spell.toString() + " is not allowed in this area");
+		}
+		return cast;
+	}
+
+	public boolean canLive(Location loc, Spells spell){
 		/*
 		 * cast is whether or not the spell can be cast.
 		 * set to false whenever it can't be
 		 * return true whenever it is in allowed-spells
 		 */
 		boolean cast = true;
-		double x = player.getLocation().getX();
-		double y = player.getLocation().getY();
-		double z = player.getLocation().getZ();
-		String message = "";
+		double x = loc.getX();
+		double y = loc.getY();
+		double z = loc.getZ();
 		if (fileConfig.contains("zones")){
 			ConfigurationSection config = fileConfig.getConfigurationSection("zones");
 			for (String zone : config.getKeys(false)){
@@ -557,12 +575,11 @@ public class Ollivanders extends JavaPlugin{
 					}
 				}
 				if (type.equalsIgnoreCase("World")){
-					if (player.getWorld().getName().equals(world)){
+					if (loc.getWorld().getName().equals(world)){
 						if (allowedSpells.contains(spell) || allAllowed){
 							return true;
 						}
 						if (disallowedSpells.contains(spell) || allDisallowed){
-							message = "Casting of " + spell.toString() + " is not allowed in " + zone;
 							cast = false;
 						}
 					}
@@ -578,7 +595,7 @@ public class Ollivanders extends JavaPlugin{
 							area.set(i, 0);
 						}
 					}
-					if (player.getWorld().getName().equals(world)){
+					if (loc.getWorld().getName().equals(world)){
 						if ((area.get(0) < x) && (x < area.get(3))){
 							if ((area.get(1) < y) && (y < area.get(4))){
 								if ((area.get(2) < z) && (z < area.get(5))){
@@ -586,7 +603,6 @@ public class Ollivanders extends JavaPlugin{
 										return true;
 									}
 									if (disallowedSpells.contains(spell) || allDisallowed){
-										message = "Casting of " + spell.toString() + " is not allowed in " + zone;
 										cast = false;
 									}
 								}
@@ -601,12 +617,11 @@ public class Ollivanders extends JavaPlugin{
 						if (regionManager != null){
 							ProtectedRegion protRegion = regionManager.getRegion(region);
 							if (protRegion != null){
-								if (protRegion.contains((int)x, (int)y, (int)z)){
+								if (protRegion.contains(BukkitUtil.toVector(loc))){
 									if (allowedSpells.contains(spell) || allAllowed){
 										return true;
 									}
 									if (disallowedSpells.contains(spell) || allDisallowed){
-										message = "Casting of " + spell.toString() + " is not allowed in " + zone;
 										cast = false;
 									}
 								}
@@ -615,9 +630,6 @@ public class Ollivanders extends JavaPlugin{
 					}
 				}
 			}
-		}
-		if (!cast && verbose){
-			player.sendMessage(message);
 		}
 		return cast;
 	}

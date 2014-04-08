@@ -5,8 +5,10 @@ package me.cakenggt.Ollivanders;
  *
  */
 public enum StationarySpells {
+	ALIQUAM_FLOO,
 	COLLOPORTUS,
 	MUFFLIATO,
+	HARMONIA_NECTERE_PASSUS,
 	HORCRUX,
 	NULLUM_APPAREBIT,
 	NULLUM_EVANESCUNT,

@@ -58,6 +58,12 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 				else if (spell instanceof StationarySpell.HORCRUX){
 					player.sendMessage(spell.name.toString() + " of player " + spell.player + " of radius " + spell.radius);
 				}
+				else if (spell instanceof StationarySpell.ALIQUAM_FLOO){
+					player.sendMessage("Floo registration of " + ((StationarySpell.ALIQUAM_FLOO)spell).getFlooName());
+				}
+				else if (spell instanceof StationarySpell.HARMONIA_NECTERE_PASSUS){
+					player.sendMessage("Vanishing Cabinet");
+				}
 				else{
 					player.sendMessage(spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration/20 + " seconds left.");
 				}

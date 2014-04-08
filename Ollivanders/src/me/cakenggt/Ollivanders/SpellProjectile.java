@@ -64,25 +64,26 @@ public class SpellProjectile{
 			spellCount.put(name, 0);
 			p.getOPlayer(player).setSpellCount(spellCount);
 		}
+		if (!p.canCast(player, name, true)){
+			kill();
+		}
 	}
 
 	/**
 	 * Moves the projectile forward, creating a particle effect
 	 */
 	public void move(){
-		if (p.canCast(player, name, true)){
-			location.add(vector);
-			location.getWorld().playEffect(location, moveEffect, moveEffectData);
-			if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER && getBlock().getType() != Material.STATIONARY_LAVA && getBlock().getType() != Material.LAVA){
-				kill = true;
-			}
-			lifeTicks ++;
-			if (lifeTicks > 160){
-				kill = true;
-			}
-		}
-		else{
+		location.add(vector);
+		if (!p.canLive(location, name)){
 			kill();
+		}
+		location.getWorld().playEffect(location, moveEffect, moveEffectData);
+		if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER && getBlock().getType() != Material.STATIONARY_LAVA && getBlock().getType() != Material.LAVA){
+			kill = true;
+		}
+		lifeTicks ++;
+		if (lifeTicks > 160){
+			kill = true;
 		}
 	}
 

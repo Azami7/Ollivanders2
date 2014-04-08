@@ -26,6 +26,16 @@ public class SPONGIFY extends StationarySpellObj implements StationarySpell{
 
 	public void checkEffect(Ollivanders p) {
 		age();
+		/*
+		if (getBlock().getType() == Material.REDSTONE_WIRE){
+			if (duration > 1){
+				getBlock().setData((byte)15, false);
+			}
+			else{
+				getBlock().setData((byte)0, true);
+			}
+		}
+		*/
 	}
 	
 }

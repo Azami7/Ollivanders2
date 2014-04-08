@@ -4,13 +4,14 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
+import me.cakenggt.Ollivanders.StationarySpellObj;
+import me.cakenggt.Ollivanders.StationarySpells;
 
 /**Creates a pair of vanishing cabinets and teleports between them.
  * @author lownes
@@ -24,21 +25,12 @@ public class HARMONIA_NECTERE_PASSUS extends SpellProjectile implements Spell{
 	}
 
 	public void checkEffect() {
-		kill();
-		Location playerLoc = player.getLocation();
-		Block feet = playerLoc.getBlock();
-		if (!cabinetCheck(feet)){
-			return;
-		}
-		if (feet.getState() instanceof Sign){
-			Sign sign1 = (Sign)feet.getState();
+		move();
+		if (getBlock().getType() == Material.WALL_SIGN || getBlock().getType() == Material.SIGN_POST){
+			kill();
+			Sign sign1 = (Sign)getBlock().getState();
 			String[] lines1 = sign1.getLines();
 			if (lines1.length == 4){
-				for (int i = 0; i < 4; i++){
-					if (lines1[i].contains("§k")){
-						lines1[i] = lines1[i].substring(2);
-					}
-				}
 				World toWorld = Bukkit.getWorld(lines1[0]);
 				if (toWorld == null){
 					return;
@@ -53,67 +45,44 @@ public class HARMONIA_NECTERE_PASSUS extends SpellProjectile implements Spell{
 				} catch (NumberFormatException e) {
 					return;
 				}
-				Location toLoc = new Location(toWorld, toX, toY, toZ, playerLoc.getYaw(), playerLoc.getPitch());
-				if (!cabinetCheck(toLoc.getBlock())){
+				Location fromLoc = new Location(getBlock().getWorld(), getBlock().getX()+0.5, getBlock().getY()+0.125, getBlock().getZ()+0.5);
+				Location toLoc = new Location(toWorld, toX+0.5, toY+0.125, toZ+0.5);
+				if (toLoc.getBlock().getType() != Material.WALL_SIGN && toLoc.getBlock().getType() != Material.SIGN_POST){
 					return;
 				}
-				if (toLoc.getBlock().getState() instanceof Sign){
-					Sign sign2 = (Sign)toLoc.getBlock().getState();
-					String[] lines2 = sign2.getLines();
-					if (lines2.length == 4){
-						for (int i = 0; i < 4; i++){
-							if (lines2[i].contains("§k")){
-								lines2[i] = lines2[i].substring(2);
+				Sign sign2 = (Sign)toLoc.getBlock().getState();
+				String[] lines2 = sign2.getLines();
+				if (lines2.length == 4){
+					World fromWorld = Bukkit.getWorld(lines2[0]);
+					int fromX;
+					int fromY;
+					int fromZ;
+					try {
+						fromX = Integer.parseInt(lines2[1]);
+						fromY = Integer.parseInt(lines2[2]);
+						fromZ = Integer.parseInt(lines2[3]);
+					} catch (NumberFormatException e) {
+						return;
+					}
+					if (!fromWorld.equals(getBlock().getWorld()) || fromX != getBlock().getX() || fromY != getBlock().getY() || fromZ != getBlock().getZ()){
+						return;
+					}
+					for (StationarySpellObj stat : p.getStationary()){
+						if (stat instanceof StationarySpell.HARMONIA_NECTERE_PASSUS){
+							StationarySpell.HARMONIA_NECTERE_PASSUS harm = (StationarySpell.HARMONIA_NECTERE_PASSUS) stat;
+							if (harm.getBlock().equals(fromLoc.getBlock()) || harm.getBlock().equals(toLoc.getBlock())){
+								return;
 							}
 						}
-						World fromWorld = Bukkit.getWorld(lines2[0]);
-						int fromX;
-						int fromY;
-						int fromZ;
-						try {
-							fromX = Integer.parseInt(lines2[1]);
-							fromY = Integer.parseInt(lines2[2]);
-							fromZ = Integer.parseInt(lines2[3]);
-						} catch (NumberFormatException e) {
-							return;
-						}
-						if (fromWorld != feet.getWorld() || fromX != feet.getX() || fromY != feet.getY() || fromZ != feet.getZ()){
-							return;
-						}
-						toLoc.add(0.5, 0, 0.5);
-						player.teleport(toLoc);
-						for (int i = 0; i < 4; i++){
-							sign2.setLine(i, "§k" + lines2[i]);
-							sign2.update(true);
-						}
 					}
-				}
-				for (int i = 0; i < 4; i++){
-					sign1.setLine(i, "§k" + lines1[i]);
-					sign1.update(true);
+					StationarySpell.HARMONIA_NECTERE_PASSUS harmFrom = new StationarySpell.HARMONIA_NECTERE_PASSUS(player, fromLoc, StationarySpells.HARMONIA_NECTERE_PASSUS, 1, 10, toLoc);
+					StationarySpell.HARMONIA_NECTERE_PASSUS harmTo = new StationarySpell.HARMONIA_NECTERE_PASSUS(player, toLoc, StationarySpells.HARMONIA_NECTERE_PASSUS, 1, 10, fromLoc);
+					harmFrom.flair(20);
+					harmTo.flair(20);
+					p.addStationary(harmFrom);
+					p.addStationary(harmTo);
 				}
 			}
 		}
-	}
-	
-	
-	public boolean cabinetCheck(Block feet){
-		if (feet.getType() == Material.WALL_SIGN || feet.getType() == Material.SIGN_POST){
-			if (feet.getRelative(1, 0, 0).getType() == Material.AIR || 
-					feet.getRelative(-1, 0, 0).getType() == Material.AIR || 
-					feet.getRelative(0, 0, 1).getType() == Material.AIR || 
-					feet.getRelative(0, 0, -1).getType() == Material.AIR || 
-					feet.getRelative(1, 1, 0).getType() == Material.AIR || 
-					feet.getRelative(-1, 1, 0).getType() == Material.AIR || 
-					feet.getRelative(0, 1, 1).getType() == Material.AIR || 
-					feet.getRelative(0, 1, -1).getType() == Material.AIR || 
-					feet.getRelative(0, 2, 0).getType() == Material.AIR){
-				return false;
-				}
-		}
-		else{
-			return false;
-		}
-		return true;
 	}
 }
