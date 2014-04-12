@@ -6,10 +6,13 @@ package me.cakenggt.Ollivanders;
  *
  */
 public enum Effects{
+	BARUFFIOS_BRAIN_ELIXIR,
 	LEVICORPUS,
-	MUCUS_AD_NAUSEAM,
 	LYCANTHROPY,
-	SILENCIO;
+	MEMORY_POTION,
+	MUCUS_AD_NAUSEAM,
+	SILENCIO,
+	WOLFSBANE_POTION;
 	
 	/**
 	 * Find the lowercase string that corresponds to an effect name

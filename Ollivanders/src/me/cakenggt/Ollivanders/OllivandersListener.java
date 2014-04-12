@@ -46,6 +46,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerEditBookEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -54,7 +55,10 @@ import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
+import Effect.BARUFFIOS_BRAIN_ELIXIR;
 import Effect.LYCANTHROPY;
+import Effect.MEMORY_POTION;
+import Effect.WOLFSBANE_POTION;
 import Spell.FORSKNING;
 import Spell.PORTUS;
 import StationarySpell.ALIQUAM_FLOO;
@@ -117,11 +121,18 @@ public class OllivandersListener implements Listener {
 			if (stat instanceof StationarySpell.ALIQUAM_FLOO){
 				StationarySpell.ALIQUAM_FLOO aliquam = (ALIQUAM_FLOO) stat;
 				if (player.getLocation().getBlock().equals(aliquam.getBlock()) && aliquam.isWorking()){
+					//Floo network
+					if (player.isPermissionSet("Ollivanders.Floo")){
+						if (!player.hasPermission("Ollivanders.Floo")){
+							player.sendMessage("You do not have permission to use the Floo Network.");
+							return;
+						}
+					}
 					aliquam.stopWorking();
 					List<ALIQUAM_FLOO> alis = new ArrayList<ALIQUAM_FLOO>();
 					Location destination;
 					for (StationarySpellObj ali : p.getStationary()){
-						if (stat instanceof StationarySpell.ALIQUAM_FLOO){
+						if (ali instanceof StationarySpell.ALIQUAM_FLOO){
 							StationarySpell.ALIQUAM_FLOO dest = (ALIQUAM_FLOO) ali;
 							alis.add(dest);
 							if (dest.getFlooName().equals(chat.trim().toLowerCase())){
@@ -956,6 +967,65 @@ public class OllivandersListener implements Listener {
 			meta.setDisplayName("Wand");
 			wand.setItemMeta(meta);
 			event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
+		}
+	}
+	
+	/**Fires if a player right clicks a cauldron that is being heated from underneath
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void cauldronClick(PlayerInteractEvent event){
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK){
+			Block block = event.getClickedBlock();
+			if (block.getType() == Material.CAULDRON && holdsWand(event.getPlayer())){
+				Block under = block.getRelative(BlockFace.DOWN);
+				if (under.getType() == Material.FIRE || under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA){
+					PotionParser.parse(block);
+				}
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPlayerDrink(PlayerItemConsumeEvent event){
+		ItemStack item = event.getItem();
+		if (item.getType() == Material.POTION){
+			OPlayer oPlayer = p.getOPlayer(event.getPlayer());
+			ItemMeta meta = item.getItemMeta();
+			if (meta.hasLore()){
+				for (String lore : meta.getLore()){
+					if (lore.equals("Memory Potion")){
+						for (OEffect effect : oPlayer.getEffects()){
+							if (effect instanceof MEMORY_POTION){
+								effect.duration = 3600;
+								return;
+							}
+						}
+						oPlayer.addEffect(new MEMORY_POTION(event.getPlayer(), Effects.MEMORY_POTION, 3600));
+						return;
+					}
+					else if (lore.equals("Baruffio's Brain Elixir")){
+						for (OEffect effect : oPlayer.getEffects()){
+							if (effect instanceof BARUFFIOS_BRAIN_ELIXIR){
+								effect.duration = 3600;
+								return;
+							}
+						}
+						oPlayer.addEffect(new BARUFFIOS_BRAIN_ELIXIR(event.getPlayer(), Effects.BARUFFIOS_BRAIN_ELIXIR, 3600));
+						return;
+					}
+					else if (lore.equals("Wolfsbane Potion")){
+						for (OEffect effect : oPlayer.getEffects()){
+							if (effect instanceof WOLFSBANE_POTION){
+								effect.duration = 3600;
+								return;
+							}
+						}
+						oPlayer.addEffect(new WOLFSBANE_POTION(event.getPlayer(), Effects.WOLFSBANE_POTION, 3600));
+						return;
+					}
+				}
+			}
 		}
 	}
 }

@@ -27,7 +27,7 @@ public class ALIQUAM_FLOO extends SpellProjectile implements Spell {
 	public void checkEffect() {
 		move();
 		if (super.getBlock().getType() == Material.FIRE){
-			Location statLocation = new Location(location.getWorld(), super.getBlock().getX()+0.5, super.getBlock().getY()+0.1, super.getBlock().getZ()+0.5);
+			Location statLocation = new Location(location.getWorld(), super.getBlock().getX()+0.5, super.getBlock().getY()+0.125, super.getBlock().getZ()+0.5);
 			if (super.getBlock().getRelative(BlockFace.UP).getType() == Material.WALL_SIGN){
 				Sign sign = (Sign) super.getBlock().getRelative(BlockFace.UP).getState();
 				String flooName = sign.getLine(0) + " " + sign.getLine(1) + " " + sign.getLine(2) + " " + sign.getLine(3);
@@ -41,7 +41,7 @@ public class ALIQUAM_FLOO extends SpellProjectile implements Spell {
 						}
 					}
 				}
-				StationarySpell.ALIQUAM_FLOO aliquam = new StationarySpell.ALIQUAM_FLOO(player, statLocation, StationarySpells.ALIQUAM_FLOO, 1, 10, flooName);
+				StationarySpell.ALIQUAM_FLOO aliquam = new StationarySpell.ALIQUAM_FLOO(player, statLocation, StationarySpells.ALIQUAM_FLOO, 2, 10, flooName);
 				aliquam.flair(20);
 				p.addStationary(aliquam);
 			}

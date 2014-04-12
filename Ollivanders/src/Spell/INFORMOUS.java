@@ -8,6 +8,7 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import Effect.LYCANTHROPY;
 import me.cakenggt.Ollivanders.Effects;
 import me.cakenggt.Ollivanders.OEffect;
 import me.cakenggt.Ollivanders.OPlayer;
@@ -44,7 +45,12 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 					Player ePlayer = (Player)entity;
 					OPlayer eoplayer = p.getOPlayer(ePlayer);
 					for (OEffect effect : eoplayer.getEffects()){
-						player.sendMessage(ePlayer.getName() + " has " + Effects.recode(effect.name) + ".");
+						if (effect instanceof LYCANTHROPY){
+							player.sendMessage(ePlayer.getName() + " has Lycanthropy.");
+						}
+						else{
+							player.sendMessage(ePlayer.getName() + " has " + Effects.recode(effect.name) + " with " + effect.duration/20 + " seconds left.");
+						}
 					}
 				}
 				iEntity.add(entity);

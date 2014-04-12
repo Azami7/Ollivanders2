@@ -56,12 +56,29 @@ public class SpellProjectile{
 		this.rightWand = rightWand;
 		spellUses = p.getSpellNum(player, name);
 		usesModifier = getusesModifier();
+		boolean memoryPotion = false;
+		for (OEffect effect : p.getOPlayer(player).getEffects()){
+			if (effect.name == Effects.MEMORY_POTION){
+				memoryPotion = true;
+			}
+			else if (effect.name == Effects.BARUFFIOS_BRAIN_ELIXIR){
+				usesModifier *= 2;
+			}
+		}
 		if (p.getOPlayer(player).getSpellCount().containsKey(name)){
 			p.incSpellCount(player, name);
+			if (memoryPotion){
+				p.incSpellCount(player, name);
+			}
 		}
 		else{
 			Map<Spells, Integer> spellCount = p.getOPlayer(player).getSpellCount();
-			spellCount.put(name, 0);
+			if (memoryPotion){
+				spellCount.put(name, 2);
+			}
+			else{
+				spellCount.put(name, 1);
+			}
 			p.getOPlayer(player).setSpellCount(spellCount);
 		}
 		if (!p.canCast(player, name, true)){

@@ -32,7 +32,14 @@ public class LYCANTHROPY extends OEffect implements Effect {
 		long dayOrNight = (time/12000)%2;
 		long days=time/24000;
 		long phase=days%8;
-		if (phase == 0 && dayOrNight == 1){
+		boolean wolfsbane = false;
+		for (OEffect effect : p.getOPlayer(owner).getEffects()){
+			if (effect instanceof WOLFSBANE_POTION){
+				wolfsbane = true;
+				break;
+			}
+		}
+		if (phase == 0 && dayOrNight == 1 && !wolfsbane){
 			//Full moon at night
 			if (wereId == -1){
 				//spawn werewolf and set wereId and set wolf name to werewolf and set

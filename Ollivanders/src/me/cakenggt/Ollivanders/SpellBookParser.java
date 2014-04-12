@@ -508,6 +508,7 @@ public class SpellBookParser{
 				FINITE_INCANTATEM + N + LIBERACORPUS);
 		bookMap.put("Magick Moste Evile",
 				FIENDFYRE);
+		//TODO put recipe for rengeration potion in here
 		bookMap.put("Secrets of the Darkest Art", 
 				"The most horrifying and destructive act man can do is the "
 						+ "creation of a horcrux. Through splitting one's soul through "
@@ -563,6 +564,28 @@ public class SpellBookParser{
 				"The secrets of wandlore are not to be easily had, however " +
 						"they will be related in this book with the greatest of ease.\n" +
 						FRANGE_LIGNEA + N + LIGATIS_COR);
+		bookMap.put("Advanced Potion-Making", 
+				"I do not expect many of you to appreciate the subtle science and exact art that "
+				+ "is potion-making, but for those of you who do, rest assured that great things "
+				+ "lie in store. Before making any potions, you must be sure to set up your cauldron "
+				+ "correctly. Carefully place your cauldron on top of a source of heat, either fire "
+				+ "or lava. Then you must fill the cauldron up with water, the level determines "
+				+ "the maximum number of potions that can be possibly made. A full cauldron produces "
+				+ "three potions if there are three times the total ingredients for the potion. "
+				+ "The ingredients for a potion should be placed on top of the cauldron, then the "
+				+ "cauldron must be right clicked with a wand. If the correct number of ingredients "
+				+ "are present in the cauldron, a number of potions will be made that is between 0 "
+				+ "and 3, depending on the multiple of the correct recipe present. Always be sure to "
+				+ "include empty glass bottles in the potion ingredients you throw into the cauldron, "
+				+ "as these will be filled with the potions." + N + N 
+				+ "The memory potion will allow you to receive twice the normal amount of experience "
+				+ "for each spell you cast. This potion is brewed with 3 sugar cane and 2 glowstone "
+				+ "dust." + N + N 
+				+ "Baruffio's Brain Elixir will cause any spells you cast to be twice as powerful. "
+				+ "This potion is brewed with 5 redstone dust and 1 gold nugget." + N + N
+				+ "Wolfsbane Potion will relieve you of the effects of Lycanthropy for as long as "
+				+ "it is active. It does not a cure, but a treatment. This potion is brewed with 2 "
+				+ "spider eyes and 3 rotten flesh.");
 		FileConfiguration config = Bukkit.getPluginManager().getPlugin("Ollivanders").getConfig();
 		if (config.getBoolean("divination")){
 			bookMap.put("Unfogging the Future", 
