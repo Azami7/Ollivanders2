@@ -34,7 +34,13 @@ public class HORCRUX extends StationarySpellObj implements StationarySpell{
 		List<LivingEntity> entities = getLivingEntities();
 		for(LivingEntity entity : entities){
 			if (entity instanceof Player){
-				if (((Player)entity).getName() != player){
+				if (entity.getUniqueId() != getPlayerUUID()){
+					Player player = (Player)entity;
+					if (player.isPermissionSet("Ollivanders.BYPASS")){
+						if (player.hasPermission("Ollivanders.BYPASS")){
+							continue;
+						}
+					}
 					PotionEffect blindness = new PotionEffect(PotionEffectType.BLINDNESS, 200, 2);
 					PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 200, 3);
 					entity.addPotionEffect(blindness);

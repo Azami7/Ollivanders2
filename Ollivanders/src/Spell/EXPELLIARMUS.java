@@ -76,12 +76,12 @@ public class EXPELLIARMUS extends SpellProjectile implements Spell{
 		ItemMeta wandMeta = wand.getItemMeta();
 		List<String> wandLore = wandMeta.getLore();
 		if (wandLore.size() == 1){
-			wandLore.add(player.getName());
+			wandLore.add(player.getUniqueId().toString());
 			wandMeta.setLore(wandLore);
 			wand.setItemMeta(wandMeta);
 		}
 		else{
-			wandLore.set(1, player.getName());
+			wandLore.set(1, player.getUniqueId().toString());
 		}
 		wandMeta.setLore(wandLore);
 		wand.setItemMeta(wandMeta);

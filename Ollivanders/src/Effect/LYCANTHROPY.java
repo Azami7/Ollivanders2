@@ -23,7 +23,6 @@ public class LYCANTHROPY extends OEffect implements Effect {
 
 	public LYCANTHROPY(Player sender, Effects effect, int duration) {
 		super(sender, effect, duration);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override

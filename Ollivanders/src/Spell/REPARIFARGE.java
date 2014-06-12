@@ -27,7 +27,7 @@ public class REPARIFARGE extends SpellProjectile implements Spell{
 					if (entity instanceof EnderDragonPart){
 						entity = ((EnderDragonPart)entity).getParent();
 					}
-					if (entity.getEntityId() == ((Transfiguration) proj).getToID()){
+					if (entity.getUniqueId() == ((Transfiguration) proj).getToID()){
 						proj.lifeTicks = proj.lifeTicks + (int)(usesModifier*1200) + 160;
 					}
 				}

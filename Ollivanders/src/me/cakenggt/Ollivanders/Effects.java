@@ -12,6 +12,7 @@ public enum Effects{
 	MEMORY_POTION,
 	MUCUS_AD_NAUSEAM,
 	SILENCIO,
+	VENTO_FOLIO,
 	WOLFSBANE_POTION;
 	
 	/**

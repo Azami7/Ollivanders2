@@ -1,5 +1,7 @@
 package me.cakenggt.Ollivanders;
 
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -15,11 +17,12 @@ import org.bukkit.inventory.ItemStack;
  * @author lownes
  *
  */
-public class Transfiguration extends SpellProjectile{
+public abstract class Transfiguration extends SpellProjectile{
 
+	private final UUID nullUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 	private EntityType fromEType;
 	private ItemStack fromStack;
-	private int toID = -1;
+	private UUID toID = nullUUID;
 	private boolean hasTransfigured;
 	private int timeMultiplier = 1200;
 	
@@ -52,7 +55,7 @@ public class Transfiguration extends SpellProjectile{
 			for (SpellProjectile spell : p.getProjectiles()){
 				if (spell instanceof Transfiguration){
 					Transfiguration trans = (Transfiguration)spell;
-					if (trans.getToID() == entity.getEntityId()){
+					if (trans.getToID() == entity.getUniqueId()){
 						trans.kill();
 						return transfigureEntity(trans.endTransfigure(), toType, toStack);
 					}
@@ -71,10 +74,10 @@ public class Transfiguration extends SpellProjectile{
 			newEntity = player.getWorld().spawnEntity(loc, toType);
 		}
 		if (newEntity == null){
-			toID = -1;
+			toID = nullUUID;
 		}
 		else{
-			toID = newEntity.getEntityId();
+			toID = newEntity.getUniqueId();
 		}
 		this.lifeTicks = (int)(usesModifier * -1 * timeMultiplier);
 		return newEntity;
@@ -84,11 +87,12 @@ public class Transfiguration extends SpellProjectile{
 	 * Ends the transfiguration. Drops items if there are any in it's inventory.
 	 * @return The newly spawned Entity. Null if no entity was spawned from the ending of the transfiguration.
 	 */
+	@SuppressWarnings("deprecation")
 	public Entity endTransfigure(){
 		kill();
 		for (World w : p.getServer().getWorlds()){
 			for (Entity e : w.getEntities()){
-				if (e.getEntityId() == toID){
+				if (e.getUniqueId() == toID){
 					e.remove();
 					if (e instanceof InventoryHolder){
 						for (ItemStack stack : ((InventoryHolder)e).getInventory().getContents()){
@@ -112,7 +116,7 @@ public class Transfiguration extends SpellProjectile{
 				}
 			}
 		}
-		if (toID == -1){
+		if (toID == nullUUID){
 			if (fromEType.equals(EntityType.DROPPED_ITEM)){
 				return (Entity)location.getWorld().dropItemNaturally(location, fromStack);
 			}
@@ -162,7 +166,7 @@ public class Transfiguration extends SpellProjectile{
 	 * Gets the id of the transfigured entity
 	 * @return the toID
 	 */
-	public int getToID(){
+	public UUID getToID(){
 		return toID;
 	}
 	

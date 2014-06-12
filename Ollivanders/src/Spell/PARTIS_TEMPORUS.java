@@ -30,7 +30,7 @@ public class PARTIS_TEMPORUS extends SpellProjectile implements Spell{
 			lifeTicks ++;
 		}
 		for (StationarySpellObj spell : p.getStationary()){
-			if (spell.isInside(location) && spell.player.equals(player.getName())){
+			if (spell.isInside(location) && spell.getPlayerUUID().equals(player.getUniqueId())){
 				spell.active = false;
 				spell.flair(10);
 				move = false;

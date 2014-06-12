@@ -45,11 +45,11 @@ public class SpellBookParser{
 			+ "just say the word apparate. Your accuracy is determined by the distance "
 			+ "traveled and your experience. If there are any entities close to you when "
 			+ "you apparate, they will be taken with you as well by side-along apparition.";
-	public final static String AQUA_ERUCTO = "Aqua eructo shoots a jet of water from your "
+	public final static String AQUA_ERUCTO = "Aqua Eructo shoots a jet of water from your "
 			+ "wand tip. The range of this jet is determined by your experience.";
 	public final static String ARANIA_EXUMAI = "Arania Exumai will blast away spiders with "
 			+ "a force dependent on your experience.";
-	public final static String ARRESTO_MOMENTUM = "Arresto momentum will immediately slow down "
+	public final static String ARRESTO_MOMENTUM = "Arresto Momentum will immediately slow down "
 			+ "any entity. The amount an entity is slowed down is determined by your experience.";
 	public final static String ASCENDIO = "Ascendio will propel the caster into the air. The "
 			+ "strength of the propulsion depends on your experience.";
@@ -102,7 +102,7 @@ public class SpellBookParser{
 	public final static String DURO = "Duro will transfigure an entity into a stone. The length "
 			+ "of the transfiguration depends on your experience. If the stone is destroyed, "
 			+ "then the entity will die.";
-	public final static String DRACONIFORS = "Ducklifors will transfigure an entity into a Dragon. "
+	public final static String DRACONIFORS = "Draconifors will transfigure an entity into a Dragon. "
 			+ "The length of the transfiguration depends on your experience.";
 	public final static String EBUBLIO = "Ebublio, the bubble head charm, will grant your target the ability "
 			+ "to breathe underwater. The duration of this effect depends on your experience.";
@@ -205,6 +205,9 @@ public class SpellBookParser{
 			+ "depends on your experience.";
 	public final static String METEOLOJINX_RECANTO = "Meteolojinx Recanto will turn a storm into a sunny day for "
 			+ "a duration which depends on your experience.";
+	public final static String MORTUOS_SUSCITATE = "Mortuos Suscitate will transfigure a piece of rotten flesh into "
+			+ "an inferius. The inferius will not attack it's owner and will disappear after an amount of time which "
+			+ "depends on your level in the spell.";
 	public final static String MUCUS_AD_NAUSEAM = "Mucus Ad Nauseam will cause your opponent to drip with slime for "
 			+ "a duration dependent on your experience.";
 	public final static String MUFFLIATO = "Muffliato creates a stationary spell which only allows the people "
@@ -239,6 +242,9 @@ public class SpellBookParser{
 			+ "caster of the protective enchantments is the portkey maker. Portkeys can be used to cross worlds as well, if you use "
 			+ "a portkey which was made in a different world. If the enchantment is said incorrectly, then the portkey will be created "
 			+ "linking to the caster's current location.";
+	public final static String PRAEPANDO = "Praepando is a space-extension spell which allows you to create a pocket of "
+			+ "extra-dimensional space at a location. Spells can travel from the extra-dimensional pocket through to the real-"
+			+ "world, but cannot go the other way around. The length of time this pocket lasts depends on the caster's experience.";
 	public final static String PROTEGO = "Protego is a shield spell which, while you are crouching, will cause any spells "
 			+ "cast at it to bounce off.";
 	public final static String PROTEGO_HORRIBILIS = "Protego horribilis is a stationary spell which will destroy any "
@@ -265,6 +271,10 @@ public class SpellBookParser{
 	public final static String STUPEFY = "Stupefy will stun an opponent for a duration depending on your experience.";
 	public final static String TERGEO = "Tergeo will siphon off a block of water where it hits. It will also disable any "
 			+ "aguamenti-placed water blocks nearby.";
+	public final static String VENTO_FOLIO = "Vento Folio gives a player the ability to fly unassisted for an amount of "
+			+ "time determined by your level in the spell.";
+	public final static String VOLATUS = "Volatus is used to enchant a broomstick for flight. Your experience with this "
+			+ "spell determines how fast the broomstick can go.";
 	public final static String WINGARDIUM_LEVIOSA = "Wingardium leviosa will allow you to lift up blocks within a radius of "
 			+ "the spell's impact, as long as you are crouching. The radius depends on your experience. When you drop "
 			+ "the blocks, they will fall like sand.";
@@ -282,7 +292,7 @@ public class SpellBookParser{
 		List<String> lore = new ArrayList<String>();
 		for (String spell : spellStrings){
 			if (pageString.contains(spell)){
-				String newLore = spell + ":" + p.getSpellNum(player, Spells.decode(spell));
+				String newLore = Spells.firstLetterCapitalize(spell) + ":" + p.getSpellNum(player, Spells.decode(spell));
 				lore.add(newLore);
 			}
 		}
@@ -392,7 +402,7 @@ public class SpellBookParser{
 	 * @param size
 	 * @return List of strings of size size or less
 	 */
-	private static List<String> splitEqually(String text, int size) {
+	public static List<String> splitEqually(String text, int size) {
 		List<String> ret = new ArrayList<String>((text.length() + size - 1) / size);
 		for (int start = 0; start < text.length(); start += size) {
 			ret.add(text.substring(start, Math.min(text.length(), start + size)));
@@ -432,10 +442,11 @@ public class SpellBookParser{
 		bookMap.put("Achievements in Charming",
 				AGUAMENTI + N + EBUBLIO + N + HERBIVICUS + N +
 				LUMOS_DUO + N + LUMOS_MAXIMA + N + DIMMINUENDO + N + 
-				EPISKEY + N + ALIQUAM_FLOO);
+				EPISKEY + N + ALIQUAM_FLOO + N + VOLATUS);
 		bookMap.put("Extreme Incantations",
 				ALARTE_ASCENDARE + N + LUMOS_MAXIMA + N + 
-				OBLIVIATE + N + ASCENDIO + N + FORSKNING);
+				OBLIVIATE + N + ASCENDIO + N + FORSKNING + N + VOLATUS + N + 
+				PRAEPANDO);
 		bookMap.put("Quintessence: A Quest",
 				"The five major wards are described as follows: " + N + 
 				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PROTEGO_HORRIBILIS + N + 
@@ -443,7 +454,7 @@ public class SpellBookParser{
 				"Following are described several ward modifiers and minor wards: " + N + 
 				CRESCERE_PROTEGAT + N + FIANTO_DURI + N + HORREAT_PROTEGAT + N + 
 				PARTIS_TEMPORUS + N + SCUTO_CONTERAM + N + PROTEGO + N + 
-				PROTEGO_MAXIMA + N + REPELLO_MUGGLETON);
+				PROTEGO_MAXIMA + N + REPELLO_MUGGLETON + N + PRAEPANDO);
 		bookMap.put("The Standard Book of Spells, Grade 1",
 				INCENDIO + N + LUMOS + N + REPARO + N + SPONGIFY + N + 
 				WINGARDIUM_LEVIOSA + N + COLLOPORTUS + N + ALOHOMORA + N + 
@@ -518,7 +529,7 @@ public class SpellBookParser{
 						+ "the soul is split, the player's maximum health is halved for "
 						+ "each horcrux they have made. "
 						+ "The only known way of destroying a horcrux is with fiendfyre.\n" + 
-						ET_INTERFICIAM_ANIMAM_LIGAVERIS);
+						ET_INTERFICIAM_ANIMAM_LIGAVERIS + N + MORTUOS_SUSCITATE + N + VENTO_FOLIO);
 		bookMap.put("A Beginner's Guide to Transfiguration", 
 				"Transfiguration involves the transformation of one entity into "
 						+ "another. All transfiguration has a time duration, after which "
@@ -584,7 +595,7 @@ public class SpellBookParser{
 				+ "Baruffio's Brain Elixir will cause any spells you cast to be twice as powerful. "
 				+ "This potion is brewed with 5 redstone dust and 1 gold nugget." + N + N
 				+ "Wolfsbane Potion will relieve you of the effects of Lycanthropy for as long as "
-				+ "it is active. It does not a cure, but a treatment. This potion is brewed with 2 "
+				+ "it is active. It is not a cure, but a treatment. This potion is brewed with 2 "
 				+ "spider eyes and 3 rotten flesh.");
 		FileConfiguration config = Bukkit.getPluginManager().getPlugin("Ollivanders").getConfig();
 		if (config.getBoolean("divination")){

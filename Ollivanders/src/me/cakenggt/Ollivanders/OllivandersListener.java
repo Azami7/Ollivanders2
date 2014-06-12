@@ -8,8 +8,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -60,6 +62,7 @@ import Effect.LYCANTHROPY;
 import Effect.MEMORY_POTION;
 import Effect.WOLFSBANE_POTION;
 import Spell.FORSKNING;
+import Spell.MORTUOS_SUSCITATE;
 import Spell.PORTUS;
 import StationarySpell.ALIQUAM_FLOO;
 import StationarySpell.COLLOPORTUS;
@@ -93,12 +96,17 @@ public class OllivandersListener implements Listener {
 	 * @param event
 	 */
 	private void protegoTotalum(PlayerMoveEvent event){
+		if (event.getPlayer().isPermissionSet("Ollivanders.BYPASS")){
+			if (event.getPlayer().hasPermission("Ollivanders.BYPASS")){
+				return;
+			}
+		}
 		Location toLoc = event.getTo();
 		Location fromLoc = event.getFrom();
 		for (StationarySpellObj spell : p.getStationary()){
 			if (spell instanceof StationarySpell.PROTEGO_TOTALUM && 
-					toLoc.getWorld().getName().equals(spell.location.getWorld()) &&
-					fromLoc.getWorld().getName().equals(spell.location.getWorld())) {
+					toLoc.getWorld().getUID().equals(spell.location.getWorldUUID()) &&
+					fromLoc.getWorld().getUID().equals(spell.location.getWorldUUID())) {
 				int radius = spell.radius;
 				Location spellLoc = spell.location.toLocation();
 				if (((fromLoc.distance(spellLoc) < radius-0.5 && toLoc.distance(spellLoc) > radius-0.5)
@@ -124,7 +132,7 @@ public class OllivandersListener implements Listener {
 					//Floo network
 					if (player.isPermissionSet("Ollivanders.Floo")){
 						if (!player.hasPermission("Ollivanders.Floo")){
-							player.sendMessage("You do not have permission to use the Floo Network.");
+							player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "You do not have permission to use the Floo Network.");
 							return;
 						}
 					}
@@ -164,13 +172,21 @@ public class OllivandersListener implements Listener {
 		if (effects != null){
 			for (OEffect effect : effects){
 				if (effect.name == Effects.SILENCIO){
-					event.getRecipients().clear();
-					return;
+					if (sender.isPermissionSet("Ollivanders.BYPASS")){
+						if (!sender.hasPermission("Ollivanders.BYPASS")){
+							event.getRecipients().clear();
+							return;
+						}
+					}
+					else{
+						event.getRecipients().clear();
+						return;
+					}
 				}
 			}
 		}
 		for (SpellProjectile proj : p.getProjectiles()){
-			if (proj instanceof FORSKNING && proj.location.getWorld().getName().equals(sender.getWorld().getName())){
+			if (proj instanceof FORSKNING && proj.location.getWorld().getUID().equals(sender.getWorld().getUID())){
 				if (proj.location.distance(sender.getLocation()) <= 10){
 					((FORSKNING)proj).research(message);
 				}
@@ -227,7 +243,14 @@ public class OllivandersListener implements Listener {
 		}
 		for (Player remRec : remRecipients){
 			try {
-				recipients.remove(remRec);
+				if (remRec.isPermissionSet("Ollivanders.BYPASS")){
+					if (!remRec.hasPermission("Ollivanders.BYPASS")){
+						recipients.remove(remRec);
+					}
+				}
+				else{
+					recipients.remove(remRec);
+				}
 			} catch (UnsupportedOperationException e) {
 				p.getLogger().warning("Chat was unable to be removed due "
 						+ "to a unmodifiable set.");
@@ -237,6 +260,10 @@ public class OllivandersListener implements Listener {
 
 		//Begin code for spell parsing
 		if (spell != null){
+			//If bookLearning is set to true, this will keep players from casting spells they have not already read in a book
+			if (p.getConfig().getBoolean("bookLearning") && p.getOPlayer(sender).getSpellCount().get(spell) == 0){
+				return;
+			}
 			boolean castSuccess;
 			if (holdsWand(sender)){
 				castSuccess = true;
@@ -261,10 +288,10 @@ public class OllivandersListener implements Listener {
 				else{
 					if (spell!=null){
 						//If the spell is valid, run this code
-						Map<String, OPlayer> opmap = p.getOPlayerMap();
-						OPlayer oplayer = opmap.get(sender.getName());
+						Map<UUID, OPlayer> opmap = p.getOPlayerMap();
+						OPlayer oplayer = opmap.get(sender.getUniqueId());
 						oplayer.setSpell(spell);
-						opmap.put(sender.getName(), oplayer);
+						opmap.put(sender.getUniqueId(), oplayer);
 						p.setOPlayerMap(opmap);
 					}
 				}
@@ -284,6 +311,11 @@ public class OllivandersListener implements Listener {
 			if (stat instanceof StationarySpell.NULLUM_EVANESCUNT && stat.isInside(sender.getLocation()) && stat.active){
 				stat.flair(10);
 				canApparateOut = false;
+			}
+		}
+		if (sender.isPermissionSet("Ollivanders.BYPASS")){
+			if (sender.hasPermission("Ollivanders.BYPASS")){
+				canApparateOut = true;
 			}
 		}
 		if (canApparateOut){
@@ -332,6 +364,11 @@ public class OllivandersListener implements Listener {
 					canApparateIn = false;
 				}
 			}
+			if (sender.isPermissionSet("Ollivanders.BYPASS")){
+				if (sender.hasPermission("Ollivanders.BYPASS")){
+					canApparateIn = true;
+				}
+			}
 			if (canApparateIn) {
 				sender.getWorld().createExplosion(sender.getLocation(), 0);
 				sender.teleport(to);
@@ -364,10 +401,11 @@ public class OllivandersListener implements Listener {
 						if (cat.isTamed()){
 							for (Entity item : world.getEntities()){
 								if (item instanceof Item && item.getLocation().distance(cat.getLocation()) <= 2){
+									@SuppressWarnings("deprecation")
 									Player recipient = server.getPlayer(splited[2]);
 									if (recipient != null){
 										if (recipient.isOnline()){
-											if (recipient.getWorld().getName().equals(world.getName())){
+											if (recipient.getWorld().getUID().equals(world.getUID())){
 												world.playSound(cat.getLocation(),Sound.CAT_MEOW,1, 0);
 												cat.teleport(recipient.getLocation());
 												item.teleport(recipient.getLocation());
@@ -375,17 +413,17 @@ public class OllivandersListener implements Listener {
 											}
 											else{
 												world.playSound(cat.getLocation(),Sound.CAT_HISS,1, 0);
-												sender.sendMessage(splited[2] + " is not in this world.");
+												sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not in this world.");
 											}
 										}
 										else{
 											world.playSound(cat.getLocation(),Sound.CAT_HISS,1, 0);
-											sender.sendMessage(splited[2] + " is not online.");
+											sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
 										}
 									}
 									else{
 										world.playSound(cat.getLocation(),Sound.CAT_HISS,1, 0);
-										sender.sendMessage(splited[2] + " is not online.");
+										sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
 									}
 									return;
 								}
@@ -433,7 +471,7 @@ public class OllivandersListener implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		//Casting an effect
 		if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK){
-			Map<String, OPlayer> opmap = p.getOPlayerMap();
+			Map<UUID, OPlayer> opmap = p.getOPlayerMap();
 			OPlayer oplayer = p.getOPlayer(event.getPlayer());
 			Spells spell = oplayer.getSpell();
 			if (spell!=null){
@@ -449,7 +487,7 @@ public class OllivandersListener implements Listener {
 				int spellc = p.getSpellNum(event.getPlayer(), spell);
 				if (spellc < 100 || spell == Spells.AVADA_KEDAVRA || !holdsWand(event.getPlayer())){
 					oplayer.setSpell(null);
-					opmap.put(event.getPlayer().getName(), oplayer);
+					opmap.put(event.getPlayer().getUniqueId(), oplayer);
 					p.setOPlayerMap(opmap);
 				}
 			}
@@ -459,8 +497,8 @@ public class OllivandersListener implements Listener {
 			if (wandCheck(event.getPlayer()) == 1){
 				Location location = event.getPlayer().getLocation();
 				location.setY(location.getY() + 1.6);
-				Map<String, OPlayer> opmap = p.getOPlayerMap();
-				OPlayer oplayer = opmap.get(event.getPlayer().getName());
+				Map<UUID, OPlayer> opmap = p.getOPlayerMap();
+				OPlayer oplayer = opmap.get(event.getPlayer().getUniqueId());
 				Spells spell = oplayer.getSpell();
 				if (spell == null){
 					event.getPlayer().getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
@@ -493,7 +531,7 @@ public class OllivandersListener implements Listener {
 					oplayer.setSpell(knownSpells.get((ind + offset)%knownSpells.size()));
 				}
 				p.setOPlayer(event.getPlayer(), oplayer);
-				event.getPlayer().sendMessage(Spells.recode(oplayer.getSpell()));
+				event.getPlayer().sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + Spells.firstLetterCapitalize(Spells.recode(oplayer.getSpell())));
 			}
 		}
 		//Reading a book, possibly a spell book
@@ -515,28 +553,57 @@ public class OllivandersListener implements Listener {
 					}
 				}
 				SpellBookParser.decode(p, event.getPlayer(), imeta);
+				if (bookM.getTitle().equalsIgnoreCase("Spell Journal")){
+					event.getPlayer().setItemInHand(makeJournal(event.getPlayer()));
+				}
 			}
 		}
 	}
 
+	/**Rewrites the journal book full of the player's experience.
+	 * @param player = Player reading the book.
+	 * @return Itemstack of the completed journal.
+	 */
+	public ItemStack makeJournal(Player player){
+		ItemStack hand = player.getItemInHand();
+		int amount = hand.getAmount();
+		ItemStack journal = new ItemStack(Material.WRITTEN_BOOK, amount);
+		BookMeta journalM = (BookMeta)journal.getItemMeta();
+		journalM.setTitle("Spell Journal");
+		journalM.setAuthor(player.getName());
+		OPlayer op = p.getOPlayer(player);
+		StringBuilder sb = new StringBuilder();
+		for (Spells spell : op.getSpellCount().keySet()){
+			if (op.getSpellCount().get(spell) > 0){
+				sb.append(Spells.firstLetterCapitalize(Spells.recode(spell)) + " : " + op.getSpellCount().get(spell) + "\n");
+			}
+		}
+		String longPage = sb.toString();
+		journalM.setPages(SpellBookParser.splitEqually(longPage, 250));
+		journal.setItemMeta(journalM);
+		return journal;
+	}
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerJoin(PlayerLoginEvent event){
-		Map<String, OPlayer> map = p.getOPlayerMap();
-		if (!map.containsKey(event.getPlayer().getName())){
-			map.put(event.getPlayer().getName(), new OPlayer());
+		Map<UUID, OPlayer> map = p.getOPlayerMap();
+		if (!map.containsKey(event.getPlayer().getUniqueId())){
+			map.put(event.getPlayer().getUniqueId(), new OPlayer());
 			p.getLogger().info("Put in new OPlayer.");
 		}
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDeath(PlayerDeathEvent event){
-		Map<String, OPlayer> map = p.getOPlayerMap();
-		OPlayer oply = map.get(event.getEntity().getName());
-		oply.resetSpellCount();
-		oply.setSpell(null);
+		Map<UUID, OPlayer> map = p.getOPlayerMap();
+		OPlayer oply = map.get(event.getEntity().getUniqueId());
+		if (p.getConfig().getBoolean("deathExpLoss")){
+			oply.resetSpellCount();
+			oply.setSpell(null);
+		}
 		oply.resetSouls();
 		oply.resetEffects();
-		map.put(event.getEntity().getName(), oply);
+		map.put(event.getEntity().getUniqueId(), oply);
 		p.setOPlayerMap(map);
 		event.getEntity().setMaxHealth(20.0);
 	}
@@ -582,10 +649,10 @@ public class OllivandersListener implements Listener {
 		List<StationarySpellObj> stationarys = p.getStationary();
 		if (event.getEntity() instanceof Player){
 			Damageable plyr = (Damageable) event.getEntity();
-			String name = ((Player)event.getEntity()).getName();
+			UUID name = ((Player)event.getEntity()).getUniqueId();
 			if (((double)plyr.getHealth()-event.getDamage())<= 0){
 				for(StationarySpellObj stationary : stationarys){
-					if (stationary.name == StationarySpells.HORCRUX && stationary.player.equals(name)){
+					if (stationary.name == StationarySpells.HORCRUX && stationary.getPlayerUUID().equals(name)){
 						Location tp = stationary.location.toLocation();
 						tp.setY(tp.getY()+1);
 						plyr.teleport(tp);
@@ -638,8 +705,14 @@ public class OllivandersListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onColloBlockPlaceEvent(BlockPlaceEvent event){
 		if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation())){
-			event.getBlock().breakNaturally();
-			return;
+			if (event.getPlayer().isPermissionSet("Ollivanders.BYPASS")){
+				if (!event.getPlayer().hasPermission("Ollivanders.BYPASS")){
+					event.getBlock().breakNaturally();
+				}
+			}
+			else{
+				event.getBlock().breakNaturally();
+			}
 		}
 	}	
 
@@ -649,8 +722,14 @@ public class OllivandersListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onColloBlockBreakEvent(BlockBreakEvent event){
 		if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation())){
-			event.setCancelled(true);
-			return;
+			if (event.getPlayer().isPermissionSet("Ollivanders.BYPASS")){
+				if (!event.getPlayer().hasPermission("Ollivanders.BYPASS")){
+					event.setCancelled(true);
+				}
+			}
+			else{
+				event.setCancelled(true);
+			}
 		}
 	}
 
@@ -673,8 +752,14 @@ public class OllivandersListener implements Listener {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK || 
 				event.getAction() == Action.RIGHT_CLICK_BLOCK){
 			if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getClickedBlock().getLocation())){
-				event.setCancelled(true);
-				return;
+				if (event.getPlayer().isPermissionSet("Ollivanders.BYPASS")){
+					if (!event.getPlayer().hasPermission("Ollivanders.BYPASS")){
+						event.setCancelled(true);
+					}
+				}
+				else{
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
@@ -764,26 +849,16 @@ public class OllivandersListener implements Listener {
 	/**
 	 * Checks what kind of wand a player holds. Returns a value based on the
 	 * wand and it's relation to the player.
-	 * @param player - Player being checked.
+	 * @param player - Player being checked. The player must be holding a wand.
 	 * @return 2 - The wand is not your type AND/OR is not allied to you.<p>
 	 * 1 - The wand is your type and is allied to you OR the wand is the elder wand and is not allied to you.<p>
 	 * 0.5 - The wand is the elder wand and it is allied to you.
 	 */
-	public double wandCheck(Player player){
-		String charList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-		int wood = player.getName().length()%4;
-		String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
-		String woodString = woodArray[wood];
-		int core = 0;
-		for (char a : player.getName().toCharArray()){
-			core += charList.indexOf(a)+1;
-		}
-		String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};
-		String coreString = coreArray[core%4];
+	public static double wandCheck(Player player){
 		List<String> lore = player.getItemInHand().getItemMeta().getLore();
 		if (lore.get(0).equals("Blaze and Ender Pearl")){
 			if (lore.size() == 2){
-				if (lore.get(1).equals(player.getName())){
+				if (lore.get(1).equals(player.getUniqueId().toString())){
 					return 0.5;
 				}
 				else{
@@ -794,10 +869,9 @@ public class OllivandersListener implements Listener {
 				return 0.5;
 			}
 		}
-		String[] comps = lore.get(0).split(" and ");
-		if (woodString.equals(comps[0]) && coreString.equals(comps[1])){
+		if (Ollivanders.destinedWand(player, player.getItemInHand())){
 			if (lore.size() == 2){
-				if (lore.get(1).equals(player.getName())){
+				if (lore.get(1).equals(player.getUniqueId().toString())){
 					return 1;
 				}
 				else{
@@ -858,7 +932,7 @@ public class OllivandersListener implements Listener {
 		ItemMeta wandMeta = wand.getItemMeta();
 		List<String> wandLore = wandMeta.getLore();
 		if (wandLore.size() == 1){
-			wandLore.add(player.getName());
+			wandLore.add(player.getUniqueId().toString());
 			wandMeta.setLore(wandLore);
 			wand.setItemMeta(wandMeta);
 			player.setItemInHand(wand);
@@ -877,7 +951,7 @@ public class OllivandersListener implements Listener {
 			for (SpellProjectile proj : p.getProjectiles()){
 				if (proj instanceof Transfiguration){
 					Transfiguration trans = (Transfiguration) proj;
-					if (trans.getToID() == event.getEntity().getEntityId()){
+					if (trans.getToID() == event.getEntity().getUniqueId()){
 						event.setCancelled(true);
 					}
 				}
@@ -904,7 +978,7 @@ public class OllivandersListener implements Listener {
 			if (s.startsWith("Portkey")){
 				String[] portArray = s.split(" ");
 				Location to;
-				to = new Location(Bukkit.getServer().getWorld(portArray[1]),
+				to = new Location(Bukkit.getServer().getWorld(UUID.fromString(portArray[1])),
 						Double.parseDouble(portArray[2]),
 						Double.parseDouble(portArray[3]),
 						Double.parseDouble(portArray[4]));
@@ -949,6 +1023,23 @@ public class OllivandersListener implements Listener {
 		}
 	}
 
+	/**Cancels any targeting of players who own inferi by that inferi
+	 * @param event - EntityTargetEvent
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void inferiTarget(EntityTargetEvent event){
+		Entity target = event.getTarget();
+		Entity entity = event.getEntity();
+		for (SpellProjectile sp : p.getProjectiles()){
+			if (sp instanceof MORTUOS_SUSCITATE){
+				Transfiguration trans = (Transfiguration)sp;
+				if (trans.getToID() == entity.getUniqueId() && trans.player == target){
+					event.setCancelled(true);
+				}
+			}
+		}
+	}
+
 	/**This drops a random wand when a witch dies
 	 * @param event
 	 */
@@ -969,7 +1060,7 @@ public class OllivandersListener implements Listener {
 			event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
 		}
 	}
-	
+
 	/**Fires if a player right clicks a cauldron that is being heated from underneath
 	 * @param event
 	 */
@@ -985,7 +1076,7 @@ public class OllivandersListener implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDrink(PlayerItemConsumeEvent event){
 		ItemStack item = event.getItem();
@@ -1023,6 +1114,27 @@ public class OllivandersListener implements Listener {
 						}
 						oPlayer.addEffect(new WOLFSBANE_POTION(event.getPlayer(), Effects.WOLFSBANE_POTION, 3600));
 						return;
+					}
+				}
+			}
+		}
+	}
+
+	/**Event fires when a player right clicks with a broom in their hand
+	 * @param event
+	 */
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void broomClick(PlayerInteractEvent event){
+		if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK){
+			if (event.getPlayer().getItemInHand() != null){
+				if (p.isBroom(event.getPlayer().getItemInHand())){
+					UUID playerUid = event.getPlayer().getUniqueId();
+					Set<UUID> flying = OllivandersSchedule.getFlying();
+					if (flying.contains(playerUid)){
+						flying.remove(playerUid);
+					}
+					else{
+						flying.add(playerUid);
 					}
 				}
 			}

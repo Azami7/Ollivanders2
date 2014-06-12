@@ -79,6 +79,7 @@ public enum Spells {
 	MELOFORS,
 	METEOLOJINX,
 	METEOLOJINX_RECANTO,
+	MORTUOS_SUSCITATE,
 	MUCUS_AD_NAUSEAM,
 	MUFFLIATO,
 	MULTICORFORS,
@@ -92,6 +93,7 @@ public enum Spells {
 	PERICULUM,
 	PIERTOTUM_LOCOMOTOR,
 	PORTUS,
+	PRAEPANDO,
 	PROTEGO,
 	PROTEGO_HORRIBILIS,
 	PROTEGO_MAXIMA,
@@ -106,6 +108,8 @@ public enum Spells {
 	SPONGIFY,
 	STUPEFY,
 	TERGEO,
+	VENTO_FOLIO,
+	VOLATUS,
 	WINGARDIUM_LEVIOSA;
 	
 	/**
@@ -121,13 +125,13 @@ public enum Spells {
 			words[i] = words[i].toUpperCase();
 		}
 		//getLogger().info(words.length);
-		String complete = "";
+		StringBuilder completeSB = new StringBuilder();
 		for (String word : words){
-			complete = complete.concat(word);
-			complete = complete.concat("_");
+			completeSB.append(word);
+			completeSB.append("_");
 		}
 		//getLogger().info(complete);
-		complete = complete.substring(0, complete.length()-1);
+		String complete = completeSB.substring(0, completeSB.length()-1);
 		Spells spell;
 		try {
 			spell = Spells.valueOf(complete);
@@ -154,5 +158,22 @@ public enum Spells {
 		}
 		comp = comp.substring(0, comp.length()-1);
 		return comp;
+	}
+	
+	/**Converts a string to have it's first letter of  each word be in upper case, and all other letters lower case.
+	 * @param str - String to convert.
+	 * @return String with correct formatting.
+	 */
+	public static String firstLetterCapitalize(String str){
+		StringBuilder sb = new StringBuilder();
+		String[] wordList = str.split(" ");
+		for (String s : wordList){
+			sb.append(s.substring(0, 1).toUpperCase());
+			if (s.length() > 1){
+				sb.append(s.substring(1, s.length()).toLowerCase());
+			}
+			sb.append(" ");
+		}
+		return sb.substring(0, sb.length()-1);
 	}
 }

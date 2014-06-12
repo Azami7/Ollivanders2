@@ -8,17 +8,23 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 
 import Effect.Effect;
+import Effect.VENTO_FOLIO;
 import Spell.Spell;
 import StationarySpell.REPELLO_MUGGLETON;
 import StationarySpell.StationarySpell;
@@ -31,6 +37,7 @@ import StationarySpell.StationarySpell;
 class OllivandersSchedule implements Runnable{
 	Ollivanders p;
 	int counter = 0;
+	static Set<UUID> flying = new HashSet<UUID>();
 	public OllivandersSchedule(Ollivanders plugin) {
 		p = plugin;
 	}
@@ -39,6 +46,7 @@ class OllivandersSchedule implements Runnable{
 		projectileSched();
 		oeffectSched();
 		stationarySched();
+		broomSched();
 		if (counter %20 == 0){
 			itemCurseSched();
 		}
@@ -75,7 +83,7 @@ class OllivandersSchedule implements Runnable{
 	 */
 	private void oeffectSched(){
 		List<Player> onlinePlayers = Arrays.asList(p.getServer().getOnlinePlayers());
-		for (String name : p.getOPlayerMap().keySet()){
+		for (UUID name : p.getOPlayerMap().keySet()){
 			OPlayer oply = p.getOPlayerMap().get(name);
 			if (oply.getEffects() != null && onlinePlayers.contains(p.getServer().getPlayer(name))){
 				List<OEffect> effects2 = new ArrayList<OEffect>(oply.getEffects());
@@ -210,6 +218,11 @@ class OllivandersSchedule implements Runnable{
 			if (hasCloak || muggletons.size() > 0){
 				oplayer.setMuggleton(true);
 				for (Player viewer : p.getServer().getOnlinePlayers()){
+					if (viewer.isPermissionSet("Ollivanders.BYPASS")){
+						if (viewer.hasPermission("Ollivanders.BYPASS")){
+							continue;
+						}
+					}
 					if (muggletons.size() == 0){
 						viewer.hidePlayer(player);
 					}
@@ -274,7 +287,7 @@ class OllivandersSchedule implements Runnable{
 		}
 		return false;
 	}
-	
+
 	/**Checks all players to see if they will receive a prophecy
 	 * 
 	 */
@@ -296,7 +309,7 @@ class OllivandersSchedule implements Runnable{
 				for (String str : lore){
 					message = message.concat(str + " ");
 				}
-				player.sendMessage(message);
+				player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + message);
 				ItemStack hand = player.getItemInHand();
 				if (hand.getType() == ball){
 					ItemStack record = new ItemStack(ball, 1);
@@ -318,7 +331,7 @@ class OllivandersSchedule implements Runnable{
 			}
 		}
 	}
-	
+
 	/**Goes through all prophecies and enacts them if they are due
 	 * and deletes them if they are past
 	 */
@@ -327,7 +340,7 @@ class OllivandersSchedule implements Runnable{
 		while (iter.hasNext()){
 			Prophecy prop = iter.next();
 			if (prop.isActive()){
-				Player player = p.getServer().getPlayer(prop.getPlayer());
+				Player player = p.getServer().getPlayer(prop.getPlayerUUID());
 				if (player != null){
 					player.addPotionEffect(prop.toPotionEffect(), true);
 				}
@@ -336,5 +349,41 @@ class OllivandersSchedule implements Runnable{
 				iter.remove();
 			}
 		}
+	}
+
+	/**Goes through all players and sets any holding a broom to flying
+	 * 
+	 */
+	private void broomSched(){
+		playerIter:
+			for (Player player : p.getServer().getOnlinePlayers()){
+				if (p.isBroom(player.getItemInHand()) && p.canLive(player.getLocation(), Spells.VOLATUS)){
+					player.setAllowFlight(true);
+					player.setFlying(true);
+					if (flying.contains(player.getUniqueId())){
+						Vector broomVec = player.getLocation().getDirection().clone();
+						broomVec.multiply(Math.sqrt(player.getItemInHand().getEnchantmentLevel(Enchantment.PROTECTION_FALL))/40.0);
+						player.setVelocity(player.getVelocity().add(broomVec));
+					}
+				}
+				else{
+					if (player.getGameMode() == GameMode.SURVIVAL){
+						for (OEffect effect : p.getOPlayer(player).getEffects()){
+							if (effect instanceof VENTO_FOLIO){
+								continue playerIter;
+							}
+						}
+						player.setAllowFlight(false);
+						player.setFlying(false);
+					}
+				}
+			}
+	}
+
+	/**Get the set of flying players
+	 * @return set of flying players
+	 */
+	public static Set<UUID> getFlying(){
+		return flying;
 	}
 }

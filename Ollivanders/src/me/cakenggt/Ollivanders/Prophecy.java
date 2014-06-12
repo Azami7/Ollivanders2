@@ -3,6 +3,7 @@ package me.cakenggt.Ollivanders;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,7 +21,7 @@ public class Prophecy implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = -3162828608067812174L;
-	private final String name;
+	private UUID playerUUID;
 	private final String effect;
 	private final long start;
 	private final int duration;
@@ -30,7 +31,7 @@ public class Prophecy implements Serializable{
 	private final int day = hour * 24;
 
 	public Prophecy(Player player) {
-		name = player.getName();
+		playerUUID = player.getUniqueId();
 		PotionEffectType[] effects = PotionEffectType.values();
 		PotionEffectType possible = null;
 		while (possible == null){
@@ -46,7 +47,7 @@ public class Prophecy implements Serializable{
 	}
 
 	public Prophecy(Player player, long start, int duration){
-		name = player.getName();
+		playerUUID = player.getUniqueId();
 		PotionEffectType[] effects = PotionEffectType.values();
 		PotionEffectType possible = null;
 		while (possible == null){
@@ -64,7 +65,7 @@ public class Prophecy implements Serializable{
 
 	public List<String> toLore(){
 		List<String> lore = new ArrayList<String>();
-		lore.add("Prophecy concerning " + name + ":");
+		lore.add("Prophecy concerning " + Bukkit.getPlayer(playerUUID).getName() + ":");
 		lore.add("A " + PotionEffectType.getByName(effect).getName() + " effect will begin in");
 		long timeTo = start - System.currentTimeMillis();
 		int days = (int)(timeTo/(day));
@@ -106,8 +107,8 @@ public class Prophecy implements Serializable{
 		}
 	}
 
-	public String getPlayer(){
-		return name;
+	public UUID getPlayerUUID(){
+		return playerUUID;
 	}
 
 }

@@ -2,7 +2,10 @@ package me.cakenggt.Ollivanders;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -21,13 +24,13 @@ import org.bukkit.util.Vector;
  * @author lownes
  *
  */
-public class StationarySpellObj implements Serializable{
+public abstract class StationarySpellObj implements Serializable{
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 9013964903309999847L;
-	public String player;
+	public UUID playerUUID;
 	public StationarySpells name;
 	public OLocation location;
 	public int duration;
@@ -36,13 +39,10 @@ public class StationarySpellObj implements Serializable{
 	public boolean active;
 
 
-	//Constructor
-	//In the chat distance dropoff code, there will be code that turns the spoken
-	//words into a Spells object.
 	public StationarySpellObj(Player player, Location location, StationarySpells name, Integer radius, Integer duration){
 		this.location = new OLocation(location);
 		this.name = name;
-		this.player = player.getName();
+		playerUUID = player.getUniqueId();
 		kill = false;
 		this.duration = duration;
 		this.radius = radius;
@@ -239,72 +239,6 @@ public class StationarySpellObj implements Serializable{
 			return false;
 		}
 	}
-
-	/**
-	 * Checks what kind of wand a player holds. Returns a value based on the
-	 * wand and it's relation to the player.
-	 * @param player - Player being checked.
-	 * @return 2 - The wand is not your type AND/OR is not allied to you.<p>
-	 * 1 - The wand is your type and is allied to you OR the wand is the elder wand and is not allied to you.<p>
-	 * 0.5 - The wand is the elder wand and it is allied to you.
-	 */
-	public double wandCheck(Player player){
-		String charList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-		int wood = player.getName().length()%4;
-		String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
-		String woodString = woodArray[wood];
-		int core = 0;
-		for (char a : player.getName().toCharArray()){
-			core += charList.indexOf(a)+1;
-		}
-		String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};
-		String coreString = coreArray[core%4];
-		List<String> lore = player.getItemInHand().getItemMeta().getLore();
-		if (lore.get(0).equals("Blaze and Ender Pearl")){
-			if (lore.size() == 2){
-				if (lore.get(1).equals(player.getName())){
-					return 0.5;
-				}
-				else{
-					return 1;
-				}
-			}
-			else{
-				return 0.5;
-			}
-		}
-		String[] comps = lore.get(0).split(" and ");
-		if (woodString.equals(comps[0]) && coreString.equals(comps[1])){
-			if (lore.size() == 2){
-				if (lore.get(1).equals(player.getName())){
-					return 1;
-				}
-				else{
-					return 2;
-				}
-			}
-			else{
-				return 1;
-			}
-		}
-		else{
-			return 2;
-		}
-	}
-
-	/**
-	 * Returns the rightWand int. Returns -1 if the player isn't holding a wand.
-	 * @param player - Player to check
-	 * @return - 1 if the correct wand, 2 if the wrong wand, -1 if no wand.
-	 */
-	public int rightWand(Player player){
-		if (holdsWand(player)){
-			return (int)wandCheck(player);
-		}
-		else{
-			return -1;
-		}
-	}
 	
 	/**
 	 * Gets the blocks in a radius of a location.
@@ -312,10 +246,10 @@ public class StationarySpellObj implements Serializable{
 	 * @param radius - The radius of the block list
 	 * @return List of blocks that are within radius of the location.
 	 */
-	public List<Block> getBlocksInRadius(Location loc, double radius){
+	public Set<Block> getBlocksInRadius(Location loc, double radius){
 		Block center = loc.getBlock();
 		int blockRadius = (int)(radius+1);
-		List<Block> blockList = new ArrayList<Block>();
+		Set<Block> blockList = new HashSet<Block>();
 		for (int x = -blockRadius; x <= blockRadius; x++){
 			for (int y = -blockRadius; y <= blockRadius; y++){
 				for (int z = -blockRadius; z <= blockRadius; z++){
@@ -323,13 +257,17 @@ public class StationarySpellObj implements Serializable{
 				}
 			}
 		}
-		ArrayList<Block> returnList = new ArrayList<Block>();
+		Set<Block> returnList = new HashSet<Block>();
 		for (Block block : blockList){
 			if (block.getLocation().distance(center.getLocation()) < radius){
 				returnList.add(block);
 			}
 		}
 		return returnList;
+	}
+	
+	public UUID getPlayerUUID(){
+		return playerUUID;
 	}
 
 }

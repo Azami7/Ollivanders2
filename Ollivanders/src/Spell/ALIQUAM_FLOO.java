@@ -30,7 +30,7 @@ public class ALIQUAM_FLOO extends SpellProjectile implements Spell {
 			Location statLocation = new Location(location.getWorld(), super.getBlock().getX()+0.5, super.getBlock().getY()+0.125, super.getBlock().getZ()+0.5);
 			if (super.getBlock().getRelative(BlockFace.UP).getType() == Material.WALL_SIGN){
 				Sign sign = (Sign) super.getBlock().getRelative(BlockFace.UP).getState();
-				String flooName = sign.getLine(0) + " " + sign.getLine(1) + " " + sign.getLine(2) + " " + sign.getLine(3);
+				String flooName = sign.getLine(0).trim() + " " + sign.getLine(1).trim() + " " + sign.getLine(2).trim() + " " + sign.getLine(3).trim();
 				flooName = flooName.trim();
 				flooName = flooName.toLowerCase();
 				for (StationarySpellObj stat : p.getStationary()){

@@ -104,6 +104,7 @@ public class WINGARDIUM_LEVIOSA extends SpellProjectile implements Spell{
 				Vector  moveVec = center.toVector().subtract(location.toVector());
 				for (Location loc : locList){
 					Location toLoc = center.clone().add(loc);
+					@SuppressWarnings("deprecation")
 					FallingBlock fall = loc.getWorld().spawnFallingBlock(toLoc, materialMap.get(loc), (byte)0);
 					fall.setVelocity(moveVec);
 				}

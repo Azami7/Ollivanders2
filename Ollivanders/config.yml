@@ -6,6 +6,11 @@ divinationBlock: 20
 divinationMaxDuration: 86400000
 divinationMaxStartOffset: 604800000
 muggletonBlockChange: true
+deathExpLoss: true
+bookLearning: false
+chatColor: 5
+flooPowder: REDSTONE
+broomstick: STICK
 zones:
   default-world:
     type: World

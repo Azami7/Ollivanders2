@@ -37,6 +37,11 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
 				byte toDat = getBlock().getData();
 				double viewDistance = Math.sqrt(2*Math.pow(((Bukkit.getServer().getViewDistance()+1)*16),2));
 				for (Player ply : getBlock().getWorld().getPlayers()){
+					if (ply.isPermissionSet("Ollivanders.BYPASS")){
+						if (ply.hasPermission("Ollivanders.BYPASS")){
+							continue;
+						}
+					}
 					if (ply.getLocation().distance(location.toLocation()) < viewDistance && !isInside(ply.getLocation())){
 						for (Block block : getBlocksInRadius(location.toLocation(), radius)){
 							ply.sendBlockChange(block.getLocation(), toMat, toDat);

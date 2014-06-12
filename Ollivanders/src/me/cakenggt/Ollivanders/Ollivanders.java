@@ -13,18 +13,22 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.command.Command;
 import org.bukkit.configuration.ConfigurationSection;
@@ -44,7 +48,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
  */
 public class Ollivanders extends JavaPlugin{
 
-	private Map<String, OPlayer> OPlayerMap = new HashMap<String, OPlayer>();
+	private Map<UUID, OPlayer> OPlayerMap = new HashMap<UUID, OPlayer>();
 	private List<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
 	private List<StationarySpellObj> stationary = new ArrayList<StationarySpellObj>();;
 	private Set<Prophecy> prophecy = new HashSet<Prophecy>();
@@ -95,7 +99,7 @@ public class Ollivanders extends JavaPlugin{
 		//loads data
 		if (new File("plugins/Ollivanders/").mkdirs())
 			getLogger().info("File created for Ollivanders");
-		OPlayerMap = new HashMap<String, OPlayer>();
+		OPlayerMap = new HashMap<UUID, OPlayer>();
 		projectiles = new ArrayList<SpellProjectile>();
 		stationary = new ArrayList<StationarySpellObj>();
 		prophecy = new HashSet<Prophecy>();
@@ -106,7 +110,7 @@ public class Ollivanders extends JavaPlugin{
 			Updater updater = new Updater(this, 72117, this.getFile(), Updater.UpdateType.DEFAULT, true);
 		}
 		try {
-			OPlayerMap = (HashMap<String, OPlayer>) SLAPI
+			OPlayerMap = (HashMap<UUID, OPlayer>) SLAPI
 					.load("plugins/Ollivanders/OPlayerMap.bin");
 			getLogger().finest("Loaded OPlayerMap.bin");
 		} catch (Exception e) {
@@ -138,14 +142,28 @@ public class Ollivanders extends JavaPlugin{
 		fillAllSpellCount();
 		this.schedule = new OllivandersSchedule(this);
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.schedule, 20L, 1L);
-		ItemStack flooPowder = new ItemStack(Material.REDSTONE, 8);
-		ItemMeta meta = flooPowder.getItemMeta();
-		meta.setDisplayName("Floo Powder");
-		List<String> lore = new ArrayList<String>();
-		lore.add("Glittery, silver powder");
-		meta.setLore(lore);
-		flooPowder.setItemMeta(meta);
+		//floo powder recipe
+		ItemStack flooPowder = new ItemStack(Material.getMaterial(fileConfig.getString("flooPowder")), 8);
+		ItemMeta fmeta = flooPowder.getItemMeta();
+		fmeta.setDisplayName("Floo Powder");
+		List<String> flore = new ArrayList<String>();
+		flore.add("Glittery, silver powder");
+		fmeta.setLore(flore);
+		flooPowder.setItemMeta(fmeta);
+		//broomstick recipe
+		ItemStack broomstick = new ItemStack(Material.getMaterial(fileConfig.getString("broomstick")));
+		ItemMeta bmeta = broomstick.getItemMeta();
+		bmeta.setDisplayName("Broomstick");
+		List<String> blore = new ArrayList<String>();
+		blore.add("Flying vehicle used by magical folk");
+		bmeta.setLore(blore);
+		broomstick.setItemMeta(bmeta);
+		ShapedRecipe bRecipe = new ShapedRecipe(broomstick);
+		bRecipe.shape("  S", " S ", "W  ");
+		bRecipe.setIngredient('S', Material.STICK);
+		bRecipe.setIngredient('W', Material.WHEAT);
 		getServer().addRecipe(new FurnaceRecipe(flooPowder, Material.ENDER_PEARL));
+		getServer().addRecipe(bRecipe);
 		getLogger().info(this + " is now enabled!");
 	}
 
@@ -162,23 +180,24 @@ public class Ollivanders extends JavaPlugin{
 				if (args[0].equalsIgnoreCase("reload")){
 					if (player != null){
 						if (!player.isOp()){
-							sender.sendMessage("Only server ops can use the /Okit command.");
+							sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only server ops can use the /Okit command.");
 							return true;
 						}
 					}
 					reloadConfig();
 					fileConfig = getConfig();
-					sender.sendMessage("Config reloaded");
+					sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Config reloaded");
 					return true;
 				}
 			}
 			if (args.length >= 4){
 				if (player != null){
 					if (!player.isOp()){
-						sender.sendMessage("Only server ops can use the /Okit command.");
+						sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only server ops can use the /Okit command.");
 					}
 				}
 				if (args[0].equalsIgnoreCase("wand")){
+					@SuppressWarnings("deprecation")
 					Player receiver = Bukkit.getPlayer(args[1]);
 					if (receiver != null){
 						String wood = "";
@@ -246,7 +265,7 @@ public class Ollivanders extends JavaPlugin{
 				return true;
 			}
 			else if (player != null){
-				sender.sendMessage("Ollivanders " + this.getDescription().getVersion());
+				sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Ollivanders " + this.getDescription().getVersion());
 				//Arguments of command
 				boolean wands = true;
 				boolean books = true;
@@ -318,7 +337,7 @@ public class Ollivanders extends JavaPlugin{
 					}
 				}
 				else{
-					sender.sendMessage("Only server ops can use the /Okit command.");
+					sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only server ops can use the /Okit command.");
 				}
 				return true;
 			}
@@ -326,11 +345,11 @@ public class Ollivanders extends JavaPlugin{
 		return false;
 	}
 
-	public Map<String, OPlayer> getOPlayerMap(){
+	public Map<UUID, OPlayer> getOPlayerMap(){
 		return OPlayerMap;
 	}
 
-	public void setOPlayerMap(Map<String, OPlayer> m){
+	public void setOPlayerMap(Map<UUID, OPlayer> m){
 		OPlayerMap = m;
 	}
 
@@ -381,12 +400,12 @@ public class Ollivanders extends JavaPlugin{
 
 	public int incSpellCount(Player player, Spells s){
 		//returns the incremented spell count
-		OPlayer oply = OPlayerMap.get(player.getName());
+		OPlayer oply = OPlayerMap.get(player.getUniqueId());
 		Map<Spells, Integer> spellMap = oply.getSpellCount();
 		int next = spellMap.get(s)+1;
 		spellMap.put(s, next);
 		oply.setSpellCount(spellMap);
-		OPlayerMap.put(player.getName(), oply);
+		OPlayerMap.put(player.getUniqueId(), oply);
 		return next;
 	}
 
@@ -396,13 +415,13 @@ public class Ollivanders extends JavaPlugin{
 	 * @return Oplayer of playername s
 	 */
 	public OPlayer getOPlayer(Player p){
-		if (OPlayerMap.containsKey(p.getName())){
-			return OPlayerMap.get(p.getName());
+		if (OPlayerMap.containsKey(p.getUniqueId())){
+			return OPlayerMap.get(p.getUniqueId());
 		}
 		else{
-			OPlayerMap.put(p.getName(), new OPlayer());
+			OPlayerMap.put(p.getUniqueId(), new OPlayer());
 			getLogger().info("Put in new OPlayer.");
-			return OPlayerMap.get(p.getName());
+			return OPlayerMap.get(p.getUniqueId());
 		}
 	}
 
@@ -412,7 +431,7 @@ public class Ollivanders extends JavaPlugin{
 	 * @param player the OPlayer associated with the player
 	 */
 	public void setOPlayer(Player p, OPlayer player){
-		OPlayerMap.put(p.getName(), player);
+		OPlayerMap.put(p.getUniqueId(), player);
 	}
 
 	/**
@@ -455,7 +474,7 @@ public class Ollivanders extends JavaPlugin{
 		List<StationarySpellObj> stationaries = getStationary();
 		List<StationarySpellObj> inside = new ArrayList<StationarySpellObj>();
 		for (StationarySpellObj stationary: stationaries){
-			if (stationary.location.getWorld().equals(location.getWorld().getName())){
+			if (stationary.location.getWorldUUID().equals(location.getWorld().getUID())){
 				if (stationary.location.distance(location) < stationary.radius){
 					inside.add(stationary);
 				}
@@ -487,7 +506,7 @@ public class Ollivanders extends JavaPlugin{
 	 * 
 	 */
 	private void fillAllSpellCount(){
-		for (String name : OPlayerMap.keySet()){
+		for (UUID name : OPlayerMap.keySet()){
 			OPlayer op = OPlayerMap.get(name);
 			Map<Spells, Integer> spellCount = op.getSpellCount();
 			for (Spells spell : Spells.values()){
@@ -524,14 +543,14 @@ public class Ollivanders extends JavaPlugin{
 		if (player.isPermissionSet("Ollivanders."+spell.toString())){
 			if (!player.hasPermission("Ollivanders." + spell.toString())){
 				if (verbose){
-					player.sendMessage("You do not have permission to use " + spell.toString());
+					player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "You do not have permission to use " + spell.toString());
 				}
 				return false;
 			}
 		}
 		boolean cast = canLive(player.getLocation(), spell);
 		if (!cast && verbose){
-			player.sendMessage("Casting of " + spell.toString() + " is not allowed in this area");
+			player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Casting of " + spell.toString() + " is not allowed in this area");
 		}
 		return cast;
 	}
@@ -677,16 +696,13 @@ public class Ollivanders extends JavaPlugin{
 	 */
 	public static boolean destinedWand(Player player, ItemStack stack){
 		if (isWand(stack)){
-			String charList = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_";
-			int wood = player.getName().length()%4;
+			int seed = Math.abs(player.getUniqueId().hashCode()%16);
+			int wood = seed/4;
+			int core = seed%4;
 			String[] woodArray = {"Spruce","Jungle","Birch","Oak"};
 			String woodString = woodArray[wood];
-			int core = 0;
-			for (char a : player.getName().toCharArray()){
-				core += charList.indexOf(a)+1;
-			}
 			String[] coreArray = {"Spider Eye","Bone","Rotten Flesh","Gunpowder"};
-			String coreString = coreArray[core%4];
+			String coreString = coreArray[core];
 			List<String> lore = stack.getItemMeta().getLore();
 			String[] comps = lore.get(0).split(" and ");
 			if (woodString.equals(comps[0]) && coreString.equals(comps[1])){
@@ -699,6 +715,25 @@ public class Ollivanders extends JavaPlugin{
 		else{
 			return false;
 		}
+	}
+
+	/**Finds out if an item is a broom.
+	 * @param item - Item in question.
+	 * @return True if yes.
+	 */
+	public boolean isBroom(ItemStack item){
+		if (item.getType() == Material.getMaterial(fileConfig.getString("broomstick"))){
+			if (item.containsEnchantment(Enchantment.PROTECTION_FALL)){
+				ItemMeta meta = item.getItemMeta();
+				if (meta.hasLore()){
+					List<String> lore = meta.getLore();
+					if (lore.contains("Flying vehicle used by magical folk")){
+						return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	/** SLAPI = Saving/Loading API

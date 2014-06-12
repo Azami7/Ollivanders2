@@ -55,7 +55,7 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell 
 			for (Item item : loc.getWorld().getEntitiesByClass(Item.class)){
 				ItemStack stack = item.getItemStack();
 				if (item.getLocation().getBlock().equals(block)){
-					if (stack.getType() == Material.REDSTONE){
+					if (stack.getType() == Material.getMaterial(p.getConfig().getString("flooPowder"))){
 						if (stack.hasItemMeta()){
 							ItemMeta meta = stack.getItemMeta();
 							if (meta.hasLore()){

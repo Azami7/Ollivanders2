@@ -23,7 +23,7 @@ import org.bukkit.util.Vector;
  * @author lownes
  *
  */
-public class SpellProjectile{
+public abstract class SpellProjectile{
 
 	public Player player;
 	public Spells name;
@@ -183,19 +183,6 @@ public class SpellProjectile{
 			living.add(player);
 		}
 		return living;
-	}
-
-	/**
-	 * This clones a SpellProjectile
-	 * @return Cloned SpellProjectile
-	 */
-	public SpellProjectile copy(){
-		SpellProjectile sp = new SpellProjectile(p, player, name, rightWand);
-		sp.location = this.location.clone();
-		sp.vector = this.vector.clone();
-		sp.lifeTicks = this.lifeTicks;
-		sp.kill = this.kill;
-		return sp;
 	}
 
 	/**

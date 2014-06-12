@@ -26,12 +26,14 @@ public class PIERTOTUM_LOCOMOTOR extends Transfiguration implements Spell{
 			move();
 			if (getBlock().getType() == Material.IRON_BLOCK){
 				getBlock().setType(Material.AIR);
+				@SuppressWarnings("deprecation")
 				FallingBlock ironFall = location.getWorld().spawnFallingBlock(location, Material.IRON_BLOCK, (byte)0);
 				transfigureEntity(ironFall, EntityType.IRON_GOLEM, null);
 				kill = false;
 			}
 			if (getBlock().getType() == Material.SNOW_BLOCK){
 				getBlock().setType(Material.AIR);
+				@SuppressWarnings("deprecation")
 				FallingBlock ironFall = location.getWorld().spawnFallingBlock(location, Material.SNOW_BLOCK, (byte)0);
 				transfigureEntity(ironFall, EntityType.SNOWMAN, null);
 				kill = false;

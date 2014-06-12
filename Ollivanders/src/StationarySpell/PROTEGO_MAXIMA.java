@@ -32,6 +32,14 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
 		age();
 		Location loc = location.toLocation();
 		for (Entity e : loc.getWorld().getEntities()){
+			if (e instanceof Player){
+				Player ply = (Player)e;
+				if (ply.isPermissionSet("Ollivanders.BYPASS")){
+					if (ply.hasPermission("Ollivanders.BYPASS")){
+						continue;
+					}
+				}
+			}
 			double distance = e.getLocation().distance(loc);
 			if (distance > radius - 0.5 && distance < radius + 0.5){
 				if (e instanceof LivingEntity){

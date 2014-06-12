@@ -2,13 +2,13 @@ package Spell;
 
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 
 import StationarySpell.HORCRUX;
-
 import me.cakenggt.Ollivanders.Ollivanders;
 import me.cakenggt.Ollivanders.SpellProjectile;
 import me.cakenggt.Ollivanders.Spells;
@@ -49,7 +49,7 @@ public class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends SpellProjectile implements 
 			}
 			else{
 				if (souls == 0){
-					player.sendMessage("Your soul is not yet so damaged to allow this.");
+					player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "Your soul is not yet so damaged to allow this.");
 					return;
 				}
 				//If they player couldn't survive making another horcrux
@@ -57,7 +57,7 @@ public class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends SpellProjectile implements 
 				else if ((futureHealth-1)<= 0){
 					List<StationarySpellObj> stationarys = p.getStationary();
 					for(StationarySpellObj stationary : stationarys){
-						if (stationary.name == StationarySpells.HORCRUX && stationary.player.equals(player.getName())){
+						if (stationary.name == StationarySpells.HORCRUX && stationary.getPlayerUUID().equals(player.getUniqueId())){
 							Location tp = stationary.location.toLocation();
 							tp.setY(tp.getY()+1);
 							player.teleport(tp);

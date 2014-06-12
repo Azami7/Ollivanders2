@@ -3,6 +3,8 @@ package Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.LivingEntity;
@@ -40,16 +42,16 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 		move();
 		for (LivingEntity entity : getLivingEntities(1)){
 			if (!iEntity.contains(entity)){
-				player.sendMessage(entity.getType().toString() + " has " + ((Damageable)entity).getHealth() + " health.");
+				player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))+entity.getType().toString() + " has " + ((Damageable)entity).getHealth() + " health.");
 				if (entity instanceof Player){
 					Player ePlayer = (Player)entity;
 					OPlayer eoplayer = p.getOPlayer(ePlayer);
 					for (OEffect effect : eoplayer.getEffects()){
 						if (effect instanceof LYCANTHROPY){
-							player.sendMessage(ePlayer.getName() + " has Lycanthropy.");
+							player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))+ePlayer.getName() + " has Lycanthropy.");
 						}
 						else{
-							player.sendMessage(ePlayer.getName() + " has " + Effects.recode(effect.name) + " with " + effect.duration/20 + " seconds left.");
+							player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))+ePlayer.getName() + " has " + Effects.recode(effect.name) + " with " + effect.duration/20 + " seconds left.");
 						}
 					}
 				}
@@ -59,19 +61,19 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 		for (StationarySpellObj spell : p.getStationary()){
 			if (spell.isInside(location) && !iSpell.contains(spell)){
 				if (spell instanceof StationarySpell.COLLOPORTUS){
-					player.sendMessage(spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration/1200 + " power left.");
+					player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))+spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration/1200 + " power left.");
 				}
 				else if (spell instanceof StationarySpell.HORCRUX){
-					player.sendMessage(spell.name.toString() + " of player " + spell.player + " of radius " + spell.radius);
+					player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))+spell.name.toString() + " of player " + Bukkit.getPlayer(spell.getPlayerUUID()).getName() + " of radius " + spell.radius);
 				}
 				else if (spell instanceof StationarySpell.ALIQUAM_FLOO){
-					player.sendMessage("Floo registration of " + ((StationarySpell.ALIQUAM_FLOO)spell).getFlooName());
+					player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))+"Floo registration of " + ((StationarySpell.ALIQUAM_FLOO)spell).getFlooName());
 				}
 				else if (spell instanceof StationarySpell.HARMONIA_NECTERE_PASSUS){
-					player.sendMessage("Vanishing Cabinet");
+					player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))+"Vanishing Cabinet");
 				}
 				else{
-					player.sendMessage(spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration/20 + " seconds left.");
+					player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))+spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration/20 + " seconds left.");
 				}
 				iSpell.add(spell);
 			}
@@ -89,9 +91,9 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 			}
 			int weatherTime = world.getWeatherDuration();
 			int thunderTime = world.getThunderDuration();
-			player.sendMessage("There will be " + weather + " for " + weatherTime/20 + " more seconds.");
+			player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))+"There will be " + weather + " for " + weatherTime/20 + " more seconds.");
 			if (thunder){
-				player.sendMessage("There will be thunder for " + thunderTime/20 + " more seconds.");
+				player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))+"There will be thunder for " + thunderTime/20 + " more seconds.");
 			}
 		}
 		if (lifeTicks > lifeTime){

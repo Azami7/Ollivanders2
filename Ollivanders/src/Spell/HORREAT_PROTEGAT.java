@@ -37,7 +37,7 @@ public class HORREAT_PROTEGAT extends SpellProjectile implements Spell{
 			limit = 1;
 		}
 		for (StationarySpellObj spell : inside){
-			if (spell.radius > limit && spell.player.equals(player.getName())){
+			if (spell.radius > limit && spell.getPlayerUUID().equals(player.getUniqueId())){
 				spell.radius --;
 				spell.flair(10);
 			}

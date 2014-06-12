@@ -40,10 +40,15 @@ public class PORTUS extends SpellProjectile implements Spell{
 		for (Item item : getItems(1)){
 			boolean canApparateOut = true;
 			for (StationarySpellObj stat : p.getStationary()){
-				if (stat instanceof StationarySpell.NULLUM_EVANESCUNT && stat.isInside(player.getLocation()) && stat.active && !stat.player.equals(player.getName())){
+				if (stat instanceof StationarySpell.NULLUM_EVANESCUNT && stat.isInside(player.getLocation()) && stat.active && !stat.getPlayerUUID().equals(player.getUniqueId())){
 					stat.flair(10);
 					canApparateOut = false;
 					player.getWorld().playSound(player.getLocation(), Sound.NOTE_PIANO, 1, 1);
+				}
+			}
+			if (player.isPermissionSet("Ollivanders.BYPASS")){
+				if (player.hasPermission("Ollivanders.BYPASS")){
+					canApparateOut = true;
 				}
 			}
 			if (canApparateOut){
@@ -63,10 +68,15 @@ public class PORTUS extends SpellProjectile implements Spell{
 				}
 				boolean canApparateIn = true;
 				for (StationarySpellObj stat : p.getStationary()){
-					if (stat instanceof StationarySpell.NULLUM_APPAREBIT && stat.isInside(to) && stat.active && !stat.player.equals(player.getName())){
+					if (stat instanceof StationarySpell.NULLUM_APPAREBIT && stat.isInside(to) && stat.active && !stat.getPlayerUUID().equals(player.getUniqueId())){
 						stat.flair(10);
 						canApparateIn = false;
 						player.getWorld().playSound(player.getLocation(), Sound.NOTE_BASS, 1, 1);
+					}
+				}
+				if (player.isPermissionSet("Ollivanders.BYPASS")){
+					if (player.hasPermission("Ollivanders.BYPASS")){
+						canApparateIn = true;
 					}
 				}
 				if (canApparateIn) {
@@ -78,7 +88,7 @@ public class PORTUS extends SpellProjectile implements Spell{
 					else{
 						lore = new ArrayList<String>();
 					}
-					lore.add("Portkey " + to.getWorld().getName() + " " + Double.toString(to.getX()) + " " + Double.toString(to.getY()) + " " + Double.toString(to.getZ()));
+					lore.add("Portkey " + to.getWorld().getUID() + " " + Double.toString(to.getX()) + " " + Double.toString(to.getY()) + " " + Double.toString(to.getZ()));
 					meta.setLore(lore);
 					item.getItemStack().setItemMeta(meta);
 				}
