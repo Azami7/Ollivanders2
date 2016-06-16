@@ -1,7 +1,6 @@
 package me.cakenggt.Ollivanders;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -43,10 +42,33 @@ class OllivandersSchedule implements Runnable{
 	}
 
 	public void run() {
-		projectileSched();
-		oeffectSched();
-		stationarySched();
-		broomSched();
+		try
+		{
+			projectileSched();	
+		}
+		catch(Exception e)
+		{
+			
+		}
+		
+		try
+		{
+			oeffectSched();	
+		}
+		catch(Exception e){}
+		
+		try
+		{
+			stationarySched();	
+		}
+		catch(Exception e){}
+		
+		try
+		{
+			broomSched();	
+		}
+		catch(Exception e){}
+				
 		if (counter %20 == 0){
 			itemCurseSched();
 		}
@@ -82,7 +104,11 @@ class OllivandersSchedule implements Runnable{
 	 * and removes those that have kill set to true.
 	 */
 	private void oeffectSched(){
-		List<Player> onlinePlayers = Arrays.asList(p.getServer().getOnlinePlayers());
+		List<Player> onlinePlayers = new ArrayList<Player>();
+		for (World world : p.getServer().getWorlds()){
+			onlinePlayers.addAll(world.getPlayers());
+		}
+			
 		for (UUID name : p.getOPlayerMap().keySet()){
 			OPlayer oply = p.getOPlayerMap().get(name);
 			if (oply.getEffects() != null && onlinePlayers.contains(p.getServer().getPlayer(name))){
@@ -204,67 +230,71 @@ class OllivandersSchedule implements Runnable{
 	 * 
 	 */
 	private void invisPlayer(){
-		for (Player player : p.getServer().getOnlinePlayers()){
-			OPlayer oplayer = p.getOPlayer(player);
-			Set<REPELLO_MUGGLETON> muggletons = new HashSet<REPELLO_MUGGLETON>();
-			for (StationarySpellObj stat : p.getStationary()){
-				if (stat instanceof REPELLO_MUGGLETON){
-					if (stat.isInside(player.getLocation()) && stat.active){
-						muggletons.add((REPELLO_MUGGLETON) stat);
-					}
-				}
-			}
-			boolean hasCloak = hasCloak(player);
-			if (hasCloak || muggletons.size() > 0){
-				oplayer.setMuggleton(true);
-				for (Player viewer : p.getServer().getOnlinePlayers()){
-					if (viewer.isPermissionSet("Ollivanders.BYPASS")){
-						if (viewer.hasPermission("Ollivanders.BYPASS")){
-							continue;
-						}
-					}
-					if (muggletons.size() == 0){
-						viewer.hidePlayer(player);
-					}
-					else{
-						for (REPELLO_MUGGLETON muggleton : muggletons){
-							if (hasCloak || (!muggleton.isInside(viewer.getLocation()) && muggleton.active)){
-								viewer.hidePlayer(player);
-								break;
-							}
-							else{
-								viewer.showPlayer(player);
-							}
+		for (World world : p.getServer().getWorlds()){
+			for (Player player : world.getPlayers()){
+				OPlayer oplayer = p.getOPlayer(player);
+				Set<REPELLO_MUGGLETON> muggletons = new HashSet<REPELLO_MUGGLETON>();
+				for (StationarySpellObj stat : p.getStationary()){
+					if (stat instanceof REPELLO_MUGGLETON){
+						if (stat.isInside(player.getLocation()) && stat.active){
+							muggletons.add((REPELLO_MUGGLETON) stat);
 						}
 					}
 				}
-				if (!oplayer.isInvisible()){
-					for (Entity entity : player.getWorld().getEntities()){
-						if (entity instanceof Creature){
-							Creature creature = (Creature)entity;
-							if (creature.getTarget() == player){
-								if (muggletons.size() == 0){
-									creature.setTarget(null);
+				boolean hasCloak = hasCloak(player);
+				if (hasCloak || muggletons.size() > 0){
+					oplayer.setMuggleton(true);
+					
+					for (Player viewer : world.getPlayers()){
+						if (viewer.isPermissionSet("Ollivanders.BYPASS")){
+							if (viewer.hasPermission("Ollivanders.BYPASS")){
+								continue;
+							}
+						}
+						if (muggletons.size() == 0){
+							viewer.hidePlayer(player);
+						}
+						else{
+							for (REPELLO_MUGGLETON muggleton : muggletons){
+								if (hasCloak || (!muggleton.isInside(viewer.getLocation()) && muggleton.active)){
+									viewer.hidePlayer(player);
+									break;
 								}
 								else{
-									for (REPELLO_MUGGLETON muggleton : muggletons){
-										if (hasCloak || (!muggleton.isInside(creature.getLocation()) && muggleton.active)){
-											creature.setTarget(null);
+									viewer.showPlayer(player);
+								}
+							}
+						}
+					}
+					
+					if (!oplayer.isInvisible()){
+						for (Entity entity : player.getWorld().getEntities()){
+							if (entity instanceof Creature){
+								Creature creature = (Creature)entity;
+								if (creature.getTarget() == player){
+									if (muggletons.size() == 0){
+										creature.setTarget(null);
+									}
+									else{
+										for (REPELLO_MUGGLETON muggleton : muggletons){
+											if (hasCloak || (!muggleton.isInside(creature.getLocation()) && muggleton.active)){
+												creature.setTarget(null);
+											}
 										}
 									}
 								}
 							}
 						}
 					}
+					oplayer.setInvisible(hasCloak);
 				}
-				oplayer.setInvisible(hasCloak);
-			}
-			else if (oplayer.isInvisible() || oplayer.isMuggleton()){
-				for (Player viewer : p.getServer().getOnlinePlayers()){
-					viewer.showPlayer(player);
+				else if (oplayer.isInvisible() || oplayer.isMuggleton()){
+					for (Player viewer : world.getPlayers()){
+						viewer.showPlayer(player);
+					}
+					oplayer.setInvisible(false);
+					oplayer.setMuggleton(false);
 				}
-				oplayer.setInvisible(false);
-				oplayer.setMuggleton(false);
 			}
 		}
 	}
@@ -293,39 +323,42 @@ class OllivandersSchedule implements Runnable{
 	 */
 	@SuppressWarnings("deprecation")
 	private void scry(){
-		Material ball = Material.getMaterial(p.getConfig().getInt("divinationBlock"));
-		for (Player player : p.getServer().getOnlinePlayers()){
-			if (player.getTargetBlock(null, 100).getType() != ball || !player.isSneaking()){
-				return;
-			}
-			double experience = p.getOPlayer(player).getSpellCount().get(Spells.INFORMOUS);
-			if (Math.random() < experience/1000.0){
-				//The scrying is successful
-				Prophecy prophecy = new Prophecy(player);
-				//Prophecy prophecy = new Prophecy(player, 2000, 30000);
-				p.getProphecy().add(prophecy);
-				String message = "";
-				List<String> lore = prophecy.toLore();
-				for (String str : lore){
-					message = message.concat(str + " ");
+		Material ball = Material.getMaterial("divinationBlock");		
+
+		for (World world : p.getServer().getWorlds()){
+			for (Player player : world.getPlayers()){
+				if (player.getTargetBlock(null, 100).getType() != ball || !player.isSneaking()){
+					return;
 				}
-				player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + message);
-				ItemStack hand = player.getItemInHand();
-				if (hand.getType() == ball){
-					ItemStack record = new ItemStack(ball, 1);
-					ItemMeta recordM = record.getItemMeta();
-					recordM.setDisplayName("Prophecy Record");
-					recordM.setLore(lore);
-					record.setItemMeta(recordM);
-					if (hand.getAmount() == 1){
-						player.setItemInHand(null);
+				double experience = p.getOPlayer(player).getSpellCount().get(Spells.INFORMOUS);
+				if (Math.random() < experience/1000.0){
+					//The scrying is successful
+					Prophecy prophecy = new Prophecy(player);
+					//Prophecy prophecy = new Prophecy(player, 2000, 30000);
+					p.getProphecy().add(prophecy);
+					String message = "";
+					List<String> lore = prophecy.toLore();
+					for (String str : lore){
+						message = message.concat(str + " ");
 					}
-					else{
-						hand.setAmount(hand.getAmount()-1);
-						player.setItemInHand(hand);
-					}
-					for (ItemStack drop : player.getInventory().addItem(record).values()){
-						player.getWorld().dropItem(player.getLocation(), drop);
+					player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + message);
+					ItemStack hand = player.getItemInHand();
+					if (hand.getType() == ball){
+						ItemStack record = new ItemStack(ball, 1);
+						ItemMeta recordM = record.getItemMeta();
+						recordM.setDisplayName("Prophecy Record");
+						recordM.setLore(lore);
+						record.setItemMeta(recordM);
+						if (hand.getAmount() == 1){
+							player.setItemInHand(null);
+						}
+						else{
+							hand.setAmount(hand.getAmount()-1);
+							player.setItemInHand(hand);
+						}
+						for (ItemStack drop : player.getInventory().addItem(record).values()){
+							player.getWorld().dropItem(player.getLocation(), drop);
+						}
 					}
 				}
 			}
@@ -356,25 +389,27 @@ class OllivandersSchedule implements Runnable{
 	 */
 	private void broomSched(){
 		playerIter:
-			for (Player player : p.getServer().getOnlinePlayers()){
-				if (p.isBroom(player.getItemInHand()) && p.canLive(player.getLocation(), Spells.VOLATUS)){
-					player.setAllowFlight(true);
-					player.setFlying(true);
-					if (flying.contains(player.getUniqueId())){
-						Vector broomVec = player.getLocation().getDirection().clone();
-						broomVec.multiply(Math.sqrt(player.getItemInHand().getEnchantmentLevel(Enchantment.PROTECTION_FALL))/40.0);
-						player.setVelocity(player.getVelocity().add(broomVec));
-					}
-				}
-				else{
-					if (player.getGameMode() == GameMode.SURVIVAL){
-						for (OEffect effect : p.getOPlayer(player).getEffects()){
-							if (effect instanceof VENTO_FOLIO){
-								continue playerIter;
-							}
+			for (World world : p.getServer().getWorlds()) {			
+				for (Player player : world.getPlayers()){
+					if (p.isBroom(player.getItemInHand()) && p.canLive(player.getLocation(), Spells.VOLATUS)){
+						player.setAllowFlight(true);
+						player.setFlying(true);
+						if (flying.contains(player.getUniqueId())){
+							Vector broomVec = player.getLocation().getDirection().clone();
+							broomVec.multiply(Math.sqrt(player.getItemInHand().getEnchantmentLevel(Enchantment.PROTECTION_FALL))/40.0);
+							player.setVelocity(player.getVelocity().add(broomVec));
 						}
-						player.setAllowFlight(false);
-						player.setFlying(false);
+					}
+					else{
+						if (player.getGameMode() == GameMode.SURVIVAL){
+							for (OEffect effect : p.getOPlayer(player).getEffects()){
+								if (effect instanceof VENTO_FOLIO){
+									continue playerIter;
+								}
+							}
+							player.setAllowFlight(false);
+							player.setFlying(false);
+						}
 					}
 				}
 			}
