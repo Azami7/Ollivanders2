@@ -455,46 +455,44 @@ public class SpellBookParser{
 				CRESCERE_PROTEGAT + N + FIANTO_DURI + N + HORREAT_PROTEGAT + N + 
 				PARTIS_TEMPORUS + N + SCUTO_CONTERAM + N + PROTEGO + N + 
 				PROTEGO_MAXIMA + N + REPELLO_MUGGLETON + N + PRAEPANDO);
-		bookMap.put("The Standard Book of Spells, Grade 1",
+		bookMap.put("Standard Book of Spells Grade 1",
 				INCENDIO + N + LUMOS + N + REPARO + N + SPONGIFY + N + 
 				WINGARDIUM_LEVIOSA + N + COLLOPORTUS + N + ALOHOMORA + N + 
 				DIFFINDO);
-		bookMap.put("The Standard Book of Spells, Grade 2", 
+		bookMap.put("Standard Book of Spells Grade 2", 
 				EXPELLIARMUS + N + IMMOBULUS + N + INCENDIO + N + LUMOS + N + 
 				OBLIVIATE + N + ALOHOMORA + N + ENGORGIO + N + 
 				FINITE_INCANTATEM + N + REDUCIO + N + DIFFINDO + N + 
 				AVIFORS);
-		bookMap.put("The Standard Book of Spells, Grade 3", 
+		bookMap.put("Standard Book of Spells Grade 3", 
 				AQUA_ERUCTO + N + BOMBARDA + N + EXPELLIARMUS + N + 
 				GLACIUS + N + LUMOS_DUO + N + REPARO + N + DRACONIFORS + N + 
 				CARPE_RETRACTUM);
-		bookMap.put("The Standard Book of Spells, Grade 4", 
+		bookMap.put("Standard Book of Spells Grade 4", 
 				ACCIO + N + ARRESTO_MOMENTUM + N + BOMBARDA_MAXIMA + N + 
 				DUCKLIFORS + N + FIANTO_DURI + N + PROTEGO_HORRIBILIS + N + 
 				PROTEGO_MAXIMA + N + PROTEGO_TOTALUM + N + GLACIUS_DUO + N + 
 				LUMOS_SOLEM);
-		bookMap.put("The Standard Book of Spells, Grade 5", 
+		bookMap.put("Standard Book of Spells Grade 5", 
 				ACCIO + N + EQUUSIFORS + N + EXPELLIARMUS + N + INCENDIO + N + 
 				PROTEGO + N + REPARO + N + SCUTO_CONTERAM + N + STUPEFY + N + 
 				WINGARDIUM_LEVIOSA + N + GLACIUS_TRIA + N + DEPULSO + N + 
 				LEVICORPUS);
-		bookMap.put("The Standard Book of Spells, Grade 6", 
+		bookMap.put("Standard Book of Spells Grade 6", 
 				APPARATE + N + CRESCERE_PROTEGAT + N + HORREAT_PROTEGAT + N + 
 				INCENDIO_DUO + N + COLOVARIA + N + MULTICORFORS + N + DISSENDIUM);
-		bookMap.put("The Standard Book of Spells, Grade 7", 
+		bookMap.put("Standard Book of Spells Grade 7", 
 				NULLUM_APPAREBIT + N + NULLUM_EVANESCUNT + N + PARTIS_TEMPORUS + N + 
 				PIERTOTUM_LOCOMOTOR + N + PORTUS + N + INCENDIO_TRIA + N + 
 				REPELLO_MUGGLETON);
-		bookMap.put("Basic Hexes for the Busy and Vexed", 
+		bookMap.put("Basic Hexes", 
 				IMMOBULUS + N + OBSCURO);
-		bookMap.put("A Compendium of Common Curses and Their Counter-Actions", 
-				INCENDIO_DUO + N + SILENCIO + N + LEVICORPUS + N + LIBERACORPUS);
 		bookMap.put("Confronting the Faceless", 
 				AVADA_KEDAVRA + N + IMPEDIMENTA + N + METEOLOJINX + N + 
 				LUMOS_SOLEM);
 		bookMap.put("Curses and Counter-Curses",
-				METEOLOJINX_RECANTO);
-		bookMap.put("Dark Arts Defence: Basics for Beginners", 
+				METEOLOJINX_RECANTO + N + INCENDIO_DUO + N + SILENCIO + N + LEVICORPUS + N + LIBERACORPUS););
+		bookMap.put("Dark Arts Defence", 
 				ARRESTO_MOMENTUM + N + HARMONIA_NECTERE_PASSUS + N + EPISKEY + N + 
 				METEOLOJINX + N + PERICULUM + N + ARANIA_EXUMAI);
 		bookMap.put("Defensive Magical Theory", 
@@ -503,18 +501,18 @@ public class SpellBookParser{
 		bookMap.put("The Dark Arts Outsmarted",
 				AVADA_KEDAVRA + N + FIENDFYRE + N + INFORMOUS + N + HARMONIA_NECTERE_PASSUS + N + 
 				METEOLOJINX_RECANTO + N + FUMOS_DUO);
-		bookMap.put("The Dark Forces: A Guide to Self-Protection", 
+		bookMap.put("The Dark Forces", 
 				LUMOS + N + MUCUS_AD_NAUSEAM + N + FUMOS);
 		bookMap.put("Guide to Advanced Occlumency", 
 				LEGILIMENS);
 		bookMap.put("Jinxes for the Jinxed", 
 				MUFFLIATO + N + SPONGIFY + N + FLAGRANTE + N + DIMMINUENDO + N + 
 				FINITE_INCANTATEM);
-		bookMap.put("Practical Defensive Magic and Its Use Against the Dark Arts",
+		bookMap.put("Practical Defensive Magic",
 				BRACKIUM_EMENDO + N + FUMOS_DUO);
 		bookMap.put("Self-Defensive Spellwork", 
 				APARECIUM + N + DEPRIMO + N + DEPULSO + N + FUMOS);
-		bookMap.put("Updated Counter-Curse Handbook (Second Revised Edition)", 
+		bookMap.put("Updated Counter-Curse Handbook", 
 				ALARTE_ASCENDARE + N + FLAGRANTE + N + INCENDIO_TRIA + N + 
 				FINITE_INCANTATEM + N + LIBERACORPUS);
 		bookMap.put("Magick Moste Evile",
@@ -530,17 +528,17 @@ public class SpellBookParser{
 						+ "each horcrux they have made. "
 						+ "The only known way of destroying a horcrux is with fiendfyre.\n" + 
 						ET_INTERFICIAM_ANIMAM_LIGAVERIS + N + MORTUOS_SUSCITATE + N + VENTO_FOLIO);
-		bookMap.put("A Beginner's Guide to Transfiguration", 
+		bookMap.put("Beginners Guide to Transfig", 
 				"Transfiguration involves the transformation of one entity into "
 						+ "another. All transfiguration has a time duration, after which "
 						+ "the entity will transfigure back into it's previous state.\n" + 
 						DELETRIUS + N + DUCKLIFORS + N + REPARIFARGE + N + AVIFORS);
-		bookMap.put("A Guide to Advanced Transfiguration", 
+		bookMap.put("Advanced Transfiguration", 
 				AVIS + N + DURO + N + EVANESCO + N + PIERTOTUM_LOCOMOTOR + N + 
 				ENTOMORPHIS);
 		bookMap.put("Intermediate Transfiguration", 
 				AVIS + N + EQUUSIFORS + N + OPPUGNO + N + DRACONIFORS);
-		bookMap.put("Theories of Transubstantial Transfiguration", 
+		bookMap.put("Transubstantial Transfiguration", 
 				"Transubstantial transfiguration encompasses the spells which "
 						+ "seem to break the rules of transfiguration, namely that an "
 						+ "entity must be transfigured into another entity and that "
