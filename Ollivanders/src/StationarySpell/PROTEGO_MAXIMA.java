@@ -5,9 +5,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Hurts any entities within 0.5 meters of the spell wall.
@@ -28,14 +28,14 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
 		this.damage = damage;
 	}
 
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		age();
 		Location loc = location.toLocation();
 		for (Entity e : loc.getWorld().getEntities()){
 			if (e instanceof Player){
 				Player ply = (Player)e;
-				if (ply.isPermissionSet("Ollivanders.BYPASS")){
-					if (ply.hasPermission("Ollivanders.BYPASS")){
+				if (ply.isPermissionSet("Ollivanders2.BYPASS")){
+					if (ply.hasPermission("Ollivanders2.BYPASS")){
 						continue;
 					}
 				}

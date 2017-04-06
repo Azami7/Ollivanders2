@@ -1,13 +1,13 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.Transfiguration;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**
  * Transfigures an iron golem from a block of iron, and snow golem from block of snow.
@@ -16,8 +16,8 @@ import me.cakenggt.Ollivanders.Transfiguration;
  */
 public class PIERTOTUM_LOCOMOTOR extends Transfiguration implements Spell{
 
-	public PIERTOTUM_LOCOMOTOR(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public PIERTOTUM_LOCOMOTOR(Ollivanders2 plugin, Player player, Spells name,
+                               Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

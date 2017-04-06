@@ -1,4 +1,4 @@
-package me.cakenggt.Ollivanders;
+package net.pottercraft.Ollivanders2;
 
 /**
  * Exception that should be thrown if an invalid spell appears.

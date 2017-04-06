@@ -3,9 +3,9 @@ package Spell;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.Transfiguration;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**
  * Transfigures an item into a horse.
@@ -14,8 +14,8 @@ import me.cakenggt.Ollivanders.Transfiguration;
  */
 public class EQUUSIFORS extends Transfiguration implements Spell{
 
-	public EQUUSIFORS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public EQUUSIFORS(Ollivanders2 plugin, Player player, Spells name,
+                      Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

@@ -2,13 +2,13 @@ package Spell;
 
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Blasts spiders away
  * @author lownes
@@ -16,8 +16,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class ARANIA_EXUMAI extends SpellProjectile implements Spell{
 
-	public ARANIA_EXUMAI(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public ARANIA_EXUMAI(Ollivanders2 plugin, Player player, Spells name,
+                         Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

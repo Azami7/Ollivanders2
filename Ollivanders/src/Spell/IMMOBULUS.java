@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**
  * Immobilizes a player for an amount of time depending on the player's
@@ -19,8 +19,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class IMMOBULUS extends SpellProjectile implements Spell{
 
-	public IMMOBULUS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public IMMOBULUS(Ollivanders2 plugin, Player player, Spells name,
+                     Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

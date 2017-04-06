@@ -1,8 +1,8 @@
 package Spell;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  */
 public class BOMBARDA extends SpellProjectile implements Spell{
 	
-	public BOMBARDA(Ollivanders p, Player player, Spells name, Double rightWand){
+	public BOMBARDA(Ollivanders2 p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

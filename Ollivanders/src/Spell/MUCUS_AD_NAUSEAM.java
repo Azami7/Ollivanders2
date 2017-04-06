@@ -2,14 +2,11 @@ package Spell;
 
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Effects;
-import me.cakenggt.Ollivanders.OPlayer;
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**Adds a MUCUS_AD_NAUSEAM oeffect to the player
  * @author lownes
@@ -17,8 +14,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class MUCUS_AD_NAUSEAM extends SpellProjectile implements Spell{
 
-	public MUCUS_AD_NAUSEAM(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public MUCUS_AD_NAUSEAM(Ollivanders2 plugin, Player player, Spells name,
+                            Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

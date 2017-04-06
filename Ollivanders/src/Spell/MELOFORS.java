@@ -1,14 +1,14 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Encases target's head in a melon itemstack with amount 0
  * @author lownes
@@ -16,8 +16,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class MELOFORS extends SpellProjectile implements Spell{
 
-	public MELOFORS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public MELOFORS(Ollivanders2 plugin, Player player, Spells name,
+                    Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

@@ -1,5 +1,6 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.Material;
@@ -9,9 +10,8 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Shoots a red firework up.
  * @author lownes
@@ -22,8 +22,8 @@ public class PERICULUM extends SpellProjectile implements Spell{
 	private double lifeTime;
 	
 	@SuppressWarnings("deprecation")
-	public PERICULUM(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public PERICULUM(Ollivanders2 plugin, Player player, Spells name,
+                     Double rightWand) {
 		super(plugin, player, name, rightWand);
 		lifeTime = usesModifier*6;
 		moveEffectData = Material.REDSTONE_BLOCK.getId();

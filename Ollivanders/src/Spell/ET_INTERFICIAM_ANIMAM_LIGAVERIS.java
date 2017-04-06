@@ -2,6 +2,7 @@ package Spell;
 
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,11 +10,7 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 
 import StationarySpell.HORCRUX;
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Creates a horcrux stationary spell object where it collides with a block. 
@@ -23,8 +20,8 @@ import me.cakenggt.Ollivanders.StationarySpells;
  */
 public class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends SpellProjectile implements Spell{
 
-	public ET_INTERFICIAM_ANIMAM_LIGAVERIS(Ollivanders plugin, Player player,
-			Spells name, Double rightWand) {
+	public ET_INTERFICIAM_ANIMAM_LIGAVERIS(Ollivanders2 plugin, Player player,
+                                           Spells name, Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

@@ -3,6 +3,7 @@ package Spell;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -10,9 +11,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Burns sun-sensitive entities with a radius
  * @author lownes
@@ -23,8 +23,8 @@ public class LUMOS_SOLEM extends SpellProjectile implements Spell {
 	boolean move = true;
 	Set<Block> blocks = new HashSet<Block>();
 
-	public LUMOS_SOLEM(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public LUMOS_SOLEM(Ollivanders2 plugin, Player player, Spells name,
+                       Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

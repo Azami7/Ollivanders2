@@ -1,13 +1,13 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Giant;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Shrinks a giant to a normal zombie. It's radius depends on experience
  * @author lownes
@@ -15,8 +15,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class REDUCIO extends SpellProjectile implements Spell{
 
-	public REDUCIO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public REDUCIO(Ollivanders2 plugin, Player player, Spells name,
+                   Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

@@ -3,10 +3,10 @@ package Spell;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Makes an anti-disapparition spell. Players can't apparate out of it.
@@ -15,8 +15,8 @@ import me.cakenggt.Ollivanders.StationarySpells;
  */
 public class NULLUM_EVANESCUNT extends SpellProjectile implements Spell{
 
-	public NULLUM_EVANESCUNT(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public NULLUM_EVANESCUNT(Ollivanders2 plugin, Player player, Spells name,
+                             Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

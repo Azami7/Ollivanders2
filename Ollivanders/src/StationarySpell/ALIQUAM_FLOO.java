@@ -14,9 +14,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.Effect;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**Stays in the fireplace and makes the floo network work
  * @author lownes
@@ -38,7 +38,7 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell 
 	}
 
 	@Override
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		Location loc = location.toLocation();
 		Block block = loc.getBlock();
 		if (block.getType().isSolid()){

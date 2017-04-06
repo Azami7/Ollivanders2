@@ -7,9 +7,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**
  * Creates a line of glowstone that goes away after a time.
@@ -20,8 +20,8 @@ public class LUMOS_DUO extends SpellProjectile implements Spell{
 
 	List<Block> line = new ArrayList<Block>();
 	
-	public LUMOS_DUO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public LUMOS_DUO(Ollivanders2 plugin, Player player, Spells name,
+                     Double rightWand) {
 		super(plugin, player, name, rightWand);
 		lifeTicks = (int)(-(usesModifier*20));
 	}

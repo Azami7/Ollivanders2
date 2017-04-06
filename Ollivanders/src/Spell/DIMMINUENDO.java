@@ -1,14 +1,14 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Zombie;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Makes certain entities babies and slimes smaller
  * @author lownes
@@ -16,8 +16,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class DIMMINUENDO extends SpellProjectile implements Spell{
 
-	public DIMMINUENDO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public DIMMINUENDO(Ollivanders2 plugin, Player player, Spells name,
+                       Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

@@ -4,7 +4,7 @@
  * This class provides the means to safely and easily update a plugin, or check to see if it is updated using dev.bukkit.org
  */
 
-package me.cakenggt.Ollivanders;
+package net.pottercraft.Ollivanders2;
 
 import java.io.*;
 import java.net.MalformedURLException;

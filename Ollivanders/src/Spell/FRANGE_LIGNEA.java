@@ -3,9 +3,9 @@ package Spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -21,7 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class FRANGE_LIGNEA extends SpellProjectile implements Spell{
 
-	public FRANGE_LIGNEA(Ollivanders p, Player player, Spells name, Double rightWand){
+	public FRANGE_LIGNEA(Ollivanders2 p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

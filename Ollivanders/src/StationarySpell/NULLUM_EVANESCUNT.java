@@ -1,11 +1,11 @@
 package StationarySpell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Anti-disapparition spell. Players can't apparate out of it.
@@ -24,7 +24,7 @@ public class NULLUM_EVANESCUNT extends StationarySpellObj implements StationaryS
 		super(player, location, name, radius, duration);
 	}
 
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		age();
 	}
 	

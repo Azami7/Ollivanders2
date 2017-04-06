@@ -7,9 +7,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Causes blindness in a radius larger than fumos
  * @author lownes
@@ -17,8 +17,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class FUMOS_DUO extends SpellProjectile implements Spell {
 
-	public FUMOS_DUO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public FUMOS_DUO(Ollivanders2 plugin, Player player, Spells name,
+                     Double rightWand) {
 		super(plugin, player, name, rightWand);
 		moveEffect = Effect.SMOKE;
 		moveEffectData = 4;

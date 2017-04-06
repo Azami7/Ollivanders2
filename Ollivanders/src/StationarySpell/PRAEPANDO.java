@@ -9,10 +9,10 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.ExtraDimensional;
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.ExtraDimensional;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 public class PRAEPANDO extends ExtraDimensional implements StationarySpell {
 
@@ -28,7 +28,7 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell {
 	}
 
 	@Override
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		Location edLocation = getEDLoc().toLocation().clone().add(0, 1.1, 0);
 		Location normLocation = location.toLocation();
 		edLocation.getWorld().playEffect(edLocation, Effect.MOBSPAWNER_FLAMES, 0);

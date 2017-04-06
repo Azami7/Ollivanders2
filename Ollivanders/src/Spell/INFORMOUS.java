@@ -11,13 +11,13 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import Effect.LYCANTHROPY;
-import me.cakenggt.Ollivanders.Effects;
-import me.cakenggt.Ollivanders.OEffect;
-import me.cakenggt.Ollivanders.OPlayer;
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
+import net.pottercraft.Ollivanders2.Effects;
+import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.OPlayer;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 /**
  * Gives information on LivingEntity (health) and StationarySpellObj (duration)
@@ -32,8 +32,8 @@ public class INFORMOUS extends SpellProjectile implements Spell{
 	boolean toldWeather = false;
 	private double lifeTime;
 
-	public INFORMOUS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public INFORMOUS(Ollivanders2 plugin, Player player, Spells name,
+                     Double rightWand) {
 		super(plugin, player, name, rightWand);
 		lifeTime = usesModifier*16;
 	}

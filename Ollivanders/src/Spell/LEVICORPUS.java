@@ -3,11 +3,11 @@ package Spell;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Effects;
-import me.cakenggt.Ollivanders.OPlayer;
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Effects;
+import net.pottercraft.Ollivanders2.OPlayer;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Puts a levicorpus effect on the player
  * @author lownes
@@ -15,8 +15,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class LEVICORPUS extends SpellProjectile implements Spell {
 
-	public LEVICORPUS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public LEVICORPUS(Ollivanders2 plugin, Player player, Spells name,
+                      Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

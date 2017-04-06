@@ -1,13 +1,13 @@
 package Effect;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 
-import me.cakenggt.Ollivanders.Effects;
-import me.cakenggt.Ollivanders.OEffect;
-import me.cakenggt.Ollivanders.Ollivanders;
+import net.pottercraft.Ollivanders2.Effects;
+import net.pottercraft.Ollivanders2.OEffect;
 
 /**Turns player into a werewolf during the full moon. Doesn't go away until death.
  * @author lownes
@@ -26,7 +26,7 @@ public class LYCANTHROPY extends OEffect implements Effect {
 	}
 
 	@Override
-	public void checkEffect(Ollivanders p, Player owner) {
+	public void checkEffect(Ollivanders2 p, Player owner) {
 		long time = owner.getWorld().getFullTime();
 		long dayOrNight = (time/12000)%2;
 		long days=time/24000;

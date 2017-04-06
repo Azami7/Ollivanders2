@@ -1,13 +1,13 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Gives a target blindness
  * @author lownes
@@ -15,8 +15,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class OBSCURO extends SpellProjectile implements Spell {
 
-	public OBSCURO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public OBSCURO(Ollivanders2 plugin, Player player, Spells name,
+                   Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Enchants a flying broomstick
  * @author lownes
@@ -19,8 +19,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class VOLATUS extends SpellProjectile implements Spell {
 
-	public VOLATUS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public VOLATUS(Ollivanders2 plugin, Player player, Spells name,
+                   Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

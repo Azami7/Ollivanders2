@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 /**
  * Grows a stationarySpellObject's radius. Only the player who created the stationarySpellObject can change it's radius.
@@ -17,8 +17,8 @@ import me.cakenggt.Ollivanders.StationarySpellObj;
  */
 public class CRESCERE_PROTEGAT extends SpellProjectile implements Spell{
 
-	public CRESCERE_PROTEGAT(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public CRESCERE_PROTEGAT(Ollivanders2 plugin, Player player, Spells name,
+                             Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

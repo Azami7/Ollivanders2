@@ -2,10 +2,10 @@ package Spell;
 
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 /**
  * Temporarily disables a stationary spell's effects if it is your spell.
@@ -16,8 +16,8 @@ public class PARTIS_TEMPORUS extends SpellProjectile implements Spell{
 
 	public boolean move;
 	
-	public PARTIS_TEMPORUS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public PARTIS_TEMPORUS(Ollivanders2 plugin, Player player, Spells name,
+                           Double rightWand) {
 		super(plugin, player, name, rightWand);
 		move = true;
 	}

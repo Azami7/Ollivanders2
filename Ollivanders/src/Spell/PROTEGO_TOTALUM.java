@@ -3,10 +3,10 @@ package Spell;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Creates a PROTEGO_TOTALUM Stationary Spell Object
@@ -15,8 +15,8 @@ import me.cakenggt.Ollivanders.StationarySpells;
  */
 public class PROTEGO_TOTALUM extends SpellProjectile implements Spell{
 
-	public PROTEGO_TOTALUM(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public PROTEGO_TOTALUM(Ollivanders2 plugin, Player player, Spells name,
+                           Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

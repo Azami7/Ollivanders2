@@ -5,9 +5,9 @@ import java.util.List;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Throws another player away from the caster. Twice as powerful as depulso.
  * @author lownes
@@ -15,8 +15,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class EVERTE_STATUM extends SpellProjectile implements Spell{
 
-	public EVERTE_STATUM(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public EVERTE_STATUM(Ollivanders2 plugin, Player player, Spells name,
+                         Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

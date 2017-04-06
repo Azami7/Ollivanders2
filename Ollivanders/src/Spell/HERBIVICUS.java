@@ -3,6 +3,7 @@ package Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.CropState;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,9 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.Crops;
 import org.bukkit.material.MaterialData;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Herbivicus causes crops in a radius to grow.
  * @author lownes
@@ -21,8 +21,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class HERBIVICUS extends SpellProjectile implements Spell{
 
-	public HERBIVICUS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public HERBIVICUS(Ollivanders2 plugin, Player player, Spells name,
+                      Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

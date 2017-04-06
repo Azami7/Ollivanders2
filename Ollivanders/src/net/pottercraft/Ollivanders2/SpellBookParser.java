@@ -1,4 +1,4 @@
-package me.cakenggt.Ollivanders;
+package net.pottercraft.Ollivanders2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -286,7 +286,7 @@ public class SpellBookParser{
 	 * @param meta - The BookMeta of the book
 	 * @return newMeta - The new BookMeta of the book, which is passed to the event
 	 */
-	public static BookMeta encode(Ollivanders p, Player player, BookMeta meta){
+	public static BookMeta encode(Ollivanders2 p, Player player, BookMeta meta){
 		String pageString = getPageString(meta);
 		List<String> spellStrings = spellList();
 		List<String> lore = new ArrayList<String>();
@@ -336,7 +336,7 @@ public class SpellBookParser{
 	 * @param player - The player reading the book
 	 * @param imeta - The book's metadata
 	 */
-	public static void decode(Ollivanders p, Player player, ItemMeta imeta){
+	public static void decode(Ollivanders2 p, Player player, ItemMeta imeta){
 		if (imeta.hasLore()){
 			List<String> lore = imeta.getLore();
 			String[] line;
@@ -491,7 +491,7 @@ public class SpellBookParser{
 				AVADA_KEDAVRA + N + IMPEDIMENTA + N + METEOLOJINX + N + 
 				LUMOS_SOLEM);
 		bookMap.put("Curses and Counter-Curses",
-				METEOLOJINX_RECANTO + N + INCENDIO_DUO + N + SILENCIO + N + LEVICORPUS + N + LIBERACORPUS););
+				METEOLOJINX_RECANTO + N + INCENDIO_DUO + N + SILENCIO + N + LEVICORPUS + N + LIBERACORPUS);
 		bookMap.put("Dark Arts Defence", 
 				ARRESTO_MOMENTUM + N + HARMONIA_NECTERE_PASSUS + N + EPISKEY + N + 
 				METEOLOJINX + N + PERICULUM + N + ARANIA_EXUMAI);
@@ -595,7 +595,7 @@ public class SpellBookParser{
 				+ "Wolfsbane Potion will relieve you of the effects of Lycanthropy for as long as "
 				+ "it is active. It is not a cure, but a treatment. This potion is brewed with 2 "
 				+ "spider eyes and 3 rotten flesh.");
-		FileConfiguration config = Bukkit.getPluginManager().getPlugin("Ollivanders").getConfig();
+		FileConfiguration config = Bukkit.getPluginManager().getPlugin("Ollivanders2").getConfig();
 		if (config.getBoolean("divination")){
 			bookMap.put("Unfogging the Future", 
 					"Divination is a complex and monumental area of study for "

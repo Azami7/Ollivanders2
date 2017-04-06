@@ -1,4 +1,4 @@
-package me.cakenggt.Ollivanders;
+package net.pottercraft.Ollivanders2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 /**
- * Stationary spell object in Ollivanders
+ * Stationary spell object in Ollivanders2
  * @author lownes
  *
  */
@@ -197,7 +197,7 @@ public abstract class StationarySpellObj implements Serializable{
 
 	/**
 	 * Translates spherical coords to vector
-	 * @param double array with indexes 0=inclination 1=azimuth
+	 * @param spher array with indexes 0=inclination 1=azimuth
 	 * @return Vector
 	 */
 	private Vector spherToVec(double[] spher){

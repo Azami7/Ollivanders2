@@ -3,15 +3,15 @@ package Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.Transfiguration;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**Transfigures wand into research object (ender crystal). Contains code
  * for research.
@@ -20,8 +20,8 @@ import me.cakenggt.Ollivanders.Transfiguration;
  */
 public class FORSKNING extends Transfiguration implements Spell{
 
-	public FORSKNING(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public FORSKNING(Ollivanders2 plugin, Player player, Spells name,
+                     Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 
@@ -29,7 +29,7 @@ public class FORSKNING extends Transfiguration implements Spell{
 		if (!hasTransfigured()){
 			move();
 			for (Item item : getItems(1)){
-				if (Ollivanders.isWand(item.getItemStack())){
+				if (Ollivanders2.isWand(item.getItemStack())){
 					transfigureEntity(item, EntityType.ENDER_CRYSTAL, null);
 				}
 			}
@@ -66,10 +66,10 @@ public class FORSKNING extends Transfiguration implements Spell{
 				double x = (double)i/candidateSpells.size();
 				double pitch = (x*x)+(0.5*x)+0.5;
 				if (Spells.decode(message) == null){
-					world.playSound(location, Sound.NOTE_PIANO, 1, (float) pitch);
+					world.playSound(location, Sound.BLOCK_NOTE_PLING, 1, (float) pitch);
 				}
 				else{
-					world.playSound(location, Sound.LEVEL_UP, 1, 1);
+					world.playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
 				}
 			}
 		}

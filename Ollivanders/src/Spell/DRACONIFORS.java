@@ -1,11 +1,11 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.Transfiguration;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**Transfiguration spell for a Dragon. OllivandersPlayerListener.draconiforsBlockChange()
  * keeps any transfigured dragons from destroying terrain.
@@ -14,8 +14,8 @@ import me.cakenggt.Ollivanders.Transfiguration;
  */
 public class DRACONIFORS extends Transfiguration implements Spell{
 
-	public DRACONIFORS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public DRACONIFORS(Ollivanders2 plugin, Player player, Spells name,
+                       Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

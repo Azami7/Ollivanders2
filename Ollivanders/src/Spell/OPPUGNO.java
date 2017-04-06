@@ -5,10 +5,10 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.Transfiguration;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**
  * All animals that you have created through transfiguration will target the targeted LivingEntity.
@@ -17,8 +17,8 @@ import me.cakenggt.Ollivanders.Transfiguration;
  */
 public class OPPUGNO extends SpellProjectile implements Spell{
 
-	public OPPUGNO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public OPPUGNO(Ollivanders2 plugin, Player player, Spells name,
+                   Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

@@ -8,9 +8,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Player will spawn here when killed, with all of their spell levels intact.
@@ -30,14 +30,14 @@ public class HORCRUX extends StationarySpellObj implements StationarySpell{
 		super(player, location, name, radius, duration);
 	}
 
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		List<LivingEntity> entities = getLivingEntities();
 		for(LivingEntity entity : entities){
 			if (entity instanceof Player){
 				if (entity.getUniqueId() != getPlayerUUID()){
 					Player player = (Player)entity;
-					if (player.isPermissionSet("Ollivanders.BYPASS")){
-						if (player.hasPermission("Ollivanders.BYPASS")){
+					if (player.isPermissionSet("Ollivanders2.BYPASS")){
+						if (player.hasPermission("Ollivanders2.BYPASS")){
 							continue;
 						}
 					}

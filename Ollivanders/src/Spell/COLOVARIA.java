@@ -10,9 +10,9 @@ import org.bukkit.entity.Sheep;
 import org.bukkit.material.Colorable;
 import org.bukkit.material.MaterialData;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Changes color of sheep and colorable blocks
  * @author lownes
@@ -20,8 +20,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class COLOVARIA extends SpellProjectile implements Spell{
 
-	public COLOVARIA(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public COLOVARIA(Ollivanders2 plugin, Player player, Spells name,
+                     Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

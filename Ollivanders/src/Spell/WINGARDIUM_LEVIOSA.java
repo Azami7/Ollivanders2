@@ -13,10 +13,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import StationarySpell.COLLOPORTUS;
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 /**Moves a group of blocks.
  * @author lownes
@@ -31,8 +31,8 @@ public class WINGARDIUM_LEVIOSA extends SpellProjectile implements Spell{
 	double length = 0;
 	boolean dropBlocks = true;	//If the blocks should be converted to fallingBlocks after the end of the spell.
 
-	public WINGARDIUM_LEVIOSA(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public WINGARDIUM_LEVIOSA(Ollivanders2 plugin, Player player, Spells name,
+                              Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

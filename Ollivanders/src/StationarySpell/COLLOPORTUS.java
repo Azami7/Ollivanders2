@@ -3,9 +3,9 @@ package StationarySpell;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**Prevents any block events in an area
  * @author lownes
@@ -23,7 +23,7 @@ public class COLLOPORTUS extends StationarySpellObj implements StationarySpell{
 		super(player, location, name, radius, duration);
 	}
 
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		
 	}
 	

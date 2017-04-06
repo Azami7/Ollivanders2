@@ -1,11 +1,11 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Open the target LivingEntity's inventory
  * @author lownes
@@ -13,8 +13,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class LEGILIMENS extends SpellProjectile implements Spell {
 
-	public LEGILIMENS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public LEGILIMENS(Ollivanders2 plugin, Player player, Spells name,
+                      Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

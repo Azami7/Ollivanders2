@@ -4,16 +4,16 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.OLocation;
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.OLocation;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**Checks for entities going into a vanishing cabinet
  * @author lownes
@@ -36,7 +36,7 @@ StationarySpell {
 	}
 
 	@Override
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		HARMONIA_NECTERE_PASSUS twinHarm = null;
 		for (StationarySpellObj stat : p.getStationary()){
 			if (stat instanceof HARMONIA_NECTERE_PASSUS && stat.location.toLocation().getBlock().equals(twin.toLocation().getBlock())){

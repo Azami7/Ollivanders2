@@ -1,4 +1,4 @@
-package me.cakenggt.Ollivanders;
+package net.pottercraft.Ollivanders2;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -31,7 +31,7 @@ public abstract class SpellProjectile{
 	public Vector vector;
 	public int lifeTicks;
 	public boolean kill;
-	public Ollivanders p;
+	public Ollivanders2 p;
 	public double rightWand;
 	public int spellUses;
 	public double usesModifier;
@@ -44,7 +44,7 @@ public abstract class SpellProjectile{
 	//Constructor
 	//In the chat distance dropoff code, there will be code that turns the spoken
 	//words into a Spells object.
-	public SpellProjectile(Ollivanders plugin, Player player, Spells name, Double rightWand){
+	public SpellProjectile(Ollivanders2 plugin, Player player, Spells name, Double rightWand){
 		location = player.getEyeLocation();
 		vector = location.getDirection().normalize();
 		location.add(vector);

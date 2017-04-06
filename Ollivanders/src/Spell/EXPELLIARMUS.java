@@ -2,9 +2,9 @@ package Spell;
 
 import java.util.List;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -21,7 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class EXPELLIARMUS extends SpellProjectile implements Spell{
 
-	public EXPELLIARMUS(Ollivanders p, Player player, Spells name, Double rightWand){
+	public EXPELLIARMUS(Ollivanders2 p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 
@@ -44,7 +44,7 @@ public class EXPELLIARMUS extends SpellProjectile implements Spell{
 	}
 
 	/**Does the player hold a wand item?
-	 * @param player - Player to check.
+	 * @param entity - Player to check.
 	 * @return True if the player holds a wand. False if not.
 	 */
 	public boolean holdsWand(LivingEntity entity){
@@ -70,7 +70,7 @@ public class EXPELLIARMUS extends SpellProjectile implements Spell{
 	}
 
 	/**Modifies the ItemStack, allying it to the disarming player.
-	 * @param item - ItemStack that may be a wand.
+	 * @param wand - ItemStack that may be a wand.
 	 */
 	private void allyWand(ItemStack wand){
 		ItemMeta wandMeta = wand.getItemMeta();

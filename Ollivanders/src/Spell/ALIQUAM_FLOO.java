@@ -6,11 +6,11 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**Registers a new floo network entry
  * @author lownes
@@ -18,8 +18,8 @@ import me.cakenggt.Ollivanders.StationarySpells;
  */
 public class ALIQUAM_FLOO extends SpellProjectile implements Spell {
 
-	public ALIQUAM_FLOO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public ALIQUAM_FLOO(Ollivanders2 plugin, Player player, Spells name,
+                        Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

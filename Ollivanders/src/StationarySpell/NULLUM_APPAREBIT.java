@@ -3,9 +3,9 @@ package StationarySpell;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Anti-apparition spell.
@@ -24,7 +24,7 @@ public class NULLUM_APPAREBIT extends StationarySpellObj implements StationarySp
 		super(player, location, name, radius, duration);
 	}
 
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		age();
 	}
 	

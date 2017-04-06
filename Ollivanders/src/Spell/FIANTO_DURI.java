@@ -5,10 +5,10 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 /**
  * Lengthens the duration of shield spells
@@ -17,8 +17,8 @@ import me.cakenggt.Ollivanders.StationarySpellObj;
  */
 public class FIANTO_DURI extends SpellProjectile implements Spell{
 
-	public FIANTO_DURI(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public FIANTO_DURI(Ollivanders2 plugin, Player player, Spells name,
+                       Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

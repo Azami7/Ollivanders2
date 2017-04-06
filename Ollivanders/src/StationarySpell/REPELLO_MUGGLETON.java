@@ -1,14 +1,14 @@
 package StationarySpell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**Hides all blocks within its area by sending out block changes.
  * Hides all players within its area. The code to hide players is located
@@ -29,7 +29,7 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
 	}
 
 	@SuppressWarnings("deprecation")
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		age();
 		if (p.getConfig().getBoolean("muggletonBlockChange")){
 			if (duration % 20 == 0){
@@ -37,8 +37,8 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
 				byte toDat = getBlock().getData();
 				double viewDistance = Math.sqrt(2*Math.pow(((Bukkit.getServer().getViewDistance()+1)*16),2));
 				for (Player ply : getBlock().getWorld().getPlayers()){
-					if (ply.isPermissionSet("Ollivanders.BYPASS")){
-						if (ply.hasPermission("Ollivanders.BYPASS")){
+					if (ply.isPermissionSet("Ollivanders2.BYPASS")){
+						if (ply.hasPermission("Ollivanders2.BYPASS")){
 							continue;
 						}
 					}

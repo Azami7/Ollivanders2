@@ -1,12 +1,12 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Makes a spell projectile that creates a sheid that hurts any entities within 0.5 meters of the spell wall.
@@ -15,8 +15,8 @@ import me.cakenggt.Ollivanders.StationarySpells;
  */
 public class PROTEGO_MAXIMA extends SpellProjectile implements Spell{
 
-	public PROTEGO_MAXIMA(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public PROTEGO_MAXIMA(Ollivanders2 plugin, Player player, Spells name,
+                          Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

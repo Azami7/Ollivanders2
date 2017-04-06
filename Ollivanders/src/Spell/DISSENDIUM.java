@@ -1,14 +1,14 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Openable;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**Opens a trapdoor or door.
  * @author lownes
@@ -21,8 +21,8 @@ public class DISSENDIUM extends SpellProjectile implements Spell {
 	private int openTime;
 	private boolean open;
 
-	public DISSENDIUM(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public DISSENDIUM(Ollivanders2 plugin, Player player, Spells name,
+                      Double rightWand) {
 		super(plugin, player, name, rightWand);
 		lifeTime = usesModifier*16;
 		move = true;

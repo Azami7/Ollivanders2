@@ -1,4 +1,4 @@
-package me.cakenggt.Ollivanders;
+package net.pottercraft.Ollivanders2;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -76,9 +76,9 @@ import StationarySpell.SPONGIFY;
  */
 public class OllivandersListener implements Listener {
 
-	Ollivanders p;
+	Ollivanders2 p;
 
-	public OllivandersListener(Ollivanders plugin) {
+	public OllivandersListener(Ollivanders2 plugin) {
 		p = plugin;
 	}
 
@@ -96,8 +96,8 @@ public class OllivandersListener implements Listener {
 	 * @param event
 	 */
 	private void protegoTotalum(PlayerMoveEvent event){
-		if (event.getPlayer().isPermissionSet("Ollivanders.BYPASS")){
-			if (event.getPlayer().hasPermission("Ollivanders.BYPASS")){
+		if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS")){
+			if (event.getPlayer().hasPermission("Ollivanders2.BYPASS")){
 				return;
 			}
 		}
@@ -130,8 +130,8 @@ public class OllivandersListener implements Listener {
 				StationarySpell.ALIQUAM_FLOO aliquam = (ALIQUAM_FLOO) stat;
 				if (player.getLocation().getBlock().equals(aliquam.getBlock()) && aliquam.isWorking()){
 					//Floo network
-					if (player.isPermissionSet("Ollivanders.Floo")){
-						if (!player.hasPermission("Ollivanders.Floo")){
+					if (player.isPermissionSet("Ollivanders2.Floo")){
+						if (!player.hasPermission("Ollivanders2.Floo")){
 							player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "You do not have permission to use the Floo Network.");
 							return;
 						}
@@ -172,8 +172,8 @@ public class OllivandersListener implements Listener {
 		if (effects != null){
 			for (OEffect effect : effects){
 				if (effect.name == Effects.SILENCIO){
-					if (sender.isPermissionSet("Ollivanders.BYPASS")){
-						if (!sender.hasPermission("Ollivanders.BYPASS")){
+					if (sender.isPermissionSet("Ollivanders2.BYPASS")){
+						if (!sender.hasPermission("Ollivanders2.BYPASS")){
 							event.getRecipients().clear();
 							return;
 						}
@@ -243,8 +243,8 @@ public class OllivandersListener implements Listener {
 		}
 		for (Player remRec : remRecipients){
 			try {
-				if (remRec.isPermissionSet("Ollivanders.BYPASS")){
-					if (!remRec.hasPermission("Ollivanders.BYPASS")){
+				if (remRec.isPermissionSet("Ollivanders2.BYPASS")){
+					if (!remRec.hasPermission("Ollivanders2.BYPASS")){
 						recipients.remove(remRec);
 					}
 				}
@@ -313,8 +313,8 @@ public class OllivandersListener implements Listener {
 				canApparateOut = false;
 			}
 		}
-		if (sender.isPermissionSet("Ollivanders.BYPASS")){
-			if (sender.hasPermission("Ollivanders.BYPASS")){
+		if (sender.isPermissionSet("Ollivanders2.BYPASS")){
+			if (sender.hasPermission("Ollivanders2.BYPASS")){
 				canApparateOut = true;
 			}
 		}
@@ -364,8 +364,8 @@ public class OllivandersListener implements Listener {
 					canApparateIn = false;
 				}
 			}
-			if (sender.isPermissionSet("Ollivanders.BYPASS")){
-				if (sender.hasPermission("Ollivanders.BYPASS")){
+			if (sender.isPermissionSet("Ollivanders2.BYPASS")){
+				if (sender.hasPermission("Ollivanders2.BYPASS")){
 					canApparateIn = true;
 				}
 			}
@@ -406,23 +406,23 @@ public class OllivandersListener implements Listener {
 									if (recipient != null){
 										if (recipient.isOnline()){
 											if (recipient.getWorld().getUID().equals(world.getUID())){
-												world.playSound(cat.getLocation(),Sound.CAT_MEOW,1, 0);
+												world.playSound(cat.getLocation(),Sound.ENTITY_CAT_PURREOW,1, 0);
 												cat.teleport(recipient.getLocation());
 												item.teleport(recipient.getLocation());
-												world.playSound(cat.getLocation(),Sound.CAT_MEOW,1, 0);
+												world.playSound(cat.getLocation(),Sound.ENTITY_CAT_PURREOW,1, 0);
 											}
 											else{
-												world.playSound(cat.getLocation(),Sound.CAT_HISS,1, 0);
+												world.playSound(cat.getLocation(),Sound.ENTITY_CAT_HISS,1, 0);
 												sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not in this world.");
 											}
 										}
 										else{
-											world.playSound(cat.getLocation(),Sound.CAT_HISS,1, 0);
+											world.playSound(cat.getLocation(),Sound.ENTITY_CAT_HISS,1, 0);
 											sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
 										}
 									}
 									else{
-										world.playSound(cat.getLocation(),Sound.CAT_HISS,1, 0);
+										world.playSound(cat.getLocation(),Sound.ENTITY_CAT_HISS,1, 0);
 										sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
 									}
 									return;
@@ -446,7 +446,7 @@ public class OllivandersListener implements Listener {
 		Constructor c = null;
 		try {
 			//Maybe you have to use Integer.TYPE here instead of Integer.class
-			c = Class.forName(spellClass).getConstructor(Ollivanders.class, Player.class, Spells.class, Double.class);
+			c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, Spells.class, Double.class);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchMethodException e) {
@@ -502,7 +502,7 @@ public class OllivandersListener implements Listener {
 				Spells spell = oplayer.getSpell();
 				if (spell == null){
 					event.getPlayer().getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
-					event.getPlayer().getWorld().playSound(location, Sound.LEVEL_UP, 1, 1);
+					event.getPlayer().getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
 				}
 			}
 			//Toggle between known spells
@@ -705,8 +705,8 @@ public class OllivandersListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onColloBlockPlaceEvent(BlockPlaceEvent event){
 		if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation())){
-			if (event.getPlayer().isPermissionSet("Ollivanders.BYPASS")){
-				if (!event.getPlayer().hasPermission("Ollivanders.BYPASS")){
+			if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS")){
+				if (!event.getPlayer().hasPermission("Ollivanders2.BYPASS")){
 					event.getBlock().breakNaturally();
 				}
 			}
@@ -722,8 +722,8 @@ public class OllivandersListener implements Listener {
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onColloBlockBreakEvent(BlockBreakEvent event){
 		if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation())){
-			if (event.getPlayer().isPermissionSet("Ollivanders.BYPASS")){
-				if (!event.getPlayer().hasPermission("Ollivanders.BYPASS")){
+			if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS")){
+				if (!event.getPlayer().hasPermission("Ollivanders2.BYPASS")){
 					event.setCancelled(true);
 				}
 			}
@@ -752,8 +752,8 @@ public class OllivandersListener implements Listener {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK || 
 				event.getAction() == Action.RIGHT_CLICK_BLOCK){
 			if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getClickedBlock().getLocation())){
-				if (event.getPlayer().isPermissionSet("Ollivanders.BYPASS")){
-					if (!event.getPlayer().hasPermission("Ollivanders.BYPASS")){
+				if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS")){
+					if (!event.getPlayer().hasPermission("Ollivanders2.BYPASS")){
 						event.setCancelled(true);
 					}
 				}
@@ -869,7 +869,7 @@ public class OllivandersListener implements Listener {
 				return 0.5;
 			}
 		}
-		if (Ollivanders.destinedWand(player, player.getItemInHand())){
+		if (Ollivanders2.destinedWand(player, player.getItemInHand())){
 			if (lore.size() == 2){
 				if (lore.get(1).equals(player.getUniqueId().toString())){
 					return 1;

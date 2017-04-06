@@ -10,9 +10,9 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**
  * Sets fire to blocks. Also sets fire to living entities and items for
@@ -25,8 +25,8 @@ public class INCENDIO extends SpellProjectile implements Spell{
 	private double lifeTime;
 	boolean move;
 
-	public INCENDIO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public INCENDIO(Ollivanders2 plugin, Player player, Spells name,
+                    Double rightWand) {
 		super(plugin, player, name, rightWand);
 		lifeTime = usesModifier*16;
 		move = true;

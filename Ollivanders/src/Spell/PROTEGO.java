@@ -1,16 +1,16 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 public class PROTEGO extends SpellProjectile implements Spell{
 
-	public PROTEGO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public PROTEGO(Ollivanders2 plugin, Player player, Spells name,
+                   Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

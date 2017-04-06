@@ -2,9 +2,9 @@ package Effect;
 
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Effects;
-import me.cakenggt.Ollivanders.OEffect;
-import me.cakenggt.Ollivanders.Ollivanders;
+import net.pottercraft.Ollivanders2.Effects;
+import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 public class BARUFFIOS_BRAIN_ELIXIR extends OEffect implements Effect {
 
@@ -18,7 +18,7 @@ public class BARUFFIOS_BRAIN_ELIXIR extends OEffect implements Effect {
 	}
 
 	@Override
-	public void checkEffect(Ollivanders p, Player owner) {
+	public void checkEffect(Ollivanders2 p, Player owner) {
 		age(1);
 	}
 

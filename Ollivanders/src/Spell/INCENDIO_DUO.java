@@ -11,9 +11,9 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**
  * Creates a larger incendio that doesn't stop after hitting an entity.
@@ -25,8 +25,8 @@ public class INCENDIO_DUO extends SpellProjectile implements Spell{
 	private double lifeTime;
 	boolean move;
 
-	public INCENDIO_DUO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public INCENDIO_DUO(Ollivanders2 plugin, Player player, Spells name,
+                        Double rightWand) {
 		super(plugin, player, name, rightWand);
 		location.add(vector);
 		lifeTime = usesModifier*16;

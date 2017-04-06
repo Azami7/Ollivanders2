@@ -2,6 +2,7 @@ package Spell;
 
 import java.util.ArrayList;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -9,9 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Drops random items from a player's inventory. Also cuts down trees.
  * @author lownes
@@ -19,8 +19,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class DIFFINDO extends SpellProjectile implements Spell{
 
-	public DIFFINDO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public DIFFINDO(Ollivanders2 plugin, Player player, Spells name,
+                    Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

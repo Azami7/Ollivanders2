@@ -9,11 +9,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.cakenggt.Ollivanders.OEffect;
-import me.cakenggt.Ollivanders.OPlayer;
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.OPlayer;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Reduces any spell effects on an item
  * @author lownes
@@ -21,8 +21,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class FINITE_INCANTATEM extends SpellProjectile implements Spell{
 
-	public FINITE_INCANTATEM(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public FINITE_INCANTATEM(Ollivanders2 plugin, Player player, Spells name,
+                             Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

@@ -6,9 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -26,7 +26,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class LIGATIS_COR extends SpellProjectile implements Spell{
 
-	public LIGATIS_COR(Ollivanders p, Player player, Spells name, Double rightWand){
+	public LIGATIS_COR(Ollivanders2 p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

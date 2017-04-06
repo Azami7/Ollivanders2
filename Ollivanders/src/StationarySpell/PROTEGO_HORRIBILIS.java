@@ -3,13 +3,13 @@ package StationarySpell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Destroys spell projectiles crossing the boundary.
@@ -28,7 +28,7 @@ public class PROTEGO_HORRIBILIS extends StationarySpellObj implements Stationary
 		super(player, location, name, radius, duration);
 	}
 
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		age();
 		List<SpellProjectile> projectiles = p.getProjectiles();
 		if (projectiles != null){

@@ -8,14 +8,14 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 public class PACK extends SpellProjectile implements Spell{
 
-	public PACK(Ollivanders plugin, Player player, Spells name, Double rightWand) {
+	public PACK(Ollivanders2 plugin, Player player, Spells name, Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

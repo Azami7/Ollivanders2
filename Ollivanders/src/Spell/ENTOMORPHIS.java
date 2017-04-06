@@ -1,14 +1,14 @@
 package Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.Transfiguration;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**Transfigures into a silverfish or turns a block into a monster egg
  * @author lownes
@@ -16,8 +16,8 @@ import me.cakenggt.Ollivanders.Transfiguration;
  */
 public class ENTOMORPHIS extends Transfiguration implements Spell{
 
-	public ENTOMORPHIS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public ENTOMORPHIS(Ollivanders2 plugin, Player player, Spells name,
+                       Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

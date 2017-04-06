@@ -9,9 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**
  * Places a flagrante affect on the item.
@@ -20,8 +20,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class FLAGRANTE extends SpellProjectile implements Spell{
 
-	public FLAGRANTE(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public FLAGRANTE(Ollivanders2 plugin, Player player, Spells name,
+                     Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 
@@ -71,7 +71,7 @@ public class FLAGRANTE extends SpellProjectile implements Spell{
 	}
 	
 	/**Is the item a wand?
-	 * @param item - Player to check.
+	 * @param held - item that might be a wand.
 	 * @return True if wand, false if not.
 	 */
 	public boolean isWand(ItemStack held){

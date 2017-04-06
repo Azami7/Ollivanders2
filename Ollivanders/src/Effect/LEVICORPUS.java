@@ -3,9 +3,9 @@ package Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Effects;
-import me.cakenggt.Ollivanders.OEffect;
-import me.cakenggt.Ollivanders.Ollivanders;
+import net.pottercraft.Ollivanders2.Effects;
+import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**Keeps a player hoisted 1.5 blocks into the air
  * @author lownes
@@ -25,7 +25,7 @@ public class LEVICORPUS extends OEffect implements Effect {
 	}
 
 	@Override
-	public void checkEffect(Ollivanders p, Player owner) {
+	public void checkEffect(Ollivanders2 p, Player owner) {
 		age(1);
 		owner.setAllowFlight(duration > 1);
 		Location curLoc = owner.getLocation();

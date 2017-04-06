@@ -5,9 +5,9 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Doesn't let entities pass the boundary.
@@ -26,7 +26,7 @@ public class PROTEGO_TOTALUM extends StationarySpellObj implements StationarySpe
 		super(player, location, name, radius, duration);
 	}
 
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		age();
 		for (Entity entity : Bukkit.getServer().getWorld(location.getWorld()).getEntities()){
 			if (!(entity instanceof Player)) {

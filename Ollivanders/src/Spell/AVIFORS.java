@@ -3,9 +3,9 @@ package Spell;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.Transfiguration;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**Transfigures entity into a bat.
  * @author lownes
@@ -13,8 +13,8 @@ import me.cakenggt.Ollivanders.Transfiguration;
  */
 public class AVIFORS extends Transfiguration implements Spell{
 
-	public AVIFORS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public AVIFORS(Ollivanders2 plugin, Player player, Spells name,
+                   Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

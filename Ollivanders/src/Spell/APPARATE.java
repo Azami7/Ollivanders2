@@ -6,10 +6,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 /**Apparition code for players who have over 100 uses in apparition.
  * @author lownes
@@ -17,8 +17,8 @@ import me.cakenggt.Ollivanders.StationarySpellObj;
  */
 public class APPARATE extends SpellProjectile implements Spell{
 
-	public APPARATE(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public APPARATE(Ollivanders2 plugin, Player player, Spells name,
+                    Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

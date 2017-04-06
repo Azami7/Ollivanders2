@@ -2,9 +2,9 @@ package Spell;
 
 import java.util.List;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class IMPEDIMENTA extends SpellProjectile implements Spell{
 
-	public IMPEDIMENTA(Ollivanders p, Player player, Spells name, Double rightWand){
+	public IMPEDIMENTA(Ollivanders2 p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

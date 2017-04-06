@@ -1,8 +1,8 @@
 package Spell;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,7 +17,7 @@ public class AGUAMENTI extends SpellProjectile implements Spell{
 
 	boolean move;
 
-	public AGUAMENTI(Ollivanders p, Player player, Spells name, Double rightWand){
+	public AGUAMENTI(Ollivanders2 p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 		move = true;
 	}

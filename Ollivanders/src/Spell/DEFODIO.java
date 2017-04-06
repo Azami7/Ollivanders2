@@ -8,10 +8,10 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import StationarySpell.COLLOPORTUS;
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 /**
  * Mines a line of blocks of length depending on the player's level 
@@ -23,8 +23,8 @@ public class DEFODIO extends SpellProjectile implements Spell{
 
 	int depth;
 
-	public DEFODIO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public DEFODIO(Ollivanders2 plugin, Player player, Spells name,
+                   Double rightWand) {
 		super(plugin, player, name, rightWand);
 		depth = (int)usesModifier;
 	}

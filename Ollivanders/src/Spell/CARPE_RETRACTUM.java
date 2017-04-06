@@ -5,9 +5,9 @@ import java.util.List;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Pulls a living entity towards the caster.
  * @author lownes
@@ -15,8 +15,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class CARPE_RETRACTUM extends SpellProjectile implements Spell{
 
-	public CARPE_RETRACTUM(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public CARPE_RETRACTUM(Ollivanders2 plugin, Player player, Spells name,
+                           Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

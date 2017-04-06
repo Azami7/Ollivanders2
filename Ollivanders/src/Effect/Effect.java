@@ -1,8 +1,7 @@
 package Effect;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
-
-import me.cakenggt.Ollivanders.Ollivanders;
 
 /**
  * Interface for effects
@@ -15,5 +14,5 @@ public interface Effect{
 	 * in this if you want the effect to age and die eventually.
 	 * @param p The plugin, so that it can access the list of stationary and projectile spells
 	 */
-	public void checkEffect(Ollivanders p, Player owner);
+	public void checkEffect(Ollivanders2 p, Player owner);
 }

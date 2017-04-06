@@ -1,4 +1,4 @@
-package me.cakenggt.Ollivanders;
+package net.pottercraft.Ollivanders2;
 
 import java.util.UUID;
 
@@ -27,8 +27,8 @@ public abstract class Transfiguration extends SpellProjectile{
 	private int timeMultiplier = 1200;
 	
 
-	public Transfiguration(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public Transfiguration(Ollivanders2 plugin, Player player, Spells name,
+                           Double rightWand) {
 		super(plugin, player, name, rightWand);
 		hasTransfigured = false;
 	}	

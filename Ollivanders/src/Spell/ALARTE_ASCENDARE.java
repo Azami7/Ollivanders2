@@ -5,9 +5,9 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**
  * Shoots target high into air.
@@ -16,8 +16,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class ALARTE_ASCENDARE extends SpellProjectile implements Spell{
 
-	public ALARTE_ASCENDARE(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public ALARTE_ASCENDARE(Ollivanders2 plugin, Player player, Spells name,
+                            Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

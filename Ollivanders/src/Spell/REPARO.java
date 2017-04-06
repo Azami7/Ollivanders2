@@ -6,9 +6,9 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**
  * Repairs an itemstack you aim it at.
@@ -17,8 +17,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class REPARO extends SpellProjectile implements Spell{
 
-	public REPARO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public REPARO(Ollivanders2 plugin, Player player, Spells name,
+                  Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

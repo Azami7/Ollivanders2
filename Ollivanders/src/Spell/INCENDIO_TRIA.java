@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,9 +12,8 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**
  * Creates a larger incendio that doesn't stop after hitting an entity.
@@ -25,8 +25,8 @@ public class INCENDIO_TRIA extends SpellProjectile implements Spell{
 	private double lifeTime;
 	boolean move;
 
-	public INCENDIO_TRIA(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public INCENDIO_TRIA(Ollivanders2 plugin, Player player, Spells name,
+                         Double rightWand) {
 		super(plugin, player, name, rightWand);
 		location.add(vector.multiply(2));
 		lifeTime = usesModifier*16;

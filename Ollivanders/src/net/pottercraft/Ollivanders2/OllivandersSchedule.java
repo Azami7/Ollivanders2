@@ -1,4 +1,4 @@
-package me.cakenggt.Ollivanders;
+package net.pottercraft.Ollivanders2;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,15 +29,15 @@ import StationarySpell.REPELLO_MUGGLETON;
 import StationarySpell.StationarySpell;
 
 /**
- * Scheduler for Ollivanders
+ * Scheduler for Ollivanders2
  * @author lownes
  *
  */
 class OllivandersSchedule implements Runnable{
-	Ollivanders p;
+	Ollivanders2 p;
 	int counter = 0;
 	static Set<UUID> flying = new HashSet<UUID>();
-	public OllivandersSchedule(Ollivanders plugin) {
+	public OllivandersSchedule(Ollivanders2 plugin) {
 		p = plugin;
 	}
 
@@ -246,8 +246,8 @@ class OllivandersSchedule implements Runnable{
 					oplayer.setMuggleton(true);
 					
 					for (Player viewer : world.getPlayers()){
-						if (viewer.isPermissionSet("Ollivanders.BYPASS")){
-							if (viewer.hasPermission("Ollivanders.BYPASS")){
+						if (viewer.isPermissionSet("Ollivanders2.BYPASS")){
+							if (viewer.hasPermission("Ollivanders2.BYPASS")){
 								continue;
 							}
 						}
@@ -327,7 +327,7 @@ class OllivandersSchedule implements Runnable{
 
 		for (World world : p.getServer().getWorlds()){
 			for (Player player : world.getPlayers()){
-				if (player.getTargetBlock(null, 100).getType() != ball || !player.isSneaking()){
+				if (player.getTargetBlock((java.util.Set)null, 100).getType() != ball || !player.isSneaking()){
 					return;
 				}
 				double experience = p.getOPlayer(player).getSpellCount().get(Spells.INFORMOUS);

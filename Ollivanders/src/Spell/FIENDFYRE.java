@@ -2,17 +2,14 @@ package Spell;
 
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.*;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.Effect;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Spawns magma cubes, blazes, and ghasts
@@ -23,7 +20,7 @@ public class FIENDFYRE extends SpellProjectile implements Spell{
 
 	private double lifeTime;
 	
-	public FIENDFYRE(Ollivanders plugin, Player player, Spells name, Double rightWand) {
+	public FIENDFYRE(Ollivanders2 plugin, Player player, Spells name, Double rightWand) {
 		super(plugin, player, name, rightWand);
 		moveEffect = Effect.MOBSPAWNER_FLAMES;
 		moveEffectData = 0;

@@ -3,9 +3,9 @@ package Spell;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 /**Shoots caster high into air
  * @author lownes
@@ -13,8 +13,8 @@ import me.cakenggt.Ollivanders.Spells;
  */
 public class ASCENDIO extends SpellProjectile implements Spell{
 
-	public ASCENDIO(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public ASCENDIO(Ollivanders2 plugin, Player player, Spells name,
+                    Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

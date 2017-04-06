@@ -1,4 +1,4 @@
-package me.cakenggt.Ollivanders;
+package net.pottercraft.Ollivanders2;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -39,7 +39,7 @@ public class Prophecy implements Serializable{
 		}
 		effect = possible.getName();
 		long currentTime = System.currentTimeMillis();
-		FileConfiguration config = Bukkit.getPluginManager().getPlugin("Ollivanders").getConfig();
+		FileConfiguration config = Bukkit.getPluginManager().getPlugin("Ollivanders2").getConfig();
 		long maxDuration = config.getLong("divinationMaxDuration");
 		long maxStartOffset = config.getLong("divinationMaxStartOffset");
 		start = currentTime + (long)(Math.random()*maxStartOffset);

@@ -1,4 +1,4 @@
-package me.cakenggt.Ollivanders;
+package net.pottercraft.Ollivanders2;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,11 +42,11 @@ import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 /**
- * Ollivanders plugin object
+ * Ollivanders2 plugin object
  * @author lownes
  *
  */
-public class Ollivanders extends JavaPlugin{
+public class Ollivanders2 extends JavaPlugin{
 
 	private Map<UUID, OPlayer> OPlayerMap = new HashMap<UUID, OPlayer>();
 	private List<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
@@ -72,19 +72,19 @@ public class Ollivanders extends JavaPlugin{
 			stat.active = true;
 		}
 		try {
-			SLAPI.save(OPlayerMap, "plugins/Ollivanders/OPlayerMap.bin");
+			SLAPI.save(OPlayerMap, "plugins/Ollivanders2/OPlayerMap.bin");
 			getLogger().finest("Saved OPlayerMap.bin");
 		} catch (Exception e) {
 			getLogger().warning("Could not save OPlayerMap.bin");
 		}
 		try {
-			SLAPI.save(stationary, "plugins/Ollivanders/stationary.bin");
+			SLAPI.save(stationary, "plugins/Ollivanders2/stationary.bin");
 			getLogger().finest("Saved stationary.bin");
 		} catch (Exception e) {
 			getLogger().warning("Could not save stationary.bin");
 		}
 		try {
-			SLAPI.save(prophecy, "plugins/Ollivanders/prophecy.bin");
+			SLAPI.save(prophecy, "plugins/Ollivanders2/prophecy.bin");
 			getLogger().finest("Saved prophecy.bin");
 		} catch (Exception e) {
 			getLogger().warning("Could not save prophecy.bin");
@@ -97,8 +97,8 @@ public class Ollivanders extends JavaPlugin{
 		playerListener = new OllivandersListener(this);
 		getServer().getPluginManager().registerEvents(playerListener, this);
 		//loads data
-		if (new File("plugins/Ollivanders/").mkdirs())
-			getLogger().info("File created for Ollivanders");
+		if (new File("plugins/Ollivanders2/").mkdirs())
+			getLogger().info("File created for Ollivanders2");
 		OPlayerMap = new HashMap<UUID, OPlayer>();
 		projectiles = new ArrayList<SpellProjectile>();
 		stationary = new ArrayList<StationarySpellObj>();
@@ -111,21 +111,21 @@ public class Ollivanders extends JavaPlugin{
 		}
 		try {
 			OPlayerMap = (HashMap<UUID, OPlayer>) SLAPI
-					.load("plugins/Ollivanders/OPlayerMap.bin");
+					.load("plugins/Ollivanders2/OPlayerMap.bin");
 			getLogger().finest("Loaded OPlayerMap.bin");
 		} catch (Exception e) {
 			getLogger().warning("Did not find OPlayerMap.bin");
 		}
 		try {
 			stationary = (List<StationarySpellObj>) SLAPI
-					.load("plugins/Ollivanders/stationary.bin");
+					.load("plugins/Ollivanders2/stationary.bin");
 			getLogger().finest("Loaded stationary.bin");
 		} catch (Exception e) {
 			getLogger().warning("Did not find stationary.bin");
 		}
 		try {
 			prophecy = (HashSet<Prophecy>) SLAPI
-					.load("plugins/Ollivanders/prophecy.bin");
+					.load("plugins/Ollivanders2/prophecy.bin");
 			getLogger().finest("Loaded prophecy.bin");
 		} catch (Exception e) {
 			getLogger().warning("Did not find prophecy.bin");
@@ -265,7 +265,7 @@ public class Ollivanders extends JavaPlugin{
 				return true;
 			}
 			else if (player != null){
-				sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Ollivanders " + this.getDescription().getVersion());
+				sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Ollivanders2 " + this.getDescription().getVersion());
 				//Arguments of command
 				boolean wands = true;
 				boolean books = true;
@@ -540,8 +540,8 @@ public class Ollivanders extends JavaPlugin{
 	 * @return True if yes, false if not
 	 */
 	public boolean canCast(Player player, Spells spell, boolean verbose){
-		if (player.isPermissionSet("Ollivanders."+spell.toString())){
-			if (!player.hasPermission("Ollivanders." + spell.toString())){
+		if (player.isPermissionSet("Ollivanders2."+spell.toString())){
+			if (!player.hasPermission("Ollivanders2." + spell.toString())){
 				if (verbose){
 					player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "You do not have permission to use " + spell.toString());
 				}

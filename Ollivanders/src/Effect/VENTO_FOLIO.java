@@ -1,8 +1,8 @@
 package Effect;
 
-import me.cakenggt.Ollivanders.Effects;
-import me.cakenggt.Ollivanders.OEffect;
-import me.cakenggt.Ollivanders.Ollivanders;
+import net.pottercraft.Ollivanders2.Effects;
+import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**Grants player flight
  * @author lownes
@@ -20,7 +20,7 @@ public class VENTO_FOLIO extends OEffect implements Effect {
 	}
 
 	@Override
-	public void checkEffect(Ollivanders p, org.bukkit.entity.Player owner) {
+	public void checkEffect(Ollivanders2 p, org.bukkit.entity.Player owner) {
 		age(1);
 		if (duration > 1){
 			owner.setAllowFlight(true);

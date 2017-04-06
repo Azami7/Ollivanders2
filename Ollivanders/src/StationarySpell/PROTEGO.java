@@ -2,18 +2,13 @@ package StationarySpell;
 
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
-import me.cakenggt.Ollivanders.OLocation;
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.OllivandersListener;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.StationarySpellObj;
-import me.cakenggt.Ollivanders.StationarySpells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 public class PROTEGO extends StationarySpellObj implements StationarySpell{
 
@@ -27,7 +22,7 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell{
 		super(player, location, name, radius, duration);
 	}
 
-	public void checkEffect(Ollivanders p) {
+	public void checkEffect(Ollivanders2 p) {
 		Player ply = Bukkit.getPlayer(getPlayerUUID());
 		if (ply == null){
 			kill();

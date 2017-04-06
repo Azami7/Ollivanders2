@@ -1,7 +1,7 @@
-name: Ollivanders
-main: me.cakenggt.Ollivanders.Ollivanders
-version: 0.16
-author: cakenggt
+name: Ollivanders2
+main: net.pottercraft.Ollivanders2.Ollivanders2
+version: 2.0
+author: Azami7
 commands:
   Okit:
     description: This command gives an op the starting kit.

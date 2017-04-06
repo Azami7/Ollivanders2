@@ -3,14 +3,14 @@ package Spell;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.Transfiguration;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.Transfiguration;
 
 public class DUCKLIFORS extends Transfiguration implements Spell{
 
-	public DUCKLIFORS(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public DUCKLIFORS(Ollivanders2 plugin, Player player, Spells name,
+                      Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 

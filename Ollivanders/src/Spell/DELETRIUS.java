@@ -2,9 +2,9 @@ package Spell;
 
 import java.util.List;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.SpellProjectile;
-import me.cakenggt.Ollivanders.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
 
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -16,7 +16,7 @@ import org.bukkit.entity.Player;
  */
 public class DELETRIUS extends SpellProjectile implements Spell{
 	
-	public DELETRIUS(Ollivanders p, Player player, Spells name, Double rightWand){
+	public DELETRIUS(Ollivanders2 p, Player player, Spells name, Double rightWand){
 		super(p, player, name, rightWand);
 	}
 

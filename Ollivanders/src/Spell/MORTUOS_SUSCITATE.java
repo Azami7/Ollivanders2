@@ -6,9 +6,9 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 
-import me.cakenggt.Ollivanders.Ollivanders;
-import me.cakenggt.Ollivanders.Spells;
-import me.cakenggt.Ollivanders.Transfiguration;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**Transfigures a rotten flesh into inferi
  * @author lownes
@@ -16,8 +16,8 @@ import me.cakenggt.Ollivanders.Transfiguration;
  */
 public class MORTUOS_SUSCITATE extends Transfiguration implements Spell {
 
-	public MORTUOS_SUSCITATE(Ollivanders plugin, Player player, Spells name,
-			Double rightWand) {
+	public MORTUOS_SUSCITATE(Ollivanders2 plugin, Player player, Spells name,
+                             Double rightWand) {
 		super(plugin, player, name, rightWand);
 	}
 
