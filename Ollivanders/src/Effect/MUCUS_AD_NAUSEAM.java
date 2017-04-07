@@ -9,24 +9,28 @@ import net.pottercraft.Ollivanders2.Effects;
 import net.pottercraft.Ollivanders2.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
-public class MUCUS_AD_NAUSEAM extends OEffect implements Effect{
+public class MUCUS_AD_NAUSEAM extends OEffect implements Effect
+{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 8685445385963186772L;
+   /**
+    *
+    */
+   private static final long serialVersionUID = 8685445385963186772L;
 
-	public MUCUS_AD_NAUSEAM(Player sender, Effects effect, int duration) {
-		super(sender, effect, duration);
-	}
+   public MUCUS_AD_NAUSEAM (Player sender, Effects effect, int duration)
+   {
+      super(sender, effect, duration);
+   }
 
-	public void checkEffect(Ollivanders2 p, Player owner) {
-		age(1);
-		if (duration%20 == 0){
-			World world = owner.getWorld();
-			Slime slime = (Slime) world.spawnEntity(owner.getEyeLocation(), EntityType.SLIME);
-			slime.setSize(1);
-		}
-	}
-	
+   public void checkEffect (Ollivanders2 p, Player owner)
+   {
+      age(1);
+      if (duration % 20 == 0)
+      {
+         World world = owner.getWorld();
+         Slime slime = (Slime) world.spawnEntity(owner.getEyeLocation(), EntityType.SLIME);
+         slime.setSize(1);
+      }
+   }
+
 }

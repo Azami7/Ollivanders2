@@ -10,45 +10,55 @@ import org.bukkit.entity.Player;
 
 /**
  * Spell which places a block of water against the targeted block.
- * @author lownes
  *
+ * @author lownes
  */
-public class AGUAMENTI extends SpellProjectile implements Spell{
+public class AGUAMENTI extends SpellProjectile implements Spell
+{
 
-	boolean move;
+   boolean move;
 
-	public AGUAMENTI(Ollivanders2 p, Player player, Spells name, Double rightWand){
-		super(p, player, name, rightWand);
-		move = true;
-	}
+   public AGUAMENTI (Ollivanders2 p, Player player, Spells name, Double rightWand)
+   {
+      super(p, player, name, rightWand);
+      move = true;
+   }
 
-	public void checkEffect() {
-		if (move){
-			move();
-			if (getBlock().getType() != Material.AIR){
-				Block block = location.subtract(super.vector).getBlock();
-				block.setType(Material.WATER);
-				changed.add(block);
-				kill = false;
-				move = false;
-				lifeTicks = (int)(-(usesModifier*1200));
-			}
-		}
-		else{
-			lifeTicks ++;
-		}
-		if (lifeTicks >= 159){
-			revert();
-			kill();
-		}
-	}
-	
-	public void revert(){
-		for (Block block : changed){
-			Material mat = block.getType();
-			if (mat == Material.WATER || mat == Material.STATIONARY_WATER){
-				block.setType(Material.AIR);
-			}
-		}
-	}
+   public void checkEffect ()
+   {
+      if (move)
+      {
+         move();
+         if (getBlock().getType() != Material.AIR)
+         {
+            Block block = location.subtract(super.vector).getBlock();
+            block.setType(Material.WATER);
+            changed.add(block);
+            kill = false;
+            move = false;
+            lifeTicks = (int) (-(usesModifier * 1200));
+         }
+      }
+      else
+      {
+         lifeTicks++;
+      }
+      if (lifeTicks >= 159)
+      {
+         revert();
+         kill();
+      }
+   }
+
+   public void revert ()
+   {
+      for (Block block : changed)
+      {
+         Material mat = block.getType();
+         if (mat == Material.WATER || mat == Material.STATIONARY_WATER)
+         {
+            block.setType(Material.AIR);
+         }
+      }
+   }
 }

@@ -12,28 +12,32 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 /**
- * Casts a powerful confusion potion effect on the player that scales 
+ * Casts a powerful confusion potion effect on the player that scales
  * with the caster's level in this spell.
- * @author lownes
  *
+ * @author lownes
  */
-public class CONFUNDO extends SpellProjectile implements Spell{
+public class CONFUNDO extends SpellProjectile implements Spell
+{
 
-	public CONFUNDO(Ollivanders2 p, Player player, Spells name, Double rightWand){
-		super(p, player, name, rightWand);
-	}
+   public CONFUNDO (Ollivanders2 p, Player player, Spells name, Double rightWand)
+   {
+      super(p, player, name, rightWand);
+   }
 
 
-	public void checkEffect() {
-		move();
-		List<LivingEntity> entities = getLivingEntities(1);
-		if (entities.size() > 0){
-			LivingEntity entity = entities.get(0);
-			int modifier = (int)usesModifier;
-			PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, modifier * 20, modifier);
-			entity.addPotionEffect(confusion);
-			kill();
-			return;
-		}
-	}
+   public void checkEffect ()
+   {
+      move();
+      List<LivingEntity> entities = getLivingEntities(1);
+      if (entities.size() > 0)
+      {
+         LivingEntity entity = entities.get(0);
+         int modifier = (int) usesModifier;
+         PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, modifier * 20, modifier);
+         entity.addPotionEffect(confusion);
+         kill();
+         return;
+      }
+   }
 }

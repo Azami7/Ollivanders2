@@ -10,29 +10,34 @@ import net.pottercraft.Ollivanders2.Spells;
 import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 /**
- * Spell which causes any stationary spell objects to flair with 
+ * Spell which causes any stationary spell objects to flair with
  * an intensity equal to your level
- * @author lownes
  *
+ * @author lownes
  */
-public class APARECIUM extends SpellProjectile implements Spell{
+public class APARECIUM extends SpellProjectile implements Spell
+{
 
-	public APARECIUM(Ollivanders2 plugin, Player player, Spells name,
-                     Double rightWand) {
-		super(plugin, player, name, rightWand);
-	}
+   public APARECIUM (Ollivanders2 plugin, Player player, Spells name,
+                     Double rightWand)
+   {
+      super(plugin, player, name, rightWand);
+   }
 
-	public void checkEffect() {
-		move();
-		List<StationarySpellObj> stationaries = p.checkForStationary(location);
-		for (StationarySpellObj stationary : stationaries){
-			//stationary.flair(Math.sqrt(p.getSpellNum(player, name))/rightWand);
-			int level = (int) usesModifier;
-			if (level > 10){
-				level = 10;
-			}
-			stationary.flair(level);
-		}
-	}
-	
+   public void checkEffect ()
+   {
+      move();
+      List<StationarySpellObj> stationaries = p.checkForStationary(location);
+      for (StationarySpellObj stationary : stationaries)
+      {
+         //stationary.flair(Math.sqrt(p.getSpellNum(player, name))/rightWand);
+         int level = (int) usesModifier;
+         if (level > 10)
+         {
+            level = 10;
+         }
+         stationary.flair(level);
+      }
+   }
+
 }

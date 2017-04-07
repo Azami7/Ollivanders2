@@ -9,21 +9,24 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 /**
- * Bubble head charm gives the player water breathing for a length of 
+ * Bubble head charm gives the player water breathing for a length of
  * time depending on the player's spell level.
- * @author lownes
  *
+ * @author lownes
  */
-public class EBUBLIO extends SpellProjectile implements Spell{
-	
-	public EBUBLIO(Ollivanders2 p, Player player, Spells name, Double rightWand){
-		super(p, player, name, rightWand);
-	}
+public class EBUBLIO extends SpellProjectile implements Spell
+{
+
+   public EBUBLIO (Ollivanders2 p, Player player, Spells name, Double rightWand)
+   {
+      super(p, player, name, rightWand);
+   }
 
 
-	public void checkEffect() {
-		move();
-		player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, (int) (usesModifier*1200), 1), true);
-		kill();
-	}
+   public void checkEffect ()
+   {
+      move();
+      player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, (int) (usesModifier * 1200), 1), true);
+      kill();
+   }
 }

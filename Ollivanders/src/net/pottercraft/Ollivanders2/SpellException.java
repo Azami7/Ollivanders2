@@ -2,14 +2,14 @@ package net.pottercraft.Ollivanders2;
 
 /**
  * Exception that should be thrown if an invalid spell appears.
- *
  */
-public class SpellException extends Exception {
+public class SpellException extends Exception
+{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2268831891168982091L;
+   /**
+    *
+    */
+   private static final long serialVersionUID = 2268831891168982091L;
 
-	
+
 }

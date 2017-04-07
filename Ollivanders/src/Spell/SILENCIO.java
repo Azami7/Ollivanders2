@@ -14,30 +14,35 @@ import net.pottercraft.Ollivanders2.Spells;
 /**
  * Silences a player for a duration depending on the spell's level. The
  * target player can only use nonverbal spells.
- * @author lownes
  *
+ * @author lownes
  */
-public class SILENCIO extends SpellProjectile implements Spell{
+public class SILENCIO extends SpellProjectile implements Spell
+{
 
-	public SILENCIO(Ollivanders2 plugin, Player player, Spells name,
-                    Double rightWand) {
-		super(plugin, player, name, rightWand);
-	}
+   public SILENCIO (Ollivanders2 plugin, Player player, Spells name,
+                    Double rightWand)
+   {
+      super(plugin, player, name, rightWand);
+   }
 
-	public void checkEffect() {
-		move();
-		List<LivingEntity> living = getLivingEntities(1);
-		for (LivingEntity live : living){
-			if (live instanceof Player){
-				Player ply = (Player)live;
-				OPlayer oply = p.getOPlayer(ply);
-				int dur = (int)(usesModifier*1200);
-				oply.addEffect(new Effect.SILENCIO(player, Effects.SILENCIO, dur));
-				p.setOPlayer(ply, oply);
-				kill();
-				return;
-			}
-		}
-	}
-	
+   public void checkEffect ()
+   {
+      move();
+      List<LivingEntity> living = getLivingEntities(1);
+      for (LivingEntity live : living)
+      {
+         if (live instanceof Player)
+         {
+            Player ply = (Player) live;
+            OPlayer oply = p.getOPlayer(ply);
+            int dur = (int) (usesModifier * 1200);
+            oply.addEffect(new Effect.SILENCIO(player, Effects.SILENCIO, dur));
+            p.setOPlayer(ply, oply);
+            kill();
+            return;
+         }
+      }
+   }
+
 }

@@ -9,23 +9,26 @@ import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Anti-disapparition spell. Players can't apparate out of it.
- * @author lownes
  *
+ * @author lownes
  */
-public class NULLUM_EVANESCUNT extends StationarySpellObj implements StationarySpell{
+public class NULLUM_EVANESCUNT extends StationarySpellObj implements StationarySpell
+{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 2882828727179919497L;
+   /**
+    *
+    */
+   private static final long serialVersionUID = 2882828727179919497L;
 
-	public NULLUM_EVANESCUNT(Player player, Location location,
-			StationarySpells name, Integer radius, Integer duration) {
-		super(player, location, name, radius, duration);
-	}
+   public NULLUM_EVANESCUNT (Player player, Location location,
+                             StationarySpells name, Integer radius, Integer duration)
+   {
+      super(player, location, name, radius, duration);
+   }
 
-	public void checkEffect(Ollivanders2 p) {
-		age();
-	}
-	
+   public void checkEffect (Ollivanders2 p)
+   {
+      age();
+   }
+
 }

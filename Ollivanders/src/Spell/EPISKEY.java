@@ -9,24 +9,29 @@ import org.bukkit.potion.PotionEffectType;
 import net.pottercraft.Ollivanders2.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spells;
 
-/**Gives an entity a healing effect for usesModifier seconds
- * @author lownes
+/**
+ * Gives an entity a healing effect for usesModifier seconds
  *
+ * @author lownes
  */
-public class EPISKEY extends SpellProjectile implements Spell{
+public class EPISKEY extends SpellProjectile implements Spell
+{
 
-	public EPISKEY(Ollivanders2 plugin, Player player, Spells name,
-                   Double rightWand) {
-		super(plugin, player, name, rightWand);
-	}
+   public EPISKEY (Ollivanders2 plugin, Player player, Spells name,
+                   Double rightWand)
+   {
+      super(plugin, player, name, rightWand);
+   }
 
-	public void checkEffect() {
-		move();
-		for (LivingEntity live : getLivingEntities(1)){
-			live.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int) (usesModifier*20), 0), true);
-			kill();
-			return;
-		}
-	}
-	
+   public void checkEffect ()
+   {
+      move();
+      for (LivingEntity live : getLivingEntities(1))
+      {
+         live.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int) (usesModifier * 20), 0), true);
+         kill();
+         return;
+      }
+   }
+
 }

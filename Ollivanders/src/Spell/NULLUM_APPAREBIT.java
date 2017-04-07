@@ -10,25 +10,29 @@ import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Creates an Anti-apparition spell object.
- * @author lownes
  *
+ * @author lownes
  */
-public class NULLUM_APPAREBIT extends SpellProjectile implements Spell{
+public class NULLUM_APPAREBIT extends SpellProjectile implements Spell
+{
 
-	public NULLUM_APPAREBIT(Ollivanders2 plugin, Player player, Spells name,
-                            Double rightWand) {
-		super(plugin, player, name, rightWand);
-	}
+   public NULLUM_APPAREBIT (Ollivanders2 plugin, Player player, Spells name,
+                            Double rightWand)
+   {
+      super(plugin, player, name, rightWand);
+   }
 
-	public void checkEffect() {
-		move();
-		if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER){
-			int duration = (int)(usesModifier*1200);
-			StationarySpell.NULLUM_APPAREBIT nullum = new StationarySpell.NULLUM_APPAREBIT(player, location, StationarySpells.NULLUM_APPAREBIT, 5, duration);
-			nullum.flair(10);
-			p.addStationary(nullum);
-			kill();
-		}
-	}
-	
+   public void checkEffect ()
+   {
+      move();
+      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
+      {
+         int duration = (int) (usesModifier * 1200);
+         StationarySpell.NULLUM_APPAREBIT nullum = new StationarySpell.NULLUM_APPAREBIT(player, location, StationarySpells.NULLUM_APPAREBIT, 5, duration);
+         nullum.flair(10);
+         p.addStationary(nullum);
+         kill();
+      }
+   }
+
 }

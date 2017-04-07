@@ -11,22 +11,26 @@ import org.bukkit.entity.Player;
 
 /**
  * Deletes an item entity.
- * @author lownes
  *
+ * @author lownes
  */
-public class DELETRIUS extends SpellProjectile implements Spell{
-	
-	public DELETRIUS(Ollivanders2 p, Player player, Spells name, Double rightWand){
-		super(p, player, name, rightWand);
-	}
+public class DELETRIUS extends SpellProjectile implements Spell
+{
 
-	public void checkEffect() {
-		move();
-		List<Item> items = getItems(1);
-		for (Item item : items){
-			item.remove();
-			kill();
-			return;
-		}
-	}
+   public DELETRIUS (Ollivanders2 p, Player player, Spells name, Double rightWand)
+   {
+      super(p, player, name, rightWand);
+   }
+
+   public void checkEffect ()
+   {
+      move();
+      List<Item> items = getItems(1);
+      for (Item item : items)
+      {
+         item.remove();
+         kill();
+         return;
+      }
+   }
 }

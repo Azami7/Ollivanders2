@@ -10,25 +10,29 @@ import net.pottercraft.Ollivanders2.StationarySpells;
 
 /**
  * Creates a spongify StationarySpellObj
- * @author lownes
  *
+ * @author lownes
  */
-public class SPONGIFY extends SpellProjectile implements Spell{
+public class SPONGIFY extends SpellProjectile implements Spell
+{
 
-	public SPONGIFY(Ollivanders2 plugin, Player player, Spells name,
-                    Double rightWand) {
-		super(plugin, player, name, rightWand);
-	}
+   public SPONGIFY (Ollivanders2 plugin, Player player, Spells name,
+                    Double rightWand)
+   {
+      super(plugin, player, name, rightWand);
+   }
 
-	public void checkEffect() {
-		move();
-		if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER){
-			int duration = (int)(usesModifier*1200);
-			StationarySpell.SPONGIFY sponge = new StationarySpell.SPONGIFY(player, location, StationarySpells.SPONGIFY, 5, duration);
-			sponge.flair(10);
-			p.addStationary(sponge);
-			kill();
-		}
-	}
-	
+   public void checkEffect ()
+   {
+      move();
+      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
+      {
+         int duration = (int) (usesModifier * 1200);
+         StationarySpell.SPONGIFY sponge = new StationarySpell.SPONGIFY(player, location, StationarySpells.SPONGIFY, 5, duration);
+         sponge.flair(10);
+         p.addStationary(sponge);
+         kill();
+      }
+   }
+
 }

@@ -14,41 +14,50 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spells;
 
-/**Changes color of sheep and colorable blocks
- * @author lownes
+/**
+ * Changes color of sheep and colorable blocks
  *
+ * @author lownes
  */
-public class COLOVARIA extends SpellProjectile implements Spell{
+public class COLOVARIA extends SpellProjectile implements Spell
+{
 
-	public COLOVARIA(Ollivanders2 plugin, Player player, Spells name,
-                     Double rightWand) {
-		super(plugin, player, name, rightWand);
-	}
+   public COLOVARIA (Ollivanders2 plugin, Player player, Spells name,
+                     Double rightWand)
+   {
+      super(plugin, player, name, rightWand);
+   }
 
-	public void checkEffect() {
-		move();
-		DyeColor[] values = DyeColor.values();
-		DyeColor newColor = values[(int) (Math.random()*values.length)];
-		for (LivingEntity live : getLivingEntities(1)){
-			if (live instanceof Sheep){
-				Sheep sheep = (Sheep)live;
-				sheep.setColor(newColor);
-				kill();
-				return;
-			}
-		}
-		if (getBlock().getType() != Material.AIR){
-			for (Block block : getBlocksInRadius(location, usesModifier)){
-				if (block.getState().getData() instanceof Colorable){
-					BlockState bs = block.getState();
-					Colorable colorable = (Colorable) bs.getData();
-					colorable.setColor(newColor);
-					bs.setData((MaterialData) colorable);
-					bs.update();
-					kill();
-				}
-			}
-		}
-	}
-	
+   public void checkEffect ()
+   {
+      move();
+      DyeColor[] values = DyeColor.values();
+      DyeColor newColor = values[(int) (Math.random() * values.length)];
+      for (LivingEntity live : getLivingEntities(1))
+      {
+         if (live instanceof Sheep)
+         {
+            Sheep sheep = (Sheep) live;
+            sheep.setColor(newColor);
+            kill();
+            return;
+         }
+      }
+      if (getBlock().getType() != Material.AIR)
+      {
+         for (Block block : getBlocksInRadius(location, usesModifier))
+         {
+            if (block.getState().getData() instanceof Colorable)
+            {
+               BlockState bs = block.getState();
+               Colorable colorable = (Colorable) bs.getData();
+               colorable.setColor(newColor);
+               bs.setData((MaterialData) colorable);
+               bs.update();
+               kill();
+            }
+         }
+      }
+   }
+
 }

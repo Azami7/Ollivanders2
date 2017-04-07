@@ -6,20 +6,23 @@ import org.bukkit.entity.Player;
 import net.pottercraft.Ollivanders2.Effects;
 import net.pottercraft.Ollivanders2.OEffect;
 
-public class MEMORY_POTION extends OEffect implements Effect {
+public class MEMORY_POTION extends OEffect implements Effect
+{
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 4202743924958098780L;
+   /**
+    *
+    */
+   private static final long serialVersionUID = 4202743924958098780L;
 
-	public MEMORY_POTION(Player sender, Effects effect, int duration) {
-		super(sender, effect, duration);
-	}
+   public MEMORY_POTION (Player sender, Effects effect, int duration)
+   {
+      super(sender, effect, duration);
+   }
 
-	@Override
-	public void checkEffect(Ollivanders2 p, Player owner) {
-		age(1);
-	}
+   @Override
+   public void checkEffect (Ollivanders2 p, Player owner)
+   {
+      age(1);
+   }
 
 }

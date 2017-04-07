@@ -11,35 +11,40 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 /**
- * Slows down any item or living entity according to your 
+ * Slows down any item or living entity according to your
  * level in the spell.
- * @author lownes
  *
+ * @author lownes
  */
-public class ARRESTO_MOMENTUM extends SpellProjectile implements Spell{
+public class ARRESTO_MOMENTUM extends SpellProjectile implements Spell
+{
 
-	public ARRESTO_MOMENTUM(Ollivanders2 p, Player player, Spells name, Double rightWand){
-		super(p, player, name, rightWand);
-	}
+   public ARRESTO_MOMENTUM (Ollivanders2 p, Player player, Spells name, Double rightWand)
+   {
+      super(p, player, name, rightWand);
+   }
 
 
-	public void checkEffect() {
-		move();
-		double modifier = usesModifier;
-		List<LivingEntity> entities = getLivingEntities(1);
-		for (LivingEntity entity : entities){
-			double speed = entity.getVelocity().length()/(Math.pow(modifier, 2));
-			entity.setVelocity(entity.getVelocity().normalize().multiply(speed));
-			entity.setFallDistance((float) (entity.getFallDistance()/modifier));
-			kill = true;
-			return;
-		}
-		List<Item> items = getItems(1);
-		for (Item item : items){
-			double speed = item.getVelocity().length()/(Math.pow(modifier, 2));
-			item.setVelocity(item.getVelocity().normalize().multiply(speed));
-			kill = true;
-			return;
-		}
-	}
+   public void checkEffect ()
+   {
+      move();
+      double modifier = usesModifier;
+      List<LivingEntity> entities = getLivingEntities(1);
+      for (LivingEntity entity : entities)
+      {
+         double speed = entity.getVelocity().length() / (Math.pow(modifier, 2));
+         entity.setVelocity(entity.getVelocity().normalize().multiply(speed));
+         entity.setFallDistance((float) (entity.getFallDistance() / modifier));
+         kill = true;
+         return;
+      }
+      List<Item> items = getItems(1);
+      for (Item item : items)
+      {
+         double speed = item.getVelocity().length() / (Math.pow(modifier, 2));
+         item.setVelocity(item.getVelocity().normalize().multiply(speed));
+         kill = true;
+         return;
+      }
+   }
 }

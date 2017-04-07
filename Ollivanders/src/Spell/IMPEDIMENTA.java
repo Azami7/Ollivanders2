@@ -14,24 +14,28 @@ import org.bukkit.potion.PotionEffectType;
 /**
  * Slows any living entity by an amount and time depending on the player's
  * spell level.
- * @author lownes
  *
+ * @author lownes
  */
-public class IMPEDIMENTA extends SpellProjectile implements Spell{
+public class IMPEDIMENTA extends SpellProjectile implements Spell
+{
 
-	public IMPEDIMENTA(Ollivanders2 p, Player player, Spells name, Double rightWand){
-		super(p, player, name, rightWand);
-	}
+   public IMPEDIMENTA (Ollivanders2 p, Player player, Spells name, Double rightWand)
+   {
+      super(p, player, name, rightWand);
+   }
 
 
-	public void checkEffect() {
-		move();
-		List<LivingEntity> entities = getLivingEntities(1);
-		for (LivingEntity entity : entities){
-			int modifier = (int)usesModifier;
-			PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, modifier * 20, modifier);
-			entity.addPotionEffect(slow);
-			kill();
-		}
-	}
+   public void checkEffect ()
+   {
+      move();
+      List<LivingEntity> entities = getLivingEntities(1);
+      for (LivingEntity entity : entities)
+      {
+         int modifier = (int) usesModifier;
+         PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, modifier * 20, modifier);
+         entity.addPotionEffect(slow);
+         kill();
+      }
+   }
 }

@@ -9,18 +9,21 @@ import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**
  * Transfigures an item into a horse.
- * @author lownes
  *
+ * @author lownes
  */
-public class EQUUSIFORS extends Transfiguration implements Spell{
+public class EQUUSIFORS extends Transfiguration implements Spell
+{
 
-	public EQUUSIFORS(Ollivanders2 plugin, Player player, Spells name,
-                      Double rightWand) {
-		super(plugin, player, name, rightWand);
-	}
+   public EQUUSIFORS (Ollivanders2 plugin, Player player, Spells name,
+                      Double rightWand)
+   {
+      super(plugin, player, name, rightWand);
+   }
 
-	public void checkEffect() {
-		simpleTransfigure(EntityType.HORSE, null);
-	}
-	
+   public void checkEffect ()
+   {
+      simpleTransfigure(EntityType.HORSE, null);
+   }
+
 }
