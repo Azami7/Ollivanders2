@@ -15,10 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -186,7 +183,9 @@ public class Ollivanders2 extends JavaPlugin
       blore.add("Flying vehicle used by magical folk");
       bmeta.setLore(blore);
       broomstick.setItemMeta(bmeta);
-      ShapedRecipe bRecipe = new ShapedRecipe(broomstick);
+      Plugin plugin = Bukkit.getPluginManager().getPlugin("Ollivanders2");
+      NamespacedKey recipeKey = new NamespacedKey(plugin, "broomstick");
+      ShapedRecipe bRecipe = new ShapedRecipe(recipeKey, broomstick);
       bRecipe.shape("  S", " S ", "W  ");
       bRecipe.setIngredient('S', Material.STICK);
       bRecipe.setIngredient('W', Material.WHEAT);
