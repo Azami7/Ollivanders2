@@ -16,11 +16,9 @@ import net.pottercraft.Ollivanders2.OEffect;
  */
 public class LYCANTHROPY extends OEffect implements Effect
 {
-
    /**
     *
     */
-   private static final long serialVersionUID = -7925837173707212516L;
    int wereId = -1;
 
    public LYCANTHROPY (Player sender, Effects effect, int duration)

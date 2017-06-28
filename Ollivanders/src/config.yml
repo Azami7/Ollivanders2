@@ -6,7 +6,7 @@ divinationBlock: 20
 divinationMaxDuration: 86400000
 divinationMaxStartOffset: 604800000
 muggletonBlockChange: true
-deathExpLoss: true
+deathExpLoss: false
 bookLearning: false
 chatColor: 5
 flooPowder: REDSTONE
