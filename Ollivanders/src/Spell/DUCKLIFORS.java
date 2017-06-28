@@ -7,6 +7,9 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spells;
 import net.pottercraft.Ollivanders2.Transfiguration;
 
+/**
+ * Transfigures entity into a chicken.
+ */
 public class DUCKLIFORS extends Transfiguration implements Spell
 {
 

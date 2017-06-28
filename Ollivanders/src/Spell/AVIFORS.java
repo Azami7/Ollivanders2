@@ -8,7 +8,7 @@ import net.pottercraft.Ollivanders2.Spells;
 import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**
- * Transfigures entity into a bat.
+ * Transfigures entity into a bird.
  *
  * @author lownes
  */
@@ -23,7 +23,7 @@ public class AVIFORS extends Transfiguration implements Spell
 
    public void checkEffect ()
    {
-      simpleTransfigure(EntityType.BAT, null);
+      simpleTransfigure(EntityType.PARROT, null);
    }
 
 }

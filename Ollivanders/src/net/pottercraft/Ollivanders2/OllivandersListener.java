@@ -20,14 +20,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -459,12 +452,12 @@ public class OllivandersListener implements Listener
    }
 
    /**
-    * Monitors chat events for the cat-post keywords and enacts the cat-post system
+    * Monitors chat events for the owl-post keywords and enacts the owl-post system
     *
     * @param event Chat event of type AsyncPlayerChatEvent
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void catPost (AsyncPlayerChatEvent event)
+   public void owlPost (AsyncPlayerChatEvent event)
    {
       Player sender = event.getPlayer();
       Server server = sender.getServer();
@@ -475,18 +468,17 @@ public class OllivandersListener implements Listener
       {
          if (splited[0].equalsIgnoreCase("deliver") && splited[1].equalsIgnoreCase("to"))
          {
-            for (Entity ocelot : world.getEntities())
+            for (Entity parrot : world.getEntities())
             {
-               if (ocelot instanceof Ocelot && ocelot.getLocation().distance(sender.getLocation()) <= 10)
+               if (parrot instanceof Parrot && parrot.getLocation().distance(sender.getLocation()) <= 10)
                {
-                  Ocelot cat = (Ocelot) ocelot;
-                  if (cat.isTamed())
+                  Parrot owl = (Parrot) parrot;
+                  if (owl.isTamed())
                   {
                      for (Entity item : world.getEntities())
                      {
-                        if (item instanceof Item && item.getLocation().distance(cat.getLocation()) <= 2)
+                        if (item instanceof Item && item.getLocation().distance(owl.getLocation()) <= 2)
                         {
-                           @SuppressWarnings("deprecation")
                            Player recipient = server.getPlayer(splited[2]);
                            if (recipient != null)
                            {
@@ -494,26 +486,26 @@ public class OllivandersListener implements Listener
                               {
                                  if (recipient.getWorld().getUID().equals(world.getUID()))
                                  {
-                                    world.playSound(cat.getLocation(), Sound.ENTITY_CAT_PURREOW, 1, 0);
-                                    cat.teleport(recipient.getLocation());
+                                    world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
+                                    owl.teleport(recipient.getLocation());
                                     item.teleport(recipient.getLocation());
-                                    world.playSound(cat.getLocation(), Sound.ENTITY_CAT_PURREOW, 1, 0);
+                                    world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
                                  }
                                  else
                                  {
-                                    world.playSound(cat.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
+                                    world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
                                     sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not in this world.");
                                  }
                               }
                               else
                               {
-                                 world.playSound(cat.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
+                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
                                  sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
                               }
                            }
                            else
                            {
-                              world.playSound(cat.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
+                              world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
                               sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
                            }
                            return;
