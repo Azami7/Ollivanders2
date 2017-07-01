@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import Quidditch.Arena;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -411,6 +412,28 @@ public class Ollivanders2 extends JavaPlugin
             }
             return true;
          }
+      }
+      else if (cmd.getName().equalsIgnoreCase("Quidd"))
+      {
+         if (args.length >= 1)
+         {
+            Player player = null;
+            if (sender instanceof Player)
+            {
+               player = (Player) sender;
+               Arena arena = new Arena(args[1], player.getLocation(), Arena.Size.MEDIUM);
+               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "The following arena was made: " + arena.toString());
+            }
+            else
+            {
+               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only players can use the /Quidd command.");
+            }
+         }
+         else
+         {
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Please include a name for your arena.");
+         }
+         return true;
       }
       return false;
    }
