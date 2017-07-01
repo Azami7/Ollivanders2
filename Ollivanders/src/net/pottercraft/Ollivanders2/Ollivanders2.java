@@ -422,7 +422,7 @@ public class Ollivanders2 extends JavaPlugin
             if (sender instanceof Player)
             {
                player = (Player) sender;
-               Arena arena = new Arena(args[1], player.getLocation(), Arena.Size.MEDIUM);
+               Arena arena = new Arena(args[0], player.getLocation(), Arena.Size.MEDIUM);
                sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "The following arena was made: " + arena.toString());
             }
             else
