@@ -1,5 +1,9 @@
 package Quidditch;
 
+import com.sk89q.worldedit.*;
+import com.sk89q.worldedit.blocks.BaseBlock;
+import com.sk89q.worldedit.event.extent.EditSessionEvent;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -38,6 +42,7 @@ public class Arena {
         this.center = center;
         this.state = ArenaState.FREE;
         this.size = size;
+        buildArena();
     }
 
     /**
@@ -166,6 +171,23 @@ public class Arena {
             }
         }
         return false;
+    }
+
+    private void buildArena(){
+        if (size == Size.MEDIUM) {
+            Vector v1 = new Vector(center.getX() + 4, center.getY() + 4, center.getZ());
+            Vector v2 = new Vector(center.getX() - 4, center.getY() - 4, center.getZ());
+            CuboidRegion testRegion = new CuboidRegion(v1, v2);
+            EditSessionFactory sessionFactory = WorldEdit.getInstance().getEditSessionFactory();
+            EditSession testSession = sessionFactory.getEditSession(testRegion.getWorld(), testRegion.getArea());
+            try {
+                testSession.setBlocks(testRegion, new BaseBlock(5, 4));
+            } catch(MaxChangedBlocksException e) {
+                return;
+            }
+        } else  if (size == Size.LARGE) {
+            return;
+        }
     }
 
     /**
