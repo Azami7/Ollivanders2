@@ -977,6 +977,7 @@ public class OllivandersListener implements Listener
     * @param event - BlockPistonRetractEvent
     */
    @EventHandler(priority = EventPriority.HIGHEST)
+   @SuppressWarnings("deprecation")
    public void onColloPistonRetract (BlockPistonRetractEvent event)
    {
       if (event.isSticky())

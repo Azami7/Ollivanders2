@@ -15,8 +15,6 @@ public class MUCUS_AD_NAUSEAM extends OEffect implements Effect
    /**
     *
     */
-   private static final long serialVersionUID = 8685445385963186772L;
-
    public MUCUS_AD_NAUSEAM (Player sender, Effects effect, int duration)
    {
       super(sender, effect, duration);

@@ -103,7 +103,7 @@ public class LYCANTHROPY extends OEffect implements Effect
             {
                if (entity.getEntityId() == wereId && entity.getType() == EntityType.WOLF)
                {
-                  if (((Wolf) entity).getCustomName().equals("Werewolf"))
+                  if (entity.getCustomName().equals("Werewolf"))
                   {
                      entity.remove();
                      wereId = -1;

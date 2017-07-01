@@ -125,13 +125,6 @@ public class Ollivanders2 extends JavaPlugin
          return;
       }
       //finished loading data
-      /*
-      if (fileConfig.getBoolean("update"))
-      {
-         @SuppressWarnings("unused")
-         Updater updater = new Updater(this, 72117, this.getFile(), Updater.UpdateType.DEFAULT, true);
-      }
-      */
 
       try
       {
