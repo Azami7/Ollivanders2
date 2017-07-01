@@ -118,14 +118,15 @@ public class Ollivanders2 extends JavaPlugin
       stationary = new ArrayList<StationarySpellObj>();
       prophecy = new HashSet<Prophecy>();
       fileConfig = getConfig();
-      //finished loading data
-      /*
-      if (fileConfig.getBoolean("update"))
+      //verify version of server
+      if (!Bukkit.getBukkitVersion().contains("1.12"))
       {
-         @SuppressWarnings("unused")
-         Updater updater = new Updater(this, 72117, this.getFile(), Updater.UpdateType.DEFAULT, true);
+         getLogger().severe("This plugin requires v1.12 and higher.");
+         this.setEnabled(false);
+         return;
       }
-      */
+      //finished loading data
+
       try
       {
          OPlayerMap = (HashMap<UUID, OPlayer>) SLAPI

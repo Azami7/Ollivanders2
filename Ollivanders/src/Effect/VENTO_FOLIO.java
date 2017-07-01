@@ -15,8 +15,6 @@ public class VENTO_FOLIO extends OEffect implements Effect
    /**
     *
     */
-   private static final long serialVersionUID = 2762063364036796900L;
-
    public VENTO_FOLIO (org.bukkit.entity.Player sender, Effects effect, int duration)
    {
       super(sender, effect, duration);

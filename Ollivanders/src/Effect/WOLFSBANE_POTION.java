@@ -12,8 +12,6 @@ public class WOLFSBANE_POTION extends OEffect implements Effect
    /**
     *
     */
-   private static final long serialVersionUID = -7153440938645339899L;
-
    public WOLFSBANE_POTION (Player sender, Effects effect, int duration)
    {
       super(sender, effect, duration);

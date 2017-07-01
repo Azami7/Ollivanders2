@@ -11,7 +11,6 @@ public class OEffect implements Serializable
    /**
     * Effect object stored in OPlayer
     */
-   private static final long serialVersionUID = -1137020032216987693L;
    public Effects name;
    public UUID casterUUID;
    public int duration;

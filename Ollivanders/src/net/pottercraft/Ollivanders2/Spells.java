@@ -21,10 +21,19 @@ public enum Spells
    AVIS,
    BOMBARDA,
    BOMBARDA_MAXIMA,
+   BOTHYNUS,
    BRACKIUM_EMENDO,
+   CALAMUS,
    CARPE_RETRACTUM,
    COLLOPORTUS,
+   COLORO_AURANTIACO,
+   COLORO_CAERULUS,
+   COLORO_FLAVO,
+   COLORO_OSTRUM,
+   COLORO_VERIDI,
+   COLORO_VERMICULO,
    COLOVARIA,
+   COMETES,
    CONFUNDO,
    CRESCERE_PROTEGAT,
    DEFODIO,
@@ -46,6 +55,7 @@ public enum Spells
    EVANESCO,
    EVERTE_STATUM,
    EXPELLIARMUS,
+   FATUUS_AURUM,
    FIANTO_DURI,
    FIENDFYRE,
    FINITE_INCANTATEM,
@@ -59,10 +69,18 @@ public enum Spells
    GLACIUS_DUO,
    GLACIUS_TRIA,
    HARMONIA_NECTERE_PASSUS,
+   HERBIFORS,
    HERBIVICUS,
    HORREAT_PROTEGAT,
    IMMOBULUS,
    IMPEDIMENTA,
+   INCARNATIO_DEVITO,
+   INCARNATIO_EQUUS,
+   INCARNATIO_FELIS,
+   INCARNATIO_LAMA,
+   INCARNATIO_LUPI,
+   INCARNATIO_PORCILLI,
+   INCARNATIO_VACCULA,
    INCENDIO,
    INCENDIO_DUO,
    INCENDIO_TRIA,
@@ -79,10 +97,12 @@ public enum Spells
    MELOFORS,
    METEOLOJINX,
    METEOLOJINX_RECANTO,
+   MORSMORDRE,
    MORTUOS_SUSCITATE,
    MUCUS_AD_NAUSEAM,
    MUFFLIATO,
    MULTICORFORS,
+   NOX,
    NULLUM_APPAREBIT,
    NULLUM_EVANESCUNT,
    OBLIVIATE,
@@ -140,13 +160,12 @@ public enum Spells
       try
       {
          spell = Spells.valueOf(complete);
-      } catch (IllegalArgumentException e)
-      {
-         spell = null;
-      } catch (NullPointerException e)
+      }
+      catch (Exception e)
       {
          spell = null;
       }
+
       return spell;
    }
 
