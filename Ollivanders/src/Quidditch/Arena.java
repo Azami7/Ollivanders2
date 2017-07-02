@@ -2,8 +2,11 @@ package Quidditch;
 
 import com.sk89q.worldedit.*;
 import com.sk89q.worldedit.blocks.BaseBlock;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.bukkit.adapter.BukkitImplAdapter;
 import com.sk89q.worldedit.event.extent.EditSessionEvent;
 import com.sk89q.worldedit.regions.CuboidRegion;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
@@ -12,6 +15,10 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+
+import java.util.ArrayList;
+
+import static org.bukkit.Bukkit.getLogger;
 
 /**
  * @author autumnwoz
@@ -173,21 +180,66 @@ public class Arena {
         return false;
     }
 
+    /**
+     * Build the arena using WorldEdit
+     */
     private void buildArena(){
+        double x = center.getX();
+        double y = center.getY() - 1;
+        double z = center.getZ();
+        BukkitWorld world = new BukkitWorld(center.getWorld());
+
         if (size == Size.MEDIUM) {
-            Vector v1 = new Vector(center.getX() + 4, center.getY() + 4, center.getZ());
-            Vector v2 = new Vector(center.getX() - 4, center.getY() - 4, center.getZ());
-            CuboidRegion testRegion = new CuboidRegion(v1, v2);
+            ArrayList<CuboidRegion> areas = new ArrayList<>();
+
+            areas.add(createRegion(x - 39, y, z + 16, x - 39, y, z - 16, world));
+            areas.add(createRegion(x - 38, y, z + 22, x - 35, y, z - 22, world));
+            areas.add(createRegion(x - 34, y, z + 36, x - 31, y, z - 36, world));
+            areas.add(createRegion(x - 30, y, z + 42, x - 27, y, z - 42, world));
+            areas.add(createRegion(x - 26, y, z + 48, x - 23, y, z - 48, world));
+            areas.add(createRegion(x - 22, y, z + 52, x - 19, y, z - 52, world));
+            areas.add(createRegion(x - 18, y, z + 48, x - 15, y, z - 48, world));
+            areas.add(createRegion(x - 14, y, z + 46, x - 11, y, z - 46, world));
+            areas.add(createRegion(x - 10, y, z + 45, x - 7, y, z - 45, world));
+            areas.add(createRegion(x - 6, y, z + 44, x - 3, y, z - 44, world));
+            areas.add(createRegion(x - 2, y, z + 44, x + 1, y, z - 44, world));
+            areas.add(createRegion(x + 2, y, z + 44, x + 5, y, z - 44, world));
+            areas.add(createRegion(x + 6, y, z + 44, x + 9, y, z - 44, world));
+            areas.add(createRegion(x + 10, y, z + 45, x + 13, y, z - 45, world));
+            areas.add(createRegion(x + 14, y, z + 47, x + 17, y, z - 47, world));
+            areas.add(createRegion(x + 18, y, z + 49, x + 21, y, z - 49, world));
+            areas.add(createRegion(x + 22, y, z + 51, x + 25, y, z - 51, world));
+            areas.add(createRegion(x + 26, y, z + 47, x + 29, y, z - 47, world));
+            areas.add(createRegion(x + 30, y, z + 41, x + 33, y, z - 41, world));
+            areas.add(createRegion(x + 34, y, z + 34, x + 37, y, z - 34, world));
+            areas.add(createRegion(x + 38, y, z + 16, x + 41, y, z - 16, world));
+
             EditSessionFactory sessionFactory = WorldEdit.getInstance().getEditSessionFactory();
-            EditSession testSession = sessionFactory.getEditSession(testRegion.getWorld(), testRegion.getArea());
+            EditSession session = sessionFactory.getEditSession(areas.get(0).getWorld(), -1);
             try {
-                testSession.setBlocks(testRegion, new BaseBlock(5, 4));
+                int i = 0;
+                for (CuboidRegion reg : areas) {
+                    if (i % 2 == 0) {
+                        session.setBlocks(reg, new BaseBlock(35, 13));
+                    } else {
+                        session.setBlocks(reg, new BaseBlock(2));
+                    }
+                    i++;
+                }
             } catch(MaxChangedBlocksException e) {
                 return;
             }
         } else  if (size == Size.LARGE) {
             return;
         }
+    }
+
+    private CuboidRegion createRegion(double x1, double y1, double z1, double x2, double y2, double z2, BukkitWorld world) {
+        Vector v1 = new Vector(x1, y1, z1);
+        Vector v2 = new Vector(x2, y2, z2);
+        CuboidRegion region = new CuboidRegion(v1, v2);
+        region.setWorld(world);
+        return region;
     }
 
     /**
