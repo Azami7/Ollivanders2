@@ -10,6 +10,8 @@ import net.pottercraft.Ollivanders2.Spells;
 /**
  * Created by Azami7 on 6/29/17.
  *
+ * Cancels the effect of the LUMOS spell or removes the effect of a Night Vision potion.
+ *
  * @author lownes
  */
 public class NOX extends SpellProjectile implements Spell

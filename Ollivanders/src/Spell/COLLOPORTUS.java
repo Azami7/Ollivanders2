@@ -15,9 +15,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class COLLOPORTUS extends SpellProjectile implements Spell
 {
-
-   public COLLOPORTUS (Ollivanders2 plugin, Player player, Spells name,
-                       Double rightWand)
+   public COLLOPORTUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -25,14 +23,15 @@ public class COLLOPORTUS extends SpellProjectile implements Spell
    public void checkEffect ()
    {
       move();
-      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
+      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE
+            && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
       {
          int duration = (int) (usesModifier * 1200);
-         StationarySpell.COLLOPORTUS total = new StationarySpell.COLLOPORTUS(player, location, StationarySpells.COLLOPORTUS, 5, duration);
+         StationarySpell.COLLOPORTUS total = new StationarySpell.COLLOPORTUS(player, location,
+               StationarySpells.COLLOPORTUS, 5, duration);
          total.flair(10);
          p.addStationary(total);
          kill();
       }
    }
-
 }

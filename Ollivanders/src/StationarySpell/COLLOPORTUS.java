@@ -14,14 +14,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class COLLOPORTUS extends StationarySpellObj implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 7170355497305049461L;
-
-   public COLLOPORTUS (Player player, Location location, StationarySpells name,
-                       Integer radius, Integer duration)
+   public COLLOPORTUS (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
       super(player, location, name, radius, duration);
    }
@@ -30,5 +23,4 @@ public class COLLOPORTUS extends StationarySpellObj implements StationarySpell
    {
 
    }
-
 }

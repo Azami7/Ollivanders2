@@ -9,6 +9,9 @@ import net.pottercraft.Ollivanders2.Spells;
 /**
  * Created by Azami7 on 6/28/17.
  *
+ * Turn target player in to a llama.
+ *
+ * @see IncarnatioSuper
  * @author Azami7
  */
 public class INCARNATIO_LAMA extends IncarnatioSuper

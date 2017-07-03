@@ -18,8 +18,7 @@ import net.pottercraft.Ollivanders2.Spells;
 public class MELOFORS extends SpellProjectile implements Spell
 {
 
-   public MELOFORS (Ollivanders2 plugin, Player player, Spells name,
-                    Double rightWand)
+   public MELOFORS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

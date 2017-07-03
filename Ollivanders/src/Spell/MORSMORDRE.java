@@ -16,6 +16,8 @@ import net.pottercraft.Ollivanders2.Spells;
 /**
  * Created by Azami7 on 6/28/17.
  *
+ * Cast the dark mark in the sky.
+ *
  * @author Azami7
  */
 public class MORSMORDRE extends SpellProjectile implements Spell

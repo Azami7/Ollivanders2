@@ -13,13 +13,12 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * Class for transfiguration spells
+ * Class for transfiguration spells.
  *
  * @author lownes
  */
 public abstract class Transfiguration extends SpellProjectile
 {
-
    private final UUID nullUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
    private EntityType fromEType;
    private ItemStack fromStack;
@@ -28,8 +27,7 @@ public abstract class Transfiguration extends SpellProjectile
    private int timeMultiplier = 1200;
 
 
-   public Transfiguration (Ollivanders2 plugin, Player player, Spells name,
-                           Double rightWand)
+   public Transfiguration (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       hasTransfigured = false;
@@ -86,6 +84,7 @@ public abstract class Transfiguration extends SpellProjectile
       {
          newEntity = player.getWorld().spawnEntity(loc, toType);
       }
+
       if (newEntity == null)
       {
          toID = nullUUID;

@@ -7,19 +7,18 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spells;
 
 /**
- * Transfigures entity into a chicken.
+ * Transfigures an item into a horse.
  *
- * @see MetatrepoSuper
- * @version Ollivanders2
+ * @author lownes
  * @author Azami7
  */
-public class DUCKLIFORS extends MetatrepoSuper
+public class METATREPO_EQUUS extends MetatrepoSuper
 {
 
-   public DUCKLIFORS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public METATREPO_EQUUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 
-      animalShape = EntityType.CHICKEN;
+      animalShape = EntityType.HORSE;
    }
 }

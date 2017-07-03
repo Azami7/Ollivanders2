@@ -12,14 +12,16 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * Created by Azami7 on 6/30/17.
  *
- * @author lownes
+ * Turn a player in to a Creature.
+ *
  * @author Azami7
  */
 public class IncarnatioEffectSuper extends OEffect implements Effect
 {
    String name;
    EntityType animalShape;
-   int myID = -1;
+   Creature animal;
+   private int myID = -1;
 
    public IncarnatioEffectSuper (Player sender, Effects effect, int duration)
    {
@@ -42,7 +44,8 @@ public class IncarnatioEffectSuper extends OEffect implements Effect
       {
          if (myID == -1)
          {
-            Creature animal = (Creature) owner.getWorld().spawnEntity(owner.getLocation(), animalShape);
+            animal = (Creature) owner.getWorld().spawnEntity(owner.getLocation(), animalShape);
+            setAnimalType();
             animal.setCustomName(animalName);
             animal.setCustomNameVisible(true);
             myID = animal.getEntityId();
@@ -87,7 +90,7 @@ public class IncarnatioEffectSuper extends OEffect implements Effect
             {
                if (entity.getEntityId() == myID && entity.getType() == animalShape)
                {
-                  if (((Creature) entity).getCustomName().equals(animalName))
+                  if (entity.getCustomName().equals(animalName))
                   {
                      entity.remove();
                      myID = -1;
@@ -98,5 +101,10 @@ public class IncarnatioEffectSuper extends OEffect implements Effect
          }
          myID = -1;
       }
+   }
+
+   public void setAnimalType()
+   {
+      //by default, do nothing
    }
 }

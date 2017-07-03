@@ -17,9 +17,11 @@ import net.pottercraft.Ollivanders2.Spells;
 /**
  * Created by Azami7 on 6/30/17.
  *
+ * Change a sheep or a colorable block to a specific color.
+ *
  * @author Azami7
  */
-public class ColoroSuper extends SpellProjectile implements Spell
+public abstract class ColoroSuper extends SpellProjectile implements Spell
 {
    DyeColor color = DyeColor.WHITE;
 

@@ -12,12 +12,13 @@ import net.pottercraft.Ollivanders2.Spells;
 import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**
- * Created by Azami7 on 6/28/17. Imported from iarepandemonium/Ollivanders.
+ * Created by Azami7 on 6/28/17.
  *
- * @author lownes
+ * Turn target player in to a Creature.
+ *
  * @author Azami7
  */
-public class IncarnatioSuper extends Transfiguration implements Spell
+public abstract class IncarnatioSuper extends Transfiguration implements Spell
 {
    OEffect effect;
 

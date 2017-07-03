@@ -9,6 +9,8 @@ import net.pottercraft.Ollivanders2.Spells;
 /**
  * Created by Azami7 on 6/30/17.
  *
+ * Target sheep or colored block turns orange.
+ *
  * @author Azami7
  */
 public class COLORO_AURANTIACO extends ColoroSuper

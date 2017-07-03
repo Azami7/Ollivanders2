@@ -9,6 +9,8 @@ import net.pottercraft.Ollivanders2.Spells;
 /**
  * Created by kristin on 6/29/17.
  *
+ * Target sheep or colored block turns blue.
+ *
  * @author Azami7
  */
 public class COLORO_CAERULUS extends ColoroSuper

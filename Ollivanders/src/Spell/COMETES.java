@@ -2,7 +2,6 @@ package Spell;
 
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
@@ -16,15 +15,15 @@ import net.pottercraft.Ollivanders2.Spells;
 /**
  * Created by Azami7 on 6/29/17.
  *
+ * Shoots mutliple orange burst fireworks in to the air.
+ *
  * @author Azami7
  */
 public class COMETES extends SpellProjectile implements Spell
 {
-   @SuppressWarnings("deprecation")
    public COMETES (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
-      moveEffectData = Material.FIREWORK.getId();
    }
 
    public void checkEffect ()

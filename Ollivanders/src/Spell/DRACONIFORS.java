@@ -5,26 +5,22 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Spells;
-import net.pottercraft.Ollivanders2.Transfiguration;
 
 /**
- * Transfiguration spell for a Dragon. OllivandersPlayerListener.draconiforsBlockChange()
+ * Turn target entity in to a Dragon. OllivandersPlayerListener.draconiforsBlockChange()
  * keeps any transfigured dragons from destroying terrain.
  *
+ * @see MetatrepoSuper
+ * @version Ollivanders2
  * @author lownes
+ * @author Azami7
  */
-public class DRACONIFORS extends Transfiguration implements Spell
+public class DRACONIFORS extends MetatrepoSuper
 {
-
-   public DRACONIFORS (Ollivanders2 plugin, Player player, Spells name,
-                       Double rightWand)
+   public DRACONIFORS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
-   }
 
-   public void checkEffect ()
-   {
-      simpleTransfigure(EntityType.ENDER_DRAGON, null);
+      animalShape = EntityType.ENDER_DRAGON;
    }
-
 }

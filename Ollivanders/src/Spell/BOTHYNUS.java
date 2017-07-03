@@ -16,6 +16,8 @@ import net.pottercraft.Ollivanders2.Spells;
 /**
  * Created by Azami7 on 6/29/17.
  *
+ * Shoots multiple yellow star fireworks in to the air.
+ *
  * @author Azami7
  */
 public class BOTHYNUS extends SpellProjectile implements Spell
