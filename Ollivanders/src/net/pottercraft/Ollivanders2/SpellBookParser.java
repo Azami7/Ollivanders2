@@ -115,8 +115,6 @@ public class SpellBookParser
          + "it will turn that into a silverfish monster egg.";
    public final static String EPISKEY = "Episkey will heal minor injuries. The duration of the healing "
          + "effect depends on your experience.";
-   public final static String EQUUSIFORS = "Equusifors will transfigure an entity into a horse. "
-         + "The length of the transfiguration depends on your experience.";
    public final static String ET_INTERFICIAM_ANIMAM_LIGAVERIS = "The unholy incantation, "
          + "et interficiam animam ligaveris, will create a horcrux.";
    public final static String EVANESCO = "Evanesco will vanish an entity. "
@@ -202,6 +200,8 @@ public class SpellBookParser
          + "the impact which will burn entities sensitive to sun. The radius of the light is dependent on your "
          + "experience.";
    public final static String MELOFORS = "Melofors places a melon on the target's head.";
+   public final static String METATREPO_EQUUS = "Metatrepo Equus will transfigure an entity into a horse. "
+         + "The length of the transfiguration depends on your experience.";
    public final static String METEOLOJINX = "Meteolojinx will turn a sunny day into a storm for a duration which "
          + "depends on your experience.";
    public final static String METEOLOJINX_RECANTO = "Meteolojinx Recanto will turn a storm into a sunny day for "
@@ -505,7 +505,7 @@ public class SpellBookParser
                   PROTEGO_MAXIMA + N + PROTEGO_TOTALUM + N + GLACIUS_DUO + N +
                   LUMOS_SOLEM);
       bookMap.put("Standard Book of Spells Grade 5",
-            ACCIO + N + EQUUSIFORS + N + EXPELLIARMUS + N + INCENDIO + N +
+            ACCIO + N + METATREPO_EQUUS + N + EXPELLIARMUS + N + INCENDIO + N +
                   PROTEGO + N + REPARO + N + SCUTO_CONTERAM + N + STUPEFY + N +
                   WINGARDIUM_LEVIOSA + N + GLACIUS_TRIA + N + DEPULSO + N +
                   LEVICORPUS);
@@ -568,7 +568,7 @@ public class SpellBookParser
             AVIS + N + DURO + N + EVANESCO + N + PIERTOTUM_LOCOMOTOR + N +
                   ENTOMORPHIS);
       bookMap.put("Intermediate Transfiguration",
-            AVIS + N + EQUUSIFORS + N + OPPUGNO + N + DRACONIFORS);
+            AVIS + N + METATREPO_EQUUS + N + OPPUGNO + N + DRACONIFORS);
       bookMap.put("Transubstantial Transfiguration",
             "Transubstantial transfiguration encompasses the spells which "
                   + "seem to break the rules of transfiguration, namely that an "

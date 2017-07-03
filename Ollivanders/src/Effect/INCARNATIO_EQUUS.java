@@ -1,90 +1,68 @@
 package Effect;
 
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.Entity;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Horse;
 
 import net.pottercraft.Ollivanders2.Effects;
-import net.pottercraft.Ollivanders2.OEffect;
-import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Created by Azami7 on 6/28/17.
  *
+ * Turns target player in to a horse.
+ *
+ * @see IncarnatioEffectSuper
  * @author Azami7
  */
-public class INCARNATIO_EQUUS extends OEffect implements Effect
+public class INCARNATIO_EQUUS extends IncarnatioEffectSuper
 {
-   int horseID = -1;
-
    public INCARNATIO_EQUUS(Player sender, Effects effect, int duration)
    {
       super(sender, effect, duration);
+
+      animalShape = EntityType.HORSE;
+      name = "Horse";
    }
 
+   /**
+    * Sets traits about this horse.
+    */
    @Override
-   public void checkEffect(Ollivanders2 p, Player owner)
+   public void setAnimalType()
    {
-      age(1);
-      if (duration > 0)
-      {
-         if(horseID == -1)
-         {
-            Horse horse = (Horse) owner.getWorld().spawnEntity(owner.getLocation(), EntityType.HORSE);
-            horse.setCustomName("Horse");
-            horse.setCustomNameVisible(true);
-            horseID = horse.getEntityId();
-         }
-         else{
-            for (Entity entity : owner.getWorld().getEntities())
-            {
-               if (entity.getEntityId() == horseID && entity.getType() == EntityType.HORSE)
-               {
-                  Horse horse = (Horse)entity;
-                  if (horse.getCustomName().equals("Horse"))
-                  {
-                     owner.teleport(entity);
-                     if(horse.getTarget() == owner)
-                     {
-                        horse.setTarget(null);
-                     }
-                     if (duration > 0)
-                     {
-                        for (Player other : owner.getWorld().getPlayers())
-                        {
-                           other.hidePlayer(owner);
-                        }
-                     }
-                     return;
-                  }
-               }
-            }
-            duration = 0;
-         }
-      }
+      Horse myAnimal = (Horse)animal;
+
+      // small chance of a special style.
+      int rand = Ollivanders2.random.nextInt() % 20;
+      if (rand == 0)
+         myAnimal.setStyle(Horse.Style.BLACK_DOTS);
+      else if (rand == 1)
+         myAnimal.setStyle(Horse.Style.WHITE);
+      else if (rand == 2)
+         myAnimal.setStyle(Horse.Style.WHITE_DOTS);
+      else if (rand == 3)
+         myAnimal.setStyle(Horse.Style.WHITEFIELD);
       else
-      {
-         if (horseID != -1)
-         {
-            for (Player other : owner.getWorld().getPlayers())
-            {
-               other.showPlayer(owner);
-            }
-            for (Entity entity : owner.getWorld().getEntities())
-            {
-               if (entity.getEntityId() == horseID && entity.getType() == EntityType.HORSE)
-               {
-                  if (((Horse)entity).getCustomName().equals("Horse"))
-                  {
-                     entity.remove();
-                     horseID = -1;
-                     return;
-                  }
-               }
-            }
-         }
-         horseID = -1;
-      }
+         myAnimal.setStyle(Horse.Style.NONE);
+
+      // randomize colors
+      rand = Ollivanders2.random.nextInt() % 7;
+      if (rand == 0)
+         myAnimal.setColor(Horse.Color.BLACK);
+      else if (rand == 1)
+         myAnimal.setColor(Horse.Color.BROWN);
+      else if (rand == 2)
+         myAnimal.setColor(Horse.Color.CHESTNUT);
+      else if (rand == 3)
+         myAnimal.setColor(Horse.Color.CREAMY);
+      else if (rand == 4)
+         myAnimal.setColor(Horse.Color.DARK_BROWN);
+      else if (rand == 5)
+         myAnimal.setColor(Horse.Color.GRAY);
+      else
+         myAnimal.setColor(Horse.Color.WHITE);
+
+      animal = myAnimal;
    }
 }

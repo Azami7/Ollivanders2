@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
@@ -41,7 +42,9 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 /**
  * Ollivanders2 plugin object
  *
+ * @version Ollivanders2
  * @author lownes
+ * @author Azami7
  */
 public class Ollivanders2 extends JavaPlugin
 {
@@ -49,12 +52,14 @@ public class Ollivanders2 extends JavaPlugin
    private Map<UUID, OPlayer> OPlayerMap = new HashMap<UUID, OPlayer>();
    private List<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
    private List<StationarySpellObj> stationary = new ArrayList<StationarySpellObj>();
-   ;
+
    private Set<Prophecy> prophecy = new HashSet<Prophecy>();
    private Listener playerListener;
    private OllivandersSchedule schedule;
    private List<Block> tempBlocks = new ArrayList<Block>();
    private FileConfiguration fileConfig;
+
+   public static Random random = new Random();
 
    public void onDisable ()
    {

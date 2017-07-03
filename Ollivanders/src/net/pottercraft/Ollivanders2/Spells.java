@@ -2,6 +2,9 @@ package net.pottercraft.Ollivanders2;
 
 /**
  * Represents allowable spells.
+ *
+ * @version Ollivanders2
+ * @author Azami7
  */
 public enum Spells
 {
@@ -50,7 +53,6 @@ public enum Spells
    ENGORGIO,
    ENTOMORPHIS,
    EPISKEY,
-   EQUUSIFORS,
    ET_INTERFICIAM_ANIMAM_LIGAVERIS,
    EVANESCO,
    EVERTE_STATUM,
@@ -95,6 +97,7 @@ public enum Spells
    LUMOS_MAXIMA,
    LUMOS_SOLEM,
    MELOFORS,
+   METATREPO_EQUUS,
    METEOLOJINX,
    METEOLOJINX_RECANTO,
    MORSMORDRE,

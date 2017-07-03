@@ -3,7 +3,9 @@ package net.pottercraft.Ollivanders2;
 /**
  * All effects
  *
+ * @version Ollivanders2
  * @author lownes
+ * @author Azami7
  */
 public enum Effects
 {
