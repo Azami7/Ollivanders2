@@ -20,7 +20,14 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.*;
+import org.bukkit.entity.Damageable;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -45,6 +52,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -251,7 +259,8 @@ public class OllivandersListener implements Listener
          try
          {
             distance = recipient.getLocation().distance(sender.getLocation());
-         } catch (IllegalArgumentException e)
+         }
+         catch (IllegalArgumentException e)
          {
             distance = -1;
          }
@@ -274,6 +283,7 @@ public class OllivandersListener implements Listener
             }
          }
       }
+
       for (Player remRec : remRecipients)
       {
          try
@@ -532,23 +542,28 @@ public class OllivandersListener implements Listener
       {
          //Maybe you have to use Integer.TYPE here instead of Integer.class
          c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, Spells.class, Double.class);
-      } catch (SecurityException e)
+      }
+      catch (SecurityException e)
       {
          e.printStackTrace();
-      } catch (NoSuchMethodException e)
+      }
+      catch (NoSuchMethodException e)
       {
          e.printStackTrace();
-      } catch (ClassNotFoundException e)
+      }
+      catch (ClassNotFoundException e)
       {
          e.printStackTrace();
       }
       try
       {
          p.addProjectile((SpellProjectile) c.newInstance(p, player, name, wandC));
-      } catch (IllegalArgumentException e)
+      }
+      catch (IllegalArgumentException e)
       {
          e.printStackTrace();
-      } catch (InstantiationException e)
+      }
+      catch (InstantiationException e)
       {
          e.printStackTrace();
       } catch (IllegalAccessException e)
@@ -1310,8 +1325,8 @@ public class OllivandersListener implements Listener
    {
       if (event.getEntityType() == EntityType.WITCH && p.getConfig().getBoolean("witchDrop"))
       {
-         int wandType = (int) (Math.random() * 4);
-         int coreType = (int) (Math.random() * 4);
+         int wandType = (int) (Ollivanders2.random.nextInt() % 4);
+         int coreType = (int) (Ollivanders2.random.nextInt() % 4);
          String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
          String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
          ItemStack wand = new ItemStack(Material.STICK);
@@ -1407,12 +1422,15 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void broomClick (PlayerInteractEvent event)
    {
-      if (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
+      if (((event.getAction() == Action.RIGHT_CLICK_AIR) || (event.getAction() == Action.RIGHT_CLICK_BLOCK))
+            && (event.getPlayer().getInventory().getItemInMainHand() != null)
+            && (this.p.isBroom(event.getPlayer().getInventory().getItemInMainHand())))
+      //(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
       {
-         if (event.getPlayer().getInventory().getItemInMainHand() != null)
-         {
-            if (p.isBroom(event.getPlayer().getInventory().getItemInMainHand()))
-            {
+         //if (event.getPlayer().getInventory().getItemInMainHand() != null)
+         //{
+            //if (p.isBroom(event.getPlayer().getInventory().getItemInMainHand()))
+            //{
                UUID playerUid = event.getPlayer().getUniqueId();
                Set<UUID> flying = OllivandersSchedule.getFlying();
                if (flying.contains(playerUid))
@@ -1423,8 +1441,8 @@ public class OllivandersListener implements Listener
                {
                   flying.add(playerUid);
                }
-            }
-         }
+            //}
+         //}
       }
    }
 }

@@ -39,15 +39,15 @@ public class Prophecy implements Serializable
       PotionEffectType possible = null;
       while (possible == null)
       {
-         possible = effects[(int) (effects.length * Math.random())];
+         possible = effects[(int) (Ollivanders2.random.nextInt() % effects.length)];
       }
       effect = possible.getName();
       long currentTime = System.currentTimeMillis();
       FileConfiguration config = Bukkit.getPluginManager().getPlugin("Ollivanders2").getConfig();
       long maxDuration = config.getLong("divinationMaxDuration");
       long maxStartOffset = config.getLong("divinationMaxStartOffset");
-      start = currentTime + (long) (Math.random() * maxStartOffset);
-      duration = (int) (Math.random() * maxDuration);
+      start = currentTime + (long) (Ollivanders2.random.nextInt() % maxStartOffset);
+      duration = (int) (Ollivanders2.random.nextInt() % maxDuration);
    }
 
    public Prophecy (Player player, long start, int duration)
@@ -57,7 +57,7 @@ public class Prophecy implements Serializable
       PotionEffectType possible = null;
       while (possible == null)
       {
-         possible = effects[(int) (effects.length * Math.random())];
+         possible = effects[(int) (Ollivanders2.random.nextInt() % effects.length)];
       }
       effect = possible.getName();
       long currentTime = System.currentTimeMillis();

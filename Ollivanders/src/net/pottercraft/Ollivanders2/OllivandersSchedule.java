@@ -38,6 +38,7 @@ class OllivandersSchedule implements Runnable
    Ollivanders2 p;
    int counter = 0;
    static Set<UUID> flying = new HashSet<UUID>();
+   Set<UUID> onBroom = new HashSet<UUID>();
 
    public OllivandersSchedule (Ollivanders2 plugin)
    {
@@ -490,6 +491,7 @@ class OllivandersSchedule implements Runnable
             {
                player.setAllowFlight(true);
                player.setFlying(true);
+               this.onBroom.add(player.getUniqueId());
                if (flying.contains(player.getUniqueId()))
                {
                   Vector broomVec = player.getLocation().getDirection().clone();
@@ -499,7 +501,7 @@ class OllivandersSchedule implements Runnable
             }
             else
             {
-               if (player.getGameMode() == GameMode.SURVIVAL)
+               if (player.getGameMode() == GameMode.SURVIVAL && (this.onBroom.contains(player.getUniqueId())))
                {
                   for (OEffect effect : p.getOPlayer(player).getEffects())
                   {
@@ -508,20 +510,16 @@ class OllivandersSchedule implements Runnable
                         continue playerIter;
                      }
                   }
-                  player.setAllowFlight(false);
+                  //player.setAllowFlight(false);
                   player.setFlying(false);
+                  this.onBroom.remove(player.getUniqueId());
                }
             }
          }
       }
    }
 
-   /**
-    * Get the set of flying players
-    *
-    * @return set of flying players
-    */
-   public static Set<UUID> getFlying ()
+   public static Set<UUID> getFlying()
    {
       return flying;
    }

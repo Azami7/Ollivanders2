@@ -249,7 +249,7 @@ public class Ollivanders2 extends JavaPlugin
                   String core = "";
                   if (args[2].startsWith("*"))
                   {
-                     wood = woodArray[(int) (Math.random() * 4)];
+                     wood = woodArray[(int) (Ollivanders2.random.nextInt() % 4)];
                   }
                   else
                   {
@@ -264,7 +264,7 @@ public class Ollivanders2 extends JavaPlugin
                   }
                   if (args[3].startsWith("*"))
                   {
-                     core = coreArray[(int) (Math.random() * 4)];
+                     core = coreArray[(int) (Ollivanders2.random.nextInt() % 4)];
                   }
                   else
                   {
@@ -337,10 +337,12 @@ public class Ollivanders2 extends JavaPlugin
             {
                if (args[0].equalsIgnoreCase("wands"))
                {
+                  // they only want wands, so do not give books
                   books = false;
                }
                else if (args[0].equalsIgnoreCase("books"))
                {
+                  // they only want books, so do not give wands
                   wands = false;
                }
                if (args.length == 2)
@@ -361,13 +363,13 @@ public class Ollivanders2 extends JavaPlugin
                //Give amount of each type of wand
                if (wands)
                {
-                  for (String i : woodArray)
+                  for (String wood : woodArray)
                   {
-                     for (String j : coreArray)
+                     for (String core : coreArray)
                      {
                         ItemStack wand = new ItemStack(Material.STICK);
                         List<String> lore = new ArrayList<String>();
-                        lore.add(i + " and " + j);
+                        lore.add(wood + " and " + core);
                         ItemMeta meta = wand.getItemMeta();
                         meta.setLore(lore);
                         meta.setDisplayName("Wand");
@@ -871,9 +873,10 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (isWand(stack))
       {
-         int seed = Math.abs(player.getUniqueId().hashCode() % 16);
-         int wood = seed / 4;
-         int core = seed % 4;
+         int seed = Math.abs(player.getUniqueId().hashCode());
+         Ollivanders2.random.setSeed(seed);
+         int wood = Ollivanders2.random.nextInt() % 4;
+         int core = Ollivanders2.random.nextInt() % 4;
          String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
          String woodString = woodArray[wood];
          String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
