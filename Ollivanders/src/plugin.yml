@@ -7,3 +7,7 @@ commands:
   Okit:
     description: This command gives an op the starting kit.
     usage: Example usage /Okit
+
+  Quidd:
+    description: This command creates a Quidditch arena.
+    usage: Example usage /Quidd Hogwarts
