@@ -36,7 +36,7 @@ public class AVIS extends SpellProjectile implements Spell
          move();
          Parrot parrot = (Parrot) location.getWorld().spawnEntity(location, EntityType.PARROT);
 
-         int rand = Ollivanders2.random.nextInt() % 5;
+         int rand = Math.abs(Ollivanders2.random.nextInt() % 5);
          Parrot.Variant variant;
          if (rand == 0)
             variant = Parrot.Variant.CYAN;

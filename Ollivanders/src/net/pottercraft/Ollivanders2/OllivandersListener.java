@@ -1325,8 +1325,8 @@ public class OllivandersListener implements Listener
    {
       if (event.getEntityType() == EntityType.WITCH && p.getConfig().getBoolean("witchDrop"))
       {
-         int wandType = (int) (Ollivanders2.random.nextInt() % 4);
-         int coreType = (int) (Ollivanders2.random.nextInt() % 4);
+         int wandType = (int) Math.abs(Ollivanders2.random.nextInt() % 4);
+         int coreType = (int) Math.abs(Ollivanders2.random.nextInt() % 4);
          String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
          String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
          ItemStack wand = new ItemStack(Material.STICK);

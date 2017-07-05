@@ -29,7 +29,7 @@ public class INCARNATIO_LAMA extends IncarnatioEffectSuper
    {
       Llama myAnimal = (Llama)animal;
 
-      int rand = Ollivanders2.random.nextInt() % 4;
+      int rand = Math.abs(Ollivanders2.random.nextInt() % 4);
       if (rand == 0)
          myAnimal.setColor(Llama.Color.BROWN);
       else if (rand == 1)

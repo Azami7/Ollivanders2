@@ -31,7 +31,7 @@ public class INCARNATIO_PORCILLI extends IncarnatioEffectSuper
    @Override
    public void setAnimalType()
    {
-      int rand = Ollivanders2.random.nextInt() % 100;
+      int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
       Pig myAnimal = (Pig)animal;
 
       if (rand == 0)

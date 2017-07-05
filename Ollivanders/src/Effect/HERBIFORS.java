@@ -36,7 +36,7 @@ public class HERBIFORS extends OEffect implements Effect
       if (flower_count <= maxFlowers)
       {
          World world = owner.getWorld();
-         int rnum = Ollivanders2.random.nextInt() % 9;
+         int rnum = Math.abs(Ollivanders2.random.nextInt() % 9);
          ItemStack flower = new ItemStack(Material.RED_ROSE);
          flower.setDurability((short)rnum);
          world.dropItem(owner.getEyeLocation(), flower);

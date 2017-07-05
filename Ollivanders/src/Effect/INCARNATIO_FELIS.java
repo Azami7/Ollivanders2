@@ -35,7 +35,7 @@ public class INCARNATIO_FELIS extends IncarnatioEffectSuper
    {
       Ocelot myAnimal = (Ocelot)animal;
 
-      int rand = Ollivanders2.random.nextInt() % 3;
+      int rand = Math.abs(Ollivanders2.random.nextInt() % 3);
       if (rand == 0)
          myAnimal.setCatType(Ocelot.Type.BLACK_CAT);
       else if (rand == 1)

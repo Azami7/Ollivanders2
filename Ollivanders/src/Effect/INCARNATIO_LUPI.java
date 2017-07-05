@@ -34,7 +34,7 @@ public class INCARNATIO_LUPI extends IncarnatioEffectSuper
    {
       Wolf myAnimal = (Wolf)animal;
 
-      int rand = Ollivanders2.random.nextInt() % 10;
+      int rand = Math.abs(Ollivanders2.random.nextInt() % 10);
       if (rand == 0)
          myAnimal.isTamed();
 

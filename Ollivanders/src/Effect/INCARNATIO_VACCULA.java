@@ -19,7 +19,7 @@ public class INCARNATIO_VACCULA extends IncarnatioEffectSuper
    {
       super(sender, effect, duration);
 
-      int rand = Ollivanders2.random.nextInt() % 100;
+      int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
       if (rand == 0)
          animalShape = EntityType.MUSHROOM_COW;
       else

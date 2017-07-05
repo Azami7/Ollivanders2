@@ -34,7 +34,7 @@ public class INCARNATIO_EQUUS extends IncarnatioEffectSuper
       Horse myAnimal = (Horse)animal;
 
       // small chance of a special style.
-      int rand = Ollivanders2.random.nextInt() % 20;
+      int rand = Math.abs(Ollivanders2.random.nextInt() % 20);
       if (rand == 0)
          myAnimal.setStyle(Horse.Style.BLACK_DOTS);
       else if (rand == 1)
@@ -47,7 +47,7 @@ public class INCARNATIO_EQUUS extends IncarnatioEffectSuper
          myAnimal.setStyle(Horse.Style.NONE);
 
       // randomize colors
-      rand = Ollivanders2.random.nextInt() % 7;
+      rand = Math.abs(Ollivanders2.random.nextInt() % 7);
       if (rand == 0)
          myAnimal.setColor(Horse.Color.BLACK);
       else if (rand == 1)

@@ -250,7 +250,7 @@ public class Ollivanders2 extends JavaPlugin
                   String core = "";
                   if (args[2].startsWith("*"))
                   {
-                     wood = woodArray[(int) (Ollivanders2.random.nextInt() % 4)];
+                     wood = woodArray[(int) Math.abs(Ollivanders2.random.nextInt() % 4)];
                   }
                   else
                   {
@@ -265,7 +265,7 @@ public class Ollivanders2 extends JavaPlugin
                   }
                   if (args[3].startsWith("*"))
                   {
-                     core = coreArray[(int) (Ollivanders2.random.nextInt() % 4)];
+                     core = coreArray[(int) Math.abs(Ollivanders2.random.nextInt() % 4)];
                   }
                   else
                   {
@@ -898,8 +898,8 @@ public class Ollivanders2 extends JavaPlugin
       {
          int seed = Math.abs(player.getUniqueId().hashCode());
          Ollivanders2.random.setSeed(seed);
-         int wood = Ollivanders2.random.nextInt() % 4;
-         int core = Ollivanders2.random.nextInt() % 4;
+         int wood = Math.abs(Ollivanders2.random.nextInt() % 4);
+         int core = Math.abs(Ollivanders2.random.nextInt() % 4);
          String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
          String woodString = woodArray[wood];
          String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
