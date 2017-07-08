@@ -10,21 +10,20 @@ import net.pottercraft.Ollivanders2.Spells;
 import java.util.ArrayList;
 
 /**
- * Shoots red burst fireworks in to the air.
+ * Shoots green fireworks in to the air.
  *
  * @see PyrotechniaSuper
- * @author lownes
  * @author Azami7
  */
-public class PERICULUM extends PyrotechniaSuper
+public class VERDIMILLIOUS extends PyrotechniaSuper
 {
-   public PERICULUM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public VERDIMILLIOUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 
       fireworkColors = new ArrayList<>();
-      fireworkColors.add(Color.RED);
-      fireworkType = Type.BURST;
+      fireworkColors.add(Color.GREEN);
+      fireworkType = Type.BALL_LARGE;
 
       if (usesModifier > 100)
       {

@@ -10,21 +10,23 @@ import net.pottercraft.Ollivanders2.Spells;
 import java.util.ArrayList;
 
 /**
- * Shoots red burst fireworks in to the air.
+ * A fancier version of Bothynus.
  *
+ * @see BOTHYNUS
  * @see PyrotechniaSuper
- * @author lownes
  * @author Azami7
  */
-public class PERICULUM extends PyrotechniaSuper
+public class BOTHYNUS_DUO extends PyrotechniaSuper
 {
-   public PERICULUM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public BOTHYNUS_DUO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 
       fireworkColors = new ArrayList<>();
-      fireworkColors.add(Color.RED);
-      fireworkType = Type.BURST;
+      fireworkColors.add(Color.YELLOW);
+      fireworkColors.add(Color.ORANGE);
+      fireworkType = Type.STAR;
+      hasTrails = true;
 
       if (usesModifier > 100)
       {

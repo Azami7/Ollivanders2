@@ -10,21 +10,29 @@ import net.pottercraft.Ollivanders2.Spells;
 import java.util.ArrayList;
 
 /**
- * Shoots red burst fireworks in to the air.
+ * A fancier version of COMETES.
  *
+ * @see COMETES
  * @see PyrotechniaSuper
- * @author lownes
  * @author Azami7
  */
-public class PERICULUM extends PyrotechniaSuper
+public class COMETES_DUO extends PyrotechniaSuper
 {
-   public PERICULUM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public COMETES_DUO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 
       fireworkColors = new ArrayList<>();
-      fireworkColors.add(Color.RED);
+      fireworkColors.add(Color.ORANGE);
       fireworkType = Type.BURST;
+
+      hasTrails = true;
+      hasFlicker = true;
+      hasFade = true;
+
+      fadeColors = new ArrayList<>();
+      fadeColors.add(Color.YELLOW);
+      fadeColors.add(Color.WHITE);
 
       if (usesModifier > 100)
       {

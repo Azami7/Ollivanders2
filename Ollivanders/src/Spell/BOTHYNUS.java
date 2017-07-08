@@ -1,34 +1,41 @@
 package Spell;
 
 import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.Material;
 import org.bukkit.FireworkEffect.Type;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.FireworkMeta;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spells;
 
+import java.util.ArrayList;
+
 /**
- * Created by Azami7 on 6/29/17.
+ * Shoots yellow star fireworks in to the air.
  *
- * Shoots multiple yellow star fireworks in to the air.
- *
+ * @see PyrotechniaSuper
  * @author Azami7
  */
-public class BOTHYNUS extends SpellProjectile implements Spell
+public class BOTHYNUS extends PyrotechniaSuper
 {
-   @SuppressWarnings("deprecation")
    public BOTHYNUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
-      moveEffectData = Material.FIREWORK.getId();
+
+      fireworkColors = new ArrayList<>();
+      fireworkColors.add(Color.YELLOW);
+      fireworkType = Type.STAR;
+
+      if (usesModifier > 100)
+      {
+         maxFireworks = 10;
+      }
+      else
+      {
+         maxFireworks = usesModifier / 10;
+      }
    }
 
+   /*
    public void checkEffect ()
    {
       move();
@@ -42,4 +49,5 @@ public class BOTHYNUS extends SpellProjectile implements Spell
       meta.setPower(4);
       firework.setFireworkMeta(meta);
    }
+   */
 }

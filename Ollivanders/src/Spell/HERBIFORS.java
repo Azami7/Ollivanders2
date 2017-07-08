@@ -14,7 +14,7 @@ import net.pottercraft.Ollivanders2.Spells;
 /**
  * Created by Azami7 on 6/28/17.
  *
- * Gives target player up to a dozen flowers, depending on the spell experience.
+ * This spell causes flowers to sprout from the victim.
  *
  * @version Ollivanders2
  * @author lownes
@@ -28,9 +28,9 @@ public class HERBIFORS extends SpellProjectile implements Spell
       super(plugin, player, name, rightWand);
 
       if (usesModifier > 120)
-         maxFlowers = 12;
+         maxFlowers = 120;
       else
-         maxFlowers = (int)usesModifier / 10;
+         maxFlowers = (int)usesModifier;
    }
 
    public void checkEffect()

@@ -12,7 +12,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * Created by kristin on 6/27/17.
  *
- * Give up to 12 flowers to target player, depending on experience.
+ * This spell causes flowers to sprout from the victim.
  *
  * @version Ollivanders2
  * @author lownes
