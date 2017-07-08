@@ -20,8 +20,8 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public abstract class PyrotechniaSuper extends SpellProjectile implements Spell
 {
-   int maxFireworks = 1;
-   int fireworkCount = 0;
+   int maxFireworks;
+   int fireworkCount;
    List <org.bukkit.Color> fireworkColors = null;
    List <org.bukkit.Color> fadeColors = null;
    FireworkEffect.Type fireworkType = null;
@@ -34,6 +34,8 @@ public abstract class PyrotechniaSuper extends SpellProjectile implements Spell
    {
       super(plugin, player, name, rightWand);
       moveEffectData = 0;
+      fireworkCount = 0;
+      maxFireworks = 1;
    }
 
    public void checkEffect ()
@@ -107,5 +109,8 @@ public abstract class PyrotechniaSuper extends SpellProjectile implements Spell
       {
          maxFireworks = (int)usesModifier / max;
       }
+
+      if (maxFireworks < 1)
+         maxFireworks = 1;
    }
 }

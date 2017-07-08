@@ -25,20 +25,4 @@ public class MORSMORDRE extends PyrotechniaSuper
       fireworkType = Type.CREEPER;
       maxFireworks = 20;
    }
-
-   /*
-   public void checkEffect ()
-   {
-      move();
-      Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
-      FireworkMeta meta = firework.getFireworkMeta();
-      FireworkEffect.Builder builder = FireworkEffect.builder();
-      builder.withColor(Color.GREEN);
-      builder.with(Type.CREEPER);
-      meta.addEffect(builder.build());
-      // make firework fly for 2 seconds
-      meta.setPower(4);
-      firework.setFireworkMeta(meta);
-   }
-   */
 }

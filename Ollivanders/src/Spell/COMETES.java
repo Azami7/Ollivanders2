@@ -29,20 +29,4 @@ public class COMETES extends PyrotechniaSuper
 
       setMaxFireworks(10);
    }
-
-   /*
-   public void checkEffect ()
-   {
-      move();
-      Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
-      FireworkMeta meta = firework.getFireworkMeta();
-      FireworkEffect.Builder builder = FireworkEffect.builder();
-      builder.withColor(Color.ORANGE);
-      builder.with(Type.BURST);
-      meta.addEffect(builder.build());
-      // make firework fly for 2 seconds
-      meta.setPower(4);
-      firework.setFireworkMeta(meta);
-   }
-   */
 }

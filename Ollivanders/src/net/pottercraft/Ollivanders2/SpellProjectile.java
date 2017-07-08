@@ -36,8 +36,8 @@ public abstract class SpellProjectile
    public double rightWand;
    public int spellUses;
    public double usesModifier;
-   public Effect moveEffect = Effect.FIREWORK_SHOOT;
-   public int moveEffectData = 0;
+   public Effect moveEffect = Effect.STEP_SOUND;
+   public int moveEffectData = Material.SPONGE.getId();
    public Set<Block> changed = new HashSet<Block>();
 
 
