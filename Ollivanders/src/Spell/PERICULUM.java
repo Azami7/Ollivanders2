@@ -26,13 +26,6 @@ public class PERICULUM extends PyrotechniaSuper
       fireworkColors.add(Color.RED);
       fireworkType = Type.BURST;
 
-      if (usesModifier > 100)
-      {
-         maxFireworks = 10;
-      }
-      else
-      {
-         maxFireworks = usesModifier / 10;
-      }
+      setMaxFireworks(10);
    }
 }

@@ -33,13 +33,6 @@ public class PORFYRO_ASTERI_DUO extends PyrotechniaSuper
 
       fireworkType = FireworkEffect.Type.STAR;
 
-      if (usesModifier > 100)
-      {
-         maxFireworks = 10;
-      }
-      else
-      {
-         maxFireworks = usesModifier / 10;
-      }
+      setMaxFireworks(10);
    }
 }

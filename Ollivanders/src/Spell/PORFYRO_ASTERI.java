@@ -25,13 +25,6 @@ public class PORFYRO_ASTERI extends PyrotechniaSuper
       fireworkColors.add(Color.PURPLE);
       fireworkType = Type.STAR;
 
-      if (usesModifier > 100)
-      {
-         maxFireworks = 10;
-      }
-      else
-      {
-         maxFireworks = usesModifier / 10;
-      }
+      setMaxFireworks(10);
    }
 }

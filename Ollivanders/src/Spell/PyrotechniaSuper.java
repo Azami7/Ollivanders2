@@ -96,4 +96,16 @@ public abstract class PyrotechniaSuper extends SpellProjectile implements Spell
          fireworkCount++;
       }
    }
+
+   void setMaxFireworks (int max)
+   {
+      if (usesModifier > (max*10))
+      {
+         maxFireworks = max;
+      }
+      else
+      {
+         maxFireworks = (int)usesModifier / max;
+      }
+   }
 }

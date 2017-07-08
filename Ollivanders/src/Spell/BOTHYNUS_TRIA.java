@@ -33,13 +33,6 @@ public class BOTHYNUS_TRIA extends PyrotechniaSuper
       hasTrails = true;
       hasFade = true;
 
-      if (usesModifier > 100)
-      {
-         maxFireworks = 10;
-      }
-      else
-      {
-         maxFireworks = usesModifier / 10;
-      }
+      setMaxFireworks(15);
    }
 }

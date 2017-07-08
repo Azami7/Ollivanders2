@@ -25,14 +25,7 @@ public class BOTHYNUS extends PyrotechniaSuper
       fireworkColors.add(Color.YELLOW);
       fireworkType = Type.STAR;
 
-      if (usesModifier > 100)
-      {
-         maxFireworks = 10;
-      }
-      else
-      {
-         maxFireworks = usesModifier / 10;
-      }
+      setMaxFireworks(10);
    }
 
    /*

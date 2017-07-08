@@ -27,14 +27,7 @@ public class COMETES extends PyrotechniaSuper
       fireworkColors.add(Color.ORANGE);
       fireworkType = Type.BURST;
 
-      if (usesModifier > 100)
-      {
-         maxFireworks = 10;
-      }
-      else
-      {
-         maxFireworks = usesModifier / 10;
-      }
+      setMaxFireworks(10);
    }
 
    /*

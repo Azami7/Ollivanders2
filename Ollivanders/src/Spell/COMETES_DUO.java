@@ -34,13 +34,6 @@ public class COMETES_DUO extends PyrotechniaSuper
       fadeColors.add(Color.YELLOW);
       fadeColors.add(Color.WHITE);
 
-      if (usesModifier > 100)
-      {
-         maxFireworks = 10;
-      }
-      else
-      {
-         maxFireworks = usesModifier / 10;
-      }
+      setMaxFireworks(10);
    }
 }

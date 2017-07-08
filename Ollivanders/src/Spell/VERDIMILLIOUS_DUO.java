@@ -29,13 +29,6 @@ public class VERDIMILLIOUS_DUO extends PyrotechniaSuper
       fireworkType = Type.BALL_LARGE;
       hasTrails = true;
 
-      if (usesModifier > 150)
-      {
-         maxFireworks = 15;
-      }
-      else
-      {
-         maxFireworks = usesModifier / 10;
-      }
+      setMaxFireworks(10);
    }
 }
