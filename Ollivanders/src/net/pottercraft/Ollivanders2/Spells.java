@@ -65,7 +65,6 @@ public enum Spells
    FIENDFYRE,
    FINITE_INCANTATEM,
    FLAGRANTE,
-   FORSKNING,
    FRANGE_LIGNEA,
    FUMOS,
    FUMOS_DUO,
@@ -152,30 +151,41 @@ public enum Spells
     */
    public static Spells decode (String s)
    {
-      //getLogger().info(s);
       String[] words = s.split(" ");
-      //getLogger().info(words.length);
-      for (int i = 0; i < words.length; i++)
-      {
-         words[i] = words[i].toUpperCase();
-      }
-      //getLogger().info(words.length);
-      StringBuilder completeSB = new StringBuilder();
-      for (String word : words)
-      {
-         completeSB.append(word);
-         completeSB.append("_");
-      }
-      //getLogger().info(complete);
-      String complete = completeSB.substring(0, completeSB.length() - 1);
       Spells spell;
-      try
+
+      // handle spells with target words first
+      if (words[0].equalsIgnoreCase("Apparate"))
       {
-         spell = Spells.valueOf(complete);
+         spell = Spells.APPARATE;
       }
-      catch (Exception e)
+      else if (words[0].equalsIgnoreCase("Portus"))
       {
-         spell = null;
+         spell = Spells.PORTUS;
+      }
+      else // normal spells
+      {
+         for (int i = 0; i < words.length; i++)
+         {
+            words[i] = words[i].toUpperCase();
+         }
+
+         StringBuilder completeSB = new StringBuilder();
+         for (String word : words)
+         {
+            completeSB.append(word);
+            completeSB.append("_");
+         }
+
+         String complete = completeSB.substring(0, completeSB.length() - 1);
+         try
+         {
+            spell = Spells.valueOf(complete);
+         }
+         catch (Exception e)
+         {
+            spell = null;
+         }
       }
 
       return spell;

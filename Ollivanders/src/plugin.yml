@@ -1,9 +1,13 @@
 name: Ollivanders2
 main: net.pottercraft.Ollivanders2.Ollivanders2
-version: 2.2.1
+version: 2.2.2
 authors: [Azami7, Lil_Miss_Giggles]
 website: https://www.spigotmc.org/resources/ollivanders2.38992/
 commands:
+  Ollivanders2:
+    description: This is the main command for the Ollivanders2 plugin
+    usage: Example usage /Ollivanders
+
   Okit:
     description: This command gives an op the starting kit.
     usage: Example usage /Okit
@@ -11,3 +15,7 @@ commands:
   Quidd:
     description: This command creates a Quidditch arena.
     usage: Example usage /Quidd Hogwarts
+
+  Olli:
+    description: This is a shortened-form version of the main plugin command
+    usage: Example usage /Olli

@@ -37,6 +37,7 @@ public abstract class SpellProjectile
    public int spellUses;
    public double usesModifier;
    public Effect moveEffect = Effect.STEP_SOUND;
+   @SuppressWarnings("deprecation")
    public int moveEffectData = Material.SPONGE.getId();
    public Set<Block> changed = new HashSet<Block>();
 

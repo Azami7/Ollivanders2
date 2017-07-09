@@ -3,7 +3,6 @@ package net.pottercraft.Ollivanders2;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
@@ -44,8 +43,10 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
  * Ollivanders2 plugin object
  *
  * @version Ollivanders2
+ * @author cakenggt
  * @author lownes
  * @author Azami7
+ * @author Lil_Miss_Giggles
  */
 public class Ollivanders2 extends JavaPlugin
 {
@@ -61,6 +62,8 @@ public class Ollivanders2 extends JavaPlugin
    private FileConfiguration fileConfig;
 
    public static Random random = new Random();
+
+   public static boolean debug = false;
 
    public void onDisable ()
    {
@@ -159,6 +162,7 @@ public class Ollivanders2 extends JavaPlugin
       {
          getLogger().warning("Did not find prophecy.bin");
       }
+      /*
       try
       {
          MetricsLite metrics = new MetricsLite(this);
@@ -167,6 +171,8 @@ public class Ollivanders2 extends JavaPlugin
       {
          // Failed to submit the stats :-(
       }
+      */
+
       if (!new File(this.getDataFolder(), "config.yml").exists())
       {
          this.saveDefaultConfig();
@@ -201,249 +207,310 @@ public class Ollivanders2 extends JavaPlugin
       getLogger().info(this + " is now enabled!");
    }
 
+   /**
+    * Handle command events
+    *
+    * @param sender
+    * @param cmd
+    * @param commandLabel
+    * @param args
+    * @return true if the command was successful, false otherwise
+    */
    @EventHandler(priority = EventPriority.HIGHEST)
    public boolean onCommand (CommandSender sender, Command cmd, String commandLabel, String[] args)
    {
-      if (cmd.getName().equalsIgnoreCase("Okit"))
+      if (cmd.getName().equalsIgnoreCase("Ollivanders2") || cmd.getName().equalsIgnoreCase("Olli"))
       {
-         String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
-         String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
+         return runOllivanders(sender, cmd, commandLabel, args);
+      }
+      else if (cmd.getName().equalsIgnoreCase("Okit"))
+      {
+         // okit command deprecated
+         return runOllivanders(sender, cmd, commandLabel, args);
+      }
+      else if (cmd.getName().equalsIgnoreCase("Quidd"))
+      {
+         return runQuidd(sender, cmd, commandLabel, args);
+      }
+
+      return false;
+   }
+
+   private boolean isOp (CommandSender sender)
+   {
+      Player player = null;
+      if (sender instanceof Player)
+      {
+         player = (Player) sender;
+      }
+
+      if (player != null)
+      {
+         if (!player.isOp())
+         {
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only server ops can use the /Ollivanders2 commands.");
+            return false;
+         }
+      }
+      else
+         return false;
+
+      return true;
+   }
+
+   /**
+    * The main Ollivanders2 command.
+    *
+    * @param sender
+    * @param cmd
+    * @param commandLabel
+    * @param args
+    * @return
+    */
+   private boolean runOllivanders (CommandSender sender, Command cmd, String commandLabel, String[] args)
+   {
+      if (!isOp(sender))
+      {
+         return true;
+      }
+
+      // parse args
+      if (args.length >= 1)
+      {
+         String subCommand = args[0];
+
+         if (subCommand.equalsIgnoreCase("help"))
+            return runHelp (sender, cmd, commandLabel, args);
+         else if (subCommand.equalsIgnoreCase("wands"))
+            return okitWands((Player) sender);
+         else if (subCommand.equalsIgnoreCase("reload"))
+            return runReloadConfigs(sender);
+         else if (subCommand.equalsIgnoreCase("books"))
+            return okitBooks((Player) sender);
+         else if (subCommand.equalsIgnoreCase("items"))
+            return okitItems((Player) sender);
+         else if (subCommand.equalsIgnoreCase("debug"))
+            return toggleDebug(sender);
+      }
+
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "You are running Ollivanders2 version "
+            + this.getDescription().getVersion() + "\n\n" + "Type '/Ollivanders2 help' for help with Ollivanders2 commands.");
+
+      return true;
+   }
+
+   /**
+    * The Ollivanders2 main help command.
+    *
+    * @param sender
+    * @param cmd
+    * @param commandLabel
+    * @param args
+    * @return true if the command can be completed, false otherwise.
+    */
+   private boolean runHelp (CommandSender sender, Command cmd, String commandLabel, String[] args)
+   {
+      if (!isOp(sender))
+      {
+         return false;
+      }
+
+      if (args.length > 1)
+      {
+         // player asking for help on a specific command
+         // TODO implement specific command help
+      }
+
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Ollivanders2 commands:\n"
+            + "wands - gives a complete set of wands\n"
+            + "books - gives a complete set of spell books\n"
+            + "items - gives a complete set of items\n"
+            + "quidd - creates a quidditch pitch\n"
+            + "reload - reload the Ollivanders2 configs\n"
+            + "debug - toggles Ollivanders2 plugin debug output\n"
+            + "\n" + "To run a command, type '/Ollivanders [command]'.\n"
+            + "For example, '/Ollivanders wands");
+
+      return true;
+   }
+
+   /**
+    * The quidditch setup command.
+    *
+    * @param sender
+    * @param cmd
+    * @param commandLabel
+    * @param args
+    * @return
+    */
+   private boolean runQuidd (CommandSender sender, Command cmd, String commandLabel, String[] args)
+   {
+      if (!isOp(sender))
+      {
+         return true;
+      }
+
+      if (args.length >= 1)
+      {
          Player player = null;
          if (sender instanceof Player)
          {
             player = (Player) sender;
-         }
-         if (args.length == 1)
-         {
-            if (args[0].equalsIgnoreCase("reload"))
-            {
-               if (player != null)
-               {
-                  if (!player.isOp())
-                  {
-                     sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only server ops can use the /Okit command.");
-                     return true;
-                  }
-               }
-               reloadConfig();
-               fileConfig = getConfig();
-               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Config reloaded");
-               return true;
-            }
-         }
-         if (args.length >= 4)
-         {
-            if (player != null)
-            {
-               if (!player.isOp())
-               {
-                  sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only server ops can use the /Okit command.");
-               }
-            }
-            if (args[0].equalsIgnoreCase("wand"))
-            {
-               @SuppressWarnings("deprecation")
-               Player receiver = Bukkit.getPlayer(args[1]);
-               if (receiver != null)
-               {
-                  String wood = "";
-                  String core = "";
-                  if (args[2].startsWith("*"))
-                  {
-                     wood = woodArray[(int) Math.abs(Ollivanders2.random.nextInt() % 4)];
-                  }
-                  else
-                  {
-                     for (String w : woodArray)
-                     {
-                        if (w.toLowerCase().startsWith(args[2].toLowerCase()))
-                        {
-                           wood = w;
-                           break;
-                        }
-                     }
-                  }
-                  if (args[3].startsWith("*"))
-                  {
-                     core = coreArray[(int) Math.abs(Ollivanders2.random.nextInt() % 4)];
-                  }
-                  else
-                  {
-                     for (String c : coreArray)
-                     {
-                        if (c.toLowerCase().startsWith(args[3].toLowerCase()))
-                        {
-                           core = c;
-                           break;
-                        }
-                     }
-                  }
-                  ItemStack wand = new ItemStack(Material.STICK);
-                  List<String> lore = new ArrayList<String>();
-                  lore.add(wood + " and " + core);
-                  ItemMeta meta = wand.getItemMeta();
-                  meta.setLore(lore);
-                  meta.setDisplayName("Wand");
-                  wand.setItemMeta(meta);
-                  boolean add = true;
-                  if (args.length == 5)
-                  {
-                     int wandIndex = 0;
-                     boolean changeWand = false;
-                     for (ItemStack item : receiver.getInventory())
-                     {
-                        if (isWand(item))
-                        {
-                           add = false;
-                           if (args[4].equalsIgnoreCase("t"))
-                           {
-                              wandIndex = receiver.getInventory().first(item);
-                              changeWand = true;
-                           }
-                           else if (args[4].equalsIgnoreCase("f"))
-                           {
-                              if (!destinedWand(receiver, item))
-                              {
-                                 wandIndex = receiver.getInventory().first(item);
-                                 changeWand = true;
-                              }
-                           }
-                           break;
-                        }
-                     }
-                     if (changeWand)
-                     {
-                        receiver.getInventory().setItem(wandIndex, wand);
-                     }
-                  }
-                  if (add)
-                  {
-                     if (receiver.getInventory().addItem(wand).size() != 0)
-                     {
-                        receiver.getWorld().dropItem(receiver.getLocation(), wand);
-                     }
-                  }
-               }
-            }
-            return true;
-         }
-         else if (player != null)
-         {
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Ollivanders2 " + this.getDescription().getVersion());
-            //Arguments of command
-            boolean wands = true;
-            boolean books = true;
-            int amount = 1;
-            if (args.length > 0)
-            {
-               if (args[0].equalsIgnoreCase("wands"))
-               {
-                  // they only want wands, so do not give books
-                  books = false;
-               }
-               else if (args[0].equalsIgnoreCase("books"))
-               {
-                  // they only want books, so do not give wands
-                  wands = false;
-               }
-               if (args.length == 2)
-               {
-                  try
-                  {
-                     amount = Integer.parseInt(args[1]);
-                  } catch (NumberFormatException nfe)
-                  {
-                  }
-               }
-            }
-            if (player.isOp())
-            {
-               //give them the kit
-               Location loc = player.getEyeLocation();
-               List<ItemStack> kit = new ArrayList<ItemStack>();
-               //Give amount of each type of wand
-               if (wands)
-               {
-                  for (String wood : woodArray)
-                  {
-                     for (String core : coreArray)
-                     {
-                        ItemStack wand = new ItemStack(Material.STICK);
-                        List<String> lore = new ArrayList<String>();
-                        lore.add(wood + " and " + core);
-                        ItemMeta meta = wand.getItemMeta();
-                        meta.setLore(lore);
-                        meta.setDisplayName("Wand");
-                        wand.setItemMeta(meta);
-                        wand.setAmount(amount);
-                        kit.add(wand);
-                     }
-                  }
-               }
-               if (wands && books)
-               {
-                  //Give Elder Wand
-                  ItemStack wand = new ItemStack(Material.BLAZE_ROD);
-                  List<String> lore = new ArrayList<String>();
-                  lore.add("Blaze and Ender Pearl");
-                  ItemMeta meta = wand.getItemMeta();
-                  meta.setLore(lore);
-                  meta.setDisplayName("Elder Wand");
-                  wand.setItemMeta(meta);
-                  kit.add(wand);
-                  //Give Invisibility Cloak
-                  ItemStack cloak = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-                  List<String> cloakLore = new ArrayList<String>();
-                  cloakLore.add("Silvery Transparent Cloak");
-                  ItemMeta cloakMeta = cloak.getItemMeta();
-                  cloakMeta.setLore(cloakLore);
-                  cloakMeta.setDisplayName("Cloak of Invisibility");
-                  cloak.setItemMeta(cloakMeta);
-                  kit.add(cloak);
-               }
-               //give them books
-               if (books)
-               {
-                  List<ItemStack> booksList = SpellBookParser.makeBooks(amount);
-                  kit.addAll(booksList);
-               }
-               ItemStack[] kitArray = kit.toArray(new ItemStack[kit.size()]);
-               HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(kitArray);
-               for (ItemStack item : leftover.values())
-               {
-                  player.getWorld().dropItem(loc, item);
-               }
-            }
-            else
-            {
-               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only server ops can use the /Okit command.");
-            }
-            return true;
-         }
-      }
-      else if (cmd.getName().equalsIgnoreCase("Quidd"))
-      {
-         if (args.length >= 1)
-         {
-            Player player = null;
-            if (sender instanceof Player)
-            {
-               player = (Player) sender;
-               Arena arena = new Arena(args[0], player.getLocation(), Arena.Size.MEDIUM);
-               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "The following arena was made: " + arena.toString());
-            }
-            else
-            {
-               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only players can use the /Quidd command.");
-            }
+            Arena arena = new Arena(args[0], player.getLocation(), Arena.Size.MEDIUM);
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "The following arena was made: " + arena.toString());
          }
          else
          {
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Please include a name for your arena.");
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only players can use the /Quidd command.");
          }
+      }
+      else
+      {
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Please include a name for your arena.");
+      }
+      return true;
+   }
+
+   /**
+    * Toggle debug mode.
+    *
+    * @param sender
+    * @return true
+    */
+   private boolean toggleDebug(CommandSender sender)
+   {
+      if (!isOp(sender))
+      {
          return true;
       }
-      return false;
+
+      debug = !debug;
+
+      if (debug)
+         getLogger().info("Debug mode enabled.");
+      else
+         getLogger().info("Debug mode disabled.");
+
+      return true;
+   }
+
+   /**
+    * Reload the game configs if the command caller is an op.
+    *
+    * @param sender
+    * @return
+    */
+   private boolean runReloadConfigs(CommandSender sender)
+   {
+      if (!isOp(sender))
+      {
+         return true;
+      }
+
+      reloadConfig();
+      fileConfig = getConfig();
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Config reloaded");
+
+      return true;
+   }
+
+   /**
+    * Give a player all the items.
+    *
+    * @param player
+    * @return
+    */
+   private boolean okitItems (Player player)
+   {
+      List<ItemStack> kit = new ArrayList<ItemStack>();
+
+      //Elder Wand
+      ItemStack wand = new ItemStack(Material.BLAZE_ROD);
+      List<String> lore = new ArrayList<String>();
+      lore.add("Blaze and Ender Pearl");
+      ItemMeta meta = wand.getItemMeta();
+      meta.setLore(lore);
+      meta.setDisplayName("Elder Wand");
+      wand.setItemMeta(meta);
+      kit.add(wand);
+
+      //Cloak of Invisibility
+      ItemStack cloak = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
+      List<String> cloakLore = new ArrayList<String>();
+      cloakLore.add("Silvery Transparent Cloak");
+      ItemMeta cloakMeta = cloak.getItemMeta();
+      cloakMeta.setLore(cloakLore);
+      cloakMeta.setDisplayName("Cloak of Invisibility");
+      cloak.setItemMeta(cloakMeta);
+      kit.add(cloak);
+
+      //TODO resurrection stone
+
+      givePlayerKit(player, kit);
+
+      return true;
+   }
+
+   /**
+    * Give a player all the books.
+    *
+    * @param player
+    * @return true if the command was a success, false otherwise.
+    */
+   private boolean okitBooks (Player player)
+   {
+      List<ItemStack> kit = new ArrayList<ItemStack>();
+      if (!kit.addAll(SpellBookParser.makeBooks(1)))
+         return false;
+
+      givePlayerKit(player, kit);
+
+      return true;
+   }
+
+   /**
+    * Give a player all the wands.
+    *
+    * @param player
+    * @return true
+    */
+   private boolean okitWands (Player player)
+   {
+      String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
+      String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
+
+      List<ItemStack> kit = new ArrayList<ItemStack>();
+
+      for (String wood : woodArray)
+      {
+         for (String core : coreArray)
+         {
+            ItemStack wand = new ItemStack(Material.STICK);
+            List<String> lore = new ArrayList<String>();
+            lore.add(wood + " and " + core);
+            ItemMeta meta = wand.getItemMeta();
+            meta.setLore(lore);
+            meta.setDisplayName("Wand");
+            wand.setItemMeta(meta);
+            wand.setAmount(1);
+            kit.add(wand);
+         }
+      }
+
+      givePlayerKit(player, kit);
+
+      return true;
+   }
+
+   private void givePlayerKit (Player player, List<ItemStack> kit)
+   {
+      Location loc = player.getEyeLocation();
+      ItemStack[] kitArray = kit.toArray(new ItemStack[kit.size()]);
+      HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(kitArray);
+      for (ItemStack item : leftover.values())
+      {
+         player.getWorld().dropItem(loc, item);
+      }
    }
 
    public Map<UUID, OPlayer> getOPlayerMap ()
@@ -694,7 +761,8 @@ public class Ollivanders2 extends JavaPlugin
          {
             if (verbose)
             {
-               player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "You do not have permission to use " + spell.toString());
+               player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                     + "You do not have permission to use " + spell.toString());
             }
             return false;
          }
@@ -702,7 +770,8 @@ public class Ollivanders2 extends JavaPlugin
       boolean cast = canLive(player.getLocation(), spell);
       if (!cast && verbose)
       {
-         player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Casting of " + spell.toString() + " is not allowed in this area");
+         player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Casting of "
+               + spell.toString() + " is not allowed in this area");
       }
       return cast;
    }

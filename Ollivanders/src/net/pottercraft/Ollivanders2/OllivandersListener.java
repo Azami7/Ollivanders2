@@ -52,7 +52,6 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -62,7 +61,6 @@ import Effect.BARUFFIOS_BRAIN_ELIXIR;
 import Effect.LYCANTHROPY;
 import Effect.MEMORY_POTION;
 import Effect.WOLFSBANE_POTION;
-import Spell.FORSKNING;
 import Spell.MORTUOS_SUSCITATE;
 import Spell.PORTUS;
 import StationarySpell.ALIQUAM_FLOO;
@@ -183,16 +181,30 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.LOW)
    public void onPlayerChat (AsyncPlayerChatEvent event)
    {
-      //Begin code for chat falloff
       Player sender = event.getPlayer();
       String message = event.getMessage();
       List<OEffect> effects = p.getOPlayer(sender).getEffects();
+
+      if (Ollivanders2.debug)
+         p.getLogger().info("onPlayerChat: message = " + message);
+
+      /**
+       * Handle player spells that effect the chat.  Need to do this first sine they may affect the chat
+       * message itself, which would change later chat effects.
+       */
       if (effects != null)
       {
+         if (Ollivanders2.debug)
+            p.getLogger().info("onPlayerChat: Handling player effects");
+
          for (OEffect effect : effects)
          {
+            // If SILENCIO is affecting the player, remove all chat recipients and do not allow a spell cast.
             if (effect.name == Effects.SILENCIO)
             {
+               if (Ollivanders2.debug)
+                  p.getLogger().info("onPlayerChat: SILENCIO");
+
                if (sender.isPermissionSet("Ollivanders2.BYPASS"))
                {
                   if (!sender.hasPermission("Ollivanders2.BYPASS"))
@@ -209,70 +221,45 @@ public class OllivandersListener implements Listener
             }
          }
       }
-      for (SpellProjectile proj : p.getProjectiles())
+
+      /**
+       * Parse to see if they were casting a spell
+       */
+      Spells spell = Spells.decode(message);
+      if (Ollivanders2.debug)
       {
-         if (proj instanceof FORSKNING && proj.location.getWorld().getUID().equals(sender.getWorld().getUID()))
-         {
-            if (proj.location.distance(sender.getLocation()) <= 10)
-            {
-               ((FORSKNING) proj).research(message);
-            }
-         }
+         if (spell != null)
+            p.getLogger().info("Spells:decode(): spell is " + spell);
+         else
+            p.getLogger().info("Spells:decode(): no spell found");
       }
+
+      /**
+       * Handle stationary spells that affect chat
+       */
       Set<Player> recipients = event.getRecipients();
-      String[] messageWords = message.split(" ");
-      String message2 = new String(message);
-      Spells spell;
-      //getLogger().info("Decoding spell");
-      spell = Spells.decode(message);
-      if (messageWords[0].equalsIgnoreCase("Apparate"))
-      {
-         event.setMessage(messageWords[0]);
-         spell = Spells.APPARATE;
-      }
-      else if (messageWords[0].equalsIgnoreCase("Portus"))
-      {
-         event.setMessage(messageWords[0]);
-         spell = Spells.PORTUS;
-      }
-      if (spell != null)
-      {
-         if (!p.canCast(sender, spell, true))
-         {
-            spell = null;
-         }
-      }
-      double chatDistance = (double) p.getChatDistance();
       List<StationarySpellObj> stationaries = p.checkForStationary(sender.getLocation());
       Set<StationarySpellObj> muffliatos = new HashSet<StationarySpellObj>();
       for (StationarySpellObj stationary : stationaries)
       {
+         if (Ollivanders2.debug)
+            p.getLogger().info("onPlayerChat: handling stationary spells");
+
          if (stationary.name.equals(StationarySpells.MUFFLIATO) && stationary.active)
          {
             muffliatos.add(stationary);
          }
       }
+
+      // If sender is in a MUFFLIATO, remove recepients not also in the MUFFLIATO radius
       Set<Player> remRecipients = new HashSet<Player>();
       for (Player recipient : recipients)
       {
-         double distance;
-         try
-         {
-            distance = recipient.getLocation().distance(sender.getLocation());
-         }
-         catch (IllegalArgumentException e)
-         {
-            distance = -1;
-         }
-         if (spell != null)
-         {
-            if (distance > chatDistance || distance == -1)
-            {
-               remRecipients.add(recipient);
-            }
-         }
          if (muffliatos.size() > 0)
          {
+            if (Ollivanders2.debug)
+               p.getLogger().info("onPlayerChat: MUFFLIATO detected");
+
             for (StationarySpellObj muffliato : muffliatos)
             {
                Location recLoc = recipient.getLocation();
@@ -286,6 +273,9 @@ public class OllivandersListener implements Listener
 
       for (Player remRec : remRecipients)
       {
+         if (Ollivanders2.debug)
+            p.getLogger().info("onPlayerChat: update recipients");
+
          try
          {
             if (remRec.isPermissionSet("Ollivanders2.BYPASS"))
@@ -299,63 +289,75 @@ public class OllivandersListener implements Listener
             {
                recipients.remove(remRec);
             }
-         } catch (UnsupportedOperationException e)
+         }
+         catch (UnsupportedOperationException e)
          {
             p.getLogger().warning("Chat was unable to be removed due "
                   + "to a unmodifiable set.");
          }
       }
-      //End code for chat falloff
 
-      //Begin code for spell parsing
-      if (spell != null)
+
+      /**
+       * Handle spell casting
+       */
+      // If the spell is valid AND player is allowed to cast spells per server permissions
+      if (spell != null && p.canCast(sender, spell, true))
       {
-         //If bookLearning is set to true, this will keep players from casting spells they have not already read in a book
          if (p.getConfig().getBoolean("bookLearning") && p.getOPlayer(sender).getSpellCount().get(spell) == 0)
          {
+            // if bookLearning is set to true then spell count must be > 0 to cast this spell
+            if (Ollivanders2.debug)
+               p.getLogger().info("onPlayerChat: bookLearning enforced");
+
             return;
          }
-         boolean castSuccess;
-         if (holdsWand(sender))
+
+         boolean castSuccess = true;
+
+         // if they are not holding their destined wand, casting success is reduced
+         if (!holdsWand(sender))
          {
-            castSuccess = true;
-         }
-         else
-         {
+            if (Ollivanders2.debug)
+               p.getLogger().info("onPlayerChat: player not holding destined wand");
+
             int uses = p.getOPlayer(sender).getSpellCount().get(spell);
             castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
          }
+
          if (castSuccess)
          {
-            String[] words = message2.split(" ");
-            //If it was apparate, then this
+            if (Ollivanders2.debug)
+               p.getLogger().info("onPlayerChat: begin casting " + spell);
+
+            String[] words = message.split(" ");
+
             if (spell == Spells.APPARATE)
             {
                apparate(sender, words);
-               spell = null;
             }
-            //If it was portus, then this
             else if (spell == Spells.PORTUS)
             {
                p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
-               spell = null;
             }
-            //If it wasn't apparate or portus, then this
             else
             {
-               if (spell != null)
-               {
-                  //If the spell is valid, run this code
-                  Map<UUID, OPlayer> opmap = p.getOPlayerMap();
-                  OPlayer oplayer = opmap.get(sender.getUniqueId());
-                  oplayer.setSpell(spell);
-                  opmap.put(sender.getUniqueId(), oplayer);
-                  p.setOPlayerMap(opmap);
-               }
+               Map<UUID, OPlayer> opmap = p.getOPlayerMap();
+               OPlayer oplayer = opmap.get(sender.getUniqueId());
+               oplayer.setSpell(spell);
+               opmap.put(sender.getUniqueId(), oplayer);
+               p.setOPlayerMap(opmap);
             }
          }
       }
-      //End code for spell parsing
+      else
+      {
+         if (Ollivanders2.debug)
+            p.getLogger().info("Either no spell cast attempted or not allowed to cast");
+      }
+
+      if (Ollivanders2.debug)
+         p.getLogger().info("onPlayerChat: return");
    }
 
    /**

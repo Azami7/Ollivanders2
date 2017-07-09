@@ -46,8 +46,8 @@ public abstract class PyrotechniaSuper extends SpellProjectile implements Spell
          Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
 
          FireworkMeta meta = firework.getFireworkMeta();
-         // make firework fly for 2 seconds
-         meta.setPower(4);
+         // make firework fly for 1 seconds
+         meta.setPower(2);
 
          FireworkEffect.Builder builder = FireworkEffect.builder();
          if (fireworkColors != null)
