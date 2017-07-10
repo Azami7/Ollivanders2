@@ -16,9 +16,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class ALARTE_ASCENDARE extends SpellProjectile implements Spell
 {
-
-   public ALARTE_ASCENDARE (Ollivanders2 plugin, Player player, Spells name,
-                            Double rightWand)
+   public ALARTE_ASCENDARE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -45,5 +43,4 @@ public class ALARTE_ASCENDARE extends SpellProjectile implements Spell
          return;
       }
    }
-
 }

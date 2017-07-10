@@ -23,5 +23,4 @@ public class GLACIUS extends GlaciusSuper
       // half radius
       radiusModifier = 0.5;
    }
-
 }

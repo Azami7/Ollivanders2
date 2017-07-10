@@ -14,9 +14,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class ASCENDIO extends SpellProjectile implements Spell
 {
-
-   public ASCENDIO (Ollivanders2 plugin, Player player, Spells name,
-                    Double rightWand)
+   public ASCENDIO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -32,5 +30,4 @@ public class ASCENDIO extends SpellProjectile implements Spell
       player.setVelocity(player.getVelocity().add(vec));
       kill();
    }
-
 }

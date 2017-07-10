@@ -33,7 +33,6 @@ public abstract class PyrotechniaSuper extends SpellProjectile implements Spell
    public PyrotechniaSuper (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
-      moveEffectData = 0;
       fireworkCount = 0;
       maxFireworks = 1;
    }

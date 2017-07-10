@@ -16,15 +16,10 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpell
 {
-
    double damage;
-   /**
-    *
-    */
-   private static final long serialVersionUID = -6758494791962491579L;
 
-   public PROTEGO_MAXIMA (Player player, Location location,
-                          StationarySpells name, Integer radius, Integer duration, double damage)
+   public PROTEGO_MAXIMA (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+                          double damage)
    {
       super(player, location, name, radius, duration);
       this.damage = damage;
@@ -62,5 +57,4 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
          }
       }
    }
-
 }

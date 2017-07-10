@@ -16,7 +16,6 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class AVIFORS extends MetatrepoSuper
 {
-
    public AVIFORS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);

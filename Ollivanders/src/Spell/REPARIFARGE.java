@@ -11,9 +11,11 @@ import net.pottercraft.Ollivanders2.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spells;
 import net.pottercraft.Ollivanders2.Transfiguration;
 
+/**
+ *
+ */
 public class REPARIFARGE extends SpellProjectile implements Spell
 {
-
    public REPARIFARGE (Ollivanders2 plugin, Player player, Spells name,
                        Double rightWand)
    {
@@ -42,5 +44,4 @@ public class REPARIFARGE extends SpellProjectile implements Spell
          }
       }
    }
-
 }

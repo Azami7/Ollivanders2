@@ -17,9 +17,7 @@ import net.pottercraft.Ollivanders2.Transfiguration;
  */
 public class OPPUGNO extends SpellProjectile implements Spell
 {
-
-   public OPPUGNO (Ollivanders2 plugin, Player player, Spells name,
-                   Double rightWand)
+   public OPPUGNO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -53,5 +51,4 @@ public class OPPUGNO extends SpellProjectile implements Spell
          }
       }
    }
-
 }

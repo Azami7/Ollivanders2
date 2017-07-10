@@ -23,11 +23,28 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class PotionParser
 {
+   /**
+    * Memory Potion
+    */
+   public final static List<ItemStack> MEMORY_POTION = Arrays.asList(new ItemStack(Material.SUGAR_CANE, 3),
+         new ItemStack(Material.GLOWSTONE_DUST, 2));
+   /**
+    * Baruffios Brain Elixir
+    */
+   public final static List<ItemStack> BARUFFIOS_BRAIN_ELIXIR = Arrays.asList(new ItemStack(Material.REDSTONE, 5),
+         new ItemStack(Material.GOLD_NUGGET, 1));
+   /**
+    * Wolfsbane Potion
+    */
+   public final static List<ItemStack> WOLFSBANE_POTION = Arrays.asList(new ItemStack(Material.SPIDER_EYE, 2),
+         new ItemStack(Material.ROTTEN_FLESH, 3));
+   /**
+    * Regeneration Potion
+    */
+   public final static List<ItemStack> REGENERATION_POTION = Arrays.asList(new ItemStack(Material.BONE, 1),
+         new ItemStack(Material.SPIDER_EYE, 1), new ItemStack(Material.SULPHUR, 1),
+         new ItemStack(Material.ROTTEN_FLESH, 1), new ItemStack(Material.NETHER_STAR, 1));
 
-   public final static List<ItemStack> MEMORY_POTION = Arrays.asList(new ItemStack(Material.SUGAR_CANE, 3), new ItemStack(Material.GLOWSTONE_DUST, 2));
-   public final static List<ItemStack> BARUFFIOS_BRAIN_ELIXIR = Arrays.asList(new ItemStack(Material.REDSTONE, 5), new ItemStack(Material.GOLD_NUGGET, 1));
-   public final static List<ItemStack> WOLFSBANE_POTION = Arrays.asList(new ItemStack(Material.SPIDER_EYE, 2), new ItemStack(Material.ROTTEN_FLESH, 3));
-   public final static List<ItemStack> REGENERATION_POTION = Arrays.asList(new ItemStack(Material.BONE, 1), new ItemStack(Material.SPIDER_EYE, 1), new ItemStack(Material.SULPHUR, 1), new ItemStack(Material.ROTTEN_FLESH, 1), new ItemStack(Material.NETHER_STAR, 1));
    public static Map<String, List<ItemStack>> ALL_POTIONS = new HashMap<String, List<ItemStack>>();
 
    /**
@@ -41,39 +58,48 @@ public class PotionParser
       ALL_POTIONS.put("Baruffio's Brain Elixir", BARUFFIOS_BRAIN_ELIXIR);
       ALL_POTIONS.put("Wolfsbane Potion", WOLFSBANE_POTION);
       ALL_POTIONS.put("Regeneration Potion", REGENERATION_POTION);
-      @SuppressWarnings("deprecation")
-      int water = cauldron.getData();
-      Map<Material, Integer> ingredients = new HashMap<Material, Integer>();
-      List<Item> ingredientItems = new ArrayList<Item>();
-      for (Item item : cauldron.getWorld().getEntitiesByClass(Item.class))
+
+      //int water = cauldron.getData();
+
+      // only do something if this is a cauldron
+      if (cauldron.getType() == Material.CAULDRON)
       {
-         if (item.getLocation().getBlock().equals(cauldron) || item.getLocation().getBlock().equals(cauldron.getRelative(BlockFace.UP)))
+         Map<Material, Integer> ingredients = new HashMap<>();
+         List<Item> ingredientItems = new ArrayList<>();
+         for (Item item : cauldron.getWorld().getEntitiesByClass(Item.class))
          {
-            Material material = item.getItemStack().getType();
-            int amount = item.getItemStack().getAmount();
-            ingredientItems.add(item);
-            if (ingredients.containsKey(material))
+            if (item.getLocation().getBlock().equals(cauldron)
+                  || item.getLocation().getBlock().equals(cauldron.getRelative(BlockFace.UP)))
             {
-               ingredients.put(material, ingredients.get(material) + amount);
-            }
-            else
-            {
-               ingredients.put(material, amount);
+               Material material = item.getItemStack().getType();
+               int amount = item.getItemStack().getAmount();
+               ingredientItems.add(item);
+               if (ingredients.containsKey(material))
+               {
+                  ingredients.put(material, ingredients.get(material) + amount);
+               }
+               else
+               {
+                  ingredients.put(material, amount);
+               }
             }
          }
-      }
-      if (!ingredients.containsKey(Material.GLASS_BOTTLE) || water == 0)
-      {
-         return;
-      }
-      /*
-		 * check to find out which recipe it is
-		 * make the potions according to how many ingredients there are and delete those item entities
-		 */
-      String recipe = recipeChecker(ingredients);
-      if (recipe != null)
-      {
-         recipeCooker(recipe, water, ingredientItems, cauldron);
+         //if (!ingredients.containsKey(Material.GLASS_BOTTLE) || water == 0)
+         if (!ingredients.containsKey(Material.GLASS_BOTTLE) || ingredientItems.size() < 1)
+         {
+            return;
+         }
+
+         /**
+          * check to find out which recipe it is
+          * make the potions according to how many ingredients there are and delete those item entities
+          */
+         String recipe = recipeChecker(ingredients);
+         if (recipe != null)
+         {
+            //recipeCooker(recipe, water, ingredientItems, cauldron);
+            recipeCooker(recipe, ingredientItems, cauldron);
+         }
       }
    }
 
@@ -114,12 +140,13 @@ public class PotionParser
     * @param name        - name of the recipe that is to be created
     * @param ingredients - ingredients in the cauldron
     */
-   @SuppressWarnings("deprecation")
-   private static void recipeCooker (String name, int water, List<Item> ingredients, Block cauldron)
+   //private static void recipeCooker (String name, int water, List<Item> ingredients, Block cauldron)
+   private static void recipeCooker (String name, List<Item> ingredients, Block cauldron)
    {
       List<ItemStack> recipe = ALL_POTIONS.get(name);
-      List<Integer> amounts = new ArrayList<Integer>();
-      amounts.add(water);
+      List<Integer> amounts = new ArrayList<>();
+      //amounts.add(water);
+
       //finding the least amount of ingredients
       for (Item item : ingredients)
       {
@@ -137,7 +164,8 @@ public class PotionParser
             }
          }
       }
-      //dropping the potions
+
+      //dropping the potions in the cauldron
       int potions = Collections.min(amounts);
       Location dropLoc = cauldron.getLocation().add(0.5, 0.9, 0.5);
       ItemStack potion = new ItemStack(Material.POTION);
@@ -149,6 +177,7 @@ public class PotionParser
       {
          cauldron.getWorld().dropItem(dropLoc, potion);
       }
+
       //subtracting the ingredients
       for (Item item : ingredients)
       {
@@ -183,8 +212,7 @@ public class PotionParser
             }
          }
       }
-      cauldron.setData((byte) (water - potions));
+
+      //cauldron.setData((byte) (water - potions));
    }
-
-
 }

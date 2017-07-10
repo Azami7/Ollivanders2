@@ -16,9 +16,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class LUMOS extends SpellProjectile implements Spell
 {
-
-   public LUMOS (Ollivanders2 plugin, Player player, Spells name,
-                 Double rightWand)
+   public LUMOS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -28,5 +26,4 @@ public class LUMOS extends SpellProjectile implements Spell
       player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, (int) (usesModifier * 1200), 1), true);
       kill();
    }
-
 }

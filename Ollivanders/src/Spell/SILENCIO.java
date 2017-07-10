@@ -19,9 +19,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class SILENCIO extends SpellProjectile implements Spell
 {
-
-   public SILENCIO (Ollivanders2 plugin, Player player, Spells name,
-                    Double rightWand)
+   public SILENCIO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

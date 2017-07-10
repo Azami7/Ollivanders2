@@ -18,14 +18,12 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public class FIENDFYRE extends SpellProjectile implements Spell
 {
-
    private double lifeTime;
 
    public FIENDFYRE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       moveEffect = Effect.MOBSPAWNER_FLAMES;
-      moveEffectData = 0;
       lifeTime = usesModifier * 4;
    }
 

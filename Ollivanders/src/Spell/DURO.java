@@ -16,9 +16,7 @@ import net.pottercraft.Ollivanders2.Transfiguration;
  */
 public class DURO extends Transfiguration implements Spell
 {
-
-   public DURO (Ollivanders2 plugin, Player player, Spells name,
-                Double rightWand)
+   public DURO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -60,5 +58,4 @@ public class DURO extends Transfiguration implements Spell
          }
       }
    }
-
 }

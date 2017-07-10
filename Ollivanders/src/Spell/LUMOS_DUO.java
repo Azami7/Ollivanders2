@@ -18,11 +18,9 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class LUMOS_DUO extends SpellProjectile implements Spell
 {
-
    List<Block> line = new ArrayList<Block>();
 
-   public LUMOS_DUO (Ollivanders2 plugin, Player player, Spells name,
-                     Double rightWand)
+   public LUMOS_DUO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       lifeTicks = (int) (-(usesModifier * 20));
@@ -54,5 +52,4 @@ public class LUMOS_DUO extends SpellProjectile implements Spell
          kill = true;
       }
    }
-
 }

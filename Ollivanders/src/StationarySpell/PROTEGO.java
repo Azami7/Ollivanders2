@@ -12,14 +12,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 
 public class PROTEGO extends StationarySpellObj implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 8133251737599676134L;
-
-   public PROTEGO (Player player, Location location, StationarySpells name,
-                   Integer radius, Integer duration)
+   public PROTEGO (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
       super(player, location, name, radius, duration);
    }
@@ -32,7 +25,7 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
          kill();
          return;
       }
-      double rightWand = OllivandersListener.wandCheck(ply);
+      double rightWand = p.wandCheck(ply);
       if (ply.isSneaking() && rightWand != -1)
       {
          location = new OLocation(ply.getEyeLocation());

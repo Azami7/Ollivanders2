@@ -15,9 +15,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class REPELLO_MUGGLETON extends SpellProjectile implements Spell
 {
-
-   public REPELLO_MUGGLETON (Ollivanders2 plugin, Player player, Spells name,
-                             Double rightWand)
+   public REPELLO_MUGGLETON (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -25,14 +23,15 @@ public class REPELLO_MUGGLETON extends SpellProjectile implements Spell
    public void checkEffect ()
    {
       move();
-      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
+      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE
+            && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
       {
          int duration = (int) (usesModifier * 1200);
-         StationarySpell.REPELLO_MUGGLETON stat = new StationarySpell.REPELLO_MUGGLETON(player, location, StationarySpells.REPELLO_MUGGLETON, 5, duration);
+         StationarySpell.REPELLO_MUGGLETON stat = new StationarySpell.REPELLO_MUGGLETON(player, location,
+               StationarySpells.REPELLO_MUGGLETON, 5, duration);
          stat.flair(10);
          p.addStationary(stat);
          kill();
       }
    }
-
 }

@@ -15,11 +15,9 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class LUMOS_MAXIMA extends SpellProjectile implements Spell
 {
-
    boolean lit;
 
-   public LUMOS_MAXIMA (Ollivanders2 plugin, Player player, Spells name,
-                        Double rightWand)
+   public LUMOS_MAXIMA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       lit = false;

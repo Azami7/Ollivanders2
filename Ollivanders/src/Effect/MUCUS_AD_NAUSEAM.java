@@ -11,10 +11,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 
 public class MUCUS_AD_NAUSEAM extends OEffect implements Effect
 {
-
-   /**
-    *
-    */
    public MUCUS_AD_NAUSEAM (Player sender, Effects effect, int duration)
    {
       super(sender, effect, duration);
@@ -30,5 +26,4 @@ public class MUCUS_AD_NAUSEAM extends OEffect implements Effect
          slime.setSize(1);
       }
    }
-
 }

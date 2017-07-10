@@ -13,9 +13,7 @@ import net.pottercraft.Ollivanders2.Transfiguration;
  */
 public class EVANESCO extends Transfiguration implements Spell
 {
-
-   public EVANESCO (Ollivanders2 plugin, Player player, Spells name,
-                    Double rightWand)
+   public EVANESCO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -24,5 +22,4 @@ public class EVANESCO extends Transfiguration implements Spell
    {
       simpleTransfigure(null, null);
    }
-
 }

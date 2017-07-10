@@ -14,17 +14,15 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.SpellProjectile;
 import net.pottercraft.Ollivanders2.StationarySpells;
 
+/**
+ *
+ */
 public class PRAEPANDO extends ExtraDimensional implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 2628887080639154071L;
    private Set<UUID> teleported = new HashSet<UUID>();
 
-   public PRAEPANDO (Player player, Location location, StationarySpells name,
-                     Integer radius, Integer duration, Integer dimenRadius)
+   public PRAEPANDO (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+                     Integer dimenRadius)
    {
       super(player, location, name, radius, duration, dimenRadius);
    }
@@ -40,7 +38,8 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
       {
          if (teleported.contains(entity.getUniqueId()))
          {
-            if (entity.getLocation().distance(normLocation) > radius && !entity.getLocation().getBlock().equals(edLocation.getBlock()))
+            if (entity.getLocation().distance(normLocation) > radius
+                  && !entity.getLocation().getBlock().equals(edLocation.getBlock()))
             {
                teleported.remove(entity.getUniqueId());
             }
@@ -69,5 +68,4 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
       }
       age();
    }
-
 }

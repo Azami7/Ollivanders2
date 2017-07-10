@@ -465,7 +465,6 @@ public class SpellBookParser
     *
     * @return Map whose keys are the titles, entries are the book text
     */
-   @SuppressWarnings("deprecation")
    public static Map<String, String> books ()
    {
       Map<String, String> bookMap = new HashMap<String, String>();

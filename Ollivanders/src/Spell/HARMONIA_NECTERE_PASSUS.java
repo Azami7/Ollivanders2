@@ -21,8 +21,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
 public class HARMONIA_NECTERE_PASSUS extends SpellProjectile implements Spell
 {
 
-   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player,
-                                   Spells name, Double rightWand)
+   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

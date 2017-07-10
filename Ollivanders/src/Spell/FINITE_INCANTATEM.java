@@ -22,9 +22,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class FINITE_INCANTATEM extends SpellProjectile implements Spell
 {
-
-   public FINITE_INCANTATEM (Ollivanders2 plugin, Player player, Spells name,
-                             Double rightWand)
+   public FINITE_INCANTATEM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -93,5 +91,4 @@ public class FINITE_INCANTATEM extends SpellProjectile implements Spell
          kill();
       }
    }
-
 }

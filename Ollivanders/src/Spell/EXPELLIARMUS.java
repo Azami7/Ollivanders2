@@ -21,12 +21,10 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class EXPELLIARMUS extends SpellProjectile implements Spell
 {
-
    public EXPELLIARMUS (Ollivanders2 p, Player player, Spells name, Double rightWand)
    {
       super(p, player, name, rightWand);
    }
-
 
    public void checkEffect ()
    {
@@ -57,7 +55,11 @@ public class EXPELLIARMUS extends SpellProjectile implements Spell
     */
    public boolean holdsWand (LivingEntity entity)
    {
+      /*
       ItemStack held;
+      */
+      return p.isWand(entity.getEquipment().getItemInMainHand());
+      /*
       if (entity.getEquipment().getItemInMainHand() != null)
       {
          held = entity.getEquipment().getItemInMainHand();
@@ -82,6 +84,7 @@ public class EXPELLIARMUS extends SpellProjectile implements Spell
       {
          return false;
       }
+      */
    }
 
    /**

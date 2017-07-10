@@ -16,14 +16,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class PROTEGO_TOTALUM extends StationarySpellObj implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 5737434601454767984L;
-
-   public PROTEGO_TOTALUM (Player player, Location location,
-                           StationarySpells name, Integer radius, Integer duration)
+   public PROTEGO_TOTALUM (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
       super(player, location, name, radius, duration);
    }
@@ -59,5 +52,4 @@ public class PROTEGO_TOTALUM extends StationarySpellObj implements StationarySpe
          }
       }
    }
-
 }

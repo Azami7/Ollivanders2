@@ -8,10 +8,6 @@ import net.pottercraft.Ollivanders2.OEffect;
 
 public class WOLFSBANE_POTION extends OEffect implements Effect
 {
-
-   /**
-    *
-    */
    public WOLFSBANE_POTION (Player sender, Effects effect, int duration)
    {
       super(sender, effect, duration);
@@ -22,5 +18,4 @@ public class WOLFSBANE_POTION extends OEffect implements Effect
    {
       age(1);
    }
-
 }

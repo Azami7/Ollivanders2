@@ -20,9 +20,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class DIFFINDO extends SpellProjectile implements Spell
 {
-
-   public DIFFINDO (Ollivanders2 plugin, Player player, Spells name,
-                    Double rightWand)
+   public DIFFINDO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -67,5 +65,4 @@ public class DIFFINDO extends SpellProjectile implements Spell
          kill();
       }
    }
-
 }

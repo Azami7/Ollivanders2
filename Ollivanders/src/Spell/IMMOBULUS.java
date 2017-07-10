@@ -19,9 +19,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class IMMOBULUS extends SpellProjectile implements Spell
 {
-
-   public IMMOBULUS (Ollivanders2 plugin, Player player, Spells name,
-                     Double rightWand)
+   public IMMOBULUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -38,5 +36,4 @@ public class IMMOBULUS extends SpellProjectile implements Spell
          kill();
       }
    }
-
 }

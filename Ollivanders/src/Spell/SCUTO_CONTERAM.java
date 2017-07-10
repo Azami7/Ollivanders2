@@ -17,9 +17,7 @@ import net.pottercraft.Ollivanders2.StationarySpellObj;
  */
 public class SCUTO_CONTERAM extends SpellProjectile implements Spell
 {
-
-   public SCUTO_CONTERAM (Ollivanders2 plugin, Player player, Spells name,
-                          Double rightWand)
+   public SCUTO_CONTERAM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -43,5 +41,4 @@ public class SCUTO_CONTERAM extends SpellProjectile implements Spell
          spell.flair(10);
       }
    }
-
 }

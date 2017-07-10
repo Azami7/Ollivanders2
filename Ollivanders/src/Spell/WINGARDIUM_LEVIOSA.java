@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import org.bukkit.material.MaterialData;
 
 import StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -25,7 +26,6 @@ import net.pottercraft.Ollivanders2.StationarySpellObj;
  */
 public class WINGARDIUM_LEVIOSA extends SpellProjectile implements Spell
 {
-
    Map<Location, Material> materialMap = new HashMap<Location, Material>();
    List<Block> blockList = new ArrayList<Block>();
    List<Location> locList = new ArrayList<Location>();
@@ -33,8 +33,7 @@ public class WINGARDIUM_LEVIOSA extends SpellProjectile implements Spell
    double length = 0;
    boolean dropBlocks = true;   //If the blocks should be converted to fallingBlocks after the end of the spell.
 
-   public WINGARDIUM_LEVIOSA (Ollivanders2 plugin, Player player, Spells name,
-                              Double rightWand)
+   public WINGARDIUM_LEVIOSA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -45,7 +44,8 @@ public class WINGARDIUM_LEVIOSA extends SpellProjectile implements Spell
       {
          move();
          Material type = getBlock().getType();
-         if (type != Material.AIR && type != Material.WATER && type != Material.STATIONARY_WATER && type != Material.LAVA && type != Material.STATIONARY_LAVA)
+         if (type != Material.AIR && type != Material.WATER && type != Material.STATIONARY_WATER
+               && type != Material.LAVA && type != Material.STATIONARY_LAVA)
          {
             moving = false;
             double radius = usesModifier / 4;
@@ -70,7 +70,10 @@ public class WINGARDIUM_LEVIOSA extends SpellProjectile implements Spell
                if (!insideCollo)
                {
                   type = block.getType();
-                  if (type != Material.WATER && type != Material.STATIONARY_WATER && type != Material.LAVA && type != Material.STATIONARY_LAVA && type != Material.SAND && type != Material.GRAVEL && type != Material.AIR && type != Material.BEDROCK && type.isSolid() && !p.getTempBlocks().contains(block))
+                  if (type != Material.WATER && type != Material.STATIONARY_WATER && type != Material.LAVA
+                        && type != Material.STATIONARY_LAVA && type != Material.SAND && type != Material.GRAVEL
+                        && type != Material.AIR && type != Material.BEDROCK && type.isSolid()
+                        && !p.getTempBlocks().contains(block))
                   {
                      Location loc = centerOfBlock(block).subtract(location);
                      Material mat = block.getType();
@@ -127,16 +130,10 @@ public class WINGARDIUM_LEVIOSA extends SpellProjectile implements Spell
             for (Location loc : locList)
             {
                Location toLoc = center.clone().add(loc);
-               @SuppressWarnings("deprecation")
-               FallingBlock fall = loc.getWorld().spawnFallingBlock(toLoc, materialMap.get(loc), (byte) 0);
+               MaterialData material = new MaterialData(materialMap.get(loc));
+               FallingBlock fall = loc.getWorld().spawnFallingBlock(toLoc, material);
                fall.setVelocity(moveVec);
             }
-            //				blockList.clear();
-            //				Vector direction = player.getEyeLocation().getDirection().multiply(length);
-            //				Location center = player.getEyeLocation().add(direction);
-            //				for (Location loc : materialMap.keySet()){
-            //					loc.getWorld().spawnFallingBlock(center.clone().add(loc).getBlock().getLocation(), materialMap.get(loc), (byte)0);
-            //				}
             kill();
          }
          else
@@ -160,5 +157,4 @@ public class WINGARDIUM_LEVIOSA extends SpellProjectile implements Spell
       newLoc.setZ(newLoc.getZ() + 0.5);
       return newLoc;
    }
-
 }

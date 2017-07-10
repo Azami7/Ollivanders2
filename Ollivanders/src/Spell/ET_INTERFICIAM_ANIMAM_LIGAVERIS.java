@@ -22,9 +22,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends SpellProjectile implements Spell
 {
-
-   public ET_INTERFICIAM_ANIMAM_LIGAVERIS (Ollivanders2 plugin, Player player,
-                                           Spells name, Double rightWand)
+   public ET_INTERFICIAM_ANIMAM_LIGAVERIS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -87,5 +85,4 @@ public class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends SpellProjectile implements 
          }
       }
    }
-
 }

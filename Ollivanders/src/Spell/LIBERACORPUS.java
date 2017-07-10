@@ -17,9 +17,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class LIBERACORPUS extends SpellProjectile implements Spell
 {
-
-   public LIBERACORPUS (Ollivanders2 plugin, Player player, Spells name,
-                        Double rightWand)
+   public LIBERACORPUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -46,5 +44,4 @@ public class LIBERACORPUS extends SpellProjectile implements Spell
          }
       }
    }
-
 }

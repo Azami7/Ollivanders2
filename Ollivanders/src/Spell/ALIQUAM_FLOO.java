@@ -19,9 +19,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class ALIQUAM_FLOO extends SpellProjectile implements Spell
 {
-
-   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, Spells name,
-                        Double rightWand)
+   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -57,5 +55,4 @@ public class ALIQUAM_FLOO extends SpellProjectile implements Spell
          kill();
       }
    }
-
 }

@@ -14,20 +14,20 @@ import net.pottercraft.Ollivanders2.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spells;
 import net.pottercraft.Ollivanders2.StationarySpellObj;
 
+/**
+ * Creates a port key.
+ */
 public class PORTUS extends SpellProjectile implements Spell
 {
-
    private final String[] wordsArray;
 
-   public PORTUS (Ollivanders2 plugin, Player player, Spells name,
-                  Double rightWand, String[] wordsArray)
+   public PORTUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand, String[] wordsArray)
    {
       super(plugin, player, name, rightWand);
       this.wordsArray = wordsArray;
    }
 
-   public PORTUS (Ollivanders2 plugin, Player player, Spells name,
-                  Double rightWand)
+   public PORTUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       Location loc = player.getLocation();
@@ -46,7 +46,8 @@ public class PORTUS extends SpellProjectile implements Spell
          boolean canApparateOut = true;
          for (StationarySpellObj stat : p.getStationary())
          {
-            if (stat instanceof StationarySpell.NULLUM_EVANESCUNT && stat.isInside(player.getLocation()) && stat.active && !stat.getPlayerUUID().equals(player.getUniqueId()))
+            if (stat instanceof StationarySpell.NULLUM_EVANESCUNT && stat.isInside(player.getLocation()) && stat.active
+                  && !stat.getPlayerUUID().equals(player.getUniqueId()))
             {
                stat.flair(10);
                canApparateOut = false;
@@ -71,7 +72,8 @@ public class PORTUS extends SpellProjectile implements Spell
                         Double.parseDouble(wordsArray[1]),
                         Double.parseDouble(wordsArray[2]),
                         Double.parseDouble(wordsArray[3]));
-               } catch (NumberFormatException e)
+               }
+               catch (NumberFormatException e)
                {
                   to = player.getLocation().clone();
                }
@@ -117,5 +119,4 @@ public class PORTUS extends SpellProjectile implements Spell
          kill();
       }
    }
-
 }

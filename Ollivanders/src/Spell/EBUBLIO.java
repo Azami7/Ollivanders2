@@ -16,12 +16,10 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class EBUBLIO extends SpellProjectile implements Spell
 {
-
    public EBUBLIO (Ollivanders2 p, Player player, Spells name, Double rightWand)
    {
       super(p, player, name, rightWand);
    }
-
 
    public void checkEffect ()
    {

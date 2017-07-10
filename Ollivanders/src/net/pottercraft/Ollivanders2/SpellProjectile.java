@@ -37,8 +37,7 @@ public abstract class SpellProjectile
    public int spellUses;
    public double usesModifier;
    public Effect moveEffect = Effect.STEP_SOUND;
-   @SuppressWarnings("deprecation")
-   public int moveEffectData = Material.SPONGE.getId();
+   public Material moveEffectData = Material.SPONGE;
    public Set<Block> changed = new HashSet<Block>();
 
 
@@ -108,7 +107,9 @@ public abstract class SpellProjectile
          kill();
       }
       location.getWorld().playEffect(location, moveEffect, moveEffectData);
-      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER && getBlock().getType() != Material.STATIONARY_LAVA && getBlock().getType() != Material.LAVA)
+      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE
+            && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER
+            && getBlock().getType() != Material.STATIONARY_LAVA && getBlock().getType() != Material.LAVA)
       {
          kill = true;
       }

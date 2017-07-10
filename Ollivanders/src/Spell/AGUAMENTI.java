@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
  */
 public class AGUAMENTI extends SpellProjectile implements Spell
 {
-
    boolean move;
 
    public AGUAMENTI (Ollivanders2 p, Player player, Spells name, Double rightWand)

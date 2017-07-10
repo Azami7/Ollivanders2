@@ -24,7 +24,6 @@ public abstract class FumosSuper extends SpellProjectile implements Spell
    {
       super(plugin, player, name, rightWand);
       moveEffect = Effect.SMOKE;
-      moveEffectData = 4;
    }
 
    @Override

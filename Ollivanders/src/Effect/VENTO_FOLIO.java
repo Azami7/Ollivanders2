@@ -11,10 +11,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public class VENTO_FOLIO extends OEffect implements Effect
 {
-
-   /**
-    *
-    */
    public VENTO_FOLIO (org.bukkit.entity.Player sender, Effects effect, int duration)
    {
       super(sender, effect, duration);
@@ -34,5 +30,4 @@ public class VENTO_FOLIO extends OEffect implements Effect
          owner.setAllowFlight(false);
       }
    }
-
 }

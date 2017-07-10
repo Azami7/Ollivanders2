@@ -18,9 +18,7 @@ import net.pottercraft.Ollivanders2.StationarySpellObj;
  */
 public class APPARATE extends SpellProjectile implements Spell
 {
-
-   public APPARATE (Ollivanders2 plugin, Player player, Spells name,
-                    Double rightWand)
+   public APPARATE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -83,5 +81,4 @@ public class APPARATE extends SpellProjectile implements Spell
          }
       }
    }
-
 }

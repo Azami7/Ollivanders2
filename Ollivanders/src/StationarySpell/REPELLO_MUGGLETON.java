@@ -19,19 +19,11 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class REPELLO_MUGGLETON extends StationarySpellObj implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 4106501979697343806L;
-
-   public REPELLO_MUGGLETON (Player player, Location location,
-                             StationarySpells name, Integer radius, Integer duration)
+   public REPELLO_MUGGLETON (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
       super(player, location, name, radius, duration);
    }
 
-   @SuppressWarnings("deprecation")
    public void checkEffect (Ollivanders2 p)
    {
       age();
@@ -79,5 +71,4 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
          }
       }
    }
-
 }

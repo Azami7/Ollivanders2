@@ -17,9 +17,7 @@ import net.pottercraft.Ollivanders2.StationarySpellObj;
  */
 public class APARECIUM extends SpellProjectile implements Spell
 {
-
-   public APARECIUM (Ollivanders2 plugin, Player player, Spells name,
-                     Double rightWand)
+   public APARECIUM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -39,5 +37,4 @@ public class APARECIUM extends SpellProjectile implements Spell
          stationary.flair(level);
       }
    }
-
 }

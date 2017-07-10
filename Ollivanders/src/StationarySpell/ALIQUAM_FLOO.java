@@ -25,16 +25,11 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = -641198067717319186L;
    private final String flooName;
    private int countDown = 0;
 
-   public ALIQUAM_FLOO (Player player, Location location,
-                        StationarySpells name, Integer radius, Integer duration, String flooName)
+   public ALIQUAM_FLOO (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+                        String flooName)
    {
       super(player, location, name, radius, duration);
       this.flooName = flooName;
@@ -108,5 +103,4 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
    {
       countDown = 0;
    }
-
 }

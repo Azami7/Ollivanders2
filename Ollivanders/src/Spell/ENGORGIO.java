@@ -19,9 +19,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class ENGORGIO extends SpellProjectile implements Spell
 {
-
-   public ENGORGIO (Ollivanders2 plugin, Player player, Spells name,
-                    Double rightWand)
+   public ENGORGIO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -58,5 +56,4 @@ public class ENGORGIO extends SpellProjectile implements Spell
          return;
       }
    }
-
 }

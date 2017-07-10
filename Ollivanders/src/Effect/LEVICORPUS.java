@@ -14,11 +14,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public class LEVICORPUS extends OEffect implements Effect
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 1306087533238710478L;
    Location loc;
 
    public LEVICORPUS (Player sender, Effects effect, int duration, Location loc)
@@ -36,5 +31,4 @@ public class LEVICORPUS extends OEffect implements Effect
       Location newLoc = new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), curLoc.getYaw(), 90);
       owner.teleport(newLoc);
    }
-
 }

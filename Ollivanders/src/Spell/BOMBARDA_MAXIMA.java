@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
  */
 public class BOMBARDA_MAXIMA extends BombardaSuper
 {
-
    public BOMBARDA_MAXIMA (Ollivanders2 p, Player player, Spells name, Double rightWand)
    {
       super(p, player, name, rightWand);

@@ -14,7 +14,6 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class METATREPO_EQUUS extends MetatrepoSuper
 {
-
    public METATREPO_EQUUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);

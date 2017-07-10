@@ -14,9 +14,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class LEGILIMENS extends SpellProjectile implements Spell
 {
-
-   public LEGILIMENS (Ollivanders2 plugin, Player player, Spells name,
-                      Double rightWand)
+   public LEGILIMENS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -40,5 +38,4 @@ public class LEGILIMENS extends SpellProjectile implements Spell
          }
       }
    }
-
 }

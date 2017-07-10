@@ -18,14 +18,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class PROTEGO_HORRIBILIS extends StationarySpellObj implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = -500146474072361113L;
-
-   public PROTEGO_HORRIBILIS (Player player, Location location,
-                              StationarySpells name, Integer radius, Integer duration)
+   public PROTEGO_HORRIBILIS (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
       super(player, location, name, radius, duration);
    }
@@ -49,5 +42,4 @@ public class PROTEGO_HORRIBILIS extends StationarySpellObj implements Stationary
          }
       }
    }
-
 }

@@ -16,9 +16,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class OBSCURO extends SpellProjectile implements Spell
 {
-
-   public OBSCURO (Ollivanders2 plugin, Player player, Spells name,
-                   Double rightWand)
+   public OBSCURO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -35,5 +33,4 @@ public class OBSCURO extends SpellProjectile implements Spell
          return;
       }
    }
-
 }

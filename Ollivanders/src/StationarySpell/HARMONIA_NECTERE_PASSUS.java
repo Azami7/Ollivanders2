@@ -20,19 +20,13 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  *
  * @author lownes
  */
-public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements
-      StationarySpell
+public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = -4508412661556164192L;
    private final OLocation twin;
    private Set<UUID> teleported = new HashSet<UUID>();
 
-   public HARMONIA_NECTERE_PASSUS (Player player, Location location,
-                                   StationarySpells name, Integer radius, Integer duration, Location twin)
+   public HARMONIA_NECTERE_PASSUS (Player player, Location location, StationarySpells name, Integer radius,
+                                   Integer duration, Location twin)
    {
       super(player, location, name, radius, duration);
       this.twin = new OLocation(twin);
@@ -44,7 +38,8 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements
       HARMONIA_NECTERE_PASSUS twinHarm = null;
       for (StationarySpellObj stat : p.getStationary())
       {
-         if (stat instanceof HARMONIA_NECTERE_PASSUS && stat.location.toLocation().getBlock().equals(twin.toLocation().getBlock()))
+         if (stat instanceof HARMONIA_NECTERE_PASSUS
+               && stat.location.toLocation().getBlock().equals(twin.toLocation().getBlock()))
          {
             twinHarm = (HARMONIA_NECTERE_PASSUS) stat;
          }
@@ -85,6 +80,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements
       {
          return false;
       }
+
       if (feet.getRelative(1, 0, 0).getType() == Material.AIR ||
             feet.getRelative(-1, 0, 0).getType() == Material.AIR ||
             feet.getRelative(0, 0, 1).getType() == Material.AIR ||
@@ -103,6 +99,11 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements
       }
    }
 
+   /**
+    * Send the entity to the twin cabinet.
+    *
+    * @param entity
+    */
    public void teleport (Entity entity)
    {
       Location toLoc = location.toLocation();
@@ -111,5 +112,4 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements
       entity.teleport(toLoc);
       teleported.add(entity.getUniqueId());
    }
-
 }

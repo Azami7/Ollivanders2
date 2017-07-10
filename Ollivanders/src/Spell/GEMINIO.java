@@ -3,7 +3,6 @@ package Spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,9 +19,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class GEMINIO extends SpellProjectile implements Spell
 {
-
-   public GEMINIO (Ollivanders2 plugin, Player player, Spells name,
-                   Double rightWand)
+   public GEMINIO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -33,7 +30,7 @@ public class GEMINIO extends SpellProjectile implements Spell
       List<Item> items = getItems(1);
       for (Item item : items)
       {
-         if (isWand(item.getItemStack()) || isCloak(item.getItemStack()))
+         if (p.isWand(item.getItemStack()) || p.isInvisibilityCloak(item.getItemStack()))
          {
             return;
          }
@@ -80,72 +77,6 @@ public class GEMINIO extends SpellProjectile implements Spell
          item.getWorld().dropItem(item.getLocation(), stack);
          kill();
          return;
-      }
-   }
-
-   /**
-    * Is the item a wand?
-    *
-    * @param held - item to check.
-    * @return True if wand, false if not.
-    */
-   public boolean isWand (ItemStack held)
-   {
-      if (held.getType() == Material.STICK || held.getType() == Material.BLAZE_ROD)
-      {
-         if (held.getItemMeta().hasLore())
-         {
-            List<String> lore = held.getItemMeta().getLore();
-            if (lore.get(0).split(" and ").length == 2)
-            {
-               return true;
-            }
-            else
-            {
-               return false;
-            }
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /**
-    * Is the item the cloak of invsibility?
-    *
-    * @param held - item to check.
-    * @return True if cloak, false if not.
-    */
-   public boolean isCloak (ItemStack held)
-   {
-      if (held.getType() == Material.CHAINMAIL_CHESTPLATE)
-      {
-         if (held.getItemMeta().hasLore())
-         {
-            List<String> lore = held.getItemMeta().getLore();
-            if (lore.get(0).equals("Silvery Transparent Cloak"))
-            {
-               return true;
-            }
-            else
-            {
-               return false;
-            }
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         return false;
       }
    }
 }

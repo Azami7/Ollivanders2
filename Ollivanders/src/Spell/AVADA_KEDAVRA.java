@@ -18,14 +18,11 @@ import org.bukkit.entity.Player;
  */
 public class AVADA_KEDAVRA extends SpellProjectile implements Spell
 {
-
-   @SuppressWarnings("deprecation")
    public AVADA_KEDAVRA (Ollivanders2 p, Player player, Spells name, Double rightWand)
    {
       super(p, player, name, rightWand);
-      moveEffectData = Material.MELON_BLOCK.getId();
+      moveEffectData = Material.MELON_BLOCK;
    }
-
 
    public void checkEffect ()
    {

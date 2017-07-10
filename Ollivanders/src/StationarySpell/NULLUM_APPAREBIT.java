@@ -14,14 +14,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class NULLUM_APPAREBIT extends StationarySpellObj implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 8858656671784513666L;
-
-   public NULLUM_APPAREBIT (Player player, Location location,
-                            StationarySpells name, Integer radius, Integer duration)
+   public NULLUM_APPAREBIT (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
       super(player, location, name, radius, duration);
    }
@@ -30,5 +23,4 @@ public class NULLUM_APPAREBIT extends StationarySpellObj implements StationarySp
    {
       age();
    }
-
 }

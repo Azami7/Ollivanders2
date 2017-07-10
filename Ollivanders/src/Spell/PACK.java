@@ -15,7 +15,6 @@ import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 public class PACK extends SpellProjectile implements Spell
 {
-
    public PACK (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
@@ -50,5 +49,4 @@ public class PACK extends SpellProjectile implements Spell
          }
       }
    }
-
 }

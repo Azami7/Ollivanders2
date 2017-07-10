@@ -3,7 +3,6 @@ package Spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -20,9 +19,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class FLAGRANTE extends SpellProjectile implements Spell
 {
-
-   public FLAGRANTE (Ollivanders2 plugin, Player player, Spells name,
-                     Double rightWand)
+   public FLAGRANTE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -33,7 +30,7 @@ public class FLAGRANTE extends SpellProjectile implements Spell
       List<Item> items = getItems(1);
       for (Item item : items)
       {
-         if (isWand(item.getItemStack()))
+         if (p.isWand(item.getItemStack()))
          {
             return;
          }
@@ -82,45 +79,4 @@ public class FLAGRANTE extends SpellProjectile implements Spell
          return;
       }
    }
-
-   /**
-    * Is the item a wand?
-    *
-    * @param held - item that might be a wand.
-    * @return True if wand, false if not.
-    */
-   public boolean isWand (ItemStack held)
-   {
-      if (player.getInventory().getItemInMainHand() != null)
-      {
-         if (held.getType() == Material.STICK || held.getType() == Material.BLAZE_ROD)
-         {
-            if (held.getItemMeta().hasLore())
-            {
-               List<String> lore = held.getItemMeta().getLore();
-               if (lore.get(0).split(" and ").length == 2)
-               {
-                  return true;
-               }
-               else
-               {
-                  return false;
-               }
-            }
-            else
-            {
-               return false;
-            }
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         return false;
-      }
-   }
-
 }

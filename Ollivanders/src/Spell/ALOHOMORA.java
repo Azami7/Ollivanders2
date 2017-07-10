@@ -12,9 +12,7 @@ import net.pottercraft.Ollivanders2.StationarySpellObj;
 
 public class ALOHOMORA extends SpellProjectile implements Spell
 {
-
-   public ALOHOMORA (Ollivanders2 plugin, Player player, Spells name,
-                     Double rightWand)
+   public ALOHOMORA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -41,5 +39,4 @@ public class ALOHOMORA extends SpellProjectile implements Spell
          spell.flair(10);
       }
    }
-
 }

@@ -10,8 +10,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
 public class PROTEGO extends SpellProjectile implements Spell
 {
 
-   public PROTEGO (Ollivanders2 plugin, Player player, Spells name,
-                   Double rightWand)
+   public PROTEGO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -23,5 +22,4 @@ public class PROTEGO extends SpellProjectile implements Spell
       p.addStationary(protego);
       kill();
    }
-
 }

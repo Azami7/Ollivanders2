@@ -16,9 +16,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class EVERTE_STATUM extends SpellProjectile implements Spell
 {
-
-   public EVERTE_STATUM (Ollivanders2 plugin, Player player, Spells name,
-                         Double rightWand)
+   public EVERTE_STATUM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -37,5 +35,4 @@ public class EVERTE_STATUM extends SpellProjectile implements Spell
          }
       }
    }
-
 }

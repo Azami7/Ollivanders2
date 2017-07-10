@@ -15,9 +15,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class NULLUM_EVANESCUNT extends SpellProjectile implements Spell
 {
-
-   public NULLUM_EVANESCUNT (Ollivanders2 plugin, Player player, Spells name,
-                             Double rightWand)
+   public NULLUM_EVANESCUNT (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -34,5 +32,4 @@ public class NULLUM_EVANESCUNT extends SpellProjectile implements Spell
          kill();
       }
    }
-
 }

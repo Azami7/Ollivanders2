@@ -22,9 +22,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class HERBIVICUS extends SpellProjectile implements Spell
 {
-
-   public HERBIVICUS (Ollivanders2 plugin, Player player, Spells name,
-                      Double rightWand)
+   public HERBIVICUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -73,5 +71,4 @@ public class HERBIVICUS extends SpellProjectile implements Spell
          kill();
       }
    }
-
 }

@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
  */
 public class DELETRIUS extends SpellProjectile implements Spell
 {
-
    public DELETRIUS (Ollivanders2 p, Player player, Spells name, Double rightWand)
    {
       super(p, player, name, rightWand);

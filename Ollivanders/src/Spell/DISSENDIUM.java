@@ -17,14 +17,12 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class DISSENDIUM extends SpellProjectile implements Spell
 {
-
    private double lifeTime;
    private boolean move;
    private int openTime;
    private boolean open;
 
-   public DISSENDIUM (Ollivanders2 plugin, Player player, Spells name,
-                      Double rightWand)
+   public DISSENDIUM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       lifeTime = usesModifier * 16;
@@ -75,5 +73,4 @@ public class DISSENDIUM extends SpellProjectile implements Spell
          kill();
       }
    }
-
 }

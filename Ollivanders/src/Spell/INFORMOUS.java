@@ -27,14 +27,12 @@ import net.pottercraft.Ollivanders2.StationarySpellObj;
  */
 public class INFORMOUS extends SpellProjectile implements Spell
 {
-
    List<LivingEntity> iEntity = new ArrayList<LivingEntity>();
    List<StationarySpellObj> iSpell = new ArrayList<StationarySpellObj>();
    boolean toldWeather = false;
    private double lifeTime;
 
-   public INFORMOUS (Ollivanders2 plugin, Player player, Spells name,
-                     Double rightWand)
+   public INFORMOUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       lifeTime = usesModifier * 16;
@@ -121,5 +119,4 @@ public class INFORMOUS extends SpellProjectile implements Spell
          kill();
       }
    }
-
 }

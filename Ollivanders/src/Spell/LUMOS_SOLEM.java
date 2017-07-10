@@ -21,12 +21,10 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class LUMOS_SOLEM extends SpellProjectile implements Spell
 {
-
    boolean move = true;
    Set<Block> blocks = new HashSet<Block>();
 
-   public LUMOS_SOLEM (Ollivanders2 plugin, Player player, Spells name,
-                       Double rightWand)
+   public LUMOS_SOLEM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

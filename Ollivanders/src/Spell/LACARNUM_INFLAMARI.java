@@ -14,9 +14,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class LACARNUM_INFLAMARI extends SpellProjectile implements Spell
 {
-
-   public LACARNUM_INFLAMARI (Ollivanders2 plugin, Player player, Spells name,
-                              Double rightWand)
+   public LACARNUM_INFLAMARI (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -28,5 +26,4 @@ public class LACARNUM_INFLAMARI extends SpellProjectile implements Spell
       kill();
       player.launchProjectile(SmallFireball.class, vector);
    }
-
 }

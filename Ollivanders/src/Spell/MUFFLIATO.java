@@ -17,9 +17,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class MUFFLIATO extends SpellProjectile implements Spell
 {
-
-   public MUFFLIATO (Ollivanders2 plugin, Player player, Spells name,
-                     Double rightWand)
+   public MUFFLIATO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -27,14 +25,15 @@ public class MUFFLIATO extends SpellProjectile implements Spell
    public void checkEffect ()
    {
       move();
-      if (super.getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
+      if (super.getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE
+            && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
       {
          int duration = (int) usesModifier * 1200;
-         StationarySpell.MUFFLIATO muffliato = new StationarySpell.MUFFLIATO(player, location, StationarySpells.MUFFLIATO, 5, duration);
+         StationarySpell.MUFFLIATO muffliato = new StationarySpell.MUFFLIATO(player, location,
+               StationarySpells.MUFFLIATO, 5, duration);
          muffliato.flair(20);
          p.addStationary(muffliato);
          kill();
       }
    }
-
 }

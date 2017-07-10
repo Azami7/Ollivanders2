@@ -2,11 +2,14 @@ package Spell;
 
 import java.util.List;
 
-import net.pottercraft.Ollivanders2.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spells;
+import net.pottercraft.Ollivanders2.OPlayer;
+import net.pottercraft.Ollivanders2.Effects;
 
 /**
  * Give a player the ability to fly
@@ -15,9 +18,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public class VENTO_FOLIO extends SpellProjectile implements Spell
 {
-
-   public VENTO_FOLIO (Ollivanders2 plugin, Player player, Spells name,
-                       Double rightWand)
+   public VENTO_FOLIO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -41,5 +42,4 @@ public class VENTO_FOLIO extends SpellProjectile implements Spell
          }
       }
    }
-
 }

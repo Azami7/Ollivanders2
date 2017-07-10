@@ -316,7 +316,7 @@ public class OllivandersListener implements Listener
          boolean castSuccess = true;
 
          // if they are not holding their destined wand, casting success is reduced
-         if (!holdsWand(sender))
+         if (!p.holdsWand(sender))
          {
             if (Ollivanders2.debug)
                p.getLogger().info("onPlayerChat: player not holding destined wand");
@@ -419,9 +419,9 @@ public class OllivandersListener implements Listener
          to.setYaw(from.getYaw());
          Double distance = from.distance(to);
          Double radius;
-         if (holdsWand(sender))
+         if (p.holdsWand(sender))
          {
-            radius = 1 / Math.sqrt(uses) * distance * 0.1 * wandCheck(sender);
+            radius = 1 / Math.sqrt(uses) * distance * 0.1 * p.wandCheck(sender);
          }
          else
          {
@@ -545,33 +545,16 @@ public class OllivandersListener implements Listener
          //Maybe you have to use Integer.TYPE here instead of Integer.class
          c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, Spells.class, Double.class);
       }
-      catch (SecurityException e)
+      catch (Exception e)
       {
          e.printStackTrace();
       }
-      catch (NoSuchMethodException e)
-      {
-         e.printStackTrace();
-      }
-      catch (ClassNotFoundException e)
-      {
-         e.printStackTrace();
-      }
+
       try
       {
          p.addProjectile((SpellProjectile) c.newInstance(p, player, name, wandC));
       }
-      catch (IllegalArgumentException e)
-      {
-         e.printStackTrace();
-      }
-      catch (InstantiationException e)
-      {
-         e.printStackTrace();
-      } catch (IllegalAccessException e)
-      {
-         e.printStackTrace();
-      } catch (InvocationTargetException e)
+      catch (Exception e)
       {
          e.printStackTrace();
       }
@@ -580,92 +563,82 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerInteract (PlayerInteractEvent event)
    {
+      Player player = event.getPlayer();
+      Action action = event.getAction();
+
+      if (action == null || player == null)
+         return;
+
       //Casting an effect
-      if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK)
+      if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
       {
          Map<UUID, OPlayer> opmap = p.getOPlayerMap();
-         OPlayer oplayer = p.getOPlayer(event.getPlayer());
+         OPlayer oplayer = p.getOPlayer(player);
          Spells spell = oplayer.getSpell();
          if (spell != null)
          {
             double wandC;
-            if (holdsWand(event.getPlayer()))
+            boolean playerHoldsWand = p.holdsWand(player);
+            if (playerHoldsWand)
             {
-               wandC = wandCheck(event.getPlayer());
-               allyWand(event.getPlayer());
+               if (Ollivanders2.debug)
+                  p.getLogger().info("OllivandersListener:onPlayerInteract: player holds a wand");
+
+               wandC = p.wandCheck(player);
+               allyWand(player);
             }
             else
             {
+               if (Ollivanders2.debug)
+                  p.getLogger().info("OllivandersListener:onPlayerInteract: player does not hold a wand");
+
                wandC = 10;
             }
-            createSpellProjectile(event.getPlayer(), spell, wandC);
-            int spellc = p.getSpellNum(event.getPlayer(), spell);
-            if (spellc < 100 || spell == Spells.AVADA_KEDAVRA || !holdsWand(event.getPlayer()))
+
+            createSpellProjectile(player, spell, wandC);
+            int spellc = p.getSpellNum(player, spell);
+            if (spellc < 100 || spell == Spells.AVADA_KEDAVRA || !playerHoldsWand)
             {
+               if (Ollivanders2.debug)
+                  p.getLogger().info("OllivandersListener:onPlayerInteract: allow cast spell");
+
                oplayer.setSpell(null);
-               opmap.put(event.getPlayer().getUniqueId(), oplayer);
+               opmap.put(player.getUniqueId(), oplayer);
                p.setOPlayerMap(opmap);
             }
          }
       }
+
       //See if it is the right wand and play an effect
-      if (holdsWand(event.getPlayer()) && (event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK))
+      if (p.holdsWand(player) && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK))
       {
-         if (wandCheck(event.getPlayer()) == 1)
+         Map<UUID, OPlayer> opmap = p.getOPlayerMap();
+         OPlayer oplayer = opmap.get(player.getUniqueId());
+         Spells castSpell = oplayer.getSpell();
+         Location location = player.getLocation();
+         location.setY(location.getY() + 1.6);
+
+         if (p.wandCheck(player) == 1)
          {
-            Location location = event.getPlayer().getLocation();
-            location.setY(location.getY() + 1.6);
-            Map<UUID, OPlayer> opmap = p.getOPlayerMap();
-            OPlayer oplayer = opmap.get(event.getPlayer().getUniqueId());
-            Spells spell = oplayer.getSpell();
-            if (spell == null)
+            if (castSpell == null)
             {
-               event.getPlayer().getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
-               event.getPlayer().getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+               // play a sound and visual effect when they right-click their destined wand with no spell
+               player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
+               player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
             }
-         }
-         //Toggle between known spells
-         Spells[] spells = Spells.values();
-         List<Spells> knownSpells = new ArrayList<Spells>();
-         for (Spells spell : spells)
-         {
-            if (p.getSpellNum(event.getPlayer(), spell) >= 100)
-            {
-               //if (spell != Spells.AVADA_KEDAVRA && spell != Spells.CRUCIO && spell != Spells.IMPERIO){
-               if (spell != Spells.AVADA_KEDAVRA)
-               {
-                  knownSpells.add(spell);
-               }
-            }
-         }
-         if (knownSpells.size() > 0)
-         {
-            OPlayer oplayer = p.getOPlayer(event.getPlayer());
-            Spells spell = oplayer.getSpell();
-            int ind = knownSpells.indexOf(spell);
-            if (ind == -1)
-            {
-               oplayer.setSpell(knownSpells.get(0));
-            }
-            else
-            {
-               int offset = 1;
-               if (event.getPlayer().isSneaking())
-               {
-                  offset = -1;
-               }
-               oplayer.setSpell(knownSpells.get((ind + offset) % knownSpells.size()));
-            }
-            p.setOPlayer(event.getPlayer(), oplayer);
-            event.getPlayer().sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + Spells.firstLetterCapitalize(Spells.recode(oplayer.getSpell())));
          }
       }
+
       //Reading a book, possibly a spell book
-      if ((event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK) && (event.getItem() != null))
+      //
+      // KA - What the hell is this code for?  Commenting out.
+      //
+      /*
+      ItemStack item = event.getItem();
+      if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) && (item != null))
       {
-         if (event.getItem().getType() == Material.WRITTEN_BOOK)
+         if (item.getType() == Material.WRITTEN_BOOK)
          {
-            ItemStack item = event.getItem();
             ItemMeta imeta = item.getItemMeta();
             BookMeta bookM = (BookMeta) imeta;
             if (bookM.getAuthor().equals("cakenggt"))
@@ -678,19 +651,20 @@ public class OllivandersListener implements Listener
                      {
                         madeBook.setAmount(item.getAmount());
                      }
-                     event.getPlayer().getInventory().setItemInMainHand(madeBook);
+                     player.getInventory().setItemInMainHand(madeBook);
                      imeta = madeBook.getItemMeta();
                      break;
                   }
                }
             }
-            SpellBookParser.decode(p, event.getPlayer(), imeta);
+            SpellBookParser.decode(p, player, imeta);
             if (bookM.getTitle().equalsIgnoreCase("Spell Journal"))
             {
-               event.getPlayer().getInventory().setItemInMainHand(makeJournal(event.getPlayer()));
+               player.getInventory().setItemInMainHand(makeJournal(event.getPlayer()));
             }
          }
       }
+      */
    }
 
    /**
@@ -1033,94 +1007,58 @@ public class OllivandersListener implements Listener
     * @param player - Player to check.
     * @return True if the player holds a wand. False if not.
     */
+   /*
    public boolean holdsWand (Player player)
    {
-      if (player.getInventory().getItemInMainHand() != null)
+      if (player != null && player.getInventory().getItemInMainHand() != null)
       {
          ItemStack held = player.getInventory().getItemInMainHand();
-         if (held.getType() == Material.STICK || held.getType() == Material.BLAZE_ROD)
-         {
-            if (held.getItemMeta().hasLore())
-            {
-               List<String> lore = held.getItemMeta().getLore();
-               if (lore.get(0).split(" and ").length == 2)
-               {
-                  return true;
-               }
-               else
-               {
-                  return false;
-               }
-            }
-            else
-            {
-               return false;
-            }
-         }
-         else
-         {
-            return false;
-         }
+         p.isWand(held);
+         return true;
       }
       else
       {
          return false;
       }
    }
+   */
 
    /**
     * Checks what kind of wand a player holds. Returns a value based on the
     * wand and it's relation to the player.
     *
+    * @assumes player not null, player holding a wand
     * @param player - Player being checked. The player must be holding a wand.
-    * @return 2 - The wand is not your type AND/OR is not allied to you.<p>
-    * 1 - The wand is your type and is allied to you OR the wand is the elder wand and is not allied to you.<p>
-    * 0.5 - The wand is the elder wand and it is allied to you.
+    * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
+    * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
+    * 0.5 - The wand is the elder wand and it is allied to player.
     */
-   public static double wandCheck (Player player)
+   /*
+   public double wandCheck (Player player)
    {
-      List<String> lore = player.getInventory().getItemInMainHand().getItemMeta().getLore();
-      if (lore.get(0).equals("Blaze and Ender Pearl"))
+      ItemStack item = player.getInventory().getItemInMainHand();
+
+      List<String> lore = item.getItemMeta().getLore();
+      if (lore.get(0).equals("Blaze and Ender Pearl")) // elder wand
       {
-         if (lore.size() == 2)
+         if (lore.size() == 2 && lore.get(1).equals(player.getUniqueId().toString()))
          {
-            if (lore.get(1).equals(player.getUniqueId().toString()))
-            {
-               return 0.5;
-            }
-            else
-            {
-               return 1;
-            }
-         }
-         else
-         {
+            // wand is Elder Wand and allied to player
             return 0.5;
          }
       }
-      if (Ollivanders2.destinedWand(player, player.getInventory().getItemInMainHand()))
+      else // not the elder wand
       {
-         if (lore.size() == 2)
+         if (!p.destinedWand(player, player.getInventory().getItemInMainHand()))
          {
-            if (lore.get(1).equals(player.getUniqueId().toString()))
-            {
-               return 1;
-            }
-            else
-            {
-               return 2;
-            }
-         }
-         else
-         {
-            return 1;
+            // not the player's destined wand
+            return 2;
          }
       }
-      else
-      {
-         return 2;
-      }
+
+      return 1;
    }
+   */
 
    /**
     * If a block is broken that is temporary, prevent it from dropping anything.
@@ -1351,7 +1289,7 @@ public class OllivandersListener implements Listener
       if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
       {
          Block block = event.getClickedBlock();
-         if (block.getType() == Material.CAULDRON && holdsWand(event.getPlayer()))
+         if (block.getType() == Material.CAULDRON && p.holdsWand(event.getPlayer()))
          {
             Block under = block.getRelative(BlockFace.DOWN);
             if (under.getType() == Material.FIRE || under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA)
@@ -1427,24 +1365,17 @@ public class OllivandersListener implements Listener
       if (((event.getAction() == Action.RIGHT_CLICK_AIR) || (event.getAction() == Action.RIGHT_CLICK_BLOCK))
             && (event.getPlayer().getInventory().getItemInMainHand() != null)
             && (this.p.isBroom(event.getPlayer().getInventory().getItemInMainHand())))
-      //(event.getAction() == Action.RIGHT_CLICK_AIR || event.getAction() == Action.RIGHT_CLICK_BLOCK)
       {
-         //if (event.getPlayer().getInventory().getItemInMainHand() != null)
-         //{
-            //if (p.isBroom(event.getPlayer().getInventory().getItemInMainHand()))
-            //{
-               UUID playerUid = event.getPlayer().getUniqueId();
-               Set<UUID> flying = OllivandersSchedule.getFlying();
-               if (flying.contains(playerUid))
-               {
-                  flying.remove(playerUid);
-               }
-               else
-               {
-                  flying.add(playerUid);
-               }
-            //}
-         //}
+         UUID playerUid = event.getPlayer().getUniqueId();
+         Set<UUID> flying = OllivandersSchedule.getFlying();
+         if (flying.contains(playerUid))
+         {
+            flying.remove(playerUid);
+         }
+         else
+         {
+            flying.add(playerUid);
+         }
       }
    }
 }

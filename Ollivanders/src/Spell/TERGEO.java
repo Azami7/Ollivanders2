@@ -10,11 +10,9 @@ import net.pottercraft.Ollivanders2.Spells;
 
 public class TERGEO extends SpellProjectile implements Spell
 {
-
    boolean move;
 
-   public TERGEO (Ollivanders2 plugin, Player player, Spells name,
-                  Double rightWand)
+   public TERGEO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       move = true;
@@ -68,5 +66,4 @@ public class TERGEO extends SpellProjectile implements Spell
          }
       }
    }
-
 }

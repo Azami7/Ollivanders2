@@ -16,9 +16,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class CARPE_RETRACTUM extends SpellProjectile implements Spell
 {
-
-   public CARPE_RETRACTUM (Ollivanders2 plugin, Player player, Spells name,
-                           Double rightWand)
+   public CARPE_RETRACTUM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -34,5 +32,4 @@ public class CARPE_RETRACTUM extends SpellProjectile implements Spell
          return;
       }
    }
-
 }

@@ -20,14 +20,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class HORCRUX extends StationarySpellObj implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = -5607024325100902862L;
-
-   public HORCRUX (Player player, Location location,
-                   StationarySpells name, Integer radius, Integer duration)
+   public HORCRUX (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
       super(player, location, name, radius, duration);
    }
@@ -57,5 +50,4 @@ public class HORCRUX extends StationarySpellObj implements StationarySpell
          }
       }
    }
-
 }

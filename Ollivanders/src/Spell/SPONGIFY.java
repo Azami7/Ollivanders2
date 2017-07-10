@@ -16,8 +16,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
 public class SPONGIFY extends SpellProjectile implements Spell
 {
 
-   public SPONGIFY (Ollivanders2 plugin, Player player, Spells name,
-                    Double rightWand)
+   public SPONGIFY (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -34,5 +33,4 @@ public class SPONGIFY extends SpellProjectile implements Spell
          kill();
       }
    }
-
 }

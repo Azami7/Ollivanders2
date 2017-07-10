@@ -17,9 +17,7 @@ import net.pottercraft.Ollivanders2.StationarySpellObj;
  */
 public class HORREAT_PROTEGAT extends SpellProjectile implements Spell
 {
-
-   public HORREAT_PROTEGAT (Ollivanders2 plugin, Player player, Spells name,
-                            Double rightWand)
+   public HORREAT_PROTEGAT (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -51,5 +49,4 @@ public class HORREAT_PROTEGAT extends SpellProjectile implements Spell
          }
       }
    }
-
 }

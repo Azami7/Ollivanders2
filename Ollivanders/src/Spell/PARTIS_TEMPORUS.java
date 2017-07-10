@@ -14,11 +14,9 @@ import net.pottercraft.Ollivanders2.StationarySpellObj;
  */
 public class PARTIS_TEMPORUS extends SpellProjectile implements Spell
 {
-
    public boolean move;
 
-   public PARTIS_TEMPORUS (Ollivanders2 plugin, Player player, Spells name,
-                           Double rightWand)
+   public PARTIS_TEMPORUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       move = true;
@@ -56,5 +54,4 @@ public class PARTIS_TEMPORUS extends SpellProjectile implements Spell
          kill = true;
       }
    }
-
 }

@@ -15,9 +15,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public class MUCUS_AD_NAUSEAM extends SpellProjectile implements Spell
 {
-
-   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, Player player, Spells name,
-                            Double rightWand)
+   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -39,5 +37,4 @@ public class MUCUS_AD_NAUSEAM extends SpellProjectile implements Spell
          }
       }
    }
-
 }

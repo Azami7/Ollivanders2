@@ -17,9 +17,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class DIMMINUENDO extends SpellProjectile implements Spell
 {
-
-   public DIMMINUENDO (Ollivanders2 plugin, Player player, Spells name,
-                       Double rightWand)
+   public DIMMINUENDO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -51,5 +49,4 @@ public class DIMMINUENDO extends SpellProjectile implements Spell
          return;
       }
    }
-
 }

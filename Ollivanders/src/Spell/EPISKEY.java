@@ -16,9 +16,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class EPISKEY extends SpellProjectile implements Spell
 {
-
-   public EPISKEY (Ollivanders2 plugin, Player player, Spells name,
-                   Double rightWand)
+   public EPISKEY (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -33,5 +31,4 @@ public class EPISKEY extends SpellProjectile implements Spell
          return;
       }
    }
-
 }

@@ -8,10 +8,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 
 public class SILENCIO extends OEffect implements Effect
 {
-
-   /**
-    *
-    */
    public SILENCIO (Player sender, Effects effect, int duration)
    {
       super(sender, effect, duration);
@@ -21,5 +17,4 @@ public class SILENCIO extends OEffect implements Effect
    {
       age(1);
    }
-
 }

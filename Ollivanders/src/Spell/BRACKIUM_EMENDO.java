@@ -17,9 +17,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class BRACKIUM_EMENDO extends SpellProjectile implements Spell
 {
-
-   public BRACKIUM_EMENDO (Ollivanders2 plugin, Player player, Spells name,
-                           Double rightWand)
+   public BRACKIUM_EMENDO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -39,5 +37,4 @@ public class BRACKIUM_EMENDO extends SpellProjectile implements Spell
          }
       }
    }
-
 }

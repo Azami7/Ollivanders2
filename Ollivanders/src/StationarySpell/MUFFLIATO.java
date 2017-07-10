@@ -15,14 +15,7 @@ import net.pottercraft.Ollivanders2.StationarySpells;
  */
 public class MUFFLIATO extends StationarySpellObj implements StationarySpell
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 4767315283996504871L;
-
-   public MUFFLIATO (Player player, Location location, StationarySpells name,
-                     Integer radius, Integer duration)
+   public MUFFLIATO (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
       super(player, location, name, radius, duration);
    }
@@ -31,5 +24,4 @@ public class MUFFLIATO extends StationarySpellObj implements StationarySpell
    {
       age();
    }
-
 }

@@ -33,7 +33,6 @@ public abstract class Transfiguration extends SpellProjectile
       hasTransfigured = false;
    }
 
-
    /**
     * Transfigures entity into new EntityType. Do not use on players. Time length is usesModier() number of minutes plus 8 seconds.
     *
@@ -102,7 +101,6 @@ public abstract class Transfiguration extends SpellProjectile
     *
     * @return The newly spawned Entity. Null if no entity was spawned from the ending of the transfiguration.
     */
-   @SuppressWarnings("deprecation")
    public Entity endTransfigure ()
    {
       kill();
@@ -133,7 +131,8 @@ public abstract class Transfiguration extends SpellProjectile
                }
                if (fromEType.equals(EntityType.FALLING_BLOCK))
                {
-                  return (Entity) e.getWorld().spawnFallingBlock(e.getLocation(), fromStack.getType(), (byte) 0);
+                  //return (Entity) e.getWorld().spawnFallingBlock(e.getLocation(), fromStack.getType(), (byte) 0);
+                  return (Entity) e.getWorld().spawnFallingBlock(e.getLocation(), fromStack.getData().clone());
                }
                else
                {

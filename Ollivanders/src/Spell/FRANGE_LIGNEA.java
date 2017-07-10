@@ -21,7 +21,6 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class FRANGE_LIGNEA extends SpellProjectile implements Spell
 {
-
    public FRANGE_LIGNEA (Ollivanders2 p, Player player, Spells name, Double rightWand)
    {
       super(p, player, name, rightWand);
@@ -34,8 +33,7 @@ public class FRANGE_LIGNEA extends SpellProjectile implements Spell
       if (block.getType() == Material.LOG)
       {
          block.getLocation().getWorld().createExplosion(block.getLocation(), 0);
-         @SuppressWarnings("deprecation")
-         int data = block.getData() % 4;
+         int data = block.getState().getData().toItemStack(1).getDurability() % 4;
          String[] woodTypes = {"Oak", "Spruce", "Birch", "Jungle"};
          int number = (int) (usesModifier * 0.8);
          if (number > 0)

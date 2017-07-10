@@ -18,9 +18,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class OBLIVIATE extends SpellProjectile implements Spell
 {
-
-   public OBLIVIATE (Ollivanders2 plugin, Player player, Spells name,
-                     Double rightWand)
+   public OBLIVIATE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -49,5 +47,4 @@ public class OBLIVIATE extends SpellProjectile implements Spell
          }
       }
    }
-
 }

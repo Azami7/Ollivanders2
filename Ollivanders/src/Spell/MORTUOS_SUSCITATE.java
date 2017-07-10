@@ -17,9 +17,7 @@ import net.pottercraft.Ollivanders2.Transfiguration;
  */
 public class MORTUOS_SUSCITATE extends Transfiguration implements Spell
 {
-
-   public MORTUOS_SUSCITATE (Ollivanders2 plugin, Player player, Spells name,
-                             Double rightWand)
+   public MORTUOS_SUSCITATE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -51,5 +49,4 @@ public class MORTUOS_SUSCITATE extends Transfiguration implements Spell
          }
       }
    }
-
 }

@@ -158,20 +158,11 @@ public class Ollivanders2 extends JavaPlugin
          prophecy = (HashSet<Prophecy>) SLAPI
                .load("plugins/Ollivanders2/prophecy.bin");
          getLogger().finest("Loaded prophecy.bin");
-      } catch (Exception e)
+      }
+      catch (Exception e)
       {
          getLogger().warning("Did not find prophecy.bin");
       }
-      /*
-      try
-      {
-         MetricsLite metrics = new MetricsLite(this);
-         metrics.start();
-      } catch (IOException e)
-      {
-         // Failed to submit the stats :-(
-      }
-      */
 
       if (!new File(this.getDataFolder(), "config.yml").exists())
       {
@@ -387,9 +378,17 @@ public class Ollivanders2 extends JavaPlugin
       debug = !debug;
 
       if (debug)
+      {
          getLogger().info("Debug mode enabled.");
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+               + "Ollivanders2 debug mode enabled.");
+      }
       else
+      {
          getLogger().info("Debug mode disabled.");
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+               + "Ollivanders2 debug mode disabled.");
+      }
 
       return true;
    }
@@ -915,41 +914,89 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
+    * Does the player hold a wand item?
+    *
+    * @param player - Player to check.
+    * @return True if the player holds a wand. False if not or if player is null.
+    */
+   public boolean holdsWand (Player player)
+   {
+      if (Ollivanders2.debug)
+         getLogger().info("Ollivander2:holdsWand: enter");
+
+      if (player != null && player.getInventory().getItemInMainHand() != null)
+      {
+         if (Ollivanders2.debug)
+            getLogger().info("Ollivander2:holdsWand: item in hand is not null, we can check it.");
+
+         ItemStack held = player.getInventory().getItemInMainHand();
+         return isWand(held);
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   /**
     * Is this item stack a wand?
     *
     * @param stack - stack to be checked
     * @return true if yes, false if no
     */
-   public static boolean isWand (ItemStack stack)
+   public boolean isWand (ItemStack stack)
    {
+      if (Ollivanders2.debug)
+         getLogger().info("Ollivander2:isWand: enter");
+
       if (stack != null)
       {
          if (stack.getType() == Material.STICK || stack.getType() == Material.BLAZE_ROD)
          {
+            if (Ollivanders2.debug)
+               getLogger().info("Ollivander2:isWand: item is wand material");
+
             if (stack.getItemMeta().hasLore())
             {
+               String itemName = stack.getItemMeta().getDisplayName();
                List<String> lore = stack.getItemMeta().getLore();
+               //TODO refactor this - item name should contain "wand" and lore should not just contain "and" but have the correct components
                if (lore.get(0).split(" and ").length == 2)
                {
+                  if (Ollivanders2.debug)
+                     getLogger().info("Ollivander2:isWand: item is a wand");
+
                   return true;
                }
                else
                {
+                  if (Ollivanders2.debug)
+                     getLogger().info("Ollivander2:isWand: item is not a wand");
+
                   return false;
                }
             }
             else
             {
+               if (Ollivanders2.debug)
+                  getLogger().info("Ollivander2:isWand: item does not have wand lore");
+
                return false;
             }
          }
          else
          {
+            if (Ollivanders2.debug)
+               getLogger().info("Ollivander2:isWand: item is not a stick or blaze rod");
+
             return false;
          }
       }
       else
       {
+         if (Ollivanders2.debug)
+            getLogger().info("Ollivander2:isWand: item to check is null");
+
          return false;
       }
    }
@@ -961,7 +1008,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param stack  - Itemstack to be checked
     * @return true if yes, false if no
     */
-   public static boolean destinedWand (Player player, ItemStack stack)
+   public boolean destinedWand (Player player, ItemStack stack)
    {
       if (isWand(stack))
       {
@@ -1017,6 +1064,41 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
+    * Checks what kind of wand a player holds. Returns a value based on the
+    * wand and it's relation to the player.
+    *
+    * @assumes player not null, player holding a wand
+    * @param player - Player being checked. The player must be holding a wand.
+    * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
+    * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
+    * 0.5 - The wand is the elder wand and it is allied to player.
+    */
+   public double wandCheck (Player player)
+   {
+      ItemStack item = player.getInventory().getItemInMainHand();
+
+      List<String> lore = item.getItemMeta().getLore();
+      if (lore.get(0).equals("Blaze and Ender Pearl")) // elder wand
+      {
+         if (lore.size() == 2 && lore.get(1).equals(player.getUniqueId().toString()))
+         {
+            // wand is Elder Wand and allied to player
+            return 0.5;
+         }
+      }
+      else // not the elder wand
+      {
+         if (!destinedWand(player, player.getInventory().getItemInMainHand()))
+         {
+            // not the player's destined wand
+            return 2;
+         }
+      }
+
+      return 1;
+   }
+
+   /**
     * SLAPI = Saving/Loading API
     * API for Saving and Loading Objects.
     *
@@ -1038,6 +1120,39 @@ public class Ollivanders2 extends JavaPlugin
          Object result = ois.readObject();
          ois.close();
          return result;
+      }
+   }
+
+   /**
+    * Determine if this is the Cloak of Invisibility.
+    *
+    * @param held
+    * @return
+    */
+   public static boolean isInvisibilityCloak (ItemStack held)
+   {
+      if (held.getType() == Material.CHAINMAIL_CHESTPLATE)
+      {
+         if (held.getItemMeta().hasLore())
+         {
+            List<String> lore = held.getItemMeta().getLore();
+            if (lore.get(0).equals("Silvery Transparent Cloak"))
+            {
+               return true;
+            }
+            else
+            {
+               return false;
+            }
+         }
+         else
+         {
+            return false;
+         }
+      }
+      else
+      {
+         return false;
       }
    }
 }

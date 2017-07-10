@@ -16,9 +16,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class DEPULSO extends SpellProjectile implements Spell
 {
-
-   public DEPULSO (Ollivanders2 plugin, Player player, Spells name,
-                   Double rightWand)
+   public DEPULSO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -34,5 +32,4 @@ public class DEPULSO extends SpellProjectile implements Spell
          return;
       }
    }
-
 }

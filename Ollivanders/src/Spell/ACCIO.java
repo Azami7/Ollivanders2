@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
  */
 public class ACCIO extends SpellProjectile implements Spell
 {
-
    public ACCIO (Ollivanders2 p, Player player, Spells name, Double rightWand)
    {
       super(p, player, name, rightWand);

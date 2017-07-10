@@ -50,30 +50,13 @@ class OllivandersSchedule implements Runnable
       try
       {
          projectileSched();
-      } catch (Exception e)
-      {
-
-      }
-
-      try
-      {
          oeffectSched();
-      } catch (Exception e)
-      {
-      }
-
-      try
-      {
          stationarySched();
-      } catch (Exception e)
-      {
-      }
-
-      try
-      {
          broomSched();
-      } catch (Exception e)
+      }
+      catch (Exception e)
       {
+         e.printStackTrace();
       }
 
       if (counter % 20 == 0)
@@ -398,7 +381,6 @@ class OllivandersSchedule implements Runnable
    /**
     * Checks all players to see if they will receive a prophecy
     */
-   @SuppressWarnings("deprecation")
    private void scry ()
    {
       Material ball = Material.getMaterial("divinationBlock");
@@ -425,7 +407,7 @@ class OllivandersSchedule implements Runnable
                   message = message.concat(str + " ");
                }
                player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + message);
-               ItemStack hand = player.getItemInHand();
+               ItemStack hand = player.getInventory().getItemInMainHand();
                if (hand.getType() == ball)
                {
                   ItemStack record = new ItemStack(ball, 1);
@@ -435,12 +417,12 @@ class OllivandersSchedule implements Runnable
                   record.setItemMeta(recordM);
                   if (hand.getAmount() == 1)
                   {
-                     player.setItemInHand(null);
+                     player.getInventory().setItemInMainHand(null);
                   }
                   else
                   {
                      hand.setAmount(hand.getAmount() - 1);
-                     player.setItemInHand(hand);
+                     player.getInventory().setItemInMainHand(hand);
                   }
                   for (ItemStack drop : player.getInventory().addItem(record).values())
                   {

@@ -17,8 +17,7 @@ import net.pottercraft.Ollivanders2.Spells;
 public class LEVICORPUS extends SpellProjectile implements Spell
 {
 
-   public LEVICORPUS (Ollivanders2 plugin, Player player, Spells name,
-                      Double rightWand)
+   public LEVICORPUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -32,12 +31,12 @@ public class LEVICORPUS extends SpellProjectile implements Spell
          if (live instanceof Player)
          {
             OPlayer oply = p.getOPlayer((Player) live);
-            Effect.LEVICORPUS levi = new Effect.LEVICORPUS((Player) live, Effects.LEVICORPUS, (int) (usesModifier * 1200.0), live.getEyeLocation());
+            Effect.LEVICORPUS levi = new Effect.LEVICORPUS((Player) live, Effects.LEVICORPUS,
+                  (int) (usesModifier * 1200.0), live.getEyeLocation());
             oply.addEffect(levi);
             kill();
             return;
          }
       }
    }
-
 }

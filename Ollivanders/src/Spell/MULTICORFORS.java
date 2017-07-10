@@ -18,9 +18,7 @@ import net.pottercraft.Ollivanders2.Spells;
  */
 public class MULTICORFORS extends SpellProjectile implements Spell
 {
-
-   public MULTICORFORS (Ollivanders2 plugin, Player player, Spells name,
-                        Double rightWand)
+   public MULTICORFORS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -50,5 +48,4 @@ public class MULTICORFORS extends SpellProjectile implements Spell
          }
       }
    }
-
 }

@@ -26,7 +26,6 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class LIGATIS_COR extends SpellProjectile implements Spell
 {
-
    public LIGATIS_COR (Ollivanders2 p, Player player, Spells name, Double rightWand)
    {
       super(p, player, name, rightWand);

@@ -21,11 +21,9 @@ import net.pottercraft.Ollivanders2.StationarySpellObj;
  */
 public class DEFODIO extends SpellProjectile implements Spell
 {
-
    int depth;
 
-   public DEFODIO (Ollivanders2 plugin, Player player, Spells name,
-                   Double rightWand)
+   public DEFODIO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       depth = (int) usesModifier;
@@ -63,5 +61,4 @@ public class DEFODIO extends SpellProjectile implements Spell
       }
       move();
    }
-
 }

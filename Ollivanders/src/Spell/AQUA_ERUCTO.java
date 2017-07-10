@@ -18,17 +18,15 @@ import org.bukkit.entity.Player;
  */
 public class AQUA_ERUCTO extends SpellProjectile implements Spell
 {
-
    private boolean move;
    private double lifeTime;
 
-   @SuppressWarnings("deprecation")
    public AQUA_ERUCTO (Ollivanders2 p, Player player, Spells name, Double rightWand)
    {
       super(p, player, name, rightWand);
       lifeTime = usesModifier * 16;
       move = true;
-      moveEffectData = Material.WATER.getId();
+      moveEffectData = Material.WATER;
    }
 
    public void checkEffect ()
