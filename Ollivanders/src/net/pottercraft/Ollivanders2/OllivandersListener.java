@@ -1288,13 +1288,27 @@ public class OllivandersListener implements Listener
    {
       if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
       {
+         if (Ollivanders2.debug)
+            p.getLogger().info("OllivandersListener:cauldronClick: enter");
+
          Block block = event.getClickedBlock();
          if (block.getType() == Material.CAULDRON && p.holdsWand(event.getPlayer()))
          {
+            if (Ollivanders2.debug)
+               p.getLogger().info("Block right-clicked was a cauldron");
+
             Block under = block.getRelative(BlockFace.DOWN);
             if (under.getType() == Material.FIRE || under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA)
             {
-               PotionParser.parse(block);
+               if (Ollivanders2.debug)
+                  p.getLogger().info("Cauldron is over a hot block");
+
+               PotionParser.parse(block, p);
+            }
+            else
+            {
+               if (Ollivanders2.debug)
+                  p.getLogger().info("Cauldron is not over a hot block");
             }
          }
       }

@@ -195,6 +195,7 @@ public class Ollivanders2 extends JavaPlugin
       bRecipe.setIngredient('W', Material.WHEAT);
       getServer().addRecipe(new FurnaceRecipe(flooPowder, Material.ENDER_PEARL));
       getServer().addRecipe(bRecipe);
+
       getLogger().info(this + " is now enabled!");
    }
 

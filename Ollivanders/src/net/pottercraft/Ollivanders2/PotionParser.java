@@ -1,45 +1,45 @@
 package net.pottercraft.Ollivanders2;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.material.Cauldron;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.*;
 
 /**
  * Parses the ingredients in a cauldron when it is right clicked with a wand and determines what potion
  * should be made and how many, if any.
  *
  * @author lownes
+ * @author Azami7
  */
 public class PotionParser
 {
    /**
-    * Memory Potion
+    * Doubles spell experience gained when casting spells
     */
    public final static List<ItemStack> MEMORY_POTION = Arrays.asList(new ItemStack(Material.SUGAR_CANE, 3),
          new ItemStack(Material.GLOWSTONE_DUST, 2));
+
    /**
-    * Baruffios Brain Elixir
+    * All spells cast are twice as powerful.
     */
    public final static List<ItemStack> BARUFFIOS_BRAIN_ELIXIR = Arrays.asList(new ItemStack(Material.REDSTONE, 5),
          new ItemStack(Material.GOLD_NUGGET, 1));
+
    /**
-    * Wolfsbane Potion
+    * Relieve the symptoms of Lycanthropy
     */
    public final static List<ItemStack> WOLFSBANE_POTION = Arrays.asList(new ItemStack(Material.SPIDER_EYE, 2),
          new ItemStack(Material.ROTTEN_FLESH, 3));
+
    /**
-    * Regeneration Potion
+    *
     */
    public final static List<ItemStack> REGENERATION_POTION = Arrays.asList(new ItemStack(Material.BONE, 1),
          new ItemStack(Material.SPIDER_EYE, 1), new ItemStack(Material.SULPHUR, 1),
@@ -52,54 +52,78 @@ public class PotionParser
     *
     * @param cauldron - The block clicked. Must be a cauldron. Must have already been checked to see if it has a hot block under it.
     */
-   public static void parse (Block cauldron)
+   public static void parse (Block cauldron, Ollivanders2 p)
    {
+      if (Ollivanders2.debug)
+         p.getLogger().info("PotionParser:parse: enter");
+
       ALL_POTIONS.put("Memory Potion", MEMORY_POTION);
       ALL_POTIONS.put("Baruffio's Brain Elixir", BARUFFIOS_BRAIN_ELIXIR);
       ALL_POTIONS.put("Wolfsbane Potion", WOLFSBANE_POTION);
       ALL_POTIONS.put("Regeneration Potion", REGENERATION_POTION);
 
-      //int water = cauldron.getData();
-
-      // only do something if this is a cauldron
-      if (cauldron.getType() == Material.CAULDRON)
+      // make sure cauldron has water in it
+      Cauldron cauldronData = (Cauldron)cauldron.getState().getData();
+      if (cauldronData.isEmpty())
       {
-         Map<Material, Integer> ingredients = new HashMap<>();
-         List<Item> ingredientItems = new ArrayList<>();
-         for (Item item : cauldron.getWorld().getEntitiesByClass(Item.class))
+         if (Ollivanders2.debug)
+            p.getLogger().info("PotionParser:parse: cauldron is empty");
+
+         return;
+      }
+      else
+      {
+         if (Ollivanders2.debug)
+            p.getLogger().info("PotionParser:parse: cauldron is full");
+      }
+
+      Map<Material, Integer> ingredients = new HashMap<>();
+      List<Item> ingredientItems = new ArrayList<>();
+      for (Item item : cauldron.getWorld().getEntitiesByClass(Item.class))
+      {
+         if (item.getLocation().getBlock().equals(cauldron)
+               || item.getLocation().getBlock().equals(cauldron.getRelative(BlockFace.UP)))
          {
-            if (item.getLocation().getBlock().equals(cauldron)
-                  || item.getLocation().getBlock().equals(cauldron.getRelative(BlockFace.UP)))
+            Material material = item.getItemStack().getType();
+            int amount = item.getItemStack().getAmount();
+            ingredientItems.add(item);
+            if (Ollivanders2.debug)
+               p.getLogger().info("PotionParser:parse: added " + material);
+
+            if (ingredients.containsKey(material))
             {
-               Material material = item.getItemStack().getType();
-               int amount = item.getItemStack().getAmount();
-               ingredientItems.add(item);
-               if (ingredients.containsKey(material))
-               {
-                  ingredients.put(material, ingredients.get(material) + amount);
-               }
-               else
-               {
-                  ingredients.put(material, amount);
-               }
+               ingredients.put(material, ingredients.get(material) + amount);
+            }
+            else
+            {
+               ingredients.put(material, amount);
             }
          }
-         //if (!ingredients.containsKey(Material.GLASS_BOTTLE) || water == 0)
-         if (!ingredients.containsKey(Material.GLASS_BOTTLE) || ingredientItems.size() < 1)
-         {
-            return;
-         }
+      }
+      if (!ingredients.containsKey(Material.GLASS_BOTTLE))
+      {
+         if (Ollivanders2.debug)
+            p.getLogger().info("PotionParser:parse: missing glass bottle");
 
-         /**
-          * check to find out which recipe it is
-          * make the potions according to how many ingredients there are and delete those item entities
-          */
-         String recipe = recipeChecker(ingredients);
-         if (recipe != null)
-         {
-            //recipeCooker(recipe, water, ingredientItems, cauldron);
-            recipeCooker(recipe, ingredientItems, cauldron);
-         }
+         return;
+      }
+
+      /**
+		 * check to find out which recipe it is
+		 * make the potions according to how many ingredients there are and delete those item entities
+		 */
+      String recipe = recipeChecker(ingredients, p);
+      if (recipe != null)
+      {
+         if (Ollivanders2.debug)
+            p.getLogger().info("PotionParser:parse: found a matching recipe");
+         //recipeCooker(recipe, water, ingredientItems, cauldron);
+         recipeCooker(recipe, ingredientItems, cauldron);
+      }
+      else
+      {
+         if (Ollivanders2.debug)
+            p.getLogger().info("PotionParser:parse: did not find a matching recipe");
       }
    }
 
@@ -109,8 +133,11 @@ public class PotionParser
     * @param ingredients - The list of materials on the ground
     * @return - The list of ingredients
     */
-   private static String recipeChecker (Map<Material, Integer> ingredients)
+   private static String recipeChecker (Map<Material, Integer> ingredients, Ollivanders2 p)
    {
+      if (Ollivanders2.debug)
+         p.getLogger().info("PotionParser:recipeChecker: enter");
+
       search:
       for (String name : ALL_POTIONS.keySet())
       {
@@ -145,7 +172,6 @@ public class PotionParser
    {
       List<ItemStack> recipe = ALL_POTIONS.get(name);
       List<Integer> amounts = new ArrayList<>();
-      //amounts.add(water);
 
       //finding the least amount of ingredients
       for (Item item : ingredients)
@@ -165,7 +191,7 @@ public class PotionParser
          }
       }
 
-      //dropping the potions in the cauldron
+      //dropping the potions
       int potions = Collections.min(amounts);
       Location dropLoc = cauldron.getLocation().add(0.5, 0.9, 0.5);
       ItemStack potion = new ItemStack(Material.POTION);
@@ -212,7 +238,6 @@ public class PotionParser
             }
          }
       }
-
       //cauldron.setData((byte) (water - potions));
    }
 }

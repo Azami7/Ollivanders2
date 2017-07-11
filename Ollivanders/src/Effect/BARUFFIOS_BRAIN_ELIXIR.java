@@ -8,12 +8,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 
 public class BARUFFIOS_BRAIN_ELIXIR extends OEffect implements Effect
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 8344150682258820456L;
-
    public BARUFFIOS_BRAIN_ELIXIR (Player sender, Effects effect, int duration)
    {
       super(sender, effect, duration);
@@ -24,5 +18,4 @@ public class BARUFFIOS_BRAIN_ELIXIR extends OEffect implements Effect
    {
       age(1);
    }
-
 }
