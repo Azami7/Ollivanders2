@@ -4,6 +4,7 @@ import net.pottercraft.Ollivanders2.SpellProjectile;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Bat;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spells;
@@ -34,21 +35,29 @@ public class AVIS extends SpellProjectile implements Spell
       if (birdCount < maxBirds)
       {
          move();
-         Parrot parrot = (Parrot) location.getWorld().spawnEntity(location, EntityType.PARROT);
 
-         int rand = Math.abs(Ollivanders2.random.nextInt() % 5);
-         Parrot.Variant variant;
-         if (rand == 0)
-            variant = Parrot.Variant.CYAN;
-         else if (rand == 1)
-            variant = Parrot.Variant.GRAY;
-         else if (rand == 2)
-            variant = Parrot.Variant.BLUE;
-         else if (rand == 3)
-            variant = Parrot.Variant.GREEN;
+         if (Ollivanders2.mcVersionCheck())
+         {
+            Parrot bird = (Parrot) location.getWorld().spawnEntity(location, EntityType.PARROT);
+
+            int rand = Math.abs(Ollivanders2.random.nextInt() % 5);
+            Parrot.Variant variant;
+            if (rand == 0)
+               variant = Parrot.Variant.CYAN;
+            else if (rand == 1)
+               variant = Parrot.Variant.GRAY;
+            else if (rand == 2)
+               variant = Parrot.Variant.BLUE;
+            else if (rand == 3)
+               variant = Parrot.Variant.GREEN;
+            else
+               variant = Parrot.Variant.RED;
+            bird.setVariant(variant);
+         }
          else
-            variant = Parrot.Variant.RED;
-         parrot.setVariant(variant);
+         {
+            Bat bird = (Bat) location.getWorld().spawnEntity(location, EntityType.BAT);
+         }
 
          birdCount++;
       }

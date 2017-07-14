@@ -61,6 +61,8 @@ public class Ollivanders2 extends JavaPlugin
    private List<Block> tempBlocks = new ArrayList<Block>();
    private FileConfiguration fileConfig;
 
+   private static String mcVersion;
+
    public static Random random = new Random();
 
    public static boolean debug = false;
@@ -127,11 +129,12 @@ public class Ollivanders2 extends JavaPlugin
       prophecy = new HashSet<Prophecy>();
       fileConfig = getConfig();
       //verify version of server
-      if (!Bukkit.getBukkitVersion().contains("1.12"))
+      mcVersion = Bukkit.getBukkitVersion();
+      if (!mcVersion.contains("1.1[2-9]"))
       {
-         getLogger().severe("This plugin requires v1.12 and higher.");
-         this.setEnabled(false);
-         return;
+         getLogger().warning("Some features of Ollivanders2 require MC 1.12 and higher.");
+         //this.setEnabled(false);
+         //return;
       }
       //finished loading data
 
@@ -1155,5 +1158,18 @@ public class Ollivanders2 extends JavaPlugin
       {
          return false;
       }
+   }
+
+   /**
+    * Check to see if we're running MC version 1.12 or higher, which many Ollivanders2 features depend on.
+    *
+    * @return true of verion string is 1.12 - 1.19, false otherwise.
+    */
+   public static boolean mcVersionCheck ()
+   {
+      if (mcVersion.contains("1.1[2-9]"))
+         return true;
+
+      return false;
    }
 }

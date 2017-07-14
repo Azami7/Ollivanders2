@@ -1,5 +1,6 @@
 package Spell;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -7,7 +8,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spells;
 
 /**
- * Transfigures entity into a parrot.
+ * Transfigures entity into a parrot (MC >= 1.12) or bat (MC < 1.12)
  *
  * @see MetatrepoSuper
  * @version Ollivanders2
@@ -20,6 +21,10 @@ public class AVIFORS extends MetatrepoSuper
    {
       super(plugin, player, name, rightWand);
 
-      animalShape = EntityType.PARROT;
+      String mcVersion = Bukkit.getBukkitVersion();
+      if (Ollivanders2.mcVersionCheck())
+         animalShape = EntityType.PARROT;
+      else
+         animalShape = EntityType.BAT;
    }
 }

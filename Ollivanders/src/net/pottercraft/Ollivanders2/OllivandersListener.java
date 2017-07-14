@@ -1,62 +1,5 @@
 package net.pottercraft.Ollivanders2;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.UUID;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Effect;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Server;
-import org.bukkit.Sound;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Parrot;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerEditBookEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.potion.PotionEffect;
-
 import Effect.BARUFFIOS_BRAIN_ELIXIR;
 import Effect.LYCANTHROPY;
 import Effect.MEMORY_POTION;
@@ -67,6 +10,24 @@ import StationarySpell.ALIQUAM_FLOO;
 import StationarySpell.COLLOPORTUS;
 import StationarySpell.REPELLO_MUGGLETON;
 import StationarySpell.SPONGIFY;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.*;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.event.player.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+
+import java.lang.reflect.Constructor;
+import java.util.*;
 
 /**
  * Listener for events from the plugin
@@ -186,7 +147,9 @@ public class OllivandersListener implements Listener
       List<OEffect> effects = p.getOPlayer(sender).getEffects();
 
       if (Ollivanders2.debug)
+      {
          p.getLogger().info("onPlayerChat: message = " + message);
+      }
 
       /**
        * Handle player spells that effect the chat.  Need to do this first sine they may affect the chat
@@ -195,7 +158,9 @@ public class OllivandersListener implements Listener
       if (effects != null)
       {
          if (Ollivanders2.debug)
+         {
             p.getLogger().info("onPlayerChat: Handling player effects");
+         }
 
          for (OEffect effect : effects)
          {
@@ -203,7 +168,9 @@ public class OllivandersListener implements Listener
             if (effect.name == Effects.SILENCIO)
             {
                if (Ollivanders2.debug)
+               {
                   p.getLogger().info("onPlayerChat: SILENCIO");
+               }
 
                if (sender.isPermissionSet("Ollivanders2.BYPASS"))
                {
@@ -229,9 +196,13 @@ public class OllivandersListener implements Listener
       if (Ollivanders2.debug)
       {
          if (spell != null)
+         {
             p.getLogger().info("Spells:decode(): spell is " + spell);
+         }
          else
+         {
             p.getLogger().info("Spells:decode(): no spell found");
+         }
       }
 
       /**
@@ -243,7 +214,9 @@ public class OllivandersListener implements Listener
       for (StationarySpellObj stationary : stationaries)
       {
          if (Ollivanders2.debug)
+         {
             p.getLogger().info("onPlayerChat: handling stationary spells");
+         }
 
          if (stationary.name.equals(StationarySpells.MUFFLIATO) && stationary.active)
          {
@@ -258,7 +231,9 @@ public class OllivandersListener implements Listener
          if (muffliatos.size() > 0)
          {
             if (Ollivanders2.debug)
+            {
                p.getLogger().info("onPlayerChat: MUFFLIATO detected");
+            }
 
             for (StationarySpellObj muffliato : muffliatos)
             {
@@ -274,7 +249,9 @@ public class OllivandersListener implements Listener
       for (Player remRec : remRecipients)
       {
          if (Ollivanders2.debug)
+         {
             p.getLogger().info("onPlayerChat: update recipients");
+         }
 
          try
          {
@@ -308,7 +285,9 @@ public class OllivandersListener implements Listener
          {
             // if bookLearning is set to true then spell count must be > 0 to cast this spell
             if (Ollivanders2.debug)
+            {
                p.getLogger().info("onPlayerChat: bookLearning enforced");
+            }
 
             return;
          }
@@ -319,7 +298,9 @@ public class OllivandersListener implements Listener
          if (!p.holdsWand(sender))
          {
             if (Ollivanders2.debug)
+            {
                p.getLogger().info("onPlayerChat: player not holding destined wand");
+            }
 
             int uses = p.getOPlayer(sender).getSpellCount().get(spell);
             castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
@@ -328,7 +309,9 @@ public class OllivandersListener implements Listener
          if (castSuccess)
          {
             if (Ollivanders2.debug)
+            {
                p.getLogger().info("onPlayerChat: begin casting " + spell);
+            }
 
             String[] words = message.split(" ");
 
@@ -353,11 +336,15 @@ public class OllivandersListener implements Listener
       else
       {
          if (Ollivanders2.debug)
+         {
             p.getLogger().info("Either no spell cast attempted or not allowed to cast");
+         }
       }
 
       if (Ollivanders2.debug)
+      {
          p.getLogger().info("onPlayerChat: return");
+      }
    }
 
    /**
@@ -397,7 +384,8 @@ public class OllivandersListener implements Listener
                      Double.parseDouble(words[1]),
                      Double.parseDouble(words[2]),
                      Double.parseDouble(words[3]));
-            } catch (NumberFormatException e)
+            }
+            catch (NumberFormatException e)
             {
                to = sender.getLocation().clone();
             }
@@ -480,50 +468,103 @@ public class OllivandersListener implements Listener
       {
          if (splited[0].equalsIgnoreCase("deliver") && splited[1].equalsIgnoreCase("to"))
          {
-            for (Entity parrot : world.getEntities())
+            for (Entity entity : world.getEntities())
             {
-               if (parrot instanceof Parrot && parrot.getLocation().distance(sender.getLocation()) <= 10)
+               if (entity.getLocation().distance(sender.getLocation()) <= 10)
                {
-                  Parrot owl = (Parrot) parrot;
-                  if (owl.isTamed())
+                  Creature owl;
+                  if (Ollivanders2.mcVersionCheck() && entity instanceof Parrot)
                   {
-                     for (Entity item : world.getEntities())
+                     owl = (Parrot) entity;
+                  }
+                  else if (entity instanceof Ocelot)
+                  {
+                     owl = (Ocelot) entity;
+                     Ocelot o = (Ocelot)owl;
+                     if (!o.isTamed())
                      {
-                        if (item instanceof Item && item.getLocation().distance(owl.getLocation()) <= 2)
+                        continue;
+                     }
+                  }
+                  else
+                  {
+                     continue;
+                  }
+
+                  //if (owl.isTamed())
+                  //{
+                  for (Entity item : world.getEntities())
+                  {
+                     if (item instanceof Item && item.getLocation().distance(owl.getLocation()) <= 2)
+                     {
+                        Player recipient = server.getPlayer(splited[2]);
+                        if (recipient != null)
                         {
-                           Player recipient = server.getPlayer(splited[2]);
-                           if (recipient != null)
+                           if (recipient.isOnline())
                            {
-                              if (recipient.isOnline())
+                              if (recipient.getWorld().getUID().equals(world.getUID()))
                               {
-                                 if (recipient.getWorld().getUID().equals(world.getUID()))
+                                 if (Ollivanders2.mcVersionCheck())
                                  {
-                                    world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
-                                    owl.teleport(recipient.getLocation());
-                                    item.teleport(recipient.getLocation());
                                     world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
                                  }
                                  else
                                  {
-                                    world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                                    sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not in this world.");
+                                    world.playSound(owl.getLocation(), Sound.ENTITY_CAT_PURREOW, 1, 0);
+                                 }
+                                 owl.teleport(recipient.getLocation());
+                                 item.teleport(recipient.getLocation());
+                                 if (Ollivanders2.mcVersionCheck())
+                                 {
+                                    world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
+                                 }
+                                 else
+                                 {
+                                    world.playSound(owl.getLocation(), Sound.ENTITY_CAT_PURREOW, 1, 0);
                                  }
                               }
                               else
                               {
-                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                                 sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
+                                 if (Ollivanders2.mcVersionCheck())
+                                 {
+                                    world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
+                                 }
+                                 else
+                                 {
+                                    world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
+                                 }
+                                 sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not in this world.");
                               }
                            }
                            else
                            {
-                              world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
+                              if (Ollivanders2.mcVersionCheck())
+                              {
+                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
+                              }
+                              else
+                              {
+                                 world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
+                              }
                               sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
                            }
-                           return;
                         }
+                        else
+                        {
+                           if (Ollivanders2.mcVersionCheck())
+                           {
+                              world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
+                           }
+                           else
+                           {
+                              world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
+                           }
+                           sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
+                        }
+                        return;
                      }
                   }
+                  //}
                }
             }
          }
@@ -567,7 +608,9 @@ public class OllivandersListener implements Listener
       Action action = event.getAction();
 
       if (action == null || player == null)
+      {
          return;
+      }
 
       //Casting an effect
       if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
@@ -582,7 +625,9 @@ public class OllivandersListener implements Listener
             if (playerHoldsWand)
             {
                if (Ollivanders2.debug)
+               {
                   p.getLogger().info("OllivandersListener:onPlayerInteract: player holds a wand");
+               }
 
                wandC = p.wandCheck(player);
                allyWand(player);
@@ -590,7 +635,9 @@ public class OllivandersListener implements Listener
             else
             {
                if (Ollivanders2.debug)
+               {
                   p.getLogger().info("OllivandersListener:onPlayerInteract: player does not hold a wand");
+               }
 
                wandC = 10;
             }
@@ -600,7 +647,9 @@ public class OllivandersListener implements Listener
             if (spellc < 100 || spell == Spells.AVADA_KEDAVRA || !playerHoldsWand)
             {
                if (Ollivanders2.debug)
+               {
                   p.getLogger().info("OllivandersListener:onPlayerInteract: allow cast spell");
+               }
 
                oplayer.setSpell(null);
                opmap.put(player.getUniqueId(), oplayer);
@@ -1289,26 +1338,34 @@ public class OllivandersListener implements Listener
       if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
       {
          if (Ollivanders2.debug)
+         {
             p.getLogger().info("OllivandersListener:cauldronClick: enter");
+         }
 
          Block block = event.getClickedBlock();
          if (block.getType() == Material.CAULDRON && p.holdsWand(event.getPlayer()))
          {
             if (Ollivanders2.debug)
+            {
                p.getLogger().info("Block right-clicked was a cauldron");
+            }
 
             Block under = block.getRelative(BlockFace.DOWN);
             if (under.getType() == Material.FIRE || under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA)
             {
                if (Ollivanders2.debug)
+               {
                   p.getLogger().info("Cauldron is over a hot block");
+               }
 
                PotionParser.parse(block, p);
             }
             else
             {
                if (Ollivanders2.debug)
-                  p.getLogger().info("Cauldron is not over a hot block");
+               {
+                  p.getLogger().info("Cauldron is over a hot block");
+               }
             }
          }
       }
