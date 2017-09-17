@@ -13,10 +13,6 @@ import java.util.Map;
  */
 public class OPlayer implements Serializable
 {
-   /**
-    *
-    */
-   private static final long serialVersionUID = 3457337288586721283L;
    private Map<Spells, Integer> SpellCount = new HashMap<Spells, Integer>();
    private List<OEffect> effects = new ArrayList<OEffect>();
    //This is the spell loaded into the wand for casting with left click

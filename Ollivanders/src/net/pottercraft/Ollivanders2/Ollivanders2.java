@@ -60,6 +60,7 @@ public class Ollivanders2 extends JavaPlugin
    private OllivandersSchedule schedule;
    private List<Block> tempBlocks = new ArrayList<Block>();
    private FileConfiguration fileConfig;
+   private O2Houses houses;
 
    private static String mcVersion;
 
@@ -110,6 +111,8 @@ public class Ollivanders2 extends JavaPlugin
       {
          getLogger().warning("Could not save prophecy.bin");
       }
+      houses.saveHouses();
+
       getLogger().info(this + " is now disabled!");
    }
 
@@ -130,12 +133,13 @@ public class Ollivanders2 extends JavaPlugin
       fileConfig = getConfig();
       //verify version of server
       mcVersion = Bukkit.getBukkitVersion();
-      if (!mcVersion.contains("1.1[2-9]"))
+      if (!mcVersionCheck())
       {
-         getLogger().warning("Some features of Ollivanders2 require MC 1.12 and higher.");
+         getLogger().warning("MC version " + mcVersion + ". Some features of Ollivanders2 require MC 1.12 and higher.");
          //this.setEnabled(false);
          //return;
       }
+
       //finished loading data
 
       try
@@ -171,6 +175,10 @@ public class Ollivanders2 extends JavaPlugin
       {
          this.saveDefaultConfig();
       }
+      //debug
+      if (getConfig().getBoolean("debug"))
+         debug = true;
+
       fillAllSpellCount();
       this.schedule = new OllivandersSchedule(this);
       Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.schedule, 20L, 1L);
@@ -199,8 +207,14 @@ public class Ollivanders2 extends JavaPlugin
       getServer().addRecipe(new FurnaceRecipe(flooPowder, Material.ENDER_PEARL));
       getServer().addRecipe(bRecipe);
 
+      // set up houses
+      houses = new O2Houses(this);
+      houses.loadHouses();
+
       getLogger().info(this + " is now enabled!");
    }
+
+
 
    /**
     * Handle command events
@@ -214,6 +228,11 @@ public class Ollivanders2 extends JavaPlugin
    @EventHandler(priority = EventPriority.HIGHEST)
    public boolean onCommand (CommandSender sender, Command cmd, String commandLabel, String[] args)
    {
+      if (!isOp(sender))
+      {
+         return true;
+      }
+
       if (cmd.getName().equalsIgnoreCase("Ollivanders2") || cmd.getName().equalsIgnoreCase("Olli"))
       {
          return runOllivanders(sender, cmd, commandLabel, args);
@@ -231,6 +250,12 @@ public class Ollivanders2 extends JavaPlugin
       return false;
    }
 
+   /**
+    * Verify the command sender is a game admin.
+    *
+    * @param sender the command sender
+    * @return true if sender is a game admin, false otherwise
+    */
    private boolean isOp (CommandSender sender)
    {
       Player player = null;
@@ -243,7 +268,8 @@ public class Ollivanders2 extends JavaPlugin
       {
          if (!player.isOp())
          {
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only server ops can use the /Ollivanders2 commands.");
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                  + "Only server ops can use the /ollivanders2 commands.");
             return false;
          }
       }
@@ -264,18 +290,27 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runOllivanders (CommandSender sender, Command cmd, String commandLabel, String[] args)
    {
-      if (!isOp(sender))
-      {
-         return true;
-      }
-
       // parse args
       if (args.length >= 1)
       {
          String subCommand = args[0];
 
+         if (debug)
+         {
+            String argString = new String();
+            for (int i = 0; i < args.length; i++)
+            {
+               argString = argString + args[i] + " ";
+            }
+
+            getLogger().info("runOllivanders: command = " + cmd.toString() + " " + argString);
+         }
+
          if (subCommand.equalsIgnoreCase("help"))
-            return runHelp (sender, cmd, commandLabel, args);
+         {
+            usageMessageOllivanders(sender);
+            return true;
+         }
          else if (subCommand.equalsIgnoreCase("wands"))
             return okitWands((Player) sender);
          else if (subCommand.equalsIgnoreCase("reload"))
@@ -284,49 +319,342 @@ public class Ollivanders2 extends JavaPlugin
             return okitBooks((Player) sender);
          else if (subCommand.equalsIgnoreCase("items"))
             return okitItems((Player) sender);
+         else if (subCommand.equalsIgnoreCase("house"))
+            return runHouse(sender, cmd, commandLabel, args);
          else if (subCommand.equalsIgnoreCase("debug"))
             return toggleDebug(sender);
       }
 
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "You are running Ollivanders2 version "
-            + this.getDescription().getVersion() + "\n\n" + "Type '/Ollivanders2 help' for help with Ollivanders2 commands.");
+      usageMessageOllivanders(sender);
 
       return true;
    }
 
    /**
-    * The Ollivanders2 main help command.
+    * Usage message for the /ollivanders command.
+    *
+    * @param sender the command sender
+    */
+   private void usageMessageOllivanders (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+            + "You are running Ollivanders2 version " + this.getDescription().getVersion() + "\n"
+            + "\nOllivanders2 commands:"
+            + "\nwands - gives a complete set of wands"
+            + "\nbooks - gives a complete set of spell books"
+            + "\nitems - gives a complete set of items"
+            + "\nquidd - creates a quidditch pitch"
+            + "\nhouse - view and manage houses and house points"
+            + "\nreload - reload the Ollivanders2 configs"
+            + "\ndebug - toggles Ollivanders2 plugin debug output\n"
+            + "\n" + "To run a command, type '/ollivanders [command]'."
+            + "\nFor example, '/ollivanders wands");
+   }
+
+   /**
+    * The house subCommand for managing everything related to houses.
     *
     * @param sender
     * @param cmd
     * @param commandLabel
     * @param args
-    * @return true if the command can be completed, false otherwise.
+    * @return
     */
-   private boolean runHelp (CommandSender sender, Command cmd, String commandLabel, String[] args)
+   private boolean runHouse (CommandSender sender, Command cmd, String commandLabel, String[] args)
    {
-      if (!isOp(sender))
+      if (getConfig().getBoolean("houses") == false)
       {
-         return false;
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+               + "Houses are not currently enabled for your server."
+               + "\nTo enable houses, update the Ollivanders2 config.yml setting to true and restart your server."
+               + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
+
+         return true;
       }
 
-      if (args.length > 1)
+      // parse args
+      if (args.length >= 2)
       {
-         // player asking for help on a specific command
-         // TODO implement specific command help
+         String subCommand = args[1];
+
+         if (subCommand.equalsIgnoreCase("sort"))
+         {
+            // sort player in to a house
+            if (args.length < 4)
+            {
+               usageMessageHouseSort(sender);
+
+               return true;
+            }
+
+            return runSort(sender, args[2], args[3]);
+         }
+         else if (subCommand.equalsIgnoreCase("list"))
+         {
+            // list houses
+
+            return runListHouse(sender, args);
+         }
+         else if (subCommand.equalsIgnoreCase("points"))
+         {
+            // update house points
+
+            return runHousePoints(sender, args);
+         }
       }
 
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Ollivanders2 commands:\n"
-            + "wands - gives a complete set of wands\n"
-            + "books - gives a complete set of spell books\n"
-            + "items - gives a complete set of items\n"
-            + "quidd - creates a quidditch pitch\n"
-            + "reload - reload the Ollivanders2 configs\n"
-            + "debug - toggles Ollivanders2 plugin debug output\n"
-            + "\n" + "To run a command, type '/Ollivanders [command]'.\n"
-            + "For example, '/Ollivanders wands");
+      usageMessageHouse(sender);
 
       return true;
+   }
+
+   /**
+    * Usage message for /ollivanders house
+    *
+    * @param sender the command sender
+    */
+   private void usageMessageHouse (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+            + "Usage: /ollivanders2 house points [option]"
+            + "\n\nOptions to '/ollivanders2 house':"
+            + "\nlist - lists Ollivanders houses and house membership"
+            + "\nsort - sort a player in to a house"
+            + "\npoints - manage house points"
+            + "\nreset - reset all house points to 0");
+   }
+
+   /**
+    * List all houses or the members of a house
+    *
+    * @param sender
+    * @param args
+    * @return true if the command succeeds.
+    */
+   private boolean runListHouse (CommandSender sender, String args[])
+   {
+      // list houses
+      if (debug)
+         getLogger().info("Running list houses");
+
+      if (args.length > 2)
+      {
+         String targetHouse = args[2];
+
+         O2Houses.O2HouseType house = houses.getHouseType(targetHouse);
+         if (house != null)
+         {
+            ArrayList<String> members = houses.getHouseMembers(house);
+            String memberStr = new String();
+
+            if (members.isEmpty())
+               memberStr = "no members";
+            else
+            {
+               for (String p : members)
+               {
+                  memberStr = memberStr + p + " ";
+               }
+            }
+
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                  + "Members of " + targetHouse + " are:\n" + memberStr);
+
+            return true;
+         }
+
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+               + "Invalid house name '" + targetHouse + "'");
+      }
+
+      String houseNames = new String();
+      ArrayList<String> h = houses.getAllHouseNames();
+
+      for (String name : h)
+      {
+         houseNames = houseNames + name + " ";
+      }
+
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+            + "Ollivanders2 Houses are:\n" + houseNames + "\n"
+            + "\nTo see the members of a specific house, run the command /ollivanders house list [house]"
+            + "\nFor example, /ollivanders list Hufflepuff");
+
+      return true;
+   }
+
+   /**
+    * Sorts a player in to a specific house.  The player will not be sorted if:
+    * a) the player is not online
+    * b) an invalid house name is specified
+    * c) they have already been sorted
+    *
+    * @param sender
+    * @param targetPlayer
+    * @param targetHouse
+    * @return true unless an error occurs
+    */
+   private boolean runSort (CommandSender sender, String targetPlayer, String targetHouse)
+   {
+      if (debug)
+         getLogger().info("Running house sort");
+
+      if (targetPlayer == null || targetPlayer.length() < 1 || targetHouse == null || targetHouse.length() < 1)
+         usageMessageHouseSort(sender);
+
+      Player player = getServer().getPlayer(targetPlayer);
+      if (player == null)
+      {
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+               + "Unable to find a player named " + targetPlayer + " logged in to this server."
+               + "\nPlayers must be logged in to be sorted.");
+
+         return true;
+      }
+
+      O2Houses.O2HouseType house = houses.getHouseType(targetHouse);
+
+      if (house == null)
+      {
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+               + targetHouse + " is not a valid house name.");
+
+         return true;
+      }
+
+      if (houses.sort(player, house))
+      {
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+               + targetPlayer + " has been successfully sorted in to " + targetHouse);
+      }
+      else
+      {
+         String curHouse = houses.getHouseName(houses.getHouse(player));
+         if (curHouse == null)
+         {
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                + "Oops, something went wrong with the sort.  If this persists, check your server logs.");
+         }
+         else
+         {
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                  + targetPlayer + " is already a member of " + houses.getHouseName(houses.getHouse(player)));
+         }
+      }
+
+      return true;
+   }
+
+   /**
+    * Usage message for /ollivanders house sort
+    * @param sender
+    */
+   private void usageMessageHouseSort (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+            + "Usage: /ollivanders house sort [player] [house]"
+            + "\nFor example '/ollivanders2 house sort Harry Gryffindor");
+   }
+
+   /**
+    * Manage house points.
+    *
+    * @param sender
+    * @param args
+    * @return true unless an error occurs
+    */
+   private boolean runHousePoints (CommandSender sender, String[] args)
+   {
+      if (debug)
+         getLogger().info("Running house points");
+
+      if (args.length > 3)
+      {
+         String option = args[2];
+         if (debug)
+            getLogger().info("runHousePoints: option = " + option);
+
+         if (option.equalsIgnoreCase("reset"))
+         {
+            return houses.resetHousePoints();
+         }
+
+         if (args.length > 4)
+         {
+            String h = args[3];
+
+            if (debug)
+               getLogger().info("runHousePoints: house = " + h);
+
+            O2Houses.O2HouseType houseType = null;
+            try
+            {
+               houseType = houses.getHouseType(h);
+            }
+            catch (Exception e)
+            {
+               // nom nom nom
+               if (debug)
+                  getLogger().warning("runHousePoints: Exception getting house type.\n");
+            }
+
+            if (houseType == null)
+            {
+               if (debug)
+                  getLogger().info("runHousePoints: invalid house name '" + h + "'");
+
+               usageMessageHousePoints(sender);
+               return true;
+            }
+
+            int value = 0;
+
+            try
+            {
+               value = Integer.parseInt(args[4]);
+
+               if (debug)
+                  getLogger().info("runHousePoints: value = " + value);
+            }
+            catch (Exception e)
+            {
+               if (debug)
+                  getLogger().warning("runHousePoints: unable to parse int from " + args[4]);
+
+               usageMessageHousePoints(sender);
+               return true;
+            }
+
+            if (option.equalsIgnoreCase("add"))
+               return houses.addHousePoints(houseType, value);
+            else if (option.equalsIgnoreCase("subtract"))
+               return houses.subtractHousePoints(houseType, value);
+            else if (option.equalsIgnoreCase("set"))
+               return houses.setHousePoints(houseType, value);
+         }
+      }
+
+      usageMessageHousePoints(sender);
+
+      return true;
+   }
+
+   /**
+    * Display the usage message for /ollivanders2 house points
+    *
+    * @param sender
+    */
+   private void usageMessageHousePoints (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+            + "Usage: /ollivanders2 house points [option] [house] [value]"
+            + "\n\nOptions to '/ollivanders2 house points':"
+            + "\nadd - increase points for a house by specific value"
+            + "\nsubtract - decrease points for a house by specified value"
+            + "\nset - set the points for a house to specified value"
+            + "\nreset - reset all house points to 0"
+            + "\n\nExample: /ollivanders2 house points add Slytherin 5"
+            + "\nExample: /ollivanders2 house points reset");
    }
 
    /**
@@ -340,11 +668,6 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runQuidd (CommandSender sender, Command cmd, String commandLabel, String[] args)
    {
-      if (!isOp(sender))
-      {
-         return true;
-      }
-
       if (args.length >= 1)
       {
          Player player = null;
@@ -374,11 +697,6 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean toggleDebug(CommandSender sender)
    {
-      if (!isOp(sender))
-      {
-         return true;
-      }
-
       debug = !debug;
 
       if (debug)
@@ -405,11 +723,6 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runReloadConfigs(CommandSender sender)
    {
-      if (!isOp(sender))
-      {
-         return true;
-      }
-
       reloadConfig();
       fileConfig = getConfig();
       sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Config reloaded");
@@ -707,6 +1020,23 @@ public class Ollivanders2 extends JavaPlugin
          }
       }
       return false;
+   }
+
+   /**
+    * Gets the set of all player UUIDs.
+    *
+    * @return a copy of the OPlayer player IDs.
+    */
+   public ArrayList getOPlayerKeys ()
+   {
+      ArrayList<UUID> playerKeys = new ArrayList<UUID>();
+
+      for (UUID key : OPlayerMap.keySet())
+      {
+         playerKeys.add(key);
+      }
+
+      return playerKeys;
    }
 
    /**
@@ -1167,7 +1497,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public static boolean mcVersionCheck ()
    {
-      if (mcVersion.contains("1.1[2-9]"))
+      if (mcVersion.contains("1.12"))
          return true;
 
       return false;

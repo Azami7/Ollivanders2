@@ -680,7 +680,7 @@ public class OllivandersListener implements Listener
 
       //Reading a book, possibly a spell book
       //
-      // KA - What the hell is this code for?  Commenting out.
+      // KA - What is this code for?  Commenting out.
       //
       /*
       ItemStack item = event.getItem();

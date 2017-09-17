@@ -1,4 +1,6 @@
-update: true
+#
+# Configuration for the Ollivanders2 plugin.
+#
 chatDropoff: 50
 witchDrop: false
 divination: true
@@ -6,11 +8,20 @@ divinationBlock: 20
 divinationMaxDuration: 86400000
 divinationMaxStartOffset: 604800000
 muggletonBlockChange: true
+# When death exp loss is enabled, players will lose their spell experience if they die.  It is not recommended to set
+# this to true if your server supports minigames or other plugins that expect players will die.
 deathExpLoss: false
-bookLearning: false
+# When book learning is true, players can only cast spells they have learned from a book.  This prevents players
+# being able to cast spells they have not "learned" but have seen in chat, etc.
+bookLearning: true
 chatColor: 5
 flooPowder: REDSTONE
 broomstick: STICK
+# When houses are enabled, Ollivanders will use the built-in minecraft scoreboard to create house teams and points.
+# IMPORTANT: Enabling houses will take over your server's main scoreboard.  If you do not want this, you must
+# set this to false.
+houses: false
+debug: false
 zones:
   default-world:
     type: World
