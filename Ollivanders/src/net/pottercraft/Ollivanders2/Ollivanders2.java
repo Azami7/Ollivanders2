@@ -343,7 +343,7 @@ public class Ollivanders2 extends JavaPlugin
             + "\nwands - gives a complete set of wands"
             + "\nbooks - gives a complete set of spell books"
             + "\nitems - gives a complete set of items"
-            + "\nquidd - creates a quidditch pitch"
+            // + "\nquidd - creates a quidditch pitch"
             + "\nhouse - view and manage houses and house points"
             + "\nreload - reload the Ollivanders2 configs"
             + "\ndebug - toggles Ollivanders2 plugin debug output\n"
