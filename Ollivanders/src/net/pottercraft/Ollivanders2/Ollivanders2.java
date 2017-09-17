@@ -418,10 +418,9 @@ public class Ollivanders2 extends JavaPlugin
       sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
             + "Usage: /ollivanders2 house points [option]"
             + "\n\nOptions to '/ollivanders2 house':"
-            + "\nlist - lists Ollivanders houses and house membership"
+            + "\nlist - lists Ollivanders2 houses and house membership"
             + "\nsort - sort a player in to a house"
-            + "\npoints - manage house points"
-            + "\nreset - reset all house points to 0");
+            + "\npoints - manage house points");
    }
 
    /**
