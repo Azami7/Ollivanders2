@@ -347,8 +347,8 @@ public class Ollivanders2 extends JavaPlugin
             + "\nhouse - view and manage houses and house points"
             + "\nreload - reload the Ollivanders2 configs"
             + "\ndebug - toggles Ollivanders2 plugin debug output\n"
-            + "\n" + "To run a command, type '/ollivanders [command]'."
-            + "\nFor example, '/ollivanders wands");
+            + "\n" + "To run a command, type '/ollivanders2 [command]'."
+            + "\nFor example, '/ollivanders2 wands");
    }
 
    /**
@@ -476,8 +476,8 @@ public class Ollivanders2 extends JavaPlugin
 
       sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
             + "Ollivanders2 Houses are:\n" + houseNames + "\n"
-            + "\nTo see the members of a specific house, run the command /ollivanders house list [house]"
-            + "\nFor example, /ollivanders list Hufflepuff");
+            + "\nTo see the members of a specific house, run the command /ollivanders2 house list [house]"
+            + "\nFor example, /ollivanders2 list Hufflepuff");
 
       return true;
    }
@@ -551,7 +551,7 @@ public class Ollivanders2 extends JavaPlugin
    private void usageMessageHouseSort (CommandSender sender)
    {
       sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-            + "Usage: /ollivanders house sort [player] [house]"
+            + "Usage: /ollivanders2 house sort [player] [house]"
             + "\nFor example '/ollivanders2 house sort Harry Gryffindor");
    }
 
@@ -567,7 +567,7 @@ public class Ollivanders2 extends JavaPlugin
       if (debug)
          getLogger().info("Running house points");
 
-      if (args.length > 3)
+      if (args.length > 2)
       {
          String option = args[2];
          if (debug)

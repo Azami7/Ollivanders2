@@ -163,6 +163,7 @@ public class O2Houses
          p.getLogger().warning("Failed to load " + housePointsMapFile);
       }
 
+      updateScoreboard();
       showScoreboard();
    }
 
@@ -363,6 +364,9 @@ public class O2Houses
    {
       int pts = points;
 
+      // make sure current points in O2 match the scoreboard
+      syncPoints(house);
+
       if (O2HousePointsMap.containsKey(house))
       {
          pts += O2HousePointsMap.get(house);
@@ -382,6 +386,9 @@ public class O2Houses
    {
       int pts = 0;
 
+      // make sure current points in O2 match the scoreboard
+      syncPoints(house);
+
       if (O2HousePointsMap.containsKey(house))
       {
          int curPoints = O2HousePointsMap.get(house);
@@ -390,6 +397,18 @@ public class O2Houses
       }
 
       return setHousePoints(house, pts);
+   }
+
+   private void syncPoints (O2HouseType house)
+   {
+      // sync the scoreboard points with O2 points in case someone has used the /scoreboard command
+      int scoreboardScore = scoreboard.getObjective(objectiveName).getScore(getHouseName(house)).getScore();
+      int o2Score = O2HousePointsMap.get(house);
+
+      if (o2Score != scoreboardScore)
+      {
+         O2HousePointsMap.replace(house, scoreboardScore);
+      }
    }
 
    /**
@@ -406,14 +425,8 @@ public class O2Houses
          return false;
       }
 
-      if (scoreboard != null)
-      {
-         // do not allow create if the scoreboard already exists
-         return false;
-      }
-
       scoreboard = p.getServer().getScoreboardManager().getMainScoreboard();
-      scoreboard.clearSlot(scoreboardSlot);
+      //scoreboard.clearSlot(scoreboardSlot);
 
       p.getLogger().info("Created scoreboard...");
 
@@ -421,12 +434,20 @@ public class O2Houses
       if (scoreboard.getObjective(objectiveName) != null)
       {
          scoreboard.getObjective(objectiveName).unregister();
-         p.getLogger().info("Unregistered previous objective...");
+         p.getLogger().info("Unregistered previous house points objective...");
+      }
+
+      // if there is another objective on the slot we want, remove it
+      if (scoreboard.getObjective(scoreboardSlot) != null)
+      {
+         scoreboard.getObjective(scoreboardSlot).unregister();
+         p.getLogger().info("Unregistered previous scoreboard objective...");
       }
 
       scoreboard.registerNewObjective(objectiveName, "dummy");
       Objective objective = scoreboard.getObjective(objectiveName);
       objective.setDisplayName(objectiveDisplayName);
+      objective.setDisplaySlot(scoreboardSlot);
 
       registerHouseTeam(O2HouseType.HUFFLEPUFF);
       registerHouseTeam(O2HouseType.GRYFFINDOR);
