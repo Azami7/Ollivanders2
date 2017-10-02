@@ -23,27 +23,43 @@ public class PotionParser
    /**
     * Doubles spell experience gained when casting spells
     */
-   public final static List<ItemStack> MEMORY_POTION = Arrays.asList(new ItemStack(Material.SUGAR_CANE, 3),
-         new ItemStack(Material.GLOWSTONE_DUST, 2));
+   public final static List<ItemStack> MEMORY_POTION = Arrays.asList(
+         new ItemStack(Material.SUGAR_CANE, 3),
+         new ItemStack(Material.GLOWSTONE_DUST, 2)
+   );
 
    /**
     * All spells cast are twice as powerful.
     */
-   public final static List<ItemStack> BARUFFIOS_BRAIN_ELIXIR = Arrays.asList(new ItemStack(Material.REDSTONE, 5),
-         new ItemStack(Material.GOLD_NUGGET, 1));
+   public final static List<ItemStack> BARUFFIOS_BRAIN_ELIXIR = Arrays.asList(
+         new ItemStack(Material.REDSTONE, 5),
+         new ItemStack(Material.GOLD_NUGGET, 1)
+   );
 
    /**
     * Relieve the symptoms of Lycanthropy
     */
-   public final static List<ItemStack> WOLFSBANE_POTION = Arrays.asList(new ItemStack(Material.SPIDER_EYE, 2),
-         new ItemStack(Material.ROTTEN_FLESH, 3));
+   public final static List<ItemStack> WOLFSBANE_POTION = Arrays.asList(
+         new ItemStack(Material.SPIDER_EYE, 2),
+         new ItemStack(Material.ROTTEN_FLESH, 3)
+   );
 
    /**
     *
     */
-   public final static List<ItemStack> REGENERATION_POTION = Arrays.asList(new ItemStack(Material.BONE, 1),
-         new ItemStack(Material.SPIDER_EYE, 1), new ItemStack(Material.SULPHUR, 1),
-         new ItemStack(Material.ROTTEN_FLESH, 1), new ItemStack(Material.NETHER_STAR, 1));
+   public final static List<ItemStack> REGENERATION_POTION = Arrays.asList(
+         new ItemStack(Material.BONE, 1),
+         new ItemStack(Material.SPIDER_EYE, 1),
+         new ItemStack(Material.SULPHUR, 1),
+         new ItemStack(Material.ROTTEN_FLESH, 1),
+         new ItemStack(Material.NETHER_STAR, 1)
+   );
+
+   public final static List<ItemStack> WIT_SHARPENING_POTION = Arrays.asList(
+         new ItemStack(Material.FERMENTED_SPIDER_EYE, 1),
+         new ItemStack(Material.BEETROOT, 2),
+         new ItemStack(Material.GHAST_TEAR, 2)
+   );
 
    public static Map<String, List<ItemStack>> ALL_POTIONS = new HashMap<String, List<ItemStack>>();
 
@@ -61,6 +77,7 @@ public class PotionParser
       ALL_POTIONS.put("Baruffio's Brain Elixir", BARUFFIOS_BRAIN_ELIXIR);
       ALL_POTIONS.put("Wolfsbane Potion", WOLFSBANE_POTION);
       ALL_POTIONS.put("Regeneration Potion", REGENERATION_POTION);
+      ALL_POTIONS.put("Wit-Sharpening Potion", WIT_SHARPENING_POTION);
 
       // make sure cauldron has water in it
       Cauldron cauldronData = (Cauldron)cauldron.getState().getData();

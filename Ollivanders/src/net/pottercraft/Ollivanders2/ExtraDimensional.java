@@ -3,6 +3,8 @@ package net.pottercraft.Ollivanders2;
 import java.util.HashSet;
 import java.util.Set;
 
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;

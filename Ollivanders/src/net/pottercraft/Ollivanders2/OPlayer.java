@@ -1,5 +1,7 @@
 package net.pottercraft.Ollivanders2;
 
+import net.pottercraft.Ollivanders2.Spell.Spells;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;

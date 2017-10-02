@@ -16,7 +16,16 @@ import java.util.Set;
 import java.util.UUID;
 
 import Quidditch.Arena;
-import org.bukkit.*;
+import net.pottercraft.Ollivanders2.Book.O2Books;
+import net.pottercraft.Ollivanders2.House.O2Houses;
+import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spell.Spells;
+
+import net.pottercraft.Ollivanders2.Spell.Transfiguration;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.Book.Books;
+
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
@@ -33,6 +42,11 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.Material;
+import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 
 import com.sk89q.worldedit.bukkit.BukkitUtil;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
@@ -51,16 +65,17 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 public class Ollivanders2 extends JavaPlugin
 {
 
-   private Map<UUID, OPlayer> OPlayerMap = new HashMap<UUID, OPlayer>();
-   private List<SpellProjectile> projectiles = new ArrayList<SpellProjectile>();
-   private List<StationarySpellObj> stationary = new ArrayList<StationarySpellObj>();
+   private Map<UUID, OPlayer> OPlayerMap = new HashMap<>();
+   private List<SpellProjectile> projectiles = new ArrayList<>();
+   private List<StationarySpellObj> stationary = new ArrayList<>();
 
-   private Set<Prophecy> prophecy = new HashSet<Prophecy>();
+   private Set<Prophecy> prophecy = new HashSet();
    private Listener playerListener;
    private OllivandersSchedule schedule;
-   private List<Block> tempBlocks = new ArrayList<Block>();
+   private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
    private O2Houses houses;
+   private O2Books books;
 
    private static String mcVersion;
 
@@ -126,22 +141,22 @@ public class Ollivanders2 extends JavaPlugin
 	   {
 		   getLogger().info("File created for Ollivanders2");
 	   }
-      OPlayerMap = new HashMap<UUID, OPlayer>();
-      projectiles = new ArrayList<SpellProjectile>();
-      stationary = new ArrayList<StationarySpellObj>();
-      prophecy = new HashSet<Prophecy>();
+      OPlayerMap = new HashMap<>();
+      projectiles = new ArrayList<>();
+      stationary = new ArrayList<>();
+      prophecy = new HashSet<>();
       fileConfig = getConfig();
-      //verify version of server
+
+      random.setSeed(System.currentTimeMillis());
+
+      //check version of server
       mcVersion = Bukkit.getBukkitVersion();
       if (!mcVersionCheck())
       {
          getLogger().warning("MC version " + mcVersion + ". Some features of Ollivanders2 require MC 1.12 and higher.");
-         //this.setEnabled(false);
-         //return;
       }
 
-      //finished loading data
-
+      // load data saved to disk
       try
       {
          OPlayerMap = (HashMap<UUID, OPlayer>) SLAPI
@@ -171,11 +186,13 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().warning("Did not find prophecy.bin");
       }
 
+      // write the config.yml to the Ollivanders2 folder if there wasn't one already
       if (!new File(this.getDataFolder(), "config.yml").exists())
       {
          this.saveDefaultConfig();
       }
-      //debug
+
+      // debug mode
       if (getConfig().getBoolean("debug"))
          debug = true;
 
@@ -186,7 +203,7 @@ public class Ollivanders2 extends JavaPlugin
       ItemStack flooPowder = new ItemStack(Material.getMaterial(fileConfig.getString("flooPowder")), 8);
       ItemMeta fmeta = flooPowder.getItemMeta();
       fmeta.setDisplayName("Floo Powder");
-      List<String> flore = new ArrayList<String>();
+      List<String> flore = new ArrayList<>();
       flore.add("Glittery, silver powder");
       fmeta.setLore(flore);
       flooPowder.setItemMeta(fmeta);
@@ -194,7 +211,7 @@ public class Ollivanders2 extends JavaPlugin
       ItemStack broomstick = new ItemStack(Material.getMaterial(fileConfig.getString("broomstick")));
       ItemMeta bmeta = broomstick.getItemMeta();
       bmeta.setDisplayName("Broomstick");
-      List<String> blore = new ArrayList<String>();
+      List<String> blore = new ArrayList<>();
       blore.add("Flying vehicle used by magical folk");
       bmeta.setLore(blore);
       broomstick.setItemMeta(bmeta);
@@ -210,6 +227,9 @@ public class Ollivanders2 extends JavaPlugin
       // set up houses
       houses = new O2Houses(this);
       houses.loadHouses();
+
+      // create books
+      books = new O2Books(this);
 
       getLogger().info(this + " is now enabled!");
    }
@@ -312,17 +332,43 @@ public class Ollivanders2 extends JavaPlugin
             return true;
          }
          else if (subCommand.equalsIgnoreCase("wands"))
-            return okitWands((Player) sender);
+         {
+            if (args.length == 1)
+               return okitWands((Player) sender);
+            else
+            {
+               Player target = getServer().getPlayer(args[1]);
+               return giveRandomWand(target);
+            }
+         }
          else if (subCommand.equalsIgnoreCase("reload"))
             return runReloadConfigs(sender);
+         /*
          else if (subCommand.equalsIgnoreCase("books"))
             return okitBooks((Player) sender);
+            */
          else if (subCommand.equalsIgnoreCase("items"))
             return okitItems((Player) sender);
-         else if (subCommand.equalsIgnoreCase("house"))
+         else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
             return runHouse(sender, cmd, commandLabel, args);
          else if (subCommand.equalsIgnoreCase("debug"))
             return toggleDebug(sender);
+         else if (subCommand.equalsIgnoreCase("floo"))
+         {
+            if (args.length == 1)
+            {
+               return giveFlooPowder((Player)sender);
+            }
+            else
+            {
+               Player target = getServer().getPlayer(args[1]);
+               return giveFlooPowder(target);
+            }
+         }
+         else if (subCommand.equalsIgnoreCase("books") || subCommand.equalsIgnoreCase("book"))
+         {
+            return runBooks(sender, args);
+         }
       }
 
       usageMessageOllivanders(sender);
@@ -365,7 +411,7 @@ public class Ollivanders2 extends JavaPlugin
       if (getConfig().getBoolean("houses") == false)
       {
          sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-               + "Houses are not currently enabled for your server."
+               + "House are not currently enabled for your server."
                + "\nTo enable houses, update the Ollivanders2 config.yml setting to true and restart your server."
                + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
 
@@ -377,17 +423,20 @@ public class Ollivanders2 extends JavaPlugin
       {
          String subCommand = args[1];
 
-         if (subCommand.equalsIgnoreCase("sort"))
+         if (subCommand.equalsIgnoreCase("sort") || subCommand.equalsIgnoreCase("forcesort"))
          {
             // sort player in to a house
             if (args.length < 4)
             {
                usageMessageHouseSort(sender);
-
                return true;
             }
 
-            return runSort(sender, args[2], args[3]);
+            boolean forcesort = false;
+            if (subCommand.equalsIgnoreCase("forcesort"))
+               forcesort = true;
+
+            return runSort(sender, args[2], args[3], forcesort);
          }
          else if (subCommand.equalsIgnoreCase("list"))
          {
@@ -401,6 +450,8 @@ public class Ollivanders2 extends JavaPlugin
 
             return runHousePoints(sender, args);
          }
+         else if (subCommand.equalsIgnoreCase("reset"))
+            return houses.reset();
       }
 
       usageMessageHouse(sender);
@@ -475,7 +526,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-            + "Ollivanders2 Houses are:\n" + houseNames + "\n"
+            + "Ollivanders2 House are:\n" + houseNames + "\n"
             + "\nTo see the members of a specific house, run the command /ollivanders2 house list [house]"
             + "\nFor example, /ollivanders2 list Hufflepuff");
 
@@ -491,9 +542,10 @@ public class Ollivanders2 extends JavaPlugin
     * @param sender
     * @param targetPlayer
     * @param targetHouse
+    * @param forcesort should the sort happen even if the player is already sorted
     * @return true unless an error occurs
     */
-   private boolean runSort (CommandSender sender, String targetPlayer, String targetHouse)
+   private boolean runSort (CommandSender sender, String targetPlayer, String targetHouse, boolean forcesort)
    {
       if (debug)
          getLogger().info("Running house sort");
@@ -521,7 +573,16 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      if (houses.sort(player, house))
+      boolean success;
+      if (forcesort)
+      {
+         houses.forceSetHouse(player, house);
+         success = true;
+      }
+      else
+         success = houses.sort(player, house);
+
+      if (success)
       {
          sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
                + targetPlayer + " has been successfully sorted in to " + targetHouse);
@@ -737,11 +798,11 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean okitItems (Player player)
    {
-      List<ItemStack> kit = new ArrayList<ItemStack>();
+      List<ItemStack> kit = new ArrayList<>();
 
       //Elder Wand
       ItemStack wand = new ItemStack(Material.BLAZE_ROD);
-      List<String> lore = new ArrayList<String>();
+      List<String> lore = new ArrayList<>();
       lore.add("Blaze and Ender Pearl");
       ItemMeta meta = wand.getItemMeta();
       meta.setLore(lore);
@@ -751,7 +812,7 @@ public class Ollivanders2 extends JavaPlugin
 
       //Cloak of Invisibility
       ItemStack cloak = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-      List<String> cloakLore = new ArrayList<String>();
+      List<String> cloakLore = new ArrayList<>();
       cloakLore.add("Silvery Transparent Cloak");
       ItemMeta cloakMeta = cloak.getItemMeta();
       cloakMeta.setLore(cloakLore);
@@ -767,16 +828,26 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Give a player all the books.
-    *
-    * @param player
-    * @return true if the command was a success, false otherwise.
+    * Give a player a random wand.
     */
-   private boolean okitBooks (Player player)
+   private boolean giveRandomWand (Player player)
    {
-      List<ItemStack> kit = new ArrayList<ItemStack>();
-      if (!kit.addAll(SpellBookParser.makeBooks(1)))
-         return false;
+      String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
+      String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
+
+      String wood = woodArray[Math.abs(random.nextInt() % woodArray.length)];
+      String core = coreArray[Math.abs(random.nextInt() % coreArray.length)];
+
+      List<ItemStack> kit = new ArrayList<>();
+      ItemStack wand = new ItemStack(Material.STICK);
+      List<String> lore = new ArrayList<>();
+      lore.add(wood + " and " + core);
+      ItemMeta meta = wand.getItemMeta();
+      meta.setLore(lore);
+      meta.setDisplayName("Wand");
+      wand.setItemMeta(meta);
+      wand.setAmount(1);
+      kit.add(wand);
 
       givePlayerKit(player, kit);
 
@@ -794,14 +865,14 @@ public class Ollivanders2 extends JavaPlugin
       String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
       String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
 
-      List<ItemStack> kit = new ArrayList<ItemStack>();
+      List<ItemStack> kit = new ArrayList<>();
 
       for (String wood : woodArray)
       {
          for (String core : coreArray)
          {
             ItemStack wand = new ItemStack(Material.STICK);
-            List<String> lore = new ArrayList<String>();
+            List<String> lore = new ArrayList<>();
             lore.add(wood + " and " + core);
             ItemMeta meta = wand.getItemMeta();
             meta.setLore(lore);
@@ -982,7 +1053,7 @@ public class Ollivanders2 extends JavaPlugin
    public List<StationarySpellObj> checkForStationary (Location location)
    {
       List<StationarySpellObj> stationaries = getStationary();
-      List<StationarySpellObj> inside = new ArrayList<StationarySpellObj>();
+      List<StationarySpellObj> inside = new ArrayList<>();
       for (StationarySpellObj stationary : stationaries)
       {
          if (stationary.location.getWorldUUID().equals(location.getWorld().getUID()))
@@ -1028,7 +1099,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public ArrayList getOPlayerKeys ()
    {
-      ArrayList<UUID> playerKeys = new ArrayList<UUID>();
+      ArrayList<UUID> playerKeys = new ArrayList<>();
 
       for (UUID key : OPlayerMap.keySet())
       {
@@ -1131,7 +1202,7 @@ public class Ollivanders2 extends JavaPlugin
             String areaString = config.getString(prefix + "area");
             boolean allAllowed = false;
             boolean allDisallowed = false;
-            List<Spells> allowedSpells = new ArrayList<Spells>();
+            List<Spells> allowedSpells = new ArrayList<>();
             for (String spellString : config.getStringList(prefix + "allowed-spells"))
             {
                if (spellString.equalsIgnoreCase("ALL"))
@@ -1143,7 +1214,7 @@ public class Ollivanders2 extends JavaPlugin
                   allowedSpells.add(Spells.decode(spellString));
                }
             }
-            List<Spells> disallowedSpells = new ArrayList<Spells>();
+            List<Spells> disallowedSpells = new ArrayList<>();
             for (String spellString : config.getStringList(prefix + "disallowed-spells"))
             {
                if (spellString.equalsIgnoreCase("ALL"))
@@ -1172,7 +1243,7 @@ public class Ollivanders2 extends JavaPlugin
             if (type.equalsIgnoreCase("Cuboid"))
             {
                List<String> areaStringList = Arrays.asList(areaString.split(" "));
-               List<Integer> area = new ArrayList<Integer>();
+               List<Integer> area = new ArrayList<>();
                for (int i = 0; i < areaStringList.size(); i++)
                {
                   area.add(Integer.parseInt(areaStringList.get(i)));
@@ -1345,8 +1416,6 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (isWand(stack))
       {
-         int seed = Math.abs(player.getUniqueId().hashCode());
-         Ollivanders2.random.setSeed(seed);
          int wood = Math.abs(Ollivanders2.random.nextInt() % 4);
          int core = Math.abs(Ollivanders2.random.nextInt() % 4);
          String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
@@ -1492,13 +1561,133 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Check to see if we're running MC version 1.12 or higher, which many Ollivanders2 features depend on.
     *
-    * @return true of verion string is 1.12 - 1.19, false otherwise.
+    * @return true of version string is 1.12 - 1.19, false otherwise.
     */
    public static boolean mcVersionCheck ()
    {
-      if (mcVersion.contains("1.12"))
+      if (mcVersion.matches(" 1.1[2-9]"))
          return true;
 
       return false;
+   }
+
+   /**
+    * Give floo powder to player.
+    *
+    * @param player
+    * @return true if successful, false otherwise
+    */
+   private boolean giveFlooPowder (Player player)
+   {
+      ItemStack flooPowder = new ItemStack(Material.REDSTONE);
+      List<String> lore = new ArrayList<>();
+      lore.add("Glittery, silver powder");
+      flooPowder.getItemMeta().setLore(lore);
+      flooPowder.getItemMeta().setDisplayName("Floo Powder");
+      flooPowder.setAmount(8);
+
+      List<ItemStack> fpStack = new ArrayList<>();
+      fpStack.add(flooPowder);
+
+      givePlayerKit(player, fpStack);
+
+      return true;
+   }
+
+   /**
+    * Run the books subcommands
+    *
+    * @param sender
+    * @param args
+    * @return true if successful, false otherwise
+    */
+   private boolean runBooks (CommandSender sender, String[] args)
+   {
+      if (args.length < 2)
+      {
+         usageMessageBooks(sender);
+         return true;
+      }
+      else if (args.length >= 2)
+      {
+         List<ItemStack> bookStack = new ArrayList<>();
+         if (args[1].equalsIgnoreCase("allbooks"))
+         {
+            bookStack = books.getAllBooks();
+
+            if (bookStack.isEmpty())
+            {
+               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                     + "There are no Ollivanders2 books.");
+
+               return true;
+            }
+         }
+         else if (args[1].equalsIgnoreCase("list"))
+         {
+            ItemStack bookItem = books.getReadingList();
+            bookStack.add(bookItem);
+         }
+         else
+         {
+            // assume it is a book name
+            String bookName = new String();
+            for (int i = 1; i < args.length; i++)
+            {
+               String s = args[i].toUpperCase();
+
+               if (bookName.length() < 1)
+               {
+                  //first word
+                  bookName = s;
+               }
+               else
+               {
+                  bookName = bookName + "_" + s;
+               }
+            }
+            if (debug)
+               getLogger().info("Getting book " + bookName);
+
+            Books bookType;
+            try
+            {
+               bookType = Books.valueOf(bookName);
+            }
+            catch (Exception e)
+            {
+               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                     + "No book named \"" + bookName + "\".\n");
+               usageMessageBooks(sender);
+               return true;
+            }
+
+            ItemStack bookItem = books.getBook(bookType);
+            bookStack.add(bookItem);
+         }
+
+         givePlayerKit((Player) sender, bookStack);
+      }
+      else
+      {
+         usageMessageBooks(sender);
+      }
+
+      return true;
+   }
+
+   /**
+    * Usage message for Books subcommands.
+    *
+    * @param sender
+    */
+   private void usageMessageBooks (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+            + "Books commands: "
+            + "\nlist - gives a book that lists all available books"
+            + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
+            + "\n<book title> - gives the book with this title, if it exists\n\n"
+            + "Example: /ollivanders2 book standard book of spells grade 1");
    }
 }

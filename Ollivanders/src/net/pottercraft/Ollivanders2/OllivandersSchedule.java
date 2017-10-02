@@ -9,6 +9,8 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.UUID;
 
+import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -22,11 +24,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
-import Effect.Effect;
-import Effect.VENTO_FOLIO;
-import Spell.Spell;
-import StationarySpell.REPELLO_MUGGLETON;
-import StationarySpell.StationarySpell;
+import net.pottercraft.Ollivanders2.Effect.Effect;
+import net.pottercraft.Ollivanders2.Effect.VENTO_FOLIO;
+import net.pottercraft.Ollivanders2.Spell.Spell;
+import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpell;
+import net.pottercraft.Ollivanders2.Spell.Spells;
 
 /**
  * Scheduler for Ollivanders2

@@ -24,6 +24,7 @@ public enum Effects
    MUCUS_AD_NAUSEAM,
    SILENCIO,
    VENTO_FOLIO,
+   WIT_SHARPENING_POTION,
    WOLFSBANE_POTION;
 
    /**

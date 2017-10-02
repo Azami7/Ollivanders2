@@ -1,16 +1,20 @@
 package net.pottercraft.Ollivanders2;
 
-import Effect.BARUFFIOS_BRAIN_ELIXIR;
-import Effect.LYCANTHROPY;
-import Effect.MEMORY_POTION;
-import Effect.WOLFSBANE_POTION;
-import Spell.MORTUOS_SUSCITATE;
-import Spell.PORTUS;
-import StationarySpell.ALIQUAM_FLOO;
-import StationarySpell.COLLOPORTUS;
-import StationarySpell.REPELLO_MUGGLETON;
-import StationarySpell.SPONGIFY;
+import net.pottercraft.Ollivanders2.Book.O2Books;
+import net.pottercraft.Ollivanders2.Book.SpellBookParser;
+import net.pottercraft.Ollivanders2.Effect.*;
+import net.pottercraft.Ollivanders2.Spell.*;
+import net.pottercraft.Ollivanders2.StationarySpell.*;
+
+import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
+import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
+import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
+import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT;
+import net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM;
+import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
+import net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE;
 import org.bukkit.*;
+import org.bukkit.Effect;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.*;
@@ -22,7 +26,6 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
@@ -33,6 +36,7 @@ import java.util.*;
  * Listener for events from the plugin
  *
  * @author lownes
+ * @author Azami7
  */
 public class OllivandersListener implements Listener
 {
@@ -69,7 +73,7 @@ public class OllivandersListener implements Listener
       Location fromLoc = event.getFrom();
       for (StationarySpellObj spell : p.getStationary())
       {
-         if (spell instanceof StationarySpell.PROTEGO_TOTALUM &&
+         if (spell instanceof PROTEGO_TOTALUM &&
                toLoc.getWorld().getUID().equals(spell.location.getWorldUUID()) &&
                fromLoc.getWorld().getUID().equals(spell.location.getWorldUUID()))
          {
@@ -95,9 +99,9 @@ public class OllivandersListener implements Listener
       String chat = event.getMessage();
       for (StationarySpellObj stat : p.getStationary())
       {
-         if (stat instanceof StationarySpell.ALIQUAM_FLOO)
+         if (stat instanceof ALIQUAM_FLOO)
          {
-            StationarySpell.ALIQUAM_FLOO aliquam = (ALIQUAM_FLOO) stat;
+            ALIQUAM_FLOO aliquam = (ALIQUAM_FLOO) stat;
             if (player.getLocation().getBlock().equals(aliquam.getBlock()) && aliquam.isWorking())
             {
                //Floo network
@@ -114,9 +118,9 @@ public class OllivandersListener implements Listener
                Location destination;
                for (StationarySpellObj ali : p.getStationary())
                {
-                  if (ali instanceof StationarySpell.ALIQUAM_FLOO)
+                  if (ali instanceof ALIQUAM_FLOO)
                   {
-                     StationarySpell.ALIQUAM_FLOO dest = (ALIQUAM_FLOO) ali;
+                     ALIQUAM_FLOO dest = (ALIQUAM_FLOO) ali;
                      alis.add(dest);
                      if (dest.getFlooName().equals(chat.trim().toLowerCase()))
                      {
@@ -288,6 +292,7 @@ public class OllivandersListener implements Listener
             {
                p.getLogger().info("onPlayerChat: bookLearning enforced");
             }
+            sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
 
             return;
          }
@@ -358,7 +363,7 @@ public class OllivandersListener implements Listener
       boolean canApparateOut = true;
       for (StationarySpellObj stat : p.getStationary())
       {
-         if (stat instanceof StationarySpell.NULLUM_EVANESCUNT && stat.isInside(sender.getLocation()) && stat.active)
+         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(sender.getLocation()) && stat.active)
          {
             stat.flair(10);
             canApparateOut = false;
@@ -422,7 +427,7 @@ public class OllivandersListener implements Listener
          boolean canApparateIn = true;
          for (StationarySpellObj stat : p.getStationary())
          {
-            if (stat instanceof StationarySpell.NULLUM_APPAREBIT && stat.isInside(to) && stat.active)
+            if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to) && stat.active)
             {
                stat.flair(10);
                canApparateIn = false;
@@ -571,14 +576,13 @@ public class OllivandersListener implements Listener
       }
    }
 
-
    /**
     * This creates the spell projectile.
     */
    private void createSpellProjectile (Player player, Spells name, double wandC)
    {
       //spells go here, using any of the three types of m
-      String spellClass = "Spell." + name.toString();
+      String spellClass = "net.pottercraft.Ollivanders2.Spell." + name.toString();
       @SuppressWarnings("rawtypes")
       Constructor c = null;
       try
@@ -679,9 +683,6 @@ public class OllivandersListener implements Listener
       }
 
       //Reading a book, possibly a spell book
-      //
-      // KA - What is this code for?  Commenting out.
-      //
       /*
       ItemStack item = event.getItem();
       if ((action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) && (item != null))
@@ -714,35 +715,6 @@ public class OllivandersListener implements Listener
          }
       }
       */
-   }
-
-   /**
-    * Rewrites the journal book full of the player's experience.
-    *
-    * @param player = Player reading the book.
-    * @return Itemstack of the completed journal.
-    */
-   public ItemStack makeJournal (Player player)
-   {
-      ItemStack hand = player.getInventory().getItemInMainHand();
-      int amount = hand.getAmount();
-      ItemStack journal = new ItemStack(Material.WRITTEN_BOOK, amount);
-      BookMeta journalM = (BookMeta) journal.getItemMeta();
-      journalM.setTitle("Spell Journal");
-      journalM.setAuthor(player.getName());
-      OPlayer op = p.getOPlayer(player);
-      StringBuilder sb = new StringBuilder();
-      for (Spells spell : op.getSpellCount().keySet())
-      {
-         if (op.getSpellCount().get(spell) > 0)
-         {
-            sb.append(Spells.firstLetterCapitalize(Spells.recode(spell)) + " : " + op.getSpellCount().get(spell) + "\n");
-         }
-      }
-      String longPage = sb.toString();
-      journalM.setPages(SpellBookParser.splitEqually(longPage, 250));
-      journal.setItemMeta(journalM);
-      return journal;
    }
 
    @EventHandler(priority = EventPriority.HIGHEST)
@@ -864,7 +836,7 @@ public class OllivandersListener implements Listener
       Entity entity = event.getEntity();
       for (StationarySpellObj spell : p.getStationary())
       {
-         if (spell instanceof SPONGIFY && event.getCause() == DamageCause.FALL)
+         if (spell instanceof MOLLIARE && event.getCause() == DamageCause.FALL)
          {
             if (spell.isInside(entity.getLocation()) && spell.active)
             {
@@ -879,16 +851,17 @@ public class OllivandersListener implements Listener
    /**
     * If a player is signing a book, try to encode any spells in the book.
     *
+    * TODO - rewrite this so it works with bookLearning
+    *
     * @param event - PlayerEditBookEvent
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   /*
+   @EventHandler(priority = EventPriority.NORMAL)
    public void onPlayerBook (PlayerEditBookEvent event)
    {
-      if (event.isSigning())
-      {
-         event.setNewBookMeta(SpellBookParser.encode(p, event.getPlayer(), event.getNewBookMeta()));
-      }
+
    }
+   */
 
    /**
     * Cancels any block place event inside of a colloportus object
@@ -1371,6 +1344,11 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * When a player consumes something, see if it was a potion and apply the effect if it was.
+    *
+    * @param event
+    */
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerDrink (PlayerItemConsumeEvent event)
    {
@@ -1422,6 +1400,19 @@ public class OllivandersListener implements Listener
                   oPlayer.addEffect(new WOLFSBANE_POTION(event.getPlayer(), Effects.WOLFSBANE_POTION, 3600));
                   return;
                }
+               else if (lore.equals("Wit-Sharpening Potion"))
+               {
+                  for (OEffect effect : oPlayer.getEffects())
+                  {
+                     if (effect instanceof WIT_SHARPENING_POTION)
+                     {
+                        effect.duration = 3600;
+                        return;
+                     }
+                  }
+                  oPlayer.addEffect(new WIT_SHARPENING_POTION(event.getPlayer(), Effects.WIT_SHARPENING_POTION, 3600));
+                  return;
+               }
             }
          }
       }
@@ -1446,6 +1437,38 @@ public class OllivandersListener implements Listener
          else
          {
             flying.add(playerUid);
+         }
+      }
+   }
+
+   /**
+    * Process book read events when bookLearning is enabled.
+    *
+    * @param event
+    */
+   @EventHandler(priority = EventPriority.LOWEST)
+   public void onBookRead (PlayerInteractEvent event)
+   {
+      // only run this if bookLearning is enabled
+      if (!p.getConfig().getBoolean("bookLearning"))
+         return;
+
+      Action action = event.getAction();
+      if (action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
+      {
+         Player player = event.getPlayer().getPlayer();
+
+         ItemStack heldItem = player.getInventory().getItemInMainHand();
+         if (heldItem.getType() == Material.WRITTEN_BOOK)
+         {
+            if (p.debug)
+               p.getLogger().info(player.getDisplayName() + " reading a book and book learning is enabled.");
+
+            // reading a book, if it is a spell book we want to let the player "learn" the spell.
+            List<String> bookLore = heldItem.getItemMeta().getLore();
+            OPlayer oplayer = p.getOPlayer(event.getPlayer());
+
+            O2Books.readLore(bookLore, player, p);
          }
       }
    }
