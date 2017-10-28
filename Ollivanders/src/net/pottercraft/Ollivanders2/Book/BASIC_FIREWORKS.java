@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Basic Fireworks
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public final class BASIC_FIREWORKS extends Book

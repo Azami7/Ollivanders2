@@ -1,14 +1,18 @@
 package net.pottercraft.Ollivanders2.House;
 
+import java.io.FileNotFoundException;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
+import org.bukkit.Server;
 
 /**
  * "While you are here, your House will be something like your family within Hogwarts.  You will have classes with the
@@ -27,26 +31,37 @@ public class O2Houses
    }
 
    private Ollivanders2 p;
-   private Map <String, O2HouseType> O2HouseMap = new HashMap<>();
+   private Map <UUID, O2HouseType> O2HouseMap = new HashMap<>();
+   @Deprecated
+   private Map <String, O2HouseType> O2HouseMapOld = new HashMap<>();
    private Map <O2HouseType, Integer> O2HousePointsMap = new HashMap<>();
+   private Map <O2HouseType, ChatColor> O2HouseColors = new HashMap<>();
    private boolean isEnabled = true;
 
    private Scoreboard scoreboard;
-   String objectiveName = "o2_hpoints";
-   String objectiveDisplayName = "House Points";
-   String houseMapFile = "plugins/Ollivanders2/O2HouseMap.bin";
-   String housePointsMapFile = "plugins/Ollivanders2/O2HousePointsMap.bin";
+   private String objectiveName = "o2_hpoints";
+   private String objectiveDisplayName = "House Points";
+   private String houseMapFile = "plugins/Ollivanders2/O2HouseMap.bin";
+   private String housePointsMapFile = "plugins/Ollivanders2/O2HousePointsMap.bin";
 
    DisplaySlot scoreboardSlot = DisplaySlot.SIDEBAR;
 
+   /**
+    * Constructor.
+    *
+    * @param plugin
+    */
    public O2Houses (Ollivanders2 plugin)
    {
       p = plugin;
 
       if (p.getConfig().getBoolean("houses"))
       {
+         loadHouses();
          initHousePoints();
          createScoreboard();
+         updateScoreboard();
+         showScoreboard();
       }
       else
       {
@@ -60,10 +75,30 @@ public class O2Houses
     */
    private void initHousePoints ()
    {
-      O2HousePointsMap.put(O2HouseType.GRYFFINDOR, 0);
-      O2HousePointsMap.put(O2HouseType.HUFFLEPUFF, 0);
-      O2HousePointsMap.put(O2HouseType.RAVENCLAW, 0);
-      O2HousePointsMap.put(O2HouseType.SLYTHERIN, 0);
+      if (!O2HousePointsMap.containsKey(O2HouseType.GRYFFINDOR))
+         O2HousePointsMap.put(O2HouseType.GRYFFINDOR, 0);
+
+      if (!O2HousePointsMap.containsKey(O2HouseType.HUFFLEPUFF))
+         O2HousePointsMap.put(O2HouseType.HUFFLEPUFF, 0);
+
+      if (!O2HousePointsMap.containsKey(O2HouseType.RAVENCLAW))
+         O2HousePointsMap.put(O2HouseType.RAVENCLAW, 0);
+
+      if (!O2HousePointsMap.containsKey(O2HouseType.SLYTHERIN))
+         O2HousePointsMap.put(O2HouseType.SLYTHERIN, 0);
+
+      //set house nametag colors
+      if (!O2HouseColors.containsKey(O2HouseType.HUFFLEPUFF))
+         O2HouseColors.put(O2HouseType.HUFFLEPUFF, ChatColor.YELLOW);
+
+      if (!O2HouseColors.containsKey(O2HouseType.GRYFFINDOR))
+         O2HouseColors.put(O2HouseType.GRYFFINDOR, ChatColor.RED);
+
+      if (!O2HouseColors.containsKey(O2HouseType.RAVENCLAW))
+         O2HouseColors.put(O2HouseType.RAVENCLAW, ChatColor.BLUE);
+
+      if (!O2HouseColors.containsKey(O2HouseType.SLYTHERIN))
+         O2HouseColors.put(O2HouseType.SLYTHERIN, ChatColor.GREEN);
    }
 
    /**
@@ -83,8 +118,14 @@ public class O2Houses
          return "Hufflepuff";
       else if (house == O2HouseType.RAVENCLAW)
          return "Ravenclaw";
-      else // house == O2HouseType.SLYTHERIN
+      else if (house == O2HouseType.SLYTHERIN)
          return "Slytherin";
+      else
+      {
+         // this should never happen...
+         p.getLogger().warning("Invalid house type " + house.toString());
+         return null;
+      }
    }
 
    /**
@@ -145,30 +186,101 @@ public class O2Houses
     */
    public void loadHouses()
    {
-      try
+      // try loading it from json first
+      // load houses from JSON
+      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      Map <UUID, O2HouseType> houses = gsonLayer.readHouses();
+      if (houses != null)
       {
-         O2HouseMap = (HashMap<String, O2HouseType>) Ollivanders2.SLAPI.load(houseMapFile);
-         p.getLogger().finest("Loaded " + houseMapFile);
-      }
-      catch (Exception e)
-      {
-         p.getLogger().warning("Failed to load " + houseMapFile);
-      }
-
-      try
-      {
-         O2HousePointsMap = (HashMap<O2HouseType, Integer>) Ollivanders2.SLAPI.load(housePointsMapFile);
-         p.getLogger().finest("Loaded " + housePointsMapFile);
-      }
-      catch (Exception e)
-      {
-         p.getLogger().warning("Failed to load " + housePointsMapFile);
+         O2HouseMap = houses;
       }
 
-      if (isEnabled)
+      Map <O2HouseType, Integer> housePoints = gsonLayer.readHousePoints();
+      if (housePoints != null)
       {
-         updateScoreboard();
-         showScoreboard();
+         O2HousePointsMap = housePoints;
+      }
+
+      // try reading the old binary files if the maps are still empty
+      if (O2HouseMap.isEmpty())
+      {
+         oldLoadHouses();
+      }
+   }
+
+   /**
+    * Loads house info from the old binary files.  Only use if the json files don't work.
+    */
+   private void oldLoadHouses()
+   {
+      // try reading the old binary files if the maps are still empty
+      if (O2HouseMap.isEmpty())
+      {
+         try
+         {
+            O2HouseMapOld = (HashMap<String, O2HouseType>) Ollivanders2.SLAPI.load(houseMapFile);
+
+            p.getLogger().info("Loaded " + houseMapFile);
+         }
+         catch (FileNotFoundException e)
+         {
+            p.getLogger().info("Save file " + houseMapFile + " not found, skipping.");
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to load " + houseMapFile);
+            if (p.debug)
+            {
+               e.printStackTrace();
+               return;
+            }
+         }
+      }
+
+      if (!O2HouseMapOld.isEmpty())
+      {
+         Server server = p.getServer();
+
+         // backfill the old house in to the new one
+         for (Entry<String, O2HouseType> e : O2HouseMapOld.entrySet())
+         {
+            UUID playerID = server.getOfflinePlayer(e.getKey()).getUniqueId();
+            if (!O2HouseMap.containsKey(playerID))
+               O2HouseMap.put(playerID, e.getValue());
+         }
+      }
+
+      if (O2HousePointsMap.isEmpty())
+      {
+         try
+         {
+            O2HousePointsMap = (HashMap<O2HouseType, Integer>) Ollivanders2.SLAPI.load(housePointsMapFile);
+            p.getLogger().info("Loaded " + housePointsMapFile);
+         }
+         catch (FileNotFoundException e)
+         {
+            p.getLogger().info("Save file " + housePointsMapFile + " not found, skipping.");
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to load " + housePointsMapFile);
+            if (p.debug)
+            {
+               e.printStackTrace();
+               return;
+            }
+         }
+      }
+
+      if (!O2HousePointsMap.isEmpty())
+      {
+         // backfill the old house points in to the new one
+         for (Entry<O2HouseType, Integer> e : O2HousePointsMap.entrySet())
+         {
+            O2HouseType house = e.getKey();
+            if (!O2HousePointsMap.containsKey(house))
+               O2HousePointsMap.put(house, e.getValue());
+         }
       }
    }
 
@@ -177,6 +289,7 @@ public class O2Houses
     */
    public void saveHouses()
    {
+      /*
       try
       {
          Ollivanders2.SLAPI.save (O2HouseMap, houseMapFile);
@@ -196,6 +309,13 @@ public class O2Houses
       {
          p.getLogger().warning("Failed to save " + housePointsMapFile);
       }
+      */
+
+      // write house data out as JSON
+      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      gsonLayer.writeHouses(O2HouseMap);
+      p.getLogger().info("O2HousePointsMap size = " + O2HousePointsMap.size());
+      gsonLayer.writeHousePoints(O2HousePointsMap);
    }
 
    /**
@@ -211,7 +331,8 @@ public class O2Houses
       if (isSorted(player))
          return false;
 
-      O2HouseMap.put(player.getPlayerListName(), house);
+      O2HouseMap.put(player.getUniqueId(), house);
+      setChatColor(player);
       return true;
    }
 
@@ -223,7 +344,7 @@ public class O2Houses
     */
    public boolean isSorted (Player player)
    {
-      if (O2HouseMap.containsKey(player.getPlayerListName()))
+      if (O2HouseMap.containsKey(player.getUniqueId()))
          return true;
       else
          return false;
@@ -240,7 +361,8 @@ public class O2Houses
    {
       if (!sort(player, house))
       {
-         O2HouseMap.replace(player.getPlayerListName(), house);
+         O2HouseMap.replace(player.getUniqueId(), house);
+         setChatColor(player);
       }
    }
 
@@ -254,15 +376,18 @@ public class O2Houses
    {
       O2HouseType house = null;
 
-      if (O2HouseMap.containsKey(player.getPlayerListName()))
+      if (O2HouseMap.containsKey(player.getUniqueId()))
       {
          try
          {
-            house = O2HouseMap.get(player.getPlayerListName());
+            house = O2HouseMap.get(player.getUniqueId());
+            p.getLogger().info(player.getDisplayName() + " is in " + house.toString());
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failure retrieving player " + player.getPlayerListName() + " from O2HouseMap.");
+            p.getLogger().warning("Failure retrieving player " + player.getName() + " from O2HouseMap.");
+            if (p.debug)
+               e.printStackTrace();
          }
       }
 
@@ -278,12 +403,15 @@ public class O2Houses
    public ArrayList getHouseMembers (O2HouseType house)
    {
       ArrayList<String> houseMembers = new ArrayList<>();
+      Server server = p.getServer();
 
-      for(Entry<String, O2HouseType> entry: O2HouseMap.entrySet())
+      for(Entry<UUID, O2HouseType> entry: O2HouseMap.entrySet())
       {
          if (entry.getValue() == house)
          {
-            houseMembers.add(entry.getKey());
+            UUID playerID = entry.getKey();
+            String playerName = server.getOfflinePlayer(playerID).getName();
+            houseMembers.add(playerName);
          }
       }
 
@@ -317,10 +445,10 @@ public class O2Houses
    {
       HashMap<O2HouseType, Integer> points = new HashMap<>();
 
-      points.put(O2HouseType.HUFFLEPUFF, O2HousePointsMap.get(O2HouseType.HUFFLEPUFF));
-      points.put(O2HouseType.GRYFFINDOR, O2HousePointsMap.get(O2HouseType.GRYFFINDOR));
-      points.put(O2HouseType.RAVENCLAW, O2HousePointsMap.get(O2HouseType.RAVENCLAW));
-      points.put(O2HouseType.SLYTHERIN, O2HousePointsMap.get(O2HouseType.SLYTHERIN));
+      points.put(O2HouseType.HUFFLEPUFF, O2HousePointsMap.get(O2HouseType.HUFFLEPUFF.toString()));
+      points.put(O2HouseType.GRYFFINDOR, O2HousePointsMap.get(O2HouseType.GRYFFINDOR.toString()));
+      points.put(O2HouseType.RAVENCLAW, O2HousePointsMap.get(O2HouseType.RAVENCLAW.toString()));
+      points.put(O2HouseType.SLYTHERIN, O2HousePointsMap.get(O2HouseType.SLYTHERIN.toString()));
 
       return points;
    }
@@ -337,10 +465,13 @@ public class O2Houses
       if (O2HousePointsMap.containsKey(house))
       {
          O2HousePointsMap.replace(house, points);
+         if (p.debug)
+            p.getLogger().info("Set house points for " + house.toString() + " to " + points);
       }
       else
       {
-         O2HousePointsMap.put(house, points);
+         //O2HousePointsMap.put(house, points);
+         p.getLogger().warning("House " + house.toString() + " not found in house points map.");
       }
 
       return updateScoreboard();
@@ -365,6 +496,7 @@ public class O2Houses
    {
       p.getLogger().info("Resetting houses...");
 
+      O2HouseMapOld.clear();
       O2HousePointsMap.clear();
       O2HouseMap.clear();
 
@@ -383,12 +515,13 @@ public class O2Houses
    {
       int pts = points;
 
-      // make sure current points in O2 match the scoreboard
-      syncPoints(house);
-
       if (O2HousePointsMap.containsKey(house))
       {
          pts += O2HousePointsMap.get(house);
+      }
+      else
+      {
+         p.getLogger().warning("House " + house.toString() + " not found in house points map.");
       }
 
       return setHousePoints(house, pts);
@@ -405,35 +538,18 @@ public class O2Houses
    {
       int pts = 0;
 
-      // make sure current points in O2 match the scoreboard
-      syncPoints(house);
-
       if (O2HousePointsMap.containsKey(house))
       {
          int curPoints = O2HousePointsMap.get(house);
          if (curPoints >= points)
             pts = curPoints - points;
       }
+      else
+      {
+         p.getLogger().warning("House " + house.toString() + " not found in house points map.");
+      }
 
       return setHousePoints(house, pts);
-   }
-
-   private void syncPoints (O2HouseType house)
-   {
-      // sync the scoreboard points with O2 points in case someone has used the /scoreboard command
-      int scoreboardScore = scoreboard.getObjective(objectiveName).getScore(getHouseName(house)).getScore();
-
-      int o2Score = 0;
-      if (O2HousePointsMap.containsKey(house))
-      {
-         o2Score = O2HousePointsMap.get(house);
-      }
-
-
-      if (o2Score != scoreboardScore)
-      {
-         O2HousePointsMap.replace(house, scoreboardScore);
-      }
    }
 
    /**
@@ -446,12 +562,18 @@ public class O2Houses
       if (isEnabled == false)
       {
          // do not allow if houses is not enabled
-         p.getLogger().warning("Attempted to create scoreboard when houses is not enabled");
+         p.getLogger().warning("Attempted to create scoreboard when houses is not enabled.");
          return false;
       }
 
+      // hide the main scoreboard
+      /*
+      Scoreboard mainScoreboard = p.getServer().getScoreboardManager().getMainScoreboard();
+      mainScoreboard.clearSlot(scoreboardSlot);
+      */
+
+      //scoreboard = p.getServer().getScoreboardManager().getNewScoreboard();
       scoreboard = p.getServer().getScoreboardManager().getMainScoreboard();
-      //scoreboard.clearSlot(scoreboardSlot);
 
       p.getLogger().info("Created scoreboard...");
 
@@ -481,10 +603,10 @@ public class O2Houses
       registerHouseTeam(O2HouseType.SLYTHERIN);
 
       //set house nametag colors
-      scoreboard.getTeam(getHouseName(O2HouseType.HUFFLEPUFF)).setColor(ChatColor.YELLOW);
-      scoreboard.getTeam(getHouseName(O2HouseType.GRYFFINDOR)).setColor(ChatColor.RED);
-      scoreboard.getTeam(getHouseName(O2HouseType.RAVENCLAW)).setColor(ChatColor.BLUE);
-      scoreboard.getTeam(getHouseName(O2HouseType.SLYTHERIN)).setColor(ChatColor.GREEN);
+      scoreboard.getTeam(getHouseName(O2HouseType.HUFFLEPUFF)).setColor(O2HouseColors.get(O2HouseType.HUFFLEPUFF));
+      scoreboard.getTeam(getHouseName(O2HouseType.GRYFFINDOR)).setColor(O2HouseColors.get(O2HouseType.GRYFFINDOR));
+      scoreboard.getTeam(getHouseName(O2HouseType.RAVENCLAW)).setColor(O2HouseColors.get(O2HouseType.RAVENCLAW));
+      scoreboard.getTeam(getHouseName(O2HouseType.SLYTHERIN)).setColor(O2HouseColors.get(O2HouseType.SLYTHERIN));
 
       updateScoreboard();
       p.getLogger().info("Updated scoreboard with current house points...");
@@ -524,6 +646,11 @@ public class O2Houses
       {
          p.getLogger().warning("Tried to update scoreboard when houses are not enabled.");
          return false;
+      }
+
+      if (scoreboard == null)
+      {
+         createScoreboard();
       }
 
       Objective objective = scoreboard.getObjective(objectiveName);
@@ -605,9 +732,37 @@ public class O2Houses
 
       Objective objective = scoreboard.getObjective(objectiveName);
 
-      if (objective.getDisplaySlot() == null)
+      if (objective != null)
          objective.setDisplaySlot(scoreboardSlot);
 
       return true;
+   }
+
+   /**
+    * Set player chat color to match their house if they are sorted.
+    *
+    * @param player
+    */
+   public void setChatColor (Player player)
+   {
+      if (isSorted(player))
+      {
+         O2HouseType house = getHouse(player);
+         ChatColor color = O2HouseColors.get(house);
+
+         try
+         {
+            player.setDisplayName(color + player.getName());
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Exception setting " + player.getDisplayName() + " chat color.");
+            if (p.debug)
+               e.printStackTrace();
+         }
+
+         if (p.debug)
+            p.getLogger().info("Setting " + player.getDisplayName() + " name color to " + color.toString());
+      }
    }
 }

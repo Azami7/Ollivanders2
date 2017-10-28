@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Extreme Incantations - Charms book for 2nd year.
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class EXTREME_INCANTATIONS extends Book

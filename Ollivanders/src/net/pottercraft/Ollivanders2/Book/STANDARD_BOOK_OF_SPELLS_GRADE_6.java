@@ -9,7 +9,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  * Missing spells:
  * Expecto Patronum - https://github.com/Azami7/Ollivanders2/issues/32
  *
- *
+ * @since 2.2.4
  * @author Azami7
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_6 extends Book

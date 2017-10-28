@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Basic Hexes for the Busy and Vexed
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class BASIC_HEXES extends Book

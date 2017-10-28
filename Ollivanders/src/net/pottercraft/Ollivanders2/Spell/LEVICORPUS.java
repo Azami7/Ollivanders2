@@ -47,10 +47,10 @@ public final class LEVICORPUS extends DarkArts
       {
          if (live instanceof Player)
          {
-            OPlayer oply = p.getOPlayer((Player) live);
+            O2Player o2p = p.getO2Player((Player) live);
             net.pottercraft.Ollivanders2.Effect.LEVICORPUS levi = new net.pottercraft.Ollivanders2.Effect.LEVICORPUS((Player) live, Effects.LEVICORPUS,
                   (int) (usesModifier * 1200.0), live.getEyeLocation());
-            oply.addEffect(levi);
+            o2p.addEffect(levi);
             kill();
             return;
          }

@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Defensive Magical Theory - 5th year defense against the dark arts
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class ESSENTIAL_DARK_ARTS extends Book

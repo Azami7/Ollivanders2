@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION;
 import net.pottercraft.Ollivanders2.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.OPlayer;
+import net.pottercraft.Ollivanders2.O2Player;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -25,6 +25,9 @@ import org.bukkit.inventory.meta.BookMeta;
  * These books will work with the new implementation of bookLearning.  Every Ollivanders2 spell must be in an
  * O2Book (or some other book with lore set up correctly) or players will not be able to learn them when bookLearning
  * is enabled.
+ *
+ * @since 2.2.4
+ * @author Azami7
  */
 public final class O2Books
 {
@@ -187,27 +190,18 @@ public final class O2Books
          return;
       }
 
-      OPlayer oplayer = p.getOPlayer(player);
+      O2Player o2p = p.getO2Player(player);
 
       for (String spell : bookLore)
       {
          Spells spellEnum = Spells.decode(spell);
 
-         // see if they know this spell already
-         Map<Spells, Integer> spellCount = oplayer.getSpellCount();
-         int spellLevel = -1;
-
-         if (spellCount.containsKey(spellEnum))
-         {
-            spellLevel = spellCount.get(spellEnum).intValue();
-         }
-
          // if spell count is less than 25, learn this spell
-         if (spellLevel < 25)
+         if (o2p.getSpellCount(spellEnum) < 25)
          {
             // check to see if they have the Wit-Sharpening Potion effect
             boolean witSharpening = false;
-            for (OEffect effect : oplayer.getEffects())
+            for (OEffect effect : o2p.getEffects())
             {
                if (effect instanceof WIT_SHARPENING_POTION)
                {

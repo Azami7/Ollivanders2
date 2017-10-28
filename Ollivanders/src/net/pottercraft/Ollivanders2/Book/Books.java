@@ -2,6 +2,8 @@ package net.pottercraft.Ollivanders2.Book;
 
 /**
  * All Ollivanders2 books.
+ *
+ * @since 2.2.4
  */
 public enum Books
 {

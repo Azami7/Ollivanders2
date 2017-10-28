@@ -34,9 +34,9 @@ public final class GLACIUS_DUO extends GlaciusSuper
    public GLACIUS_DUO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
-      // double duration
-      strengthModifier = 2;
-      // normal radius
-      radiusModifier = 1.0;
+      // 50% duration
+      durationModifier = 0.5;
+      // 2x radius
+      radiusModifier = 2.0;
    }
 }

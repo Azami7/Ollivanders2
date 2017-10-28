@@ -6,26 +6,25 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
- * Turns a target area or object to stone.
+ * The Softening Charm (Spongify) is a spell that softens a target area or object, making it rubbery and bouncy.
  *
+ * @link https://github.com/Azami7/Ollivanders2/issues/93
  * @since 2.2.5
  * @see BlockTransfigurationSuper
  * @author Azami7
  */
-public final class DURO extends BlockTransfigurationSuper
+public class SPONGIFY extends BlockTransfigurationSuper
 {
    protected O2MagicBranch branch = O2MagicBranch.CHARMS;
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    */
-   public DURO ()
+   public SPONGIFY ()
    {
       super();
 
-      flavorText.add("The Hardening Charm");
-      flavorText.add("The Hardening Charm will turn an object into solid stone. This can be surprisingly handy in a tight spot. Of course, most students only seem to use this spell to sabotage their fellow students' schoolbags or to turn a pumpkin pasty to stone just before someone bites into it. It is unwise to try this unworthy trick on any of your teachers.");
-      text = "Duro will turn the blocks in a radius in to stone.";
+      flavorText.add("\"Good morning class. Today's lesson will most assuredly involve learning how to cast the Softening Charm, Spongify.\" -Filius Flitwick");
+      flavorText.add("The Softening Charm");
+
+      text = "Turns the blocks in a radius in to slime blocks.";
    }
 
    /**
@@ -36,11 +35,11 @@ public final class DURO extends BlockTransfigurationSuper
     * @param name
     * @param rightWand
     */
-   public DURO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public SPONGIFY (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 
-      transfigureType = Material.STONE;
+      transfigureType = Material.SLIME_BLOCK;
       spellDuration = (int)(1200 * usesModifier);
       permanent = false;
 

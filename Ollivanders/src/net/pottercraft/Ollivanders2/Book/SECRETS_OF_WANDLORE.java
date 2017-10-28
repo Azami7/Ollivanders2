@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Secrets of Wandlore
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public final class SECRETS_OF_WANDLORE extends Book

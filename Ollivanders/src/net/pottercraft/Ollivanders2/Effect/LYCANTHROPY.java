@@ -31,7 +31,7 @@ public class LYCANTHROPY extends OEffect implements Effect
       long days = time / 24000;
       long phase = days % 8;
       boolean wolfsbane = false;
-      for (OEffect effect : p.getOPlayer(owner).getEffects())
+      for (OEffect effect : p.getO2Player(owner).getEffects())
       {
          if (effect instanceof WOLFSBANE_POTION)
          {

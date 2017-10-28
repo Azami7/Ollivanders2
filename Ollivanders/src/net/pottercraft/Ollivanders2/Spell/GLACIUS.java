@@ -36,8 +36,8 @@ public final class GLACIUS extends GlaciusSuper
    {
       super(plugin, player, name, rightWand);
       // normal duration
-      strengthModifier = 1;
-      // half radius
-      radiusModifier = 0.5;
+      durationModifier = 1.0;
+      // normal radius
+      radiusModifier = 1.0;
    }
 }

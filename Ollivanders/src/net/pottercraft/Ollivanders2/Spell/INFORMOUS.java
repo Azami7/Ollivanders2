@@ -69,8 +69,8 @@ public final class INFORMOUS extends Arithmancy
             if (entity instanceof Player)
             {
                Player ePlayer = (Player) entity;
-               OPlayer eoplayer = p.getOPlayer(ePlayer);
-               for (OEffect effect : eoplayer.getEffects())
+               O2Player o2p = p.getO2Player(ePlayer);
+               for (OEffect effect : o2p.getEffects())
                {
                   if (effect instanceof LYCANTHROPY)
                   {

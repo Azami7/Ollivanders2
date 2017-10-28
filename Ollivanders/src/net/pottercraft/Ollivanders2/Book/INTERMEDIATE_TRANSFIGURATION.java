@@ -13,8 +13,8 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  *
  * Missing spells:
  * Animagus - https://github.com/Azami7/Ollivanders2/issues/87
- * Lapifors - https://github.com/Azami7/Ollivanders2/issues/51
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class INTERMEDIATE_TRANSFIGURATION extends Book
@@ -34,7 +34,7 @@ public class INTERMEDIATE_TRANSFIGURATION extends Book
       spellList.add(Spells.DELETRIUS);
       spellList.add(Spells.HERBIFORS);
       spellList.add(Spells.METATREPO_EQUUS);
+      spellList.add(Spells.LAPIFORS);
       //spellList.add(Spells.ANIMAGUS);
-      //spellList.add(Spells.LAPIFORS);
    }
 }

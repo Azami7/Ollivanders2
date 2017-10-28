@@ -5,6 +5,9 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 
 /**
  * World of Color - spells for changing colors
+ *
+ * @since 2.2.4
+ * @author Azami7
  */
 public final class WORLD_OF_COLOR extends Book
 {

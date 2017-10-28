@@ -9,6 +9,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  * Missing Spells:
  * Flipendo - https://github.com/Azami7/Ollivanders2/issues/37
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class THE_DARK_FORCES extends Book

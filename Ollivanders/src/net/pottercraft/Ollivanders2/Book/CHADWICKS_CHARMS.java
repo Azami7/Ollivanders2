@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Chadwick's Charms - O.W.L level charms book
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class CHADWICKS_CHARMS extends Book

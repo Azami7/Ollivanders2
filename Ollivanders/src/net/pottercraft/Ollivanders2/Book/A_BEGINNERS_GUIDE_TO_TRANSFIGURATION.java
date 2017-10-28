@@ -9,6 +9,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  * Topics:
  * Switching
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends Book

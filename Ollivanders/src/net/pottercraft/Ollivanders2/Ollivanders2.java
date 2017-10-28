@@ -1,5 +1,7 @@
 package net.pottercraft.Ollivanders2;
 
+import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -10,12 +12,12 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
 
 import Quidditch.Arena;
+
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
@@ -26,9 +28,11 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 import net.pottercraft.Ollivanders2.Book.Books;
 
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -42,16 +46,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.Material;
-import org.bukkit.Bukkit;
-import org.bukkit.NamespacedKey;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-
-import com.sk89q.worldedit.bukkit.BukkitUtil;
-import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
-import com.sk89q.worldguard.protection.managers.RegionManager;
-import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 /**
  * Ollivanders2 plugin object
@@ -64,8 +58,6 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
  */
 public class Ollivanders2 extends JavaPlugin
 {
-
-   private Map<UUID, OPlayer> OPlayerMap = new HashMap<>();
    private List<SpellProjectile> projectiles = new ArrayList<>();
    private List<StationarySpellObj> stationary = new ArrayList<>();
 
@@ -75,14 +67,20 @@ public class Ollivanders2 extends JavaPlugin
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
    private O2Houses houses;
+   private O2Players o2Players;
    private O2Books books;
 
    private static String mcVersion;
-
    public static Random random = new Random();
-
    public static boolean debug = false;
+   public static Ollivanders2WorldGuard worldGuardO2;
+   public static boolean worldGuardEnabled = false;
 
+   /**
+    * onDisable runs when the Minecraft server is shutting down.
+    *
+    * Primary functions are to reset transfigured blocks back to their correct type and save plugin data to disk.
+    */
    public void onDisable ()
    {
 	   for (Block block : tempBlocks)
@@ -102,14 +100,7 @@ public class Ollivanders2 extends JavaPlugin
       {
          stat.active = true;
       }
-      try
-      {
-         SLAPI.save(OPlayerMap, "plugins/Ollivanders2/OPlayerMap.bin");
-         getLogger().finest("Saved OPlayerMap.bin");
-      } catch (Exception e)
-      {
-         getLogger().warning("Could not save OPlayerMap.bin");
-      }
+
       try
       {
          SLAPI.save(stationary, "plugins/Ollivanders2/stationary.bin");
@@ -126,12 +117,18 @@ public class Ollivanders2 extends JavaPlugin
       {
          getLogger().warning("Could not save prophecy.bin");
       }
+
       houses.saveHouses();
+	   o2Players.saveO2Players();
 
       getLogger().info(this + " is now disabled!");
    }
 
-   @SuppressWarnings("unchecked")
+   /**
+    * onEnable runs when the Minecraft server is starting up.
+    *
+    * Primary function is to set up static plugin data and load saved configs and data from disk.
+    */
    public void onEnable ()
    {
       playerListener = new OllivandersListener(this);
@@ -139,9 +136,8 @@ public class Ollivanders2 extends JavaPlugin
       //loads data
 	   if (new File("plugins/Ollivanders2/").mkdirs())
 	   {
-		   getLogger().info("File created for Ollivanders2");
+		   getLogger().info("File directory for Ollivanders2");
 	   }
-      OPlayerMap = new HashMap<>();
       projectiles = new ArrayList<>();
       stationary = new ArrayList<>();
       prophecy = new HashSet<>();
@@ -156,36 +152,6 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().warning("MC version " + mcVersion + ". Some features of Ollivanders2 require MC 1.12 and higher.");
       }
 
-      // load data saved to disk
-      try
-      {
-         OPlayerMap = (HashMap<UUID, OPlayer>) SLAPI
-               .load("plugins/Ollivanders2/OPlayerMap.bin");
-         getLogger().finest("Loaded OPlayerMap.bin");
-      } catch (Exception e)
-      {
-         getLogger().warning("Did not find OPlayerMap.bin");
-      }
-      try
-      {
-         stationary = (List<StationarySpellObj>) SLAPI
-               .load("plugins/Ollivanders2/stationary.bin");
-         getLogger().finest("Loaded stationary.bin");
-      } catch (Exception e)
-      {
-         getLogger().warning("Did not find stationary.bin");
-      }
-      try
-      {
-         prophecy = (HashSet<Prophecy>) SLAPI
-               .load("plugins/Ollivanders2/prophecy.bin");
-         getLogger().finest("Loaded prophecy.bin");
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Did not find prophecy.bin");
-      }
-
       // write the config.yml to the Ollivanders2 folder if there wasn't one already
       if (!new File(this.getDataFolder(), "config.yml").exists())
       {
@@ -196,9 +162,28 @@ public class Ollivanders2 extends JavaPlugin
       if (getConfig().getBoolean("debug"))
          debug = true;
 
-      fillAllSpellCount();
+      try
+      {
+         stationary = (List<StationarySpellObj>) SLAPI.load("plugins/Ollivanders2/stationary.bin");
+         getLogger().info("Loaded save file stationary.bin");
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Did not find stationary.bin");
+      }
+      try
+      {
+         prophecy = (HashSet<Prophecy>) SLAPI.load("plugins/Ollivanders2/prophecy.bin");
+         getLogger().info("Loaded save file prophecy.bin");
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Did not find prophecy.bin");
+      }
+
       this.schedule = new OllivandersSchedule(this);
       Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.schedule, 20L, 1L);
+
       //floo powder recipe
       ItemStack flooPowder = new ItemStack(Material.getMaterial(fileConfig.getString("flooPowder")), 8);
       ItemMeta fmeta = flooPowder.getItemMeta();
@@ -207,6 +192,7 @@ public class Ollivanders2 extends JavaPlugin
       flore.add("Glittery, silver powder");
       fmeta.setLore(flore);
       flooPowder.setItemMeta(fmeta);
+
       //broomstick recipe
       ItemStack broomstick = new ItemStack(Material.getMaterial(fileConfig.getString("broomstick")));
       ItemMeta bmeta = broomstick.getItemMeta();
@@ -224,17 +210,53 @@ public class Ollivanders2 extends JavaPlugin
       getServer().addRecipe(new FurnaceRecipe(flooPowder, Material.ENDER_PEARL));
       getServer().addRecipe(bRecipe);
 
+      // set up players
+      o2Players = new O2Players(this);
+      o2Players.loadO2Players();
+
       // set up houses
       houses = new O2Houses(this);
-      houses.loadHouses();
 
       // create books
       books = new O2Books(this);
 
+      // set up WorldGuard manager
+      Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+      if (wg == null)
+      {
+         worldGuardEnabled = false;
+      }
+      else
+      {
+         try
+         {
+            if (wg instanceof WorldGuardPlugin)
+            {
+               worldGuardO2 = new Ollivanders2WorldGuard(this);
+               worldGuardEnabled = true;
+            }
+         }
+         catch (NoClassDefFoundError e)
+         {
+            worldGuardEnabled = false;
+         }
+         catch (Exception e)
+         {
+            worldGuardEnabled = false;
+         }
+      }
+
+      if (worldGuardEnabled)
+      {
+         getLogger().info("WorldGuard found, enabled WorldGuard features.");
+      }
+      else
+      {
+         getLogger().info("WorldGuard not found, disabled WorldGuard features.");
+      }
+
       getLogger().info(this + " is now enabled!");
    }
-
-
 
    /**
     * Handle command events
@@ -343,10 +365,6 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("reload"))
             return runReloadConfigs(sender);
-         /*
-         else if (subCommand.equalsIgnoreCase("books"))
-            return okitBooks((Player) sender);
-            */
          else if (subCommand.equalsIgnoreCase("items"))
             return okitItems((Player) sender);
          else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
@@ -899,16 +917,6 @@ public class Ollivanders2 extends JavaPlugin
       }
    }
 
-   public Map<UUID, OPlayer> getOPlayerMap ()
-   {
-      return OPlayerMap;
-   }
-
-   public void setOPlayerMap (Map<UUID, OPlayer> m)
-   {
-      OPlayerMap = m;
-   }
-
    public int getChatDistance ()
    {
       return fileConfig.getInt("chatDropoff");
@@ -930,9 +938,7 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Get's the spell count associated with a player's spell.
-    * This code relies on the fact that fillAllSpellCount() has placed every
-    * spell from Spells into the OPlayer's SpellCount.
+    * Get the spell use count for the player for this spell
     *
     * @param player
     * @param spell
@@ -940,68 +946,80 @@ public class Ollivanders2 extends JavaPlugin
     */
    public int getSpellNum (Player player, Spells spell)
    {
-      OPlayer op = getOPlayer(player);
-      Map<Spells, Integer> spellCount = op.getSpellCount();
-      return spellCount.get(spell);
-      //		if (spellCount.containsKey(spell)){
-      //			return op.getSpellCount().get(spell);
-      //		}
-      //		spellCount.put(spell, 0);
-      //		op.setSpellCount(spellCount);
-      //		setOPlayer(player, op);
-      //		return 0;
+      O2Player o2p = o2Players.getPlayer(player.getUniqueId());
+
+      return o2p.getSpellCount(spell);
    }
 
+   /**
+    * Set the spell use count for a player.
+    *
+    * @param player
+    * @param spell
+    * @param i
+    */
    public void setSpellNum (Player player, Spells spell, int i)
    {
-      OPlayer op = getOPlayer(player);
-      Map<Spells, Integer> spellCount = op.getSpellCount();
-      spellCount.put(spell, i);
-      op.setSpellCount(spellCount);
-      setOPlayer(player, op);
+      UUID pid = player.getUniqueId();
+      O2Player o2p = o2Players.getPlayer(pid);
+
+      o2p.setSpellCount(spell, i);
+
+      o2Players.updatePlayer(pid, o2p);
    }
 
+   /**
+    * Increment the spell use count for a player.
+    *
+    * @param player
+    * @param s
+    * @return the incremented use count for this player for this spell
+    */
    public int incSpellCount (Player player, Spells s)
    {
       //returns the incremented spell count
-      OPlayer oply = OPlayerMap.get(player.getUniqueId());
-      Map<Spells, Integer> spellMap = oply.getSpellCount();
-      int next = spellMap.get(s) + 1;
-      spellMap.put(s, next);
-      oply.setSpellCount(spellMap);
-      OPlayerMap.put(player.getUniqueId(), oply);
-      return next;
+      UUID pid = player.getUniqueId();
+      O2Player o2p = o2Players.getPlayer(pid);
+
+      o2p.incrementSpellCount(s);
+      o2Players.updatePlayer(pid, o2p);
+
+      return o2p.getSpellCount(s);
    }
 
    /**
     * Gets the OPlayer associated with the Player
     *
-    * @param p Player
-    * @return Oplayer of playername s
+    * @param player Player
+    * @return OPlayer of playername s
     */
-   public OPlayer getOPlayer (Player p)
+   public O2Player getO2Player (Player player)
    {
-      if (OPlayerMap.containsKey(p.getUniqueId()))
+      UUID pid = player.getUniqueId();
+      O2Player o2p = o2Players.getPlayer(pid);
+
+      if (o2p == null && !(player instanceof NPC))
       {
-         return OPlayerMap.get(p.getUniqueId());
+         o2Players.addPlayer(pid, player.getDisplayName());
+
+         o2p = o2Players.getPlayer(pid);
       }
-      else
-      {
-         OPlayerMap.put(p.getUniqueId(), new OPlayer());
-         getLogger().info("Put in new OPlayer.");
-         return OPlayerMap.get(p.getUniqueId());
-      }
+
+      return o2p;
    }
 
    /**
     * Sets the player's OPlayer by their playername
     *
-    * @param p      the player
-    * @param player the OPlayer associated with the player
+    * @param player      the player
+    * @param o2p the OPlayer associated with the player
     */
-   public void setOPlayer (Player p, OPlayer player)
+   public void setO2Player (Player player, O2Player o2p)
    {
-      OPlayerMap.put(p.getUniqueId(), player);
+      if (!(player instanceof NPC))
+      {
+         o2Players.updatePlayer(player.getUniqueId(), o2p);
+      }
    }
 
    /**
@@ -1077,6 +1095,13 @@ public class Ollivanders2 extends JavaPlugin
       return tempBlocks;
    }
 
+   /**
+    * Determine if the location is inside of a stationary spell area.
+    *
+    * @param statName
+    * @param loc
+    * @return
+    */
    public boolean isInsideOf (StationarySpells statName, Location loc)
    {
       for (StationarySpellObj stat : getStationary())
@@ -1097,55 +1122,9 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @return a copy of the OPlayer player IDs.
     */
-   public ArrayList getOPlayerKeys ()
+   public ArrayList<UUID> getOPlayerKeys ()
    {
-      ArrayList<UUID> playerKeys = new ArrayList<>();
-
-      for (UUID key : OPlayerMap.keySet())
-      {
-         playerKeys.add(key);
-      }
-
-      return playerKeys;
-   }
-
-   /**
-    * Fills every OPlayer's spell list with all possible spells that aren't there set to 0
-    */
-   private void fillAllSpellCount ()
-   {
-      for (UUID name : OPlayerMap.keySet())
-      {
-         OPlayer op = OPlayerMap.get(name);
-         Map<Spells, Integer> spellCount = op.getSpellCount();
-         for (Spells spell : Spells.values())
-         {
-            if (!spellCount.containsKey(spell))
-            {
-               spellCount.put(spell, 0);
-            }
-         }
-         op.setSpellCount(spellCount);
-         OPlayerMap.put(name, op);
-      }
-   }
-
-   /**
-    * Gets the worldguard plugin, if it exists.
-    *
-    * @return WorldGuardPlugin or null
-    */
-   private WorldGuardPlugin getWorldGuard ()
-   {
-      Plugin plugin = getServer().getPluginManager().getPlugin("WorldGuard");
-
-      // WorldGuard may not be loaded
-      if (plugin == null || !(plugin instanceof WorldGuardPlugin))
-      {
-         return null; // Maybe you want throw an exception instead
-      }
-
-      return (WorldGuardPlugin) plugin;
+      return o2Players.getPlayerIDs();
    }
 
    /**
@@ -1173,15 +1152,14 @@ public class Ollivanders2 extends JavaPlugin
       boolean cast = canLive(player.getLocation(), spell);
       if (!cast && verbose)
       {
-         player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Casting of "
-               + spell.toString() + " is not allowed in this area");
+         spellCannotBeCastMessage(player);
       }
       return cast;
    }
 
    public boolean canLive (Location loc, Spells spell)
    {
-		/*
+		/**
 		 * cast is whether or not the spell can be cast.
 		 * set to false whenever it can't be
 		 * return true whenever it is in allowed-spells
@@ -1276,6 +1254,7 @@ public class Ollivanders2 extends JavaPlugin
                   }
                }
             }
+            /*
             if (type.equalsIgnoreCase("WorldGuard"))
             {
                WorldGuardPlugin worldGuard = getWorldGuard();
@@ -1302,6 +1281,7 @@ public class Ollivanders2 extends JavaPlugin
                   }
                }
             }
+            */
          }
       }
       return cast;
@@ -1350,16 +1330,10 @@ public class Ollivanders2 extends JavaPlugin
     */
    public boolean isWand (ItemStack stack)
    {
-      if (Ollivanders2.debug)
-         getLogger().info("Ollivander2:isWand: enter");
-
       if (stack != null)
       {
          if (stack.getType() == Material.STICK || stack.getType() == Material.BLAZE_ROD)
          {
-            if (Ollivanders2.debug)
-               getLogger().info("Ollivander2:isWand: item is wand material");
-
             if (stack.getItemMeta().hasLore())
             {
                String itemName = stack.getItemMeta().getDisplayName();
@@ -1367,40 +1341,25 @@ public class Ollivanders2 extends JavaPlugin
                //TODO refactor this - item name should contain "wand" and lore should not just contain "and" but have the correct components
                if (lore.get(0).split(" and ").length == 2)
                {
-                  if (Ollivanders2.debug)
-                     getLogger().info("Ollivander2:isWand: item is a wand");
-
                   return true;
                }
                else
                {
-                  if (Ollivanders2.debug)
-                     getLogger().info("Ollivander2:isWand: item is not a wand");
-
                   return false;
                }
             }
             else
             {
-               if (Ollivanders2.debug)
-                  getLogger().info("Ollivander2:isWand: item does not have wand lore");
-
                return false;
             }
          }
          else
          {
-            if (Ollivanders2.debug)
-               getLogger().info("Ollivander2:isWand: item is not a stick or blaze rod");
-
             return false;
          }
       }
       else
       {
-         if (Ollivanders2.debug)
-            getLogger().info("Ollivander2:isWand: item to check is null");
-
          return false;
       }
    }
@@ -1416,22 +1375,15 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (isWand(stack))
       {
-         int wood = Math.abs(Ollivanders2.random.nextInt() % 4);
-         int core = Math.abs(Ollivanders2.random.nextInt() % 4);
-         String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
-         String woodString = woodArray[wood];
-         String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
-         String coreString = coreArray[core];
-         List<String> lore = stack.getItemMeta().getLore();
-         String[] comps = lore.get(0).split(" and ");
-         if (woodString.equals(comps[0]) && coreString.equals(comps[1]))
+         O2Player o2Player = o2Players.getPlayer(player.getUniqueId());
+
+         if (o2Player == null)
          {
-            return true;
-         }
-         else
-         {
+            getLogger().warning(player.getDisplayName() + " not found.");
             return false;
          }
+
+         return o2Player.isDestinedWand(stack);
       }
       else
       {
@@ -1561,11 +1513,11 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Check to see if we're running MC version 1.12 or higher, which many Ollivanders2 features depend on.
     *
-    * @return true of version string is 1.12 - 1.19, false otherwise.
+    * @return true of version string is 1.12, false otherwise.
     */
    public static boolean mcVersionCheck ()
    {
-      if (mcVersion.matches(" 1.1[2-9]"))
+      if (mcVersion.startsWith("1.12"))
          return true;
 
       return false;
@@ -1574,6 +1526,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Give floo powder to player.
     *
+    * @since 2.2.4
     * @param player
     * @return true if successful, false otherwise
     */
@@ -1597,6 +1550,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Run the books subcommands
     *
+    * @since 2.2.4
     * @param sender
     * @param args
     * @return true if successful, false otherwise
@@ -1679,6 +1633,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Usage message for Books subcommands.
     *
+    * @since 2.2.4
     * @param sender
     */
    private void usageMessageBooks (CommandSender sender)
@@ -1690,4 +1645,43 @@ public class Ollivanders2 extends JavaPlugin
             + "\n<book title> - gives the book with this title, if it exists\n\n"
             + "Example: /ollivanders2 book standard book of spells grade 1");
    }
+
+   /**
+    * When a spell is not allowed be cast, such as from WorldGuard protection, send a message.
+    * This is not the message to use for bookLearning enforcement.
+    *
+    * @since 2.2.5
+    * @param player
+    */
+   public void spellCannotBeCastMessage (Player player)
+   {
+      player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+            + "A powerful protective magic prevents you from casting this spell here.");
+   }
+
+   /**
+    * Set the players name to their team color if they are sorted.
+    *
+    * @param player
+    */
+   public void setPlayerTeamColor (Player player)
+   {
+      houses.setChatColor(player);
+   }
+
+   /**
+    * Add a new player to o2Players.
+    *
+    * @param pid
+    * @param name
+    */
+   /*
+   public void addO2Player (UUID pid, String name)
+   {
+      if (pid == null || name == null)
+         return;
+
+      o2Players.addPlayer(pid, name);
+   }
+   */
 }

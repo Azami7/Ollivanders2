@@ -34,9 +34,9 @@ public final class GLACIUS_TRIA extends GlaciusSuper
    public GLACIUS_TRIA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
-      //4x duration
-      strengthModifier = 4;
-      //normal radius
-      radiusModifier = 2.0;
+      //25% duration
+      durationModifier = 0.25;
+      //4x radius radius
+      radiusModifier = 4.0;
    }
 }

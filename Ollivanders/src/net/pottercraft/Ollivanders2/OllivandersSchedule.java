@@ -100,32 +100,39 @@ class OllivandersSchedule implements Runnable
    }
 
    /**
-    * Scheduling method that calls checkEffect on all OEffect objects associated with every player
+    * Scheduling method that calls checkEffect on all OEffect objects associated with every online player
     * and removes those that have kill set to true.
     */
    private void oeffectSched ()
    {
-      List<Player> onlinePlayers = new ArrayList<Player>();
+      List<Player> onlinePlayers = new ArrayList<>();
+
       for (World world : p.getServer().getWorlds())
       {
          onlinePlayers.addAll(world.getPlayers());
       }
 
-      for (UUID name : p.getOPlayerMap().keySet())
+      for (Player player : onlinePlayers)
       {
-         OPlayer oply = p.getOPlayerMap().get(name);
-         if (oply.getEffects() != null && onlinePlayers.contains(p.getServer().getPlayer(name)))
+         O2Player o2p = p.getO2Player(player);
+         UUID pid = player.getUniqueId();
+
+         List<OEffect> playerEffects = o2p.getEffects();
+         if (playerEffects == null)
          {
-            List<OEffect> effects2 = new ArrayList<OEffect>(oply.getEffects());
-            for (OEffect effect : effects2)
+            continue;
+         }
+
+         for (OEffect effect : playerEffects)
+         {
+            ((Effect) effect).checkEffect(p, Bukkit.getPlayer(pid));
+            if (effect.kill)
             {
-               ((Effect) effect).checkEffect(p, Bukkit.getPlayer(name));
-               if (effect.kill)
-               {
-                  oply.remEffect(effect);
-               }
+               o2p.remEffect(effect);
             }
          }
+
+         p.setO2Player(player, o2p);
       }
    }
 
@@ -136,7 +143,7 @@ class OllivandersSchedule implements Runnable
    private void stationarySched ()
    {
       List<StationarySpellObj> stationary = p.getStationary();
-      List<StationarySpellObj> stationary2 = new ArrayList<StationarySpellObj>(stationary);
+      List<StationarySpellObj> stationary2 = new ArrayList<>(stationary);
       if (stationary2.size() > 0)
       {
          for (StationarySpellObj stat : stationary2)
@@ -164,7 +171,7 @@ class OllivandersSchedule implements Runnable
       {
          for (Player player : world.getPlayers())
          {
-            List<ItemStack> geminioIS = new ArrayList<ItemStack>();
+            List<ItemStack> geminioIS = new ArrayList<>();
             ListIterator<ItemStack> invIt = player.getInventory().iterator();
             while (invIt.hasNext())
             {
@@ -210,7 +217,7 @@ class OllivandersSchedule implements Runnable
       int stackSize = item.getAmount();
       ItemMeta meta = item.getItemMeta();
       List<String> lore = meta.getLore();
-      ArrayList<String> newLore = new ArrayList<String>();
+      ArrayList<String> newLore = new ArrayList<>();
       for (int i = 0; i < lore.size(); i++)
       {
          if (lore.get(i).contains("Geminio "))
@@ -266,8 +273,9 @@ class OllivandersSchedule implements Runnable
       {
          for (Player player : world.getPlayers())
          {
-            OPlayer oplayer = p.getOPlayer(player);
-            Set<REPELLO_MUGGLETON> muggletons = new HashSet<REPELLO_MUGGLETON>();
+            O2Player o2p = p.getO2Player(player);
+
+            Set<REPELLO_MUGGLETON> muggletons = new HashSet<>();
             for (StationarySpellObj stat : p.getStationary())
             {
                if (stat instanceof REPELLO_MUGGLETON)
@@ -278,10 +286,11 @@ class OllivandersSchedule implements Runnable
                   }
                }
             }
+
             boolean hasCloak = hasCloak(player);
             if (hasCloak || muggletons.size() > 0)
             {
-               oplayer.setMuggleton(true);
+               o2p.setMuggleton(true);
 
                for (Player viewer : world.getPlayers())
                {
@@ -313,7 +322,7 @@ class OllivandersSchedule implements Runnable
                   }
                }
 
-               if (!oplayer.isInvisible())
+               if (!o2p.isInvisible())
                {
                   for (Entity entity : player.getWorld().getEntities())
                   {
@@ -340,17 +349,19 @@ class OllivandersSchedule implements Runnable
                      }
                   }
                }
-               oplayer.setInvisible(hasCloak);
+               o2p.setInvisible(hasCloak);
             }
-            else if (oplayer.isInvisible() || oplayer.isMuggleton())
+            else if (o2p.isInvisible() || o2p.isMuggleton())
             {
                for (Player viewer : world.getPlayers())
                {
                   viewer.showPlayer(player);
                }
-               oplayer.setInvisible(false);
-               oplayer.setMuggleton(false);
+               o2p.setInvisible(false);
+               o2p.setMuggleton(false);
             }
+
+            p.setO2Player(player, o2p);
          }
       }
    }
@@ -396,12 +407,11 @@ class OllivandersSchedule implements Runnable
             {
                return;
             }
-            double experience = p.getOPlayer(player).getSpellCount().get(Spells.INFORMOUS);
+            double experience = p.getO2Player(player).getSpellCount(Spells.INFORMOUS);
             if (Math.random() < experience / 1000.0)
             {
                //The scrying is successful
                Prophecy prophecy = new Prophecy(player);
-               //Prophecy prophecy = new Prophecy(player, 2000, 30000);
                p.getProphecy().add(prophecy);
                String message = "";
                List<String> lore = prophecy.toLore();
@@ -488,7 +498,7 @@ class OllivandersSchedule implements Runnable
             {
                if (player.getGameMode() == GameMode.SURVIVAL && (this.onBroom.contains(player.getUniqueId())))
                {
-                  for (OEffect effect : p.getOPlayer(player).getEffects())
+                  for (OEffect effect : p.getO2Player(player).getEffects())
                   {
                      if (effect instanceof VENTO_FOLIO)
                      {

@@ -10,6 +10,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  * Substantive Charm - https://github.com/Azami7/Ollivanders2/issues/96
  * Rictusempra - https://github.com/Azami7/Ollivanders2/issues/92
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_5 extends Book

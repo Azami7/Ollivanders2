@@ -10,6 +10,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  * Orchideous - https://github.com/Azami7/Ollivanders2/issues/56
  * Four-Points Spell - https://github.com/Azami7/Ollivanders2/issues/97
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends Book

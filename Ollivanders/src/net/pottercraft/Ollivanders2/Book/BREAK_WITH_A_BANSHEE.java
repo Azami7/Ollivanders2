@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Break with a Banshee - 2nd year Defense Against the Dark Arts book
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class BREAK_WITH_A_BANSHEE extends Book

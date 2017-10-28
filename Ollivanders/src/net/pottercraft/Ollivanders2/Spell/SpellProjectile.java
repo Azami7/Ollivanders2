@@ -3,7 +3,6 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Effects;
 import net.pottercraft.Ollivanders2.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Spell.Spells;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,8 +42,8 @@ public abstract class SpellProjectile
    public int spellUses;
    public double usesModifier;
    public Effect moveEffect = Effect.STEP_SOUND;
-   public Material moveEffectData = Material.SPONGE;
-   public Set<Block> changed = new HashSet<Block>();
+   public Material moveEffectData = Material.GLOWSTONE;
+   public Set<Block> changed = new HashSet<>();
 
    /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
@@ -74,7 +73,8 @@ public abstract class SpellProjectile
       spellUses = p.getSpellNum(player, name);
       usesModifier = getusesModifier();
       boolean memoryPotion = false;
-      for (OEffect effect : p.getOPlayer(player).getEffects())
+
+      for (OEffect effect : p.getO2Player(player).getEffects())
       {
          if (effect.name == Effects.MEMORY_POTION)
          {
@@ -85,27 +85,13 @@ public abstract class SpellProjectile
             usesModifier *= 2;
          }
       }
-      if (p.getOPlayer(player).getSpellCount().containsKey(name))
+
+      p.incSpellCount(player, name);
+      if (memoryPotion)
       {
          p.incSpellCount(player, name);
-         if (memoryPotion)
-         {
-            p.incSpellCount(player, name);
-         }
       }
-      else
-      {
-         Map<Spells, Integer> spellCount = p.getOPlayer(player).getSpellCount();
-         if (memoryPotion)
-         {
-            spellCount.put(name, 2);
-         }
-         else
-         {
-            spellCount.put(name, 1);
-         }
-         p.getOPlayer(player).setSpellCount(spellCount);
-      }
+
       if (!p.canCast(player, name, true))
       {
          kill();
@@ -261,7 +247,7 @@ public abstract class SpellProjectile
    {
       Block center = loc.getBlock();
       int blockRadius = (int) (radius + 1);
-      List<Block> blockList = new ArrayList<Block>();
+      List<Block> blockList = new ArrayList<>();
       for (int x = -blockRadius; x <= blockRadius; x++)
       {
          for (int y = -blockRadius; y <= blockRadius; y++)

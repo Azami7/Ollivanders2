@@ -15,8 +15,8 @@ import java.util.Map;
  */
 public class OPlayer implements Serializable
 {
-   private Map<Spells, Integer> SpellCount = new HashMap<Spells, Integer>();
-   private List<OEffect> effects = new ArrayList<OEffect>();
+   private Map<Spells, Integer> SpellCount = new HashMap<>();
+   private List<OEffect> effects = new ArrayList<>();
    //This is the spell loaded into the wand for casting with left click
    private Spells spell;
    private int souls;

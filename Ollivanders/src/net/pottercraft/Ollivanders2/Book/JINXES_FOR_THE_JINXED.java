@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Jinxes for the Jinxed
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class JINXES_FOR_THE_JINXED extends Book

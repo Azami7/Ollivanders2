@@ -7,9 +7,9 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  * Standard Book of Spells Grade 3
  *
  * Missing spells:
- * Lapifors - https://github.com/Azami7/Ollivanders2/issues/51
  * Snufflifors - https://github.com/Azami7/Ollivanders2/issues/94
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_3 extends Book
@@ -27,7 +27,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_3 extends Book
       spellList.add(Spells.REPARO);
       spellList.add(Spells.CARPE_RETRACTUM);
       spellList.add(Spells.PACK);
-      //spellList.add(Spells.LAPIFORS);
+      spellList.add(Spells.LAPIFORS);
       //spellList.add(Spells.SNUFFLIFORS);
    }
 }

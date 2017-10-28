@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -13,11 +14,9 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
-public abstract class GlaciusSuper extends Charms
+public abstract class GlaciusSuper extends BlockTransfigurationSuper
 {
-   boolean move;
-   int strengthModifier = 1;
-   double radiusModifier = 1;
+   protected O2MagicBranch branch = O2MagicBranch.CHARMS;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -38,9 +37,39 @@ public abstract class GlaciusSuper extends Charms
    public GlaciusSuper (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
-      move = true;
+
+      if (usesModifier > 50)
+      {
+         radius = 5;
+      }
+      else if (usesModifier < 10)
+      {
+         radius = 1;
+      }
+      else
+      {
+         radius = (int) (usesModifier / 10);
+      }
+      permanent = false;
+
+      spellDuration = (int)(usesModifier * 1200);
+
+      transfigurationMap.put(Material.FIRE, Material.AIR);
+      transfigurationMap.put(Material.WATER, Material.ICE);
+      transfigurationMap.put(Material.STATIONARY_WATER, Material.ICE);
+      transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
+      transfigurationMap.put(Material.STATIONARY_LAVA, Material.OBSIDIAN);
+      transfigurationMap.put(Material.ICE, Material.PACKED_ICE);
+
+      materialWhitelist.add(Material.FIRE);
+      materialWhitelist.add(Material.WATER);
+      materialWhitelist.add(Material.STATIONARY_WATER);
+      materialWhitelist.add(Material.LAVA);
+      materialWhitelist.add(Material.STATIONARY_LAVA);
+      materialWhitelist.add(Material.ICE);
    }
 
+   /*
    @Override
    public void checkEffect ()
    {
@@ -116,4 +145,5 @@ public abstract class GlaciusSuper extends Charms
          }
       }
    }
+   */
 }

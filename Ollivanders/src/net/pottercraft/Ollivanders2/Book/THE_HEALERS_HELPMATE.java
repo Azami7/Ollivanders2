@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * The Healer's Helpmate
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class THE_HEALERS_HELPMATE extends Book

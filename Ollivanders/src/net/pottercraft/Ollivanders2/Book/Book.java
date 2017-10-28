@@ -21,6 +21,7 @@ import java.util.List;
  * Characters per page - 256, newlines count as 2 characters
  * Characters per line - 16-18 depending on the exact characters
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public abstract class Book

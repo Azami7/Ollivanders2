@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Curses and Counter-Curses -
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class CURSES_AND_COUNTERCURSES extends Book

@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Achievements in Charming - Charms book for 1st year.
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class ACHIEVEMENTS_IN_CHARMING extends Book
@@ -17,5 +18,7 @@ public class ACHIEVEMENTS_IN_CHARMING extends Book
       branch = O2MagicBranch.CHARMS;
 
       spellList.add(Spells.LUMOS);
+      spellList.add(Spells.WINGARDIUM_LEVIOSA);
+      spellList.add(Spells.SPONGIFY);
    }
 }

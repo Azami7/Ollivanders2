@@ -5,6 +5,9 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 
 /**
  * Practical Defensive Magic - sent to Harry by Sirius and Lupin in his 5th year
+ *
+ * @since 2.2.4
+ * @author Azami7
  */
 public class PRACTICAL_DEFENSIVE_MAGIC extends Book
 {

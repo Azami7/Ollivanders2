@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Modern Magical Transportation
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class MODERN_MAGICAL_TRANSPORTATION extends Book

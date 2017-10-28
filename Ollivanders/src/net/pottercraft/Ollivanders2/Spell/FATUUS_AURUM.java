@@ -1,8 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.craftbukkit.libs.it.unimi.dsi.fastutil.io.MeasurableInputStream;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -12,8 +11,10 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author Azami7
  */
-public final class FATUUS_AURUM extends MetamorfosiSuper
+public final class FATUUS_AURUM extends BlockTransfigurationSuper
 {
+   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -39,7 +40,10 @@ public final class FATUUS_AURUM extends MetamorfosiSuper
    {
       super(plugin, player, name, rightWand);
 
-      targetType = Material.STONE;
-      transformationType = Material.GOLD_BLOCK;
+      materialWhitelist.add(Material.STONE);
+      transfigureType = Material.GOLD_BLOCK;
+      permanent = false;
+      spellDuration = (int)(2400 * usesModifier);
+      radius = 1;
    }
 }

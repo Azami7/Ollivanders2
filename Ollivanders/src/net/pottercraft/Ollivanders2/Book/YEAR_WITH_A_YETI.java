@@ -8,6 +8,7 @@ import net.pottercraft.Ollivanders2.O2MagicBranch;
  * Missing spells:
  * Mimblewimble - https://github.com/Azami7/Ollivanders2/issues/54
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class YEAR_WITH_A_YETI extends Book

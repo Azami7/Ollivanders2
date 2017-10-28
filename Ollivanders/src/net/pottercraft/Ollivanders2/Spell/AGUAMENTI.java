@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -9,13 +9,13 @@ import org.bukkit.entity.Player;
 /**
  * Spell which places a block of water against the targeted block.
  *
+ * @since 2.2.4
  * @version Ollivanders2
- * @author lownes
  * @author Azami7
  */
-public final class AGUAMENTI extends Charms
+public final class AGUAMENTI extends BlockTransfigurationSuper
 {
-   boolean move;
+   protected O2MagicBranch branch = O2MagicBranch.CHARMS;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -41,45 +41,29 @@ public final class AGUAMENTI extends Charms
    public AGUAMENTI (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
-      move = true;
-   }
 
-   public void checkEffect ()
-   {
-      if (move)
-      {
-         move();
-         if (getBlock().getType() != Material.AIR)
-         {
-            Block block = location.subtract(super.vector).getBlock();
-            block.setType(Material.WATER);
-            changed.add(block);
-            kill = false;
-            move = false;
-            lifeTicks = (int) (-(usesModifier * 1200));
-         }
-      }
-      else
-      {
-         lifeTicks++;
-      }
-      if (lifeTicks >= 159)
-      {
-         revert();
-         kill();
-      }
+      transfigureType = Material.WATER;
+      spellDuration = (int)(1200 * usesModifier);
+      permanent = false;
+      radius = 1;
+
+      materialWhitelist.add(Material.AIR);
    }
 
    @Override
-   public void revert ()
+   protected Block getTargetBlock ()
    {
-      for (Block block : changed)
+      Block center = getBlock();
+
+      if (center.getType() != Material.AIR)
       {
-         Material mat = block.getType();
-         if (mat == Material.WATER || mat == Material.STATIONARY_WATER)
-         {
-            block.setType(Material.AIR);
-         }
+         p.getLogger().info("finding aguamenti block");
+         // we want the air block before this block
+         return location.subtract(super.vector).getBlock();
+      }
+      else
+      {
+         return null;
       }
    }
 }

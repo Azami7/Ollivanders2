@@ -17,6 +17,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  * Imperio
  * Dementors
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class CONFRONTING_THE_FACELESS extends Book

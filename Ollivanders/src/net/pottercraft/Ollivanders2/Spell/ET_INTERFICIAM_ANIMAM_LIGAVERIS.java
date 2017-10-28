@@ -61,7 +61,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
          {
             futureHealth = ((Attributable) player).getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0;
          }
-         int souls = p.getOPlayer(player).getSouls();
+         int souls = p.getO2Player(player).getSouls();
          //If the player's soul is split enough and they can survive
          //making another horcrux, then make a new one and damage them
          if (futureHealth - 1 > 0 && souls > 0)
@@ -71,7 +71,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
             p.addStationary(horcrux);
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
                   player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0);
-            p.getOPlayer(player).subSoul();
+            p.getO2Player(player).subtractSoul();
             player.damage(1.0);
             kill();
          }
@@ -96,7 +96,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
                      tp.setY(tp.getY() + 1);
                      player.teleport(tp);
                      player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-                     p.getOPlayer(player).resetEffects();
+                     p.getO2Player(player).resetEffects();
                      p.remStationary(stationary);
                      return;
                   }

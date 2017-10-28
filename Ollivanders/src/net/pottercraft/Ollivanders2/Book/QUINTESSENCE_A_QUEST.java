@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Quintessence: A Quest - 5th year Charms book
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public class QUINTESSENCE_A_QUEST extends Book

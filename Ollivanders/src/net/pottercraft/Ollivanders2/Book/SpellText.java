@@ -12,6 +12,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * The text and flavor text for all Ollivanders2 spells.  This can be used for writing books, creating lessons, or
  * other in-game spell learning.
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public final class SpellText

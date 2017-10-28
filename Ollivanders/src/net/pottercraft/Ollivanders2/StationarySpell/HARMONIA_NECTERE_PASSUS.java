@@ -21,7 +21,7 @@ import net.pottercraft.Ollivanders2.OLocation;
 public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements StationarySpell
 {
    private final OLocation twin;
-   private Set<UUID> teleported = new HashSet<UUID>();
+   private Set<UUID> teleported = new HashSet<>();
 
    public HARMONIA_NECTERE_PASSUS (Player player, Location location, StationarySpells name, Integer radius,
                                    Integer duration, Location twin)

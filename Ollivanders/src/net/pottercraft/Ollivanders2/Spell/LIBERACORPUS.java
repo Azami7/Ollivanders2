@@ -45,9 +45,9 @@ public final class LIBERACORPUS extends Charms
       {
          if (live instanceof Player)
          {
-            Player ply = (Player) live;
-            OPlayer op = p.getOPlayer(ply);
-            for (OEffect effect : op.getEffects())
+            Player player = (Player) live;
+            O2Player o2p = p.getO2Player(player);
+            for (OEffect effect : o2p.getEffects())
             {
                if (effect.name == Effects.LEVICORPUS)
                {

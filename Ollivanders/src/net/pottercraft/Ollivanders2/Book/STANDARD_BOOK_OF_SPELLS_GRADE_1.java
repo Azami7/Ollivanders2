@@ -6,9 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Standard Book of Spells Grade 1
  *
- * Missing spells:
- * Spongify - https://github.com/Azami7/Ollivanders2/issues/93
- *
+ * @since 2.2.4
  * @author Azami7
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_1 extends Book

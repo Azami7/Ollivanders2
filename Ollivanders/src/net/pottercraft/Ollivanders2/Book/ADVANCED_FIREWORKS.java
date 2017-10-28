@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 /**
  * Advanced Fireworks for Fun and Profit
  *
+ * @since 2.2.4
  * @author Azami7
  */
 public final class ADVANCED_FIREWORKS extends Book

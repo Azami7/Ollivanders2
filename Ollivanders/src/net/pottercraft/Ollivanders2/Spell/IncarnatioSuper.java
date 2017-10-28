@@ -32,11 +32,11 @@ public abstract class IncarnatioSuper extends Transfiguration
       {
          if (live instanceof Player)
          {
-            Player ply = (Player)live;
-            OPlayer oply = p.getOPlayer(ply);
+            Player player = (Player)live;
+            O2Player o2p = p.getO2Player(player);
             effect.duration = (int)(usesModifier*1200);
-            oply.addEffect(effect);
-            p.setOPlayer(ply, oply);
+            o2p.addEffect(effect);
+            p.setO2Player(player, o2p);
             kill();
          }
       }

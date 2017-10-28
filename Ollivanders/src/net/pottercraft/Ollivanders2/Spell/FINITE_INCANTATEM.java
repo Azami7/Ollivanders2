@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.pottercraft.Ollivanders2.OEffect;
-import net.pottercraft.Ollivanders2.OPlayer;
+import net.pottercraft.Ollivanders2.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -56,8 +56,8 @@ public final class FINITE_INCANTATEM extends Charms
          if (live instanceof Player)
          {
             Player ply = (Player) live;
-            OPlayer op = p.getOPlayer(ply);
-            for (OEffect effect : op.getEffects())
+            O2Player o2p = p.getO2Player(ply);
+            for (OEffect effect : o2p.getEffects())
             {
                effect.age((int) (usesModifier * 1200));
             }
