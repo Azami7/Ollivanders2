@@ -21,7 +21,7 @@ public class SPONGIFY extends BlockTransfigurationSuper
    {
       super();
 
-      flavorText.add("\"Good morning class. Today's lesson will most assuredly involve learning how to cast the Softening Charm, Spongify.\" -Filius Flitwick");
+      flavorText.add("\"Today's lesson will most assuredly involve learning how to cast the Softening Charm, Spongify.\" -Filius Flitwick");
       flavorText.add("The Softening Charm");
 
       text = "Turns the blocks in a radius in to slime blocks.";

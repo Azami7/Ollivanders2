@@ -8,10 +8,12 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * Created by Aazmi7 on 6/29/17. Imported from iarepandemonium/Ollivanders.
  *
+ * @version Ollivanders2
+ * @since 2.5.3
  * @author lownes
  * @author Azami7
  */
-public final class LAPIDO extends MetamorfosiSuper
+public final class LAPIDO extends BlockTransfigurationSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -36,7 +38,7 @@ public final class LAPIDO extends MetamorfosiSuper
    {
       super(plugin, player, name, rightWand);
 
-      targetType = Material.COBBLESTONE;
-      transformationType = Material.STONE;
+      transfigureType = Material.STONE;
+      materialWhitelist.add(Material.COBBLESTONE);
    }
 }

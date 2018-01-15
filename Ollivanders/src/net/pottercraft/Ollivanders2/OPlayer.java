@@ -13,6 +13,7 @@ import java.util.Map;
  *
  * @author lownes
  */
+@Deprecated
 public class OPlayer implements Serializable
 {
    private Map<Spells, Integer> SpellCount = new HashMap<>();

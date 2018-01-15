@@ -7,7 +7,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import org.bukkit.Effect;
@@ -71,7 +70,7 @@ public abstract class SpellProjectile
       p = plugin;
       this.rightWand = rightWand;
       spellUses = p.getSpellNum(player, name);
-      usesModifier = getusesModifier();
+      usesModifier = getUsesModifier();
       boolean memoryPotion = false;
 
       for (OEffect effect : p.getO2Player(player).getEffects())
@@ -230,9 +229,10 @@ public abstract class SpellProjectile
     *
     * @return Uses modifier
     */
-   private double getusesModifier ()
+   private double getUsesModifier ()
    {
       double modifier = Math.sqrt(p.getSpellNum(player, name)) / rightWand;
+
       return modifier;
    }
 
@@ -276,5 +276,24 @@ public abstract class SpellProjectile
    public void revert ()
    {
 
+   }
+
+   /**
+    * Get the target block for the spell.
+    *
+    * @return the target block
+    */
+   protected Block getTargetBlock ()
+   {
+      Block center = getBlock();
+
+      if (center.getType() != Material.AIR)
+      {
+         return center;
+      }
+      else
+      {
+         return null;
+      }
    }
 }

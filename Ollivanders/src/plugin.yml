@@ -1,16 +1,16 @@
 name: Ollivanders2
 main: net.pottercraft.Ollivanders2.Ollivanders2
-version: 2.2.5
+version: 2.2.6
 authors: [Azami7, Lil_Miss_Giggles]
 website: https://www.spigotmc.org/resources/ollivanders2.38992/
 softdepend: [WorldGuard]
 commands:
   Ollivanders2:
-    description: This is the main command for the Ollivanders2 plugin
+    description: This is the main admin command for the Ollivanders2 plugin
     usage: Example usage /Ollivanders2
 
   Okit:
-    description: This command gives an op the starting kit.
+    description: DEPRECATED. This command gives an op the starting kit.
     usage: Example usage /Okit
 
   Quidd:

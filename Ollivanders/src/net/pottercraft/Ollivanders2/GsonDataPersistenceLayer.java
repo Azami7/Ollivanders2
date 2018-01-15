@@ -12,6 +12,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
 {
    Gson gson;
    Ollivanders2 p;
+   Ollivanders2Common common;
 
    private String saveDirectory = "plugins/Ollivanders2";
    private String housesJSONFile = "O2Houses.txt";
@@ -22,6 +23,8 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
       p = plugin;
+
+      common = new Ollivanders2Common(p);
    }
 
    @Override
@@ -77,21 +80,13 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
          if (house == null || playerID == null)
             continue;
 
-         UUID pid;
-         O2Houses.O2HouseType hType;
-
-         try
+         UUID pid = common.uuidFromString(playerID);
+         if (pid == null)
          {
-            pid = UUID.fromString(playerID);
-         }
-         catch (Exception e)
-         {
-            p.getLogger().warning("Failed to convert uuid " + playerID);
-            if (p.debug)
-               e.printStackTrace();
-
             continue;
          }
+
+         O2Houses.O2HouseType hType;
 
          try
          {
@@ -150,17 +145,9 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
             continue;
          }
 
-         try
+         pts = common.integerFromString(points);
+         if (pts == null)
          {
-            int p = Integer.parseInt(points);
-            pts = new Integer(p);
-         }
-         catch (Exception e)
-         {
-            p.getLogger().warning("Failed to convert points " + points);
-            if (p.debug)
-               e.printStackTrace();
-
             continue;
          }
 

@@ -19,18 +19,20 @@ public class O2Players
    private Map<UUID, O2Player> O2PlayerMap = new HashMap<>();
 
    private Ollivanders2 p;
+   private Ollivanders2Common common;
 
    private String nameLabel = "Name";
    private String woodLabel = "Wood";
    private String coreLabel = "Core";
-   private String wandSpellLabel = "WandSpell";
    private String soulsLabel = "Souls";
    private String invisibleLabel = "Invisible";
    private String muggletonLabel = "Muggleton";
+   private String foundWandLabel = "Found_Wand";
 
    public O2Players (Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -124,22 +126,32 @@ public class O2Players
       // load players from the save file, if it exists
       Map <String, Map<String, String>> serializedMap = gsonLayer.readO2Players();
 
-      if (serializedMap == null || serializedMap.size() < 1)
+      if (serializedMap != null)
       {
-         p.getLogger().info("No saved O2Players, checking for legacy OPlayers save file.");
-         Map<UUID, OPlayer> OPlayerMap = new HashMap<>();
-         try
-         {
-            OPlayerMap = (HashMap<UUID, OPlayer>) Ollivanders2.SLAPI.load("plugins/Ollivanders2/OPlayerMap.bin");
-            p.getLogger().info("Loaded save file OPlayerMap.bin");
-         }
-         catch (Exception e)
-         {
-            p.getLogger().warning("Did not find OPlayerMap.bin");
-         }
+         Map<UUID, O2Player> deserializedMap = deserializeO2Players(serializedMap);
 
-         updateLegacyPlayers(OPlayerMap);
+         if (deserializedMap != null && deserializedMap.size() > 0)
+            O2PlayerMap = deserializedMap;
       }
+      else
+      {
+         p.getLogger().info("No saved O2Players.");
+      }
+
+      p.getLogger().info("Checking for legacy OPlayers save file...");
+      Map<UUID, OPlayer> OPlayerMap = new HashMap<>();
+      try
+      {
+         p.getLogger().info("Loading save file OPlayerMap.bin...");
+         OPlayerMap = (HashMap<UUID, OPlayer>) Ollivanders2.SLAPI.load("plugins/Ollivanders2/OPlayerMap.bin");
+         p.getLogger().info("Found " + OPlayerMap.size() + " legacy players.");
+      }
+      catch (Exception e)
+      {
+         p.getLogger().warning("Did not find OPlayerMap.bin");
+      }
+
+      updateLegacyPlayers(OPlayerMap);
    }
 
    private void updateLegacyPlayers (Map<UUID, OPlayer> OPlayerMap)
@@ -180,6 +192,10 @@ public class O2Players
          }
 
          O2PlayerMap.put(pid, o2p);
+         if (p.debug)
+         {
+            p.getLogger().info("Loaded player " + o2p.getPlayerName());
+         }
       }
    }
 
@@ -192,7 +208,6 @@ public class O2Players
     *    Name : playerName
     *    WandWood : wandWood
     *    WandCore : wandCore
-    *    WandSpell: spell
     *    Souls : souls
     *    Invisible : invisible
     *    Muggleton : muggleton
@@ -231,16 +246,6 @@ public class O2Players
          playerData.put(coreLabel, o2p.getWandCore());
 
          /**
-          * Wand Spell
-          */
-         //OPlayer oPlayer = p.getOPlayer(pid);
-         Spells wandSpell = o2p.getSpell();
-         if (wandSpell != null)
-         {
-            playerData.put(wandSpellLabel, wandSpell.toString());
-         }
-
-         /**
           * Souls
           */
          Integer souls = new Integer(o2p.getSouls());
@@ -249,14 +254,29 @@ public class O2Players
          /**
           * Invisible
           */
-         Boolean invisible = new Boolean(o2p.isInvisible());
-         playerData.put(invisibleLabel, invisible.toString());
+         if (o2p.isInvisible())
+         {
+            Boolean invisible = new Boolean(true);
+            playerData.put(invisibleLabel, invisible.toString());
+         }
 
          /**
           * Muggleton
           */
-         Boolean muggleton = new Boolean(o2p.isMuggleton());
-         playerData.put(muggletonLabel, muggleton.toString());
+         if (o2p.isMuggleton())
+         {
+            Boolean muggleton = new Boolean(true);
+            playerData.put(muggletonLabel, muggleton.toString());
+         }
+
+         /**
+          * Found Wand
+          */
+         if (o2p.foundWand())
+         {
+            Boolean foundWand = new Boolean(true);
+            playerData.put(foundWandLabel, foundWand.toString());
+         }
 
          /**
           * Spell Experience
@@ -274,5 +294,130 @@ public class O2Players
       }
 
       return serializedMap;
+   }
+
+   /**
+    * Deserialize an O2Player map
+    *
+    * Map structure:
+    * Key - UUID
+    * ArrayList {{
+    *    Name : playerName
+    *    WandWood : wandWood
+    *    WandCore : wandCore
+    *    WandSpell: spell
+    *    Souls : souls
+    *    Invisible : invisible
+    *    Muggleton : muggleton
+    *    [Spell] : [Count]
+    * }};
+    *
+    * @param map
+    * @return the deserialized map of O2Players, null if map could not be deserialized
+    */
+   private Map<UUID, O2Player> deserializeO2Players (Map <String, Map<String, String>> map)
+   {
+      Map<UUID, O2Player> deserializedMap = new HashMap<>();
+
+      if (map == null || map.size() < 1)
+      {
+         return null;
+      }
+
+      for (Entry<String, Map<String, String>> e : map.entrySet())
+      {
+         UUID pid = common.uuidFromString(e.getKey());
+         if (pid == null)
+         {
+            continue;
+         }
+
+         Map<String, String> playerData = e.getValue();
+         if (playerData == null || playerData.size() < 1)
+         {
+            continue;
+         }
+
+         // get player name
+         String playerName = playerData.get(nameLabel);
+         if (playerName == null || playerName.length() < 1)
+         {
+            continue;
+         }
+
+         O2Player player = new O2Player(pid, playerName, p);
+
+         for (Entry<String, String> data : playerData.entrySet())
+         {
+            String label = data.getKey();
+            String value = data.getValue();
+
+            if (label.equalsIgnoreCase(nameLabel))
+            {
+               continue;
+            }
+            else if (label.equalsIgnoreCase(woodLabel))
+            {
+               player.setWandWood(value);
+            }
+            else if (label.equalsIgnoreCase(coreLabel))
+            {
+               player.setWandCore(value);
+            }
+            else if (label.equalsIgnoreCase(soulsLabel))
+            {
+               Integer souls = common.integerFromString(value);
+               if (souls != null)
+               {
+                  player.setSouls(souls.intValue());
+               }
+            }
+            else if (label.equalsIgnoreCase(muggletonLabel))
+            {
+               Boolean muggleton = common.booleanFromString(value);
+               if (muggleton != null)
+               {
+                  player.setMuggleton(muggleton.booleanValue());
+               }
+            }
+            else if (label.equalsIgnoreCase(invisibleLabel))
+            {
+               Boolean invisible = common.booleanFromString(value);
+               if (invisible != null)
+               {
+                  player.setInvisible(invisible.booleanValue());
+               }
+            }
+            else if (label.equalsIgnoreCase(foundWandLabel))
+            {
+               Boolean foundWand = common.booleanFromString(value);
+               if (foundWand != null)
+               {
+                  player.setFoundWand(foundWand.booleanValue());
+               }
+            }
+            else
+            {
+               // it is a spell
+               Spells spell = common.spellsFromString(label);
+               if (spell == null)
+               {
+                  continue;
+               }
+
+               Integer count = common.integerFromString(value);
+               if (count != null)
+               {
+                  player.setSpellCount(spell, count.intValue());
+               }
+            }
+         }
+
+         deserializedMap.put(pid, player);
+         if (p.debug)
+            p.getLogger().info("Loaded player " + player.getPlayerName());
+      }
+
+      return deserializedMap;
    }
 }

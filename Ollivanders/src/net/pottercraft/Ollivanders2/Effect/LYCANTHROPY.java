@@ -76,7 +76,7 @@ public class LYCANTHROPY extends OEffect implements Effect
                      {
                         for (Player other : owner.getWorld().getPlayers())
                         {
-                           other.hidePlayer(owner);
+                           other.hidePlayer(p, owner);
                         }
                      }
                      return;
@@ -94,7 +94,7 @@ public class LYCANTHROPY extends OEffect implements Effect
          {
             for (Player other : owner.getWorld().getPlayers())
             {
-               other.showPlayer(owner);
+               other.showPlayer(p, owner);
             }
             for (Entity entity : owner.getWorld().getEntities())
             {

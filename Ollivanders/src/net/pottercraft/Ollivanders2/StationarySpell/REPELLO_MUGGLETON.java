@@ -31,38 +31,38 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
             Material toMat = getBlock().getType();
             byte toDat = getBlock().getData();
             double viewDistance = Math.sqrt(2 * Math.pow(((Bukkit.getServer().getViewDistance() + 1) * 16), 2));
-            for (Player ply : getBlock().getWorld().getPlayers())
+            for (Player player : getBlock().getWorld().getPlayers())
             {
-               if (ply.isPermissionSet("Ollivanders2.BYPASS"))
+               if (player.isPermissionSet("Ollivanders2.BYPASS"))
                {
-                  if (ply.hasPermission("Ollivanders2.BYPASS"))
+                  if (player.hasPermission("Ollivanders2.BYPASS"))
                   {
                      continue;
                   }
                }
-               if (ply.getLocation().distance(location.toLocation()) < viewDistance && !isInside(ply.getLocation()))
+               if (player.getLocation().distance(location.toLocation()) < viewDistance && !isInside(player.getLocation()))
                {
                   for (Block block : getBlocksInRadius(location.toLocation(), radius))
                   {
-                     ply.sendBlockChange(block.getLocation(), toMat, toDat);
+                     player.sendBlockChange(block.getLocation(), toMat, toDat);
                   }
                }
-               else if (isInside(ply.getLocation()))
+               else if (isInside(player.getLocation()))
                {
                   for (Block block : getBlocksInRadius(location.toLocation(), radius))
                   {
-                     ply.sendBlockChange(block.getLocation(), block.getType(), block.getData());
+                     player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
                   }
                }
             }
          }
          if (duration <= 1)
          {
-            for (Player ply : getBlock().getWorld().getPlayers())
+            for (Player player : getBlock().getWorld().getPlayers())
             {
                for (Block block : getBlocksInRadius(location.toLocation(), radius))
                {
-                  ply.sendBlockChange(block.getLocation(), block.getType(), block.getData());
+                  player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
                }
             }
          }

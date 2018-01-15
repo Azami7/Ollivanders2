@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.Map;
 import java.util.UUID;
 
 import Quidditch.Arena;
@@ -270,11 +271,6 @@ public class Ollivanders2 extends JavaPlugin
    @EventHandler(priority = EventPriority.HIGHEST)
    public boolean onCommand (CommandSender sender, Command cmd, String commandLabel, String[] args)
    {
-      if (!isOp(sender))
-      {
-         return true;
-      }
-
       if (cmd.getName().equalsIgnoreCase("Ollivanders2") || cmd.getName().equalsIgnoreCase("Olli"))
       {
          return runOllivanders(sender, cmd, commandLabel, args);
@@ -286,6 +282,10 @@ public class Ollivanders2 extends JavaPlugin
       }
       else if (cmd.getName().equalsIgnoreCase("Quidd"))
       {
+         if (!isOp(sender))
+         {
+            return true;
+         }
          return runQuidd(sender, cmd, commandLabel, args);
       }
 
@@ -332,6 +332,11 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runOllivanders (CommandSender sender, Command cmd, String commandLabel, String[] args)
    {
+      if (!isOp(sender))
+      {
+         return playerSummary(sender);
+      }
+
       // parse args
       if (args.length >= 1)
       {
@@ -387,9 +392,69 @@ public class Ollivanders2 extends JavaPlugin
          {
             return runBooks(sender, args);
          }
+         else if (subCommand.equalsIgnoreCase("summary"))
+         {
+            return playerSummary(sender);
+         }
       }
 
       usageMessageOllivanders(sender);
+
+      return true;
+   }
+
+   /**
+    * Displays a summary of player info for the Ollivanders2 plugin
+    *
+    * @param sender
+    * @return true if the command worked, false otherwise.
+    */
+   private boolean playerSummary (CommandSender sender)
+   {
+      if (debug)
+         getLogger().info("Running playerSummary");
+
+      Player player = getServer().getPlayer(sender.getName());
+      O2Player o2Player = o2Players.getPlayer(player.getUniqueId());
+
+      String summary = new String("Ollivanders2 player summary:\n\n");
+
+      // wand type
+      if (o2Player.foundWand())
+      {
+         String wandlore = o2Player.getDestinedWandLore();
+         summary = summary + "\nWand Type: " + wandlore + "\n";
+      }
+
+      // sorted
+      if (houses.isSorted(player))
+      {
+         String house = houses.getHouseName(houses.getHouse(player));
+         summary = summary + "\nHouse: " + house + "\n";
+      }
+      else
+      {
+         summary = summary + "\nYou have not been sorted.\n";
+      }
+
+      // spells
+      Map<Spells, Integer> spells = o2Player.getKnownSpells();
+
+      if (spells.size() > 0)
+      {
+         summary = summary + "\nKnown Spells and Spell Level:";
+
+         for (Map.Entry<Spells, Integer> e : spells.entrySet())
+         {
+            summary = summary + "\n" + e.getKey().toString() + " " + e.getValue().toString();
+         }
+      }
+      else
+      {
+         summary = summary + "\nYou have not learned any spells.";
+      }
+
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + summary);
 
       return true;
    }
@@ -998,7 +1063,7 @@ public class Ollivanders2 extends JavaPlugin
       UUID pid = player.getUniqueId();
       O2Player o2p = o2Players.getPlayer(pid);
 
-      if (o2p == null && !(player instanceof NPC))
+      if (o2p == null)
       {
          o2Players.addPlayer(pid, player.getDisplayName());
 
@@ -1582,8 +1647,38 @@ public class Ollivanders2 extends JavaPlugin
             ItemStack bookItem = books.getReadingList();
             bookStack.add(bookItem);
          }
+         else if (args[1].equalsIgnoreCase("give"))
+         {
+            if (args.length < 4)
+            {
+               usageMessageBooks(sender);
+            }
+
+            //next arg is the target player
+            String targetName = args[2];
+            Player targetPlayer = getServer().getPlayer(targetName);
+            if (targetPlayer == null)
+            {
+               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                     + "Did not find player \"" + targetName + "\".\n");
+
+               return true;
+            }
+
+            // args after "book give [player]" are book name
+            String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
+            ItemStack bookItem = getBookFromArgs(subArgs, sender);
+
+            if (bookItem == null)
+            {
+               return true;
+            }
+
+            bookStack.add(bookItem);
+         }
          else
          {
+            /*
             // assume it is a book name
             String bookName = new String();
             for (int i = 1; i < args.length; i++)
@@ -1617,6 +1712,14 @@ public class Ollivanders2 extends JavaPlugin
             }
 
             ItemStack bookItem = books.getBook(bookType);
+            */
+
+            ItemStack bookItem = getBookFromArgs(args, sender);
+            if (bookItem == null)
+            {
+               return true;
+            }
+
             bookStack.add(bookItem);
          }
 
@@ -1631,6 +1734,53 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
+    * Get the book
+    * @param args
+    * @param sender
+    * @return
+    */
+   private ItemStack getBookFromArgs (String[] args, CommandSender sender)
+   {
+      ItemStack bookItem;
+
+      String bookName = new String();
+
+      for (int i = 1; i < args.length; i++)
+      {
+         String s = args[i].toUpperCase();
+
+         if (bookName.length() < 1)
+         {
+            //first word
+            bookName = s;
+         }
+         else
+         {
+            bookName = bookName + "_" + s;
+         }
+      }
+      if (debug)
+         getLogger().info("Getting book " + bookName);
+
+      Books bookType;
+      try
+      {
+         bookType = Books.valueOf(bookName);
+      }
+      catch (Exception e)
+      {
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+               + "No book named \"" + bookName + "\".\n");
+         usageMessageBooks(sender);
+         return null;
+      }
+
+      bookItem = books.getBook(bookType);
+
+      return bookItem;
+   }
+
+   /**
     * Usage message for Books subcommands.
     *
     * @since 2.2.4
@@ -1642,8 +1792,9 @@ public class Ollivanders2 extends JavaPlugin
             + "Books commands: "
             + "\nlist - gives a book that lists all available books"
             + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
-            + "\n<book title> - gives the book with this title, if it exists\n\n"
-            + "Example: /ollivanders2 book standard book of spells grade 1");
+            + "\n<book title> - gives you the book with this title, if it exists"
+            + "\ngive <player> <book title> - gives target player the book with this title, if it exists\n"
+            + "\nExample: /ollivanders2 book standard book of spells grade 1");
    }
 
    /**
@@ -1668,20 +1819,4 @@ public class Ollivanders2 extends JavaPlugin
    {
       houses.setChatColor(player);
    }
-
-   /**
-    * Add a new player to o2Players.
-    *
-    * @param pid
-    * @param name
-    */
-   /*
-   public void addO2Player (UUID pid, String name)
-   {
-      if (pid == null || name == null)
-         return;
-
-      o2Players.addPlayer(pid, name);
-   }
-   */
 }

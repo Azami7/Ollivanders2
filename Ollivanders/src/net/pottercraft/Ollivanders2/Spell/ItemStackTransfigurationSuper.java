@@ -3,8 +3,6 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
-import java.util.HashMap;
-
 /**
  * The super class for all ItemStack transfigurations.  This cannot be used on Entities or Blocks.
  *

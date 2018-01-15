@@ -13,6 +13,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
+//public final class EQUUSIFORS extends EntityTransfigurationSuper
 public final class EQUUSIFORS extends MetatrepoSuper
 {
    /**
@@ -38,5 +39,7 @@ public final class EQUUSIFORS extends MetatrepoSuper
       super(plugin, player, name, rightWand);
 
       animalShape = EntityType.HORSE;
+      //targetType = EntityType.HORSE;
+      //permanent = false;
    }
 }

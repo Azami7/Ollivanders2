@@ -1070,43 +1070,47 @@ public class OllivandersListener implements Listener
     * @param event - PlayerPickupItemEvent
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void portkeyPickUp (PlayerPickupItemEvent event)
+   public void portkeyPickUp (EntityPickupItemEvent event)
    {
-      Player player = event.getPlayer();
-      Item item = event.getItem();
-      ItemMeta meta = item.getItemStack().getItemMeta();
-      List<String> lore;
-      if (meta.hasLore())
+      Entity entity = event.getEntity();
+      if (entity instanceof Player)
       {
-         lore = meta.getLore();
-      }
-      else
-      {
-         lore = new ArrayList<String>();
-      }
-      for (String s : lore)
-      {
-         if (s.startsWith("Portkey"))
+         Player player = (Player) entity;
+         Item item = event.getItem();
+         ItemMeta meta = item.getItemStack().getItemMeta();
+         List<String> lore;
+         if (meta.hasLore())
          {
-            String[] portArray = s.split(" ");
-            Location to;
-            to = new Location(Bukkit.getServer().getWorld(UUID.fromString(portArray[1])),
-                  Double.parseDouble(portArray[2]),
-                  Double.parseDouble(portArray[3]),
-                  Double.parseDouble(portArray[4]));
-            to.setDirection(player.getLocation().getDirection());
-            for (Entity e : player.getWorld().getEntities())
+            lore = meta.getLore();
+         }
+         else
+         {
+            lore = new ArrayList<>();
+         }
+         for (String s : lore)
+         {
+            if (s.startsWith("Portkey"))
             {
-               if (player.getLocation().distance(e.getLocation()) <= 2)
+               String[] portArray = s.split(" ");
+               Location to;
+               to = new Location(Bukkit.getServer().getWorld(UUID.fromString(portArray[1])),
+                     Double.parseDouble(portArray[2]),
+                     Double.parseDouble(portArray[3]),
+                     Double.parseDouble(portArray[4]));
+               to.setDirection(player.getLocation().getDirection());
+               for (Entity e : player.getWorld().getEntities())
                {
-                  e.teleport(to);
+                  if (player.getLocation().distance(e.getLocation()) <= 2)
+                  {
+                     e.teleport(to);
+                  }
                }
+               player.teleport(to);
+               lore.remove(lore.indexOf(s));
+               meta.setLore(lore);
+               item.getItemStack().setItemMeta(meta);
+               return;
             }
-            player.teleport(to);
-            lore.remove(lore.indexOf(s));
-            meta.setLore(lore);
-            item.getItemStack().setItemMeta(meta);
-            return;
          }
       }
    }

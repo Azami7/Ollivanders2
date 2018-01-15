@@ -1,6 +1,5 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -37,7 +36,6 @@ public abstract class FumosSuper extends Charms
    public FumosSuper (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
-      moveEffect = Effect.SMOKE;
    }
 
    @Override

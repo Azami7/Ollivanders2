@@ -27,6 +27,7 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
     * If the transfiguration has taken place or not.
     */
    protected boolean isTransfigured = false;
+
    /**
     * A map of the transfigured blocks and their original types for use with revert()
     */
@@ -39,29 +40,36 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
     * The branch of magic this spell is - most likely Charms or Transfiguration
     */
    protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
+
    /**
     * If this is populated, any material type key will be changed to the value
     */
    protected HashMap<Material, Material> transfigurationMap = new HashMap<>();
+
    /**
     * The material type to change this block to.
     */
    protected Material transfigureType = Material.AIR;
+
    /**
     * Whether this transfiguration permanent or not.  Usually for Charms it is false and for Transfiguration it is true.
     */
    protected boolean permanent = true;
+
    /**
     * How many blocks out from the target are affects.  Usually for permanent spells this is 1.
     */
    protected int radius = 1;
+
    /**
     * Allows spell variants to change the radius of the spell.
     */
    protected double radiusModifier = 1.0;
+
    /**
     * If this is not permanent, how long it should last.
     */
+
    protected int spellDuration = 1200;
    /**
     * Allows spell variants to change the duration of this spell.
@@ -72,18 +80,22 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
     * The current duration of this spell.
     */
    protected int lifeTicks = 0;
+
    /**
     * A blacklist of Material types that will not be affected by this spell.  Only used if the whitelist is empty.
     */
    protected List<Material> materialBlacklist = new ArrayList<>();
+
    /**
     * A whitelist of Material types that will be affected by this spell.
     */
    protected List<Material> materialWhitelist = new ArrayList<>();
+
    /**
     * Flavor text for this spell in spellbooks, etc.  Optional.
     */
    protected ArrayList<String> flavorText = new ArrayList<>();
+
    /**
     * The description text for this spell in spell books.  Required or spell cannot be written in a book.
     */
@@ -130,14 +142,20 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
             }
 
             transfigure(target);
+
             if (!permanent)
             {
                spellDuration = (int) (spellDuration * durationModifier);
+               kill = false;
             }
-            kill = false;
+            else
+            {
+               spellDuration = 0;
+               kill();
+            }
          }
       }
-      // if the object has transfigured, check time to change back
+      // if the entity has transfigured, check time to change back
       else
       {
          // check time to live on the spell
@@ -153,25 +171,6 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
          }
 
          lifeTicks++;
-      }
-   }
-
-   /**
-    * Get the target block for the spell.
-    *
-    * @return the target block
-    */
-   protected Block getTargetBlock ()
-   {
-      Block center = getBlock();
-
-      if (center.getType() != Material.AIR)
-      {
-         return center;
-      }
-      else
-      {
-         return null;
       }
    }
 
@@ -195,8 +194,11 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
          }
 
          Material orig = b.getType();
-         // keep track of what the original block was
-         originalBlocks.put(b, orig);
+         // if not permanent, keep track of what the original block was
+         if (!permanent)
+         {
+            originalBlocks.put(b, orig);
+         }
 
          if (transfigurationMap.containsKey(orig))
          {
@@ -232,17 +234,16 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
       {
          canChange = false;
       }
-      else if (materialWhitelist.isEmpty()) // do not change if this block is in the blacklist
+      else if (materialBlacklist.contains(m)) // do not change if this block is in the blacklist
       {
-         // only check blacklist if whitelist is empty
-         if (materialBlacklist.contains(m))
+         canChange = false;
+      }
+      else if (!materialWhitelist.isEmpty()) // do not change if the whitelist exists and this block is not in it
+      {
+         if (!materialWhitelist.contains(m))
          {
             canChange = false;
          }
-      }
-      else if (!materialWhitelist.contains(m)) // do not change if this block is in the whitelist
-      {
-         canChange = false;
       }
 
       return canChange;

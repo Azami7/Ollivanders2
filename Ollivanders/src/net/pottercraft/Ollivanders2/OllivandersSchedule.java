@@ -128,7 +128,7 @@ class OllivandersSchedule implements Runnable
             ((Effect) effect).checkEffect(p, Bukkit.getPlayer(pid));
             if (effect.kill)
             {
-               o2p.remEffect(effect);
+               o2p.removeEffect(effect);
             }
          }
 
@@ -303,7 +303,8 @@ class OllivandersSchedule implements Runnable
                   }
                   if (muggletons.size() == 0)
                   {
-                     viewer.hidePlayer(player);
+                     viewer.hidePlayer(p, player);
+
                   }
                   else
                   {
@@ -311,12 +312,12 @@ class OllivandersSchedule implements Runnable
                      {
                         if (hasCloak || (!muggleton.isInside(viewer.getLocation()) && muggleton.active))
                         {
-                           viewer.hidePlayer(player);
+                           viewer.hidePlayer(p, player);
                            break;
                         }
                         else
                         {
-                           viewer.showPlayer(player);
+                           viewer.showPlayer(p, player);
                         }
                      }
                   }
@@ -355,7 +356,7 @@ class OllivandersSchedule implements Runnable
             {
                for (Player viewer : world.getPlayers())
                {
-                  viewer.showPlayer(player);
+                  viewer.showPlayer(p, player);
                }
                o2p.setInvisible(false);
                o2p.setMuggleton(false);

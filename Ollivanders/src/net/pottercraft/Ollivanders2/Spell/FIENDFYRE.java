@@ -46,7 +46,6 @@ public final class FIENDFYRE extends DarkArts
    public FIENDFYRE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
-      moveEffect = Effect.MOBSPAWNER_FLAMES;
       lifeTime = usesModifier * 4;
    }
 
