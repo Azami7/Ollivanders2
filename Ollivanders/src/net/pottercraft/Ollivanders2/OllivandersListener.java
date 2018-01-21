@@ -331,7 +331,7 @@ public class OllivandersListener implements Listener
             else
             {
                O2Player o2p = p.getO2Player(sender);
-               o2p.setSpell(spell);
+               o2p.setWandSpell(spell);
                p.setO2Player(sender, o2p);
             }
          }
@@ -614,12 +614,13 @@ public class OllivandersListener implements Listener
          return;
       }
 
-      //Casting an effect
+      /**
+       * A left click is used to cast a spell.
+       */
       if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
       {
-         //Map<UUID, OPlayer> opmap = p.getOPlayerMap();
          O2Player o2p = p.getO2Player(player);
-         Spells spell = o2p.getSpell();
+         Spells spell = o2p.getWandSpell();
          if (spell != null)
          {
             double wandC;
@@ -653,24 +654,48 @@ public class OllivandersListener implements Listener
                   p.getLogger().info("OllivandersListener:onPlayerInteract: allow cast spell");
                }
 
-               o2p.setSpell(null);
+               o2p.setWandSpell(null);
                p.setO2Player(player, o2p);
             }
          }
       }
 
-      //See if it is the right wand and play an effect
+      /**
+       * A right click is used to determine if the wand is the player's destined wand or to set the mastered
+       * spell in the wand for non-verbal casting if they are sneaking while clicking.
+       */
       if (p.holdsWand(player) && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK))
       {
-         //Map<UUID, OPlayer> opmap = p.getOPlayerMap();
          O2Player o2p = p.getO2Player(player);
-         Spells castSpell = o2p.getSpell();
+         Spells castSpell = o2p.getWandSpell();
          Location location = player.getLocation();
          location.setY(location.getY() + 1.6);
 
          if (p.wandCheck(player) == 1)
          {
-            if (castSpell == null)
+            if (player.isSneaking() && Ollivanders2.nonVerbalCasting)
+            {
+               if (Ollivanders2.debug)
+               {
+                  p.getLogger().info("OllivandersListener:onPlayerInteract: shift mastered spell");
+               }
+
+               o2p.shiftMasterSpell();
+               Spells spell = o2p.getMasterSpell();
+               if (spell != null)
+               {
+                  String spellName = Spells.recode(spell);
+                  player.sendMessage("Wand master spell set to " + spellName);
+               }
+               else
+               {
+                  if (Ollivanders2.debug)
+                  {
+                     player.sendMessage("You have not mastered any spells.");
+                  }
+               }
+            }
+            else
             {
                // play a sound and visual effect when they right-click their destined wand with no spell
                player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
@@ -704,7 +729,7 @@ public class OllivandersListener implements Listener
          O2Player o2p = p.getO2Player(event.getEntity());
 
          o2p.resetSpellCount();
-         o2p.setSpell(null);
+         o2p.setWandSpell(null);
          o2p.resetSouls();
          o2p.resetEffects();
 

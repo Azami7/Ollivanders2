@@ -74,6 +74,7 @@ public class Ollivanders2 extends JavaPlugin
    private static String mcVersion;
    public static Random random = new Random();
    public static boolean debug = false;
+   public static boolean nonVerbalCasting = false;
    public static Ollivanders2WorldGuard worldGuardO2;
    public static boolean worldGuardEnabled = false;
 
@@ -256,6 +257,9 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().info("WorldGuard not found, disabled WorldGuard features.");
       }
 
+      if (getConfig().getBoolean("nonVerbalSpellCasting"))
+         nonVerbalCasting = true;
+
       getLogger().info(this + " is now enabled!");
    }
 
@@ -423,7 +427,15 @@ public class Ollivanders2 extends JavaPlugin
       if (o2Player.foundWand())
       {
          String wandlore = o2Player.getDestinedWandLore();
-         summary = summary + "\nWand Type: " + wandlore + "\n";
+         summary = summary + "\nWand Type: " + wandlore;
+
+         Spells masterSpell = o2Player.getMasterSpell();
+         if (masterSpell != null)
+         {
+            summary = summary + "\nMaster Spell: " + Spells.recode(masterSpell);
+         }
+
+         summary = summary + "\n";
       }
 
       // sorted
@@ -474,6 +486,7 @@ public class Ollivanders2 extends JavaPlugin
             + "\nitems - gives a complete set of items"
             // + "\nquidd - creates a quidditch pitch"
             + "\nhouse - view and manage houses and house points"
+            + "\nsummary - gives a summary of wand type, house, and known spells"
             + "\nreload - reload the Ollivanders2 configs"
             + "\ndebug - toggles Ollivanders2 plugin debug output\n"
             + "\n" + "To run a command, type '/ollivanders2 [command]'."
@@ -1678,42 +1691,6 @@ public class Ollivanders2 extends JavaPlugin
          }
          else
          {
-            /*
-            // assume it is a book name
-            String bookName = new String();
-            for (int i = 1; i < args.length; i++)
-            {
-               String s = args[i].toUpperCase();
-
-               if (bookName.length() < 1)
-               {
-                  //first word
-                  bookName = s;
-               }
-               else
-               {
-                  bookName = bookName + "_" + s;
-               }
-            }
-            if (debug)
-               getLogger().info("Getting book " + bookName);
-
-            Books bookType;
-            try
-            {
-               bookType = Books.valueOf(bookName);
-            }
-            catch (Exception e)
-            {
-               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                     + "No book named \"" + bookName + "\".\n");
-               usageMessageBooks(sender);
-               return true;
-            }
-
-            ItemStack bookItem = books.getBook(bookType);
-            */
-
             ItemStack bookItem = getBookFromArgs(args, sender);
             if (bookItem == null)
             {

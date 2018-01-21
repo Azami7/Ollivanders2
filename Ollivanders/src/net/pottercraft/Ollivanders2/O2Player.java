@@ -31,6 +31,8 @@ public class O2Player
    private List<OEffect> effects = new ArrayList<>();
    //This is the spell loaded into the wand for casting with left click
    private Spells wandSpell = null;
+   private Spells masterSpell = null;
+   private ArrayList<Spells> masteredSpells = new ArrayList<>();
    private int souls = 0;
    private boolean invisible = false;
    private boolean muggleton = false;
@@ -247,6 +249,27 @@ public class O2Player
       {
          knownSpells.put(spell, new Integer(count));
       }
+
+      // remove spell from mastered list if level is less than 100
+      if (count < 100)
+      {
+         removeMasteredSpell(spell);
+      }
+      // add spell to mastered list if level is at or over 100
+      else
+      {
+         addMasteredSpell(spell);
+      }
+   }
+
+   /**
+    * Set the wand's mastered spell.
+    *
+    * @param spell the mastered spell
+    */
+   public void setMasterSpell (Spells spell)
+   {
+      masterSpell = spell;
    }
 
    /**
@@ -259,8 +282,12 @@ public class O2Player
       if (knownSpells.containsKey(spell))
       {
          int curCount = knownSpells.get(spell).intValue();
-
          knownSpells.replace(spell, new Integer(curCount + 1));
+
+         if (curCount + 1 >= 100)
+         {
+            addMasteredSpell(spell);
+         }
       }
       else
       {
@@ -274,6 +301,7 @@ public class O2Player
    public void resetSpellCount ()
    {
       knownSpells.clear();
+      masteredSpells.clear();
    }
 
    /**
@@ -281,8 +309,11 @@ public class O2Player
     *
     * @return the loaded spell
     */
-   public Spells getSpell ()
+   public Spells getWandSpell ()
    {
+      if (wandSpell == null && masterSpell != null && Ollivanders2.nonVerbalCasting)
+         return masterSpell;
+
       return wandSpell;
    }
 
@@ -291,7 +322,7 @@ public class O2Player
     *
     * @param spell the spell to load
     */
-   public void setSpell (Spells spell)
+   public void setWandSpell (Spells spell)
    {
       wandSpell = spell;
    }
@@ -472,7 +503,7 @@ public class O2Player
             content = content + "\n";
          }
 
-         String line = e.getKey().toString() + " " + e.getValue().toString();
+         String line = Spells.recode(e.getKey()) + " " + e.getValue().toString();
          content = content + line;
 
          lineCount++;
@@ -489,5 +520,94 @@ public class O2Player
       spellJournal.setItemMeta(bookMeta);
 
       return spellJournal;
+   }
+
+   /**
+    * Add a spell to the list of spells that have a level of 100 or more. If this spell is the first mastered
+    * spell then also load it to the wand master spell.
+    *
+    * @param spell the spell to add
+    */
+   private void addMasteredSpell (Spells spell)
+   {
+      if (!masteredSpells.contains(spell))
+      {
+         if (masteredSpells.size() < 1)
+         {
+            // this is their first mastered spell, set it on their wand
+            masterSpell = spell;
+         }
+         masteredSpells.add(spell);
+      }
+   }
+
+   /**
+    * Remove a mastered spell when the level goes below 100 or is reset. If this spell is also set as the wand's
+    * master spell, shift it to the next mastered spell or remove if there are none.
+    *
+    * @param spell the spell to remove
+    */
+   private void removeMasteredSpell (Spells spell)
+   {
+      if (masteredSpells.contains(spell))
+      {
+         // first remove this from the loaded master spell if it is that spell
+         if (masterSpell == spell)
+         {
+            if (masteredSpells.size() > 1)
+            {
+               shiftMasterSpell();
+            }
+            else
+            {
+               masterSpell = null;
+            }
+         }
+
+         masteredSpells.remove(spell);
+      }
+   }
+
+   /**
+    * Shift the wand's master spell to the next spell.
+    */
+   public void shiftMasterSpell ()
+   {
+      // shift to the next spell if there is more than one mastered spell
+      if (masteredSpells.size() >= 1)
+      {
+         if (masterSpell == null || masteredSpells.size() == 1)
+         {
+            masterSpell = masteredSpells.get(0);
+         }
+         else
+         {
+            int i = masteredSpells.indexOf(masterSpell);
+
+            if (i == (masteredSpells.size() - 1))
+            {
+               // spell is the last in the array, roll over
+               masterSpell = masteredSpells.get(0);
+            }
+            else
+            {
+               masterSpell = masteredSpells.get(i + 1);
+            }
+         }
+      }
+      else
+      {
+         masterSpell = null;
+      }
+   }
+
+   /**
+    * Get the wand's master spell.
+    *
+    * @return the wand's master spell
+    */
+   public Spells getMasterSpell ()
+   {
+      return masterSpell;
    }
 }

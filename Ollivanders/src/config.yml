@@ -14,7 +14,8 @@ deathExpLoss: false
 # When book learning is true, players can only cast spells they have learned from a book.  This prevents players
 # being able to cast spells they have not "learned" but have seen in chat, etc.
 bookLearning: true
-spellJournal: false
+spellJournal: true
+nonVerbalSpellCasting: true
 chatColor: 5
 flooPowder: REDSTONE
 broomstick: STICK

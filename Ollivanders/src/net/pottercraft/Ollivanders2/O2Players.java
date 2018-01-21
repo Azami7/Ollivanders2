@@ -28,6 +28,7 @@ public class O2Players
    private String invisibleLabel = "Invisible";
    private String muggletonLabel = "Muggleton";
    private String foundWandLabel = "Found_Wand";
+   private String masterSpellLabel = "Master_Spell";
 
    public O2Players (Ollivanders2 plugin)
    {
@@ -177,7 +178,7 @@ public class O2Players
          o2p.setSouls(player.getSouls());
          o2p.setInvisible(player.isInvisible());
          o2p.setMuggleton(player.isMuggleton());
-         o2p.setSpell(player.getSpell());
+         o2p.setWandSpell(player.getSpell());
 
          Map <Spells, Integer> spells = player.getSpellCount();
          for (Entry<Spells, Integer> s : spells.entrySet())
@@ -276,6 +277,15 @@ public class O2Players
          {
             Boolean foundWand = new Boolean(true);
             playerData.put(foundWandLabel, foundWand.toString());
+         }
+
+         /**
+          * Master Spell
+          */
+         Spells spell = o2p.getMasterSpell();
+         if (spell != null)
+         {
+            playerData.put(masterSpellLabel, spell.toString());
          }
 
          /**
@@ -394,6 +404,14 @@ public class O2Players
                if (foundWand != null)
                {
                   player.setFoundWand(foundWand.booleanValue());
+               }
+            }
+            else if (label.equalsIgnoreCase(masterSpellLabel))
+            {
+               Spells spell = common.spellsFromString(value);
+               if (spell != null)
+               {
+                  player.setMasterSpell(spell);
                }
             }
             else
