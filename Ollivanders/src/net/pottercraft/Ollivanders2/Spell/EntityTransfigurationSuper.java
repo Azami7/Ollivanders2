@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * The super class for transfiguration of mobs and players.
  *
- * @since 2.2.5
+ * @since 2.2.6
  * @author Azami7
  */
 public abstract class EntityTransfigurationSuper extends SpellProjectile implements O2Spell

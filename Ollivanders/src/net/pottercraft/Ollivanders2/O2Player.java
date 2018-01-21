@@ -1,9 +1,16 @@
 package net.pottercraft.Ollivanders2;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 
 /**
  * Ollivanders2 player
@@ -432,5 +439,55 @@ public class O2Player
    public boolean foundWand ()
    {
       return foundWand;
+   }
+
+   /**
+    * Returns this player's spell journal, a book with all known spells and their level.
+    *
+    * @return the player's spell journal
+    */
+   public ItemStack getSpellJournal ()
+   {
+      ItemStack spellJournal = new ItemStack(Material.WRITTEN_BOOK, 1);
+
+      BookMeta bookMeta = (BookMeta)spellJournal.getItemMeta();
+      bookMeta.setAuthor(playerName);
+      bookMeta.setTitle("Spell Journal");
+
+      String content = new String("Spell Journal\n\n");
+      int lineCount = 2;
+      for (Entry <Spells, Integer> e : knownSpells.entrySet())
+      {
+         // if we have done 14 lines, make a new page
+         if (lineCount == 14)
+         {
+            bookMeta.addPage(content);
+            lineCount = 0;
+            content = "";
+         }
+
+         // add a newline to all lines except the first
+         if (lineCount != 0)
+         {
+            content = content + "\n";
+         }
+
+         String line = e.getKey().toString() + " " + e.getValue().toString();
+         content = content + line;
+
+         lineCount++;
+         // ~18 characters per line, this will likely wrap
+         if (line.length() > 18)
+         {
+            lineCount++;
+         }
+      }
+
+      bookMeta.addPage(content);
+
+      bookMeta.setGeneration(BookMeta.Generation.ORIGINAL);
+      spellJournal.setItemMeta(bookMeta);
+
+      return spellJournal;
    }
 }

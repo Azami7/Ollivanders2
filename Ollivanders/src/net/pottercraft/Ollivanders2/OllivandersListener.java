@@ -25,6 +25,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
@@ -1351,7 +1352,7 @@ public class OllivandersListener implements Listener
       Action action = event.getAction();
       if (action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
       {
-         Player player = event.getPlayer().getPlayer();
+         Player player = event.getPlayer();
 
          ItemStack heldItem = player.getInventory().getItemInMainHand();
          if (heldItem.getType() == Material.WRITTEN_BOOK)
@@ -1363,6 +1364,35 @@ public class OllivandersListener implements Listener
             List<String> bookLore = heldItem.getItemMeta().getLore();
 
             O2Books.readLore(bookLore, player, p);
+         }
+      }
+   }
+
+   /**
+    * When a user holds their spell journal, replace it with an updated version of the book.
+    *
+    * @param event
+    */
+   @EventHandler (priority = EventPriority.LOWEST)
+   public void onSpellJournalHold (PlayerItemHeldEvent event)
+   {
+      // only run this if spellJournal is enabled
+      if (event == null || !p.getConfig().getBoolean("spellJournal"))
+         return;
+
+      Player player = event.getPlayer();
+      int slotIndex = event.getNewSlot();
+
+      ItemStack heldItem = player.getInventory().getItem(slotIndex);
+      if (heldItem != null && heldItem.getType() == Material.WRITTEN_BOOK)
+      {
+         BookMeta bookMeta = (BookMeta)heldItem.getItemMeta();
+         if (bookMeta.getTitle().equalsIgnoreCase("Spell Journal"))
+         {
+            O2Player o2Player = p.getO2Player(player);
+            ItemStack spellJournal = o2Player.getSpellJournal();
+
+            player.getInventory().setItem(slotIndex, spellJournal);
          }
       }
    }

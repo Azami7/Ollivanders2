@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 /**
  * The super class for all ItemStack transfigurations.  This cannot be used on Entities or Blocks.
  *
- * @since 2.2.5
+ * @since 2.2.6
  * @see BlockTransfigurationSuper
  * @author Azami7
  */
