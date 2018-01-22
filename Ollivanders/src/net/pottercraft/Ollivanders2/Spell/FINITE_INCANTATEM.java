@@ -32,7 +32,7 @@ public final class FINITE_INCANTATEM extends Charms
       flavorText.add("\"He pointed his wand at the rampart, cried, \"Finite!\" and it steadied.\"");
       flavorText.add("\"Try Finite Incantatem, that should stop the rain if it’s a hex or curse.\"  -Hermione Granger");
       flavorText.add("The General Counter-Spell");
-      text = "Reduces all spell effects on an item.";
+      text = "Reduces all spell effects on an item or player.";
    }
 
    /**
@@ -72,7 +72,7 @@ public final class FINITE_INCANTATEM extends Charms
          if (meta.hasLore())
          {
             List<String> lore = meta.getLore();
-            ArrayList<String> newLore = new ArrayList<String>();
+            ArrayList<String> newLore = new ArrayList<>();
             for (int i = 0; i < lore.size(); i++)
             {
                String string = lore.get(i);

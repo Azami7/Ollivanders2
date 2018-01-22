@@ -3,7 +3,7 @@ main: net.pottercraft.Ollivanders2.Ollivanders2
 version: 2.2.6
 authors: [Azami7, Lil_Miss_Giggles]
 website: https://www.spigotmc.org/resources/ollivanders2.38992/
-softdepend: [WorldGuard]
+softdepend: [WorldGuard, LibsDisguise]
 commands:
   Ollivanders2:
     description: This is the main admin command for the Ollivanders2 plugin

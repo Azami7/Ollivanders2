@@ -33,8 +33,11 @@ public class INTERMEDIATE_TRANSFIGURATION extends Book
       spellList.add(Spells.PIERTOTUM_LOCOMOTOR);
       spellList.add(Spells.DELETRIUS);
       spellList.add(Spells.HERBIFORS);
-      spellList.add(Spells.METATREPO_EQUUS);
       spellList.add(Spells.LAPIFORS);
       //spellList.add(Spells.ANIMAGUS);
+      //spell 11
+      //spell 12
+      //spell 13
+      //spell 14
    }
 }

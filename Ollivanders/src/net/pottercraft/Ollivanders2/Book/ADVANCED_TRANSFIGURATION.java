@@ -33,10 +33,13 @@ public class ADVANCED_TRANSFIGURATION extends Book
       spellList.add(Spells.INCARNATIO_LAMA);
       spellList.add(Spells.INCARNATIO_LUPI);
       spellList.add(Spells.INCARNATIO_PORCILLI);
+      spellList.add(Spells.INCARNATIO_URSUS);
       spellList.add(Spells.INCARNATIO_VACCULA);
       spellList.add(Spells.GEMINO);
       spellList.add(Spells.REPARIFARGE);
       spellList.add(Spells.AVIS);
       //spellList.add(Spells.HOMORPHUS);
+      //spell 13
+      //spell 14
    }
 }

@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.lang.reflect.Constructor;
 
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -42,6 +43,11 @@ public final class SpellText
    {
       for (Spells s : Spells.values())
       {
+         if (Ollivanders2Common.libsDisguisesSpells.contains(s) && !Ollivanders2.libsDisguisesEnabled)
+         {
+            continue;
+         }
+         
          String spellName = "net.pottercraft.Ollivanders2.Spell." + s.toString();
 
          Constructor c = null;

@@ -86,6 +86,7 @@ public enum Spells
    INCARNATIO_LAMA,
    INCARNATIO_LUPI,
    INCARNATIO_PORCILLI,
+   INCARNATIO_URSUS,
    INCARNATIO_VACCULA,
    INCENDIO,
    INCENDIO_DUO,
@@ -102,7 +103,6 @@ public enum Spells
    LUMOS_MAXIMA,
    LUMOS_SOLEM,
    MELOFORS,
-   METATREPO_EQUUS,
    METELOJINX,
    METELOJINX_RECANTO,
    MOLLIARE,
@@ -143,11 +143,11 @@ public enum Spells
    STUPEFY,
    TERGEO,
    VENTO_FOLIO,
+   VERA_VERTO,
    VERDIMILLIOUS,
    VERDIMILLIOUS_DUO,
    VOLATUS,
    WINGARDIUM_LEVIOSA;
-
 
    /**
     * Find the Spell that corresponds to a string.

@@ -2,14 +2,17 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.entity.*;
+
+import net.pottercraft.Ollivanders2.Ollivanders2WorldGuard;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- * The super class for transfiguration of mobs and players.
+ * The super class for transfiguration of all entities.
  *
  * @since 2.2.6
  * @author Azami7
@@ -23,11 +26,6 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
     * If the transfiguration has taken place or not.
     */
    protected boolean isTransfigured = false;
-
-   /**
-    * A map of the transfigured entities and their original types for use with revert()
-    */
-   protected HashMap<Entity, EntityType> originalEntities = new HashMap<>();
 
    //
    // these should be set by each spell as needed
@@ -45,7 +43,7 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    /**
     * Whether this transfiguration permanent or not.  Usually for Charms it is false and for Transfiguration it is true.
     */
-   protected boolean permanent = true;
+   protected boolean permanent = false;
 
    /**
     * How many blocks out from the target are affects.  Usually for permanent spells this is 1.
@@ -60,7 +58,7 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    /**
     * If this is not permanent, how long it should last.
     */
-   protected int spellDuration = 1200;
+   protected int spellDuration = 120;
 
    /**
     * Allows spell variants to change the duration of this spell.
@@ -71,6 +69,11 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
     * The current duration of this spell.
     */
    protected int lifeTicks = 0;
+
+   /**
+    * The percent chance this spell will succeed each casting.
+    */
+   protected int successRate = 100;
 
    /**
     * Flavor text for this spell in spellbooks, etc.  Optional.
@@ -93,10 +96,23 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    protected List<EntityType> entityWhitelist = new ArrayList<>();
 
    /**
+    * A class for checking WorldGuard permissions
+    */
+   protected Ollivanders2WorldGuard worldGuard;
+
+   /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
    public EntityTransfigurationSuper () {}
 
+   /**
+    * Constructor
+    *
+    * @param plugin
+    * @param player
+    * @param name
+    * @param rightWand
+    */
    public EntityTransfigurationSuper (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
@@ -104,7 +120,6 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
       entityBlacklist.add(EntityType.AREA_EFFECT_CLOUD);
       entityBlacklist.add(EntityType.COMPLEX_PART);
       entityBlacklist.add(EntityType.EXPERIENCE_ORB);
-      entityBlacklist.add(EntityType.PLAYER);
       entityBlacklist.add(EntityType.FALLING_BLOCK);
       entityBlacklist.add(EntityType.EXPERIENCE_ORB);
       entityBlacklist.add(EntityType.UNKNOWN);
@@ -142,6 +157,11 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
             if (!permanent)
             {
                spellDuration = (int) (spellDuration * durationModifier);
+
+               // do not let the spell last more than 24 hours
+               if (spellDuration > 86400)
+                  spellDuration = 86400;
+
                kill = false;
             }
             else
@@ -178,38 +198,43 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
     */
    protected void transfigure (Entity entity)
    {
-      if (isTransfigured)
+      if (isTransfigured || !canTransfigure(entity))
       {
          return;
       }
 
-      if (!canTransfigure(entity))
-      {
-         return;
-      }
-
-      if (permanent)
+      // check success
+      int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
+      if (rand < successRate)
       {
          transfigureEntity(entity);
       }
       else
       {
-         disguiseEntity(entity);
+         if (Ollivanders2.debug)
+            p.getLogger().info("Failed success check.");
       }
    }
 
    /**
-    * Transfigures entity into new EntityType. This spawns an entirely new entity in the location of the target
-    * entity with as many of the same attributes as possible.
+    * Determine if this entity can be transfigured by this spell. This must be overridden by child classes or
+    * it will fail all transfigurations.
+    *
+    * @param e
+    * @return true if the entity can be transfigured, false otherwise.
     */
-   public void transfigureEntity (Entity entity)
+   protected boolean canTransfigure (Entity e)
    {
-
+      return false;
    }
 
-   public void disguiseEntity (Entity entity)
+   /**
+    * Transfigures entity into new EntityType.
+    *
+    * @param entity
+    */
+   protected void transfigureEntity (Entity entity)
    {
-
    }
 
    /**
@@ -218,34 +243,39 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
     * @param e
     * @return true if the entity can be changed, false otherwise.
     */
-   protected boolean canTransfigure (Entity e)
+   protected boolean targetTypeCheck (Entity e)
    {
       // get entity type
       EntityType eType = e.getType();
 
-      boolean canChange = true;
+      boolean check = true;
 
       if (eType == targetType) // do not change if this entity is already the target type
       {
-         canChange = false;
+         if (Ollivanders2.debug)
+            p.getLogger().info("Target entity is same type as spell type.");
+
+         check = false;
       }
-      else if (entityBlacklist.contains(e)) // do not change if this entity is in the blacklist
+      else if (entityBlacklist.contains(eType)) // do not change if this entity is in the blacklist
       {
-            canChange = false;
+         if (Ollivanders2.debug)
+            p.getLogger().info("EntityType is on the blacklist.");
+
+         check = false;
       }
       else if (!entityWhitelist.isEmpty()) // do not change if the whitelist exists and this entity is not in it
       {
-         if (!entityWhitelist.contains(e))
+         if (!entityWhitelist.contains(eType))
          {
-            canChange = false;
+            if (Ollivanders2.debug)
+               p.getLogger().info("EntityType is not on the whitelist.");
+
+            check = false;
          }
       }
-      else if (!e.getType().isAlive() && targetType.isAlive()) // do not change a non-living thing in to a living thing
-      {
-         canChange = false;
-      }
 
-      return canChange;
+      return check;
    }
 
    @Override

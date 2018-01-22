@@ -1,19 +1,20 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import me.libraryaddict.disguise.disguisetypes.MobDisguise;
+import me.libraryaddict.disguise.disguisetypes.watchers.EnderDragonWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 /**
- * Turn target entity in to a Dragon. OllivandersPlayerListener.draconiforsBlockChange()
- * keeps any transfigured dragons from destroying terrain.
+ * Turn target entity in to a Dragon.
  *
- * @see MetatrepoSuper
- * @version Ollivanders2
+ * @since 1.0
  * @author lownes
  * @author Azami7
  */
-public final class DRACONIFORS extends MetatrepoSuper
+public final class DRACONIFORS extends FriendlyMobDisguiseSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -39,6 +40,17 @@ public final class DRACONIFORS extends MetatrepoSuper
    {
       super(plugin, player, name, rightWand);
 
-      animalShape = EntityType.ENDER_DRAGON;
+      targetType = EntityType.ENDER_DRAGON;
+      disguiseType = DisguiseType.getType(targetType);
+      disguise = new MobDisguise(disguiseType);
+
+      EnderDragonWatcher watcher = (EnderDragonWatcher)disguise.getWatcher();
+
+      if (usesModifier < 20)
+         successRate = 5;
+      else if (usesModifier < 100)
+         successRate = 10;
+      else
+         successRate = 20;
    }
 }

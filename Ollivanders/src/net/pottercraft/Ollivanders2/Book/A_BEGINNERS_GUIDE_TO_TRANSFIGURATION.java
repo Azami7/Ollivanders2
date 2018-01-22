@@ -26,5 +26,6 @@ public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends Book
       spellList.add(Spells.CALAMUS);
       spellList.add(Spells.DEPRIMO);
       spellList.add(Spells.MULTICORFORS);
+      spellList.add(Spells.VERA_VERTO);
    }
 }

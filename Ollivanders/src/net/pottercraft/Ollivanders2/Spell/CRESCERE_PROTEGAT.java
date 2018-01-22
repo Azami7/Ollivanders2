@@ -43,7 +43,7 @@ public final class CRESCERE_PROTEGAT extends Charms
    public void checkEffect ()
    {
       move();
-      List<StationarySpellObj> inside = new ArrayList<StationarySpellObj>();
+      List<StationarySpellObj> inside = new ArrayList<>();
       for (StationarySpellObj spell : p.getStationary())
       {
          if (spell.isInside(location) && spell.radius < (int) usesModifier)

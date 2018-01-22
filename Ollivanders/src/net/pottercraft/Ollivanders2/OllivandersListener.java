@@ -579,6 +579,11 @@ public class OllivandersListener implements Listener
     */
    private void createSpellProjectile (Player player, Spells name, double wandC)
    {
+      if (Ollivanders2Common.libsDisguisesSpells.contains(name) && !Ollivanders2.libsDisguisesEnabled)
+      {
+         return;
+      }
+
       //spells go here, using any of the three types of m
       String spellClass = "net.pottercraft.Ollivanders2.Spell." + name.toString();
       @SuppressWarnings("rawtypes")

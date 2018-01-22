@@ -77,6 +77,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean nonVerbalCasting = false;
    public static Ollivanders2WorldGuard worldGuardO2;
    public static boolean worldGuardEnabled = false;
+   public static boolean libsDisguisesEnabled = false;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -246,6 +247,17 @@ public class Ollivanders2 extends JavaPlugin
          {
             worldGuardEnabled = false;
          }
+      }
+
+      Plugin libsDisguises = Bukkit.getServer().getPluginManager().getPlugin("LibsDisguises");
+      if (libsDisguises != null)
+      {
+         libsDisguisesEnabled = true;
+         getLogger().info("LibsDisguises found, enabled entity transfiguration spells.");
+      }
+      else
+      {
+         getLogger().info("LibsDisguises not found, disabling entity transfiguration spells.");
       }
 
       if (worldGuardEnabled)
