@@ -12,6 +12,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author Azami7
  */
+@Deprecated
 public class INCARNATIO_LAMA extends IncarnatioEffectSuper
 {
    public INCARNATIO_LAMA(Player sender, Effects effect, int duration)

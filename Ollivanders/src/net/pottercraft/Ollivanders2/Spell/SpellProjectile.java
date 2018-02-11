@@ -29,17 +29,16 @@ import org.bukkit.util.Vector;
  */
 public abstract class SpellProjectile
 {
-
    public Player player;
    public Spells name;
    public Location location;
-   public Vector vector;
    public int lifeTicks;
    public boolean kill;
    public Ollivanders2 p;
-   public double rightWand;
    public int spellUses;
    public double usesModifier;
+   public Vector vector;
+   public double rightWand;
    public Effect moveEffect = Effect.STEP_SOUND;
    public Material moveEffectData = Material.GLOWSTONE;
    public Set<Block> changed = new HashSet<>();
@@ -61,17 +60,20 @@ public abstract class SpellProjectile
    public SpellProjectile (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       location = player.getEyeLocation();
-      vector = location.getDirection().normalize();
-      location.add(vector);
       this.name = name;
       this.player = player;
       kill = false;
       lifeTicks = 0;
       p = plugin;
-      this.rightWand = rightWand;
       spellUses = p.getSpellNum(player, name);
-      usesModifier = getUsesModifier();
+      usesModifier = spellUses;
       boolean memoryPotion = false;
+
+      vector = location.getDirection().normalize();
+      location.add(vector);
+      this.rightWand = rightWand;
+
+      usesModifier = getUsesModifier();
 
       for (OEffect effect : p.getO2Player(player).getEffects())
       {
@@ -122,14 +124,6 @@ public abstract class SpellProjectile
    }
 
    /**
-    * This kills the projectile.
-    */
-   public void kill ()
-   {
-      kill = true;
-   }
-
-   /**
     * Gets the block the projectile is inside
     *
     * @return Block the projectile is inside
@@ -140,7 +134,7 @@ public abstract class SpellProjectile
    }
 
    /**
-    * Gets entities within a distance of projectile
+    * Gets entities within a distance of spell target
     *
     * @param radius - radius within which to get entities
     * @return List of entities within one block of projectile
@@ -148,7 +142,7 @@ public abstract class SpellProjectile
    public List<Entity> getCloseEntities (double radius)
    {
       List<Entity> entities = location.getWorld().getEntities();
-      List<Entity> close = new ArrayList<Entity>();
+      List<Entity> close = new ArrayList<>();
       for (Entity e : entities)
       {
          if (e instanceof LivingEntity)
@@ -189,7 +183,7 @@ public abstract class SpellProjectile
    public List<Item> getItems (double radius)
    {
       List<Entity> entities = getCloseEntities(radius);
-      List<Item> items = new ArrayList<Item>();
+      List<Item> items = new ArrayList<>();
       for (Entity e : entities)
       {
          if (e instanceof Item)
@@ -209,7 +203,7 @@ public abstract class SpellProjectile
    public List<LivingEntity> getLivingEntities (double radius)
    {
       List<Entity> entities = getCloseEntities(radius);
-      List<LivingEntity> living = new ArrayList<LivingEntity>();
+      List<LivingEntity> living = new ArrayList<>();
       for (Entity e : entities)
       {
          if (e instanceof LivingEntity)
@@ -258,7 +252,7 @@ public abstract class SpellProjectile
             }
          }
       }
-      ArrayList<Block> returnList = new ArrayList<Block>();
+      ArrayList<Block> returnList = new ArrayList<>();
       for (Block block : blockList)
       {
          if (block.getLocation().distance(center.getLocation()) < radius)
@@ -295,5 +289,13 @@ public abstract class SpellProjectile
       {
          return null;
       }
+   }
+
+   /**
+    * This kills the spell.
+    */
+   public void kill ()
+   {
+      kill = true;
    }
 }

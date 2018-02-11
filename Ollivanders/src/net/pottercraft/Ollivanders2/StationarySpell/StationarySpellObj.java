@@ -8,6 +8,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.OLocation;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
@@ -40,7 +41,6 @@ public abstract class StationarySpellObj implements Serializable
    public boolean kill;
    public int radius;
    public boolean active;
-
 
    public StationarySpellObj (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
@@ -96,22 +96,7 @@ public abstract class StationarySpellObj implements Serializable
     */
    public boolean isInside (Location loc)
    {
-      double distance;
-      try
-      {
-         distance = loc.distance(location.toLocation());
-      } catch (IllegalArgumentException e)
-      {
-         return false;
-      }
-      if (distance < radius)
-      {
-         return true;
-      }
-      else
-      {
-         return false;
-      }
+      return Ollivanders2Common.isInside(location, loc, radius);
    }
 
    /**

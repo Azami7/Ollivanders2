@@ -6,6 +6,11 @@ import net.pottercraft.Ollivanders2.Effects;
 import net.pottercraft.Ollivanders2.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+/**
+ * Gives a player more spell experience while effect is active.
+ *
+ * @since 1.0
+ */
 public class BARUFFIOS_BRAIN_ELIXIR extends OEffect implements Effect
 {
    public BARUFFIOS_BRAIN_ELIXIR (Player sender, Effects effect, int duration)

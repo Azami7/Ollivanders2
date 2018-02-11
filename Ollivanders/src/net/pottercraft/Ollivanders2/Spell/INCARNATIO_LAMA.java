@@ -4,8 +4,8 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.LlamaWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Llama;
 import org.bukkit.entity.Player;
 
 /**
@@ -47,14 +47,7 @@ public final class INCARNATIO_LAMA extends PlayerDisguiseSuper
       LlamaWatcher watcher = (LlamaWatcher)disguise.getWatcher();
       watcher.setAdult();
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 4);
-      if (rand == 0)
-         watcher.setColor(Llama.Color.BROWN);
-      else if (rand == 1)
-         watcher.setColor(Llama.Color.CREAMY);
-      else if (rand == 2)
-         watcher.setColor(Llama.Color.GRAY);
-      else
-         watcher.setColor(Llama.Color.WHITE);
+      Ollivanders2Common common = new Ollivanders2Common(p);
+      watcher.setColor(common.randomLlamaColor());
    }
 }

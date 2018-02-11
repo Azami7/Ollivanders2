@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
+@Deprecated
 public abstract class IncarnatioSuper extends Transfiguration
 {
    OEffect effect;

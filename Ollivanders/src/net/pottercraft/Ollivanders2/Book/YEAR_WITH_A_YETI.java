@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Spell.Spells;
 
 /**
  * Year with a Yeti - 2nd year Defense Against the Dark Arts book
@@ -18,5 +19,7 @@ public class YEAR_WITH_A_YETI extends Book
       title = shortTitle = "Year with a Yeti";
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
+
+      spellList.add(Spells.ARANIA_EXUMAI);
    }
 }

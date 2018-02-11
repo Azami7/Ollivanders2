@@ -4,8 +4,8 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.OcelotWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 
 /**
@@ -48,15 +48,10 @@ public final class INCARNATIO_FELIS extends PlayerDisguiseSuper
       OcelotWatcher watcher = (OcelotWatcher)disguise.getWatcher();
       watcher.setAdult();
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 3);
-      if (rand == 0)
-         watcher.setType(Ocelot.Type.BLACK_CAT);
-      else if (rand == 1)
-         watcher.setType(Ocelot.Type.RED_CAT);
-      else
-         watcher.setType(Ocelot.Type.SIAMESE_CAT);
+      Ollivanders2Common common = new Ollivanders2Common(p);
+      watcher.setType(common.randomOcelotType());
 
-      rand = Ollivanders2.random.nextInt() % 10;
+      int rand = Ollivanders2.random.nextInt() % 10;
       if (rand == 0)
          watcher.isTamed();
    }

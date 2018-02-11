@@ -7,8 +7,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import me.libraryaddict.disguise.DisguiseAPI;
+import me.libraryaddict.disguise.disguisetypes.DisguiseType;
+import me.libraryaddict.disguise.disguisetypes.MobDisguise;
+import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
+import me.libraryaddict.disguise.disguisetypes.watchers.*;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -26,9 +33,12 @@ public class O2Player
    private String wandWood = null;
    private String wandCore = null;
    private String playerName = null;
+   private UUID pid = null;
    private Ollivanders2 p = null;
+   private Ollivanders2Common common;
    private Map<Spells, Integer> knownSpells = new HashMap<>();
    private List<OEffect> effects = new ArrayList<>();
+   ArrayList<EntityType> animagusShapes = new ArrayList<>();
    //This is the spell loaded into the wand for casting with left click
    private Spells wandSpell = null;
    private Spells masterSpell = null;
@@ -37,6 +47,10 @@ public class O2Player
    private boolean invisible = false;
    private boolean muggleton = false;
    private boolean foundWand = false;
+   private EntityType animagusForm = null;
+   private String animagusColor = null;
+   private boolean isTransformed = false;
+   private TargetedDisguise disguise;
 
    /**
     * Wand wood types
@@ -63,25 +77,56 @@ public class O2Player
    /**
     * Constructor.
     *
-    * @param pid the UUID of the player
+    * @param id the UUID of the player
     * @param name the name of the player
     * @param plugin a reference to the plugin
     */
-   public O2Player (UUID pid, String name, Ollivanders2 plugin)
+   public O2Player (UUID id, String name, Ollivanders2 plugin)
    {
       p = plugin;
       playerName = name;
+      pid = id;
 
       // set destined wand
-      initDestinedWand(pid);
+      initDestinedWand();
+
+      animagusShapes.add(EntityType.OCELOT);
+      animagusShapes.add(EntityType.WOLF);
+      animagusShapes.add(EntityType.COW);
+      animagusShapes.add(EntityType.PIG);
+      animagusShapes.add(EntityType.HORSE);
+      animagusShapes.add(EntityType.SHEEP);
+      animagusShapes.add(EntityType.RABBIT);
+      animagusShapes.add(EntityType.MULE);
+      animagusShapes.add(EntityType.DONKEY);
+
+      if (Ollivanders2.hostileMobAnimagi)
+      {
+         animagusShapes.add(EntityType.SPIDER);
+         animagusShapes.add(EntityType.SLIME);
+         animagusShapes.add(EntityType.CAVE_SPIDER);
+         animagusShapes.add(EntityType.CREEPER);
+         animagusShapes.add(EntityType.EVOKER);
+         animagusShapes.add(EntityType.HUSK);
+         animagusShapes.add(EntityType.SILVERFISH);
+         animagusShapes.add(EntityType.WITCH);
+         animagusShapes.add(EntityType.VINDICATOR);
+         animagusShapes.add(EntityType.SHULKER);
+      }
+
+      if (Ollivanders2.mcVersionCheck())
+      {
+         animagusShapes.add(EntityType.POLAR_BEAR);
+         animagusShapes.add(EntityType.LLAMA);
+      }
+
+      common = new Ollivanders2Common(plugin);
    }
 
    /**
     * Initialize the player's destined wand seeded with their pid
-    *
-    * @param pid the player's uuid
     */
-   private void initDestinedWand (UUID pid)
+   private void initDestinedWand ()
    {
       // set destined wand
       int seed = Math.abs(pid.hashCode()%16);
@@ -324,6 +369,14 @@ public class O2Player
     */
    public void setWandSpell (Spells spell)
    {
+      if (Ollivanders2.debug)
+      {
+         if (spell == null)
+            p.getLogger().info("Setting wand spell to null");
+         else
+            p.getLogger().info("Setting wand spell to " + spell.toString());
+      }
+
       wandSpell = spell;
    }
 
@@ -421,7 +474,14 @@ public class O2Player
     */
    public List<OEffect> getEffects ()
    {
-      return effects;
+      List<OEffect> effectsCopy = new ArrayList<>();
+
+      for (OEffect e : effects)
+      {
+         effectsCopy.add(e);
+      }
+
+      return effectsCopy;
    }
 
    /**
@@ -432,6 +492,9 @@ public class O2Player
    public void addEffect (OEffect e)
    {
       effects.add(e);
+
+      if (Ollivanders2.debug)
+         p.getLogger().info("Adding effect " + e.toString() + " to " + playerName);
    }
 
    /**
@@ -442,6 +505,9 @@ public class O2Player
    public void removeEffect (OEffect e)
    {
       effects.remove(e);
+
+      if (Ollivanders2.debug)
+         p.getLogger().info("Removing effect " + e.toString() + " to " + playerName);
    }
 
    /**
@@ -503,8 +569,10 @@ public class O2Player
             content = content + "\n";
          }
 
-         String line = Spells.recode(e.getKey()) + " " + e.getValue().toString();
-         content = content + line;
+         String spell = Spells.firstLetterCapitalize(Spells.recode(e.getKey()));
+         String count = e.getValue().toString();
+         String line = spell + " " + count;
+         content = content + spell + " " + count;
 
          lineCount++;
          // ~18 characters per line, this will likely wrap
@@ -609,5 +677,283 @@ public class O2Player
    public Spells getMasterSpell ()
    {
       return masterSpell;
+   }
+
+   /**
+    * Sets that this player is an Animagus.
+    */
+   public void setIsAnimagus ()
+   {
+      if (animagusForm == null)
+      {
+         int form = 0;
+
+         if (Ollivanders2.mcVersionCheck())
+         {
+            form = Math.abs(pid.hashCode() % animagusShapes.size());
+         }
+         else
+         {
+            // last 2 types are MC 1.12 and higher
+            form = Math.abs(pid.hashCode() % (animagusShapes.size() - 2));
+         }
+
+         animagusForm = animagusShapes.get(form);
+         if (Ollivanders2.debug)
+            p.getLogger().info(playerName + " is an animagus type " + animagusForm.toString());
+
+         // determine color variations for certain types
+         if (animagusForm == EntityType.OCELOT)
+         {
+            animagusColor = common.randomOcelotType().toString();
+         }
+         else if (animagusForm == EntityType.WOLF)
+         {
+            animagusColor = common.randomSecondaryDyeColor().toString();
+         }
+         else if (animagusForm == EntityType.HORSE)
+         {
+            animagusColor = common.randomHorseColor().toString();
+         }
+         else if (Ollivanders2.mcVersionCheck() && animagusForm == EntityType.LLAMA)
+         {
+            animagusColor = common.randomLlamaColor().toString();
+         }
+
+         if (animagusColor != null && Ollivanders2.debug)
+         {
+            p.getLogger().info("Color variation " + animagusColor);
+         }
+      }
+   }
+
+   /**
+    * Sets the Animagus form for this player.
+    *
+    * @param type the player's Animagus form.
+    */
+   public void setAnimagusForm (EntityType type)
+   {
+      if (animagusShapes.contains(type))
+      {
+         animagusForm = type;
+      }
+      else
+      {
+         // they do not have an allowed type, reset their type
+         animagusForm = null;
+         animagusColor = null;
+         setIsAnimagus();
+      }
+   }
+
+   public void setAnimagusColor (String color)
+   {
+      animagusColor = color;
+   }
+
+   /**
+    * Get the Animagus form for this player.
+    *
+    * @return the player's Animagus form or null if they are not an Animagus
+    */
+   public EntityType getAnimagusForm ()
+   {
+      return animagusForm;
+   }
+
+   /**
+    * Get the color variation for this animagus.
+    *
+    * @return the color variation or null if not applicable
+    */
+   public String getAnimagusColor ()
+   {
+      // in case color was set when player has no animagus form
+      if (animagusForm != null)
+         return animagusColor;
+      else
+         return null;
+   }
+
+   /**
+    * Determine if this player an Animagus.
+    *
+    * @return true if they have an Animagus form, false otherwise
+    */
+   public boolean isAnimagus ()
+   {
+      if (animagusForm != null)
+         return true;
+      else
+         return false;
+   }
+
+   /**
+    * Determine if this player is transformed in to their Animagus form. This is only for use in saving
+    * player state to disk and when a player logs in.
+    *
+    * @return
+    */
+   public boolean isTransformed ()
+   {
+      return isTransformed;
+   }
+
+   /**
+    * Changes a player to their Animagus form or transforms them back.
+    */
+   public void animagusForm ()
+   {
+      if (animagusForm == null)
+      {
+         // this player is not an animagus
+         return;
+      }
+
+      if (isTransformed == false)
+      {
+         // transform the player in to their Animagus form
+         DisguiseType disguiseType = DisguiseType.getType(animagusForm);
+         disguise = new MobDisguise(disguiseType);
+         LivingWatcher watcher = (LivingWatcher)disguise.getWatcher();
+
+         if (animagusForm == EntityType.OCELOT)
+         {
+            OcelotWatcher ocelotWatcher = (OcelotWatcher)watcher;
+            Ocelot.Type type = Ocelot.Type.WILD_OCELOT;
+            ocelotWatcher.isAdult();
+
+            try
+            {
+               type = Ocelot.Type.valueOf(animagusColor);
+            }
+            catch (Exception e)
+            {
+               p.getLogger().warning("Failed to parse Ocelot.Type " + animagusColor);
+               if (p.debug)
+                  e.printStackTrace();
+            }
+            finally
+            {
+               if (type != null)
+               {
+                  ocelotWatcher.setType(type);
+               }
+            }
+         }
+         else if (animagusForm == EntityType.WOLF)
+         {
+            WolfWatcher wolfWatcher = (WolfWatcher)watcher;
+            DyeColor color = DyeColor.WHITE;
+            wolfWatcher.isAdult();
+
+            try
+            {
+               color = DyeColor.valueOf(animagusColor);
+            }
+            catch (Exception e)
+            {
+               p.getLogger().warning("Failed to parse DyeColor " + animagusColor);
+               if (p.debug)
+                  e.printStackTrace();
+            }
+            finally
+            {
+               if (color != null)
+               {
+                  wolfWatcher.isTamed();
+                  wolfWatcher.setCollarColor(color);
+               }
+            }
+         }
+         else if (animagusForm == EntityType.HORSE)
+         {
+            HorseWatcher horseWatcher = (HorseWatcher)watcher;
+            horseWatcher.setStyle(Horse.Style.NONE);
+            Horse.Color color = Horse.Color.WHITE;
+            horseWatcher.setBaby();
+
+            try
+            {
+               color = Horse.Color.valueOf(animagusColor);
+            }
+            catch (Exception e)
+            {
+               p.getLogger().warning("Failed to parse Horse.Color " + animagusColor);
+               if (p.debug)
+                  e.printStackTrace();
+            }
+            finally
+            {
+               if (color != null)
+               {
+                  horseWatcher.setColor(color);
+               }
+            }
+         }
+         else if (Ollivanders2.mcVersionCheck() && animagusForm == EntityType.LLAMA)
+         {
+            LlamaWatcher llamaWatcher = (LlamaWatcher)watcher;
+            Llama.Color color = Llama.Color.WHITE;
+            llamaWatcher.setBaby();
+
+            try
+            {
+               color = Llama.Color.valueOf(animagusColor);
+            }
+            catch (Exception e)
+            {
+               p.getLogger().warning("Failed to parse Llama.Color " + animagusColor);
+               if (p.debug)
+                  e.printStackTrace();
+            }
+            finally
+            {
+               if (color != null)
+               {
+                  llamaWatcher.setColor(color);
+               }
+            }
+         }
+         else if (animagusForm == EntityType.COW || animagusForm == EntityType.DONKEY
+               || animagusForm == EntityType.MULE || animagusForm == EntityType.SLIME
+               || animagusForm == EntityType.POLAR_BEAR)
+         {
+            AgeableWatcher ageableWatcher = (AgeableWatcher)watcher;
+            ageableWatcher.setBaby();
+         }
+
+         Entity player = p.getServer().getPlayer(pid);
+
+         DisguiseAPI.disguiseToAll(player, disguise);
+
+         isTransformed = true;
+      }
+      else // isTransformed = true
+      {
+         // transform this player to their normal form
+         Entity entity = disguise.getEntity();
+         try
+         {
+            DisguiseAPI.undisguiseToAll(entity);
+         }
+         catch (Exception e)
+         {
+            // in case entity no longer exists
+         }
+
+         isTransformed = false;
+      }
+   }
+
+   /**
+    * Get the player's UUID
+    *
+    * @return
+    */
+   public UUID getID ()
+   {
+      return pid;
    }
 }

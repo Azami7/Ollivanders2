@@ -4,8 +4,8 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.HorseWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.Player;
 
 /**
@@ -48,59 +48,9 @@ public final class INCARNATIO_EQUUS extends PlayerDisguiseSuper
       watcher.setAdult();
 
       // randomize appearance
-      watcher.setStyle(INCARNATIO_EQUUS.getRandomHorseStyle());
-      watcher.setColor(INCARNATIO_EQUUS.getRandomHorseColor());
-   }
+      Ollivanders2Common common = new Ollivanders2Common(p);
 
-   /**
-    * Get a random horse style.
-    *
-    * @return
-    */
-   public static Horse.Style getRandomHorseStyle ()
-   {
-      Horse.Style style;
-
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 20);
-      if (rand == 0)
-         style = Horse.Style.BLACK_DOTS;
-      else if (rand == 1)
-         style = Horse.Style.WHITE;
-      else if (rand == 2)
-         style = Horse.Style.WHITE_DOTS;
-      else if (rand == 3)
-         style = Horse.Style.WHITEFIELD;
-      else
-         style = Horse.Style.NONE;
-
-      return style;
-   }
-
-   /**
-    * Get a random horse color.
-    *
-    * @return
-    */
-   public static Horse.Color getRandomHorseColor ()
-   {
-      Horse.Color color;
-
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 7);
-      if (rand == 0)
-         color = Horse.Color.BLACK;
-      else if (rand == 1)
-         color = Horse.Color.BROWN;
-      else if (rand == 2)
-         color = Horse.Color.CHESTNUT;
-      else if (rand == 3)
-         color = Horse.Color.CREAMY;
-      else if (rand == 4)
-         color = Horse.Color.DARK_BROWN;
-      else if (rand == 5)
-         color = Horse.Color.GRAY;
-      else
-         color = Horse.Color.WHITE;
-
-      return color;
+      watcher.setStyle(common.randomHorseStyle());
+      watcher.setColor(common.randomHorseColor());
    }
 }

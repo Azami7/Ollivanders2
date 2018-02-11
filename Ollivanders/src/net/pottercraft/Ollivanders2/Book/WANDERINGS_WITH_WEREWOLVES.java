@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Spell.Spells;
 
 /**
  * Wanderings with Werewolves - 2nd year Defense Against the Dark Arts book
@@ -17,5 +18,7 @@ public class WANDERINGS_WITH_WEREWOLVES extends Book
       title = shortTitle = "Wanderings with Werewolves";
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
+
+      spellList.add(Spells.CONFUNDUS_DUO);
    }
 }

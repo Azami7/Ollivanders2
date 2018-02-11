@@ -59,7 +59,8 @@ class OllivandersSchedule implements Runnable
       }
       catch (Exception e)
       {
-         e.printStackTrace();
+         if (p.debug)
+            e.printStackTrace();
       }
 
       if (counter % 20 == 0)
@@ -85,7 +86,7 @@ class OllivandersSchedule implements Runnable
    private void projectileSched ()
    {
       List<SpellProjectile> projectiles = p.getProjectiles();
-      List<SpellProjectile> projectiles2 = new ArrayList<SpellProjectile>(projectiles);
+      List<SpellProjectile> projectiles2 = new ArrayList<>(projectiles);
       if (projectiles2.size() > 0)
       {
          for (SpellProjectile proj : projectiles2)
@@ -123,16 +124,24 @@ class OllivandersSchedule implements Runnable
             continue;
          }
 
-         for (OEffect effect : playerEffects)
+         try
          {
-            ((Effect) effect).checkEffect(p, Bukkit.getPlayer(pid));
-            if (effect.kill)
+            for (OEffect effect : playerEffects)
             {
-               o2p.removeEffect(effect);
+               ((Effect) effect).checkEffect(p, Bukkit.getPlayer(pid));
+               if (effect.kill)
+               {
+                  o2p.removeEffect(effect);
+               }
             }
-         }
 
-         p.setO2Player(player, o2p);
+            p.setO2Player(player, o2p);
+         }
+         catch (Exception e)
+         {
+            if (Ollivanders2.debug)
+               e.printStackTrace();
+         }
       }
    }
 

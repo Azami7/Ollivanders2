@@ -15,6 +15,7 @@ import net.pottercraft.Ollivanders2.Effects;
  * @see IncarnatioEffectSuper
  * @author Azami7
  */
+@Deprecated
 public class INCARNATIO_EQUUS extends IncarnatioEffectSuper
 {
    public INCARNATIO_EQUUS(Player sender, Effects effect, int duration)

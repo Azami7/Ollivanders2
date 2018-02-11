@@ -26,7 +26,7 @@ public final class LAPIFORS extends FriendlyMobDisguiseSuper
 
       flavorText.add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
 
-      text = "The transfiguration spell Lapifors will transfigure an entity into a chicken.";
+      text = "The transfiguration spell Lapifors will transfigure an entity into a rabbit.";
    }
 
    /**

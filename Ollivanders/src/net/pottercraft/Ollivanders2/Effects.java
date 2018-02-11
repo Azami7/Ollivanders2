@@ -9,6 +9,7 @@ package net.pottercraft.Ollivanders2;
  */
 public enum Effects
 {
+   ANIMAGUS_INCANTATION,
    BARUFFIOS_BRAIN_ELIXIR,
    HERBIFORS,
    INCARNATIO_DEVITO,

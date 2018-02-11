@@ -228,21 +228,38 @@ public class OllivandersListener implements Listener
          }
       }
 
-      // If sender is in a MUFFLIATO, remove recepients not also in the MUFFLIATO radius
+      /**
+       * Handle removing recipients from chat
+       */
       Set<Player> remRecipients = new HashSet<>();
-      for (Player recipient : recipients)
-      {
-         if (muffliatos.size() > 0)
-         {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: MUFFLIATO detected");
-            }
 
+      // If player cast a spell, only show that chat to players within range
+      if (spell != null)
+      {
+         for (Player recipient : recipients)
+         {
+            OLocation location = new OLocation(sender.getLocation());
+            if (!Ollivanders2Common.isInside(location, recipient.getLocation(), 15))
+            {
+               remRecipients.add(recipient);
+            }
+         }
+      }
+
+      // If sender is in a MUFFLIATO, remove recepients not also in the MUFFLIATO radius
+      if (muffliatos.size() > 0)
+      {
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("onPlayerChat: MUFFLIATO detected");
+         }
+
+         for (Player recipient : recipients)
+         {
             for (StationarySpellObj muffliato : muffliatos)
             {
                Location recLoc = recipient.getLocation();
-               if (!muffliato.isInside(recLoc))
+               if (!muffliato.isInside(recLoc) && !remRecipients.contains(recipient))
                {
                   remRecipients.add(recipient);
                }
@@ -278,69 +295,82 @@ public class OllivandersListener implements Listener
          }
       }
 
-
       /**
        * Handle spell casting
        */
       // If the spell is valid AND player is allowed to cast spells per server permissions
       if (spell != null && p.canCast(sender, spell, true))
       {
-         if (p.getConfig().getBoolean("bookLearning") && p.getO2Player(sender).getSpellCount(spell) == 0)
+         if (p.canCast(sender, spell, true))
          {
-            // if bookLearning is set to true then spell count must be > 0 to cast this spell
-            if (Ollivanders2.debug)
+            if (p.getConfig().getBoolean("bookLearning") && p.getO2Player(sender).getSpellCount(spell) == 0)
             {
-               p.getLogger().info("onPlayerChat: bookLearning enforced");
-            }
-            sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
+               // if bookLearning is set to true then spell count must be > 0 to cast this spell
+               if (Ollivanders2.debug)
+               {
+                  p.getLogger().info("onPlayerChat: bookLearning enforced");
+               }
+               sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
 
-            return;
+               return;
+            }
+
+            boolean castSuccess = true;
+
+            if (!p.holdsWand(sender))
+            {
+               // if they are not holding their destined wand, casting success is reduced
+               if (Ollivanders2.debug)
+               {
+                  p.getLogger().info("onPlayerChat: player not holding destined wand");
+               }
+
+               int uses = p.getO2Player(sender).getSpellCount(spell);
+               castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
+            }
+
+            // wandless spells
+            if (spell == Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+            {
+               castSuccess = true;
+            }
+
+            if (castSuccess)
+            {
+               if (Ollivanders2.debug)
+               {
+                  p.getLogger().info("onPlayerChat: begin casting " + spell);
+               }
+
+               String[] words = message.split(" ");
+
+               if (spell == Spells.APPARATE)
+               {
+                  apparate(sender, words);
+                  event.setMessage("apparate");
+               }
+               else if (spell == Spells.PORTUS)
+               {
+                  p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+               }
+               else if (spell == Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+               {
+                  p.addProjectile(new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, sender, Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS, 1.0));
+               }
+               else
+               {
+                  O2Player o2p = p.getO2Player(sender);
+                  o2p.setWandSpell(spell);
+                  p.setO2Player(sender, o2p);
+               }
+            }
          }
-
-         boolean castSuccess = true;
-
-         // if they are not holding their destined wand, casting success is reduced
-         if (!p.holdsWand(sender))
-         {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: player not holding destined wand");
-            }
-
-            int uses = p.getO2Player(sender).getSpellCount(spell);
-            castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
-         }
-
-         if (castSuccess)
-         {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: begin casting " + spell);
-            }
-
-            String[] words = message.split(" ");
-
-            if (spell == Spells.APPARATE)
-            {
-               apparate(sender, words);
-            }
-            else if (spell == Spells.PORTUS)
-            {
-               p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
-            }
-            else
-            {
-               O2Player o2p = p.getO2Player(sender);
-               o2p.setWandSpell(spell);
-               p.setO2Player(sender, o2p);
-            }
-         }
-      }
       else
-      {
-         if (Ollivanders2.debug)
          {
-            p.getLogger().info("Either no spell cast attempted or not allowed to cast");
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("Either no spell cast attempted or not allowed to cast");
+            }
          }
       }
 
@@ -608,11 +638,19 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * Handle events when player interacts with an item in their hand.
+    *
+    * @param event
+    */
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerInteract (PlayerInteractEvent event)
    {
       Player player = event.getPlayer();
       Action action = event.getAction();
+
+      if (Ollivanders2.debug)
+         p.getLogger().info("onPlayerInteract: enter");
 
       if (action == null || player == null)
       {
@@ -662,6 +700,18 @@ public class OllivandersListener implements Listener
                o2p.setWandSpell(null);
                p.setO2Player(player, o2p);
             }
+
+
+            if (spellc >= 100 && wandC != 1)
+            {
+               if (Ollivanders2.debug)
+               {
+                  p.getLogger().info("OllivandersListener:onPlayerInteract: allow cast spell");
+               }
+
+               o2p.setMasterSpell(null);
+               p.setO2Player(player, o2p);
+            }
          }
       }
 
@@ -672,7 +722,6 @@ public class OllivandersListener implements Listener
       if (p.holdsWand(player) && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK))
       {
          O2Player o2p = p.getO2Player(player);
-         Spells castSpell = o2p.getWandSpell();
          Location location = player.getLocation();
          location.setY(location.getY() + 1.6);
 
@@ -689,7 +738,7 @@ public class OllivandersListener implements Listener
                Spells spell = o2p.getMasterSpell();
                if (spell != null)
                {
-                  String spellName = Spells.recode(spell);
+                  String spellName = Spells.firstLetterCapitalize(Spells.recode(spell));
                   player.sendMessage("Wand master spell set to " + spellName);
                }
                else
@@ -710,22 +759,31 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * Handle player joining event.
+    *
+    * @param event
+    */
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerJoin (PlayerLoginEvent event)
    {
-      //Map<UUID, OPlayer> map = p.getOPlayerMap();
       Player player = event.getPlayer();
       UUID pid = player.getUniqueId();
 
       O2Player o2p = p.getO2Player(player);
 
-      p.setPlayerTeamColor(event.getPlayer());
+      //p.setPlayerTeamColor(event.getPlayer());
       o2p.setPlayerName(player.getDisplayName());
       p.setO2Player(player, o2p);
 
       p.getLogger().info("Player " + player.getDisplayName() + " joined.");
    }
 
+   /**
+    * Handle player death event.
+    *
+    * @param event
+    */
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerDeath (PlayerDeathEvent event)
    {
@@ -1257,7 +1315,7 @@ public class OllivandersListener implements Listener
                   p.getLogger().info("Cauldron is over a hot block");
                }
 
-               PotionParser.parse(block, p);
+               p.potionParser.parse(block);
             }
             else
             {
@@ -1281,7 +1339,14 @@ public class OllivandersListener implements Listener
       ItemStack item = event.getItem();
       if (item.getType() == Material.POTION)
       {
-         O2Player o2p = p.getO2Player(event.getPlayer());
+         Player player = event.getPlayer();
+
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info(player.getDisplayName() + " drank a potion.");
+         }
+
+         O2Player o2p = p.getO2Player(player);
          ItemMeta meta = item.getItemMeta();
          if (meta.hasLore())
          {
@@ -1298,6 +1363,10 @@ public class OllivandersListener implements Listener
                      }
                   }
                   o2p.addEffect(new MEMORY_POTION(event.getPlayer(), Effects.MEMORY_POTION, 3600));
+
+                  player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+                        + "You feel more alert.");
+
                   return;
                }
                else if (lore.equals("Baruffio's Brain Elixir"))
@@ -1311,6 +1380,10 @@ public class OllivandersListener implements Listener
                      }
                   }
                   o2p.addEffect(new BARUFFIOS_BRAIN_ELIXIR(event.getPlayer(), Effects.BARUFFIOS_BRAIN_ELIXIR, 3600));
+
+                  player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+                        + "You feel clarity of thought.");
+
                   return;
                }
                else if (lore.equals("Wolfsbane Potion"))
@@ -1324,6 +1397,10 @@ public class OllivandersListener implements Listener
                      }
                   }
                   o2p.addEffect(new WOLFSBANE_POTION(event.getPlayer(), Effects.WOLFSBANE_POTION, 3600));
+
+                  player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+                        + "You feel a sense of relief.");
+
                   return;
                }
                else if (lore.equals("Wit-Sharpening Potion"))
@@ -1337,9 +1414,53 @@ public class OllivandersListener implements Listener
                      }
                   }
                   o2p.addEffect(new WIT_SHARPENING_POTION(event.getPlayer(), Effects.WIT_SHARPENING_POTION, 3600));
+
+                  player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+                        + "You feel ready to learn.");
+
+                  return;
+               }
+               else if (lore.equals("Animagus Potion"))
+               {
+                  animagusPotion(o2p);
                   return;
                }
             }
+         }
+      }
+   }
+
+   /**
+    * Perform effects of drinking the animagus potion.
+    *
+    * @param o2p
+    */
+   private void animagusPotion (O2Player o2p)
+   {
+      if (o2p.isAnimagus())
+      {
+         // they are already an Animagus so this has no effect
+         return;
+      }
+      Player player = p.getServer().getPlayer(o2p.getID());
+
+      if (!player.getWorld().isThundering())
+      {
+         // potion only works in a thunderstorm
+         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+               + "Nothing seems to happen.");
+         return;
+      }
+
+      for (OEffect effect : o2p.getEffects())
+      {
+         if (effect instanceof ANIMAGUS_INCANTATION)
+         {
+            o2p.setIsAnimagus();
+            o2p.animagusForm();
+
+            player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+                  + "You feel transformed.");
          }
       }
    }

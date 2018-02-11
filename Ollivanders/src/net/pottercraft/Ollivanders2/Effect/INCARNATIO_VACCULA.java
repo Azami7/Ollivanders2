@@ -13,6 +13,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author lownes
  */
+@Deprecated
 public class INCARNATIO_VACCULA extends IncarnatioEffectSuper
 {
    public INCARNATIO_VACCULA(Player sender, Effects effect, int duration)

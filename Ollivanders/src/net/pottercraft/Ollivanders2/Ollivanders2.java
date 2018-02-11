@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.UUID;
 
 import Quidditch.Arena;
@@ -75,9 +76,11 @@ public class Ollivanders2 extends JavaPlugin
    public static Random random = new Random();
    public static boolean debug = false;
    public static boolean nonVerbalCasting = false;
+   public static boolean hostileMobAnimagi = false;
    public static Ollivanders2WorldGuard worldGuardO2;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
+   public PotionParser potionParser;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -213,6 +216,27 @@ public class Ollivanders2 extends JavaPlugin
       getServer().addRecipe(new FurnaceRecipe(flooPowder, Material.ENDER_PEARL));
       getServer().addRecipe(bRecipe);
 
+      // set up libDisguises
+      Plugin libsDisguises = Bukkit.getServer().getPluginManager().getPlugin("LibsDisguises");
+      if (libsDisguises != null)
+      {
+         libsDisguisesEnabled = true;
+         getLogger().info("LibsDisguises found, enabled entity transfiguration spells.");
+      }
+      else
+      {
+         getLogger().info("LibsDisguises not found, disabling entity transfiguration spells.");
+      }
+
+      if (worldGuardEnabled)
+      {
+         getLogger().info("WorldGuard found, enabled WorldGuard features.");
+      }
+      else
+      {
+         getLogger().info("WorldGuard not found, disabled WorldGuard features.");
+      }
+
       // set up players
       o2Players = new O2Players(this);
       o2Players.loadO2Players();
@@ -249,28 +273,16 @@ public class Ollivanders2 extends JavaPlugin
          }
       }
 
-      Plugin libsDisguises = Bukkit.getServer().getPluginManager().getPlugin("LibsDisguises");
-      if (libsDisguises != null)
-      {
-         libsDisguisesEnabled = true;
-         getLogger().info("LibsDisguises found, enabled entity transfiguration spells.");
-      }
-      else
-      {
-         getLogger().info("LibsDisguises not found, disabling entity transfiguration spells.");
-      }
+      nonVerbalCasting = getConfig().getBoolean("nonVerbalSpellCasting");
+      if (nonVerbalCasting)
+         getLogger().info("Enabling non-verbal spell casting.");
 
-      if (worldGuardEnabled)
-      {
-         getLogger().info("WorldGuard found, enabled WorldGuard features.");
-      }
-      else
-      {
-         getLogger().info("WorldGuard not found, disabled WorldGuard features.");
-      }
+      hostileMobAnimagi = getConfig().getBoolean("hostileMobAnimagi");
+      if (hostileMobAnimagi)
+         getLogger().info("Enabling hostile mob types for animagi.");
 
-      if (getConfig().getBoolean("nonVerbalSpellCasting"))
-         nonVerbalCasting = true;
+      // potions
+      potionParser = new PotionParser(this);
 
       getLogger().info(this + " is now enabled!");
    }
@@ -326,8 +338,6 @@ public class Ollivanders2 extends JavaPlugin
       {
          if (!player.isOp())
          {
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                  + "Only server ops can use the /ollivanders2 commands.");
             return false;
          }
       }
@@ -411,6 +421,10 @@ public class Ollivanders2 extends JavaPlugin
          else if (subCommand.equalsIgnoreCase("summary"))
          {
             return playerSummary(sender);
+         }
+         else if (subCommand.equalsIgnoreCase("potions"))
+         {
+            return givePotions((Player)sender);
          }
       }
 
@@ -1395,14 +1409,8 @@ public class Ollivanders2 extends JavaPlugin
     */
    public boolean holdsWand (Player player)
    {
-      if (Ollivanders2.debug)
-         getLogger().info("Ollivander2:holdsWand: enter");
-
       if (player != null && player.getInventory().getItemInMainHand() != null)
       {
-         if (Ollivanders2.debug)
-            getLogger().info("Ollivander2:holdsWand: item in hand is not null, we can check it.");
-
          ItemStack held = player.getInventory().getItemInMainHand();
          return isWand(held);
       }
@@ -1807,5 +1815,43 @@ public class Ollivanders2 extends JavaPlugin
    public void setPlayerTeamColor (Player player)
    {
       houses.setChatColor(player);
+   }
+
+   /**
+    * Gives the command sender 1 of every Ollivanders2 potion.
+    *
+    * @param player
+    * @return
+    */
+   private boolean givePotions (Player player)
+   {
+      if (debug)
+         getLogger().info("Running givePotions...");
+
+      List<ItemStack> kit = new ArrayList<>();
+
+      for (Entry <String, List<ItemStack>> e : potionParser.allPotions.entrySet())
+      {
+         ItemStack potion = new ItemStack(Material.POTION, 1);
+         ItemMeta meta = potion.getItemMeta();
+
+         String potionType = e.getKey();
+
+         ArrayList<String> lore = new ArrayList<>();
+         lore.add(potionType);
+         meta.setLore(lore);
+         meta.setDisplayName(potionType);
+
+         potion.setItemMeta(meta);
+
+         if (debug)
+            getLogger().info("Adding " + potionType);
+
+         kit.add(potion);
+      }
+
+      givePlayerKit(player, kit);
+
+      return true;
    }
 }

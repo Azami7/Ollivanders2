@@ -15,6 +15,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
+@Deprecated
 public class INCARNATIO_PORCILLI extends IncarnatioEffectSuper
 {
    public INCARNATIO_PORCILLI(Player sender, Effects effect, int duration)

@@ -16,6 +16,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author Azami7
  */
+@Deprecated
 public class IncarnatioEffectSuper extends OEffect implements Effect
 {
    String name;

@@ -16,6 +16,7 @@ deathExpLoss: false
 bookLearning: true
 spellJournal: true
 nonVerbalSpellCasting: true
+hostileMobAnimagi: false
 chatColor: 5
 flooPowder: REDSTONE
 broomstick: STICK

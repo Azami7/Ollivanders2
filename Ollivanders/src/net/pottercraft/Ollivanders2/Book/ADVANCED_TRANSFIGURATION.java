@@ -12,7 +12,6 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  * Untransfiguration
  *
  * Missing Spells:
- * Animagus - https://github.com/Azami7/Ollivanders2/issues/87
  * Homorphus Charm - https://github.com/Azami7/Ollivanders2/issues/39
  *
  * @since 2.2.4
@@ -38,8 +37,8 @@ public class ADVANCED_TRANSFIGURATION extends Book
       spellList.add(Spells.GEMINO);
       spellList.add(Spells.REPARIFARGE);
       spellList.add(Spells.AVIS);
+      spellList.add(Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       //spellList.add(Spells.HOMORPHUS);
-      //spell 13
       //spell 14
    }
 }

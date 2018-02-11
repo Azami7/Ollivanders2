@@ -43,7 +43,7 @@ public final class SpellText
    {
       for (Spells s : Spells.values())
       {
-         if (Ollivanders2Common.libsDisguisesSpells.contains(s) && !Ollivanders2.libsDisguisesEnabled)
+         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(s))
          {
             continue;
          }

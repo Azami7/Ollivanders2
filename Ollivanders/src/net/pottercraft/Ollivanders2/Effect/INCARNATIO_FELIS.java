@@ -17,6 +17,7 @@ import net.pottercraft.Ollivanders2.Effects;
  * @author lownes
  * @author Azami7
  */
+@Deprecated
 public class INCARNATIO_FELIS extends IncarnatioEffectSuper
 {
    public INCARNATIO_FELIS(Player sender, Effects effect, int duration)

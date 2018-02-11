@@ -24,5 +24,6 @@ public class CHADWICKS_CHARMS extends Book
       spellList.add(Spells.HORREAT_PROTEGAT);
       spellList.add(Spells.DEFODIO);
       spellList.add(Spells.MOV_FOTIA);
+      spellList.add(Spells.CONFUNDUS_DUO);
    }
 }

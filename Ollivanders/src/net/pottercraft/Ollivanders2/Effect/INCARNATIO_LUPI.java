@@ -16,6 +16,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @version Ollivanders2
  * @author lownes
  */
+@Deprecated
 public class INCARNATIO_LUPI extends IncarnatioEffectSuper
 {
    public INCARNATIO_LUPI(Player sender, Effects effect, int duration)

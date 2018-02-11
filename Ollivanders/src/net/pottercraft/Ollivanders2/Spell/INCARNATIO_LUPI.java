@@ -3,7 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.WolfWatcher;
-import org.bukkit.DyeColor;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -52,20 +52,8 @@ public final class INCARNATIO_LUPI extends PlayerDisguiseSuper
       if (rand < 9)
       {
          watcher.isTamed();
-
-         rand = Math.abs(Ollivanders2.random.nextInt() % 6);
-         if (rand == 0)
-            watcher.setCollarColor(DyeColor.BLUE);
-         else if (rand == 1)
-            watcher.setCollarColor(DyeColor.GREEN);
-         else if (rand == 2)
-            watcher.setCollarColor(DyeColor.ORANGE);
-         else if (rand == 3)
-            watcher.setCollarColor(DyeColor.PURPLE);
-         else if (rand == 4)
-            watcher.setCollarColor(DyeColor.YELLOW);
-         else
-            watcher.setCollarColor(DyeColor.RED);
+         Ollivanders2Common common = new Ollivanders2Common(p);
+         watcher.setCollarColor(common.randomSecondaryDyeColor());
       }
    }
 }

@@ -1,12 +1,12 @@
 package net.pottercraft.Ollivanders2;
 
-import net.pottercraft.Ollivanders2.Spell.Spells;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.ArrayList;
+import net.pottercraft.Ollivanders2.Spell.Spells;
+import org.bukkit.entity.EntityType;
 
 /**
  * O2Players
@@ -29,6 +29,8 @@ public class O2Players
    private String muggletonLabel = "Muggleton";
    private String foundWandLabel = "Found_Wand";
    private String masterSpellLabel = "Master_Spell";
+   private String animagusLabel = "Animagus";
+   private String animagusColorLabel = "Animagus_Color";
 
    public O2Players (Ollivanders2 plugin)
    {
@@ -289,6 +291,18 @@ public class O2Players
          }
 
          /**
+          * Animagus
+          */
+         EntityType animagus = o2p.getAnimagusForm();
+         if (animagus != null)
+         {
+            playerData.put(animagusLabel, animagus.toString());
+            String color = o2p.getAnimagusColor();
+            if (color != null)
+               playerData.put(animagusColorLabel, color);
+         }
+
+         /**
           * Spell Experience
           */
          Map<Spells, Integer> spells = o2p.getKnownSpells();
@@ -413,6 +427,18 @@ public class O2Players
                {
                   player.setMasterSpell(spell);
                }
+            }
+            else if (label.equalsIgnoreCase(animagusLabel))
+            {
+               EntityType animagus = common.entityTypeFromString(value);
+               if (animagus != null)
+               {
+                  player.setAnimagusForm(animagus);
+               }
+            }
+            else if (label.equalsIgnoreCase(animagusColorLabel))
+            {
+               player.setAnimagusColor(value);
             }
             else
             {

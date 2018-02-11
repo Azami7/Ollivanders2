@@ -4,6 +4,7 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.HorseWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -46,7 +47,8 @@ public final class EQUUSIFORS extends FriendlyMobDisguiseSuper
       watcher.setAdult();
 
       // randomize appearance
-      watcher.setStyle(INCARNATIO_EQUUS.getRandomHorseStyle());
-      watcher.setColor(INCARNATIO_EQUUS.getRandomHorseColor());
+      Ollivanders2Common common = new Ollivanders2Common(p);
+      watcher.setStyle(common.randomHorseStyle());
+      watcher.setColor(common.randomHorseColor());
    }
 }

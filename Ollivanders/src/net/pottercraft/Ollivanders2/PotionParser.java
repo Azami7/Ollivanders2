@@ -9,7 +9,12 @@ import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Collections;
 
 /**
  * Parses the ingredients in a cauldron when it is right clicked with a wand and determines what potion
@@ -45,7 +50,7 @@ public class PotionParser
    );
 
    /**
-    *
+    * Heals a player.
     */
    public final static List<ItemStack> REGENERATION_POTION = Arrays.asList(
          new ItemStack(Material.BONE, 1),
@@ -55,29 +60,52 @@ public class PotionParser
          new ItemStack(Material.NETHER_STAR, 1)
    );
 
+   /**
+    *
+    */
    public final static List<ItemStack> WIT_SHARPENING_POTION = Arrays.asList(
          new ItemStack(Material.FERMENTED_SPIDER_EYE, 1),
          new ItemStack(Material.BEETROOT, 2),
          new ItemStack(Material.GHAST_TEAR, 2)
    );
 
-   public static Map<String, List<ItemStack>> ALL_POTIONS = new HashMap<String, List<ItemStack>>();
+   /**
+    * Consumed after successfully casting the Animagus incantation, this will turn a player in to an Animagus.
+    */
+   public final static List<ItemStack> ANIMAGUS_POTION = Arrays.asList(
+         new ItemStack(Material.NETHER_WARTS, 2),
+         new ItemStack(Material.CHORUS_FRUIT, 2),
+         new ItemStack(Material.EYE_OF_ENDER, 1),
+         new ItemStack(Material.SUGAR, 3)
+   );
+
+   Ollivanders2 p;
+   public Map<String, List<ItemStack>> allPotions = new HashMap<>();
+
+   public PotionParser (Ollivanders2 plugin)
+   {
+      p = plugin;
+
+      allPotions.put("Memory Potion", MEMORY_POTION);
+      allPotions.put("Baruffio's Brain Elixir", BARUFFIOS_BRAIN_ELIXIR);
+      allPotions.put("Wolfsbane Potion", WOLFSBANE_POTION);
+      allPotions.put("Regeneration Potion", REGENERATION_POTION);
+      allPotions.put("Wit-Sharpening Potion", WIT_SHARPENING_POTION);
+      allPotions.put("Animagus Potion", ANIMAGUS_POTION);
+
+      if (Ollivanders2.debug)
+         p.getLogger().info("Loaded "  + allPotions.size() + " potions.");
+   }
 
    /**
     * Parses the ingredients in a cauldron. The parameter must be a cauldron block.
     *
     * @param cauldron - The block clicked. Must be a cauldron. Must have already been checked to see if it has a hot block under it.
     */
-   public static void parse (Block cauldron, Ollivanders2 p)
+   public void parse (Block cauldron)
    {
       if (Ollivanders2.debug)
          p.getLogger().info("PotionParser:parse: enter");
-
-      ALL_POTIONS.put("Memory Potion", MEMORY_POTION);
-      ALL_POTIONS.put("Baruffio's Brain Elixir", BARUFFIOS_BRAIN_ELIXIR);
-      ALL_POTIONS.put("Wolfsbane Potion", WOLFSBANE_POTION);
-      ALL_POTIONS.put("Regeneration Potion", REGENERATION_POTION);
-      ALL_POTIONS.put("Wit-Sharpening Potion", WIT_SHARPENING_POTION);
 
       // make sure cauldron has water in it
       Cauldron cauldronData = (Cauldron)cauldron.getState().getData();
@@ -129,7 +157,7 @@ public class PotionParser
 		 * check to find out which recipe it is
 		 * make the potions according to how many ingredients there are and delete those item entities
 		 */
-      String recipe = recipeChecker(ingredients, p);
+      String recipe = recipeChecker(ingredients);
       if (recipe != null)
       {
          if (Ollivanders2.debug)
@@ -148,17 +176,17 @@ public class PotionParser
     * Checks to find out which recipe is satisfied.
     *
     * @param ingredients - The list of materials on the ground
-    * @return - The list of ingredients
+    * @return - The name of potion that matches the ingredients
     */
-   private static String recipeChecker (Map<Material, Integer> ingredients, Ollivanders2 p)
+   private String recipeChecker (Map<Material, Integer> ingredients)
    {
       if (Ollivanders2.debug)
          p.getLogger().info("PotionParser:recipeChecker: enter");
 
       search:
-      for (String name : ALL_POTIONS.keySet())
+      for (String name : allPotions.keySet())
       {
-         List<ItemStack> recipe = ALL_POTIONS.get(name);
+         List<ItemStack> recipe = allPotions.get(name);
          for (ItemStack ingredient : recipe)
          {
             if (ingredients.containsKey(ingredient.getType()))
@@ -185,9 +213,9 @@ public class PotionParser
     * @param ingredients - ingredients in the cauldron
     */
    //private static void recipeCooker (String name, int water, List<Item> ingredients, Block cauldron)
-   private static void recipeCooker (String name, List<Item> ingredients, Block cauldron)
+   private void recipeCooker (String name, List<Item> ingredients, Block cauldron)
    {
-      List<ItemStack> recipe = ALL_POTIONS.get(name);
+      List<ItemStack> recipe = allPotions.get(name);
       List<Integer> amounts = new ArrayList<>();
 
       //finding the least amount of ingredients
@@ -255,6 +283,5 @@ public class PotionParser
             }
          }
       }
-      //cauldron.setData((byte) (water - potions));
    }
 }
