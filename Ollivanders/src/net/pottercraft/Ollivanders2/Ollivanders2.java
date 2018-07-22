@@ -1255,7 +1255,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       O2Player p = getO2Player(player);
-      boolean coolDown = System.currentTimeMillis() < p.getSpellLastCast(spell);
+      boolean coolDown = System.currentTimeMillis() < p.getSpellLastCastTime(spell);
 
       if (coolDown)
       {

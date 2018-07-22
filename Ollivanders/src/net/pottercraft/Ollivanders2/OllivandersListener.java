@@ -689,7 +689,7 @@ public class OllivandersListener implements Listener
             }
 
             createSpellProjectile(player, spell, wandC);
-            o2p.setSpellRecent(spell);
+            o2p.setSpellRecentCastTime(spell);
             int spellc = p.getSpellNum(player, spell);
             if (spellc < 100 || spell == Spells.AVADA_KEDAVRA || !playerHoldsWand)
             {

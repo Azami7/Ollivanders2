@@ -277,7 +277,7 @@ public class O2Player
     * @param spell the spell to get a count for
     * @return the number of times a player has cast this spell
     */
-   public Long getSpellLastCast (Spells spell)
+   public Long getSpellLastCastTime (Spells spell)
    {
       Long count = new Long(0);
 
@@ -341,7 +341,7 @@ public class O2Player
     *
     * @param spell the spell to set the time for
     */
-   public void setSpellRecent (Spells spell)
+   public void setSpellRecentCastTime (Spells spell)
    {
       String spellClass = "net.pottercraft.Ollivanders2.Spell." + spell.toString();
       @SuppressWarnings("rawtypes")
