@@ -1,13 +1,14 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.Effects;
-import net.pottercraft.Ollivanders2.OEffect;
-import net.pottercraft.Ollivanders2.Ollivanders2;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import net.pottercraft.Ollivanders2.Effects;
+import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -141,7 +142,7 @@ public abstract class SpellProjectile
     */
    public List<Entity> getCloseEntities (double radius)
    {
-      List<Entity> entities = location.getWorld().getEntities();
+      List<Entity> entities = Ollivanders2Common.getCloseEntities(location, radius);
       List<Entity> close = new ArrayList<>();
       for (Entity e : entities)
       {
@@ -157,7 +158,6 @@ public abstract class SpellProjectile
                {
                   if (lifeTicks > 1)
                   {
-                     //getLogger().info(((LivingEntity) e).getEyeLocation().distance(location));
                      close.add(e);
                   }
                }
@@ -165,10 +165,7 @@ public abstract class SpellProjectile
          }
          else
          {
-            if (e.getLocation().distance(location) < radius)
-            {
-               close.add(e);
-            }
+            close.add(e);
          }
       }
       return close;
@@ -228,39 +225,6 @@ public abstract class SpellProjectile
       double modifier = Math.sqrt(p.getSpellNum(player, name)) / rightWand;
 
       return modifier;
-   }
-
-   /**
-    * Gets the blocks in a radius of a location.
-    *
-    * @param loc    - The Location that is the center of the block list
-    * @param radius - The radius of the block list
-    * @return List of blocks that are within radius of the location.
-    */
-   public List<Block> getBlocksInRadius (Location loc, double radius)
-   {
-      Block center = loc.getBlock();
-      int blockRadius = (int) (radius + 1);
-      List<Block> blockList = new ArrayList<>();
-      for (int x = -blockRadius; x <= blockRadius; x++)
-      {
-         for (int y = -blockRadius; y <= blockRadius; y++)
-         {
-            for (int z = -blockRadius; z <= blockRadius; z++)
-            {
-               blockList.add(center.getRelative(x, y, z));
-            }
-         }
-      }
-      ArrayList<Block> returnList = new ArrayList<>();
-      for (Block block : blockList)
-      {
-         if (block.getLocation().distance(center.getLocation()) < radius)
-         {
-            returnList.add(block);
-         }
-      }
-      return returnList;
    }
 
    /**

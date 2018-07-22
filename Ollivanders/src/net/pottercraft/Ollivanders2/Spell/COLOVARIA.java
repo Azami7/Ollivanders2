@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -62,7 +63,7 @@ public final class COLOVARIA extends Charms
       }
       if (getBlock().getType() != Material.AIR)
       {
-         for (Block block : getBlocksInRadius(location, usesModifier))
+         for (Block block : Ollivanders2Common.getBlocksInRadius(location, usesModifier))
          {
             if (block.getState().getData() instanceof Colorable)
             {

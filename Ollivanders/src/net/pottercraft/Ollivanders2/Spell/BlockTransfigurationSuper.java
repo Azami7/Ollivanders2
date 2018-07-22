@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.Material;
@@ -186,7 +187,7 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
       }
 
       // get the objects to be transfigured
-      for (Block b : getBlocksInRadius(block.getLocation(), (int)(radius * radiusModifier)))
+      for (Block b : Ollivanders2Common.getBlocksInRadius(block.getLocation(), (int)(radius * radiusModifier)))
       {
          if (!canTransfigure(b))
          {

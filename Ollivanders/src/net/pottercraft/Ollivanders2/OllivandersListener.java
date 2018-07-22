@@ -1547,4 +1547,40 @@ public class OllivandersListener implements Listener
          }
       }
    }
+
+   /**
+    * Handle potion making actions.
+    *
+    * @param event
+    */
+   @EventHandler (priority = EventPriority.NORMAL)
+   public void onPotionBrewing (PlayerToggleSneakEvent event)
+   {
+      Player player = event.getPlayer();
+
+      // is the player sneaking
+      if (!event.isSneaking())
+      {
+         return;
+      }
+
+      // are they standing next to a cauldron
+      Location location = player.getLocation();
+
+      // check that the item held is in their left hand
+      ItemStack heldItem = player.getInventory().getItemInOffHand();
+      if (heldItem == null)
+      {
+         return;
+      }
+
+      // is the item in their left hand a material
+
+      if (Ollivanders2.debug)
+      {
+
+      }
+      // check to see if the player is standing next to a cauldron
+
+   }
 }

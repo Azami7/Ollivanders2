@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.CropState;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -53,7 +54,7 @@ public final class HERBIVICUS extends Herbology
       double radius = usesModifier;
       if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER && getBlock().getType() != Material.LAVA && getBlock().getType() != Material.STATIONARY_LAVA)
       {
-         for (Block block : getBlocksInRadius(location, radius))
+         for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
          {
             if (block.getState().getData() instanceof Crops)
             {

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -79,7 +80,7 @@ public final class WINGARDIUM_LEVIOSA extends Charms
                   collos.add((COLLOPORTUS) stat);
                }
             }
-            for (Block block : getBlocksInRadius(location, radius))
+            for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
             {
                boolean insideCollo = false;
                for (COLLOPORTUS collo : collos)

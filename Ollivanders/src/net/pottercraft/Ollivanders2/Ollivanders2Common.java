@@ -2,6 +2,8 @@ package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
@@ -9,6 +11,7 @@ import org.bukkit.entity.Ocelot;
 import org.bukkit.DyeColor;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -384,5 +387,81 @@ public class Ollivanders2Common
       }
 
       return color;
+   }
+
+   /**
+    * Gets all entities within a radius of a specific location
+    *
+    * @param location the location to search for entities from
+    * @param radius - radius within which to get entities
+    * @return List of entities within the radius
+    */
+   public static List<Entity> getCloseEntities (Location location, double radius)
+   {
+      List<Entity> entities = location.getWorld().getEntities();
+      List<Entity> entitiesInRadius = new ArrayList<>();
+      for (Entity e : entities)
+      {
+         if (e.getLocation().distance(location) < radius)
+         {
+            entitiesInRadius.add(e);
+         }
+      }
+      return entitiesInRadius;
+   }
+
+   /**
+    * Gets all of a specific entity type within a radius of a specific location
+    *
+    * @param location - the location to search for entities from
+    * @param radius - radius within which to get entities
+    * @param entityType - the type of entity to look for
+    * @return List of entities of the specified type within the radius
+    */
+   public static List<Entity> getTypedCloseEntities (Location location, double radius, EntityType entityType)
+   {
+      List<Entity> entities = getCloseEntities(location, radius);
+      List<Entity> entitiesInRadius = new ArrayList<>();
+      for (Entity e : entities)
+      {
+         if (e.getType() == entityType)
+         {
+            entitiesInRadius.add(e);
+         }
+      }
+      return entitiesInRadius;
+   }
+
+   /**
+    * Gets the blocks in a radius of a location.
+    *
+    * @param loc    - The Location that is the center of the block list
+    * @param radius - The radius of the block list
+    * @return List of blocks that are within radius of the location.
+    */
+   public static List<Block> getBlocksInRadius (Location loc, double radius)
+   {
+      Block center = loc.getBlock();
+      int blockRadius = (int) (radius + 1);
+      List<Block> blockList = new ArrayList<>();
+      for (int x = -blockRadius; x <= blockRadius; x++)
+      {
+         for (int y = -blockRadius; y <= blockRadius; y++)
+         {
+            for (int z = -blockRadius; z <= blockRadius; z++)
+            {
+               blockList.add(center.getRelative(x, y, z));
+            }
+         }
+      }
+      ArrayList<Block> returnList = new ArrayList<>();
+      for (Block block : blockList)
+      {
+         if (block.getLocation().distance(center.getLocation()) < radius)
+         {
+            returnList.add(block);
+         }
+      }
+      return returnList;
    }
 }

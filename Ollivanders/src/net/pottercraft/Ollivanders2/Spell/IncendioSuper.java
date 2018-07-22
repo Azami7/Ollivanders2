@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -58,7 +59,7 @@ public abstract class IncendioSuper extends Charms
          changed.removeAll(remChange);
          if (strafe)
          {
-            for (Block block : getBlocksInRadius(location, blockRadius))
+            for (Block block : Ollivanders2Common.getBlocksInRadius(location, blockRadius))
             {
                block.getWorld().playEffect(block.getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
                if (block.getType() == Material.AIR)
