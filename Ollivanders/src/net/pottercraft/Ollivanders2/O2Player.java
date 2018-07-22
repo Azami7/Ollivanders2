@@ -2,7 +2,6 @@ package net.pottercraft.Ollivanders2;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,7 +14,6 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.*;
-import net.pottercraft.Ollivanders2.Spell.Spell;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.DyeColor;
