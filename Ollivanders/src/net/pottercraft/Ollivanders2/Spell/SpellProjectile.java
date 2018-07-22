@@ -298,4 +298,11 @@ public abstract class SpellProjectile
    {
       kill = true;
    }
+
+   /**
+    * Return the cool-down time for this spell.
+    */
+   public Long getCoolDown() {
+      return new Long(1000);
+   }
 }

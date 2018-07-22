@@ -1,5 +1,8 @@
 package net.pottercraft.Ollivanders2;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +15,8 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.*;
+import net.pottercraft.Ollivanders2.Spell.Spell;
+import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -37,6 +42,7 @@ public class O2Player
    private Ollivanders2 p = null;
    private Ollivanders2Common common;
    private Map<Spells, Integer> knownSpells = new HashMap<>();
+   private Map<Spells, Long> recentSpells = new HashMap<>();
    private List<OEffect> effects = new ArrayList<>();
    ArrayList<EntityType> animagusShapes = new ArrayList<>();
    //This is the spell loaded into the wand for casting with left click
@@ -268,6 +274,24 @@ public class O2Player
    }
 
    /**
+    * Get the casting count for a spell
+    *
+    * @param spell the spell to get a count for
+    * @return the number of times a player has cast this spell
+    */
+   public Long getSpellLastCast (Spells spell)
+   {
+      Long count = new Long(0);
+
+      if (recentSpells.containsKey(spell))
+      {
+         count = recentSpells.get(spell);
+      }
+
+      return count;
+   }
+
+   /**
     * Get the list of known spells for this player.
     *
     * @return a map of all the known spells and the spell count for each.
@@ -276,6 +300,13 @@ public class O2Player
    {
       return knownSpells;
    }
+
+   /**
+    * Get the list of recently cast spells for this player.
+    *
+    * @return a map of all recent spells and the time they were cast.
+    */
+   public Map<Spells, Long> getRecentSpells () { return recentSpells; }
 
    /**
     * Set the spell count for a spell. This will override the existing values for this spell and should
@@ -304,6 +335,39 @@ public class O2Player
       else
       {
          addMasteredSpell(spell);
+      }
+   }
+
+   /**
+    * Set the most recent cast time for a spell. This will override the existing values for this spell.
+    *
+    * @param spell the spell to set the time for
+    */
+   public void setSpellRecent (Spells spell)
+   {
+      String spellClass = "net.pottercraft.Ollivanders2.Spell." + spell.toString();
+      @SuppressWarnings("rawtypes")
+      Constructor c = null;
+      try
+      {
+         c = Class.forName(spellClass).getConstructor();
+         SpellProjectile s = (SpellProjectile) c.newInstance();
+         if (recentSpells.containsKey(spell))
+         {
+            recentSpells.replace(spell, System.currentTimeMillis() + s.getCoolDown());
+         }
+         else
+         {
+            recentSpells.put(spell, System.currentTimeMillis() + s.getCoolDown());
+         }
+      }
+      catch (InvocationTargetException e)
+      {
+         e.getCause().printStackTrace();
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
       }
    }
 
