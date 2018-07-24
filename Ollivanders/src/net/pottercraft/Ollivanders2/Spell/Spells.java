@@ -240,4 +240,23 @@ public enum Spells
       }
       return sb.substring(0, sb.length() - 1);
    }
+
+   /**
+    * Get a Spells enum from a string.
+    *
+    * @param spellString
+    * @return
+    */
+   public static Spells spellsFromString (String spellString)
+   {
+      Spells spell = null;
+
+      try
+      {
+         spell = Spells.valueOf(spellString);
+      }
+      catch (Exception e) { }
+
+      return spell;
+   }
 }
