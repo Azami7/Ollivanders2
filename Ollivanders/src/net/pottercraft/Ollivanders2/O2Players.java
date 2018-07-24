@@ -422,7 +422,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(masterSpellLabel))
             {
-               Spells spell = common.spellsFromString(value);
+               Spells spell = Spells.spellsFromString(value);
                if (spell != null)
                {
                   player.setMasterSpell(spell);
@@ -443,7 +443,7 @@ public class O2Players
             else
             {
                // it is a spell
-               Spells spell = common.spellsFromString(label);
+               Spells spell = Spells.spellsFromString(label);
                if (spell == null)
                {
                   continue;
