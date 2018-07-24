@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
 
 import Quidditch.Arena;
@@ -24,6 +23,8 @@ import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Potion.Potion;
+import net.pottercraft.Ollivanders2.Potion.Potions;
 
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
@@ -71,6 +72,7 @@ public class Ollivanders2 extends JavaPlugin
    private O2Houses houses;
    private O2Players o2Players;
    private O2Books books;
+   private Potions potions;
 
    private static String mcVersion;
    public static Random random = new Random();
@@ -80,7 +82,7 @@ public class Ollivanders2 extends JavaPlugin
    public static Ollivanders2WorldGuard worldGuardO2;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
-   public PotionParser potionParser;
+   //public PotionParser potionParser;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -244,6 +246,9 @@ public class Ollivanders2 extends JavaPlugin
       // set up houses
       houses = new O2Houses(this);
 
+      // set up potions
+      potions = new Potions(this);
+
       // create books
       books = new O2Books(this);
 
@@ -282,7 +287,7 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().info("Enabling hostile mob types for animagi.");
 
       // potions
-      potionParser = new PotionParser(this);
+      //potionParser = new PotionParser(this);
 
       getLogger().info(this + " is now enabled!");
    }
@@ -1830,28 +1835,23 @@ public class Ollivanders2 extends JavaPlugin
 
       List<ItemStack> kit = new ArrayList<>();
 
-      for (Entry <String, List<ItemStack>> e : potionParser.allPotions.entrySet())
+      for (Potion potion : potions.getPotions())
       {
-         ItemStack potion = new ItemStack(Material.POTION, 1);
-         ItemMeta meta = potion.getItemMeta();
-
-         String potionType = e.getKey();
-
-         ArrayList<String> lore = new ArrayList<>();
-         lore.add(potionType);
-         meta.setLore(lore);
-         meta.setDisplayName(potionType);
-
-         potion.setItemMeta(meta);
+         ItemStack brewedPotion = potion.brew();
 
          if (debug)
-            getLogger().info("Adding " + potionType);
+            getLogger().info("Adding " + potion.getName());
 
-         kit.add(potion);
+         kit.add(brewedPotion);
       }
 
       givePlayerKit(player, kit);
 
       return true;
+   }
+
+   public Potions getPotions ()
+   {
+      return potions;
    }
 }

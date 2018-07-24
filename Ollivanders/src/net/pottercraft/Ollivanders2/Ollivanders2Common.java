@@ -149,30 +149,6 @@ public class Ollivanders2Common
    }
 
    /**
-    * Get a Spells enum from a string.
-    *
-    * @param spellString
-    * @return
-    */
-   public Spells spellsFromString (String spellString)
-   {
-      Spells spell = null;
-
-      try
-      {
-         spell = Spells.valueOf(spellString);
-      }
-      catch (Exception e)
-      {
-         p.getLogger().warning("Failed to parse spell " + spellString);
-         if (p.debug)
-            e.printStackTrace();
-      }
-
-      return spell;
-   }
-
-   /**
     * Get an EntityType enum from a string.
     *
     * @param entityTypeString

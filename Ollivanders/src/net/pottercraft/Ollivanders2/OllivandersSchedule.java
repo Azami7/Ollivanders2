@@ -40,8 +40,8 @@ class OllivandersSchedule implements Runnable
 {
    Ollivanders2 p;
    int counter = 0;
-   static Set<UUID> flying = new HashSet<UUID>();
-   Set<UUID> onBroom = new HashSet<UUID>();
+   static Set<UUID> flying = new HashSet<>();
+   Set<UUID> onBroom = new HashSet<>();
 
    public OllivandersSchedule (Ollivanders2 plugin)
    {

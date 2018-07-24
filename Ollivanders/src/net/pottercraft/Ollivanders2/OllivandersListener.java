@@ -3,8 +3,8 @@ package net.pottercraft.Ollivanders2;
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Effect.*;
 import net.pottercraft.Ollivanders2.Spell.*;
+import net.pottercraft.Ollivanders2.Potion.Potions;
 import net.pottercraft.Ollivanders2.StationarySpell.*;
-
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
@@ -12,10 +12,12 @@ import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT;
 import net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM;
 import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
 import net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE;
+
 import org.bukkit.*;
 import org.bukkit.Effect;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -24,10 +26,13 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.*;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.util.Vector;
+import org.bukkit.material.MaterialData;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
@@ -143,6 +148,11 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * Handles all actions related to players speaking.
+    *
+    * @param event
+    */
    @EventHandler(priority = EventPriority.LOW)
    public void onPlayerChat (AsyncPlayerChatEvent event)
    {
@@ -652,16 +662,19 @@ public class OllivandersListener implements Listener
       if (Ollivanders2.debug)
          p.getLogger().info("onPlayerInteract: enter");
 
-      if (action == null || player == null)
+      if (action == null || player == null || event.getHand() != EquipmentSlot.HAND)
       {
          return;
       }
 
       /**
-       * A left click is used to cast a spell.
+       * A left click is used to cast a spell
        */
       if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
       {
+         if (Ollivanders2.debug)
+            p.getLogger().info("OllivandersListener:onPlayerInteract: left click action");
+
          O2Player o2p = p.getO2Player(player);
          Spells spell = o2p.getWandSpell();
          if (spell != null)
@@ -671,9 +684,7 @@ public class OllivandersListener implements Listener
             if (playerHoldsWand)
             {
                if (Ollivanders2.debug)
-               {
                   p.getLogger().info("OllivandersListener:onPlayerInteract: player holds a wand");
-               }
 
                wandC = p.wandCheck(player);
                allyWand(player);
@@ -716,11 +727,19 @@ public class OllivandersListener implements Listener
       }
 
       /**
-       * A right click is used to determine if the wand is the player's destined wand or to set the mastered
-       * spell in the wand for non-verbal casting if they are sneaking while clicking.
+       * A right click is used:
+       *  - to determine if the wand is the player's destined wand
+       *  - to set the mastered spell in the wand for non-verbal casting if they are sneaking while clicking
+       *  - to brew a potion if they are holding a glass bottle in their off hand and facing a cauldron
        */
-      if (p.holdsWand(player) && (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK))
+      else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
       {
+         if (!p.holdsWand(player))
+            return;
+
+         if (Ollivanders2.debug)
+            p.getLogger().info("OllivandersListener:onPlayerInteract: right click action");
+
          O2Player o2p = p.getO2Player(player);
          Location location = player.getLocation();
          location.setY(location.getY() + 1.6);
@@ -730,9 +749,7 @@ public class OllivandersListener implements Listener
             if (player.isSneaking() && Ollivanders2.nonVerbalCasting)
             {
                if (Ollivanders2.debug)
-               {
                   p.getLogger().info("OllivandersListener:onPlayerInteract: shift mastered spell");
-               }
 
                o2p.shiftMasterSpell();
                Spells spell = o2p.getMasterSpell();
@@ -749,8 +766,18 @@ public class OllivandersListener implements Listener
                   }
                }
             }
+            else if ((playerFacingCauldron(player) != null) && (player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE))
+            {
+               if (Ollivanders2.debug)
+                  p.getLogger().info("OllivandersListener:onPlayerInteract: brewing potion");
+
+               Block cauldron = (playerFacingCauldron(player));
+               brewPotion(player, cauldron);
+            }
             else
             {
+               if (Ollivanders2.debug)
+                  p.getLogger().info("OllivandersListener:onPlayerInteract: waving destined wand");
                // play a sound and visual effect when they right-click their destined wand with no spell
                player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
                player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
@@ -841,6 +868,11 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * Handles when players receive damage.
+    *
+    * @param event
+    */
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerDamage (EntityDamageEvent event)
    {
@@ -1289,6 +1321,7 @@ public class OllivandersListener implements Listener
    /**
     * Fires if a player right clicks a cauldron that is being heated from underneath
     */
+   /*
    @EventHandler(priority = EventPriority.HIGHEST)
    public void cauldronClick (PlayerInteractEvent event)
    {
@@ -1315,18 +1348,19 @@ public class OllivandersListener implements Listener
                   p.getLogger().info("Cauldron is over a hot block");
                }
 
-               p.potionParser.parse(block);
+               p.getPotions().brewPotion(block);
             }
             else
             {
                if (Ollivanders2.debug)
                {
-                  p.getLogger().info("Cauldron is over a hot block");
+                  p.getLogger().info("Cauldron is not over a hot block");
                }
             }
          }
       }
    }
+   */
 
    /**
     * When a player consumes something, see if it was a potion and apply the effect if it was.
@@ -1561,26 +1595,116 @@ public class OllivandersListener implements Listener
       // is the player sneaking
       if (!event.isSneaking())
       {
+         if (Ollivanders2.debug)
+            p.getLogger().info("onPotionBrewing: player not sneaking");
+
          return;
       }
 
-      // are they standing next to a cauldron
-      Location location = player.getLocation();
+      Block cauldron = playerFacingCauldron(player);
+      if (cauldron == null)
+      {
+         if (Ollivanders2.debug)
+            p.getLogger().info("onPotionBrewing: player not facing a cauldron");
+
+         return;
+      }
 
       // check that the item held is in their left hand
       ItemStack heldItem = player.getInventory().getItemInOffHand();
-      if (heldItem == null)
+      if (heldItem == null || heldItem.getAmount() == 0)
       {
+         if (Ollivanders2.debug)
+            p.getLogger().info("onPotionBrewing: player not holding an item in their off hand");
+
          return;
       }
 
-      // is the item in their left hand a material
+      // put the item in the player's off hand in to the cauldron
+      Location spawnLoc = cauldron.getLocation();
+      World world = cauldron.getWorld();
 
-      if (Ollivanders2.debug)
+      Item item = world.dropItem(spawnLoc.add(+0.5, +0.5, +0.5), heldItem.clone());
+
+      if (item == null)
       {
+         if (Ollivanders2.debug)
+            p.getLogger().info("onPotionBrewing: failed to spawn dropped item in cauldron");
 
+         return;
       }
-      // check to see if the player is standing next to a cauldron
 
+      item.setVelocity(new Vector(0, 0, 0));
+      player.getInventory().setItemInOffHand(null);
+   }
+
+   /**
+    * Determine if a player is facing a cauldron.
+    *
+    * @param player
+    * @return the cauldron if a player is facing one, null otherwise
+    */
+   Block playerFacingCauldron (Player player)
+   {
+      List<Block> blocksInFront = player.getLineOfSight(null, 3);
+      Block cauldron = null;
+
+      for (Block block : blocksInFront)
+      {
+         if (block.getType() == Material.CAULDRON)
+         {
+            cauldron = block;
+            break;
+         }
+      }
+
+      return cauldron;
+   }
+
+   /**
+    * Brew a potion from the ingredients in a cauldron.
+    *
+    * @apiNote assumes player is holding a glass bottle in their off hand and will set off hand item to null
+    * @param player the player brewing the potion
+    * @param cauldron the cauldron of ingredients
+    */
+   void brewPotion (Player player, Block cauldron)
+   {
+      Block under = cauldron.getRelative(BlockFace.DOWN);
+      if (under.getType() == Material.FIRE || under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA)
+      {
+         Potions potions = p.getPotions();
+
+         ItemStack potion = potions.brewPotion(cauldron);
+
+         if (potion == null)
+         {
+            player.sendMessage("The cauldron appears unchanged. Perhaps you should check your recipe");
+            return;
+         }
+
+         Location spawnLoc = cauldron.getLocation();
+         World world = cauldron.getWorld();
+
+         // remove ingredients from cauldron
+         for (Entity e : cauldron.getWorld().getNearbyEntities(cauldron.getLocation(), 1, 1, 1))
+         {
+            if (e instanceof Item)
+            {
+               e.remove();
+            }
+         }
+
+         player.getWorld().playEffect(cauldron.getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
+         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 1, 1);
+         player.getInventory().setItemInOffHand(potion);
+      }
+      else
+      {
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("Cauldron is not over a hot block");
+         }
+      }
    }
 }

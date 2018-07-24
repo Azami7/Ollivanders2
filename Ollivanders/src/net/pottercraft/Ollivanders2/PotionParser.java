@@ -22,6 +22,7 @@ import java.util.Collections;
  *
  * @author lownes
  * @author Azami7
+ * @deprecated use net.pottercraft.Ollivanders2.Potion.Potions
  */
 public class PotionParser
 {
@@ -73,7 +74,7 @@ public class PotionParser
     * Consumed after successfully casting the Animagus incantation, this will turn a player in to an Animagus.
     */
    public final static List<ItemStack> ANIMAGUS_POTION = Arrays.asList(
-         new ItemStack(Material.NETHER_WARTS, 2),
+         new ItemStack(Material.WATER_LILY, 1),
          new ItemStack(Material.CHORUS_FRUIT, 2),
          new ItemStack(Material.EYE_OF_ENDER, 1),
          new ItemStack(Material.SUGAR, 3)
