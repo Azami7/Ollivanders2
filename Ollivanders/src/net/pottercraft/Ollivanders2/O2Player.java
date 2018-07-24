@@ -55,7 +55,7 @@ public class O2Player
    /**
     * Wand wood types
     */
-   private ArrayList<String> woodArray = new ArrayList<String>() {{
+   private final ArrayList<String> woodArray = new ArrayList<String>() {{
       add("Spruce");
       add("Jungle");
       add("Birch");
@@ -65,7 +65,7 @@ public class O2Player
    /**
     * Wand core types
     */
-   private ArrayList<String> coreArray = new ArrayList<String>() {{
+   private final ArrayList<String> coreArray = new ArrayList<String>() {{
       add("Spider Eye");
       add("Bone");
       add("Rotten Flesh");
