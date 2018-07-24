@@ -58,7 +58,7 @@ public abstract class GaleatiSuper extends Charms
                live.getWorld().dropItem(live.getEyeLocation(), helmet);
             }
          }
-         ee.setHelmet(new ItemStack(materialType, 0));
+         ee.setHelmet(new ItemStack(materialType, 1));
          kill();
          return;
       }

@@ -43,6 +43,7 @@ public abstract class SpellProjectile
    public Effect moveEffect = Effect.STEP_SOUND;
    public Material moveEffectData = Material.GLOWSTONE;
    public Set<Block> changed = new HashSet<>();
+   public static final Long DEFAULT_COOLDOWN = new Long(1000);
 
    /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
@@ -261,5 +262,12 @@ public abstract class SpellProjectile
    public void kill ()
    {
       kill = true;
+   }
+
+   /**
+    * Return the cool-down time for this spell.
+    */
+   public Long getCoolDown() {
+      return DEFAULT_COOLDOWN;
    }
 }

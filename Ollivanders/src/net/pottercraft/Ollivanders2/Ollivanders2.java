@@ -1258,7 +1258,21 @@ public class Ollivanders2 extends JavaPlugin
             return false;
          }
       }
+
+      O2Player p = getO2Player(player);
+      boolean coolDown = System.currentTimeMillis() < p.getSpellLastCastTime(spell);
+
+      if (coolDown)
+      {
+         if (verbose)
+         {
+            spellCoolDownMessage(player);
+         }
+         return false;
+      }
+
       boolean cast = canLive(player.getLocation(), spell);
+
       if (!cast && verbose)
       {
          spellCannotBeCastMessage(player);
@@ -1810,6 +1824,19 @@ public class Ollivanders2 extends JavaPlugin
    {
       player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
             + "A powerful protective magic prevents you from casting this spell here.");
+   }
+
+   /**
+    * When a spell is not allowed be cast, such as from WorldGuard protection, send a message.
+    * This is not the message to use for bookLearning enforcement.
+    *
+    * @since 2.2.5
+    * @param player
+    */
+   public void spellCoolDownMessage (Player player)
+   {
+      player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+              + "You are too tired to cast this spell right now.");
    }
 
    /**

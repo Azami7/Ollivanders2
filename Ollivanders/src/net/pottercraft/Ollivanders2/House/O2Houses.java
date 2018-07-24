@@ -344,10 +344,7 @@ public class O2Houses
     */
    public boolean isSorted (Player player)
    {
-      if (O2HouseMap.containsKey(player.getUniqueId()))
-         return true;
-      else
-         return false;
+         return O2HouseMap.containsKey(player.getUniqueId());
    }
 
    /**
