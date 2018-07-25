@@ -27,6 +27,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_6 extends Book
       spellList.add(Spells.ALARTE_ASCENDARE);
       spellList.add(Spells.LUMOS_SOLEM);
       spellList.add(Spells.PARTIS_TEMPORUS);
+      spellList.add(Spells.APPARATE);
       //spellList.add(Spells.EXPECTO_PATRONUM);
    }
 }
