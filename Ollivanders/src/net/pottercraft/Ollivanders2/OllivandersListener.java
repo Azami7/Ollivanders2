@@ -713,7 +713,7 @@ public class OllivandersListener implements Listener
                p.setO2Player(player, o2p);
             }
 
-
+            /*
             if (spellc >= 100 && wandC != 1)
             {
                if (Ollivanders2.debug)
@@ -724,6 +724,7 @@ public class OllivandersListener implements Listener
                o2p.setMasterSpell(null);
                p.setO2Player(player, o2p);
             }
+            */
          }
       }
 
