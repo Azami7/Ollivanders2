@@ -18,5 +18,6 @@ public class VOYAGES_WITH_VAMPIRES extends Book
       branch = O2MagicBranch.DARK_ARTS;
 
       spellList.add(Spells.DEPULSO);
+      spellList.add(Spells.POINT_ME);
    }
 }
