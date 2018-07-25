@@ -703,6 +703,16 @@ public class O2Player
     */
    public void shiftMasterSpell ()
    {
+      shiftMasterSpell(false);
+   }
+
+   /**
+    * Shift the wand's master spell to the next spell.
+    *
+    * @param reverse if set to true, iterates backwards through spell list
+    */
+   public void shiftMasterSpell (boolean reverse)
+   {
       // shift to the next spell if there is more than one mastered spell
       if (masteredSpells.size() >= 1)
       {
@@ -712,17 +722,25 @@ public class O2Player
          }
          else
          {
-            int i = masteredSpells.indexOf(masterSpell);
+            int curSpellIndex = masteredSpells.indexOf(masterSpell);
+            int nextSpellIndex;
 
-            if (i == (masteredSpells.size() - 1))
-            {
-               // spell is the last in the array, roll over
-               masterSpell = masteredSpells.get(0);
-            }
+            if (reverse)
+               nextSpellIndex = curSpellIndex + 1;
             else
+               nextSpellIndex = curSpellIndex - 1;
+
+            // handle roll overs
+            if (nextSpellIndex >= masteredSpells.size())
             {
-               masterSpell = masteredSpells.get(i + 1);
+               nextSpellIndex = 0;
             }
+            else if (nextSpellIndex < 0)
+            {
+               nextSpellIndex = masteredSpells.size() - 1;
+            }
+
+            masterSpell = masteredSpells.get(nextSpellIndex);
          }
       }
       else
