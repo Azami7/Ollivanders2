@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -25,6 +26,7 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
 
       flavorText.add("They are corpses, dead bodies that have been bewitched to do a Dark wizard's bidding. Inferi have not been seen for a long time, however, not since Voldemort was last powerful... He killed enough people to make an army of them, of course.");
       text = "Mortuos Suscitate will transfigure a piece of rotten flesh into an Inferius. The Inferius will not attack it's owner.";
+      branch = O2MagicBranch.DARK_ARTS;
    }
 
    /**

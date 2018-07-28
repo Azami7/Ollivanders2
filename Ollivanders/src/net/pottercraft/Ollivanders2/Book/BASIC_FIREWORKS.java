@@ -14,13 +14,13 @@ public final class BASIC_FIREWORKS extends Book
    public BASIC_FIREWORKS ()
    {
       title = shortTitle = "Basic Fireworks";
-      author = "Fred and George Weasley";
+      author = "Fred George Weasley";
       branch = O2MagicBranch.CHARMS;
 
-      spellList.add(Spells.BOTHYNUS);
-      spellList.add(Spells.COMETES);
-      spellList.add(Spells.PERICULUM);
-      spellList.add(Spells.PORFYRO_ASTERI);
-      spellList.add(Spells.VERDIMILLIOUS);
+      spells.add(Spells.BOTHYNUS);
+      spells.add(Spells.COMETES);
+      spells.add(Spells.PERICULUM);
+      spells.add(Spells.PORFYRO_ASTERI);
+      spells.add(Spells.VERDIMILLIOUS);
    }
 }

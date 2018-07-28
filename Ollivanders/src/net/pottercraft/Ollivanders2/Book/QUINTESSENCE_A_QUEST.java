@@ -18,11 +18,11 @@ public class QUINTESSENCE_A_QUEST extends Book
       author = "Unknown";
       branch = O2MagicBranch.CHARMS;
 
-      spellList.add(Spells.PROTEGO_TOTALUM);
-      spellList.add(Spells.PROTEGO_HORRIBILIS);
-      spellList.add(Spells.NULLUM_APPAREBIT);
-      spellList.add(Spells.NULLUM_EVANESCUNT);
-      spellList.add(Spells.APARECIUM);
-      spellList.add(Spells.CONFUNDO);
+      spells.add(Spells.PROTEGO_TOTALUM);
+      spells.add(Spells.PROTEGO_HORRIBILIS);
+      spells.add(Spells.NULLUM_APPAREBIT);
+      spells.add(Spells.NULLUM_EVANESCUNT);
+      spells.add(Spells.APARECIUM);
+      spells.add(Spells.CONFUNDO);
    }
 }

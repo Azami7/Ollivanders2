@@ -22,10 +22,10 @@ public class MAGICK_MOSTE_EVILE extends Book
       author = "Godelot";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.FIENDFYRE);
-      spellList.add(Spells.AVADA_KEDAVRA);
-      spellList.add(Spells.FLAGRANTE);
-      spellList.add(Spells.LEGILIMENS);
+      spells.add(Spells.FIENDFYRE);
+      spells.add(Spells.AVADA_KEDAVRA);
+      spells.add(Spells.FLAGRANTE);
+      spells.add(Spells.LEGILIMENS);
 
       closingPage = "\n\nOf the Horcrux, wickedest of magical inventions, we shall not speak nor give direction.";
    }

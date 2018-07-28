@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
+import net.pottercraft.Ollivanders2.Teachable;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -20,7 +24,7 @@ import org.bukkit.potion.PotionEffectType;
  * @author Azami7
  * @since 2.2.7
  */
-public abstract class Potion
+public abstract class Potion implements Teachable
 {
    /**
     * The ingredients list for this potion.
@@ -54,6 +58,21 @@ public abstract class Potion
     */
    public Potion () { }
 
+   protected String getIngredientsText ()
+   {
+      String s = "\n\nIngredients:";
+
+      for (Entry<Material, Integer> e : ingredients.entrySet())
+      {
+         Material m = e.getKey();
+         String mString = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(m.toString()));
+
+         s = s + "\n" + e.getValue().toString() + " " + mString;
+      }
+
+      return s;
+   }
+
    /**
     * Get the name of this potion
     *
@@ -80,7 +99,7 @@ public abstract class Potion
     *
     * @return the description text for this spell
     */
-   String getText ()
+   public String getText ()
    {
       return text;
    }
@@ -102,6 +121,11 @@ public abstract class Potion
          int index = Math.abs(Ollivanders2.random.nextInt() % flavorText.size());
          return flavorText.get(index);
       }
+   }
+
+   public O2MagicBranch getMagicBranch ()
+   {
+      return O2MagicBranch.POTIONS;
    }
 
    /**

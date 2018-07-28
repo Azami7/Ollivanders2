@@ -21,12 +21,12 @@ public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends Book
       author = "Emeric Switch";
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      spellList.add(Spells.DURO);
-      spellList.add(Spells.FATUUS_AURUM);
-      spellList.add(Spells.CALAMUS);
-      spellList.add(Spells.DEPRIMO);
-      spellList.add(Spells.MULTICORFORS);
-      spellList.add(Spells.VERA_VERTO);
-      spellList.add(Spells.SNUFFLIFORS);
+      spells.add(Spells.DURO);
+      spells.add(Spells.FATUUS_AURUM);
+      spells.add(Spells.CALAMUS);
+      spells.add(Spells.DEPRIMO);
+      spells.add(Spells.MULTICORFORS);
+      spells.add(Spells.VERA_VERTO);
+      spells.add(Spells.SNUFFLIFORS);
    }
 }

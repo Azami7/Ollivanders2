@@ -1,10 +1,11 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Ollivanders2;
-
 import java.util.ArrayList;
 import java.util.UUID;
+
+import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Teachable;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -23,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
  * @author lownes
  * @author Azami7
  */
-public abstract class Transfiguration extends SpellProjectile implements O2Spell
+public abstract class Transfiguration extends SpellProjectile implements Spell, Teachable
 {
    private final UUID nullUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
    private EntityType fromEType;

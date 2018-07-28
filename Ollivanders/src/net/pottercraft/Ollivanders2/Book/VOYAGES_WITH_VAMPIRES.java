@@ -17,6 +17,7 @@ public class VOYAGES_WITH_VAMPIRES extends Book
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.DEPULSO);
+      spells.add(Spells.DEPULSO);
+      spells.add(Spells.OBLIVIATE);
    }
 }

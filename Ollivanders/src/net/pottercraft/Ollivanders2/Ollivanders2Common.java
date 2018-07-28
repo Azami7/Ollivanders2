@@ -440,4 +440,46 @@ public class Ollivanders2Common
       }
       return returnList;
    }
+
+   /**
+    * Find the lowercase string that corresponds to an enum
+    *
+    * @param s the enum as a string
+    * @return string such that it is the lowercase version of the spell minus underscores
+    */
+   public static String enumRecode (String s)
+   {
+      String nameLow = s.toString().toLowerCase();
+      String[] words = nameLow.split("_");
+      String comp = "";
+      for (String st : words)
+      {
+         comp = comp.concat(st);
+         comp = comp.concat(" ");
+      }
+      comp = comp.substring(0, comp.length() - 1);
+      return comp;
+   }
+
+   /**
+    * Converts a string to have it's first letter of each word be in upper case, and all other letters lower case.
+    *
+    * @param str - String to convert.
+    * @return String with correct formatting.
+    */
+   public static String firstLetterCapitalize (String str)
+   {
+      StringBuilder sb = new StringBuilder();
+      String[] wordList = str.split(" ");
+      for (String s : wordList)
+      {
+         sb.append(s.substring(0, 1).toUpperCase());
+         if (s.length() > 1)
+         {
+            sb.append(s.substring(1, s.length()).toLowerCase());
+         }
+         sb.append(" ");
+      }
+      return sb.substring(0, sb.length() - 1);
+   }
 }

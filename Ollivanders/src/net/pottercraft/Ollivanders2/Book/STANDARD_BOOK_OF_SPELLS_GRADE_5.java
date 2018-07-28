@@ -21,15 +21,15 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_5 extends Book
       author = "Miranda Goshawk";
       branch = O2MagicBranch.CHARMS;
 
-      spellList.add(Spells.DEPULSO);
-      spellList.add(Spells.EXPELLIARMUS);
-      spellList.add(Spells.INCENDIO);
-      spellList.add(Spells.LEVICORPUS);
-      spellList.add(Spells.LIBERACORPUS);
-      spellList.add(Spells.PROTEGO);
-      spellList.add(Spells.STUPEFY);
-      spellList.add(Spells.INCENDIO_DUO);
-      //spellList.add(Spells.RICTUSEMPRA);
-      //spellList.add(Spells.SUBSTANTIVUM);
+      spells.add(Spells.DEPULSO);
+      spells.add(Spells.EXPELLIARMUS);
+      spells.add(Spells.INCENDIO);
+      spells.add(Spells.LEVICORPUS);
+      spells.add(Spells.LIBERACORPUS);
+      spells.add(Spells.PROTEGO);
+      spells.add(Spells.STUPEFY);
+      spells.add(Spells.INCENDIO_DUO);
+      //spells.add(Spells.RICTUSEMPRA);
+      //spells.add(Spells.SUBSTANTIVUM);
    }
 }

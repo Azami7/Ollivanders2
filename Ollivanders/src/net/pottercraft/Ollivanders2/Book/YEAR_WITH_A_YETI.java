@@ -20,6 +20,7 @@ public class YEAR_WITH_A_YETI extends Book
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.ARANIA_EXUMAI);
+      spells.add(Spells.ARANIA_EXUMAI);
+      spells.add(Spells.OBLIVIATE);
    }
 }

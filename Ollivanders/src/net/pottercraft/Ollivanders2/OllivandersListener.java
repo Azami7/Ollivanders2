@@ -756,7 +756,7 @@ public class OllivandersListener implements Listener
                Spells spell = o2p.getMasterSpell();
                if (spell != null)
                {
-                  String spellName = Spells.firstLetterCapitalize(Spells.recode(spell));
+                  String spellName = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(spell.toString().toLowerCase()));
                   player.sendMessage("Wand master spell set to " + spellName);
                }
                else
@@ -820,6 +820,7 @@ public class OllivandersListener implements Listener
          O2Player o2p = p.getO2Player(event.getEntity());
 
          o2p.resetSpellCount();
+         o2p.resetPotionCount();
          o2p.setWandSpell(null);
          o2p.resetSouls();
          o2p.resetEffects();
@@ -1318,50 +1319,6 @@ public class OllivandersListener implements Listener
          event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
       }
    }
-
-   /**
-    * Fires if a player right clicks a cauldron that is being heated from underneath
-    */
-   /*
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void cauldronClick (PlayerInteractEvent event)
-   {
-      if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
-      {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("OllivandersListener:cauldronClick: enter");
-         }
-
-         Block block = event.getClickedBlock();
-         if (block.getType() == Material.CAULDRON && p.holdsWand(event.getPlayer()))
-         {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("Block right-clicked was a cauldron");
-            }
-
-            Block under = block.getRelative(BlockFace.DOWN);
-            if (under.getType() == Material.FIRE || under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA)
-            {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("Cauldron is over a hot block");
-               }
-
-               p.getPotions().brewPotion(block);
-            }
-            else
-            {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("Cauldron is not over a hot block");
-               }
-            }
-         }
-      }
-   }
-   */
 
    /**
     * When a player consumes something, see if it was a potion and apply the effect if it was.

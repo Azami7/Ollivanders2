@@ -17,6 +17,7 @@ public class BREAK_WITH_A_BANSHEE extends Book
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.EXPELLIARMUS);
+      spells.add(Spells.EXPELLIARMUS);
+      spells.add(Spells.OBLIVIATE);
    }
 }

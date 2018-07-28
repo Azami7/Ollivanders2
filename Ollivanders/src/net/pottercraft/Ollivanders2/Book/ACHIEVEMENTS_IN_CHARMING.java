@@ -17,8 +17,8 @@ public class ACHIEVEMENTS_IN_CHARMING extends Book
       author = "Unknown";
       branch = O2MagicBranch.CHARMS;
 
-      spellList.add(Spells.LUMOS);
-      spellList.add(Spells.WINGARDIUM_LEVIOSA);
-      spellList.add(Spells.SPONGIFY);
+      spells.add(Spells.LUMOS);
+      spells.add(Spells.WINGARDIUM_LEVIOSA);
+      spells.add(Spells.SPONGIFY);
    }
 }

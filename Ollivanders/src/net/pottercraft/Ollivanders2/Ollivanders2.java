@@ -82,7 +82,6 @@ public class Ollivanders2 extends JavaPlugin
    public static Ollivanders2WorldGuard worldGuardO2;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
-   //public PotionParser potionParser;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -463,7 +462,7 @@ public class Ollivanders2 extends JavaPlugin
          Spells masterSpell = o2Player.getMasterSpell();
          if (masterSpell != null)
          {
-            summary = summary + "\nMaster Spell: " + Spells.recode(masterSpell);
+            summary = summary + "\nMaster Spell: " + Ollivanders2Common.enumRecode(masterSpell.toString().toLowerCase());
          }
 
          summary = summary + "\n";
@@ -1094,6 +1093,25 @@ public class Ollivanders2 extends JavaPlugin
       o2Players.updatePlayer(pid, o2p);
 
       return o2p.getSpellCount(s);
+   }
+
+   /**
+    * Increment the spell use count for a player.
+    *
+    * @param player
+    * @param p
+    * @return the incremented use count for this player for this spell
+    */
+   public int incPotionCount (Player player, String p)
+   {
+      //returns the incremented spell count
+      UUID pid = player.getUniqueId();
+      O2Player o2p = o2Players.getPlayer(pid);
+
+      o2p.incrementPotionCount(p);
+      o2Players.updatePlayer(pid, o2p);
+
+      return o2p.getPotionCount(p);
    }
 
    /**

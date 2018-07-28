@@ -17,12 +17,12 @@ public class PRACTICAL_DEFENSIVE_MAGIC extends Book
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.EXPELLIARMUS);
-      spellList.add(Spells.PROTEGO);
-      spellList.add(Spells.PROTEGO_MAXIMA);
-      spellList.add(Spells.MUFFLIATO);
-      spellList.add(Spells.ARANIA_EXUMAI);
-      spellList.add(Spells.FIANTO_DURI);
-      spellList.add(Spells.SCUTO_CONTERAM);
+      spells.add(Spells.EXPELLIARMUS);
+      spells.add(Spells.PROTEGO);
+      spells.add(Spells.PROTEGO_MAXIMA);
+      spells.add(Spells.MUFFLIATO);
+      spells.add(Spells.ARANIA_EXUMAI);
+      spells.add(Spells.FIANTO_DURI);
+      spells.add(Spells.SCUTO_CONTERAM);
    }
 }

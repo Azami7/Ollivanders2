@@ -1,17 +1,18 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
-
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.List;
+
+import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
+
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 
 /**
  * The super class for transfiguration of objects.  Not for use on players or entities.
@@ -19,7 +20,7 @@ import java.util.List;
  * @since 2.2.5
  * @author Azami7
  */
-public abstract class BlockTransfigurationSuper extends SpellProjectile implements O2Spell
+public abstract class BlockTransfigurationSuper extends SpellProjectile implements Spell
 {
    //
    // these should generally not be changed
@@ -93,16 +94,6 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
    protected List<Material> materialWhitelist = new ArrayList<>();
 
    /**
-    * Flavor text for this spell in spellbooks, etc.  Optional.
-    */
-   protected ArrayList<String> flavorText = new ArrayList<>();
-
-   /**
-    * The description text for this spell in spell books.  Required or spell cannot be written in a book.
-    */
-   protected String text = "";
-
-   /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
    public BlockTransfigurationSuper () { }
@@ -118,6 +109,8 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
    public BlockTransfigurationSuper (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
+
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       materialBlacklist.add(Material.BEDROCK);
       materialBlacklist.add(Material.ENDER_CHEST);

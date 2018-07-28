@@ -21,7 +21,7 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
    {
       super();
 
-      text = "Meteolojinx Recanto will turn a storm into a sunny day.";
+      text = "Metelojinx Recanto will turn a storm into a sunny day.";
    }
 
    /**

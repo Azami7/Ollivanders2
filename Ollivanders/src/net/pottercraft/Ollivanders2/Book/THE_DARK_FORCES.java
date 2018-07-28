@@ -21,11 +21,11 @@ public class THE_DARK_FORCES extends Book
       author = "Quentin Trimble";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.LUMOS);
-      spellList.add(Spells.FINITE_INCANTATEM);
-      spellList.add(Spells.FUMOS);
-      spellList.add(Spells.PERICULUM);
-      spellList.add(Spells.VERDIMILLIOUS);
-      spellList.add(Spells.FLIPENDO);
+      spells.add(Spells.LUMOS);
+      spells.add(Spells.FINITE_INCANTATEM);
+      spells.add(Spells.FUMOS);
+      spells.add(Spells.PERICULUM);
+      spells.add(Spells.VERDIMILLIOUS);
+      spells.add(Spells.FLIPENDO);
    }
 }
