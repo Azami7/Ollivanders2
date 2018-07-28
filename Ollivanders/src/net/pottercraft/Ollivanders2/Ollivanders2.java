@@ -1595,39 +1595,6 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Determine if this is the Cloak of Invisibility.
-    *
-    * @param held
-    * @return
-    */
-   public static boolean isInvisibilityCloak (ItemStack held)
-   {
-      if (held.getType() == Material.CHAINMAIL_CHESTPLATE)
-      {
-         if (held.getItemMeta().hasLore())
-         {
-            List<String> lore = held.getItemMeta().getLore();
-            if (lore.get(0).equals("Silvery Transparent Cloak"))
-            {
-               return true;
-            }
-            else
-            {
-               return false;
-            }
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /**
     * Check to see if we're running MC version 1.12 or higher, which many Ollivanders2 features depend on.
     *
     * @return true of version string is 1.12, false otherwise.
