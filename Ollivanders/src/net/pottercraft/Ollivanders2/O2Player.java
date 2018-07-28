@@ -726,9 +726,13 @@ public class O2Player
             int nextSpellIndex;
 
             if (reverse)
+            {
                nextSpellIndex = curSpellIndex + 1;
+            }
             else
+            {
                nextSpellIndex = curSpellIndex - 1;
+            }
 
             // handle roll overs
             if (nextSpellIndex >= masteredSpells.size())

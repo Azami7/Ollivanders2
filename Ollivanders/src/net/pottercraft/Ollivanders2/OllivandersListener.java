@@ -733,7 +733,6 @@ public class OllivandersListener implements Listener
          /**
           * A right click of the primary hand is used:
           *  - to determine if the wand is the player's destined wand
-          *  - to set the mastered spell in the wand for non-verbal casting if they are sneaking while clicking
           *  - to brew a potion if they are holding a glass bottle in their off hand and facing a cauldron
           */
          else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
