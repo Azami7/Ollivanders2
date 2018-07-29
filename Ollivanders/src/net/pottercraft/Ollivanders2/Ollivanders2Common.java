@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.DyeColor;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -481,5 +483,27 @@ public class Ollivanders2Common
          sb.append(" ");
       }
       return sb.substring(0, sb.length() - 1);
+   }
+  
+   /**
+    * Determine if this is the Cloak of Invisibility.
+    *
+    * @param held Item stack to check
+    * @return True if held is an invisibility cloak
+    */
+   public static boolean isInvisibilityCloak (ItemStack held)
+   {
+      if (held.getType() == Material.CHAINMAIL_CHESTPLATE)
+      {
+         if (held.getItemMeta().hasLore())
+         {
+            List<String> lore = held.getItemMeta().getLore();
+            if (lore.get(0).equals("Silvery Transparent Cloak"))
+            {
+               return true;
+            }
+         }
+      }
+      return false;
    }
 }

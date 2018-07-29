@@ -22,6 +22,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import net.pottercraft.Ollivanders2.Effect.Effect;
@@ -30,6 +32,8 @@ import net.pottercraft.Ollivanders2.Spell.Spell;
 import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpell;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+
+import static net.pottercraft.Ollivanders2.Ollivanders2Common.isInvisibilityCloak;
 
 /**
  * Scheduler for Ollivanders2
@@ -278,97 +282,86 @@ class OllivandersSchedule implements Runnable
     */
    private void invisPlayer ()
    {
+      Set<REPELLO_MUGGLETON> repelloMuggletons = new HashSet<>();
+      for (StationarySpellObj stat : p.getStationary())
+      {
+         if (stat instanceof REPELLO_MUGGLETON && stat.active)
+         {
+               repelloMuggletons.add((REPELLO_MUGGLETON) stat);
+         }
+      }
+
       for (World world : p.getServer().getWorlds())
       {
          for (Player player : world.getPlayers())
          {
             O2Player o2p = p.getO2Player(player);
 
-            Set<REPELLO_MUGGLETON> muggletons = new HashSet<>();
-            for (StationarySpellObj stat : p.getStationary())
-            {
-               if (stat instanceof REPELLO_MUGGLETON)
-               {
-                  if (stat.isInside(player.getLocation()) && stat.active)
-                  {
-                     muggletons.add((REPELLO_MUGGLETON) stat);
-                  }
-               }
-            }
+            boolean alreadyInvis = o2p.isInvisible();
+            boolean alreadyInRepelloMuggleton = o2p.isInRepelloMuggleton();
 
             boolean hasCloak = hasCloak(player);
-            if (hasCloak || muggletons.size() > 0)
-            {
-               o2p.setMuggleton(true);
-
-               for (Player viewer : world.getPlayers())
-               {
-                  if (viewer.isPermissionSet("Ollivanders2.BYPASS"))
-                  {
-                     if (viewer.hasPermission("Ollivanders2.BYPASS"))
-                     {
-                        continue;
-                     }
-                  }
-                  if (muggletons.size() == 0)
-                  {
-                     viewer.hidePlayer(p, player);
-
-                  }
-                  else
-                  {
-                     for (REPELLO_MUGGLETON muggleton : muggletons)
-                     {
-                        if (hasCloak || (!muggleton.isInside(viewer.getLocation()) && muggleton.active))
-                        {
-                           viewer.hidePlayer(p, player);
-                           break;
-                        }
-                        else
-                        {
-                           viewer.showPlayer(p, player);
-                        }
-                     }
-                  }
+            if (hasCloak) {
+               if (!alreadyInvis) {
+                  o2p.setInvisible(true);
+                  player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
                }
-
-               if (!o2p.isInvisible())
-               {
-                  for (Entity entity : player.getWorld().getEntities())
-                  {
-                     if (entity instanceof Creature)
-                     {
-                        Creature creature = (Creature) entity;
-                        if (creature.getTarget() == player)
-                        {
-                           if (muggletons.size() == 0)
-                           {
-                              creature.setTarget(null);
-                           }
-                           else
-                           {
-                              for (REPELLO_MUGGLETON muggleton : muggletons)
-                              {
-                                 if (hasCloak || (!muggleton.isInside(creature.getLocation()) && muggleton.active))
-                                 {
-                                    creature.setTarget(null);
-                                 }
-                              }
-                           }
-                        }
-                     }
-                  }
-               }
-               o2p.setInvisible(hasCloak);
             }
-            else if (o2p.isInvisible() || o2p.isMuggleton())
-            {
-               for (Player viewer : world.getPlayers())
+
+            boolean inRepelloMuggletons = false;
+            for (StationarySpellObj stat : repelloMuggletons) {
+               if (stat.isInside(player.getLocation())) {
+                  inRepelloMuggletons = true;
+                  if (!alreadyInRepelloMuggleton) {
+                     o2p.setInRepelloMuggleton(true);
+                  }
+                  break;
+               }
+            }
+
+            if (hasCloak || inRepelloMuggletons) {
+               for (Player player2 : world.getPlayers()) {
+                  if (player2.isPermissionSet("Ollivanders2.BYPASS") && player2.hasPermission("Ollivanders2.BYPASS")) {
+                     continue;
+                  }
+
+                  O2Player viewer = p.getO2Player(player2);
+
+                  if (hasCloak) {
+                     player2.hidePlayer(p, player);
+                     System.out.println(player2.canSee(player));
+                  } else if (viewer.isMuggle()) {
+                     player2.hidePlayer(p, player);
+                  }
+               }
+            } else if (!hasCloak && alreadyInvis) {
+               for (Player player2 : world.getPlayers())
                {
-                  viewer.showPlayer(p, player);
+                  O2Player viewer = p.getO2Player(player2);
+                  if (!inRepelloMuggletons && viewer.isMuggle()) {
+                     player2.showPlayer(p, player);
+                  }
                }
                o2p.setInvisible(false);
-               o2p.setMuggleton(false);
+               player.removePotionEffect(PotionEffectType.INVISIBILITY);
+            } else if (!inRepelloMuggletons && alreadyInRepelloMuggleton) {
+               if (!hasCloak) {
+                  for (Player player2 : world.getPlayers()) {
+                     player2.showPlayer(p, player);
+                  }
+               }
+               o2p.setInRepelloMuggleton(false);
+            }
+
+            if (o2p.isInvisible()) {
+               for (Entity entity : player.getWorld().getEntities()) {
+                  if (entity instanceof Creature) {
+                     Creature creature = (Creature) entity;
+                     if (creature.getTarget() == player) {
+                        creature.setTarget(null);
+                     }
+                  }
+               }
             }
 
             p.setO2Player(player, o2p);
@@ -387,17 +380,7 @@ class OllivandersSchedule implements Runnable
       ItemStack chestPlate = player.getInventory().getChestplate();
       if (chestPlate != null)
       {
-         if (chestPlate.getType() == Material.CHAINMAIL_CHESTPLATE)
-         {
-            if (chestPlate.getItemMeta().hasLore())
-            {
-               List<String> lore = chestPlate.getItemMeta().getLore();
-               if (lore.get(0).equals("Silvery Transparent Cloak"))
-               {
-                  return true;
-               }
-            }
-         }
+         return isInvisibilityCloak(chestPlate);
       }
       return false;
    }

@@ -10,6 +10,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import static net.pottercraft.Ollivanders2.Ollivanders2Common.isInvisibilityCloak;
+
 /**
  * Places a gemino affect on the item.
  *
@@ -51,7 +53,7 @@ public final class GEMINO extends DarkArts
       List<Item> items = getItems(1);
       for (Item item : items)
       {
-         if (p.isWand(item.getItemStack()) || p.isInvisibilityCloak(item.getItemStack()))
+         if (p.isWand(item.getItemStack()) || isInvisibilityCloak(item.getItemStack()))
          {
             return;
          }
