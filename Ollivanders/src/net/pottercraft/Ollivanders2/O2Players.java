@@ -453,7 +453,7 @@ public class O2Players
                Boolean muggle = common.booleanFromString(value);
                if (muggle != null)
                {
-                  player.setFoundWand(muggle.booleanValue());
+                  player.setMuggle(muggle.booleanValue());
                }
             } else
             {
