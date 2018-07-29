@@ -1722,7 +1722,8 @@ public class Ollivanders2 extends JavaPlugin
             }
             else
             {
-               getLogger().info("player to give book to is " + targetName);
+               if (Ollivanders2.debug)
+                  getLogger().info("player to give book to is " + targetName);
             }
 
             // args after "book give <player>" are book name
