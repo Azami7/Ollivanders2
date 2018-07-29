@@ -1,6 +1,12 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION;
+import net.pottercraft.Ollivanders2.O2Player;
+import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 
 /**
  * Consumed after successfully casting the Animagus incantation, this will turn a player in to an Animagus.
@@ -9,8 +15,9 @@ import org.bukkit.Material;
  */
 public final class ANIMAGUS_POTION extends Potion
 {
-   public ANIMAGUS_POTION ()
+   public ANIMAGUS_POTION (Ollivanders2 plugin)
    {
+      super(plugin);
       name = "Animagus Potion";
       text = "An Animagus is a wizard who elects to turn into an animal. This potion, if brewed and consumed correctly, " +
             "will transform the drinker in to their animal form. Thereafter, the Animagus can transform without the " +
@@ -22,5 +29,35 @@ public final class ANIMAGUS_POTION extends Potion
       ingredients.put(Material.CHORUS_FRUIT, 2);
       ingredients.put(Material.EYE_OF_ENDER, 1);
       ingredients.put(Material.SUGAR, 3);
+   }
+
+   @Override
+   public void drink (O2Player o2p, Player player)
+   {
+      if (o2p.isAnimagus())
+      {
+         // they are already an Animagus so this has no effect
+         return;
+      }
+
+      if (!player.getWorld().isThundering())
+      {
+         // potion only works in a thunderstorm
+         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+               + "Nothing seems to happen.");
+         return;
+      }
+
+      for (OEffect effect : o2p.getEffects())
+      {
+         if (effect instanceof ANIMAGUS_INCANTATION)
+         {
+            o2p.setIsAnimagus();
+            o2p.animagusForm();
+
+            player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+                  + "You feel transformed.");
+         }
+      }
    }
 }

@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.*;
+import net.pottercraft.Ollivanders2.Effect.Effects;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
