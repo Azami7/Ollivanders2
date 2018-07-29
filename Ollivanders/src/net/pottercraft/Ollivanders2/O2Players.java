@@ -320,8 +320,8 @@ public class O2Players
           */
          if (!o2p.isMuggle())
          {
-            Boolean foundWand = new Boolean(false);
-            playerData.put(foundWandLabel, foundWand.toString());
+            Boolean muggle = new Boolean(false);
+            playerData.put(muggleLabel, muggle.toString());
          }
 
          serializedMap.put(pid.toString(), playerData);
