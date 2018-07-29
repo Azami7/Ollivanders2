@@ -271,4 +271,22 @@ public final class O2Books
 
       return library;
    }
+
+   /**
+    * Get all of the short titles for all loaded O2 books
+    *
+    * @return a list of the short titles for all loaded books
+    */
+   public ArrayList<String> getAllBookShortTitles ()
+   {
+      ArrayList<String> bookTitles = new ArrayList<>();
+
+      for (Entry <Books, Book> e : O2BooksMap.entrySet())
+      {
+         Book book = e.getValue();
+         bookTitles.add(book.getShortTitle());
+      }
+
+      return bookTitles;
+   }
 }

@@ -309,6 +309,16 @@ public abstract class Book
    }
 
    /**
+    * Get the short title for this book
+    *
+    * @return short title for this book
+    */
+   public String getShortTitle ()
+   {
+      return shortTitle;
+   }
+
+   /**
     * The author for this book.
     *
     * @return author
