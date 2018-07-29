@@ -26,7 +26,7 @@ public class O2Players
    private String coreLabel = "Core";
    private String soulsLabel = "Souls";
    private String invisibleLabel = "Invisible";
-   private String muggletonLabel = "Muggleton";
+   private String inMuggletonLabel = "Muggleton";
    private String foundWandLabel = "Found_Wand";
    private String masterSpellLabel = "Master_Spell";
    private String animagusLabel = "Animagus";
@@ -179,7 +179,7 @@ public class O2Players
 
          o2p.setSouls(player.getSouls());
          o2p.setInvisible(player.isInvisible());
-         o2p.setMuggleton(player.isMuggleton());
+         o2p.setInRepelloMuggleton(player.isMuggleton());
          o2p.setWandSpell(player.getSpell());
 
          Map <Spells, Integer> spells = player.getSpellCount();
@@ -266,10 +266,10 @@ public class O2Players
          /**
           * Muggleton
           */
-         if (o2p.isMuggleton())
+         if (o2p.isInRepelloMuggleton())
          {
             Boolean muggleton = new Boolean(true);
-            playerData.put(muggletonLabel, muggleton.toString());
+            playerData.put(inMuggletonLabel, muggleton.toString());
          }
 
          /**
@@ -396,12 +396,12 @@ public class O2Players
                   player.setSouls(souls.intValue());
                }
             }
-            else if (label.equalsIgnoreCase(muggletonLabel))
+            else if (label.equalsIgnoreCase(inMuggletonLabel))
             {
                Boolean muggleton = common.booleanFromString(value);
                if (muggleton != null)
                {
-                  player.setMuggleton(muggleton.booleanValue());
+                  player.setInRepelloMuggleton(muggleton.booleanValue());
                }
             }
             else if (label.equalsIgnoreCase(invisibleLabel))
