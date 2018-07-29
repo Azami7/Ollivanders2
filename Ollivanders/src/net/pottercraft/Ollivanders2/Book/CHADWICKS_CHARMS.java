@@ -25,5 +25,6 @@ public class CHADWICKS_CHARMS extends Book
       spells.add(Spells.DEFODIO);
       spells.add(Spells.MOV_FOTIA);
       spells.add(Spells.CONFUNDUS_DUO);
+      spells.add(Spells.FINESTRA);
    }
 }
