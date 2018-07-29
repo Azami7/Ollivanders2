@@ -28,14 +28,14 @@ public class CONFRONTING_THE_FACELESS extends Book
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.MORTUOS_SUSCITATE);
-      spellList.add(Spells.OPPUGNO);
-      spellList.add(Spells.REDUCTO);
-      spellList.add(Spells.LEGILIMENS);
-      spellList.add(Spells.FLAGRANTE);
-      spellList.add(Spells.PRAEPANDO);
-      //spellList.add(Spells.CRUCIO);
-      //spellList.add(Spells.IMPERIO);
-      //spellList.add(Spells.EXPECTO_PATRONUM);
+      spells.add(Spells.MORTUOS_SUSCITATE);
+      spells.add(Spells.OPPUGNO);
+      spells.add(Spells.REDUCTO);
+      spells.add(Spells.LEGILIMENS);
+      spells.add(Spells.FLAGRANTE);
+      spells.add(Spells.PRAEPANDO);
+      //spells.add(Spells.CRUCIO);
+      //spells.add(Spells.IMPERIO);
+      //spells.add(Spells.EXPECTO_PATRONUM);
    }
 }

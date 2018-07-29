@@ -17,7 +17,7 @@ import java.util.List;
  * @since 2.2.6
  * @author Azami7
  */
-public abstract class EntityTransfigurationSuper extends SpellProjectile implements O2Spell
+public abstract class EntityTransfigurationSuper extends SpellProjectile implements Spell
 {
    //
    // these should generally not be changed
@@ -74,16 +74,6 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
     * The percent chance this spell will succeed each casting.
     */
    protected int successRate = 100;
-
-   /**
-    * Flavor text for this spell in spellbooks, etc.  Optional.
-    */
-   protected ArrayList<String> flavorText = new ArrayList<>();
-
-   /**
-    * The description text for this spell in spell books.  Required or spell cannot be written in a book.
-    */
-   protected String text = "";
 
    /**
     * A blacklist of Entity types that will not be affected by this spell.  Only used if the whitelist is empty.
@@ -276,31 +266,5 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
       }
 
       return check;
-   }
-
-   @Override
-   public String getText ()
-   {
-      return text;
-   }
-
-   @Override
-   public String getFlavorText()
-   {
-      if (flavorText.size() < 1)
-      {
-         return null;
-      }
-      else
-      {
-         int index = Math.abs(Ollivanders2.random.nextInt() % flavorText.size());
-         return flavorText.get(index);
-      }
-   }
-
-   @Override
-   public O2MagicBranch getMagicBranch ()
-   {
-      return branch;
    }
 }

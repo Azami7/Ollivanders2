@@ -17,6 +17,7 @@ public class GADDING_WITH_GHOULS extends Book
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.MOLLIARE);
+      spells.add(Spells.MOLLIARE);
+      spells.add(Spells.OBLIVIATE);
    }
 }

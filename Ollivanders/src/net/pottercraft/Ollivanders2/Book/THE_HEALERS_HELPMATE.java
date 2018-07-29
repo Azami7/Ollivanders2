@@ -18,8 +18,8 @@ public class THE_HEALERS_HELPMATE extends Book
       author = "H. Pollingtonious";
       branch = O2MagicBranch.HEALING;
 
-      spellList.add(Spells.AGUAMENTI);
-      spellList.add(Spells.BRACKIUM_EMENDO);
-      spellList.add(Spells.EPISKEY);
+      spells.add(Spells.AGUAMENTI);
+      spells.add(Spells.BRACKIUM_EMENDO);
+      spells.add(Spells.EPISKEY);
    }
 }

@@ -18,12 +18,12 @@ public class CHADWICKS_CHARMS extends Book
       author = "Violeta Stitch";
       branch = O2MagicBranch.CHARMS;
 
-      spellList.add(Spells.ASCENDIO);
-      spellList.add(Spells.BOMBARDA_MAXIMA);
-      spellList.add(Spells.CRESCERE_PROTEGAT);
-      spellList.add(Spells.HORREAT_PROTEGAT);
-      spellList.add(Spells.DEFODIO);
-      spellList.add(Spells.MOV_FOTIA);
-      spellList.add(Spells.CONFUNDUS_DUO);
+      spells.add(Spells.ASCENDIO);
+      spells.add(Spells.BOMBARDA_MAXIMA);
+      spells.add(Spells.CRESCERE_PROTEGAT);
+      spells.add(Spells.HORREAT_PROTEGAT);
+      spells.add(Spells.DEFODIO);
+      spells.add(Spells.MOV_FOTIA);
+      spells.add(Spells.CONFUNDUS_DUO);
    }
 }

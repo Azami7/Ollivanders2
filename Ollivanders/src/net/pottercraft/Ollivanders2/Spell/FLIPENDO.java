@@ -18,7 +18,10 @@ public final class FLIPENDO extends Charms
    {
       super();
 
-      flavorText.add("");
+      text = "Flipendo can be used to repel an opponent away from oneself.";
+      flavorText.add("The Knockback Jinx");
+      flavorText.add("The incantation for the knockback jinx is 'Flipendo'. This jinx is the most utilitarian of Grade 2 spell, in that it will allow the caster to 'knock back' an opponent or object and can also be used to push and activate certain magically charmed switches. Like many Grade 2 spells, Flipendo can be targeted.");
+      flavorText.add("\"There was a loud bang and he felt himself flying backwards as if punched; as he slammed into the kitchen wall and slid to the floor, he glimpsed the tail of Lupin's cloak disappearing round the door.\"");
    }
 
    public FLIPENDO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)

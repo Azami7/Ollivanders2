@@ -24,7 +24,7 @@ public final class CRESCERE_PROTEGAT extends Charms
    public CRESCERE_PROTEGAT ()
    {
       super();
-      text = "Grows a Stationary Spell's radius. Only the player who created the Stationary Spell can change it's radius.";
+      text = "Grows a stationary spell's radius. Only the player who created the Stationary Spell can change it's radius.";
    }
 
    /**

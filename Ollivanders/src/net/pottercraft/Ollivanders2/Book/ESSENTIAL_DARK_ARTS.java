@@ -13,18 +13,18 @@ public class ESSENTIAL_DARK_ARTS extends Book
 {
    public ESSENTIAL_DARK_ARTS ()
    {
-      shortTitle = "Essential Defense";
+      shortTitle = "Essential Dark Arts Defence";
       title = "The Essential Defence Against the Dark Arts";
       author = "Arsenius Jigger";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.CARPE_RETRACTUM);
-      spellList.add(Spells.GLACIUS);
-      spellList.add(Spells.LUMOS_DUO);
-      spellList.add(Spells.AQUA_ERUCTO);
-      spellList.add(Spells.GLACIUS_DUO);
-      spellList.add(Spells.ALARTE_ASCENDARE);
-      spellList.add(Spells.DISSENDIUM);
-      spellList.add(Spells.FUMOS_DUO);
+      spells.add(Spells.CARPE_RETRACTUM);
+      spells.add(Spells.GLACIUS);
+      spells.add(Spells.LUMOS_DUO);
+      spells.add(Spells.AQUA_ERUCTO);
+      spells.add(Spells.GLACIUS_DUO);
+      spells.add(Spells.ALARTE_ASCENDARE);
+      spells.add(Spells.DISSENDIUM);
+      spells.add(Spells.FUMOS_DUO);
    }
 }

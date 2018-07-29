@@ -7,6 +7,7 @@ import net.pottercraft.Ollivanders2.O2MagicBranch;
  *
  * @author Azami7
  */
+@Deprecated
 public interface O2Spell extends Spell
 {
    /**

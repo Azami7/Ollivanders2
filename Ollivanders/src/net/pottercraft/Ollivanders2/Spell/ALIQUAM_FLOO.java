@@ -31,6 +31,8 @@ public final class ALIQUAM_FLOO extends Charms
             + "place a solid block where the fire was, or you will have to re-register your fireplace. "
             + "People can use your fireplace via Floo powder, which is made by smelting ender pearl. "
             + "Toss the powder into a registered fireplace, walk into the fire, and say the name of your destination.";
+
+      flavorText.add("\"In use for centuries, the Floo Network, while somewhat uncomfortable, has many advantages. Firstly, unlike broomsticks, the Network can be used without fear of breaking the International Statute of Secrecy. Secondly, unlike Apparition, there is little to no danger of serious injury. Thirdly, it can be used to transport children, the elderly and the infirm.\"");
    }
 
    /**

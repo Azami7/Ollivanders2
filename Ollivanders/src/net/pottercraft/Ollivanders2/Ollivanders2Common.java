@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.DyeColor;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -439,5 +441,69 @@ public class Ollivanders2Common
          }
       }
       return returnList;
+   }
+
+   /**
+    * Find the lowercase string that corresponds to an enum
+    *
+    * @param s the enum as a string
+    * @return string such that it is the lowercase version of the spell minus underscores
+    */
+   public static String enumRecode (String s)
+   {
+      String nameLow = s.toString().toLowerCase();
+      String[] words = nameLow.split("_");
+      String comp = "";
+      for (String st : words)
+      {
+         comp = comp.concat(st);
+         comp = comp.concat(" ");
+      }
+      comp = comp.substring(0, comp.length() - 1);
+      return comp;
+   }
+
+   /**
+    * Converts a string to have it's first letter of each word be in upper case, and all other letters lower case.
+    *
+    * @param str - String to convert.
+    * @return String with correct formatting.
+    */
+   public static String firstLetterCapitalize (String str)
+   {
+      StringBuilder sb = new StringBuilder();
+      String[] wordList = str.split(" ");
+      for (String s : wordList)
+      {
+         sb.append(s.substring(0, 1).toUpperCase());
+         if (s.length() > 1)
+         {
+            sb.append(s.substring(1, s.length()).toLowerCase());
+         }
+         sb.append(" ");
+      }
+      return sb.substring(0, sb.length() - 1);
+   }
+  
+   /**
+    * Determine if this is the Cloak of Invisibility.
+    *
+    * @param held Item stack to check
+    * @return True if held is an invisibility cloak
+    */
+   public static boolean isInvisibilityCloak (ItemStack held)
+   {
+      if (held.getType() == Material.CHAINMAIL_CHESTPLATE)
+      {
+         if (held.getItemMeta().hasLore())
+         {
+            List<String> lore = held.getItemMeta().getLore();
+            if (lore.get(0).equals("Silvery Transparent Cloak"))
+            {
+               return true;
+            }
+         }
+      }
+      return false;
    }
 }

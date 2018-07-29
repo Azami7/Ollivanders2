@@ -18,9 +18,9 @@ public class BASIC_HEXES extends Book
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.MUCUS_AD_NAUSEAM);
-      spellList.add(Spells.IMPEDIMENTA);
-      spellList.add(Spells.IMMOBULUS);
-      spellList.add(Spells.OBSCURO);
+      spells.add(Spells.MUCUS_AD_NAUSEAM);
+      spells.add(Spells.IMPEDIMENTA);
+      spells.add(Spells.IMMOBULUS);
+      spells.add(Spells.OBSCURO);
    }
 }

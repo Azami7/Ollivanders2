@@ -23,7 +23,7 @@ public final class INCENDIO_TRIA extends IncendioSuper
 
       flavorText.add("\"Incendio!\" said Mr Weasley, pointing his wand at the hole in the wall behind him. Flames rose at once in the fireplace, crackling merrily as though they had been burning for hours.");
       flavorText.add("The Strongest Fire-Making Charm");
-      text = "Incendio Tria will burn blocks and entities it passes by. It's radius is four times that of incendio and it's duration one quarter.";
+      text = "Incendio Tria will burn blocks and entities it passes by. It's radius is four times that of Incendio and it's duration one quarter.";
    }
 
    /**

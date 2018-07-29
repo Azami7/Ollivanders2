@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -298,7 +299,7 @@ public class SpellBookParser
       {
          if (pageString.contains(spell))
          {
-            String newLore = Spells.firstLetterCapitalize(spell) + ":" + p.getSpellNum(player, Spells.decode(spell));
+            String newLore = Ollivanders2Common.firstLetterCapitalize(spell) + ":" + p.getSpellNum(player, Spells.decode(spell));
             lore.add(newLore);
          }
       }
@@ -337,7 +338,7 @@ public class SpellBookParser
       List<String> spellStrings = new ArrayList<String>();
       for (Spells spell : spellsList)
       {
-         spellStrings.add(Spells.recode(spell));
+         spellStrings.add(Ollivanders2Common.enumRecode(spell.toString().toLowerCase()));
       }
       return spellStrings;
    }

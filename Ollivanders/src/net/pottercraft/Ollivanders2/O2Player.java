@@ -40,6 +40,7 @@ public class O2Player
    private Ollivanders2 p = null;
    private Ollivanders2Common common;
    private Map<Spells, Integer> knownSpells = new HashMap<>();
+   private Map<String, Integer> knownPotions = new HashMap<>();
    private Map<Spells, Long> recentSpells = new HashMap<>();
    private List<OEffect> effects = new ArrayList<>();
    ArrayList<EntityType> animagusShapes = new ArrayList<>();
@@ -49,12 +50,13 @@ public class O2Player
    private ArrayList<Spells> masteredSpells = new ArrayList<>();
    private int souls = 0;
    private boolean invisible = false;
-   private boolean muggleton = false;
+   private boolean inRepelloMuggleton = false;
    private boolean foundWand = false;
    private EntityType animagusForm = null;
    private String animagusColor = null;
    private boolean isTransformed = false;
    private TargetedDisguise disguise;
+   private boolean muggle = true;
 
    /**
     * Wand wood types
@@ -272,6 +274,24 @@ public class O2Player
    }
 
    /**
+    * Get the brewing count for a potion
+    *
+    * @param potion the spell to get a count for
+    * @return the number of times a player has cast this spell
+    */
+   public int getPotionCount (String potion)
+   {
+      int count = 0;
+
+      if (knownPotions.containsKey(potion))
+      {
+         count = knownPotions.get(potion).intValue();
+      }
+
+      return count;
+   }
+
+   /**
     * Get the casting count for a spell
     *
     * @param spell the spell to get a count for
@@ -403,12 +423,38 @@ public class O2Player
    }
 
    /**
+    * Increment the potion count by 1.
+    *
+    * @param potion the potion to increment
+    */
+   public void incrementPotionCount (String potion)
+   {
+      if (knownPotions.containsKey(potion))
+      {
+         int curCount = knownPotions.get(potion).intValue();
+         knownPotions.replace(potion, new Integer(curCount + 1));
+      }
+      else
+      {
+         knownPotions.put(potion, new Integer(1));
+      }
+   }
+
+   /**
     * Resets the known spells for this player to none.
     */
    public void resetSpellCount ()
    {
       knownSpells.clear();
       masteredSpells.clear();
+   }
+
+   /**
+    * Resets the known spells for this player to none.
+    */
+   public void resetPotionCount ()
+   {
+      knownPotions.clear();
    }
 
    /**
@@ -463,24 +509,38 @@ public class O2Player
    }
 
    /**
-    * Determine if the player is a Muggleton.
+    * Determine if the player is in a Repello Muggleton.
     *
-    * @return true if they are a muggleton, false otherwise.
+    * @return true if they are a in a repello muggleton, false otherwise.
     */
-   public boolean isMuggleton ()
+   public boolean isInRepelloMuggleton ()
    {
-      return muggleton;
+      return inRepelloMuggleton;
    }
 
    /**
-    * Set if a player is a muggleton.
+    * Set if a player is in a repello muggleton.
     *
-    * @param isMuggleton true if the player is a muggleton, false otherwise
+    * @param isInRepelloMuggleton true if the player is in a repello muggleton, false otherwise
     */
-   public void setMuggleton (boolean isMuggleton)
+   public void setInRepelloMuggleton (boolean isInRepelloMuggleton)
    {
-      muggleton = isMuggleton;
+      inRepelloMuggleton = isInRepelloMuggleton;
    }
+
+   /**
+    * Determine if player is a muggle.
+    *
+    * @return true if they are a muggle, false otherwise
+    */
+   public boolean isMuggle () { return muggle; }
+
+   /**
+    * Set if a player is a muggle.
+    *
+    * @param isMuggle true if the player is a muggle
+    */
+   public void setMuggle (boolean isMuggle) { muggle = isMuggle; }
 
    /**
     * Get the number of souls this player has collected.
@@ -631,7 +691,7 @@ public class O2Player
             content = content + "\n";
          }
 
-         String spell = Spells.firstLetterCapitalize(Spells.recode(e.getKey()));
+         String spell = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(e.getKey().toString().toLowerCase()));
          String count = e.getValue().toString();
          String line = spell + " " + count;
          content = content + spell + " " + count;
@@ -703,6 +763,16 @@ public class O2Player
     */
    public void shiftMasterSpell ()
    {
+      shiftMasterSpell(false);
+   }
+
+   /**
+    * Shift the wand's master spell to the next spell.
+    *
+    * @param reverse if set to true, iterates backwards through spell list
+    */
+   public void shiftMasterSpell (boolean reverse)
+   {
       // shift to the next spell if there is more than one mastered spell
       if (masteredSpells.size() >= 1)
       {
@@ -712,17 +782,29 @@ public class O2Player
          }
          else
          {
-            int i = masteredSpells.indexOf(masterSpell);
+            int curSpellIndex = masteredSpells.indexOf(masterSpell);
+            int nextSpellIndex;
 
-            if (i == (masteredSpells.size() - 1))
+            if (reverse)
             {
-               // spell is the last in the array, roll over
-               masterSpell = masteredSpells.get(0);
+               nextSpellIndex = curSpellIndex + 1;
             }
             else
             {
-               masterSpell = masteredSpells.get(i + 1);
+               nextSpellIndex = curSpellIndex - 1;
             }
+
+            // handle roll overs
+            if (nextSpellIndex >= masteredSpells.size())
+            {
+               nextSpellIndex = 0;
+            }
+            else if (nextSpellIndex < 0)
+            {
+               nextSpellIndex = masteredSpells.size() - 1;
+            }
+
+            masterSpell = masteredSpells.get(nextSpellIndex);
          }
       }
       else

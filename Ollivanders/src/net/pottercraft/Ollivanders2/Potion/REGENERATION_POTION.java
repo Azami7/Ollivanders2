@@ -33,8 +33,5 @@ public final class REGENERATION_POTION extends Potion
       potionColor = Color.WHITE;
    }
 
-   public void drink (O2Player o2p, Player player)
-   {
-
-   }
+   public void drink (O2Player o2p, Player player) { }
 }

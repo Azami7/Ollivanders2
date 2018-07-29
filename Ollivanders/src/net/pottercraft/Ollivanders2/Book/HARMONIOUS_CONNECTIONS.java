@@ -30,6 +30,6 @@ public class HARMONIOUS_CONNECTIONS extends Book
 
       branch = O2MagicBranch.CHARMS;
 
-      spellList.add(Spells.HARMONIA_NECTERE_PASSUS);
+      spells.add(Spells.HARMONIA_NECTERE_PASSUS);
    }
 }

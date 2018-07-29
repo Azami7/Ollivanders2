@@ -35,11 +35,13 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -82,7 +84,6 @@ public class Ollivanders2 extends JavaPlugin
    public static Ollivanders2WorldGuard worldGuardO2;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
-   //public PotionParser potionParser;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -463,7 +464,7 @@ public class Ollivanders2 extends JavaPlugin
          Spells masterSpell = o2Player.getMasterSpell();
          if (masterSpell != null)
          {
-            summary = summary + "\nMaster Spell: " + Spells.recode(masterSpell);
+            summary = summary + "\nMaster Spell: " + Ollivanders2Common.enumRecode(masterSpell.toString().toLowerCase());
          }
 
          summary = summary + "\n";
@@ -1097,6 +1098,25 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
+    * Increment the spell use count for a player.
+    *
+    * @param player
+    * @param p
+    * @return the incremented use count for this player for this spell
+    */
+   public int incPotionCount (Player player, String p)
+   {
+      //returns the incremented spell count
+      UUID pid = player.getUniqueId();
+      O2Player o2p = o2Players.getPlayer(pid);
+
+      o2p.incrementPotionCount(p);
+      o2Players.updatePlayer(pid, o2p);
+
+      return o2p.getPotionCount(p);
+   }
+
+   /**
     * Gets the OPlayer associated with the Player
     *
     * @param player Player
@@ -1421,7 +1441,7 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Does the player hold a wand item?
+    * Does the player hold a wand item in their primary hand?
     *
     * @param player - Player to check.
     * @return True if the player holds a wand. False if not or if player is null.
@@ -1437,6 +1457,37 @@ public class Ollivanders2 extends JavaPlugin
       {
          return false;
       }
+   }
+
+   /**
+    * Does the player hold a wand item in their hand?
+    *
+    * @since 2.2.7
+    * @param player - Player to check.
+    * @param hand - the equipment slot to check for this player
+    * @return True if the player holds a wand. False if not or if player is null.
+    */
+   public boolean holdsWand (Player player, EquipmentSlot hand)
+   {
+      if (player == null || hand == null)
+         return false;
+
+      ItemStack held;
+      if (hand == EquipmentSlot.HAND)
+      {
+         held = player.getInventory().getItemInMainHand();
+      }
+      else if (hand == EquipmentSlot.OFF_HAND)
+      {
+         held = player.getInventory().getItemInOffHand();
+      }
+      else
+         return false;
+
+      if (held == null)
+         return false;
+
+      return isWand(held);
    }
 
    /**
@@ -1482,7 +1533,7 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Is this itemstack the player's destined wand?
+    * Is this ItemStack the player's destined wand?
     *
     * @param player - Player to check the stack against.
     * @param stack  - Itemstack to be checked
@@ -1535,7 +1586,7 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Checks what kind of wand a player holds. Returns a value based on the
+    * Checks what kind of wand a player holds in their primary hand. Returns a value based on the
     * wand and it's relation to the player.
     *
     * @assumes player not null, player holding a wand
@@ -1548,6 +1599,48 @@ public class Ollivanders2 extends JavaPlugin
    {
       ItemStack item = player.getInventory().getItemInMainHand();
 
+      return doWandCheck(player, item);
+   }
+
+   /**
+    * Checks what kind of wand a player holds. Returns a value based on the wand and it's relation to the player.
+    *
+    * @since 2.2.7
+    * @assumes player not null, player is holding a wand in the equipment slot passed in
+    * @param player - Player being checked. The player must be holding a wand.
+    * @param hand - the hand that is holding the wand to check.
+    * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
+    * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
+    * 0.5 - The wand is the elder wand and it is allied to player.
+    */
+   public double wandCheck (Player player, EquipmentSlot hand)
+   {
+      ItemStack item;
+
+      if (hand == EquipmentSlot.HAND)
+      {
+         item = player.getInventory().getItemInMainHand();
+      }
+      else
+      {
+         item = player.getInventory().getItemInOffHand();
+      }
+
+      return doWandCheck(player, item);
+   }
+
+   /**
+    * Checks what kind of wand a player holds. Returns a value based on the wand and it's relation to the player.
+    *
+    * @since 2.2.7
+    * @param player - the player to check
+    * @param item - the
+    * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
+    * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
+    * 0.5 - The wand is the elder wand and it is allied to player.
+    */
+   double doWandCheck (Player player, ItemStack item)
+   {
       List<String> lore = item.getItemMeta().getLore();
       if (lore.get(0).equals("Blaze and Ender Pearl")) // elder wand
       {
@@ -1591,39 +1684,6 @@ public class Ollivanders2 extends JavaPlugin
          Object result = ois.readObject();
          ois.close();
          return result;
-      }
-   }
-
-   /**
-    * Determine if this is the Cloak of Invisibility.
-    *
-    * @param held
-    * @return
-    */
-   public static boolean isInvisibilityCloak (ItemStack held)
-   {
-      if (held.getType() == Material.CHAINMAIL_CHESTPLATE)
-      {
-         if (held.getItemMeta().hasLore())
-         {
-            List<String> lore = held.getItemMeta().getLore();
-            if (lore.get(0).equals("Silvery Transparent Cloak"))
-            {
-               return true;
-            }
-            else
-            {
-               return false;
-            }
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         return false;
       }
    }
 

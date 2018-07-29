@@ -17,6 +17,7 @@ public class TRAVELS_WITH_TROLLS extends Book
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.VERDIMILLIOUS_DUO);
+      spells.add(Spells.VERDIMILLIOUS_DUO);
+      spells.add(Spells.OBLIVIATE);
    }
 }

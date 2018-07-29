@@ -26,19 +26,16 @@ public class ADVANCED_TRANSFIGURATION extends Book
       author = "Unknown";
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      spellList.add(Spells.INCARNATIO_DEVITO);
-      spellList.add(Spells.INCARNATIO_EQUUS);
-      spellList.add(Spells.INCARNATIO_FELIS);
-      spellList.add(Spells.INCARNATIO_LAMA);
-      spellList.add(Spells.INCARNATIO_LUPI);
-      spellList.add(Spells.INCARNATIO_PORCILLI);
-      spellList.add(Spells.INCARNATIO_URSUS);
-      spellList.add(Spells.INCARNATIO_VACCULA);
-      spellList.add(Spells.GEMINO);
-      spellList.add(Spells.REPARIFARGE);
-      spellList.add(Spells.AVIS);
-      spellList.add(Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS);
-      //spellList.add(Spells.HOMORPHUS);
-      //spell 14
+      spells.add(Spells.INCARNATIO_DEVITO);
+      spells.add(Spells.INCARNATIO_EQUUS);
+      spells.add(Spells.INCARNATIO_FELIS);
+      spells.add(Spells.INCARNATIO_LAMA);
+      spells.add(Spells.INCARNATIO_LUPI);
+      spells.add(Spells.INCARNATIO_PORCILLI);
+      spells.add(Spells.INCARNATIO_URSUS);
+      spells.add(Spells.INCARNATIO_VACCULA);
+      spells.add(Spells.GEMINO);
+      spells.add(Spells.REPARIFARGE);
+      //spells.add(Spells.HOMORPHUS);
    }
 }

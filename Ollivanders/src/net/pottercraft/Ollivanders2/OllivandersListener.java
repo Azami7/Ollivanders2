@@ -649,6 +649,54 @@ public class OllivandersListener implements Listener
    }
 
    /**
+    * Action by player to cast a spell
+    *
+    * @since 2.2.7
+    * @param player
+    */
+   void castSpell (Player player)
+   {
+      O2Player o2p = p.getO2Player(player);
+      Spells spell = o2p.getWandSpell();
+
+      if (spell != null)
+      {
+         double wandCheck;
+         boolean playerHoldsWand = p.holdsWand(player, EquipmentSlot.HAND);
+         if (playerHoldsWand)
+         {
+            if (Ollivanders2.debug)
+               p.getLogger().info("OllivandersListener:castSpell: player holds a wand in their primary hand");
+
+            wandCheck = p.wandCheck(player, EquipmentSlot.HAND);
+            allyWand(player);
+         }
+         else
+         {
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("OllivandersListener:castSpell: player does not hold a wand in their primary hand");
+            }
+            return;
+         }
+
+         createSpellProjectile(player, spell, wandCheck);
+         o2p.setSpellRecentCastTime(spell);
+         int spellCastCount = p.getSpellNum(player, spell);
+         if (spellCastCount < 100 || spell == Spells.AVADA_KEDAVRA || !playerHoldsWand)
+         {
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("OllivandersListener:castSpell: allow cast spell");
+            }
+
+            o2p.setWandSpell(null);
+            p.setO2Player(player, o2p);
+         }
+      }
+   }
+
+   /**
     * Handle events when player interacts with an item in their hand.
     *
     * @param event
@@ -662,128 +710,105 @@ public class OllivandersListener implements Listener
       if (Ollivanders2.debug)
          p.getLogger().info("onPlayerInteract: enter");
 
-      if (action == null || player == null || event.getHand() != EquipmentSlot.HAND)
+      if (action == null || player == null)
       {
          return;
       }
 
       /**
-       * A left click is used to cast a spell
+       * A right or left click of the primary hand when holding a wand is used to make a magical action.
        */
-      if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
+      if ((event.getHand() == EquipmentSlot.HAND) && (p.holdsWand(player, EquipmentSlot.HAND)))
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("OllivandersListener:onPlayerInteract: left click action");
-
-         O2Player o2p = p.getO2Player(player);
-         Spells spell = o2p.getWandSpell();
-         if (spell != null)
+         /**
+          * A left click of the primary hand is used to cast a spell
+          */
+         if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
          {
-            double wandC;
-            boolean playerHoldsWand = p.holdsWand(player);
-            if (playerHoldsWand)
-            {
-               if (Ollivanders2.debug)
-                  p.getLogger().info("OllivandersListener:onPlayerInteract: player holds a wand");
+            if (Ollivanders2.debug)
+               p.getLogger().info("OllivandersListener:onPlayerInteract: left click action");
 
-               wandC = p.wandCheck(player);
-               allyWand(player);
-            }
-            else
-            {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("OllivandersListener:onPlayerInteract: player does not hold a wand");
-               }
-
-               wandC = 10;
-            }
-
-            createSpellProjectile(player, spell, wandC);
-            o2p.setSpellRecentCastTime(spell);
-            int spellc = p.getSpellNum(player, spell);
-            if (spellc < 100 || spell == Spells.AVADA_KEDAVRA || !playerHoldsWand)
-            {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("OllivandersListener:onPlayerInteract: allow cast spell");
-               }
-
-               o2p.setWandSpell(null);
-               p.setO2Player(player, o2p);
-            }
-
-            /*
-            if (spellc >= 100 && wandC != 1)
-            {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("OllivandersListener:onPlayerInteract: allow cast spell");
-               }
-
-               o2p.setMasterSpell(null);
-               p.setO2Player(player, o2p);
-            }
-            */
-         }
-      }
-
-      /**
-       * A right click is used:
-       *  - to determine if the wand is the player's destined wand
-       *  - to set the mastered spell in the wand for non-verbal casting if they are sneaking while clicking
-       *  - to brew a potion if they are holding a glass bottle in their off hand and facing a cauldron
-       */
-      else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
-      {
-         if (!p.holdsWand(player))
+            castSpell(player);
             return;
+         }
 
-         if (Ollivanders2.debug)
-            p.getLogger().info("OllivandersListener:onPlayerInteract: right click action");
-
-         O2Player o2p = p.getO2Player(player);
-         Location location = player.getLocation();
-         location.setY(location.getY() + 1.6);
-
-         if (p.wandCheck(player) == 1)
+         /**
+          * A right click is used:
+          *  - to determine if the wand is the player's destined wand
+          *  - to brew a potion if they are holding a glass bottle in their off hand and facing a cauldron
+          */
+         else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
          {
-            if (player.isSneaking() && Ollivanders2.nonVerbalCasting)
-            {
-               if (Ollivanders2.debug)
-                  p.getLogger().info("OllivandersListener:onPlayerInteract: shift mastered spell");
+            if (!p.holdsWand(player))
+               return;
 
-               o2p.shiftMasterSpell();
-               Spells spell = o2p.getMasterSpell();
-               if (spell != null)
-               {
-                  String spellName = Spells.firstLetterCapitalize(Spells.recode(spell));
-                  player.sendMessage("Wand master spell set to " + spellName);
-               }
-               else
-               {
-                  if (Ollivanders2.debug)
-                  {
-                     player.sendMessage("You have not mastered any spells.");
-                  }
-               }
-            }
-            else if ((playerFacingCauldron(player) != null) && (player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE))
+            if (Ollivanders2.debug)
+               p.getLogger().info("OllivandersListener:onPlayerInteract: right click action");
+
+            Block cauldron = (playerFacingCauldron(player));
+            if ((cauldron != null) && (player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE))
             {
                if (Ollivanders2.debug)
                   p.getLogger().info("OllivandersListener:onPlayerInteract: brewing potion");
 
-               Block cauldron = (playerFacingCauldron(player));
                brewPotion(player, cauldron);
+               return;
             }
-            else
-            {
-               if (Ollivanders2.debug)
-                  p.getLogger().info("OllivandersListener:onPlayerInteract: waving destined wand");
-               // play a sound and visual effect when they right-click their destined wand with no spell
-               player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
-               player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
-            }
+
+            if (Ollivanders2.debug)
+               p.getLogger().info("OllivandersListener:onPlayerInteract: waving destined wand");
+            // play a sound and visual effect when they right-click their destined wand with no spell
+            Location location = player.getLocation();
+            location.setY(location.getY() + 1.6);
+            player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
+            player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+         }
+      }
+      /**
+       * A right or left click of the off hand is used to rotate through mastered spells for non-verbal spell casting.
+       */
+      else // event.getHand() == EquipmentSlot.OFF_HAND
+      {
+         rotateNonVerbalSpell(player, action);
+      }
+   }
+
+   /**
+    * If non-verbal spell casting is enabled, selects a new spell from mastered spells.
+    *
+    * @assumes non-verbal spell casting is enabled
+    * @param player
+    * @param action
+    */
+   void rotateNonVerbalSpell (Player player, Action action)
+   {
+      if (!Ollivanders2.nonVerbalCasting)
+         return;
+
+      if (Ollivanders2.debug)
+         p.getLogger().info("Rotating mastered spells for non-verbal casting.");
+
+      if (!p.holdsWand(player, EquipmentSlot.OFF_HAND))
+         return;
+
+      O2Player o2p = p.getO2Player(player);
+      boolean reverse = false;
+      // right click rotates through spells backwards
+      if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
+         reverse = true;
+
+      o2p.shiftMasterSpell(reverse);
+      Spells spell = o2p.getMasterSpell();
+      if (spell != null)
+      {
+         String spellName = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(spell.toString()));
+         player.sendMessage("Wand master spell set to " + spellName);
+      }
+      else
+      {
+         if (Ollivanders2.debug)
+         {
+            player.sendMessage("You have not mastered any spells.");
          }
       }
    }
@@ -821,6 +846,7 @@ public class OllivandersListener implements Listener
          O2Player o2p = p.getO2Player(event.getEntity());
 
          o2p.resetSpellCount();
+         o2p.resetPotionCount();
          o2p.setWandSpell(null);
          o2p.resetSouls();
          o2p.resetEffects();
@@ -1321,50 +1347,6 @@ public class OllivandersListener implements Listener
    }
 
    /**
-    * Fires if a player right clicks a cauldron that is being heated from underneath
-    */
-   /*
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void cauldronClick (PlayerInteractEvent event)
-   {
-      if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
-      {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("OllivandersListener:cauldronClick: enter");
-         }
-
-         Block block = event.getClickedBlock();
-         if (block.getType() == Material.CAULDRON && p.holdsWand(event.getPlayer()))
-         {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("Block right-clicked was a cauldron");
-            }
-
-            Block under = block.getRelative(BlockFace.DOWN);
-            if (under.getType() == Material.FIRE || under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA)
-            {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("Cauldron is over a hot block");
-               }
-
-               p.getPotions().brewPotion(block);
-            }
-            else
-            {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("Cauldron is not over a hot block");
-               }
-            }
-         }
-      }
-   }
-   */
-
-   /**
     * When a player consumes something, see if it was a potion and apply the effect if it was.
     *
     * @param event
@@ -1589,6 +1571,9 @@ public class OllivandersListener implements Listener
     */
    void brewPotion (Player player, Block cauldron)
    {
+      if (Ollivanders2.debug)
+         p.getLogger().info("OllivandersListener:brewPotion: brewing potion");
+
       Block under = cauldron.getRelative(BlockFace.DOWN);
       if (under.getType() == Material.FIRE || under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA)
       {
