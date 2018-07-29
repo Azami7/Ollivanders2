@@ -800,7 +800,7 @@ public class OllivandersListener implements Listener
       Spells spell = o2p.getMasterSpell();
       if (spell != null)
       {
-         String spellName = Spells.firstLetterCapitalize(Spells.recode(spell));
+         String spellName = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(spell.toString()));
          player.sendMessage("Wand master spell set to " + spellName);
       }
       else

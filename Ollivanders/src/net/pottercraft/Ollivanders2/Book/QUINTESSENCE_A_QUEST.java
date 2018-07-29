@@ -24,5 +24,6 @@ public class QUINTESSENCE_A_QUEST extends Book
       spells.add(Spells.NULLUM_EVANESCUNT);
       spells.add(Spells.APARECIUM);
       spells.add(Spells.CONFUNDO);
+      spells.add(Spells.POINT_ME);
    }
 }
