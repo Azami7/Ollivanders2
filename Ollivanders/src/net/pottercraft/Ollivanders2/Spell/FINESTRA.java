@@ -7,7 +7,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 /**
- * Drops random items from a player's inventory. Also cuts down trees.
+ * Breaks glass.
  *
  * @author autumnwoz
  */
