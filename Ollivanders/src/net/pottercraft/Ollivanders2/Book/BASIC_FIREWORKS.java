@@ -14,7 +14,7 @@ public final class BASIC_FIREWORKS extends Book
    public BASIC_FIREWORKS ()
    {
       title = shortTitle = "Basic Fireworks";
-      author = "Fred George Weasley";
+      author = "George Weasley";
       branch = O2MagicBranch.CHARMS;
 
       spells.add(Spells.BOTHYNUS);
