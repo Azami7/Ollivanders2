@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2;
 import java.io.Serializable;
 import java.util.UUID;
 
+import net.pottercraft.Ollivanders2.Effect.Effects;
 import org.bukkit.entity.Player;
 
 public class OEffect implements Serializable

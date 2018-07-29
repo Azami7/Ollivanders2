@@ -1,6 +1,5 @@
 package net.pottercraft.Ollivanders2.Effect;
 
-import net.pottercraft.Ollivanders2.Effects;
 import net.pottercraft.Ollivanders2.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 

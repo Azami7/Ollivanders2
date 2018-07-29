@@ -5,8 +5,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Horse;
 
-import net.pottercraft.Ollivanders2.Effects;
-
 /**
  * Created by Azami7 on 6/28/17.
  *

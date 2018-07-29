@@ -5,8 +5,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.Effects;
-
 /**
  * Created by Azami7 on 6/27/17.
  *

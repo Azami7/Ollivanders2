@@ -5,6 +5,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import net.pottercraft.Ollivanders2.Effect.Effects;
+import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.*;
 
 import org.bukkit.Effect;

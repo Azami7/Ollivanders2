@@ -3,7 +3,6 @@ package net.pottercraft.Ollivanders2.Effect;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.Effects;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
