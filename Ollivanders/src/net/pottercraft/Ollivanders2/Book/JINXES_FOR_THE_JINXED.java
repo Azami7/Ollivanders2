@@ -17,10 +17,10 @@ public class JINXES_FOR_THE_JINXED extends Book
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.ENTOMORPHIS);
-      spellList.add(Spells.IMPEDIMENTA);
-      spellList.add(Spells.LEVICORPUS);
-      spellList.add(Spells.LACARNUM_INFLAMARI);
-      spellList.add(Spells.VENTO_FOLIO);
+      spells.add(Spells.ENTOMORPHIS);
+      spells.add(Spells.IMPEDIMENTA);
+      spells.add(Spells.LEVICORPUS);
+      spells.add(Spells.LACARNUM_INFLAMARI);
+      spells.add(Spells.VENTO_FOLIO);
    }
 }

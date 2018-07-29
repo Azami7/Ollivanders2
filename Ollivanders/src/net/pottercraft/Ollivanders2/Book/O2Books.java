@@ -35,7 +35,7 @@ public final class O2Books
    private Map <Books, ItemStack> O2BookItemMap = new HashMap<>();
 
    private Ollivanders2 p;
-   public SpellText spellText;
+   public BookTexts spellText;
 
    private ItemStack library;
 
@@ -52,7 +52,7 @@ public final class O2Books
       addBooks();
 
       // add all spell text
-      spellText = new SpellText (p);
+      spellText = new BookTexts(p);
 
       library = null;
 
@@ -195,9 +195,15 @@ public final class O2Books
       for (String spell : bookLore)
       {
          Spells spellEnum = Spells.decode(spell);
+         int spellLevel = 0;
+
+         if (spellEnum != null)
+            spellLevel = o2p.getSpellCount(spellEnum);
+         else
+            spellLevel = o2p.getPotionCount(spell);
 
          // if spell count is less than 25, learn this spell
-         if (o2p.getSpellCount(spellEnum) < 25)
+         if (spellLevel < 25)
          {
             // check to see if they have the Wit-Sharpening Potion effect
             boolean witSharpening = false;
@@ -210,14 +216,23 @@ public final class O2Books
                }
             }
 
-            if (p.debug)
-               p.getLogger().info(player.getDisplayName() + " learned new spell " + spellEnum.toString());
-
-            p.incSpellCount(player, spellEnum);
+            if (spellEnum != null)
+            {
+               p.incSpellCount(player, spellEnum);
+            }
+            else
+            {
+               p.incPotionCount(player, spell);
+            }
 
             // if they have the wit sharpening effect, increment it again
             if (witSharpening)
-               p.incSpellCount(player, spellEnum);
+            {
+               if (spellEnum != null)
+                  p.incSpellCount(player, spellEnum);
+               else
+                  p.incPotionCount(player, spell);
+            }
          }
       }
    }

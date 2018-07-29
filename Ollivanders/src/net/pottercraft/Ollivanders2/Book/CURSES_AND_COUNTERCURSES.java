@@ -17,10 +17,10 @@ public class CURSES_AND_COUNTERCURSES extends Book
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.LEVICORPUS);
-      spellList.add(Spells.LIBERACORPUS);
-      spellList.add(Spells.METELOJINX);
-      spellList.add(Spells.METELOJINX_RECANTO);
-      spellList.add(Spells.SILENCIO);
+      spells.add(Spells.LEVICORPUS);
+      spells.add(Spells.LIBERACORPUS);
+      spells.add(Spells.METELOJINX);
+      spells.add(Spells.METELOJINX_RECANTO);
+      spells.add(Spells.SILENCIO);
    }
 }

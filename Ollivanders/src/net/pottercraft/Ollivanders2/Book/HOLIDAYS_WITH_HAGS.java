@@ -17,6 +17,7 @@ public class HOLIDAYS_WITH_HAGS extends Book
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.MELOFORS);
+      spells.add(Spells.MELOFORS);
+      spells.add(Spells.OBLIVIATE);
    }
 }

@@ -5,10 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.pottercraft.Ollivanders2.Effects;
-import net.pottercraft.Ollivanders2.OEffect;
-import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
+import net.pottercraft.Ollivanders2.*;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -28,7 +25,7 @@ import org.bukkit.util.Vector;
  * @author lownes
  * @author Azami7
  */
-public abstract class SpellProjectile
+public abstract class SpellProjectile implements Teachable
 {
    public Player player;
    public Spells name;
@@ -44,6 +41,21 @@ public abstract class SpellProjectile
    public Material moveEffectData = Material.GLOWSTONE;
    public Set<Block> changed = new HashSet<>();
    public static final Long DEFAULT_COOLDOWN = new Long(1000);
+
+   /**
+    * The branch of magic this spell is - most likely Charms or Transfiguration
+    */
+   protected O2MagicBranch branch = O2MagicBranch.CHARMS;
+
+   /**
+    * Flavor text for this spell in spellbooks, etc.  Optional.
+    */
+   protected ArrayList<String> flavorText = new ArrayList<>();
+
+   /**
+    * The description text for this spell in spell books.  Required or spell cannot be written in a book.
+    */
+   protected String text = "";
 
    /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
@@ -269,5 +281,31 @@ public abstract class SpellProjectile
     */
    public Long getCoolDown() {
       return DEFAULT_COOLDOWN;
+   }
+
+   @Override
+   public String getText ()
+   {
+      return text;
+   }
+
+   @Override
+   public String getFlavorText()
+   {
+      if (flavorText.size() < 1)
+      {
+         return null;
+      }
+      else
+      {
+         int index = Math.abs(Ollivanders2.random.nextInt() % flavorText.size());
+         return flavorText.get(index);
+      }
+   }
+
+   @Override
+   public O2MagicBranch getMagicBranch ()
+   {
+      return branch;
    }
 }

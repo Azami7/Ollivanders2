@@ -17,9 +17,9 @@ public class EXTREME_INCANTATIONS extends Book
       author = "Violeta Stitch";
       branch = O2MagicBranch.CHARMS;
 
-      spellList.add(Spells.LUMOS_DUO);
-      spellList.add(Spells.BOMBARDA);
-      spellList.add(Spells.COLOVARIA);
-      spellList.add(Spells.LUMOS_MAXIMA);
+      spells.add(Spells.LUMOS_DUO);
+      spells.add(Spells.BOMBARDA);
+      spells.add(Spells.COLOVARIA);
+      spells.add(Spells.LUMOS_MAXIMA);
    }
 }

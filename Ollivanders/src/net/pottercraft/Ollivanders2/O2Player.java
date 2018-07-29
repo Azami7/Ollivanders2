@@ -40,6 +40,7 @@ public class O2Player
    private Ollivanders2 p = null;
    private Ollivanders2Common common;
    private Map<Spells, Integer> knownSpells = new HashMap<>();
+   private Map<String, Integer> knownPotions = new HashMap<>();
    private Map<Spells, Long> recentSpells = new HashMap<>();
    private List<OEffect> effects = new ArrayList<>();
    ArrayList<EntityType> animagusShapes = new ArrayList<>();
@@ -273,6 +274,24 @@ public class O2Player
    }
 
    /**
+    * Get the brewing count for a potion
+    *
+    * @param potion the spell to get a count for
+    * @return the number of times a player has cast this spell
+    */
+   public int getPotionCount (String potion)
+   {
+      int count = 0;
+
+      if (knownPotions.containsKey(potion))
+      {
+         count = knownPotions.get(potion).intValue();
+      }
+
+      return count;
+   }
+
+   /**
     * Get the casting count for a spell
     *
     * @param spell the spell to get a count for
@@ -404,12 +423,38 @@ public class O2Player
    }
 
    /**
+    * Increment the potion count by 1.
+    *
+    * @param potion the potion to increment
+    */
+   public void incrementPotionCount (String potion)
+   {
+      if (knownPotions.containsKey(potion))
+      {
+         int curCount = knownPotions.get(potion).intValue();
+         knownPotions.replace(potion, new Integer(curCount + 1));
+      }
+      else
+      {
+         knownPotions.put(potion, new Integer(1));
+      }
+   }
+
+   /**
     * Resets the known spells for this player to none.
     */
    public void resetSpellCount ()
    {
       knownSpells.clear();
       masteredSpells.clear();
+   }
+
+   /**
+    * Resets the known spells for this player to none.
+    */
+   public void resetPotionCount ()
+   {
+      knownPotions.clear();
    }
 
    /**
@@ -646,7 +691,7 @@ public class O2Player
             content = content + "\n";
          }
 
-         String spell = Spells.firstLetterCapitalize(Spells.recode(e.getKey()));
+         String spell = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(e.getKey().toString().toLowerCase()));
          String count = e.getValue().toString();
          String line = spell + " " + count;
          content = content + spell + " " + count;

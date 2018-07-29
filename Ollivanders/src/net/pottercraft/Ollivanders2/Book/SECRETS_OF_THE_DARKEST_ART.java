@@ -18,6 +18,6 @@ public class SECRETS_OF_THE_DARKEST_ART extends Book
       author = "Owle Bullock";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.ET_INTERFICIAM_ANIMAM_LIGAVERIS);
+      spells.add(Spells.ET_INTERFICIAM_ANIMAM_LIGAVERIS);
    }
 }

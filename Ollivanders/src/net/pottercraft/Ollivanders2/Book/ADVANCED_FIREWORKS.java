@@ -15,15 +15,15 @@ public final class ADVANCED_FIREWORKS extends Book
    {
       title = "Advanced Fireworks for Fun and Profit";
       shortTitle = "Advanced Fireworks";
-      author = "Fred and George Weasley";
+      author = "George Weasley";
       branch = O2MagicBranch.CHARMS;
 
-      spellList.add(Spells.BOTHYNUS_DUO);
-      spellList.add(Spells.COMETES_DUO);
-      spellList.add(Spells.PERICULUM_DUO);
-      spellList.add(Spells.PORFYRO_ASTERI_DUO);
-      spellList.add(Spells.VERDIMILLIOUS_DUO);
-      spellList.add(Spells.BOTHYNUS_TRIA);
-      spellList.add(Spells.PORFYRO_ASTERI_TRIA);
+      spells.add(Spells.BOTHYNUS_DUO);
+      spells.add(Spells.COMETES_DUO);
+      spells.add(Spells.PERICULUM_DUO);
+      spells.add(Spells.PORFYRO_ASTERI_DUO);
+      spells.add(Spells.VERDIMILLIOUS_DUO);
+      spells.add(Spells.BOTHYNUS_TRIA);
+      spells.add(Spells.PORFYRO_ASTERI_TRIA);
    }
 }

@@ -31,6 +31,7 @@ public final class FINITE_INCANTATEM extends Charms
 
       flavorText.add("\"He pointed his wand at the rampart, cried, \"Finite!\" and it steadied.\"");
       flavorText.add("\"Try Finite Incantatem, that should stop the rain if it’s a hex or curse.\"  -Hermione Granger");
+      flavorText.add("\"Stop! Stop!\" screamed Lockhart, but Snape took charge. \"Finite Incantatum!\" he shouted; Harry's feet stopped dancing, Malfoy stopped laughing, and they were able to look up.");
       flavorText.add("The General Counter-Spell");
       text = "Reduces all spell effects on an item or player.";
    }

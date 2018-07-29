@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
 import org.bukkit.Material;
@@ -43,14 +44,14 @@ public abstract class Book
     * No more than 256 characters
     */
    protected String closingPage;
-   protected ArrayList<String> mainContent;
 
    protected Ollivanders2 p;
 
    /**
-    * No more than 11 spells in a book or they won't fit on the table of contents.
+    * No more than 11 spells and/or potions in a book or they won't fit on the table of contents.
     */
-   protected ArrayList<Spells> spellList;
+   protected ArrayList<Spells> spells;
+   protected ArrayList<String> potions;
 
    /**
     * Constructor
@@ -63,9 +64,9 @@ public abstract class Book
       toc = "";
       openingPage = "";
       closingPage = "";
-      mainContent = new ArrayList<>();
 
-      spellList = new ArrayList<>();
+      spells = new ArrayList<>();
+      potions = new ArrayList<>();
       bookMeta = null;
       p = null;
    }
@@ -88,22 +89,32 @@ public abstract class Book
       toc = new String("Contents:\n\n");
       ArrayList<String> mainContent = new ArrayList<>();
 
-      for (Spells s : spellList)
+      // add the names of all the book contents
+      ArrayList<String> bookContents = new ArrayList<>();
+      for (Spells spell : spells)
       {
-         String spellName = Spells.recode(s);
-         String spell = Spells.firstLetterCapitalize(spellName);
-         toc = toc + spell + "\n";
+         bookContents.add(spell.toString());
+      }
+      for (String potion : potions)
+      {
+         bookContents.add(potion);
+      }
+
+      for (String content : bookContents)
+      {
+         String name = BookTexts.getName(content);
+         toc = toc + name + "\n";
 
          String text;
-         String spellText = SpellText.getText(s);
-         String spellFlavorText = SpellText.getFlavorText(s);
+         String mainText = BookTexts.getText(content);
+         String flavorText = BookTexts.getFlavorText(content);
 
-         if (spellFlavorText == null)
+         if (flavorText == null)
          {
-            text = spell + "\n\n" + spellText;
+            text = name + "\n\n" + mainText;
          }
          else
-            text = spell + "\n\n" + spellFlavorText + "\n\n" + spellText;
+            text = name + "\n\n" + flavorText + "\n\n" + mainText;
 
          // create the pages for this spell
          ArrayList<String> pages = createPages(text);
@@ -160,7 +171,7 @@ public abstract class Book
     */
    private ArrayList<String> getWords (String text)
    {
-      ArrayList<String> words = new ArrayList<String>();
+      ArrayList<String> words = new ArrayList<>();
       String[] splits = text.split(" ");
 
       for (String s : splits)
@@ -252,16 +263,19 @@ public abstract class Book
     *
     * @return a String list of lore
     */
-   private List<String> getSpellBookLore ()
+   private List<String> getBookLore ()
    {
-      List<String> lore = new ArrayList<String>();
+      List<String> lore = new ArrayList<>();
 
-      for (Spells s : spellList)
+      for (Spells spell : spells)
       {
-         String spellName = Spells.recode(s);
-         String spell = Spells.firstLetterCapitalize(spellName);
+         String s = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(spell.toString()));
+         lore.add(s);
+      }
 
-         lore.add(spell);
+      for (String p : potions)
+      {
+         lore.add(p);
       }
 
       return lore;
@@ -283,13 +297,8 @@ public abstract class Book
 
       if (bookMeta == null)
       {
-         // only support spell books right now
-         if (branch == O2MagicBranch.CHARMS || branch == O2MagicBranch.DARK_ARTS || branch == O2MagicBranch.TRANSFIGURATION
-               || branch == O2MagicBranch.ARITHMANCY || branch == O2MagicBranch.HEALING)
-         {
-            writeSpellBookMeta(bookItem);
-            lore = getSpellBookLore();
-         }
+         writeSpellBookMeta(bookItem);
+         lore = getBookLore();
       }
 
       bookMeta.setLore(lore);

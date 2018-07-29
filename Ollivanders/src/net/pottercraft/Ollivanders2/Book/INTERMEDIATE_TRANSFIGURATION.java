@@ -22,19 +22,16 @@ public class INTERMEDIATE_TRANSFIGURATION extends Book
       author = "Unknown";
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      spellList.add(Spells.DRACONIFORS);
-      spellList.add(Spells.DUCKLIFORS);
-      spellList.add(Spells.AVIFORS);
-      spellList.add(Spells.EQUUSIFORS);
-      spellList.add(Spells.EVANESCO);
-      spellList.add(Spells.PIERTOTUM_LOCOMOTOR);
-      spellList.add(Spells.DELETRIUS);
-      spellList.add(Spells.HERBIFORS);
-      spellList.add(Spells.LAPIFORS);
-      spellList.add(Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS);
+      spells.add(Spells.DRACONIFORS);
+      spells.add(Spells.DUCKLIFORS);
+      spells.add(Spells.AVIFORS);
+      spells.add(Spells.EQUUSIFORS);
+      spells.add(Spells.EVANESCO);
+      spells.add(Spells.PIERTOTUM_LOCOMOTOR);
+      spells.add(Spells.DELETRIUS);
+      spells.add(Spells.HERBIFORS);
+      spells.add(Spells.LAPIFORS);
+      spells.add(Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       //spell 11
-      //spell 12
-      //spell 13
-      //spell 14
    }
 }

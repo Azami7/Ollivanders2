@@ -12,10 +12,10 @@ public final class MEMORY_POTION extends Potion
 {
    public MEMORY_POTION ()
    {
-      name = "Memory Potion";
-      text = "This potion improves the drinker's memory. All spell experience is doubled.";
-
       ingredients.put(Material.SUGAR_CANE, 3);
       ingredients.put(Material.GLOWSTONE_DUST, 2);
+
+      name = "Memory Potion";
+      text = "This potion improves the drinker's memory. All spell experience is doubled." + getIngredientsText();
    }
 }

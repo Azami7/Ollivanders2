@@ -19,7 +19,7 @@ public final class SECRETS_OF_WANDLORE extends Book
 
       openingPage = "Wandlore is an ancient, complex, and mysterious branch of magic dealing with the history, abilities, and actions of wands, quasi-sentient magical tools used by wizards and witches to cast spells.";
 
-      spellList.add(Spells.FRANGE_LIGNEA);
-      spellList.add(Spells.LIGATIS_COR);
+      spells.add(Spells.FRANGE_LIGNEA);
+      spells.add(Spells.LIGATIS_COR);
    }
 }

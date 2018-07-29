@@ -19,6 +19,7 @@ public class WANDERINGS_WITH_WEREWOLVES extends Book
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spellList.add(Spells.CONFUNDUS_DUO);
+      spells.add(Spells.CONFUNDUS_DUO);
+      spells.add(Spells.OBLIVIATE);
    }
 }

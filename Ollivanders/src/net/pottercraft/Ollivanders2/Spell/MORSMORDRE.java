@@ -27,7 +27,6 @@ public final class MORSMORDRE extends PyrotechniaSuper
       flavorText.add("Then he realised it was a colossal skull, comprised of what looked like emerald stars, with a serpent protruding from its mouth like a tongue. As they watched, it rose higher and higher, blazing in a haze of greenish smoke, etched against the black sky like a new constellation.");
 
       text = "Conjures the Dark Mark in the sky.";
-
       branch = O2MagicBranch.DARK_ARTS;
    }
 
