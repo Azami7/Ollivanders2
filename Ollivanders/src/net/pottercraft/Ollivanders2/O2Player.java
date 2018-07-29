@@ -161,6 +161,7 @@ public class O2Player
          if (wandWood.equalsIgnoreCase(comps[0]) && wandCore.equalsIgnoreCase(comps[1]))
          {
             foundWand = true;
+            muggle = false;
             return true;
          }
          else

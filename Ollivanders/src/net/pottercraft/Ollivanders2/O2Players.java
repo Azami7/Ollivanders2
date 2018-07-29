@@ -31,6 +31,7 @@ public class O2Players
    private String masterSpellLabel = "Master_Spell";
    private String animagusLabel = "Animagus";
    private String animagusColorLabel = "Animagus_Color";
+   private String muggleLabel = "Muggle";
 
    public O2Players (Ollivanders2 plugin)
    {
@@ -314,6 +315,15 @@ public class O2Players
             }
          }
 
+         /**
+          * Muggle
+          */
+         if (!o2p.isMuggle())
+         {
+            Boolean foundWand = new Boolean(false);
+            playerData.put(foundWandLabel, foundWand.toString());
+         }
+
          serializedMap.put(pid.toString(), playerData);
       }
 
@@ -439,8 +449,13 @@ public class O2Players
             else if (label.equalsIgnoreCase(animagusColorLabel))
             {
                player.setAnimagusColor(value);
-            }
-            else
+            } else if (label.equalsIgnoreCase(muggleLabel)) {
+               Boolean muggle = common.booleanFromString(value);
+               if (muggle != null)
+               {
+                  player.setFoundWand(muggle.booleanValue());
+               }
+            } else
             {
                // it is a spell
                Spells spell = Spells.spellsFromString(label);
