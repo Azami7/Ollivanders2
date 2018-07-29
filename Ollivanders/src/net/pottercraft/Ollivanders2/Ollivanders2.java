@@ -1674,6 +1674,8 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runBooks (CommandSender sender, String[] args)
    {
+      Player targetPlayer = (Player) sender;
+
       if (args.length < 2)
       {
          usageMessageBooks(sender);
@@ -1696,11 +1698,13 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (args[1].equalsIgnoreCase("list"))
          {
-            ItemStack bookItem = books.getReadingList();
-            bookStack.add(bookItem);
+            // olli books list
+            listAllBooks(targetPlayer);
+            return true;
          }
          else if (args[1].equalsIgnoreCase("give"))
          {
+            // olli books give <player> <book name>
             if (args.length < 4)
             {
                usageMessageBooks(sender);
@@ -1708,7 +1712,7 @@ public class Ollivanders2 extends JavaPlugin
 
             //next arg is the target player
             String targetName = args[2];
-            Player targetPlayer = getServer().getPlayer(targetName);
+            targetPlayer = getServer().getPlayer(targetName);
             if (targetPlayer == null)
             {
                sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
@@ -1716,8 +1720,12 @@ public class Ollivanders2 extends JavaPlugin
 
                return true;
             }
+            else
+            {
+               getLogger().info("player to give book to is " + targetName);
+            }
 
-            // args after "book give [player]" are book name
+            // args after "book give <player>" are book name
             String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
             ItemStack bookItem = getBookFromArgs(subArgs, sender);
 
@@ -1730,7 +1738,8 @@ public class Ollivanders2 extends JavaPlugin
          }
          else
          {
-            ItemStack bookItem = getBookFromArgs(args, sender);
+            String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
+            ItemStack bookItem = getBookFromArgs(subArgs, sender);
             if (bookItem == null)
             {
                return true;
@@ -1739,7 +1748,7 @@ public class Ollivanders2 extends JavaPlugin
             bookStack.add(bookItem);
          }
 
-         givePlayerKit((Player) sender, bookStack);
+         givePlayerKit(targetPlayer, bookStack);
       }
       else
       {
@@ -1761,7 +1770,7 @@ public class Ollivanders2 extends JavaPlugin
 
       String bookName = new String();
 
-      for (int i = 1; i < args.length; i++)
+      for (int i = 0; i < args.length; i++)
       {
          String s = args[i].toUpperCase();
 
@@ -1880,5 +1889,16 @@ public class Ollivanders2 extends JavaPlugin
    public Potions getPotions ()
    {
       return potions;
+   }
+
+   public void listAllBooks (Player player)
+   {
+      String titleList = "Book Titles:";
+      for (String bookTitle : books.getAllBookShortTitles())
+      {
+         titleList = titleList + "\n" + bookTitle;
+      }
+
+      player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + titleList);
    }
 }
