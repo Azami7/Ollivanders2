@@ -19,6 +19,7 @@ public class COLLOPORTUS extends StationarySpellObj implements StationarySpell
 
    public void checkEffect (Ollivanders2 p)
    {
-
+      if (duration < 1)
+         kill();
    }
 }
