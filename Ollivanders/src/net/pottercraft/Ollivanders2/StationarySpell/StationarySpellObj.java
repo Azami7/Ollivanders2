@@ -58,11 +58,7 @@ public abstract class StationarySpellObj implements Serializable
     */
    public void age ()
    {
-      duration--;
-      if (duration < 0)
-      {
-         kill();
-      }
+      age(1);
    }
 
    /**
@@ -116,9 +112,9 @@ public abstract class StationarySpellObj implements Serializable
     */
    public List<Entity> getCloseEntities ()
    {
-      List<Entity> entities = new ArrayList<Entity>();
+      List<Entity> entities = new ArrayList<>();
       entities = Bukkit.getServer().getWorld(location.getWorld()).getEntities();
-      List<Entity> close = new ArrayList<Entity>();
+      List<Entity> close = new ArrayList<>();
       for (Entity e : entities)
       {
          if (e instanceof LivingEntity)
@@ -147,7 +143,7 @@ public abstract class StationarySpellObj implements Serializable
    public List<Item> getItems ()
    {
       List<Entity> entities = getCloseEntities();
-      List<Item> items = new ArrayList<Item>();
+      List<Item> items = new ArrayList<>();
       for (Entity e : entities)
       {
          if (e instanceof Item)
@@ -166,7 +162,7 @@ public abstract class StationarySpellObj implements Serializable
    public List<LivingEntity> getLivingEntities ()
    {
       List<Entity> entities = getCloseEntities();
-      List<LivingEntity> living = new ArrayList<LivingEntity>();
+      List<LivingEntity> living = new ArrayList<>();
       for (Entity e : entities)
       {
          if (e instanceof LivingEntity)
@@ -238,49 +234,6 @@ public abstract class StationarySpellObj implements Serializable
    }
 
    /**
-    * Does the player hold a wand item?
-    *
-    * @param player - Player to check.
-    * @return True if the player holds a wand. False if not.
-    */
-   public boolean holdsWand (Player player)
-   {
-      //if (player.getItemInHand() != null){
-      if (player.getInventory().getItemInMainHand() != null)
-      {
-         //ItemStack held = player.getItemInHand();
-         ItemStack held = player.getInventory().getItemInMainHand();
-         if (held.getType() == Material.STICK || held.getType() == Material.BLAZE_ROD)
-         {
-            if (held.getItemMeta().hasLore())
-            {
-               List<String> lore = held.getItemMeta().getLore();
-               if (lore.get(0).split(" and ").length == 2)
-               {
-                  return true;
-               }
-               else
-               {
-                  return false;
-               }
-            }
-            else
-            {
-               return false;
-            }
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /**
     * Gets the blocks in a radius of a location.
     *
     * @param loc    - The Location that is the center of the block list
@@ -291,7 +244,7 @@ public abstract class StationarySpellObj implements Serializable
    {
       Block center = loc.getBlock();
       int blockRadius = (int) (radius + 1);
-      Set<Block> blockList = new HashSet<Block>();
+      Set<Block> blockList = new HashSet<>();
       for (int x = -blockRadius; x <= blockRadius; x++)
       {
          for (int y = -blockRadius; y <= blockRadius; y++)
@@ -302,7 +255,7 @@ public abstract class StationarySpellObj implements Serializable
             }
          }
       }
-      Set<Block> returnList = new HashSet<Block>();
+      Set<Block> returnList = new HashSet<>();
       for (Block block : blockList)
       {
          if (block.getLocation().distance(center.getLocation()) < radius)
