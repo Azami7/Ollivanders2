@@ -1,8 +1,11 @@
 package net.pottercraft.Ollivanders2.StationarySpell;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
 
@@ -10,6 +13,16 @@ public class O2StationarySpells
 {
    private List<StationarySpellObj> O2StationarySpells = new ArrayList<>();
    Ollivanders2 p;
+
+   private String playerUUIDLabel = "Player_UUID";
+   private String spellLabel = "Name";
+   private String locationWorldLabel = "World";
+   private String locationWorldUUIDLabel = "World_UUID";
+   private String locationWorldXLabel = "World_X";
+   private String locationWorldYLabel = "World_Y";
+   private String locationWorldZLabel = "World_Z";
+   private String durationLabel = "Duration";
+   private String radiusLabel = "Radius";
 
    /**
     * Constructor
@@ -29,6 +42,9 @@ public class O2StationarySpells
     */
    public void addStationarySpell (StationarySpellObj spell)
    {
+      if (Ollivanders2.debug)
+         p.getLogger().info("O2StationarySpells.addStationarySpell: adding " + spell.name.toString());
+
       if (spell != null)
          O2StationarySpells.add(spell);
    }
@@ -41,6 +57,9 @@ public class O2StationarySpells
     */
    public void removeStationarySpell (StationarySpellObj spell)
    {
+      if (Ollivanders2.debug)
+         p.getLogger().info("O2StationarySpells.removeStationarySpell: removing " + spell.name.toString());
+
       spell.kill();
    }
 
@@ -113,7 +132,9 @@ public class O2StationarySpells
     */
    public void upkeep ()
    {
-      for (StationarySpellObj spell : O2StationarySpells)
+      List<StationarySpellObj> s = new ArrayList<>(O2StationarySpells);
+
+      for (StationarySpellObj spell : s)
       {
          if (spell.active)
          {
@@ -126,6 +147,9 @@ public class O2StationarySpells
 
          if (spell.kill)
          {
+            if (Ollivanders2.debug)
+               p.getLogger().info("O2StationarySpells.upkeep: removing " + spell.name.toString());
+
             O2StationarySpells.remove(spell);
          }
       }
@@ -146,7 +170,11 @@ public class O2StationarySpells
          p.getLogger().warning("Could not save stationary.bin");
       }
 
-      //TODO make this serialize to json rather than binary
+      // serialize the stationary spell list
+      List <Map<String, String>> serializedList = serializeO2StationarySpells();
+
+      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      gsonLayer.writeO2O2StationarySpells(serializedList);
    }
 
    /**
@@ -165,5 +193,78 @@ public class O2StationarySpells
       }
 
       //TODO make this serialize to json rather than binary
+   }
+
+   /**
+    * Serialize stationary spells for writing out json
+    * @return
+    */
+   private List<Map<String, String>> serializeO2StationarySpells ()
+   {
+      List <Map<String, String>> serializedList = new ArrayList<>();
+
+      if (p.debug)
+         p.getLogger().info("Serializing O2StationarySpells...");
+
+      for (StationarySpellObj spell : O2StationarySpells)
+      {
+         Map<String, String> spellData = new HashMap<>();
+
+         /**
+          * Spell name
+          */
+         spellData.put(spellLabel, spell.name.toString());
+
+         /**
+          * Player UUID
+          */
+         spellData.put(playerUUIDLabel, spell.playerUUID.toString());
+
+         /**
+          * Location world
+          */
+         spellData.put(locationWorldLabel, spell.location.getWorld());
+
+         /**
+          * Location world UUID
+          */
+         spellData.put(locationWorldUUIDLabel, spell.location.getWorldUUID().toString());
+
+         Location location = spell.location.toLocation();
+
+         /**
+          * Location x
+          */
+         Double x = new Double(location.getX());
+         spellData.put(locationWorldXLabel, x.toString());
+
+         /**
+          * Location y
+          */
+         Double y = new Double(location.getY());
+         spellData.put(locationWorldYLabel, y.toString());
+
+         /**
+          * Location z
+          */
+         Double z = new Double(location.getZ());
+         spellData.put(locationWorldZLabel, z.toString());
+
+         /**
+          * Duration
+          */
+         Integer duration = new Integer(spell.duration);
+         spellData.put(durationLabel, duration.toString());
+
+         /**
+          * Radius
+          */
+         Integer radius = new Integer(spell.radius);
+         spellData.put(radiusLabel, radius.toString());
+
+         serializedList.add(spellData);
+      }
+
+      return serializedList;
    }
 }

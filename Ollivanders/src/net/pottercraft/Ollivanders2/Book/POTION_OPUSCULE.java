@@ -19,6 +19,6 @@ public class POTION_OPUSCULE extends Book
       author = "Arsenius Jigger";
       branch = O2MagicBranch.POTIONS;
 
-      potions.add(new ANIMAGUS_POTION().getName());
+      potions.add(new ANIMAGUS_POTION(p).getName());
    }
 }

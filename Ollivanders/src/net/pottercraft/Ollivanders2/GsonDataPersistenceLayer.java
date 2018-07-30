@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.House.O2Houses;
 
 import java.io.*;
 import java.util.*;
+import java.util.List;
 import java.util.Map.Entry;
 
 public class GsonDataPersistenceLayer implements DataPersistenceLayer
@@ -18,6 +19,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
    private String housesJSONFile = "O2Houses.txt";
    private String housePointsJSONFile = "O2HousePoints.txt";
    private String o2PlayerJSONFile = "O2Players.txt";
+   private String o2StationarySpellsJSONFile = "O2StationarySpells.txt";
 
    public GsonDataPersistenceLayer (Ollivanders2 plugin)
    {
@@ -59,6 +61,13 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
    {
       String json = gson.toJson(map);
       writeJSON(json, o2PlayerJSONFile);
+   }
+
+   @Override
+   public void writeO2O2StationarySpells (List <Map<String, String>> map)
+   {
+      String json = gson.toJson(map);
+      writeJSON(json, o2StationarySpellsJSONFile);
    }
 
    @Override

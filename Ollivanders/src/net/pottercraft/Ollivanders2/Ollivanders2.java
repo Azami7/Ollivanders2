@@ -104,6 +104,8 @@ public class Ollivanders2 extends JavaPlugin
          proj.revert();
       }
 
+      stationarySpells.saveO2StationarySpells();
+
       try
       {
          SLAPI.save(prophecy, "plugins/Ollivanders2/prophecy.bin");

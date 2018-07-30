@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2;
 
 import java.util.Map;
 import java.util.UUID;
+import java.util.List;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 
 public interface DataPersistenceLayer
@@ -11,6 +12,8 @@ public interface DataPersistenceLayer
    void writeHousePoints (Map<O2Houses.O2HouseType, Integer> map);
 
    void writeO2Players (Map <String, Map<String, String>> map);
+
+   void writeO2O2StationarySpells (List <Map<String, String>> map);
 
    Map<UUID, O2Houses.O2HouseType> readHouses ();
 

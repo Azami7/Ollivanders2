@@ -19,8 +19,8 @@ public class MOSTE_POTENTE_POTIONS extends Book
       author = "Phineas Bourne";
       branch = O2MagicBranch.POTIONS;
 
-      potions.add(new BARUFFIOS_BRAIN_ELIXIR().getName());
-      potions.add(new WOLFSBANE_POTION().getName());
+      potions.add(new BARUFFIOS_BRAIN_ELIXIR(p).getName());
+      potions.add(new WOLFSBANE_POTION(p).getName());
       // polyjuice potion
       // laxative potion
    }
