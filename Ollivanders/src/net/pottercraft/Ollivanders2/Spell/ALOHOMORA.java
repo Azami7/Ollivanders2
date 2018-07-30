@@ -47,7 +47,7 @@ public final class ALOHOMORA extends Charms
    {
       move();
       List<StationarySpellObj> inside = new ArrayList<StationarySpellObj>();
-      for (StationarySpellObj spell : p.getStationary())
+      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
       {
          if (spell instanceof COLLOPORTUS)
          {

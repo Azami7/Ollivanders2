@@ -44,8 +44,8 @@ public final class HORREAT_PROTEGAT extends Charms
    public void checkEffect ()
    {
       move();
-      List<StationarySpellObj> inside = new ArrayList<StationarySpellObj>();
-      for (StationarySpellObj spell : p.getStationary())
+      List<StationarySpellObj> inside = new ArrayList<>();
+      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
       {
          if (spell.isInside(location) && spell.radius > (int) (10 / usesModifier))
          {
@@ -53,7 +53,7 @@ public final class HORREAT_PROTEGAT extends Charms
             kill();
          }
       }
-      //int limit = (int)(10/(usesModifier/inside.size()));
+
       int limit = (int) (10 / usesModifier);
       if (limit < 1)
       {

@@ -55,7 +55,7 @@ public final class DISSENDIUM extends Charms
       if (move)
       {
          move();
-         if (p.isInsideOf(StationarySpells.COLLOPORTUS, location))
+         if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, location))
          {
             kill();
             return;

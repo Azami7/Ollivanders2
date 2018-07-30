@@ -62,13 +62,12 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
             futureHealth = ((Attributable) player).getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0;
          }
          int souls = p.getO2Player(player).getSouls();
-         //If the player's soul is split enough and they can survive
-         //making another horcrux, then make a new one and damage them
+         //If the player's soul is split enough and they can survive making another horcrux, then make a new one and damage them
          if (futureHealth - 1 > 0 && souls > 0)
          {
             HORCRUX horcrux = new HORCRUX(player, location, StationarySpells.HORCRUX, 5, 10);
             horcrux.flair(10);
-            p.addStationary(horcrux);
+            p.stationarySpells.addStationarySpell(horcrux);
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
                   player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0);
             p.getO2Player(player).subtractSoul();
@@ -83,11 +82,10 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
                      + "Your soul is not yet so damaged to allow this.");
                return;
             }
-            //If they player couldn't survive making another horcrux
-            //then they are sent back to a previous horcrux
+            //If they player couldn't survive making another horcrux then they are sent back to a previous horcrux
             else if ((futureHealth - 1) <= 0)
             {
-               List<StationarySpellObj> stationarys = p.getStationary();
+               List<StationarySpellObj> stationarys = p.stationarySpells.getActiveStationarySpells();
                for (StationarySpellObj stationary : stationarys)
                {
                   if (stationary.name == StationarySpells.HORCRUX && stationary.getPlayerUUID().equals(player.getUniqueId()))
@@ -97,12 +95,11 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
                      player.teleport(tp);
                      player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
                      p.getO2Player(player).resetEffects();
-                     p.remStationary(stationary);
+                     p.stationarySpells.removeStationarySpell(stationary);
                      return;
                   }
                }
-               //If the player doesn't have any horcruxes left
-               //then they are killed.
+               //If the player doesn't have any horcruxes left then they are killed.
                player.damage(1000.0);
             }
          }

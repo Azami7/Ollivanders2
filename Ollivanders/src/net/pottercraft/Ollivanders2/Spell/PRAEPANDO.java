@@ -49,7 +49,7 @@ public final class PRAEPANDO extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO prae = new net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO(player, location, StationarySpells.PRAEPANDO,
                1, duration, 5);
          prae.flair(10);
-         p.addStationary(prae);
+         p.stationarySpells.addStationarySpell(prae);
          kill();
       }
    }

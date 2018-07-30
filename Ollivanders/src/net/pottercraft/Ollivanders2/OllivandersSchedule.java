@@ -58,7 +58,7 @@ class OllivandersSchedule implements Runnable
       {
          projectileSched();
          oeffectSched();
-         stationarySched();
+         p.stationarySpells.upkeep();
          broomSched();
       }
       catch (Exception e)
@@ -145,30 +145,6 @@ class OllivandersSchedule implements Runnable
          {
             if (Ollivanders2.debug)
                e.printStackTrace();
-         }
-      }
-   }
-
-   /**
-    * Scheduling method that calls checkEffect on all StationarySpellObj objects associated with every player
-    * and removes those that have kill set to true.
-    */
-   private void stationarySched ()
-   {
-      List<StationarySpellObj> stationary = p.getStationary();
-      List<StationarySpellObj> stationary2 = new ArrayList<>(stationary);
-      if (stationary2.size() > 0)
-      {
-         for (StationarySpellObj stat : stationary2)
-         {
-            if (stat.active)
-            {
-               ((StationarySpell) stat).checkEffect(p);
-            }
-            if (stat.kill)
-            {
-               p.remStationary(stat);
-            }
          }
       }
    }
@@ -283,9 +259,9 @@ class OllivandersSchedule implements Runnable
    private void invisPlayer ()
    {
       Set<REPELLO_MUGGLETON> repelloMuggletons = new HashSet<>();
-      for (StationarySpellObj stat : p.getStationary())
+      for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
       {
-         if (stat instanceof REPELLO_MUGGLETON && stat.active)
+         if (stat instanceof REPELLO_MUGGLETON)
          {
                repelloMuggletons.add((REPELLO_MUGGLETON) stat);
          }

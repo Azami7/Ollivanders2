@@ -75,7 +75,7 @@ public class OllivandersListener implements Listener
       }
       Location toLoc = event.getTo();
       Location fromLoc = event.getFrom();
-      for (StationarySpellObj spell : p.getStationary())
+      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
       {
          if (spell instanceof PROTEGO_TOTALUM &&
                toLoc.getWorld().getUID().equals(spell.location.getWorldUUID()) &&
@@ -101,7 +101,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
       String chat = event.getMessage();
-      for (StationarySpellObj stat : p.getStationary())
+      for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
       {
          if (stat instanceof ALIQUAM_FLOO)
          {
@@ -118,9 +118,9 @@ public class OllivandersListener implements Listener
                   }
                }
                aliquam.stopWorking();
-               List<ALIQUAM_FLOO> alis = new ArrayList<ALIQUAM_FLOO>();
+               List<ALIQUAM_FLOO> alis = new ArrayList<>();
                Location destination;
-               for (StationarySpellObj ali : p.getStationary())
+               for (StationarySpellObj ali : p.stationarySpells.getActiveStationarySpells())
                {
                   if (ali instanceof ALIQUAM_FLOO)
                   {
@@ -222,7 +222,7 @@ public class OllivandersListener implements Listener
        * Handle stationary spells that affect chat
        */
       Set<Player> recipients = event.getRecipients();
-      List<StationarySpellObj> stationaries = p.checkForStationary(sender.getLocation());
+      List<StationarySpellObj> stationaries = p.stationarySpells.getStationarySpellsAtLocation(sender.getLocation());
       Set<StationarySpellObj> muffliatos = new HashSet<>();
       for (StationarySpellObj stationary : stationaries)
       {
@@ -398,9 +398,9 @@ public class OllivandersListener implements Listener
    private void apparate (Player sender, String[] words)
    {
       boolean canApparateOut = true;
-      for (StationarySpellObj stat : p.getStationary())
+      for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
       {
-         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(sender.getLocation()) && stat.active)
+         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(sender.getLocation()))
          {
             stat.flair(10);
             canApparateOut = false;
@@ -462,9 +462,9 @@ public class OllivandersListener implements Listener
          to.setX(newX);
          to.setZ(newZ);
          boolean canApparateIn = true;
-         for (StationarySpellObj stat : p.getStationary())
+         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
          {
-            if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to) && stat.active)
+            if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to))
             {
                stat.flair(10);
                canApparateIn = false;
@@ -908,7 +908,7 @@ public class OllivandersListener implements Listener
          return;
       }
       //Horcrux code
-      List<StationarySpellObj> stationarys = p.getStationary();
+      List<StationarySpellObj> stationarys = p.stationarySpells.getActiveStationarySpells();
       if (event.getEntity() instanceof Player)
       {
          Damageable plyr = (Damageable) event.getEntity();
@@ -930,7 +930,7 @@ public class OllivandersListener implements Listener
                   }
                   event.setCancelled(true);
                   plyr.setHealth(((Player) plyr).getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-                  p.remStationary(stationary);
+                  p.stationarySpells.removeStationarySpell(stationary);
                   return;
                }
             }
@@ -947,11 +947,11 @@ public class OllivandersListener implements Listener
    private boolean checkSpongify (EntityDamageEvent event)
    {
       Entity entity = event.getEntity();
-      for (StationarySpellObj spell : p.getStationary())
+      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
       {
          if (spell instanceof MOLLIARE && event.getCause() == DamageCause.FALL)
          {
-            if (spell.isInside(entity.getLocation()) && spell.active)
+            if (spell.isInside(entity.getLocation()))
             {
                event.setCancelled(true);
                return true;
@@ -969,7 +969,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloBlockPlaceEvent (BlockPlaceEvent event)
    {
-      if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
+      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
       {
          if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
          {
@@ -993,7 +993,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloBlockBreakEvent (BlockBreakEvent event)
    {
-      if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
+      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
       {
          if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
          {
@@ -1017,7 +1017,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloBlockPhysicsEvent (BlockPhysicsEvent event)
    {
-      if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
+      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
       {
          event.setCancelled(true);
          return;
@@ -1035,7 +1035,7 @@ public class OllivandersListener implements Listener
       if (event.getAction() == Action.LEFT_CLICK_BLOCK ||
             event.getAction() == Action.RIGHT_CLICK_BLOCK)
       {
-         if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getClickedBlock().getLocation()))
+         if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getClickedBlock().getLocation()))
          {
             if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
             {
@@ -1058,8 +1058,8 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloPistonExtend (BlockPistonExtendEvent event)
    {
-      ArrayList<COLLOPORTUS> collos = new ArrayList<COLLOPORTUS>();
-      for (StationarySpellObj stat : p.getStationary())
+      ArrayList<COLLOPORTUS> collos = new ArrayList<>();
+      for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
       {
          if (stat instanceof COLLOPORTUS)
          {
@@ -1088,12 +1088,11 @@ public class OllivandersListener implements Listener
     * @param event - BlockPistonRetractEvent
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   @SuppressWarnings("deprecation")
    public void onColloPistonRetract (BlockPistonRetractEvent event)
    {
       if (event.isSticky())
       {
-         if (p.isInsideOf(StationarySpells.COLLOPORTUS, event.getRetractLocation()))
+         if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getRetractLocation()))
          {
             event.setCancelled(true);
             return;
@@ -1111,7 +1110,7 @@ public class OllivandersListener implements Listener
    {
       Location loc = event.getBlock().getLocation();
       Entity entity = event.getEntity();
-      if (p.isInsideOf(StationarySpells.COLLOPORTUS, loc))
+      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, loc))
       {
          event.setCancelled(true);
          if (event.getEntityType() == EntityType.FALLING_BLOCK)
@@ -1143,7 +1142,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onExplosion (EntityExplodeEvent event)
    {
-      List<Block> blockListCopy = new ArrayList<Block>();
+      List<Block> blockListCopy = new ArrayList<>();
       blockListCopy.addAll(event.blockList());
       List<Block> tempBlocks = p.getTempBlocks();
       for (Block block : blockListCopy)
@@ -1152,7 +1151,7 @@ public class OllivandersListener implements Listener
          {
             event.blockList().remove(block);
          }
-         for (StationarySpellObj stat : p.getStationary())
+         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)
             {
@@ -1283,7 +1282,7 @@ public class OllivandersListener implements Listener
       }
       if (target != null)
       {
-         for (StationarySpellObj stat : p.getStationary())
+         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
          {
             if (stat instanceof REPELLO_MUGGLETON)
             {

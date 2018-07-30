@@ -85,7 +85,7 @@ public final class INFORMOUS extends Arithmancy
             iEntity.add(entity);
          }
       }
-      for (StationarySpellObj spell : p.getStationary())
+      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
       {
          if (spell.isInside(location) && !iSpell.contains(spell))
          {

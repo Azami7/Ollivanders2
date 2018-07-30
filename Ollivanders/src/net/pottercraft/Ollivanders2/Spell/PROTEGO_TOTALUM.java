@@ -49,7 +49,7 @@ public final class PROTEGO_TOTALUM extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM total =
                new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM(player, location, StationarySpells.PROTEGO_TOTALUM, 5, duration);
          total.flair(10);
-         p.addStationary(total);
+         p.stationarySpells.addStationarySpell(total);
          kill();
       }
    }

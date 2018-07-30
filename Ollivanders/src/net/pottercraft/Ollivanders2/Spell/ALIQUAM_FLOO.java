@@ -60,7 +60,7 @@ public final class ALIQUAM_FLOO extends Charms
             String flooName = sign.getLine(0).trim() + " " + sign.getLine(1).trim() + " " + sign.getLine(2).trim() + " " + sign.getLine(3).trim();
             flooName = flooName.trim();
             flooName = flooName.toLowerCase();
-            for (StationarySpellObj stat : p.getStationary())
+            for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
             {
                if (stat instanceof net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO)
                {
@@ -73,7 +73,7 @@ public final class ALIQUAM_FLOO extends Charms
             }
             net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO aliquam = new net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO(player, statLocation, StationarySpells.ALIQUAM_FLOO, 2, 10, flooName);
             aliquam.flair(20);
-            p.addStationary(aliquam);
+            p.stationarySpells.addStationarySpell(aliquam);
          }
          kill();
       }

@@ -27,15 +27,13 @@ import net.pottercraft.Ollivanders2.Potion.Potion;
 import net.pottercraft.Ollivanders2.Potion.Potions;
 
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpells;
 import net.pottercraft.Ollivanders2.Book.Books;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -64,7 +62,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Ollivanders2 extends JavaPlugin
 {
    private List<SpellProjectile> projectiles = new ArrayList<>();
-   private List<StationarySpellObj> stationary = new ArrayList<>();
 
    private Set<Prophecy> prophecy = new HashSet();
    private Listener playerListener;
@@ -75,6 +72,7 @@ public class Ollivanders2 extends JavaPlugin
    private O2Players o2Players;
    private O2Books books;
    private Potions potions;
+   public O2StationarySpells stationarySpells;
 
    private static String mcVersion;
    public static Random random = new Random();
@@ -105,19 +103,7 @@ public class Ollivanders2 extends JavaPlugin
          }
          proj.revert();
       }
-      for (StationarySpellObj stat : stationary)
-      {
-         stat.active = true;
-      }
 
-      try
-      {
-         SLAPI.save(stationary, "plugins/Ollivanders2/stationary.bin");
-         getLogger().finest("Saved stationary.bin");
-      } catch (Exception e)
-      {
-         getLogger().warning("Could not save stationary.bin");
-      }
       try
       {
          SLAPI.save(prophecy, "plugins/Ollivanders2/prophecy.bin");
@@ -148,7 +134,6 @@ public class Ollivanders2 extends JavaPlugin
 		   getLogger().info("File directory for Ollivanders2");
 	   }
       projectiles = new ArrayList<>();
-      stationary = new ArrayList<>();
       prophecy = new HashSet<>();
       fileConfig = getConfig();
 
@@ -171,15 +156,6 @@ public class Ollivanders2 extends JavaPlugin
       if (getConfig().getBoolean("debug"))
          debug = true;
 
-      try
-      {
-         stationary = (List<StationarySpellObj>) SLAPI.load("plugins/Ollivanders2/stationary.bin");
-         getLogger().info("Loaded save file stationary.bin");
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Did not find stationary.bin");
-      }
       try
       {
          prophecy = (HashSet<Prophecy>) SLAPI.load("plugins/Ollivanders2/prophecy.bin");
@@ -249,6 +225,9 @@ public class Ollivanders2 extends JavaPlugin
 
       // set up potions
       potions = new Potions(this);
+
+      // set up stationary spells
+      stationarySpells = new O2StationarySpells(this);
 
       // create books
       books = new O2Books(this);
@@ -1152,16 +1131,6 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Gets the list of stationary spell objects
-    *
-    * @return List of stationary spell objects in server
-    */
-   public List<StationarySpellObj> getStationary ()
-   {
-      return stationary;
-   }
-
-   /**
     * Gets the set of prophecy objects
     *
     * @return Set of prophecy objects in server
@@ -1172,49 +1141,6 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Adds a stationary spell object to plugin stationary spell ojbect list
-    *
-    * @param s - StationarySpellObj to be added to list. Cannot be null.
-    */
-   public void addStationary (StationarySpellObj s)
-   {
-      stationary.add(s);
-   }
-
-   /**
-    * Removes a stationary spell object from plugin's stationary list
-    *
-    * @param s - StationarySpellObj to be removed. Cannot be null.
-    */
-   public void remStationary (StationarySpellObj s)
-   {
-      stationary.remove(s);
-   }
-
-   /**
-    * Checks if the location is within one or more stationary spell objects, regardless of whether or not they are active.
-    *
-    * @param location - location to check
-    * @return List of StationarySpellObj that the location is inside
-    */
-   public List<StationarySpellObj> checkForStationary (Location location)
-   {
-      List<StationarySpellObj> stationaries = getStationary();
-      List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj stationary : stationaries)
-      {
-         if (stationary.location.getWorldUUID().equals(location.getWorld().getUID()))
-         {
-            if (stationary.location.distance(location) < stationary.radius)
-            {
-               inside.add(stationary);
-            }
-         }
-      }
-      return inside;
-   }
-
-   /**
     * Gets the tempBlocks list.
     *
     * @return tempBlocks Block list.
@@ -1222,28 +1148,6 @@ public class Ollivanders2 extends JavaPlugin
    public List<Block> getTempBlocks ()
    {
       return tempBlocks;
-   }
-
-   /**
-    * Determine if the location is inside of a stationary spell area.
-    *
-    * @param statName
-    * @param loc
-    * @return
-    */
-   public boolean isInsideOf (StationarySpells statName, Location loc)
-   {
-      for (StationarySpellObj stat : getStationary())
-      {
-         if (stat.name == statName)
-         {
-            if (stat.isInside(loc) && stat.active)
-            {
-               return true;
-            }
-         }
-      }
-      return false;
    }
 
    /**

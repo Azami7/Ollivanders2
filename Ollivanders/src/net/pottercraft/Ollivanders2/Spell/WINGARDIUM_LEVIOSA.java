@@ -32,7 +32,10 @@ public final class WINGARDIUM_LEVIOSA extends Charms
    List<Location> locList = new ArrayList();
    boolean moving = true;
    double length = 0;
-   boolean dropBlocks = true;   //If the blocks should be converted to fallingBlocks after the end of the spell.
+   /**
+    * If the blocks should be converted to fallingBlocks after the end of the spell.
+    */
+   boolean dropBlocks = true;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -72,8 +75,8 @@ public final class WINGARDIUM_LEVIOSA extends Charms
          {
             moving = false;
             double radius = usesModifier / 4;
-            ArrayList<COLLOPORTUS> collos = new ArrayList<COLLOPORTUS>();
-            for (StationarySpellObj stat : p.getStationary())
+            ArrayList<COLLOPORTUS> collos = new ArrayList<>();
+            for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
             {
                if (stat instanceof COLLOPORTUS)
                {
@@ -114,7 +117,7 @@ public final class WINGARDIUM_LEVIOSA extends Charms
       {
          if (player.isSneaking())
          {
-            List<Location> locList2 = new ArrayList<Location>(locList);
+            List<Location> locList2 = new ArrayList<>(locList);
             for (Block block : blockList)
             {
                if (block.getType() == Material.AIR)
