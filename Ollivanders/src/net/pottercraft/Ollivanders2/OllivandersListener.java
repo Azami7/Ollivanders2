@@ -12,6 +12,7 @@ import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT;
 import net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM;
 import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
 import net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE;
+import net.pottercraft.Ollivanders2.Potion.*;
 
 import org.bukkit.*;
 import org.bukkit.Effect;
@@ -1363,6 +1364,8 @@ public class OllivandersListener implements Listener
          }
 
          O2Player o2p = p.getO2Player(player);
+         Potion potion = null;
+
          ItemMeta meta = item.getItemMeta();
          if (meta.hasLore())
          {
@@ -1370,113 +1373,28 @@ public class OllivandersListener implements Listener
             {
                if (lore.equals("Memory Potion"))
                {
-                  for (OEffect effect : o2p.getEffects())
-                  {
-                     if (effect instanceof MEMORY_POTION)
-                     {
-                        effect.duration = 3600;
-                        return;
-                     }
-                  }
-                  o2p.addEffect(new MEMORY_POTION(event.getPlayer(), Effects.MEMORY_POTION, 3600));
-
-                  player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-                        + "You feel more alert.");
-
-                  return;
+                  potion = new net.pottercraft.Ollivanders2.Potion.MEMORY_POTION(p);
                }
                else if (lore.equals("Baruffio's Brain Elixir"))
                {
-                  for (OEffect effect : o2p.getEffects())
-                  {
-                     if (effect instanceof BARUFFIOS_BRAIN_ELIXIR)
-                     {
-                        effect.duration = 3600;
-                        return;
-                     }
-                  }
-                  o2p.addEffect(new BARUFFIOS_BRAIN_ELIXIR(event.getPlayer(), Effects.BARUFFIOS_BRAIN_ELIXIR, 3600));
-
-                  player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-                        + "You feel clarity of thought.");
-
-                  return;
+                  potion = new net.pottercraft.Ollivanders2.Potion.BARUFFIOS_BRAIN_ELIXIR(p);
                }
                else if (lore.equals("Wolfsbane Potion"))
                {
-                  for (OEffect effect : o2p.getEffects())
-                  {
-                     if (effect instanceof WOLFSBANE_POTION)
-                     {
-                        effect.duration = 3600;
-                        return;
-                     }
-                  }
-                  o2p.addEffect(new WOLFSBANE_POTION(event.getPlayer(), Effects.WOLFSBANE_POTION, 3600));
-
-                  player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-                        + "You feel a sense of relief.");
-
-                  return;
+                  potion = new net.pottercraft.Ollivanders2.Potion.WOLFSBANE_POTION(p);
                }
                else if (lore.equals("Wit-Sharpening Potion"))
                {
-                  for (OEffect effect : o2p.getEffects())
-                  {
-                     if (effect instanceof WIT_SHARPENING_POTION)
-                     {
-                        effect.duration = 3600;
-                        return;
-                     }
-                  }
-                  o2p.addEffect(new WIT_SHARPENING_POTION(event.getPlayer(), Effects.WIT_SHARPENING_POTION, 3600));
-
-                  player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-                        + "You feel ready to learn.");
-
-                  return;
+                  potion = new net.pottercraft.Ollivanders2.Potion.WIT_SHARPENING_POTION(p);
                }
                else if (lore.equals("Animagus Potion"))
                {
-                  animagusPotion(o2p);
-                  return;
+                  potion = new net.pottercraft.Ollivanders2.Potion.ANIMAGUS_POTION(p);
                }
+
+               if (potion != null)
+                  potion.drink(o2p, player);
             }
-         }
-      }
-   }
-
-   /**
-    * Perform effects of drinking the animagus potion.
-    *
-    * @param o2p
-    */
-   private void animagusPotion (O2Player o2p)
-   {
-      if (o2p.isAnimagus())
-      {
-         // they are already an Animagus so this has no effect
-         return;
-      }
-      Player player = p.getServer().getPlayer(o2p.getID());
-
-      if (!player.getWorld().isThundering())
-      {
-         // potion only works in a thunderstorm
-         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-               + "Nothing seems to happen.");
-         return;
-      }
-
-      for (OEffect effect : o2p.getEffects())
-      {
-         if (effect instanceof ANIMAGUS_INCANTATION)
-         {
-            o2p.setIsAnimagus();
-            o2p.animagusForm();
-
-            player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-                  + "You feel transformed.");
          }
       }
    }

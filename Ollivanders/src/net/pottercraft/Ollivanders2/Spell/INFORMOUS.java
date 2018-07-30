@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.*;
+import net.pottercraft.Ollivanders2.Effect.Effects;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS;

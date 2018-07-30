@@ -1,4 +1,4 @@
-package net.pottercraft.Ollivanders2;
+package net.pottercraft.Ollivanders2.Effect;
 
 /**
  * All effects

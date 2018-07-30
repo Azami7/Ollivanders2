@@ -6,6 +6,10 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+
+import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.O2Player;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -17,9 +21,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.entity.Player;
 
 /**
  * Ollivander2 magical potion.
+ *
+ * Potions can have either or both of the following types of effects:
+ *
+ * PotionEffect - this is a standard Minecraft potion effect such as Night Vision and is set in the item metadata in the
+ * brew().
+ * Ollivanders Effect - effects related to the mechanics of the Ollivanders plugin. These are applied on the potion
+ * drink action in OllivandersListener in the onPlayerDrink().
  *
  * @author Azami7
  * @since 2.2.7
@@ -51,12 +63,27 @@ public abstract class Potion implements Teachable
     */
    protected Color potionColor = Color.PURPLE;
 
-   protected PotionEffect effect = null;
+   /**
+    * The PotionEffect for this potion
+    */
+   PotionEffect effect = null;
+
+   /**
+    * The duration for this potion
+    */
+   protected int duration = 3600;
+
+   protected Ollivanders2 p;
 
    /**
     * Constructor
+    *
+    * @param plugin
     */
-   public Potion () { }
+   public Potion (Ollivanders2 plugin)
+   {
+      p = plugin;
+   }
 
    protected String getIngredientsText ()
    {
@@ -236,34 +263,55 @@ public abstract class Potion implements Teachable
 
       if (rand >= 5)
       {
-         PotionEffect effect;
+         PotionEffect e;
 
          if (rand == 9)
          {
-            effect = new PotionEffect(PotionEffectType.SLOW, duration, amplifier);
+            e = new PotionEffect(PotionEffectType.SLOW, duration, amplifier);
          }
          else if (rand == 8)
          {
-            effect = new PotionEffect(PotionEffectType.BLINDNESS, duration, amplifier);
+            e = new PotionEffect(PotionEffectType.BLINDNESS, duration, amplifier);
          }
          else if (rand == 7)
          {
-            effect = new PotionEffect(PotionEffectType.HUNGER, duration, amplifier);
+            e = new PotionEffect(PotionEffectType.HUNGER, duration, amplifier);
          }
          else if (rand == 6)
          {
-            effect = new PotionEffect(PotionEffectType.CONFUSION, duration, amplifier);
+            e = new PotionEffect(PotionEffectType.CONFUSION, duration, amplifier);
          }
          else
          {
-            effect = new PotionEffect(PotionEffectType.WEAKNESS, duration, amplifier);
+            e = new PotionEffect(PotionEffectType.WEAKNESS, duration, amplifier);
          }
-         meta.addCustomEffect(effect, true);
+         meta.addCustomEffect(e, true);
       }
       // rand < 5, no effect
 
       potion.setItemMeta(meta);
 
       return potion;
+   }
+
+   public void drink (O2Player o2p, Player player) { }
+
+   /**
+    * Extends the effect time of this potion to the max duration if the player already has this effect active.
+    * @param o2p
+    * @return true if the effect was extended, false if the effect was not found and extended
+    */
+   public boolean extendEffect (O2Player o2p)
+   {
+      for (OEffect effect : o2p.getEffects())
+      {
+         if (effect instanceof net.pottercraft.Ollivanders2.Effect.WOLFSBANE_POTION)
+         {
+            effect.duration = duration;
+            return true;
+         }
+      }
+
+      return false;
    }
 }

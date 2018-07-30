@@ -20,20 +20,21 @@ import org.bukkit.Material;
  */
 public class Potions
 {
-   private final ArrayList<Potion> potions = new ArrayList() {{
-      add(new ANIMAGUS_POTION());
-      add(new BARUFFIOS_BRAIN_ELIXIR());
-      add(new MEMORY_POTION());
-      add(new REGENERATION_POTION());
-      add(new WIT_SHARPENING_POTION());
-      add(new WOLFSBANE_POTION());
-   }};
+   private final ArrayList<Potion> potions = new ArrayList();
 
    Ollivanders2 p;
 
    public Potions (Ollivanders2 plugin)
    {
       p = plugin;
+
+      potions.add(new ANIMAGUS_POTION(p));
+      potions.add(new ANTIDOTE_POTION(p));
+      potions.add(new BARUFFIOS_BRAIN_ELIXIR(p));
+      potions.add(new MEMORY_POTION(p));
+      potions.add(new REGENERATION_POTION(p));
+      potions.add(new WIT_SHARPENING_POTION(p));
+      potions.add(new WOLFSBANE_POTION(p));
 
       if (Ollivanders2.debug)
          p.getLogger().info("Loaded "  + potions.size() + " potions.");
