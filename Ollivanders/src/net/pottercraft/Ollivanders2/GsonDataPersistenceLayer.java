@@ -64,7 +64,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
    }
 
    @Override
-   public void writeO2O2StationarySpells (List <Map<String, String>> map)
+   public void writeO2StationarySpells (List <Map<String, String>> map)
    {
       String json = gson.toJson(map);
       writeJSON(json, o2StationarySpellsJSONFile);

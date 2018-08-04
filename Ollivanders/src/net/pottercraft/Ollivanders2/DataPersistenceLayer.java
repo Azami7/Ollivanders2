@@ -13,7 +13,7 @@ public interface DataPersistenceLayer
 
    void writeO2Players (Map <String, Map<String, String>> map);
 
-   void writeO2O2StationarySpells (List <Map<String, String>> map);
+   void writeO2StationarySpells (List <Map<String, String>> map);
 
    Map<UUID, O2Houses.O2HouseType> readHouses ();
 

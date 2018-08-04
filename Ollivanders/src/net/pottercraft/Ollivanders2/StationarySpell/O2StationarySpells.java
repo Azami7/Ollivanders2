@@ -174,7 +174,7 @@ public class O2StationarySpells
       List <Map<String, String>> serializedList = serializeO2StationarySpells();
 
       GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
-      gsonLayer.writeO2O2StationarySpells(serializedList);
+      gsonLayer.writeO2StationarySpells(serializedList);
    }
 
    /**
