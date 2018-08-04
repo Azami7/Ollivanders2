@@ -29,7 +29,6 @@ import org.bukkit.util.Vector;
  */
 public abstract class StationarySpellObj implements Serializable
 {
-   //private static final long serialVersionUID = 9013964903309999847L;
    public UUID playerUUID;
    public StationarySpells name;
    public OLocation location;
