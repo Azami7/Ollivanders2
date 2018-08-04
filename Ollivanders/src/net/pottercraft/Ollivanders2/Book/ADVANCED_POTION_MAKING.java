@@ -21,8 +21,8 @@ public class ADVANCED_POTION_MAKING extends Book
       author = "Libatius Borage";
       branch = O2MagicBranch.POTIONS;
 
-      potions.add(new REGENERATION_POTION().getName());
-      potions.add(new MEMORY_POTION().getName());
+      potions.add(new REGENERATION_POTION(p).getName());
+      potions.add(new MEMORY_POTION(p).getName());
 
       // draught of living death
       // elixir to induce euphoria

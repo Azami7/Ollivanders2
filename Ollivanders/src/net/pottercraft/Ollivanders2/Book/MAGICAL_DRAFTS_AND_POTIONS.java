@@ -17,7 +17,7 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends Book
       author = "Arsenius Jigger";
       branch = O2MagicBranch.POTIONS;
 
-      potions.add(new WIT_SHARPENING_POTION().getName());
+      potions.add(new WIT_SHARPENING_POTION(p).getName());
       // forgetfulness potion
       // swelling potion
       // cure for boils
