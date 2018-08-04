@@ -53,7 +53,7 @@ public final class FIENDFYRE extends DarkArts
    public void checkEffect ()
    {
       move();
-      List<StationarySpellObj> stationaries = p.checkForStationary(location);
+      List<StationarySpellObj> stationaries = p.stationarySpells.getStationarySpellsAtLocation(location);
       for (StationarySpellObj stationary : stationaries)
       {
          if (stationary.name.equals(StationarySpells.HORCRUX))

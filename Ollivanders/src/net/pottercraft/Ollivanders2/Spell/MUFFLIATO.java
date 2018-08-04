@@ -51,7 +51,7 @@ public final class MUFFLIATO extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.MUFFLIATO muffliato = new net.pottercraft.Ollivanders2.StationarySpell.MUFFLIATO(player, location,
                StationarySpells.MUFFLIATO, 5, duration);
          muffliato.flair(20);
-         p.addStationary(muffliato);
+         p.stationarySpells.addStationarySpell(muffliato);
          kill();
       }
    }

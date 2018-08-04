@@ -44,10 +44,9 @@ public final class APARECIUM extends Charms
    public void checkEffect ()
    {
       move();
-      List<StationarySpellObj> stationaries = p.checkForStationary(location);
+      List<StationarySpellObj> stationaries = p.stationarySpells.getStationarySpellsAtLocation(location);
       for (StationarySpellObj stationary : stationaries)
       {
-         //stationary.flair(Math.sqrt(p.getSpellNum(player, name))/rightWand);
          int level = (int) usesModifier;
          if (level > 10)
          {

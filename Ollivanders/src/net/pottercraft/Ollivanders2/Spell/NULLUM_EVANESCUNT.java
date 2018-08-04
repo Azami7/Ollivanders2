@@ -44,7 +44,7 @@ public final class NULLUM_EVANESCUNT extends Charms
          int duration = (int) (usesModifier * 1200);
          net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT nullum = new net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT(player, location, StationarySpells.NULLUM_EVANESCUNT, 5, duration);
          nullum.flair(10);
-         p.addStationary(nullum);
+         p.stationarySpells.addStationarySpell(nullum);
          kill();
       }
    }

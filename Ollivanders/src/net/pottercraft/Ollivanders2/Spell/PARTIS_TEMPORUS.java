@@ -52,7 +52,7 @@ public final class PARTIS_TEMPORUS extends Charms
       {
          lifeTicks++;
       }
-      for (StationarySpellObj spell : p.getStationary())
+      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
       {
          if (spell.isInside(location) && spell.getPlayerUUID().equals(player.getUniqueId()))
          {
@@ -63,7 +63,7 @@ public final class PARTIS_TEMPORUS extends Charms
       }
       if (lifeTicks > 160)
       {
-         for (StationarySpellObj spell : p.getStationary())
+         for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
          {
             if (spell.isInside(location))
             {

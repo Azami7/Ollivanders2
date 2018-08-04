@@ -56,7 +56,7 @@ public final class DEFODIO extends Charms
       List<Block> tempBlocks = p.getTempBlocks();
       if (depth > 0)
       {
-         for (StationarySpellObj stat : p.getStationary())
+         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)
             {

@@ -52,7 +52,7 @@ public final class PROTEGO_MAXIMA extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_MAXIMA max =
                new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_MAXIMA(player, location, StationarySpells.PROTEGO_MAXIMA, 5, duration, damage);
          max.flair(10);
-         p.addStationary(max);
+         p.stationarySpells.addStationarySpell(max);
          kill();
       }
    }

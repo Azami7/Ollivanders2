@@ -46,7 +46,7 @@ public final class NULLUM_APPAREBIT extends Charms
          int duration = (int) (usesModifier * 1200);
          net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT nullum = new net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT(player, location, StationarySpells.NULLUM_APPAREBIT, 5, duration);
          nullum.flair(10);
-         p.addStationary(nullum);
+         p.stationarySpells.addStationarySpell(nullum);
          kill();
       }
    }

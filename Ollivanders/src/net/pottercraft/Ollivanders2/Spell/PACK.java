@@ -53,9 +53,9 @@ public final class PACK extends Charms
       Block block = getBlock();
       if (block.getType() == Material.CHEST)
       {
-         for (StationarySpellObj stat : p.getStationary())
+         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
          {
-            if (stat instanceof COLLOPORTUS && stat.active)
+            if (stat instanceof COLLOPORTUS)
             {
                stat.flair(10);
                return;

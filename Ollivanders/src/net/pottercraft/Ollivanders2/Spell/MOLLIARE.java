@@ -49,7 +49,7 @@ public final class MOLLIARE extends Charms
          int duration = (int) (usesModifier * 1200);
          net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE molliare = new net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE(player, location, StationarySpells.MOLLIARE, 5, duration);
          molliare.flair(10);
-         p.addStationary(molliare);
+         p.stationarySpells.addStationarySpell(molliare);
          kill();
       }
    }

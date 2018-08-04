@@ -49,7 +49,7 @@ public final class COLLOPORTUS extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS total = new net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS(player, location,
                StationarySpells.COLLOPORTUS, 5, duration);
          total.flair(10);
-         p.addStationary(total);
+         p.stationarySpells.addStationarySpell(total);
          kill();
       }
    }

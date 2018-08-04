@@ -46,8 +46,8 @@ public final class FIANTO_DURI extends Charms
    public void checkEffect ()
    {
       move();
-      List<StationarySpellObj> inside = new ArrayList<StationarySpellObj>();
-      for (StationarySpellObj spell : p.getStationary())
+      List<StationarySpellObj> inside = new ArrayList<>();
+      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
       {
          if (spell.isInside(location))
          {

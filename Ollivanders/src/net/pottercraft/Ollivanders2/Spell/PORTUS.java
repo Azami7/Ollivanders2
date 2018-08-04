@@ -84,7 +84,7 @@ public final class PORTUS extends Charms
       for (Item item : getItems(1))
       {
          boolean canApparateOut = true;
-         for (StationarySpellObj stat : p.getStationary())
+         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
          {
             if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation()) && stat.active
                   && !stat.getPlayerUUID().equals(player.getUniqueId()))
@@ -123,7 +123,7 @@ public final class PORTUS extends Charms
                to = player.getLocation().clone();
             }
             boolean canApparateIn = true;
-            for (StationarySpellObj stat : p.getStationary())
+            for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
             {
                if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to) && stat.active && !stat.getPlayerUUID().equals(player.getUniqueId()))
                {
@@ -149,7 +149,7 @@ public final class PORTUS extends Charms
                }
                else
                {
-                  lore = new ArrayList<String>();
+                  lore = new ArrayList<>();
                }
                lore.add("Portkey " + to.getWorld().getUID() + " " + Double.toString(to.getX()) + " " + Double.toString(to.getY()) + " " + Double.toString(to.getZ()));
                meta.setLore(lore);

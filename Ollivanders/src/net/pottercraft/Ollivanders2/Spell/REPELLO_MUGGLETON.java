@@ -50,7 +50,7 @@ public final class REPELLO_MUGGLETON extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON stat = new net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON(player, location,
                StationarySpells.REPELLO_MUGGLETON, 5, duration);
          stat.flair(10);
-         p.addStationary(stat);
+         p.stationarySpells.addStationarySpell(stat);
          kill();
       }
    }

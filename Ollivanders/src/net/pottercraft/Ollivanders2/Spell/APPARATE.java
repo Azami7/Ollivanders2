@@ -54,9 +54,9 @@ public final class APPARATE extends Charms
       kill();
       location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
       boolean canApparateOut = true;
-      for (StationarySpellObj stat : p.getStationary())
+      for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
       {
-         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation()) && stat.active)
+         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation()))
          {
             stat.flair(10);
             canApparateOut = false;
@@ -84,9 +84,9 @@ public final class APPARATE extends Charms
          to.setX(newX);
          to.setZ(newZ);
          boolean canApparateIn = true;
-         for (StationarySpellObj stat : p.getStationary())
+         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
          {
-            if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to) && stat.active)
+            if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to))
             {
                stat.flair(10);
                canApparateIn = false;
