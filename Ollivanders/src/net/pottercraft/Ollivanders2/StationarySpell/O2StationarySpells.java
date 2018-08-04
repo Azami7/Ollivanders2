@@ -74,7 +74,7 @@ public class O2StationarySpells
 
       for (StationarySpellObj spell : O2StationarySpells)
       {
-         if (spell.active)
+         if (spell.kill != true && spell.active == true)
             active.add(spell);
       }
 
@@ -116,7 +116,7 @@ public class O2StationarySpells
       {
          if (spell.name == stationarySpell)
          {
-            if (spell.isInside(loc) && spell.active)
+            if (spell.isInside(loc) && spell.kill != true)
             {
                return true;
             }
@@ -136,14 +136,7 @@ public class O2StationarySpells
 
       for (StationarySpellObj spell : s)
       {
-         if (spell.active)
-         {
-            ((StationarySpell)spell).checkEffect(p);
-         }
-         else
-         {
-            spell.kill();
-         }
+         ((StationarySpell)spell).checkEffect(p);
 
          if (spell.kill)
          {

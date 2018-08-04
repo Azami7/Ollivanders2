@@ -85,7 +85,7 @@ public class OllivandersListener implements Listener
             int radius = spell.radius;
             Location spellLoc = spell.location.toLocation();
             if (((fromLoc.distance(spellLoc) < radius - 0.5 && toLoc.distance(spellLoc) > radius - 0.5)
-                  || (toLoc.distance(spellLoc) < radius + 0.5 && fromLoc.distance(spellLoc) > radius + 0.5)) && spell.active)
+                  || (toLoc.distance(spellLoc) < radius + 0.5 && fromLoc.distance(spellLoc) > radius + 0.5)))
             {
                event.setCancelled(true);
                spell.flair(10);
@@ -232,7 +232,7 @@ public class OllivandersListener implements Listener
             p.getLogger().info("onPlayerChat: handling stationary spells");
          }
 
-         if (stationary.name.equals(StationarySpells.MUFFLIATO) && stationary.active)
+         if (stationary.name.equals(StationarySpells.MUFFLIATO))
          {
             muffliatos.add(stationary);
          }
