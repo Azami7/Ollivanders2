@@ -232,7 +232,7 @@ public class OllivandersListener implements Listener
             p.getLogger().info("onPlayerChat: handling stationary spells");
          }
 
-         if (stationary.name.equals(StationarySpells.MUFFLIATO))
+         if (stationary.name.equals(StationarySpells.MUFFLIATO) && stationary.active)
          {
             muffliatos.add(stationary);
          }
