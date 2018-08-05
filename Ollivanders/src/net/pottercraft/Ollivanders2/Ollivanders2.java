@@ -1748,6 +1748,8 @@ public class Ollivanders2 extends JavaPlugin
          }
          else
          {
+            // remove any apostrophes
+            s = s.replace("\'", "");
             bookName = bookName + "_" + s;
          }
       }
@@ -1861,7 +1863,7 @@ public class Ollivanders2 extends JavaPlugin
    public void listAllBooks (Player player)
    {
       String titleList = "Book Titles:";
-      for (String bookTitle : books.getAllBookShortTitles())
+      for (String bookTitle : books.getAllBookTitles())
       {
          titleList = titleList + "\n" + bookTitle;
       }
