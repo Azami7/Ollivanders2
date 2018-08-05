@@ -37,7 +37,6 @@ public class FORGETFULLNESS_POTION extends Potion
       ingredients.put(Material.GHAST_TEAR, 2);
       ingredients.put(Material.SUGAR, 2);
 
-      effect = new PotionEffect(PotionEffectType.HEAL, duration, 1);
       potionColor = Color.MAROON;
    }
 
