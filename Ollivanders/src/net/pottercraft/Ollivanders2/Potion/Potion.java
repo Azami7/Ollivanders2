@@ -69,6 +69,11 @@ public abstract class Potion implements Teachable
    PotionEffect effect = null;
 
    /**
+    * The type of potion this is
+    */
+   Material potionMaterialType = Material.POTION;
+
+   /**
     * The duration for this potion
     */
    protected int duration = 3600;
@@ -197,7 +202,7 @@ public abstract class Potion implements Teachable
     */
    public ItemStack brew ()
    {
-      ItemStack potion = new ItemStack(Material.POTION);
+      ItemStack potion = new ItemStack(potionMaterialType);
       PotionMeta meta = (PotionMeta)potion.getItemMeta();
 
       meta.setDisplayName(name);
