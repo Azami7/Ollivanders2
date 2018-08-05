@@ -1,20 +1,22 @@
 package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Spell.Spells;
-import org.bukkit.Location;
-import org.bukkit.Material;
+
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
-import org.bukkit.DyeColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.HashMap;
 
 /**
  * Common functions and data
@@ -24,6 +26,11 @@ import java.util.UUID;
  */
 public class Ollivanders2Common
 {
+   private final String locationWorldLabel = "World";
+   private final String locationXLabel = "X-Value";
+   private final String locationYLabel = "Y-Value";
+   private final String locationZLabel = "Z-Value";
+
    public static final ArrayList<EntityType> smallFriendlyAnimals = new ArrayList<EntityType>() {{
       add(EntityType.BAT);
       add(EntityType.CHICKEN);
@@ -505,5 +512,85 @@ public class Ollivanders2Common
          }
       }
       return false;
+   }
+
+   /**
+    * Serialize an Location for saving.
+    *
+    * @param location the Location to serialize
+    * @param labelPrefix the prefix for the label string, assumes not empty or null
+    * @return a map of the serialized OLocation data
+    */
+   public Map<String, String> serializeLocation (Location location, String labelPrefix)
+   {
+      Map<String, String> locData = new HashMap<>();
+
+      /**
+       * Location world
+       */
+      locData.put(labelPrefix + "_" + locationWorldLabel, location.getWorld().getName());
+
+      /**
+       * Location x, y, z
+       */
+      Double x = new Double(location.getX());
+      locData.put(labelPrefix + "_" + locationXLabel, x.toString());
+
+      Double y = new Double(location.getY());
+      locData.put(labelPrefix + "_" + locationYLabel, y.toString());
+
+      Double z = new Double(location.getZ());
+      locData.put(labelPrefix + "_" + locationZLabel, z.toString());
+
+      return locData;
+   }
+
+   /**
+    * Returns a Location from serialized data.
+    *
+    * @return the location if the data was successfully read, null otherwise
+    */
+   public Location deserializeLocation (Map<String, String> locData, String labelPrefix)
+   {
+      double x = 0.0;
+      double y = 0.0;
+      double z = 0.0;
+      String worldName = "world";
+
+      for (Entry <String, String> e : locData.entrySet())
+      {
+         try
+         {
+            if (e.getKey().equals(labelPrefix + "_" + locationWorldLabel))
+            {
+               worldName = e.getValue();
+            }
+            else if (e.getKey().equals(labelPrefix + "_" + locationXLabel))
+            {
+               x = Double.parseDouble(e.getValue());
+            }
+            else if (e.getKey().equals(labelPrefix + "_" + locationYLabel))
+            {
+               y = Double.parseDouble(e.getValue());
+            }
+            else if (e.getKey().equals(labelPrefix + "_" + locationZLabel))
+            {
+               z = Double.parseDouble(e.getValue());
+            }
+         }
+         catch (Exception exception)
+         {
+            p.getLogger().info("Unable to deserialize location");
+            if (Ollivanders2.debug)
+               exception.printStackTrace();
+
+            return null;
+         }
+      }
+
+      World world = Bukkit.getServer().getWorld(worldName);
+      Location location = new Location(world, x, y, z);
+
+      return location;
    }
 }
