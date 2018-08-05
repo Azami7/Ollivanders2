@@ -28,13 +28,13 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
 
       potionMaterialType = Material.SPLASH_POTION;
 
-      name = "Herbicide Potion";
-      text = "The Herbicide Potion is damages or kills Creepers. It is also harmful to other living creatures.";
-
       ingredients.put(Material.RAW_FISH, 4);
       ingredients.put(Material.SUGAR, 2);
       ingredients.put(Material.MAGMA_CREAM, 2);
       ingredients.put(Material.SLIME_BALL, 2);
+
+      name = "Herbicide Potion";
+      text = "The Herbicide Potion is damages or kills Creepers. It is also harmful to other living creatures." + getIngredientsText();
 
       // set duration of potion effect to 30 seconds
       duration = 600;
