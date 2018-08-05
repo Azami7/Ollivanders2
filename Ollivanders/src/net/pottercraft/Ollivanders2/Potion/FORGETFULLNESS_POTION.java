@@ -22,7 +22,7 @@ import java.util.ArrayList;
  * @since 2.2.7
  * @author Azami7
  */
-public final class FORGETFULLNESS_POTION extends Potion
+public final class FORGETFULLNESS_POTION extends O2Potion
 {
    public FORGETFULLNESS_POTION (Ollivanders2 plugin)
    {

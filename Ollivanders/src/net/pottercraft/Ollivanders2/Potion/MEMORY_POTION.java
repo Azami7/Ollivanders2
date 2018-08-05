@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @author Azami7
  * @author cakenggt
  */
-public final class MEMORY_POTION extends Potion
+public final class MEMORY_POTION extends O2Potion
 {
    public MEMORY_POTION (Ollivanders2 plugin)
    {

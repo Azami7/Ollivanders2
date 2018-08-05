@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @author Azami7
  * @author cakenggt
  */
-public final class WOLFSBANE_POTION extends Potion
+public final class WOLFSBANE_POTION extends O2Potion
 {
    public WOLFSBANE_POTION (Ollivanders2 plugin)
    {

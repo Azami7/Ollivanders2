@@ -23,7 +23,7 @@ import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spell.Spells;
-import net.pottercraft.Ollivanders2.Potion.Potion;
+import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import net.pottercraft.Ollivanders2.Potion.Potions;
 
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
@@ -1838,7 +1838,7 @@ public class Ollivanders2 extends JavaPlugin
 
       List<ItemStack> kit = new ArrayList<>();
 
-      for (Potion potion : potions.getPotions())
+      for (O2Potion potion : potions.getPotions())
       {
          ItemStack brewedPotion = potion.brew();
 
@@ -1853,6 +1853,11 @@ public class Ollivanders2 extends JavaPlugin
       return true;
    }
 
+   /**
+    * Get the Potions class managing all the potions loaded in the game.
+    *
+    * @return the Potions class for this plugin
+    */
    public Potions getPotions ()
    {
       return potions;

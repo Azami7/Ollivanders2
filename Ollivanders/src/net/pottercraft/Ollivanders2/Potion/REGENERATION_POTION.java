@@ -13,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
  *
  * @author Azami7
  */
-public final class REGENERATION_POTION extends Potion
+public final class REGENERATION_POTION extends O2Potion
 {
    public REGENERATION_POTION (Ollivanders2 plugin)
    {

@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
-public final class ANIMAGUS_POTION extends Potion
+public final class ANIMAGUS_POTION extends O2Potion
 {
    public ANIMAGUS_POTION (Ollivanders2 plugin)
    {

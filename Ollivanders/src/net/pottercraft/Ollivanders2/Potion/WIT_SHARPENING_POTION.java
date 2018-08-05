@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
-public final class WIT_SHARPENING_POTION extends Potion
+public final class WIT_SHARPENING_POTION extends O2Potion
 {
    //TODO add uses for this potion
    public WIT_SHARPENING_POTION (Ollivanders2 plugin)

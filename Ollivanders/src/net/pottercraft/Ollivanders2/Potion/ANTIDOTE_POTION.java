@@ -16,7 +16,7 @@ import org.bukkit.potion.PotionEffectType;
  * @since 2.2.7
  * @author Azami7
  */
-public final class ANTIDOTE_POTION extends Potion
+public final class ANTIDOTE_POTION extends O2Potion
 {
    public ANTIDOTE_POTION (Ollivanders2 plugin)
    {
@@ -28,6 +28,7 @@ public final class ANTIDOTE_POTION extends Potion
       ingredients.put(Material.BEETROOT_SEEDS, 2);
       ingredients.put(Material.BLAZE_POWDER, 1);
       ingredients.put(Material.LAPIS_ORE, 2);
+      ingredients.put(Material.SUGAR, 2);
 
       effect = new PotionEffect(PotionEffectType.HEAL, duration, 1);
       potionColor = Color.TEAL;

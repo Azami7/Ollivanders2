@@ -36,7 +36,7 @@ import org.bukkit.entity.Player;
  * @author Azami7
  * @since 2.2.7
  */
-public abstract class Potion implements Teachable
+public abstract class O2Potion implements Teachable
 {
    /**
     * The ingredients list for this potion.
@@ -85,11 +85,16 @@ public abstract class Potion implements Teachable
     *
     * @param plugin
     */
-   public Potion (Ollivanders2 plugin)
+   public O2Potion (Ollivanders2 plugin)
    {
       p = plugin;
    }
 
+   /**
+    * Get the ingredients text for this potion
+    *
+    * @return
+    */
    protected String getIngredientsText ()
    {
       String s = "\n\nIngredients:";

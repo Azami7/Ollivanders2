@@ -20,9 +20,9 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends Book
       potions.add(new ANTIDOTE_POTION(p).getName());
       potions.add(new WIT_SHARPENING_POTION(p).getName());
       potions.add(new FORGETFULLNESS_POTION(p).getName());
+      potions.add(new HERBICIDE_POTION(p).getName());
       // swelling potion
       // cure for boils
-      // herbicide potion
       // sleeping draught
       // swelling solution
       // wideye potion
