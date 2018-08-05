@@ -4,7 +4,7 @@ import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Potion.*;
 
 /**
- * Magical Drafts and Potions - 1st year potions book
+ * Magical Drafts and Potions - OWL potions book
  *
  * @since 2.2.7
  * @author Azami7
@@ -18,7 +18,7 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends Book
       branch = O2MagicBranch.POTIONS;
 
       potions.add(new WIT_SHARPENING_POTION(p).getName());
-      // forgetfulness potion
+      potions.add(new FORGETFULLNESS_POTION(p).getName());
       // swelling potion
       // cure for boils
       // herbicide potion

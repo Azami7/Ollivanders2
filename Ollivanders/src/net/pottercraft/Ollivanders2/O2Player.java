@@ -320,6 +320,11 @@ public class O2Player
       return knownSpells;
    }
 
+   public Map<String, Integer> getKnownPotions ()
+   {
+      return knownPotions;
+   }
+
    /**
     * Get the list of recently cast spells for this player.
     *
@@ -336,13 +341,21 @@ public class O2Player
     */
    public void setSpellCount (Spells spell, int count)
    {
-      if (knownSpells.containsKey(spell))
+      if (count >= 1)
       {
-         knownSpells.replace(spell, new Integer(count));
+         if (knownSpells.containsKey(spell))
+         {
+            knownSpells.replace(spell, new Integer(count));
+         }
+         else
+         {
+            knownSpells.put(spell, new Integer(count));
+         }
       }
       else
       {
-         knownSpells.put(spell, new Integer(count));
+         if (knownSpells.containsKey(spell))
+            knownSpells.remove(spell);
       }
 
       // remove spell from mastered list if level is less than 100
@@ -354,6 +367,33 @@ public class O2Player
       else
       {
          addMasteredSpell(spell);
+      }
+   }
+
+   /**
+    * Set the potion count for a potion. This will override the existing values for this potion and should
+    * not be used when increment is intended.
+    *
+    * @param potion the potion to set the count for
+    * @param count the count to set
+    */
+   public void setPotionCount (String potion, int count)
+   {
+      if (count >= 1)
+      {
+         if (knownPotions.containsKey(potion))
+         {
+            knownPotions.replace(potion, new Integer(count));
+         }
+         else
+         {
+            knownPotions.put(potion, new Integer(count));
+         }
+      }
+      else
+      {
+         if (knownPotions.containsKey(potion))
+            knownPotions.remove(potion);
       }
    }
 

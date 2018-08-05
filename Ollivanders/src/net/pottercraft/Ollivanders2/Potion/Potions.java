@@ -31,6 +31,7 @@ public class Potions
       potions.add(new ANIMAGUS_POTION(p));
       potions.add(new ANTIDOTE_POTION(p));
       potions.add(new BARUFFIOS_BRAIN_ELIXIR(p));
+      potions.add(new FORGETFULLNESS_POTION(p));
       potions.add(new MEMORY_POTION(p));
       potions.add(new REGENERATION_POTION(p));
       potions.add(new WIT_SHARPENING_POTION(p));

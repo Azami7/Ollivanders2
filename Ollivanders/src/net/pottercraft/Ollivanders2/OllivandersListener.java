@@ -1391,6 +1391,10 @@ public class OllivandersListener implements Listener
                {
                   potion = new net.pottercraft.Ollivanders2.Potion.ANIMAGUS_POTION(p);
                }
+               else if (lore.equals("Forgetfulness Potion"))
+               {
+                  potion = new net.pottercraft.Ollivanders2.Potion.FORGETFULLNESS_POTION(p);
+               }
 
                if (potion != null)
                   potion.drink(o2p, player);
