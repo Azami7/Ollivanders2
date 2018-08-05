@@ -28,6 +28,7 @@ public final class REGENERATION_POTION extends O2Potion
       ingredients.put(Material.SULPHUR, 1);
       ingredients.put(Material.ROTTEN_FLESH, 1);
       ingredients.put(Material.ENDER_PEARL, 1);
+      ingredients.put(Material.SUGAR, 4);
 
       effect = new PotionEffect(PotionEffectType.REGENERATION, duration, 1);
       potionColor = Color.WHITE;

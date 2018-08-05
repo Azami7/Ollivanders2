@@ -24,6 +24,9 @@ public final class MEMORY_POTION extends O2Potion
 
       ingredients.put(Material.SUGAR_CANE, 3);
       ingredients.put(Material.GLOWSTONE_DUST, 2);
+      ingredients.put(Material.FEATHER, 2);
+      ingredients.put(Material.BAKED_POTATO, 1);
+      ingredients.put(Material.SUGAR, 2);
    }
 
    public void drink (O2Player o2p, Player player)

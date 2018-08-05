@@ -26,6 +26,7 @@ public final class WOLFSBANE_POTION extends O2Potion
       ingredients.put(Material.SPIDER_EYE, 2);
       ingredients.put(Material.ROTTEN_FLESH, 3);
       ingredients.put(Material.POISONOUS_POTATO, 1);
+      ingredients.put(Material.SUGAR, 3);
 
       name = "Wolfsbane Potion";
       text = "This potion will relieve, though not cure, the symotoms of Lycanthropy. It is a complex potion and requires"

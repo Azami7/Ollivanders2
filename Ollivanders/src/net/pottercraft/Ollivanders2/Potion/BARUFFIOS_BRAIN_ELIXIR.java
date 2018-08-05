@@ -25,6 +25,8 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
 
       ingredients.put(Material.REDSTONE, 5);
       ingredients.put(Material.GOLD_NUGGET, 1);
+      ingredients.put(Material.SUGAR, 2);
+      ingredients.put(Material.MONSTER_EGG, 1);
 
       name = "Baruffio's Brain Elixir";
       text = "Baruffio's Brain Elixir is a potion that increases the taker's brain power. All spells cast are twice as "
