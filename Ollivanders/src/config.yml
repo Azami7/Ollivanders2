@@ -24,6 +24,7 @@ broomstick: STICK
 # IMPORTANT: Enabling houses will take over your server's main scoreboard.  If you do not want this, you must
 # set this to false.
 houses: false
+years: false
 debug: false
 zones:
   default-world:
