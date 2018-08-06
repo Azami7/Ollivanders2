@@ -85,7 +85,7 @@ public class OllivandersListener implements Listener
             int radius = spell.radius;
             Location spellLoc = spell.location.toLocation();
             if (((fromLoc.distance(spellLoc) < radius - 0.5 && toLoc.distance(spellLoc) > radius - 0.5)
-                  || (toLoc.distance(spellLoc) < radius + 0.5 && fromLoc.distance(spellLoc) > radius + 0.5)) && spell.active)
+                  || (toLoc.distance(spellLoc) < radius + 0.5 && fromLoc.distance(spellLoc) > radius + 0.5)))
             {
                event.setCancelled(true);
                spell.flair(10);

@@ -19,7 +19,13 @@ public class COLLOPORTUS extends StationarySpellObj implements StationarySpell
 
    public void checkEffect (Ollivanders2 p)
    {
+      // Colloportus duration can only be decreased by an alohomora spell
       if (duration < 1)
+      {
+         if (Ollivanders2.debug)
+            p.getLogger().info("Colloportus stationary: kill spell");
+
          kill();
+      }
    }
 }
