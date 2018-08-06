@@ -28,7 +28,7 @@ public abstract class IncarnatioSuper extends Transfiguration
    public void checkEffect()
    {
       move();
-      List<LivingEntity> living = getLivingEntities(1);
+      List<LivingEntity> living = getLivingEntities(2);
       for (LivingEntity live : living)
       {
          if (live instanceof Player)

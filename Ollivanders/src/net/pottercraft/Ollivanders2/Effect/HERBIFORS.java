@@ -16,6 +16,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @version Ollivanders2
  * @author lownes
  */
+@Deprecated
 public class HERBIFORS extends OEffect implements Effect
 {
    private int maxFlowers;

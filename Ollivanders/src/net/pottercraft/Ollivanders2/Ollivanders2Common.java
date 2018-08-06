@@ -15,8 +15,6 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.World;
-import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +22,7 @@ import java.util.UUID;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.HashMap;
+import java.util.Collection;
 
 /**
  * Common functions and data
@@ -399,9 +398,10 @@ public class Ollivanders2Common
     * @param radius - radius within which to get entities
     * @return List of entities within the radius
     */
-   public static List<Entity> getCloseEntities (Location location, double radius)
+   public List<Entity> getCloseEntities (Location location, double radius)
    {
-      List<Entity> entities = location.getWorld().getEntities();
+      Collection<Entity> entities = location.getWorld().getNearbyEntities(location, radius, radius, radius);
+
       List<Entity> entitiesInRadius = new ArrayList<>();
       for (Entity e : entities)
       {
@@ -410,6 +410,7 @@ public class Ollivanders2Common
             entitiesInRadius.add(e);
          }
       }
+
       return entitiesInRadius;
    }
 
@@ -421,10 +422,11 @@ public class Ollivanders2Common
     * @param entityType - the type of entity to look for
     * @return List of entities of the specified type within the radius
     */
-   public static List<Entity> getTypedCloseEntities (Location location, double radius, EntityType entityType)
+   public List<Entity> getTypedCloseEntities (Location location, double radius, EntityType entityType)
    {
       List<Entity> entities = getCloseEntities(location, radius);
       List<Entity> entitiesInRadius = new ArrayList<>();
+
       for (Entity e : entities)
       {
          if (e.getType() == entityType)
@@ -662,85 +664,5 @@ public class Ollivanders2Common
          default:
             return -1;
       }
-   }
-
-   /**
-    * Serialize an Location for saving.
-    *
-    * @param location the Location to serialize
-    * @param labelPrefix the prefix for the label string, assumes not empty or null
-    * @return a map of the serialized OLocation data
-    */
-   public Map<String, String> serializeLocation (Location location, String labelPrefix)
-   {
-      Map<String, String> locData = new HashMap<>();
-
-      /**
-       * Location world
-       */
-      locData.put(labelPrefix + "_" + locationWorldLabel, location.getWorld().getName());
-
-      /**
-       * Location x, y, z
-       */
-      Double x = new Double(location.getX());
-      locData.put(labelPrefix + "_" + locationXLabel, x.toString());
-
-      Double y = new Double(location.getY());
-      locData.put(labelPrefix + "_" + locationYLabel, y.toString());
-
-      Double z = new Double(location.getZ());
-      locData.put(labelPrefix + "_" + locationZLabel, z.toString());
-
-      return locData;
-   }
-
-   /**
-    * Returns a Location from serialized data.
-    *
-    * @return the location if the data was successfully read, null otherwise
-    */
-   public Location deserializeLocation (Map<String, String> locData, String labelPrefix)
-   {
-      double x = 0.0;
-      double y = 0.0;
-      double z = 0.0;
-      String worldName = "world";
-
-      for (Entry <String, String> e : locData.entrySet())
-      {
-         try
-         {
-            if (e.getKey().equals(labelPrefix + "_" + locationWorldLabel))
-            {
-               worldName = e.getValue();
-            }
-            else if (e.getKey().equals(labelPrefix + "_" + locationXLabel))
-            {
-               x = Double.parseDouble(e.getValue());
-            }
-            else if (e.getKey().equals(labelPrefix + "_" + locationYLabel))
-            {
-               y = Double.parseDouble(e.getValue());
-            }
-            else if (e.getKey().equals(labelPrefix + "_" + locationZLabel))
-            {
-               z = Double.parseDouble(e.getValue());
-            }
-         }
-         catch (Exception exception)
-         {
-            p.getLogger().info("Unable to deserialize location");
-            if (Ollivanders2.debug)
-               exception.printStackTrace();
-
-            return null;
-         }
-      }
-
-      World world = Bukkit.getServer().getWorld(worldName);
-      Location location = new Location(world, x, y, z);
-
-      return location;
    }
 }

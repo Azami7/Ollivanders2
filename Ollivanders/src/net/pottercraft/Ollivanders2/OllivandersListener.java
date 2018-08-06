@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Effect.*;
+import net.pottercraft.Ollivanders2.Effect.SILENCIO;
 import net.pottercraft.Ollivanders2.Spell.*;
 import net.pottercraft.Ollivanders2.Potion.Potions;
 import net.pottercraft.Ollivanders2.StationarySpell.*;
@@ -162,7 +163,7 @@ public class OllivandersListener implements Listener
     *
     * @param event
     */
-   @EventHandler(priority = EventPriority.LOW)
+   @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerChat (AsyncPlayerChatEvent event)
    {
       Player sender = event.getPlayer();
@@ -190,24 +191,11 @@ public class OllivandersListener implements Listener
             // If SILENCIO is affecting the player, remove all chat recipients and do not allow a spell cast.
             if (effect.name == Effects.SILENCIO)
             {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("onPlayerChat: SILENCIO");
-               }
-
-               if (sender.isPermissionSet("Ollivanders2.BYPASS"))
-               {
-                  if (!sender.hasPermission("Ollivanders2.BYPASS"))
-                  {
-                     event.getRecipients().clear();
-                     return;
-                  }
-               }
-               else
-               {
-                  event.getRecipients().clear();
-                  return;
-               }
+               ((SILENCIO)effect).doSilencio(p, event);
+            }
+            else if (effect.name == Effects.BABBLING_EFFECT)
+            {
+               ((BABBLING_EFFECT)effect).doBabblingEffect(p, event);
             }
          }
       }
@@ -508,7 +496,7 @@ public class OllivandersListener implements Listener
     *
     * @param event Chat event of type AsyncPlayerChatEvent
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   @EventHandler(priority = EventPriority.HIGH)
    public void owlPost (AsyncPlayerChatEvent event)
    {
       Player sender = event.getPlayer();

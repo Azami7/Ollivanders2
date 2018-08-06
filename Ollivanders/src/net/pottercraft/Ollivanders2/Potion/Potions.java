@@ -33,6 +33,7 @@ public class Potions
       ArrayList<O2Potion> potions = new ArrayList<>();
       potions.add(new ANIMAGUS_POTION(p));
       potions.add(new ANTIDOTE_POTION(p));
+      potions.add(new BABBLING_BEVERAGE(p));
       potions.add(new BARUFFIOS_BRAIN_ELIXIR(p));
       potions.add(new FORGETFULLNESS_POTION(p));
       potions.add(new HERBICIDE_POTION(p));
@@ -44,8 +45,7 @@ public class Potions
       O2PotionsMap = new HashMap<>();
       loadPotionsClasses(potions);
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("Loaded "  + O2PotionsMap.size() + " potions.");
+      p.getLogger().info("Loaded "  + O2PotionsMap.size() + " potions.");
    }
 
    /**

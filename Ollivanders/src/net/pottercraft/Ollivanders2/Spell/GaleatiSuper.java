@@ -47,7 +47,7 @@ public abstract class GaleatiSuper extends Charms
    public void checkEffect ()
    {
       move();
-      for (LivingEntity live : getLivingEntities(1))
+      for (LivingEntity live : getLivingEntities(2))
       {
          EntityEquipment ee = live.getEquipment();
          ItemStack helmet = ee.getHelmet();

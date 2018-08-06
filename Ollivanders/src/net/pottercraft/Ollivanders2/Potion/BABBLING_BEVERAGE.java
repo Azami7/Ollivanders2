@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Potion;
 import net.pottercraft.Ollivanders2.Effect.Effects;
 import net.pottercraft.Ollivanders2.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -13,7 +14,7 @@ import org.bukkit.entity.Player;
  * @since 2.2.7
  * @author Azami7
  */
-public class BABBLING_BEVERAGE extends Potion
+public class BABBLING_BEVERAGE extends O2Potion
 {
    public BABBLING_BEVERAGE (Ollivanders2 plugin)
    {
@@ -38,5 +39,8 @@ public class BABBLING_BEVERAGE extends Potion
       {
          o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BABBLING_EFFECT(player, Effects.BABBLING_EFFECT, duration));
       }
+
+      player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+            + "You tongue feels fuzzy.");
    }
 }

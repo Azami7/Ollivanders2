@@ -44,7 +44,7 @@ public final class LEVICORPUS extends DarkArts
    public void checkEffect ()
    {
       move();
-      for (LivingEntity live : getLivingEntities(1))
+      for (LivingEntity live : getLivingEntities(2))
       {
          if (live instanceof Player)
          {

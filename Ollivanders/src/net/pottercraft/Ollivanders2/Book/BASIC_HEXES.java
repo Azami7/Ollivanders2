@@ -22,5 +22,6 @@ public class BASIC_HEXES extends Book
       spells.add(Spells.IMPEDIMENTA);
       spells.add(Spells.IMMOBULUS);
       spells.add(Spells.OBSCURO);
+      spells.add(Spells.LOQUELA_INEPTIAS);
    }
 }

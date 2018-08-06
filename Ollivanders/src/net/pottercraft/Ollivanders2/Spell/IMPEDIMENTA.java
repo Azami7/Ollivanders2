@@ -46,7 +46,7 @@ public final class IMPEDIMENTA extends DarkArts
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> entities = getLivingEntities(1);
+      List<LivingEntity> entities = getLivingEntities(2);
       for (LivingEntity entity : entities)
       {
          int modifier = (int) usesModifier;
