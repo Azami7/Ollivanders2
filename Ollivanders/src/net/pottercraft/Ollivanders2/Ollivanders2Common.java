@@ -2,7 +2,12 @@ package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
-import org.bukkit.*;
+
+import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
