@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
-public final class WIT_SHARPENING_POTION extends Potion
+public final class WIT_SHARPENING_POTION extends O2Potion
 {
    //TODO add uses for this potion
    public WIT_SHARPENING_POTION (Ollivanders2 plugin)
@@ -23,6 +23,7 @@ public final class WIT_SHARPENING_POTION extends Potion
       ingredients.put(Material.BEETROOT, 2);
       ingredients.put(Material.FERMENTED_SPIDER_EYE, 1);
       ingredients.put(Material.GHAST_TEAR, 2);
+      ingredients.put(Material.SUGAR, 2);
 
       name = "Wit-Sharpening Potion";
       text = "The Wit-Sharpening Potion is a potion which allows the drinker to think more clearly. Due to this, it acts"

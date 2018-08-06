@@ -92,7 +92,13 @@ public final class INFORMOUS extends Arithmancy
          {
             if (spell instanceof COLLOPORTUS)
             {
-               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration / 1200 + " power left.");
+               int power;
+               if (spell.duration >= 1200)
+                  power = spell.duration / 1200;
+               else
+                  power = 1;
+
+               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + spell.name.toString() + " of radius " + spell.radius + " has " + power + " power left.");
             }
             else if (spell instanceof HORCRUX)
             {
