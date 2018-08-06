@@ -29,8 +29,10 @@ import org.bukkit.inventory.meta.BookMeta;
  * file-based save used serialization, a new class was created for backwards compatibility.
  *
  * @author Azami7
+ * @author autumnwoz
  * @since 2.5.2
  */
+
 public class O2Player
 {
    private String wandWood = null;
@@ -57,6 +59,7 @@ public class O2Player
    private boolean isTransformed = false;
    private TargetedDisguise disguise;
    private boolean muggle = true;
+   private Year year = Year.YEAR_1;
 
    /**
     * Wand wood types
@@ -619,6 +622,24 @@ public class O2Player
       if (souls > 0)
       {
          souls--;
+      }
+   }
+
+   /**
+    * Get the year this player is in.
+    * @return The year the player is in
+    */
+   public Year getYear() {
+      return year;
+   }
+
+   /**
+    * Set the year this player is in.
+    * @param y The year to set them to
+    */
+   public void setYear(Year y) {
+      if (year != null) {
+         year = y;
       }
    }
 

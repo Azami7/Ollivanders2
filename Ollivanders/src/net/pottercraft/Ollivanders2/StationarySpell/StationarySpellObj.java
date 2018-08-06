@@ -29,28 +29,21 @@ import org.bukkit.util.Vector;
  */
 public abstract class StationarySpellObj implements Serializable
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 9013964903309999847L;
    public UUID playerUUID;
    public StationarySpells name;
    public OLocation location;
    public int duration;
-   public boolean kill;
+   public boolean kill = false;
+   public boolean active = true;
    public int radius;
-   public boolean active;
 
    public StationarySpellObj (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
       this.location = new OLocation(location);
       this.name = name;
       playerUUID = player.getUniqueId();
-      kill = false;
       this.duration = duration;
       this.radius = radius;
-      active = true;
    }
 
    /**
@@ -112,8 +105,7 @@ public abstract class StationarySpellObj implements Serializable
     */
    public List<Entity> getCloseEntities ()
    {
-      List<Entity> entities = new ArrayList<>();
-      entities = Bukkit.getServer().getWorld(location.getWorld()).getEntities();
+      List<Entity> entities = Bukkit.getServer().getWorld(location.getWorld()).getEntities();
       List<Entity> close = new ArrayList<>();
       for (Entity e : entities)
       {
@@ -270,5 +262,4 @@ public abstract class StationarySpellObj implements Serializable
    {
       return playerUUID;
    }
-
 }
