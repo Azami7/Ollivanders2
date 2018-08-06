@@ -97,19 +97,6 @@ public final class O2Books
             continue;
          }
 
-         String title = null;
-         try
-         {
-            title = book.getTitle();
-         }
-         catch (Exception e)
-         {
-            p.getLogger().warning("Exception trying to get book title for " + bookName);
-            e.printStackTrace();
-
-            continue;
-         }
-
          if (!O2BooksMap.containsKey(b))
          {
             O2BooksMap.put(b, book);

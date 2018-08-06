@@ -8,7 +8,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Teachable;
-import net.pottercraft.Ollivanders2.Potion.Potion;
+import net.pottercraft.Ollivanders2.Potion.O2Potion;
 
 /**
  * The text and flavor text for all Ollivanders2 magic.  This can be used for writing books, creating lessons, or
@@ -139,7 +139,7 @@ public final class BookTexts
 
    private void addPotions ()
    {
-      for (Potion potion : p.getPotions().getPotions())
+      for (O2Potion potion : p.getPotions().getPotions())
       {
          SpellText sText = new SpellText(potion.getName(), potion.getText(), potion.getFlavorText());
          O2MagicTextMap.put(potion.getName(), sText);
