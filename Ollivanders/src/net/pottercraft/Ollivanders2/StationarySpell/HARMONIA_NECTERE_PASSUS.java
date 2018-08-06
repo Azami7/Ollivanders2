@@ -1,10 +1,12 @@
 package net.pottercraft.Ollivanders2.StationarySpell;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 import java.util.UUID;
+import java.util.Set;
+import java.util.HashSet;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -20,14 +22,24 @@ import net.pottercraft.Ollivanders2.OLocation;
  */
 public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements StationarySpell
 {
-   private final OLocation twin;
+   private OLocation twin;
    private Set<UUID> teleported = new HashSet<>();
+
+   private final String twinLabel = "Twin";
 
    public HARMONIA_NECTERE_PASSUS (Player player, Location location, StationarySpells name, Integer radius,
                                    Integer duration, Location twin)
    {
       super(player, location, name, radius, duration);
       this.twin = new OLocation(twin);
+   }
+
+   public HARMONIA_NECTERE_PASSUS (Player player, Location location, StationarySpells name, Integer radius,
+                                   Integer duration, Map<String, String> spellData, Ollivanders2 plugin)
+   {
+      super(player, location, name, radius, duration);
+
+      deserializeSpellData(spellData, plugin);
    }
 
    @Override
@@ -109,5 +121,36 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
       toLoc.setYaw(entity.getLocation().getYaw());
       entity.teleport(toLoc);
       teleported.add(entity.getUniqueId());
+   }
+
+   /**
+    * Serialize all data specific to this spell so it can be saved.
+    *
+    * @return a map of the serialized data
+    */
+   @Override
+   public Map<String, String> serializeSpellData (Ollivanders2 p)
+   {
+      Ollivanders2Common o2c = new Ollivanders2Common(p);
+
+      Map<String, String> locData = o2c.serializeLocation(location.toLocation(), twinLabel);
+
+      return locData;
+   }
+
+   /**
+    * Deserialize the data for this spell and load the data to this spell.
+    *
+    * @param spellData a map of the saved spell data
+    */
+   @Override
+   public void deserializeSpellData (Map<String, String> spellData, Ollivanders2 p)
+   {
+      Ollivanders2Common o2c = new Ollivanders2Common(p);
+
+      Location loc = o2c.deserializeLocation(spellData, twinLabel);
+
+      if (loc != null)
+         twin = new OLocation(loc);
    }
 }
