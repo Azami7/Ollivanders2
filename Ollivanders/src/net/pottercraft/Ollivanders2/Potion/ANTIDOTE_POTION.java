@@ -30,6 +30,9 @@ public final class ANTIDOTE_POTION extends O2Potion
       name = "Common Antidote Potion";
       text = "Counteracts ordinary poisons, such as creature bites and stings." + getIngredientsText();
 
+      name = "Common Antidote Potion";
+      text = "Counteracts ordinary poisons, such as creature bites and stings." + getIngredientsText();
+
       effect = new PotionEffect(PotionEffectType.HEAL, duration, 1);
       potionColor = Color.TEAL;
    }

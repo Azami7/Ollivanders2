@@ -25,6 +25,7 @@ public final class MEMORY_POTION extends O2Potion
       ingredients.put(Material.BAKED_POTATO, 1);
       ingredients.put(Material.SUGAR, 2);
 
+
       name = "Memory Potion";
       text = "This potion improves the drinker's memory. All spell experience is doubled." + getIngredientsText();
    }
