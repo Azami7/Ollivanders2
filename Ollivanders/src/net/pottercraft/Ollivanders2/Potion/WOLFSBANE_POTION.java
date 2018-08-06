@@ -13,7 +13,7 @@ import org.bukkit.entity.Player;
  * @author Azami7
  * @author cakenggt
  */
-public final class WOLFSBANE_POTION extends Potion
+public final class WOLFSBANE_POTION extends O2Potion
 {
    public WOLFSBANE_POTION (Ollivanders2 plugin)
    {
@@ -22,6 +22,7 @@ public final class WOLFSBANE_POTION extends Potion
       ingredients.put(Material.SPIDER_EYE, 2);
       ingredients.put(Material.ROTTEN_FLESH, 3);
       ingredients.put(Material.POISONOUS_POTATO, 1);
+      ingredients.put(Material.SUGAR, 3);
 
       name = "Wolfsbane Potion";
       text = "This potion will relieve, though not cure, the symotoms of Lycanthropy. It is a complex potion and requires"

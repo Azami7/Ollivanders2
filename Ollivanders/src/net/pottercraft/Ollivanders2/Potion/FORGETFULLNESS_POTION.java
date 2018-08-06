@@ -7,8 +7,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.Map;
 import java.util.Set;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
  * @since 2.2.7
  * @author Azami7
  */
-public class FORGETFULLNESS_POTION extends Potion
+public final class FORGETFULLNESS_POTION extends O2Potion
 {
    public FORGETFULLNESS_POTION (Ollivanders2 plugin)
    {
