@@ -50,6 +50,9 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import static net.pottercraft.Ollivanders2.Ollivanders2Common.intToYear;
+import static net.pottercraft.Ollivanders2.Ollivanders2Common.yearToInt;
+
 /**
  * Ollivanders2 plugin object
  *
@@ -57,8 +60,9 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author cakenggt
  * @author lownes
  * @author Azami7
- * @author Lil_Miss_Giggles
+ * @author autumnwoz
  */
+
 public class Ollivanders2 extends JavaPlugin
 {
    private List<SpellProjectile> projectiles = new ArrayList<>();
@@ -412,6 +416,9 @@ public class Ollivanders2 extends JavaPlugin
          else if (subCommand.equalsIgnoreCase("potions"))
          {
             return givePotions((Player)sender);
+         } else if (subCommand.equalsIgnoreCase("year"))
+         {
+            return runYear(sender, args);
          }
       }
 
@@ -462,6 +469,9 @@ public class Ollivanders2 extends JavaPlugin
          summary = summary + "\nYou have not been sorted.\n";
       }
 
+      //year
+      summary = summary + "Year: " + yearToInt(o2Player.getYear()) + "\n";
+
       // spells
       Map<Spells, Integer> spells = o2Player.getKnownSpells();
 
@@ -499,7 +509,8 @@ public class Ollivanders2 extends JavaPlugin
             + "\nitems - gives a complete set of items"
             // + "\nquidd - creates a quidditch pitch"
             + "\nhouse - view and manage houses and house points"
-            + "\nsummary - gives a summary of wand type, house, and known spells"
+            + "\nyear - view and manage player years"
+            + "\nsummary - gives a summary of wand type, house, year, and known spells"
             + "\nreload - reload the Ollivanders2 configs"
             + "\ndebug - toggles Ollivanders2 plugin debug output\n"
             + "\n" + "To run a command, type '/ollivanders2 [command]'."
@@ -824,6 +835,198 @@ public class Ollivanders2 extends JavaPlugin
             + "\nreset - reset all house points to 0"
             + "\n\nExample: /ollivanders2 house points add Slytherin 5"
             + "\nExample: /ollivanders2 house points reset");
+   }
+
+   /**
+    * The year subCommand for managing everything related to years.
+    *
+    * @param sender
+    * @param args
+    * @return
+    */
+
+   private boolean runYear (CommandSender sender, String[] args)
+   {
+      if (getConfig().getBoolean("years") == false)
+      {
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                 + "Years are not currently enabled for your server."
+                 + "\nTo enable years, update the Ollivanders2 config.yml setting to true and restart your server."
+                 + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
+
+         return true;
+      }
+
+      // parse args
+      if (args.length >= 2)
+      {
+         String subCommand = args[1];
+
+         if (subCommand.equalsIgnoreCase("set"))
+         {
+            if (args.length < 4)
+            {
+               usageMessageYearSet(sender);
+               return true;
+            }
+
+            return runYearSet(sender, args[2], args[3]);
+         }
+         else if (subCommand.equalsIgnoreCase("promote"))
+         {
+            if (args.length < 3)
+            {
+               usageMessageYearPromote (sender);
+               return true;
+            }
+
+            return runYearChange(sender, args[2], 1);
+         }
+         else if (subCommand.equalsIgnoreCase("demote"))
+         {
+            if (args.length < 3)
+            {
+               usageMessageYearDemote(sender);
+               return true;
+            }
+
+            return runYearChange(sender, args[2], -1);
+         }
+         else if (args.length == 2) {
+            String p = args[1];
+            if (p == null || p.length() < 1) {
+               usageMessageHouseSort(sender);
+               return true;
+            }
+            Player player = getServer().getPlayer(p);
+            if (player == null)
+            {
+               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                       + "Unable to find a player named " + p + ".\n");
+               return true;
+            }
+            O2Player o2p = getO2Player(player);
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                        + "Player " + p + " is in year " + yearToInt(o2p.getYear()));
+            return true;
+         }
+      }
+
+      usageMessageYear(sender);
+
+      return true;
+   }
+
+   /**
+    * Display the usage message for /ollivanders2 year set
+    *
+    * @param sender
+    */
+   private void usageMessageYearSet (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+              + "Usage: /ollivanders2 year set [player] [year]"
+              + "\nyear - must be a number between 1 and 7"
+              + "\nExample: /ollivanders2 year set Harry 5");
+   }
+
+   /**
+    * Display the usage message for /ollivanders2 year promote
+    *
+    * @param sender
+    */
+   private void usageMessageYearPromote (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+              + "Usage: /ollivanders2 year promote [player]"
+              + "\nExample: /ollivanders2 year promote Harry");
+   }
+
+   /**
+    * Display the usage message for /ollivanders2 year demote
+    *
+    * @param sender
+    */
+   private void usageMessageYearDemote (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+              + "Usage: /ollivanders2 year demote [player]"
+              + "\nExample: /ollivanders2 year demote Harry");
+   }
+
+   /**
+    * Usage message for Year subcommands.
+    *
+    * @param sender
+    */
+   private void usageMessageYear (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+              + "Year commands: "
+              + "\nset - sets a player's year, years must be between 1 and 7"
+              + "\npromote - increases a player's year by 1 year"
+              + "\ndemote - decreases a player's year by 1 year"
+              + "\n<player> - tells you the year or a player\n");
+   }
+
+   /**
+    * Run the command to set a player's year
+    *
+    * @param sender
+    * @param targetPlayer
+    * @param targetYear
+    * @return
+    */
+   private boolean runYearSet (CommandSender sender, String targetPlayer, String targetYear) {
+      if (targetPlayer == null || targetPlayer.length() < 1 || targetYear == null || targetYear.length() < 1) {
+         usageMessageYearSet(sender);
+         return true;
+      }
+      Player player = getServer().getPlayer(targetPlayer);
+      if (player == null)
+      {
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                 + "Unable to find a player named " + targetPlayer + ".\n");
+         return true;
+      }
+      O2Player o2p = getO2Player(player);
+      int year;
+      try {
+         year = Integer.parseInt(targetYear);
+      } catch (NumberFormatException e) {
+         usageMessageYearSet(sender);
+         return true;
+      }
+      if (year < 1 || year > 7) {
+         usageMessageYearSet(sender);
+         return true;
+      }
+      o2p.setYear(intToYear(year));
+      return true;
+   }
+
+   /**
+    * Run promote and demote year commands
+    *
+    * @param sender
+    * @param targetPlayer
+    * @param yearChange
+    * @return
+    */
+   private boolean runYearChange (CommandSender sender, String targetPlayer, int yearChange) {
+      Player player = getServer().getPlayer(targetPlayer);
+      if (player == null)
+      {
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                 + "Unable to find a player named " + targetPlayer + ".\n");
+         return true;
+      }
+      O2Player o2p = getO2Player(player);
+      int year = yearToInt(o2p.getYear()) + yearChange;
+      if (year > 0 && year < 8) {
+         o2p.setYear(intToYear(year));
+      }
+      return true;
    }
 
    /**
@@ -1870,4 +2073,5 @@ public class Ollivanders2 extends JavaPlugin
 
       player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + titleList);
    }
+
 }

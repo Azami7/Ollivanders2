@@ -1,14 +1,15 @@
 package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Spell.Spells;
-
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.DyeColor;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -24,6 +25,17 @@ import java.util.HashMap;
  * @since 2.2.6
  * @author Azami7
  */
+
+enum Year {
+   YEAR_1,
+   YEAR_2,
+   YEAR_3,
+   YEAR_4,
+   YEAR_5,
+   YEAR_6,
+   YEAR_7
+}
+
 public class Ollivanders2Common
 {
    private final String locationWorldLabel = "World";
@@ -512,6 +524,58 @@ public class Ollivanders2Common
          }
       }
       return false;
+   }
+
+   /**
+    * Take an integer and get the corresponding year
+    * @param year The year; must be between 1 and 7
+    * @return The corresponding year or null if invalid input
+    */
+   public static Year intToYear(int year) {
+      switch (year) {
+         case 1:
+            return Year.YEAR_1;
+         case 2:
+            return Year.YEAR_2;
+         case 3:
+            return Year.YEAR_3;
+         case 4:
+            return Year.YEAR_4;
+         case 5:
+            return Year.YEAR_5;
+         case 6:
+            return Year.YEAR_6;
+         case 7:
+            return Year.YEAR_7;
+         default:
+            return null;
+      }
+   }
+
+   /**
+    * Take a year and get the corresponding integer
+    * @param year The year
+    * @return The corresponding number year
+    */
+   public static int yearToInt(Year year) {
+      switch (year) {
+         case YEAR_1:
+            return 1;
+         case YEAR_2:
+            return 2;
+         case YEAR_3:
+            return 3;
+         case YEAR_4:
+            return 4;
+         case YEAR_5:
+            return 5;
+         case YEAR_6:
+            return 6;
+         case YEAR_7:
+            return 7;
+         default:
+            return -1;
+      }
    }
 
    /**

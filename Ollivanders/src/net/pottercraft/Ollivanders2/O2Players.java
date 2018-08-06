@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.entity.EntityType;
 
+import static net.pottercraft.Ollivanders2.Ollivanders2Common.intToYear;
+import static net.pottercraft.Ollivanders2.Ollivanders2Common.yearToInt;
+
 /**
  * O2Players
  *
@@ -32,6 +35,7 @@ public class O2Players
    private String animagusLabel = "Animagus";
    private String animagusColorLabel = "Animagus_Color";
    private String muggleLabel = "Muggle";
+   private String yearLabel = "Year";
 
    public O2Players (Ollivanders2 plugin)
    {
@@ -324,6 +328,12 @@ public class O2Players
             playerData.put(muggleLabel, muggle.toString());
          }
 
+         /**
+          * Year
+          */
+         Integer year = new Integer(yearToInt(o2p.getYear()));
+         playerData.put(yearLabel, year.toString());
+
          serializedMap.put(pid.toString(), playerData);
       }
 
@@ -455,7 +465,16 @@ public class O2Players
                {
                   player.setMuggle(muggle.booleanValue());
                }
-            } else
+            }
+            else if (label.equalsIgnoreCase(yearLabel))
+            {
+               Integer year = common.integerFromString(value);
+               if (year != null)
+               {
+                  player.setYear(intToYear(year.intValue()));
+               }
+            }
+            else
             {
                // it is a spell
                Spells spell = Spells.spellsFromString(label);
