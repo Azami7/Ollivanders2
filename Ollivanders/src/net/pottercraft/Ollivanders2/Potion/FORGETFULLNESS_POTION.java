@@ -28,16 +28,15 @@ public final class FORGETFULLNESS_POTION extends O2Potion
    {
       super(plugin);
 
-      name = "Forgetfulness Potion";
-      text = "The Forgetfulness Potion is a potion which causes a degree of memory loss in the drinker.";
-      flavorText.add("Hermione Granger: \"What are the three most crucial ingredients in a Forgetfulness Potion?\"\nRon Weasley: \"I forgot.\"");
-
       ingredients.put(Material.MELON, 4);
       ingredients.put(Material.VINE, 2);
       ingredients.put(Material.GHAST_TEAR, 2);
       ingredients.put(Material.SUGAR, 2);
 
-      effect = new PotionEffect(PotionEffectType.HEAL, duration, 1);
+      name = "Forgetfulness Potion";
+      text = "The Forgetfulness Potion is a potion which causes a degree of memory loss in the drinker." + getIngredientsText();
+      flavorText.add("Hermione Granger: \"What are the three most crucial ingredients in a Forgetfulness Potion?\"\nRon Weasley: \"I forgot.\"");
+
       potionColor = Color.MAROON;
    }
 

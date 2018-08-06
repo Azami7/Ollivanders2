@@ -19,14 +19,14 @@ public final class MEMORY_POTION extends O2Potion
    {
       super(plugin);
 
-      name = "Memory Potion";
-      text = "This potion improves the drinker's memory. All spell experience is doubled.";
-
       ingredients.put(Material.SUGAR_CANE, 3);
       ingredients.put(Material.GLOWSTONE_DUST, 2);
       ingredients.put(Material.FEATHER, 2);
       ingredients.put(Material.BAKED_POTATO, 1);
       ingredients.put(Material.SUGAR, 2);
+
+      name = "Memory Potion";
+      text = "This potion improves the drinker's memory. All spell experience is doubled." + getIngredientsText();
    }
 
    public void drink (O2Player o2p, Player player)
