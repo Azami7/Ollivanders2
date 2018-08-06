@@ -14,14 +14,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
+/**
+ * Spells that create extra dimensions of space.
+ *
+ */
 public abstract class ExtraDimensional extends StationarySpellObj
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = 3905882508601771210L;
-   private int dimenRadius;
+   protected int dimenRadius;
    private OLocation edLoc;
 
    public ExtraDimensional (Player player, Location location,
