@@ -11,6 +11,8 @@ import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.DyeColor;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.World;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
