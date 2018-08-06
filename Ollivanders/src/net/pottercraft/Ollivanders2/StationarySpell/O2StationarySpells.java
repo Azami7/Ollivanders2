@@ -4,23 +4,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 
 public class O2StationarySpells
 {
    private List<StationarySpellObj> O2StationarySpells = new ArrayList<>();
    Ollivanders2 p;
+   Ollivanders2Common o2c;
 
    private String playerUUIDLabel = "Player_UUID";
    private String spellLabel = "Name";
-   private String locationWorldLabel = "World";
-   private String locationWorldUUIDLabel = "World_UUID";
-   private String locationWorldXLabel = "World_X";
-   private String locationWorldYLabel = "World_Y";
-   private String locationWorldZLabel = "World_Z";
    private String durationLabel = "Duration";
    private String radiusLabel = "Radius";
 
@@ -32,6 +30,8 @@ public class O2StationarySpells
    public O2StationarySpells (Ollivanders2 plugin)
    {
       p = plugin;
+      o2c = new Ollivanders2Common(p);
+
       loadO2StationarySpells();
    }
 
@@ -74,7 +74,7 @@ public class O2StationarySpells
 
       for (StationarySpellObj spell : O2StationarySpells)
       {
-         if (spell.active)
+         if (!spell.kill && spell.active)
             active.add(spell);
       }
 
@@ -116,7 +116,7 @@ public class O2StationarySpells
       {
          if (spell.name == stationarySpell)
          {
-            if (spell.isInside(loc) && spell.active)
+            if (spell.isInside(loc) && !spell.kill && spell.active)
             {
                return true;
             }
@@ -136,14 +136,7 @@ public class O2StationarySpells
 
       for (StationarySpellObj spell : s)
       {
-         if (spell.active)
-         {
-            ((StationarySpell)spell).checkEffect(p);
-         }
-         else
-         {
-            spell.kill();
-         }
+         ((StationarySpell)spell).checkEffect(p);
 
          if (spell.kill)
          {
@@ -221,34 +214,13 @@ public class O2StationarySpells
          spellData.put(playerUUIDLabel, spell.playerUUID.toString());
 
          /**
-          * Location world
+          * Location
           */
-         spellData.put(locationWorldLabel, spell.location.getWorld());
-
-         /**
-          * Location world UUID
-          */
-         spellData.put(locationWorldUUIDLabel, spell.location.getWorldUUID().toString());
-
-         Location location = spell.location.toLocation();
-
-         /**
-          * Location x
-          */
-         Double x = new Double(location.getX());
-         spellData.put(locationWorldXLabel, x.toString());
-
-         /**
-          * Location y
-          */
-         Double y = new Double(location.getY());
-         spellData.put(locationWorldYLabel, y.toString());
-
-         /**
-          * Location z
-          */
-         Double z = new Double(location.getZ());
-         spellData.put(locationWorldZLabel, z.toString());
+         Map<String, String> locData = o2c.serializeLocation(spell.location.toLocation(), "Spell_Loc");
+         for (Entry<String, String> e : locData.entrySet())
+         {
+            spellData.put(e.getKey(), e.getValue());
+         }
 
          /**
           * Duration
@@ -263,6 +235,13 @@ public class O2StationarySpells
          spellData.put(radiusLabel, radius.toString());
 
          serializedList.add(spellData);
+
+         // get spell-specific data
+         Map <String, String> uniqueData = ((StationarySpell)spell).serializeSpellData(p);
+         for (Entry<String, String> e : uniqueData.entrySet())
+         {
+            spellData.put(e.getKey(),e.getValue());
+         }
       }
 
       return serializedList;

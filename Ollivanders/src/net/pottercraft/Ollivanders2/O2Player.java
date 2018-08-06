@@ -29,8 +29,10 @@ import org.bukkit.inventory.meta.BookMeta;
  * file-based save used serialization, a new class was created for backwards compatibility.
  *
  * @author Azami7
+ * @author autumnwoz
  * @since 2.5.2
  */
+
 public class O2Player
 {
    private String wandWood = null;
@@ -57,6 +59,7 @@ public class O2Player
    private boolean isTransformed = false;
    private TargetedDisguise disguise;
    private boolean muggle = true;
+   private Year year = Year.YEAR_1;
 
    /**
     * Wand wood types
@@ -320,6 +323,11 @@ public class O2Player
       return knownSpells;
    }
 
+   public Map<String, Integer> getKnownPotions ()
+   {
+      return knownPotions;
+   }
+
    /**
     * Get the list of recently cast spells for this player.
     *
@@ -336,13 +344,21 @@ public class O2Player
     */
    public void setSpellCount (Spells spell, int count)
    {
-      if (knownSpells.containsKey(spell))
+      if (count >= 1)
       {
-         knownSpells.replace(spell, new Integer(count));
+         if (knownSpells.containsKey(spell))
+         {
+            knownSpells.replace(spell, new Integer(count));
+         }
+         else
+         {
+            knownSpells.put(spell, new Integer(count));
+         }
       }
       else
       {
-         knownSpells.put(spell, new Integer(count));
+         if (knownSpells.containsKey(spell))
+            knownSpells.remove(spell);
       }
 
       // remove spell from mastered list if level is less than 100
@@ -354,6 +370,33 @@ public class O2Player
       else
       {
          addMasteredSpell(spell);
+      }
+   }
+
+   /**
+    * Set the potion count for a potion. This will override the existing values for this potion and should
+    * not be used when increment is intended.
+    *
+    * @param potion the potion to set the count for
+    * @param count the count to set
+    */
+   public void setPotionCount (String potion, int count)
+   {
+      if (count >= 1)
+      {
+         if (knownPotions.containsKey(potion))
+         {
+            knownPotions.replace(potion, new Integer(count));
+         }
+         else
+         {
+            knownPotions.put(potion, new Integer(count));
+         }
+      }
+      else
+      {
+         if (knownPotions.containsKey(potion))
+            knownPotions.remove(potion);
       }
    }
 
@@ -579,6 +622,24 @@ public class O2Player
       if (souls > 0)
       {
          souls--;
+      }
+   }
+
+   /**
+    * Get the year this player is in.
+    * @return The year the player is in
+    */
+   public Year getYear() {
+      return year;
+   }
+
+   /**
+    * Set the year this player is in.
+    * @param y The year to set them to
+    */
+   public void setYear(Year y) {
+      if (year != null) {
+         year = y;
       }
    }
 

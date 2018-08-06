@@ -18,15 +18,24 @@ import org.bukkit.*;
 import org.bukkit.Effect;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-
-import org.bukkit.entity.*;
+import org.bukkit.entity.Creature;
+import org.bukkit.entity.Damageable;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.FallingBlock;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.ThrownPotion;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.player.*;
+import org.bukkit.event.entity.*;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -85,7 +94,7 @@ public class OllivandersListener implements Listener
             int radius = spell.radius;
             Location spellLoc = spell.location.toLocation();
             if (((fromLoc.distance(spellLoc) < radius - 0.5 && toLoc.distance(spellLoc) > radius - 0.5)
-                  || (toLoc.distance(spellLoc) < radius + 0.5 && fromLoc.distance(spellLoc) > radius + 0.5)) && spell.active)
+                  || (toLoc.distance(spellLoc) < radius + 0.5 && fromLoc.distance(spellLoc) > radius + 0.5)))
             {
                event.setCancelled(true);
                spell.flair(10);
@@ -1364,11 +1373,12 @@ public class OllivandersListener implements Listener
          }
 
          O2Player o2p = p.getO2Player(player);
-         Potion potion = null;
 
          ItemMeta meta = item.getItemMeta();
          if (meta.hasLore())
          {
+            O2Potion potion = p.getPotions().findPotionByItemMeta(meta);
+            /*
             for (String lore : meta.getLore())
             {
                if (lore.equals("Memory Potion"))
@@ -1391,10 +1401,14 @@ public class OllivandersListener implements Listener
                {
                   potion = new net.pottercraft.Ollivanders2.Potion.ANIMAGUS_POTION(p);
                }
-
-               if (potion != null)
-                  potion.drink(o2p, player);
+               else if (lore.equals("Forgetfulness Potion"))
+               {
+                  potion = new net.pottercraft.Ollivanders2.Potion.FORGETFULLNESS_POTION(p);
+               }
             }
+            */
+            if (potion != null)
+               potion.drink(o2p, player);
          }
       }
    }
@@ -1607,6 +1621,23 @@ public class OllivandersListener implements Listener
          if (Ollivanders2.debug)
          {
             p.getLogger().info("Cauldron is not over a hot block");
+         }
+      }
+   }
+
+   @EventHandler (priority = EventPriority.HIGH)
+   public void onSplashPotion (PotionSplashEvent event)
+   {
+      ThrownPotion thrown = event.getEntity();
+      ItemMeta meta = thrown.getItem().getItemMeta();
+
+      O2Potion potion = p.getPotions().findPotionByItemMeta(meta);
+
+      if (potion != null)
+      {
+         if (potion instanceof O2SplashPotion)
+         {
+            ((O2SplashPotion)potion).thrownEffect(event);
          }
       }
    }

@@ -1,20 +1,29 @@
 package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Spell.Spells;
+
+
+import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
-import org.bukkit.DyeColor;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.World;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.HashMap;
 
 /**
  * Common functions and data
@@ -22,8 +31,24 @@ import java.util.UUID;
  * @since 2.2.6
  * @author Azami7
  */
+
+enum Year {
+   YEAR_1,
+   YEAR_2,
+   YEAR_3,
+   YEAR_4,
+   YEAR_5,
+   YEAR_6,
+   YEAR_7
+}
+
 public class Ollivanders2Common
 {
+   private final String locationWorldLabel = "World";
+   private final String locationXLabel = "X-Value";
+   private final String locationYLabel = "Y-Value";
+   private final String locationZLabel = "Z-Value";
+
    public static final ArrayList<EntityType> smallFriendlyAnimals = new ArrayList<EntityType>() {{
       add(EntityType.BAT);
       add(EntityType.CHICKEN);
@@ -505,5 +530,217 @@ public class Ollivanders2Common
          }
       }
       return false;
+   }
+
+   /**
+    * Serialize an Location for saving.
+    *
+    * @param location the Location to serialize
+    * @param labelPrefix the prefix for the label string, assumes not empty or null
+    * @return a map of the serialized OLocation data
+    */
+   public Map<String, String> serializeLocation (Location location, String labelPrefix)
+   {
+      Map<String, String> locData = new HashMap<>();
+
+      /**
+       * Location world
+       */
+      locData.put(labelPrefix + "_" + locationWorldLabel, location.getWorld().getName());
+
+      /**
+       * Location x, y, z
+       */
+      Double x = new Double(location.getX());
+      locData.put(labelPrefix + "_" + locationXLabel, x.toString());
+
+      Double y = new Double(location.getY());
+      locData.put(labelPrefix + "_" + locationYLabel, y.toString());
+
+      Double z = new Double(location.getZ());
+      locData.put(labelPrefix + "_" + locationZLabel, z.toString());
+
+      return locData;
+   }
+
+   /**
+    * Returns a Location from serialized data.
+    *
+    * @return the location if the data was successfully read, null otherwise
+    */
+   public Location deserializeLocation (Map<String, String> locData, String labelPrefix)
+   {
+      double x = 0.0;
+      double y = 0.0;
+      double z = 0.0;
+      String worldName = "world";
+
+      for (Entry <String, String> e : locData.entrySet())
+      {
+         try
+         {
+            if (e.getKey().equals(labelPrefix + "_" + locationWorldLabel))
+            {
+               worldName = e.getValue();
+            }
+            else if (e.getKey().equals(labelPrefix + "_" + locationXLabel))
+            {
+               x = Double.parseDouble(e.getValue());
+            }
+            else if (e.getKey().equals(labelPrefix + "_" + locationYLabel))
+            {
+               y = Double.parseDouble(e.getValue());
+            }
+            else if (e.getKey().equals(labelPrefix + "_" + locationZLabel))
+            {
+               z = Double.parseDouble(e.getValue());
+            }
+         }
+         catch (Exception exception)
+         {
+            p.getLogger().info("Unable to deserialize location");
+            if (Ollivanders2.debug)
+               exception.printStackTrace();
+
+            return null;
+         }
+      }
+
+      World world = Bukkit.getServer().getWorld(worldName);
+      Location location = new Location(world, x, y, z);
+
+      return location;
+   }
+
+   /**
+    * Take an integer and get the corresponding year
+    * @param year The year; must be between 1 and 7
+    * @return The corresponding year or null if invalid input
+    */
+   public static Year intToYear(int year) {
+      switch (year) {
+         case 1:
+            return Year.YEAR_1;
+         case 2:
+            return Year.YEAR_2;
+         case 3:
+            return Year.YEAR_3;
+         case 4:
+            return Year.YEAR_4;
+         case 5:
+            return Year.YEAR_5;
+         case 6:
+            return Year.YEAR_6;
+         case 7:
+            return Year.YEAR_7;
+         default:
+            return null;
+      }
+   }
+
+   /**
+    * Take a year and get the corresponding integer
+    * @param year The year
+    * @return The corresponding number year
+    */
+   public static int yearToInt(Year year) {
+      switch (year) {
+         case YEAR_1:
+            return 1;
+         case YEAR_2:
+            return 2;
+         case YEAR_3:
+            return 3;
+         case YEAR_4:
+            return 4;
+         case YEAR_5:
+            return 5;
+         case YEAR_6:
+            return 6;
+         case YEAR_7:
+            return 7;
+         default:
+            return -1;
+      }
+   }
+
+   /**
+    * Serialize an Location for saving.
+    *
+    * @param location the Location to serialize
+    * @param labelPrefix the prefix for the label string, assumes not empty or null
+    * @return a map of the serialized OLocation data
+    */
+   public Map<String, String> serializeLocation (Location location, String labelPrefix)
+   {
+      Map<String, String> locData = new HashMap<>();
+
+      /**
+       * Location world
+       */
+      locData.put(labelPrefix + "_" + locationWorldLabel, location.getWorld().getName());
+
+      /**
+       * Location x, y, z
+       */
+      Double x = new Double(location.getX());
+      locData.put(labelPrefix + "_" + locationXLabel, x.toString());
+
+      Double y = new Double(location.getY());
+      locData.put(labelPrefix + "_" + locationYLabel, y.toString());
+
+      Double z = new Double(location.getZ());
+      locData.put(labelPrefix + "_" + locationZLabel, z.toString());
+
+      return locData;
+   }
+
+   /**
+    * Returns a Location from serialized data.
+    *
+    * @return the location if the data was successfully read, null otherwise
+    */
+   public Location deserializeLocation (Map<String, String> locData, String labelPrefix)
+   {
+      double x = 0.0;
+      double y = 0.0;
+      double z = 0.0;
+      String worldName = "world";
+
+      for (Entry <String, String> e : locData.entrySet())
+      {
+         try
+         {
+            if (e.getKey().equals(labelPrefix + "_" + locationWorldLabel))
+            {
+               worldName = e.getValue();
+            }
+            else if (e.getKey().equals(labelPrefix + "_" + locationXLabel))
+            {
+               x = Double.parseDouble(e.getValue());
+            }
+            else if (e.getKey().equals(labelPrefix + "_" + locationYLabel))
+            {
+               y = Double.parseDouble(e.getValue());
+            }
+            else if (e.getKey().equals(labelPrefix + "_" + locationZLabel))
+            {
+               z = Double.parseDouble(e.getValue());
+            }
+         }
+         catch (Exception exception)
+         {
+            p.getLogger().info("Unable to deserialize location");
+            if (Ollivanders2.debug)
+               exception.printStackTrace();
+
+            return null;
+         }
+      }
+
+      World world = Bukkit.getServer().getWorld(worldName);
+      Location location = new Location(world, x, y, z);
+
+      return location;
    }
 }

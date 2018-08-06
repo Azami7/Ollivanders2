@@ -13,21 +13,30 @@ import org.bukkit.potion.PotionEffectType;
  *
  * @author Azami7
  */
-public final class REGENERATION_POTION extends Potion
+public final class REGENERATION_POTION extends O2Potion
 {
    public REGENERATION_POTION (Ollivanders2 plugin)
    {
       super(plugin);
-
-      name = "Regeneration Potion";
-      text = "This potion will heal a player.";
-      flavorText.add("\"Bone of the father, unknowingly given, you will renew your son! Flesh of the servant, willingly sacrificed, you will revive your master. Blood of the enemy, forcibly taken, you will resurrect your foe.\" -Peter Pettigrew");
 
       ingredients.put(Material.BONE, 1);
       ingredients.put(Material.SPIDER_EYE, 1);
       ingredients.put(Material.SULPHUR, 1);
       ingredients.put(Material.ROTTEN_FLESH, 1);
       ingredients.put(Material.ENDER_PEARL, 1);
+      ingredients.put(Material.SUGAR, 4);
+
+      name = "Regeneration Potion";
+      text = "This potion will heal a player." + getIngredientsText();
+      flavorText.add("\"Bone of the father, unknowingly given, you will renew your son! Flesh of the servant, willingly sacrificed, you will revive your master. Blood of the enemy, forcibly taken, you will resurrect your foe.\" -Peter Pettigrew");
+
+      name = "Regeneration Potion";
+      text = "This potion will heal a player." + getIngredientsText();
+      flavorText.add("\"Bone of the father, unknowingly given, you will renew your son! Flesh of the servant, willingly sacrificed, you will revive your master. Blood of the enemy, forcibly taken, you will resurrect your foe.\" -Peter Pettigrew");
+
+      name = "Regeneration Potion";
+      text = "This potion will heal a player." + getIngredientsText();
+      flavorText.add("\"Bone of the father, unknowingly given, you will renew your son! Flesh of the servant, willingly sacrificed, you will revive your master. Blood of the enemy, forcibly taken, you will resurrect your foe.\" -Peter Pettigrew");
 
       effect = new PotionEffect(PotionEffectType.REGENERATION, duration, 1);
       potionColor = Color.WHITE;

@@ -1,6 +1,8 @@
 package net.pottercraft.Ollivanders2.StationarySpell;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.pottercraft.Ollivanders2.*;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
@@ -12,11 +14,23 @@ import org.bukkit.util.Vector;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
+/**
+ * Shield spell
+ *
+ */
 public class PROTEGO extends StationarySpellObj implements StationarySpell
 {
    public PROTEGO (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
       super(player, location, name, radius, duration);
+   }
+
+   public PROTEGO (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+                   Map<String, String> spellData, Ollivanders2 plugin)
+   {
+      super(player, location, name, radius, duration);
+
+      deserializeSpellData(spellData, plugin);
    }
 
    public void checkEffect (Ollivanders2 p)
@@ -42,8 +56,6 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
                   if (location.toLocation().distance(proj.location) > radius - 1)
                   {
                      Vector N = proj.location.toVector().subtract(location.toLocation().toVector()).normalize();
-                     //reflect it
-                     //b * ( -2*(V dot N)*N + V )
                      double b = p.getSpellNum(ply, Spells.PROTEGO) / rightWand / 10.0;
                      b += 1;
                      Vector V = proj.vector.clone();
@@ -60,4 +72,24 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
       }
    }
 
+   /**
+    * Serialize all data specific to this spell so it can be saved.
+    *
+    * @param p unused for this spell
+    * @return a map of the serialized data
+    */
+   @Override
+   public Map<String, String> serializeSpellData (Ollivanders2 p)
+   {
+      return new HashMap<>();
+   }
+
+   /**
+    * Deserialize the data for this spell and load the data to this spell.
+    *
+    * @param spellData a map of the saved spell data
+    * @param p unused for this spell
+    */
+   @Override
+   public void deserializeSpellData (Map<String, String> spellData, Ollivanders2 p) { }
 }

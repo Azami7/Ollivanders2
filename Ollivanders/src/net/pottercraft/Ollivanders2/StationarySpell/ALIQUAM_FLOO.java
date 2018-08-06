@@ -1,6 +1,9 @@
 package net.pottercraft.Ollivanders2.StationarySpell;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Map.Entry;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -23,14 +26,24 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
 {
-   private final String flooName;
+   private String flooName;
    private int countDown = 0;
+
+   private final String flooNameLabel = "name";
 
    public ALIQUAM_FLOO (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
                         String flooName)
    {
       super(player, location, name, radius, duration);
       this.flooName = flooName;
+   }
+
+   public ALIQUAM_FLOO (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+                        Map<String, String> spellData, Ollivanders2 plugin)
+   {
+      super(player, location, name, radius, duration);
+
+      deserializeSpellData(spellData, plugin);
    }
 
    @Override
@@ -100,5 +113,39 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
    public void stopWorking ()
    {
       countDown = 0;
+   }
+
+   /**
+    * Serialize all data specific to this spell so it can be saved.
+    *
+    * @param p unused for this spell
+    * @return a map of the serialized data
+    */
+   @Override
+   public Map<String, String> serializeSpellData (Ollivanders2 p)
+   {
+      Map<String, String> spellData = new HashMap<>();
+
+      spellData.put(flooNameLabel, flooName);
+
+      return spellData;
+   }
+
+   /**
+    * Deserialize the data for this spell and load the data to this spell.
+    *
+    * @param spellData a map of the saved spell data
+    * @param p unused for this spell
+    */
+   @Override
+   public void deserializeSpellData (Map<String, String> spellData, Ollivanders2 p)
+   {
+      for (Entry<String, String> e : spellData.entrySet())
+      {
+         if (e.getKey().equals(flooNameLabel))
+         {
+            flooName = e.getValue();
+         }
+      }
    }
 }
