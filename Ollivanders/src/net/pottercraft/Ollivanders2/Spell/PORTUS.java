@@ -86,7 +86,7 @@ public final class PORTUS extends Charms
          boolean canApparateOut = true;
          for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
          {
-            if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation()) && stat.active
+            if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation())
                   && !stat.getPlayerUUID().equals(player.getUniqueId()))
             {
                stat.flair(10);
@@ -125,7 +125,7 @@ public final class PORTUS extends Charms
             boolean canApparateIn = true;
             for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
             {
-               if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to) && stat.active && !stat.getPlayerUUID().equals(player.getUniqueId()))
+               if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to) && !stat.getPlayerUUID().equals(player.getUniqueId()))
                {
                   stat.flair(10);
                   canApparateIn = false;
