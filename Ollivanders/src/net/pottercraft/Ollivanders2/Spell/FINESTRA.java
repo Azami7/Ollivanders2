@@ -44,7 +44,7 @@ public final class FINESTRA extends Charms
       if (type == Material.GLASS || type == Material.STAINED_GLASS ||
           type == Material.STAINED_GLASS_PANE || type == Material.THIN_GLASS)
       {
-         for (Block block : Ollivanders2Common.getBlocksInRadius(location, usesModifier))
+         for (Block block : p.common.getBlocksInRadius(location, usesModifier))
          {
             Material type2 = block.getType();
             System.out.println("Type 2: " + type2.toString());

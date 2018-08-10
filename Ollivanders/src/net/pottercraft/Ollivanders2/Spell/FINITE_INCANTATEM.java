@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Effect.OEffect;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 

@@ -167,7 +167,7 @@ public class O2Houses
     *
     * @return all house names.
     */
-   public ArrayList getAllHouseNames ()
+   public ArrayList<String> getAllHouseNames ()
    {
       ArrayList<String> houseNames = new ArrayList<>();
       houseNames.add("Hufflepuff");
@@ -394,7 +394,7 @@ public class O2Houses
     * @param house
     * @return the names of all members of the specified house.
     */
-   public ArrayList getHouseMembers (O2HouseType house)
+   public ArrayList<String> getHouseMembers (O2HouseType house)
    {
       ArrayList<String> houseMembers = new ArrayList<>();
       Server server = p.getServer();

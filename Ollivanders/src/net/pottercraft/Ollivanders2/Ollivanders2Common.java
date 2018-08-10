@@ -1,21 +1,5 @@
 package net.pottercraft.Ollivanders2;
 
-import net.pottercraft.Ollivanders2.Spell.Spells;
-
-
-import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
-import org.bukkit.entity.Llama;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.inventory.ItemStack;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -23,6 +7,23 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.HashMap;
 import java.util.Collection;
+
+import net.pottercraft.Ollivanders2.Spell.Spells;
+
+import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Horse;
+import org.bukkit.entity.Llama;
+import org.bukkit.entity.Ocelot;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Common functions and data
@@ -84,7 +85,7 @@ public class Ollivanders2Common
       add(Spells.VERA_VERTO);
    }};
 
-   Ollivanders2 p;
+   private Ollivanders2 p;
 
    public Ollivanders2Common (Ollivanders2 plugin)
    {
@@ -94,7 +95,7 @@ public class Ollivanders2Common
    /**
     * Create a UUID from a string.
     *
-    * @param uuid
+    * @param uuid the UUID as a string
     * @return the UUID or null if an exception occurred.
     */
    public UUID uuidFromString (String uuid)
@@ -108,7 +109,7 @@ public class Ollivanders2Common
       catch (Exception e)
       {
          p.getLogger().warning("Failed to parse uuid " + uuid);
-         if (p.debug)
+         if (Ollivanders2.debug)
             e.printStackTrace();
       }
 
@@ -118,8 +119,8 @@ public class Ollivanders2Common
    /**
     * Get an integer from a string.
     *
-    * @param intString
-    * @return
+    * @param intString the integer as a string
+    * @return the Integer or null if an exception occurred
     */
    public Integer integerFromString (String intString)
    {
@@ -127,13 +128,12 @@ public class Ollivanders2Common
 
       try
       {
-         int p = Integer.parseInt(intString);
-         i = new Integer(p);
+         i = Integer.parseInt(intString);
       }
       catch (Exception e)
       {
          p.getLogger().warning("Failed to parse integer " + intString);
-         if (p.debug)
+         if (Ollivanders2.debug)
             e.printStackTrace();
       }
 
@@ -143,8 +143,8 @@ public class Ollivanders2Common
    /**
     * Get a boolean from a string.
     *
-    * @param boolString
-    * @return
+    * @param boolString the boolean as a string
+    * @return the Boolean or null if an exception occurred
     */
    public Boolean booleanFromString (String boolString)
    {
@@ -157,7 +157,7 @@ public class Ollivanders2Common
       catch (Exception e)
       {
          p.getLogger().warning("Failed to parse boolean " + boolString);
-         if (p.debug)
+         if (Ollivanders2.debug)
             e.printStackTrace();
       }
 
@@ -167,8 +167,8 @@ public class Ollivanders2Common
    /**
     * Get an EntityType enum from a string.
     *
-    * @param entityTypeString
-    * @return
+    * @param entityTypeString the entity type as a string
+    * @return the EntityType or null if an exception occurred
     */
    public EntityType entityTypeFromString (String entityTypeString)
    {
@@ -181,7 +181,7 @@ public class Ollivanders2Common
       catch (Exception e)
       {
          p.getLogger().warning("Failed to parse EntityType " + entityTypeString);
-         if (p.debug)
+         if (Ollivanders2.debug)
             e.printStackTrace();
       }
       return entityType;
@@ -192,18 +192,20 @@ public class Ollivanders2Common
     * @param loc1 the source location
     * @param loc2 the location to check
     * @param radius the radius from the source location
-    * @return
+    * @return true if loc2 is in the radius of loc1
     */
-   public static boolean isInside (OLocation loc1, Location loc2, int radius)
+   public boolean isInside (OLocation loc1, Location loc2, int radius)
    {
       double distance;
       try
       {
          distance = loc2.distance(loc1.toLocation());
-      } catch (IllegalArgumentException e)
+      }
+      catch (IllegalArgumentException e)
       {
          return false;
       }
+
       if (distance < radius)
       {
          return true;
@@ -217,7 +219,7 @@ public class Ollivanders2Common
    /**
     * Generate a random Ocelot type.
     *
-    * @return
+    * @return the Ocelot type
     */
    public Ocelot.Type randomOcelotType ()
    {
@@ -246,7 +248,8 @@ public class Ollivanders2Common
 
    /**
     * Generate a random primary or secondary color - red, orange, yellow, green, blue, purple
-    * @return
+    *
+    * @return the dye color
     */
    public DyeColor randomSecondaryDyeColor ()
    {
@@ -282,7 +285,7 @@ public class Ollivanders2Common
    /**
     * Generate a random horse style.
     *
-    * @return
+    * @return the horse style
     */
    public Horse.Style randomHorseStyle ()
    {
@@ -315,7 +318,7 @@ public class Ollivanders2Common
    /**
     * Generate a random horse color.
     *
-    * @return
+    * @return the color
     */
    public Horse.Color randomHorseColor ()
    {
@@ -354,7 +357,7 @@ public class Ollivanders2Common
    /**
     * Generate random llama color.
     *
-    * @return
+    * @return the color
     */
    public Llama.Color randomLlamaColor ()
    {
@@ -434,7 +437,7 @@ public class Ollivanders2Common
     * @param radius - The radius of the block list
     * @return List of blocks that are within radius of the location.
     */
-   public static List<Block> getBlocksInRadius (Location loc, double radius)
+   public List<Block> getBlocksInRadius (Location loc, double radius)
    {
       Block center = loc.getBlock();
       int blockRadius = (int) (radius + 1);
@@ -466,9 +469,9 @@ public class Ollivanders2Common
     * @param s the enum as a string
     * @return string such that it is the lowercase version of the spell minus underscores
     */
-   public static String enumRecode (String s)
+   public String enumRecode (String s)
    {
-      String nameLow = s.toString().toLowerCase();
+      String nameLow = s.toLowerCase();
       String[] words = nameLow.split("_");
       String comp = "";
       for (String st : words)
@@ -486,7 +489,7 @@ public class Ollivanders2Common
     * @param str - String to convert.
     * @return String with correct formatting.
     */
-   public static String firstLetterCapitalize (String str)
+   public String firstLetterCapitalize (String str)
    {
       StringBuilder sb = new StringBuilder();
       String[] wordList = str.split(" ");
@@ -508,7 +511,7 @@ public class Ollivanders2Common
     * @param held Item stack to check
     * @return True if held is an invisibility cloak
     */
-   public static boolean isInvisibilityCloak (ItemStack held)
+   public boolean isInvisibilityCloak (ItemStack held)
    {
       if (held.getType() == Material.CHAINMAIL_CHESTPLATE)
       {
@@ -543,13 +546,13 @@ public class Ollivanders2Common
       /**
        * Location x, y, z
        */
-      Double x = new Double(location.getX());
+      Double x = location.getX();
       locData.put(labelPrefix + "_" + locationXLabel, x.toString());
 
-      Double y = new Double(location.getY());
+      Double y = location.getY();
       locData.put(labelPrefix + "_" + locationYLabel, y.toString());
 
-      Double z = new Double(location.getZ());
+      Double z = location.getZ();
       locData.put(labelPrefix + "_" + locationZLabel, z.toString());
 
       return locData;
@@ -599,8 +602,74 @@ public class Ollivanders2Common
       }
 
       World world = Bukkit.getServer().getWorld(worldName);
-      Location location = new Location(world, x, y, z);
 
-      return location;
+      return new Location(world, x, y, z);
+   }
+
+   /**
+    * Is this item stack a wand?
+    *
+    * @param stack stack to be checked
+    * @return true if yes, false if no
+    */
+   public boolean isWand (ItemStack stack)
+   {
+      if (stack != null)
+      {
+         if (stack.getType() == Material.STICK || stack.getType() == Material.BLAZE_ROD)
+         {
+            if (stack.getItemMeta().hasLore())
+            {
+               List<String> lore = stack.getItemMeta().getLore();
+
+               if (lore.get(0).split(" and ").length == 2)
+               {
+                  return true;
+               }
+               else
+               {
+                  return false;
+               }
+            }
+            else
+            {
+               return false;
+            }
+         }
+         else
+         {
+            return false;
+         }
+      }
+      else
+      {
+         return false;
+      }
+   }
+
+   /**
+    * Finds out if an item is a broom.
+    *
+    * @param item item in question
+    * @return True if yes
+    */
+   public boolean isBroom (ItemStack item)
+   {
+      if (item.getType() == Material.getMaterial(p.getFileConfig().getString("broomstick")))
+      {
+         if (item.containsEnchantment(Enchantment.PROTECTION_FALL))
+         {
+            ItemMeta meta = item.getItemMeta();
+            if (meta.hasLore())
+            {
+               List<String> lore = meta.getLore();
+               if (lore.contains("Flying vehicle used by magical folk"))
+               {
+                  return true;
+               }
+            }
+         }
+      }
+      return false;
    }
 }

@@ -24,6 +24,7 @@ import java.util.Collections;
  * @author Azami7
  * @deprecated use net.pottercraft.Ollivanders2.Potion.Potions
  */
+@Deprecated
 public class PotionParser
 {
    /**

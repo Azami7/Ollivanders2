@@ -31,23 +31,23 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
 
    private final String flooNameLabel = "name";
 
-   public ALIQUAM_FLOO (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
                         String flooName)
    {
-      super(player, location, name, radius, duration);
+      super(plugin, player, location, name, radius, duration);
       this.flooName = flooName;
    }
 
-   public ALIQUAM_FLOO (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                        Map<String, String> spellData, Ollivanders2 plugin)
+   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+                        Map<String, String> spellData)
    {
-      super(player, location, name, radius, duration);
+      super(plugin, player, location, name, radius, duration);
 
-      deserializeSpellData(spellData, plugin);
+      deserializeSpellData(spellData);
    }
 
    @Override
-   public void checkEffect (Ollivanders2 p)
+   public void checkEffect ()
    {
       Location loc = location.toLocation();
       Block block = loc.getBlock();
@@ -118,11 +118,10 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
    /**
     * Serialize all data specific to this spell so it can be saved.
     *
-    * @param p unused for this spell
     * @return a map of the serialized data
     */
    @Override
-   public Map<String, String> serializeSpellData (Ollivanders2 p)
+   public Map<String, String> serializeSpellData ()
    {
       Map<String, String> spellData = new HashMap<>();
 
@@ -135,10 +134,9 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
     * Deserialize the data for this spell and load the data to this spell.
     *
     * @param spellData a map of the saved spell data
-    * @param p unused for this spell
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData, Ollivanders2 p)
+   public void deserializeSpellData (Map<String, String> spellData)
    {
       for (Entry<String, String> e : spellData.entrySet())
       {

@@ -54,11 +54,11 @@ public final class HERBIVICUS extends Herbology
       double radius = usesModifier;
       if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER && getBlock().getType() != Material.LAVA && getBlock().getType() != Material.STATIONARY_LAVA)
       {
-         for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
+         for (Block block : p.common.getBlocksInRadius(location, radius))
          {
             if (block.getState().getData() instanceof Crops)
             {
-               List<CropState> stateList = new ArrayList<CropState>();
+               List<CropState> stateList = new ArrayList<>();
                stateList.add(CropState.SEEDED);
                stateList.add(CropState.GERMINATED);
                stateList.add(CropState.VERY_SMALL);

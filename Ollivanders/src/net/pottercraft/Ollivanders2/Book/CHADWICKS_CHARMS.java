@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Chadwick's Charms - O.W.L level charms book
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class CHADWICKS_CHARMS extends Book
 {
-   public CHADWICKS_CHARMS ()
+   public CHADWICKS_CHARMS (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = "Chadwicks Charms";
       title = "Chadwick's Charms";
       author = "Violeta Stitch";

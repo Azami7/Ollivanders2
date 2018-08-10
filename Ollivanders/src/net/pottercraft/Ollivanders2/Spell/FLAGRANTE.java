@@ -49,7 +49,7 @@ public final class FLAGRANTE extends DarkArts
       List<Item> items = getItems(1);
       for (Item item : items)
       {
-         if (p.isWand(item.getItemStack()))
+         if (p.common.isWand(item.getItemStack()))
          {
             return;
          }

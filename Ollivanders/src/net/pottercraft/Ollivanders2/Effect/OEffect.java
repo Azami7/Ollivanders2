@@ -1,9 +1,8 @@
-package net.pottercraft.Ollivanders2;
+package net.pottercraft.Ollivanders2.Effect;
 
 import java.io.Serializable;
 import java.util.UUID;
 
-import net.pottercraft.Ollivanders2.Effect.Effects;
 import org.bukkit.entity.Player;
 
 public class OEffect implements Serializable
@@ -13,7 +12,7 @@ public class OEffect implements Serializable
     * Effect object stored in OPlayer
     */
    public Effects name;
-   public UUID casterUUID;
+   private UUID casterUUID;
    public int duration;
    public boolean kill;
 

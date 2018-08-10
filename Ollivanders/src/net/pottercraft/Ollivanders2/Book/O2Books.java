@@ -8,12 +8,13 @@ import java.util.Map.Entry;
 import java.lang.reflect.Constructor;
 import java.util.Collections;
 
+import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION;
-import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Effect.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.Spells;
@@ -69,30 +70,17 @@ public final class O2Books
       {
          String bookName = "net.pottercraft.Ollivanders2.Book." + b.toString();
 
-         Constructor c = null;
-
-         try
-         {
-            c = Class.forName(bookName).getConstructor();
-         }
-         catch (Exception e)
-         {
-            p.getLogger().warning("Exception trying to add book " + bookName);
-            e.printStackTrace();
-
-            continue;
-         }
-
          Book book = null;
 
          try
          {
-            book = (Book)c.newInstance();
+            book = (Book)Class.forName(bookName).getConstructor(Ollivanders2.class).newInstance(p);
          }
-         catch (Exception e)
+         catch (Exception exception)
          {
-            p.getLogger().warning("Exception trying to create a new instance of " + bookName);
-            e.printStackTrace();
+            p.getLogger().info("Exception trying to create new instance of " + bookName);
+            if (Ollivanders2.debug)
+               exception.printStackTrace();
 
             continue;
          }
@@ -125,7 +113,7 @@ public final class O2Books
       }
       else
       {
-         bookItem = book.createBook(p);
+         bookItem = book.createBook();
          O2BookItemMap.put(bookType, bookItem);
       }
 
@@ -153,7 +141,7 @@ public final class O2Books
          }
          else
          {
-            ItemStack bookItem = book.createBook(p);
+            ItemStack bookItem = book.createBook();
             O2BookItemMap.put(bookType, bookItem);
 
             bookStack.add(bookItem);

@@ -46,7 +46,7 @@ public final class PRAEPANDO extends Charms
             && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
       {
          int duration = (int) (usesModifier * 1200);
-         net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO prae = new net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO(player, location, StationarySpells.PRAEPANDO,
+         net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO prae = new net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO(p, player, location, StationarySpells.PRAEPANDO,
                1, duration, 5);
          prae.flair(10);
          p.stationarySpells.addStationarySpell(prae);

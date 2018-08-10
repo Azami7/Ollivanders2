@@ -47,7 +47,7 @@ public abstract class ColoroSuper extends Charms
       }
       if (getBlock().getType() != Material.AIR)
       {
-         for (Block block : Ollivanders2Common.getBlocksInRadius(location, usesModifier))
+         for (Block block : p.common.getBlocksInRadius(location, usesModifier))
          {
             if (block.getState().getData() instanceof Colorable)
             {

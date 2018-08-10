@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Intermediate Transfiguration - an O.W.L level transfiguration book
@@ -16,8 +17,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class INTERMEDIATE_TRANSFIGURATION extends Book
 {
-   public INTERMEDIATE_TRANSFIGURATION ()
+   public INTERMEDIATE_TRANSFIGURATION (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = title = "Intermediate Transfiguration";
       author = "Unknown";
       branch = O2MagicBranch.TRANSFIGURATION;

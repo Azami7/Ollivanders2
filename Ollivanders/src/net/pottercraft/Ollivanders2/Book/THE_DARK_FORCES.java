@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * The Dark Forces: A Guide to Self-Protection - 1st year Defense Against the Dark Arts
@@ -14,8 +15,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class THE_DARK_FORCES extends Book
 {
-   public THE_DARK_FORCES ()
+   public THE_DARK_FORCES (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = "The Dark Forces";
       title = "The Dark Forces: A Guide to Self-Protection";
       author = "Quentin Trimble";

@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Harmonious Connections
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class HARMONIOUS_CONNECTIONS extends Book
 {
-   public HARMONIOUS_CONNECTIONS ()
+   public HARMONIOUS_CONNECTIONS (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = "Harmonious Connections";
       title = "Harmonious Connections";
       author = "Unknown";

@@ -75,7 +75,7 @@ public final class DIFFINDO extends Charms
       }
       if (getBlock().getType() == Material.LOG)
       {
-         for (Block block : Ollivanders2Common.getBlocksInRadius(location, usesModifier))
+         for (Block block : p.common.getBlocksInRadius(location, usesModifier))
          {
             if (block.getType() == Material.LOG)
             {

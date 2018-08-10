@@ -9,6 +9,7 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.UUID;
 
+import net.pottercraft.Ollivanders2.Effect.OEffect;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
@@ -32,8 +33,6 @@ import net.pottercraft.Ollivanders2.Effect.VENTO_FOLIO;
 import net.pottercraft.Ollivanders2.Spell.Spell;
 import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
 import net.pottercraft.Ollivanders2.Spell.Spells;
-
-import static net.pottercraft.Ollivanders2.Ollivanders2Common.isInvisibilityCloak;
 
 /**
  * Scheduler for Ollivanders2
@@ -63,7 +62,7 @@ class OllivandersSchedule implements Runnable
       }
       catch (Exception e)
       {
-         if (p.debug)
+         if (Ollivanders2.debug)
             e.printStackTrace();
       }
 
@@ -356,7 +355,7 @@ class OllivandersSchedule implements Runnable
       ItemStack chestPlate = player.getInventory().getChestplate();
       if (chestPlate != null)
       {
-         return isInvisibilityCloak(chestPlate);
+         return p.common.isInvisibilityCloak(chestPlate);
       }
       return false;
    }
@@ -364,6 +363,7 @@ class OllivandersSchedule implements Runnable
    /**
     * Checks all players to see if they will receive a prophecy
     */
+   @Deprecated
    private void scry ()
    {
       Material ball = Material.getMaterial("divinationBlock");
@@ -420,6 +420,7 @@ class OllivandersSchedule implements Runnable
     * Goes through all prophecies and enacts them if they are due
     * and deletes them if they are past
     */
+   @Deprecated
    private void effectProphecy ()
    {
       Iterator<Prophecy> iter = p.getProphecy().iterator();
@@ -451,7 +452,7 @@ class OllivandersSchedule implements Runnable
       {
          for (Player player : world.getPlayers())
          {
-            if (p.isBroom(player.getInventory().getItemInMainHand()) && p.canLive(player.getLocation(), Spells.VOLATUS))
+            if (p.common.isBroom(player.getInventory().getItemInMainHand()) && p.canLive(player.getLocation(), Spells.VOLATUS))
             {
                player.setAllowFlight(true);
                player.setFlying(true);

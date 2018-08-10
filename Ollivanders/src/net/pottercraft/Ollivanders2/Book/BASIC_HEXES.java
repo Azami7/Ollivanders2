@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Basic Hexes for the Busy and Vexed
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class BASIC_HEXES extends Book
 {
-   public BASIC_HEXES ()
+   public BASIC_HEXES (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = "Basic Hexes";
       title = "Basic Hexes for the Busy and Vexed";
       author = "Unknown";

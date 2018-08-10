@@ -2,7 +2,6 @@ package net.pottercraft.Ollivanders2.Effect;
 
 import java.util.ArrayList;
 
-import net.pottercraft.Ollivanders2.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;

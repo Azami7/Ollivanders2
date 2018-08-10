@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 
-import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Effect.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
@@ -101,7 +101,7 @@ public abstract class O2Potion implements Teachable
       for (Entry<Material, Integer> e : ingredients.entrySet())
       {
          Material m = e.getKey();
-         String mString = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(m.toString()));
+         String mString = p.common.firstLetterCapitalize(p.common.enumRecode(m.toString()));
 
          s = s + "\n" + e.getValue().toString() + " " + mString;
       }

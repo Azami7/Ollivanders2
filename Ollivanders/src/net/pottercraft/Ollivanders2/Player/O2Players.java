@@ -32,11 +32,6 @@ public class O2Players
    private Ollivanders2 p;
 
    /**
-    * Common O2 functions
-    */
-   private Ollivanders2Common common;
-
-   /**
     * Labels for serializing player data
     */
    private String nameLabel = "Name";
@@ -60,7 +55,6 @@ public class O2Players
    public O2Players (Ollivanders2 plugin)
    {
       p = plugin;
-      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -117,7 +111,7 @@ public class O2Players
    /**
     * Get a list of all player unique ids.
     *
-    * @return
+    * @return a list of all known player MC UUIDs
     */
    public ArrayList<UUID> getPlayerIDs ()
    {
@@ -163,6 +157,10 @@ public class O2Players
       }
    }
 
+   /**
+    * Write the binary serialization file for the original Ollivanders plugin
+    * @param OPlayerMap a map of all players as OPlayer type
+    */
    @Deprecated
    private void updateLegacyPlayers (Map<UUID, OPlayer> OPlayerMap)
    {
@@ -223,7 +221,7 @@ public class O2Players
     *    Muggleton : muggleton
     *    [Spell] : [Count]
     * }};
-    * @param o2PlayerMap
+    * @param o2PlayerMap a map of all player MC UUIDs and corresponding O2Player object
     * @return all player data as a map of strings per player
     */
    private Map <String, Map<String, String>> serializeO2Players (Map<UUID, O2Player> o2PlayerMap)
@@ -372,7 +370,7 @@ public class O2Players
 
       for (Entry<String, Map<String, String>> e : map.entrySet())
       {
-         UUID pid = common.uuidFromString(e.getKey());
+         UUID pid = p.common.uuidFromString(e.getKey());
          if (pid == null)
          {
             continue;
@@ -412,7 +410,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(soulsLabel))
             {
-               Integer souls = common.integerFromString(value);
+               Integer souls = p.common.integerFromString(value);
                if (souls != null)
                {
                   player.setSouls(souls);
@@ -420,7 +418,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(inMuggletonLabel))
             {
-               Boolean muggleton = common.booleanFromString(value);
+               Boolean muggleton = p.common.booleanFromString(value);
                if (muggleton != null)
                {
                   player.setInRepelloMuggleton(muggleton);
@@ -428,7 +426,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(invisibleLabel))
             {
-               Boolean invisible = common.booleanFromString(value);
+               Boolean invisible = p.common.booleanFromString(value);
                if (invisible != null)
                {
                   player.setInvisible(invisible);
@@ -436,7 +434,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(foundWandLabel))
             {
-               Boolean foundWand = common.booleanFromString(value);
+               Boolean foundWand = p.common.booleanFromString(value);
                if (foundWand != null)
                {
                   player.setFoundWand(foundWand);
@@ -452,7 +450,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(animagusLabel))
             {
-               EntityType animagus = common.entityTypeFromString(value);
+               EntityType animagus = p.common.entityTypeFromString(value);
                if (animagus != null)
                {
                   player.setAnimagusForm(animagus);
@@ -462,7 +460,7 @@ public class O2Players
             {
                player.setAnimagusColor(value);
             } else if (label.equalsIgnoreCase(muggleLabel)) {
-               Boolean muggle = common.booleanFromString(value);
+               Boolean muggle = p.common.booleanFromString(value);
                if (muggle != null)
                {
                   player.setMuggle(muggle);
@@ -470,7 +468,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(yearLabel))
             {
-               Integer year = common.integerFromString(value);
+               Integer year = p.common.integerFromString(value);
                if (year != null)
                {
                   player.setYear(O2PlayerCommon.intToYear(year));
@@ -485,7 +483,7 @@ public class O2Players
                   continue;
                }
 
-               Integer count = common.integerFromString(value);
+               Integer count = p.common.integerFromString(value);
                if (count != null)
                {
                   player.setSpellCount(spell, count);

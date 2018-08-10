@@ -5,7 +5,6 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import net.pottercraft.Ollivanders2.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**

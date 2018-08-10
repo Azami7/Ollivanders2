@@ -16,8 +16,10 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public class MAGICK_MOSTE_EVILE extends Book
 {
-   public MAGICK_MOSTE_EVILE ()
+   public MAGICK_MOSTE_EVILE (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = title = "Magick Moste Evile";
       author = "Godelot";
       branch = O2MagicBranch.DARK_ARTS;

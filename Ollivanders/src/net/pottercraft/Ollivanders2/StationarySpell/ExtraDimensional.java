@@ -1,10 +1,10 @@
-package net.pottercraft.Ollivanders2;
+package net.pottercraft.Ollivanders2.StationarySpell;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.OLocation;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -16,17 +16,15 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * Spells that create extra dimensions of space.
- *
  */
 public abstract class ExtraDimensional extends StationarySpellObj
 {
-   protected int dimenRadius;
+   int dimenRadius;
    private OLocation edLoc;
 
-   public ExtraDimensional (Player player, Location location,
-                            StationarySpells name, Integer radius, Integer duration, Integer dimenRadius)
+   public ExtraDimensional (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration, Integer dimenRadius)
    {
-      super(player, location, name, radius, duration);
+      super(plugin, player, location, name, radius, duration);
       this.dimenRadius = dimenRadius;
       createSpace();
    }

@@ -65,7 +65,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
          //If the player's soul is split enough and they can survive making another horcrux, then make a new one and damage them
          if (futureHealth - 1 > 0 && souls > 0)
          {
-            HORCRUX horcrux = new HORCRUX(player, location, StationarySpells.HORCRUX, 5, 10);
+            HORCRUX horcrux = new HORCRUX(p, player, location, StationarySpells.HORCRUX, 5, 10);
             horcrux.flair(10);
             p.stationarySpells.addStationarySpell(horcrux);
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(

@@ -59,7 +59,7 @@ public abstract class IncendioSuper extends Charms
          changed.removeAll(remChange);
          if (strafe)
          {
-            for (Block block : Ollivanders2Common.getBlocksInRadius(location, blockRadius))
+            for (Block block : p.common.getBlocksInRadius(location, blockRadius))
             {
                block.getWorld().playEffect(block.getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
                if (block.getType() == Material.AIR)

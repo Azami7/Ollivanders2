@@ -2,7 +2,6 @@ package net.pottercraft.Ollivanders2.Effect;
 
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 

@@ -15,7 +15,6 @@ public class O2StationarySpells
 {
    private List<StationarySpellObj> O2StationarySpells = new ArrayList<>();
    Ollivanders2 p;
-   Ollivanders2Common o2c;
 
    private String playerUUIDLabel = "Player_UUID";
    private String spellLabel = "Name";
@@ -30,7 +29,6 @@ public class O2StationarySpells
    public O2StationarySpells (Ollivanders2 plugin)
    {
       p = plugin;
-      o2c = new Ollivanders2Common(p);
 
       loadO2StationarySpells();
    }
@@ -136,7 +134,7 @@ public class O2StationarySpells
 
       for (StationarySpellObj spell : s)
       {
-         ((StationarySpell)spell).checkEffect(p);
+         ((StationarySpell)spell).checkEffect();
 
          if (spell.kill)
          {
@@ -214,7 +212,7 @@ public class O2StationarySpells
          /**
           * Location
           */
-         Map<String, String> locData = o2c.serializeLocation(spell.location.toLocation(), "Spell_Loc");
+         Map<String, String> locData = p.common.serializeLocation(spell.location.toLocation(), "Spell_Loc");
          for (Entry<String, String> e : locData.entrySet())
          {
             spellData.put(e.getKey(), e.getValue());
@@ -235,7 +233,7 @@ public class O2StationarySpells
          serializedList.add(spellData);
 
          // get spell-specific data
-         Map <String, String> uniqueData = ((StationarySpell)spell).serializeSpellData(p);
+         Map <String, String> uniqueData = ((StationarySpell)spell).serializeSpellData();
          for (Entry<String, String> e : uniqueData.entrySet())
          {
             spellData.put(e.getKey(),e.getValue());

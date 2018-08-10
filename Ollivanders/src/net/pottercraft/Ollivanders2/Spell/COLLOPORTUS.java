@@ -46,7 +46,7 @@ public final class COLLOPORTUS extends Charms
             && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
       {
          int duration = (int) (usesModifier * 1200);
-         net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS total = new net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS(player, location,
+         net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS total = new net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS(p, player, location,
                StationarySpells.COLLOPORTUS, 5, duration);
          total.flair(10);
          p.stationarySpells.addStationarySpell(total);

@@ -76,7 +76,7 @@ public final class EXPELLIARMUS extends Charms
     */
    public boolean holdsWand (LivingEntity entity)
    {
-      return p.isWand(entity.getEquipment().getItemInMainHand());
+      return p.common.isWand(entity.getEquipment().getItemInMainHand());
    }
 
    /**

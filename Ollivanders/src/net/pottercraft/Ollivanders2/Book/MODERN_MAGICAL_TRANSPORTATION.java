@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Modern Magical Transportation
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class MODERN_MAGICAL_TRANSPORTATION extends Book
 {
-   public MODERN_MAGICAL_TRANSPORTATION ()
+   public MODERN_MAGICAL_TRANSPORTATION (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = "Magical Transportation";
       title = "Modern Magical Transportation";
       author = "Azami7";

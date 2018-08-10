@@ -11,14 +11,11 @@ import org.bukkit.World;
  * Serializable location stored in OPlayer
  *
  * @author lownes
+ * @deprecated this class was only needed to do binary serialization of MC Location objects
  */
+@Deprecated
 public class OLocation implements Serializable
 {
-
-   /**
-    *
-    */
-   private static final long serialVersionUID = -2409002434410114789L;
    private String world;
    private UUID worldUUID;
    private double x;

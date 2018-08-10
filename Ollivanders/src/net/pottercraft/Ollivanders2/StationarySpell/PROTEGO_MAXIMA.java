@@ -1,6 +1,5 @@
 package net.pottercraft.Ollivanders2.StationarySpell;
 
-import net.pottercraft.Ollivanders2.Spell.INCARNATIO_EQUUS;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -22,22 +21,23 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
 
    private final String damageLabel = "Damage";
 
-   public PROTEGO_MAXIMA (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+   public PROTEGO_MAXIMA (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
                           double damage)
    {
-      super(player, location, name, radius, duration);
+      super(plugin, player, location, name, radius, duration);
       this.damage = damage;
    }
 
-   public PROTEGO_MAXIMA (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                          Map<String, String> spellData, Ollivanders2 plugin)
+   public PROTEGO_MAXIMA (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+                          Map<String, String> spellData)
    {
-      super(player, location, name, radius, duration);
+      super(plugin, player, location, name, radius, duration);
 
-      deserializeSpellData(spellData, plugin);
+      deserializeSpellData(spellData);
    }
 
-   public void checkEffect (Ollivanders2 p)
+   @Override
+   public void checkEffect ()
    {
       age();
       Location loc = location.toLocation();
@@ -73,11 +73,10 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
    /**
     * Serialize all data specific to this spell so it can be saved.
     *
-    * @param p unused for this spell
     * @return a map of the serialized data
     */
    @Override
-   public Map<String, String> serializeSpellData (Ollivanders2 p)
+   public Map<String, String> serializeSpellData ()
    {
       Map<String, String> spellData = new HashMap<>();
 
@@ -90,10 +89,9 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
     * Deserialize the data for this spell and load the data to this spell.
     *
     * @param spellData a map of the saved spell data
-    * @param p unused for this spell
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData, Ollivanders2 p)
+   public void deserializeSpellData (Map<String, String> spellData)
    {
       for (Map.Entry<String, String> e : spellData.entrySet())
       {

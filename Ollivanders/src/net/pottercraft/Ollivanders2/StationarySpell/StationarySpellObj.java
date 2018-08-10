@@ -7,19 +7,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.OLocation;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 /**
@@ -29,6 +26,7 @@ import org.bukkit.util.Vector;
  */
 public abstract class StationarySpellObj implements Serializable
 {
+   Ollivanders2 p;
    public UUID playerUUID;
    public StationarySpells name;
    public OLocation location;
@@ -37,8 +35,10 @@ public abstract class StationarySpellObj implements Serializable
    public boolean active = true;
    public int radius;
 
-   public StationarySpellObj (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
+   public StationarySpellObj (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
+      p = plugin;
+
       this.location = new OLocation(location);
       this.name = name;
       playerUUID = player.getUniqueId();
@@ -85,7 +85,7 @@ public abstract class StationarySpellObj implements Serializable
     */
    public boolean isInside (Location loc)
    {
-      return Ollivanders2Common.isInside(location, loc, radius);
+      return p.common.isInside(location, loc, radius);
    }
 
    /**
@@ -197,7 +197,6 @@ public abstract class StationarySpellObj implements Serializable
     * @return Spherical coords in double array with
     * indexes 0=inclination 1=azimuth
     */
-   @SuppressWarnings("unused")
    private double[] vecToSpher (Vector vec)
    {
       double inc = Math.acos(vec.getZ());

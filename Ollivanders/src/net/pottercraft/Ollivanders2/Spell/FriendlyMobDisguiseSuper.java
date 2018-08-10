@@ -31,14 +31,14 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
    {
       super(plugin, player, name, rightWand);
 
-      for (EntityType e : Ollivanders2Common.smallFriendlyAnimals)
+      for (EntityType e :p.common.smallFriendlyAnimals)
       {
          entityWhitelist.add(e);
       }
 
       if (usesModifier > 100)
       {
-         for (EntityType e : Ollivanders2Common.mediumFriendlyAnimals)
+         for (EntityType e : p.common.mediumFriendlyAnimals)
          {
             entityWhitelist.add(e);
          }
@@ -46,7 +46,7 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
 
       if (usesModifier > 200)
       {
-         for (EntityType e : Ollivanders2Common.largeFriendlyAnimals)
+         for (EntityType e : p.common.largeFriendlyAnimals)
          {
             entityWhitelist.add(e);
          }

@@ -5,7 +5,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
 
-import net.pottercraft.Ollivanders2.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 public class MUCUS_AD_NAUSEAM extends OEffect implements Effect

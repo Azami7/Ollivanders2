@@ -51,7 +51,7 @@ public final class DEPRIMO extends Charms
       List<Block> tempBlocks = p.getTempBlocks();
       if (center.getType() != Material.AIR)
       {
-         for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
+         for (Block block : p.common.getBlocksInRadius(location, radius))
          {
             if (!tempBlocks.contains(block) &&
                   block.getType() != Material.WATER && block.getType() != Material.LAVA &&

@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
 /**
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public final class SECRETS_OF_WANDLORE extends Book
 {
-   public SECRETS_OF_WANDLORE ()
+   public SECRETS_OF_WANDLORE (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = title = "Secrets of Wandlore";
       author = "Geraint Ollivander";
       branch = O2MagicBranch.CHARMS;
