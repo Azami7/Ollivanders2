@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.Effects;
-import net.pottercraft.Ollivanders2.O2Player;
+import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
  */
 public final class WIT_SHARPENING_POTION extends O2Potion
 {
-   //TODO add uses for this potion
    public WIT_SHARPENING_POTION (Ollivanders2 plugin)
    {
       super(plugin);

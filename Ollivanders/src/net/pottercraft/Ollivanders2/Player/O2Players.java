@@ -1,15 +1,17 @@
-package net.pottercraft.Ollivanders2;
+package net.pottercraft.Ollivanders2.Player;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.ArrayList;
+
+import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
+import net.pottercraft.Ollivanders2.OPlayer;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.entity.EntityType;
-
-import static net.pottercraft.Ollivanders2.Ollivanders2Common.intToYear;
-import static net.pottercraft.Ollivanders2.Ollivanders2Common.yearToInt;
 
 /**
  * O2Players
@@ -19,11 +21,24 @@ import static net.pottercraft.Ollivanders2.Ollivanders2Common.yearToInt;
  */
 public class O2Players
 {
+   /**
+    * A map of MC player UUIDs and the player O2Player object.
+    */
    private Map<UUID, O2Player> O2PlayerMap = new HashMap<>();
 
+   /**
+    * The MC plugin callback
+    */
    private Ollivanders2 p;
+
+   /**
+    * Common O2 functions
+    */
    private Ollivanders2Common common;
 
+   /**
+    * Labels for serializing player data
+    */
    private String nameLabel = "Name";
    private String woodLabel = "Wood";
    private String coreLabel = "Core";
@@ -37,6 +52,11 @@ public class O2Players
    private String muggleLabel = "Muggle";
    private String yearLabel = "Year";
 
+   /**
+    * Constructor
+    *
+    * @param plugin the MC plugin
+    */
    public O2Players (Ollivanders2 plugin)
    {
       p = plugin;
@@ -46,8 +66,8 @@ public class O2Players
    /**
     * Add a new O2Player.
     *
-    * @param pid
-    * @param name
+    * @param pid the UUID of this player
+    * @param name the name of this player
     */
    public void addPlayer (UUID pid, String name)
    {
@@ -62,8 +82,8 @@ public class O2Players
    /**
     * Update an existing O2Player.
     *
-    * @param pid
-    * @param o2p
+    * @param pid the UUID of this player
+    * @param o2p the O2Player object for this player
     */
    public synchronized void updatePlayer (UUID pid, O2Player o2p)
    {
@@ -86,19 +106,12 @@ public class O2Players
    /**
     * Get an O2Player.
     *
-    * @param pid
+    * @param pid the UUID of the player
     * @return the O2Player if found, null otherwise.
     */
    public O2Player getPlayer (UUID pid)
    {
-      if (O2PlayerMap.containsKey(pid))
-      {
-         return O2PlayerMap.get(pid);
-      }
-      else
-      {
-         return null;
-      }
+      return O2PlayerMap.getOrDefault(pid, null);
    }
 
    /**
@@ -110,14 +123,14 @@ public class O2Players
    {
       ArrayList<UUID> ids = new ArrayList<>();
 
-      for (UUID id : O2PlayerMap.keySet())
-      {
-         ids.add(id);
-      }
+      ids.addAll(O2PlayerMap.keySet());
 
       return ids;
    }
 
+   /**
+    * Write all players to the plugin config directory
+    */
    public void saveO2Players()
    {
       // serialize the player map
@@ -127,6 +140,9 @@ public class O2Players
       gsonLayer.writeO2Players(serializedMap);
    }
 
+   /**
+    *
+    */
    public void loadO2Players ()
    {
       GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
@@ -145,23 +161,9 @@ public class O2Players
       {
          p.getLogger().info("No saved O2Players.");
       }
-
-      p.getLogger().info("Checking for legacy OPlayers save file...");
-      Map<UUID, OPlayer> OPlayerMap = new HashMap<>();
-      try
-      {
-         p.getLogger().info("Loading save file OPlayerMap.bin...");
-         OPlayerMap = (HashMap<UUID, OPlayer>) Ollivanders2.SLAPI.load("plugins/Ollivanders2/OPlayerMap.bin");
-         p.getLogger().info("Found " + OPlayerMap.size() + " legacy players.");
-      }
-      catch (Exception e)
-      {
-         p.getLogger().warning("Did not find OPlayerMap.bin");
-      }
-
-      updateLegacyPlayers(OPlayerMap);
    }
 
+   @Deprecated
    private void updateLegacyPlayers (Map<UUID, OPlayer> OPlayerMap)
    {
       for (Entry <UUID, OPlayer> e : OPlayerMap.entrySet())
@@ -191,7 +193,7 @@ public class O2Players
          for (Entry<Spells, Integer> s : spells.entrySet())
          {
             Spells spell = s.getKey();
-            int count = s.getValue().intValue();
+            int count = s.getValue();
 
             if (count > 0)
             {
@@ -200,7 +202,7 @@ public class O2Players
          }
 
          O2PlayerMap.put(pid, o2p);
-         if (p.debug)
+         if (Ollivanders2.debug)
          {
             p.getLogger().info("Loaded player " + o2p.getPlayerName());
          }
@@ -222,13 +224,13 @@ public class O2Players
     *    [Spell] : [Count]
     * }};
     * @param o2PlayerMap
-    * @return
+    * @return all player data as a map of strings per player
     */
    private Map <String, Map<String, String>> serializeO2Players (Map<UUID, O2Player> o2PlayerMap)
    {
       Map <String, Map<String, String>> serializedMap = new HashMap<>();
 
-      if (p.debug)
+      if (Ollivanders2.debug)
          p.getLogger().info("Serializing O2Players...");
 
       for (Map.Entry<UUID, O2Player> e : o2PlayerMap.entrySet())
@@ -242,7 +244,7 @@ public class O2Players
           * Name
           */
          String pName = o2p.getPlayerName();
-         if (p.debug)
+         if (Ollivanders2.debug)
             p.getLogger().info("\tAdding " + pName + "...");
 
          playerData.put(nameLabel, pName);
@@ -256,7 +258,7 @@ public class O2Players
          /**
           * Souls
           */
-         Integer souls = new Integer(o2p.getSouls());
+         Integer souls = o2p.getSouls();
          playerData.put(soulsLabel, souls.toString());
 
          /**
@@ -264,7 +266,7 @@ public class O2Players
           */
          if (o2p.isInvisible())
          {
-            Boolean invisible = new Boolean(true);
+            Boolean invisible = true;
             playerData.put(invisibleLabel, invisible.toString());
          }
 
@@ -273,7 +275,7 @@ public class O2Players
           */
          if (o2p.isInRepelloMuggleton())
          {
-            Boolean muggleton = new Boolean(true);
+            Boolean muggleton = true;
             playerData.put(inMuggletonLabel, muggleton.toString());
          }
 
@@ -282,7 +284,7 @@ public class O2Players
           */
          if (o2p.foundWand())
          {
-            Boolean foundWand = new Boolean(true);
+            Boolean foundWand = true;
             playerData.put(foundWandLabel, foundWand.toString());
          }
 
@@ -324,14 +326,14 @@ public class O2Players
           */
          if (!o2p.isMuggle())
          {
-            Boolean muggle = new Boolean(false);
+            Boolean muggle = false;
             playerData.put(muggleLabel, muggle.toString());
          }
 
          /**
           * Year
           */
-         Integer year = new Integer(yearToInt(o2p.getYear()));
+         Integer year = O2PlayerCommon.yearToInt(o2p.getYear());
          playerData.put(yearLabel, year.toString());
 
          serializedMap.put(pid.toString(), playerData);
@@ -356,7 +358,7 @@ public class O2Players
     *    [Spell] : [Count]
     * }};
     *
-    * @param map
+    * @param map a map of player data as strings
     * @return the deserialized map of O2Players, null if map could not be deserialized
     */
    private Map<UUID, O2Player> deserializeO2Players (Map <String, Map<String, String>> map)
@@ -413,7 +415,7 @@ public class O2Players
                Integer souls = common.integerFromString(value);
                if (souls != null)
                {
-                  player.setSouls(souls.intValue());
+                  player.setSouls(souls);
                }
             }
             else if (label.equalsIgnoreCase(inMuggletonLabel))
@@ -421,7 +423,7 @@ public class O2Players
                Boolean muggleton = common.booleanFromString(value);
                if (muggleton != null)
                {
-                  player.setInRepelloMuggleton(muggleton.booleanValue());
+                  player.setInRepelloMuggleton(muggleton);
                }
             }
             else if (label.equalsIgnoreCase(invisibleLabel))
@@ -429,7 +431,7 @@ public class O2Players
                Boolean invisible = common.booleanFromString(value);
                if (invisible != null)
                {
-                  player.setInvisible(invisible.booleanValue());
+                  player.setInvisible(invisible);
                }
             }
             else if (label.equalsIgnoreCase(foundWandLabel))
@@ -437,7 +439,7 @@ public class O2Players
                Boolean foundWand = common.booleanFromString(value);
                if (foundWand != null)
                {
-                  player.setFoundWand(foundWand.booleanValue());
+                  player.setFoundWand(foundWand);
                }
             }
             else if (label.equalsIgnoreCase(masterSpellLabel))
@@ -463,7 +465,7 @@ public class O2Players
                Boolean muggle = common.booleanFromString(value);
                if (muggle != null)
                {
-                  player.setMuggle(muggle.booleanValue());
+                  player.setMuggle(muggle);
                }
             }
             else if (label.equalsIgnoreCase(yearLabel))
@@ -471,7 +473,7 @@ public class O2Players
                Integer year = common.integerFromString(value);
                if (year != null)
                {
-                  player.setYear(intToYear(year.intValue()));
+                  player.setYear(O2PlayerCommon.intToYear(year));
                }
             }
             else
@@ -486,13 +488,13 @@ public class O2Players
                Integer count = common.integerFromString(value);
                if (count != null)
                {
-                  player.setSpellCount(spell, count.intValue());
+                  player.setSpellCount(spell, count);
                }
             }
          }
 
          deserializedMap.put(pid, player);
-         if (p.debug)
+         if (Ollivanders2.debug)
             p.getLogger().info("Loaded player " + player.getPlayerName());
       }
 

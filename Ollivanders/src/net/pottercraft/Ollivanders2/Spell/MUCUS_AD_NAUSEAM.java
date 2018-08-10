@@ -2,8 +2,8 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.List;
 
-import net.pottercraft.Ollivanders2.*;
 import net.pottercraft.Ollivanders2.Effect.Effects;
+import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 

@@ -1,4 +1,4 @@
-package net.pottercraft.Ollivanders2;
+package net.pottercraft.Ollivanders2.Player;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -14,6 +14,9 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.*;
+import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.DyeColor;
@@ -35,53 +38,120 @@ import org.bukkit.inventory.meta.BookMeta;
 
 public class O2Player
 {
+   /**
+    * Wand wood material name
+    */
    private String wandWood = null;
+
+   /**
+    * Wand core material name
+    */
    private String wandCore = null;
+
+   /**
+    * Player display name
+    */
    private String playerName = null;
+
+   /**
+    * Player minecraft UUID, this is their primary identifier in Ollivanders2
+    */
    private UUID pid = null;
+
+   /**
+    * The MC plugin callback
+    */
    private Ollivanders2 p = null;
+
+   /**
+    * Common Ollivanders2 functions
+    */
    private Ollivanders2Common common;
+
+   /**
+    * A map of all the spells a player knows and the cast count.
+    */
    private Map<Spells, Integer> knownSpells = new HashMap<>();
+
+   /**
+    * A map of all the potions a player knows and the brew count.
+    */
    private Map<String, Integer> knownPotions = new HashMap<>();
+
+   /**
+    * A map of the recent spells a player has cast and their cast timestamp
+    */
    private Map<Spells, Long> recentSpells = new HashMap<>();
+
+   /**
+    * A list of all effects currently on this player
+    */
    private List<OEffect> effects = new ArrayList<>();
-   ArrayList<EntityType> animagusShapes = new ArrayList<>();
-   //This is the spell loaded into the wand for casting with left click
+
+   /**
+    * The spell loaded into the wand for casting with left click
+    */
    private Spells wandSpell = null;
+
+   /**
+    * The mastered spell set for silent casting - is cast anytime a player left-clicks their wand in their primary hand.
+    */
    private Spells masterSpell = null;
+
+   /**
+    * The list of mastered spells - spells with > 100 cast count
+    */
    private ArrayList<Spells> masteredSpells = new ArrayList<>();
+
+   /**
+    * The number of souls this user has collected
+    */
    private int souls = 0;
+
+   /**
+    * Whether the player is currently invisible
+    */
    private boolean invisible = false;
+
+   /**
+    * Whether the player is in a Repello Muggleton area
+    */
    private boolean inRepelloMuggleton = false;
+
+   /**
+    * Whether the player has found their destined wand yet
+    */
    private boolean foundWand = false;
+
+   /**
+    * The player'ss animagus form, if they are an animagus
+    */
    private EntityType animagusForm = null;
+
+   /**
+    * The color variant for the animagus form
+    */
    private String animagusColor = null;
+
+   /**
+    * Whether the player is currently transformed to their animagus shape
+    */
    private boolean isTransformed = false;
+
+   /**
+    * The disguise object for this player to make them appear as another EntityType
+    */
    private TargetedDisguise disguise;
+
+   /**
+    * Whether the player is a Muggle.
+    */
    private boolean muggle = true;
+
+   /**
+    * The player's year in school
+    */
    private Year year = Year.YEAR_1;
-
-   /**
-    * Wand wood types
-    */
-   private final ArrayList<String> woodArray = new ArrayList<String>() {{
-      add("Spruce");
-      add("Jungle");
-      add("Birch");
-      add("Oak");
-   }};
-
-   /**
-    * Wand core types
-    */
-   private final ArrayList<String> coreArray = new ArrayList<String>() {{
-      add("Spider Eye");
-      add("Bone");
-      add("Rotten Flesh");
-      add("Gunpowder");
-   }};
-
-   private String loreConjunction = " and ";
 
    /**
     * Constructor.
@@ -99,36 +169,6 @@ public class O2Player
       // set destined wand
       initDestinedWand();
 
-      animagusShapes.add(EntityType.OCELOT);
-      animagusShapes.add(EntityType.WOLF);
-      animagusShapes.add(EntityType.COW);
-      animagusShapes.add(EntityType.PIG);
-      animagusShapes.add(EntityType.HORSE);
-      animagusShapes.add(EntityType.SHEEP);
-      animagusShapes.add(EntityType.RABBIT);
-      animagusShapes.add(EntityType.MULE);
-      animagusShapes.add(EntityType.DONKEY);
-
-      if (Ollivanders2.hostileMobAnimagi)
-      {
-         animagusShapes.add(EntityType.SPIDER);
-         animagusShapes.add(EntityType.SLIME);
-         animagusShapes.add(EntityType.CAVE_SPIDER);
-         animagusShapes.add(EntityType.CREEPER);
-         animagusShapes.add(EntityType.EVOKER);
-         animagusShapes.add(EntityType.HUSK);
-         animagusShapes.add(EntityType.SILVERFISH);
-         animagusShapes.add(EntityType.WITCH);
-         animagusShapes.add(EntityType.VINDICATOR);
-         animagusShapes.add(EntityType.SHULKER);
-      }
-
-      if (Ollivanders2.mcVersionCheck())
-      {
-         animagusShapes.add(EntityType.POLAR_BEAR);
-         animagusShapes.add(EntityType.LLAMA);
-      }
-
       common = new Ollivanders2Common(plugin);
    }
 
@@ -142,8 +182,8 @@ public class O2Player
       int wood = seed/4;
       int core = seed%4;
 
-      wandWood = woodArray.get(wood);
-      wandCore = coreArray.get(core);
+      wandWood = O2PlayerCommon.woodArray.get(wood);
+      wandCore = O2PlayerCommon.coreArray.get(core);
    }
 
    /**
@@ -160,7 +200,7 @@ public class O2Player
       if (p.isWand(stack))
       {
          List<String> lore = stack.getItemMeta().getLore();
-         String[] comps = lore.get(0).split(loreConjunction);
+         String[] comps = lore.get(0).split(O2PlayerCommon.wandLoreConjunction);
 
          if (wandWood.equalsIgnoreCase(comps[0]) && wandCore.equalsIgnoreCase(comps[1]))
          {
@@ -182,19 +222,17 @@ public class O2Player
    /**
     * Get the player's destined wand lore.
     *
-    * @return
+    * @return the wand lore for the players destined wand
     */
    public String getDestinedWandLore ()
    {
-      String wandLore = wandWood + loreConjunction + wandCore;
-
-      return wandLore;
+      return wandWood + O2PlayerCommon.wandLoreConjunction + wandCore;
    }
 
    /**
     * Get the player's destined wand wood type.
     *
-    * @return
+    * @return the player's destined wand wood type
     */
    public String getWandWood ()
    {
@@ -204,7 +242,7 @@ public class O2Player
    /**
     * Get the player's destined wand core type.
     *
-    * @return
+    * @return the player's destined wand core type
     */
    public String getWandCore ()
    {
@@ -214,11 +252,11 @@ public class O2Player
    /**
     * Set the player's destined wand wood type. This overrides the current value.
     *
-    * @param wood
+    * @param wood sets the destined wand wood type
     */
    public void setWandWood (String wood)
    {
-      if (woodArray.contains(wood))
+      if (O2PlayerCommon.woodArray.contains(wood))
       {
          wandWood = wood;
       }
@@ -227,11 +265,11 @@ public class O2Player
    /**
     * Set the player's destined wand core type. This overrides the current value.
     *
-    * @param core
+    * @param core set the destined wand core type
     */
    public void setWandCore (String core)
    {
-      if (coreArray.contains(core))
+      if (O2PlayerCommon.coreArray.contains(core))
       {
          wandCore = core;
       }
@@ -242,7 +280,7 @@ public class O2Player
     * can change, this should not be used to identify a player. Instead, use the UUID of player and the O2Players
     * map to find their O2Player object.
     *
-    * @return
+    * @return the player's name
     */
    public String getPlayerName ()
    {
@@ -252,7 +290,7 @@ public class O2Player
    /**
     * Sets the name of this player for use in commands like listing out house membership.
     *
-    * @param name
+    * @param name the name to set for this player
     */
    public void setPlayerName (String name)
    {
@@ -271,7 +309,7 @@ public class O2Player
 
       if (knownSpells.containsKey(spell))
       {
-         count = knownSpells.get(spell).intValue();
+         count = knownSpells.get(spell);
       }
 
       return count;
@@ -289,7 +327,7 @@ public class O2Player
 
       if (knownPotions.containsKey(potion))
       {
-         count = knownPotions.get(potion).intValue();
+         count = knownPotions.get(potion);
       }
 
       return count;
@@ -348,11 +386,11 @@ public class O2Player
       {
          if (knownSpells.containsKey(spell))
          {
-            knownSpells.replace(spell, new Integer(count));
+            knownSpells.replace(spell, count);
          }
          else
          {
-            knownSpells.put(spell, new Integer(count));
+            knownSpells.put(spell, count);
          }
       }
       else
@@ -386,11 +424,11 @@ public class O2Player
       {
          if (knownPotions.containsKey(potion))
          {
-            knownPotions.replace(potion, new Integer(count));
+            knownPotions.replace(potion, count);
          }
          else
          {
-            knownPotions.put(potion, new Integer(count));
+            knownPotions.put(potion, count);
          }
       }
       else
@@ -409,7 +447,7 @@ public class O2Player
    {
       String spellClass = "net.pottercraft.Ollivanders2.Spell." + spell.toString();
       @SuppressWarnings("rawtypes")
-      Constructor c = null;
+      Constructor c;
       try
       {
          c = Class.forName(spellClass).getConstructor();
@@ -452,8 +490,8 @@ public class O2Player
    {
       if (knownSpells.containsKey(spell))
       {
-         int curCount = knownSpells.get(spell).intValue();
-         knownSpells.replace(spell, new Integer(curCount + 1));
+         int curCount = knownSpells.get(spell);
+         knownSpells.replace(spell, curCount + 1);
 
          if (curCount + 1 >= 100)
          {
@@ -462,7 +500,7 @@ public class O2Player
       }
       else
       {
-         knownSpells.put(spell, new Integer(1));
+         knownSpells.put(spell, 1);
       }
    }
 
@@ -475,12 +513,12 @@ public class O2Player
    {
       if (knownPotions.containsKey(potion))
       {
-         int curCount = knownPotions.get(potion).intValue();
-         knownPotions.replace(potion, new Integer(curCount + 1));
+         int curCount = knownPotions.get(potion);
+         knownPotions.replace(potion, curCount + 1);
       }
       else
       {
-         knownPotions.put(potion, new Integer(1));
+         knownPotions.put(potion, 1);
       }
    }
 
@@ -589,7 +627,7 @@ public class O2Player
    /**
     * Get the number of souls this player has collected.
     *
-    * @return
+    * @return the number of souls this player has collected
     */
    public int getSouls ()
    {
@@ -599,7 +637,7 @@ public class O2Player
    /**
     * Set the number of souls this player has collected.
     *
-    * @param s
+    * @param s the number of souls the player has collected
     */
    public void setSouls (int s)
    {
@@ -654,16 +692,13 @@ public class O2Player
    /**
     * Get a list of all the Ollivanders effects this user has on them.
     *
-    * @return
+    * @return a list of the effects active on this player
     */
    public List<OEffect> getEffects ()
    {
       List<OEffect> effectsCopy = new ArrayList<>();
 
-      for (OEffect e : effects)
-      {
-         effectsCopy.add(e);
-      }
+      effectsCopy.addAll(effects);
 
       return effectsCopy;
    }
@@ -671,7 +706,7 @@ public class O2Player
    /**
     * Add an effect to this player.
     *
-    * @param e
+    * @param e the effect to add to this player
     */
    public void addEffect (OEffect e)
    {
@@ -684,7 +719,7 @@ public class O2Player
    /**
     * Remove an effect from this player.
     *
-    * @param e
+    * @param e the effect to remove from this player
     */
    public void removeEffect (OEffect e)
    {
@@ -705,7 +740,7 @@ public class O2Player
    /**
     * Set whether the player has found their destined wand before.
     *
-    * @param b
+    * @param b set whether the player has found their destined wand
     */
    public void setFoundWand (boolean b)
    {
@@ -735,7 +770,7 @@ public class O2Player
       bookMeta.setAuthor(playerName);
       bookMeta.setTitle("Spell Journal");
 
-      String content = new String("Spell Journal\n\n");
+      String content = "Spell Journal\n\n";
       int lineCount = 2;
       for (Entry <Spells, Integer> e : knownSpells.entrySet())
       {
@@ -823,6 +858,7 @@ public class O2Player
    /**
     * Shift the wand's master spell to the next spell.
     */
+   @Deprecated
    public void shiftMasterSpell ()
    {
       shiftMasterSpell(false);
@@ -894,6 +930,8 @@ public class O2Player
       {
          int form = 0;
 
+         ArrayList<EntityType> animagusShapes = O2PlayerCommon.getAnimagusShapes();
+
          if (Ollivanders2.mcVersionCheck())
          {
             form = Math.abs(pid.hashCode() % animagusShapes.size());
@@ -940,6 +978,8 @@ public class O2Player
     */
    public void setAnimagusForm (EntityType type)
    {
+      ArrayList<EntityType> animagusShapes = O2PlayerCommon.getAnimagusShapes();
+
       if (animagusShapes.contains(type))
       {
          animagusForm = type;
@@ -953,7 +993,7 @@ public class O2Player
       }
    }
 
-   public void setAnimagusColor (String color)
+   void setAnimagusColor (String color)
    {
       animagusColor = color;
    }
@@ -991,15 +1031,15 @@ public class O2Player
    {
       if (animagusForm != null)
          return true;
-      else
-         return false;
+
+      return false;
    }
 
    /**
     * Determine if this player is transformed in to their Animagus form. This is only for use in saving
     * player state to disk and when a player logs in.
     *
-    * @return
+    * @return true if the player is in their animal form, false otherwise
     */
    public boolean isTransformed ()
    {
@@ -1017,7 +1057,7 @@ public class O2Player
          return;
       }
 
-      if (isTransformed == false)
+      if (!isTransformed)
       {
          // transform the player in to their Animagus form
          DisguiseType disguiseType = DisguiseType.getType(animagusForm);
@@ -1037,7 +1077,7 @@ public class O2Player
             catch (Exception e)
             {
                p.getLogger().warning("Failed to parse Ocelot.Type " + animagusColor);
-               if (p.debug)
+               if (Ollivanders2.debug)
                   e.printStackTrace();
             }
             finally
@@ -1061,7 +1101,7 @@ public class O2Player
             catch (Exception e)
             {
                p.getLogger().warning("Failed to parse DyeColor " + animagusColor);
-               if (p.debug)
+               if (Ollivanders2.debug)
                   e.printStackTrace();
             }
             finally
@@ -1087,7 +1127,7 @@ public class O2Player
             catch (Exception e)
             {
                p.getLogger().warning("Failed to parse Horse.Color " + animagusColor);
-               if (p.debug)
+               if (Ollivanders2.debug)
                   e.printStackTrace();
             }
             finally
@@ -1111,7 +1151,7 @@ public class O2Player
             catch (Exception e)
             {
                p.getLogger().warning("Failed to parse Llama.Color " + animagusColor);
-               if (p.debug)
+               if (Ollivanders2.debug)
                   e.printStackTrace();
             }
             finally

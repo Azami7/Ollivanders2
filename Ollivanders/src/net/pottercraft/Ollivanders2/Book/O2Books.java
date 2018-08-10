@@ -15,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION;
 import net.pottercraft.Ollivanders2.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.O2Player;
+import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.inventory.meta.BookMeta;
 

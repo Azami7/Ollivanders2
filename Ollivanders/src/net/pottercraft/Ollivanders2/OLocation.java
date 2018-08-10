@@ -61,7 +61,6 @@ public class OLocation implements Serializable
 
    public UUID getWorldUUID ()
    {
-      //TODO take this code out in 0.17
       if (worldUUID == null)
       {
          worldUUID = Bukkit.getWorld(world).getUID();

@@ -184,8 +184,6 @@ public class O2StationarySpells
       {
          p.getLogger().warning("Did not find stationary.bin");
       }
-
-      //TODO make this serialize to json rather than binary
    }
 
    /**
