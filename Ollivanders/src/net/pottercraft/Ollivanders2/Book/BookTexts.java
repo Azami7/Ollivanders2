@@ -25,7 +25,7 @@ public final class BookTexts
       String text;
       String flavorText;
 
-      public SpellText (String n, String t, String f)
+      SpellText (String n, String t, String f)
       {
          name = n;
          text = t;
@@ -48,16 +48,16 @@ public final class BookTexts
       }
    }
 
-   private static Map <String, SpellText> O2MagicTextMap = new HashMap<>();
+   private Map <String, SpellText> O2MagicTextMap = new HashMap<>();
 
    private Ollivanders2 p;
 
    /**
     * Constructor.
     *
-    * @param plugin
+    * @param plugin the MC plugin
     */
-   public BookTexts (Ollivanders2 plugin)
+   BookTexts (Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -81,7 +81,7 @@ public final class BookTexts
          
          String spellName = "net.pottercraft.Ollivanders2.Spell." + s.toString();
 
-         Constructor c = null;
+         Constructor c;
 
          try
          {
@@ -95,7 +95,7 @@ public final class BookTexts
             continue;
          }
 
-         Teachable spell = null;
+         Teachable spell;
          try
          {
             spell = (Teachable)c.newInstance();
@@ -108,8 +108,8 @@ public final class BookTexts
             continue;
          }
 
-         String text = null;
-         String flavorText = null;
+         String text;
+         String flavorText;
 
          try
          {
@@ -149,10 +149,10 @@ public final class BookTexts
    /**
     * Get the flavor text for a specific magic.
     *
-    * @param magic
+    * @param magic the name of the magic topic
     * @return the flavor text for that spell or null if it has none.
     */
-   public static String getFlavorText (String magic)
+   String getFlavorText (String magic)
    {
       String flavorText = null;
 
@@ -165,10 +165,10 @@ public final class BookTexts
    /**
     * Get the description text for a specific magic.
     *
-    * @param magic
+    * @param magic the name of the magic topic
     * @return the description text for this spell
     */
-   public static String getText (String magic)
+   String getText (String magic)
    {
       String text = null;
 
@@ -181,10 +181,10 @@ public final class BookTexts
    /**
     * Get the printable name for a specific magic.
     *
-    * @param magic
-    * @return
+    * @param magic the name of the magic topic
+    * @return the printable name for this magic
     */
-   public static String getName (String magic)
+   public String getName (String magic)
    {
       String name = null;
 

@@ -74,7 +74,7 @@ public class Ollivanders2 extends JavaPlugin
    private FileConfiguration fileConfig;
    private O2Houses houses;
    private O2Players o2Players;
-   private O2Books books;
+   public O2Books books;
    private Potions potions;
    public O2StationarySpells stationarySpells;
 

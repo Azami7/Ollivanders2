@@ -42,7 +42,7 @@ public final class O2Books
    /**
     * Constructor
     *
-    * @param plugin
+    * @param plugin the MC plugin
     */
    public O2Books (Ollivanders2 plugin)
    {
