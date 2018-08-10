@@ -51,7 +51,7 @@ public final class COLOVARIA extends Charms
       move();
       DyeColor[] values = DyeColor.values();
       DyeColor newColor = values[Math.abs(Ollivanders2.random.nextInt() % values.length)];
-      for (LivingEntity live : getLivingEntities(1))
+      for (LivingEntity live : getLivingEntities(2))
       {
          if (live instanceof Sheep)
          {

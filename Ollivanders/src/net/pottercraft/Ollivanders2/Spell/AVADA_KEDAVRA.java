@@ -47,7 +47,7 @@ public final class AVADA_KEDAVRA extends DarkArts
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> entities = getLivingEntities(1);
+      List<LivingEntity> entities = getLivingEntities(1.5);
       if (entities.size() > 0)
       {
          LivingEntity entity = entities.get(0);

@@ -35,7 +35,7 @@ public abstract class ColoroSuper extends Charms
    {
       move();
 
-      for (LivingEntity live : getLivingEntities(1))
+      for (LivingEntity live : getLivingEntities(2))
       {
          if (live instanceof Sheep)
          {

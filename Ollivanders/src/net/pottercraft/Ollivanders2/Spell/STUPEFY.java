@@ -46,7 +46,7 @@ public final class STUPEFY extends Charms
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> entities = getLivingEntities(1);
+      List<LivingEntity> entities = getLivingEntities(2);
       if (entities.size() > 0)
       {
          LivingEntity entity = entities.get(0);

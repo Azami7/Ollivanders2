@@ -10,6 +10,7 @@ package net.pottercraft.Ollivanders2.Effect;
 public enum Effects
 {
    ANIMAGUS_INCANTATION,
+   BABBLING_EFFECT,
    BARUFFIOS_BRAIN_ELIXIR,
    HERBIFORS,
    INCARNATIO_DEVITO,

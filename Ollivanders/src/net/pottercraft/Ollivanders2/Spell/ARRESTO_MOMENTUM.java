@@ -47,7 +47,7 @@ public final class ARRESTO_MOMENTUM extends Charms
    {
       move();
       double modifier = usesModifier;
-      List<LivingEntity> entities = getLivingEntities(1);
+      List<LivingEntity> entities = getLivingEntities(2);
       for (LivingEntity entity : entities)
       {
          double speed = entity.getVelocity().length() / (Math.pow(modifier, 2));

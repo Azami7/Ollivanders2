@@ -47,7 +47,7 @@ public final class BRACKIUM_EMENDO extends Healing
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> entities = getLivingEntities(1);
+      List<LivingEntity> entities = getLivingEntities(2);
       for (LivingEntity entity : entities)
       {
          EntityType type = entity.getType();

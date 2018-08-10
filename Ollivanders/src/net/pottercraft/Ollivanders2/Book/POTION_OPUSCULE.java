@@ -20,5 +20,6 @@ public class POTION_OPUSCULE extends Book
       branch = O2MagicBranch.POTIONS;
 
       potions.add(new ANIMAGUS_POTION(p).getName());
+      potions.add(new BABBLING_BEVERAGE(p).getName());
    }
 }

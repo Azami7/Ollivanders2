@@ -22,6 +22,7 @@ import java.util.UUID;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.HashMap;
+import java.util.Collection;
 
 /**
  * Common functions and data
@@ -397,9 +398,10 @@ public class Ollivanders2Common
     * @param radius - radius within which to get entities
     * @return List of entities within the radius
     */
-   public static List<Entity> getCloseEntities (Location location, double radius)
+   public List<Entity> getCloseEntities (Location location, double radius)
    {
-      List<Entity> entities = location.getWorld().getEntities();
+      Collection<Entity> entities = location.getWorld().getNearbyEntities(location, radius, radius, radius);
+
       List<Entity> entitiesInRadius = new ArrayList<>();
       for (Entity e : entities)
       {
@@ -408,6 +410,7 @@ public class Ollivanders2Common
             entitiesInRadius.add(e);
          }
       }
+
       return entitiesInRadius;
    }
 
@@ -419,10 +422,11 @@ public class Ollivanders2Common
     * @param entityType - the type of entity to look for
     * @return List of entities of the specified type within the radius
     */
-   public static List<Entity> getTypedCloseEntities (Location location, double radius, EntityType entityType)
+   public List<Entity> getTypedCloseEntities (Location location, double radius, EntityType entityType)
    {
       List<Entity> entities = getCloseEntities(location, radius);
       List<Entity> entitiesInRadius = new ArrayList<>();
+
       for (Entity e : entities)
       {
          if (e.getType() == entityType)

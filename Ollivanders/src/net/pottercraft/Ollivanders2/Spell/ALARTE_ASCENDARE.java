@@ -52,7 +52,7 @@ public final class ALARTE_ASCENDARE extends Charms
          up = 4;
       }
       Vector vec = new Vector(0, up, 0);
-      for (LivingEntity lentity : getLivingEntities(1))
+      for (LivingEntity lentity : getLivingEntities(2))
       {
          lentity.setVelocity(lentity.getVelocity().add(vec));
          kill();
