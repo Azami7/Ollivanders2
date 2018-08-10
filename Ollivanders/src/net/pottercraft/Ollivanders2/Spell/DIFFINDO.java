@@ -48,12 +48,12 @@ public final class DIFFINDO extends Charms
    public void checkEffect ()
    {
       move();
-      for (LivingEntity live : getLivingEntities(1))
+      for (LivingEntity live : getLivingEntities(2))
       {
          if (live instanceof Player)
          {
             PlayerInventory inv = ((Player) live).getInventory();
-            ArrayList<ItemStack> remStack = new ArrayList<ItemStack>();
+            ArrayList<ItemStack> remStack = new ArrayList<>();
             for (ItemStack stack : inv.getContents())
             {
                if (stack != null)

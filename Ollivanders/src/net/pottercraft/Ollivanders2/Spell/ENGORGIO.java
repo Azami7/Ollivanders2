@@ -45,7 +45,7 @@ public final class ENGORGIO extends Charms
    public void checkEffect ()
    {
       move();
-      for (LivingEntity live : getLivingEntities(1))
+      for (LivingEntity live : getLivingEntities(2))
       {
          if (live instanceof Ageable)
          {

@@ -42,7 +42,7 @@ public final class VENTO_FOLIO extends Charms
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> living = getLivingEntities(1);
+      List<LivingEntity> living = getLivingEntities(2);
       for (LivingEntity live : living)
       {
          if (live instanceof Player)

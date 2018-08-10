@@ -62,7 +62,7 @@ public final class INFORMOUS extends Arithmancy
    public void checkEffect ()
    {
       move();
-      for (LivingEntity entity : getLivingEntities(1))
+      for (LivingEntity entity : getLivingEntities(2))
       {
          if (!iEntity.contains(entity))
          {

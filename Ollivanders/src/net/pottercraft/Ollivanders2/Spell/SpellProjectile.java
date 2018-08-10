@@ -159,8 +159,13 @@ public abstract class SpellProjectile implements Teachable
     */
    public List<Entity> getCloseEntities (double radius)
    {
-      List<Entity> entities = Ollivanders2Common.getCloseEntities(location, radius);
+      if (radius <= 0)
+         radius = 1.0;
+
+      Ollivanders2Common o2c = new Ollivanders2Common(p);
+      List<Entity> entities = o2c.getCloseEntities(location, radius);
       List<Entity> close = new ArrayList<>();
+
       for (Entity e : entities)
       {
          if (e instanceof LivingEntity)
@@ -184,6 +189,8 @@ public abstract class SpellProjectile implements Teachable
          {
             close.add(e);
          }
+
+         close.add(e);
       }
       return close;
    }
@@ -225,10 +232,12 @@ public abstract class SpellProjectile implements Teachable
             living.add((LivingEntity) e);
          }
       }
+
       if (lifeTicks == 1 && player.getEyeLocation().getPitch() > 80)
       {
          living.add(player);
       }
+
       return living;
    }
 

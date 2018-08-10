@@ -44,7 +44,7 @@ public final class OPPUGNO extends DarkArts
    public void checkEffect ()
    {
       move();
-      for (LivingEntity e : getLivingEntities(1))
+      for (LivingEntity e : getLivingEntities(2))
       {
          for (SpellProjectile spell : p.getProjectiles())
          {

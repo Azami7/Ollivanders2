@@ -32,7 +32,7 @@ public final class FLIPENDO extends Charms
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> living = this.getLivingEntities(1);
+      List<LivingEntity> living = this.getLivingEntities(2);
       for (LivingEntity live : living)
       {
          if (live instanceof Player)
