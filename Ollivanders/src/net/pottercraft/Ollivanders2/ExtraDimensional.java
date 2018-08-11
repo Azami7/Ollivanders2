@@ -66,11 +66,11 @@ public abstract class ExtraDimensional extends StationarySpellObj
       loc.getBlock().setType(Material.BEDROCK);
    }
 
-   public Set<Block> getBlocksInCube (Location loc)
+   private Set<Block> getBlocksInCube (Location loc)
    {
       Block center = loc.getBlock();
-      int blockRadius = (int) (dimenRadius + 1);
-      Set<Block> blockList = new HashSet<Block>();
+      int blockRadius = dimenRadius + 1;
+      Set<Block> blockList = new HashSet<>();
       for (int x = -blockRadius; x <= blockRadius; x++)
       {
          for (int y = -blockRadius; y <= blockRadius; y++)
@@ -123,7 +123,7 @@ public abstract class ExtraDimensional extends StationarySpellObj
    /**
     * Returns the location of the spell in the extra dimension.
     */
-   public OLocation getEDLoc ()
+   protected OLocation getEDLoc ()
    {
       return edLoc;
    }

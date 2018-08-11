@@ -108,7 +108,6 @@ public class O2Houses
     */
    public String getHouseName(O2HouseType house)
    {
-      //TODO allow house names to be set via config
       if (house == null)
          return null;
 
@@ -151,7 +150,6 @@ public class O2Houses
       if (Ollivanders2.debug)
          p.getLogger().info("getHouseType: getting type for " + h);
 
-      //TODO allow house names to be set via config
       if (h.equalsIgnoreCase("Hufflepuff"))
          return O2HouseType.HUFFLEPUFF;
       else if (h.equalsIgnoreCase("Gryffindor"))
@@ -171,7 +169,6 @@ public class O2Houses
     */
    public ArrayList getAllHouseNames ()
    {
-      //TODO allow house names to be set via config
       ArrayList<String> houseNames = new ArrayList<>();
       houseNames.add("Hufflepuff");
       houseNames.add("Gryffindor");

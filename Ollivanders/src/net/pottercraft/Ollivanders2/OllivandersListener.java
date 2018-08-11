@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2;
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Effect.*;
 import net.pottercraft.Ollivanders2.Effect.SILENCIO;
+import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.*;
 import net.pottercraft.Ollivanders2.Potion.Potions;
 import net.pottercraft.Ollivanders2.StationarySpell.*;

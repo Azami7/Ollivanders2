@@ -21,6 +21,9 @@ import Quidditch.Arena;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.House.O2Houses;
+import net.pottercraft.Ollivanders2.Player.O2Player;
+import net.pottercraft.Ollivanders2.Player.O2Players;
+import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import net.pottercraft.Ollivanders2.Potion.O2Potion;
@@ -49,9 +52,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import static net.pottercraft.Ollivanders2.Ollivanders2Common.intToYear;
-import static net.pottercraft.Ollivanders2.Ollivanders2Common.yearToInt;
 
 /**
  * Ollivanders2 plugin object
@@ -470,7 +470,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //year
-      summary = summary + "Year: " + yearToInt(o2Player.getYear()) + "\n";
+      summary = summary + "Year: " + O2PlayerCommon.yearToInt(o2Player.getYear()) + "\n";
 
       // spells
       Map<Spells, Integer> spells = o2Player.getKnownSpells();
@@ -907,7 +907,7 @@ public class Ollivanders2 extends JavaPlugin
             }
             O2Player o2p = getO2Player(player);
             sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                        + "Player " + p + " is in year " + yearToInt(o2p.getYear()));
+                        + "Player " + p + " is in year " + O2PlayerCommon.yearToInt(o2p.getYear()));
             return true;
          }
       }
@@ -1001,7 +1001,7 @@ public class Ollivanders2 extends JavaPlugin
          usageMessageYearSet(sender);
          return true;
       }
-      o2p.setYear(intToYear(year));
+      o2p.setYear(O2PlayerCommon.intToYear(year));
       return true;
    }
 
@@ -1022,9 +1022,9 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
       O2Player o2p = getO2Player(player);
-      int year = yearToInt(o2p.getYear()) + yearChange;
+      int year = O2PlayerCommon.yearToInt(o2p.getYear()) + yearChange;
       if (year > 0 && year < 8) {
-         o2p.setYear(intToYear(year));
+         o2p.setYear(O2PlayerCommon.intToYear(year));
       }
       return true;
    }
@@ -1131,8 +1131,6 @@ public class Ollivanders2 extends JavaPlugin
       cloakMeta.setDisplayName("Cloak of Invisibility");
       cloak.setItemMeta(cloakMeta);
       kit.add(cloak);
-
-      //TODO resurrection stone
 
       givePlayerKit(player, kit);
 
@@ -1615,7 +1613,7 @@ public class Ollivanders2 extends JavaPlugin
             {
                String itemName = stack.getItemMeta().getDisplayName();
                List<String> lore = stack.getItemMeta().getLore();
-               //TODO refactor this - item name should contain "wand" and lore should not just contain "and" but have the correct components
+
                if (lore.get(0).split(" and ").length == 2)
                {
                   return true;

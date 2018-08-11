@@ -11,9 +11,9 @@ import java.util.Map.Entry;
 
 public class GsonDataPersistenceLayer implements DataPersistenceLayer
 {
-   Gson gson;
-   Ollivanders2 p;
-   Ollivanders2Common common;
+   private Gson gson;
+   private Ollivanders2 p;
+   private Ollivanders2Common common;
 
    private String saveDirectory = "plugins/Ollivanders2";
    private String housesJSONFile = "O2Houses.txt";
@@ -21,6 +21,11 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
    private String o2PlayerJSONFile = "O2Players.txt";
    private String o2StationarySpellsJSONFile = "O2StationarySpells.txt";
 
+   /**
+    * Constructor
+    *
+    * @param plugin
+    */
    public GsonDataPersistenceLayer (Ollivanders2 plugin)
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
@@ -29,6 +34,11 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       common = new Ollivanders2Common(p);
    }
 
+   /**
+    * Write the O2house data
+    *
+    * @param map a map of player and house data as strings
+    */
    @Override
    public void writeHouses (Map<UUID, O2Houses.O2HouseType> map)
    {
@@ -43,6 +53,11 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       writeJSON(json, housesJSONFile);
    }
 
+   /**
+    * Write O2House points
+    *
+    * @param map a map of the O2House points data as strings
+    */
    @Override
    public void writeHousePoints (Map<O2Houses.O2HouseType, Integer> map)
    {
@@ -56,6 +71,11 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       writeJSON(json, housePointsJSONFile);
    }
 
+   /**
+    * Write the O2Player data
+    *
+    * @param map a map of the player data as strings
+    */
    @Override
    public void writeO2Players (Map <String, Map<String, String>> map)
    {
@@ -63,6 +83,11 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       writeJSON(json, o2PlayerJSONFile);
    }
 
+   /**
+    * Write the stationary spells json file
+    *
+    * @param map a map of stationary spell data as strings
+    */
    @Override
    public void writeO2StationarySpells (List <Map<String, String>> map)
    {
@@ -70,6 +95,11 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       writeJSON(json, o2StationarySpellsJSONFile);
    }
 
+   /**
+    * Read the O2House data from json
+    *
+    * @return a map of player UUIDs and their O2House
+    */
    @Override
    public Map<UUID, O2Houses.O2HouseType> readHouses ()
    {
@@ -104,7 +134,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
          catch (Exception e)
          {
             p.getLogger().warning("Failed to convert house " + house);
-            if (p.debug)
+            if (Ollivanders2.debug)
                e.printStackTrace();
 
             continue;
@@ -112,13 +142,18 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
 
          map.put(pid, hType);
 
-         if (p.debug)
+         if (Ollivanders2.debug)
             p.getLogger().info("Read " + playerID + " : " + house);
       }
 
       return map;
    }
 
+   /**
+    * read the house points json data
+    *
+    * @return a map of O2Houses and their points
+    */
    @Override
    public Map<O2Houses.O2HouseType, Integer> readHousePoints ()
    {
@@ -148,7 +183,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
          catch (Exception e)
          {
             p.getLogger().warning("Failed to convert house " + house);
-            if (p.debug)
+            if (Ollivanders2.debug)
                e.printStackTrace();
 
             continue;
@@ -162,13 +197,18 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
 
          map.put(hType, pts);
 
-         if (p.debug)
+         if (Ollivanders2.debug)
             p.getLogger().info("Read " + house + " : " + points);
       }
 
       return map;
    }
 
+   /**
+    * Read the O2Players json file
+    *
+    * @return a map of the player json data
+    */
    @Override
    public Map <String, Map<String, String>> readO2Players ()
    {
@@ -183,6 +223,12 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       return strMap;
    }
 
+   /**
+    * Write json data to a file.
+    *
+    * @param json the json data to write
+    * @param path the path to the json file
+    */
    private synchronized void writeJSON (String json, String path)
    {
       // make sure directory exists
@@ -210,7 +256,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       catch (Exception e)
       {
          p.getLogger().warning("Error creating save file " + saveFile);
-         if (p.debug)
+         if (Ollivanders2.debug)
          {
             e.printStackTrace();
          }
@@ -224,26 +270,23 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
                new FileOutputStream(saveFile), "UTF-8"));
 
          bWriter.write(json);
-         //bWriter.newLine();
          bWriter.flush();
          bWriter.close();
       }
       catch (Exception e)
       {
          p.getLogger().warning("Unable to write save file " + saveFile);
-         if (p.debug)
+         if (Ollivanders2.debug)
          {
             e.printStackTrace();
          }
-
-         return;
       }
    }
 
    /**
     * Reads json from the specified file.
     *
-    * @param path
+    * @param path path to the json file
     * @return the json read or null if the file could not be read
     */
    private String readJSON (String path)
@@ -271,7 +314,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       catch (Exception e)
       {
          p.getLogger().warning("Error trying to read " + saveFile + ". Skipping.");
-         if (p.debug)
+         if (Ollivanders2.debug)
          {
             e.printStackTrace();
          }
@@ -298,7 +341,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       catch (Exception e)
       {
          p.getLogger().warning("Error trying to read " + saveFile + ". Skipping.");
-         if (p.debug)
+         if (Ollivanders2.debug)
          {
             e.printStackTrace();
          }
