@@ -59,7 +59,7 @@ public abstract class Book
     */
    public Book ()
    {
-      author = "Azami7";
+      author = "Unknown";
       title = "Untitled";
       shortTitle = "Untitled";
       toc = "";
