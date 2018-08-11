@@ -33,17 +33,18 @@ public abstract class Book
     * Cannot be more than 32 characters or it will appear blank.
     */
    protected String shortTitle;
-   protected BookMeta bookMeta;
+   private BookMeta bookMeta;
    protected O2MagicBranch branch;
-   protected String toc;
+   private String toc;
    /**
     * No more than 256 characters
     */
-   protected String openingPage;
+   String openingPage;
+
    /**
     * No more than 256 characters
     */
-   protected String closingPage;
+   String closingPage;
 
    protected Ollivanders2 p;
 
@@ -58,9 +59,9 @@ public abstract class Book
     */
    public Book ()
    {
-      author = new String ("Azami7");
-      title = new String ("Untitled");
-      shortTitle = new String ("Untitled");
+      author = "Unknown";
+      title = "Untitled";
+      shortTitle = "Untitled";
       toc = "";
       openingPage = "";
       closingPage = "";
@@ -86,7 +87,7 @@ public abstract class Book
       String titlePage = title + "\n\nby " + author;
       bookMeta.addPage(titlePage);
 
-      toc = new String("Contents:\n\n");
+      toc = "Contents:\n\n";
       ArrayList<String> mainContent = new ArrayList<>();
 
       // add the names of all the book contents
@@ -95,19 +96,17 @@ public abstract class Book
       {
          bookContents.add(spell.toString());
       }
-      for (String potion : potions)
-      {
-         bookContents.add(potion);
-      }
+
+      bookContents.addAll(potions);
 
       for (String content : bookContents)
       {
-         String name = BookTexts.getName(content);
+         String name = p.books.spellText.getName(content);
          toc = toc + name + "\n";
 
          String text;
-         String mainText = BookTexts.getText(content);
-         String flavorText = BookTexts.getFlavorText(content);
+         String mainText = p.books.spellText.getText(content);
+         String flavorText = p.books.spellText.getFlavorText(content);
 
          if (flavorText == null)
          {
@@ -119,10 +118,7 @@ public abstract class Book
          // create the pages for this spell
          ArrayList<String> pages = createPages(text);
 
-         for (String p : pages)
-         {
-            mainContent.add(p);
-         }
+         mainContent.addAll(pages);
       }
 
       // add TOC page
@@ -149,7 +145,7 @@ public abstract class Book
    /**
     * Create the pages for the spells.
     *
-    * @param text
+    * @param text the text for this spell
     * @return a list of the spell pages
     */
    private ArrayList<String> createPages (String text)
@@ -158,15 +154,13 @@ public abstract class Book
       ArrayList<String> words = getWords(text);
 
       // turn the word list in to pages
-      ArrayList<String> pages = makePages(words);
-
-      return pages;
+      return makePages(words);
    }
 
    /**
     * Get a list of all the words in a spell text.
     *
-    * @param text
+    * @param text the book text for this spell
     * @return a list of the words in a text.
     */
    private ArrayList<String> getWords (String text)
@@ -203,7 +197,7 @@ public abstract class Book
 
       // first page
       int remaining = 175;
-      String page = new String();
+      String page = "";
 
       // first page
       while (remaining > 0)
@@ -230,7 +224,7 @@ public abstract class Book
       while (!words.isEmpty())
       {
          remaining = 200;
-         page = new String();
+         page = "";
 
          while (remaining > 0)
          {
@@ -273,10 +267,7 @@ public abstract class Book
          lore.add(s);
       }
 
-      for (String p : potions)
-      {
-         lore.add(p);
-      }
+      lore.addAll(potions);
 
       return lore;
    }

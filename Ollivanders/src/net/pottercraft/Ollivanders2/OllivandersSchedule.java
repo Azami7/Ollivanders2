@@ -9,6 +9,7 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.UUID;
 
+import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.Bukkit;
@@ -30,7 +31,6 @@ import net.pottercraft.Ollivanders2.Effect.Effect;
 import net.pottercraft.Ollivanders2.Effect.VENTO_FOLIO;
 import net.pottercraft.Ollivanders2.Spell.Spell;
 import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpell;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
 import static net.pottercraft.Ollivanders2.Ollivanders2Common.isInvisibilityCloak;

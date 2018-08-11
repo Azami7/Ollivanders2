@@ -1,7 +1,6 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Potion.*;
 
 /**
  * The Book of Potions is a book concerned with Potion-making, written by wizard Zygmunt Budge. Like with Miranda

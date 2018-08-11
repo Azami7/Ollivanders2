@@ -14,7 +14,7 @@ public final class WORLD_OF_COLOR extends Book
    public WORLD_OF_COLOR ()
    {
       shortTitle = title = "World of Color";
-      author = "Andromeda Tonks";
+      author = "Nymphadora Tonks";
       branch = O2MagicBranch.CHARMS;
 
       openingPage = "\"Mere color, unspoiled by meaning, and unallied with definite form, can speak to the soul in a thousand different ways.\"";
