@@ -34,12 +34,12 @@ public class HORCRUX extends StationarySpellObj implements StationarySpell
 
    public void checkEffect ()
    {
-      List<LivingEntity> entities = getLivingEntities();
+      List<LivingEntity> entities = getCloseLivingEntities();
       for (LivingEntity entity : entities)
       {
          if (entity instanceof Player)
          {
-            if (entity.getUniqueId() != getPlayerUUID())
+            if (entity.getUniqueId() != getCasterID())
             {
                Player player = (Player) entity;
                if (player.isPermissionSet("Ollivanders2.BYPASS"))

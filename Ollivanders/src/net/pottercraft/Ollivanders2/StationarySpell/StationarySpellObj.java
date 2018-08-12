@@ -2,19 +2,14 @@ package net.pottercraft.Ollivanders2.StationarySpell;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
+import java.util.Collection;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.OLocation;
-import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -29,17 +24,17 @@ public abstract class StationarySpellObj implements Serializable
    Ollivanders2 p;
    public UUID playerUUID;
    public StationarySpells name;
-   public OLocation location;
+   public Location location;
    public int duration;
    public boolean kill = false;
    public boolean active = true;
    public int radius;
 
-   public StationarySpellObj (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration)
+   public StationarySpellObj (Ollivanders2 plugin, Player player, Location loc, StationarySpells name, Integer radius, Integer duration)
    {
       p = plugin;
 
-      this.location = new OLocation(location);
+      location = loc;
       this.name = name;
       playerUUID = player.getUniqueId();
       this.duration = duration;
@@ -95,74 +90,29 @@ public abstract class StationarySpellObj implements Serializable
     */
    public Block getBlock ()
    {
-      return location.toLocation().getBlock();
+      return location.getBlock();
    }
 
    /**
-    * Gets entities within radius of stationary spell
+    * Get living entities who's eye location is within the radius.
     *
-    * @return List of entities within one block of projectile
+    * @return List of living entities with an eye location within radius
     */
-   public List<Entity> getCloseEntities ()
+   public List<LivingEntity> getCloseLivingEntities ()
    {
-      List<Entity> entities = Bukkit.getServer().getWorld(location.getWorld()).getEntities();
-      List<Entity> close = new ArrayList<>();
-      for (Entity e : entities)
+      Collection<LivingEntity> entities = p.common.getLivingEntitiesInRadius(location, radius);
+      List<LivingEntity> close = new ArrayList<>();
+
+      /* only add living entities if their eye location is within the radius */
+      for (LivingEntity e : entities)
       {
-         if (e instanceof LivingEntity)
+         if (location.distance(e.getEyeLocation()) < radius)
          {
-            if (location.distance(((LivingEntity) e).getEyeLocation()) < radius)
-            {
-               close.add(e);
-            }
-         }
-         else
-         {
-            if (e.getLocation().distance(location.toLocation()) < radius)
-            {
-               close.add(e);
-            }
+            close.add(e);
          }
       }
+
       return close;
-   }
-
-   /**
-    * Gets item entities within radius of the projectile
-    *
-    * @return List of item entities within radius of projectile
-    */
-   public List<Item> getItems ()
-   {
-      List<Entity> entities = getCloseEntities();
-      List<Item> items = new ArrayList<>();
-      for (Entity e : entities)
-      {
-         if (e instanceof Item)
-         {
-            items.add((Item) e);
-         }
-      }
-      return items;
-   }
-
-   /**
-    * Gets all LivingEntity within radius of projectile
-    *
-    * @return List of LivingEntity within radius of projectile
-    */
-   public List<LivingEntity> getLivingEntities ()
-   {
-      List<Entity> entities = getCloseEntities();
-      List<LivingEntity> living = new ArrayList<>();
-      for (Entity e : entities)
-      {
-         if (e instanceof LivingEntity)
-         {
-            living.add((LivingEntity) e);
-         }
-      }
-      return living;
    }
 
    /**
@@ -184,7 +134,7 @@ public abstract class StationarySpellObj implements Serializable
             double[] spher = new double[2];
             spher[0] = inc;
             spher[1] = azi;
-            Location e = location.toLocation().clone().add(spherToVec(spher));
+            Location e = location.clone().add(spherToVec(spher));
             e.getWorld().playEffect(e, Effect.SMOKE, 4);
          }
       }
@@ -225,39 +175,11 @@ public abstract class StationarySpellObj implements Serializable
    }
 
    /**
-    * Gets the blocks in a radius of a location.
+    * Get the ID of the player that cast the spell
     *
-    * @param loc    - The Location that is the center of the block list
-    * @param radius - The radius of the block list
-    * @return List of blocks that are within radius of the location.
+    * @return the MC UUID of the player that cast the spell
     */
-   public Set<Block> getBlocksInRadius (Location loc, double radius)
-   {
-      Block center = loc.getBlock();
-      int blockRadius = (int) (radius + 1);
-      Set<Block> blockList = new HashSet<>();
-      for (int x = -blockRadius; x <= blockRadius; x++)
-      {
-         for (int y = -blockRadius; y <= blockRadius; y++)
-         {
-            for (int z = -blockRadius; z <= blockRadius; z++)
-            {
-               blockList.add(center.getRelative(x, y, z));
-            }
-         }
-      }
-      Set<Block> returnList = new HashSet<>();
-      for (Block block : blockList)
-      {
-         if (block.getLocation().distance(center.getLocation()) < radius)
-         {
-            returnList.add(block);
-         }
-      }
-      return returnList;
-   }
-
-   public UUID getPlayerUUID ()
+   public UUID getCasterID ()
    {
       return playerUUID;
    }

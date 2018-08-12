@@ -88,9 +88,9 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
                List<StationarySpellObj> stationarys = p.stationarySpells.getActiveStationarySpells();
                for (StationarySpellObj stationary : stationarys)
                {
-                  if (stationary.name == StationarySpells.HORCRUX && stationary.getPlayerUUID().equals(player.getUniqueId()))
+                  if (stationary.name == StationarySpells.HORCRUX && stationary.getCasterID().equals(player.getUniqueId()))
                   {
-                     Location tp = stationary.location.toLocation();
+                     Location tp = stationary.location;
                      tp.setY(tp.getY() + 1);
                      player.teleport(tp);
                      player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());

@@ -43,7 +43,7 @@ public class PROTEGO_HORRIBILIS extends StationarySpellObj implements Stationary
          {
             if (isInside(proj.location))
             {
-               if (location.toLocation().distance(proj.location) > radius - 1)
+               if (location.distance(proj.location) > radius - 1)
                {
                   p.remProjectile(proj);
                }

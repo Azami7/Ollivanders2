@@ -54,7 +54,7 @@ public final class PARTIS_TEMPORUS extends Charms
       }
       for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
       {
-         if (spell.isInside(location) && spell.getPlayerUUID().equals(player.getUniqueId()))
+         if (spell.isInside(location) && spell.getCasterID().equals(player.getUniqueId()))
          {
             spell.active = false;
             spell.flair(10);

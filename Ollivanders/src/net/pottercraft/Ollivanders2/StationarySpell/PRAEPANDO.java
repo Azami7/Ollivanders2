@@ -42,8 +42,8 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
    @Override
    public void checkEffect ()
    {
-      Location edLocation = getEDLoc().toLocation().clone().add(0, 1.1, 0);
-      Location normLocation = location.toLocation();
+      Location edLocation = getEDLoc().clone().add(0, 1.1, 0);
+      Location normLocation = location;
       edLocation.getWorld().playEffect(edLocation, Effect.MOBSPAWNER_FLAMES, 0);
       normLocation.getWorld().playEffect(normLocation, Effect.MOBSPAWNER_FLAMES, 0);
       for (Entity entity : normLocation.getWorld().getEntities())
