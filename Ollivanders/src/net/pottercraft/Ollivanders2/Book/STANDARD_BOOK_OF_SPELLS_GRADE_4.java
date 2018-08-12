@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Standard Book of Spells Grade 4
@@ -15,8 +16,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends Book
 {
-   public STANDARD_BOOK_OF_SPELLS_GRADE_4 ()
+   public STANDARD_BOOK_OF_SPELLS_GRADE_4 (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = shortTitle = "Standard Book of Spells Grade 4";
       author = "Miranda Goshawk";
       branch = O2MagicBranch.CHARMS;

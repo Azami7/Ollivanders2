@@ -2,7 +2,6 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
 import org.bukkit.Material;
@@ -57,7 +56,7 @@ public abstract class Book
    /**
     * Constructor
     */
-   public Book ()
+   public Book (Ollivanders2 plugin)
    {
       author = "Unknown";
       title = "Untitled";
@@ -69,7 +68,7 @@ public abstract class Book
       spells = new ArrayList<>();
       potions = new ArrayList<>();
       bookMeta = null;
-      p = null;
+      p = plugin;
    }
 
    /**
@@ -275,14 +274,10 @@ public abstract class Book
    /**
     * Create a BookItem of this book.
     *
-    * @param plugin the O2 plugin
     * @return the book as a BookItem
     */
-   public ItemStack createBook (Ollivanders2 plugin)
+   public ItemStack createBook ()
    {
-      // make sure this is set
-      p = plugin;
-
       ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK, 1);
       List<String> lore = null;
 

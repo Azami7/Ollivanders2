@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Potion.*;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Advanced Potion-Making is a book written by Libatius Borage. As the title implies this book contains advanced recipes
@@ -15,8 +16,10 @@ import net.pottercraft.Ollivanders2.Potion.*;
  */
 public class ADVANCED_POTION_MAKING extends Book
 {
-   public ADVANCED_POTION_MAKING ()
+   public ADVANCED_POTION_MAKING (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = shortTitle = "Advanced Potion Making";
       author = "Libatius Borage";
       branch = O2MagicBranch.POTIONS;

@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Practical Defensive Magic - sent to Harry by Sirius and Lupin in his 5th year
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class PRACTICAL_DEFENSIVE_MAGIC extends Book
 {
-   public PRACTICAL_DEFENSIVE_MAGIC ()
+   public PRACTICAL_DEFENSIVE_MAGIC (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = shortTitle = "Practical Defensive Magic";
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;

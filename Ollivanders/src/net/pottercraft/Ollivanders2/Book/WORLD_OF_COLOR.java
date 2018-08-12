@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * World of Color - spells for changing colors
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public final class WORLD_OF_COLOR extends Book
 {
-   public WORLD_OF_COLOR ()
+   public WORLD_OF_COLOR (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = title = "World of Color";
       author = "Nymphadora Tonks";
       branch = O2MagicBranch.CHARMS;

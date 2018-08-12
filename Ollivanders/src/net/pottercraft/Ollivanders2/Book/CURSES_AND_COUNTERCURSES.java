@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Curses and Counter-Curses -
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class CURSES_AND_COUNTERCURSES extends Book
 {
-   public CURSES_AND_COUNTERCURSES ()
+   public CURSES_AND_COUNTERCURSES (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = shortTitle = "Curses and Counter-Curses";
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;

@@ -253,9 +253,6 @@ public class Ollivanders2 extends JavaPlugin
       if (hostileMobAnimagi)
          getLogger().info("Enabling hostile mob types for animagi.");
 
-      // potions
-      //potionParser = new PotionParser(this);
-
       getLogger().info(this + " is now enabled!");
    }
 
@@ -264,19 +261,15 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param sender the player who issued the command
     * @param cmd the command entered by the player
+    * @param commandLabel required arg for the plugin onCommand call from the server
     * @param args the arguments to the command, if any
     * @return true if the command was successful, false otherwise
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public boolean onCommand (CommandSender sender, Command cmd, String[] args)
+   public boolean onCommand (CommandSender sender, Command cmd, String commandLabel, String[] args)
    {
       if (cmd.getName().equalsIgnoreCase("Ollivanders2") || cmd.getName().equalsIgnoreCase("Olli"))
       {
-         return runOllivanders(sender, cmd, args);
-      }
-      else if (cmd.getName().equalsIgnoreCase("Okit"))
-      {
-         // okit command deprecated
          return runOllivanders(sender, cmd, args);
       }
       else if (cmd.getName().equalsIgnoreCase("Quidd"))

@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Advanced Fireworks for Fun and Profit
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public final class ADVANCED_FIREWORKS extends Book
 {
-   public ADVANCED_FIREWORKS ()
+   public ADVANCED_FIREWORKS (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = "Advanced Fireworks for Fun and Profit";
       shortTitle = "Advanced Fireworks";
       author = "George Weasley";

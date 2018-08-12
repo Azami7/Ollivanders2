@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Jinxes for the Jinxed
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class JINXES_FOR_THE_JINXED extends Book
 {
-   public JINXES_FOR_THE_JINXED ()
+   public JINXES_FOR_THE_JINXED (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = shortTitle = "Jinxes for the Jinxed";
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;

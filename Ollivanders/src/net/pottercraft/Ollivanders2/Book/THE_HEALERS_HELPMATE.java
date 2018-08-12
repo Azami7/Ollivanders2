@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * The Healer's Helpmate
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class THE_HEALERS_HELPMATE extends Book
 {
-   public THE_HEALERS_HELPMATE ()
+   public THE_HEALERS_HELPMATE (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = "The Healer's Helpmate";
       shortTitle = "The Healers Helpmate";
       author = "H. Pollingtonious";

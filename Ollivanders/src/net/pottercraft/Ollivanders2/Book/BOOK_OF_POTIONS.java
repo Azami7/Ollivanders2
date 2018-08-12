@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * The Book of Potions is a book concerned with Potion-making, written by wizard Zygmunt Budge. Like with Miranda
@@ -14,8 +15,10 @@ import net.pottercraft.Ollivanders2.O2MagicBranch;
  */
 public class BOOK_OF_POTIONS extends Book
 {
-   public BOOK_OF_POTIONS ()
+   public BOOK_OF_POTIONS (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = shortTitle = "Book Of Potions";
       author = "Zygmunt Budge";
       branch = O2MagicBranch.POTIONS;

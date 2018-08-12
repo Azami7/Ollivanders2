@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Basic Fireworks
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public final class BASIC_FIREWORKS extends Book
 {
-   public BASIC_FIREWORKS ()
+   public BASIC_FIREWORKS (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = shortTitle = "Basic Fireworks";
       author = "George Weasley";
       branch = O2MagicBranch.CHARMS;

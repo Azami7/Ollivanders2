@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
 /**
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class NUMEROLOGY_AND_GRAMMATICA extends Book
 {
-   public NUMEROLOGY_AND_GRAMMATICA ()
+   public NUMEROLOGY_AND_GRAMMATICA (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = title = "Numerology and Grammatica";
       author = "Unknown";
       branch = O2MagicBranch.ARITHMANCY;

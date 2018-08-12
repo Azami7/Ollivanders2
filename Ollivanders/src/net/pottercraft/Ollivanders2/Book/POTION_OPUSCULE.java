@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Potion.*;
 
 /**
@@ -13,8 +14,10 @@ import net.pottercraft.Ollivanders2.Potion.*;
  */
 public class POTION_OPUSCULE extends Book
 {
-   public POTION_OPUSCULE ()
+   public POTION_OPUSCULE (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = shortTitle = "Potion Opuscule";
       author = "Arsenius Jigger";
       branch = O2MagicBranch.POTIONS;

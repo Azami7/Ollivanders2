@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Potion.*;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Magical Drafts and Potions - OWL potions book
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Potion.*;
  */
 public class MAGICAL_DRAFTS_AND_POTIONS extends Book
 {
-   public MAGICAL_DRAFTS_AND_POTIONS ()
+   public MAGICAL_DRAFTS_AND_POTIONS (Ollivanders2 plugin)
    {
+      super(plugin);
+
       title = shortTitle = "Magical Drafts and Potions";
       author = "Arsenius Jigger";
       branch = O2MagicBranch.POTIONS;

@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * A Guide to Advanced Transfiguration - N.E.W.T level Transfiguration book
@@ -19,8 +20,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class ADVANCED_TRANSFIGURATION extends Book
 {
-   public ADVANCED_TRANSFIGURATION ()
+   public ADVANCED_TRANSFIGURATION (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = "Advanced Transfiguration";
       title = "A Guide to Advanced Transfiguration";
       author = "Unknown";

@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Achievements in Charming - Charms book for 1st year.
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class ACHIEVEMENTS_IN_CHARMING extends Book
 {
-   public ACHIEVEMENTS_IN_CHARMING ()
+   public ACHIEVEMENTS_IN_CHARMING (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = title = "Achievements in Charming";
       author = "Unknown";
       branch = O2MagicBranch.CHARMS;

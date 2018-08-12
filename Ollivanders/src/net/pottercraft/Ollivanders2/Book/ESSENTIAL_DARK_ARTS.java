@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Defensive Magical Theory - 5th year defense against the dark arts
@@ -11,8 +12,10 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  */
 public class ESSENTIAL_DARK_ARTS extends Book
 {
-   public ESSENTIAL_DARK_ARTS ()
+   public ESSENTIAL_DARK_ARTS (Ollivanders2 plugin)
    {
+      super(plugin);
+
       shortTitle = "Essential Dark Arts Defence";
       title = "The Essential Defence Against the Dark Arts";
       author = "Arsenius Jigger";
