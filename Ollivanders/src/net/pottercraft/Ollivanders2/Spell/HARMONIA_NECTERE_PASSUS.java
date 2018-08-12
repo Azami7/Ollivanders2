@@ -101,8 +101,8 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
                }
             }
          }
-         net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS harmoniaFrom = new net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS(player, fromLoc, StationarySpells.HARMONIA_NECTERE_PASSUS, 1, 10, toLoc);
-         net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS harmoniaTo = new net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS(player, toLoc, StationarySpells.HARMONIA_NECTERE_PASSUS, 1, 10, fromLoc);
+         net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS harmoniaFrom = new net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS(p, player, fromLoc, StationarySpells.HARMONIA_NECTERE_PASSUS, 1, 10, toLoc);
+         net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS harmoniaTo = new net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS(p, player, toLoc, StationarySpells.HARMONIA_NECTERE_PASSUS, 1, 10, fromLoc);
 
          harmoniaFrom.flair(20);
          harmoniaTo.flair(20);

@@ -6,8 +6,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Wolf;
 
-import net.pottercraft.Ollivanders2.OEffect;
-
 /**
  * Turns player into a werewolf during the full moon. Doesn't go away until death.
  *

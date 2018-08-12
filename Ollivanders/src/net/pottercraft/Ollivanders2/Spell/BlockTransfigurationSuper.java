@@ -180,7 +180,7 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
       }
 
       // get the objects to be transfigured
-      for (Block b : Ollivanders2Common.getBlocksInRadius(block.getLocation(), (int)(radius * radiusModifier)))
+      for (Block b : p.common.getBlocksInRadius(block.getLocation(), (int)(radius * radiusModifier)))
       {
          if (!canTransfigure(b))
          {

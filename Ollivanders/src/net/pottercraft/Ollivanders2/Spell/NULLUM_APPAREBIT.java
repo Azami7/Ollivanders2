@@ -44,7 +44,7 @@ public final class NULLUM_APPAREBIT extends Charms
       if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
       {
          int duration = (int) (usesModifier * 1200);
-         net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT nullum = new net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT(player, location, StationarySpells.NULLUM_APPAREBIT, 5, duration);
+         net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT nullum = new net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT(p, player, location, StationarySpells.NULLUM_APPAREBIT, 5, duration);
          nullum.flair(10);
          p.stationarySpells.addStationarySpell(nullum);
          kill();

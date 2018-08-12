@@ -14,7 +14,7 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.*;
-import net.pottercraft.Ollivanders2.OEffect;
+import net.pottercraft.Ollivanders2.Effect.OEffect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
@@ -62,11 +62,6 @@ public class O2Player
     * The MC plugin callback
     */
    private Ollivanders2 p = null;
-
-   /**
-    * Common Ollivanders2 functions
-    */
-   private Ollivanders2Common common;
 
    /**
     * A map of all the spells a player knows and the cast count.
@@ -168,8 +163,6 @@ public class O2Player
 
       // set destined wand
       initDestinedWand();
-
-      common = new Ollivanders2Common(plugin);
    }
 
    /**
@@ -197,7 +190,7 @@ public class O2Player
       if (wandWood == null || wandCore == null)
          return false;
 
-      if (p.isWand(stack))
+      if (p.common.isWand(stack))
       {
          List<String> lore = stack.getItemMeta().getLore();
          String[] comps = lore.get(0).split(O2PlayerCommon.wandLoreConjunction);
@@ -788,7 +781,7 @@ public class O2Player
             content = content + "\n";
          }
 
-         String spell = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(e.getKey().toString().toLowerCase()));
+         String spell = p.common.firstLetterCapitalize(p.common.enumRecode(e.getKey().toString().toLowerCase()));
          String count = e.getValue().toString();
          String line = spell + " " + count;
          content = content + spell + " " + count;
@@ -843,7 +836,7 @@ public class O2Player
          {
             if (masteredSpells.size() > 1)
             {
-               shiftMasterSpell();
+               shiftMasterSpell(false);
             }
             else
             {
@@ -949,19 +942,19 @@ public class O2Player
          // determine color variations for certain types
          if (animagusForm == EntityType.OCELOT)
          {
-            animagusColor = common.randomOcelotType().toString();
+            animagusColor = p.common.randomOcelotType().toString();
          }
          else if (animagusForm == EntityType.WOLF)
          {
-            animagusColor = common.randomSecondaryDyeColor().toString();
+            animagusColor = p.common.randomSecondaryDyeColor().toString();
          }
          else if (animagusForm == EntityType.HORSE)
          {
-            animagusColor = common.randomHorseColor().toString();
+            animagusColor = p.common.randomHorseColor().toString();
          }
          else if (Ollivanders2.mcVersionCheck() && animagusForm == EntityType.LLAMA)
          {
-            animagusColor = common.randomLlamaColor().toString();
+            animagusColor = p.common.randomLlamaColor().toString();
          }
 
          if (animagusColor != null && Ollivanders2.debug)

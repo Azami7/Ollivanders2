@@ -47,7 +47,7 @@ public final class REPELLO_MUGGLETON extends Charms
             && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
       {
          int duration = (int) (usesModifier * 1200);
-         net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON stat = new net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON(player, location,
+         net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON stat = new net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON(p, player, location,
                StationarySpells.REPELLO_MUGGLETON, 5, duration);
          stat.flair(10);
          p.stationarySpells.addStationarySpell(stat);

@@ -27,23 +27,24 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
 
    private final String twinLabel = "Twin";
 
-   public HARMONIA_NECTERE_PASSUS (Player player, Location location, StationarySpells name, Integer radius,
+   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius,
                                    Integer duration, Location twin)
    {
-      super(player, location, name, radius, duration);
+
+      super(plugin, player, location, name, radius, duration);
       this.twin = new OLocation(twin);
    }
 
-   public HARMONIA_NECTERE_PASSUS (Player player, Location location, StationarySpells name, Integer radius,
-                                   Integer duration, Map<String, String> spellData, Ollivanders2 plugin)
+   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius,
+                                   Integer duration, Map<String, String> spellData)
    {
-      super(player, location, name, radius, duration);
+      super(plugin, player, location, name, radius, duration);
 
-      deserializeSpellData(spellData, plugin);
+      deserializeSpellData(spellData);
    }
 
    @Override
-   public void checkEffect (Ollivanders2 p)
+   public void checkEffect ()
    {
       HARMONIA_NECTERE_PASSUS twinHarm = null;
       for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
@@ -129,7 +130,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     * @return a map of the serialized data
     */
    @Override
-   public Map<String, String> serializeSpellData (Ollivanders2 p)
+   public Map<String, String> serializeSpellData ()
    {
       Ollivanders2Common o2c = new Ollivanders2Common(p);
 
@@ -144,7 +145,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     * @param spellData a map of the saved spell data
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData, Ollivanders2 p)
+   public void deserializeSpellData (Map<String, String> spellData)
    {
       Ollivanders2Common o2c = new Ollivanders2Common(p);
 

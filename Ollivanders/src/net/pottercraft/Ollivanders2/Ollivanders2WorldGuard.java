@@ -10,7 +10,7 @@ import org.bukkit.Location;
 import com.sk89q.worldedit.Vector;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import static com.sk89q.worldguard.bukkit.BukkitUtil.*;
+import static com.sk89q.worldguard.bukkit.BukkitUtil.toVector;
 
 /**
  * Handles all WorldGuard support for Ollivanders2.  If WorldGuard is not enabled on the server, all calls
@@ -22,8 +22,8 @@ import static com.sk89q.worldguard.bukkit.BukkitUtil.*;
  */
 public class Ollivanders2WorldGuard
 {
-   WorldGuardPlugin worldGuard;
-   Ollivanders2 p;
+   private WorldGuardPlugin worldGuard;
+   private Ollivanders2 p;
 
    /**
     * Constructor.
@@ -59,8 +59,8 @@ public class Ollivanders2WorldGuard
    /**
     * Test the state of a specific WorldGuard protection.
     *
-    * @param player
-    * @param flag
+    * @param player the player to check for
+    * @param flag the state flag for this region
     * @return true if the player can take the action, false otherwise
     */
    private boolean wgTestState (Player player, Location location, StateFlag flag)
@@ -74,7 +74,7 @@ public class Ollivanders2WorldGuard
       if (regionSet != null && !regionSet.getRegions().isEmpty())
       {
          StateFlag.State state = regionSet.queryState(worldGuard.wrapPlayer(player), flag);
-         if (p.debug)
+         if (Ollivanders2.debug)
             p.getLogger().info("State of " + flag.toString() + " for " + player.getDisplayName() + " is " + state.toString());
 
          if (state == StateFlag.State.DENY)
@@ -84,7 +84,7 @@ public class Ollivanders2WorldGuard
       }
       else
       {
-         if (p.debug)
+         if (Ollivanders2.debug)
             p.getLogger().info("No regions defined here.");
 
          return true;
@@ -94,7 +94,7 @@ public class Ollivanders2WorldGuard
    /**
     * Get the regions in this location.
     *
-    * @param location
+    * @param location the locationto check
     * @return the set of regions for this location or null if there is no set.
     */
    private ApplicableRegionSet getWGRegionSet (Location location)
@@ -103,14 +103,14 @@ public class Ollivanders2WorldGuard
 
       if (worldGuard != null)
       {
-         if (p.debug)
+         if (Ollivanders2.debug)
             p.getLogger().info("Getting region manager...");
 
          RegionManager regionManager = worldGuard.getRegionManager(location.getWorld());
 
          if (regionManager != null)
          {
-            if (p.debug)
+            if (Ollivanders2.debug)
                p.getLogger().info("Getting regions...");
 
             Vector locPt = toVector(location);
@@ -126,8 +126,8 @@ public class Ollivanders2WorldGuard
     * This is done so that Ollivanders2 actions do not complete partially, such as mob transfiguration spells, and then
     * cannot complete because WorldGuard is enabled.
     *
-    * @param player
-    * @param location
+    * @param player the player to check WG for
+    * @param location the location to check (since it may not be where the player is)
     * @return true if the player is allowed to damage friendly mobs in this location, false otherwise.
     */
    public boolean checkWGFriendlyMobDamage (Player player, Location location)
@@ -139,8 +139,8 @@ public class Ollivanders2WorldGuard
     * If WorldGuard is enabled, determine if PVP is allowed in this location. This is done so that Ollivanders2 actions
     * do not complete partially, such as mob transfiguration spells, and then cannot complete because WorldGuard is enabled.
     *
-    * @param player
-    * @param location
+    * @param player the player to check WG for
+    * @param location the location to check (since it may not be where the player is)
     * @return true if the player can damage friendly mobs at this location, false otherwise
     */
    public boolean checkWGPVP (Player player, Location location)
@@ -153,8 +153,8 @@ public class Ollivanders2WorldGuard
     * Ollivanders2 actions do not complete partially, such as mob transfiguration spells, and then cannot
     * complete because WorldGuard is enabled.
     *
-    * @param player
-    * @param location
+    * @param player the player to check for
+    * @param location the location to check (since it may not be where the player is)
     * @return true if mobs can be spawned in this location, false otherwise
     */
    public boolean checkWGSpawn (Player player, Location location)
@@ -169,8 +169,8 @@ public class Ollivanders2WorldGuard
     *
     * @link https://github.com/Azami7/Ollivanders2/issues/5
     *
-    * @param player
-    * @param location
+    * @param player the player to check WG for
+    * @param location the location to check (since it may not be where the player is)
     * @return true if the player has permissions to build at their location, false otherwise
     */
    public boolean checkWGBuild (Player player, Location location)

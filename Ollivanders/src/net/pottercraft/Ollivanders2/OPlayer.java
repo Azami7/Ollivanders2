@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2;
 
+import net.pottercraft.Ollivanders2.Effect.OEffect;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
 import java.io.Serializable;
@@ -12,6 +13,7 @@ import java.util.Map;
  * Serializable player object
  *
  * @author lownes
+ * @deprecated use net.pottercraft.Ollivanders2.Player.O2Player
  */
 @Deprecated
 public class OPlayer implements Serializable

@@ -83,7 +83,7 @@ public final class WINGARDIUM_LEVIOSA extends Charms
                   collos.add((COLLOPORTUS) stat);
                }
             }
-            for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
+            for (Block block : p.common.getBlocksInRadius(location, radius))
             {
                boolean insideCollo = false;
                for (COLLOPORTUS collo : collos)

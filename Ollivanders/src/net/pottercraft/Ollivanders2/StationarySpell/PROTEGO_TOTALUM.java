@@ -17,20 +17,21 @@ import java.util.Map;
  */
 public class PROTEGO_TOTALUM extends StationarySpellObj implements StationarySpell
 {
-   public PROTEGO_TOTALUM (Player player, Location location, StationarySpells name, Integer radius, Integer duration)
+   public PROTEGO_TOTALUM (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration)
    {
-      super(player, location, name, radius, duration);
+      super(plugin, player, location, name, radius, duration);
    }
 
-   public PROTEGO_TOTALUM (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                           Map<String, String> spellData, Ollivanders2 plugin)
+   public PROTEGO_TOTALUM (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+                           Map<String, String> spellData)
    {
-      super(player, location, name, radius, duration);
+      super(plugin, player, location, name, radius, duration);
 
-      deserializeSpellData(spellData, plugin);
+      deserializeSpellData(spellData);
    }
 
-   public void checkEffect (Ollivanders2 p)
+   @Override
+   public void checkEffect ()
    {
       age();
       for (Entity entity : Bukkit.getServer().getWorld(location.getWorld()).getEntities())
@@ -65,11 +66,10 @@ public class PROTEGO_TOTALUM extends StationarySpellObj implements StationarySpe
    /**
     * Serialize all data specific to this spell so it can be saved.
     *
-    * @param p unused for this spell
     * @return a map of the serialized data
     */
    @Override
-   public Map<String, String> serializeSpellData (Ollivanders2 p)
+   public Map<String, String> serializeSpellData ()
    {
       return new HashMap<>();
    }
@@ -78,8 +78,7 @@ public class PROTEGO_TOTALUM extends StationarySpellObj implements StationarySpe
     * Deserialize the data for this spell and load the data to this spell.
     *
     * @param spellData a map of the saved spell data
-    * @param p unused for this spell
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData, Ollivanders2 p) { }
+   public void deserializeSpellData (Map<String, String> spellData) { }
 }

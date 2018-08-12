@@ -74,7 +74,7 @@ public final class BookTexts
    {
       for (Spells s : Spells.values())
       {
-         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(s))
+         if (!Ollivanders2.libsDisguisesEnabled && p.common.libsDisguisesSpells.contains(s))
          {
             continue;
          }
@@ -130,7 +130,7 @@ public final class BookTexts
             continue;
          }
 
-         String name = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(s.toString().toLowerCase()));
+         String name = p.common.firstLetterCapitalize(p.common.enumRecode(s.toString().toLowerCase()));
 
          SpellText sText = new SpellText(name, text, flavorText);
          O2MagicTextMap.put(s.toString(), sText);

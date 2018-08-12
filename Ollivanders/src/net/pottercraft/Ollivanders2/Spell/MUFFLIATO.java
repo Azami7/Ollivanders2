@@ -48,7 +48,7 @@ public final class MUFFLIATO extends Charms
             && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
       {
          int duration = (int) usesModifier * 1200;
-         net.pottercraft.Ollivanders2.StationarySpell.MUFFLIATO muffliato = new net.pottercraft.Ollivanders2.StationarySpell.MUFFLIATO(player, location,
+         net.pottercraft.Ollivanders2.StationarySpell.MUFFLIATO muffliato = new net.pottercraft.Ollivanders2.StationarySpell.MUFFLIATO(p, player, location,
                StationarySpells.MUFFLIATO, 5, duration);
          muffliato.flair(20);
          p.stationarySpells.addStationarySpell(muffliato);

@@ -263,7 +263,7 @@ public abstract class Book
 
       for (Spells spell : spells)
       {
-         String s = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(spell.toString()));
+         String s = p.common.firstLetterCapitalize(p.common.enumRecode(spell.toString()));
          lore.add(s);
       }
 

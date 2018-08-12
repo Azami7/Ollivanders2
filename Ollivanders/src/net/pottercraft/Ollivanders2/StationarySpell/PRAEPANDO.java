@@ -7,13 +7,11 @@ import java.util.Set;
 import java.util.HashSet;
 import java.util.HashMap;
 
-import net.pottercraft.Ollivanders2.Spell.INCARNATIO_EQUUS;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.ExtraDimensional;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 
@@ -27,22 +25,22 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
 
    private final String radiusLabel = "Radius";
 
-   public PRAEPANDO (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+   public PRAEPANDO (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
                      Integer dimenRadius)
    {
-      super(player, location, name, radius, duration, dimenRadius);
+      super(plugin, player, location, name, radius, duration, dimenRadius);
    }
 
-   public PRAEPANDO (Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                     Map<String, String> spellData, Ollivanders2 plugin)
+   public PRAEPANDO (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
+                     Map<String, String> spellData)
    {
-      super(player, location, name, radius, duration, 1);
+      super(plugin, player, location, name, radius, duration, 1);
 
-      deserializeSpellData(spellData, plugin);
+      deserializeSpellData(spellData);
    }
 
    @Override
-   public void checkEffect (Ollivanders2 p)
+   public void checkEffect ()
    {
       Location edLocation = getEDLoc().toLocation().clone().add(0, 1.1, 0);
       Location normLocation = location.toLocation();
@@ -86,11 +84,10 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
    /**
     * Serialize all data specific to this spell so it can be saved.
     *
-    * @param p unused for this spell
     * @return a map of the serialized data
     */
    @Override
-   public Map<String, String> serializeSpellData (Ollivanders2 p)
+   public Map<String, String> serializeSpellData ()
    {
       Map<String, String> spellData = new HashMap<>();
 
@@ -103,10 +100,9 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
     * Deserialize the data for this spell and load the data to this spell.
     *
     * @param spellData a map of the saved spell data
-    * @param p unused for this spell
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData, Ollivanders2 p)
+   public void deserializeSpellData (Map<String, String> spellData)
    {
       for (Entry<String, String> e : spellData.entrySet())
       {

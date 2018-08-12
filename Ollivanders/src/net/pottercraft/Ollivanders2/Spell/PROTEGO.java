@@ -31,7 +31,7 @@ public final class PROTEGO extends Charms
    public void checkEffect ()
    {
       net.pottercraft.Ollivanders2.StationarySpell.PROTEGO protego =
-            new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO(player, location, StationarySpells.PROTEGO, 5, 12000);
+            new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO(p, player, location, StationarySpells.PROTEGO, 5, 12000);
       protego.flair(2);
       p.stationarySpells.addStationarySpell(protego);
       kill();

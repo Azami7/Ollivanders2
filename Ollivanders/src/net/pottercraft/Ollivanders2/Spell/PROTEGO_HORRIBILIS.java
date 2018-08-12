@@ -47,7 +47,7 @@ public final class PROTEGO_HORRIBILIS extends Charms
       {
          int duration = (int) (usesModifier * 1200);
          net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_HORRIBILIS total =
-               new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_HORRIBILIS(player, location, StationarySpells.PROTEGO_HORRIBILIS, 5, duration);
+               new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_HORRIBILIS(p, player, location, StationarySpells.PROTEGO_HORRIBILIS, 5, duration);
          total.flair(10);
          p.stationarySpells.addStationarySpell(total);
          kill();

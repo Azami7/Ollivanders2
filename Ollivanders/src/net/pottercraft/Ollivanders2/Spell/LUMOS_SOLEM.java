@@ -77,7 +77,7 @@ public final class LUMOS_SOLEM extends Charms
             }
             kill = false;
             move = false;
-            for (Block block : Ollivanders2Common.getBlocksInRadius(location, usesModifier))
+            for (Block block : p.common.getBlocksInRadius(location, usesModifier))
             {
                if (block.getType() == Material.AIR)
                {

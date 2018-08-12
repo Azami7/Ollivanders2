@@ -4,16 +4,23 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 public class GsonDataPersistenceLayer implements DataPersistenceLayer
 {
    private Gson gson;
    private Ollivanders2 p;
-   private Ollivanders2Common common;
 
    private String saveDirectory = "plugins/Ollivanders2";
    private String housesJSONFile = "O2Houses.txt";
@@ -30,8 +37,6 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
       p = plugin;
-
-      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -119,7 +124,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
          if (house == null || playerID == null)
             continue;
 
-         UUID pid = common.uuidFromString(playerID);
+         UUID pid = p.common.uuidFromString(playerID);
          if (pid == null)
          {
             continue;
@@ -189,7 +194,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
             continue;
          }
 
-         pts = common.integerFromString(points);
+         pts = p.common.integerFromString(points);
          if (pts == null)
          {
             continue;

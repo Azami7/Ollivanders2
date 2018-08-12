@@ -33,16 +33,18 @@ import net.pottercraft.Ollivanders2.Spell.Transfiguration;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpells;
 import net.pottercraft.Ollivanders2.Book.Books;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -67,9 +69,7 @@ public class Ollivanders2 extends JavaPlugin
 {
    private List<SpellProjectile> projectiles = new ArrayList<>();
 
-   private Set<Prophecy> prophecy = new HashSet();
-   private Listener playerListener;
-   private OllivandersSchedule schedule;
+   private Set<Prophecy> prophecy = new HashSet<>();
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
    private O2Houses houses;
@@ -77,6 +77,8 @@ public class Ollivanders2 extends JavaPlugin
    public O2Books books;
    private Potions potions;
    public O2StationarySpells stationarySpells;
+   public Ollivanders2Common common;
+   public O2PlayerCommon playerCommon;
 
    private static String mcVersion;
    public static Random random = new Random();
@@ -110,15 +112,6 @@ public class Ollivanders2 extends JavaPlugin
 
       stationarySpells.saveO2StationarySpells();
 
-      try
-      {
-         SLAPI.save(prophecy, "plugins/Ollivanders2/prophecy.bin");
-         getLogger().finest("Saved prophecy.bin");
-      } catch (Exception e)
-      {
-         getLogger().warning("Could not save prophecy.bin");
-      }
-
       houses.saveHouses();
 	   o2Players.saveO2Players();
 
@@ -132,8 +125,9 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void onEnable ()
    {
-      playerListener = new OllivandersListener(this);
+      Listener playerListener = new OllivandersListener(this);
       getServer().getPluginManager().registerEvents(playerListener, this);
+      common = new Ollivanders2Common(this);
       //loads data
 	   if (new File("plugins/Ollivanders2/").mkdirs())
 	   {
@@ -162,18 +156,8 @@ public class Ollivanders2 extends JavaPlugin
       if (getConfig().getBoolean("debug"))
          debug = true;
 
-      try
-      {
-         prophecy = (HashSet<Prophecy>) SLAPI.load("plugins/Ollivanders2/prophecy.bin");
-         getLogger().info("Loaded save file prophecy.bin");
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Did not find prophecy.bin");
-      }
-
-      this.schedule = new OllivandersSchedule(this);
-      Bukkit.getScheduler().scheduleSyncRepeatingTask(this, this.schedule, 20L, 1L);
+      OllivandersSchedule schedule = new OllivandersSchedule(this);
+      Bukkit.getScheduler().scheduleSyncRepeatingTask(this, schedule, 20L, 1L);
 
       //floo powder recipe
       ItemStack flooPowder = new ItemStack(Material.getMaterial(fileConfig.getString("flooPowder")), 8);
@@ -225,6 +209,7 @@ public class Ollivanders2 extends JavaPlugin
       // set up players
       o2Players = new O2Players(this);
       o2Players.loadO2Players();
+      playerCommon = new O2PlayerCommon(this);
 
       // set up houses
       houses = new O2Houses(this);
@@ -254,10 +239,6 @@ public class Ollivanders2 extends JavaPlugin
                worldGuardEnabled = true;
             }
          }
-         catch (NoClassDefFoundError e)
-         {
-            worldGuardEnabled = false;
-         }
          catch (Exception e)
          {
             worldGuardEnabled = false;
@@ -281,23 +262,22 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Handle command events
     *
-    * @param sender
-    * @param cmd
-    * @param commandLabel
-    * @param args
+    * @param sender the player who issued the command
+    * @param cmd the command entered by the player
+    * @param args the arguments to the command, if any
     * @return true if the command was successful, false otherwise
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public boolean onCommand (CommandSender sender, Command cmd, String commandLabel, String[] args)
+   public boolean onCommand (CommandSender sender, Command cmd, String[] args)
    {
       if (cmd.getName().equalsIgnoreCase("Ollivanders2") || cmd.getName().equalsIgnoreCase("Olli"))
       {
-         return runOllivanders(sender, cmd, commandLabel, args);
+         return runOllivanders(sender, cmd, args);
       }
       else if (cmd.getName().equalsIgnoreCase("Okit"))
       {
          // okit command deprecated
-         return runOllivanders(sender, cmd, commandLabel, args);
+         return runOllivanders(sender, cmd, args);
       }
       else if (cmd.getName().equalsIgnoreCase("Quidd"))
       {
@@ -305,7 +285,7 @@ public class Ollivanders2 extends JavaPlugin
          {
             return true;
          }
-         return runQuidd(sender, cmd, commandLabel, args);
+         return runQuidd(sender, args);
       }
 
       return false;
@@ -341,13 +321,12 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * The main Ollivanders2 command.
     *
-    * @param sender
-    * @param cmd
-    * @param commandLabel
-    * @param args
-    * @return
+    * @param sender the player who issued the command
+    * @param cmd the command the player issued
+    * @param args the arguments for the command, if any
+    * @return true if the /ollivanders command worked, false otherwise
     */
-   private boolean runOllivanders (CommandSender sender, Command cmd, String commandLabel, String[] args)
+   private boolean runOllivanders (CommandSender sender, Command cmd, String[] args)
    {
       if (!isOp(sender))
       {
@@ -361,10 +340,10 @@ public class Ollivanders2 extends JavaPlugin
 
          if (debug)
          {
-            String argString = new String();
-            for (int i = 0; i < args.length; i++)
+            String argString = "";
+            for (String arg : args)
             {
-               argString = argString + args[i] + " ";
+               argString = argString + arg + " ";
             }
 
             getLogger().info("runOllivanders: command = " + cmd.toString() + " " + argString);
@@ -390,7 +369,7 @@ public class Ollivanders2 extends JavaPlugin
          else if (subCommand.equalsIgnoreCase("items"))
             return okitItems((Player) sender);
          else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
-            return runHouse(sender, cmd, commandLabel, args);
+            return runHouse(sender, args);
          else if (subCommand.equalsIgnoreCase("debug"))
             return toggleDebug(sender);
          else if (subCommand.equalsIgnoreCase("floo"))
@@ -430,8 +409,8 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Displays a summary of player info for the Ollivanders2 plugin
     *
-    * @param sender
-    * @return true if the command worked, false otherwise.
+    * @param sender the player who issued the command
+    * @return true if no error occurred
     */
    private boolean playerSummary (CommandSender sender)
    {
@@ -441,7 +420,7 @@ public class Ollivanders2 extends JavaPlugin
       Player player = getServer().getPlayer(sender.getName());
       O2Player o2Player = o2Players.getPlayer(player.getUniqueId());
 
-      String summary = new String("Ollivanders2 player summary:\n\n");
+      String summary = "Ollivanders2 player summary:\n\n";
 
       // wand type
       if (o2Player.foundWand())
@@ -452,7 +431,7 @@ public class Ollivanders2 extends JavaPlugin
          Spells masterSpell = o2Player.getMasterSpell();
          if (masterSpell != null)
          {
-            summary = summary + "\nMaster Spell: " + Ollivanders2Common.enumRecode(masterSpell.toString().toLowerCase());
+            summary = summary + "\nMaster Spell: " + common.enumRecode(masterSpell.toString().toLowerCase());
          }
 
          summary = summary + "\n";
@@ -520,15 +499,13 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * The house subCommand for managing everything related to houses.
     *
-    * @param sender
-    * @param cmd
-    * @param commandLabel
-    * @param args
-    * @return
+    * @param sender the player that issued the command
+    * @param args the arguments to the command, if any
+    * @return true if no error occurred
     */
-   private boolean runHouse (CommandSender sender, Command cmd, String commandLabel, String[] args)
+   private boolean runHouse (CommandSender sender, String[] args)
    {
-      if (getConfig().getBoolean("houses") == false)
+      if (!getConfig().getBoolean("houses"))
       {
          sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
                + "House are not currently enabled for your server."
@@ -597,9 +574,9 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * List all houses or the members of a house
     *
-    * @param sender
-    * @param args
-    * @return true if the command succeeds.
+    * @param sender the player who issued the command
+    * @param args the arguments for the command, if any
+    * @return true if no error occurred
     */
    private boolean runListHouse (CommandSender sender, String args[])
    {
@@ -615,7 +592,7 @@ public class Ollivanders2 extends JavaPlugin
          if (house != null)
          {
             ArrayList<String> members = houses.getHouseMembers(house);
-            String memberStr = new String();
+            String memberStr = "";
 
             if (members.isEmpty())
                memberStr = "no members";
@@ -637,7 +614,7 @@ public class Ollivanders2 extends JavaPlugin
                + "Invalid house name '" + targetHouse + "'");
       }
 
-      String houseNames = new String();
+      String houseNames = "";
       ArrayList<String> h = houses.getAllHouseNames();
 
       for (String name : h)
@@ -659,11 +636,11 @@ public class Ollivanders2 extends JavaPlugin
     * b) an invalid house name is specified
     * c) they have already been sorted
     *
-    * @param sender
-    * @param targetPlayer
-    * @param targetHouse
+    * @param sender the player that issued the command
+    * @param targetPlayer the player to sort
+    * @param targetHouse the house to sort the player to
     * @param forcesort should the sort happen even if the player is already sorted
-    * @return true unless an error occurs
+    * @return true unless an error occurred
     */
    private boolean runSort (CommandSender sender, String targetPlayer, String targetHouse, boolean forcesort)
    {
@@ -727,7 +704,7 @@ public class Ollivanders2 extends JavaPlugin
 
    /**
     * Usage message for /ollivanders house sort
-    * @param sender
+    * @param sender the player that issued the command
     */
    private void usageMessageHouseSort (CommandSender sender)
    {
@@ -739,8 +716,8 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Manage house points.
     *
-    * @param sender
-    * @param args
+    * @param sender the player that issued the command
+    * @param args the arguments for the command, if any
     * @return true unless an error occurs
     */
    private boolean runHousePoints (CommandSender sender, String[] args)
@@ -787,7 +764,7 @@ public class Ollivanders2 extends JavaPlugin
                return true;
             }
 
-            int value = 0;
+            int value;
 
             try
             {
@@ -822,7 +799,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Display the usage message for /ollivanders2 house points
     *
-    * @param sender
+    * @param sender the player that issued the command
     */
    private void usageMessageHousePoints (CommandSender sender)
    {
@@ -840,14 +817,14 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * The year subCommand for managing everything related to years.
     *
-    * @param sender
-    * @param args
-    * @return
+    * @param sender the player that issued the command
+    * @param args the arguments for the command, if any
+    * @return true unless an error occurred
     */
 
    private boolean runYear (CommandSender sender, String[] args)
    {
-      if (getConfig().getBoolean("years") == false)
+      if (!getConfig().getBoolean("years"))
       {
          sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
                  + "Years are not currently enabled for your server."
@@ -920,7 +897,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Display the usage message for /ollivanders2 year set
     *
-    * @param sender
+    * @param sender the player that issued the command
     */
    private void usageMessageYearSet (CommandSender sender)
    {
@@ -933,7 +910,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Display the usage message for /ollivanders2 year promote
     *
-    * @param sender
+    * @param sender the player that issued the command
     */
    private void usageMessageYearPromote (CommandSender sender)
    {
@@ -945,7 +922,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Display the usage message for /ollivanders2 year demote
     *
-    * @param sender
+    * @param sender the player that issued the command
     */
    private void usageMessageYearDemote (CommandSender sender)
    {
@@ -957,7 +934,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Usage message for Year subcommands.
     *
-    * @param sender
+    * @param sender the player that issued the command
     */
    private void usageMessageYear (CommandSender sender)
    {
@@ -972,13 +949,15 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Run the command to set a player's year
     *
-    * @param sender
-    * @param targetPlayer
-    * @param targetYear
-    * @return
+    * @param sender the player that issued the command
+    * @param targetPlayer the player to set the year for
+    * @param targetYear the year to set for the player
+    * @return true unless an error occurred
     */
-   private boolean runYearSet (CommandSender sender, String targetPlayer, String targetYear) {
-      if (targetPlayer == null || targetPlayer.length() < 1 || targetYear == null || targetYear.length() < 1) {
+   private boolean runYearSet (CommandSender sender, String targetPlayer, String targetYear)
+   {
+      if (targetPlayer == null || targetPlayer.length() < 1 || targetYear == null || targetYear.length() < 1)
+      {
          usageMessageYearSet(sender);
          return true;
       }
@@ -991,13 +970,18 @@ public class Ollivanders2 extends JavaPlugin
       }
       O2Player o2p = getO2Player(player);
       int year;
-      try {
+      try
+      {
          year = Integer.parseInt(targetYear);
-      } catch (NumberFormatException e) {
+      }
+      catch (NumberFormatException e)
+      {
          usageMessageYearSet(sender);
          return true;
       }
-      if (year < 1 || year > 7) {
+
+      if (year < 1 || year > 7)
+      {
          usageMessageYearSet(sender);
          return true;
       }
@@ -1008,12 +992,13 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Run promote and demote year commands
     *
-    * @param sender
-    * @param targetPlayer
-    * @param yearChange
-    * @return
+    * @param sender the player that issued the command
+    * @param targetPlayer the player to promote or demote
+    * @param yearChange the year to change the player to
+    * @return true unless an error occurred
     */
-   private boolean runYearChange (CommandSender sender, String targetPlayer, int yearChange) {
+   private boolean runYearChange (CommandSender sender, String targetPlayer, int yearChange)
+   {
       Player player = getServer().getPlayer(targetPlayer);
       if (player == null)
       {
@@ -1023,7 +1008,8 @@ public class Ollivanders2 extends JavaPlugin
       }
       O2Player o2p = getO2Player(player);
       int year = O2PlayerCommon.yearToInt(o2p.getYear()) + yearChange;
-      if (year > 0 && year < 8) {
+      if (year > 0 && year < 8)
+      {
          o2p.setYear(O2PlayerCommon.intToYear(year));
       }
       return true;
@@ -1032,17 +1018,15 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * The quidditch setup command.
     *
-    * @param sender
-    * @param cmd
-    * @param commandLabel
-    * @param args
-    * @return
+    * @param sender the player that issued the command
+    * @param args the arguments for the command, if any
+    * @return true unless an error occurred
     */
-   private boolean runQuidd (CommandSender sender, Command cmd, String commandLabel, String[] args)
+   private boolean runQuidd (CommandSender sender, String[] args)
    {
       if (args.length >= 1)
       {
-         Player player = null;
+         Player player;
          if (sender instanceof Player)
          {
             player = (Player) sender;
@@ -1064,8 +1048,8 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Toggle debug mode.
     *
-    * @param sender
-    * @return true
+    * @param sender the player that issued the command
+    * @return true unless and error occurred
     */
    private boolean toggleDebug(CommandSender sender)
    {
@@ -1090,8 +1074,8 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Reload the game configs if the command caller is an op.
     *
-    * @param sender
-    * @return
+    * @param sender the player that issued the command
+    * @return true unless an error occurred
     */
    private boolean runReloadConfigs(CommandSender sender)
    {
@@ -1105,8 +1089,8 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Give a player all the items.
     *
-    * @param player
-    * @return
+    * @param player the player to give items to
+    * @return true unless an error occurred
     */
    private boolean okitItems (Player player)
    {
@@ -1167,8 +1151,8 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Give a player all the wands.
     *
-    * @param player
-    * @return true
+    * @param player the player to give the wands to
+    * @return true unless an error occurred
     */
    private boolean okitWands (Player player)
    {
@@ -1209,31 +1193,51 @@ public class Ollivanders2 extends JavaPlugin
       }
    }
 
+   /**
+    * Get the chat dropoff distance configuration.
+    *
+    * @return the chatDropoff config value
+    */
    public int getChatDistance ()
    {
       return fileConfig.getInt("chatDropoff");
    }
 
+   /**
+    * Get all the active spell projectiles
+    *
+    * @return a list of all active spell projectiles
+    */
    public List<SpellProjectile> getProjectiles ()
    {
       return projectiles;
    }
 
-   public void addProjectile (SpellProjectile s)
+   /**
+    * Add a new spell projectile
+    *
+    * @param spell the spell projectile
+    */
+   public void addProjectile (SpellProjectile spell)
    {
-      projectiles.add(s);
+      projectiles.add(spell);
    }
 
-   public void remProjectile (SpellProjectile s)
+   /**
+    * Remove a spell projectile. This will make it stop if it has not already been killed.
+    *
+    * @param spell the spell projectile
+    */
+   public void remProjectile (SpellProjectile spell)
    {
-      projectiles.remove(s);
+      projectiles.remove(spell);
    }
 
    /**
     * Get the spell use count for the player for this spell
     *
-    * @param player
-    * @param spell
+    * @param player the player to get the count for
+    * @param spell the spell to get the count for
     * @return the spell count
     */
    public int getSpellNum (Player player, Spells spell)
@@ -1246,16 +1250,16 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Set the spell use count for a player.
     *
-    * @param player
-    * @param spell
-    * @param i
+    * @param player the player to set the spell count for
+    * @param spell the spell to set the count for
+    * @param count the count to set
     */
-   public void setSpellNum (Player player, Spells spell, int i)
+   public void setSpellNum (Player player, Spells spell, int count)
    {
       UUID pid = player.getUniqueId();
       O2Player o2p = o2Players.getPlayer(pid);
 
-      o2p.setSpellCount(spell, i);
+      o2p.setSpellCount(spell, count);
 
       o2Players.updatePlayer(pid, o2p);
    }
@@ -1263,46 +1267,43 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Increment the spell use count for a player.
     *
-    * @param player
-    * @param s
+    * @param player the player to increment the count for
+    * @param spell the spell to increment
     * @return the incremented use count for this player for this spell
     */
-   public int incSpellCount (Player player, Spells s)
+   public int incSpellCount (Player player, Spells spell)
    {
       //returns the incremented spell count
       UUID pid = player.getUniqueId();
       O2Player o2p = o2Players.getPlayer(pid);
 
-      o2p.incrementSpellCount(s);
+      o2p.incrementSpellCount(spell);
       o2Players.updatePlayer(pid, o2p);
 
-      return o2p.getSpellCount(s);
+      return o2p.getSpellCount(spell);
    }
 
    /**
-    * Increment the spell use count for a player.
+    * Increment the potion use count for a player.
     *
-    * @param player
-    * @param p
-    * @return the incremented use count for this player for this spell
+    * @param player the player to increment the count for
+    * @param potion the potion to increment
     */
-   public int incPotionCount (Player player, String p)
+   public void incPotionCount (Player player, String potion)
    {
-      //returns the incremented spell count
+      //returns the incremented potion count
       UUID pid = player.getUniqueId();
       O2Player o2p = o2Players.getPlayer(pid);
 
-      o2p.incrementPotionCount(p);
+      o2p.incrementPotionCount(potion);
       o2Players.updatePlayer(pid, o2p);
-
-      return o2p.getPotionCount(p);
    }
 
    /**
-    * Gets the OPlayer associated with the Player
+    * Gets the O2Player associated with the Player
     *
-    * @param player Player
-    * @return OPlayer of playername s
+    * @param player the player to get
+    * @return O2Player object for this player
     */
    public O2Player getO2Player (Player player)
    {
@@ -1356,9 +1357,9 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Gets the set of all player UUIDs.
     *
-    * @return a copy of the OPlayer player IDs.
+    * @return a list of all player MC UUIDs
     */
-   public ArrayList<UUID> getOPlayerKeys ()
+   public ArrayList<UUID> getO2PlayerIDs ()
    {
       return o2Players.getPlayerIDs();
    }
@@ -1366,10 +1367,10 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Can this player cast this spell?
     *
-    * @param player  - Player to check
-    * @param spell   - Spell to check
-    * @param verbose - Whether or not to inform the player of why they cannot cast a spell
-    * @return True if yes, false if not
+    * @param player Player to check
+    * @param spell Spell to check
+    * @param verbose Whether or not to inform the player of why they cannot cast a spell
+    * @return True if the player can cast this spell, false if not
     */
    public boolean canCast (Player player, Spells spell, boolean verbose)
    {
@@ -1407,13 +1408,15 @@ public class Ollivanders2 extends JavaPlugin
       return cast;
    }
 
+   /**
+    * Determine if this spell can exist here
+    *
+    * @param loc the location of the spell
+    * @param spell the spell to check
+    * @return true if the spell can exist, false otherwise
+    */
    public boolean canLive (Location loc, Spells spell)
    {
-		/**
-		 * cast is whether or not the spell can be cast.
-		 * set to false whenever it can't be
-		 * return true whenever it is in allowed-spells
-		 */
       boolean cast = true;
       double x = loc.getX();
       double y = loc.getY();
@@ -1426,7 +1429,6 @@ public class Ollivanders2 extends JavaPlugin
             String prefix = zone + ".";
             String type = config.getString(prefix + "type");
             String world = config.getString(prefix + "world");
-            String region = config.getString(prefix + "region");
             String areaString = config.getString(prefix + "area");
             boolean allAllowed = false;
             boolean allDisallowed = false;
@@ -1472,9 +1474,9 @@ public class Ollivanders2 extends JavaPlugin
             {
                List<String> areaStringList = Arrays.asList(areaString.split(" "));
                List<Integer> area = new ArrayList<>();
-               for (int i = 0; i < areaStringList.size(); i++)
+               for (String a : areaStringList)
                {
-                  area.add(Integer.parseInt(areaStringList.get(i)));
+                  area.add(Integer.parseInt(a));
                }
                if (area.size() < 6)
                {
@@ -1504,34 +1506,6 @@ public class Ollivanders2 extends JavaPlugin
                   }
                }
             }
-            /*
-            if (type.equalsIgnoreCase("WorldGuard"))
-            {
-               WorldGuardPlugin worldGuard = getWorldGuard();
-               if (worldGuard != null)
-               {
-                  RegionManager regionManager = worldGuard.getRegionManager(Bukkit.getWorld(world));
-                  if (regionManager != null)
-                  {
-                     ProtectedRegion protRegion = regionManager.getRegion(region);
-                     if (protRegion != null)
-                     {
-                        if (protRegion.contains(BukkitUtil.toVector(loc)))
-                        {
-                           if (allowedSpells.contains(spell) || allAllowed)
-                           {
-                              return true;
-                           }
-                           if (disallowedSpells.contains(spell) || allDisallowed)
-                           {
-                              cast = false;
-                           }
-                        }
-                     }
-                  }
-               }
-            }
-            */
          }
       }
       return cast;
@@ -1542,231 +1516,10 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @return FileConfiguration
     */
+   @Deprecated
    public FileConfiguration getFileConfig ()
    {
       return fileConfig;
-   }
-
-   /**
-    * Does the player hold a wand item in their primary hand?
-    *
-    * @param player - Player to check.
-    * @return True if the player holds a wand. False if not or if player is null.
-    */
-   public boolean holdsWand (Player player)
-   {
-      if (player != null && player.getInventory().getItemInMainHand() != null)
-      {
-         ItemStack held = player.getInventory().getItemInMainHand();
-         return isWand(held);
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /**
-    * Does the player hold a wand item in their hand?
-    *
-    * @since 2.2.7
-    * @param player - Player to check.
-    * @param hand - the equipment slot to check for this player
-    * @return True if the player holds a wand. False if not or if player is null.
-    */
-   public boolean holdsWand (Player player, EquipmentSlot hand)
-   {
-      if (player == null || hand == null)
-         return false;
-
-      ItemStack held;
-      if (hand == EquipmentSlot.HAND)
-      {
-         held = player.getInventory().getItemInMainHand();
-      }
-      else if (hand == EquipmentSlot.OFF_HAND)
-      {
-         held = player.getInventory().getItemInOffHand();
-      }
-      else
-         return false;
-
-      if (held == null)
-         return false;
-
-      return isWand(held);
-   }
-
-   /**
-    * Is this item stack a wand?
-    *
-    * @param stack - stack to be checked
-    * @return true if yes, false if no
-    */
-   public boolean isWand (ItemStack stack)
-   {
-      if (stack != null)
-      {
-         if (stack.getType() == Material.STICK || stack.getType() == Material.BLAZE_ROD)
-         {
-            if (stack.getItemMeta().hasLore())
-            {
-               String itemName = stack.getItemMeta().getDisplayName();
-               List<String> lore = stack.getItemMeta().getLore();
-
-               if (lore.get(0).split(" and ").length == 2)
-               {
-                  return true;
-               }
-               else
-               {
-                  return false;
-               }
-            }
-            else
-            {
-               return false;
-            }
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /**
-    * Is this ItemStack the player's destined wand?
-    *
-    * @param player - Player to check the stack against.
-    * @param stack  - Itemstack to be checked
-    * @return true if yes, false if no
-    */
-   public boolean destinedWand (Player player, ItemStack stack)
-   {
-      if (isWand(stack))
-      {
-         O2Player o2Player = o2Players.getPlayer(player.getUniqueId());
-
-         if (o2Player == null)
-         {
-            getLogger().warning(player.getDisplayName() + " not found.");
-            return false;
-         }
-
-         return o2Player.isDestinedWand(stack);
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /**
-    * Finds out if an item is a broom.
-    *
-    * @param item - Item in question.
-    * @return True if yes.
-    */
-   public boolean isBroom (ItemStack item)
-   {
-      if (item.getType() == Material.getMaterial(fileConfig.getString("broomstick")))
-      {
-         if (item.containsEnchantment(Enchantment.PROTECTION_FALL))
-         {
-            ItemMeta meta = item.getItemMeta();
-            if (meta.hasLore())
-            {
-               List<String> lore = meta.getLore();
-               if (lore.contains("Flying vehicle used by magical folk"))
-               {
-                  return true;
-               }
-            }
-         }
-      }
-      return false;
-   }
-
-   /**
-    * Checks what kind of wand a player holds in their primary hand. Returns a value based on the
-    * wand and it's relation to the player.
-    *
-    * @assumes player not null, player holding a wand
-    * @param player - Player being checked. The player must be holding a wand.
-    * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
-    * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
-    * 0.5 - The wand is the elder wand and it is allied to player.
-    */
-   public double wandCheck (Player player)
-   {
-      ItemStack item = player.getInventory().getItemInMainHand();
-
-      return doWandCheck(player, item);
-   }
-
-   /**
-    * Checks what kind of wand a player holds. Returns a value based on the wand and it's relation to the player.
-    *
-    * @since 2.2.7
-    * @assumes player not null, player is holding a wand in the equipment slot passed in
-    * @param player - Player being checked. The player must be holding a wand.
-    * @param hand - the hand that is holding the wand to check.
-    * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
-    * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
-    * 0.5 - The wand is the elder wand and it is allied to player.
-    */
-   public double wandCheck (Player player, EquipmentSlot hand)
-   {
-      ItemStack item;
-
-      if (hand == EquipmentSlot.HAND)
-      {
-         item = player.getInventory().getItemInMainHand();
-      }
-      else
-      {
-         item = player.getInventory().getItemInOffHand();
-      }
-
-      return doWandCheck(player, item);
-   }
-
-   /**
-    * Checks what kind of wand a player holds. Returns a value based on the wand and it's relation to the player.
-    *
-    * @since 2.2.7
-    * @param player - the player to check
-    * @param item - the
-    * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
-    * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
-    * 0.5 - The wand is the elder wand and it is allied to player.
-    */
-   double doWandCheck (Player player, ItemStack item)
-   {
-      List<String> lore = item.getItemMeta().getLore();
-      if (lore.get(0).equals("Blaze and Ender Pearl")) // elder wand
-      {
-         if (lore.size() == 2 && lore.get(1).equals(player.getUniqueId().toString()))
-         {
-            // wand is Elder Wand and allied to player
-            return 0.5;
-         }
-      }
-      else // not the elder wand
-      {
-         if (!destinedWand(player, player.getInventory().getItemInMainHand()))
-         {
-            // not the player's destined wand
-            return 2;
-         }
-      }
-
-      return 1;
    }
 
    /**
@@ -1775,6 +1528,7 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @author Tomsik68
     */
+   @Deprecated
    public static class SLAPI
    {
       public static void save (Object obj, String path) throws Exception
@@ -1811,7 +1565,7 @@ public class Ollivanders2 extends JavaPlugin
     * Give floo powder to player.
     *
     * @since 2.2.4
-    * @param player
+    * @param player the player to give the floo powder to
     * @return true if successful, false otherwise
     */
    private boolean giveFlooPowder (Player player)
@@ -1835,8 +1589,8 @@ public class Ollivanders2 extends JavaPlugin
     * Run the books subcommands
     *
     * @since 2.2.4
-    * @param sender
-    * @param args
+    * @param sender the player that issued the command
+    * @param args the arguments to the book command
     * @return true if successful, false otherwise
     */
    private boolean runBooks (CommandSender sender, String[] args)
@@ -1848,99 +1602,94 @@ public class Ollivanders2 extends JavaPlugin
          usageMessageBooks(sender);
          return true;
       }
-      else if (args.length >= 2)
+
+
+      List<ItemStack> bookStack = new ArrayList<>();
+      if (args[1].equalsIgnoreCase("allbooks"))
       {
-         List<ItemStack> bookStack = new ArrayList<>();
-         if (args[1].equalsIgnoreCase("allbooks"))
-         {
-            bookStack = books.getAllBooks();
+         bookStack = books.getAllBooks();
 
-            if (bookStack.isEmpty())
-            {
-               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                     + "There are no Ollivanders2 books.");
-
-               return true;
-            }
-         }
-         else if (args[1].equalsIgnoreCase("list"))
+         if (bookStack.isEmpty())
          {
-            // olli books list
-            listAllBooks(targetPlayer);
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                  + "There are no Ollivanders2 books.");
+
             return true;
          }
-         else if (args[1].equalsIgnoreCase("give"))
+      }
+      else if (args[1].equalsIgnoreCase("list"))
+      {
+         // olli books list
+         listAllBooks(targetPlayer);
+         return true;
+      }
+      else if (args[1].equalsIgnoreCase("give"))
+      {
+         // olli books give <player> <book name>
+         if (args.length < 4)
          {
-            // olli books give <player> <book name>
-            if (args.length < 4)
-            {
-               usageMessageBooks(sender);
-            }
+            usageMessageBooks(sender);
+         }
 
-            //next arg is the target player
-            String targetName = args[2];
-            targetPlayer = getServer().getPlayer(targetName);
-            if (targetPlayer == null)
-            {
-               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                     + "Did not find player \"" + targetName + "\".\n");
+         //next arg is the target player
+         String targetName = args[2];
+         targetPlayer = getServer().getPlayer(targetName);
+         if (targetPlayer == null)
+         {
+            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+                  + "Did not find player \"" + targetName + "\".\n");
 
-               return true;
-            }
-            else
-            {
-               if (Ollivanders2.debug)
-                  getLogger().info("player to give book to is " + targetName);
-            }
-
-            // args after "book give <player>" are book name
-            String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
-            ItemStack bookItem = getBookFromArgs(subArgs, sender);
-
-            if (bookItem == null)
-            {
-               return true;
-            }
-
-            bookStack.add(bookItem);
+            return true;
          }
          else
          {
-            String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
-            ItemStack bookItem = getBookFromArgs(subArgs, sender);
-            if (bookItem == null)
-            {
-               return true;
-            }
-
-            bookStack.add(bookItem);
+            if (Ollivanders2.debug)
+               getLogger().info("player to give book to is " + targetName);
          }
 
-         givePlayerKit(targetPlayer, bookStack);
+         // args after "book give <player>" are book name
+         String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
+         ItemStack bookItem = getBookFromArgs(subArgs, sender);
+
+         if (bookItem == null)
+         {
+            return true;
+         }
+
+         bookStack.add(bookItem);
       }
       else
       {
-         usageMessageBooks(sender);
+         String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
+         ItemStack bookItem = getBookFromArgs(subArgs, sender);
+         if (bookItem == null)
+         {
+            return true;
+         }
+
+         bookStack.add(bookItem);
       }
+
+      givePlayerKit(targetPlayer, bookStack);
 
       return true;
    }
 
    /**
     * Get the book
-    * @param args
-    * @param sender
-    * @return
+    * @param args the arguments for the book command
+    * @param sender the player that issued the command
+    * @return true unless an error occurred
     */
    private ItemStack getBookFromArgs (String[] args, CommandSender sender)
    {
       ItemStack bookItem;
 
-      String bookName = new String();
+      String bookName = "";
 
-      for (int i = 0; i < args.length; i++)
+      for (String arg : args)
       {
-         String s = args[i].toUpperCase();
+         String s = arg.toUpperCase();
 
          if (bookName.length() < 1)
          {
@@ -1979,7 +1728,7 @@ public class Ollivanders2 extends JavaPlugin
     * Usage message for Books subcommands.
     *
     * @since 2.2.4
-    * @param sender
+    * @param sender the player that issued the command
     */
    private void usageMessageBooks (CommandSender sender)
    {
@@ -1997,7 +1746,7 @@ public class Ollivanders2 extends JavaPlugin
     * This is not the message to use for bookLearning enforcement.
     *
     * @since 2.2.5
-    * @param player
+    * @param player the player that cast the spell
     */
    public void spellCannotBeCastMessage (Player player)
    {
@@ -2010,7 +1759,7 @@ public class Ollivanders2 extends JavaPlugin
     * This is not the message to use for bookLearning enforcement.
     *
     * @since 2.2.5
-    * @param player
+    * @param player the player to send the cooldown message to
     */
    public void spellCoolDownMessage (Player player)
    {
@@ -2021,7 +1770,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Set the players name to their team color if they are sorted.
     *
-    * @param player
+    * @param player the player to set the color for
     */
    public void setPlayerTeamColor (Player player)
    {
@@ -2029,10 +1778,10 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Gives the command sender 1 of every Ollivanders2 potion.
+    * Gives the specified player 1 of every Ollivanders2 potion.
     *
-    * @param player
-    * @return
+    * @param player the player to give the potions to
+    * @return true unless an error occurred
     */
    private boolean givePotions (Player player)
    {
@@ -2066,6 +1815,11 @@ public class Ollivanders2 extends JavaPlugin
       return potions;
    }
 
+   /**
+    * Show a list of all Ollivanders2 books
+    *
+    * @param player the player to display the list to
+    */
    public void listAllBooks (Player player)
    {
       String titleList = "Book Titles:";

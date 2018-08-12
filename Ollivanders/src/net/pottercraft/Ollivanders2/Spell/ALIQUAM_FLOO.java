@@ -71,7 +71,7 @@ public final class ALIQUAM_FLOO extends Charms
                   }
                }
             }
-            net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO aliquam = new net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO(player, statLocation, StationarySpells.ALIQUAM_FLOO, 2, 10, flooName);
+            net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO aliquam = new net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO(p, player, statLocation, StationarySpells.ALIQUAM_FLOO, 2, 10, flooName);
             aliquam.flair(20);
             p.stationarySpells.addStationarySpell(aliquam);
          }
