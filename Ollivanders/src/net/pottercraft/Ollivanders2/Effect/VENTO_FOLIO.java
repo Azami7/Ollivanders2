@@ -2,30 +2,44 @@ package net.pottercraft.Ollivanders2.Effect;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import org.bukkit.entity.Player;
+
 /**
  * Grants player flight
  *
  * @author lownes
  */
-public class VENTO_FOLIO extends OEffect implements Effect
+public class VENTO_FOLIO extends O2Effect
 {
-   public VENTO_FOLIO (org.bukkit.entity.Player sender, Effects effect, int duration)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param effect the effect cast
+    * @param duration the duration of the effect
+    */
+   public VENTO_FOLIO (Ollivanders2 plugin, O2EffectType effect, int duration)
    {
-      super(sender, effect, duration);
+      super(plugin, effect, duration);
    }
 
+   /**
+    * Allow player to fly until the effect ends.
+    *
+    * @param target the player affected by the effect
+    */
    @Override
-   public void checkEffect (Ollivanders2 p, org.bukkit.entity.Player owner)
+   public void checkEffect (Player target)
    {
       age(1);
       if (duration > 1)
       {
-         owner.setAllowFlight(true);
-         owner.getWorld().playEffect(owner.getLocation(), org.bukkit.Effect.SMOKE, 4);
+         target.setAllowFlight(true);
+         target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
       }
       else
       {
-         owner.setAllowFlight(false);
+         target.setAllowFlight(false);
       }
    }
 }

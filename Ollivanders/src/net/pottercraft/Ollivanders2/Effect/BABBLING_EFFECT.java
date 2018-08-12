@@ -12,7 +12,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
  * @since 2.2.7
  * @author Azami7
  */
-public class BABBLING_EFFECT extends OEffect implements Effect
+public class BABBLING_EFFECT extends O2Effect
 {
    public final ArrayList<String> dictionary = new ArrayList<String>() {{
       add("mimble");
@@ -56,25 +56,37 @@ public class BABBLING_EFFECT extends OEffect implements Effect
       add("flummadiddle");
    }};
 
-   public BABBLING_EFFECT (Player sender, Effects effect, int duration)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param effect the effect on the player
+    * @param duration the duration of this effect
+    */
+   public BABBLING_EFFECT (Ollivanders2 plugin, O2EffectType effect, int duration)
    {
-      super(sender, effect, duration);
+      super(plugin, effect, duration);
    }
 
+   /**
+    * Age this effect each game tick.
+    *
+    * @param target the player affected by the effect
+    */
    @Override
-   public void checkEffect (Ollivanders2 p, Player player)
+   public void checkEffect (Player target)
    {
       age(1);
    }
 
    /**
-    * Return a string of nonsense words from 1-5 words in length.
+    * Get nonsense text to replace what the user actually typed.
     *
-    * @return
+    * @return a string of nonsense words from 1-5 words in length
     */
    private String getNonsense ()
    {
-      String nonsense = new String();
+      String nonsense = "";
       int numWords = Math.abs(Ollivanders2.random.nextInt() % 5) + 1;
 
       for (int i = 0; i < numWords; i++)
@@ -90,7 +102,12 @@ public class BABBLING_EFFECT extends OEffect implements Effect
       return nonsense;
    }
 
-   public void doBabblingEffect (Ollivanders2 p, AsyncPlayerChatEvent event)
+   /**
+    * Change a player's chat to babbling nonsense.
+    *
+    * @param event the player chat event
+    */
+   public void doBabblingEffect (AsyncPlayerChatEvent event)
    {
       String message = event.getMessage();
       String newMessage = getNonsense();

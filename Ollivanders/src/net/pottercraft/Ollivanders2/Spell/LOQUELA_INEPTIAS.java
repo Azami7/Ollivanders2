@@ -1,6 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.Effect.Effects;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class LOQUELA_INEPTIAS extends Charms
 {
-   Effects effect = Effects.BABBLING_EFFECT;
+   O2EffectType effect = O2EffectType.BABBLING_EFFECT;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -58,7 +58,7 @@ public class LOQUELA_INEPTIAS extends Charms
             Player player = (Player) live;
             O2Player o2p = p.getO2Player(player);
             int dur = (int) (usesModifier * 1200);
-            o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BABBLING_EFFECT(player, Effects.BABBLING_EFFECT, dur));
+            o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BABBLING_EFFECT(p, O2EffectType.BABBLING_EFFECT, dur));
             p.setO2Player(player, o2p);
             kill();
             return;

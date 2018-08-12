@@ -5,18 +5,19 @@ import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
+@Deprecated
 public class OEffect implements Serializable
 {
 
    /**
     * Effect object stored in OPlayer
     */
-   public Effects name;
+   public O2EffectType name;
    private UUID casterUUID;
    public int duration;
    public boolean kill;
 
-   public OEffect (Player sender, Effects effect, int duration)
+   public OEffect (Player sender, O2EffectType effect, int duration)
    {
       casterUUID = sender.getUniqueId();
       this.duration = duration;

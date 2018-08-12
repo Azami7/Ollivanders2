@@ -1,6 +1,6 @@
 package net.pottercraft.Ollivanders2.Potion;
 
-import net.pottercraft.Ollivanders2.Effect.Effects;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
@@ -25,7 +25,7 @@ public final class WOLFSBANE_POTION extends O2Potion
       ingredients.put(Material.SUGAR, 3);
 
       name = "Wolfsbane Potion";
-      text = "This potion will relieve, though not cure, the symotoms of Lycanthropy. It is a complex potion and requires"
+      text = "This potion will relieve, though not cure, the symptoms of Lycanthropy. It is a complex potion and requires"
             + "the most advanced potion-making skills." + getIngredientsText();
 
       flavorText.add("\"There is no known cure, although recent developments in potion-making have to a great extent alleviated the worst symptoms.\" —Newton Scamander");
@@ -36,7 +36,7 @@ public final class WOLFSBANE_POTION extends O2Potion
    {
       if (!extendEffect(o2p))
       {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.WOLFSBANE_POTION(player, Effects.WOLFSBANE_POTION, duration));
+         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.WOLFSBANE_POTION(p, O2EffectType.WOLFSBANE_POTION, duration));
       }
 
       player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))

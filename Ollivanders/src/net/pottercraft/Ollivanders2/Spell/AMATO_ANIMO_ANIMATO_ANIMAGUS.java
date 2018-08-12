@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION;
-import net.pottercraft.Ollivanders2.Effect.Effects;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
@@ -124,7 +124,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
          }
          else
          {
-            o2p.addEffect(new ANIMAGUS_INCANTATION(player, Effects.ANIMAGUS_INCANTATION, 300));
+            o2p.addEffect(new ANIMAGUS_INCANTATION(p, O2EffectType.ANIMAGUS_INCANTATION, 300));
             player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
                   + "You feel slightly different.");
 

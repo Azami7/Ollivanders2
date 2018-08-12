@@ -8,13 +8,14 @@ import org.bukkit.entity.Player;
  *
  * @author lownes
  */
+@Deprecated
 public interface Effect
 {
    /**
-    * This is the effect's action. age() must be called
-    * in this if you want the effect to age and die eventually.
+    * This is the effect's action. age() must be called in this if you want the effect to age and die eventually.
     *
     * @param p The plugin, so that it can access the list of stationary and projectile spells
+    * @param target the player affected by the effect
     */
-   void checkEffect (Ollivanders2 p, Player owner);
+   void checkEffect (Ollivanders2 p, Player target);
 }
