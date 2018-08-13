@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
 /**
  * Ollivander2 magical potion.
  *
- * Potions can have either or both of the following types of effects:
+ * O2Potions can have either or both of the following types of effects:
  *
  * PotionEffect - this is a standard Minecraft potion effect such as Night Vision and is set in the item metadata in the
  * brew().
