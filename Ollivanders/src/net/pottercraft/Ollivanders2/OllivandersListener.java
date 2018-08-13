@@ -15,7 +15,7 @@ import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
 import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import net.pottercraft.Ollivanders2.Potion.O2SplashPotion;
-import net.pottercraft.Ollivanders2.Potion.Potions;
+import net.pottercraft.Ollivanders2.Potion.O2Potions;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
@@ -1428,7 +1428,7 @@ public class OllivandersListener implements Listener
          ItemMeta meta = item.getItemMeta();
          if (meta.hasLore())
          {
-            O2Potion potion = p.getPotions().findPotionByItemMeta(meta);
+            O2Potion potion = p.getO2Potions().findPotionByItemMeta(meta);
 
             if (potion != null)
                potion.drink(o2p, player);
@@ -1615,7 +1615,7 @@ public class OllivandersListener implements Listener
       Block under = cauldron.getRelative(BlockFace.DOWN);
       if (under.getType() == Material.FIRE || under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA)
       {
-         Potions potions = p.getPotions();
+         O2Potions potions = p.getO2Potions();
 
          ItemStack potion = potions.brewPotion(cauldron);
 
@@ -1658,7 +1658,7 @@ public class OllivandersListener implements Listener
       ThrownPotion thrown = event.getEntity();
       ItemMeta meta = thrown.getItem().getItemMeta();
 
-      O2Potion potion = p.getPotions().findPotionByItemMeta(meta);
+      O2Potion potion = p.getO2Potions().findPotionByItemMeta(meta);
 
       if (potion != null)
       {

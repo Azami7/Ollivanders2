@@ -2,6 +2,8 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Potion.O2Potion;
+import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
 import org.bukkit.Material;
@@ -51,7 +53,7 @@ public abstract class Book
     * No more than 11 spells and/or potions in a book or they won't fit on the table of contents.
     */
    protected ArrayList<Spells> spells;
-   protected ArrayList<String> potions;
+   protected ArrayList<O2PotionType> potions;
 
    /**
     * Constructor
@@ -89,14 +91,18 @@ public abstract class Book
       toc = "Contents:\n\n";
       ArrayList<String> mainContent = new ArrayList<>();
 
-      // add the names of all the book contents
+      // add the names of all spells in the book
       ArrayList<String> bookContents = new ArrayList<>();
       for (Spells spell : spells)
       {
          bookContents.add(spell.toString());
       }
 
-      bookContents.addAll(potions);
+      // add the name of all the potions in the book
+      for (O2PotionType potionType : potions)
+      {
+         bookContents.add(potionType.toString());
+      }
 
       for (String content : bookContents)
       {
@@ -260,13 +266,17 @@ public abstract class Book
    {
       List<String> lore = new ArrayList<>();
 
-      for (Spells spell : spells)
+      for (Spells spellType : spells)
       {
-         String s = p.common.firstLetterCapitalize(p.common.enumRecode(spell.toString()));
+         String s = p.common.firstLetterCapitalize(p.common.enumRecode(spellType.toString()));
          lore.add(s);
       }
 
-      lore.addAll(potions);
+      for (O2PotionType potionType : potions)
+      {
+         String s = p.common.firstLetterCapitalize(p.common.enumRecode(potionType.toString()));
+         lore.add(s);
+      }
 
       return lore;
    }

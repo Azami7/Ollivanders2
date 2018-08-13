@@ -1,9 +1,9 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Collection;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
@@ -20,59 +20,39 @@ import org.bukkit.inventory.meta.ItemMeta;
  *
  * @author Azami7
  */
-public class Potions
+public class O2Potions
 {
-   private final HashMap<String, String> O2PotionsMap;
+   private Ollivanders2 p;
 
-   Ollivanders2 p;
+   private HashMap <String, O2PotionType> O2PotionsLoreMap = new HashMap<>();
 
-   public Potions (Ollivanders2 plugin)
+   public O2Potions (Ollivanders2 plugin)
    {
       p = plugin;
 
-      ArrayList<O2Potion> potions = new ArrayList<>();
-      potions.add(new ANIMAGUS_POTION(p));
-      potions.add(new ANTIDOTE_POTION(p));
-      potions.add(new BABBLING_BEVERAGE(p));
-      potions.add(new BARUFFIOS_BRAIN_ELIXIR(p));
-      potions.add(new FORGETFULLNESS_POTION(p));
-      potions.add(new HERBICIDE_POTION(p));
-      potions.add(new MEMORY_POTION(p));
-      potions.add(new REGENERATION_POTION(p));
-      potions.add(new WIT_SHARPENING_POTION(p));
-      potions.add(new WOLFSBANE_POTION(p));
-
-      O2PotionsMap = new HashMap<>();
-      loadPotionsClasses(potions);
-
-      p.getLogger().info("Loaded "  + O2PotionsMap.size() + " potions.");
-   }
-
-   /**
-    * Load all the potions in to the potions map.
-    *
-    * @param potions
-    */
-   private void loadPotionsClasses (ArrayList<O2Potion> potions)
-   {
-      for (O2Potion potion : potions)
+      for (O2PotionType potionType : O2PotionType.values())
       {
-         O2PotionsMap.put(potion.getName(), potion.getClass().getName());
+         O2Potion potion = getPotionFromType(potionType);
+
+         if (potion != null)
+         {
+            O2PotionsLoreMap.put(potion.getName(), potionType);
+         }
       }
    }
 
    /**
     * Return the set of all the potions
     *
-    * @return
+    * @return a Collection of 1 of each O2Potion
     */
-   public ArrayList<O2Potion> getPotions ()
+   public Collection<O2Potion> getAllPotions ()
    {
-      ArrayList<O2Potion> potions = new ArrayList<>();
+      Collection<O2Potion> potions = new ArrayList<>();
 
-      for (Entry <String, String> e : O2PotionsMap.entrySet())
+      for (O2PotionType potionType : O2PotionType.values())
       {
-         O2Potion potion = getPotionFromClassName(e.getValue());
+         O2Potion potion = getPotionFromType(potionType);
 
          if (potion != null)
             potions.add(potion);
@@ -124,9 +104,9 @@ public class Potions
    O2Potion matchPotion (Map<Material, Integer> ingredientsInCauldron)
    {
       // compare ingredients in the cauldron to the recipe for each potion
-      for (Entry<String, String> e : O2PotionsMap.entrySet())
+      for (O2PotionType potionType : O2PotionType.values())
       {
-         O2Potion potion = getPotionFromClassName(e.getValue());
+         O2Potion potion = getPotionFromType(potionType);
 
          if (potion != null && potion.checkRecipe(ingredientsInCauldron))
             return potion;
@@ -161,24 +141,6 @@ public class Potions
    }
 
    /**
-    * Find a potion by name.
-    *
-    * @param name the name to search for
-    * @return the potion, if found, null otherwise
-    */
-   public O2Potion findPotionByName (String name)
-   {
-      if (O2PotionsMap.containsKey(name))
-      {
-         return getPotionFromClassName(O2PotionsMap.get(name));
-      }
-      else
-      {
-         return null;
-      }
-   }
-
-   /**
     * Get an O2Potion from ItemMeta
     *
     * @param meta
@@ -190,9 +152,9 @@ public class Potions
       {
          for (String lore : meta.getLore())
          {
-            if (O2PotionsMap.containsKey(lore))
+            if (O2PotionsLoreMap.containsKey(lore))
             {
-               return getPotionFromClassName(O2PotionsMap.get(lore));
+               return getPotionFromType(O2PotionsLoreMap.get(lore));
             }
          }
       }
@@ -201,22 +163,24 @@ public class Potions
    }
 
    /**
-    * Get an O2Potions object from a class name.
+    * Get an O2Potions object from its type.
     *
-    * @param name
+    * @param potionType the type of potion to get
     * @return the O2Potions object, if it could be created, or null otherwise
     */
-   private O2Potion getPotionFromClassName (String name)
+   private O2Potion getPotionFromType (O2PotionType potionType)
    {
-      O2Potion potion = null;
+      O2Potion potion;
+
+      Class potionClass = potionType.getClassName();
 
       try
       {
-         potion = (O2Potion)Class.forName(name).getConstructor(Ollivanders2.class).newInstance(p);
+         potion = (O2Potion)potionClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception exception)
       {
-         p.getLogger().info("Exception trying to create new instance of " + name);
+         p.getLogger().info("Exception trying to create new instance of " + potionType.toString());
          if (Ollivanders2.debug)
             exception.printStackTrace();
 

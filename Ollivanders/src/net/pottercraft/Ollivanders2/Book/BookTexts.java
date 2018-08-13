@@ -2,13 +2,11 @@ package net.pottercraft.Ollivanders2.Book;
 
 import java.util.Map;
 import java.util.HashMap;
-import java.lang.reflect.Constructor;
 
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
+import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Teachable;
-import net.pottercraft.Ollivanders2.Potion.O2Potion;
 
 /**
  * The text and flavor text for all Ollivanders2 magic.  This can be used for writing books, creating lessons, or
@@ -19,13 +17,13 @@ import net.pottercraft.Ollivanders2.Potion.O2Potion;
  */
 public final class BookTexts
 {
-   private class SpellText
+   private class BookText
    {
       String name;
       String text;
       String flavorText;
 
-      SpellText (String n, String t, String f)
+      BookText (String n, String t, String f)
       {
          name = n;
          text = t;
@@ -48,7 +46,8 @@ public final class BookTexts
       }
    }
 
-   private Map <String, SpellText> O2MagicTextMap = new HashMap<>();
+   private Map <Spells, BookText> O2SpellTextMap = new HashMap<>();
+   private Map <O2PotionType, BookText> O2PotionTextMap = new HashMap<>();
 
    private Ollivanders2 p;
 
@@ -61,88 +60,91 @@ public final class BookTexts
    {
       p = plugin;
 
-      // add all spell's texts
+      // add all spells' texts
       addSpells();
-      // add all potion's texts
+      // add all potions' texts
       addPotions();
    }
 
    /**
-    * Add the spell text for every registered spell projectile.
+    * Add the learnable text for every registered spell projectile.
     */
    private void addSpells ()
    {
-      for (Spells s : Spells.values())
+      for (Spells spellType : Spells.values())
       {
-         if (!Ollivanders2.libsDisguisesEnabled && p.common.libsDisguisesSpells.contains(s))
+         if (!Ollivanders2.libsDisguisesEnabled && p.common.libsDisguisesSpells.contains(spellType))
          {
             continue;
          }
          
-         String spellName = "net.pottercraft.Ollivanders2.Spell." + s.toString();
-
-         Constructor c;
-
-         try
-         {
-            c = Class.forName(spellName).getConstructor();
-         }
-         catch (Exception e)
-         {
-            p.getLogger().warning("Exception trying to add spell text for " + spellName);
-            e.printStackTrace();
-
-            continue;
-         }
+         String spellName = "net.pottercraft.Ollivanders2.Spell." + spellType.toString();
 
          Teachable spell;
+
          try
          {
-            spell = (Teachable)c.newInstance();
+            spell = (Teachable)Class.forName(spellName).getConstructor().newInstance();
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Exception trying to create a new instance of " + spellName);
+            p.getLogger().warning("Exception trying to add book text for " + spellName);
             e.printStackTrace();
 
             continue;
          }
 
-         String text;
-         String flavorText;
-
-         try
-         {
-            text = spell.getText();
-            flavorText = spell.getFlavorText();
-         }
-         catch (Exception e)
-         {
-            p.getLogger().warning("Exception trying to get the spell text for " + spellName);
-            e.printStackTrace();
-
-            continue;
-         }
+         String text = spell.getText();
+         String flavorText = spell.getFlavorText();
 
          if (text == null)
          {
-            p.getLogger().warning("No spell text for " + spellName);
+            p.getLogger().warning("No book text for " + spellName);
             continue;
          }
 
-         String name = p.common.firstLetterCapitalize(p.common.enumRecode(s.toString().toLowerCase()));
+         String name = p.common.firstLetterCapitalize(p.common.enumRecode(spellType.toString().toLowerCase()));
 
-         SpellText sText = new SpellText(name, text, flavorText);
-         O2MagicTextMap.put(s.toString(), sText);
+         BookText sText = new BookText(name, text, flavorText);
+         O2SpellTextMap.put(spellType, sText);
       }
    }
 
+   /**
+    * Add the learnable text for every potion.
+    */
    private void addPotions ()
    {
-      for (O2Potion potion : p.getPotions().getPotions())
+      for (O2PotionType potionType : O2PotionType.values())
       {
-         SpellText sText = new SpellText(potion.getName(), potion.getText(), potion.getFlavorText());
-         O2MagicTextMap.put(potion.getName(), sText);
+         Class potionClass = potionType.getClassName();
+         Teachable spell;
+
+         try
+         {
+            spell = (Teachable) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Exception trying to add book text for " + potionType.toString());
+            e.printStackTrace();
+
+            continue;
+         }
+
+         String text = spell.getText();
+         String flavorText = spell.getFlavorText();
+
+         if (text == null)
+         {
+            p.getLogger().warning("No book text for " + potionType.toString());
+            continue;
+         }
+
+         String name = p.common.firstLetterCapitalize(p.common.enumRecode(potionType.toString().toLowerCase()));
+
+         BookText sText = new BookText(name, text, flavorText);
+         O2PotionTextMap.put(potionType, sText);
       }
    }
 
@@ -156,8 +158,10 @@ public final class BookTexts
    {
       String flavorText = null;
 
-      if (O2MagicTextMap.containsKey(magic))
-         flavorText = O2MagicTextMap.get(magic).getFlavorText();
+      if (O2SpellTextMap.containsKey(magic))
+         flavorText = O2SpellTextMap.get(magic).getFlavorText();
+      else if (O2PotionTextMap.containsKey(magic))
+         flavorText = O2PotionTextMap.get(magic).getFlavorText();
 
       return flavorText;
    }
@@ -172,8 +176,10 @@ public final class BookTexts
    {
       String text = null;
 
-      if (O2MagicTextMap.containsKey(magic))
-         text = O2MagicTextMap.get(magic).getText();
+      if (O2SpellTextMap.containsKey(magic))
+         text = O2SpellTextMap.get(magic).getText();
+      else if (O2PotionTextMap.containsKey(magic))
+         text = O2PotionTextMap.get(magic).getText();
 
       return text;
    }
@@ -188,8 +194,10 @@ public final class BookTexts
    {
       String name = null;
 
-      if (O2MagicTextMap.containsKey(magic))
-         name = O2MagicTextMap.get(magic).getName();
+      if (O2SpellTextMap.containsKey(magic))
+         name = O2SpellTextMap.get(magic).getName();
+      else if (O2PotionTextMap.containsKey(magic))
+         name = O2PotionTextMap.get(magic).getName();
 
       return name;
    }

@@ -22,7 +22,7 @@ import java.util.Collections;
  *
  * @author lownes
  * @author Azami7
- * @deprecated use net.pottercraft.Ollivanders2.Potion.Potions
+ * @deprecated use net.pottercraft.Ollivanders2.Potion.O2Potions
  */
 @Deprecated
 public class PotionParser

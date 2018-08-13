@@ -24,10 +24,10 @@ import net.pottercraft.Ollivanders2.House.O2Houses;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Player.O2Players;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
+import net.pottercraft.Ollivanders2.Potion.O2Potions;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import net.pottercraft.Ollivanders2.Potion.O2Potion;
-import net.pottercraft.Ollivanders2.Potion.Potions;
 
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpells;
@@ -75,7 +75,7 @@ public class Ollivanders2 extends JavaPlugin
    private O2Houses houses;
    private O2Players o2Players;
    public O2Books books;
-   private Potions potions;
+   private O2Potions potions;
    public O2StationarySpells stationarySpells;
    public Ollivanders2Common common;
    public O2PlayerCommon playerCommon;
@@ -215,7 +215,7 @@ public class Ollivanders2 extends JavaPlugin
       houses = new O2Houses(this);
 
       // set up potions
-      potions = new Potions(this);
+      potions = new O2Potions(this);
 
       // set up stationary spells
       stationarySpells = new O2StationarySpells(this);
@@ -1783,7 +1783,7 @@ public class Ollivanders2 extends JavaPlugin
 
       List<ItemStack> kit = new ArrayList<>();
 
-      for (O2Potion potion : potions.getPotions())
+      for (O2Potion potion : potions.getAllPotions())
       {
          ItemStack brewedPotion = potion.brew();
 
@@ -1799,11 +1799,11 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Get the Potions class managing all the potions loaded in the game.
+    * Get the O2Potions class managing all the potions loaded in the game.
     *
-    * @return the Potions class for this plugin
+    * @return the O2Potions class for this plugin
     */
-   public Potions getPotions ()
+   public O2Potions getO2Potions ()
    {
       return potions;
    }
