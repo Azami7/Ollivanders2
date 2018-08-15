@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public final class WORLD_OF_COLOR extends Book
+public final class WORLD_OF_COLOR extends O2Book
 {
    public WORLD_OF_COLOR (Ollivanders2 plugin)
    {

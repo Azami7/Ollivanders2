@@ -15,7 +15,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class INTERMEDIATE_TRANSFIGURATION extends Book
+public class INTERMEDIATE_TRANSFIGURATION extends O2Book
 {
    public INTERMEDIATE_TRANSFIGURATION (Ollivanders2 plugin)
    {

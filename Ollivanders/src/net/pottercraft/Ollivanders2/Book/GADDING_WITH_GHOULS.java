@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class GADDING_WITH_GHOULS extends Book
+public class GADDING_WITH_GHOULS extends O2Book
 {
    public GADDING_WITH_GHOULS (Ollivanders2 plugin)
    {

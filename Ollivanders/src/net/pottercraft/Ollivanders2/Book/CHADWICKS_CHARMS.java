@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class CHADWICKS_CHARMS extends Book
+public class CHADWICKS_CHARMS extends O2Book
 {
    public CHADWICKS_CHARMS (Ollivanders2 plugin)
    {

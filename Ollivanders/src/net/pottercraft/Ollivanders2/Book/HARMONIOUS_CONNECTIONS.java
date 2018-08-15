@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class HARMONIOUS_CONNECTIONS extends Book
+public class HARMONIOUS_CONNECTIONS extends O2Book
 {
    public HARMONIOUS_CONNECTIONS (Ollivanders2 plugin)
    {

@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class CURSES_AND_COUNTERCURSES extends Book
+public class CURSES_AND_COUNTERCURSES extends O2Book
 {
    public CURSES_AND_COUNTERCURSES (Ollivanders2 plugin)
    {

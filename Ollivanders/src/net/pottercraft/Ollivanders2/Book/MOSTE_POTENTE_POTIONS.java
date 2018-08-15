@@ -12,7 +12,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.7
  * @author Azami7
  */
-public class MOSTE_POTENTE_POTIONS extends Book
+public class MOSTE_POTENTE_POTIONS extends O2Book
 {
    public MOSTE_POTENTE_POTIONS (Ollivanders2 plugin)
    {

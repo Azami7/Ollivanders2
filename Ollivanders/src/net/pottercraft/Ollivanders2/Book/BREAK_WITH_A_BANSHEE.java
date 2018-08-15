@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class BREAK_WITH_A_BANSHEE extends Book
+public class BREAK_WITH_A_BANSHEE extends O2Book
 {
    public BREAK_WITH_A_BANSHEE (Ollivanders2 plugin)
    {

@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class MODERN_MAGICAL_TRANSPORTATION extends Book
+public class MODERN_MAGICAL_TRANSPORTATION extends O2Book
 {
    public MODERN_MAGICAL_TRANSPORTATION (Ollivanders2 plugin)
    {

@@ -13,7 +13,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class THE_DARK_FORCES extends Book
+public class THE_DARK_FORCES extends O2Book
 {
    public THE_DARK_FORCES (Ollivanders2 plugin)
    {

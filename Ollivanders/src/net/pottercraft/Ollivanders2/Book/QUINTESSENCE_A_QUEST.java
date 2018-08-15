@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class QUINTESSENCE_A_QUEST extends Book
+public class QUINTESSENCE_A_QUEST extends O2Book
 {
    public QUINTESSENCE_A_QUEST (Ollivanders2 plugin)
    {

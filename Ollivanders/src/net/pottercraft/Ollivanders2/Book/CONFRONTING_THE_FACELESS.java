@@ -21,7 +21,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class CONFRONTING_THE_FACELESS extends Book
+public class CONFRONTING_THE_FACELESS extends O2Book
 {
    public CONFRONTING_THE_FACELESS (Ollivanders2 plugin)
    {

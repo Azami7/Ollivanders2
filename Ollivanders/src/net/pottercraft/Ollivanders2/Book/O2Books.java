@@ -5,10 +5,8 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.lang.reflect.Constructor;
 import java.util.Collections;
 
-import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -21,7 +19,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.inventory.meta.BookMeta;
 
 /**
- * Ollivanders2 Books
+ * Ollivanders2 O2BookType
  *
  * These books will work with the new implementation of bookLearning.  Every Ollivanders2 spell must be in an
  * O2Book (or some other book with lore set up correctly) or players will not be able to learn them when bookLearning
@@ -32,11 +30,12 @@ import org.bukkit.inventory.meta.BookMeta;
  */
 public final class O2Books
 {
-   private Map <Books, Book> O2BooksMap = new HashMap<>();
-   private Map <Books, ItemStack> O2BookItemMap = new HashMap<>();
+   //private Map <O2BookType, O2Book> O2BooksMap = new HashMap<>();
+   //private Map <O2BookType, ItemStack> O2BookItemMap = new HashMap<>();
+   private Map <String, O2BookType> O2BookMap = new HashMap<>();
 
    private Ollivanders2 p;
-   public BookTexts spellText;
+   //public BookTexts spellText;
 
    private ItemStack library;
 
@@ -61,20 +60,20 @@ public final class O2Books
    }
 
    /**
-    * Add all books in the Books enum to the O2BooksMap.
+    * Add all books in the O2BookType enum to the O2BooksMap.
     */
    private void addBooks ()
    {
       p.getLogger().info("Adding all books...");
-      for (Books b : Books.values())
+      for (O2BookType b : O2BookType.values())
       {
-         String bookName = "net.pottercraft.Ollivanders2.Book." + b.toString();
+         String bookName = "net.pottercraft.Ollivanders2.O2Book." + b.toString();
 
-         Book book = null;
+         O2Book book = null;
 
          try
          {
-            book = (Book)Class.forName(bookName).getConstructor(Ollivanders2.class).newInstance(p);
+            book = (O2Book)Class.forName(bookName).getConstructor(Ollivanders2.class).newInstance(p);
          }
          catch (Exception exception)
          {
@@ -98,11 +97,11 @@ public final class O2Books
     * @param bookType the book to be returned
     * @return the BookItem if found bookType was found, null otherwise.
     */
-   public ItemStack getBook (Books bookType)
+   public ItemStack getBook (O2BookType bookType)
    {
       ItemStack bookItem;
 
-      Book book = O2BooksMap.get(bookType);
+      O2Book book = O2BooksMap.get(bookType);
 
       if (book == null)
          return null;
@@ -123,16 +122,16 @@ public final class O2Books
    /**
     * Gets all Ollivanders2 books.
     *
-    * @return a ArrayList of all Book objects.
+    * @return a ArrayList of all O2Book objects.
     */
    public ArrayList<ItemStack> getAllBooks ()
    {
       ArrayList<ItemStack> bookStack = new ArrayList<>();
 
-      for (Entry<Books, Book> entry : O2BooksMap.entrySet())
+      for (Entry<O2BookType, O2Book> entry : O2BooksMap.entrySet())
       {
-         Book book = entry.getValue();
-         Books bookType = entry.getKey();
+         O2Book book = entry.getValue();
+         O2BookType bookType = entry.getKey();
 
          //only make this book if it has not already been made
          if (O2BookItemMap.containsKey(bookType))
@@ -233,9 +232,9 @@ public final class O2Books
       bookMeta.setTitle("Hogwarts Reading List");
 
       ArrayList<String> bookTitles = new ArrayList<>();
-      for (Entry<Books, Book> e : O2BooksMap.entrySet())
+      for (Entry<O2BookType, O2Book> e : O2BooksMap.entrySet())
       {
-         Books b = e.getKey();
+         O2BookType b = e.getKey();
          bookTitles.add(b.toString().replaceAll("_", " "));
       }
       Collections.sort(bookTitles);
@@ -271,9 +270,9 @@ public final class O2Books
    {
       ArrayList<String> bookTitles = new ArrayList<>();
 
-      for (Entry <Books, Book> e : O2BooksMap.entrySet())
+      for (Entry <O2BookType, O2Book> e : O2BooksMap.entrySet())
       {
-         Book book = e.getValue();
+         O2Book book = e.getValue();
          bookTitles.add(book.getTitle());
       }
 

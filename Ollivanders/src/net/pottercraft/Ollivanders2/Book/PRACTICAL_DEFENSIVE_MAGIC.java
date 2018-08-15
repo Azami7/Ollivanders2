@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class PRACTICAL_DEFENSIVE_MAGIC extends Book
+public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book
 {
    public PRACTICAL_DEFENSIVE_MAGIC (Ollivanders2 plugin)
    {

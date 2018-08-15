@@ -12,7 +12,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author Azami7
  */
-public class WANDERINGS_WITH_WEREWOLVES extends Book
+public class WANDERINGS_WITH_WEREWOLVES extends O2Book
 {
    public WANDERINGS_WITH_WEREWOLVES (Ollivanders2 plugin)
    {

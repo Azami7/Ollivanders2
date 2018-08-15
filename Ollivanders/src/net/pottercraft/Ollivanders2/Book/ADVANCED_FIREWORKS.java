@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public final class ADVANCED_FIREWORKS extends Book
+public final class ADVANCED_FIREWORKS extends O2Book
 {
    public ADVANCED_FIREWORKS (Ollivanders2 plugin)
    {
