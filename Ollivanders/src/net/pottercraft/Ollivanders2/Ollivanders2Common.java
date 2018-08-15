@@ -469,6 +469,7 @@ public class Ollivanders2Common
     * @param s the enum as a string
     * @return string such that it is the lowercase version of the spell minus underscores
     */
+   @Deprecated
    public String enumRecode (String s)
    {
       String nameLow = s.toLowerCase();

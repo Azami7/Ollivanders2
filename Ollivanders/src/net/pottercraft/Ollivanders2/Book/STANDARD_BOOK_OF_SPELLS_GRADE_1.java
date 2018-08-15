@@ -28,5 +28,8 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_1 extends O2Book
       spells.add(Spells.DIFFINDO);
       spells.add(Spells.WINGARDIUM_LEVIOSA);
       spells.add(Spells.INCENDIO);
+      //9
+      //10
+      //11
    }
 }

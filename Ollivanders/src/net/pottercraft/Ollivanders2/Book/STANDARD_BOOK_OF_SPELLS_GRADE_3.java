@@ -32,5 +32,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_3 extends O2Book
       spells.add(Spells.PACK);
       spells.add(Spells.LAPIFORS);
       spells.add(Spells.SNUFFLIFORS);
+      //10
+      //11
    }
 }

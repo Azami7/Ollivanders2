@@ -1,11 +1,11 @@
 package net.pottercraft.Ollivanders2.Book;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Map.Entry;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -30,14 +30,41 @@ import org.bukkit.inventory.meta.BookMeta;
  */
 public final class O2Books
 {
-   //private Map <O2BookType, O2Book> O2BooksMap = new HashMap<>();
-   //private Map <O2BookType, ItemStack> O2BookItemMap = new HashMap<>();
    private Map <String, O2BookType> O2BookMap = new HashMap<>();
 
    private Ollivanders2 p;
-   //public BookTexts spellText;
+   BookTexts spellText;
 
    private ItemStack library;
+
+   public static final ArrayList<O2BookType> hogwartsReadingList = new ArrayList<O2BookType>() {{
+      add(O2BookType.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION);
+      add(O2BookType.ACHIEVEMENTS_IN_CHARMING);
+      add(O2BookType.ADVANCED_POTION_MAKING);
+      add(O2BookType.ADVANCED_TRANSFIGURATION);
+      add(O2BookType.BREAK_WITH_A_BANSHEE);
+      add(O2BookType.CONFRONTING_THE_FACELESS);
+      add(O2BookType.ESSENTIAL_DARK_ARTS);
+      add(O2BookType.EXTREME_INCANTATIONS);
+      add(O2BookType.GADDING_WITH_GHOULS);
+      add(O2BookType.HOLIDAYS_WITH_HAGS);
+      add(O2BookType.INTERMEDIATE_TRANSFIGURATION);
+      add(O2BookType.MAGICAL_DRAFTS_AND_POTIONS);
+      add(O2BookType.NUMEROLOGY_AND_GRAMMATICA);
+      add(O2BookType.QUINTESSENCE_A_QUEST);
+      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1);
+      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_2);
+      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_3);
+      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_4);
+      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_5);
+      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_6);
+      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_7);
+      add(O2BookType.THE_DARK_FORCES);
+      add(O2BookType.TRAVELS_WITH_TROLLS);
+      add(O2BookType.VOYAGES_WITH_VAMPIRES);
+      add(O2BookType.WANDERINGS_WITH_WEREWOLVES);
+      add(O2BookType.YEAR_WITH_A_YETI);
+   }};
 
    /**
     * Constructor
@@ -48,11 +75,10 @@ public final class O2Books
    {
       p = plugin;
 
+      spellText = new BookTexts(plugin);
+
       // add all books
       addBooks();
-
-      // add all spell text
-      spellText = new BookTexts(p);
 
       library = null;
 
@@ -65,58 +91,73 @@ public final class O2Books
    private void addBooks ()
    {
       p.getLogger().info("Adding all books...");
-      for (O2BookType b : O2BookType.values())
+      for (O2BookType bookType : O2BookType.values())
       {
-         String bookName = "net.pottercraft.Ollivanders2.O2Book." + b.toString();
+         O2Book book = getO2BookByType(bookType);
 
-         O2Book book = null;
-
-         try
+         if (book != null)
          {
-            book = (O2Book)Class.forName(bookName).getConstructor(Ollivanders2.class).newInstance(p);
-         }
-         catch (Exception exception)
-         {
-            p.getLogger().info("Exception trying to create new instance of " + bookName);
-            if (Ollivanders2.debug)
-               exception.printStackTrace();
-
-            continue;
-         }
-
-         if (!O2BooksMap.containsKey(b))
-         {
-            O2BooksMap.put(b, book);
+            O2BookMap.put(book.getTitle(), bookType);
          }
       }
    }
 
    /**
-    * Get a book by title.
+    * Get an o2book by book type.
     *
     * @param bookType the book to be returned
     * @return the BookItem if found bookType was found, null otherwise.
     */
-   public ItemStack getBook (O2BookType bookType)
+   private O2Book getO2BookByType (O2BookType bookType)
    {
-      ItemStack bookItem;
+      Class bookClass = bookType.getClassName();
 
-      O2Book book = O2BooksMap.get(bookType);
+      O2Book book = null;
 
-      if (book == null)
+      try
+      {
+         book = (O2Book)bookClass.getConstructor(Ollivanders2.class).newInstance(p);
+      }
+      catch (Exception exception)
+      {
+         p.getLogger().info("Exception trying to create new instance of " + bookType);
+         if (Ollivanders2.debug)
+            exception.printStackTrace();
+      }
+
+      return book;
+   }
+
+   /**
+    * Get a book item of this book.
+    *
+    * @param title the title of the book
+    * @return a book item version of this book if it exists, null otherwise.
+    */
+   public ItemStack getBookByTitle (String title)
+   {
+      String searchFor = title.toLowerCase();
+      O2BookType match = null;
+
+      // Iterate through all keys rather than a direct lookup so that we can:
+      // - allow case insensitive lookup
+      // - allow partial match for lazy typing
+      for (String key : O2BookMap.keySet())
+      {
+         String bookTitle = key.toLowerCase();
+
+         if (bookTitle.startsWith(searchFor))
+         {
+            match = O2BookMap.get(key);
+         }
+      }
+
+      if (match == null)
          return null;
 
-      if (O2BookItemMap.containsKey(bookType))
-      {
-         bookItem = O2BookItemMap.get(bookType);
-      }
-      else
-      {
-         bookItem = book.createBook();
-         O2BookItemMap.put(bookType, bookItem);
-      }
+      O2Book o2book = getO2BookByType(match);
 
-      return bookItem;
+      return o2book.createBook();
    }
 
    /**
@@ -128,22 +169,13 @@ public final class O2Books
    {
       ArrayList<ItemStack> bookStack = new ArrayList<>();
 
-      for (Entry<O2BookType, O2Book> entry : O2BooksMap.entrySet())
+      for (O2BookType bookType : O2BookType.values())
       {
-         O2Book book = entry.getValue();
-         O2BookType bookType = entry.getKey();
+         O2Book o2book = getO2BookByType(bookType);
 
-         //only make this book if it has not already been made
-         if (O2BookItemMap.containsKey(bookType))
+         if (o2book != null)
          {
-            bookStack.add(O2BookItemMap.get(bookType));
-         }
-         else
-         {
-            ItemStack bookItem = book.createBook();
-            O2BookItemMap.put(bookType, bookItem);
-
-            bookStack.add(bookItem);
+            bookStack.add(o2book.createBook());
          }
       }
 
@@ -232,14 +264,16 @@ public final class O2Books
       bookMeta.setTitle("Hogwarts Reading List");
 
       ArrayList<String> bookTitles = new ArrayList<>();
-      for (Entry<O2BookType, O2Book> e : O2BooksMap.entrySet())
+
+      for (Entry<String, O2BookType> e : O2BookMap.entrySet())
       {
-         O2BookType b = e.getKey();
-         bookTitles.add(b.toString().replaceAll("_", " "));
+         if (hogwartsReadingList.contains(e.getValue()))
+            bookTitles.add(e.getKey());
       }
+
       Collections.sort(bookTitles);
 
-      String page = new String();
+      String page = "";
       int lines = 0;
 
       for (String s : bookTitles)
@@ -262,7 +296,7 @@ public final class O2Books
    }
 
    /**
-    * Get all of the short titles for all loaded O2 books
+    * Get all of the titles for all loaded O2 books
     *
     * @return a list of the titles for all loaded books
     */
@@ -270,11 +304,8 @@ public final class O2Books
    {
       ArrayList<String> bookTitles = new ArrayList<>();
 
-      for (Entry <O2BookType, O2Book> e : O2BooksMap.entrySet())
-      {
-         O2Book book = e.getValue();
-         bookTitles.add(book.getTitle());
-      }
+      bookTitles.addAll(O2BookMap.keySet());
+      Collections.sort(bookTitles);
 
       return bookTitles;
    }

@@ -1676,8 +1676,25 @@ public class Ollivanders2 extends JavaPlugin
     */
    private ItemStack getBookFromArgs (String[] args, CommandSender sender)
    {
-      ItemStack bookItem;
+      String title = "";
+      for (String arg : args)
+      {
+         title = title + " " + arg;
+      }
+      title = title.trim();
 
+      ItemStack bookItem = books.getBookByTitle(title);
+
+      if (bookItem == null)
+      {
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+               + "No book named \"" + title + "\".\n");
+         usageMessageBooks(sender);
+      }
+
+      return bookItem;
+
+      /*
       String bookName = "";
 
       for (String arg : args)
@@ -1712,9 +1729,10 @@ public class Ollivanders2 extends JavaPlugin
          return null;
       }
 
-      bookItem = books.getBook(bookType);
+      bookItem = books.getBookByType(bookType);
 
       return bookItem;
+      */
    }
 
    /**

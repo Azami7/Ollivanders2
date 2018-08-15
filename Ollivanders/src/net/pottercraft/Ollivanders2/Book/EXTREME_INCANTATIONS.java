@@ -22,6 +22,7 @@ public class EXTREME_INCANTATIONS extends O2Book
 
       spells.add(Spells.LUMOS_DUO);
       spells.add(Spells.BOMBARDA);
+      spells.add(Spells.BOMBARDA_MAXIMA);
       spells.add(Spells.COLOVARIA);
       spells.add(Spells.LUMOS_MAXIMA);
    }

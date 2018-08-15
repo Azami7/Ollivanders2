@@ -28,5 +28,11 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book
       spells.add(Spells.INFORMOUS);
       spells.add(Spells.GLACIUS_TRIA);
       spells.add(Spells.INCENDIO_TRIA);
+      spells.add(Spells.DEFODIO);
+      //7
+      //8
+      //9
+      //10
+      //11
    }
 }

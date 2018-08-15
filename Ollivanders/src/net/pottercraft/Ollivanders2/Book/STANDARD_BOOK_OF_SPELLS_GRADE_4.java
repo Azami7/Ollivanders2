@@ -33,6 +33,8 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends O2Book
       spells.add(Spells.TERGEO);
       spells.add(Spells.REDUCTO);
       spells.add(Spells.GLACIUS_DUO);
+      //10
+      //11
    }
 }
 

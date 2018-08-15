@@ -33,6 +33,5 @@ public class ADVANCED_POTION_MAKING extends O2Book
       // Everlasting Elixirs
       // Felix Felicis
       // Poison Antidote (Golpalott's Third Law)
-
    }
 }

@@ -26,15 +26,36 @@ import java.util.List;
  */
 public abstract class O2Book
 {
-   protected String author;
-   protected String title;
    /**
-    * Cannot be more than 32 characters or it will appear blank.
+    * The book author
+    */
+   protected String author;
+
+   /**
+    * The full book title
+    */
+   protected String title;
+
+   /**
+    * The book title for item lore, cannot be more than 32 characters or it will appear blank.
     */
    protected String shortTitle;
+
+   /**
+    * The item metadata for this book
+    */
    private BookMeta bookMeta;
+
+   /**
+    * The branch of magic this book covers
+    */
    protected O2MagicBranch branch;
+
+   /**
+    * Table of contents
+    */
    private String toc;
+
    /**
     * No more than 256 characters
     */
@@ -48,7 +69,7 @@ public abstract class O2Book
    protected Ollivanders2 p;
 
    /**
-    * No more than 11 spells and/or potions in a book or they won't fit on the table of contents.
+    * No more than 11 spells + potions in a book or they won't fit on the table of contents.
     */
    protected ArrayList<Spells> spells;
    protected ArrayList<String> potions;

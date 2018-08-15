@@ -22,5 +22,6 @@ public class TRAVELS_WITH_TROLLS extends O2Book
 
       spells.add(Spells.VERDIMILLIOUS_DUO);
       spells.add(Spells.OBLIVIATE);
+      spells.add(Spells.CONFUNDUS_DUO);
    }
 }

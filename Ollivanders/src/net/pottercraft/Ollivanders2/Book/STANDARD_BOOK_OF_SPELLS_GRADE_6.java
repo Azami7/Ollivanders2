@@ -31,5 +31,8 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_6 extends O2Book
       spells.add(Spells.LUMOS_SOLEM);
       spells.add(Spells.PARTIS_TEMPORUS);
       //spells.add(Spells.EXPECTO_PATRONUM);
+      //9
+      //10
+      //11
    }
 }

@@ -34,5 +34,6 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_5 extends O2Book
       spells.add(Spells.INCENDIO_DUO);
       //spells.add(Spells.RICTUSEMPRA);
       //spells.add(Spells.SUBSTANTIVUM);
+      //11
    }
 }
