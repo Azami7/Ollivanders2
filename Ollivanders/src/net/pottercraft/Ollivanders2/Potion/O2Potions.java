@@ -24,7 +24,7 @@ public class O2Potions
 {
    private Ollivanders2 p;
 
-   private HashMap <String, O2PotionType> O2PotionsLoreMap = new HashMap<>();
+   private HashMap <String, O2PotionType> O2PotionMap = new HashMap<>();
 
    public O2Potions (Ollivanders2 plugin)
    {
@@ -36,7 +36,7 @@ public class O2Potions
 
          if (potion != null)
          {
-            O2PotionsLoreMap.put(potion.getName(), potionType);
+            O2PotionMap.put(potion.getName(), potionType);
          }
       }
    }
@@ -152,9 +152,9 @@ public class O2Potions
       {
          for (String lore : meta.getLore())
          {
-            if (O2PotionsLoreMap.containsKey(lore))
+            if (O2PotionMap.containsKey(lore))
             {
-               return getPotionFromType(O2PotionsLoreMap.get(lore));
+               return getPotionFromType(O2PotionMap.get(lore));
             }
          }
       }
