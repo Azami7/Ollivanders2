@@ -3,7 +3,6 @@ package net.pottercraft.Ollivanders2.StationarySpell;
 import java.util.HashSet;
 import java.util.Set;
 
-import net.pottercraft.Ollivanders2.OLocation;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,7 +19,7 @@ import org.bukkit.inventory.ItemStack;
 public abstract class ExtraDimensional extends StationarySpellObj
 {
    int dimenRadius;
-   private OLocation edLoc;
+   private Location edLoc;
 
    public ExtraDimensional (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration, Integer dimenRadius)
    {
@@ -42,7 +41,7 @@ public abstract class ExtraDimensional extends StationarySpellObj
          double x = (int) (29000000 - Math.random() * 58000000) + 0.5;
          double z = (int) (29000000 - Math.random() * 58000000) + 0.5;
          double y = 230.0;
-         loc = new Location(location.toLocation().getWorld(), x, y, z);
+         loc = new Location(location.getWorld(), x, y, z);
          for (Block block : getBlocksInCube(loc))
          {
             if (block.getType() != Material.AIR)
@@ -52,12 +51,12 @@ public abstract class ExtraDimensional extends StationarySpellObj
          }
          spaceFree = true;
       }
-      edLoc = new OLocation(loc);
+      edLoc = loc;
       for (Block block : getBlocksInCube(loc))
       {
          block.setType(Material.BEDROCK);
       }
-      for (Block block : getBlocksInRadius(loc, dimenRadius))
+      for (Block block : p.common.getBlocksInRadius(loc, dimenRadius))
       {
          block.setType(Material.AIR);
       }
@@ -87,13 +86,13 @@ public abstract class ExtraDimensional extends StationarySpellObj
    {
       flair(20);
       kill = true;
-      for (Block block : getBlocksInCube(edLoc.toLocation()))
+      for (Block block : getBlocksInCube(edLoc))
       {
          if (block.getType() != Material.BEDROCK)
          {
             for (ItemStack stack : block.getDrops())
             {
-               location.toLocation().getWorld().dropItem(location.toLocation(), stack);
+               location.getWorld().dropItem(location, stack);
             }
             BlockState state = block.getState();
             if (state instanceof InventoryHolder)
@@ -102,18 +101,18 @@ public abstract class ExtraDimensional extends StationarySpellObj
                {
                   if (stack != null)
                   {
-                     location.toLocation().getWorld().dropItem(location.toLocation(), stack);
+                     location.getWorld().dropItem(location, stack);
                   }
                }
             }
             block.setType(Material.AIR);
          }
       }
-      for (Entity entity : edLoc.toLocation().getWorld().getEntities())
+      for (Entity entity : edLoc.getWorld().getEntities())
       {
-         if (entity.getLocation().distance(edLoc.toLocation()) < dimenRadius)
+         if (entity.getLocation().distance(edLoc) < dimenRadius)
          {
-            entity.teleport(location.toLocation());
+            entity.teleport(location);
          }
       }
    }
@@ -121,7 +120,7 @@ public abstract class ExtraDimensional extends StationarySpellObj
    /**
     * Returns the location of the spell in the extra dimension.
     */
-   protected OLocation getEDLoc ()
+   protected Location getEDLoc ()
    {
       return edLoc;
    }

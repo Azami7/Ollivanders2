@@ -1,12 +1,12 @@
 package net.pottercraft.Ollivanders2.StationarySpell;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,8 +40,10 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
    public void checkEffect ()
    {
       age();
-      Location loc = location.toLocation();
-      for (Entity e : loc.getWorld().getEntities())
+
+      Collection<LivingEntity> nearbyEntities = p.common.getLivingEntitiesInRadius(location,radius + 1);
+
+      for (LivingEntity e : nearbyEntities)
       {
          if (e instanceof Player)
          {
@@ -54,17 +56,11 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
                }
             }
          }
-         double distance = e.getLocation().distance(loc);
+         double distance = e.getLocation().distance(location);
          if (distance > radius - 0.5 && distance < radius + 0.5)
          {
-            if (e instanceof LivingEntity)
-            {
-               ((LivingEntity) e).damage(damage);
-            }
-            else
-            {
-               e.remove();
-            }
+            e.damage(damage);
+
             flair(10);
          }
       }

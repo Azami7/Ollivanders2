@@ -143,11 +143,11 @@ public class OllivandersListener implements Listener
       for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
       {
          if (spell instanceof PROTEGO_TOTALUM &&
-               toLoc.getWorld().getUID().equals(spell.location.getWorldUUID()) &&
-               fromLoc.getWorld().getUID().equals(spell.location.getWorldUUID()))
+               toLoc.getWorld().getUID().equals(spell.location.getWorld().getUID()) &&
+               fromLoc.getWorld().getUID().equals(spell.location.getWorld().getUID()))
          {
             int radius = spell.radius;
-            Location spellLoc = spell.location.toLocation();
+            Location spellLoc = spell.location;
             if (((fromLoc.distance(spellLoc) < radius - 0.5 && toLoc.distance(spellLoc) > radius - 0.5)
                   || (toLoc.distance(spellLoc) < radius + 0.5 && fromLoc.distance(spellLoc) > radius + 0.5)))
             {
@@ -195,7 +195,7 @@ public class OllivandersListener implements Listener
                      alis.add(dest);
                      if (dest.getFlooName().equals(chat.trim().toLowerCase()))
                      {
-                        destination = dest.location.toLocation();
+                        destination = dest.location;
                         destination.setPitch(player.getLocation().getPitch());
                         destination.setYaw(player.getLocation().getYaw());
                         player.teleport(destination);
@@ -204,7 +204,7 @@ public class OllivandersListener implements Listener
                   }
                }
                int randomIndex = (int) (alis.size() * Math.random());
-               destination = alis.get(randomIndex).location.toLocation();
+               destination = alis.get(randomIndex).location;
                destination.setPitch(player.getLocation().getPitch());
                destination.setYaw(player.getLocation().getYaw());
                player.teleport(destination);
@@ -301,7 +301,7 @@ public class OllivandersListener implements Listener
       {
          for (Player recipient : recipients)
          {
-            OLocation location = new OLocation(sender.getLocation());
+            Location location = sender.getLocation();
             if (!p.common.isInside(location, recipient.getLocation(), 15))
             {
                remRecipients.add(recipient);
@@ -976,9 +976,9 @@ public class OllivandersListener implements Listener
          {
             for (StationarySpellObj stationary : stationarys)
             {
-               if (stationary.name == StationarySpells.HORCRUX && stationary.getPlayerUUID().equals(pid))
+               if (stationary.name == StationarySpells.HORCRUX && stationary.getCasterID().equals(pid))
                {
-                  Location tp = stationary.location.toLocation();
+                  Location tp = stationary.location;
                   tp.setY(tp.getY() + 1);
                   plyr.teleport(tp);
                   p.getO2Player((Player) plyr).resetEffects();

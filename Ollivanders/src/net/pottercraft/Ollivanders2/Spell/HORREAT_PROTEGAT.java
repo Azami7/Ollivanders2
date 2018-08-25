@@ -61,7 +61,7 @@ public final class HORREAT_PROTEGAT extends Charms
       }
       for (StationarySpellObj spell : inside)
       {
-         if (spell.radius > limit && spell.getPlayerUUID().equals(player.getUniqueId()))
+         if (spell.radius > limit && spell.getCasterID().equals(player.getUniqueId()))
          {
             spell.radius--;
             spell.flair(10);

@@ -9,6 +9,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Collection;
 
 /**
  * Doesn't let entities pass the boundary.
@@ -34,14 +35,16 @@ public class PROTEGO_TOTALUM extends StationarySpellObj implements StationarySpe
    public void checkEffect ()
    {
       age();
-      for (Entity entity : Bukkit.getServer().getWorld(location.getWorld()).getEntities())
+      Collection<Entity> nearbyEntities = p.common.getEntitiesInRadius(location, radius + 1);
+
+      for (Entity entity : nearbyEntities)
       {
          if (!(entity instanceof Player))
          {
-            if (entity.getLocation().distance(location.toLocation()) < radius + 0.5
-                  && entity.getLocation().distance(location.toLocation()) > radius - 0.5)
+            if (entity.getLocation().distance(location) < radius + 0.5
+                  && entity.getLocation().distance(location) > radius - 0.5)
             {
-               Location spellLoc = location.toLocation();
+               Location spellLoc = location;
                Location eLoc = entity.getLocation();
                double distance = eLoc.distance(spellLoc);
                if (distance > radius - 0.5)

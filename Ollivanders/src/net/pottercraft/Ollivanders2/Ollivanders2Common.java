@@ -15,6 +15,8 @@ import org.bukkit.DyeColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
+import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.Location;
@@ -194,26 +196,11 @@ public class Ollivanders2Common
     * @param radius the radius from the source location
     * @return true if loc2 is in the radius of loc1
     */
-   public boolean isInside (OLocation loc1, Location loc2, int radius)
+   public boolean isInside (Location loc1, Location loc2, int radius)
    {
-      double distance;
-      try
-      {
-         distance = loc2.distance(loc1.toLocation());
-      }
-      catch (IllegalArgumentException e)
-      {
-         return false;
-      }
+      double distance = loc2.distance(loc1);
 
-      if (distance < radius)
-      {
-         return true;
-      }
-      else
-      {
-         return false;
-      }
+      return (distance < radius);
    }
 
    /**
@@ -391,20 +378,32 @@ public class Ollivanders2Common
     * @param radius - radius within which to get entities
     * @return List of entities within the radius
     */
-   public List<Entity> getCloseEntities (Location location, double radius)
+   public Collection<Entity> getEntitiesInRadius (Location location, double radius)
    {
-      Collection<Entity> entities = location.getWorld().getNearbyEntities(location, radius, radius, radius);
+      return getEntitiesInBounds(location, radius, radius, radius);
+   }
 
-      List<Entity> entitiesInRadius = new ArrayList<>();
+   /**
+    * Gets all living entities within a radius of a specific location
+    *
+    * @param location the location to search for entities from
+    * @param radius - radius within which to get entities
+    * @return List of living entities within the radius
+    */
+   public List<LivingEntity> getLivingEntitiesInRadius (Location location, double radius)
+   {
+      Collection<Entity> entities = getEntitiesInRadius(location, radius);
+      List<LivingEntity> close = new ArrayList<>();
+
       for (Entity e : entities)
       {
-         if (e.getLocation().distance(location) < radius)
+         if (e instanceof LivingEntity)
          {
-            entitiesInRadius.add(e);
+            close.add(((LivingEntity)e));
          }
       }
 
-      return entitiesInRadius;
+      return close;
    }
 
    /**
@@ -417,17 +416,17 @@ public class Ollivanders2Common
     */
    public List<Entity> getTypedCloseEntities (Location location, double radius, EntityType entityType)
    {
-      List<Entity> entities = getCloseEntities(location, radius);
-      List<Entity> entitiesInRadius = new ArrayList<>();
+      Collection<Entity> entities = getEntitiesInRadius(location, radius);
+      List<Entity> close = new ArrayList<>();
 
       for (Entity e : entities)
       {
          if (e.getType() == entityType)
          {
-            entitiesInRadius.add(e);
+            close.add(e);
          }
       }
-      return entitiesInRadius;
+      return close;
    }
 
    /**
@@ -672,5 +671,41 @@ public class Ollivanders2Common
          }
       }
       return false;
+   }
+
+   /**
+    * Gets item entities within radius of the projectile
+    *
+    * @return List of item entities within radius of projectile
+    */
+   public List<Item> getItemsInBounds (Location location, double x, double y, double z)
+   {
+      Collection<Entity> entities = getEntitiesInBounds(location, x, y, z);
+
+      List<Item> items = new ArrayList<>();
+      for (Entity e : entities)
+      {
+         if (e instanceof Item)
+         {
+            items.add((Item) e);
+         }
+      }
+      return items;
+   }
+
+   /**
+    * Get all the entities with a bounding box of a specific location.
+    *
+    * @param location the location to check from
+    * @param x the distance +/- on the x-plane
+    * @param y the distance +/- on the y-plane
+    * @param z the distance +/- on the z-plane
+    * @return a Collection of all entities within the bounding box.
+    */
+   public Collection<Entity> getEntitiesInBounds (Location location, double x, double y, double z)
+   {
+      World world = location.getWorld();
+
+      return world.getNearbyEntities(location, x, y, z);
    }
 }

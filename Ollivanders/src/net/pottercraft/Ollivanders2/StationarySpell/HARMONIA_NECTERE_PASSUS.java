@@ -13,8 +13,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.OLocation;
-
 /**
  * Checks for entities going into a vanishing cabinet
  *
@@ -22,7 +20,7 @@ import net.pottercraft.Ollivanders2.OLocation;
  */
 public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements StationarySpell
 {
-   private OLocation twin;
+   private Location twin;
    private Set<UUID> teleported = new HashSet<>();
 
    private final String twinLabel = "Twin";
@@ -32,7 +30,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
    {
 
       super(plugin, player, location, name, radius, duration);
-      this.twin = new OLocation(twin);
+      this.twin = twin;
    }
 
    public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius,
@@ -50,28 +48,28 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
       for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
       {
          if (stat instanceof HARMONIA_NECTERE_PASSUS
-               && stat.location.toLocation().getBlock().equals(twin.toLocation().getBlock()))
+               && stat.location.getBlock().equals(twin.getBlock()))
          {
             twinHarm = (HARMONIA_NECTERE_PASSUS) stat;
          }
       }
-      if (twinHarm == null || !cabinetCheck(location.toLocation().getBlock()))
+      if (twinHarm == null || !cabinetCheck(location.getBlock()))
       {
          kill();
          return;
       }
-      for (Entity entity : location.toLocation().getWorld().getEntities())
+      for (Entity entity : location.getWorld().getEntities())
       {
          if (teleported.contains(entity.getUniqueId()))
          {
-            if (!entity.getLocation().getBlock().equals(location.toLocation().getBlock()))
+            if (!entity.getLocation().getBlock().equals(location.getBlock()))
             {
                teleported.remove(entity.getUniqueId());
             }
          }
          else
          {
-            if (entity.getLocation().getBlock().equals(location.toLocation().getBlock()))
+            if (entity.getLocation().getBlock().equals(location.getBlock()))
             {
                twinHarm.teleport(entity);
             }
@@ -117,10 +115,9 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     */
    public void teleport (Entity entity)
    {
-      Location toLoc = location.toLocation();
-      toLoc.setPitch(entity.getLocation().getPitch());
-      toLoc.setYaw(entity.getLocation().getYaw());
-      entity.teleport(toLoc);
+      location.setPitch(entity.getLocation().getPitch());
+      location.setYaw(entity.getLocation().getYaw());
+      entity.teleport(location);
       teleported.add(entity.getUniqueId());
    }
 
@@ -134,7 +131,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
    {
       Ollivanders2Common o2c = new Ollivanders2Common(p);
 
-      Map<String, String> locData = o2c.serializeLocation(location.toLocation(), twinLabel);
+      Map<String, String> locData = o2c.serializeLocation(location, twinLabel);
 
       return locData;
    }
@@ -152,6 +149,6 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
       Location loc = o2c.deserializeLocation(spellData, twinLabel);
 
       if (loc != null)
-         twin = new OLocation(loc);
+         twin = loc;
    }
 }

@@ -55,7 +55,7 @@ public final class CRESCERE_PROTEGAT extends Charms
       int limit = (int) usesModifier;
       for (StationarySpellObj spell : inside)
       {
-         if (spell.radius < limit && spell.getPlayerUUID().equals(player.getUniqueId()))
+         if (spell.radius < limit && spell.getCasterID().equals(player.getUniqueId()))
          {
             spell.radius++;
             spell.flair(10);

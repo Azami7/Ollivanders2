@@ -104,7 +104,7 @@ public final class INFORMOUS extends Arithmancy
             }
             else if (spell instanceof HORCRUX)
             {
-               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + spell.name.toString() + " of player " + Bukkit.getPlayer(spell.getPlayerUUID()).getName() + " of radius " + spell.radius);
+               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + spell.name.toString() + " of player " + Bukkit.getPlayer(spell.getCasterID()).getName() + " of radius " + spell.radius);
             }
             else if (spell instanceof ALIQUAM_FLOO)
             {

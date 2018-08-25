@@ -35,7 +35,7 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
 
    public void checkEffect ()
    {
-      Player ply = Bukkit.getPlayer(getPlayerUUID());
+      Player ply = Bukkit.getPlayer(getCasterID());
       if (ply == null)
       {
          kill();
@@ -44,7 +44,7 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
       double rightWand = p.playerCommon.wandCheck(ply);
       if (ply.isSneaking() && rightWand != -1)
       {
-         location = new OLocation(ply.getEyeLocation());
+         location = ply.getEyeLocation();
          flair(1);
          List<SpellProjectile> projectiles = p.getProjectiles();
          if (projectiles != null)
@@ -53,9 +53,9 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
             {
                if (isInside(proj.location))
                {
-                  if (location.toLocation().distance(proj.location) > radius - 1)
+                  if (location.distance(proj.location) > radius - 1)
                   {
-                     Vector N = proj.location.toVector().subtract(location.toLocation().toVector()).normalize();
+                     Vector N = proj.location.toVector().subtract(location.toVector()).normalize();
                      double b = p.getSpellNum(ply, Spells.PROTEGO) / rightWand / 10.0;
                      b += 1;
                      Vector V = proj.vector.clone();

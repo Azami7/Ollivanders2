@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -49,16 +50,16 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
    @Override
    public void checkEffect ()
    {
-      Location loc = location.toLocation();
-      Block block = loc.getBlock();
+      Block block = location.getBlock();
       if (block.getType().isSolid())
       {
          kill();
       }
       if (countDown > 0)
       {
-         loc.getWorld().playEffect(loc, Effect.MOBSPAWNER_FLAMES, 0);
-         for (LivingEntity live : this.getLivingEntities())
+         location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
+
+         for (LivingEntity live : getCloseLivingEntities())
          {
             live.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 300, 0), true);
          }
@@ -66,7 +67,7 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
       }
       if (block.getType() == Material.FIRE)
       {
-         for (Item item : loc.getWorld().getEntitiesByClass(Item.class))
+         for (Item item : location.getWorld().getEntitiesByClass(Item.class))
          {
             ItemStack stack = item.getItemStack();
             if (item.getLocation().getBlock().equals(block))

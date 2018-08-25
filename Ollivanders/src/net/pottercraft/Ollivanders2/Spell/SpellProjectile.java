@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Collection;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
@@ -163,7 +164,7 @@ public abstract class SpellProjectile implements Teachable
          radius = 1.0;
 
       Ollivanders2Common o2c = new Ollivanders2Common(p);
-      List<Entity> entities = o2c.getCloseEntities(location, radius);
+      Collection<Entity> entities = o2c.getEntitiesInRadius(location, radius);
       List<Entity> close = new ArrayList<>();
 
       for (Entity e : entities)

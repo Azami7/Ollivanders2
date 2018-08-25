@@ -75,5 +75,4 @@ public class OLocation implements Serializable
       World world = Bukkit.getServer().getWorld(this.world);
       return new Location(world, x, y, z);
    }
-
 }

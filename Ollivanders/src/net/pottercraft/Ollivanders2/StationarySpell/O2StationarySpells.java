@@ -90,7 +90,7 @@ public class O2StationarySpells
       List<StationarySpellObj> inside = new ArrayList<>();
       for (StationarySpellObj stationary : O2StationarySpells)
       {
-         if (stationary.location.getWorldUUID().equals(location.getWorld().getUID()))
+         if (stationary.location.getWorld().getUID().equals(location.getWorld().getUID()))
          {
             if (stationary.location.distance(location) < stationary.radius)
             {
@@ -212,7 +212,7 @@ public class O2StationarySpells
          /**
           * Location
           */
-         Map<String, String> locData = p.common.serializeLocation(spell.location.toLocation(), "Spell_Loc");
+         Map<String, String> locData = p.common.serializeLocation(spell.location, "Spell_Loc");
          for (Entry<String, String> e : locData.entrySet())
          {
             spellData.put(e.getKey(), e.getValue());

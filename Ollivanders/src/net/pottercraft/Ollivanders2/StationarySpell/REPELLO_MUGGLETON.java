@@ -52,16 +52,16 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
                      continue;
                   }
                }
-               if (player.getLocation().distance(location.toLocation()) < viewDistance && !isInside(player.getLocation()))
+               if (player.getLocation().distance(location) < viewDistance && !isInside(player.getLocation()))
                {
-                  for (Block block : getBlocksInRadius(location.toLocation(), radius))
+                  for (Block block : p.common.getBlocksInRadius(location, radius))
                   {
                      player.sendBlockChange(block.getLocation(), toMat, toDat);
                   }
                }
                else if (isInside(player.getLocation()))
                {
-                  for (Block block : getBlocksInRadius(location.toLocation(), radius))
+                  for (Block block : p.common.getBlocksInRadius(location, radius))
                   {
                      player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
                   }
@@ -72,7 +72,7 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
          {
             for (Player player : getBlock().getWorld().getPlayers())
             {
-               for (Block block : getBlocksInRadius(location.toLocation(), radius))
+               for (Block block : p.common.getBlocksInRadius(location, radius))
                {
                   player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
                }
