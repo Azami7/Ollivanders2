@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class TRAVELS_WITH_TROLLS extends Book
+public class TRAVELS_WITH_TROLLS extends O2Book
 {
    public TRAVELS_WITH_TROLLS (Ollivanders2 plugin)
    {
@@ -22,5 +22,6 @@ public class TRAVELS_WITH_TROLLS extends Book
 
       spells.add(Spells.VERDIMILLIOUS_DUO);
       spells.add(Spells.OBLIVIATE);
+      spells.add(Spells.CONFUNDUS_DUO);
    }
 }

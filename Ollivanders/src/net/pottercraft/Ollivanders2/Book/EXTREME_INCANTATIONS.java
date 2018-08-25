@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class EXTREME_INCANTATIONS extends Book
+public class EXTREME_INCANTATIONS extends O2Book
 {
    public EXTREME_INCANTATIONS (Ollivanders2 plugin)
    {
@@ -22,6 +22,7 @@ public class EXTREME_INCANTATIONS extends Book
 
       spells.add(Spells.LUMOS_DUO);
       spells.add(Spells.BOMBARDA);
+      spells.add(Spells.BOMBARDA_MAXIMA);
       spells.add(Spells.COLOVARIA);
       spells.add(Spells.LUMOS_MAXIMA);
    }

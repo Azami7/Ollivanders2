@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.7
  * @author Azami7
  */
-public class MAGICAL_DRAFTS_AND_POTIONS extends Book
+public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book
 {
    public MAGICAL_DRAFTS_AND_POTIONS (Ollivanders2 plugin)
    {

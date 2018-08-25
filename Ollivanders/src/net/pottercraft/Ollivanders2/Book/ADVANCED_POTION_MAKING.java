@@ -14,7 +14,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.7
  * @author Azami7
  */
-public class ADVANCED_POTION_MAKING extends Book
+public class ADVANCED_POTION_MAKING extends O2Book
 {
    public ADVANCED_POTION_MAKING (Ollivanders2 plugin)
    {
@@ -33,6 +33,5 @@ public class ADVANCED_POTION_MAKING extends Book
       // Everlasting Elixirs
       // Felix Felicis
       // Poison Antidote (Golpalott's Third Law)
-
    }
 }

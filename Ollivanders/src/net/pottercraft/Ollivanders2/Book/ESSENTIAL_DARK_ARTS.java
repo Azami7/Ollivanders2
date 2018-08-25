@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class ESSENTIAL_DARK_ARTS extends Book
+public class ESSENTIAL_DARK_ARTS extends O2Book
 {
    public ESSENTIAL_DARK_ARTS (Ollivanders2 plugin)
    {

@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class VOYAGES_WITH_VAMPIRES extends Book
+public class VOYAGES_WITH_VAMPIRES extends O2Book
 {
    public VOYAGES_WITH_VAMPIRES (Ollivanders2 plugin)
    {

@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  * @since 2.2.4
  * @author Azami7
  */
-public class NUMEROLOGY_AND_GRAMMATICA extends Book
+public class NUMEROLOGY_AND_GRAMMATICA extends O2Book
 {
    public NUMEROLOGY_AND_GRAMMATICA (Ollivanders2 plugin)
    {

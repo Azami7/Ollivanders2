@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class ACHIEVEMENTS_IN_CHARMING extends Book
+public class ACHIEVEMENTS_IN_CHARMING extends O2Book
 {
    public ACHIEVEMENTS_IN_CHARMING (Ollivanders2 plugin)
    {

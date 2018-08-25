@@ -12,7 +12,7 @@ import net.pottercraft.Ollivanders2.Potion.*;
  * @since 2.2.7
  * @author Azami7
  */
-public class POTION_OPUSCULE extends Book
+public class POTION_OPUSCULE extends O2Book
 {
    public POTION_OPUSCULE (Ollivanders2 plugin)
    {

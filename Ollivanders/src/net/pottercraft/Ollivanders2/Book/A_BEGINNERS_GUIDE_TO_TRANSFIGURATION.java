@@ -13,7 +13,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends Book
+public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book
 {
    public A_BEGINNERS_GUIDE_TO_TRANSFIGURATION (Ollivanders2 plugin)
    {

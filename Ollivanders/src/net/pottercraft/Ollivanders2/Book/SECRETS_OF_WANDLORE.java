@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
  * @since 2.2.4
  * @author Azami7
  */
-public final class SECRETS_OF_WANDLORE extends Book
+public final class SECRETS_OF_WANDLORE extends O2Book
 {
    public SECRETS_OF_WANDLORE (Ollivanders2 plugin)
    {

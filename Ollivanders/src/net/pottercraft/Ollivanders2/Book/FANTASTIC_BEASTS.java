@@ -8,7 +8,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author Azami7
  */
-public class FANTASTIC_BEASTS extends Book
+public class FANTASTIC_BEASTS extends O2Book
 {
    public FANTASTIC_BEASTS (Ollivanders2 plugin)
    {

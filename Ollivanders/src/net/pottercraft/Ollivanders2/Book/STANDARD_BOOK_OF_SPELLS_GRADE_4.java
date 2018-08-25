@@ -5,7 +5,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Standard Book of Spells Grade 4
+ * Standard O2Book of Spells Grade 4
  *
  * Missing spells:
  * Orchideous - https://github.com/Azami7/Ollivanders2/issues/56
@@ -14,13 +14,13 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends Book
+public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends O2Book
 {
    public STANDARD_BOOK_OF_SPELLS_GRADE_4 (Ollivanders2 plugin)
    {
       super(plugin);
 
-      title = shortTitle = "Standard Book of Spells Grade 4";
+      title = shortTitle = "Standard O2Book of Spells Grade 4";
       author = "Miranda Goshawk";
       branch = O2MagicBranch.CHARMS;
 
@@ -33,6 +33,8 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends Book
       spells.add(Spells.TERGEO);
       spells.add(Spells.REDUCTO);
       spells.add(Spells.GLACIUS_DUO);
+      //10
+      //11
    }
 }
 

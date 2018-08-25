@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class SECRETS_OF_THE_DARKEST_ART extends Book
+public class SECRETS_OF_THE_DARKEST_ART extends O2Book
 {
    public SECRETS_OF_THE_DARKEST_ART (Ollivanders2 plugin)
    {

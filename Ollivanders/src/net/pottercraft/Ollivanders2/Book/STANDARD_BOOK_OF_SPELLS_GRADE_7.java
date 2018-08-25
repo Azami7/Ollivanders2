@@ -5,7 +5,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Standard Book of Spells Grade 7
+ * Standard O2Book of Spells Grade 7
  *
  * Missing spells:
  * Prior Incantato - https://github.com/Azami7/Ollivanders2/issues/62
@@ -13,13 +13,13 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends Book
+public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book
 {
    public STANDARD_BOOK_OF_SPELLS_GRADE_7 (Ollivanders2 plugin)
    {
       super(plugin);
 
-      title = shortTitle = "Standard Book of Spells Grade 7";
+      title = shortTitle = "Standard O2Book of Spells Grade 7";
       author = "Miranda Goshawk";
       branch = O2MagicBranch.CHARMS;
 
@@ -28,5 +28,11 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends Book
       spells.add(Spells.INFORMOUS);
       spells.add(Spells.GLACIUS_TRIA);
       spells.add(Spells.INCENDIO_TRIA);
+      spells.add(Spells.DEFODIO);
+      //7
+      //8
+      //9
+      //10
+      //11
    }
 }

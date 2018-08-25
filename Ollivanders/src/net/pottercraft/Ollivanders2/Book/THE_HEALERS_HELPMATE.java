@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class THE_HEALERS_HELPMATE extends Book
+public class THE_HEALERS_HELPMATE extends O2Book
 {
    public THE_HEALERS_HELPMATE (Ollivanders2 plugin)
    {

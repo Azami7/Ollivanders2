@@ -19,6 +19,7 @@ import java.util.UUID;
 
 import Quidditch.Arena;
 
+import net.pottercraft.Ollivanders2.Book.O2BookType;
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -31,7 +32,6 @@ import net.pottercraft.Ollivanders2.Potion.Potions;
 
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpells;
-import net.pottercraft.Ollivanders2.Book.Books;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -1676,8 +1676,25 @@ public class Ollivanders2 extends JavaPlugin
     */
    private ItemStack getBookFromArgs (String[] args, CommandSender sender)
    {
-      ItemStack bookItem;
+      String title = "";
+      for (String arg : args)
+      {
+         title = title + " " + arg;
+      }
+      title = title.trim();
 
+      ItemStack bookItem = books.getBookByTitle(title);
+
+      if (bookItem == null)
+      {
+         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+               + "No book named \"" + title + "\".\n");
+         usageMessageBooks(sender);
+      }
+
+      return bookItem;
+
+      /*
       String bookName = "";
 
       for (String arg : args)
@@ -1699,10 +1716,10 @@ public class Ollivanders2 extends JavaPlugin
       if (debug)
          getLogger().info("Getting book " + bookName);
 
-      Books bookType;
+      O2BookType bookType;
       try
       {
-         bookType = Books.valueOf(bookName);
+         bookType = O2BookType.valueOf(bookName);
       }
       catch (Exception e)
       {
@@ -1712,13 +1729,14 @@ public class Ollivanders2 extends JavaPlugin
          return null;
       }
 
-      bookItem = books.getBook(bookType);
+      bookItem = books.getBookByType(bookType);
 
       return bookItem;
+      */
    }
 
    /**
-    * Usage message for Books subcommands.
+    * Usage message for O2BookType subcommands.
     *
     * @since 2.2.4
     * @param sender the player that issued the command
@@ -1726,7 +1744,7 @@ public class Ollivanders2 extends JavaPlugin
    private void usageMessageBooks (CommandSender sender)
    {
       sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-            + "Books commands: "
+            + "O2BookType commands: "
             + "\nlist - gives a book that lists all available books"
             + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
             + "\n<book title> - gives you the book with this title, if it exists"
@@ -1815,7 +1833,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void listAllBooks (Player player)
    {
-      String titleList = "Book Titles:";
+      String titleList = "O2Book Titles:";
       for (String bookTitle : books.getAllBookTitles())
       {
          titleList = titleList + "\n" + bookTitle;

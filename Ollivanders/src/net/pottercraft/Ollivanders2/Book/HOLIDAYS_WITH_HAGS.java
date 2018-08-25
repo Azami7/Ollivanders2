@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class HOLIDAYS_WITH_HAGS extends Book
+public class HOLIDAYS_WITH_HAGS extends O2Book
 {
    public HOLIDAYS_WITH_HAGS (Ollivanders2 plugin)
    {

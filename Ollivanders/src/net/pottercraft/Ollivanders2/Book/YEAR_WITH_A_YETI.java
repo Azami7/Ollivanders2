@@ -13,7 +13,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class YEAR_WITH_A_YETI extends Book
+public class YEAR_WITH_A_YETI extends O2Book
 {
    public YEAR_WITH_A_YETI (Ollivanders2 plugin)
    {

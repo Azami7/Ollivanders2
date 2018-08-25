@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class BASIC_HEXES extends Book
+public class BASIC_HEXES extends O2Book
 {
    public BASIC_HEXES (Ollivanders2 plugin)
    {

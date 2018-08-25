@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @since 2.2.4
  * @author Azami7
  */
-public class JINXES_FOR_THE_JINXED extends Book
+public class JINXES_FOR_THE_JINXED extends O2Book
 {
    public JINXES_FOR_THE_JINXED (Ollivanders2 plugin)
    {
