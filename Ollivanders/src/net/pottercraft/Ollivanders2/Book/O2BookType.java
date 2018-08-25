@@ -22,6 +22,7 @@ public enum O2BookType
    ESSENTIAL_DARK_ARTS (net.pottercraft.Ollivanders2.Book.ESSENTIAL_DARK_ARTS.class),
    EXTREME_INCANTATIONS (net.pottercraft.Ollivanders2.Book.EXTREME_INCANTATIONS.class),
    //FANTASTIC_BEASTS (net.pottercraft.Ollivanders2.Book.FANTASTIC_BEASTS.class),
+   FOR_THE_GREATER_GOOD (net.pottercraft.Ollivanders2.Book.FOR_THE_GREATER_GOOD.class),
    GADDING_WITH_GHOULS (net.pottercraft.Ollivanders2.Book.GADDING_WITH_GHOULS.class),
    HARMONIOUS_CONNECTIONS (net.pottercraft.Ollivanders2.Book.HARMONIOUS_CONNECTIONS.class),
    HOLIDAYS_WITH_HAGS (net.pottercraft.Ollivanders2.Book.HOLIDAYS_WITH_HAGS.class),
