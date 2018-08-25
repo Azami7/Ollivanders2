@@ -5,7 +5,7 @@ import net.pottercraft.Ollivanders2.Potion.*;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Magical Drafts and Potions - OWL potions book
+ * Magical Drafts and O2Potions - OWL potions book
  *
  * @since 2.2.7
  * @author Azami7
@@ -16,14 +16,14 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Magical Drafts and Potions";
+      title = shortTitle = "Magical Drafts and O2Potions";
       author = "Arsenius Jigger";
       branch = O2MagicBranch.POTIONS;
 
-      potions.add(new ANTIDOTE_POTION(p).getName());
-      potions.add(new WIT_SHARPENING_POTION(p).getName());
-      potions.add(new FORGETFULLNESS_POTION(p).getName());
-      potions.add(new HERBICIDE_POTION(p).getName());
+      potions.add(O2PotionType.ANTIDOTE_POTION);
+      potions.add(O2PotionType.WIT_SHARPENING_POTION);
+      potions.add(O2PotionType.FORGETFULLNESS_POTION);
+      potions.add(O2PotionType.HERBICIDE_POTION);
       // swelling potion
       // cure for boils
       // sleeping draught
