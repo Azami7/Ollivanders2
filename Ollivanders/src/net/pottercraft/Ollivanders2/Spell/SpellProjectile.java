@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.pottercraft.Ollivanders2.Effect.Effects;
-import net.pottercraft.Ollivanders2.Effect.OEffect;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.*;
@@ -93,13 +93,13 @@ public abstract class SpellProjectile implements Teachable
 
       usesModifier = getUsesModifier();
 
-      for (OEffect effect : p.getO2Player(player).getEffects())
+      for (O2Effect effect : p.getO2Player(player).getEffects())
       {
-         if (effect.name == Effects.MEMORY_POTION)
+         if (effect.name == O2EffectType.MEMORY_POTION)
          {
             memoryPotion = true;
          }
-         else if (effect.name == Effects.BARUFFIOS_BRAIN_ELIXIR)
+         else if (effect.name == O2EffectType.BARUFFIOS_BRAIN_ELIXIR)
          {
             usesModifier *= 2;
          }

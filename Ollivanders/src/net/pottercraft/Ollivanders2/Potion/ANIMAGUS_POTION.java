@@ -2,7 +2,7 @@ package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION;
 import net.pottercraft.Ollivanders2.Player.O2Player;
-import net.pottercraft.Ollivanders2.Effect.OEffect;
+import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -50,7 +50,7 @@ public final class ANIMAGUS_POTION extends O2Potion
          return;
       }
 
-      for (OEffect effect : o2p.getEffects())
+      for (O2Effect effect : o2p.getEffects())
       {
          if (effect instanceof ANIMAGUS_INCANTATION)
          {

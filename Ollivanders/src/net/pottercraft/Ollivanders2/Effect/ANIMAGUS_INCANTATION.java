@@ -9,23 +9,26 @@ import org.bukkit.entity.Player;
  * @since 2.2.6
  * @author Azami7
  */
-public class ANIMAGUS_INCANTATION extends OEffect implements Effect
+public class ANIMAGUS_INCANTATION extends O2Effect
 {
    /**
     * Constructor.
     *
-    * @param sender
-    * @param effect
-    * @param duration
+    * @param plugin a callback to the MC plugin
+    * @param effect the effect on the player
+    * @param duration the duration of this effect
     */
-   public ANIMAGUS_INCANTATION (Player sender, Effects effect, int duration)
+   public ANIMAGUS_INCANTATION (Ollivanders2 plugin, O2EffectType effect, int duration)
    {
-      super(sender, effect, duration);
+      super(plugin, effect, duration);
    }
 
+   /**
+    * The animagus effect can only be changed/removed by the player repeating the incantation,
+    * therefore there is nothing to do in checkEffect().
+    *
+    * @param target the player affected by the effect
+    */
    @Override
-   public void checkEffect (Ollivanders2 p, Player owner)
-   {
-      age(1);
-   }
+   public void checkEffect (Player target) { }
 }

@@ -11,24 +11,37 @@ import org.bukkit.entity.Wolf;
  *
  * @author lownes
  */
-public class LYCANTHROPY extends OEffect implements Effect
+public class LYCANTHROPY extends O2Effect
 {
    int wereId = -1;
 
-   public LYCANTHROPY (Player sender, Effects effect, int duration)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param effect the effect cast
+    * @param duration the duration of the effect
+    */
+   public LYCANTHROPY (Ollivanders2 plugin, O2EffectType effect, int duration)
    {
-      super(sender, effect, duration);
+      super(plugin, effect, duration);
    }
 
+   /**
+    * Check the time of day for the player and transform them in to or back from
+    * a wolf Entity.
+    *
+    * @param target the player affected by the effect
+    */
    @Override
-   public void checkEffect (Ollivanders2 p, Player owner)
+   public void checkEffect (Player target)
    {
-      long time = owner.getWorld().getFullTime();
+      long time = target.getWorld().getFullTime();
       long dayOrNight = (time / 12000) % 2;
       long days = time / 24000;
       long phase = days % 8;
       boolean wolfsbane = false;
-      for (OEffect effect : p.getO2Player(owner).getEffects())
+      for (O2Effect effect : p.getO2Player(target).getEffects())
       {
          if (effect instanceof WOLFSBANE_POTION)
          {
@@ -43,7 +56,7 @@ public class LYCANTHROPY extends OEffect implements Effect
          {
             //spawn werewolf and set wereId and set wolf name to werewolf and set
             //it to be angry
-            Wolf werewolf = (Wolf) owner.getWorld().spawnEntity(owner.getLocation(), EntityType.WOLF);
+            Wolf werewolf = (Wolf) target.getWorld().spawnEntity(target.getLocation(), EntityType.WOLF);
             werewolf.setAngry(true);
             werewolf.setCustomName("Werewolf");
             werewolf.setCustomNameVisible(true);
@@ -53,34 +66,34 @@ public class LYCANTHROPY extends OEffect implements Effect
          {
             //see if wereId points to a wolf with name werewolf.
             //If so, teleport to it. if not, kill player
-            for (Entity entity : owner.getWorld().getEntities())
+            for (Entity entity : target.getWorld().getEntities())
             {
                if (entity.getEntityId() == wereId && entity.getType() == EntityType.WOLF)
                {
                   Wolf wolf = (Wolf) entity;
                   if (wolf.getCustomName().equals("Werewolf"))
                   {
-                     owner.teleport(entity);
+                     target.teleport(entity);
                      if (!wolf.isAngry())
                      {
                         wolf.setAngry(true);
                      }
-                     if (wolf.getTarget() == owner)
+                     if (wolf.getTarget() == target)
                      {
                         wolf.setTarget(null);
                      }
                      if (time % 20 == 0)
                      {
-                        for (Player other : owner.getWorld().getPlayers())
+                        for (Player other : target.getWorld().getPlayers())
                         {
-                           other.hidePlayer(p, owner);
+                           other.hidePlayer(p, target);
                         }
                      }
                      return;
                   }
                }
             }
-            owner.damage(1000.0);
+            target.damage(1000.0);
          }
       }
       else
@@ -89,11 +102,11 @@ public class LYCANTHROPY extends OEffect implements Effect
          //set wereId to -1
          if (wereId != -1)
          {
-            for (Player other : owner.getWorld().getPlayers())
+            for (Player other : target.getWorld().getPlayers())
             {
-               other.showPlayer(p, owner);
+               other.showPlayer(p, target);
             }
-            for (Entity entity : owner.getWorld().getEntities())
+            for (Entity entity : target.getWorld().getEntities())
             {
                if (entity.getEntityId() == wereId && entity.getType() == EntityType.WOLF)
                {

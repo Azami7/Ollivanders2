@@ -1,6 +1,6 @@
 package net.pottercraft.Ollivanders2.Potion;
 
-import net.pottercraft.Ollivanders2.Effect.Effects;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
@@ -35,7 +35,7 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
    {
       if (!extendEffect(o2p))
       {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BARUFFIOS_BRAIN_ELIXIR(player, Effects.BARUFFIOS_BRAIN_ELIXIR, duration));
+         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BARUFFIOS_BRAIN_ELIXIR(p, O2EffectType.BARUFFIOS_BRAIN_ELIXIR, duration));
       }
 
       player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
