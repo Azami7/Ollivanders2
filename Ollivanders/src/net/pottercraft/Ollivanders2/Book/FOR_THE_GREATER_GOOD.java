@@ -4,6 +4,13 @@ import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
+/**
+ * Non-cannon book written by Gellert Grindelwald that is the only location of Morsmordre appears, which makes it
+ * Grindelwald's mark that Voldemort took for his own purposes.
+ *
+ * @author Azami7
+ * @since 2.2.8
+ */
 public class FOR_THE_GREATER_GOOD extends O2Book
 {
    public FOR_THE_GREATER_GOOD (Ollivanders2 plugin)
