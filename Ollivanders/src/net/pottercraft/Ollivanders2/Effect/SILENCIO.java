@@ -5,19 +5,36 @@ import org.bukkit.entity.Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-public class SILENCIO extends OEffect implements Effect
+public class SILENCIO extends O2Effect
 {
-   public SILENCIO (Player sender, Effects effect, int duration)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param effect the effect cast
+    * @param duration the duration of the effect
+    */
+   public SILENCIO (Ollivanders2 plugin, O2EffectType effect, int duration)
    {
-      super(sender, effect, duration);
+      super(plugin, effect, duration);
    }
 
-   public void checkEffect (Ollivanders2 p, Player owner)
+   /**
+    * Age the effect by 1 every game tick.
+    *
+    * @param target the player affected by the effect
+    */
+   public void checkEffect (Player target)
    {
       age(1);
    }
 
-   public void doSilencio (Ollivanders2 p, AsyncPlayerChatEvent event)
+   /**
+    * Remove all recepients from chat if the player.
+    *
+    * @param event the player chat event
+    */
+   public void doSilencio (AsyncPlayerChatEvent event)
    {
       Player sender = event.getPlayer();
 
@@ -31,13 +48,11 @@ public class SILENCIO extends OEffect implements Effect
          if (!sender.hasPermission("Ollivanders2.BYPASS"))
          {
             event.getRecipients().clear();
-            return;
          }
       }
       else
       {
          event.getRecipients().clear();
-         return;
       }
    }
 }

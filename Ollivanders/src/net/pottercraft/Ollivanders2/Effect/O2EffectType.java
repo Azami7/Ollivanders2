@@ -7,19 +7,11 @@ package net.pottercraft.Ollivanders2.Effect;
  * @author lownes
  * @author Azami7
  */
-public enum Effects
+public enum O2EffectType
 {
    ANIMAGUS_INCANTATION,
    BABBLING_EFFECT,
    BARUFFIOS_BRAIN_ELIXIR,
-   HERBIFORS,
-   INCARNATIO_DEVITO,
-   INCARNATIO_EQUUS,
-   INCARNATIO_FELIS,
-   INCARNATIO_LAMA,
-   INCARNATIO_LUPI,
-   INCARNATIO_PORCILLI,
-   INCARNATIO_VACCULA,
    LEVICORPUS,
    LYCANTHROPY,
    MEMORY_POTION,
@@ -32,17 +24,18 @@ public enum Effects
    /**
     * Find the lowercase string that corresponds to an effect name
     *
-    * @param s - effect
+    * @param effectType effect name as an enum
     * @return string such that it is the lowercase version of the effect minus underscores
     */
-   public static String recode (Effects s)
+   public static String recode (O2EffectType effectType)
    {
-      String nameLow = s.toString().toLowerCase();
+      String nameLow = effectType.toString().toLowerCase();
       String[] words = nameLow.split("_");
       String comp = "";
-      for (String st : words)
+
+      for (String word : words)
       {
-         comp = comp.concat(st);
+         comp = comp.concat(word);
          comp = comp.concat(" ");
       }
       comp = comp.substring(0, comp.length() - 1);

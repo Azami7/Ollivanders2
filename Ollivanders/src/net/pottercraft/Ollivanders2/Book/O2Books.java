@@ -5,16 +5,14 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
-import java.lang.reflect.Constructor;
 import java.util.Collections;
 
-import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION;
-import net.pottercraft.Ollivanders2.Effect.OEffect;
+import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.Spells;
@@ -182,7 +180,7 @@ public final class O2Books
          {
             // check to see if they have the Wit-Sharpening Potion effect
             boolean witSharpening = false;
-            for (OEffect effect : o2p.getEffects())
+            for (O2Effect effect : o2p.getEffects())
             {
                if (effect instanceof WIT_SHARPENING_POTION)
                {

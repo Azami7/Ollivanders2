@@ -1,8 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.*;
-import net.pottercraft.Ollivanders2.Effect.Effects;
-import net.pottercraft.Ollivanders2.Effect.OEffect;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -50,9 +50,9 @@ public final class LIBERACORPUS extends Charms
          {
             Player player = (Player) live;
             O2Player o2p = p.getO2Player(player);
-            for (OEffect effect : o2p.getEffects())
+            for (O2Effect effect : o2p.getEffects())
             {
-               if (effect.name == Effects.LEVICORPUS)
+               if (effect.name == O2EffectType.LEVICORPUS)
                {
                   effect.age((int) (usesModifier * 2400));
                }

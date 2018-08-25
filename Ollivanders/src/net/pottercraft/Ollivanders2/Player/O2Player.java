@@ -14,9 +14,8 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.*;
-import net.pottercraft.Ollivanders2.Effect.OEffect;
+import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.DyeColor;
@@ -81,7 +80,7 @@ public class O2Player
    /**
     * A list of all effects currently on this player
     */
-   private List<OEffect> effects = new ArrayList<>();
+   private List<O2Effect> effects = new ArrayList<>();
 
    /**
     * The spell loaded into the wand for casting with left click
@@ -687,9 +686,9 @@ public class O2Player
     *
     * @return a list of the effects active on this player
     */
-   public List<OEffect> getEffects ()
+   public List<O2Effect> getEffects ()
    {
-      List<OEffect> effectsCopy = new ArrayList<>();
+      List<O2Effect> effectsCopy = new ArrayList<>();
 
       effectsCopy.addAll(effects);
 
@@ -701,7 +700,7 @@ public class O2Player
     *
     * @param e the effect to add to this player
     */
-   public void addEffect (OEffect e)
+   public void addEffect (O2Effect e)
    {
       effects.add(e);
 
@@ -714,7 +713,7 @@ public class O2Player
     *
     * @param e the effect to remove from this player
     */
-   public void removeEffect (OEffect e)
+   public void removeEffect (O2Effect e)
    {
       effects.remove(e);
 

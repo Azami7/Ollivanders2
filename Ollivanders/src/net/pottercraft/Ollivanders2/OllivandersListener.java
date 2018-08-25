@@ -1,11 +1,11 @@
 package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
-import net.pottercraft.Ollivanders2.Effect.BABBLING_EFFECT;
-import net.pottercraft.Ollivanders2.Effect.Effects;
-import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY;
-import net.pottercraft.Ollivanders2.Effect.OEffect;
+import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.SILENCIO;
+import net.pottercraft.Ollivanders2.Effect.BABBLING_EFFECT;
+import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.AMATO_ANIMO_ANIMATO_ANIMAGUS;
 import net.pottercraft.Ollivanders2.Spell.MORTUOS_SUSCITATE;
@@ -224,7 +224,7 @@ public class OllivandersListener implements Listener
    {
       Player sender = event.getPlayer();
       String message = event.getMessage();
-      List<OEffect> effects = p.getO2Player(sender).getEffects();
+      List<O2Effect> effects = p.getO2Player(sender).getEffects();
 
       if (Ollivanders2.debug)
       {
@@ -242,16 +242,16 @@ public class OllivandersListener implements Listener
             p.getLogger().info("onPlayerChat: Handling player effects");
          }
 
-         for (OEffect effect : effects)
+         for (O2Effect effect : effects)
          {
             // If SILENCIO is affecting the player, remove all chat recipients and do not allow a spell cast.
-            if (effect.name == Effects.SILENCIO)
+            if (effect.name == O2EffectType.SILENCIO)
             {
-               ((SILENCIO)effect).doSilencio(p, event);
+               ((SILENCIO)effect).doSilencio(event);
             }
-            else if (effect.name == Effects.BABBLING_EFFECT)
+            else if (effect.name == O2EffectType.BABBLING_EFFECT)
             {
-               ((BABBLING_EFFECT)effect).doBabblingEffect(p, event);
+               ((BABBLING_EFFECT)effect).doBabblingEffect(event);
             }
          }
       }
@@ -938,16 +938,16 @@ public class OllivandersListener implements Listener
             {
                boolean hasLy = false;
                O2Player o2p = p.getO2Player(damaged);
-               for (OEffect effect : o2p.getEffects())
+               for (O2Effect effect : o2p.getEffects())
                {
-                  if (effect.name == Effects.LYCANTHROPY)
+                  if (effect.name == O2EffectType.LYCANTHROPY)
                   {
                      hasLy = true;
                   }
                }
                if (!hasLy)
                {
-                  o2p.addEffect(new LYCANTHROPY(damaged, Effects.LYCANTHROPY, 100));
+                  o2p.addEffect(new LYCANTHROPY(p, O2EffectType.LYCANTHROPY, 100));
                }
             }
          }

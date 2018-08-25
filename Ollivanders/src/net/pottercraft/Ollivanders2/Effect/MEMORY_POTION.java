@@ -3,15 +3,31 @@ package net.pottercraft.Ollivanders2.Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
-public class MEMORY_POTION extends OEffect implements Effect
+/**
+ * Improve the player's ability to remember information.
+ *
+ */
+public class MEMORY_POTION extends O2Effect
 {
-   public MEMORY_POTION (Player sender, Effects effect, int duration)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param effect the effect cast
+    * @param duration the duration of the effect
+    */
+   public MEMORY_POTION (Ollivanders2 plugin, O2EffectType effect, int duration)
    {
-      super(sender, effect, duration);
+      super(plugin, effect, duration);
    }
 
+   /**
+    * Age this effect each game tick.
+    *
+    * @param target the player affected by the effect
+    */
    @Override
-   public void checkEffect (Ollivanders2 p, Player owner)
+   public void checkEffect (Player target)
    {
       age(1);
    }

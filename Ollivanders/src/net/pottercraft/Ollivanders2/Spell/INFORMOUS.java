@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.*;
-import net.pottercraft.Ollivanders2.Effect.Effects;
-import net.pottercraft.Ollivanders2.Effect.OEffect;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
@@ -73,7 +73,7 @@ public final class INFORMOUS extends Arithmancy
             {
                Player ePlayer = (Player) entity;
                O2Player o2p = p.getO2Player(ePlayer);
-               for (OEffect effect : o2p.getEffects())
+               for (O2Effect effect : o2p.getEffects())
                {
                   if (effect instanceof LYCANTHROPY)
                   {
@@ -81,7 +81,7 @@ public final class INFORMOUS extends Arithmancy
                   }
                   else
                   {
-                     player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + ePlayer.getName() + " has " + Effects.recode(effect.name) + " with " + effect.duration / 20 + " seconds left.");
+                     player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + ePlayer.getName() + " has " + O2EffectType.recode(effect.name) + " with " + effect.duration / 20 + " seconds left.");
                   }
                }
             }

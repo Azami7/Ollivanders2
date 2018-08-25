@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.*;
-import net.pottercraft.Ollivanders2.Effect.Effects;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -50,7 +50,7 @@ public final class LEVICORPUS extends DarkArts
          if (live instanceof Player)
          {
             O2Player o2p = p.getO2Player((Player) live);
-            net.pottercraft.Ollivanders2.Effect.LEVICORPUS levi = new net.pottercraft.Ollivanders2.Effect.LEVICORPUS((Player) live, Effects.LEVICORPUS,
+            net.pottercraft.Ollivanders2.Effect.LEVICORPUS levi = new net.pottercraft.Ollivanders2.Effect.LEVICORPUS(p, O2EffectType.LEVICORPUS,
                   (int) (usesModifier * 1200.0), live.getEyeLocation());
             o2p.addEffect(levi);
             kill();
