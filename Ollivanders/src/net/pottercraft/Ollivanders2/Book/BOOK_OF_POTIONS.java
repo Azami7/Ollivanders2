@@ -4,8 +4,8 @@ import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * The O2Book of Potions is a book concerned with Potion-making, written by wizard Zygmunt Budge. Like with Miranda
- * Goshawk's O2Book of Spells, this potions book has the ability to conjure utensils with which the reader can brew the
+ * The Book of Potions is a book concerned with Potion-making, written by wizard Zygmunt Budge. Like with Miranda
+ * Goshawk's Book of Spells, this potions book has the ability to conjure utensils with which the reader can brew the
  * various potions included.
  *
  * http://harrypotter.wikia.com/wiki/Book_of_Potions
@@ -19,7 +19,7 @@ public class BOOK_OF_POTIONS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Book Of O2Potions";
+      title = shortTitle = "Book Of Potions";
       author = "Zygmunt Budge";
       branch = O2MagicBranch.POTIONS;
 
