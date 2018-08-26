@@ -16,6 +16,7 @@ public abstract class O2Effect
    public O2EffectType name;
    public int duration;
    public boolean kill;
+   Player target;
 
    /**
     * Constructor
@@ -23,14 +24,16 @@ public abstract class O2Effect
     * @param plugin a callback to the MC plugin
     * @param effect the effect to add to this player
     * @param duration the length this effect should remain
+    * @param player the player this effect acts on
     */
-   public O2Effect (Ollivanders2 plugin, O2EffectType effect, int duration)
+   public O2Effect (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
    {
       p = plugin;
 
       this.duration = duration;
       name = effect;
       kill = false;
+      target = player;
    }
 
    /**
@@ -57,8 +60,6 @@ public abstract class O2Effect
 
    /**
     * This is the effect's action. age() must be called in this if you want the effect to age and die eventually.
-    *
-    * @param target the player affected by the effect
     */
-   public void checkEffect (Player target) { }
+   public void checkEffect () { }
 }

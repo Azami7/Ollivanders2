@@ -17,19 +17,18 @@ public class VENTO_FOLIO extends O2Effect
     * @param plugin a callback to the MC plugin
     * @param effect the effect cast
     * @param duration the duration of the effect
+    * @param player the player this effect acts on
     */
-   public VENTO_FOLIO (Ollivanders2 plugin, O2EffectType effect, int duration)
+   public VENTO_FOLIO (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
    {
-      super(plugin, effect, duration);
+      super(plugin, effect, duration, player);
    }
 
    /**
     * Allow player to fly until the effect ends.
-    *
-    * @param target the player affected by the effect
     */
    @Override
-   public void checkEffect (Player target)
+   public void checkEffect ()
    {
       age(1);
       if (duration > 1)

@@ -37,7 +37,7 @@ public class BABBLING_BEVERAGE extends O2Potion
    {
       if (!extendEffect(o2p))
       {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BABBLING_EFFECT(p, O2EffectType.BABBLING_EFFECT, duration));
+         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BABBLING_EFFECT(p, O2EffectType.BABBLING_EFFECT, duration, player));
       }
 
       player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))

@@ -34,7 +34,7 @@ public final class MEMORY_POTION extends O2Potion
    {
       if (!extendEffect(o2p))
       {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.MEMORY_POTION(p, O2EffectType.MEMORY_POTION, duration));
+         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.MEMORY_POTION(p, O2EffectType.MEMORY_POTION, duration, player));
       }
 
       player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))

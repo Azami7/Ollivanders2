@@ -1,6 +1,8 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_EFFECT;
 import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -27,7 +29,7 @@ public final class ANIMAGUS_POTION extends O2Potion
 
       name = "Animagus Potion";
       text = "An Animagus is a wizard who elects to turn into an animal. This potion, if brewed and consumed correctly, " +
-            "will transform the drinker in to their animal form. Thereafter, the Animagus can transform without the " +
+            "will disguisePlayer the drinker in to their animal form. Thereafter, the Animagus can disguisePlayer without the " +
             "potion, however it will take considerable practice to change forms consistently at will." + getIngredientsText();
       flavorText.add("\"You know that I can disguise myself most effectively.\" -Peter Pettigrew");
       flavorText.add("\"Normally, I have a very sweet disposition as a dog; in fact, more than once, James suggested I make the change permanent. The tail I could live with...but the fleas, they're murder.\" -Sirius Black");
@@ -42,7 +44,7 @@ public final class ANIMAGUS_POTION extends O2Potion
          return;
       }
 
-      if (!player.getWorld().isThundering())
+      if (!Ollivanders2.libsDisguisesEnabled || !player.getWorld().isThundering())
       {
          // potion only works in a thunderstorm
          player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
@@ -55,7 +57,10 @@ public final class ANIMAGUS_POTION extends O2Potion
          if (effect instanceof ANIMAGUS_INCANTATION)
          {
             o2p.setIsAnimagus();
-            o2p.animagusForm();
+
+            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player);
+            o2p.addEffect(animagusEffect);
+            p.setO2Player(player, o2p);
 
             player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
                   + "You feel transformed.");

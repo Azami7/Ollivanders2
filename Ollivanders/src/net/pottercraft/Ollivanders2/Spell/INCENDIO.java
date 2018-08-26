@@ -8,7 +8,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * Sets fire to blocks. Also sets fire to living entities and items for an amount of time depending on the player's
  * spell level.
  *
- * @see IncarnatioSuper
  * @version Ollivanders2
  * @author lownes
  * @author Azami7

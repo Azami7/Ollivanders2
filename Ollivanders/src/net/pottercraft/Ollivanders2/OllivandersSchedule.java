@@ -131,7 +131,7 @@ class OllivandersSchedule implements Runnable
          {
             for (O2Effect effect : playerEffects)
             {
-               effect.checkEffect(Bukkit.getPlayer(pid));
+               effect.checkEffect();
                if (effect.kill)
                {
                   o2p.removeEffect(effect);

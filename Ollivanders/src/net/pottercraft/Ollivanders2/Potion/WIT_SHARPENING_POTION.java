@@ -35,7 +35,7 @@ public final class WIT_SHARPENING_POTION extends O2Potion
    {
       if (!extendEffect(o2p))
       {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION(p, O2EffectType.WIT_SHARPENING_POTION, duration));
+         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION(p, O2EffectType.WIT_SHARPENING_POTION, duration, player));
       }
 
       player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))

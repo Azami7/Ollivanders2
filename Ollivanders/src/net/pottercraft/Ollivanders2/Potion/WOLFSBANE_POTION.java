@@ -36,7 +36,7 @@ public final class WOLFSBANE_POTION extends O2Potion
    {
       if (!extendEffect(o2p))
       {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.WOLFSBANE_POTION(p, O2EffectType.WOLFSBANE_POTION, duration));
+         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.WOLFSBANE_POTION(p, O2EffectType.WOLFSBANE_POTION, duration, player));
       }
 
       player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))

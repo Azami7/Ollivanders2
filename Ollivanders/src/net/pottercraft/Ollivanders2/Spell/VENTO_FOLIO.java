@@ -51,7 +51,7 @@ public final class VENTO_FOLIO extends Charms
             Player player = (Player) live;
             O2Player o2p = p.getO2Player(player);
             int dur = (int) (usesModifier * 1200);
-            o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.VENTO_FOLIO(p, O2EffectType.VENTO_FOLIO, dur));
+            o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.VENTO_FOLIO(p, O2EffectType.VENTO_FOLIO, dur, player));
             p.setO2Player(player, o2p);
             kill();
             return;
