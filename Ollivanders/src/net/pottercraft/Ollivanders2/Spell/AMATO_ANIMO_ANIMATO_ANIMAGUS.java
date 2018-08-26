@@ -76,13 +76,14 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
          }
          else
          {
+            int uses = (int)(usesModifier * 10);
             // set success rate based on their experience
-            if (usesModifier < 25)
+            if (uses < 25)
                successRate = 5;
-            else if (usesModifier < 100)
+            else if (uses < 100)
                successRate = 10;
-            else if (usesModifier < 200)
-               successRate = (int) usesModifier / 2;
+            else if (uses < 200)
+               successRate = uses / 2;
             else
                successRate = 100;
          }
@@ -128,7 +129,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
             player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
                   + "You feel slightly different.");
 
-            if (p.debug)
+            if (Ollivanders2.debug)
                p.getLogger().info("Adding effect ANIMAGUS_INCANTATION");
          }
       }
