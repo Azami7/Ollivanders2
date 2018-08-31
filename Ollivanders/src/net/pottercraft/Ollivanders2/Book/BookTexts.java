@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Book;
 import java.util.Map;
 import java.util.HashMap;
 
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -117,12 +118,17 @@ public final class BookTexts
    {
       for (O2PotionType potionType : O2PotionType.values())
       {
+         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potionType))
+         {
+            continue;
+         }
+
          Class potionClass = potionType.getClassName();
          Teachable spell;
 
          try
          {
-            spell = (Teachable) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
+            spell = (Teachable) potionClass.getConstructor(Ollivanders2.class, O2PotionType.class).newInstance(p, potionType);
          }
          catch (Exception e)
          {

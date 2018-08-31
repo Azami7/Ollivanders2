@@ -15,9 +15,9 @@ import org.bukkit.entity.Player;
  */
 public final class MEMORY_POTION extends O2Potion
 {
-   public MEMORY_POTION (Ollivanders2 plugin)
+   public MEMORY_POTION (Ollivanders2 plugin, O2PotionType potionType)
    {
-      super(plugin);
+      super(plugin, potionType);
 
       ingredients.put(Material.SUGAR_CANE, 3);
       ingredients.put(Material.GLOWSTONE_DUST, 2);

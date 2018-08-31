@@ -1431,7 +1431,14 @@ public class OllivandersListener implements Listener
             O2Potion potion = p.getO2Potions().findPotionByItemMeta(meta);
 
             if (potion != null)
+            {
+               if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getType()))
+               {
+                  return;
+               }
+
                potion.drink(o2p, player);
+            }
          }
       }
    }

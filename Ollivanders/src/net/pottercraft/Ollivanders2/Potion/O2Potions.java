@@ -7,6 +7,7 @@ import java.util.Collection;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -55,7 +56,14 @@ public class O2Potions
          O2Potion potion = getPotionFromType(potionType);
 
          if (potion != null)
+         {
+            if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getType()))
+            {
+               continue;
+            }
+
             potions.add(potion);
+         }
       }
 
       return potions;
@@ -86,9 +94,9 @@ public class O2Potions
 
       // match the ingredients in this potion to a known potion
       O2Potion potion = matchPotion(ingredientsInCauldron);
-      if (potion == null)
+      if (potion == null || (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getType())))
       {
-         // the ingredients did not match a known potion, make them a bad potion
+         // make them a bad potion
          return O2Potion.brewBadPotion();
       }
 
@@ -176,7 +184,7 @@ public class O2Potions
 
       try
       {
-         potion = (O2Potion)potionClass.getConstructor(Ollivanders2.class).newInstance(p);
+         potion = (O2Potion)potionClass.getConstructor(Ollivanders2.class, O2PotionType.class).newInstance(p, potionType);
       }
       catch (Exception exception)
       {

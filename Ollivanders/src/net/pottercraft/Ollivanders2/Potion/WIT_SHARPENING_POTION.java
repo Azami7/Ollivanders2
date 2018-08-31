@@ -15,9 +15,9 @@ import org.bukkit.entity.Player;
  */
 public final class WIT_SHARPENING_POTION extends O2Potion
 {
-   public WIT_SHARPENING_POTION (Ollivanders2 plugin)
+   public WIT_SHARPENING_POTION (Ollivanders2 plugin, O2PotionType potionType)
    {
-      super(plugin);
+      super(plugin, potionType);
 
       ingredients.put(Material.BEETROOT, 2);
       ingredients.put(Material.FERMENTED_SPIDER_EYE, 1);
