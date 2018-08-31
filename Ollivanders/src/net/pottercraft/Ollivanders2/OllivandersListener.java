@@ -27,7 +27,6 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 import net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -180,7 +179,7 @@ public class OllivandersListener implements Listener
                {
                   if (!player.hasPermission("Ollivanders2.Floo"))
                   {
-                     player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "You do not have permission to use the Floo Network.");
+                     player.sendMessage(Ollivanders2.chatColor + "You do not have permission to use the Floo Network.");
                      return;
                   }
                }
@@ -373,7 +372,7 @@ public class OllivandersListener implements Listener
                {
                   p.getLogger().info("onPlayerChat: bookLearning enforced");
                }
-               sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
+               sender.sendMessage(Ollivanders2.chatColor + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
 
                return;
             }
@@ -629,7 +628,7 @@ public class OllivandersListener implements Listener
                                  {
                                     world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
                                  }
-                                 sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not in this world.");
+                                 sender.sendMessage(Ollivanders2.chatColor + splited[2] + " is not in this world.");
                               }
                            }
                            else
@@ -642,7 +641,7 @@ public class OllivandersListener implements Listener
                               {
                                  world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
                               }
-                              sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
+                              sender.sendMessage(Ollivanders2.chatColor + splited[2] + " is not online.");
                            }
                         }
                         else
@@ -655,7 +654,7 @@ public class OllivandersListener implements Listener
                            {
                               world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
                            }
-                           sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
+                           sender.sendMessage(Ollivanders2.chatColor + splited[2] + " is not online.");
                         }
                         return;
                      }

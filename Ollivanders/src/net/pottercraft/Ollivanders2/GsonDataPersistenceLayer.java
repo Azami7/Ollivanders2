@@ -2,7 +2,7 @@ package net.pottercraft.Ollivanders2;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import net.pottercraft.Ollivanders2.House.O2Houses;
+import net.pottercraft.Ollivanders2.House.O2HouseType;
 
 import java.io.File;
 import java.io.BufferedReader;
@@ -45,11 +45,11 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     * @param map a map of player and house data as strings
     */
    @Override
-   public void writeHouses (Map<UUID, O2Houses.O2HouseType> map)
+   public void writeHouses (Map<UUID, O2HouseType> map)
    {
       // convert to something that can be properly serialized
       Map <String, String> strMap = new HashMap<>();
-      for (Entry<UUID, O2Houses.O2HouseType> e : map.entrySet())
+      for (Entry<UUID, O2HouseType> e : map.entrySet())
       {
          strMap.put(e.getKey().toString(), e.getValue().toString());
       }
@@ -64,10 +64,10 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     * @param map a map of the O2House points data as strings
     */
    @Override
-   public void writeHousePoints (Map<O2Houses.O2HouseType, Integer> map)
+   public void writeHousePoints (Map<O2HouseType, Integer> map)
    {
       Map <String, String> strMap = new HashMap<>();
-      for (Entry<O2Houses.O2HouseType, Integer> e : map.entrySet())
+      for (Entry<O2HouseType, Integer> e : map.entrySet())
       {
          strMap.put(e.getKey().toString(), e.getValue().toString());
       }
@@ -106,7 +106,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     * @return a map of player UUIDs and their O2House
     */
    @Override
-   public Map<UUID, O2Houses.O2HouseType> readHouses ()
+   public Map<UUID, O2HouseType> readHouses ()
    {
       String json = readJSON(housesJSONFile);
       if (json == null)
@@ -115,7 +115,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       Map<String, String> strMap = new HashMap<>();
       strMap = (Map<String, String>) gson.fromJson(json, strMap.getClass());
 
-      Map<UUID, O2Houses.O2HouseType> map = new HashMap<>();
+      Map<UUID, O2HouseType> map = new HashMap<>();
       for (Entry <String, String> entry : strMap.entrySet())
       {
          String playerID = entry.getKey();
@@ -130,11 +130,11 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
             continue;
          }
 
-         O2Houses.O2HouseType hType;
+         O2HouseType hType;
 
          try
          {
-            hType = O2Houses.O2HouseType.valueOf(house);
+            hType = O2HouseType.valueOf(house);
          }
          catch (Exception e)
          {
@@ -160,7 +160,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     * @return a map of O2Houses and their points
     */
    @Override
-   public Map<O2Houses.O2HouseType, Integer> readHousePoints ()
+   public Map<O2HouseType, Integer> readHousePoints ()
    {
       String json = readJSON(housePointsJSONFile);
       if (json == null)
@@ -169,7 +169,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       Map<String, String> strMap = new HashMap<>();
       strMap = (Map<String, String>) gson.fromJson(json, strMap.getClass());
 
-      Map<O2Houses.O2HouseType, Integer> map = new HashMap<>();
+      Map<O2HouseType, Integer> map = new HashMap<>();
       for (Entry <String, String> entry : strMap.entrySet())
       {
          String house = entry.getKey();
@@ -178,12 +178,12 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
          if (house == null || points == null)
             continue;
 
-         O2Houses.O2HouseType hType;
+         O2HouseType hType;
          Integer pts;
 
          try
          {
-            hType = O2Houses.O2HouseType.valueOf(house);
+            hType = O2HouseType.valueOf(house);
          }
          catch (Exception e)
          {
