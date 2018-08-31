@@ -8,7 +8,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.Effect;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
@@ -43,7 +42,7 @@ public final class FIENDFYRE extends DarkArts
     * @param name
     * @param rightWand
     */
-   public FIENDFYRE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public FIENDFYRE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       lifeTime = usesModifier * 4;

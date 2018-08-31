@@ -36,7 +36,7 @@ public final class TERGEO extends Charms
     * @param name
     * @param rightWand
     */
-   public TERGEO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public TERGEO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       move = true;
@@ -59,7 +59,7 @@ public final class TERGEO extends Charms
          }
          for (SpellProjectile proj : p.getProjectiles())
          {
-            if (proj.name == Spells.AGUAMENTI && proj.location.getWorld() == location.getWorld())
+            if (proj.spellType == O2SpellType.AGUAMENTI && proj.location.getWorld() == location.getWorld())
             {
                if (proj.location.distance(location) < 1)
                {

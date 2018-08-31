@@ -40,7 +40,7 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
     * @param name
     * @param rightWand
     */
-   public AVIFORS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public AVIFORS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

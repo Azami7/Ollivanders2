@@ -32,7 +32,7 @@ public final class METELOJINX extends MetelojinxSuper
     * @param name
     * @param rightWand
     */
-   public METELOJINX (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public METELOJINX (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       storm = true;

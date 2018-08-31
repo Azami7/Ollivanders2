@@ -31,7 +31,7 @@ public final class GLACIUS_TRIA extends GlaciusSuper
     * @param name
     * @param rightWand
     */
-   public GLACIUS_TRIA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public GLACIUS_TRIA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       //25% duration

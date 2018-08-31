@@ -40,7 +40,7 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
     * @param name
     * @param rightWand
     */
-   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

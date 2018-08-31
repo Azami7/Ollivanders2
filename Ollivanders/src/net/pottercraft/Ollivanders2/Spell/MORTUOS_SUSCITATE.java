@@ -37,7 +37,7 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
     * @param name
     * @param rightWand
     */
-   public MORTUOS_SUSCITATE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public MORTUOS_SUSCITATE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

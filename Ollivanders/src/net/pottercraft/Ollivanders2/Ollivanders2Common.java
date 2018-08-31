@@ -8,7 +8,7 @@ import java.util.Map.Entry;
 import java.util.HashMap;
 import java.util.Collection;
 
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -69,22 +69,22 @@ public class Ollivanders2Common
       add(EntityType.SHULKER); // not large in size but complex
    }};
 
-   public static final ArrayList<Spells> libsDisguisesSpells = new ArrayList<Spells>() {{
-      add(Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS);
-      add(Spells.AVIFORS);
-      add(Spells.DRACONIFORS);
-      add(Spells.ENTOMORPHIS);
-      add(Spells.EQUUSIFORS);
-      add(Spells.INCARNATIO_DEVITO);
-      add(Spells.INCARNATIO_EQUUS);
-      add(Spells.INCARNATIO_LAMA);
-      add(Spells.INCARNATIO_LUPI);
-      add(Spells.INCARNATIO_PORCILLI);
-      add(Spells.INCARNATIO_URSUS);
-      add(Spells.INCARNATIO_VACCULA);
-      add(Spells.LAPIFORS);
-      add(Spells.SNUFFLIFORS);
-      add(Spells.VERA_VERTO);
+   public static final ArrayList<O2SpellType> libsDisguisesSpells = new ArrayList<O2SpellType>() {{
+      add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
+      add(O2SpellType.AVIFORS);
+      add(O2SpellType.DRACONIFORS);
+      add(O2SpellType.ENTOMORPHIS);
+      add(O2SpellType.EQUUSIFORS);
+      add(O2SpellType.INCARNATIO_DEVITO);
+      add(O2SpellType.INCARNATIO_EQUUS);
+      add(O2SpellType.INCARNATIO_LAMA);
+      add(O2SpellType.INCARNATIO_LUPI);
+      add(O2SpellType.INCARNATIO_PORCILLI);
+      add(O2SpellType.INCARNATIO_URSUS);
+      add(O2SpellType.INCARNATIO_VACCULA);
+      add(O2SpellType.LAPIFORS);
+      add(O2SpellType.SNUFFLIFORS);
+      add(O2SpellType.VERA_VERTO);
    }};
 
    private Ollivanders2 p;

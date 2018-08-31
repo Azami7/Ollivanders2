@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -25,16 +25,16 @@ public class INTERMEDIATE_TRANSFIGURATION extends O2Book
       author = "Unknown";
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      spells.add(Spells.DRACONIFORS);
-      spells.add(Spells.DUCKLIFORS);
-      spells.add(Spells.AVIFORS);
-      spells.add(Spells.EQUUSIFORS);
-      spells.add(Spells.EVANESCO);
-      spells.add(Spells.PIERTOTUM_LOCOMOTOR);
-      spells.add(Spells.DELETRIUS);
-      spells.add(Spells.HERBIFORS);
-      spells.add(Spells.LAPIFORS);
-      spells.add(Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS);
+      spells.add(O2SpellType.DRACONIFORS);
+      spells.add(O2SpellType.DUCKLIFORS);
+      spells.add(O2SpellType.AVIFORS);
+      spells.add(O2SpellType.EQUUSIFORS);
+      spells.add(O2SpellType.EVANESCO);
+      spells.add(O2SpellType.PIERTOTUM_LOCOMOTOR);
+      spells.add(O2SpellType.DELETRIUS);
+      spells.add(O2SpellType.HERBIFORS);
+      spells.add(O2SpellType.LAPIFORS);
+      spells.add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       //spell 11
    }
 }

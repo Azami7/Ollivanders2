@@ -40,7 +40,7 @@ public final class MOV_FOTIA extends PyrotechniaSuper
     * @param name
     * @param rightWand
     */
-   public MOV_FOTIA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public MOV_FOTIA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

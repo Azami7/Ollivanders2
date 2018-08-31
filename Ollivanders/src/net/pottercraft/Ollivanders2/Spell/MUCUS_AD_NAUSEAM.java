@@ -36,7 +36,7 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
     * @param name
     * @param rightWand
     */
-   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

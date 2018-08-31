@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -58,7 +56,7 @@ public final class WINGARDIUM_LEVIOSA extends Charms
     * @param name
     * @param rightWand
     */
-   public WINGARDIUM_LEVIOSA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public WINGARDIUM_LEVIOSA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

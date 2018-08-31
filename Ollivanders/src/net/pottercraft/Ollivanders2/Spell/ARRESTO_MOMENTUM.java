@@ -38,7 +38,7 @@ public final class ARRESTO_MOMENTUM extends Charms
     * @param name
     * @param rightWand
     */
-   public ARRESTO_MOMENTUM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public ARRESTO_MOMENTUM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

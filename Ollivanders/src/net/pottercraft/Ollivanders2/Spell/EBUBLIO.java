@@ -36,7 +36,7 @@ public final class EBUBLIO extends Charms
     * @param name
     * @param rightWand
     */
-   public EBUBLIO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public EBUBLIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

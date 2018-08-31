@@ -34,7 +34,7 @@ public final class VENTO_FOLIO extends Charms
     * @param name
     * @param rightWand
     */
-   public VENTO_FOLIO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public VENTO_FOLIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

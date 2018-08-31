@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -21,13 +21,13 @@ public class ESSENTIAL_DARK_ARTS extends O2Book
       author = "Arsenius Jigger";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spells.add(Spells.CARPE_RETRACTUM);
-      spells.add(Spells.GLACIUS);
-      spells.add(Spells.LUMOS_DUO);
-      spells.add(Spells.AQUA_ERUCTO);
-      spells.add(Spells.GLACIUS_DUO);
-      spells.add(Spells.ALARTE_ASCENDARE);
-      spells.add(Spells.DISSENDIUM);
-      spells.add(Spells.FUMOS_DUO);
+      spells.add(O2SpellType.CARPE_RETRACTUM);
+      spells.add(O2SpellType.GLACIUS);
+      spells.add(O2SpellType.LUMOS_DUO);
+      spells.add(O2SpellType.AQUA_ERUCTO);
+      spells.add(O2SpellType.GLACIUS_DUO);
+      spells.add(O2SpellType.ALARTE_ASCENDARE);
+      spells.add(O2SpellType.DISSENDIUM);
+      spells.add(O2SpellType.FUMOS_DUO);
    }
 }

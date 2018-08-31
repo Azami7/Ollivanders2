@@ -3,9 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.CropState;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -42,7 +40,7 @@ public final class HERBIVICUS extends Herbology
     * @param name
     * @param rightWand
     */
-   public HERBIVICUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public HERBIVICUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

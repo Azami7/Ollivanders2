@@ -35,7 +35,7 @@ public final class VERDIMILLIOUS_DUO extends PyrotechniaSuper
     * @param name
     * @param rightWand
     */
-   public VERDIMILLIOUS_DUO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public VERDIMILLIOUS_DUO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

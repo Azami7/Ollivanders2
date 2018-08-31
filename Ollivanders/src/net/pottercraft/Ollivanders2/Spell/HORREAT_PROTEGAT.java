@@ -35,7 +35,7 @@ public final class HORREAT_PROTEGAT extends Charms
     * @param name
     * @param rightWand
     */
-   public HORREAT_PROTEGAT (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public HORREAT_PROTEGAT (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

@@ -34,7 +34,7 @@ public final class LEGILIMENS extends DarkArts
     * @param name
     * @param rightWand
     */
-   public LEGILIMENS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public LEGILIMENS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -48,7 +48,7 @@ public final class LEGILIMENS extends DarkArts
          if (live instanceof Player)
          {
             Player target = (Player) live;
-            double experience = p.getO2Player(target).getSpellCount(Spells.LEGILIMENS);
+            double experience = p.getO2Player(target).getSpellCount(O2SpellType.LEGILIMENS);
             if (usesModifier > experience)
             {
                player.openInventory(target.getInventory());

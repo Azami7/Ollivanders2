@@ -16,8 +16,8 @@ import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.*;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
-import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -38,17 +38,17 @@ import org.bukkit.inventory.meta.BookMeta;
 public class O2Player
 {
    /**
-    * Wand wood material name
+    * Wand wood material spellType
     */
    private String wandWood = null;
 
    /**
-    * Wand core material name
+    * Wand core material spellType
     */
    private String wandCore = null;
 
    /**
-    * Player display name
+    * Player display spellType
     */
    private String playerName = null;
 
@@ -65,7 +65,7 @@ public class O2Player
    /**
     * A map of all the spells a player knows and the cast count.
     */
-   private Map<Spells, Integer> knownSpells = new HashMap<>();
+   private Map<O2SpellType, Integer> knownSpells = new HashMap<>();
 
    /**
     * A map of all the potions a player knows and the brew count.
@@ -75,7 +75,7 @@ public class O2Player
    /**
     * A map of the recent spells a player has cast and their cast timestamp
     */
-   private Map<Spells, Long> recentSpells = new HashMap<>();
+   private Map<O2SpellType, Long> recentSpells = new HashMap<>();
 
    /**
     * A list of all effects currently on this player
@@ -85,17 +85,17 @@ public class O2Player
    /**
     * The spell loaded into the wand for casting with left click
     */
-   private Spells wandSpell = null;
+   private O2SpellType wandSpell = null;
 
    /**
     * The mastered spell set for silent casting - is cast anytime a player left-clicks their wand in their primary hand.
     */
-   private Spells masterSpell = null;
+   private O2SpellType masterSpell = null;
 
    /**
     * The list of mastered spells - spells with > 100 cast count
     */
-   private ArrayList<Spells> masteredSpells = new ArrayList<>();
+   private ArrayList<O2SpellType> masteredSpells = new ArrayList<>();
 
    /**
     * The number of souls this user has collected
@@ -295,7 +295,7 @@ public class O2Player
     * @param spell the spell to get a count for
     * @return the number of times a player has cast this spell
     */
-   public int getSpellCount (Spells spell)
+   public int getSpellCount (O2SpellType spell)
    {
       int count = 0;
 
@@ -331,7 +331,7 @@ public class O2Player
     * @param spell the spell to get a count for
     * @return the number of times a player has cast this spell
     */
-   public Long getSpellLastCastTime (Spells spell)
+   public Long getSpellLastCastTime (O2SpellType spell)
    {
       Long count = new Long(0);
 
@@ -348,7 +348,7 @@ public class O2Player
     *
     * @return a map of all the known spells and the spell count for each.
     */
-   public Map<Spells, Integer> getKnownSpells ()
+   public Map<O2SpellType, Integer> getKnownSpells ()
    {
       return knownSpells;
    }
@@ -363,7 +363,7 @@ public class O2Player
     *
     * @return a map of all recent spells and the time they were cast.
     */
-   public Map<Spells, Long> getRecentSpells () { return recentSpells; }
+   public Map<O2SpellType, Long> getRecentSpells () { return recentSpells; }
 
    /**
     * Set the spell count for a spell. This will override the existing values for this spell and should
@@ -372,7 +372,7 @@ public class O2Player
     * @param spell the spell to set the count for
     * @param count the count to set
     */
-   public void setSpellCount (Spells spell, int count)
+   public void setSpellCount (O2SpellType spell, int count)
    {
       if (count >= 1)
       {
@@ -435,7 +435,7 @@ public class O2Player
     *
     * @param spell the spell to set the time for
     */
-   public void setSpellRecentCastTime (Spells spell)
+   public void setSpellRecentCastTime (O2SpellType spell)
    {
       String spellClass = "net.pottercraft.Ollivanders2.Spell." + spell.toString();
       @SuppressWarnings("rawtypes")
@@ -468,7 +468,7 @@ public class O2Player
     *
     * @param spell the mastered spell
     */
-   public void setMasterSpell (Spells spell)
+   public void setMasterSpell (O2SpellType spell)
    {
       masterSpell = spell;
    }
@@ -478,7 +478,7 @@ public class O2Player
     *
     * @param spell the spell to increment
     */
-   public void incrementSpellCount (Spells spell)
+   public void incrementSpellCount (O2SpellType spell)
    {
       if (knownSpells.containsKey(spell))
       {
@@ -536,7 +536,7 @@ public class O2Player
     *
     * @return the loaded spell
     */
-   public Spells getWandSpell ()
+   public O2SpellType getWandSpell ()
    {
       if (wandSpell == null && masterSpell != null && Ollivanders2.nonVerbalCasting)
          return masterSpell;
@@ -549,7 +549,7 @@ public class O2Player
     *
     * @param spell the spell to load
     */
-   public void setWandSpell (Spells spell)
+   public void setWandSpell (O2SpellType spell)
    {
       if (Ollivanders2.debug)
       {
@@ -764,7 +764,7 @@ public class O2Player
 
       String content = "Spell Journal\n\n";
       int lineCount = 2;
-      for (Entry <Spells, Integer> e : knownSpells.entrySet())
+      for (Entry <O2SpellType, Integer> e : knownSpells.entrySet())
       {
          // if we have done 14 lines, make a new page
          if (lineCount == 14)
@@ -807,7 +807,7 @@ public class O2Player
     *
     * @param spell the spell to add
     */
-   private void addMasteredSpell (Spells spell)
+   private void addMasteredSpell (O2SpellType spell)
    {
       if (!masteredSpells.contains(spell))
       {
@@ -826,7 +826,7 @@ public class O2Player
     *
     * @param spell the spell to remove
     */
-   private void removeMasteredSpell (Spells spell)
+   private void removeMasteredSpell (O2SpellType spell)
    {
       if (masteredSpells.contains(spell))
       {
@@ -908,7 +908,7 @@ public class O2Player
     *
     * @return the wand's master spell
     */
-   public Spells getMasterSpell ()
+   public O2SpellType getMasterSpell ()
    {
       return masterSpell;
    }

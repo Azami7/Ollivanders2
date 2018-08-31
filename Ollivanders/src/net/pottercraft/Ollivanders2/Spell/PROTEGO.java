@@ -23,7 +23,7 @@ public final class PROTEGO extends Charms
       text = "Protego is a shield spell which, while you are crouching, will cause any spells cast at it to bounce off.";
    }
 
-   public PROTEGO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public PROTEGO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

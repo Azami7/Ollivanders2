@@ -37,7 +37,7 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration implements Spell
     * @param name
     * @param rightWand
     */
-   public PIERTOTUM_LOCOMOTOR (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public PIERTOTUM_LOCOMOTOR (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

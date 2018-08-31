@@ -28,11 +28,10 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import net.pottercraft.Ollivanders2.Effect.Effect;
 import net.pottercraft.Ollivanders2.Effect.VENTO_FOLIO;
 import net.pottercraft.Ollivanders2.Spell.Spell;
 import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 /**
  * Scheduler for Ollivanders2
@@ -376,7 +375,7 @@ class OllivandersSchedule implements Runnable
             {
                return;
             }
-            double experience = p.getO2Player(player).getSpellCount(Spells.INFORMOUS);
+            double experience = p.getO2Player(player).getSpellCount(O2SpellType.INFORMOUS);
             if (Math.random() < experience / 1000.0)
             {
                //The scrying is successful
@@ -452,7 +451,7 @@ class OllivandersSchedule implements Runnable
       {
          for (Player player : world.getPlayers())
          {
-            if (p.common.isBroom(player.getInventory().getItemInMainHand()) && p.canLive(player.getLocation(), Spells.VOLATUS))
+            if (p.common.isBroom(player.getInventory().getItemInMainHand()) && p.canLive(player.getLocation(), O2SpellType.VOLATUS))
             {
                player.setAllowFlight(true);
                player.setFlying(true);

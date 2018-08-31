@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -22,11 +22,11 @@ public final class WORLD_OF_COLOR extends O2Book
 
       openingPage = "\"Mere color, unspoiled by meaning, and unallied with definite form, can speak to the soul in a thousand different ways.\"";
 
-      spells.add(Spells.COLORO_AURANTIACO);
-      spells.add(Spells.COLORO_CAERULUS);
-      spells.add(Spells.COLORO_FLAVO);
-      spells.add(Spells.COLORO_OSTRUM);
-      spells.add(Spells.COLORO_VERIDI);
-      spells.add(Spells.COLORO_VERMICULO);
+      spells.add(O2SpellType.COLORO_AURANTIACO);
+      spells.add(O2SpellType.COLORO_CAERULUS);
+      spells.add(O2SpellType.COLORO_FLAVO);
+      spells.add(O2SpellType.COLORO_OSTRUM);
+      spells.add(O2SpellType.COLORO_VERIDI);
+      spells.add(O2SpellType.COLORO_VERMICULO);
    }
 }

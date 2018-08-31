@@ -35,7 +35,7 @@ public final class MUFFLIATO extends Charms
     * @param name
     * @param rightWand
     */
-   public MUFFLIATO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public MUFFLIATO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

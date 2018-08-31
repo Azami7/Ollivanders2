@@ -39,7 +39,7 @@ public abstract class GaleatiSuper extends Charms
     * @param name
     * @param rightWand
     */
-   public GaleatiSuper (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public GaleatiSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

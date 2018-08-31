@@ -37,7 +37,7 @@ public final class FLAGRANTE extends DarkArts
     * @param name
     * @param rightWand
     */
-   public FLAGRANTE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public FLAGRANTE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

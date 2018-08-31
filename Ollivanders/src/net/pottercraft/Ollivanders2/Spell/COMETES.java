@@ -36,7 +36,7 @@ public final class COMETES extends PyrotechniaSuper
     * @param name
     * @param rightWand
     */
-   public COMETES (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public COMETES (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

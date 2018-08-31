@@ -19,15 +19,14 @@ import java.util.UUID;
 
 import Quidditch.Arena;
 
-import net.pottercraft.Ollivanders2.Book.O2BookType;
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Player.O2Players;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
 import net.pottercraft.Ollivanders2.Potion.O2Potions;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
-import net.pottercraft.Ollivanders2.Spell.Spells;
 import net.pottercraft.Ollivanders2.Potion.O2Potion;
 
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
@@ -421,7 +420,7 @@ public class Ollivanders2 extends JavaPlugin
          String wandlore = o2Player.getDestinedWandLore();
          summary = summary + "\nWand Type: " + wandlore;
 
-         Spells masterSpell = o2Player.getMasterSpell();
+         O2SpellType masterSpell = o2Player.getMasterSpell();
          if (masterSpell != null)
          {
             summary = summary + "\nMaster Spell: " + common.enumRecode(masterSpell.toString().toLowerCase());
@@ -445,13 +444,13 @@ public class Ollivanders2 extends JavaPlugin
       summary = summary + "Year: " + O2PlayerCommon.yearToInt(o2Player.getYear()) + "\n";
 
       // spells
-      Map<Spells, Integer> spells = o2Player.getKnownSpells();
+      Map<O2SpellType, Integer> spells = o2Player.getKnownSpells();
 
       if (spells.size() > 0)
       {
          summary = summary + "\nKnown Spells and Spell Level:";
 
-         for (Map.Entry<Spells, Integer> e : spells.entrySet())
+         for (Map.Entry<O2SpellType, Integer> e : spells.entrySet())
          {
             summary = summary + "\n" + e.getKey().toString() + " " + e.getValue().toString();
          }
@@ -1233,7 +1232,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param spell the spell to get the count for
     * @return the spell count
     */
-   public int getSpellNum (Player player, Spells spell)
+   public int getSpellNum (Player player, O2SpellType spell)
    {
       O2Player o2p = o2Players.getPlayer(player.getUniqueId());
 
@@ -1247,7 +1246,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param spell the spell to set the count for
     * @param count the count to set
     */
-   public void setSpellNum (Player player, Spells spell, int count)
+   public void setSpellNum (Player player, O2SpellType spell, int count)
    {
       UUID pid = player.getUniqueId();
       O2Player o2p = o2Players.getPlayer(pid);
@@ -1264,7 +1263,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param spell the spell to increment
     * @return the incremented use count for this player for this spell
     */
-   public int incSpellCount (Player player, Spells spell)
+   public int incSpellCount (Player player, O2SpellType spell)
    {
       //returns the incremented spell count
       UUID pid = player.getUniqueId();
@@ -1365,7 +1364,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param verbose Whether or not to inform the player of why they cannot cast a spell
     * @return True if the player can cast this spell, false if not
     */
-   public boolean canCast (Player player, Spells spell, boolean verbose)
+   public boolean canCast (Player player, O2SpellType spell, boolean verbose)
    {
       if (player.isPermissionSet("Ollivanders2." + spell.toString()))
       {
@@ -1408,7 +1407,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param spell the spell to check
     * @return true if the spell can exist, false otherwise
     */
-   public boolean canLive (Location loc, Spells spell)
+   public boolean canLive (Location loc, O2SpellType spell)
    {
       boolean cast = true;
       double x = loc.getX();
@@ -1425,7 +1424,7 @@ public class Ollivanders2 extends JavaPlugin
             String areaString = config.getString(prefix + "area");
             boolean allAllowed = false;
             boolean allDisallowed = false;
-            List<Spells> allowedSpells = new ArrayList<>();
+            List<O2SpellType> allowedSpells = new ArrayList<>();
             for (String spellString : config.getStringList(prefix + "allowed-spells"))
             {
                if (spellString.equalsIgnoreCase("ALL"))
@@ -1434,10 +1433,10 @@ public class Ollivanders2 extends JavaPlugin
                }
                else
                {
-                  allowedSpells.add(Spells.decode(spellString));
+                  allowedSpells.add(O2SpellType.decode(spellString));
                }
             }
-            List<Spells> disallowedSpells = new ArrayList<>();
+            List<O2SpellType> disallowedSpells = new ArrayList<>();
             for (String spellString : config.getStringList(prefix + "disallowed-spells"))
             {
                if (spellString.equalsIgnoreCase("ALL"))
@@ -1446,7 +1445,7 @@ public class Ollivanders2 extends JavaPlugin
                }
                else
                {
-                  disallowedSpells.add(Spells.decode(spellString));
+                  disallowedSpells.add(O2SpellType.decode(spellString));
                }
             }
             if (type.equalsIgnoreCase("World"))

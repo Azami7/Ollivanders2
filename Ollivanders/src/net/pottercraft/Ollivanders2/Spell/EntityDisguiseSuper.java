@@ -33,7 +33,7 @@ public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
     * @param name
     * @param rightWand
     */
-   public EntityDisguiseSuper (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public EntityDisguiseSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super (plugin, player, name, rightWand);
 

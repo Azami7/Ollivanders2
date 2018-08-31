@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -21,12 +21,12 @@ public final class ADVANCED_FIREWORKS extends O2Book
       author = "George Weasley";
       branch = O2MagicBranch.CHARMS;
 
-      spells.add(Spells.BOTHYNUS_DUO);
-      spells.add(Spells.COMETES_DUO);
-      spells.add(Spells.PERICULUM_DUO);
-      spells.add(Spells.PORFYRO_ASTERI_DUO);
-      spells.add(Spells.VERDIMILLIOUS_DUO);
-      spells.add(Spells.BOTHYNUS_TRIA);
-      spells.add(Spells.PORFYRO_ASTERI_TRIA);
+      spells.add(O2SpellType.BOTHYNUS_DUO);
+      spells.add(O2SpellType.COMETES_DUO);
+      spells.add(O2SpellType.PERICULUM_DUO);
+      spells.add(O2SpellType.PORFYRO_ASTERI_DUO);
+      spells.add(O2SpellType.VERDIMILLIOUS_DUO);
+      spells.add(O2SpellType.BOTHYNUS_TRIA);
+      spells.add(O2SpellType.PORFYRO_ASTERI_TRIA);
    }
 }

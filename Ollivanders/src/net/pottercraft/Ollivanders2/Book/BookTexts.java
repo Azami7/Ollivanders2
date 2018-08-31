@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Teachable;
 
@@ -46,7 +46,7 @@ public final class BookTexts
       }
    }
 
-   private Map <Spells, BookText> O2SpellTextMap = new HashMap<>();
+   private Map <O2SpellType, BookText> O2SpellTextMap = new HashMap<>();
    private Map <O2PotionType, BookText> O2PotionTextMap = new HashMap<>();
 
    private Ollivanders2 p;
@@ -71,24 +71,23 @@ public final class BookTexts
     */
    private void addSpells ()
    {
-      for (Spells spellType : Spells.values())
+      for (O2SpellType spellType : O2SpellType.values())
       {
          if (!Ollivanders2.libsDisguisesEnabled && p.common.libsDisguisesSpells.contains(spellType))
          {
             continue;
          }
-         
-         String spellName = "net.pottercraft.Ollivanders2.Spell." + spellType.toString();
 
          Teachable spell;
+         Class spellClass = spellType.getClassName();
 
          try
          {
-            spell = (Teachable)Class.forName(spellName).getConstructor().newInstance();
+            spell = (Teachable)spellClass.getConstructor().newInstance();
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Exception trying to add book text for " + spellName);
+            p.getLogger().warning("Exception trying to add book text for " + spellType.toString());
             e.printStackTrace();
 
             continue;
@@ -99,11 +98,11 @@ public final class BookTexts
 
          if (text == null)
          {
-            p.getLogger().warning("No book text for " + spellName);
+            p.getLogger().warning("No book text for " + spellType.toString());
             continue;
          }
 
-         String name = p.common.firstLetterCapitalize(p.common.enumRecode(spellType.toString().toLowerCase()));
+         String name = spell.getName();
 
          BookText sText = new BookText(name, text, flavorText);
          O2SpellTextMap.put(spellType, sText);
@@ -151,7 +150,7 @@ public final class BookTexts
    /**
     * Get the flavor text for a specific magic.
     *
-    * @param magic the name of the magic topic
+    * @param magic the spellType of the magic topic
     * @return the flavor text for that spell or null if it has none.
     */
    String getFlavorText (String magic)
@@ -169,7 +168,7 @@ public final class BookTexts
    /**
     * Get the description text for a specific magic.
     *
-    * @param magic the name of the magic topic
+    * @param magic the spellType of the magic topic
     * @return the description text for this spell
     */
    String getText (String magic)
@@ -185,10 +184,10 @@ public final class BookTexts
    }
 
    /**
-    * Get the printable name for a specific magic.
+    * Get the printable spellType for a specific magic.
     *
-    * @param magic the name of the magic topic
-    * @return the printable name for this magic
+    * @param magic the spellType of the magic topic
+    * @return the printable spellType for this magic
     */
    public String getName (String magic)
    {

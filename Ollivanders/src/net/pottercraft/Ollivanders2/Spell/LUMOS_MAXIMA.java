@@ -33,7 +33,7 @@ public final class LUMOS_MAXIMA extends Charms
     * @param name
     * @param rightWand
     */
-   public LUMOS_MAXIMA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public LUMOS_MAXIMA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       lit = false;

@@ -33,7 +33,7 @@ public final class FUMOS_DUO extends FumosSuper
     * @param name
     * @param rightWand
     */
-   public FUMOS_DUO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public FUMOS_DUO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       strength = 2;

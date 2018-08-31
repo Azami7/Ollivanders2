@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
 import net.pottercraft.Ollivanders2.OPlayer;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import org.bukkit.entity.EntityType;
 
 /**
@@ -187,15 +186,15 @@ public class O2Players
          o2p.setInRepelloMuggleton(player.isMuggleton());
          o2p.setWandSpell(player.getSpell());
 
-         Map <Spells, Integer> spells = player.getSpellCount();
-         for (Entry<Spells, Integer> s : spells.entrySet())
+         Map <O2SpellType, Integer> spells = player.getSpellCount();
+         for (Entry<O2SpellType, Integer> s : spells.entrySet())
          {
-            Spells spell = s.getKey();
+            O2SpellType spellType = s.getKey();
             int count = s.getValue();
 
             if (count > 0)
             {
-               o2p.setSpellCount(spell, count);
+               o2p.setSpellCount(spellType, count);
             }
          }
 
@@ -289,10 +288,10 @@ public class O2Players
          /**
           * Master Spell
           */
-         Spells spell = o2p.getMasterSpell();
-         if (spell != null)
+         O2SpellType spellType = o2p.getMasterSpell();
+         if (spellType != null)
          {
-            playerData.put(masterSpellLabel, spell.toString());
+            playerData.put(masterSpellLabel, spellType.toString());
          }
 
          /**
@@ -310,10 +309,10 @@ public class O2Players
          /**
           * Spell Experience
           */
-         Map<Spells, Integer> spells = o2p.getKnownSpells();
+         Map<O2SpellType, Integer> spells = o2p.getKnownSpells();
          if (spells != null)
          {
-            for (Entry<Spells, Integer> s : spells.entrySet())
+            for (Entry<O2SpellType, Integer> s : spells.entrySet())
             {
                playerData.put(s.getKey().toString(), s.getValue().toString());
             }
@@ -382,7 +381,7 @@ public class O2Players
             continue;
          }
 
-         // get player name
+         // get player spellType
          String playerName = playerData.get(nameLabel);
          if (playerName == null || playerName.length() < 1)
          {
@@ -442,10 +441,10 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(masterSpellLabel))
             {
-               Spells spell = Spells.spellsFromString(value);
-               if (spell != null)
+               O2SpellType spellType = O2SpellType.spellsFromString(value);
+               if (spellType != null)
                {
-                  player.setMasterSpell(spell);
+                  player.setMasterSpell(spellType);
                }
             }
             else if (label.equalsIgnoreCase(animagusLabel))
@@ -477,8 +476,8 @@ public class O2Players
             else
             {
                // it is a spell
-               Spells spell = Spells.spellsFromString(label);
-               if (spell == null)
+               O2SpellType spellType = O2SpellType.spellsFromString(label);
+               if (spellType == null)
                {
                   continue;
                }
@@ -486,7 +485,7 @@ public class O2Players
                Integer count = p.common.integerFromString(value);
                if (count != null)
                {
-                  player.setSpellCount(spell, count);
+                  player.setSpellCount(spellType, count);
                }
             }
          }

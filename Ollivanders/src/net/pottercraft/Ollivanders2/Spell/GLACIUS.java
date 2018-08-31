@@ -32,7 +32,7 @@ public final class GLACIUS extends GlaciusSuper
     * @param name
     * @param rightWand
     */
-   public GLACIUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public GLACIUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       // normal duration

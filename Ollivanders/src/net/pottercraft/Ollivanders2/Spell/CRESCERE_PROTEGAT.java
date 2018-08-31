@@ -34,7 +34,7 @@ public final class CRESCERE_PROTEGAT extends Charms
     * @param name
     * @param rightWand
     */
-   public CRESCERE_PROTEGAT (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public CRESCERE_PROTEGAT (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

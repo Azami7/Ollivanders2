@@ -2,7 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 /**
  * Secrets of Wandlore
@@ -22,7 +22,7 @@ public final class SECRETS_OF_WANDLORE extends O2Book
 
       openingPage = "Wandlore is an ancient, complex, and mysterious branch of magic dealing with the history, abilities, and actions of wands, quasi-sentient magical tools used by wizards and witches to cast spells.";
 
-      spells.add(Spells.FRANGE_LIGNEA);
-      spells.add(Spells.LIGATIS_COR);
+      spells.add(O2SpellType.FRANGE_LIGNEA);
+      spells.add(O2SpellType.LIGATIS_COR);
    }
 }

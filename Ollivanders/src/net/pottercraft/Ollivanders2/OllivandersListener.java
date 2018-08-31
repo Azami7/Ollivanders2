@@ -7,12 +7,12 @@ import net.pottercraft.Ollivanders2.Effect.BABBLING_EFFECT;
 import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
+import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spell.Transfiguration;
 import net.pottercraft.Ollivanders2.Spell.AMATO_ANIMO_ANIMATO_ANIMAGUS;
 import net.pottercraft.Ollivanders2.Spell.MORTUOS_SUSCITATE;
 import net.pottercraft.Ollivanders2.Spell.PORTUS;
-import net.pottercraft.Ollivanders2.Spell.Spells;
-import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
-import net.pottercraft.Ollivanders2.Spell.Transfiguration;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import net.pottercraft.Ollivanders2.Potion.O2SplashPotion;
 import net.pottercraft.Ollivanders2.Potion.O2Potions;
@@ -259,16 +259,16 @@ public class OllivandersListener implements Listener
       /**
        * Parse to see if they were casting a spell
        */
-      Spells spell = Spells.decode(message);
+      O2SpellType spell = O2SpellType.decode(message);
       if (Ollivanders2.debug)
       {
          if (spell != null)
          {
-            p.getLogger().info("Spells:decode(): spell is " + spell);
+            p.getLogger().info("O2SpellType:decode(): spell is " + spell);
          }
          else
          {
-            p.getLogger().info("Spells:decode(): no spell found");
+            p.getLogger().info("O2SpellType:decode(): no spell found");
          }
       }
 
@@ -393,7 +393,7 @@ public class OllivandersListener implements Listener
             }
 
             // wandless spells
-            if (spell == Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+            if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
             {
                castSuccess = true;
             }
@@ -407,18 +407,18 @@ public class OllivandersListener implements Listener
 
                String[] words = message.split(" ");
 
-               if (spell == Spells.APPARATE)
+               if (spell == O2SpellType.APPARATE)
                {
                   apparate(sender, words);
                   event.setMessage("apparate");
                }
-               else if (spell == Spells.PORTUS)
+               else if (spell == O2SpellType.PORTUS)
                {
-                  p.addProjectile(new PORTUS(p, sender, Spells.PORTUS, 1.0, words));
+                  p.addProjectile(new PORTUS(p, sender, O2SpellType.PORTUS, 1.0, words));
                }
-               else if (spell == Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+               else if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
                {
-                  p.addProjectile(new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, sender, Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS, 1.0));
+                  p.addProjectile(new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, sender, O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS, 1.0));
                }
                else
                {
@@ -469,7 +469,7 @@ public class OllivandersListener implements Listener
       }
       if (canApparateOut)
       {
-         int uses = p.incSpellCount(sender, Spells.APPARATE);
+         int uses = p.incSpellCount(sender, O2SpellType.APPARATE);
          Location from = sender.getLocation().clone();
          Location to;
          if (words.length == 4)
@@ -674,7 +674,7 @@ public class OllivandersListener implements Listener
     * @param name the name of the spell cast
     * @wandC the wand check value for the held wand
     */
-   private void createSpellProjectile (Player player, Spells name, double wandC)
+   private void createSpellProjectile (Player player, O2SpellType name, double wandC)
    {
       if (Ollivanders2Common.libsDisguisesSpells.contains(name) && !Ollivanders2.libsDisguisesEnabled)
       {
@@ -688,7 +688,7 @@ public class OllivandersListener implements Listener
       try
       {
          //Maybe you have to use Integer.TYPE here instead of Integer.class
-         c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, Spells.class, Double.class);
+         c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, O2SpellType.class, Double.class);
       }
       catch (Exception e)
       {
@@ -715,7 +715,7 @@ public class OllivandersListener implements Listener
    private void castSpell (Player player)
    {
       O2Player o2p = p.getO2Player(player);
-      Spells spell = o2p.getWandSpell();
+      O2SpellType spell = o2p.getWandSpell();
 
       if (spell != null)
       {
@@ -741,7 +741,7 @@ public class OllivandersListener implements Listener
          createSpellProjectile(player, spell, wandCheck);
          o2p.setSpellRecentCastTime(spell);
          int spellCastCount = p.getSpellNum(player, spell);
-         if (spellCastCount < 100 || spell == Spells.AVADA_KEDAVRA)
+         if (spellCastCount < 100 || spell == O2SpellType.AVADA_KEDAVRA)
          {
             if (Ollivanders2.debug)
             {
@@ -855,7 +855,7 @@ public class OllivandersListener implements Listener
          reverse = true;
 
       o2p.shiftMasterSpell(reverse);
-      Spells spell = o2p.getMasterSpell();
+      O2SpellType spell = o2p.getMasterSpell();
       if (spell != null)
       {
          String spellName = p.common.firstLetterCapitalize(p.common.enumRecode(spell.toString()));

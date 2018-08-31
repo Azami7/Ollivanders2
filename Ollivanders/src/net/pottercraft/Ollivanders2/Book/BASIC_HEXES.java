@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -21,10 +21,10 @@ public class BASIC_HEXES extends O2Book
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spells.add(Spells.MUCUS_AD_NAUSEAM);
-      spells.add(Spells.IMPEDIMENTA);
-      spells.add(Spells.IMMOBULUS);
-      spells.add(Spells.OBSCURO);
-      spells.add(Spells.LOQUELA_INEPTIAS);
+      spells.add(O2SpellType.MUCUS_AD_NAUSEAM);
+      spells.add(O2SpellType.IMPEDIMENTA);
+      spells.add(O2SpellType.IMMOBULUS);
+      spells.add(O2SpellType.OBSCURO);
+      spells.add(O2SpellType.LOQUELA_INEPTIAS);
    }
 }

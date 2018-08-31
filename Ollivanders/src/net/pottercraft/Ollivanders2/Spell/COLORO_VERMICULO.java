@@ -32,7 +32,7 @@ public final class COLORO_VERMICULO extends ColoroSuper
     * @param name
     * @param rightWand
     */
-   public COLORO_VERMICULO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public COLORO_VERMICULO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

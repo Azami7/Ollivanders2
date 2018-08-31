@@ -25,7 +25,7 @@ public class INCARNATIO_URSUS extends PlayerDisguiseSuper
       text = "Turns target player in to a polar bear.";
    }
 
-   public INCARNATIO_URSUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public INCARNATIO_URSUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

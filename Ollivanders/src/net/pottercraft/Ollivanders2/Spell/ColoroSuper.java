@@ -1,6 +1,5 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -26,7 +25,7 @@ public abstract class ColoroSuper extends Charms
 
    public ColoroSuper () { }
 
-   public ColoroSuper (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public ColoroSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

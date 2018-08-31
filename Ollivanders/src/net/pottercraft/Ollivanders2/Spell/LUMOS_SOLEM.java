@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -42,7 +41,7 @@ public final class LUMOS_SOLEM extends Charms
     * @param name
     * @param rightWand
     */
-   public LUMOS_SOLEM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public LUMOS_SOLEM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -20,10 +20,10 @@ public class CURSES_AND_COUNTERCURSES extends O2Book
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spells.add(Spells.LEVICORPUS);
-      spells.add(Spells.LIBERACORPUS);
-      spells.add(Spells.METELOJINX);
-      spells.add(Spells.METELOJINX_RECANTO);
-      spells.add(Spells.SILENCIO);
+      spells.add(O2SpellType.LEVICORPUS);
+      spells.add(O2SpellType.LIBERACORPUS);
+      spells.add(O2SpellType.METELOJINX);
+      spells.add(O2SpellType.METELOJINX_RECANTO);
+      spells.add(O2SpellType.SILENCIO);
    }
 }

@@ -2,7 +2,7 @@ package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -48,11 +48,11 @@ public final class FORGETFULLNESS_POTION extends O2Potion
 
       if (coinToss > 0)
       {
-         Map<Spells, Integer> knownSpells = o2p.getKnownSpells();
+         Map<O2SpellType, Integer> knownSpells = o2p.getKnownSpells();
          if (knownSpells.size() > 0)
          {
-            Set<Spells> keySet = knownSpells.keySet();
-            ArrayList<Spells> listOfSpells = new ArrayList<>(keySet);
+            Set<O2SpellType> keySet = knownSpells.keySet();
+            ArrayList<O2SpellType> listOfSpells = new ArrayList<>(keySet);
             int index = Math.abs(Ollivanders2.random.nextInt() % listOfSpells.size());
 
             o2p.setSpellCount(listOfSpells.get(index), memLoss);

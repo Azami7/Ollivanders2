@@ -1,10 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import java.util.List;
-
 import net.pottercraft.Ollivanders2.*;
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 /**
@@ -37,7 +34,7 @@ public final class HERBIFORS extends GaleatiSuper
     * @param name
     * @param rightWand
     */
-   public HERBIFORS(Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public HERBIFORS(Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

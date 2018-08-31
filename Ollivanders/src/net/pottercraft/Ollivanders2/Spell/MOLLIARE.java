@@ -35,7 +35,7 @@ public final class MOLLIARE extends Charms
     * @param name
     * @param rightWand
     */
-   public MOLLIARE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public MOLLIARE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

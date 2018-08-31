@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -12,7 +12,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * Human Transfiguration
  * Untransfiguration
  *
- * Missing Spells:
+ * Missing O2SpellType:
  * Homorphus Charm - https://github.com/Azami7/Ollivanders2/issues/39
  *
  * @since 2.2.4
@@ -29,16 +29,16 @@ public class ADVANCED_TRANSFIGURATION extends O2Book
       author = "Unknown";
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      spells.add(Spells.INCARNATIO_DEVITO);
-      spells.add(Spells.INCARNATIO_EQUUS);
-      spells.add(Spells.INCARNATIO_FELIS);
-      spells.add(Spells.INCARNATIO_LAMA);
-      spells.add(Spells.INCARNATIO_LUPI);
-      spells.add(Spells.INCARNATIO_PORCILLI);
-      spells.add(Spells.INCARNATIO_URSUS);
-      spells.add(Spells.INCARNATIO_VACCULA);
-      spells.add(Spells.GEMINO);
-      spells.add(Spells.REPARIFARGE);
-      //spells.add(Spells.HOMORPHUS);
+      spells.add(O2SpellType.INCARNATIO_DEVITO);
+      spells.add(O2SpellType.INCARNATIO_EQUUS);
+      spells.add(O2SpellType.INCARNATIO_FELIS);
+      spells.add(O2SpellType.INCARNATIO_LAMA);
+      spells.add(O2SpellType.INCARNATIO_LUPI);
+      spells.add(O2SpellType.INCARNATIO_PORCILLI);
+      spells.add(O2SpellType.INCARNATIO_URSUS);
+      spells.add(O2SpellType.INCARNATIO_VACCULA);
+      spells.add(O2SpellType.GEMINO);
+      spells.add(O2SpellType.REPARIFARGE);
+      //spells.add(O2SpellType.HOMORPHUS);
    }
 }

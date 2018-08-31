@@ -36,7 +36,7 @@ public final class INCARNATIO_EQUUS extends PlayerDisguiseSuper
     * @param name
     * @param rightWand
     */
-   public INCARNATIO_EQUUS(Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public INCARNATIO_EQUUS(Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

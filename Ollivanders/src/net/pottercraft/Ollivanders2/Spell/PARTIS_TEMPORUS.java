@@ -35,7 +35,7 @@ public final class PARTIS_TEMPORUS extends Charms
     * @param name
     * @param rightWand
     */
-   public PARTIS_TEMPORUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public PARTIS_TEMPORUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       move = true;

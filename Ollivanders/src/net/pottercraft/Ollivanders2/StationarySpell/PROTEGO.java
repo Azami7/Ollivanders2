@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import net.pottercraft.Ollivanders2.*;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -12,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Spell.Spells;
 
 /**
  * Shield spell
@@ -56,7 +55,7 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
                   if (location.distance(proj.location) > radius - 1)
                   {
                      Vector N = proj.location.toVector().subtract(location.toVector()).normalize();
-                     double b = p.getSpellNum(ply, Spells.PROTEGO) / rightWand / 10.0;
+                     double b = p.getSpellNum(ply, O2SpellType.PROTEGO) / rightWand / 10.0;
                      b += 1;
                      Vector V = proj.vector.clone();
                      proj.vector = N.multiply((V.dot(N))).multiply(-2).add(V).multiply(b);

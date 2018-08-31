@@ -306,7 +306,7 @@ public abstract class O2Potion implements Teachable
 
    /**
     * Extends the effect time of this potion to the max duration if the player already has this effect active.
-    * @param o2p
+    * @param o2p the target player
     * @return true if the effect was extended, false if the effect was not found and extended
     */
    public boolean extendEffect (O2Player o2p)
