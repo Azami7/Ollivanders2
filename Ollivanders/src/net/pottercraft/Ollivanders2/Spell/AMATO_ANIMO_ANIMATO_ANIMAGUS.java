@@ -130,29 +130,6 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
       }
    }
 
-   /**
-    * If the player is an animagus, saying the incantation will toggle them to and from their
-    * animal form. Changing to animal form takes practice to do consistently. Players can always
-    * return to their human form once transformed.
-    *
-    * @param o2p
-    */
-   private void transform (O2Player o2p)
-   {
-      if (o2p.hasEffect(O2EffectType.ANIMAGUS_EFFECT))
-      {
-         // change them back to human form
-         ANIMAGUS_EFFECT animagusEffect = (ANIMAGUS_EFFECT)(o2p.getEffect(O2EffectType.ANIMAGUS_EFFECT));
-         animagusEffect.kill();
-
-         o2p.removeEffect(O2EffectType.ANIMAGUS_EFFECT);
-      }
-      else
-      {
-         transformToAnimalForm(o2p);
-      }
-   }
-
    private void transformToAnimalForm (O2Player o2p)
    {
       int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
