@@ -586,8 +586,6 @@ public class OllivandersListener implements Listener
                      continue;
                   }
 
-                  //if (owl.isTamed())
-                  //{
                   for (Entity item : world.getEntities())
                   {
                      if (item instanceof Item && item.getLocation().distance(owl.getLocation()) <= 2)
@@ -659,7 +657,6 @@ public class OllivandersListener implements Listener
                         return;
                      }
                   }
-                  //}
                }
             }
          }
@@ -880,12 +877,14 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
 
       O2Player o2p = p.getO2Player(player);
-
-      //p.setPlayerTeamColor(event.getPlayer());
-      o2p.setPlayerName(player.getDisplayName());
+      // update player's name if it has changed
+      o2p.setPlayerName(player.getName());
       p.setO2Player(player, o2p);
 
-      p.getLogger().info("Player " + player.getDisplayName() + " joined.");
+      // add player to their house team
+      p.houses.addPlayerToHouseTeam(player);
+
+      p.getLogger().info("Player " + player.getName() + " joined.");
    }
 
    /**

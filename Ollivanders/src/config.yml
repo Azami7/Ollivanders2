@@ -34,11 +34,11 @@ houses: false
 # slytherinName: Slytherin
 #
 # If houses are enabled, you can change the color for player name tags and chat by uncommenting and editing
-# See https://hub.spigotmc.org/javadocs/spigot/org/bukkit/ChatColor.html
-# gryffindorColor: RED
-# hufflepuffColor: YELLOW
-# ravenclawColor: BLUE
-# slytherinColor: GREEN
+# Options are: WHITE, GRAY, RED, GOLD, YELLOW, GREEN, AQUA, BLUE, LIGHT_PURPLE, DARK_GRAY, DARK_RED, DARK_AQUA, DARK_BLUE, DARK_PURPLE
+# gryffindorColor: DARK_RED
+# hufflepuffColor: GOLD
+# ravenclawColor: DARK_BLUE
+# slytherinColor: DARK_GREEN
 #
 # When years is set to true, it enables the /olli year command
 years: false

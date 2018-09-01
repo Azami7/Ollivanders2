@@ -72,7 +72,7 @@ public class Ollivanders2 extends JavaPlugin
    private Set<Prophecy> prophecy = new HashSet<>();
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
-   private O2Houses houses;
+   public O2Houses houses;
    private O2Players o2Players;
    public O2Books books;
    private O2Potions potions;
@@ -212,21 +212,53 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // set up players
-      o2Players = new O2Players(this);
-      o2Players.loadO2Players();
-      playerCommon = new O2PlayerCommon(this);
+      try
+      {
+         o2Players = new O2Players(this);
+         o2Players.loadO2Players();
+         playerCommon = new O2PlayerCommon(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up players.");
+         e.printStackTrace();
+      }
 
       // set up houses
-      houses = new O2Houses(this);
+      try
+      {
+         houses = new O2Houses(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up houses.");
+         e.printStackTrace();
+      }
 
       // set up potions
-      potions = new O2Potions(this);
+      try
+      {
+         potions = new O2Potions(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up potions.");
+         e.printStackTrace();
+      }
 
       // set up stationary spells
       stationarySpells = new O2StationarySpells(this);
 
       // create books
-      books = new O2Books(this);
+      try
+      {
+         books = new O2Books(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up books.");
+         e.printStackTrace();
+      }
 
       // set up WorldGuard manager
       Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
@@ -1723,16 +1755,6 @@ public class Ollivanders2 extends JavaPlugin
    public void spellCoolDownMessage (Player player)
    {
       player.sendMessage(chatColor + "You are too tired to cast this spell right now.");
-   }
-
-   /**
-    * Set the players name to their team color if they are sorted.
-    *
-    * @param player the player to set the color for
-    */
-   public void setPlayerTeamColor (Player player)
-   {
-      houses.setChatColor(player);
    }
 
    /**
