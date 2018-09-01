@@ -28,8 +28,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import net.pottercraft.Ollivanders2.Effect.Effect;
-import net.pottercraft.Ollivanders2.Effect.VENTO_FOLIO;
+import net.pottercraft.Ollivanders2.Effect.FLYING;
 import net.pottercraft.Ollivanders2.Spell.Spell;
 import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
 import net.pottercraft.Ollivanders2.Spell.Spells;
@@ -131,7 +130,7 @@ class OllivandersSchedule implements Runnable
          {
             for (O2Effect effect : playerEffects)
             {
-               effect.checkEffect(Bukkit.getPlayer(pid));
+               effect.checkEffect();
                if (effect.kill)
                {
                   o2p.removeEffect(effect);
@@ -470,7 +469,7 @@ class OllivandersSchedule implements Runnable
                {
                   for (O2Effect effect : p.getO2Player(player).getEffects())
                   {
-                     if (effect instanceof VENTO_FOLIO)
+                     if (effect instanceof FLYING)
                      {
                         continue playerIter;
                      }

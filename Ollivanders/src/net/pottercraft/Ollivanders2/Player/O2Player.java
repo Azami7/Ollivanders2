@@ -9,18 +9,13 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import me.libraryaddict.disguise.DisguiseAPI;
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
-import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
-import me.libraryaddict.disguise.disguisetypes.watchers.*;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.Spell.Spells;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.entity.*;
+import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -80,7 +75,7 @@ public class O2Player
    /**
     * A list of all effects currently on this player
     */
-   private List<O2Effect> effects = new ArrayList<>();
+   private Map<O2EffectType, O2Effect> effects = new HashMap<>();
 
    /**
     * The spell loaded into the wand for casting with left click
@@ -126,16 +121,6 @@ public class O2Player
     * The color variant for the animagus form
     */
    private String animagusColor = null;
-
-   /**
-    * Whether the player is currently transformed to their animagus shape
-    */
-   private boolean isTransformed = false;
-
-   /**
-    * The disguise object for this player to make them appear as another EntityType
-    */
-   private TargetedDisguise disguise;
 
    /**
     * Whether the player is a Muggle.
@@ -690,9 +675,23 @@ public class O2Player
    {
       List<O2Effect> effectsCopy = new ArrayList<>();
 
-      effectsCopy.addAll(effects);
+      effectsCopy.addAll(effects.values());
 
       return effectsCopy;
+   }
+
+   /**
+    * Gets a specific effect on a player.
+    *
+    * @param effectType the effect type to get
+    * @return the effect if the player has one, null otherwise
+    */
+   public O2Effect getEffect (O2EffectType effectType)
+   {
+      if (effects.containsKey(effectType))
+         return effects.get(effectType);
+      else
+         return null;
    }
 
    /**
@@ -702,10 +701,10 @@ public class O2Player
     */
    public void addEffect (O2Effect e)
    {
-      effects.add(e);
+      effects.put(e.name, e);
 
       if (Ollivanders2.debug)
-         p.getLogger().info("Adding effect " + e.toString() + " to " + playerName);
+         p.getLogger().info("Adding effect " + e.name.toString() + " to " + playerName);
    }
 
    /**
@@ -715,10 +714,20 @@ public class O2Player
     */
    public void removeEffect (O2Effect e)
    {
-      effects.remove(e);
+      removeEffect(e.name);
+   }
+
+   /**
+    * Remove an effect from this player.
+    *
+    * @param effectType the effect to remove from this player
+    */
+   public void removeEffect (O2EffectType effectType)
+   {
+      effects.remove(effectType);
 
       if (Ollivanders2.debug)
-         p.getLogger().info("Removing effect " + e.toString() + " to " + playerName);
+         p.getLogger().info("Removing effect " + effectType.toString() + " to " + playerName);
    }
 
    /**
@@ -1028,161 +1037,21 @@ public class O2Player
    }
 
    /**
-    * Determine if this player is transformed in to their Animagus form. This is only for use in saving
-    * player state to disk and when a player logs in.
+    * Determine if this player has the specified effect
     *
+    * @param effectType the effect to check for
     * @return true if the player is in their animal form, false otherwise
     */
-   public boolean isTransformed ()
+   public boolean hasEffect (O2EffectType effectType)
    {
-      return isTransformed;
-   }
+      boolean has = false;
 
-   /**
-    * Changes a player to their Animagus form or transforms them back.
-    */
-   public void animagusForm ()
-   {
-      if (animagusForm == null)
+      if (effects.containsKey(effectType))
       {
-         // this player is not an animagus
-         return;
+         has = true;
       }
 
-      if (!isTransformed)
-      {
-         // transform the player in to their Animagus form
-         DisguiseType disguiseType = DisguiseType.getType(animagusForm);
-         disguise = new MobDisguise(disguiseType);
-         LivingWatcher watcher = (LivingWatcher)disguise.getWatcher();
-
-         if (animagusForm == EntityType.OCELOT)
-         {
-            OcelotWatcher ocelotWatcher = (OcelotWatcher)watcher;
-            Ocelot.Type type = Ocelot.Type.WILD_OCELOT;
-            ocelotWatcher.isAdult();
-
-            try
-            {
-               type = Ocelot.Type.valueOf(animagusColor);
-            }
-            catch (Exception e)
-            {
-               p.getLogger().warning("Failed to parse Ocelot.Type " + animagusColor);
-               if (Ollivanders2.debug)
-                  e.printStackTrace();
-            }
-            finally
-            {
-               if (type != null)
-               {
-                  ocelotWatcher.setType(type);
-               }
-            }
-         }
-         else if (animagusForm == EntityType.WOLF)
-         {
-            WolfWatcher wolfWatcher = (WolfWatcher)watcher;
-            DyeColor color = DyeColor.WHITE;
-            wolfWatcher.isAdult();
-
-            try
-            {
-               color = DyeColor.valueOf(animagusColor);
-            }
-            catch (Exception e)
-            {
-               p.getLogger().warning("Failed to parse DyeColor " + animagusColor);
-               if (Ollivanders2.debug)
-                  e.printStackTrace();
-            }
-            finally
-            {
-               if (color != null)
-               {
-                  wolfWatcher.isTamed();
-                  wolfWatcher.setCollarColor(color);
-               }
-            }
-         }
-         else if (animagusForm == EntityType.HORSE)
-         {
-            HorseWatcher horseWatcher = (HorseWatcher)watcher;
-            horseWatcher.setStyle(Horse.Style.NONE);
-            Horse.Color color = Horse.Color.WHITE;
-            horseWatcher.setBaby();
-
-            try
-            {
-               color = Horse.Color.valueOf(animagusColor);
-            }
-            catch (Exception e)
-            {
-               p.getLogger().warning("Failed to parse Horse.Color " + animagusColor);
-               if (Ollivanders2.debug)
-                  e.printStackTrace();
-            }
-            finally
-            {
-               if (color != null)
-               {
-                  horseWatcher.setColor(color);
-               }
-            }
-         }
-         else if (Ollivanders2.mcVersionCheck() && animagusForm == EntityType.LLAMA)
-         {
-            LlamaWatcher llamaWatcher = (LlamaWatcher)watcher;
-            Llama.Color color = Llama.Color.WHITE;
-            llamaWatcher.setBaby();
-
-            try
-            {
-               color = Llama.Color.valueOf(animagusColor);
-            }
-            catch (Exception e)
-            {
-               p.getLogger().warning("Failed to parse Llama.Color " + animagusColor);
-               if (Ollivanders2.debug)
-                  e.printStackTrace();
-            }
-            finally
-            {
-               if (color != null)
-               {
-                  llamaWatcher.setColor(color);
-               }
-            }
-         }
-         else if (animagusForm == EntityType.COW || animagusForm == EntityType.DONKEY
-               || animagusForm == EntityType.MULE || animagusForm == EntityType.SLIME
-               || animagusForm == EntityType.POLAR_BEAR)
-         {
-            AgeableWatcher ageableWatcher = (AgeableWatcher)watcher;
-            ageableWatcher.setBaby();
-         }
-
-         Entity player = p.getServer().getPlayer(pid);
-
-         DisguiseAPI.disguiseToAll(player, disguise);
-
-         isTransformed = true;
-      }
-      else // isTransformed = true
-      {
-         // transform this player to their normal form
-         Entity entity = disguise.getEntity();
-         try
-         {
-            DisguiseAPI.undisguiseToAll(entity);
-         }
-         catch (Exception e)
-         {
-            // in case entity no longer exists
-         }
-
-         isTransformed = false;
-      }
+      return has;
    }
 
    /**

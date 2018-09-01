@@ -46,8 +46,7 @@ public final class BookTexts
       }
    }
 
-   private Map <Spells, BookText> O2SpellTextMap = new HashMap<>();
-   private Map <O2PotionType, BookText> O2PotionTextMap = new HashMap<>();
+   private Map <String, BookText> O2MagicTextMap = new HashMap<>();
 
    private Ollivanders2 p;
 
@@ -106,7 +105,7 @@ public final class BookTexts
          String name = p.common.firstLetterCapitalize(p.common.enumRecode(spellType.toString().toLowerCase()));
 
          BookText sText = new BookText(name, text, flavorText);
-         O2SpellTextMap.put(spellType, sText);
+         O2MagicTextMap.put(spellType.toString(), sText);
       }
    }
 
@@ -144,7 +143,7 @@ public final class BookTexts
          String name = p.common.firstLetterCapitalize(p.common.enumRecode(potionType.toString().toLowerCase()));
 
          BookText sText = new BookText(name, text, flavorText);
-         O2PotionTextMap.put(potionType, sText);
+         O2MagicTextMap.put(potionType.toString(), sText);
       }
    }
 
@@ -158,10 +157,8 @@ public final class BookTexts
    {
       String flavorText = null;
 
-      if (O2SpellTextMap.containsKey(magic))
-         flavorText = O2SpellTextMap.get(magic).getFlavorText();
-      else if (O2PotionTextMap.containsKey(magic))
-         flavorText = O2PotionTextMap.get(magic).getFlavorText();
+      if (O2MagicTextMap.containsKey(magic))
+         flavorText = O2MagicTextMap.get(magic).getFlavorText();
 
       return flavorText;
    }
@@ -176,10 +173,8 @@ public final class BookTexts
    {
       String text = null;
 
-      if (O2SpellTextMap.containsKey(magic))
-         text = O2SpellTextMap.get(magic).getText();
-      else if (O2PotionTextMap.containsKey(magic))
-         text = O2PotionTextMap.get(magic).getText();
+      if (O2MagicTextMap.containsKey(magic))
+         text = O2MagicTextMap.get(magic).getText();
 
       return text;
    }
@@ -194,10 +189,8 @@ public final class BookTexts
    {
       String name = null;
 
-      if (O2SpellTextMap.containsKey(magic))
-         name = O2SpellTextMap.get(magic).getName();
-      else if (O2PotionTextMap.containsKey(magic))
-         name = O2PotionTextMap.get(magic).getName();
+      if (O2MagicTextMap.containsKey(magic))
+         name = O2MagicTextMap.get(magic).getName();
 
       return name;
    }

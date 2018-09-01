@@ -394,6 +394,10 @@ public class OllivandersListener implements Listener
             // wandless spells
             if (spell == Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS)
             {
+               if (Ollivanders2.debug)
+               {
+                  p.getLogger().info("onPlayerChat: allow wandless casting of " + spell);
+               }
                castSuccess = true;
             }
 
@@ -945,7 +949,7 @@ public class OllivandersListener implements Listener
                }
                if (!hasLy)
                {
-                  o2p.addEffect(new LYCANTHROPY(p, O2EffectType.LYCANTHROPY, 100));
+                  o2p.addEffect(new LYCANTHROPY(p, O2EffectType.LYCANTHROPY, 100, damaged));
                }
             }
          }

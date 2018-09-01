@@ -73,10 +73,12 @@ public class Ollivanders2Common
       add(Spells.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       add(Spells.AVIFORS);
       add(Spells.DRACONIFORS);
+      add(Spells.DUCKLIFORS);
       add(Spells.ENTOMORPHIS);
       add(Spells.EQUUSIFORS);
       add(Spells.INCARNATIO_DEVITO);
       add(Spells.INCARNATIO_EQUUS);
+      add(Spells.INCARNATIO_FELIS);
       add(Spells.INCARNATIO_LAMA);
       add(Spells.INCARNATIO_LUPI);
       add(Spells.INCARNATIO_PORCILLI);

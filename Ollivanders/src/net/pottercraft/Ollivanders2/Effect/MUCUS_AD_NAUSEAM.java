@@ -15,18 +15,17 @@ public class MUCUS_AD_NAUSEAM extends O2Effect
     * @param plugin the callback to the MC plugin
     * @param effect the effect cast
     * @param duration the duration of the effect
+    * @param player the player this effect acts on
     */
-   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, O2EffectType effect, int duration)
+   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
    {
-      super(plugin, effect, duration);
+      super(plugin, effect, duration, player);
    }
 
    /**
     * Spawn a slime entity on the player's head once per second.
-    *
-    * @param target the player affected by the effect
     */
-   public void checkEffect (Player target)
+   public void checkEffect ()
    {
       age(1);
       if (duration % 20 == 0)
