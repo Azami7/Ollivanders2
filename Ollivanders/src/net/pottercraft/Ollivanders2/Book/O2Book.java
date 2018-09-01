@@ -127,6 +127,12 @@ public abstract class O2Book
       for (String content : bookContents)
       {
          String name = p.books.spellText.getName(content);
+         if (name == null)
+         {
+            p.getLogger().warning(this.title + " contains unknown spell or potion " + content);
+            continue;
+         }
+
          toc = toc + name + "\n";
 
          String text;

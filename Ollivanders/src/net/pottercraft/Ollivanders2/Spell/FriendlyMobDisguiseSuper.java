@@ -35,7 +35,9 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
          entityWhitelist.add(e);
       }
 
-      if (usesModifier > 100)
+      int uses = (int)(usesModifier * 5);
+
+      if (uses > 100)
       {
          for (EntityType e : p.common.mediumFriendlyAnimals)
          {
@@ -43,7 +45,7 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
          }
       }
 
-      if (usesModifier > 200)
+      if (uses > 200)
       {
          for (EntityType e : p.common.largeFriendlyAnimals)
          {

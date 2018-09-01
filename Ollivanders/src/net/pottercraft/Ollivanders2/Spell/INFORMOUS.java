@@ -6,6 +6,7 @@ import java.util.List;
 import net.pottercraft.Ollivanders2.*;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
+import net.pottercraft.Ollivanders2.Effect.SHAPE_SHIFT;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
@@ -78,6 +79,10 @@ public final class INFORMOUS extends Arithmancy
                   if (effect instanceof LYCANTHROPY)
                   {
                      player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + ePlayer.getName() + " has Lycanthropy.");
+                  }
+                  else if (effect instanceof SHAPE_SHIFT)
+                  {
+                     // do nothing, this is not detectable
                   }
                   else
                   {

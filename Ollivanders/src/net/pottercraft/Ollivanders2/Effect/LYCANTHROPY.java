@@ -21,20 +21,19 @@ public class LYCANTHROPY extends O2Effect
     * @param plugin a callback to the MC plugin
     * @param effect the effect cast
     * @param duration the duration of the effect
+    * @param player the player this effect acts on
     */
-   public LYCANTHROPY (Ollivanders2 plugin, O2EffectType effect, int duration)
+   public LYCANTHROPY (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
    {
-      super(plugin, effect, duration);
+      super(plugin, effect, duration, player);
    }
 
    /**
-    * Check the time of day for the player and transform them in to or back from
+    * Check the time of day for the player and disguisePlayer them in to or back from
     * a wolf Entity.
-    *
-    * @param target the player affected by the effect
     */
    @Override
-   public void checkEffect (Player target)
+   public void checkEffect ()
    {
       long time = target.getWorld().getFullTime();
       long dayOrNight = (time / 12000) % 2;

@@ -73,10 +73,12 @@ public class Ollivanders2Common
       add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       add(O2SpellType.AVIFORS);
       add(O2SpellType.DRACONIFORS);
+      add(O2SpellType.DUCKLIFORS);
       add(O2SpellType.ENTOMORPHIS);
       add(O2SpellType.EQUUSIFORS);
       add(O2SpellType.INCARNATIO_DEVITO);
       add(O2SpellType.INCARNATIO_EQUUS);
+      add(O2SpellType.INCARNATIO_FELIS);
       add(O2SpellType.INCARNATIO_LAMA);
       add(O2SpellType.INCARNATIO_LUPI);
       add(O2SpellType.INCARNATIO_PORCILLI);

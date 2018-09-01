@@ -24,6 +24,5 @@ public class JINXES_FOR_THE_JINXED extends O2Book
       spells.add(O2SpellType.IMPEDIMENTA);
       spells.add(O2SpellType.LEVICORPUS);
       spells.add(O2SpellType.LACARNUM_INFLAMARI);
-      spells.add(O2SpellType.VENTO_FOLIO);
    }
 }
