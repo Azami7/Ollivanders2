@@ -252,7 +252,7 @@ public class O2Houses
          try
          {
             houseType = O2HouseMap.get(player.getUniqueId());
-            p.getLogger().info(player.getDisplayName() + " is in " + houseType.toString());
+            p.getLogger().info(player.getDisplayName() + " is in " + houseType.getName());
          }
          catch (Exception e)
          {
@@ -301,7 +301,7 @@ public class O2Houses
       houseType.setScore(points);
 
       if (Ollivanders2.debug)
-         p.getLogger().info("Set house points for " + houseType.toString() + " to " + points);
+         p.getLogger().info("Set house points for " + houseType.getName() + " to " + points);
 
       return updateScoreboard();
    }
