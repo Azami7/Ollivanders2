@@ -8,9 +8,11 @@ divinationBlock: 20
 divinationMaxDuration: 86400000
 divinationMaxStartOffset: 604800000
 muggletonBlockChange: true
+#
 # When death exp loss is enabled, players will lose their spell experience if they die.  It is not recommended to set
 # this to true if your server supports minigames or other plugins that expect players will die.
 deathExpLoss: false
+#
 # When book learning is true, players can only cast spells they have learned from a book.  This prevents players
 # being able to cast spells they have not "learned" but have seen in chat, etc.
 bookLearning: true
