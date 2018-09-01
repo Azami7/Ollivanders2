@@ -5,7 +5,7 @@ import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Basic Fireworks
+ * Non-cannon book written by George Weasley on firework making.
  *
  * @since 2.2.4
  * @author Azami7
