@@ -22,5 +22,6 @@ public class SECRETS_OF_THE_DARKEST_ART extends O2Book
       branch = O2MagicBranch.DARK_ARTS;
 
       spells.add(Spells.ET_INTERFICIAM_ANIMAM_LIGAVERIS);
+      spells.add(Spells.VENTO_FOLIO);
    }
 }

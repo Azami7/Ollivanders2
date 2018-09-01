@@ -37,7 +37,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
       flavorText.add("\"You know that I can disguise myself most effectively.\" -Peter Pettigrew");
 
       text = "Becoming an Animagus takes practice, skill, and patience. The animagus incantation is the one of the "
-            + "most difficult Transfiguration spells. The spell alone is not sufficient to disguisePlayer the caster the "
+            + "most difficult Transfiguration spells. The spell alone is not sufficient to transform the caster the "
             + "first time. You must drink the Animagus potion immediately after saying the incantation. Both the "
             + "incantation and the potion also have specific environmental requirements. The incantation must be said "
             + "at either sunrise or sunset. The potion must be consumed during a thunderstorm. One you have successfully "
@@ -104,6 +104,29 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
       {
          player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
                + "Nothing seems to happen.");
+      }
+   }
+
+   /**
+    * If the player is an animagus, saying the incantation will toggle them to and from their
+    * animal form. Changing to animal form takes practice to do consistently. Players can always
+    * return to their human form once transformed.
+    *
+    * @param o2p
+    */
+   private void transform (O2Player o2p)
+   {
+      if (o2p.hasEffect(O2EffectType.ANIMAGUS_EFFECT))
+      {
+         // change them back to human form
+         ANIMAGUS_EFFECT animagusEffect = (ANIMAGUS_EFFECT)(o2p.getEffect(O2EffectType.ANIMAGUS_EFFECT));
+         animagusEffect.kill();
+
+         o2p.removeEffect(O2EffectType.ANIMAGUS_EFFECT);
+      }
+      else
+      {
+         transformToAnimalForm(o2p);
       }
    }
 

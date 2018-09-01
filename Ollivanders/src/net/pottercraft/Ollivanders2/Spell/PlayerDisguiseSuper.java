@@ -32,10 +32,12 @@ public class PlayerDisguiseSuper extends EntityDisguiseSuper
 
       entityWhitelist.add(EntityType.PLAYER);
 
-      if (usesModifier < 10)
+      int uses = (int)(usesModifier * 5);
+
+      if (uses < 10)
          successRate = 10;
-      else if (usesModifier < 100)
-         successRate = (int)usesModifier;
+      else if (uses < 100)
+         successRate = uses;
       else
          successRate = 100;
    }

@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
  *
  * @author lownes
  */
-public class VENTO_FOLIO extends O2Effect
+public class FLYING extends O2Effect
 {
    /**
     * Constructor
@@ -19,7 +19,7 @@ public class VENTO_FOLIO extends O2Effect
     * @param duration the duration of the effect
     * @param player the player this effect acts on
     */
-   public VENTO_FOLIO (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
+   public FLYING (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
    {
       super(plugin, effect, duration, player);
    }
