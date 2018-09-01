@@ -105,7 +105,7 @@ public final class VENTO_FOLIO extends Charms
 
       if (rand < successRate)
       {
-         o2p.addEffect(new FLYING(p, O2EffectType.FLYING, duration));
+         o2p.addEffect(new FLYING(p, O2EffectType.FLYING, duration, player));
 
          if (Ollivanders2.debug)
             p.getLogger().info("Adding effect ");

@@ -17,19 +17,18 @@ public class WIT_SHARPENING_POTION extends O2Effect
     * @param plugin a callback to the MC plugin
     * @param effect the effect cast
     * @param duration the duration of the effect
+    * @param player the player this effect acts on
     */
-   public WIT_SHARPENING_POTION(Ollivanders2 plugin, O2EffectType effect, int duration)
+   public WIT_SHARPENING_POTION(Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
    {
-      super(plugin, effect, duration);
+      super(plugin, effect, duration, player);
    }
 
    /**
     * Age this effect each game tick.
-    *
-    * @param target the player affected by the effect
     */
    @Override
-   public void checkEffect (Player target)
+   public void checkEffect ()
    {
       age(1);
    }

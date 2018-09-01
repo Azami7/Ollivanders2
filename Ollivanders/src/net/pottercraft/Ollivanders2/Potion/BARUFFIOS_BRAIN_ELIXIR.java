@@ -35,7 +35,7 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
    {
       if (!extendEffect(o2p))
       {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BARUFFIOS_BRAIN_ELIXIR(p, O2EffectType.BARUFFIOS_BRAIN_ELIXIR, duration));
+         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BARUFFIOS_BRAIN_ELIXIR(p, O2EffectType.BARUFFIOS_BRAIN_ELIXIR, duration, player));
       }
 
       player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))

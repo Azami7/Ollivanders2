@@ -7,7 +7,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * Creates a larger incendio that strafes and doubles the radius and duration.
  *
- * @see IncarnatioSuper
  * @version Ollivanders2
  * @author lownes
  * @author Azami7

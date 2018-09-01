@@ -20,20 +20,20 @@ public class LEVICORPUS extends O2Effect
     * @param plugin a callback to the MC plugin
     * @param effect the effect cast
     * @param duration the duration of the effect
+    * @param player the player this effect acts on
     */
-   public LEVICORPUS (Ollivanders2 plugin, O2EffectType effect, int duration, Location loc)
+   public LEVICORPUS (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
    {
-      super(plugin, effect, duration);
-      this.loc = loc;
+      super(plugin, effect, duration, player);
+
+      this.loc = player.getEyeLocation();
    }
 
    /**
     * Age this effect by 1, move the player up 1.5 blocks off the ground
-    *
-    * @param target the player affected by the effect
     */
    @Override
-   public void checkEffect (Player target)
+   public void checkEffect ()
    {
       age(1);
       target.setAllowFlight(duration > 1);

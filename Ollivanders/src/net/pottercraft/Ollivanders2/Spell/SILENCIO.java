@@ -52,7 +52,7 @@ public final class SILENCIO extends Charms
             Player player = (Player) live;
             O2Player o2p = p.getO2Player(player);
             int dur = (int) (usesModifier * 1200);
-            o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.SILENCIO(p, O2EffectType.SILENCIO, dur));
+            o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.SILENCIO(p, O2EffectType.SILENCIO, dur, player));
             p.setO2Player(player, o2p);
             kill();
             return;

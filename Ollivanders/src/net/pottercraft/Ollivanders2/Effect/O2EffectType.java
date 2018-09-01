@@ -9,6 +9,7 @@ package net.pottercraft.Ollivanders2.Effect;
  */
 public enum O2EffectType
 {
+   ANIMAGUS_EFFECT,
    ANIMAGUS_INCANTATION,
    BABBLING_EFFECT,
    BARUFFIOS_BRAIN_ELIXIR,
