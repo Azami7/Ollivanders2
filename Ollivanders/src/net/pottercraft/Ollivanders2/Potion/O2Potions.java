@@ -1,21 +1,24 @@
 package net.pottercraft.Ollivanders2.Potion;
 
-import java.util.Map;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
-import net.pottercraft.Ollivanders2.Spell.ARRESTO_MOMENTUM;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 
 /**
  * Manages all Ollivanders2 potions.
@@ -220,14 +223,17 @@ public class O2Potions
     */
    public ItemStack getIngredientByName (String name)
    {
-      IngredientType ingredientType = null;
-
       for (IngredientType i : IngredientType.values())
       {
          String iName = i.getName();
 
          if (iName.toLowerCase().startsWith(name.toLowerCase()))
             return getIngredient(i);
+         else
+         {
+            if (Ollivanders2.debug)
+               p.getLogger().info("Did not find ingredient " + name);
+         }
       }
 
       return null;
@@ -241,6 +247,9 @@ public class O2Potions
     */
    public ItemStack getIngredient (IngredientType ingredientType)
    {
+      if (Ollivanders2.debug)
+         p.getLogger().info("Getting ingredient " + ingredientType.getName());
+
       Material material = ingredientType.getMaterial();
       short variant = ingredientType.getVariant();
       String name = ingredientType.getName();
@@ -248,8 +257,17 @@ public class O2Potions
       ItemStack ingredient = new ItemStack(material, 1, variant);
 
       ItemMeta meta = ingredient.getItemMeta();
-
+      meta.setLore(Arrays.asList(name));
       meta.setDisplayName(name);
+
+      if (material == Material.POTION)
+      {
+         Ollivanders2Common common = new Ollivanders2Common(p);
+
+         meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+         ((PotionMeta)meta).setColor(common.colorByNumber((int)variant));
+      }
+
       ingredient.setItemMeta(meta);
 
       return ingredient;
