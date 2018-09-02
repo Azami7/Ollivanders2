@@ -6,10 +6,10 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public enum IngredientType
 {
-   ARMADILLO_BILE (Material.SLIME_BALL, (short)0, "Armadillo Bile"),
+   ARMADILLO_BILE (Material.POTION, (short)9, "Armadillo Bile"),
    BEZOAR (Material.COAL, (short)1, "Bezoar"), // charcoal
    BONE (Material.BONE, (short)0, "Bone"),
-   BLOOD (Material.POTION, (short)8204, "Blood"),
+   BLOOD (Material.POTION, (short)7, "Blood"),
    DEATHS_HEAD_MOTH_CHRYSALIS (Material.COAL, (short)0, "Death's Head Moth Chrysalis"),
    DEW_DROP (Material.GHAST_TEAR, (short)0, "Dew Drop"),
    DITTANY (Material.SAPLING, (short)2, "Dittany"), //birch sapling
@@ -22,7 +22,7 @@ public enum IngredientType
    LETHE_RIVER_WATER (Material.POTION, (short)0, "Lethe River Water"), //bottle of water
    LIONFISH_SPINES (Material.RAW_FISH, (short)0, "Lionfish Spines"),
    MANDRAKE_LEAF (Material.WATER_LILY, (short)0, "Mandrake Leaf"),
-   MISTLETOE_BERRIES (Material.COCOA, (short)0, "Mistletoe Berries"),
+   MISTLETOE_BERRIES (Material.INK_SACK, (short)3, "Mistletoe Berries"),
    POISONOUS_POTATO (Material.POISONOUS_POTATO, (short)0, "Poisonous Potato"),
    POWDERED_SAGE (Material.INK_SACK, (short)10, "Powdered Sage"), //lime dye
    ROTTEN_FLESH (Material.ROTTEN_FLESH, (short)0, "Rotten Flesh"),

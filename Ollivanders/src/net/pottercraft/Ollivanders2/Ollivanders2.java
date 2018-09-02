@@ -1699,12 +1699,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private ItemStack getBookFromArgs (String[] args, CommandSender sender)
    {
-      String title = "";
-      for (String arg : args)
-      {
-         title = title + " " + arg;
-      }
-      title = title.trim();
+      String title = common.stringArrayToString(args);
 
       ItemStack bookItem = books.getBookByTitle(title);
 
@@ -1760,18 +1755,109 @@ public class Ollivanders2 extends JavaPlugin
 
    public boolean runPotions (CommandSender sender, String[] args)
    {
+      if (args.length > 1)
+      {
+         String subCommand = args[1];
 
+         if (subCommand.equalsIgnoreCase("ingredient"))
+         {
+            if (args.length > 2)
+            {
+               if (args[2].equalsIgnoreCase("list"))
+               {
+                  return listAllIngredients((Player)sender);
+               }
+               else
+               {
+                  // potion ingredient mandrake leaf
+                  String [] subArgs = Arrays.copyOfRange(args, 2, args.length);
+                  return givePotionIngredient((Player)sender, common.stringArrayToString(subArgs));
+               }
+            }
+         }
+         else if (subCommand.equalsIgnoreCase("all"))
+         {
+            return giveAllPotions((Player)sender);
+         }
+         //TODO implement givePotion
+         /*
+         else if (subCommand.equalsIgnoreCase("give"))
+         {
+            if (args.length > 3)
+            {
+               // potions give fred memory potion
+               Player targetPlayer = getServer().getPlayer(args[2]);
+               String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
+               givePotion((Player)sender, common.stringArrayToString(subArgs));
+            }
+         }
+         else
+         {
+            // potions memory potion
+            String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
+            givePotion((Player)sender, common.stringArrayToString(subArgs));
+         }
+         */
+      }
+
+      usageMessagePotions(sender);
+      return true;
    }
 
    private void usageMessagePotions (CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "book commands: "
-            + "\nlist - gives a book that lists all available books"
-            + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
-            + "\n<book title> - gives you the book with this title, if it exists"
-            + "\ngive <player> <book title> - gives target player the book with this title, if it exists\n"
-            + "\nExample: /ollivanders2 book standard book of spells grade 1");
+            + "Usage: /olli potions"
+            + "\ningredient list - lists all potions ingredients"
+            + "\ningredient <ingredient name> - give you the ingredient with this name, if it exists"
+            + "\nall - gives all Ollivanders2 potions, this may not fit in your inventory"
+            //+ "\n<potion name> - gives you the potion with this name, if it exists"
+            //+ "\ngive <player> <potion name> - gives target player the potion with this name, if it exists\n"
+            + "\nExample: /ollivanders2 potions all"
+            + "\nExample: /ollivanders2 potions ingredient list");
+   }
+
+   /**
+    * List all the potions ingredients
+    *
+    * @param player the player to display the list to
+    * @return true
+    */
+   private boolean listAllIngredients (Player player)
+   {
+      List<String> ingredientList = potions.getAllIngredientNames();
+      String displayString = "Ingredients:";
+
+      for (String name : ingredientList)
+      {
+         displayString = displayString + "\n" + name;
+      }
+      displayString = displayString + "\n";
+
+      player.sendMessage(chatColor + displayString);
+
+      return true;
+   }
+
+   /**
+    * Give a potion ingredient to a player.
+    *
+    * @param player the player to give the ingredient to
+    * @param name the name of the ingredient
+    * @return true
+    */
+   private boolean givePotionIngredient(Player player, String name)
+   {
+      List<ItemStack> kit = new ArrayList<>();
+      ItemStack ingredient = potions.getIngredientByName(name);
+
+      if (ingredient != null)
+      {
+         kit.add(ingredient);
+         givePlayerKit(player, kit);
+      }
+
+      return true;
    }
 
    /**
@@ -1780,7 +1866,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param player the player to give the potions to
     * @return true unless an error occurred
     */
-   private boolean givePotions (Player player)
+   private boolean giveAllPotions (Player player)
    {
       if (debug)
          getLogger().info("Running givePotions...");

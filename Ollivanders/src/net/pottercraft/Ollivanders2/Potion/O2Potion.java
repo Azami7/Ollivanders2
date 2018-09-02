@@ -15,6 +15,7 @@ import net.pottercraft.Ollivanders2.Teachable;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
@@ -229,6 +230,8 @@ public abstract class O2Potion implements Teachable
       meta.setColor(potionColor);
       if (effect != null)
          meta.addCustomEffect(effect, true);
+
+      meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
       potion.setItemMeta(meta);
 
