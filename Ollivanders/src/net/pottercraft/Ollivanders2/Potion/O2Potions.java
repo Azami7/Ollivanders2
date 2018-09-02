@@ -11,9 +11,10 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import java.util.List;
+import java.util.Map;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -244,15 +245,12 @@ public class O2Potions
     */
    public ItemStack getIngredientByName (String name)
    {
-      IngredientType ingredientType = null;
-
       for (IngredientType i : IngredientType.values())
       {
          String iName = i.getName();
 
          if (iName.toLowerCase().startsWith(name.toLowerCase()))
             return getIngredient(i);
-
          else
          {
             if (Ollivanders2.debug)
