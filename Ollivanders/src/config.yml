@@ -27,6 +27,7 @@ hostileMobAnimagi: false
 chatColor: 5
 flooPowder: REDSTONE
 broomstick: STICK
+#
 # When houses are enabled, Ollivanders will use the built-in minecraft scoreboard to create house teams and points.
 # IMPORTANT: Enabling houses will take over your server's main scoreboard.  If you do not want this, you must
 # set this to false.
