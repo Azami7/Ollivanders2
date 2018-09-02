@@ -21,6 +21,7 @@ import Quidditch.Arena;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.House.O2Houses;
+import net.pottercraft.Ollivanders2.House.O2HouseType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Player.O2Players;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
@@ -71,7 +72,7 @@ public class Ollivanders2 extends JavaPlugin
    private Set<Prophecy> prophecy = new HashSet<>();
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
-   private O2Houses houses;
+   public O2Houses houses;
    private O2Players o2Players;
    public O2Books books;
    private O2Potions potions;
@@ -87,6 +88,7 @@ public class Ollivanders2 extends JavaPlugin
    public static Ollivanders2WorldGuard worldGuardO2;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
+   public static ChatColor chatColor = ChatColor.AQUA;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -155,6 +157,10 @@ public class Ollivanders2 extends JavaPlugin
       if (getConfig().getBoolean("debug"))
          debug = true;
 
+      // chat color
+      if (getConfig().isSet("chatColor"))
+         chatColor = ChatColor.getByChar(getConfig().getString("chatColor"));
+
       OllivandersSchedule schedule = new OllivandersSchedule(this);
       Bukkit.getScheduler().scheduleSyncRepeatingTask(this, schedule, 20L, 1L);
 
@@ -206,21 +212,53 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // set up players
-      o2Players = new O2Players(this);
-      o2Players.loadO2Players();
-      playerCommon = new O2PlayerCommon(this);
+      try
+      {
+         o2Players = new O2Players(this);
+         o2Players.loadO2Players();
+         playerCommon = new O2PlayerCommon(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up players.");
+         e.printStackTrace();
+      }
 
       // set up houses
-      houses = new O2Houses(this);
+      try
+      {
+         houses = new O2Houses(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up houses.");
+         e.printStackTrace();
+      }
 
       // set up potions
-      potions = new O2Potions(this);
+      try
+      {
+         potions = new O2Potions(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up potions.");
+         e.printStackTrace();
+      }
 
       // set up stationary spells
       stationarySpells = new O2StationarySpells(this);
 
       // create books
-      books = new O2Books(this);
+      try
+      {
+         books = new O2Books(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up books.");
+         e.printStackTrace();
+      }
 
       // set up WorldGuard manager
       Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
@@ -433,7 +471,7 @@ public class Ollivanders2 extends JavaPlugin
       // sorted
       if (houses.isSorted(player))
       {
-         String house = houses.getHouseName(houses.getHouse(player));
+         String house = houses.getHouse(player).getName();
          summary = summary + "\nHouse: " + house + "\n";
       }
       else
@@ -461,7 +499,7 @@ public class Ollivanders2 extends JavaPlugin
          summary = summary + "\nYou have not learned any spells.";
       }
 
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + summary);
+      sender.sendMessage(chatColor + summary);
 
       return true;
    }
@@ -473,7 +511,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private void usageMessageOllivanders (CommandSender sender)
    {
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+      sender.sendMessage(chatColor
             + "You are running Ollivanders2 version " + this.getDescription().getVersion() + "\n"
             + "\nOllivanders2 commands:"
             + "\nwands - gives a complete set of wands"
@@ -500,7 +538,7 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (!getConfig().getBoolean("houses"))
       {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+         sender.sendMessage(chatColor
                + "House are not currently enabled for your server."
                + "\nTo enable houses, update the Ollivanders2 config.yml setting to true and restart your server."
                + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
@@ -556,7 +594,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private void usageMessageHouse (CommandSender sender)
    {
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+      sender.sendMessage(chatColor
             + "Usage: /ollivanders2 house points [option]"
             + "\n\nOptions to '/ollivanders2 house':"
             + "\nlist - lists Ollivanders2 houses and house membership"
@@ -581,7 +619,7 @@ public class Ollivanders2 extends JavaPlugin
       {
          String targetHouse = args[2];
 
-         O2Houses.O2HouseType house = houses.getHouseType(targetHouse);
+         O2HouseType house = houses.getHouseType(targetHouse);
          if (house != null)
          {
             ArrayList<String> members = houses.getHouseMembers(house);
@@ -597,14 +635,12 @@ public class Ollivanders2 extends JavaPlugin
                }
             }
 
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                  + "Members of " + targetHouse + " are:\n" + memberStr);
+            sender.sendMessage(chatColor + "Members of " + targetHouse + " are:\n" + memberStr);
 
             return true;
          }
 
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-               + "Invalid house name '" + targetHouse + "'");
+         sender.sendMessage(chatColor + "Invalid house name '" + targetHouse + "'");
       }
 
       String houseNames = "";
@@ -615,7 +651,7 @@ public class Ollivanders2 extends JavaPlugin
          houseNames = houseNames + name + " ";
       }
 
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+      sender.sendMessage(chatColor
             + "Ollivanders2 House are:\n" + houseNames + "\n"
             + "\nTo see the members of a specific house, run the command /ollivanders2 house list [house]"
             + "\nFor example, /ollivanders2 list Hufflepuff");
@@ -646,19 +682,18 @@ public class Ollivanders2 extends JavaPlugin
       Player player = getServer().getPlayer(targetPlayer);
       if (player == null)
       {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+         sender.sendMessage(chatColor
                + "Unable to find a player named " + targetPlayer + " logged in to this server."
                + "\nPlayers must be logged in to be sorted.");
 
          return true;
       }
 
-      O2Houses.O2HouseType house = houses.getHouseType(targetHouse);
+      O2HouseType house = houses.getHouseType(targetHouse);
 
       if (house == null)
       {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-               + targetHouse + " is not a valid house name.");
+         sender.sendMessage(chatColor + targetHouse + " is not a valid house name.");
 
          return true;
       }
@@ -674,21 +709,18 @@ public class Ollivanders2 extends JavaPlugin
 
       if (success)
       {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-               + targetPlayer + " has been successfully sorted in to " + targetHouse);
+         sender.sendMessage(chatColor + targetPlayer + " has been successfully sorted in to " + targetHouse);
       }
       else
       {
-         String curHouse = houses.getHouseName(houses.getHouse(player));
+         String curHouse = houses.getHouse(player).getName();
          if (curHouse == null)
          {
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                + "Oops, something went wrong with the sort.  If this persists, check your server logs.");
+            sender.sendMessage(chatColor + "Oops, something went wrong with the sort.  If this persists, check your server logs.");
          }
          else
          {
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                  + targetPlayer + " is already a member of " + houses.getHouseName(houses.getHouse(player)));
+            sender.sendMessage(chatColor + targetPlayer + " is already a member of " + houses.getHouse(player).getName());
          }
       }
 
@@ -701,7 +733,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private void usageMessageHouseSort (CommandSender sender)
    {
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+      sender.sendMessage(chatColor
             + "Usage: /ollivanders2 house sort [player] [house]"
             + "\nFor example '/ollivanders2 house sort Harry Gryffindor");
    }
@@ -736,7 +768,7 @@ public class Ollivanders2 extends JavaPlugin
             if (debug)
                getLogger().info("runHousePoints: house = " + h);
 
-            O2Houses.O2HouseType houseType = null;
+            O2HouseType houseType = null;
             try
             {
                houseType = houses.getHouseType(h);
@@ -796,7 +828,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private void usageMessageHousePoints (CommandSender sender)
    {
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+      sender.sendMessage(chatColor
             + "Usage: /ollivanders2 house points [option] [house] [value]"
             + "\n\nOptions to '/ollivanders2 house points':"
             + "\nadd - increase points for a house by specific value"
@@ -819,7 +851,7 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (!getConfig().getBoolean("years"))
       {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+         sender.sendMessage(chatColor
                  + "Years are not currently enabled for your server."
                  + "\nTo enable years, update the Ollivanders2 config.yml setting to true and restart your server."
                  + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
@@ -871,13 +903,11 @@ public class Ollivanders2 extends JavaPlugin
             Player player = getServer().getPlayer(p);
             if (player == null)
             {
-               sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                       + "Unable to find a player named " + p + ".\n");
+               sender.sendMessage(chatColor + "Unable to find a player named " + p + ".\n");
                return true;
             }
             O2Player o2p = getO2Player(player);
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                        + "Player " + p + " is in year " + O2PlayerCommon.yearToInt(o2p.getYear()));
+            sender.sendMessage(chatColor + "Player " + p + " is in year " + O2PlayerCommon.yearToInt(o2p.getYear()));
             return true;
          }
       }
@@ -894,7 +924,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private void usageMessageYearSet (CommandSender sender)
    {
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+      sender.sendMessage(chatColor
               + "Usage: /ollivanders2 year set [player] [year]"
               + "\nyear - must be a number between 1 and 7"
               + "\nExample: /ollivanders2 year set Harry 5");
@@ -907,7 +937,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private void usageMessageYearPromote (CommandSender sender)
    {
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+      sender.sendMessage(chatColor
               + "Usage: /ollivanders2 year promote [player]"
               + "\nExample: /ollivanders2 year promote Harry");
    }
@@ -919,7 +949,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private void usageMessageYearDemote (CommandSender sender)
    {
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+      sender.sendMessage(chatColor
               + "Usage: /ollivanders2 year demote [player]"
               + "\nExample: /ollivanders2 year demote Harry");
    }
@@ -931,7 +961,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private void usageMessageYear (CommandSender sender)
    {
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+      sender.sendMessage(chatColor
               + "Year commands: "
               + "\nset - sets a player's year, years must be between 1 and 7"
               + "\npromote - increases a player's year by 1 year"
@@ -957,8 +987,7 @@ public class Ollivanders2 extends JavaPlugin
       Player player = getServer().getPlayer(targetPlayer);
       if (player == null)
       {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                 + "Unable to find a player named " + targetPlayer + ".\n");
+         sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
          return true;
       }
       O2Player o2p = getO2Player(player);
@@ -995,8 +1024,7 @@ public class Ollivanders2 extends JavaPlugin
       Player player = getServer().getPlayer(targetPlayer);
       if (player == null)
       {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                 + "Unable to find a player named " + targetPlayer + ".\n");
+         sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
          return true;
       }
       O2Player o2p = getO2Player(player);
@@ -1024,16 +1052,16 @@ public class Ollivanders2 extends JavaPlugin
          {
             player = (Player) sender;
             Arena arena = new Arena(args[0], player.getLocation(), Arena.Size.MEDIUM);
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "The following arena was made: " + arena.toString());
+            sender.sendMessage(chatColor + "The following arena was made: " + arena.toString());
          }
          else
          {
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Only players can use the /Quidd command.");
+            sender.sendMessage(chatColor + "Only players can use the /Quidd command.");
          }
       }
       else
       {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Please include a name for your arena.");
+         sender.sendMessage(chatColor + "Please include a name for your arena.");
       }
       return true;
    }
@@ -1051,14 +1079,12 @@ public class Ollivanders2 extends JavaPlugin
       if (debug)
       {
          getLogger().info("Debug mode enabled.");
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-               + "Ollivanders2 debug mode enabled.");
+         sender.sendMessage(chatColor + "Ollivanders2 debug mode enabled.");
       }
       else
       {
          getLogger().info("Debug mode disabled.");
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-               + "Ollivanders2 debug mode disabled.");
+         sender.sendMessage(chatColor + "Ollivanders2 debug mode disabled.");
       }
 
       return true;
@@ -1074,7 +1100,7 @@ public class Ollivanders2 extends JavaPlugin
    {
       reloadConfig();
       fileConfig = getConfig();
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + "Config reloaded");
+      sender.sendMessage(chatColor + "Config reloaded");
 
       return true;
    }
@@ -1373,8 +1399,7 @@ public class Ollivanders2 extends JavaPlugin
          {
             if (verbose)
             {
-               player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                     + "You do not have permission to use " + spell.toString());
+               player.sendMessage(chatColor + "You do not have permission to use " + spell.toString());
             }
             return false;
          }
@@ -1604,8 +1629,7 @@ public class Ollivanders2 extends JavaPlugin
 
          if (bookStack.isEmpty())
          {
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                  + "There are no Ollivanders2 books.");
+            sender.sendMessage(chatColor + "There are no Ollivanders2 books.");
 
             return true;
          }
@@ -1629,14 +1653,13 @@ public class Ollivanders2 extends JavaPlugin
          targetPlayer = getServer().getPlayer(targetName);
          if (targetPlayer == null)
          {
-            sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-                  + "Did not find player \"" + targetName + "\".\n");
+            sender.sendMessage(chatColor + "Did not find player \"" + targetName + "\".\n");
 
             return true;
          }
          else
          {
-            if (Ollivanders2.debug)
+            if (debug)
                getLogger().info("player to give book to is " + targetName);
          }
 
@@ -1687,8 +1710,7 @@ public class Ollivanders2 extends JavaPlugin
 
       if (bookItem == null)
       {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-               + "No book named \"" + title + "\".\n");
+         sender.sendMessage(chatColor + "No book named \"" + title + "\".\n");
          usageMessageBooks(sender);
       }
 
@@ -1703,7 +1725,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private void usageMessageBooks (CommandSender sender)
    {
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+      sender.sendMessage(chatColor
             + "O2BookType commands: "
             + "\nlist - gives a book that lists all available books"
             + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
@@ -1721,8 +1743,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void spellCannotBeCastMessage (Player player)
    {
-      player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-            + "A powerful protective magic prevents you from casting this spell here.");
+      player.sendMessage(chatColor + "A powerful protective magic prevents you from casting this spell here.");
    }
 
    /**
@@ -1734,18 +1755,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void spellCoolDownMessage (Player player)
    {
-      player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-              + "You are too tired to cast this spell right now.");
-   }
-
-   /**
-    * Set the players name to their team color if they are sorted.
-    *
-    * @param player the player to set the color for
-    */
-   public void setPlayerTeamColor (Player player)
-   {
-      houses.setChatColor(player);
+      player.sendMessage(chatColor + "You are too tired to cast this spell right now.");
    }
 
    public boolean runPotions (CommandSender sender, String[] args)
@@ -1815,7 +1825,7 @@ public class Ollivanders2 extends JavaPlugin
          titleList = titleList + "\n" + bookTitle;
       }
 
-      player.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor")) + titleList);
+      player.sendMessage(chatColor + titleList);
    }
 
 }
