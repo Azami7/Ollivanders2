@@ -44,7 +44,7 @@ public abstract class O2Potion implements Teachable
    /**
     * The ingredients list for this potion.
     */
-   protected Map<Material, Integer> ingredients = new HashMap<>();
+   protected Map<IngredientType, Integer> ingredients = new HashMap<>();
 
    /**
     * The name of this potion as it should appear on the bottle.
@@ -86,7 +86,7 @@ public abstract class O2Potion implements Teachable
    /**
     * Constructor
     *
-    * @param plugin
+    * @param plugin a callback to the plugin
     */
    public O2Potion (Ollivanders2 plugin, O2PotionType potionType)
    {
@@ -97,18 +97,18 @@ public abstract class O2Potion implements Teachable
    /**
     * Get the ingredients text for this potion
     *
-    * @return
+    * @return the recipe text for this ingredient
     */
    protected String getIngredientsText ()
    {
       String s = "\n\nIngredients:";
 
-      for (Entry<Material, Integer> e : ingredients.entrySet())
+      for (Entry<IngredientType, Integer> e : ingredients.entrySet())
       {
-         Material m = e.getKey();
-         String mString = p.common.firstLetterCapitalize(p.common.enumRecode(m.toString()));
+         IngredientType ingredientType = e.getKey();
+         String name = ingredientType.getName();
 
-         s = s + "\n" + e.getValue().toString() + " " + mString;
+         s = s + "\n" + e.getValue().toString() + " " + name;
       }
 
       return s;
@@ -138,7 +138,7 @@ public abstract class O2Potion implements Teachable
     *
     * @return a Map of the ingredients for this potion
     */
-   Map<Material, Integer> getIngredients ()
+   Map<IngredientType, Integer> getIngredients ()
    {
       return ingredients;
    }
@@ -181,7 +181,7 @@ public abstract class O2Potion implements Teachable
    /**
     * Check the recipe for this potion against a set of ingredients.
     *
-    * @param cauldronIngredients
+    * @param cauldronIngredients the ingredients found in the cauldron
     * @return true if the ingredient list matches this potion recipe exactly, false otherwise
     */
    public boolean checkRecipe (Map<Material, Integer> cauldronIngredients)
@@ -192,9 +192,10 @@ public abstract class O2Potion implements Teachable
          return false;
       }
 
-      for (Map.Entry<Material, Integer> e : ingredients.entrySet())
+      for (Map.Entry<IngredientType, Integer> e : ingredients.entrySet())
       {
-         Material material = e.getKey();
+         IngredientType ingredientType = e.getKey();
+         Material material = ingredientType.getMaterial();
          Integer count = e.getValue();
 
          // is this ingredient in the recipe?
@@ -321,6 +322,7 @@ public abstract class O2Potion implements Teachable
 
    /**
     * Extends the effect time of this potion to the max duration if the player already has this effect active.
+    *
     * @param o2p the target player
     * @return true if the effect was extended, false if the effect was not found and extended
     */

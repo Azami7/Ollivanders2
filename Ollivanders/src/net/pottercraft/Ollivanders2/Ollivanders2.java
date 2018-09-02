@@ -424,8 +424,9 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("potions"))
          {
-            return givePotions((Player)sender);
-         } else if (subCommand.equalsIgnoreCase("year"))
+            return runPotions(sender, args);
+         }
+         else if (subCommand.equalsIgnoreCase("year"))
          {
             return runYear(sender, args);
          }
@@ -1755,6 +1756,22 @@ public class Ollivanders2 extends JavaPlugin
    public void spellCoolDownMessage (Player player)
    {
       player.sendMessage(chatColor + "You are too tired to cast this spell right now.");
+   }
+
+   public boolean runPotions (CommandSender sender, String[] args)
+   {
+
+   }
+
+   private void usageMessagePotions (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+            + "O2BookType commands: "
+            + "\nlist - gives a book that lists all available books"
+            + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
+            + "\n<book title> - gives you the book with this title, if it exists"
+            + "\ngive <player> <book title> - gives target player the book with this title, if it exists\n"
+            + "\nExample: /ollivanders2 book standard book of spells grade 1");
    }
 
    /**

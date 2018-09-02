@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Collection;
+import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
@@ -86,7 +87,7 @@ public class O2Potions
          return null;
 
       // get ingredients from the cauldron
-      Map<Material, Integer> ingredientsInCauldron = getIngredients(cauldron);
+      Map<Material, Integer> ingredientsInCauldron = getIngredientsInCauldron(cauldron);
 
       // make sure cauldron has ingredients in it
       if (ingredientsInCauldron.size() < 1)
@@ -129,7 +130,7 @@ public class O2Potions
     * @param cauldron
     * @return a Map of the ingredients and count of each ingredient
     */
-   Map<Material, Integer> getIngredients (Block cauldron)
+   Map<Material, Integer> getIngredientsInCauldron (Block cauldron)
    {
       Map<Material, Integer> ingredientsInCauldron = new HashMap<>();
       Location location = cauldron.getLocation();
@@ -140,6 +141,9 @@ public class O2Potions
          {
             Material material = ((Item) e).getItemStack().getType();
             Integer count = ((Item) e).getItemStack().getAmount();
+
+            if (Ollivanders2.debug)
+               p.getLogger().info("Found " + count + " of ingredient " + material.toString());
 
             ingredientsInCauldron.put(material, count);
          }
@@ -196,5 +200,65 @@ public class O2Potions
       }
 
       return potion;
+   }
+
+   /**
+    * Get a list of the names of every potion ingredient.
+    *
+    * @return a list of all potions ingredients
+    */
+   public List<String> getAllIngredientNames ()
+   {
+      ArrayList<String> ingredientList = new ArrayList<>();
+
+      for (IngredientType i : IngredientType.values())
+      {
+         ingredientList.add(i.getName());
+      }
+
+      return ingredientList;
+   }
+
+   /**
+    * Get a potion ingredient by name.
+    *
+    * @param name the name of the ingredient to get
+    * @return the ingredient item or null if not found
+    */
+   public ItemStack getIngredientByName (String name)
+   {
+      IngredientType ingredientType = null;
+
+      for (IngredientType i : IngredientType.values())
+      {
+         String iName = i.getName();
+
+         if (iName.toLowerCase().startsWith(name.toLowerCase()))
+            return getIngredient(i);
+      }
+
+      return null;
+   }
+
+   /**
+    * Get an ingredient by type.
+    *
+    * @param ingredientType the type of the ingredient
+    * @return the ingredient item
+    */
+   public ItemStack getIngredient (IngredientType ingredientType)
+   {
+      Material material = ingredientType.getMaterial();
+      short variant = ingredientType.getVariant();
+      String name = ingredientType.getName();
+
+      ItemStack ingredient = new ItemStack(material, 1, variant);
+
+      ItemMeta meta = ingredient.getItemMeta();
+
+      meta.setDisplayName(name);
+      ingredient.setItemMeta(meta);
+
+      return ingredient;
    }
 }
