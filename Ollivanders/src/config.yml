@@ -18,8 +18,10 @@ deathExpLoss: false
 bookLearning: true
 #
 spellJournal: true
+#
 # When nonVerbalSpellCasting is set to true, once players master a spell they can cast it without saying the incantation
 nonVerbalSpellCasting: true
+#
 # When hostileMobAnimagi is set to true, the possible animagus forms will include hostile mobs such as spiders
 hostileMobAnimagi: false
 chatColor: 5
