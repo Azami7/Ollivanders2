@@ -1765,8 +1765,8 @@ public class Ollivanders2 extends JavaPlugin
 
    private void usageMessagePotions (CommandSender sender)
    {
-      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-            + "O2BookType commands: "
+      sender.sendMessage(chatColor
+            + "book commands: "
             + "\nlist - gives a book that lists all available books"
             + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
             + "\n<book title> - gives you the book with this title, if it exists"
