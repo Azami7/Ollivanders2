@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
@@ -245,6 +246,8 @@ public class O2Potions
     */
    public ItemStack getIngredientByName (String name)
    {
+      IngredientType ingredientType = null;
+
       for (IngredientType i : IngredientType.values())
       {
          String iName = i.getName();
