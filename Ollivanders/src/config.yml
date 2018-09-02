@@ -48,6 +48,7 @@ houses: false
 #
 # When years is set to true, it enables the /olli year command
 years: false
+#
 # Turns on debug output in your logs. This can also be done while the game is running by using the command
 # /olli debug
 debug: false
