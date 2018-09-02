@@ -230,7 +230,6 @@ public class O2Potions
     */
    public ItemStack getIngredientByName (String name)
    {
-      IngredientType ingredientType = null;
       for (IngredientType i : IngredientType.values())
       {
          String iName = i.getName();
@@ -276,7 +275,6 @@ public class O2Potions
          ((PotionMeta)meta).setColor(common.colorByNumber((int)variant));
       }
 
-      meta.setDisplayName(name);
       ingredient.setItemMeta(meta);
 
       return ingredient;
