@@ -22,10 +22,10 @@ public final class ANTIDOTE_POTION extends O2Potion
    {
       super(plugin);
 
-      ingredients.put(Material.BEETROOT_SEEDS, 2);
-      ingredients.put(Material.BLAZE_POWDER, 1);
-      ingredients.put(Material.LAPIS_ORE, 2);
-      ingredients.put(Material.SUGAR, 2);
+      ingredients.put(IngredientType.MISTLETOE_BERRIES, 2);
+      ingredients.put(IngredientType.BEZOAR, 1);
+      ingredients.put(IngredientType.UNICORN_HAIR, 1);
+      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
 
       name = "Common Antidote Potion";
       text = "Counteracts ordinary poisons, such as creature bites and stings." + getIngredientsText();

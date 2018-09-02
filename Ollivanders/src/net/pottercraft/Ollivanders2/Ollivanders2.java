@@ -19,7 +19,6 @@ import java.util.UUID;
 
 import Quidditch.Arena;
 
-import net.pottercraft.Ollivanders2.Book.O2BookType;
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -387,8 +386,9 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("potions"))
          {
-            return givePotions((Player)sender);
-         } else if (subCommand.equalsIgnoreCase("year"))
+            return runPotions(sender, args);
+         }
+         else if (subCommand.equalsIgnoreCase("year"))
          {
             return runYear(sender, args);
          }
@@ -1693,46 +1693,6 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       return bookItem;
-
-      /*
-      String bookName = "";
-
-      for (String arg : args)
-      {
-         String s = arg.toUpperCase();
-
-         if (bookName.length() < 1)
-         {
-            //first word
-            bookName = s;
-         }
-         else
-         {
-            // remove any apostrophes
-            s = s.replace("\'", "");
-            bookName = bookName + "_" + s;
-         }
-      }
-      if (debug)
-         getLogger().info("Getting book " + bookName);
-
-      O2BookType bookType;
-      try
-      {
-         bookType = O2BookType.valueOf(bookName);
-      }
-      catch (Exception e)
-      {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-               + "No book named \"" + bookName + "\".\n");
-         usageMessageBooks(sender);
-         return null;
-      }
-
-      bookItem = books.getBookByType(bookType);
-
-      return bookItem;
-      */
    }
 
    /**
@@ -1786,6 +1746,22 @@ public class Ollivanders2 extends JavaPlugin
    public void setPlayerTeamColor (Player player)
    {
       houses.setChatColor(player);
+   }
+
+   public boolean runPotions (CommandSender sender, String[] args)
+   {
+
+   }
+
+   private void usageMessagePotions (CommandSender sender)
+   {
+      sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
+            + "O2BookType commands: "
+            + "\nlist - gives a book that lists all available books"
+            + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
+            + "\n<book title> - gives you the book with this title, if it exists"
+            + "\ngive <player> <book title> - gives target player the book with this title, if it exists\n"
+            + "\nExample: /ollivanders2 book standard book of spells grade 1");
    }
 
    /**

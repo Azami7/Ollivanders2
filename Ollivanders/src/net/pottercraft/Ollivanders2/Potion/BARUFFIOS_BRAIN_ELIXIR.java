@@ -4,7 +4,6 @@ import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -19,10 +18,9 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
    {
       super(plugin);
 
-      ingredients.put(Material.REDSTONE, 5);
-      ingredients.put(Material.GOLD_NUGGET, 1);
-      ingredients.put(Material.SUGAR, 2);
-      ingredients.put(Material.MONSTER_EGG, 1);
+      ingredients.put(IngredientType.RUNESPOOR_EGG, 1);
+      ingredients.put(IngredientType.GINGER_ROOT, 2);
+      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
 
       name = "Baruffio's Brain Elixir";
       text = "Baruffio's Brain Elixir is a potion that increases the taker's brain power. All spells cast are twice as "
