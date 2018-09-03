@@ -16,9 +16,9 @@ import org.bukkit.entity.Player;
  */
 public class BABBLING_BEVERAGE extends O2Potion
 {
-   public BABBLING_BEVERAGE (Ollivanders2 plugin)
+   public BABBLING_BEVERAGE (Ollivanders2 plugin, O2PotionType potionType)
    {
-      super(plugin);
+      super(plugin, potionType);
 
       ingredients.put(Material.VINE, 2);
       ingredients.put(Material.YELLOW_FLOWER, 1);

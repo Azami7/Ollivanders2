@@ -18,9 +18,9 @@ import org.bukkit.potion.PotionEffectType;
  */
 public final class ANTIDOTE_POTION extends O2Potion
 {
-   public ANTIDOTE_POTION (Ollivanders2 plugin)
+   public ANTIDOTE_POTION (Ollivanders2 plugin, O2PotionType potionType)
    {
-      super(plugin);
+      super(plugin, potionType);
 
       ingredients.put(Material.BEETROOT_SEEDS, 2);
       ingredients.put(Material.BLAZE_POWDER, 1);

@@ -22,9 +22,9 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
 {
    private final double minimumEffect = 0.1;
 
-   public HERBICIDE_POTION (Ollivanders2 plugin)
+   public HERBICIDE_POTION (Ollivanders2 plugin, O2PotionType potionType)
    {
-      super (plugin);
+      super (plugin, potionType);
 
       potionMaterialType = Material.SPLASH_POTION;
 

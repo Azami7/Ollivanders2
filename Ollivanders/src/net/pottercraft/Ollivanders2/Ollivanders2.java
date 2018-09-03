@@ -1717,7 +1717,7 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Usage message for O2BookType subcommands.
+    * Usage message for book subcommands.
     *
     * @since 2.2.4
     * @param sender the player that issued the command
@@ -1802,7 +1802,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void listAllBooks (Player player)
    {
-      String titleList = "O2Book Titles:";
+      String titleList = "Book Titles:";
       for (String bookTitle : books.getAllBookTitles())
       {
          titleList = titleList + "\n" + bookTitle;

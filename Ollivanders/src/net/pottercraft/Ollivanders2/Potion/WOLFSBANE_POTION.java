@@ -15,9 +15,9 @@ import org.bukkit.entity.Player;
  */
 public final class WOLFSBANE_POTION extends O2Potion
 {
-   public WOLFSBANE_POTION (Ollivanders2 plugin)
+   public WOLFSBANE_POTION (Ollivanders2 plugin, O2PotionType potionType)
    {
-      super(plugin);
+      super(plugin, potionType);
 
       ingredients.put(Material.SPIDER_EYE, 2);
       ingredients.put(Material.ROTTEN_FLESH, 3);
