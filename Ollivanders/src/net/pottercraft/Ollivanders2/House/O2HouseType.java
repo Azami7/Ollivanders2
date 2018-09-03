@@ -53,23 +53,6 @@ public enum O2HouseType
       this.color = color;
       prefix = colorPrefixes.get(color);
       score = 0;
-
-      colorPrefixes.put(ChatColor.BLACK, "§0");
-      colorPrefixes.put(ChatColor.DARK_BLUE, "§1");
-      colorPrefixes.put(ChatColor.DARK_GREEN, "§2");
-      colorPrefixes.put(ChatColor.DARK_AQUA, "§3");
-      colorPrefixes.put(ChatColor.DARK_RED, "§4");
-      colorPrefixes.put(ChatColor.DARK_PURPLE, "§5");
-      colorPrefixes.put(ChatColor.GOLD, "§6");
-      colorPrefixes.put(ChatColor.GRAY, "§7");
-      colorPrefixes.put(ChatColor.DARK_GRAY, "§8");
-      colorPrefixes.put(ChatColor.BLUE, "§9");
-      colorPrefixes.put(ChatColor.GREEN, "§a");
-      colorPrefixes.put(ChatColor.AQUA, "§b");
-      colorPrefixes.put(ChatColor.RED, "§c");
-      colorPrefixes.put(ChatColor.LIGHT_PURPLE, "§d");
-      colorPrefixes.put(ChatColor.YELLOW, "§e");
-      colorPrefixes.put(ChatColor.WHITE, "§f");
    }
 
    /**
