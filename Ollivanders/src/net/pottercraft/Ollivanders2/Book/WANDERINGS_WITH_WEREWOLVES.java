@@ -7,7 +7,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * Wanderings with Werewolves - 2nd year Defense Against the Dark Arts book
  *
- * Missing O2SpellType:
+ * Missing Spells:
  * Rictusempra - https://github.com/Azami7/Ollivanders2/issues/92
  *
  * @author Azami7

@@ -13,7 +13,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * Dementors
  * Imperius Curse
  *
- * Missing O2SpellType:
+ * Missing Spells:
  * Crucio - https://github.com/Azami7/Ollivanders2/issues/88
  * Imperio
  * Dementors

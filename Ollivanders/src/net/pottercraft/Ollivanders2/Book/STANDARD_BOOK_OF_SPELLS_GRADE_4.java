@@ -5,7 +5,7 @@ import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Standard O2Book of O2SpellType Grade 4
+ * Standard Book of Spells Grade 4
  *
  * Missing spells:
  * Orchideous - https://github.com/Azami7/Ollivanders2/issues/56
@@ -20,7 +20,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Standard O2Book of O2SpellType Grade 4";
+      title = shortTitle = "Standard Book of Spells Grade 4";
       author = "Miranda Goshawk";
       branch = O2MagicBranch.CHARMS;
 

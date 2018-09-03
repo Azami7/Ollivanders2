@@ -12,7 +12,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * Human Transfiguration
  * Untransfiguration
  *
- * Missing O2SpellType:
+ * Missing Spell:
  * Homorphus Charm - https://github.com/Azami7/Ollivanders2/issues/39
  *
  * @since 2.2.4

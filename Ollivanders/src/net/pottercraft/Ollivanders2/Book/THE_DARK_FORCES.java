@@ -7,7 +7,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * The Dark Forces: A Guide to Self-Protection - 1st year Defense Against the Dark Arts
  *
- * Missing O2SpellType:
+ * Missing Spells:
  * Flipendo - https://github.com/Azami7/Ollivanders2/issues/37
  *
  * @since 2.2.4
