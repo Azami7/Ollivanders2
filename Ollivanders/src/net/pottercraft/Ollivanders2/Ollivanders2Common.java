@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Collection;
 
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
+import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -87,6 +88,10 @@ public class Ollivanders2Common
       add(O2SpellType.LAPIFORS);
       add(O2SpellType.SNUFFLIFORS);
       add(O2SpellType.VERA_VERTO);
+   }};
+
+   public static final ArrayList<O2PotionType> libDisguisesPotions = new ArrayList<O2PotionType>() {{
+      add(O2PotionType.ANIMAGUS_POTION);
    }};
 
    private Ollivanders2 p;

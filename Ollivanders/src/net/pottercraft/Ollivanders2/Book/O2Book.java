@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Super class for all Ollivanders2 books.
  *
- * O2Book limits:
+ * Book limits:
  * Title - 32 characters
  * Pages - 50
  * Lines per page - 14
@@ -210,7 +210,7 @@ public abstract class O2Book
    /**
     * Turn a spell text word list in to a set of pages that fit in an MC book.
     *
-    * O2Book pages cannot be more than 14 lines with ~18 characters per line, 256 characters max
+    * Book pages cannot be more than 14 lines with ~18 characters per line, 256 characters max
     * assume 2 lines for spell name, 1 blank line between name and flavor text, 1 blank link between flavor text
     * and description text, means the first page has 9 lines of ~15 characters + continue, subsequent pages are 13
     * lines of ~15 characters + continue.

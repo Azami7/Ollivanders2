@@ -22,9 +22,9 @@ import java.util.ArrayList;
  */
 public final class FORGETFULLNESS_POTION extends O2Potion
 {
-   public FORGETFULLNESS_POTION (Ollivanders2 plugin)
+   public FORGETFULLNESS_POTION (Ollivanders2 plugin, O2PotionType potionType)
    {
-      super(plugin);
+      super(plugin, potionType);
 
       ingredients.put(Material.MELON, 4);
       ingredients.put(Material.VINE, 2);
