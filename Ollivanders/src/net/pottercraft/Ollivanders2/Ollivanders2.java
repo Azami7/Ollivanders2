@@ -19,7 +19,6 @@ import java.util.UUID;
 
 import Quidditch.Arena;
 
-import net.pottercraft.Ollivanders2.Book.O2BookType;
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -1693,50 +1692,10 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       return bookItem;
-
-      /*
-      String bookName = "";
-
-      for (String arg : args)
-      {
-         String s = arg.toUpperCase();
-
-         if (bookName.length() < 1)
-         {
-            //first word
-            bookName = s;
-         }
-         else
-         {
-            // remove any apostrophes
-            s = s.replace("\'", "");
-            bookName = bookName + "_" + s;
-         }
-      }
-      if (debug)
-         getLogger().info("Getting book " + bookName);
-
-      O2BookType bookType;
-      try
-      {
-         bookType = O2BookType.valueOf(bookName);
-      }
-      catch (Exception e)
-      {
-         sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-               + "No book named \"" + bookName + "\".\n");
-         usageMessageBooks(sender);
-         return null;
-      }
-
-      bookItem = books.getBookByType(bookType);
-
-      return bookItem;
-      */
    }
 
    /**
-    * Usage message for O2BookType subcommands.
+    * Usage message for book subcommands.
     *
     * @since 2.2.4
     * @param sender the player that issued the command
@@ -1744,7 +1703,7 @@ public class Ollivanders2 extends JavaPlugin
    private void usageMessageBooks (CommandSender sender)
    {
       sender.sendMessage(ChatColor.getByChar(fileConfig.getString("chatColor"))
-            + "O2BookType commands: "
+            + "Usage: /olli book"
             + "\nlist - gives a book that lists all available books"
             + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
             + "\n<book title> - gives you the book with this title, if it exists"
@@ -1833,7 +1792,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void listAllBooks (Player player)
    {
-      String titleList = "O2Book Titles:";
+      String titleList = "Book Titles:";
       for (String bookTitle : books.getAllBookTitles())
       {
          titleList = titleList + "\n" + bookTitle;

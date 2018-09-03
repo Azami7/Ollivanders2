@@ -5,7 +5,7 @@ import net.pottercraft.Ollivanders2.Spell.Spells;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Standard O2Book of Spells Grade 5
+ * Standard Book of Spells Grade 5
  *
  * Missing spells:
  * Substantive Charm - https://github.com/Azami7/Ollivanders2/issues/96
@@ -20,7 +20,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_5 extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Standard O2Book of Spells Grade 5";
+      title = shortTitle = "Standard Book of Spells Grade 5";
       author = "Miranda Goshawk";
       branch = O2MagicBranch.CHARMS;
 
