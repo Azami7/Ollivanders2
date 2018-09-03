@@ -381,7 +381,7 @@ public class O2Players
             continue;
          }
 
-         // get player spellType
+         // get player name
          String playerName = playerData.get(nameLabel);
          if (playerName == null || playerName.length() < 1)
          {
