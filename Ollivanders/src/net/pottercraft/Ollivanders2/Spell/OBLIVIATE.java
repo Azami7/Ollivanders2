@@ -32,10 +32,10 @@ public final class OBLIVIATE extends Charms
    /**
     * Constructor for casting the spell.
     *
-    * @param plugin
-    * @param player
-    * @param name
-    * @param rightWand
+    * @param plugin the plugin callback
+    * @param player the player who cast the spell
+    * @param name the name of the spell
+    * @param rightWand which wand they are using
     */
    public OBLIVIATE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {

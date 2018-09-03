@@ -159,7 +159,7 @@ public enum O2SpellType
    /**
     * Constructor
     *
-    * @param className the spellType of the spell class associated with this spell type
+    * @param className the name of the spell class associated with this spell type
     */
    O2SpellType (Class className)
    {
@@ -167,7 +167,7 @@ public enum O2SpellType
    }
 
    /**
-    * Get the class spellType associated with this spell type
+    * Get the class name associated with this spell type
     *
     * @return the classname for this spell type
     */
@@ -227,8 +227,8 @@ public enum O2SpellType
    /**
     * Get a O2SpellType enum from a string.
     *
-    * @param spellString
-    * @return
+    * @param spellString the name of the spell
+    * @return the spell type
     */
    public static O2SpellType spellsFromString (String spellString)
    {

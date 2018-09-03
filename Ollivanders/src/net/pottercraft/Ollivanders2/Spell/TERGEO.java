@@ -25,7 +25,7 @@ public final class TERGEO extends Charms
 
       flavorText.add("The Siphoning Spell");
       flavorText.add("The wand siphoned off most of the grease. Looking rather pleased with himself, Ron handed the slightly smoking handkerchief to Hermione.");
-      text = "Tergeo will siphon off a block of water where it hits. It will also disable any aguamenti-placed water blocks nearby.";
+      text = "Tergeo will siphon off a block of water where it hits. It will also disable any Aguamenti-placed water blocks nearby.";
    }
 
    /**

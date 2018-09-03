@@ -24,7 +24,7 @@ public class HARMONIOUS_CONNECTIONS extends O2Book
             + "\n\nVanishing cabinet construction is very precise and the cabinets will only work if the directions are followed exactly."
             + "\n\nStep 1 - determine the XYZ coordinates for the cabinets. These must be in whole numbers."
             + "\n\nStep 2 - create a sign at each XYZ coordinate that contains the coordinates for the other cabinet."
-            + "Write the world spellType on the first line, the X coordinate on the second, Y on the third, and Z on the fourth."
+            + "Write the world name on the first line, the X coordinate on the second, Y on the third, and Z on the fourth."
             + "\n\nStep 3 - place any type of solid block 2-blocks high on each side, in front, and in back of the sign - 4 blocks total."
             + "\n\nStep 4 - leave an air block above the sign and place any type of solid block above that air block."
             + "\n\nStep 5 - construct the other cabinet following steps 3 and 4."
