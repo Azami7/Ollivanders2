@@ -4,6 +4,7 @@ import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -19,16 +20,18 @@ public final class WOLFSBANE_POTION extends O2Potion
    {
       super(plugin, potionType);
 
-      ingredients.put(Material.SPIDER_EYE, 2);
-      ingredients.put(Material.ROTTEN_FLESH, 3);
-      ingredients.put(Material.POISONOUS_POTATO, 1);
-      ingredients.put(Material.SUGAR, 3);
+      ingredients.put(IngredientType.WOLFSBANE, 2);
+      ingredients.put(IngredientType.MANDRAKE_LEAF, 3);
+      ingredients.put(IngredientType.POISONOUS_POTATO, 1);
+      ingredients.put(IngredientType.DITTANY, 2);
+      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 3);
 
       name = "Wolfsbane Potion";
       text = "This potion will relieve, though not cure, the symptoms of Lycanthropy. It is a complex potion and requires"
             + "the most advanced potion-making skills." + getIngredientsText();
 
       flavorText.add("\"There is no known cure, although recent developments in potion-making have to a great extent alleviated the worst symptoms.\" —Newton Scamander");
+      potionColor = Color.fromRGB(51, 0, 102);
    }
 
    @Override
@@ -36,10 +39,9 @@ public final class WOLFSBANE_POTION extends O2Potion
    {
       if (!extendEffect(o2p))
       {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.WOLFSBANE_POTION(p, O2EffectType.WOLFSBANE_POTION, duration, player));
+         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.WOLFSBANE_POTION(p, O2EffectType.WOLFSBANE_POTION, duration, player.getUniqueId()));
       }
 
-      player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-            + "You feel a sense of relief.");
+      player.sendMessage(Ollivanders2.chatColor + "You feel a sense of relief.");
    }
 }

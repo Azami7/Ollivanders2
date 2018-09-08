@@ -5,7 +5,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.Map;
@@ -26,16 +25,16 @@ public final class FORGETFULLNESS_POTION extends O2Potion
    {
       super(plugin, potionType);
 
-      ingredients.put(Material.MELON, 4);
-      ingredients.put(Material.VINE, 2);
-      ingredients.put(Material.GHAST_TEAR, 2);
-      ingredients.put(Material.SUGAR, 2);
+      ingredients.put(IngredientType.MISTLETOE_BERRIES, 4);
+      ingredients.put(IngredientType.VALERIAN_SPRIGS, 2);
+      ingredients.put(IngredientType.LETHE_RIVER_WATER, 2);
+      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
 
       name = "Forgetfulness Potion";
       text = "The Forgetfulness Potion is a potion which causes a degree of memory loss in the drinker." + getIngredientsText();
       flavorText.add("Hermione Granger: \"What are the three most crucial ingredients in a Forgetfulness Potion?\"\nRon Weasley: \"I forgot.\"");
 
-      potionColor = Color.MAROON;
+      potionColor = Color.fromRGB(195, 71, 0);
    }
 
    public void drink (O2Player o2p, Player player)

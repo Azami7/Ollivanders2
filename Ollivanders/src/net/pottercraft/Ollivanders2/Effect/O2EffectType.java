@@ -9,25 +9,50 @@ package net.pottercraft.Ollivanders2.Effect;
  */
 public enum O2EffectType
 {
-   ANIMAGUS_EFFECT,
-   ANIMAGUS_INCANTATION,
-   BABBLING_EFFECT,
-   BARUFFIOS_BRAIN_ELIXIR,
-   FLYING,
-   LEVICORPUS,
-   LYCANTHROPY,
-   MEMORY_POTION,
-   MUCUS_AD_NAUSEAM,
-   SILENCIO,
-   WIT_SHARPENING_POTION,
-   WOLFSBANE_POTION;
+   AGGRESSION (net.pottercraft.Ollivanders2.Effect.AGGRESSION.class),
+   ANIMAGUS_EFFECT (net.pottercraft.Ollivanders2.Effect.ANIMAGUS_EFFECT.class),
+   ANIMAGUS_INCANTATION (net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION.class),
+   BABBLING (BABBLING.class),
+   BARUFFIOS_BRAIN_ELIXIR (net.pottercraft.Ollivanders2.Effect.BARUFFIOS_BRAIN_ELIXIR.class),
+   FLYING (net.pottercraft.Ollivanders2.Effect.FLYING.class),
+   LEVICORPUS (net.pottercraft.Ollivanders2.Effect.LEVICORPUS.class),
+   LYCANTHROPY (net.pottercraft.Ollivanders2.Effect.LYCANTHROPY.class),
+   LYCANTHROPY_SPEECH (net.pottercraft.Ollivanders2.Effect.LYCANTHROPY_SPEECH.class),
+   MEMORY_POTION (net.pottercraft.Ollivanders2.Effect.MEMORY_POTION.class),
+   MUCUS_AD_NAUSEAM (net.pottercraft.Ollivanders2.Effect.MUCUS_AD_NAUSEAM.class),
+   SILENCIO (net.pottercraft.Ollivanders2.Effect.SILENCIO.class),
+   WIT_SHARPENING_POTION (net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION.class),
+   WOLFSBANE_POTION (net.pottercraft.Ollivanders2.Effect.WOLFSBANE_POTION.class);
+
+   private Class className;
 
    /**
-    * Find the lowercase string that corresponds to an effect name
+    * Enum constructor.
     *
-    * @param effectType effect name as an enum
+    * @param className the name of the effect class this type represents.
+    */
+   O2EffectType (Class className)
+   {
+      this.className = className;
+   }
+
+   /**
+    * Get the class name for the O2Effect class that this type represents.
+    *
+    * @return the effect class
+    */
+   public Class getClassName ()
+   {
+      return className;
+   }
+
+   /**
+    * Find the lowercase string that corresponds to an effect effectType
+    *
+    * @param effectType effect effectType as an enum
     * @return string such that it is the lowercase version of the effect minus underscores
     */
+   @Deprecated
    public static String recode (O2EffectType effectType)
    {
       String nameLow = effectType.toString().toLowerCase();

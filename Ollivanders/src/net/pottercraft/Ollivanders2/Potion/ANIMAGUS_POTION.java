@@ -7,7 +7,7 @@ import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
 /**
@@ -22,10 +22,10 @@ public final class ANIMAGUS_POTION extends O2Potion
 
       super(plugin, potionType);
 
-      ingredients.put(Material.WATER_LILY, 1);
-      ingredients.put(Material.CHORUS_FRUIT, 2);
-      ingredients.put(Material.EYE_OF_ENDER, 1);
-      ingredients.put(Material.SUGAR, 3);
+      ingredients.put(IngredientType.MANDRAKE_LEAF, 1);
+      ingredients.put(IngredientType.DEW_DROP, 2);
+      ingredients.put(IngredientType.DEATHS_HEAD_MOTH_CHRYSALIS, 1);
+      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 3);
 
       name = "Animagus Potion";
       text = "An Animagus is a wizard who elects to turn into an animal. This potion, if brewed and consumed correctly, " +
@@ -33,6 +33,8 @@ public final class ANIMAGUS_POTION extends O2Potion
             "potion, however it will take considerable practice to change forms consistently at will." + getIngredientsText();
       flavorText.add("\"You know that I can disguise myself most effectively.\" -Peter Pettigrew");
       flavorText.add("\"Normally, I have a very sweet disposition as a dog; in fact, more than once, James suggested I make the change permanent. The tail I could live with...but the fleas, they're murder.\" -Sirius Black");
+
+      potionColor = Color.fromRGB(102, 0, 0);
    }
 
    @Override
@@ -58,12 +60,11 @@ public final class ANIMAGUS_POTION extends O2Potion
          {
             o2p.setIsAnimagus();
 
-            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player);
+            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player.getUniqueId());
             o2p.addEffect(animagusEffect);
             p.setO2Player(player, o2p);
 
-            player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-                  + "You feel transformed.");
+            player.sendMessage(Ollivanders2.chatColor + "You feel transformed.");
          }
       }
    }

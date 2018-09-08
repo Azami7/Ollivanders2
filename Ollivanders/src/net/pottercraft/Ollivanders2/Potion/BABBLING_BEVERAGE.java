@@ -1,11 +1,11 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Effect.BABBLING;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -20,11 +20,10 @@ public class BABBLING_BEVERAGE extends O2Potion
    {
       super(plugin, potionType);
 
-      ingredients.put(Material.VINE, 2);
-      ingredients.put(Material.YELLOW_FLOWER, 1);
-      ingredients.put(Material.WATER_LILY, 1);
-      ingredients.put(Material.LAPIS_ORE, 2);
-      ingredients.put(Material.SUGAR, 2);
+      ingredients.put(IngredientType.VALERIAN_SPRIGS, 2);
+      ingredients.put(IngredientType.DITTANY, 1);
+      ingredients.put(IngredientType.WOLFSBANE, 1);
+      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
 
       potionColor = Color.FUCHSIA;
 
@@ -37,10 +36,9 @@ public class BABBLING_BEVERAGE extends O2Potion
    {
       if (!extendEffect(o2p))
       {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BABBLING_EFFECT(p, O2EffectType.BABBLING_EFFECT, duration, player));
+         o2p.addEffect(new BABBLING(p, O2EffectType.BABBLING, duration, player.getUniqueId()));
       }
 
-      player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-            + "You tongue feels fuzzy.");
+      player.sendMessage(Ollivanders2.chatColor + "You tongue feels fuzzy.");
    }
 }

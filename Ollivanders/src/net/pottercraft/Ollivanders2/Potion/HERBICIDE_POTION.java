@@ -28,10 +28,10 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
 
       potionMaterialType = Material.SPLASH_POTION;
 
-      ingredients.put(Material.RAW_FISH, 4);
-      ingredients.put(Material.SUGAR, 2);
-      ingredients.put(Material.MAGMA_CREAM, 2);
-      ingredients.put(Material.SLIME_BALL, 2);
+      ingredients.put(IngredientType.LIONFISH_SPINES, 4);
+      ingredients.put(IngredientType.FLOBBERWORM_MUCUS, 2);
+      ingredients.put(IngredientType.HORKLUMP_JUICE, 2);
+      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
 
       name = "Herbicide Potion";
       text = "The Herbicide Potion is damages or kills Creepers. It is also harmful to other living creatures." + getIngredientsText();
@@ -39,7 +39,7 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
       // set duration of potion effect to 30 seconds
       duration = 600;
       effect = new PotionEffect(PotionEffectType.HARM, duration, 1);
-      potionColor = Color.OLIVE;
+      potionColor = Color.fromRGB(51, 102, 0);
    }
 
    public void drink (O2Player o2p, Player player) { }

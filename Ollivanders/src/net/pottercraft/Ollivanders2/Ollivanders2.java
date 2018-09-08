@@ -20,6 +20,8 @@ import java.util.UUID;
 import Quidditch.Arena;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
+import net.pottercraft.Ollivanders2.Effect.O2Effect;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 import net.pottercraft.Ollivanders2.House.O2HouseType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -97,7 +99,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void onDisable ()
    {
-	   for (Block block : tempBlocks)
+      for (Block block : tempBlocks)
       {
          block.setType(Material.AIR);
       }
@@ -114,7 +116,7 @@ public class Ollivanders2 extends JavaPlugin
       stationarySpells.saveO2StationarySpells();
 
       houses.saveHouses();
-	   o2Players.saveO2Players();
+      o2Players.saveO2Players();
 
       getLogger().info(this + " is now disabled!");
    }
@@ -130,10 +132,10 @@ public class Ollivanders2 extends JavaPlugin
       getServer().getPluginManager().registerEvents(playerListener, this);
       common = new Ollivanders2Common(this);
       //loads data
-	   if (new File("plugins/Ollivanders2/").mkdirs())
-	   {
-		   getLogger().info("File directory for Ollivanders2");
-	   }
+      if (new File("plugins/Ollivanders2/").mkdirs())
+      {
+         getLogger().info("File directory for Ollivanders2");
+      }
       projectiles = new ArrayList<>();
       prophecy = new HashSet<>();
       fileConfig = getConfig();
@@ -424,10 +426,15 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("potions"))
          {
-            return givePotions((Player)sender);
-         } else if (subCommand.equalsIgnoreCase("year"))
+            return runPotions(sender, args);
+         }
+         else if (subCommand.equalsIgnoreCase("year"))
          {
             return runYear(sender, args);
+         }
+         else if (subCommand.equalsIgnoreCase("effect"))
+         {
+            return runEffect(sender, args);
          }
       }
 
@@ -462,6 +469,27 @@ public class Ollivanders2 extends JavaPlugin
          if (masterSpell != null)
          {
             summary = summary + "\nMaster Spell: " + common.enumRecode(masterSpell.toString().toLowerCase());
+         }
+
+         summary = summary + "\n";
+      }
+
+      // effects
+      if (isOp(sender))
+      {
+         List<O2Effect> effects = o2Player.getEffects();
+         summary = summary + "\nAffected by:\n";
+
+         if (effects == null || effects.isEmpty())
+         {
+            summary = summary + "Nothing";
+         }
+         else
+         {
+            for (O2Effect effect : effects)
+            {
+               summary = summary + effect.effectType.toString() + "\n";
+            }
          }
 
          summary = summary + "\n";
@@ -851,9 +879,9 @@ public class Ollivanders2 extends JavaPlugin
       if (!getConfig().getBoolean("years"))
       {
          sender.sendMessage(chatColor
-                 + "Years are not currently enabled for your server."
-                 + "\nTo enable years, update the Ollivanders2 config.yml setting to true and restart your server."
-                 + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
+               + "Years are not currently enabled for your server."
+               + "\nTo enable years, update the Ollivanders2 config.yml setting to true and restart your server."
+               + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
 
          return true;
       }
@@ -924,9 +952,9 @@ public class Ollivanders2 extends JavaPlugin
    private void usageMessageYearSet (CommandSender sender)
    {
       sender.sendMessage(chatColor
-              + "Usage: /ollivanders2 year set [player] [year]"
-              + "\nyear - must be a number between 1 and 7"
-              + "\nExample: /ollivanders2 year set Harry 5");
+            + "Usage: /ollivanders2 year set [player] [year]"
+            + "\nyear - must be a number between 1 and 7"
+            + "\nExample: /ollivanders2 year set Harry 5");
    }
 
    /**
@@ -937,8 +965,8 @@ public class Ollivanders2 extends JavaPlugin
    private void usageMessageYearPromote (CommandSender sender)
    {
       sender.sendMessage(chatColor
-              + "Usage: /ollivanders2 year promote [player]"
-              + "\nExample: /ollivanders2 year promote Harry");
+            + "Usage: /ollivanders2 year promote [player]"
+            + "\nExample: /ollivanders2 year promote Harry");
    }
 
    /**
@@ -949,8 +977,8 @@ public class Ollivanders2 extends JavaPlugin
    private void usageMessageYearDemote (CommandSender sender)
    {
       sender.sendMessage(chatColor
-              + "Usage: /ollivanders2 year demote [player]"
-              + "\nExample: /ollivanders2 year demote Harry");
+            + "Usage: /ollivanders2 year demote [player]"
+            + "\nExample: /ollivanders2 year demote Harry");
    }
 
    /**
@@ -961,11 +989,11 @@ public class Ollivanders2 extends JavaPlugin
    private void usageMessageYear (CommandSender sender)
    {
       sender.sendMessage(chatColor
-              + "Year commands: "
-              + "\nset - sets a player's year, years must be between 1 and 7"
-              + "\npromote - increases a player's year by 1 year"
-              + "\ndemote - decreases a player's year by 1 year"
-              + "\n<player> - tells you the year or a player\n");
+            + "Year commands: "
+            + "\nset - sets a player's year, years must be between 1 and 7"
+            + "\npromote - increases a player's year by 1 year"
+            + "\ndemote - decreases a player's year by 1 year"
+            + "\n<player> - tells you the year or a player\n");
    }
 
    /**
@@ -1032,6 +1060,67 @@ public class Ollivanders2 extends JavaPlugin
       {
          o2p.setYear(O2PlayerCommon.intToYear(year));
       }
+      return true;
+   }
+
+   /**
+    * The effects command, this is for testing purposes only and is not listed in the usage message.
+    *
+    * @param sender the player that issued the command
+    * @param args the arguments for the command, if any
+    * @return true unless an error occurred
+    */
+   private boolean runEffect (CommandSender sender, String[] args)
+   {
+      // olli effect <effect>
+      if (args.length >= 2)
+      {
+         String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
+         String effectName = common.stringArrayToString(subArgs).toUpperCase();
+
+         O2EffectType effectType;
+         try
+         {
+            effectType = O2EffectType.valueOf(effectName);
+         }
+         catch (Exception e)
+         {
+            sender.sendMessage(chatColor + "No effect named " + effectName + ".\n");
+            return true;
+         }
+
+         O2Player o2p = getO2Player((Player)sender);
+         if (o2p.hasEffect(effectType))
+         {
+            o2p.removeEffect(effectType);
+            sender.sendMessage(chatColor + "Removed " + effectName + " from " + sender + ".\n");
+         }
+         else
+         {
+            Class effectClass = effectType.getClassName();
+            getLogger().info("Trying to add effect " + effectClass);
+
+            O2Effect effect = null;
+            try
+            {
+               effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, O2EffectType.class, Integer.class, UUID.class).newInstance(this, effectType, 1200, ((Player) sender).getUniqueId());
+            }
+            catch (Exception e)
+            {
+               sender.sendMessage(chatColor + "Failed to add effect " + effectName + " to " + sender + ".\n");
+               e.printStackTrace();
+               return true;
+            }
+
+            o2p.addEffect(effect);
+            sender.sendMessage(chatColor + "Added " + effectName + " to " + sender + ".\n");
+         }
+      }
+      else
+      {
+         sender.sendMessage(chatColor + "Not enough arguments to /olli effect.\n");
+      }
+
       return true;
    }
 
@@ -1698,12 +1787,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private ItemStack getBookFromArgs (String[] args, CommandSender sender)
    {
-      String title = "";
-      for (String arg : args)
-      {
-         title = title + " " + arg;
-      }
-      title = title.trim();
+      String title = common.stringArrayToString(args);
 
       ItemStack bookItem = books.getBookByTitle(title);
 
@@ -1757,13 +1841,120 @@ public class Ollivanders2 extends JavaPlugin
       player.sendMessage(chatColor + "You are too tired to cast this spell right now.");
    }
 
+   public boolean runPotions (CommandSender sender, String[] args)
+   {
+      if (args.length > 1)
+      {
+         String subCommand = args[1];
+
+         if (subCommand.equalsIgnoreCase("ingredient"))
+         {
+            if (args.length > 2)
+            {
+               if (args[2].equalsIgnoreCase("list"))
+               {
+                  return listAllIngredients((Player)sender);
+               }
+               else
+               {
+                  // potion ingredient mandrake leaf
+                  String [] subArgs = Arrays.copyOfRange(args, 2, args.length);
+                  return givePotionIngredient((Player)sender, common.stringArrayToString(subArgs));
+               }
+            }
+         }
+         else if (subCommand.equalsIgnoreCase("all"))
+         {
+            return giveAllPotions((Player)sender);
+         }
+         //TODO implement givePotion
+         /*
+         else if (subCommand.equalsIgnoreCase("give"))
+         {
+            if (args.length > 3)
+            {
+               // potions give fred memory potion
+               Player targetPlayer = getServer().getPlayer(args[2]);
+               String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
+               givePotion((Player)sender, common.stringArrayToString(subArgs));
+            }
+         }
+         else
+         {
+            // potions memory potion
+            String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
+            givePotion((Player)sender, common.stringArrayToString(subArgs));
+         }
+         */
+      }
+
+      usageMessagePotions(sender);
+      return true;
+   }
+
+   private void usageMessagePotions (CommandSender sender)
+   {
+      sender.sendMessage(chatColor
+            + "Usage: /olli potions"
+            + "\ningredient list - lists all potions ingredients"
+            + "\ningredient <ingredient name> - give you the ingredient with this name, if it exists"
+            + "\nall - gives all Ollivanders2 potions, this may not fit in your inventory"
+            //+ "\n<potion name> - gives you the potion with this name, if it exists"
+            //+ "\ngive <player> <potion name> - gives target player the potion with this name, if it exists\n"
+            + "\nExample: /ollivanders2 potions all"
+            + "\nExample: /ollivanders2 potions ingredient list");
+   }
+
+   /**
+    * List all the potions ingredients
+    *
+    * @param player the player to display the list to
+    * @return true
+    */
+   private boolean listAllIngredients (Player player)
+   {
+      List<String> ingredientList = potions.getAllIngredientNames();
+      String displayString = "Ingredients:";
+
+      for (String name : ingredientList)
+      {
+         displayString = displayString + "\n" + name;
+      }
+      displayString = displayString + "\n";
+
+      player.sendMessage(chatColor + displayString);
+
+      return true;
+   }
+
+   /**
+    * Give a potion ingredient to a player.
+    *
+    * @param player the player to give the ingredient to
+    * @param name the name of the ingredient
+    * @return true
+    */
+   private boolean givePotionIngredient(Player player, String name)
+   {
+      List<ItemStack> kit = new ArrayList<>();
+      ItemStack ingredient = potions.getIngredientByName(name);
+
+      if (ingredient != null)
+      {
+         kit.add(ingredient);
+         givePlayerKit(player, kit);
+      }
+
+      return true;
+   }
+
    /**
     * Gives the specified player 1 of every Ollivanders2 potion.
     *
     * @param player the player to give the potions to
     * @return true unless an error occurred
     */
-   private boolean givePotions (Player player)
+   private boolean giveAllPotions (Player player)
    {
       if (debug)
          getLogger().info("Running givePotions...");
@@ -1810,5 +2001,4 @@ public class Ollivanders2 extends JavaPlugin
 
       player.sendMessage(chatColor + titleList);
    }
-
 }
