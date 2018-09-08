@@ -25,7 +25,7 @@ public final class TERGEO extends Charms
 
       flavorText.add("The Siphoning Spell");
       flavorText.add("The wand siphoned off most of the grease. Looking rather pleased with himself, Ron handed the slightly smoking handkerchief to Hermione.");
-      text = "Tergeo will siphon off a block of water where it hits. It will also disable any aguamenti-placed water blocks nearby.";
+      text = "Tergeo will siphon off a block of water where it hits. It will also disable any Aguamenti-placed water blocks nearby.";
    }
 
    /**
@@ -36,7 +36,7 @@ public final class TERGEO extends Charms
     * @param name
     * @param rightWand
     */
-   public TERGEO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public TERGEO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       move = true;
@@ -59,7 +59,7 @@ public final class TERGEO extends Charms
          }
          for (SpellProjectile proj : p.getProjectiles())
          {
-            if (proj.name == Spells.AGUAMENTI && proj.location.getWorld() == location.getWorld())
+            if (proj.spellType == O2SpellType.AGUAMENTI && proj.location.getWorld() == location.getWorld())
             {
                if (proj.location.distance(location) < 1)
                {

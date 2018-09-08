@@ -35,7 +35,7 @@ public final class PROTEGO_MAXIMA extends Charms
     * @param name
     * @param rightWand
     */
-   public PROTEGO_MAXIMA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public PROTEGO_MAXIMA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

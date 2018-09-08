@@ -32,7 +32,7 @@ public final class BOTHYNUS extends PyrotechniaSuper
     * @param name
     * @param rightWand
     */
-   public BOTHYNUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public BOTHYNUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

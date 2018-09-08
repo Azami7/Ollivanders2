@@ -2,9 +2,8 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -73,7 +72,7 @@ public abstract class O2Book
    /**
     * No more than 11 spells + potions in a book or they won't fit on the table of contents.
     */
-   protected ArrayList<Spells> spells;
+   protected ArrayList<O2SpellType> spells;
    protected ArrayList<O2PotionType> potions;
 
    /**
@@ -114,7 +113,7 @@ public abstract class O2Book
 
       // add the names of all spells in the book
       ArrayList<String> bookContents = new ArrayList<>();
-      for (Spells spell : spells)
+      for (O2SpellType spell : spells)
       {
          bookContents.add(spell.toString());
       }
@@ -293,7 +292,7 @@ public abstract class O2Book
    {
       List<String> lore = new ArrayList<>();
 
-      for (Spells spellType : spells)
+      for (O2SpellType spellType : spells)
       {
          String s = p.common.firstLetterCapitalize(p.common.enumRecode(spellType.toString()));
          lore.add(s);

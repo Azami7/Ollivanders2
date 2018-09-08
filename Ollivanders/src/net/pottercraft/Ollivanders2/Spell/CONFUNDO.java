@@ -33,7 +33,7 @@ public final class CONFUNDO extends ConfundusSuper
     * @param name
     * @param rightWand
     */
-   public CONFUNDO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public CONFUNDO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

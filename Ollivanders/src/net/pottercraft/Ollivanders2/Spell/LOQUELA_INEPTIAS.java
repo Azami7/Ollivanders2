@@ -39,7 +39,7 @@ public class LOQUELA_INEPTIAS extends Charms
     * @param name
     * @param rightWand
     */
-   public LOQUELA_INEPTIAS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public LOQUELA_INEPTIAS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

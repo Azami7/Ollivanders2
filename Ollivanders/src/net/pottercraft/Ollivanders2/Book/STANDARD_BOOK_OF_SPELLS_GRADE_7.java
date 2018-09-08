@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -23,12 +23,12 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book
       author = "Miranda Goshawk";
       branch = O2MagicBranch.CHARMS;
 
-      spells.add(Spells.MUFFLIATO);
-      spells.add(Spells.REPELLO_MUGGLETON);
-      spells.add(Spells.INFORMOUS);
-      spells.add(Spells.GLACIUS_TRIA);
-      spells.add(Spells.INCENDIO_TRIA);
-      spells.add(Spells.DEFODIO);
+      spells.add(O2SpellType.MUFFLIATO);
+      spells.add(O2SpellType.REPELLO_MUGGLETON);
+      spells.add(O2SpellType.INFORMOUS);
+      spells.add(O2SpellType.GLACIUS_TRIA);
+      spells.add(O2SpellType.INCENDIO_TRIA);
+      spells.add(O2SpellType.DEFODIO);
       //7
       //8
       //9

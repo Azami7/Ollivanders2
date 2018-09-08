@@ -43,7 +43,7 @@ public final class LIGATIS_COR extends Charms
     * @param name
     * @param rightWand
     */
-   public LIGATIS_COR (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public LIGATIS_COR (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

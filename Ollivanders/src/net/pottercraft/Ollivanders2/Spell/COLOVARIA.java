@@ -1,6 +1,5 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -41,7 +40,7 @@ public final class COLOVARIA extends Charms
     * @param name
     * @param rightWand
     */
-   public COLOVARIA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public COLOVARIA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

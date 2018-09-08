@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Collections;
 
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +16,6 @@ import net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
-import net.pottercraft.Ollivanders2.Spell.Spells;
 import org.bukkit.inventory.meta.BookMeta;
 
 /**
@@ -201,7 +200,7 @@ public final class O2Books
 
       for (String spell : bookLore)
       {
-         Spells spellEnum = Spells.decode(spell);
+         O2SpellType spellEnum = O2SpellType.decode(spell);
          int spellLevel = 0;
 
          if (spellEnum != null)

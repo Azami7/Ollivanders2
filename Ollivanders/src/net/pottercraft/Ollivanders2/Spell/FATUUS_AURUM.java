@@ -36,7 +36,7 @@ public final class FATUUS_AURUM extends BlockTransfigurationSuper
     * @param name
     * @param rightWand
     */
-   public FATUUS_AURUM (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public FATUUS_AURUM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

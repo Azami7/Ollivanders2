@@ -37,7 +37,7 @@ public final class VERA_VERTO extends FriendlyMobDisguiseSuper
     * @param name
     * @param rightWand
     */
-   public VERA_VERTO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public VERA_VERTO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

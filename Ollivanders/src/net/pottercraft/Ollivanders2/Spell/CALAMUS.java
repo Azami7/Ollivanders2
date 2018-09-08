@@ -37,7 +37,7 @@ public final class CALAMUS extends Transfiguration
     * @param name
     * @param rightWand
     */
-   public CALAMUS(Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public CALAMUS(Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

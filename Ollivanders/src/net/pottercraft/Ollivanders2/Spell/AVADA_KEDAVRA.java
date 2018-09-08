@@ -38,7 +38,7 @@ public final class AVADA_KEDAVRA extends DarkArts
     * @param name
     * @param rightWand
     */
-   public AVADA_KEDAVRA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public AVADA_KEDAVRA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       moveEffectData = Material.MELON_BLOCK;

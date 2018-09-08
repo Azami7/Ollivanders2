@@ -36,7 +36,7 @@ public final class LEVICORPUS extends DarkArts
     * @param name
     * @param rightWand
     */
-   public LEVICORPUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public LEVICORPUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

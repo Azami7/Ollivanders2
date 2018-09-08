@@ -35,7 +35,7 @@ public final class INCENDIO extends IncendioSuper
     * @param name
     * @param rightWand
     */
-   public INCENDIO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public INCENDIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       strafe = false;

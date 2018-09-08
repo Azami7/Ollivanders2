@@ -52,7 +52,7 @@ public final class PORTUS extends Charms
     * @param rightWand
     * @param wordsArray
     */
-   public PORTUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand, String[] wordsArray)
+   public PORTUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand, String[] wordsArray)
    {
       super(plugin, player, name, rightWand);
       this.wordsArray = wordsArray;
@@ -66,7 +66,7 @@ public final class PORTUS extends Charms
     * @param name
     * @param rightWand
     */
-   public PORTUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public PORTUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       Location loc = player.getLocation();

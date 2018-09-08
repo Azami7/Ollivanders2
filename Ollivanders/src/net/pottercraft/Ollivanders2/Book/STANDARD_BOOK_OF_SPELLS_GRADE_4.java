@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -24,15 +24,15 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends O2Book
       author = "Miranda Goshawk";
       branch = O2MagicBranch.CHARMS;
 
-      spells.add(Spells.AVIFORS);
-      spells.add(Spells.ACCIO);
-      spells.add(Spells.EBUBLIO);
-      spells.add(Spells.COLOVARIA);
-      spells.add(Spells.ARRESTO_MOMENTUM);
-      spells.add(Spells.FINITE_INCANTATEM);
-      spells.add(Spells.TERGEO);
-      spells.add(Spells.REDUCTO);
-      spells.add(Spells.GLACIUS_DUO);
+      spells.add(O2SpellType.AVIFORS);
+      spells.add(O2SpellType.ACCIO);
+      spells.add(O2SpellType.EBUBLIO);
+      spells.add(O2SpellType.COLOVARIA);
+      spells.add(O2SpellType.ARRESTO_MOMENTUM);
+      spells.add(O2SpellType.FINITE_INCANTATEM);
+      spells.add(O2SpellType.TERGEO);
+      spells.add(O2SpellType.REDUCTO);
+      spells.add(O2SpellType.GLACIUS_DUO);
       //10
       //11
    }

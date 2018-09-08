@@ -1,7 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -27,7 +26,7 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
     * @param name
     * @param rightWand
     */
-   public FriendlyMobDisguiseSuper (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public FriendlyMobDisguiseSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

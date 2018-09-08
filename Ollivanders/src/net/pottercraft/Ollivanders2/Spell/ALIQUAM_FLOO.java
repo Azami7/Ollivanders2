@@ -43,7 +43,7 @@ public final class ALIQUAM_FLOO extends Charms
     * @param name
     * @param rightWand
     */
-   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

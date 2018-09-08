@@ -33,7 +33,7 @@ import org.bukkit.util.Vector;
 public abstract class SpellProjectile implements Teachable
 {
    public Player player;
-   public Spells name;
+   public O2SpellType spellType;
    public Location location;
    public int lifeTicks;
    public boolean kill;
@@ -48,7 +48,7 @@ public abstract class SpellProjectile implements Teachable
    public static final Long DEFAULT_COOLDOWN = new Long(1000);
 
    /**
-    * The branch of magic this spell is - most likely Charms or Transfiguration
+    * The branch of magic this spell is
     */
    protected O2MagicBranch branch = O2MagicBranch.CHARMS;
 
@@ -71,20 +71,20 @@ public abstract class SpellProjectile implements Teachable
    /**
     * Constructor
     *
-    * @param plugin
-    * @param player
-    * @param name
-    * @param rightWand
+    * @param plugin a callback to the O2 plugin
+    * @param player the player casting the spell
+    * @param type the O2SpellType of this spell
+    * @param rightWand wand check for the player
     */
-   public SpellProjectile (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public SpellProjectile (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
       location = player.getEyeLocation();
-      this.name = name;
+      this.spellType = type;
       this.player = player;
       kill = false;
       lifeTicks = 0;
       p = plugin;
-      spellUses = p.getSpellNum(player, name);
+      spellUses = p.getSpellNum(player, type);
       usesModifier = spellUses;
       boolean memoryPotion = false;
 
@@ -106,13 +106,13 @@ public abstract class SpellProjectile implements Teachable
          }
       }
 
-      p.incSpellCount(player, name);
+      p.incSpellCount(player, type);
       if (memoryPotion)
       {
-         p.incSpellCount(player, name);
+         p.incSpellCount(player, type);
       }
 
-      if (!p.canCast(player, name, true))
+      if (!p.canCast(player, type, true))
       {
          kill();
       }
@@ -124,7 +124,7 @@ public abstract class SpellProjectile implements Teachable
    public void move ()
    {
       location.add(vector);
-      if (!p.canLive(location, name))
+      if (!p.canLive(location, spellType))
       {
          kill();
       }
@@ -249,7 +249,7 @@ public abstract class SpellProjectile implements Teachable
     */
    private double getUsesModifier ()
    {
-      double modifier = Math.sqrt(p.getSpellNum(player, name)) / rightWand;
+      double modifier = Math.sqrt(p.getSpellNum(player, spellType)) / rightWand;
 
       return modifier;
    }
@@ -321,5 +321,13 @@ public abstract class SpellProjectile implements Teachable
    public O2MagicBranch getMagicBranch ()
    {
       return branch;
+   }
+
+   @Override
+   public String getName ()
+   {
+      Ollivanders2Common common = new Ollivanders2Common(p);
+
+      return common.firstLetterCapitalize(spellType.toString().toLowerCase().replace("_", " "));
    }
 }

@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -23,7 +23,7 @@ public class YEAR_WITH_A_YETI extends O2Book
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spells.add(Spells.ARANIA_EXUMAI);
-      spells.add(Spells.OBLIVIATE);
+      spells.add(O2SpellType.ARANIA_EXUMAI);
+      spells.add(O2SpellType.OBLIVIATE);
    }
 }

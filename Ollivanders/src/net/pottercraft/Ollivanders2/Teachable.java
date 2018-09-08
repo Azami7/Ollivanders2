@@ -6,6 +6,13 @@ package net.pottercraft.Ollivanders2;
 public interface Teachable
 {
    /**
+    * Get the name for this magic. This should not be null.
+    *
+    * @return the name of this magic
+    */
+   String getName ();
+
+   /**
     * Get the description text for this magic. This should not be null.
     *
     * @return the description text for this teachable magic

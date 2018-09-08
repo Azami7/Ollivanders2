@@ -35,7 +35,7 @@ public final class LACARNUM_INFLAMARI extends Charms
     * @param name
     * @param rightWand
     */
-   public LACARNUM_INFLAMARI (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public LACARNUM_INFLAMARI (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

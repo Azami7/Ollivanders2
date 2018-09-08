@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Effect.OEffect;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -18,48 +18,48 @@ import java.util.Map;
 @Deprecated
 public class OPlayer implements Serializable
 {
-   private Map<Spells, Integer> SpellCount = new HashMap<>();
+   private Map<O2SpellType, Integer> SpellCount = new HashMap<>();
    private List<OEffect> effects = new ArrayList<>();
    //This is the spell loaded into the wand for casting with left click
-   private Spells spell;
+   private O2SpellType spell;
    private int souls;
    private boolean invisible = false;
    private boolean muggleton = false;
 
    public OPlayer ()
    {
-      Spells[] spells = Spells.values();
-      for (Spells spell : spells)
+      O2SpellType[] spells = O2SpellType.values();
+      for (O2SpellType spell : spells)
       {
          SpellCount.put(spell, 0);
       }
       souls = 0;
    }
 
-   public Map<Spells, Integer> getSpellCount ()
+   public Map<O2SpellType, Integer> getSpellCount ()
    {
       return SpellCount;
    }
 
-   public void setSpellCount (Map<Spells, Integer> map)
+   public void setSpellCount (Map<O2SpellType, Integer> map)
    {
       SpellCount = map;
    }
 
-   public Spells getSpell ()
+   public O2SpellType getSpell ()
    {
       return spell;
    }
 
-   public void setSpell (Spells s)
+   public void setSpell (O2SpellType s)
    {
       spell = s;
    }
 
    public void resetSpellCount ()
    {
-      Spells[] spells = Spells.values();
-      for (Spells spell : spells)
+      O2SpellType[] spells = O2SpellType.values();
+      for (O2SpellType spell : spells)
       {
          SpellCount.put(spell, 0);
       }

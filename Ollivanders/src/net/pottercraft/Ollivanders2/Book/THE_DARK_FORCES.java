@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -24,11 +24,11 @@ public class THE_DARK_FORCES extends O2Book
       author = "Quentin Trimble";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spells.add(Spells.LUMOS);
-      spells.add(Spells.FINITE_INCANTATEM);
-      spells.add(Spells.FUMOS);
-      spells.add(Spells.PERICULUM);
-      spells.add(Spells.VERDIMILLIOUS);
-      spells.add(Spells.FLIPENDO);
+      spells.add(O2SpellType.LUMOS);
+      spells.add(O2SpellType.FINITE_INCANTATEM);
+      spells.add(O2SpellType.FUMOS);
+      spells.add(O2SpellType.PERICULUM);
+      spells.add(O2SpellType.VERDIMILLIOUS);
+      spells.add(O2SpellType.FLIPENDO);
    }
 }

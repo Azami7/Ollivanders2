@@ -39,7 +39,7 @@ public final class GEMINO extends DarkArts
     * @param name
     * @param rightWand
     */
-   public GEMINO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public GEMINO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

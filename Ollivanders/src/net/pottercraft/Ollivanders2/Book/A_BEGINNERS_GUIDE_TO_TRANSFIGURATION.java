@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -24,12 +24,12 @@ public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book
       author = "Emeric Switch";
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      spells.add(Spells.DURO);
-      spells.add(Spells.FATUUS_AURUM);
-      spells.add(Spells.CALAMUS);
-      spells.add(Spells.DEPRIMO);
-      spells.add(Spells.MULTICORFORS);
-      spells.add(Spells.VERA_VERTO);
-      spells.add(Spells.SNUFFLIFORS);
+      spells.add(O2SpellType.DURO);
+      spells.add(O2SpellType.FATUUS_AURUM);
+      spells.add(O2SpellType.CALAMUS);
+      spells.add(O2SpellType.DEPRIMO);
+      spells.add(O2SpellType.MULTICORFORS);
+      spells.add(O2SpellType.VERA_VERTO);
+      spells.add(O2SpellType.SNUFFLIFORS);
    }
 }

@@ -24,7 +24,7 @@ public final class FLIPENDO extends Charms
       flavorText.add("\"There was a loud bang and he felt himself flying backwards as if punched; as he slammed into the kitchen wall and slid to the floor, he glimpsed the tail of Lupin's cloak disappearing round the door.\"");
    }
 
-   public FLIPENDO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public FLIPENDO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

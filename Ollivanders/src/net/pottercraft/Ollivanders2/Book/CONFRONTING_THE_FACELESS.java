@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -31,14 +31,14 @@ public class CONFRONTING_THE_FACELESS extends O2Book
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spells.add(Spells.MORTUOS_SUSCITATE);
-      spells.add(Spells.OPPUGNO);
-      spells.add(Spells.REDUCTO);
-      spells.add(Spells.LEGILIMENS);
-      spells.add(Spells.FLAGRANTE);
-      spells.add(Spells.PRAEPANDO);
-      //spells.add(Spells.CRUCIO);
-      //spells.add(Spells.IMPERIO);
-      //spells.add(Spells.EXPECTO_PATRONUM);
+      spells.add(O2SpellType.MORTUOS_SUSCITATE);
+      spells.add(O2SpellType.OPPUGNO);
+      spells.add(O2SpellType.REDUCTO);
+      spells.add(O2SpellType.LEGILIMENS);
+      spells.add(O2SpellType.FLAGRANTE);
+      spells.add(O2SpellType.PRAEPANDO);
+      //spells.add(O2SpellType.CRUCIO);
+      //spells.add(O2SpellType.IMPERIO);
+      //spells.add(O2SpellType.EXPECTO_PATRONUM);
    }
 }

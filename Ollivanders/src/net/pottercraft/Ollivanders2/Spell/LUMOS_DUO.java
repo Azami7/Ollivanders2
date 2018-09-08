@@ -38,7 +38,7 @@ public final class LUMOS_DUO extends Charms
     * @param name
     * @param rightWand
     */
-   public LUMOS_DUO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public LUMOS_DUO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       lifeTicks = (int) (-(usesModifier * 20));

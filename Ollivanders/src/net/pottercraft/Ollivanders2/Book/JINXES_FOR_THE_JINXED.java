@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -20,9 +20,9 @@ public class JINXES_FOR_THE_JINXED extends O2Book
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spells.add(Spells.ENTOMORPHIS);
-      spells.add(Spells.IMPEDIMENTA);
-      spells.add(Spells.LEVICORPUS);
-      spells.add(Spells.LACARNUM_INFLAMARI);
+      spells.add(O2SpellType.ENTOMORPHIS);
+      spells.add(O2SpellType.IMPEDIMENTA);
+      spells.add(O2SpellType.LEVICORPUS);
+      spells.add(O2SpellType.LACARNUM_INFLAMARI);
    }
 }

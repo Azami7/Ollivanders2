@@ -35,7 +35,7 @@ public final class BOTHYNUS_TRIA extends PyrotechniaSuper
     * @param name
     * @param rightWand
     */
-   public BOTHYNUS_TRIA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public BOTHYNUS_TRIA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

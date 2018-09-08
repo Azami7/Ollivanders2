@@ -17,7 +17,7 @@ public abstract class BombardaSuper extends Charms
 
    public BombardaSuper () { }
 
-   public BombardaSuper (Ollivanders2 p, Player player, Spells name, Double rightWand)
+   public BombardaSuper (Ollivanders2 p, Player player, O2SpellType name, Double rightWand)
    {
       super(p, player, name, rightWand);
    }

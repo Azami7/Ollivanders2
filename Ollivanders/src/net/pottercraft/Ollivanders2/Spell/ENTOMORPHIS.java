@@ -25,7 +25,7 @@ public final class ENTOMORPHIS extends PlayerDisguiseSuper
       text = "Entomorphis will transfigure an entity into a spider a duration dependent on your experience.";
    }
 
-   public ENTOMORPHIS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public ENTOMORPHIS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

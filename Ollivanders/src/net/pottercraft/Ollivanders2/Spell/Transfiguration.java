@@ -50,7 +50,7 @@ public abstract class Transfiguration extends SpellProjectile implements Spell, 
     * @param name
     * @param rightWand
     */
-   public Transfiguration (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public Transfiguration (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       hasTransfigured = false;

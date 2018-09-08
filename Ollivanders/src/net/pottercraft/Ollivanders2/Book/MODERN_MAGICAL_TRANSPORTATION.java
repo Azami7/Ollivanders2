@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -23,8 +23,8 @@ public class MODERN_MAGICAL_TRANSPORTATION extends O2Book
 
       openingPage = "Understanding magical transportation is important for every witch and wizard.  In this book we will learn three primary means of transport - Brooms, Floo Powder, and Portkeys.";
 
-      spells.add(Spells.VOLATUS);
-      spells.add(Spells.ALIQUAM_FLOO);
-      spells.add(Spells.PORTUS);
+      spells.add(O2SpellType.VOLATUS);
+      spells.add(O2SpellType.ALIQUAM_FLOO);
+      spells.add(O2SpellType.PORTUS);
    }
 }

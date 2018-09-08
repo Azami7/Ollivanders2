@@ -31,7 +31,7 @@ public final class EVANESCO extends Transfiguration
     * @param name
     * @param rightWand
     */
-   public EVANESCO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public EVANESCO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

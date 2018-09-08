@@ -42,7 +42,7 @@ public final class DEFODIO extends Charms
     * @param name
     * @param rightWand
     */
-   public DEFODIO (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public DEFODIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       depth = (int) usesModifier;

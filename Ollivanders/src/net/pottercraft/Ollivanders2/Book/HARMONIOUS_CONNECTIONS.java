@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -33,6 +33,6 @@ public class HARMONIOUS_CONNECTIONS extends O2Book
 
       branch = O2MagicBranch.CHARMS;
 
-      spells.add(Spells.HARMONIA_NECTERE_PASSUS);
+      spells.add(O2SpellType.HARMONIA_NECTERE_PASSUS);
    }
 }

@@ -2,7 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 /**
  * Non-cannon book written by Gellert Grindelwald that is the only location of Morsmordre appears, which makes it
@@ -23,10 +23,10 @@ public class FOR_THE_GREATER_GOOD extends O2Book
 
       openingPage = "We've lived in the shadows for far too long, scuttling like rats in the gutter, forced to hide lest we be discovered, forced to conceal our true nature. I refuse to bow down any longer.";
 
-      spells.add(Spells.MORSMORDRE);
-      spells.add(Spells.IMMOBULUS);
-      spells.add(Spells.LEVICORPUS);
-      spells.add(Spells.LEGILIMENS);
+      spells.add(O2SpellType.MORSMORDRE);
+      spells.add(O2SpellType.IMMOBULUS);
+      spells.add(O2SpellType.LEVICORPUS);
+      spells.add(O2SpellType.LEGILIMENS);
       //Crucio
       //Imperio
    }

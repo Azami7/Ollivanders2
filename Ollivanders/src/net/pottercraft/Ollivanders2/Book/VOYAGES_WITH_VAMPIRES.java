@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -20,7 +20,7 @@ public class VOYAGES_WITH_VAMPIRES extends O2Book
       author = "Gilderoy Lockhart";
       branch = O2MagicBranch.DARK_ARTS;
       
-      spells.add(Spells.DEPULSO);
-      spells.add(Spells.OBLIVIATE);
+      spells.add(O2SpellType.DEPULSO);
+      spells.add(O2SpellType.OBLIVIATE);
    }
 }

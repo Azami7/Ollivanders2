@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -20,12 +20,12 @@ public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
-      spells.add(Spells.EXPELLIARMUS);
-      spells.add(Spells.PROTEGO);
-      spells.add(Spells.PROTEGO_MAXIMA);
-      spells.add(Spells.MUFFLIATO);
-      spells.add(Spells.ARANIA_EXUMAI);
-      spells.add(Spells.FIANTO_DURI);
-      spells.add(Spells.SCUTO_CONTERAM);
+      spells.add(O2SpellType.EXPELLIARMUS);
+      spells.add(O2SpellType.PROTEGO);
+      spells.add(O2SpellType.PROTEGO_MAXIMA);
+      spells.add(O2SpellType.MUFFLIATO);
+      spells.add(O2SpellType.ARANIA_EXUMAI);
+      spells.add(O2SpellType.FIANTO_DURI);
+      spells.add(O2SpellType.SCUTO_CONTERAM);
    }
 }

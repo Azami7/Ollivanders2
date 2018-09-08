@@ -32,12 +32,12 @@ public final class OBLIVIATE extends Charms
    /**
     * Constructor for casting the spell.
     *
-    * @param plugin
-    * @param player
-    * @param name
-    * @param rightWand
+    * @param plugin the plugin callback
+    * @param player the player who cast the spell
+    * @param name the name of the spell
+    * @param rightWand which wand they are using
     */
-   public OBLIVIATE (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public OBLIVIATE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }
@@ -53,15 +53,15 @@ public final class OBLIVIATE extends Charms
          if (entity instanceof Player)
          {
             Player ply = (Player) entity;
-            for (Spells spell : Spells.values())
+            for (O2SpellType spellType : O2SpellType.values())
             {
-               int know = p.getSpellNum(ply, spell);
+               int know = p.getSpellNum(ply, spellType);
                int to = know - i;
                if (to < 0)
                {
                   to = 0;
                }
-               p.setSpellNum(ply, spell, to);
+               p.setSpellNum(ply, spellType, to);
             }
             kill();
          }

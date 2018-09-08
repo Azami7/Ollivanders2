@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Teachable;
 
@@ -71,24 +71,23 @@ public final class BookTexts
     */
    private void addSpells ()
    {
-      for (Spells spellType : Spells.values())
+      for (O2SpellType spellType : O2SpellType.values())
       {
          if (!Ollivanders2.libsDisguisesEnabled && p.common.libsDisguisesSpells.contains(spellType))
          {
             continue;
          }
-         
-         String spellName = "net.pottercraft.Ollivanders2.Spell." + spellType.toString();
 
          Teachable spell;
+         Class spellClass = spellType.getClassName();
 
          try
          {
-            spell = (Teachable)Class.forName(spellName).getConstructor().newInstance();
+            spell = (Teachable)spellClass.getConstructor().newInstance();
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Exception trying to add book text for " + spellName);
+            p.getLogger().warning("Exception trying to add book text for " + spellType.toString());
             e.printStackTrace();
 
             continue;
@@ -99,11 +98,11 @@ public final class BookTexts
 
          if (text == null)
          {
-            p.getLogger().warning("No book text for " + spellName);
+            p.getLogger().warning("No book text for " + spellType.toString());
             continue;
          }
 
-         String name = p.common.firstLetterCapitalize(p.common.enumRecode(spellType.toString().toLowerCase()));
+         String name = spell.getName();
 
          BookText sText = new BookText(name, text, flavorText);
          O2MagicTextMap.put(spellType.toString(), sText);

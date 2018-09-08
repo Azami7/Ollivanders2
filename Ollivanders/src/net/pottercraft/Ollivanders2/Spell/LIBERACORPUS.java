@@ -35,7 +35,7 @@ public final class LIBERACORPUS extends Charms
     * @param name
     * @param rightWand
     */
-   public LIBERACORPUS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public LIBERACORPUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

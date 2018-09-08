@@ -37,7 +37,7 @@ public final class FIANTO_DURI extends Charms
     * @param name
     * @param rightWand
     */
-   public FIANTO_DURI (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public FIANTO_DURI (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
    }

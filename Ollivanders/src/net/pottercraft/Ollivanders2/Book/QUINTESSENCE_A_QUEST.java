@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -21,12 +21,12 @@ public class QUINTESSENCE_A_QUEST extends O2Book
       author = "Unknown";
       branch = O2MagicBranch.CHARMS;
 
-      spells.add(Spells.PROTEGO_TOTALUM);
-      spells.add(Spells.PROTEGO_HORRIBILIS);
-      spells.add(Spells.NULLUM_APPAREBIT);
-      spells.add(Spells.NULLUM_EVANESCUNT);
-      spells.add(Spells.APARECIUM);
-      spells.add(Spells.CONFUNDO);
-      spells.add(Spells.POINT_ME);
+      spells.add(O2SpellType.PROTEGO_TOTALUM);
+      spells.add(O2SpellType.PROTEGO_HORRIBILIS);
+      spells.add(O2SpellType.NULLUM_APPAREBIT);
+      spells.add(O2SpellType.NULLUM_EVANESCUNT);
+      spells.add(O2SpellType.APARECIUM);
+      spells.add(O2SpellType.CONFUNDO);
+      spells.add(O2SpellType.POINT_ME);
    }
 }

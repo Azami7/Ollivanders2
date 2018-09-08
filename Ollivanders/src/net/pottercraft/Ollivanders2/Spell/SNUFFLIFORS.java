@@ -37,7 +37,7 @@ public class SNUFFLIFORS extends FriendlyMobDisguiseSuper
     * @param name
     * @param rightWand
     */
-   public SNUFFLIFORS (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public SNUFFLIFORS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
 

@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
-import net.pottercraft.Ollivanders2.Spell.Spells;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -20,8 +20,8 @@ public class ACHIEVEMENTS_IN_CHARMING extends O2Book
       author = "Unknown";
       branch = O2MagicBranch.CHARMS;
 
-      spells.add(Spells.LUMOS);
-      spells.add(Spells.WINGARDIUM_LEVIOSA);
-      spells.add(Spells.SPONGIFY);
+      spells.add(O2SpellType.LUMOS);
+      spells.add(O2SpellType.WINGARDIUM_LEVIOSA);
+      spells.add(O2SpellType.SPONGIFY);
    }
 }

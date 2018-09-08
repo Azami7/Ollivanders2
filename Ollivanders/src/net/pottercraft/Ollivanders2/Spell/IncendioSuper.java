@@ -4,7 +4,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -35,7 +34,7 @@ public abstract class IncendioSuper extends Charms
 
    public IncendioSuper () { }
 
-   public IncendioSuper (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public IncendioSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       lifeTime = usesModifier * ticksModifier;
@@ -99,7 +98,7 @@ public abstract class IncendioSuper extends Charms
          }
          for (SpellProjectile proj : p.getProjectiles())
          {
-            if ((proj.name == Spells.GLACIUS || proj.name == Spells.GLACIUS_DUO || proj.name == Spells.GLACIUS_TRIA)
+            if ((proj.spellType == O2SpellType.GLACIUS || proj.spellType == O2SpellType.GLACIUS_DUO || proj.spellType == O2SpellType.GLACIUS_TRIA)
                   && proj.location.getWorld() == location.getWorld())
             {
                if (proj.location.distance(location) < distance)

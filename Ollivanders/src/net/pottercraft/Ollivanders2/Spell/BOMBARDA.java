@@ -34,7 +34,7 @@ public final class BOMBARDA extends BombardaSuper
     * @param name
     * @param rightWand
     */
-   public BOMBARDA (Ollivanders2 plugin, Player player, Spells name, Double rightWand)
+   public BOMBARDA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
    {
       super(plugin, player, name, rightWand);
       strength = 0.8;
