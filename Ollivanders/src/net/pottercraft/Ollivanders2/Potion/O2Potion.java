@@ -196,7 +196,6 @@ public abstract class O2Potion implements Teachable
       for (Map.Entry<IngredientType, Integer> e : ingredients.entrySet())
       {
          IngredientType ingredientType = e.getKey();
-
          Integer count = e.getValue();
 
          // is this ingredient in the recipe?
