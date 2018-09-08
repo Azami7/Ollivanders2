@@ -27,7 +27,6 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 import net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
@@ -180,7 +179,7 @@ public class OllivandersListener implements Listener
                {
                   if (!player.hasPermission("Ollivanders2.Floo"))
                   {
-                     player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "You do not have permission to use the Floo Network.");
+                     player.sendMessage(Ollivanders2.chatColor + "You do not have permission to use the Floo Network.");
                      return;
                   }
                }
@@ -373,7 +372,7 @@ public class OllivandersListener implements Listener
                {
                   p.getLogger().info("onPlayerChat: bookLearning enforced");
                }
-               sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
+               sender.sendMessage(Ollivanders2.chatColor + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
 
                return;
             }
@@ -591,8 +590,6 @@ public class OllivandersListener implements Listener
                      continue;
                   }
 
-                  //if (owl.isTamed())
-                  //{
                   for (Entity item : world.getEntities())
                   {
                      if (item instanceof Item && item.getLocation().distance(owl.getLocation()) <= 2)
@@ -633,7 +630,7 @@ public class OllivandersListener implements Listener
                                  {
                                     world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
                                  }
-                                 sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not in this world.");
+                                 sender.sendMessage(Ollivanders2.chatColor + splited[2] + " is not in this world.");
                               }
                            }
                            else
@@ -646,7 +643,7 @@ public class OllivandersListener implements Listener
                               {
                                  world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
                               }
-                              sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
+                              sender.sendMessage(Ollivanders2.chatColor + splited[2] + " is not online.");
                            }
                         }
                         else
@@ -659,12 +656,11 @@ public class OllivandersListener implements Listener
                            {
                               world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
                            }
-                           sender.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + splited[2] + " is not online.");
+                           sender.sendMessage(Ollivanders2.chatColor + splited[2] + " is not online.");
                         }
                         return;
                      }
                   }
-                  //}
                }
             }
          }
@@ -885,12 +881,14 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
 
       O2Player o2p = p.getO2Player(player);
-
-      //p.setPlayerTeamColor(event.getPlayer());
-      o2p.setPlayerName(player.getDisplayName());
+      // update player's name if it has changed
+      o2p.setPlayerName(player.getName());
       p.setO2Player(player, o2p);
 
-      p.getLogger().info("Player " + player.getDisplayName() + " joined.");
+      // add player to their house team
+      p.houses.addPlayerToHouseTeam(player);
+
+      p.getLogger().info("Player " + player.getName() + " joined.");
    }
 
    /**
