@@ -27,6 +27,7 @@ broomstick: STICK
 # IMPORTANT: Enabling houses will take over your server's main scoreboard.  If you do not want this, you must
 # set this to false.
 houses: false
+#
 # If houses are enabled, you can change the name of them in the game by uncommenting and editing
 # gryffindorName: Gryffindor
 # hufflepuffName: Hufflepuff

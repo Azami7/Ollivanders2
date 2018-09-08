@@ -7,7 +7,6 @@ import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -22,10 +21,10 @@ public final class ANIMAGUS_POTION extends O2Potion
 
       super(plugin, potionType);
 
-      ingredients.put(Material.WATER_LILY, 1);
-      ingredients.put(Material.CHORUS_FRUIT, 2);
-      ingredients.put(Material.EYE_OF_ENDER, 1);
-      ingredients.put(Material.SUGAR, 3);
+      ingredients.put(IngredientType.MANDRAKE_LEAF, 1);
+      ingredients.put(IngredientType.DEW_DROP, 2);
+      ingredients.put(IngredientType.DEATHS_HEAD_MOTH_CHRYSALIS, 1);
+      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 3);
 
       name = "Animagus Potion";
       text = "An Animagus is a wizard who elects to turn into an animal. This potion, if brewed and consumed correctly, " +
