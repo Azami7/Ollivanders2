@@ -39,7 +39,7 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
       // set duration of potion effect to 30 seconds
       duration = 600;
       effect = new PotionEffect(PotionEffectType.HARM, duration, 1);
-      potionColor = Color.OLIVE;
+      potionColor = Color.fromRGB(51, 102, 0);
    }
 
    public void drink (O2Player o2p, Player player) { }

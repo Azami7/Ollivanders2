@@ -6,7 +6,7 @@ import java.util.List;
 import net.pottercraft.Ollivanders2.*;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
-import net.pottercraft.Ollivanders2.Effect.SHAPE_SHIFT;
+import net.pottercraft.Ollivanders2.Effect.ShapeShiftSuper;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
@@ -69,7 +69,7 @@ public final class INFORMOUS extends Arithmancy
       {
          if (!iEntity.contains(entity))
          {
-            player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + entity.getType().toString() + " has " + ((Damageable) entity).getHealth() + " health.");
+            player.sendMessage(Ollivanders2.chatColor + entity.getType().toString() + " has " + ((Damageable) entity).getHealth() + " health.");
             if (entity instanceof Player)
             {
                Player ePlayer = (Player) entity;
@@ -78,15 +78,15 @@ public final class INFORMOUS extends Arithmancy
                {
                   if (effect instanceof LYCANTHROPY)
                   {
-                     player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + ePlayer.getName() + " has Lycanthropy.");
+                     player.sendMessage(Ollivanders2.chatColor + ePlayer.getName() + " has Lycanthropy.");
                   }
-                  else if (effect instanceof SHAPE_SHIFT)
+                  else if (effect instanceof ShapeShiftSuper)
                   {
                      // do nothing, this is not detectable
                   }
                   else
                   {
-                     player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + ePlayer.getName() + " has " + O2EffectType.recode(effect.name) + " with " + effect.duration / 20 + " seconds left.");
+                     player.sendMessage(Ollivanders2.chatColor + ePlayer.getName() + " has " + O2EffectType.recode(effect.effectType) + " with " + effect.duration / 20 + " seconds left.");
                   }
                }
             }
@@ -105,23 +105,23 @@ public final class INFORMOUS extends Arithmancy
                else
                   power = 1;
 
-               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + spell.name.toString() + " of radius " + spell.radius + " has " + power + " power left.");
+               player.sendMessage(Ollivanders2.chatColor + spell.name.toString() + " of radius " + spell.radius + " has " + power + " power left.");
             }
             else if (spell instanceof HORCRUX)
             {
-               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + spell.name.toString() + " of player " + Bukkit.getPlayer(spell.getCasterID()).getName() + " of radius " + spell.radius);
+               player.sendMessage(Ollivanders2.chatColor + spell.name.toString() + " of player " + Bukkit.getPlayer(spell.getCasterID()).getName() + " of radius " + spell.radius);
             }
             else if (spell instanceof ALIQUAM_FLOO)
             {
-               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "Floo registration of " + ((ALIQUAM_FLOO) spell).getFlooName());
+               player.sendMessage(Ollivanders2.chatColor + "Floo registration of " + ((ALIQUAM_FLOO) spell).getFlooName());
             }
             else if (spell instanceof HARMONIA_NECTERE_PASSUS)
             {
-               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "Vanishing Cabinet");
+               player.sendMessage(Ollivanders2.chatColor + "Vanishing Cabinet");
             }
             else
             {
-               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration / 20 + " seconds left.");
+               player.sendMessage(Ollivanders2.chatColor + spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration / 20 + " seconds left.");
             }
             iSpell.add(spell);
          }
@@ -142,10 +142,10 @@ public final class INFORMOUS extends Arithmancy
          }
          int weatherTime = world.getWeatherDuration();
          int thunderTime = world.getThunderDuration();
-         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "There will be " + weather + " for " + weatherTime / 20 + " more seconds.");
+         player.sendMessage(Ollivanders2.chatColor + "There will be " + weather + " for " + weatherTime / 20 + " more seconds.");
          if (thunder)
          {
-            player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + "There will be thunder for " + thunderTime / 20 + " more seconds.");
+            player.sendMessage(Ollivanders2.chatColor + "There will be thunder for " + thunderTime / 20 + " more seconds.");
          }
       }
       if (lifeTicks > lifeTime)

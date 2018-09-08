@@ -34,7 +34,7 @@ public final class FORGETFULLNESS_POTION extends O2Potion
       text = "The Forgetfulness Potion is a potion which causes a degree of memory loss in the drinker." + getIngredientsText();
       flavorText.add("Hermione Granger: \"What are the three most crucial ingredients in a Forgetfulness Potion?\"\nRon Weasley: \"I forgot.\"");
 
-      potionColor = Color.MAROON;
+      potionColor = Color.fromRGB(195, 71, 0);
    }
 
    public void drink (O2Player o2p, Player player)

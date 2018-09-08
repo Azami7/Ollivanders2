@@ -13,7 +13,6 @@ import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -131,7 +130,7 @@ class OllivandersSchedule implements Runnable
             for (O2Effect effect : playerEffects)
             {
                effect.checkEffect();
-               if (effect.kill)
+               if (effect.isKilled())
                {
                   o2p.removeEffect(effect);
                }
@@ -261,7 +260,7 @@ class OllivandersSchedule implements Runnable
       {
          if (stat instanceof REPELLO_MUGGLETON)
          {
-               repelloMuggletons.add((REPELLO_MUGGLETON) stat);
+            repelloMuggletons.add((REPELLO_MUGGLETON) stat);
          }
       }
 

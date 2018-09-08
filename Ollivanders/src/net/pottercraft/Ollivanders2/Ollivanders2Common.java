@@ -225,8 +225,8 @@ public class Ollivanders2Common
       switch (rand)
       {
          case 1:
-           type = Ocelot.Type.BLACK_CAT;
-           break;
+            type = Ocelot.Type.BLACK_CAT;
+            break;
          case 2:
             type = Ocelot.Type.RED_CAT;
             break;
@@ -512,7 +512,7 @@ public class Ollivanders2Common
       }
       return sb.substring(0, sb.length() - 1);
    }
-  
+
    /**
     * Determine if this is the Cloak of Invisibility.
     *
