@@ -29,6 +29,7 @@ public final class MEMORY_POTION extends O2Potion
 
       name = "Memory Potion";
       text = "This potion improves the drinker's memory. All spell experience is doubled.";
+      potionColor = Color.fromRGB(255, 128, 0);
    }
 
    public void drink (O2Player o2p, Player player)
