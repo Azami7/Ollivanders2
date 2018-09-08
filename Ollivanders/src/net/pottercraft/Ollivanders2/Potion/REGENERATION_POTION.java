@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Spell.INFORMOUS;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -19,12 +20,11 @@ public final class REGENERATION_POTION extends O2Potion
    {
       super(plugin, potionType);
 
-      ingredients.put(Material.BONE, 1);
-      ingredients.put(Material.SPIDER_EYE, 1);
-      ingredients.put(Material.SULPHUR, 1);
-      ingredients.put(Material.ROTTEN_FLESH, 1);
-      ingredients.put(Material.ENDER_PEARL, 1);
-      ingredients.put(Material.SUGAR, 4);
+      ingredients.put(IngredientType.BONE, 1);
+      ingredients.put(IngredientType.BLOOD, 1);
+      ingredients.put(IngredientType.ROTTEN_FLESH, 1);
+      ingredients.put(IngredientType.SALAMANDER_FIRE, 1);
+      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 4);
 
       name = "Regeneration Potion";
       text = "This potion will heal a player." + getIngredientsText();

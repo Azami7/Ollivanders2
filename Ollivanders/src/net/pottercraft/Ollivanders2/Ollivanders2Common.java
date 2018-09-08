@@ -1,17 +1,18 @@
 package net.pottercraft.Ollivanders2;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import java.util.UUID;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.HashMap;
-import java.util.Collection;
+import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.Spells;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -714,5 +715,64 @@ public class Ollivanders2Common
       World world = location.getWorld();
 
       return world.getNearbyEntities(location, x, y, z);
+   }
+
+   /**
+    * Convert an array of strings to a single string.
+    *
+    * @param strArray the array to convert
+    * @return the array as a single string
+    */
+   public String stringArrayToString (String[] strArray)
+   {
+      String newString = "";
+      for (String str : strArray)
+      {
+         newString = newString + " " + str;
+      }
+      newString = newString.trim();
+
+      return newString;
+   }
+
+   public Color colorByNumber (int number)
+   {
+      Color color = Color.WHITE;
+
+      if (number == 0)
+         color = Color.AQUA;
+      else if (number == 1)
+         color = Color.BLACK;
+      else if (number == 2)
+         color = Color.BLUE;
+      else if (number == 3)
+         color = Color.FUCHSIA;
+      else if (number == 4)
+         color = Color.GRAY;
+      else if (number == 5)
+         color = Color.GREEN;
+      else if (number == 6)
+         color = Color.LIME;
+      else if (number == 7)
+         color = Color.MAROON;
+      else if (number == 8)
+         color = Color.NAVY;
+      else if (number == 9)
+         color = Color.OLIVE;
+      else if (number == 10)
+         color = Color.ORANGE;
+      else if (number == 11)
+         color = Color.PURPLE;
+      else if (number == 12)
+         color = Color.RED;
+      else if (number == 13)
+         color = Color.SILVER;
+      else if (number == 14)
+         color = Color.TEAL;
+      // 15 is white again
+      else if (number == 16)
+         color = Color.WHITE;
+
+      return color;
    }
 }
