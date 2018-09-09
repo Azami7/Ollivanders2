@@ -54,18 +54,14 @@ public final class ANIMAGUS_POTION extends O2Potion
          return;
       }
 
-      for (O2Effect effect : o2p.getEffects())
+      if (p.players.playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION))
       {
-         if (effect instanceof ANIMAGUS_INCANTATION)
-         {
-            o2p.setIsAnimagus();
+         o2p.setIsAnimagus();
 
-            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player.getUniqueId());
-            o2p.addEffect(animagusEffect);
-            p.setO2Player(player, o2p);
+         ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player.getUniqueId());
+         p.players.playerEffects.addEffect(animagusEffect);
 
-            player.sendMessage(Ollivanders2.chatColor + "You feel transformed.");
-         }
+         player.sendMessage(Ollivanders2.chatColor + "You feel transformed.");
       }
    }
 }

@@ -9,7 +9,7 @@ import org.bukkit.entity.Slime;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
-public class MUCUS_AD_NAUSEAM extends O2Effect
+public class MUCUS extends O2Effect
 {
    /**
     * Constructor
@@ -19,18 +19,18 @@ public class MUCUS_AD_NAUSEAM extends O2Effect
     * @param duration the duration of the effect
     * @param pid the ID of the player this effect acts on
     */
-   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   public MUCUS (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
       super(plugin, effect, duration, pid);
    }
 
    /**
-    * Spawn a slime entity on the player's head once per second.
+    * Spawn a slime entity on the player's head once per 15 seconds.
     */
    public void checkEffect ()
    {
       age(1);
-      if (duration % 20 == 0)
+      if (duration % 300 == 0)
       {
          Player target = p.getServer().getPlayer(targetID);
 

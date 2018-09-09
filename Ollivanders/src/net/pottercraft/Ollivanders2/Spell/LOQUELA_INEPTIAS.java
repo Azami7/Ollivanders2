@@ -59,10 +59,11 @@ public class LOQUELA_INEPTIAS extends Charms
          if (live instanceof Player)
          {
             Player player = (Player) live;
-            O2Player o2p = p.getO2Player(player);
             int dur = (int) (usesModifier * 1200);
-            o2p.addEffect(new BABBLING(p, O2EffectType.BABBLING, dur, player.getUniqueId()));
-            p.setO2Player(player, o2p);
+
+            BABBLING effect = new BABBLING(p, O2EffectType.BABBLING, dur, player.getUniqueId());
+            p.players.playerEffects.addEffect(effect);
+
             kill();
             return;
          }

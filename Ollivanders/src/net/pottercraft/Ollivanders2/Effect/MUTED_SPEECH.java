@@ -5,7 +5,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
-public class SILENCIO extends O2Effect
+public class MUTED_SPEECH extends O2Effect
 {
    /**
     * Constructor
@@ -15,7 +15,7 @@ public class SILENCIO extends O2Effect
     * @param duration the duration of the effect
     * @param pid the ID of the player this effect acts on
     */
-   public SILENCIO (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   public MUTED_SPEECH (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
       super(plugin, effect, duration, pid);
    }

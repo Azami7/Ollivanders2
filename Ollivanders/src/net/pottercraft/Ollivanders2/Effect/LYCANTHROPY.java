@@ -10,7 +10,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 /**
- * Turns player into a werewolf during the full moon. Doesn't go away until death.
+ * Turns player into a werewolf during the full moon. Doesn't go away until death (if deathExpLoss is set to
+ * true).
  *
  * @author azami7
  * @since 2.2.8
@@ -110,12 +111,13 @@ public class LYCANTHROPY extends ShapeShiftSuper
    {
       O2Player o2p = p.players.getPlayer(targetID);
 
-      AGGRESSION effect = new AGGRESSION(p, O2EffectType.AGGRESSION, 5, targetID);
-      effect.setAggressionLevel(10);
-      o2p.addEffect(effect);
+      AGGRESSION aggression = new AGGRESSION(p, O2EffectType.AGGRESSION, 5, targetID);
+      aggression.setAggressionLevel(10);
+      p.players.playerEffects.addEffect(aggression);
       additionalEffects.add(O2EffectType.AGGRESSION);
 
-      o2p.addEffect(new LYCANTHROPY_SPEECH(p, O2EffectType.LYCANTHROPY_SPEECH, 5, targetID));
+      LYCANTHROPY_SPEECH speech = new LYCANTHROPY_SPEECH(p, O2EffectType.LYCANTHROPY_SPEECH, 5, targetID);
+      p.players.playerEffects.addEffect(speech);
       additionalEffects.add(O2EffectType.LYCANTHROPY_SPEECH);
    }
 
@@ -124,11 +126,9 @@ public class LYCANTHROPY extends ShapeShiftSuper
     */
    private void removeAdditionalEffect ()
    {
-      O2Player o2p = p.players.getPlayer(targetID);
-
-      for (O2EffectType effect : additionalEffects)
+      for (O2EffectType effectType : additionalEffects)
       {
-         o2p.removeEffect(effect);
+         p.players.playerEffects.removeEffect(targetID, effectType);
       }
    }
 }

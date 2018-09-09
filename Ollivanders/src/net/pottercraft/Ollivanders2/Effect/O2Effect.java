@@ -62,6 +62,18 @@ public abstract class O2Effect
    }
 
    /**
+    * Get the id of the player affected by this effect.
+    *
+    * @return the id of the player
+    */
+   public UUID getTargetID ()
+   {
+      UUID pid = new UUID(targetID.getMostSignificantBits(), targetID.getLeastSignificantBits());
+
+      return pid;
+   }
+
+   /**
     * This is the effect's action. age() must be called in this if you want the effect to age and die eventually.
     */
    public void checkEffect () { }

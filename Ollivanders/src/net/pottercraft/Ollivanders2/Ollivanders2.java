@@ -456,17 +456,17 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().info("Running playerSummary");
 
       Player player = getServer().getPlayer(sender.getName());
-      O2Player o2Player = players.getPlayer(player.getUniqueId());
+      O2Player o2p = players.getPlayer(player.getUniqueId());
 
       String summary = "Ollivanders2 player summary:\n\n";
 
       // wand type
-      if (o2Player.foundWand())
+      if (o2p.foundWand())
       {
-         String wandlore = o2Player.getDestinedWandLore();
+         String wandlore = o2p.getDestinedWandLore();
          summary = summary + "\nWand Type: " + wandlore;
 
-         O2SpellType masterSpell = o2Player.getMasterSpell();
+         O2SpellType masterSpell = o2p.getMasterSpell();
          if (masterSpell != null)
          {
             summary = summary + "\nMaster Spell: " + common.enumRecode(masterSpell.toString().toLowerCase());
@@ -478,7 +478,7 @@ public class Ollivanders2 extends JavaPlugin
       // effects
       if (isOp(sender))
       {
-         List<O2Effect> effects = o2Player.getEffects();
+         List<O2EffectType> effects = players.playerEffects.getEffects(o2p.getID());
          summary = summary + "\nAffected by:\n";
 
          if (effects == null || effects.isEmpty())
@@ -487,9 +487,9 @@ public class Ollivanders2 extends JavaPlugin
          }
          else
          {
-            for (O2Effect effect : effects)
+            for (O2EffectType effectType : effects)
             {
-               summary = summary + effect.effectType.toString() + "\n";
+               summary = summary + effectType.toString() + "\n";
             }
          }
 
@@ -508,10 +508,10 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //year
-      summary = summary + "Year: " + O2PlayerCommon.yearToInt(o2Player.getYear()) + "\n";
+      summary = summary + "Year: " + O2PlayerCommon.yearToInt(o2p.getYear()) + "\n";
 
       // spells
-      Map<O2SpellType, Integer> spells = o2Player.getKnownSpells();
+      Map<O2SpellType, Integer> spells = o2p.getKnownSpells();
 
       if (spells.size() > 0)
       {
@@ -1091,9 +1091,9 @@ public class Ollivanders2 extends JavaPlugin
          }
 
          O2Player o2p = getO2Player((Player)sender);
-         if (o2p.hasEffect(effectType))
+         if (players.playerEffects.hasEffect(((Player) sender).getUniqueId(), effectType))
          {
-            o2p.removeEffect(effectType);
+            players.playerEffects.removeEffect(((Player) sender).getUniqueId(), effectType);
             sender.sendMessage(chatColor + "Removed " + effectName + " from " + sender + ".\n");
          }
          else
@@ -1113,7 +1113,7 @@ public class Ollivanders2 extends JavaPlugin
                return true;
             }
 
-            o2p.addEffect(effect);
+            players.playerEffects.addEffect(effect);
             sender.sendMessage(chatColor + "Added " + effectName + " to " + sender + ".\n");
          }
       }

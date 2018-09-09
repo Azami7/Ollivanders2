@@ -5,11 +5,11 @@ import java.util.UUID;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Gives a player more spell experience while effect is active.
+ * Makes book learning more effective.
  *
- * @since 1.0
+ * @author Azami7
  */
-public class BARUFFIOS_BRAIN_ELIXIR extends O2Effect
+public class IMPROVED_BOOK_LEARNING extends O2Effect
 {
    /**
     * Constructor
@@ -19,7 +19,7 @@ public class BARUFFIOS_BRAIN_ELIXIR extends O2Effect
     * @param duration the duration of the effect
     * @param pid the ID of the player this effect acts on
     */
-   public BARUFFIOS_BRAIN_ELIXIR (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   public IMPROVED_BOOK_LEARNING (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
       super(plugin, effect, duration, pid);
    }

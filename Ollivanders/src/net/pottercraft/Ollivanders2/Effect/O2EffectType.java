@@ -13,18 +13,18 @@ public enum O2EffectType
    ANIMAGUS_EFFECT (net.pottercraft.Ollivanders2.Effect.ANIMAGUS_EFFECT.class),
    ANIMAGUS_INCANTATION (net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION.class),
    BABBLING (BABBLING.class),
-   BARUFFIOS_BRAIN_ELIXIR (net.pottercraft.Ollivanders2.Effect.BARUFFIOS_BRAIN_ELIXIR.class),
+   FAST_LEARNING (FAST_LEARNING.class),
    FLYING (net.pottercraft.Ollivanders2.Effect.FLYING.class),
+   HIGHER_SKILL (HIGHER_SKILL.class),
+   IMPROVED_BOOK_LEARNING(IMPROVED_BOOK_LEARNING.class),
    LEVICORPUS (net.pottercraft.Ollivanders2.Effect.LEVICORPUS.class),
    LYCANTHROPY (net.pottercraft.Ollivanders2.Effect.LYCANTHROPY.class),
    LYCANTHROPY_SPEECH (net.pottercraft.Ollivanders2.Effect.LYCANTHROPY_SPEECH.class),
-   MEMORY_POTION (net.pottercraft.Ollivanders2.Effect.MEMORY_POTION.class),
-   MUCUS_AD_NAUSEAM (net.pottercraft.Ollivanders2.Effect.MUCUS_AD_NAUSEAM.class),
-   SILENCIO (net.pottercraft.Ollivanders2.Effect.SILENCIO.class),
-   SLEEP (net.pottercraft.Ollivanders2.Effect.SLEEP.class),
+   LYCANTHROPY_RELIEF (LYCANTHROPY_RELIEF.class),
+   MUCUS (net.pottercraft.Ollivanders2.Effect.MUCUS.class),
+   MUTED_SPEECH (net.pottercraft.Ollivanders2.Effect.MUTED_SPEECH.class),
    SLEEP_SPEECH (net.pottercraft.Ollivanders2.Effect.SLEEP_SPEECH.class),
-   WIT_SHARPENING_POTION (net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION.class),
-   WOLFSBANE_POTION (net.pottercraft.Ollivanders2.Effect.WOLFSBANE_POTION.class);
+   SLEEPING(net.pottercraft.Ollivanders2.Effect.SLEEPING.class);
 
    private Class className;
 

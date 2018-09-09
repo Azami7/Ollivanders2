@@ -48,9 +48,6 @@ public class WIGGENWELD_POTION extends O2Potion
    @Override
    public void drink (O2Player o2p, Player player)
    {
-      if (o2p.hasEffect(O2EffectType.SLEEP))
-      {
-         o2p.removeEffect(O2EffectType.SLEEP);
-      }
+      p.players.playerEffects.removeEffect(player.getUniqueId(), O2EffectType.SLEEPING);
    }
 }

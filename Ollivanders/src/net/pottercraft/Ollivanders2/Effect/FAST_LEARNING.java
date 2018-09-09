@@ -4,10 +4,11 @@ import java.util.UUID;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Improve the player's ability to remember information.
+ * Increases the experience a player gets for using a skill.
  *
+ * @author Azami7
  */
-public class MEMORY_POTION extends O2Effect
+public class FAST_LEARNING extends O2Effect
 {
    /**
     * Constructor
@@ -17,7 +18,7 @@ public class MEMORY_POTION extends O2Effect
     * @param duration the duration of the effect
     * @param pid the ID of the player this effect acts on
     */
-   public MEMORY_POTION (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   public FAST_LEARNING (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
       super(plugin, effect, duration, pid);
    }

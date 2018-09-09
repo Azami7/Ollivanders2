@@ -34,10 +34,8 @@ public class BABBLING_BEVERAGE extends O2Potion
 
    public void drink (O2Player o2p, Player player)
    {
-      if (!extendEffect(o2p))
-      {
-         o2p.addEffect(new BABBLING(p, O2EffectType.BABBLING, duration, player.getUniqueId()));
-      }
+      BABBLING effect = new BABBLING(p, O2EffectType.BABBLING, duration, player.getUniqueId());
+      p.players.playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You tongue feels fuzzy.");
    }

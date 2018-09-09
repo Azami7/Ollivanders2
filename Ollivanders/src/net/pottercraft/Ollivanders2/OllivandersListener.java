@@ -2,7 +2,7 @@ package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
-import net.pottercraft.Ollivanders2.Effect.SILENCIO;
+import net.pottercraft.Ollivanders2.Effect.MUTED_SPEECH;
 import net.pottercraft.Ollivanders2.Effect.BABBLING;
 import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
@@ -34,7 +34,6 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.Effect;
 
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
@@ -44,6 +43,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.NPC;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
@@ -123,13 +123,15 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerMove (PlayerMoveEvent event)
    {
-      O2Player o2p = p.getO2Player(event.getPlayer());
+      Player player = event.getPlayer();
 
-      if (o2p.hasEffect(O2EffectType.SLEEP))
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          // do not allow the player to move if they are asleep
          Location fromLoc = event.getFrom();
          event.setTo(fromLoc);
+
+         player.sendMessage(Ollivanders2.chatColor + "You are unable to move.");
       }
       else
       {
@@ -237,7 +239,6 @@ public class OllivandersListener implements Listener
    {
       Player sender = event.getPlayer();
       String message = event.getMessage();
-      List<O2Effect> effects = p.getO2Player(sender).getEffects();
 
       if (Ollivanders2.debug)
       {
@@ -245,29 +246,40 @@ public class OllivandersListener implements Listener
       }
 
       /**
-       * Handle player spells that effect the chat.  Need to do this first sine they may affect the chat
+       * Handle player spells that effect the chat.  Need to do this first since they may affect the chat
        * message itself, which would change later chat effects.
        */
-      if (effects != null)
+      if (Ollivanders2.debug)
       {
-         if (Ollivanders2.debug)
+         p.getLogger().info("onPlayerChat: Handling player effects");
+      }
+
+      O2Effect effect = null;
+      // muted speech has highest precedence
+      if (p.players.playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.MUTED_SPEECH))
+      {
+         effect = p.players.playerEffects.getEffect(sender.getUniqueId(), O2EffectType.MUTED_SPEECH);
+
+         if (effect != null)
+            ((MUTED_SPEECH)effect).doSilencio(event);
+      }
+      else // speech replacement effects
+      {
+         if (p.players.playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.SLEEP_SPEECH))
          {
-            p.getLogger().info("onPlayerChat: Handling player effects");
+            effect = p.players.playerEffects.getEffect(sender.getUniqueId(), O2EffectType.SLEEP_SPEECH);
+         }
+         else if (p.players.playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.LYCANTHROPY_SPEECH))
+         {
+            effect = p.players.playerEffects.getEffect(sender.getUniqueId(), O2EffectType.LYCANTHROPY_SPEECH);
+         }
+         else if (p.players.playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.BABBLING))
+         {
+            effect = p.players.playerEffects.getEffect(sender.getUniqueId(), O2EffectType.BABBLING);
          }
 
-         for (O2Effect effect : effects)
-         {
-            // If SILENCIO is affecting the player, remove all chat recipients and do not allow a spell cast.
-            if (effect.effectType == O2EffectType.SILENCIO)
-            {
-               ((SILENCIO)effect).doSilencio(event);
-            }
-            else if (effect.effectType == O2EffectType.BABBLING ||
-                  effect.effectType == O2EffectType.LYCANTHROPY_SPEECH)
-            {
-               ((BABBLING)effect).doBabblingEffect(event);
-            }
-         }
+         if (effect != null)
+            ((BABBLING)effect).doBabblingEffect(event);
       }
 
       /**
@@ -788,10 +800,11 @@ public class OllivandersListener implements Listener
          return;
       }
 
-      O2Player o2p = p.getO2Player(player);
-      if (o2p.hasEffect(O2EffectType.SLEEP))
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
+
+         player.sendMessage(Ollivanders2.chatColor + "You are unable to move.");
          return;
       }
 
@@ -881,13 +894,13 @@ public class OllivandersListener implements Listener
       if (spell != null)
       {
          String spellName = p.common.firstLetterCapitalize(p.common.enumRecode(spell.toString()));
-         player.sendMessage("Wand master spell set to " + spellName);
+         player.sendMessage(Ollivanders2.chatColor + "Wand master spell set to " + spellName);
       }
       else
       {
          if (Ollivanders2.debug)
          {
-            player.sendMessage("You have not mastered any spells.");
+            player.sendMessage(Ollivanders2.chatColor + "You have not mastered any spells.");
          }
       }
    }
@@ -967,11 +980,7 @@ public class OllivandersListener implements Listener
       {
          O2Player o2p = p.getO2Player(event.getEntity());
 
-         o2p.resetSpellCount();
-         o2p.resetPotionCount();
-         o2p.setWandSpell(null);
-         o2p.resetSouls();
-         o2p.resetEffects();
+         o2p.onDeath();
 
          p.setO2Player(event.getEntity(), o2p);
       }
@@ -1003,18 +1012,10 @@ public class OllivandersListener implements Listener
             Wolf wolf = (Wolf) event.getDamager();
             if (wolf.isAngry())
             {
-               boolean hasLy = false;
-               O2Player o2p = p.getO2Player(damaged);
-               for (O2Effect effect : o2p.getEffects())
+               if (!p.players.playerEffects.hasEffect(damaged.getUniqueId(), O2EffectType.LYCANTHROPY))
                {
-                  if (effect.effectType == O2EffectType.LYCANTHROPY)
-                  {
-                     hasLy = true;
-                  }
-               }
-               if (!hasLy)
-               {
-                  o2p.addEffect(new LYCANTHROPY(p, O2EffectType.LYCANTHROPY, 100, damaged.getUniqueId()));
+                  LYCANTHROPY effect = new LYCANTHROPY(p, O2EffectType.LYCANTHROPY, 100, damaged.getUniqueId());
+                  p.players.playerEffects.addEffect(effect);
                }
             }
          }
@@ -1049,7 +1050,7 @@ public class OllivandersListener implements Listener
                   Location tp = stationary.location;
                   tp.setY(tp.getY() + 1);
                   plyr.teleport(tp);
-                  p.getO2Player((Player) plyr).resetEffects();
+
                   Collection<PotionEffect> potions = ((Player) event.getEntity()).getActivePotionEffects();
                   for (PotionEffect potion : potions)
                   {
@@ -1696,7 +1697,7 @@ public class OllivandersListener implements Listener
 
          if (potion == null)
          {
-            player.sendMessage("The cauldron appears unchanged. Perhaps you should check your recipe");
+            player.sendMessage(Ollivanders2.chatColor + "The cauldron appears unchanged. Perhaps you should check your recipe");
             return;
          }
 

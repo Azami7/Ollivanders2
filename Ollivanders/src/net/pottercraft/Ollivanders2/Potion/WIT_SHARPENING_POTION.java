@@ -1,11 +1,10 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Effect.IMPROVED_BOOK_LEARNING;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -36,10 +35,8 @@ public final class WIT_SHARPENING_POTION extends O2Potion
    @Override
    public void drink (O2Player o2p, Player player)
    {
-      if (!extendEffect(o2p))
-      {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION(p, O2EffectType.WIT_SHARPENING_POTION, duration, player.getUniqueId()));
-      }
+      IMPROVED_BOOK_LEARNING effect = new IMPROVED_BOOK_LEARNING(p, O2EffectType.IMPROVED_BOOK_LEARNING, duration, player.getUniqueId());
+      p.players.playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel ready to learn.");
    }

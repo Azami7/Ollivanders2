@@ -15,7 +15,7 @@ import java.util.UUID;
  * @since 2.2.8
  * @author Azami7
  */
-public abstract class SLEEP extends O2Effect
+public class SLEEPING extends O2Effect
 {
    boolean sleeping = false;
 
@@ -27,7 +27,7 @@ public abstract class SLEEP extends O2Effect
     * @param duration the duration of the effect
     * @param pid the player this effect acts on
     */
-   public SLEEP (Ollivanders2 plugin, O2EffectType effect, int duration, UUID pid)
+   public SLEEPING (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
       super(plugin, effect, duration, pid);
 
@@ -69,12 +69,14 @@ public abstract class SLEEP extends O2Effect
 
       // tilt player head down
       Location loc = target.getLocation();
-      Location newLoc = new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 135);
+      Location newLoc = new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 45);
       target.teleport(newLoc);
 
       // add sleep speech
       SLEEP_SPEECH effect = new SLEEP_SPEECH(p, O2EffectType.SLEEP_SPEECH, 5, targetID);
-      o2p.addEffect(effect);
+      p.players.playerEffects.addEffect(effect);
+
+      sleeping = true;
    }
 
    /**
@@ -84,6 +86,7 @@ public abstract class SLEEP extends O2Effect
    {
       O2Player o2p = p.players.getPlayer(targetID);
 
-      o2p.removeEffect(O2EffectType.SLEEP_SPEECH);
+      p.players.playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
+      sleeping = false;
    }
 }

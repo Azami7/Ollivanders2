@@ -46,8 +46,7 @@ public class AGGRESSION extends O2Effect
       Player target = p.getServer().getPlayer(targetID);
 
       // only take action once per 10 seconds, which is every 120 ticks
-      long curTime = target.getWorld().getTime();
-      if ((curTime % 120) == 0)
+      if ((duration % 120) == 0)
       {
          int rand = Math.abs(Ollivanders2.random.nextInt()) % 10;
 
