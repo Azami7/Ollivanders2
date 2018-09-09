@@ -17,9 +17,9 @@ public final class COLORO_VERIDI extends ColoroSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_VERIDI ()
+   public COLORO_VERIDI (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Turns target colorable entity or block green.";
    }
@@ -29,12 +29,12 @@ public final class COLORO_VERIDI extends ColoroSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public COLORO_VERIDI (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public COLORO_VERIDI (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       //set color green
       color = DyeColor.GREEN;

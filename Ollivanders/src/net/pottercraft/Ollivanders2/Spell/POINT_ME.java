@@ -15,9 +15,9 @@ public class POINT_ME extends Charms
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      */
-    public POINT_ME ()
+    public POINT_ME (O2SpellType type)
     {
-        super();
+        super(type);
 
         flavorText.add("\"\'Point Me!\' he whispered again to his wand, and it spun around and pointed him to the right-hand one.\"");
         flavorText.add("The Four-Point Spell");
@@ -30,12 +30,12 @@ public class POINT_ME extends Charms
      *
      * @param plugin
      * @param player
-     * @param name
+     * @param type
      * @param rightWand
      */
-    public POINT_ME (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+    public POINT_ME (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
     {
-        super(plugin, player, name, rightWand);
+        super(plugin, player, type, rightWand);
     }
 
 

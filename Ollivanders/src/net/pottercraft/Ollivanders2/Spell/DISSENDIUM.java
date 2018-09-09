@@ -24,9 +24,9 @@ public final class DISSENDIUM extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DISSENDIUM ()
+   public DISSENDIUM (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Opening Charm");
       flavorText.add("At once, the statue's hump opened wide enough to admit a fairly thin person.");
@@ -38,12 +38,12 @@ public final class DISSENDIUM extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public DISSENDIUM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public DISSENDIUM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       lifeTime = usesModifier * 16;
       move = true;
       openTime = 160;

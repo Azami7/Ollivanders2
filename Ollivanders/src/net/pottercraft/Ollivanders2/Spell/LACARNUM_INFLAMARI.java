@@ -16,9 +16,9 @@ public final class LACARNUM_INFLAMARI extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LACARNUM_INFLAMARI ()
+   public LACARNUM_INFLAMARI (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Some of the new incantations, such as ‘lacarnum inflamari’ must have sounded more dramatic onscreen – although by the time you’ve managed to say ‘lacarnum inflamari’, you’ve surely lost precious seconds in which the Devil’s Snare might have throttled you. But that’s showbiz.");
       flavorText.add("She whipped out her wand, waved it, muttered something, and sent a jet of the same bluebell flames she had used on Snape at the plant. In a matter of seconds, the two boys felt it loosening its grip as it cringed away from the light and warmth.");
@@ -32,12 +32,12 @@ public final class LACARNUM_INFLAMARI extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public LACARNUM_INFLAMARI (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public LACARNUM_INFLAMARI (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

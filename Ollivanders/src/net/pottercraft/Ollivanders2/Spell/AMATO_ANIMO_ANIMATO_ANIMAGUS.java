@@ -29,9 +29,9 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AMATO_ANIMO_ANIMATO_ANIMAGUS ()
+   public AMATO_ANIMO_ANIMATO_ANIMAGUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("An Animagus is a wizard who elects to turn into an animal.");
       flavorText.add("\"You know that I can disguise myself most effectively.\" -Peter Pettigrew");
@@ -50,11 +50,11 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     */
-   public AMATO_ANIMO_ANIMATO_ANIMAGUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public AMATO_ANIMO_ANIMATO_ANIMAGUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    /**

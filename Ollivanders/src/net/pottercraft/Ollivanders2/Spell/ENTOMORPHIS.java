@@ -16,18 +16,18 @@ import org.bukkit.entity.Player;
  */
 public final class ENTOMORPHIS extends PlayerDisguiseSuper
 {
-   public ENTOMORPHIS ()
+   public ENTOMORPHIS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("What wouldn't he give to strike now, to jinx Dudley so thoroughly he'd have to crawl home like an insect, struck dumb, sprouting feelers...");
       flavorText.add("The Insect Jinx");
       text = "Entomorphis will transfigure an entity into a spider a duration dependent on your experience.";
    }
 
-   public ENTOMORPHIS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public ENTOMORPHIS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.SPIDER;
       disguiseType = DisguiseType.getType(targetType);

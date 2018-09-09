@@ -21,9 +21,9 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_PORCILLI ()
+   public INCARNATIO_PORCILLI (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Turns target player in to a pig.";
    }
@@ -33,12 +33,12 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public INCARNATIO_PORCILLI(Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public INCARNATIO_PORCILLI(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.PIG;
       disguiseType = DisguiseType.getType(targetType);

@@ -21,9 +21,9 @@ public final class ALOHOMORA extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ALOHOMORA ()
+   public ALOHOMORA (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("There are many ways to pass through locked doors in the magical world.  When you wish to enter or depart discreetly, however, the Unlocking Charm is your best friend.");
       flavorText.add("The Unlocking Charm");
@@ -35,12 +35,12 @@ public final class ALOHOMORA extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public ALOHOMORA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public ALOHOMORA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

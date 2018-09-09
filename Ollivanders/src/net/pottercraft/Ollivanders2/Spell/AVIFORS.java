@@ -21,9 +21,9 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AVIFORS ()
+   public AVIFORS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("However, mastering a Transfiguration spell such as \"Avifors\" can be both rewarding and useful.");
       if (Ollivanders2.mcVersionCheck())
@@ -37,12 +37,12 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public AVIFORS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public AVIFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       if (Ollivanders2.mcVersionCheck())
       {

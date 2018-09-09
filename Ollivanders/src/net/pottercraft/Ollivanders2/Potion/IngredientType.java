@@ -1,8 +1,9 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public enum IngredientType
 {
@@ -58,5 +59,39 @@ public enum IngredientType
    public short getVariant ()
    {
       return variant;
+   }
+
+   /**
+    * Get an ingredient type by name
+    *
+    * @param name the name of the ingredient
+    * @return the ingredient type if found, null otherwise
+    */
+   public static IngredientType getIngredientType (String name)
+   {
+      for (IngredientType i : IngredientType.values())
+      {
+         if (i.getName().equalsIgnoreCase(name))
+            return i;
+      }
+
+      return null;
+   }
+
+   /**
+    * Get a list of the names of every potion ingredient.
+    *
+    * @return a list of all potions ingredients
+    */
+   public static List<String> getAllIngredientNames ()
+   {
+      ArrayList<String> ingredientList = new ArrayList<>();
+
+      for (IngredientType i : IngredientType.values())
+      {
+         ingredientList.add(i.getName());
+      }
+
+      return ingredientList;
    }
 }

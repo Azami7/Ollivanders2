@@ -17,9 +17,9 @@ public final class FUMOS_DUO extends FumosSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FUMOS_DUO ()
+   public FUMOS_DUO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("A Stronger Smoke-Screen Spell");
       text = "Fumos Duo will cause those in an area to be blinded by a smoke cloud. The blindness lasts for a time twice as long as that created by Fumos";
@@ -30,12 +30,12 @@ public final class FUMOS_DUO extends FumosSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public FUMOS_DUO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public FUMOS_DUO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       strength = 2;
    }
 }

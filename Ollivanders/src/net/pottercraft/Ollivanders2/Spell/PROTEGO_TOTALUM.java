@@ -17,9 +17,9 @@ public final class PROTEGO_TOTALUM extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_TOTALUM ()
+   public PROTEGO_TOTALUM (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Raising her wand, she began to walk in a wide circle around Harry and Ron, murmuring incantations as she went. Harry saw little disturbances in the surrounding air: it was as if Hermione had cast a heat haze across their clearing.");
       text = "Protego totalum is a stationary spell which will prevent any entities from crossing it's boundary.";
@@ -30,12 +30,12 @@ public final class PROTEGO_TOTALUM extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public PROTEGO_TOTALUM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public PROTEGO_TOTALUM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

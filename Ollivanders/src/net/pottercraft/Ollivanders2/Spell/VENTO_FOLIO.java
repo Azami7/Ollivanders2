@@ -23,9 +23,9 @@ public final class VENTO_FOLIO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VENTO_FOLIO ()
+   public VENTO_FOLIO (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Vento Folio gives the caster the ability to fly unassisted for an amount of time.";
       flavorText.add("\"And then Harry saw him. Voldemort was flying like smoke on the wind, without broomstick or thestral to hold him, his snake-like face gleaming out of the blackness, his white fingers raising his wand again —\"");
@@ -39,12 +39,12 @@ public final class VENTO_FOLIO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public VENTO_FOLIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public VENTO_FOLIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       setSuccessRate();
    }

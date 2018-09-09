@@ -18,9 +18,9 @@ public abstract class MetelojinxSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MetelojinxSuper ()
+   public MetelojinxSuper (O2SpellType type)
    {
-      super();
+      super(type);
    }
 
    /**
@@ -28,12 +28,12 @@ public abstract class MetelojinxSuper extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public MetelojinxSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public MetelojinxSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

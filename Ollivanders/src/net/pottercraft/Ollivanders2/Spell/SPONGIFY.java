@@ -17,9 +17,9 @@ public class SPONGIFY extends BlockTransfigurationSuper
 {
    protected O2MagicBranch branch = O2MagicBranch.CHARMS;
 
-   public SPONGIFY ()
+   public SPONGIFY (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"Today's lesson will most assuredly involve learning how to cast the Softening Charm, Spongify.\" -Filius Flitwick");
       flavorText.add("The Softening Charm");
@@ -32,12 +32,12 @@ public class SPONGIFY extends BlockTransfigurationSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public SPONGIFY (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public SPONGIFY (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       transfigureType = Material.SLIME_BLOCK;
       spellDuration = (int)(1200 * usesModifier);

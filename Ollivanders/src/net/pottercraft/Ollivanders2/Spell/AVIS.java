@@ -20,9 +20,9 @@ public final class AVIS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AVIS ()
+   public AVIS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Bird-Conjuring Charm");
       flavorText.add("Most of the class had already left, although several twittering yellow birds were still zooming around the room, all of Hermione's creation; nobody else had succeeded in conjuring so much as a feather from thin air.");
@@ -35,12 +35,12 @@ public final class AVIS extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public AVIS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public AVIS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       if (usesModifier > 100)
          maxBirds += 10;

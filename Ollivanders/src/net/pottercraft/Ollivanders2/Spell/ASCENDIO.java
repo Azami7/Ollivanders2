@@ -17,9 +17,9 @@ public final class ASCENDIO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ASCENDIO ()
+   public ASCENDIO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Climbing Charm");
       flavorText.add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
@@ -31,12 +31,12 @@ public final class ASCENDIO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public ASCENDIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public ASCENDIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

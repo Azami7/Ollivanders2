@@ -16,9 +16,9 @@ public final class CONFUNDUS_DUO extends ConfundusSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public CONFUNDUS_DUO ()
+   public CONFUNDUS_DUO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Confundus Charm");
       flavorText.add("The guard was confused. He stared down at the thin, golden Probe and then at his companion, who said in a slightly dazed voice, 'Yeah, you've just checked them, Marius.'");
@@ -30,12 +30,12 @@ public final class CONFUNDUS_DUO extends ConfundusSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public CONFUNDUS_DUO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public CONFUNDUS_DUO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       modifier = 2;
    }

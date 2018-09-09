@@ -20,9 +20,9 @@ public final class STUPEFY extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public STUPEFY ()
+   public STUPEFY (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Stunning Spell");
       flavorText.add("\"Stunning is one of the most useful spells in your arsenal. It's sort of a wizard's bread and butter, really.\" -Harry Potter");
@@ -34,12 +34,12 @@ public final class STUPEFY extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public STUPEFY (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public STUPEFY (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

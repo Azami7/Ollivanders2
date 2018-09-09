@@ -21,9 +21,9 @@ public abstract class ConfundusSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ConfundusSuper ()
+   public ConfundusSuper (O2SpellType type)
    {
-
+      super(type);
    }
 
    /**
@@ -31,12 +31,12 @@ public abstract class ConfundusSuper extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public ConfundusSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public ConfundusSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

@@ -20,9 +20,9 @@ public final class FIANTO_DURI extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FIANTO_DURI ()
+   public FIANTO_DURI (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" - Filius Flitwick");
       flavorText.add("");
@@ -34,12 +34,12 @@ public final class FIANTO_DURI extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public FIANTO_DURI (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public FIANTO_DURI (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

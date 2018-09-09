@@ -20,9 +20,9 @@ public final class ARRESTO_MOMENTUM extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ARRESTO_MOMENTUM ()
+   public ARRESTO_MOMENTUM (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("An incantation for slowing velocity.");
       flavorText.add("\"Dumbledore ...ran onto the field as you fell, waved his wand, and you sort of slowed down before you hit the ground.\" - Hermione Granger");
@@ -35,12 +35,12 @@ public final class ARRESTO_MOMENTUM extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public ARRESTO_MOMENTUM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public ARRESTO_MOMENTUM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

@@ -23,9 +23,9 @@ public final class APPARATE extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public APPARATE ()
+   public APPARATE (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("A magical means of transportation.");
       flavorText.add("Harry felt Dumbledore's arm twist away from him and re-doubled his grip: the next thing he knew everything went black; he was pressed very hard from all directions; he could not breathe, there were iron bands tightening around his chest; his eyeballs were being forced back into his head; his ear-drums were being pushed deeper into his skull.");
@@ -41,12 +41,12 @@ public final class APPARATE extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public APPARATE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public APPARATE (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

@@ -20,9 +20,9 @@ public final class FLAGRANTE extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FLAGRANTE ()
+   public FLAGRANTE (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Burning Curse");
       flavorText.add("They have added Geminio and Flagrante curses! Everything you touch will burn and multiply, but the copies are worthless.");
@@ -34,12 +34,12 @@ public final class FLAGRANTE extends DarkArts
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public FLAGRANTE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public FLAGRANTE (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

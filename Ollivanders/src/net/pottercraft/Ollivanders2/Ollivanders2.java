@@ -25,6 +25,7 @@ import net.pottercraft.Ollivanders2.House.O2HouseType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Player.O2Players;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
+import net.pottercraft.Ollivanders2.Potion.IngredientType;
 import net.pottercraft.Ollivanders2.Potion.O2Potions;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
@@ -1825,7 +1826,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean listAllIngredients (Player player)
    {
-      List<String> ingredientList = potions.getAllIngredientNames();
+      List<String> ingredientList = IngredientType.getAllIngredientNames();
       String displayString = "Ingredients:";
 
       for (String name : ingredientList)

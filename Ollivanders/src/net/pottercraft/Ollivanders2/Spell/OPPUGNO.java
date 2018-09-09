@@ -18,9 +18,9 @@ public final class OPPUGNO extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public OPPUGNO ()
+   public OPPUGNO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Harry spun around to see Hermione pointing her wand at Ron, her expression wild: The little flock of birds was speeding like a hail of fat golden bullets toward Ron, who yelped and covered his face with his hands, but the birds attacked, pecking and clawing at every bit of flesh they could reach.");
       flavorText.add("The Oppugno Jinx");
@@ -32,12 +32,12 @@ public final class OPPUGNO extends DarkArts
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public OPPUGNO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public OPPUGNO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

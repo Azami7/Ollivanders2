@@ -145,21 +145,21 @@ public abstract class O2Potion implements Teachable
    }
 
    /**
-    * Get the description text for this spell.  This can be used to write books, for lessons, or other in-game messages.
+    * Get the description text for this potion.  This can be used to write books, for lessons, or other in-game messages.
     * Description text is required for adding a spell to an Ollivanders2 book.
     *
-    * @return the description text for this spell
+    * @return the description text for this potion
     */
    public String getText ()
    {
-      return text;
+      return text + getIngredientsText();
    }
 
    /**
-    * Get the flavor text for this spell.  This can be used to make books, lessons, and other descriptions of spells more interesting.
+    * Get the flavor text for this potion.  This can be used to make books, lessons, and other descriptions of spells more interesting.
     * Flavor text is optional.
     *
-    * @return the flavor text for this spell.
+    * @return the flavor text for this potion.
     */
    public String getFlavorText()
    {
@@ -185,7 +185,7 @@ public abstract class O2Potion implements Teachable
     * @param cauldronIngredients the ingredients found in the cauldron
     * @return true if the ingredient list matches this potion recipe exactly, false otherwise
     */
-   public boolean checkRecipe (Map<Material, Integer> cauldronIngredients)
+   public boolean checkRecipe (Map<IngredientType, Integer> cauldronIngredients)
    {
       // are there the right number of ingredients?
       if (ingredients.size() != cauldronIngredients.size())
@@ -196,17 +196,17 @@ public abstract class O2Potion implements Teachable
       for (Map.Entry<IngredientType, Integer> e : ingredients.entrySet())
       {
          IngredientType ingredientType = e.getKey();
-         Material material = ingredientType.getMaterial();
+
          Integer count = e.getValue();
 
          // is this ingredient in the recipe?
-         if (!cauldronIngredients.containsKey(material))
+         if (!cauldronIngredients.containsKey(ingredientType))
          {
             return false;
          }
 
          // is the amount of the ingredient correct?
-         if (cauldronIngredients.get(material).intValue() != count.intValue())
+         if (cauldronIngredients.get(ingredientType).intValue() != count.intValue())
          {
             return false;
          }

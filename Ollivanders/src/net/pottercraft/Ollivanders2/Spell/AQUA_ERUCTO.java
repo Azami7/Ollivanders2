@@ -19,9 +19,9 @@ public final class AQUA_ERUCTO extends BlockTransfigurationSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AQUA_ERUCTO ()
+   public AQUA_ERUCTO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Aqua Eructo Charm");
       flavorText.add("\"Very good. You'll need to use Aqua Eructo to put out the fires.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
@@ -33,12 +33,12 @@ public final class AQUA_ERUCTO extends BlockTransfigurationSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public AQUA_ERUCTO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public AQUA_ERUCTO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       spellDuration = (int)(1200 * usesModifier);
       permanent = false;

@@ -19,9 +19,9 @@ public final class DRACONIFORS extends FriendlyMobDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DRACONIFORS ()
+   public DRACONIFORS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Draconifors Transfiguration");
       flavorText.add("\"It was great! Now I can turn anything into dragons!\" -Hermione Granger");
@@ -33,12 +33,12 @@ public final class DRACONIFORS extends FriendlyMobDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public DRACONIFORS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public DRACONIFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.ENDER_DRAGON;
       disguiseType = DisguiseType.getType(targetType);

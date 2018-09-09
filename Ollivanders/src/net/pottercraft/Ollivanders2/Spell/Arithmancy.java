@@ -16,19 +16,22 @@ public abstract class Arithmancy extends SpellProjectile implements Spell
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Arithmancy () { }
+   public Arithmancy (O2SpellType type)
+   {
+      super(type);
+   }
 
    /**
     * Constructor for casting a charm spell.
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public Arithmancy (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public Arithmancy (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 }
 

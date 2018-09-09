@@ -22,8 +22,9 @@ public final class VERA_VERTO extends FriendlyMobDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VERA_VERTO ()
+   public VERA_VERTO (O2SpellType type)
    {
+      super(type);
       flavorText.add("\"Could I have your attention please? Right, now, today, we will be transforming animals into water goblets. Like so. One, two, three. Vera Verto.\" -Minerva McGonagall");
 
       text = "Turns an entity in to a flower pot. Size of animal and duration of the spell depends on your experience.";
@@ -34,12 +35,12 @@ public final class VERA_VERTO extends FriendlyMobDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public VERA_VERTO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public VERA_VERTO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       spellDuration = (int)(1200 * usesModifier);
       targetType = EntityType.FALLING_BLOCK;

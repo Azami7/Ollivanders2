@@ -20,9 +20,9 @@ public final class AVADA_KEDAVRA extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AVADA_KEDAVRA ()
+   public AVADA_KEDAVRA (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Killing Curse");
       flavorText.add("There was a flash of blinding green light and a rushing sound, as though a vast, invisible something was soaring through the air — instantaneously the spider rolled over onto its back, unmarked, but unmistakably dead");

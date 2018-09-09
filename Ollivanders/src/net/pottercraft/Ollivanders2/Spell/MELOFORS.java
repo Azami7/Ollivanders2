@@ -19,9 +19,9 @@ public final class MELOFORS extends GaleatiSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MELOFORS ()
+   public MELOFORS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Harry overheard one second-year girl assuring another that Fudge was now lying in St Mungo’s with a pumpkin for a head.\"");
       flavorText.add("The Melon-Head Spell");
@@ -33,12 +33,12 @@ public final class MELOFORS extends GaleatiSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public MELOFORS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public MELOFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       materialType = melons[Math.abs(Ollivanders2.random.nextInt() % melons.length)];
    }

@@ -18,9 +18,9 @@ public final class DEPULSO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DEPULSO ()
+   public DEPULSO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("They were supposed to be practising the opposite of the Summoning Charm today — the Banishing Charm. Owing to the potential for nasty accidents when objects kept flying across the room. Professor Flitwick had given each student a stack of cushions on which to practise, the theory being that these wouldn’t hurt anyone if they went off target.");
       flavorText.add("The Banishing Charm");
@@ -32,12 +32,12 @@ public final class DEPULSO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public DEPULSO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public DEPULSO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()
