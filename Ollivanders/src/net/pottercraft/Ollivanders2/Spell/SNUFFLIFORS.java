@@ -20,9 +20,9 @@ public class SNUFFLIFORS extends FriendlyMobDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public SNUFFLIFORS ()
+   public SNUFFLIFORS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"You're going to have a lot of fun with the Snufflifors Spell, Hermione! It's particularly useful at turning books into bats! How cool is that?\" -Fred Weasley");
 
@@ -34,12 +34,12 @@ public class SNUFFLIFORS extends FriendlyMobDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public SNUFFLIFORS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public SNUFFLIFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.BAT;
       disguiseType = DisguiseType.getType(targetType);

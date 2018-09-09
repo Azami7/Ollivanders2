@@ -18,9 +18,9 @@ public final class COLLOPORTUS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLLOPORTUS ()
+   public COLLOPORTUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Locking Spell.");
       text = "Locks blocks in to place.  This spell does not age and can only be removed with the Unlocking Spell, Alohomora.";
@@ -31,12 +31,12 @@ public final class COLLOPORTUS extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public COLLOPORTUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public COLLOPORTUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

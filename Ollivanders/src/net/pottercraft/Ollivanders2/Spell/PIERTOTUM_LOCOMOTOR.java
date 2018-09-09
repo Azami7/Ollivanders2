@@ -20,9 +20,9 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration implements Spell
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PIERTOTUM_LOCOMOTOR ()
+   public PIERTOTUM_LOCOMOTOR (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("And all along the corridor the statues and suits of armour jumped down from their plinths, and from the echoing crashes from the floors above and below, Harry knew that their fellows throughout the castle had done the same... Cheering and yelling, the horde of moving statues stampeded past Harry; some of them smaller, others larger than life.");
 
@@ -34,12 +34,12 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration implements Spell
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public PIERTOTUM_LOCOMOTOR (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public PIERTOTUM_LOCOMOTOR (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       if (Ollivanders2.debug)
          p.getLogger().info("PIERTOTUM_LOCOMOTOR: create");

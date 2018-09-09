@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
+
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -90,7 +90,7 @@ public class O2Potions
          return null;
 
       // get ingredients from the cauldron
-      Map<Material, Integer> ingredientsInCauldron = getIngredientsInCauldron(cauldron);
+      Map<IngredientType, Integer> ingredientsInCauldron = getIngredientsInCauldron(cauldron);
 
       // make sure cauldron has ingredients in it
       if (ingredientsInCauldron.size() < 1)
@@ -113,7 +113,7 @@ public class O2Potions
     * @param ingredientsInCauldron the ingredients in this cauldron
     * @return the matching potion if found, null otherwise
     */
-   O2Potion matchPotion (Map<Material, Integer> ingredientsInCauldron)
+   O2Potion matchPotion (Map<IngredientType, Integer> ingredientsInCauldron)
    {
       // compare ingredients in the cauldron to the recipe for each potion
       for (O2PotionType potionType : O2PotionType.values())
@@ -130,12 +130,12 @@ public class O2Potions
    /**
     * Creates a map of all the ingredients in this cauldron.
     *
-    * @param cauldron
+    * @param cauldron the brewing cauldron
     * @return a Map of the ingredients and count of each ingredient
     */
-   Map<Material, Integer> getIngredientsInCauldron (Block cauldron)
+   Map<IngredientType, Integer> getIngredientsInCauldron (Block cauldron)
    {
-      Map<Material, Integer> ingredientsInCauldron = new HashMap<>();
+      Map<IngredientType, Integer> ingredientsInCauldron = new HashMap<>();
       Location location = cauldron.getLocation();
 
       for (Entity e : cauldron.getWorld().getNearbyEntities(location, 1, 1, 1))
@@ -143,12 +143,19 @@ public class O2Potions
          if (e instanceof Item)
          {
             Material material = ((Item) e).getItemStack().getType();
+            String lore = ((Item)e).getItemStack().getItemMeta().getLore().get(0);
+
+            IngredientType ingredientType = IngredientType.getIngredientType(lore);
+
+            if (ingredientType == null || material != ingredientType.getMaterial())
+               continue;
+
             Integer count = ((Item) e).getItemStack().getAmount();
 
             if (Ollivanders2.debug)
-               p.getLogger().info("Found " + count + " of ingredient " + material.toString());
+               p.getLogger().info("Found " + count + " of ingredient " + ingredientType.getName());
 
-            ingredientsInCauldron.put(material, count);
+            ingredientsInCauldron.put(ingredientType, count);
          }
       }
 
@@ -203,23 +210,6 @@ public class O2Potions
       }
 
       return potion;
-   }
-
-   /**
-    * Get a list of the names of every potion ingredient.
-    *
-    * @return a list of all potions ingredients
-    */
-   public List<String> getAllIngredientNames ()
-   {
-      ArrayList<String> ingredientList = new ArrayList<>();
-
-      for (IngredientType i : IngredientType.values())
-      {
-         ingredientList.add(i.getName());
-      }
-
-      return ingredientList;
    }
 
    /**

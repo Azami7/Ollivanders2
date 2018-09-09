@@ -65,15 +65,20 @@ public abstract class SpellProjectile implements Teachable
    /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
     * text.
+    *
+    * @param type the type of this spell
     */
-   public SpellProjectile () { }
+   public SpellProjectile (O2SpellType type)
+   {
+      spellType = type;
+   }
 
    /**
     * Constructor
     *
     * @param plugin a callback to the O2 plugin
     * @param player the player casting the spell
-    * @param type the O2SpellType of this spell
+    * @param type the type of this spell
     * @param rightWand wand check for the player
     */
    public SpellProjectile (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)

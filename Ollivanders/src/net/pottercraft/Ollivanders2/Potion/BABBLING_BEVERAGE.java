@@ -28,7 +28,7 @@ public class BABBLING_BEVERAGE extends O2Potion
       potionColor = Color.FUCHSIA;
 
       name = "Babbling Beverage";
-      text = "Babbling Beverage is a potion that causes the drinker to babble nonsense." + getIngredientsText();
+      text = "Babbling Beverage is a potion that causes the drinker to babble nonsense.";
       flavorText.add("\"Potter, when I want nonsense shouted at me I shall give you a Babbling Beverage.\" -Severus Snape");
    }
 

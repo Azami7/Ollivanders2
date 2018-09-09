@@ -23,9 +23,9 @@ public final class COLOVARIA extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLOVARIA ()
+   public COLOVARIA (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Colour Change Charm");
       flavorText.add("[...] he wished he had not mixed up the incantations for Colour Change and Growth Charms, so that the rat he was supposed to be turning orange swelled shockingly and was the size of a badger before Harry could rectify his mistake.");
@@ -37,12 +37,12 @@ public final class COLOVARIA extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public COLOVARIA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public COLOVARIA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

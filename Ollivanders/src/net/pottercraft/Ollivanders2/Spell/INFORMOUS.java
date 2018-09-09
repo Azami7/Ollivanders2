@@ -39,9 +39,9 @@ public final class INFORMOUS extends Arithmancy
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INFORMOUS ()
+   public INFORMOUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Basic Arithmancy");
       text = "Gives information on a living entity, weather, player, or stationary spell.";
@@ -52,12 +52,12 @@ public final class INFORMOUS extends Arithmancy
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public INFORMOUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public INFORMOUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       lifeTime = usesModifier * 16;
    }
 

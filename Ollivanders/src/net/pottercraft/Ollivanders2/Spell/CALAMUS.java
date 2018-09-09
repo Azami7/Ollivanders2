@@ -22,9 +22,9 @@ public final class CALAMUS extends Transfiguration
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public CALAMUS ()
+   public CALAMUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Turns sticks in to arrows.";
    }
@@ -34,12 +34,12 @@ public final class CALAMUS extends Transfiguration
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public CALAMUS(Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public CALAMUS(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect()

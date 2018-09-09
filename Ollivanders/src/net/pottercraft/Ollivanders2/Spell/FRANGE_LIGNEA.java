@@ -23,9 +23,9 @@ public final class FRANGE_LIGNEA extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FRANGE_LIGNEA ()
+   public FRANGE_LIGNEA (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Frange lignea will cause a log of the spruce, oak, birch, or jungle species to explode into coreless wands.";
    }
@@ -35,12 +35,12 @@ public final class FRANGE_LIGNEA extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public FRANGE_LIGNEA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public FRANGE_LIGNEA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

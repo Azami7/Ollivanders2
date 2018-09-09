@@ -20,9 +20,9 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MORTUOS_SUSCITATE ()
+   public MORTUOS_SUSCITATE (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("They are corpses, dead bodies that have been bewitched to do a Dark wizard's bidding. Inferi have not been seen for a long time, however, not since Voldemort was last powerful... He killed enough people to make an army of them, of course.");
       text = "Mortuos Suscitate will transfigure a piece of rotten flesh into an Inferius. The Inferius will not attack it's owner.";
@@ -34,12 +34,12 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public MORTUOS_SUSCITATE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public MORTUOS_SUSCITATE (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

@@ -14,9 +14,9 @@ public final class REDUCIO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REDUCIO ()
+   public REDUCIO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Shrinking Charm");
       flavorText.add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink. You will be learning both charms together, so that you can always undo an over-enthusiastic cast. There is thus no excuse for having accidentally shrunk your homework down to microscopic size or for allowing a giant toad to rampage through your school’s flower gardens.");
@@ -28,12 +28,12 @@ public final class REDUCIO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public REDUCIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public REDUCIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

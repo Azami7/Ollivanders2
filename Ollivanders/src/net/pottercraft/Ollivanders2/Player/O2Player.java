@@ -425,24 +425,25 @@ public class O2Player
    /**
     * Set the most recent cast time for a spell. This will override the existing values for this spell.
     *
-    * @param spell the spell to set the time for
+    * @param spellType the spell to set the time for
     */
-   public void setSpellRecentCastTime (O2SpellType spell)
+   public void setSpellRecentCastTime (O2SpellType spellType)
    {
-      String spellClass = "net.pottercraft.Ollivanders2.Spell." + spell.toString();
-      @SuppressWarnings("rawtypes")
+      String spellClass = "net.pottercraft.Ollivanders2.Spell." + spellType.toString();
+
       Constructor c;
       try
       {
-         c = Class.forName(spellClass).getConstructor();
-         SpellProjectile s = (SpellProjectile) c.newInstance();
-         if (recentSpells.containsKey(spell))
+         c = Class.forName(spellClass).getConstructor(O2SpellType.class);
+         SpellProjectile s = (SpellProjectile) c.newInstance(spellType);
+
+         if (recentSpells.containsKey(spellType))
          {
-            recentSpells.replace(spell, System.currentTimeMillis() + s.getCoolDown());
+            recentSpells.replace(spellType, System.currentTimeMillis() + s.getCoolDown());
          }
          else
          {
-            recentSpells.put(spell, System.currentTimeMillis() + s.getCoolDown());
+            recentSpells.put(spellType, System.currentTimeMillis() + s.getCoolDown());
          }
       }
       catch (InvocationTargetException e)

@@ -93,19 +93,22 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EntityTransfigurationSuper () {}
+   public EntityTransfigurationSuper (O2SpellType type)
+   {
+      super(type);
+   }
 
    /**
     * Constructor
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public EntityTransfigurationSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public EntityTransfigurationSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       entityBlacklist.add(EntityType.AREA_EFFECT_CLOUD);
       entityBlacklist.add(EntityType.COMPLEX_PART);

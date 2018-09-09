@@ -17,9 +17,9 @@ public final class PRAEPANDO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PRAEPANDO ()
+   public PRAEPANDO (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Praepando is a space-extension spell which allows you to create a pocket of extra-dimensional space at a location. "
             + "Spells can travel from the extra-dimensional pocket through to the real-world, but cannot go the other way around.";
@@ -30,12 +30,12 @@ public final class PRAEPANDO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public PRAEPANDO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public PRAEPANDO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

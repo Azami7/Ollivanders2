@@ -25,9 +25,9 @@ public final class FIENDFYRE extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FIENDFYRE ()
+   public FIENDFYRE (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("It was not normal fire; Crabbe had used a curse of which Harry had no knowledge: As they turned a corner the flames chased them as though they were alive, sentient, intent upon killing them. ");
       flavorText.add("Bewitched Flame Curse");
@@ -39,12 +39,12 @@ public final class FIENDFYRE extends DarkArts
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public FIENDFYRE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public FIENDFYRE (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       lifeTime = usesModifier * 4;
    }
 

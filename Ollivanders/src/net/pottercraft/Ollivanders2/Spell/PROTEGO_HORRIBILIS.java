@@ -17,9 +17,9 @@ public final class PROTEGO_HORRIBILIS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_HORRIBILIS ()
+   public PROTEGO_HORRIBILIS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add(" [...] although he could barely see out of it, he pointed his wand through the smashed window and started muttering incantations of great complexity. Harry heard a weird rushing noise, as though Flitwick had unleashed the power of the wind into the grounds.");
       text = "Protego horribilis is a stationary spell which will destroy any spells crossing it's barrier.";
@@ -30,12 +30,12 @@ public final class PROTEGO_HORRIBILIS extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public PROTEGO_HORRIBILIS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public PROTEGO_HORRIBILIS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

@@ -22,9 +22,9 @@ public final class GEMINO extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GEMINO ()
+   public GEMINO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Hermione screamed in pain, and Harry turned his wand on her in time to see a jewelled goblet tumbling from her grip. But as it fell, it split, became a shower of goblets, so that a second later, with a great clatter, the floor was covered in identical cups rolling in every direction, the original impossible to discern amongst them.");
       flavorText.add("The Doubling Curse");
@@ -36,12 +36,12 @@ public final class GEMINO extends DarkArts
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public GEMINO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public GEMINO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override
