@@ -23,14 +23,13 @@ public class SLEEPING extends O2Effect
     * Constructor
     *
     * @param plugin a callback to the MC plugin
+    * @param effect the effect cast
     * @param duration the duration of the effect
     * @param pid the player this effect acts on
     */
-   public SLEEPING (Ollivanders2 plugin, Integer duration, UUID pid)
+   public SLEEPING (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
-      super(plugin, duration, pid);
-
-      effectType = O2EffectType.SLEEPING;
+      super(plugin, effect, duration, pid);
 
       permanent = false;
    }
@@ -74,7 +73,7 @@ public class SLEEPING extends O2Effect
       target.teleport(newLoc);
 
       // add sleep speech
-      SLEEP_SPEECH effect = new SLEEP_SPEECH(p, 5, targetID);
+      SLEEP_SPEECH effect = new SLEEP_SPEECH(p, O2EffectType.SLEEP_SPEECH, 5, targetID);
       p.players.playerEffects.addEffect(effect);
 
       sleeping = true;
