@@ -53,7 +53,7 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
             Player player = (Player) live;
             O2Player o2p = p.getO2Player(player);
             int dur = (int) (usesModifier * 1200);
-            o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.MUCUS_AD_NAUSEAM(p, O2EffectType.MUCUS_AD_NAUSEAM, dur, player));
+            o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.MUCUS_AD_NAUSEAM(p, O2EffectType.MUCUS_AD_NAUSEAM, dur, player.getUniqueId()));
             p.setO2Player(player, o2p);
             kill();
          }

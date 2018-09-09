@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Effect;
 
+import java.util.UUID;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.entity.Player;
 
 public class WOLFSBANE_POTION extends O2Effect
 {
@@ -11,10 +11,11 @@ public class WOLFSBANE_POTION extends O2Effect
     * @param plugin a callback to the MC plugin
     * @param effect the effect cast
     * @param duration the duration of the effect
+    * @param pid the ID of the player this effect acts on
     */
-   public WOLFSBANE_POTION (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
+   public WOLFSBANE_POTION (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, player);
+      super(plugin, effect, duration, pid);
    }
 
    /**

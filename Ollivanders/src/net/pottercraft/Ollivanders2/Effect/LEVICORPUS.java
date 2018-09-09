@@ -1,5 +1,7 @@
 package net.pottercraft.Ollivanders2.Effect;
 
+import java.util.UUID;
+
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -20,13 +22,14 @@ public class LEVICORPUS extends O2Effect
     * @param plugin a callback to the MC plugin
     * @param effect the effect cast
     * @param duration the duration of the effect
-    * @param player the player this effect acts on
+    * @param pid the ID of the player this effect acts on
     */
-   public LEVICORPUS (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
+   public LEVICORPUS (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, player);
+      super(plugin, effect, duration, pid);
 
-      this.loc = player.getEyeLocation();
+      Player target = p.getServer().getPlayer(targetID);
+      this.loc = target.getEyeLocation();
    }
 
    /**
@@ -36,6 +39,8 @@ public class LEVICORPUS extends O2Effect
    public void checkEffect ()
    {
       age(1);
+
+      Player target = p.getServer().getPlayer(targetID);
       target.setAllowFlight(duration > 1);
       Location curLoc = target.getLocation();
       Location newLoc = new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), curLoc.getYaw(), 90);

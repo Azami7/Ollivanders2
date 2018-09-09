@@ -4,6 +4,7 @@ import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -34,10 +35,9 @@ public final class MEMORY_POTION extends O2Potion
    {
       if (!extendEffect(o2p))
       {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.MEMORY_POTION(p, O2EffectType.MEMORY_POTION, duration, player));
+         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.MEMORY_POTION(p, O2EffectType.MEMORY_POTION, duration, player.getUniqueId()));
       }
 
-      player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-            + "You feel more alert.");
+      player.sendMessage(Ollivanders2.chatColor + "You feel more alert.");
    }
 }
