@@ -34,7 +34,6 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.Effect;
 
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
@@ -808,6 +807,8 @@ public class OllivandersListener implements Listener
       if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
+
+         player.sendMessage(Ollivanders2.chatColor + "You are unable to move.");
          return;
       }
 
