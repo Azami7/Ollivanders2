@@ -213,26 +213,6 @@ public class O2Potions
    }
 
    /**
-<<<<<<< HEAD
-=======
-    * Get a list of the names of every potion ingredient.
-    *
-    * @return a list of all potions ingredients
-    */
-   public List<String> getAllIngredientNames ()
-   {
-      ArrayList<String> ingredientList = new ArrayList<>();
-
-      for (IngredientType i : IngredientType.values())
-      {
-         ingredientList.add(i.getName());
-      }
-
-      return ingredientList;
-   }
-
-   /**
->>>>>>> Potions ingredients (#195)
     * Get a potion ingredient by name.
     *
     * @param name the name of the ingredient to get
