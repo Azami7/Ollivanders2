@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 @Deprecated
 public class OEffect implements Serializable
 {
-
    /**
     * Effect object stored in OPlayer
     */
