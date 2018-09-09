@@ -24,9 +24,9 @@ public final class HERBIVICUS extends Herbology
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public HERBIVICUS ()
+   public HERBIVICUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Plant-Growing Charm");
       text = "Herbivicus causes crops within a radius to grow.";
@@ -37,12 +37,12 @@ public final class HERBIVICUS extends Herbology
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public HERBIVICUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public HERBIVICUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

@@ -21,9 +21,9 @@ public final class INCARNATIO_LAMA extends PlayerDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_LAMA ()
+   public INCARNATIO_LAMA (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Turns target player in to a llama.";
    }
@@ -33,12 +33,12 @@ public final class INCARNATIO_LAMA extends PlayerDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public INCARNATIO_LAMA(Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public INCARNATIO_LAMA(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.LLAMA;
       disguiseType = DisguiseType.getType(targetType);

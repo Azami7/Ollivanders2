@@ -21,9 +21,9 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public HARMONIA_NECTERE_PASSUS ()
+   public HARMONIA_NECTERE_PASSUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("He stares at the monolith before him, lifts his wand and begins to chant eerily. The surface of the cabinet glimmers, atremble in the ambient light. Almost alive. Then he stops. Looking back, his eyes haunted, he slips away. Light plays within the cabinet. Movement. Shadows flicker within, coalesce.");
       flavorText.add("\" ...we forced him head-first into that Vanishing Cabinet on the first floor.\"\n" +
@@ -37,12 +37,12 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

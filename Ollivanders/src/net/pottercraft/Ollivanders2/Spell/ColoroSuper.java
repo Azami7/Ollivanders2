@@ -23,11 +23,14 @@ public abstract class ColoroSuper extends Charms
 {
    DyeColor color = DyeColor.WHITE;
 
-   public ColoroSuper () { }
-
-   public ColoroSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public ColoroSuper (O2SpellType type)
    {
-      super(plugin, player, name, rightWand);
+      super(type);
+   }
+
+   public ColoroSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   {
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

@@ -20,9 +20,9 @@ public final class DEPRIMO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DEPRIMO ()
+   public DEPRIMO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("She had blasted a hole in the sitting-room floor. They fell like boulders, Harry still holding onto her hand for dear life, there as a scream from below and he glimpsed two men trying to get out of the way as vast quantities of rubble and broken furniture rained all around them from the shattered ceiling.");
       flavorText.add("The Blasting Charm");
@@ -34,12 +34,12 @@ public final class DEPRIMO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public DEPRIMO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public DEPRIMO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

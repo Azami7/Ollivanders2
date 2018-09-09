@@ -22,9 +22,9 @@ public final class INCARNATIO_FELIS extends PlayerDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_FELIS ()
+   public INCARNATIO_FELIS (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Turns target player in to an ocelot or cat.";
    }
@@ -34,12 +34,12 @@ public final class INCARNATIO_FELIS extends PlayerDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public INCARNATIO_FELIS(Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public INCARNATIO_FELIS(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.OCELOT;
       disguiseType = DisguiseType.getType(targetType);

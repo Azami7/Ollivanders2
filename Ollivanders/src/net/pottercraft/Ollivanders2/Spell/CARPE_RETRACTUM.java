@@ -19,9 +19,9 @@ public final class CARPE_RETRACTUM extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public CARPE_RETRACTUM ()
+   public CARPE_RETRACTUM (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"...which is why the Carpe Retractum spell is useful. It allows you to seize and pull objects within your direct line of sight towards you...\" -Professor Flitwick");
       flavorText.add("Seize and Pull Charm");
@@ -33,12 +33,12 @@ public final class CARPE_RETRACTUM extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public CARPE_RETRACTUM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public CARPE_RETRACTUM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

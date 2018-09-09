@@ -15,11 +15,14 @@ public abstract class BombardaSuper extends Charms
 {
    double strength;
 
-   public BombardaSuper () { }
-
-   public BombardaSuper (Ollivanders2 p, Player player, O2SpellType name, Double rightWand)
+   public BombardaSuper (O2SpellType type)
    {
-      super(p, player, name, rightWand);
+      super(type);
+   }
+
+   public BombardaSuper (Ollivanders2 p, Player player, O2SpellType type, Double rightWand)
+   {
+      super(p, player, type, rightWand);
    }
 
    public void checkEffect ()

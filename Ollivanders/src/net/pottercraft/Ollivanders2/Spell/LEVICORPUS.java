@@ -17,9 +17,9 @@ public final class LEVICORPUS extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LEVICORPUS ()
+   public LEVICORPUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"Oh, that one had a great vogue during my time at Hogwarts. There were a few months in my fifth year when you couldn't move for being hoisted into the air by your ankle.\" -Remus Lupin");
       flavorText.add("Pointing his wand at nothing in particular, he gave it an upward flick and said Levicorpus! inside his head... There was a flash of light... Ron was dangling upside down in midair as though an invisible hook had hoisted him up by the ankle.");
@@ -33,12 +33,12 @@ public final class LEVICORPUS extends DarkArts
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public LEVICORPUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public LEVICORPUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

@@ -29,7 +29,7 @@ public final class ANIMAGUS_POTION extends O2Potion
       name = "Animagus Potion";
       text = "An Animagus is a wizard who elects to turn into an animal. This potion, if brewed and consumed correctly, " +
             "will disguisePlayer the drinker in to their animal form. Thereafter, the Animagus can disguisePlayer without the " +
-            "potion, however it will take considerable practice to change forms consistently at will." + getIngredientsText();
+            "potion, however it will take considerable practice to change forms consistently at will.";
       flavorText.add("\"You know that I can disguise myself most effectively.\" -Peter Pettigrew");
       flavorText.add("\"Normally, I have a very sweet disposition as a dog; in fact, more than once, James suggested I make the change permanent. The tail I could live with...but the fleas, they're murder.\" -Sirius Black");
    }

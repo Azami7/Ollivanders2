@@ -16,9 +16,9 @@ public final class INCENDIO_DUO extends IncendioSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCENDIO_DUO ()
+   public INCENDIO_DUO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("A Stronger Fire-Making Charm");
       text = "Incendio Duo will burn blocks and entities it passes by. It's radius is twice that of Incendio and it's duration half.";
@@ -29,12 +29,12 @@ public final class INCENDIO_DUO extends IncendioSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public INCENDIO_DUO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public INCENDIO_DUO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       location.add(vector);
       strafe = true;
       blockRadius = 2;

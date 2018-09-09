@@ -27,9 +27,9 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ET_INTERFICIAM_ANIMAM_LIGAVERIS ()
+   public ET_INTERFICIAM_ANIMAM_LIGAVERIS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Tamper with the deepest mysteries — the source of life, the essence of self — only if prepared for consequences of the most extreme and dangerous kind.");
       text = "The most horrifying and destructive act man can do is the creation of a Horcrux. Through splitting one's soul through the murder of another player, one is able to resurrect with all of their magical experience intact. "
@@ -42,12 +42,12 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public ET_INTERFICIAM_ANIMAM_LIGAVERIS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public ET_INTERFICIAM_ANIMAM_LIGAVERIS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

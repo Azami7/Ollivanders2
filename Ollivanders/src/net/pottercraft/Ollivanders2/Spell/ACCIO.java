@@ -20,9 +20,9 @@ public final class ACCIO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ACCIO ()
+   public ACCIO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"Accio Firebolt!\" -Harry Potter");
       flavorText.add("The Summoning Charm");
@@ -36,12 +36,12 @@ public final class ACCIO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public ACCIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public ACCIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

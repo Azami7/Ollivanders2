@@ -17,9 +17,9 @@ public final class LUMOS_MAXIMA extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LUMOS_MAXIMA ()
+   public LUMOS_MAXIMA (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"Light your wands, can’t you? And hurry, we have little time!\" -Griphook");
       text = "Lumos Maxima will spawn a glowstone at the impact site.";
@@ -30,12 +30,12 @@ public final class LUMOS_MAXIMA extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public LUMOS_MAXIMA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public LUMOS_MAXIMA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       lit = false;
    }
 

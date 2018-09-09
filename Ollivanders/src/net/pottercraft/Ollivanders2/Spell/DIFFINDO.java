@@ -21,9 +21,9 @@ public final class DIFFINDO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DIFFINDO ()
+   public DIFFINDO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Severing Charm");
       flavorText.add("With the Severing Charm, cutting or tearing objects is a simple matter of wand control.");
@@ -36,12 +36,12 @@ public final class DIFFINDO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public DIFFINDO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public DIFFINDO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

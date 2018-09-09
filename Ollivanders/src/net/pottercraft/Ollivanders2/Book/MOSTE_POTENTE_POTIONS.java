@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Book;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Potion.*;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 /**
  * Moste Potente O2Potions is a book by Phineas Bourne that gives instructions on how to brew advanced potions.
@@ -24,6 +25,7 @@ public class MOSTE_POTENTE_POTIONS extends O2Book
 
       potions.add(O2PotionType.BARUFFIOS_BRAIN_ELIXIR);
       potions.add(O2PotionType.WOLFSBANE_POTION);
+      potions.add(O2PotionType.REGENERATION_POTION);
       // polyjuice potion
       // laxative potion
    }

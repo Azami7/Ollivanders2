@@ -19,9 +19,9 @@ public final class MUFFLIATO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MUFFLIATO ()
+   public MUFFLIATO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add(" [...] perhaps most useful of all, Muffliato, a spell that filled the ears of anyone nearby with an unidentifiable buzzing, so that lengthy conversations could be held in class without being overheard.");
       text = "Muffliato creates a stationary spell which only allows the people inside to hear anything spoken inside the effect.";
@@ -32,12 +32,12 @@ public final class MUFFLIATO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public MUFFLIATO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public MUFFLIATO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

@@ -17,9 +17,9 @@ public final class INCENDIO extends IncendioSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCENDIO ()
+   public INCENDIO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Fire-Making Charm");
       flavorText.add("The ability to produce fire with the flick or a wand can be dangerous to your fellow students (and worse, your books).");
@@ -32,12 +32,12 @@ public final class INCENDIO extends IncendioSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public INCENDIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public INCENDIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       strafe = false;
       radius = 1;
       blockRadius = 1;

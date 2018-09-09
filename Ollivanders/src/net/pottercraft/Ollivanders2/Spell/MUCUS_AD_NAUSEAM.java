@@ -20,9 +20,9 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MUCUS_AD_NAUSEAM ()
+   public MUCUS_AD_NAUSEAM (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Curse of the Bogies");
       text = "Mucus Ad Nauseam will cause your opponent to drip with slime.";
@@ -33,12 +33,12 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

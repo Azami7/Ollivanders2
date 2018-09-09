@@ -18,9 +18,9 @@ public final class EPISKEY extends Healing
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EPISKEY ()
+   public EPISKEY (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"Episkey,\" said Tonks. Harry's nose felt very hot, then very cold. He raised a hand and felt it gingerly. It seemed to be mended.");
       flavorText.add("A minor healing spell.");
@@ -32,12 +32,12 @@ public final class EPISKEY extends Healing
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public EPISKEY (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public EPISKEY (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

@@ -20,9 +20,9 @@ public final class LAPIFORS extends FriendlyMobDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LAPIFORS ()
+   public LAPIFORS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
 
@@ -34,12 +34,12 @@ public final class LAPIFORS extends FriendlyMobDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public LAPIFORS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public LAPIFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.RABBIT;
       disguiseType = DisguiseType.getType(targetType);

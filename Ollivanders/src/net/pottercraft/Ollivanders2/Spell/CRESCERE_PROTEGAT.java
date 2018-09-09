@@ -20,9 +20,9 @@ public final class CRESCERE_PROTEGAT extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public CRESCERE_PROTEGAT ()
+   public CRESCERE_PROTEGAT (O2SpellType type)
    {
-      super();
+      super(type);
       text = "Grows a stationary spell's radius. Only the player who created the Stationary Spell can change it's radius.";
    }
 
@@ -31,12 +31,12 @@ public final class CRESCERE_PROTEGAT extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public CRESCERE_PROTEGAT (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public CRESCERE_PROTEGAT (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

@@ -17,9 +17,9 @@ public final class MOLLIARE extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MOLLIARE ()
+   public MOLLIARE (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Cushioning Charm.");
       flavorText.add("Harry felt himself glide back toward the ground as though weightless, landing painlessly on the rocky passage floor.");
@@ -32,12 +32,12 @@ public final class MOLLIARE extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public MOLLIARE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public MOLLIARE (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

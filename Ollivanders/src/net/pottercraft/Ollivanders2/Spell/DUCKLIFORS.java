@@ -18,9 +18,9 @@ public final class DUCKLIFORS extends FriendlyMobDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DUCKLIFORS ()
+   public DUCKLIFORS (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "The transfiguration spell Ducklifors will transfigure an entity into a chicken.";
    }
@@ -30,12 +30,12 @@ public final class DUCKLIFORS extends FriendlyMobDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public DUCKLIFORS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public DUCKLIFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.CHICKEN;
       disguiseType = DisguiseType.getType(targetType);

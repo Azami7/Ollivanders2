@@ -17,9 +17,9 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public METELOJINX_RECANTO ()
+   public METELOJINX_RECANTO (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Metelojinx Recanto will turn a storm into a sunny day.";
    }
@@ -29,12 +29,12 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public METELOJINX_RECANTO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public METELOJINX_RECANTO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       storm = false;
    }
 }

@@ -18,16 +18,16 @@ public class INCARNATIO_URSUS extends PlayerDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_URSUS ()
+   public INCARNATIO_URSUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Turns target player in to a polar bear.";
    }
 
-   public INCARNATIO_URSUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public INCARNATIO_URSUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.POLAR_BEAR;
       disguiseType = DisguiseType.getType(targetType);

@@ -25,9 +25,9 @@ public final class LUMOS_SOLEM extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LUMOS_SOLEM ()
+   public LUMOS_SOLEM (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Light of the Sun");
       text = "Lumos Solem will cause a sun-like light to erupt in an area around the impact which will burn entities sensitive to sun.";
@@ -38,12 +38,12 @@ public final class LUMOS_SOLEM extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public LUMOS_SOLEM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public LUMOS_SOLEM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

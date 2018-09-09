@@ -28,9 +28,9 @@ public final class LIGATIS_COR extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LIGATIS_COR ()
+   public LIGATIS_COR (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Ligatis cor will bind a coreless wand to a core material.  Make sure the two items are near each other when this spell is cast. You can only use this on one coreless wand and one core material at a time.";
    }
@@ -40,12 +40,12 @@ public final class LIGATIS_COR extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public LIGATIS_COR (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public LIGATIS_COR (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

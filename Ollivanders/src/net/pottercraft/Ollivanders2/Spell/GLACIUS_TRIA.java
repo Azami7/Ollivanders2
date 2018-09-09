@@ -15,9 +15,9 @@ public final class GLACIUS_TRIA extends GlaciusSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GLACIUS_TRIA ()
+   public GLACIUS_TRIA (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Strongest Freezing Charm");
       text = "Glacius Tria will freeze blocks in a radius four times that of glacius, but for one quarter the time.";
@@ -28,12 +28,12 @@ public final class GLACIUS_TRIA extends GlaciusSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public GLACIUS_TRIA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public GLACIUS_TRIA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       //25% duration
       durationModifier = 0.25;
       //4x radius radius

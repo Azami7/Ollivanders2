@@ -17,9 +17,9 @@ public final class REPELLO_MUGGLETON extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REPELLO_MUGGLETON ()
+   public REPELLO_MUGGLETON (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Muggle-Repelling Charms on every inch of it. Every time Muggles have got anywhere near here all year, they've suddenly remembered urgent appointments and had to dash away again.");
 
@@ -31,12 +31,12 @@ public final class REPELLO_MUGGLETON extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public REPELLO_MUGGLETON (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public REPELLO_MUGGLETON (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

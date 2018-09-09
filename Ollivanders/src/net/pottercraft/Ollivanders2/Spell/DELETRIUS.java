@@ -19,9 +19,9 @@ public final class DELETRIUS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DELETRIUS ()
+   public DELETRIUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Eradication Spell");
       flavorText.add("'Deletrius!' Mr Diggory shouted, and the smoky skull vanished in a wisp of smoke.");
@@ -33,12 +33,12 @@ public final class DELETRIUS extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public DELETRIUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public DELETRIUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

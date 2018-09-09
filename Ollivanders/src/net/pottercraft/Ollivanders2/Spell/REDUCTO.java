@@ -17,9 +17,9 @@ public final class REDUCTO extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REDUCTO ()
+   public REDUCTO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Reductor Curse");
       flavorText.add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
@@ -32,12 +32,12 @@ public final class REDUCTO extends DarkArts
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public REDUCTO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public REDUCTO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

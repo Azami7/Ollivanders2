@@ -33,9 +33,9 @@ public abstract class PyrotechniaSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PyrotechniaSuper ()
+   public PyrotechniaSuper (O2SpellType type)
    {
-      super ();
+      super(type);
    }
 
    /**
@@ -43,12 +43,12 @@ public abstract class PyrotechniaSuper extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public PyrotechniaSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public PyrotechniaSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       fireworkCount = 0;
       maxFireworks = 1;
    }

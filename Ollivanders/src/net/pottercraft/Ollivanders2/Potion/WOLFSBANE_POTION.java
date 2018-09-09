@@ -27,7 +27,7 @@ public final class WOLFSBANE_POTION extends O2Potion
 
       name = "Wolfsbane Potion";
       text = "This potion will relieve, though not cure, the symptoms of Lycanthropy. It is a complex potion and requires"
-            + "the most advanced potion-making skills." + getIngredientsText();
+            + "the most advanced potion-making skills.";
 
       flavorText.add("\"There is no known cure, although recent developments in potion-making have to a great extent alleviated the worst symptoms.\" —Newton Scamander");
    }

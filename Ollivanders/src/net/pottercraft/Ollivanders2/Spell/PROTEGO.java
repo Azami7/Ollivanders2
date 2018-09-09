@@ -13,9 +13,9 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class PROTEGO extends Charms
 {
-   public PROTEGO ()
+   public PROTEGO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"I don't remember telling you to use a Shield Charm… but there is no doubt that it was effective…\" -Severus Snape");
       flavorText.add("The Shield Charm");
@@ -23,9 +23,9 @@ public final class PROTEGO extends Charms
       text = "Protego is a shield spell which, while you are crouching, will cause any spells cast at it to bounce off.";
    }
 
-   public PROTEGO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public PROTEGO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

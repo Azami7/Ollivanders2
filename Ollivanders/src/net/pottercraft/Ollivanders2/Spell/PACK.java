@@ -23,9 +23,9 @@ public final class PACK extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PACK ()
+   public PACK (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Books, clothes, telescope and scales all soared into the air and flew pell-mell into the trunk.");
       flavorText.add("The Packing Charm");
@@ -38,12 +38,12 @@ public final class PACK extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public PACK (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public PACK (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

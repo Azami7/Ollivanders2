@@ -27,15 +27,7 @@ public final class REGENERATION_POTION extends O2Potion
       ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 4);
 
       name = "Regeneration Potion";
-      text = "This potion will heal a player." + getIngredientsText();
-      flavorText.add("\"Bone of the father, unknowingly given, you will renew your son! Flesh of the servant, willingly sacrificed, you will revive your master. Blood of the enemy, forcibly taken, you will resurrect your foe.\" -Peter Pettigrew");
-
-      name = "Regeneration Potion";
-      text = "This potion will heal a player." + getIngredientsText();
-      flavorText.add("\"Bone of the father, unknowingly given, you will renew your son! Flesh of the servant, willingly sacrificed, you will revive your master. Blood of the enemy, forcibly taken, you will resurrect your foe.\" -Peter Pettigrew");
-
-      name = "Regeneration Potion";
-      text = "This potion will heal a player." + getIngredientsText();
+      text = "This potion will heal a player.";
       flavorText.add("\"Bone of the father, unknowingly given, you will renew your son! Flesh of the servant, willingly sacrificed, you will revive your master. Blood of the enemy, forcibly taken, you will resurrect your foe.\" -Peter Pettigrew");
 
       effect = new PotionEffect(PotionEffectType.REGENERATION, duration, 1);

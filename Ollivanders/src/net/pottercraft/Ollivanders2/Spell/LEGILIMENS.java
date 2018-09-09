@@ -16,9 +16,9 @@ public final class LEGILIMENS extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LEGILIMENS ()
+   public LEGILIMENS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"The mind is not a book, to be opened at will and examined at leisure. Thoughts are not etched on the inside of skulls, to be perused by any invader. The mind is a complex and many-layered thing, Potter. Or at least most minds are... It is true, however, that those who have mastered Legilimency are able, under certain conditions, to delve into the minds of their victims and to interpret their findings correctly.\" -Severus Snape");
       flavorText.add("The Legilimency Spell");
@@ -31,12 +31,12 @@ public final class LEGILIMENS extends DarkArts
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public LEGILIMENS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public LEGILIMENS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

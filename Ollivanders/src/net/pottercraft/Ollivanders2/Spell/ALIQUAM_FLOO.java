@@ -21,9 +21,9 @@ public final class ALIQUAM_FLOO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ALIQUAM_FLOO ()
+   public ALIQUAM_FLOO (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Aliquam Floo will register a fireplace with the Floo Network. "
             + "Place a sign above a fire with the unique name of the fireplace and cast this spell at the fire. "
@@ -40,12 +40,12 @@ public final class ALIQUAM_FLOO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()
