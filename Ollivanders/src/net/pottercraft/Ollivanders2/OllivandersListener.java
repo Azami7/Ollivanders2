@@ -34,6 +34,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.Effect;
 
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
@@ -801,6 +802,12 @@ public class OllivandersListener implements Listener
 
       if (action == null || player == null)
       {
+         return;
+      }
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      {
+         event.setCancelled(true);
          return;
       }
 
