@@ -741,35 +741,51 @@ public class Ollivanders2Common
 
       if (number == 0)
          color = Color.AQUA;
+
       else if (number == 1)
          color = Color.BLACK;
+
       else if (number == 2)
          color = Color.BLUE;
+
       else if (number == 3)
          color = Color.FUCHSIA;
+
       else if (number == 4)
          color = Color.GRAY;
+
       else if (number == 5)
          color = Color.GREEN;
+
       else if (number == 6)
          color = Color.LIME;
+
       else if (number == 7)
          color = Color.MAROON;
+
       else if (number == 8)
          color = Color.NAVY;
+
       else if (number == 9)
          color = Color.OLIVE;
+
       else if (number == 10)
          color = Color.ORANGE;
+
       else if (number == 11)
          color = Color.PURPLE;
+
       else if (number == 12)
          color = Color.RED;
+
       else if (number == 13)
          color = Color.SILVER;
+
       else if (number == 14)
          color = Color.TEAL;
+
       // 15 is white again
+
       else if (number == 16)
          color = Color.WHITE;
 
