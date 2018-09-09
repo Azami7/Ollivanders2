@@ -18,9 +18,9 @@ public final class LIBERACORPUS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LIBERACORPUS ()
+   public LIBERACORPUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Levicorpus Counter-Spell");
       flavorText.add("...he jerked his wand upwards; Snape fell into a crumpled heap on the ground.");
@@ -32,12 +32,12 @@ public final class LIBERACORPUS extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public LIBERACORPUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public LIBERACORPUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

@@ -14,9 +14,9 @@ public final class GLACIUS_DUO extends GlaciusSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GLACIUS_DUO ()
+   public GLACIUS_DUO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("A Stronger Freezing Charm");
       flavorText.add("\"It's about preparing ourselves ...for what's waiting for us out there.\" -Hermione Granger");
@@ -28,12 +28,12 @@ public final class GLACIUS_DUO extends GlaciusSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public GLACIUS_DUO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public GLACIUS_DUO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       // 50% duration
       durationModifier = 0.5;
       // 2x radius

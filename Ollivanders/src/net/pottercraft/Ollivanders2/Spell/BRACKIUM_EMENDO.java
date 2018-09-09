@@ -22,9 +22,9 @@ public final class BRACKIUM_EMENDO extends Healing
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BRACKIUM_EMENDO ()
+   public BRACKIUM_EMENDO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Bone-Healing Spell");
       flavorText.add("As Harry got to his feet, he felt strangely lopsided. Taking a deep breath he looked down at his right side. What he saw nearly made him pass out again. Poking out of the end of his robes was what looked like a thick, fleshcoloured rubber glove. He tried to move his fingers. Nothing happened. Lockhart hadn't mended Harry's bones. He had removed them.");
@@ -36,12 +36,12 @@ public final class BRACKIUM_EMENDO extends Healing
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public BRACKIUM_EMENDO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public BRACKIUM_EMENDO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

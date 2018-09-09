@@ -25,9 +25,9 @@ public final class DEFODIO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DEFODIO ()
+   public DEFODIO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Gouging Spell enables a witch or wizard to carve through earth and stone with ease. From budding Herbologists digging for Snargaluff seedlings to treasure-hunting curse breakers uncovering ancient wizard tombs, the Gouging Spell makes all manner of heavy labour a matter of pointing a wand.");
       flavorText.add("The Gouging Charm");
@@ -39,12 +39,12 @@ public final class DEFODIO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public DEFODIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public DEFODIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       depth = (int) usesModifier;
    }
 

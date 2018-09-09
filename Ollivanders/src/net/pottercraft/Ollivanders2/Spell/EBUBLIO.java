@@ -18,9 +18,9 @@ public final class EBUBLIO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EBUBLIO ()
+   public EBUBLIO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Bubble-Head Charm");
       flavorText.add("Fleur Delacour, though she demonstrated excellent use of the Bubble-Head Charm, was attacked by grindylows as she approached her goal, and failed to retrieve her hostage.");
@@ -33,12 +33,12 @@ public final class EBUBLIO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public EBUBLIO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public EBUBLIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

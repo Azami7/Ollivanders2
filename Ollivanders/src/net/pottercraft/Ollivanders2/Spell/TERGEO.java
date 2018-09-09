@@ -19,9 +19,9 @@ public final class TERGEO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public TERGEO ()
+   public TERGEO (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Siphoning Spell");
       flavorText.add("The wand siphoned off most of the grease. Looking rather pleased with himself, Ron handed the slightly smoking handkerchief to Hermione.");
@@ -33,12 +33,12 @@ public final class TERGEO extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public TERGEO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public TERGEO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       move = true;
    }
 

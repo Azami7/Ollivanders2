@@ -17,9 +17,9 @@ public final class COLORO_OSTRUM extends ColoroSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_OSTRUM ()
+   public COLORO_OSTRUM (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Turns target colorable entity or block purple.";
    }
@@ -29,12 +29,12 @@ public final class COLORO_OSTRUM extends ColoroSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public COLORO_OSTRUM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public COLORO_OSTRUM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       //set color purple
       color = DyeColor.PURPLE;

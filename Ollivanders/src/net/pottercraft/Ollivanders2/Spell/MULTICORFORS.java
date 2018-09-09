@@ -21,9 +21,9 @@ public final class MULTICORFORS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MULTICORFORS ()
+   public MULTICORFORS (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Multicorfors will change the color of leather armor of the target.";
       // this is a transfiguration spell in HP but does not use the Transfiguration superclass.
@@ -35,12 +35,12 @@ public final class MULTICORFORS extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public MULTICORFORS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public MULTICORFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       // this is a transfiguration spell in HP but does not use the Transfiguration superclass.
       branch = O2MagicBranch.TRANSFIGURATION;
    }

@@ -32,11 +32,14 @@ public abstract class IncendioSuper extends Charms
    int duration = 1;
    private int ticksModifier = 16;
 
-   public IncendioSuper () { }
-
-   public IncendioSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public IncendioSuper (O2SpellType type)
    {
-      super(plugin, player, name, rightWand);
+      super(type);
+   }
+
+   public IncendioSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   {
+      super(plugin, player, type, rightWand);
       lifeTime = usesModifier * ticksModifier;
       move = true;
    }

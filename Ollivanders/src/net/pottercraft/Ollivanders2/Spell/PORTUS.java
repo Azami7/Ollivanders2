@@ -24,9 +24,9 @@ public final class PORTUS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PORTUS ()
+   public PORTUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("For a moment the kettle trembled, glowing with an odd blue light; then it quivered to rest, as solidly black as ever.");
       flavorText.add("Almost any inanimate object can be turned into a Portkey. Once bewitched, the object will transport anyone who grasps it to a pre-arranged destination.");
@@ -48,13 +48,13 @@ public final class PORTUS extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     * @param wordsArray
     */
-   public PORTUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand, String[] wordsArray)
+   public PORTUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand, String[] wordsArray)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
       this.wordsArray = wordsArray;
    }
 

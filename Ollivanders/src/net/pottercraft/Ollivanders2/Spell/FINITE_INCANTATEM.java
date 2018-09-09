@@ -25,9 +25,9 @@ public final class FINITE_INCANTATEM extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FINITE_INCANTATEM ()
+   public FINITE_INCANTATEM (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("\"He pointed his wand at the rampart, cried, \"Finite!\" and it steadied.\"");
       flavorText.add("\"Try Finite Incantatem, that should stop the rain if it’s a hex or curse.\"  -Hermione Granger");
@@ -41,12 +41,12 @@ public final class FINITE_INCANTATEM extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public FINITE_INCANTATEM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public FINITE_INCANTATEM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

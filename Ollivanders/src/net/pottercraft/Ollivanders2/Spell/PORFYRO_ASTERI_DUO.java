@@ -19,9 +19,9 @@ public final class PORFYRO_ASTERI_DUO extends PyrotechniaSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PORFYRO_ASTERI_DUO ()
+   public PORFYRO_ASTERI_DUO (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Conjures purple star fireworks that fade to white.";
    }
@@ -31,12 +31,12 @@ public final class PORFYRO_ASTERI_DUO extends PyrotechniaSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public PORFYRO_ASTERI_DUO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public PORFYRO_ASTERI_DUO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);

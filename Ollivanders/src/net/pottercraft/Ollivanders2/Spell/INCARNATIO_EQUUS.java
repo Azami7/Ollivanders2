@@ -21,9 +21,9 @@ public final class INCARNATIO_EQUUS extends PlayerDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_EQUUS ()
+   public INCARNATIO_EQUUS (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Turns target player in to a horse.";
    }
@@ -33,12 +33,12 @@ public final class INCARNATIO_EQUUS extends PlayerDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public INCARNATIO_EQUUS(Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public INCARNATIO_EQUUS(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.HORSE;
       disguiseType = DisguiseType.getType(targetType);

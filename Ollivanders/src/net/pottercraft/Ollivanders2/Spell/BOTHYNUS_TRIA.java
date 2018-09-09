@@ -20,9 +20,9 @@ public final class BOTHYNUS_TRIA extends PyrotechniaSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BOTHYNUS_TRIA ()
+   public BOTHYNUS_TRIA (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Creates one or more yellow and orange star fireworks with trails and that fades to silver.";
    }
@@ -32,12 +32,12 @@ public final class BOTHYNUS_TRIA extends PyrotechniaSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public BOTHYNUS_TRIA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public BOTHYNUS_TRIA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.YELLOW);

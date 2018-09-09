@@ -21,9 +21,9 @@ public final class IMPEDIMENTA extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public IMPEDIMENTA ()
+   public IMPEDIMENTA (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal.");
       flavorText.add("\"I like the look of this one, this Impediment Jinx. Should slow down anything that’s trying to attack you, Harry. We’ll start with that one.\" -Hermione Granger");
@@ -34,12 +34,12 @@ public final class IMPEDIMENTA extends DarkArts
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public IMPEDIMENTA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public IMPEDIMENTA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

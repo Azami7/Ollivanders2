@@ -14,9 +14,9 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class FLIPENDO extends Charms
 {
-   public FLIPENDO ()
+   public FLIPENDO (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Flipendo can be used to repel an opponent away from oneself.";
       flavorText.add("The Knockback Jinx");
@@ -24,9 +24,9 @@ public final class FLIPENDO extends Charms
       flavorText.add("\"There was a loud bang and he felt himself flying backwards as if punched; as he slammed into the kitchen wall and slid to the floor, he glimpsed the tail of Lupin's cloak disappearing round the door.\"");
    }
 
-   public FLIPENDO (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public FLIPENDO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

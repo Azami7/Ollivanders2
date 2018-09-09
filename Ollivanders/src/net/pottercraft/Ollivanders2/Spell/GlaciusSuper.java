@@ -20,9 +20,9 @@ public abstract class GlaciusSuper extends BlockTransfigurationSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GlaciusSuper ()
+   public GlaciusSuper (O2SpellType type)
    {
-      super();
+      super(type);
    }
 
    /**
@@ -30,12 +30,12 @@ public abstract class GlaciusSuper extends BlockTransfigurationSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public GlaciusSuper (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public GlaciusSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       if (usesModifier > 50)
       {

@@ -20,9 +20,9 @@ public final class EQUUSIFORS extends FriendlyMobDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EQUUSIFORS ()
+   public EQUUSIFORS (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Turns target entity in to a horse.";
    }
@@ -32,12 +32,12 @@ public final class EQUUSIFORS extends FriendlyMobDisguiseSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public EQUUSIFORS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public EQUUSIFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       targetType = EntityType.HORSE;
       disguiseType = DisguiseType.getType(targetType);

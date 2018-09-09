@@ -18,9 +18,9 @@ public final class FATUUS_AURUM extends BlockTransfigurationSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FATUUS_AURUM ()
+   public FATUUS_AURUM (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("What glitters may not be gold; and even wolves may smile; and fools will be led by promises to their deaths.");
       flavorText.add("There is thy gold, worse poison to men's souls.");
@@ -33,12 +33,12 @@ public final class FATUUS_AURUM extends BlockTransfigurationSuper
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public FATUUS_AURUM (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public FATUUS_AURUM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
 
       materialWhitelist.add(Material.STONE);
       transfigureType = Material.GOLD_BLOCK;

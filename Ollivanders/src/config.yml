@@ -8,21 +8,26 @@ divinationBlock: 20
 divinationMaxDuration: 86400000
 divinationMaxStartOffset: 604800000
 muggletonBlockChange: true
+#
 # When death exp loss is enabled, players will lose their spell experience if they die.  It is not recommended to set
 # this to true if your server supports minigames or other plugins that expect players will die.
 deathExpLoss: false
+#
 # When book learning is true, players can only cast spells they have learned from a book.  This prevents players
 # being able to cast spells they have not "learned" but have seen in chat, etc.
 bookLearning: true
 #
 spellJournal: true
+#
 # When nonVerbalSpellCasting is set to true, once players master a spell they can cast it without saying the incantation
 nonVerbalSpellCasting: true
+#
 # When hostileMobAnimagi is set to true, the possible animagus forms will include hostile mobs such as spiders
 hostileMobAnimagi: false
 chatColor: 5
 flooPowder: REDSTONE
 broomstick: STICK
+#
 # When houses are enabled, Ollivanders will use the built-in minecraft scoreboard to create house teams and points.
 # IMPORTANT: Enabling houses will take over your server's main scoreboard.  If you do not want this, you must
 # set this to false.
@@ -43,6 +48,7 @@ houses: false
 #
 # When years is set to true, it enables the /olli year command
 years: false
+#
 # Turns on debug output in your logs. This can also be done while the game is running by using the command
 # /olli debug
 debug: false

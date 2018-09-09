@@ -18,9 +18,9 @@ public final class NOX extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public NOX ()
+   public NOX (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Wand-Extinguishing Charm");
       flavorText.add("With difficulty he dragged it over himself, murmured, 'Nox,' extinguishing his wand light, and continued on his hands and knees, as silently as possible, all his senses straining, expecting every second to be discovered, to hear a cold clear voice, see a flash of green light.");
@@ -33,12 +33,12 @@ public final class NOX extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public NOX(Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public NOX(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

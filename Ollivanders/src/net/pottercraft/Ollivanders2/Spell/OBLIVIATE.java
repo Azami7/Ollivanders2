@@ -19,9 +19,9 @@ public final class OBLIVIATE extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public OBLIVIATE ()
+   public OBLIVIATE (O2SpellType type)
    {
-      super();
+      super(type);
 
       flavorText.add("The Memory Charm");
       flavorText.add("\"If there’s one thing I pride myself on, it’s my Memory Charms.\" -Gilderoy Lockhart");
@@ -34,12 +34,12 @@ public final class OBLIVIATE extends Charms
     *
     * @param plugin the plugin callback
     * @param player the player who cast the spell
-    * @param name the name of the spell
+    * @param type the name of the spell
     * @param rightWand which wand they are using
     */
-   public OBLIVIATE (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public OBLIVIATE (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    @Override

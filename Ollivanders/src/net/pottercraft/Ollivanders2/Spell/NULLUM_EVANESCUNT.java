@@ -16,9 +16,9 @@ public final class NULLUM_EVANESCUNT extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public NULLUM_EVANESCUNT ()
+   public NULLUM_EVANESCUNT (O2SpellType type)
    {
-      super();
+      super(type);
 
       text = "Nullum evanescunt creates a stationary spell which will not allow disapparition out of it.";
    }
@@ -28,12 +28,12 @@ public final class NULLUM_EVANESCUNT extends Charms
     *
     * @param plugin
     * @param player
-    * @param name
+    * @param type
     * @param rightWand
     */
-   public NULLUM_EVANESCUNT (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public NULLUM_EVANESCUNT (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, type, rightWand);
    }
 
    public void checkEffect ()

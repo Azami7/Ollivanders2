@@ -83,7 +83,7 @@ public final class BookTexts
 
          try
          {
-            spell = (Teachable)spellClass.getConstructor().newInstance();
+            spell = (Teachable)spellClass.getConstructor(O2SpellType.class).newInstance(spellType);
          }
          catch (Exception e)
          {
@@ -122,11 +122,11 @@ public final class BookTexts
          }
 
          Class potionClass = potionType.getClassName();
-         Teachable spell;
+         Teachable potion;
 
          try
          {
-            spell = (Teachable) potionClass.getConstructor(Ollivanders2.class, O2PotionType.class).newInstance(p, potionType);
+            potion = (Teachable) potionClass.getConstructor(Ollivanders2.class, O2PotionType.class).newInstance(p, potionType);
          }
          catch (Exception e)
          {
@@ -136,8 +136,8 @@ public final class BookTexts
             continue;
          }
 
-         String text = spell.getText();
-         String flavorText = spell.getFlavorText();
+         String text = potion.getText();
+         String flavorText = potion.getFlavorText();
 
          if (text == null)
          {
