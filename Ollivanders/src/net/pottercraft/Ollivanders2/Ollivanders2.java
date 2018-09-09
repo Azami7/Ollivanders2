@@ -76,7 +76,7 @@ public class Ollivanders2 extends JavaPlugin
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
    public O2Houses houses;
-   private O2Players o2Players;
+   public O2Players players;
    public O2Books books;
    private O2Potions potions;
    public O2StationarySpells stationarySpells;
@@ -117,7 +117,7 @@ public class Ollivanders2 extends JavaPlugin
       stationarySpells.saveO2StationarySpells();
 
       houses.saveHouses();
-      o2Players.saveO2Players();
+      players.saveO2Players();
 
       getLogger().info(this + " is now disabled!");
    }
@@ -217,8 +217,8 @@ public class Ollivanders2 extends JavaPlugin
       // set up players
       try
       {
-         o2Players = new O2Players(this);
-         o2Players.loadO2Players();
+         players = new O2Players(this);
+         players.loadO2Players();
          playerCommon = new O2PlayerCommon(this);
       }
       catch (Exception e)
@@ -456,7 +456,7 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().info("Running playerSummary");
 
       Player player = getServer().getPlayer(sender.getName());
-      O2Player o2Player = o2Players.getPlayer(player.getUniqueId());
+      O2Player o2Player = players.getPlayer(player.getUniqueId());
 
       String summary = "Ollivanders2 player summary:\n\n";
 
@@ -1350,7 +1350,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public int getSpellNum (Player player, O2SpellType spell)
    {
-      O2Player o2p = o2Players.getPlayer(player.getUniqueId());
+      O2Player o2p = players.getPlayer(player.getUniqueId());
 
       return o2p.getSpellCount(spell);
    }
@@ -1365,11 +1365,11 @@ public class Ollivanders2 extends JavaPlugin
    public void setSpellNum (Player player, O2SpellType spell, int count)
    {
       UUID pid = player.getUniqueId();
-      O2Player o2p = o2Players.getPlayer(pid);
+      O2Player o2p = players.getPlayer(pid);
 
       o2p.setSpellCount(spell, count);
 
-      o2Players.updatePlayer(pid, o2p);
+      players.updatePlayer(pid, o2p);
    }
 
    /**
@@ -1383,10 +1383,10 @@ public class Ollivanders2 extends JavaPlugin
    {
       //returns the incremented spell count
       UUID pid = player.getUniqueId();
-      O2Player o2p = o2Players.getPlayer(pid);
+      O2Player o2p = players.getPlayer(pid);
 
       o2p.incrementSpellCount(spell);
-      o2Players.updatePlayer(pid, o2p);
+      players.updatePlayer(pid, o2p);
 
       return o2p.getSpellCount(spell);
    }
@@ -1401,10 +1401,10 @@ public class Ollivanders2 extends JavaPlugin
    {
       //returns the incremented potion count
       UUID pid = player.getUniqueId();
-      O2Player o2p = o2Players.getPlayer(pid);
+      O2Player o2p = players.getPlayer(pid);
 
       o2p.incrementPotionCount(potion);
-      o2Players.updatePlayer(pid, o2p);
+      players.updatePlayer(pid, o2p);
    }
 
    /**
@@ -1416,13 +1416,13 @@ public class Ollivanders2 extends JavaPlugin
    public O2Player getO2Player (Player player)
    {
       UUID pid = player.getUniqueId();
-      O2Player o2p = o2Players.getPlayer(pid);
+      O2Player o2p = players.getPlayer(pid);
 
       if (o2p == null)
       {
-         o2Players.addPlayer(pid, player.getDisplayName());
+         players.addPlayer(pid, player.getDisplayName());
 
-         o2p = o2Players.getPlayer(pid);
+         o2p = players.getPlayer(pid);
       }
 
       return o2p;
@@ -1438,7 +1438,7 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (!(player instanceof NPC))
       {
-         o2Players.updatePlayer(player.getUniqueId(), o2p);
+         players.updatePlayer(player.getUniqueId(), o2p);
       }
    }
 
@@ -1469,7 +1469,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public ArrayList<UUID> getO2PlayerIDs ()
    {
-      return o2Players.getPlayerIDs();
+      return players.getPlayerIDs();
    }
 
    /**

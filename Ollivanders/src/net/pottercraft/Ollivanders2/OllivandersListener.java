@@ -34,6 +34,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.Effect;
 
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
@@ -122,7 +123,18 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerMove (PlayerMoveEvent event)
    {
-      protegoTotalum(event);
+      O2Player o2p = p.getO2Player(event.getPlayer());
+
+      if (o2p.hasEffect(O2EffectType.SLEEP))
+      {
+         // do not allow the player to move if they are asleep
+         Location fromLoc = event.getFrom();
+         event.setTo(fromLoc);
+      }
+      else
+      {
+         protegoTotalum(event);
+      }
    }
 
    /**
@@ -776,6 +788,13 @@ public class OllivandersListener implements Listener
          return;
       }
 
+      O2Player o2p = p.getO2Player(player);
+      if (o2p.hasEffect(O2EffectType.SLEEP))
+      {
+         event.setCancelled(true);
+         return;
+      }
+
       /**
        * A right or left click of the primary hand when holding a wand is used to make a magical action.
        */
@@ -970,6 +989,7 @@ public class OllivandersListener implements Listener
       if (event.getEntity() instanceof Player)
       {
          Player damaged = (Player) event.getEntity();
+
          if (event.getDamager() instanceof Player)
          {
             Player attacker = (Player) event.getDamager();
@@ -1013,6 +1033,7 @@ public class OllivandersListener implements Listener
       {
          return;
       }
+
       //Horcrux code
       List<StationarySpellObj> stationarys = p.stationarySpells.getActiveStationarySpells();
       if (event.getEntity() instanceof Player)
