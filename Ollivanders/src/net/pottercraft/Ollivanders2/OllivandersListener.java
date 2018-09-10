@@ -804,14 +804,6 @@ public class OllivandersListener implements Listener
          return;
       }
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
-      {
-         event.setCancelled(true);
-
-         player.sendMessage(Ollivanders2.chatColor + "You are unable to move.");
-         return;
-      }
-
       /**
        * A right or left click of the primary hand when holding a wand is used to make a magical action.
        */
