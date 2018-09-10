@@ -96,7 +96,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
 
       if ((curTime >= 23000 && curTime <= 24000) || (curTime >=12000 && curTime <= 13000))
       {
-         ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, O2EffectType.ANIMAGUS_INCANTATION, 300, player.getUniqueId());
+         ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, player.getUniqueId());
          p.players.playerEffects.addEffect(effect);
 
          player.sendMessage(Ollivanders2.chatColor + "You feel slightly different.");
@@ -145,7 +145,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
 
       if (rand < successRate)
       {
-         ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player.getUniqueId());
+         ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
          p.players.playerEffects.addEffect(animagusEffect);
 
          player.sendMessage(Ollivanders2.chatColor + "You feel very different.");

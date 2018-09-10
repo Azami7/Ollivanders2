@@ -4,7 +4,11 @@ import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.Color;
+import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -15,13 +19,15 @@ import org.bukkit.potion.PotionEffectType;
  * @author Azami7
  * @since 2.2.8
  */
-public class WIGGENWELD_POTION extends O2Potion
+public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
 {
    public WIGGENWELD_POTION (Ollivanders2 plugin, O2PotionType potionType)
    {
       super(plugin, potionType);
 
       name = "Wiggenweld Potion";
+
+      potionMaterialType = Material.SPLASH_POTION;
 
       ingredients.put(IngredientType.HORKLUMP_JUICE, 1);
       ingredients.put(IngredientType.FLOBBERWORM_MUCUS, 2);
@@ -46,8 +52,18 @@ public class WIGGENWELD_POTION extends O2Potion
    }
 
    @Override
-   public void drink (O2Player o2p, Player player)
+   public void drink (O2Player o2p, Player player) { }
+
+   @Override
+   public void thrownEffect (PotionSplashEvent event)
    {
-      p.players.playerEffects.removeEffect(player.getUniqueId(), O2EffectType.SLEEPING);
+      for (LivingEntity e : event.getAffectedEntities())
+      {
+         if (e instanceof Player)
+         {
+            Player player = (Player)e;
+            p.players.playerEffects.removeEffect(player.getUniqueId(), O2EffectType.SLEEPING);
+         }
+      }
    }
 }

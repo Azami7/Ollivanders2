@@ -6,6 +6,7 @@ public enum O2PotionType
    ANTIDOTE_POTION (net.pottercraft.Ollivanders2.Potion.ANTIDOTE_POTION.class),
    BABBLING_BEVERAGE (net.pottercraft.Ollivanders2.Potion.BABBLING_BEVERAGE.class),
    BARUFFIOS_BRAIN_ELIXIR (net.pottercraft.Ollivanders2.Potion.BARUFFIOS_BRAIN_ELIXIR.class),
+   DRAUGHT_OF_LIVING_DEATH (net.pottercraft.Ollivanders2.Potion.DRAUGHT_OF_LIVING_DEATH.class),
    FORGETFULLNESS_POTION (net.pottercraft.Ollivanders2.Potion.FORGETFULLNESS_POTION.class),
    HERBICIDE_POTION (net.pottercraft.Ollivanders2.Potion.HERBICIDE_POTION.class),
    MEMORY_POTION (net.pottercraft.Ollivanders2.Potion.MEMORY_POTION.class),

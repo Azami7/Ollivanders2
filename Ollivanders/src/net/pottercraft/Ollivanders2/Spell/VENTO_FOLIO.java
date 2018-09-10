@@ -103,7 +103,7 @@ public final class VENTO_FOLIO extends Charms
 
       if (rand < successRate)
       {
-         FLYING effect = new FLYING(p, O2EffectType.FLYING, duration, player.getUniqueId());
+         FLYING effect = new FLYING(p, duration, player.getUniqueId());
          p.players.playerEffects.addEffect(effect);
 
          if (Ollivanders2.debug)

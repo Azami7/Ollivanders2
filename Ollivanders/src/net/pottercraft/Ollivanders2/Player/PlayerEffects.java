@@ -349,7 +349,7 @@ public class PlayerEffects
          O2Effect effect;
          try
          {
-            effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, O2EffectType.class, Integer.class, UUID.class).newInstance(p, effectType, duration, pid);
+            effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, duration, pid);
          }
          catch (Exception e)
          {

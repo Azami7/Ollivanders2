@@ -53,7 +53,7 @@ public final class SILENCIO extends Charms
             Player player = (Player) live;
             int dur = (int) (usesModifier * 1200);
 
-            MUTED_SPEECH effect = new MUTED_SPEECH(p, O2EffectType.MUTED_SPEECH, dur, player.getUniqueId());
+            MUTED_SPEECH effect = new MUTED_SPEECH(p, dur, player.getUniqueId());
             p.players.playerEffects.addEffect(effect);
 
             kill();

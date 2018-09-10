@@ -56,7 +56,7 @@ public final class ANIMAGUS_POTION extends O2Potion
       {
          o2p.setIsAnimagus();
 
-         ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player.getUniqueId());
+         ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
          p.players.playerEffects.addEffect(animagusEffect);
 
          player.sendMessage(Ollivanders2.chatColor + "You feel transformed.");

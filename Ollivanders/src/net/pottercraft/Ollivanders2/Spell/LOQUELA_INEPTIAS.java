@@ -61,7 +61,7 @@ public class LOQUELA_INEPTIAS extends Charms
             Player player = (Player) live;
             int dur = (int) (usesModifier * 1200);
 
-            BABBLING effect = new BABBLING(p, O2EffectType.BABBLING, dur, player.getUniqueId());
+            BABBLING effect = new BABBLING(p, dur, player.getUniqueId());
             p.players.playerEffects.addEffect(effect);
 
             kill();

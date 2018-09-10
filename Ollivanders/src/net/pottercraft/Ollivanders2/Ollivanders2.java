@@ -28,6 +28,7 @@ import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Player.O2Players;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
 import net.pottercraft.Ollivanders2.Potion.IngredientType;
+import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Potion.O2Potions;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
@@ -1104,7 +1105,7 @@ public class Ollivanders2 extends JavaPlugin
             O2Effect effect = null;
             try
             {
-               effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, O2EffectType.class, Integer.class, UUID.class).newInstance(this, effectType, 1200, ((Player) sender).getUniqueId());
+               effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(this, 1200, ((Player) sender).getUniqueId());
             }
             catch (Exception e)
             {
@@ -1868,8 +1869,6 @@ public class Ollivanders2 extends JavaPlugin
          {
             return giveAllPotions((Player)sender);
          }
-         //TODO implement givePotion
-         /*
          else if (subCommand.equalsIgnoreCase("give"))
          {
             if (args.length > 3)
@@ -1877,7 +1876,7 @@ public class Ollivanders2 extends JavaPlugin
                // potions give fred memory potion
                Player targetPlayer = getServer().getPlayer(args[2]);
                String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
-               givePotion((Player)sender, common.stringArrayToString(subArgs));
+               givePotion(targetPlayer, common.stringArrayToString(subArgs));
             }
          }
          else
@@ -1886,11 +1885,40 @@ public class Ollivanders2 extends JavaPlugin
             String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
             givePotion((Player)sender, common.stringArrayToString(subArgs));
          }
-         */
       }
 
       usageMessagePotions(sender);
       return true;
+   }
+
+   /**
+    * Give a specific potion to a player.
+    *
+    * @param player the player to give the potion to
+    * @param potionName the potion to give the player
+    */
+   public void givePotion (Player player, String potionName)
+   {
+      O2Potion potion = null;
+
+      for (O2Potion p : potions.getAllPotions())
+      {
+         if (p.getName().toLowerCase().startsWith(potionName.toLowerCase()))
+         {
+            potion = p;
+            break;
+         }
+      }
+
+      if (potion != null)
+      {
+         ItemStack brewedPotion = potion.brew();
+
+         List<ItemStack> kit = new ArrayList<>();
+         kit.add(brewedPotion);
+
+         givePlayerKit(player, kit);
+      }
    }
 
    private void usageMessagePotions (CommandSender sender)

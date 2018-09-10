@@ -54,7 +54,7 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
             Player player = (Player) live;
             int dur = (int) (usesModifier * 1200);
 
-            MUCUS effect = new MUCUS(p, O2EffectType.MUCUS, dur, player.getUniqueId());
+            MUCUS effect = new MUCUS(p, dur, player.getUniqueId());
             p.players.playerEffects.addEffect(effect);
 
             kill();

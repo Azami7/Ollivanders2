@@ -17,13 +17,14 @@ public class LYCANTHROPY_SPEECH extends BABBLING
     * Constructor
     *
     * @param plugin a callback to the MC plugin
-    * @param effect the effect cast
     * @param duration the duration of the effect
     * @param pid the ID of the player this effect acts on
     */
-   public LYCANTHROPY_SPEECH (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   public LYCANTHROPY_SPEECH (Ollivanders2 plugin, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, pid);
+      super(plugin, duration, pid);
+
+      effectType = O2EffectType.LYCANTHROPY_SPEECH;
 
       dictionary = new ArrayList<String>() {{
          add("§oHOOOOOOWLLLLLL");

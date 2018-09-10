@@ -24,13 +24,14 @@ public class LYCANTHROPY extends ShapeShiftSuper
     * Constructor
     *
     * @param plugin a callback to the MC plugin
-    * @param effect the effect cast
     * @param duration the duration of the effect
     * @param pid the ID of the player this effect acts on
     */
-   public LYCANTHROPY (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   public LYCANTHROPY (Ollivanders2 plugin, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, pid);
+      super(plugin, duration, pid);
+
+      effectType = O2EffectType.LYCANTHROPY;
 
       form = EntityType.WOLF;
       permanent = true;
@@ -111,12 +112,12 @@ public class LYCANTHROPY extends ShapeShiftSuper
    {
       O2Player o2p = p.players.getPlayer(targetID);
 
-      AGGRESSION aggression = new AGGRESSION(p, O2EffectType.AGGRESSION, 5, targetID);
+      AGGRESSION aggression = new AGGRESSION(p, 5, targetID);
       aggression.setAggressionLevel(10);
       p.players.playerEffects.addEffect(aggression);
       additionalEffects.add(O2EffectType.AGGRESSION);
 
-      LYCANTHROPY_SPEECH speech = new LYCANTHROPY_SPEECH(p, O2EffectType.LYCANTHROPY_SPEECH, 5, targetID);
+      LYCANTHROPY_SPEECH speech = new LYCANTHROPY_SPEECH(p, 5, targetID);
       p.players.playerEffects.addEffect(speech);
       additionalEffects.add(O2EffectType.LYCANTHROPY_SPEECH);
    }

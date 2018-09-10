@@ -73,15 +73,19 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -786,7 +790,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the player interact event
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   @EventHandler(priority = EventPriority.HIGH)
    public void onPlayerInteract (PlayerInteractEvent event)
    {
       Player player = event.getPlayer();
@@ -800,19 +804,17 @@ public class OllivandersListener implements Listener
          return;
       }
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
-      {
-         event.setCancelled(true);
-
-         player.sendMessage(Ollivanders2.chatColor + "You are unable to move.");
-         return;
-      }
-
       /**
        * A right or left click of the primary hand when holding a wand is used to make a magical action.
        */
       if ((event.getHand() == EquipmentSlot.HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
+         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+         {
+            event.setCancelled(true);
+            return;
+         }
+
          /**
           * A left click of the primary hand is used to cast a spell
           */
@@ -849,6 +851,7 @@ public class OllivandersListener implements Listener
 
             if (Ollivanders2.debug)
                p.getLogger().info("OllivandersListener:onPlayerInteract: waving destined wand");
+
             // play a sound and visual effect when they right-click their destined wand with no spell
             Location location = player.getLocation();
             location.setY(location.getY() + 1.6);
@@ -859,8 +862,14 @@ public class OllivandersListener implements Listener
       /**
        * A right or left click of the off hand is used to rotate through mastered spells for non-verbal spell casting.
        */
-      else // event.getHand() == EquipmentSlot.OFF_HAND
+      else if ((event.getHand() == EquipmentSlot.OFF_HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
+         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+         {
+            event.setCancelled(true);
+            return;
+         }
+
          rotateNonVerbalSpell(player, action);
       }
    }
@@ -1014,7 +1023,7 @@ public class OllivandersListener implements Listener
             {
                if (!p.players.playerEffects.hasEffect(damaged.getUniqueId(), O2EffectType.LYCANTHROPY))
                {
-                  LYCANTHROPY effect = new LYCANTHROPY(p, O2EffectType.LYCANTHROPY, 100, damaged.getUniqueId());
+                  LYCANTHROPY effect = new LYCANTHROPY(p, 100, damaged.getUniqueId());
                   p.players.playerEffects.addEffect(effect);
                }
             }
@@ -1159,8 +1168,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloPlayerInteract (PlayerInteractEvent event)
    {
-      if (event.getAction() == Action.LEFT_CLICK_BLOCK ||
-            event.getAction() == Action.RIGHT_CLICK_BLOCK)
+      if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
       {
          if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getClickedBlock().getLocation()))
          {
@@ -1195,6 +1203,7 @@ public class OllivandersListener implements Listener
             collos.add((COLLOPORTUS) stat);
          }
       }
+
       List<Block> blocks = event.getBlocks();
       BlockFace direction = event.getDirection();
       for (Block block : blocks)
@@ -1271,7 +1280,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the entity explode event
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   @EventHandler(priority = EventPriority.HIGH)
    public void onExplosion (EntityExplodeEvent event)
    {
       List<Block> blockListCopy = new ArrayList<>();
@@ -1344,7 +1353,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the player Pickup Item Event
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   @EventHandler(priority = EventPriority.HIGH)
    public void portkeyPickUp (EntityPickupItemEvent event)
    {
       Entity entity = event.getEntity();
@@ -1431,7 +1440,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the Entity Target Event
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   @EventHandler(priority = EventPriority.HIGH)
    public void inferiTarget (EntityTargetEvent event)
    {
       Entity target = event.getTarget();
@@ -1454,7 +1463,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the entity death event
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   @EventHandler(priority = EventPriority.NORMAL)
    public void witchWandDrop (EntityDeathEvent event)
    {
       if (event.getEntityType() == EntityType.WITCH && p.getConfig().getBoolean("witchDrop"))
@@ -1479,7 +1488,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the player item consume event
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   @EventHandler(priority = EventPriority.NORMAL)
    public void onPlayerDrink (PlayerItemConsumeEvent event)
    {
       ItemStack item = event.getItem();
@@ -1517,14 +1526,16 @@ public class OllivandersListener implements Listener
     *
     * @param event the player interact event
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   @EventHandler(priority = EventPriority.HIGH)
    public void broomClick (PlayerInteractEvent event)
    {
+      Player player = event.getPlayer();
+
       if (((event.getAction() == Action.RIGHT_CLICK_AIR) || (event.getAction() == Action.RIGHT_CLICK_BLOCK))
-            && (event.getPlayer().getInventory().getItemInMainHand() != null)
-            && (this.p.common.isBroom(event.getPlayer().getInventory().getItemInMainHand())))
+            && (player.getInventory().getItemInMainHand() != null)
+            && (this.p.common.isBroom(player.getInventory().getItemInMainHand())))
       {
-         UUID playerUid = event.getPlayer().getUniqueId();
+         UUID playerUid = player.getUniqueId();
          Set<UUID> flying = OllivandersSchedule.getFlying();
          if (flying.contains(playerUid))
          {
@@ -1742,6 +1753,24 @@ public class OllivandersListener implements Listener
          {
             ((O2SplashPotion)potion).thrownEffect(event);
          }
+      }
+   }
+
+   /**
+    * Handle player interact events when they are affected by an effect that alters interacts.
+    *
+    * @param event
+    */
+   @EventHandler (priority = EventPriority.HIGHEST)
+   public void onAffectedInteract (PlayerInteractEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      {
+         // cannot interact with anything while asleep
+         event.setCancelled(true);
+         return;
       }
    }
 }

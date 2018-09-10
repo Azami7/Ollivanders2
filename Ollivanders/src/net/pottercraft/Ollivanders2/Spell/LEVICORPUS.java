@@ -49,8 +49,7 @@ public final class LEVICORPUS extends DarkArts
       {
          if (live instanceof Player)
          {
-            net.pottercraft.Ollivanders2.Effect.LEVICORPUS levi = new net.pottercraft.Ollivanders2.Effect.LEVICORPUS(p, O2EffectType.LEVICORPUS,
-                  (int) (usesModifier * 1200.0), live.getUniqueId());
+            net.pottercraft.Ollivanders2.Effect.LEVICORPUS levi = new net.pottercraft.Ollivanders2.Effect.LEVICORPUS(p, (int)(usesModifier * 1200.0), live.getUniqueId());
 
             p.players.playerEffects.addEffect(levi);
 

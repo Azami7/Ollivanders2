@@ -23,6 +23,7 @@ public enum IngredientType
    GROUND_SCARAB_BEETLE (Material.SULPHUR, (short)0, "Ground Scarab Beetle"),
    HONEYWATER (Material.POTION, (short)0, "Honeywater"),
    HORKLUMP_JUICE (Material.DRAGONS_BREATH, (short)0, "Horklump Juice"),
+   INFUSION_OF_WORMWOOD (Material.POTION, (short)5, "Infusion of Wormwood"),
    JOBBERKNOLL_FEATHER (Material.FEATHER, (short)0, "Jobberknoll Feather"),
    LETHE_RIVER_WATER (Material.POTION, (short)0, "Lethe River Water"), //bottle of water
    LIONFISH_SPINES (Material.RAW_FISH, (short)0, "Lionfish Spines"),
@@ -31,17 +32,21 @@ public enum IngredientType
    MISTLETOE_BERRIES (Material.INK_SACK, (short)3, "Mistletoe Berries"),
    MOONDEW_DROP (Material.GHAST_TEAR, (short)0, "Moondew Drop"),
    POISONOUS_POTATO (Material.POISONOUS_POTATO, (short)0, "Poisonous Potato"),
+   POWDERED_ASHPODEL (Material.INK_SACK, (short)14, "Powedered Root of Asphodel"), // orange dye
    POWDERED_SAGE (Material.INK_SACK, (short)10, "Powdered Sage"), //lime dye
    ROTTEN_FLESH (Material.ROTTEN_FLESH, (short)0, "Rotten Flesh"),
    RUNESPOOR_EGG (Material.EGG, (short)0, "Runespoor Egg"),
    SALAMANDER_BLOOD (Material.POTION, (short)7, "Salamander Blood"),
    SALAMANDER_FIRE (Material.BLAZE_POWDER, (short)0, "Salamander Fire"),
-   SLOTH_BRAIN_MUCUS (Material.POTION, (short)4,"Sloth Brain Mucus"),
+   SLOTH_BRAIN (Material.FERMENTED_SPIDER_EYE, (short)0, "Sloth Brain"),
+   SLOTH_BRAIN_MUCUS (Material.POTION, (short)4, "Sloth Brain Mucus"),
+   SOPOPHORUS_BEAN_JUICE (Material.POTION, (short)13, "Sopophorus Bean Juice"),
    SPIDER_EYE (Material.SPIDER_EYE, (short)0, "Spider Eye"),
    STANDARD_POTION_INGREDIENT (Material.SUGAR, (short)0, "Standard Potion Ingredient"),
    UNICORN_HAIR(Material.STRING, (short)0, "Unicorn Hair"),
    UNICORN_HORN(Material.BLAZE_ROD, (short)0, "Unicorn Horn"),
    VALERIAN_SPRIGS (Material.VINE, (short)0, "Valerian Sprigs"),
+   VALERIAN_ROOT (Material.GOLDEN_CARROT, (short)0, "Valerian Root"),
    WOLFSBANE (Material.RED_ROSE, (short)2, "Wolfsbane"); // allium
 
    private Material material;

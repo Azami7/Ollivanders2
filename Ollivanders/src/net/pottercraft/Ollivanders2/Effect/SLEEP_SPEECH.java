@@ -13,9 +13,18 @@ import java.util.UUID;
  */
 public class SLEEP_SPEECH extends BABBLING
 {
-   public SLEEP_SPEECH (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param duration the duration of the effect
+    * @param pid the ID of the player this effect acts on
+    */
+   public SLEEP_SPEECH (Ollivanders2 plugin, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, pid);
+      super(plugin, duration, pid);
+
+      effectType = O2EffectType.SLEEP_SPEECH;
 
       dictionary = new ArrayList<String>() {{
          add("§ozzzzzzzz");
