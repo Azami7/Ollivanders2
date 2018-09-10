@@ -1616,18 +1616,12 @@ public class OllivandersListener implements Listener
       // is the player sneaking
       if (!event.isSneaking())
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("onPotionBrewing: player not sneaking");
-
          return;
       }
 
       Block cauldron = playerFacingCauldron(player);
       if (cauldron == null)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("onPotionBrewing: player not facing a cauldron");
-
          return;
       }
 
@@ -1635,9 +1629,6 @@ public class OllivandersListener implements Listener
       ItemStack heldItem = player.getInventory().getItemInOffHand();
       if (heldItem == null || heldItem.getAmount() == 0)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("onPotionBrewing: player not holding an item in their off hand");
-
          return;
       }
 

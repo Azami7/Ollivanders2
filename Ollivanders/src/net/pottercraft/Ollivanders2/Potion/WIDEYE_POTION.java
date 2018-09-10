@@ -25,6 +25,8 @@ public class WIDEYE_POTION extends O2Potion
 
       potionType = O2PotionType.WIDEYE_POTION;
 
+      name = "Wideye Potion";
+
       ingredients.put(IngredientType.GROUND_SNAKE_FANGS, 3);
       ingredients.put(IngredientType.BILLYWIG_STING_SLIME, 6);
       ingredients.put(IngredientType.WOLFSBANE, 2);

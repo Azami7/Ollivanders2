@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Effect.SLEEPING;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -45,10 +46,17 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion
    @Override
    public void drink (O2Player o2p, Player player)
    {
-      SLEEPING effect = new SLEEPING(p, 5, player.getUniqueId());
-      effect.setPermanent();
-      p.players.playerEffects.addEffect(effect);
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
+      {
+         player.sendMessage(Ollivanders2.chatColor + "You yawn but otherwise nothing happens.");
+      }
+      else
+      {
+         SLEEPING effect = new SLEEPING(p, 5, player.getUniqueId());
+         effect.setPermanent();
+         p.players.playerEffects.addEffect(effect);
 
-      player.sendMessage(Ollivanders2.chatColor + "You fall in to a powerful magic sleep.");
+         player.sendMessage(Ollivanders2.chatColor + "You fall in to a powerful magic sleep.");
+      }
    }
 }
