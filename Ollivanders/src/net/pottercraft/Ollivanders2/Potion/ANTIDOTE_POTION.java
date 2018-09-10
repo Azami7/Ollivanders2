@@ -18,9 +18,16 @@ import org.bukkit.potion.PotionEffectType;
  */
 public final class ANTIDOTE_POTION extends O2Potion
 {
-   public ANTIDOTE_POTION (Ollivanders2 plugin, O2PotionType potionType)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the plugin
+    */
+   public ANTIDOTE_POTION (Ollivanders2 plugin)
    {
-      super(plugin, potionType);
+      super(plugin);
+
+      potionType = O2PotionType.ANTIDOTE_POTION;
 
       ingredients.put(IngredientType.MISTLETOE_BERRIES, 2);
       ingredients.put(IngredientType.BEZOAR, 1);

@@ -21,9 +21,16 @@ import java.util.ArrayList;
  */
 public final class FORGETFULLNESS_POTION extends O2Potion
 {
-   public FORGETFULLNESS_POTION (Ollivanders2 plugin, O2PotionType potionType)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the plugin
+    */
+   public FORGETFULLNESS_POTION (Ollivanders2 plugin)
    {
-      super(plugin, potionType);
+      super(plugin);
+
+      potionType = O2PotionType.FORGETFULLNESS_POTION;
 
       ingredients.put(IngredientType.MISTLETOE_BERRIES, 4);
       ingredients.put(IngredientType.VALERIAN_SPRIGS, 2);

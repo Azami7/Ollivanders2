@@ -43,7 +43,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.NPC;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
@@ -73,19 +72,16 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
-import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -114,7 +110,7 @@ public class OllivandersListener implements Listener
 
    private Ollivanders2 p;
 
-   public OllivandersListener (Ollivanders2 plugin)
+   OllivandersListener (Ollivanders2 plugin)
    {
       p = plugin;
    }
@@ -286,9 +282,9 @@ public class OllivandersListener implements Listener
             ((BABBLING)effect).doBabblingEffect(event);
       }
 
-      /**
-       * Parse to see if they were casting a spell
-       */
+      //
+      // Parse to see if they were casting a spell
+      //
       O2SpellType spell = O2SpellType.decode(message);
       if (Ollivanders2.debug)
       {
@@ -302,9 +298,9 @@ public class OllivandersListener implements Listener
          }
       }
 
-      /**
-       * Handle stationary spells that affect chat
-       */
+      //
+      // Handle stationary spells that affect chat
+      //
       Set<Player> recipients = event.getRecipients();
       List<StationarySpellObj> stationaries = p.stationarySpells.getStationarySpellsAtLocation(sender.getLocation());
       Set<StationarySpellObj> muffliatos = new HashSet<>();
@@ -321,9 +317,9 @@ public class OllivandersListener implements Listener
          }
       }
 
-      /**
-       * Handle removing recipients from chat
-       */
+      //
+      // Handle removing recipients from chat
+      //
       Set<Player> remRecipients = new HashSet<>();
 
       // If player cast a spell, only show that chat to players within range
@@ -388,9 +384,9 @@ public class OllivandersListener implements Listener
          }
       }
 
-      /**
-       * Handle spell casting
-       */
+      //
+      // Handle spell casting
+      //
       // If the spell is valid AND player is allowed to cast spells per server permissions
       if (spell != null && p.canCast(sender, spell, true))
       {
@@ -703,7 +699,7 @@ public class OllivandersListener implements Listener
     *
     * @param player the player that cast the spell
     * @param name the name of the spell cast
-    * @wandC the wand check value for the held wand
+    * @param wandC the wand check value for the held wand
     */
    private void createSpellProjectile (Player player, O2SpellType name, double wandC)
    {
@@ -804,9 +800,9 @@ public class OllivandersListener implements Listener
          return;
       }
 
-      /**
-       * A right or left click of the primary hand when holding a wand is used to make a magical action.
-       */
+      //
+      // A right or left click of the primary hand when holding a wand is used to make a magical action.
+      //
       if ((event.getHand() == EquipmentSlot.HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
          if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
@@ -815,9 +811,9 @@ public class OllivandersListener implements Listener
             return;
          }
 
-         /**
-          * A left click of the primary hand is used to cast a spell
-          */
+         //
+         // A left click of the primary hand is used to cast a spell
+         //
          if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
          {
             if (Ollivanders2.debug)
@@ -826,11 +822,11 @@ public class OllivandersListener implements Listener
             castSpell(player);
          }
 
-         /**
-          * A right click is used:
-          *  - to determine if the wand is the player's destined wand
-          *  - to brew a potion if they are holding a glass bottle in their off hand and facing a cauldron
-          */
+         //
+         // A right click is used:
+         // - to determine if the wand is the player's destined wand
+         // - to brew a potion if they are holding a glass bottle in their off hand and facing a cauldron
+         //
          else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
          {
             if (!p.playerCommon.holdsWand(player))
@@ -859,9 +855,9 @@ public class OllivandersListener implements Listener
             player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
          }
       }
-      /**
-       * A right or left click of the off hand is used to rotate through mastered spells for non-verbal spell casting.
-       */
+      //
+      // A right or left click of the off hand is used to rotate through mastered spells for non-verbal spell casting.
+      //
       else if ((event.getHand() == EquipmentSlot.OFF_HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
          if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
@@ -877,7 +873,6 @@ public class OllivandersListener implements Listener
    /**
     * If non-verbal spell casting is enabled, selects a new spell from mastered spells.
     *
-    * @assumes non-verbal spell casting is enabled
     * @param player the player rotating spells
     * @param action the player action
     */
@@ -1510,7 +1505,7 @@ public class OllivandersListener implements Listener
 
             if (potion != null)
             {
-               if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getType()))
+               if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getPotionType()))
                {
                   return;
                }
@@ -1759,7 +1754,7 @@ public class OllivandersListener implements Listener
    /**
     * Handle player interact events when they are affected by an effect that alters interacts.
     *
-    * @param event
+    * @param event the player interact event
     */
    @EventHandler (priority = EventPriority.HIGHEST)
    public void onAffectedInteract (PlayerInteractEvent event)
@@ -1769,6 +1764,24 @@ public class OllivandersListener implements Listener
       if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          // cannot interact with anything while asleep
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   /**
+    * Handle player sleep event.
+    *
+    * @param event the player bed enter event
+    */
+   @EventHandler (priority = EventPriority.HIGH)
+   public void onPlayerSleep (PlayerBedEnterEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
+      {
+         // cannot sleep while awake effect is active
          event.setCancelled(true);
          return;
       }

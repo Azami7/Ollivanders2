@@ -15,9 +15,16 @@ import org.bukkit.entity.Player;
  */
 public final class WOLFSBANE_POTION extends O2Potion
 {
-   public WOLFSBANE_POTION (Ollivanders2 plugin, O2PotionType potionType)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the plugin
+    */
+   public WOLFSBANE_POTION (Ollivanders2 plugin)
    {
-      super(plugin, potionType);
+      super(plugin);
+
+      potionType = O2PotionType.WOLFSBANE_POTION;
 
       ingredients.put(IngredientType.WOLFSBANE, 2);
       ingredients.put(IngredientType.MANDRAKE_LEAF, 3);

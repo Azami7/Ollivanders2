@@ -21,6 +21,7 @@ public enum IngredientType
    GALANTHUS_NIVALIS (Material.RED_ROSE, (short)3, "Galanthus Nivalis"), //azure bluet
    GINGER_ROOT (Material.BEETROOT, (short)0, "Ginger Root"),
    GROUND_SCARAB_BEETLE (Material.SULPHUR, (short)0, "Ground Scarab Beetle"),
+   GROUND_SNAKE_FANGS (Material.INK_SACK, (short)15, "Ground Snake Fangs"),
    HONEYWATER (Material.POTION, (short)0, "Honeywater"),
    HORKLUMP_JUICE (Material.DRAGONS_BREATH, (short)0, "Horklump Juice"),
    INFUSION_OF_WORMWOOD (Material.POTION, (short)5, "Infusion of Wormwood"),

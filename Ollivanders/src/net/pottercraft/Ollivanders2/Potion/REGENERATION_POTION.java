@@ -16,9 +16,16 @@ import org.bukkit.potion.PotionEffectType;
  */
 public final class REGENERATION_POTION extends O2Potion
 {
-   public REGENERATION_POTION (Ollivanders2 plugin, O2PotionType potionType)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the plugin
+    */
+   public REGENERATION_POTION (Ollivanders2 plugin)
    {
-      super(plugin, potionType);
+      super(plugin);
+
+      potionType = O2PotionType.REGENERATION_POTION;
 
       ingredients.put(IngredientType.BONE, 1);
       ingredients.put(IngredientType.BLOOD, 1);

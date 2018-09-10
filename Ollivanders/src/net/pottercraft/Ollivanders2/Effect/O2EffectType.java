@@ -12,6 +12,7 @@ public enum O2EffectType
    AGGRESSION (net.pottercraft.Ollivanders2.Effect.AGGRESSION.class),
    ANIMAGUS_EFFECT (net.pottercraft.Ollivanders2.Effect.ANIMAGUS_EFFECT.class),
    ANIMAGUS_INCANTATION (net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION.class),
+   AWAKE (net.pottercraft.Ollivanders2.Effect.AWAKE.class),
    BABBLING (BABBLING.class),
    FAST_LEARNING (FAST_LEARNING.class),
    FLYING (net.pottercraft.Ollivanders2.Effect.FLYING.class),
