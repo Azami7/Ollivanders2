@@ -117,7 +117,8 @@ public abstract class O2Potion implements Teachable
 
    /**
     * Get the type of this potion.
-    * @return
+    *
+    * @return the type of potion
     */
    public O2PotionType getType ()
    {

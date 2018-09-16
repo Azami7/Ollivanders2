@@ -149,11 +149,11 @@ public abstract class SpellProjectile implements Teachable
 
       for (O2Effect effect : p.getO2Player(player).getEffects())
       {
-         if (effect.name == O2EffectType.MEMORY_POTION)
+         if (effect.effectType == O2EffectType.MEMORY_POTION)
          {
             memoryPotion = true;
          }
-         else if (effect.name == O2EffectType.BARUFFIOS_BRAIN_ELIXIR)
+         else if (effect.effectType == O2EffectType.BARUFFIOS_BRAIN_ELIXIR)
          {
             usesModifier *= 2;
          }

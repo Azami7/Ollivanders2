@@ -16,13 +16,15 @@ import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
 
+import java.util.UUID;
+
 /**
  * Transforms an Animagus player in to their animal form.
  *
  * @author Azami7
  * @since 2.2.8
  */
-public class ANIMAGUS_EFFECT extends SHAPE_SHIFT
+public class ANIMAGUS_EFFECT extends ShapeShiftSuper
 {
    String colorVariant;
 
@@ -32,19 +34,25 @@ public class ANIMAGUS_EFFECT extends SHAPE_SHIFT
     * @param plugin a callback to the MC plugin
     * @param effect the effect cast
     * @param duration the duration of the effect
-    * @param player the player this effect acts on
+    * @param pid the ID of the player this effect acts on
     */
-   public ANIMAGUS_EFFECT (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
+   public ANIMAGUS_EFFECT (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, player);
-
-      O2Player o2p = p.getO2Player(target);
-
-      // set the details of their animal form
-      form = o2p.getAnimagusForm();
-      colorVariant = o2p.getAnimagusColor();
+      super(plugin, effect, duration, pid);
 
       permanent = true;
+   }
+
+   @Override
+   /**
+    * If the player has not yet transformed, transform them.
+    */
+   protected void upkeep ()
+   {
+      if (!transformed && !kill)
+      {
+         transform();
+      }
    }
 
    /**
@@ -53,9 +61,13 @@ public class ANIMAGUS_EFFECT extends SHAPE_SHIFT
    @Override
    protected void customizeWatcher ()
    {
+      O2Player o2p = p.getO2Player(p.getServer().getPlayer(targetID));
+
       if (form == null)
       {
-         return;
+         // set the details of their animal form
+         form = o2p.getAnimagusForm();
+         colorVariant = o2p.getAnimagusColor();
       }
 
       if (form == EntityType.OCELOT)

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Effect.BABBLING;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -28,7 +29,7 @@ public class LOQUELA_INEPTIAS extends Charms
 
    protected String text = "Causes your target to speak nonsense for a period of time.";
 
-   O2EffectType effect = O2EffectType.BABBLING_EFFECT;
+   O2EffectType effect = O2EffectType.BABBLING;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -61,7 +62,7 @@ public class LOQUELA_INEPTIAS extends Charms
             Player player = (Player) live;
             O2Player o2p = p.getO2Player(player);
             int dur = (int) (usesModifier * 1200);
-            o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.BABBLING_EFFECT(p, O2EffectType.BABBLING_EFFECT, dur, player));
+            o2p.addEffect(new BABBLING(p, O2EffectType.BABBLING, dur, player.getUniqueId()));
             p.setO2Player(player, o2p);
             kill();
             return;

@@ -98,14 +98,12 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
 
       if ((curTime >= 23000 && curTime <= 24000) || (curTime >=12000 && curTime <= 13000))
       {
-         o2p.addEffect(new ANIMAGUS_INCANTATION(p, O2EffectType.ANIMAGUS_INCANTATION, 300, player));
-         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-               + "You feel slightly different.");
+         o2p.addEffect(new ANIMAGUS_INCANTATION(p, O2EffectType.ANIMAGUS_INCANTATION, 300, player.getUniqueId()));
+         player.sendMessage(Ollivanders2.chatColor + "You feel slightly different.");
       }
       else
       {
-         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-               + "Nothing seems to happen.");
+         player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
       }
    }
 
@@ -150,16 +148,14 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
 
       if (rand < successRate)
       {
-         ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player);
+         ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player.getUniqueId());
          o2p.addEffect(animagusEffect);
 
-         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-               + "You feel very different.");
+         player.sendMessage(Ollivanders2.chatColor + "You feel very different.");
       }
       else
       {
-         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-               + "You feel a momentary change but it quickly fades.");
+         player.sendMessage(Ollivanders2.chatColor + "You feel a momentary change but it quickly fades.");
       }
 
       p.setO2Player(player, o2p);

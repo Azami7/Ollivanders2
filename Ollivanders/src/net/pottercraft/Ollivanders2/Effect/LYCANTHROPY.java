@@ -1,19 +1,23 @@
 package net.pottercraft.Ollivanders2.Effect;
 
+import java.util.ArrayList;
+import java.util.UUID;
+
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.entity.Entity;
+import net.pottercraft.Ollivanders2.Player.O2Player;
+import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
 
 /**
  * Turns player into a werewolf during the full moon. Doesn't go away until death.
  *
- * @author lownes
+ * @author azami7
+ * @since 2.2.8
  */
-public class LYCANTHROPY extends O2Effect
+public class LYCANTHROPY extends ShapeShiftSuper
 {
-   int wereId = -1;
+   ArrayList<O2EffectType> additionalEffects = new ArrayList<>();
 
    /**
     * Constructor
@@ -21,104 +25,112 @@ public class LYCANTHROPY extends O2Effect
     * @param plugin a callback to the MC plugin
     * @param effect the effect cast
     * @param duration the duration of the effect
-    * @param player the player this effect acts on
+    * @param pid the ID of the player this effect acts on
     */
-   public LYCANTHROPY (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
+   public LYCANTHROPY (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, player);
+      super(plugin, effect, duration, pid);
+
+      form = EntityType.WOLF;
+      permanent = true;
+      transformed = false;
    }
 
    /**
-    * Check the time of day for the player and disguisePlayer them in to or back from
-    * a wolf Entity.
+    * Transfigure the player back to human form and kill this effect.
     */
    @Override
-   public void checkEffect ()
+   public void kill ()
    {
-      long time = target.getWorld().getFullTime();
-      long dayOrNight = (time / 12000) % 2;
-      long days = time / 24000;
-      long phase = days % 8;
-      boolean wolfsbane = false;
-      for (O2Effect effect : p.getO2Player(target).getEffects())
+      restore();
+      removeAdditionalEffect();
+
+      kill = true;
+   }
+
+   /**
+    * Change player in to a wolf for 1 day when the full moon occurs.
+    *
+    * See https://minecraft.gamepedia.com/Moon
+    */
+   @Override
+   protected void upkeep ()
+   {
+      Player target = p.getServer().getPlayer(targetID);
+
+      long curTime = target.getWorld().getTime();
+      if (!transformed)
       {
-         if (effect instanceof WOLFSBANE_POTION)
+         // only need to check after sunset
+         if (curTime > 13000)
          {
-            wolfsbane = true;
-            break;
-         }
-      }
-      if (phase == 0 && dayOrNight == 1 && !wolfsbane)
-      {
-         //Full moon at night
-         if (wereId == -1)
-         {
-            //spawn werewolf and set wereId and set wolf name to werewolf and set
-            //it to be angry
-            Wolf werewolf = (Wolf) target.getWorld().spawnEntity(target.getLocation(), EntityType.WOLF);
-            werewolf.setAngry(true);
-            werewolf.setCustomName("Werewolf");
-            werewolf.setCustomNameVisible(true);
-            wereId = werewolf.getEntityId();
-         }
-         else
-         {
-            //see if wereId points to a wolf with name werewolf.
-            //If so, teleport to it. if not, kill player
-            for (Entity entity : target.getWorld().getEntities())
+            long day = target.getWorld().getFullTime()/24000;
+            if ((day % 8) == 0)
             {
-               if (entity.getEntityId() == wereId && entity.getType() == EntityType.WOLF)
-               {
-                  Wolf wolf = (Wolf) entity;
-                  if (wolf.getCustomName().equals("Werewolf"))
-                  {
-                     target.teleport(entity);
-                     if (!wolf.isAngry())
-                     {
-                        wolf.setAngry(true);
-                     }
-                     if (wolf.getTarget() == target)
-                     {
-                        wolf.setTarget(null);
-                     }
-                     if (time % 20 == 0)
-                     {
-                        for (Player other : target.getWorld().getPlayers())
-                        {
-                           other.hidePlayer(p, target);
-                        }
-                     }
-                     return;
-                  }
-               }
+               // moonrise on a full moon day
+               transform();
+
+               addAdditionalEffects();
+
+               target.playSound(target.getEyeLocation(), Sound.ENTITY_WOLF_HOWL, 1, 0);
             }
-            target.damage(1000.0);
          }
       }
       else
       {
-         //if wereId points to a wolf with the name werewolf, kill it and
-         //set wereId to -1
-         if (wereId != -1)
+         long day = target.getWorld().getFullTime()/24000;
+         boolean restore = false;
+
+         if ((day % 8) == 0)
          {
-            for (Player other : target.getWorld().getPlayers())
+            // if it is a full moon day before moonrise or after sunrise
+            if (curTime < 13000 || curTime > 23500)
             {
-               other.showPlayer(p, target);
+               restore = true;
             }
-            for (Entity entity : target.getWorld().getEntities())
-            {
-               if (entity.getEntityId() == wereId && entity.getType() == EntityType.WOLF)
-               {
-                  if (entity.getCustomName().equals("Werewolf"))
-                  {
-                     entity.remove();
-                     wereId = -1;
-                     return;
-                  }
-               }
-            }
-            wereId = -1;
          }
+         else
+         {
+            // it is not a full moon day
+            restore = true;
+         }
+
+         if (restore)
+         {
+            restore();
+            removeAdditionalEffect();
+         }
+      }
+   }
+
+   /**
+    * Add additional effects of lycanthropy such as aggression and speaking like a wolf
+    */
+   private void addAdditionalEffects ()
+   {
+      Player target = p.getServer().getPlayer(targetID);
+      O2Player o2p = p.getO2Player(target);
+
+      AGGRESSION effect = new AGGRESSION(p, O2EffectType.AGGRESSION, 5, targetID);
+      effect.setAggressionLevel(10);
+      o2p.addEffect(effect);
+      additionalEffects.add(O2EffectType.AGGRESSION);
+
+      o2p.addEffect(new LYCANTHROPY_SPEECH(p, O2EffectType.LYCANTHROPY_SPEECH, 5, targetID));
+      additionalEffects.add(O2EffectType.LYCANTHROPY_SPEECH);
+   }
+
+   /**
+    * Remove additional effects of Lycanthropy
+    */
+   private void removeAdditionalEffect ()
+   {
+      Player target = p.getServer().getPlayer(targetID);
+      O2Player o2p = p.getO2Player(target);
+
+      for (O2EffectType effect : additionalEffects)
+      {
+         o2p.removeEffect(effect);
       }
    }
 }

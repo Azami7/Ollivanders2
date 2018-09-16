@@ -1,7 +1,8 @@
 package net.pottercraft.Ollivanders2.Effect;
 
+import java.util.UUID;
+
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.entity.Player;
 
 /**
  * Sets that the player has an active Animagus incantion.
@@ -12,16 +13,16 @@ import org.bukkit.entity.Player;
 public class ANIMAGUS_INCANTATION extends O2Effect
 {
    /**
-    * Constructor.
+    * Constructor
     *
     * @param plugin a callback to the MC plugin
-    * @param effect the effect on the player
-    * @param duration the duration of this effect
-    * @param player the player this effect acts on
+    * @param effect the effect cast
+    * @param duration the duration of the effect
+    * @param pid the ID of the player this effect acts on
     */
-   public ANIMAGUS_INCANTATION (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
+   public ANIMAGUS_INCANTATION (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, player);
+      super(plugin, effect, duration, pid);
    }
 
    /**

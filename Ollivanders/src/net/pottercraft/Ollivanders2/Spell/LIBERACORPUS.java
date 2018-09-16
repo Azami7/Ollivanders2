@@ -55,7 +55,7 @@ public final class LIBERACORPUS extends Charms
             O2Player o2p = p.getO2Player(player);
             for (O2Effect effect : o2p.getEffects())
             {
-               if (effect.name == O2EffectType.LEVICORPUS)
+               if (effect.effectType == O2EffectType.LEVICORPUS)
                {
                   effect.age((int) (usesModifier * 2400));
                }
