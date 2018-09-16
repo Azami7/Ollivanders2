@@ -1,5 +1,7 @@
 package net.pottercraft.Ollivanders2.Effect;
 
+import java.util.UUID;
+
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import me.libraryaddict.disguise.disguisetypes.watchers.AgeableWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.HorseWatcher;
@@ -7,16 +9,15 @@ import me.libraryaddict.disguise.disguisetypes.watchers.LlamaWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.OcelotWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.RabbitWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.WolfWatcher;
+
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
+
 import org.bukkit.DyeColor;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Player;
-
-import java.util.UUID;
 
 /**
  * Transforms an Animagus player in to their animal form.
