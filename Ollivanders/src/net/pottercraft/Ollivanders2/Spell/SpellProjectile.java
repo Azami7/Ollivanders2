@@ -137,6 +137,12 @@ public abstract class SpellProjectile implements Teachable
       this.player = player;
       p = plugin;
 
+      if (!p.canCast(player, spellType, true))
+      {
+         kill();
+         return;
+      }
+
       spellUses = p.getSpellNum(player, spellType);
       usesModifier = spellUses;
       boolean fastLearning = false;
@@ -156,16 +162,10 @@ public abstract class SpellProjectile implements Teachable
          usesModifier *= 2;
       }
 
-
       p.incSpellCount(player, spellType);
       if (fastLearning)
       {
          p.incSpellCount(player, spellType);
-      }
-
-      if (!p.canCast(player, spellType, true))
-      {
-         kill();
       }
    }
 

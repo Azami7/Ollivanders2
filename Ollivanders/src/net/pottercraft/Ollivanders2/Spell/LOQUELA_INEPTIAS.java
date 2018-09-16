@@ -40,8 +40,6 @@ public class LOQUELA_INEPTIAS extends Charms
 
    protected String text = "Causes your target to speak nonsense for a period of time.";
 
-   O2EffectType effect = O2EffectType.BABBLING_EFFECT;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
