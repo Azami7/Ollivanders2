@@ -17,13 +17,16 @@ public enum IngredientType
    DEATHS_HEAD_MOTH_CHRYSALIS (Material.COAL, (short)0, "Death's Head Moth Chrysalis"),
    DEW_DROP (Material.GHAST_TEAR, (short)0, "Dew Drop"),
    DITTANY (Material.SAPLING, (short)2, "Dittany"), //birch sapling
+   DRIED_NETTLES (Material.SAPLING, (short)0, "Dried Nettles"), // oak sapling
    FLOBBERWORM_MUCUS (Material.SLIME_BALL, (short)0, "Flobberworm Mucus"),
    GALANTHUS_NIVALIS (Material.RED_ROSE, (short)3, "Galanthus Nivalis"), //azure bluet
    GINGER_ROOT (Material.BEETROOT, (short)0, "Ginger Root"),
+   GROUND_PORCUPINE_QUILLS (Material.INK_SACK, (short)3, "Ground Porcupine Quills"),
    GROUND_SCARAB_BEETLE (Material.SULPHUR, (short)0, "Ground Scarab Beetle"),
    GROUND_SNAKE_FANGS (Material.INK_SACK, (short)15, "Ground Snake Fangs"),
    HONEYWATER (Material.POTION, (short)0, "Honeywater"),
    HORKLUMP_JUICE (Material.DRAGONS_BREATH, (short)0, "Horklump Juice"),
+   HORNED_SLUG_MUCUS (Material.SLIME_BALL, (short)0, "Horned Slug Mucus"),
    INFUSION_OF_WORMWOOD (Material.POTION, (short)5, "Infusion of Wormwood"),
    JOBBERKNOLL_FEATHER (Material.FEATHER, (short)0, "Jobberknoll Feather"),
    LAVENDER_SPRIG (Material.DOUBLE_PLANT, (short)1, "Lavender Sprig"), //lilac

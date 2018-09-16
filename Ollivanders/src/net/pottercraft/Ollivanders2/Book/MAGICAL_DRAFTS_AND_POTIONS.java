@@ -26,8 +26,7 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book
       potions.add(O2PotionType.HERBICIDE_POTION);
       potions.add(O2PotionType.WIDEYE_POTION);
       potions.add(O2PotionType.SLEEPING_DRAUGHT);
+      potions.add(O2PotionType.CURE_FOR_BOILS);
       // swelling potion
-      // cure for boils
-      // swelling solution
    }
 }
