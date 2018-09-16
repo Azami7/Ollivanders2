@@ -1,7 +1,6 @@
 package net.pottercraft.Ollivanders2.Effect;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Player.O2Player;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

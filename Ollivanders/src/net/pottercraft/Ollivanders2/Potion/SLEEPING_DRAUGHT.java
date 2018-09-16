@@ -15,6 +15,11 @@ import org.bukkit.entity.Player;
  */
 public class SLEEPING_DRAUGHT extends O2Potion
 {
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    */
    public SLEEPING_DRAUGHT (Ollivanders2 plugin)
    {
       super(plugin);
