@@ -24,24 +24,21 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
    //
    // these should generally not be changed
    //
+   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
+
    /**
     * If the transfiguration has taken place or not.
     */
-   protected boolean isTransfigured = false;
+   private boolean isTransfigured = false;
 
    /**
     * A map of the transfigured blocks and their original types for use with revert()
     */
-   protected HashMap<Block, Material> originalBlocks = new HashMap<>();
+   private HashMap<Block, Material> originalBlocks = new HashMap<>();
 
    //
    // these should be set by each spell as needed
    //
-   /**
-    * The branch of magic this spell is - most likely Charms or Transfiguration
-    */
-   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
-
    /**
     * If this is populated, any material type key will be changed to the value
     */
@@ -50,7 +47,7 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
    /**
     * The material type to change this block to.
     */
-   protected Material transfigureType = Material.AIR;
+   Material transfigureType = Material.AIR;
 
    /**
     * Whether this transfiguration permanent or not.  Usually for Charms it is false and for Transfiguration it is true.
@@ -65,52 +62,43 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
    /**
     * Allows spell variants to change the radius of the spell.
     */
-   protected double radiusModifier = 1.0;
+   double radiusModifier = 1.0;
 
    /**
     * If this is not permanent, how long it should last.
     */
+   int spellDuration = 1200;
 
-   protected int spellDuration = 1200;
    /**
     * Allows spell variants to change the duration of this spell.
     */
-   protected double durationModifier = 1.0;
-
-   /**
-    * The current duration of this spell.
-    */
-   protected int lifeTicks = 0;
+   double durationModifier = 1.0;
 
    /**
     * A blacklist of Material types that will not be affected by this spell.  Only used if the whitelist is empty.
     */
-   protected List<Material> materialBlacklist = new ArrayList<>();
+   List<Material> materialBlacklist = new ArrayList<>();
 
    /**
     * A whitelist of Material types that will be affected by this spell.
     */
-   protected List<Material> materialWhitelist = new ArrayList<>();
+   List<Material> materialWhitelist = new ArrayList<>();
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BlockTransfigurationSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   public BlockTransfigurationSuper () { }
 
    /**
-    * Constructor for casting a transfiguration spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public BlockTransfigurationSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public BlockTransfigurationSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       branch = O2MagicBranch.TRANSFIGURATION;
 
@@ -212,10 +200,10 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
    /**
     * Determines if this block can be changed by this Transfiguration spell.
     *
-    * @param b
+    * @param b the block to check
     * @return true if the block can be changed, false otherwise.
     */
-   protected boolean canTransfigure (Block b)
+   private boolean canTransfigure (Block b)
    {
       // get block type
       Material m = b.getType();

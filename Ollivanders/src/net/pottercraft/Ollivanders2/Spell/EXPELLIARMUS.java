@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -19,32 +20,33 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public final class EXPELLIARMUS extends Charms
 {
+   public O2SpellType spellType = O2SpellType.EXPELLIARMUS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Disarming Charm");
+      add("They made the most of the last few hours in which they were allowed to do magic before the holidays... and practised disarming each other by magic. Harry was getting very good at it.");
+      add("A handy (even life-saving) spell for removing an object from an enemy’s grasp.");
+      add("\"Expelliarmus is a useful spell, Harry, but the Death Eaters seem to think it is your signature move, and I urge you not to let it become so!” -Remus Lupin");
+      add("The Disarming Charm lies at the heart of a good duelling technique. It allows the duelist to rebound an opponent's spell in the hope that the rebounded spell will strike the opponent and leave him or her vulnerable to further attack.");
+   }};
+
+   protected String text = "Item held by an entity is flung a distance.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EXPELLIARMUS (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Disarming Charm");
-      flavorText.add("They made the most of the last few hours in which they were allowed to do magic before the holidays... and practised disarming each other by magic. Harry was getting very good at it.");
-      flavorText.add("A handy (even life-saving) spell for removing an object from an enemy’s grasp.");
-      flavorText.add("\"Expelliarmus is a useful spell, Harry, but the Death Eaters seem to think it is your signature move, and I urge you not to let it become so!” -Remus Lupin");
-      flavorText.add("The Disarming Charm lies at the heart of a good duelling technique. It allows the duelist to rebound an opponent's spell in the hope that the rebounded spell will strike the opponent and leave him or her vulnerable to further attack.");
-      text = "Item held by an entity is flung a distance.";
-   }
+   public EXPELLIARMUS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public EXPELLIARMUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public EXPELLIARMUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

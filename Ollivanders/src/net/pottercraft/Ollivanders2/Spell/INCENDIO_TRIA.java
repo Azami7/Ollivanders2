@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import java.util.ArrayList;
+
 /**
  * Creates a larger incendio that strafes and has 4x the radius and duration.
  *
@@ -13,29 +15,30 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class INCENDIO_TRIA extends IncendioSuper
 {
+   public O2SpellType spellType = O2SpellType.INCENDIO_TRIA;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"Incendio!\" said Mr Weasley, pointing his wand at the hole in the wall behind him. Flames rose at once in the fireplace, crackling merrily as though they had been burning for hours.");
+      add("The Strongest Fire-Making Charm");
+   }};
+
+   protected String text = "Incendio Tria will burn blocks and entities it passes by. It's radius is four times that of Incendio and it's duration one quarter.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCENDIO_TRIA (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("\"Incendio!\" said Mr Weasley, pointing his wand at the hole in the wall behind him. Flames rose at once in the fireplace, crackling merrily as though they had been burning for hours.");
-      flavorText.add("The Strongest Fire-Making Charm");
-      text = "Incendio Tria will burn blocks and entities it passes by. It's radius is four times that of Incendio and it's duration one quarter.";
-   }
+   public INCENDIO_TRIA () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public INCENDIO_TRIA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public INCENDIO_TRIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       location.add(vector.multiply(2));
       strafe = true;
       radius = 2;

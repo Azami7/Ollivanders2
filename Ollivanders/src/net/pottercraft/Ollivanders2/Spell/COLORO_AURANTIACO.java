@@ -6,37 +6,31 @@ import org.bukkit.entity.Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Created by Azami7 on 6/30/17.
- *
  * Target sheep or colored block turns orange.
  *
  * @author Azami7
  */
 public final class COLORO_AURANTIACO extends ColoroSuper
 {
+   public O2SpellType spellType = O2SpellType.COLORO_AURANTIACO;
+   protected String text = "Turns target colorable entity or block orange.";
+
+   DyeColor color = DyeColor.ORANGE;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_AURANTIACO (O2SpellType type)
-   {
-      super(type);
-
-      text = "Turns target colorable entity or block orange.";
-   }
+   public COLORO_AURANTIACO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public COLORO_AURANTIACO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public COLORO_AURANTIACO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
-
-      //set color orange
-      color = DyeColor.ORANGE;
+      super(plugin, player, rightWand);
    }
 }

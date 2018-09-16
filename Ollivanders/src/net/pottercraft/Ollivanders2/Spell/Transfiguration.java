@@ -1,6 +1,5 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
@@ -34,28 +33,23 @@ public abstract class Transfiguration extends SpellProjectile implements Spell, 
    private int timeMultiplier = 1200;
 
    protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;;
-   protected ArrayList<String> flavorText = new ArrayList<>();
-   protected String text = "";
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Transfiguration (O2SpellType type)
-   {
-      super(type);
-   }
+   public Transfiguration () { }
 
    /**
-    * Constructor for casting a transfiguration spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public Transfiguration (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public Transfiguration (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
+
       hasTransfigured = false;
    }
 
@@ -153,12 +147,11 @@ public abstract class Transfiguration extends SpellProjectile implements Spell, 
                }
                if (fromEType.equals(EntityType.DROPPED_ITEM))
                {
-                  return (Entity) e.getWorld().dropItemNaturally(e.getLocation(), fromStack);
+                  return e.getWorld().dropItemNaturally(e.getLocation(), fromStack);
                }
                if (fromEType.equals(EntityType.FALLING_BLOCK))
                {
-                  //return (Entity) e.getWorld().spawnFallingBlock(e.getLocation(), fromStack.getType(), (byte) 0);
-                  return (Entity) e.getWorld().spawnFallingBlock(e.getLocation(), fromStack.getData().clone());
+                  return e.getWorld().spawnFallingBlock(e.getLocation(), fromStack.getData().clone());
                }
                else
                {
@@ -171,7 +164,7 @@ public abstract class Transfiguration extends SpellProjectile implements Spell, 
       {
          if (fromEType.equals(EntityType.DROPPED_ITEM))
          {
-            return (Entity) location.getWorld().dropItemNaturally(location, fromStack);
+            return location.getWorld().dropItemNaturally(location, fromStack);
          }
          else
          {
@@ -245,31 +238,5 @@ public abstract class Transfiguration extends SpellProjectile implements Spell, 
    public void setTimeMultiplier (int mult)
    {
       timeMultiplier = mult;
-   }
-
-   @Override
-   public String getText ()
-   {
-      return text;
-   }
-
-   @Override
-   public String getFlavorText()
-   {
-      if (flavorText.size() < 1)
-      {
-         return null;
-      }
-      else
-      {
-         int index = Math.abs(Ollivanders2.random.nextInt() % flavorText.size());
-         return flavorText.get(index);
-      }
-   }
-
-   @Override
-   public O2MagicBranch getMagicBranch ()
-   {
-      return branch;
    }
 }

@@ -8,6 +8,8 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Transfigures entity into a rabbit.
  *
@@ -17,29 +19,29 @@ import org.bukkit.entity.Player;
  */
 public final class LAPIFORS extends FriendlyMobDisguiseSuper
 {
+   public O2SpellType spellType = O2SpellType.LAPIFORS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
+   }};
+
+   protected String text = "The transfiguration spell Lapifors will transfigure an entity into a rabbit.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LAPIFORS (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
-
-      text = "The transfiguration spell Lapifors will transfigure an entity into a rabbit.";
-   }
+   public LAPIFORS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public LAPIFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public LAPIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       targetType = EntityType.RABBIT;
       disguiseType = DisguiseType.getType(targetType);
@@ -48,35 +50,6 @@ public final class LAPIFORS extends FriendlyMobDisguiseSuper
       RabbitWatcher watcher = (RabbitWatcher)disguise.getWatcher();
       watcher.setAdult();
 
-      watcher.setType(LAPIFORS.getRandomRabbitType());
-   }
-
-   /**
-    * Get a random rabbit type. Odds are 1/60 to get a Killer Bunny.
-    *
-    * @return
-    */
-   public static RabbitType getRandomRabbitType ()
-   {
-      RabbitType type;
-
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 61);
-
-      if (rand < 10)
-         type = RabbitType.BROWN;
-      else if (rand < 20)
-         type = RabbitType.BLACK;
-      else if (rand < 30)
-         type = RabbitType.WHITE;
-      else if (rand < 40)
-         type = RabbitType.GOLD;
-      else if (rand < 50)
-         type = RabbitType.PATCHES;
-      else if (rand < 60)
-         type = RabbitType.PEPPER;
-      else
-         type = RabbitType.KILLER_BUNNY;
-
-      return type;
+      watcher.setType(p.common.randomRabbitType());
    }
 }

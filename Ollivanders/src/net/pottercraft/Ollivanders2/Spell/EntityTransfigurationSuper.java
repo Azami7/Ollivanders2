@@ -25,7 +25,7 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    /**
     * If the transfiguration has taken place or not.
     */
-   protected boolean isTransfigured = false;
+   boolean isTransfigured = false;
 
    //
    // these should be set by each spell as needed
@@ -58,17 +58,12 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    /**
     * If this is not permanent, how long it should last.
     */
-   protected int spellDuration = 120;
+   int spellDuration = 120;
 
    /**
     * Allows spell variants to change the duration of this spell.
     */
-   protected double durationModifier = 1.0;
-
-   /**
-    * The current duration of this spell.
-    */
-   protected int lifeTicks = 0;
+   private double durationModifier = 1.0;
 
    /**
     * The percent chance this spell will succeed each casting.
@@ -78,37 +73,33 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    /**
     * A blacklist of Entity types that will not be affected by this spell.  Only used if the whitelist is empty.
     */
-   protected List<EntityType> entityBlacklist = new ArrayList<>();
+   List<EntityType> entityBlacklist = new ArrayList<>();
 
    /**
     * A whitelist of Entity types that will be affected by this spell.
     */
-   protected List<EntityType> entityWhitelist = new ArrayList<>();
+   List<EntityType> entityWhitelist = new ArrayList<>();
 
    /**
     * A class for checking WorldGuard permissions
     */
-   protected Ollivanders2WorldGuard worldGuard;
+   Ollivanders2WorldGuard worldGuard;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EntityTransfigurationSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   public EntityTransfigurationSuper () { }
 
    /**
-    * Constructor
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public EntityTransfigurationSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public EntityTransfigurationSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       entityBlacklist.add(EntityType.AREA_EFFECT_CLOUD);
       entityBlacklist.add(EntityType.COMPLEX_PART);
@@ -187,7 +178,7 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
     * Transfigure the target living entity. Will not change the entity if it is on the entityBlacklist list or
     * if the target entity is already the transfigure type.
     *
-    * @param entity
+    * @param entity the entity to transfigure
     */
    protected void transfigure (Entity entity)
    {
@@ -213,7 +204,7 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
     * Determine if this entity can be transfigured by this spell. This must be overridden by child classes or
     * it will fail all transfigurations.
     *
-    * @param e
+    * @param e the entity to check
     * @return true if the entity can be transfigured, false otherwise.
     */
    protected boolean canTransfigure (Entity e)
@@ -224,7 +215,7 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    /**
     * Transfigures entity into new EntityType.
     *
-    * @param entity
+    * @param entity the entity to transfigure
     */
    protected void transfigureEntity (Entity entity)
    {
@@ -233,7 +224,7 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    /**
     * Determines if this entity can be changed by this Transfiguration spell.
     *
-    * @param e
+    * @param e the entity to check
     * @return true if the entity can be changed, false otherwise.
     */
    protected boolean targetTypeCheck (Entity e)

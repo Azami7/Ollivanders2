@@ -3,6 +3,8 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Glacius Duo has the same effect as Glacius but with 2x the duration and radius.
  *
@@ -11,29 +13,31 @@ import org.bukkit.entity.Player;
  */
 public final class GLACIUS_DUO extends GlaciusSuper
 {
+   public O2SpellType spellType = O2SpellType.APARECIUM;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("A Stronger Freezing Charm");
+      add("\"It's about preparing ourselves ...for what's waiting for us out there.\" -Hermione Granger");
+   }};
+
+   protected String text = "Glacius Duo will freeze blocks in a radius twice that of glacius, but for half the time.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GLACIUS_DUO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("A Stronger Freezing Charm");
-      flavorText.add("\"It's about preparing ourselves ...for what's waiting for us out there.\" -Hermione Granger");
-      text = "Glacius Duo will freeze blocks in a radius twice that of glacius, but for half the time.";
-   }
+   public GLACIUS_DUO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public GLACIUS_DUO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public GLACIUS_DUO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
+
       // 50% duration
       durationModifier = 0.5;
       // 2x radius

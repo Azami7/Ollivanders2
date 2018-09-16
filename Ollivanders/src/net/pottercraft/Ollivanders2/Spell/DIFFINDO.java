@@ -18,30 +18,31 @@ import org.bukkit.inventory.PlayerInventory;
  */
 public final class DIFFINDO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.DIFFINDO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Severing Charm");
+      add("With the Severing Charm, cutting or tearing objects is a simple matter of wand control.");
+      add("The spell can be quite precise in skilled hands, and the Severing Charm is widely used in a variety of wizarding trades.");
+   }};
+
+   protected String text = "Breaks logs in a radius or drops items from a player’s inventory.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DIFFINDO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Severing Charm");
-      flavorText.add("With the Severing Charm, cutting or tearing objects is a simple matter of wand control.");
-      flavorText.add("The spell can be quite precise in skilled hands, and the Severing Charm is widely used in a variety of wizarding trades.");
-      text = "Breaks logs in a radius or drops items from a player’s inventory.";
-   }
+   public DIFFINDO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public DIFFINDO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public DIFFINDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

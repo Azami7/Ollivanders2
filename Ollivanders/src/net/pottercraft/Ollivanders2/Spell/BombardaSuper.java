@@ -15,14 +15,18 @@ public abstract class BombardaSuper extends Charms
 {
    double strength;
 
-   public BombardaSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   public BombardaSuper () { }
 
-   public BombardaSuper (Ollivanders2 p, Player player, O2SpellType type, Double rightWand)
+   /**
+    * Constructor.
+    *
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
+    */
+   public BombardaSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(p, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

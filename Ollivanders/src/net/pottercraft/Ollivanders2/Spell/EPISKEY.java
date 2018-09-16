@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+
 /**
  * Gives an entity a healing effect for usesModifier seconds
  *
@@ -15,29 +17,30 @@ import org.bukkit.potion.PotionEffectType;
  */
 public final class EPISKEY extends Healing
 {
+   public O2SpellType spellType = O2SpellType.EPISKEY;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"Episkey,\" said Tonks. Harry's nose felt very hot, then very cold. He raised a hand and felt it gingerly. It seemed to be mended.");
+      add("A minor healing spell.");
+   }};
+
+   protected String text = "Episkey will heal minor injuries.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EPISKEY (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("\"Episkey,\" said Tonks. Harry's nose felt very hot, then very cold. He raised a hand and felt it gingerly. It seemed to be mended.");
-      flavorText.add("A minor healing spell.");
-      text = "Episkey will heal minor injuries.";
-   }
+   public EPISKEY () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public EPISKEY (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public EPISKEY (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

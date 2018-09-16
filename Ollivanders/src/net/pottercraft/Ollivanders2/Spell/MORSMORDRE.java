@@ -16,31 +16,31 @@ import java.util.ArrayList;
  */
 public final class MORSMORDRE extends PyrotechniaSuper
 {
+   protected O2MagicBranch branch = O2MagicBranch.DARK_ARTS;
+   public O2SpellType spellType = O2SpellType.MORSMORDRE;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"Should the Dark Mark appear over any dwelling place or other  building, DO NOT ENTER, but contact the Auror office immediately.\" -Ministry of Magic");
+      add("Then he realised it was a colossal skull, comprised of what looked like emerald stars, with a serpent protruding from its mouth like a tongue. As they watched, it rose higher and higher, blazing in a haze of greenish smoke, etched against the black sky like a new constellation.");
+   }};
+
+   protected String text = "Conjures the Dark Mark in the sky.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MORSMORDRE (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("\"Should the Dark Mark appear over any dwelling place or other  building, DO NOT ENTER, but contact the Auror office immediately.\" -Ministry of Magic");
-      flavorText.add("Then he realised it was a colossal skull, comprised of what looked like emerald stars, with a serpent protruding from its mouth like a tongue. As they watched, it rose higher and higher, blazing in a haze of greenish smoke, etched against the black sky like a new constellation.");
-
-      text = "Conjures the Dark Mark in the sky.";
-      branch = O2MagicBranch.DARK_ARTS;
-   }
+   public MORSMORDRE () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public MORSMORDRE (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public MORSMORDRE (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       branch = O2MagicBranch.DARK_ARTS;
 
       fireworkColors = new ArrayList<>();

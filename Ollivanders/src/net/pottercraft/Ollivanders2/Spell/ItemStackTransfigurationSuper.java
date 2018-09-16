@@ -10,27 +10,23 @@ import org.bukkit.entity.Player;
  * @see BlockTransfigurationSuper
  * @author Azami7
  */
-public class ItemStackTransfigurationSuper extends BlockTransfigurationSuper
+public abstract class ItemStackTransfigurationSuper extends BlockTransfigurationSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ItemStackTransfigurationSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   public ItemStackTransfigurationSuper () { }
 
    /**
-    * Constructor for casting a transfiguration spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public ItemStackTransfigurationSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public ItemStackTransfigurationSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       permanent = true;
       radius = 1;

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -18,28 +19,30 @@ import org.bukkit.potion.PotionEffectType;
  */
 public final class IMPEDIMENTA extends DarkArts
 {
+   public O2SpellType spellType = O2SpellType.IMPEDIMENTA;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal.");
+      add("\"I like the look of this one, this Impediment Jinx. Should slow down anything that’s trying to attack you, Harry. We’ll start with that one.\" -Hermione Granger");
+   }};
+
+   protected String text = "Slows target movements.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public IMPEDIMENTA (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal.");
-      flavorText.add("\"I like the look of this one, this Impediment Jinx. Should slow down anything that’s trying to attack you, Harry. We’ll start with that one.\" -Hermione Granger");
-   }
+   public IMPEDIMENTA () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public IMPEDIMENTA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public IMPEDIMENTA (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

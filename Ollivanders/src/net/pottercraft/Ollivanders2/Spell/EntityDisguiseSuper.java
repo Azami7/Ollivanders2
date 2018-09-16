@@ -23,22 +23,18 @@ public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EntityDisguiseSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   public EntityDisguiseSuper () { }
 
    /**
     * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public EntityDisguiseSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public EntityDisguiseSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super (plugin, player, type, rightWand);
+      super (plugin, player, rightWand);
 
       worldGuard = new Ollivanders2WorldGuard(plugin);
       permanent = false;
@@ -47,7 +43,7 @@ public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
    /**
     * Transfigure the entity.
     *
-    * @param entity
+    * @param entity the entity to transfigure
     */
    @Override
    protected void transfigureEntity (Entity entity)
@@ -67,14 +63,12 @@ public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
     * 4. The entity is not already the target type
     * 5. There are no WorldGuard permissions preventing the caster from altering this entity type
     *
-    * @param e
+    * @param e the entity to check
     * @return true if it can be changed
     */
    @Override
    protected boolean canTransfigure (Entity e)
    {
-      EntityType eType = e.getType();
-
       if (Ollivanders2.debug)
          p.getLogger().info("canTransfigure: " + e.getType().toString());
 

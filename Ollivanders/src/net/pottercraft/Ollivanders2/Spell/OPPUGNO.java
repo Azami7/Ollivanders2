@@ -7,6 +7,8 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import java.util.ArrayList;
+
 /**
  * All animals that you have created through transfiguration will target the targeted LivingEntity.
  *
@@ -15,29 +17,30 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class OPPUGNO extends DarkArts
 {
+   public O2SpellType spellType = O2SpellType.OPPUGNO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("Harry spun around to see Hermione pointing her wand at Ron, her expression wild: The little flock of birds was speeding like a hail of fat golden bullets toward Ron, who yelped and covered his face with his hands, but the birds attacked, pecking and clawing at every bit of flesh they could reach.");
+      add("The Oppugno Jinx");
+   }};
+
+   protected String text = "Oppugno will cause any entities transfigured by you to attack the targeted entity.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public OPPUGNO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("Harry spun around to see Hermione pointing her wand at Ron, her expression wild: The little flock of birds was speeding like a hail of fat golden bullets toward Ron, who yelped and covered his face with his hands, but the birds attacked, pecking and clawing at every bit of flesh they could reach.");
-      flavorText.add("The Oppugno Jinx");
-      text = "Oppugno will cause any entities transfigured by you to attack the targeted entity.";
-   }
+   public OPPUGNO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public OPPUGNO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public OPPUGNO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

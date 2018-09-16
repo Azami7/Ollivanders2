@@ -19,31 +19,29 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class VOLATUS extends Charms
 {
+   public O2SpellType spellType = O2SpellType.VOLATUS;
+
+   protected String text = "Volatus is used to enchant a broomstick for flight. "
+         + "To make a magical broomstick, you must first craft a broomstick.  This recipe requires two sticks and a wheat. "
+         + "Place the first stick in the upper-right corner, the next stick in the center, and the wheat in the lower-left. "
+         + "Once you have a broomstick, place it in the ground in front of you and cast the spell Volatus at it. "
+         + "Your experience with this spell determines how fast the broomstick can go.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VOLATUS (O2SpellType type)
-   {
-      super(type);
-
-      text = "Volatus is used to enchant a broomstick for flight. "
-            + "To make a magical broomstick, you must first craft a broomstick.  This recipe requires two sticks and a wheat."
-            + "Place the first stick in the upper-right corner, the next stick in the center, and the wheat in the lower-left. "
-            + "Once you have a broomstick, place it in the ground in front of you and cast the spell Volatus at it. "
-            + "Your experience with this spell determines how fast the broomstick can go.";
-   }
+   public VOLATUS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public VOLATUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public VOLATUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

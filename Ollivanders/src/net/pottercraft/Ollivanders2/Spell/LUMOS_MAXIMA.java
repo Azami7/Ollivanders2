@@ -5,6 +5,8 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Creates a glowstone at the reticule that goes away after a time.
  *
@@ -12,30 +14,31 @@ import org.bukkit.entity.Player;
  */
 public final class LUMOS_MAXIMA extends Charms
 {
+   public O2SpellType spellType = O2SpellType.LUMOS_MAXIMA;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"Light your wands, can’t you? And hurry, we have little time!\" -Griphook");
+   }};
+
+   protected String text = "Lumos Maxima will spawn a glowstone at the impact site.";
+
    boolean lit;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LUMOS_MAXIMA (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("\"Light your wands, can’t you? And hurry, we have little time!\" -Griphook");
-      text = "Lumos Maxima will spawn a glowstone at the impact site.";
-   }
+   public LUMOS_MAXIMA () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public LUMOS_MAXIMA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public LUMOS_MAXIMA (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       lit = false;
    }
 

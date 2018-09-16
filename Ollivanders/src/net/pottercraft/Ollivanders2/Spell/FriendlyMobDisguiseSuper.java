@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -16,49 +17,36 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FriendlyMobDisguiseSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   public FriendlyMobDisguiseSuper () { }
 
    /**
     * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public FriendlyMobDisguiseSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public FriendlyMobDisguiseSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
-      for (EntityType e :p.common.smallFriendlyAnimals)
-      {
-         entityWhitelist.add(e);
-      }
+      entityWhitelist.addAll(Ollivanders2Common.smallFriendlyAnimals);
 
       int uses = (int)(usesModifier * 5);
 
       if (uses > 100)
       {
-         for (EntityType e : p.common.mediumFriendlyAnimals)
-         {
-            entityWhitelist.add(e);
-         }
+         entityWhitelist.addAll(Ollivanders2Common.mediumFriendlyAnimals);
       }
 
       if (uses > 200)
       {
-         for (EntityType e : p.common.largeFriendlyAnimals)
-         {
-            entityWhitelist.add(e);
-         }
+         entityWhitelist.addAll(Ollivanders2Common.largeFriendlyAnimals);
       }
    }
 
    /**
-    * Check whether player has permissions to damage friendly mobs in their current location or in the
+    * Check whether player has permissions to damage friendly mobs in their current location and in the
     * target entity's location.
     *
     * @param e the target entity
@@ -67,17 +55,11 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
    @Override
    protected boolean wgPermissionsCheck(Entity e)
    {
-      if (worldGuard.checkWGFriendlyMobDamage(player, player.getLocation()))
+      if (worldGuard.checkWGFriendlyMobDamage(player, player.getLocation()) && worldGuard.checkWGFriendlyMobDamage(player, e.getLocation()))
       {
          return true;
       }
-      else if (worldGuard.checkWGFriendlyMobDamage(player, e.getLocation()))
-      {
-         return true;
-      }
-      else
-      {
-         return false;
-      }
+
+      return false;
    }
 }

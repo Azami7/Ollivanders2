@@ -17,30 +17,31 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class LUMOS_DUO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.LUMOS_DUO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("A variation of the Wand-Lighting Charm.");
+   }};
+
+   protected String text = "Creates a stream of flowstone to light your way.";
+
    private List<Block> line = new ArrayList();
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LUMOS_DUO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("A variation of the Wand-Lighting Charm.");
-      text = "Creates a stream of flowstone to light your way.";
-   }
+   public LUMOS_DUO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public LUMOS_DUO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public LUMOS_DUO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       lifeTicks = (int) (-(usesModifier * 20));
    }
 

@@ -20,22 +20,18 @@ public abstract class GlaciusSuper extends BlockTransfigurationSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GlaciusSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   public GlaciusSuper () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public GlaciusSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public GlaciusSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       if (usesModifier > 50)
       {
@@ -67,82 +63,4 @@ public abstract class GlaciusSuper extends BlockTransfigurationSuper
       materialWhitelist.add(Material.STATIONARY_LAVA);
       materialWhitelist.add(Material.ICE);
    }
-
-   /*
-   @Override
-   public void checkEffect ()
-   {
-      if (move)
-      {
-         move();
-         Block center = getBlock();
-         Material type = center.getType();
-         double radius = usesModifier * radiusModifier;
-         if (type != Material.AIR)
-         {
-            for (Block block : getBlocksInRadius(location, radius))
-            {
-               Material changeType = block.getType();
-               if (changeType == Material.FIRE)
-               {
-                  block.setType(Material.AIR);
-                  changed.add(block);
-               }
-               else if (changeType == Material.WATER || changeType == Material.STATIONARY_WATER)
-               {
-                  block.setType(Material.ICE);
-                  changed.add(block);
-               }
-               else if (changeType == Material.LAVA || changeType == Material.STATIONARY_LAVA)
-               {
-                  block.setType(Material.OBSIDIAN);
-                  changed.add(block);
-               }
-               else if (changeType == Material.ICE)
-               {
-                  block.setType(Material.PACKED_ICE);
-                  changed.add(block);
-               }
-            }
-            kill = false;
-            move = false;
-            lifeTicks = (int) (-(usesModifier * 1200 / strengthModifier));
-         }
-      }
-      else
-      {
-         lifeTicks++;
-      }
-      if (lifeTicks >= 159)
-      {
-         revert();
-         kill();
-      }
-   }
-
-   @Override
-   public void revert ()
-   {
-      for (Block block : changed)
-      {
-         Material mat = block.getType();
-         if (mat == Material.PACKED_ICE)
-         {
-            block.setType(Material.ICE);
-         }
-         else if (mat == Material.ICE)
-         {
-            block.setType(Material.STATIONARY_WATER);
-         }
-         else if (mat == Material.OBSIDIAN)
-         {
-            block.setType(Material.STATIONARY_LAVA);
-         }
-         else if (mat == Material.AIR)
-         {
-            block.setType(Material.FIRE);
-         }
-      }
-   }
-   */
 }
