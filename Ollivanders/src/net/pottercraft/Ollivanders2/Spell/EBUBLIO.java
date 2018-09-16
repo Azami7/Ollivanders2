@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+
 /**
  * Bubble head charm gives the player water breathing for a length of time depending on the player's spell level.
  *
@@ -15,30 +17,31 @@ import org.bukkit.potion.PotionEffectType;
  */
 public final class EBUBLIO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.EBUBLIO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Bubble-Head Charm");
+      add("Fleur Delacour, though she demonstrated excellent use of the Bubble-Head Charm, was attacked by grindylows as she approached her goal, and failed to retrieve her hostage.");
+      add("Cedric Diggory, who also used the Bubble-Head Charm, was first to return with his hostage, though he returned one minute outside the time limit of an hour.");
+   }};
+
+   protected String text = "Gives target player the ability to breathe underwater.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EBUBLIO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Bubble-Head Charm");
-      flavorText.add("Fleur Delacour, though she demonstrated excellent use of the Bubble-Head Charm, was attacked by grindylows as she approached her goal, and failed to retrieve her hostage.");
-      flavorText.add("Cedric Diggory, who also used the Bubble-Head Charm, was first to return with his hostage, though he returned one minute outside the time limit of an hour.");
-      text = "Gives target player the ability to breathe underwater.";
-   }
+   public EBUBLIO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public EBUBLIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public EBUBLIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

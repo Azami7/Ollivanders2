@@ -34,6 +34,6 @@ public class SLEEP_SPEECH extends BABBLING
       }};
 
       permanent = true;
-      maxWords = 2;
+      maxWords = 1;
    }
 }

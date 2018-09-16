@@ -21,28 +21,29 @@ import org.bukkit.material.MaterialData;
  */
 public final class HERBIVICUS extends Herbology
 {
+   public O2SpellType spellType = O2SpellType.HERBIVICUS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Plant-Growing Charm");
+   }};
+
+   protected String text = "Herbivicus causes crops within a radius to grow.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public HERBIVICUS (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Plant-Growing Charm");
-      text = "Herbivicus causes crops within a radius to grow.";
-   }
+   public HERBIVICUS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public HERBIVICUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public HERBIVICUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

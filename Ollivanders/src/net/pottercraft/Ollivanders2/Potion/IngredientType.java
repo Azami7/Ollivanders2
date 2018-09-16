@@ -29,6 +29,7 @@ public enum IngredientType
    HORNED_SLUG_MUCUS (Material.SLIME_BALL, (short)0, "Horned Slug Mucus"),
    INFUSION_OF_WORMWOOD (Material.POTION, (short)5, "Infusion of Wormwood"),
    JOBBERKNOLL_FEATHER (Material.FEATHER, (short)0, "Jobberknoll Feather"),
+   LAVENDER_SPRIG (Material.DOUBLE_PLANT, (short)1, "Lavender Sprig"), //lilac
    LETHE_RIVER_WATER (Material.POTION, (short)0, "Lethe River Water"), //bottle of water
    LIONFISH_SPINES (Material.RAW_FISH, (short)0, "Lionfish Spines"),
    MANDRAKE_LEAF (Material.WATER_LILY, (short)0, "Mandrake Leaf"),

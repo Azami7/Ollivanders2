@@ -21,46 +21,49 @@ public abstract class GaleatiSuper extends Charms
 {
    Material materialType = Material.AIR;
 
+   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GaleatiSuper (O2SpellType type)
-   {
-      super(type);
-
-      branch = O2MagicBranch.TRANSFIGURATION;
-   }
+   public GaleatiSuper () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public GaleatiSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public GaleatiSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()
    {
       move();
+
       for (LivingEntity live : getLivingEntities(2))
       {
-         EntityEquipment ee = live.getEquipment();
-         ItemStack helmet = ee.getHelmet();
-         if (helmet != null)
+         if (live instanceof Player)
          {
-            if (helmet.getType() != Material.AIR)
+            if (live.getUniqueId() == player.getUniqueId())
+               continue;
+
+            EntityEquipment ee = live.getEquipment();
+            ItemStack helmet = ee.getHelmet();
+            if (helmet != null)
             {
-               live.getWorld().dropItem(live.getEyeLocation(), helmet);
+               if (helmet.getType() != Material.AIR)
+               {
+                  live.getWorld().dropItem(live.getEyeLocation(), helmet);
+               }
             }
+            ee.setHelmet(new ItemStack(materialType, 1));
+            kill();
+            return;
          }
-         ee.setHelmet(new ItemStack(materialType, 1));
-         kill();
-         return;
       }
    }
 }

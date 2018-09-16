@@ -5,6 +5,8 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * The Softening Charm (Spongify) is a spell that softens a target area or object, making it rubbery and bouncy.
  *
@@ -15,29 +17,29 @@ import org.bukkit.entity.Player;
  */
 public class SPONGIFY extends BlockTransfigurationSuper
 {
+   public O2SpellType spellType = O2SpellType.SPONGIFY;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"Today's lesson will most assuredly involve learning how to cast the Softening Charm, Spongify.\" -Filius Flitwick");
+      add("The Softening Charm");
+   }};
+
+   protected String text = "Turns the blocks in a radius in to slime blocks.";
+
    protected O2MagicBranch branch = O2MagicBranch.CHARMS;
 
-   public SPONGIFY (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("\"Today's lesson will most assuredly involve learning how to cast the Softening Charm, Spongify.\" -Filius Flitwick");
-      flavorText.add("The Softening Charm");
-
-      text = "Turns the blocks in a radius in to slime blocks.";
-   }
+   public SPONGIFY () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public SPONGIFY (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public SPONGIFY (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       transfigureType = Material.SLIME_BLOCK;
       spellDuration = (int)(1200 * usesModifier);

@@ -6,6 +6,8 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Creates an explosion of magnitude depending on the spell level which destroys blocks and sets fires.
  *
@@ -14,30 +16,30 @@ import org.bukkit.entity.Player;
  */
 public final class REDUCTO extends DarkArts
 {
+   public O2SpellType spellType = O2SpellType.REDUCTO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Reductor Curse");
+      add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
+   }};
+
+   protected String text = "Reducto creates an explosion which will damage the terrain.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REDUCTO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Reductor Curse");
-      flavorText.add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
-
-      text = "Reducto creates an explosion which will damage the terrain.";
-   }
+   public REDUCTO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public REDUCTO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public REDUCTO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

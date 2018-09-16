@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -17,30 +18,32 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class AVADA_KEDAVRA extends DarkArts
 {
+   public O2SpellType spellType = O2SpellType.AVADA_KEDAVRA;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Killing Curse");
+      add("There was a flash of blinding green light and a rushing sound, as though a vast, invisible something was soaring through the air — instantaneously the spider rolled over onto its back, unmarked, but unmistakably dead");
+      add("\"Yes, the last and worst. Avada Kedavra. ...the Killing Curse.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
+   }};
+
+   protected String text = "Cause direct damage to a living thing, possibly killing it.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AVADA_KEDAVRA (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Killing Curse");
-      flavorText.add("There was a flash of blinding green light and a rushing sound, as though a vast, invisible something was soaring through the air — instantaneously the spider rolled over onto its back, unmarked, but unmistakably dead");
-      flavorText.add("\"Yes, the last and worst. Avada Kedavra. ...the Killing Curse.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
-      text = "Cause direct damage to a living thing, possibly killing it.";
-   }
+   public AVADA_KEDAVRA () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param name
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public AVADA_KEDAVRA (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public AVADA_KEDAVRA (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, rightWand);
+
       moveEffectData = Material.MELON_BLOCK;
    }
 

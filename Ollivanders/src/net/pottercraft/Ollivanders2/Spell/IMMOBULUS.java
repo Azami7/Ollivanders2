@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.LivingEntity;
@@ -18,30 +19,31 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class IMMOBULUS extends Charms
 {
+   public O2SpellType spellType = O2SpellType.IMMOBULUS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Freezing Charm");
+      add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");
+      add("The Freezing Charm is a spell which immobilises living targets.");
+   }};
+
+   protected String text = "Renders entry unable to move for a time period.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public IMMOBULUS (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Freezing Charm");
-      flavorText.add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");
-      flavorText.add("The Freezing Charm is a spell which immobilises living targets.");
-      text = "Renders entry unable to move for a time period.";
-   }
+   public IMMOBULUS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public IMMOBULUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public IMMOBULUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

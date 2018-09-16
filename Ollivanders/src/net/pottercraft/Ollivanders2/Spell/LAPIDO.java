@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import java.util.ArrayList;
+
 /**
  * Created by Aazmi7 on 6/29/17. Imported from iarepandemonium/Ollivanders.
  *
@@ -15,28 +17,29 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class LAPIDO extends BlockTransfigurationSuper
 {
+   public O2SpellType spellType = O2SpellType.LAPIDO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("Cobblestone to Stone Spell");
+   }};
+
+   protected String text = "Turns cobblestone in to stone.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LAPIDO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("Cobblestone to Stone Spell");
-      text = "Turns cobblestone in to stone.";
-   }
+   public LAPIDO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public LAPIDO(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public LAPIDO(Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       transfigureType = Material.STONE;
       materialWhitelist.add(Material.COBBLESTONE);

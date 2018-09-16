@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
@@ -20,31 +21,32 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class FIENDFYRE extends DarkArts
 {
+   public O2SpellType spellType = O2SpellType.FIENDFYRE;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("It was not normal fire; Crabbe had used a curse of which Harry had no knowledge: As they turned a corner the flames chased them as though they were alive, sentient, intent upon killing them. ");
+      add("Bewitched Flame Curse");
+   }};
+
+   protected String text = "Fiendfyre is a hellish curse which summons a mix of magma cubes, blazes, and ghasts.";
+
    private double lifeTime;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FIENDFYRE (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("It was not normal fire; Crabbe had used a curse of which Harry had no knowledge: As they turned a corner the flames chased them as though they were alive, sentient, intent upon killing them. ");
-      flavorText.add("Bewitched Flame Curse");
-      text = "Fiendfyre is a hellish curse which summons a mix of magma cubes, blazes, and ghasts.";
-   }
+   public FIENDFYRE () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public FIENDFYRE (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public FIENDFYRE (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       lifeTime = usesModifier * 4;
    }
 

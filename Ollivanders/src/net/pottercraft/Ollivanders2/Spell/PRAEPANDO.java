@@ -14,28 +14,26 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class PRAEPANDO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.PRAEPANDO;
+
+   protected String text = "Praepando is a space-extension spell which allows you to create a pocket of extra-dimensional space at a location. "
+         + "Spells can travel from the extra-dimensional pocket through to the real-world, but cannot go the other way around.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PRAEPANDO (O2SpellType type)
-   {
-      super(type);
-
-      text = "Praepando is a space-extension spell which allows you to create a pocket of extra-dimensional space at a location. "
-            + "Spells can travel from the extra-dimensional pocket through to the real-world, but cannot go the other way around.";
-   }
+   public PRAEPANDO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public PRAEPANDO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public PRAEPANDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

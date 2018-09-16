@@ -11,27 +11,23 @@ import org.bukkit.entity.Player;
  * @since 2.2.6
  * @author Azami7
  */
-public class PlayerDisguiseSuper extends EntityDisguiseSuper
+public abstract class PlayerDisguiseSuper extends EntityDisguiseSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PlayerDisguiseSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   public PlayerDisguiseSuper () { }
 
    /**
     * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public PlayerDisguiseSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public PlayerDisguiseSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       entityWhitelist.add(EntityType.PLAYER);
 

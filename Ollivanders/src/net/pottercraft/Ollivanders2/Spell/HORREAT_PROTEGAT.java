@@ -16,28 +16,29 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class HORREAT_PROTEGAT extends Charms
 {
+   public O2SpellType spellType = O2SpellType.HORREAT_PROTEGAT;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Spell-Reduction Charm");
+   }};
+
+   protected String text = "Horreat Protegat will shrink a stationary spell's radius. Only the creator of the stationary spell can affect it with this spell.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public HORREAT_PROTEGAT (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Spell-Reduction Charm");
-      text = "Horreat Protegat will shrink a stationary spell's radius. Only the creator of the stationary spell can affect it with this spell.";
-   }
+   public HORREAT_PROTEGAT () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public HORREAT_PROTEGAT (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public HORREAT_PROTEGAT (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

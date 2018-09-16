@@ -5,6 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Breaks glass.
  *
@@ -12,27 +14,25 @@ import org.bukkit.entity.Player;
  */
 public final class FINESTRA extends Charms
 {
+   public O2SpellType spellType = O2SpellType.FINESTRA;
+
+   protected String text = "Breaks glass in a radius.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FINESTRA(O2SpellType type)
-   {
-      super(type);
-
-      text = "Breaks glass in a radius.";
-   }
+   public FINESTRA () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public FINESTRA(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public FINESTRA(Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

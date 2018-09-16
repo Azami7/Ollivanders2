@@ -3,6 +3,8 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Glacius Tria has the same effect as Glacius but with 4x the duration and radius.
  *
@@ -12,28 +14,30 @@ import org.bukkit.entity.Player;
  */
 public final class GLACIUS_TRIA extends GlaciusSuper
 {
+   public O2SpellType spellType = O2SpellType.GLACIUS_TRIA;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Strongest Freezing Charm");
+   }};
+
+   protected String text = "Glacius Tria will freeze blocks in a radius four times that of glacius, but for one quarter the time.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GLACIUS_TRIA (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Strongest Freezing Charm");
-      text = "Glacius Tria will freeze blocks in a radius four times that of glacius, but for one quarter the time.";
-   }
+   public GLACIUS_TRIA () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public GLACIUS_TRIA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public GLACIUS_TRIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
+
       //25% duration
       durationModifier = 0.25;
       //4x radius radius
