@@ -40,14 +40,24 @@ public class SLEEPING extends O2Effect
    {
       if (!sleeping)
       {
-         playerSleep();
+         if (p.players.playerEffects.hasEffect(targetID, O2EffectType.AWAKE))
+         {
+            kill();
+         }
+         else
+         {
+            playerSleep();
+         }
       }
    }
 
    @Override
    public void kill ()
    {
-      playerWake();
+      if (sleeping)
+      {
+         playerWake();
+      }
 
       kill = true;
    }
