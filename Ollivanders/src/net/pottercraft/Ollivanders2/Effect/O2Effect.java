@@ -13,28 +13,48 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public abstract class O2Effect
 {
-   public O2EffectType effectType;
+   /**
+    * The type this effect is. Set to babbling as a safe default.
+    */
+   public O2EffectType effectType = O2EffectType.BABBLING;
+
+   /**
+    * The number of game ticks this effect lasts. 24000 ticks is one MC day and should be ~20 real minutes.
+    */
    public Integer duration;
 
+   /**
+    * A callback to the MC plugin
+    */
    protected Ollivanders2 p;
+
+   /**
+    * Whether this effect should be killed next upkeep.
+    */
    protected boolean kill;
+
+   /**
+    * Whether this effect is permanent. Permanent effects do not age and can only be removed by explicitly killing them.
+    */
    protected boolean permanent = false;
+
+   /**
+    * The id of the player this effect affects.
+    */
    protected UUID targetID;
 
    /**
     * Constructor. If you change this method signature, be sure to update all reflection code that uses it.
     *
     * @param plugin a callback to the MC plugin
-    * @param effect the effect to add to this player
     * @param duration the length this effect should remain
     * @param pid the player this effect acts on
     */
-   public O2Effect (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   public O2Effect (Ollivanders2 plugin, Integer duration, UUID pid)
    {
       p = plugin;
 
       this.duration = duration;
-      effectType = effect;
       kill = false;
       targetID = pid;
    }
@@ -59,6 +79,18 @@ public abstract class O2Effect
    public void kill ()
    {
       kill = true;
+   }
+
+   /**
+    * Get the id of the player affected by this effect.
+    *
+    * @return the id of the player
+    */
+   public UUID getTargetID ()
+   {
+      UUID pid = new UUID(targetID.getMostSignificantBits(), targetID.getLeastSignificantBits());
+
+      return pid;
    }
 
    /**

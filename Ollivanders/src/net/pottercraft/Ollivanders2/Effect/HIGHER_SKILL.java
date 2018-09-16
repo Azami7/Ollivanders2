@@ -5,23 +5,24 @@ import java.util.UUID;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Makes book learning more effective.
+ * Makes player's effective experience (level) in skills higher while active.
  *
- * @author Azami7
+ * @since 1.0
  */
-public class WIT_SHARPENING_POTION extends O2Effect
+public class HIGHER_SKILL extends O2Effect
 {
    /**
     * Constructor
     *
     * @param plugin a callback to the MC plugin
-    * @param effect the effect cast
     * @param duration the duration of the effect
     * @param pid the ID of the player this effect acts on
     */
-   public WIT_SHARPENING_POTION(Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   public HIGHER_SKILL (Ollivanders2 plugin, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, pid);
+      super(plugin, duration, pid);
+
+      effectType = O2EffectType.HIGHER_SKILL;
    }
 
    /**

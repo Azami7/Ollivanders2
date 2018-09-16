@@ -1,11 +1,9 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Effect.FAST_LEARNING;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.ChatColor;
-import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -33,10 +31,8 @@ public final class MEMORY_POTION extends O2Potion
 
    public void drink (O2Player o2p, Player player)
    {
-      if (!extendEffect(o2p))
-      {
-         o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.MEMORY_POTION(p, O2EffectType.MEMORY_POTION, duration, player.getUniqueId()));
-      }
+      FAST_LEARNING effect = new FAST_LEARNING(p, duration, player.getUniqueId());
+      p.players.playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel more alert.");
    }

@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * Change the the player's speech to dog sounds.
+ * Sleep speech makes the player say "sleeping" sounds rather than talk.
  *
  * @author Azami7
  * @since 2.2.8
  */
-public class LYCANTHROPY_SPEECH extends BABBLING
+public class SLEEP_SPEECH extends BABBLING
 {
    /**
     * Constructor
@@ -20,20 +20,20 @@ public class LYCANTHROPY_SPEECH extends BABBLING
     * @param duration the duration of the effect
     * @param pid the ID of the player this effect acts on
     */
-   public LYCANTHROPY_SPEECH (Ollivanders2 plugin, Integer duration, UUID pid)
+   public SLEEP_SPEECH (Ollivanders2 plugin, Integer duration, UUID pid)
    {
       super(plugin, duration, pid);
 
-      effectType = O2EffectType.LYCANTHROPY_SPEECH;
+      effectType = O2EffectType.SLEEP_SPEECH;
 
       dictionary = new ArrayList<String>() {{
-         add("§oHOOOOOOWLLLLLL");
-         add("§obark bark bark bark");
-         add("§ogrowl");
-         add("§osnarl");
+         add("§ozzzzzzzz");
+         add("§osnore");
+         add("§oincoherent mumbling");
+         add("§ozzzz zzz zzzzzz");
       }};
 
       permanent = true;
-      maxWords = 3;
+      maxWords = 2;
    }
 }
