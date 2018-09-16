@@ -1,9 +1,9 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.FAST_LEARNING;
-import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
 /**
