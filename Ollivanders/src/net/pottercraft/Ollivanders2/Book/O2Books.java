@@ -7,12 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import net.pottercraft.Ollivanders2.Effect.WIT_SHARPENING_POTION;
+import net.pottercraft.Ollivanders2.Effect.IMPROVED_BOOK_LEARNING;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -211,17 +212,6 @@ public final class O2Books
          // if spell count is less than 25, learn this spell
          if (spellLevel < 25)
          {
-            // check to see if they have the Wit-Sharpening Potion effect
-            boolean witSharpening = false;
-            for (O2Effect effect : o2p.getEffects())
-            {
-               if (effect instanceof WIT_SHARPENING_POTION)
-               {
-                  witSharpening = true;
-                  break;
-               }
-            }
-
             if (spellEnum != null)
             {
                p.incSpellCount(player, spellEnum);
@@ -231,8 +221,8 @@ public final class O2Books
                p.incPotionCount(player, spell);
             }
 
-            // if they have the wit sharpening effect, increment it again
-            if (witSharpening)
+            // if they have the improved learning effect, increment it again
+            if (p.players.playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
             {
                if (spellEnum != null)
                   p.incSpellCount(player, spellEnum);

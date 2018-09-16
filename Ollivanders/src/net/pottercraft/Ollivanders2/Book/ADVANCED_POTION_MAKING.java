@@ -25,8 +25,8 @@ public class ADVANCED_POTION_MAKING extends O2Book
       branch = O2MagicBranch.POTIONS;
 
       potions.add(O2PotionType.MEMORY_POTION);
-
-      // draught of living death
+      potions.add(O2PotionType.WIGGENWELD_POTION);
+      potions.add(O2PotionType.DRAUGHT_OF_LIVING_DEATH);
       // elixir to induce euphoria
       // Hiccoughing Solution
       // Everlasting Elixirs

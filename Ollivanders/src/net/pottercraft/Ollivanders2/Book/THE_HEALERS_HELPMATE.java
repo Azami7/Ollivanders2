@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
@@ -24,5 +25,10 @@ public class THE_HEALERS_HELPMATE extends O2Book
       spells.add(O2SpellType.AGUAMENTI);
       spells.add(O2SpellType.BRACKIUM_EMENDO);
       spells.add(O2SpellType.EPISKEY);
+      potions.add(O2PotionType.ANTIDOTE_POTION);
+      // wound cleaning potion
+      // pepperup potion
+      // wideye potion
+      // burn healing paste
    }
 }

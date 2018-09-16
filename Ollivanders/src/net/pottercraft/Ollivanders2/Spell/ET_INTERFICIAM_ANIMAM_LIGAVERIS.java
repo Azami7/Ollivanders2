@@ -94,7 +94,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
                      tp.setY(tp.getY() + 1);
                      player.teleport(tp);
                      player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
-                     p.getO2Player(player).resetEffects();
+
                      p.stationarySpells.removeStationarySpell(stationary);
                      return;
                   }

@@ -26,6 +26,11 @@ public class O2Players
    private Map<UUID, O2Player> O2PlayerMap = new HashMap<>();
 
    /**
+    * Effects manager for player effects.
+    */
+   public PlayerEffects playerEffects;
+
+   /**
     * The MC plugin callback
     */
    private Ollivanders2 p;
@@ -33,19 +38,18 @@ public class O2Players
    /**
     * Labels for serializing player data
     */
-   private String nameLabel = "Name";
-   private String woodLabel = "Wood";
-   private String coreLabel = "Core";
-   private String soulsLabel = "Souls";
-   private String invisibleLabel = "Invisible";
-   private String inMuggletonLabel = "Muggleton";
-   private String foundWandLabel = "Found_Wand";
-   private String masterSpellLabel = "Master_Spell";
-   private String animagusLabel = "Animagus";
-   private String animagusColorLabel = "Animagus_Color";
-   private String muggleLabel = "Muggle";
-   private String yearLabel = "Year";
-   private String effectLabel = "Effect_";
+   private final String nameLabel = "Name";
+   private final String woodLabel = "Wood";
+   private final String coreLabel = "Core";
+   private final String soulsLabel = "Souls";
+   private final String invisibleLabel = "Invisible";
+   private final String inMuggletonLabel = "Muggleton";
+   private final String foundWandLabel = "Found_Wand";
+   private final String masterSpellLabel = "Master_Spell";
+   private final String animagusLabel = "Animagus";
+   private final String animagusColorLabel = "Animagus_Color";
+   private final String muggleLabel = "Muggle";
+   private final String yearLabel = "Year";
 
    /**
     * Constructor
@@ -55,6 +59,8 @@ public class O2Players
    public O2Players (Ollivanders2 plugin)
    {
       p = plugin;
+
+      playerEffects = new PlayerEffects(p);
    }
 
    /**
@@ -106,6 +112,11 @@ public class O2Players
    public O2Player getPlayer (UUID pid)
    {
       return O2PlayerMap.getOrDefault(pid, null);
+   }
+
+   public void removePlayer (UUID pid)
+   {
+      O2PlayerMap.remove(pid);
    }
 
    /**
@@ -275,11 +286,10 @@ public class O2Players
          /**
           * Effects
           */
-         Map<O2EffectType, Integer> effects = o2p.getJoinEffects();
-         for (Entry<O2EffectType, Integer> entry : effects.entrySet())
+         Map<String, String> effects = p.players.playerEffects.serializeEffects(pid);
+         for (Entry<String, String> entry : effects.entrySet())
          {
-            String label = effectLabel + entry.getKey().toString();
-            playerData.put(label, entry.getValue().toString());
+            playerData.put(entry.getKey(), entry.getValue());
          }
 
          /**
@@ -437,22 +447,9 @@ public class O2Players
                   o2p.setYear(O2PlayerCommon.intToYear(year));
                }
             }
-            else if (label.startsWith(effectLabel))
+            else if (label.startsWith(playerEffects.effectLabel))
             {
-               Integer duration = p.common.integerFromString(value);
-               String effectName = label.replaceFirst(effectLabel, "");
-               if (duration != null)
-               {
-                  try
-                  {
-                     O2EffectType effectType = O2EffectType.valueOf(effectName);
-                     o2p.addJoinEffect(effectType, duration);
-                  }
-                  catch (Exception ex)
-                  {
-                     p.getLogger().info("Failed to deserialize effect " + effectName);
-                  }
-               }
+               playerEffects.deserializeEffect(pid, label, value);
             }
             else
             {

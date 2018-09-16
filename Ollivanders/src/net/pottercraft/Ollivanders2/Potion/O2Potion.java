@@ -322,24 +322,4 @@ public abstract class O2Potion implements Teachable
    }
 
    public void drink (O2Player o2p, Player player) { }
-
-   /**
-    * Extends the effect time of this potion to the max duration if the player already has this effect active.
-    *
-    * @param o2p the target player
-    * @return true if the effect was extended, false if the effect was not found and extended
-    */
-   public boolean extendEffect (O2Player o2p)
-   {
-      for (O2Effect effect : o2p.getEffects())
-      {
-         if (effect instanceof net.pottercraft.Ollivanders2.Effect.WOLFSBANE_POTION)
-         {
-            effect.duration = duration;
-            return true;
-         }
-      }
-
-      return false;
-   }
 }

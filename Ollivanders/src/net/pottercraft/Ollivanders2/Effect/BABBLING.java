@@ -63,13 +63,14 @@ public class BABBLING extends O2Effect
     * Constructor
     *
     * @param plugin a callback to the MC plugin
-    * @param effect the effect cast
     * @param duration the duration of the effect
     * @param pid the ID of the player this effect acts on
     */
-   public BABBLING (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   public BABBLING (Ollivanders2 plugin, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, pid);
+      super(plugin, duration, pid);
+
+      effectType = O2EffectType.BABBLING;
    }
 
    /**

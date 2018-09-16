@@ -28,6 +28,7 @@ import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Player.O2Players;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
 import net.pottercraft.Ollivanders2.Potion.IngredientType;
+import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Potion.O2Potions;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
@@ -76,7 +77,7 @@ public class Ollivanders2 extends JavaPlugin
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
    public O2Houses houses;
-   private O2Players o2Players;
+   public O2Players players;
    public O2Books books;
    private O2Potions potions;
    public O2StationarySpells stationarySpells;
@@ -117,7 +118,7 @@ public class Ollivanders2 extends JavaPlugin
       stationarySpells.saveO2StationarySpells();
 
       houses.saveHouses();
-      o2Players.saveO2Players();
+      players.saveO2Players();
 
       getLogger().info(this + " is now disabled!");
    }
@@ -217,8 +218,8 @@ public class Ollivanders2 extends JavaPlugin
       // set up players
       try
       {
-         o2Players = new O2Players(this);
-         o2Players.loadO2Players();
+         players = new O2Players(this);
+         players.loadO2Players();
          playerCommon = new O2PlayerCommon(this);
       }
       catch (Exception e)
@@ -456,17 +457,17 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().info("Running playerSummary");
 
       Player player = getServer().getPlayer(sender.getName());
-      O2Player o2Player = o2Players.getPlayer(player.getUniqueId());
+      O2Player o2p = players.getPlayer(player.getUniqueId());
 
       String summary = "Ollivanders2 player summary:\n\n";
 
       // wand type
-      if (o2Player.foundWand())
+      if (o2p.foundWand())
       {
-         String wandlore = o2Player.getDestinedWandLore();
+         String wandlore = o2p.getDestinedWandLore();
          summary = summary + "\nWand Type: " + wandlore;
 
-         O2SpellType masterSpell = o2Player.getMasterSpell();
+         O2SpellType masterSpell = o2p.getMasterSpell();
          if (masterSpell != null)
          {
             summary = summary + "\nMaster Spell: " + common.enumRecode(masterSpell.toString().toLowerCase());
@@ -478,7 +479,7 @@ public class Ollivanders2 extends JavaPlugin
       // effects
       if (isOp(sender))
       {
-         List<O2Effect> effects = o2Player.getEffects();
+         List<O2EffectType> effects = players.playerEffects.getEffects(o2p.getID());
          summary = summary + "\nAffected by:\n";
 
          if (effects == null || effects.isEmpty())
@@ -487,9 +488,9 @@ public class Ollivanders2 extends JavaPlugin
          }
          else
          {
-            for (O2Effect effect : effects)
+            for (O2EffectType effectType : effects)
             {
-               summary = summary + effect.effectType.toString() + "\n";
+               summary = summary + effectType.toString() + "\n";
             }
          }
 
@@ -508,10 +509,10 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //year
-      summary = summary + "Year: " + O2PlayerCommon.yearToInt(o2Player.getYear()) + "\n";
+      summary = summary + "Year: " + O2PlayerCommon.yearToInt(o2p.getYear()) + "\n";
 
       // spells
-      Map<O2SpellType, Integer> spells = o2Player.getKnownSpells();
+      Map<O2SpellType, Integer> spells = o2p.getKnownSpells();
 
       if (spells.size() > 0)
       {
@@ -1091,9 +1092,9 @@ public class Ollivanders2 extends JavaPlugin
          }
 
          O2Player o2p = getO2Player((Player)sender);
-         if (o2p.hasEffect(effectType))
+         if (players.playerEffects.hasEffect(((Player) sender).getUniqueId(), effectType))
          {
-            o2p.removeEffect(effectType);
+            players.playerEffects.removeEffect(((Player) sender).getUniqueId(), effectType);
             sender.sendMessage(chatColor + "Removed " + effectName + " from " + sender + ".\n");
          }
          else
@@ -1104,7 +1105,7 @@ public class Ollivanders2 extends JavaPlugin
             O2Effect effect = null;
             try
             {
-               effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, O2EffectType.class, Integer.class, UUID.class).newInstance(this, effectType, 1200, ((Player) sender).getUniqueId());
+               effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(this, 1200, ((Player) sender).getUniqueId());
             }
             catch (Exception e)
             {
@@ -1113,7 +1114,7 @@ public class Ollivanders2 extends JavaPlugin
                return true;
             }
 
-            o2p.addEffect(effect);
+            players.playerEffects.addEffect(effect);
             sender.sendMessage(chatColor + "Added " + effectName + " to " + sender + ".\n");
          }
       }
@@ -1350,7 +1351,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public int getSpellNum (Player player, O2SpellType spell)
    {
-      O2Player o2p = o2Players.getPlayer(player.getUniqueId());
+      O2Player o2p = players.getPlayer(player.getUniqueId());
 
       return o2p.getSpellCount(spell);
    }
@@ -1365,11 +1366,11 @@ public class Ollivanders2 extends JavaPlugin
    public void setSpellNum (Player player, O2SpellType spell, int count)
    {
       UUID pid = player.getUniqueId();
-      O2Player o2p = o2Players.getPlayer(pid);
+      O2Player o2p = players.getPlayer(pid);
 
       o2p.setSpellCount(spell, count);
 
-      o2Players.updatePlayer(pid, o2p);
+      players.updatePlayer(pid, o2p);
    }
 
    /**
@@ -1383,10 +1384,10 @@ public class Ollivanders2 extends JavaPlugin
    {
       //returns the incremented spell count
       UUID pid = player.getUniqueId();
-      O2Player o2p = o2Players.getPlayer(pid);
+      O2Player o2p = players.getPlayer(pid);
 
       o2p.incrementSpellCount(spell);
-      o2Players.updatePlayer(pid, o2p);
+      players.updatePlayer(pid, o2p);
 
       return o2p.getSpellCount(spell);
    }
@@ -1401,10 +1402,10 @@ public class Ollivanders2 extends JavaPlugin
    {
       //returns the incremented potion count
       UUID pid = player.getUniqueId();
-      O2Player o2p = o2Players.getPlayer(pid);
+      O2Player o2p = players.getPlayer(pid);
 
       o2p.incrementPotionCount(potion);
-      o2Players.updatePlayer(pid, o2p);
+      players.updatePlayer(pid, o2p);
    }
 
    /**
@@ -1416,13 +1417,13 @@ public class Ollivanders2 extends JavaPlugin
    public O2Player getO2Player (Player player)
    {
       UUID pid = player.getUniqueId();
-      O2Player o2p = o2Players.getPlayer(pid);
+      O2Player o2p = players.getPlayer(pid);
 
       if (o2p == null)
       {
-         o2Players.addPlayer(pid, player.getDisplayName());
+         players.addPlayer(pid, player.getDisplayName());
 
-         o2p = o2Players.getPlayer(pid);
+         o2p = players.getPlayer(pid);
       }
 
       return o2p;
@@ -1438,7 +1439,7 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (!(player instanceof NPC))
       {
-         o2Players.updatePlayer(player.getUniqueId(), o2p);
+         players.updatePlayer(player.getUniqueId(), o2p);
       }
    }
 
@@ -1469,7 +1470,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public ArrayList<UUID> getO2PlayerIDs ()
    {
-      return o2Players.getPlayerIDs();
+      return players.getPlayerIDs();
    }
 
    /**
@@ -1868,8 +1869,6 @@ public class Ollivanders2 extends JavaPlugin
          {
             return giveAllPotions((Player)sender);
          }
-         //TODO implement givePotion
-         /*
          else if (subCommand.equalsIgnoreCase("give"))
          {
             if (args.length > 3)
@@ -1877,7 +1876,7 @@ public class Ollivanders2 extends JavaPlugin
                // potions give fred memory potion
                Player targetPlayer = getServer().getPlayer(args[2]);
                String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
-               givePotion((Player)sender, common.stringArrayToString(subArgs));
+               givePotion(targetPlayer, common.stringArrayToString(subArgs));
             }
          }
          else
@@ -1886,11 +1885,40 @@ public class Ollivanders2 extends JavaPlugin
             String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
             givePotion((Player)sender, common.stringArrayToString(subArgs));
          }
-         */
       }
 
       usageMessagePotions(sender);
       return true;
+   }
+
+   /**
+    * Give a specific potion to a player.
+    *
+    * @param player the player to give the potion to
+    * @param potionName the potion to give the player
+    */
+   public void givePotion (Player player, String potionName)
+   {
+      O2Potion potion = null;
+
+      for (O2Potion p : potions.getAllPotions())
+      {
+         if (p.getName().toLowerCase().startsWith(potionName.toLowerCase()))
+         {
+            potion = p;
+            break;
+         }
+      }
+
+      if (potion != null)
+      {
+         ItemStack brewedPotion = potion.brew();
+
+         List<ItemStack> kit = new ArrayList<>();
+         kit.add(brewedPotion);
+
+         givePlayerKit(player, kit);
+      }
    }
 
    private void usageMessagePotions (CommandSender sender)

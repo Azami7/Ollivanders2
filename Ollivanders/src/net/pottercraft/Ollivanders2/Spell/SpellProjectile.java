@@ -91,7 +91,7 @@ public abstract class SpellProjectile implements Teachable
       p = plugin;
       spellUses = p.getSpellNum(player, type);
       usesModifier = spellUses;
-      boolean memoryPotion = false;
+      boolean fastLearning = false;
 
       vector = location.getDirection().normalize();
       location.add(vector);
@@ -99,20 +99,17 @@ public abstract class SpellProjectile implements Teachable
 
       usesModifier = getUsesModifier();
 
-      for (O2Effect effect : p.getO2Player(player).getEffects())
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
       {
-         if (effect.effectType == O2EffectType.MEMORY_POTION)
-         {
-            memoryPotion = true;
-         }
-         else if (effect.effectType == O2EffectType.BARUFFIOS_BRAIN_ELIXIR)
-         {
-            usesModifier *= 2;
-         }
+         fastLearning = true;
+      }
+      else if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+      {
+         usesModifier *= 2;
       }
 
       p.incSpellCount(player, type);
-      if (memoryPotion)
+      if (fastLearning)
       {
          p.incSpellCount(player, type);
       }

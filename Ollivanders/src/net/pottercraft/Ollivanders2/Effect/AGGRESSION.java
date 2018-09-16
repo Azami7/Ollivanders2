@@ -26,13 +26,14 @@ public class AGGRESSION extends O2Effect
     * Constructor
     *
     * @param plugin a callback to the MC plugin
-    * @param effect the effect cast
     * @param duration the duration of the effect
     * @param pid the ID of the player this effect acts on
     */
-   public AGGRESSION (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
+   public AGGRESSION (Ollivanders2 plugin, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, pid);
+      super(plugin, duration, pid);
+
+      effectType = O2EffectType.AGGRESSION;
 
       permanent = true;
    }
@@ -46,8 +47,7 @@ public class AGGRESSION extends O2Effect
       Player target = p.getServer().getPlayer(targetID);
 
       // only take action once per 10 seconds, which is every 120 ticks
-      long curTime = target.getWorld().getTime();
-      if ((curTime % 120) == 0)
+      if ((duration % 120) == 0)
       {
          int rand = Math.abs(Ollivanders2.random.nextInt()) % 10;
 

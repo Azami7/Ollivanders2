@@ -96,7 +96,9 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
 
       if ((curTime >= 23000 && curTime <= 24000) || (curTime >=12000 && curTime <= 13000))
       {
-         o2p.addEffect(new ANIMAGUS_INCANTATION(p, O2EffectType.ANIMAGUS_INCANTATION, 300, player.getUniqueId()));
+         ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, player.getUniqueId());
+         p.players.playerEffects.addEffect(effect);
+
          player.sendMessage(Ollivanders2.chatColor + "You feel slightly different.");
       }
       else
@@ -110,17 +112,14 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
     * animal form. Changing to animal form takes practice to do consistently. Players can always
     * return to their human form once transformed.
     *
-    * @param o2p
+    * @param o2p the o2player casting this spell
     */
    private void transform (O2Player o2p)
    {
-      if (o2p.hasEffect(O2EffectType.ANIMAGUS_EFFECT))
+      if (p.players.playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT))
       {
          // change them back to human form
-         ANIMAGUS_EFFECT animagusEffect = (ANIMAGUS_EFFECT)(o2p.getEffect(O2EffectType.ANIMAGUS_EFFECT));
-         animagusEffect.kill();
-
-         o2p.removeEffect(O2EffectType.ANIMAGUS_EFFECT);
+         p.players.playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT);
       }
       else
       {
@@ -146,8 +145,8 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
 
       if (rand < successRate)
       {
-         ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player.getUniqueId());
-         o2p.addEffect(animagusEffect);
+         ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
+         p.players.playerEffects.addEffect(animagusEffect);
 
          player.sendMessage(Ollivanders2.chatColor + "You feel very different.");
       }

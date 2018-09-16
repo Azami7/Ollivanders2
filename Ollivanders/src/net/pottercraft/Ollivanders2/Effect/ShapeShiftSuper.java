@@ -33,13 +33,12 @@ public abstract class ShapeShiftSuper extends O2Effect
     * Constructor
     *
     * @param plugin a callback to the MC plugin
-    * @param effect the effect cast
     * @param duration the duration of the effect
     * @param pid the player this effect acts on
     */
-   public ShapeShiftSuper (Ollivanders2 plugin, O2EffectType effect, int duration, UUID pid)
+   public ShapeShiftSuper (Ollivanders2 plugin, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, pid);
+      super(plugin, duration, pid);
    }
 
    /**

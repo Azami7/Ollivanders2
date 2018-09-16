@@ -1,10 +1,8 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_EFFECT;
-import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -54,18 +52,14 @@ public final class ANIMAGUS_POTION extends O2Potion
          return;
       }
 
-      for (O2Effect effect : o2p.getEffects())
+      if (p.players.playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION))
       {
-         if (effect instanceof ANIMAGUS_INCANTATION)
-         {
-            o2p.setIsAnimagus();
+         o2p.setIsAnimagus();
 
-            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, O2EffectType.ANIMAGUS_EFFECT, 5, player.getUniqueId());
-            o2p.addEffect(animagusEffect);
-            p.setO2Player(player, o2p);
+         ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
+         p.players.playerEffects.addEffect(animagusEffect);
 
-            player.sendMessage(Ollivanders2.chatColor + "You feel transformed.");
-         }
+         player.sendMessage(Ollivanders2.chatColor + "You feel transformed.");
       }
    }
 }
