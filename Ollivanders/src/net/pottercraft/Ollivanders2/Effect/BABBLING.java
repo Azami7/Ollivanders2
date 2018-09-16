@@ -1,20 +1,20 @@
 package net.pottercraft.Ollivanders2.Effect;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
- * Causes a player to chat nonsense.
+ * Causes a player to chat nonsense. Any Babbling effects must also be added to onPlayerChat in Ollivanders2Listener.
  *
  * @since 2.2.7
  * @author Azami7
  */
-public class BABBLING_EFFECT extends O2Effect
+public class BABBLING extends O2Effect
 {
-   public final ArrayList<String> dictionary = new ArrayList<String>() {{
+   public ArrayList<String> dictionary = new ArrayList<String>() {{
       add("mimble");
       add("wimble");
       add("oddment");
@@ -54,19 +54,22 @@ public class BABBLING_EFFECT extends O2Effect
       add("narrischkeit");
       add("mumbo-jumbo");
       add("flummadiddle");
+      add("me me big boy");
    }};
+
+   int maxWords = 5;
 
    /**
     * Constructor
     *
     * @param plugin a callback to the MC plugin
-    * @param effect the effect on the player
-    * @param duration the duration of this effect
-    * @param player the player this effect acts on
+    * @param effect the effect cast
+    * @param duration the duration of the effect
+    * @param pid the ID of the player this effect acts on
     */
-   public BABBLING_EFFECT (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
+   public BABBLING (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, player);
+      super(plugin, effect, duration, pid);
    }
 
    /**
@@ -75,7 +78,10 @@ public class BABBLING_EFFECT extends O2Effect
    @Override
    public void checkEffect ()
    {
-      age(1);
+      if (!permanent)
+      {
+         age(1);
+      }
    }
 
    /**
@@ -86,7 +92,7 @@ public class BABBLING_EFFECT extends O2Effect
    private String getNonsense ()
    {
       String nonsense = "";
-      int numWords = Math.abs(Ollivanders2.random.nextInt() % 5) + 1;
+      int numWords = Math.abs(Ollivanders2.random.nextInt() % maxWords) + 1;
 
       for (int i = 0; i < numWords; i++)
       {

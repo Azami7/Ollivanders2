@@ -1,5 +1,7 @@
 package net.pottercraft.Ollivanders2.Effect;
 
+import java.util.UUID;
+
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.entity.Player;
@@ -17,11 +19,11 @@ public class FLYING extends O2Effect
     * @param plugin a callback to the MC plugin
     * @param effect the effect cast
     * @param duration the duration of the effect
-    * @param player the player this effect acts on
+    * @param pid the ID of the player this effect acts on
     */
-   public FLYING (Ollivanders2 plugin, O2EffectType effect, int duration, Player player)
+   public FLYING (Ollivanders2 plugin, O2EffectType effect, Integer duration, UUID pid)
    {
-      super(plugin, effect, duration, player);
+      super(plugin, effect, duration, pid);
    }
 
    /**
@@ -30,6 +32,8 @@ public class FLYING extends O2Effect
    @Override
    public void checkEffect ()
    {
+      Player target = p.getServer().getPlayer(targetID);
+
       age(1);
       if (duration > 1)
       {
