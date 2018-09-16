@@ -40,7 +40,7 @@ public abstract class O2Potion implements Teachable
    /**
     * The type this potion is.
     */
-   protected O2PotionType type;
+   protected O2PotionType potionType;
 
    /**
     * The ingredients list for this potion.
@@ -89,10 +89,10 @@ public abstract class O2Potion implements Teachable
     *
     * @param plugin a callback to the plugin
     */
-   public O2Potion (Ollivanders2 plugin, O2PotionType potionType)
+   public O2Potion (Ollivanders2 plugin)
    {
       p = plugin;
-      type = potionType;
+      potionType = O2PotionType.BABBLING_BEVERAGE;
    }
 
    /**
@@ -120,9 +120,9 @@ public abstract class O2Potion implements Teachable
     *
     * @return the type of potion
     */
-   public O2PotionType getType ()
+   public O2PotionType getPotionType ()
    {
-      return type;
+      return potionType;
    }
 
    /**

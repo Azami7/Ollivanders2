@@ -126,7 +126,7 @@ public final class BookTexts
 
          try
          {
-            potion = (Teachable) potionClass.getConstructor(Ollivanders2.class, O2PotionType.class).newInstance(p, potionType);
+            potion = (Teachable) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
          }
          catch (Exception e)
          {

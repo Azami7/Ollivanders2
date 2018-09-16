@@ -372,17 +372,6 @@ public class Ollivanders2 extends JavaPlugin
       {
          String subCommand = args[0];
 
-         if (debug)
-         {
-            String argString = "";
-            for (String arg : args)
-            {
-               argString = argString + arg + " ";
-            }
-
-            getLogger().info("runOllivanders: command = " + cmd.toString() + " " + argString);
-         }
-
          if (subCommand.equalsIgnoreCase("help"))
          {
             usageMessageOllivanders(sender);
@@ -1876,14 +1865,14 @@ public class Ollivanders2 extends JavaPlugin
                // potions give fred memory potion
                Player targetPlayer = getServer().getPlayer(args[2]);
                String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
-               givePotion(targetPlayer, common.stringArrayToString(subArgs));
+               return givePotion(sender, targetPlayer, common.stringArrayToString(subArgs));
             }
          }
          else
          {
             // potions memory potion
             String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
-            givePotion((Player)sender, common.stringArrayToString(subArgs));
+            return givePotion(sender, (Player)sender, common.stringArrayToString(subArgs));
          }
       }
 
@@ -1897,7 +1886,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param player the player to give the potion to
     * @param potionName the potion to give the player
     */
-   public void givePotion (Player player, String potionName)
+   public boolean givePotion (CommandSender sender, Player player, String potionName)
    {
       O2Potion potion = null;
 
@@ -1919,6 +1908,12 @@ public class Ollivanders2 extends JavaPlugin
 
          givePlayerKit(player, kit);
       }
+      else
+      {
+         sender.sendMessage(chatColor + "Unable to find potion " + potionName);
+      }
+
+      return true;
    }
 
    private void usageMessagePotions (CommandSender sender)
@@ -1928,9 +1923,9 @@ public class Ollivanders2 extends JavaPlugin
             + "\ningredient list - lists all potions ingredients"
             + "\ningredient <ingredient name> - give you the ingredient with this name, if it exists"
             + "\nall - gives all Ollivanders2 potions, this may not fit in your inventory"
-            //+ "\n<potion name> - gives you the potion with this name, if it exists"
-            //+ "\ngive <player> <potion name> - gives target player the potion with this name, if it exists\n"
-            + "\nExample: /ollivanders2 potions all"
+            + "\n<potion name> - gives you the potion with this name, if it exists"
+            + "\ngive <player> <potion name> - gives target player the potion with this name, if it exists\n"
+            + "\nExample: /ollivanders2 potions wiggenweld potion"
             + "\nExample: /ollivanders2 potions ingredient list");
    }
 

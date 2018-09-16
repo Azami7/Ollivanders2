@@ -61,7 +61,7 @@ public class O2Potions
 
          if (potion != null)
          {
-            if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getType()))
+            if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getPotionType()))
             {
                continue;
             }
@@ -98,7 +98,7 @@ public class O2Potions
 
       // match the ingredients in this potion to a known potion
       O2Potion potion = matchPotion(ingredientsInCauldron);
-      if (potion == null || (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getType())))
+      if (potion == null || (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getPotionType())))
       {
          // make them a bad potion
          return O2Potion.brewBadPotion();
@@ -198,7 +198,7 @@ public class O2Potions
 
       try
       {
-         potion = (O2Potion)potionClass.getConstructor(Ollivanders2.class, O2PotionType.class).newInstance(p, potionType);
+         potion = (O2Potion)potionClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception exception)
       {
