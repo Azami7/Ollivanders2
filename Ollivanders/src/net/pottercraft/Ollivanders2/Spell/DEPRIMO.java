@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -17,29 +18,30 @@ import org.bukkit.entity.Player;
  */
 public final class DEPRIMO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.DEPRIMO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("She had blasted a hole in the sitting-room floor. They fell like boulders, Harry still holding onto her hand for dear life, there as a scream from below and he glimpsed two men trying to get out of the way as vast quantities of rubble and broken furniture rained all around them from the shattered ceiling.");
+      add("The Blasting Charm");
+   }};
+
+   protected String text = "Deprimo creates an immense downward pressure which will cause all blocks within a radius to fall like sand.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DEPRIMO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("She had blasted a hole in the sitting-room floor. They fell like boulders, Harry still holding onto her hand for dear life, there as a scream from below and he glimpsed two men trying to get out of the way as vast quantities of rubble and broken furniture rained all around them from the shattered ceiling.");
-      flavorText.add("The Blasting Charm");
-      text = "Deprimo creates an immense downward pressure which will cause all blocks within a radius to fall like sand.";
-   }
+   public DEPRIMO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public DEPRIMO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public DEPRIMO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

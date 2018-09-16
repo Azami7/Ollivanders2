@@ -83,7 +83,7 @@ public final class BookTexts
 
          try
          {
-            spell = (Teachable)spellClass.getConstructor(O2SpellType.class).newInstance(spellType);
+            spell = (Teachable)spellClass.getConstructor().newInstance();
          }
          catch (Exception e)
          {

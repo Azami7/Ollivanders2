@@ -9,6 +9,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 
 /**
  * Transfigures entity into a parrot (MC >= 1.12) or bat (MC < 1.12)
@@ -18,31 +20,33 @@ import org.bukkit.entity.Player;
  */
 public final class AVIFORS extends FriendlyMobDisguiseSuper
 {
+   public O2SpellType spellType = O2SpellType.AVIFORS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("However, mastering a Transfiguration spell such as \"Avifors\" can be both rewarding and useful.");
+   }};
+
+   protected String text = "Turns target entity in to a bird.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AVIFORS (O2SpellType type)
+   public AVIFORS ()
    {
-      super(type);
-
-      flavorText.add("However, mastering a Transfiguration spell such as \"Avifors\" can be both rewarding and useful.");
-      if (Ollivanders2.mcVersionCheck())
-         text = "Turns target entity in to an owl.";
-      else
+      if (!Ollivanders2.mcVersionCheck())
          text = "Turns target entity in to a bat.";
    }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public AVIFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public AVIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       if (Ollivanders2.mcVersionCheck())
       {

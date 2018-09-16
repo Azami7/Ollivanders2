@@ -17,29 +17,30 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class FIANTO_DURI extends Charms
 {
+   public O2SpellType spellType = O2SpellType.FIANTO_DURI;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" - Filius Flitwick");
+      add("");
+   }};
+
+   protected String text = "Fianto Duri lengthens the duration of a stationary spell.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FIANTO_DURI (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" - Filius Flitwick");
-      flavorText.add("");
-      text = "Fianto Duri lengthens the duration of a stationary spell.";
-   }
+   public FIANTO_DURI () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public FIANTO_DURI (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public FIANTO_DURI (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

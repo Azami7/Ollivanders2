@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 
+import java.util.ArrayList;
+
 /**
  * Creates a PROTEGO_TOTALUM Stationary Spell Object
  *
@@ -14,28 +16,29 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class PROTEGO_TOTALUM extends Charms
 {
+   public O2SpellType spellType = O2SpellType.PROTEGO_TOTALUM;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("Raising her wand, she began to walk in a wide circle around Harry and Ron, murmuring incantations as she went. Harry saw little disturbances in the surrounding air: it was as if Hermione had cast a heat haze across their clearing.");
+   }};
+
+   protected String text = "Protego totalum is a stationary spell which will prevent any entities from crossing it's boundary.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_TOTALUM (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("Raising her wand, she began to walk in a wide circle around Harry and Ron, murmuring incantations as she went. Harry saw little disturbances in the surrounding air: it was as if Hermione had cast a heat haze across their clearing.");
-      text = "Protego totalum is a stationary spell which will prevent any entities from crossing it's boundary.";
-   }
+   public PROTEGO_TOTALUM () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public PROTEGO_TOTALUM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public PROTEGO_TOTALUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

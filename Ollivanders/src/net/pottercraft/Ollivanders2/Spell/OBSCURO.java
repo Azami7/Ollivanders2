@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.ArrayList;
+
 /**
  * Gives a target blindness
  *
@@ -14,28 +16,29 @@ import org.bukkit.potion.PotionEffectType;
  */
 public final class OBSCURO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.OBSCURO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("A black blindfold appeared over Phineas Nigellus' clever, dark eyes, causing him to bump into the frame and shriek with pain.");
+   }};
+
+   protected String text = "Obscuro will blind the target.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public OBSCURO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("A black blindfold appeared over Phineas Nigellus' clever, dark eyes, causing him to bump into the frame and shriek with pain.");
-      text = "Obscuro will blind the target.";
-   }
+   public OBSCURO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public OBSCURO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public OBSCURO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

@@ -7,6 +7,8 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Turn target player in to a spider.
  *
@@ -16,18 +18,27 @@ import org.bukkit.entity.Player;
  */
 public final class ENTOMORPHIS extends PlayerDisguiseSuper
 {
-   public ENTOMORPHIS (O2SpellType type)
-   {
-      super(type);
+   public O2SpellType spellType = O2SpellType.ENTOMORPHIS;
 
-      flavorText.add("What wouldn't he give to strike now, to jinx Dudley so thoroughly he'd have to crawl home like an insect, struck dumb, sprouting feelers...");
-      flavorText.add("The Insect Jinx");
-      text = "Entomorphis will transfigure an entity into a spider a duration dependent on your experience.";
-   }
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("What wouldn't he give to strike now, to jinx Dudley so thoroughly he'd have to crawl home like an insect, struck dumb, sprouting feelers...");
+      add("The Insect Jinx");
+   }};
 
-   public ENTOMORPHIS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   protected String text = "Entomorphis will transfigure an entity into a spider a duration dependent on your experience.";
+
+   public ENTOMORPHIS () { }
+
+   /**
+    * Constructor.
+    *
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
+    */
+   public ENTOMORPHIS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       targetType = EntityType.SPIDER;
       disguiseType = DisguiseType.getType(targetType);

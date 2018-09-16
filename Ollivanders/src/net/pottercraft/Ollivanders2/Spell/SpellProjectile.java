@@ -32,20 +32,76 @@ import org.bukkit.util.Vector;
  */
 public abstract class SpellProjectile implements Teachable
 {
+   /**
+    * The player who cast this spell.
+    */
    public Player player;
-   public O2SpellType spellType;
+
+   /**
+    * The type this spell is.
+    */
+   public O2SpellType spellType = O2SpellType.LUMOS;
+
+   /**
+    * The location the spell was cast from.
+    */
    public Location location;
-   public int lifeTicks;
-   public boolean kill;
-   public Ollivanders2 p;
-   public int spellUses;
+
+   /**
+    * How long this spell projectile has been alive in game ticks.
+    */
+   public int lifeTicks = 0;
+
+   /**
+    * Whether this spell projectile should be terminated.
+    */
+   public boolean kill = false;
+
+   /**
+    * The callback to the MC plugin
+    */
+   Ollivanders2 p;
+
+   /**
+    * The number of times the player has previously cast this spell.
+    */
+   int spellUses;
+
+   /**
+    * The modifier for this spell based on usage. This is for spells that change behavior based on the caster's experience.
+    */
    public double usesModifier;
+
+   /**
+    * The vector of the projectile.
+    */
    public Vector vector;
+
+   /**
+    * Represents which wand the user was holding. See Ollivanders2Common.wandCheck()
+    */
    public double rightWand;
-   public Effect moveEffect = Effect.STEP_SOUND;
-   public Material moveEffectData = Material.GLOWSTONE;
+
+   /**
+    * The sound this projectile makes as it moves.
+    */
+   Effect moveEffect = Effect.STEP_SOUND;
+
+   /**
+    * The visual effect this projectile has when it moves.
+    */
+   Material moveEffectData = Material.GLOWSTONE;
+
+   /**
+    * If the spell affects blocks, the list of blocks affected that can be used to restore them later.
+    */
    public Set<Block> changed = new HashSet<>();
-   public static final Long DEFAULT_COOLDOWN = new Long(1000);
+
+   /**
+    * The cooldown for this spell. Spells take mental and physical energy for the caster and cannot be cast in rapid
+    * succession.
+    */
+   static final Long DEFAULT_COOLDOWN = new Long(1000);
 
    /**
     * The branch of magic this spell is
@@ -65,31 +121,23 @@ public abstract class SpellProjectile implements Teachable
    /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
     * text.
-    *
-    * @param type the type of this spell
     */
-   public SpellProjectile (O2SpellType type)
-   {
-      spellType = type;
-   }
+   public SpellProjectile () { }
 
    /**
     * Constructor
     *
     * @param plugin a callback to the O2 plugin
     * @param player the player casting the spell
-    * @param type the type of this spell
     * @param rightWand wand check for the player
     */
-   public SpellProjectile (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public SpellProjectile (Ollivanders2 plugin, Player player, Double rightWand)
    {
       location = player.getEyeLocation();
-      this.spellType = type;
       this.player = player;
-      kill = false;
-      lifeTicks = 0;
       p = plugin;
-      spellUses = p.getSpellNum(player, type);
+
+      spellUses = p.getSpellNum(player, spellType);
       usesModifier = spellUses;
       boolean memoryPotion = false;
 
@@ -111,13 +159,13 @@ public abstract class SpellProjectile implements Teachable
          }
       }
 
-      p.incSpellCount(player, type);
+      p.incSpellCount(player, spellType);
       if (memoryPotion)
       {
-         p.incSpellCount(player, type);
+         p.incSpellCount(player, spellType);
       }
 
-      if (!p.canCast(player, type, true))
+      if (!p.canCast(player, spellType, true))
       {
          kill();
       }

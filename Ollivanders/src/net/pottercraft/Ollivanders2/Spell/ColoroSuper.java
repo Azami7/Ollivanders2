@@ -23,14 +23,21 @@ public abstract class ColoroSuper extends Charms
 {
    DyeColor color = DyeColor.WHITE;
 
-   public ColoroSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    */
+   public ColoroSuper () { }
 
-   public ColoroSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   /**
+    * Constructor.
+    *
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
+    */
+   public ColoroSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

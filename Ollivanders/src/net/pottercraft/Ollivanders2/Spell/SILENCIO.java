@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.*;
@@ -16,28 +17,30 @@ import org.bukkit.entity.Player;
  */
 public final class SILENCIO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.SILENCIO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The raven continued to open and close its sharp beak, but no sound came out.");
+      add("The Silencing Charm");
+   }};
+
+   protected String text = "Mutes the target for a time.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public SILENCIO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The raven continued to open and close its sharp beak, but no sound came out.");
-      flavorText.add("The Silencing Charm");
-   }
+   public SILENCIO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public SILENCIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public SILENCIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

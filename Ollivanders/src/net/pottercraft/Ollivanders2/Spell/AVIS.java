@@ -7,6 +7,8 @@ import org.bukkit.entity.Bat;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import java.util.ArrayList;
+
 /**
  * Conjures a flock of birds from the tip of the wand.
  *
@@ -14,33 +16,38 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class AVIS extends Charms
 {
+   public O2SpellType spellType = O2SpellType.AVIS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Bird-Conjuring Charm");
+      add("Most of the class had already left, although several twittering yellow birds were still zooming around the room, all of Hermione's creation; nobody else had succeeded in conjuring so much as a feather from thin air.");
+      add("\"Oh, hello, Harry ... I was just practicing.\" -Hermione Granger conjuring small golden birds just before sending them to attack Ron");
+   }};
+
+   protected String text = "Causes one or more birds to fly out of the tip of your wand.";
+
    private int birdCount = 0;
    private int maxBirds = 2;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AVIS (O2SpellType type)
+   public AVIS ()
    {
-      super(type);
-
-      flavorText.add("The Bird-Conjuring Charm");
-      flavorText.add("Most of the class had already left, although several twittering yellow birds were still zooming around the room, all of Hermione's creation; nobody else had succeeded in conjuring so much as a feather from thin air.");
-      flavorText.add("\"Oh, hello, Harry ... I was just practicing.\" -Hermione Granger conjuring small golden birds just before sending them to attack Ron");
-      text = "Causes one or more birds to fly out of the tip of your wand.";
+      if (!Ollivanders2.mcVersionCheck())
+         text = "Causes one or more bats to fly out of the tip of your wand.";
    }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public AVIS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public AVIS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       if (usesModifier > 100)
          maxBirds += 10;

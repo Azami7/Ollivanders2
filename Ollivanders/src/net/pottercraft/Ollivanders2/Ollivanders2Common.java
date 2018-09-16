@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 
@@ -237,6 +238,35 @@ public class Ollivanders2Common
             type = Ocelot.Type.WILD_OCELOT;
             break;
       }
+
+      return type;
+   }
+
+   /**
+    * Get a random rabbit type. Odds are 1/60 to get a Killer Bunny.
+    *
+    * @return the type variant for the rabbit
+    */
+   public RabbitType randomRabbitType ()
+   {
+      RabbitType type;
+
+      int rand = Math.abs(Ollivanders2.random.nextInt() % 61);
+
+      if (rand < 10)
+         type = RabbitType.BROWN;
+      else if (rand < 20)
+         type = RabbitType.BLACK;
+      else if (rand < 30)
+         type = RabbitType.WHITE;
+      else if (rand < 40)
+         type = RabbitType.GOLD;
+      else if (rand < 50)
+         type = RabbitType.PATCHES;
+      else if (rand < 60)
+         type = RabbitType.PEPPER;
+      else
+         type = RabbitType.KILLER_BUNNY;
 
       return type;
    }
@@ -476,7 +506,6 @@ public class Ollivanders2Common
     * @param s the enum as a string
     * @return string such that it is the lowercase version of the spell minus underscores
     */
-   @Deprecated
    public String enumRecode (String s)
    {
       String nameLow = s.toLowerCase();
@@ -663,7 +692,7 @@ public class Ollivanders2Common
     */
    public boolean isBroom (ItemStack item)
    {
-      if (item.getType() == Material.getMaterial(p.getFileConfig().getString("broomstick")))
+      if (item.getType() == Material.getMaterial(p.getConfig().getString("broomstick")))
       {
          if (item.containsEnchantment(Enchantment.PROTECTION_FALL))
          {

@@ -18,27 +18,25 @@ import org.bukkit.entity.Player;
  */
 public final class INCARNATIO_PORCILLI extends PlayerDisguiseSuper
 {
+   public O2SpellType spellType = O2SpellType.INCARNATIO_PORCILLI;
+
+   protected String text = "Turns target player in to a pig.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_PORCILLI (O2SpellType type)
-   {
-      super(type);
-
-      text = "Turns target player in to a pig.";
-   }
+   public INCARNATIO_PORCILLI () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public INCARNATIO_PORCILLI(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public INCARNATIO_PORCILLI(Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       targetType = EntityType.PIG;
       disguiseType = DisguiseType.getType(targetType);

@@ -14,8 +14,6 @@ import org.bukkit.entity.Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Created by Azami7 on 7/2/17.
- *
  * Sets fire to blocks. Also sets fire to living entities and items for an amount of time depending on the player's
  * spell level.
  *
@@ -32,14 +30,21 @@ public abstract class IncendioSuper extends Charms
    int duration = 1;
    private int ticksModifier = 16;
 
-   public IncendioSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    */
+   public IncendioSuper () { }
 
-   public IncendioSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   /**
+    * Constructor.
+    *
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
+    */
+   public IncendioSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       lifeTime = usesModifier * ticksModifier;
       move = true;
    }
@@ -50,7 +55,7 @@ public abstract class IncendioSuper extends Charms
       {
          move();
          //Check if the blocks set on fire are still on fire
-         Set<Block> remChange = new HashSet<Block>();
+         Set<Block> remChange = new HashSet<>();
          for (Block block : changed)
          {
             if (block.getType() != Material.FIRE)

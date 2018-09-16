@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 
+import java.util.ArrayList;
+
 /**
  * Locks blocks in to place.
  *
@@ -15,28 +17,29 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class COLLOPORTUS extends Charms
 {
+   public O2SpellType spellType = O2SpellType.COLLOPORTUS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Locking Spell.");
+   }};
+
+   protected String text = "Locks blocks in to place.  This spell does not age and can only be removed with the Unlocking Spell, Alohomora.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLLOPORTUS (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Locking Spell.");
-      text = "Locks blocks in to place.  This spell does not age and can only be removed with the Unlocking Spell, Alohomora.";
-   }
+   public COLLOPORTUS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public COLLOPORTUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public COLLOPORTUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

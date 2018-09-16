@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 
+import java.util.ArrayList;
+
 /**
  * Creates a muffliato stationary spell object. Only players within that
  * object can hear other players within it. Time duration depends on spell's
@@ -16,28 +18,29 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class MUFFLIATO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.MUFFLIATO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add(" [...] perhaps most useful of all, Muffliato, a spell that filled the ears of anyone nearby with an unidentifiable buzzing, so that lengthy conversations could be held in class without being overheard.");
+   }};
+
+   protected String text = "Muffliato creates a stationary spell which only allows the people inside to hear anything spoken inside the effect.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MUFFLIATO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add(" [...] perhaps most useful of all, Muffliato, a spell that filled the ears of anyone nearby with an unidentifiable buzzing, so that lengthy conversations could be held in class without being overheard.");
-      text = "Muffliato creates a stationary spell which only allows the people inside to hear anything spoken inside the effect.";
-   }
+   public MUFFLIATO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public MUFFLIATO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public MUFFLIATO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

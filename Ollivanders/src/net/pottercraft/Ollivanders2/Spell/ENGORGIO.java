@@ -8,6 +8,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Zombie;
 
+import java.util.ArrayList;
+
 /**
  * Makes certain entities grow into adults, slimes grow larger, and at usesModifier 10, zombies grow into giants
  *
@@ -17,29 +19,30 @@ import org.bukkit.entity.Zombie;
  */
 public final class ENGORGIO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.ENGORGIO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Engorgement Charm");
+      add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink.");
+   }};
+
+   protected String text = "Grows a baby animal, slime, or zombie.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ENGORGIO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Engorgement Charm");
-      flavorText.add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink.");
-      text = "Grows a baby animal, slime, or zombie.";
-   }
+   public ENGORGIO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public ENGORGIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public ENGORGIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

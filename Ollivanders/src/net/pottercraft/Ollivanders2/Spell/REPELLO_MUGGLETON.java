@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 
+import java.util.ArrayList;
+
 /**
  * Adds a repello muggleton stationary spell object.
  *
@@ -14,29 +16,29 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class REPELLO_MUGGLETON extends Charms
 {
+   public O2SpellType spellType = O2SpellType.REPELLO_MUGGLETON;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("Muggle-Repelling Charms on every inch of it. Every time Muggles have got anywhere near here all year, they've suddenly remembered urgent appointments and had to dash away again.");
+   }};
+
+   protected String text = "Repello Muggleton will hide any blocks and players in it's radius from those outside of it.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REPELLO_MUGGLETON (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("Muggle-Repelling Charms on every inch of it. Every time Muggles have got anywhere near here all year, they've suddenly remembered urgent appointments and had to dash away again.");
-
-      text = "Repello Muggleton will hide any blocks and players in it's radius from those outside of it.";
-   }
+   public REPELLO_MUGGLETON () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public REPELLO_MUGGLETON (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public REPELLO_MUGGLETON (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

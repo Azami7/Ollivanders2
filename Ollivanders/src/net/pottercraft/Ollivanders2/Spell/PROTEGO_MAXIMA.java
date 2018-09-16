@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 
+import java.util.ArrayList;
+
 /**
  * Makes a spell projectile that creates a shield that hurts any entities within 0.5 meters of the spell wall.
  *
@@ -14,30 +16,30 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class PROTEGO_MAXIMA extends Charms
 {
+   public O2SpellType spellType = O2SpellType.PROTEGO_MAXIMA;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" -Filius Flitwick");
+      add("A Stronger Shield Charm");
+   }};
+
+   protected String text = "Protego maxima is a stationary spell which will hurt any entities close to it's boundary.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_MAXIMA (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" -Filius Flitwick");
-      flavorText.add("A Stronger Shield Charm");
-
-      text = "Protego maxima is a stationary spell which will hurt any entities close to it's boundary.";
-   }
+   public PROTEGO_MAXIMA () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public PROTEGO_MAXIMA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public PROTEGO_MAXIMA (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

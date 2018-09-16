@@ -7,6 +7,8 @@ import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Reduces the time duration of any levicorpus effects on the target
  *
@@ -15,29 +17,30 @@ import org.bukkit.entity.Player;
  */
 public final class LIBERACORPUS extends Charms
 {
+   public O2SpellType spellType = O2SpellType.LIBERACORPUS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Levicorpus Counter-Spell");
+      add("...he jerked his wand upwards; Snape fell into a crumpled heap on the ground.");
+   }};
+
+   protected String text = "Liberacorpus will reduce the time left on any levicorpus effects on the target by an amount determined by your experience.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LIBERACORPUS (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Levicorpus Counter-Spell");
-      flavorText.add("...he jerked his wand upwards; Snape fell into a crumpled heap on the ground.");
-      text = "Liberacorpus will reduce the time left on any levicorpus effects on the target by an amount determined by your experience.";
-   }
+   public LIBERACORPUS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public LIBERACORPUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public LIBERACORPUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

@@ -11,6 +11,8 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Creates a pair of vanishing cabinets and teleports between them.
  *
@@ -18,31 +20,32 @@ import org.bukkit.entity.Player;
  */
 public final class HARMONIA_NECTERE_PASSUS extends Charms
 {
+   public O2SpellType spellType = O2SpellType.HARMONIA_NECTERE_PASSUS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("He stares at the monolith before him, lifts his wand and begins to chant eerily. The surface of the cabinet glimmers, atremble in the ambient light. Almost alive. Then he stops. Looking back, his eyes haunted, he slips away. Light plays within the cabinet. Movement. Shadows flicker within, coalesce.");
+      add("\" ...we forced him head-first into that Vanishing Cabinet on the first floor.\"\n" +
+            "\"But you'll get into terrible trouble!\"\n" +
+            "\"Not until Montague reappears, and that could take weeks, I dunno where we sent him...\" -Fred Weasley and Hermione Granger");
+   }};
+
+   protected String text = "Harmonia Nectere Passus will create a pair of vanishing cabinets if the cabinets on both ends are configured correctly.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public HARMONIA_NECTERE_PASSUS (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("He stares at the monolith before him, lifts his wand and begins to chant eerily. The surface of the cabinet glimmers, atremble in the ambient light. Almost alive. Then he stops. Looking back, his eyes haunted, he slips away. Light plays within the cabinet. Movement. Shadows flicker within, coalesce.");
-      flavorText.add("\" ...we forced him head-first into that Vanishing Cabinet on the first floor.\"\n" +
-            "\"But you'll get into terrible trouble!\"\n" +
-            "\"Not until Montague reappears, and that could take weeks, I dunno where we sent him...\" -Fred Weasley and Hermione Granger");
-      text = "Harmonia Nectere Passus will create a pair of vanishing cabinets if the cabinets on both ends are configured correctly.";
-   }
+   public HARMONIA_NECTERE_PASSUS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override
@@ -115,7 +118,7 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
    /**
     * Get the world from the sign block.
     *
-    * @param block
+    * @param block the sign to check
     * @return the location or null if one could not be created
     */
    private Location getSignLocation (Block block)
@@ -133,9 +136,10 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
             return null;
          }
 
-         int x = 0;
-         int y = 0;
-         int z = 0;
+         int x;
+         int y;
+         int z;
+
          try
          {
             x = Integer.parseInt(lines[1]);
@@ -144,7 +148,7 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
          }
          catch (NumberFormatException e)
          {
-            if (p.debug)
+            if (Ollivanders2.debug)
             {
                p.getLogger().warning("Unable to parse coordinates from sign.");
             }
