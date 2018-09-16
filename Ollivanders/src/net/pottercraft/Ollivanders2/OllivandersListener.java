@@ -131,7 +131,7 @@ public class OllivandersListener implements Listener
          Location fromLoc = event.getFrom();
          event.setTo(fromLoc);
 
-         player.sendMessage(Ollivanders2.chatColor + "You are unable to move.");
+         player.sendMessage(Ollivanders2.chatColor + "You are in a deep sleep and cannot move.");
       }
       else
       {
