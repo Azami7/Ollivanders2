@@ -32,6 +32,14 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class INFORMOUS extends Arithmancy
 {
+   public O2SpellType spellType = O2SpellType.INFORMOUS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("Basic Arithmancy");
+   }};
+
+   protected String text = "Gives information on a living entity, weather, player, or stationary spell.";
+
    List<LivingEntity> iEntity = new ArrayList();
    List<StationarySpellObj> iSpell = new ArrayList();
    boolean toldWeather = false;
@@ -40,25 +48,18 @@ public final class INFORMOUS extends Arithmancy
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INFORMOUS (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("Basic Arithmancy");
-      text = "Gives information on a living entity, weather, player, or stationary spell.";
-   }
+   public INFORMOUS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public INFORMOUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public INFORMOUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       lifeTime = usesModifier * 16;
    }
 

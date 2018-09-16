@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -17,29 +18,30 @@ import org.bukkit.potion.PotionEffectType;
  */
 public final class STUPEFY extends Charms
 {
+   public O2SpellType spellType = O2SpellType.STUPEFY;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Stunning Spell");
+      add("\"Stunning is one of the most useful spells in your arsenal. It's sort of a wizard's bread and butter, really.\" -Harry Potter");
+   }};
+
+   protected String text = "Stupefy will stun an opponent for a duration.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public STUPEFY (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Stunning Spell");
-      flavorText.add("\"Stunning is one of the most useful spells in your arsenal. It's sort of a wizard's bread and butter, really.\" -Harry Potter");
-      text = "Stupefy will stun an opponent for a duration.";
-   }
+   public STUPEFY () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public STUPEFY (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public STUPEFY (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

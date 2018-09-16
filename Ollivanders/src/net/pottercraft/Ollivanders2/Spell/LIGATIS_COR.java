@@ -25,27 +25,25 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public final class LIGATIS_COR extends Charms
 {
+   public O2SpellType spellType = O2SpellType.LIGATIS_COR;
+
+   protected String text = "Ligatis cor will bind a coreless wand to a core material.  Make sure the two items are near each other when this spell is cast. You can only use this on one coreless wand and one core material at a time.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LIGATIS_COR (O2SpellType type)
-   {
-      super(type);
-
-      text = "Ligatis cor will bind a coreless wand to a core material.  Make sure the two items are near each other when this spell is cast. You can only use this on one coreless wand and one core material at a time.";
-   }
+   public LIGATIS_COR () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public LIGATIS_COR (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public LIGATIS_COR (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

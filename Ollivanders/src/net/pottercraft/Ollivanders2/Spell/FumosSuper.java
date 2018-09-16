@@ -20,22 +20,18 @@ public abstract class FumosSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FumosSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   public FumosSuper () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public FumosSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public FumosSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

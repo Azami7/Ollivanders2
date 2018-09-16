@@ -17,26 +17,25 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class CRESCERE_PROTEGAT extends Charms
 {
+   public O2SpellType spellType = O2SpellType.CRESCERE_PROTEGAT;
+
+   protected String text = "Grows a stationary spell's radius. Only the player who created the Stationary Spell can change it's radius.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public CRESCERE_PROTEGAT (O2SpellType type)
-   {
-      super(type);
-      text = "Grows a stationary spell's radius. Only the player who created the Stationary Spell can change it's radius.";
-   }
+   public CRESCERE_PROTEGAT () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public CRESCERE_PROTEGAT (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public CRESCERE_PROTEGAT (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

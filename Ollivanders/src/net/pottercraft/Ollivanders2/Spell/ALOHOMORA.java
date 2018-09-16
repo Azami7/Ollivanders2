@@ -18,29 +18,30 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class ALOHOMORA extends Charms
 {
+   public O2SpellType spellType = O2SpellType.ALOHOMORA;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("There are many ways to pass through locked doors in the magical world.  When you wish to enter or depart discreetly, however, the Unlocking Charm is your best friend.");
+      add("The Unlocking Charm");
+   }};
+
+   protected String text = "Unlocks blocks locked by Colloportus.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ALOHOMORA (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("There are many ways to pass through locked doors in the magical world.  When you wish to enter or depart discreetly, however, the Unlocking Charm is your best friend.");
-      flavorText.add("The Unlocking Charm");
-      text = "Unlocks blocks locked by Colloportus.";
-   }
+   public ALOHOMORA () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public ALOHOMORA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public ALOHOMORA (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

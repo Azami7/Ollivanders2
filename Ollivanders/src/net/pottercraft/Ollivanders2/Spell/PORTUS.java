@@ -19,56 +19,57 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class PORTUS extends Charms
 {
+   public O2SpellType spellType = O2SpellType.PORTUS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("For a moment the kettle trembled, glowing with an odd blue light; then it quivered to rest, as solidly black as ever.");
+      add("Almost any inanimate object can be turned into a Portkey. Once bewitched, the object will transport anyone who grasps it to a pre-arranged destination.");
+   }};
+
+   protected String text = "Portus is a spell which creates a portkey. To cast it, hold a wand in your hand "
+         + "and look directly at the item you wish to enchant. Then say 'Portus x y z', where x y and z are the coordinates "
+         + "you wish the portkey to link to. When this item is picked up, the holder and the entities around them will be "
+         + "transported to the destination. Anti-apparition and anti-disapparition spells will stop this, but only if present "
+         + "during the creation of the portkey, and will cause the creation to fail. If the portkey is successfully made, then "
+         + "it can be used to go to that location regardless of the spells put on it. A portkey creation will not fail if the "
+         + "caster of the protective enchantments is the portkey maker. Portkeys can be used to cross worlds as well, if you use "
+         + "a portkey which was made in a different world. If the enchantment is said incorrectly, then the portkey will be created "
+         + "linking to the caster's current location.";
+
    private final String[] wordsArray;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PORTUS (O2SpellType type)
+   public PORTUS ()
    {
-      super(type);
-
-      flavorText.add("For a moment the kettle trembled, glowing with an odd blue light; then it quivered to rest, as solidly black as ever.");
-      flavorText.add("Almost any inanimate object can be turned into a Portkey. Once bewitched, the object will transport anyone who grasps it to a pre-arranged destination.");
-      text = "Portus is a spell which creates a portkey. To cast it, hold a wand in your hand "
-            + "and look directly at the item you wish to enchant. Then say 'Portus x y z', where x y and z are the coordinates "
-            + "you wish the portkey to link to. When this item is picked up, the holder and the entities around them will be "
-            + "transported to the destination. Anti-apparition and anti-disapparition spells will stop this, but only if present "
-            + "during the creation of the portkey, and will cause the creation to fail. If the portkey is successfully made, then "
-            + "it can be used to go to that location regardless of the spells put on it. A portkey creation will not fail if the "
-            + "caster of the protective enchantments is the portkey maker. Portkeys can be used to cross worlds as well, if you use "
-            + "a portkey which was made in a different world. If the enchantment is said incorrectly, then the portkey will be created "
-            + "linking to the caster's current location.";
-
       wordsArray = null;
    }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
-    * @param wordsArray
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public PORTUS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand, String[] wordsArray)
+   public PORTUS (Ollivanders2 plugin, Player player, Double rightWand, String[] wordsArray)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       this.wordsArray = wordsArray;
    }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param name
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public PORTUS (Ollivanders2 plugin, Player player, O2SpellType name, Double rightWand)
+   public PORTUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, name, rightWand);
+      super(plugin, player, rightWand);
+
       Location loc = player.getLocation();
       wordsArray = new String[4];
       wordsArray[0] = "portus";

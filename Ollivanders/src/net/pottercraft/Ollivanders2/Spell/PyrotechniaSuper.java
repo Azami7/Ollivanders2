@@ -33,22 +33,18 @@ public abstract class PyrotechniaSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PyrotechniaSuper (O2SpellType type)
-   {
-      super(type);
-   }
+   public PyrotechniaSuper () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public PyrotechniaSuper (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public PyrotechniaSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       fireworkCount = 0;
       maxFireworks = 1;
    }
@@ -114,6 +110,11 @@ public abstract class PyrotechniaSuper extends Charms
       }
    }
 
+   /**
+    * Set the number of fireworks that can be cast based on the user's experience.
+    *
+    * @param max the base maximum
+    */
    void setMaxFireworks (int max)
    {
       if (usesModifier > (max*10))

@@ -6,6 +6,8 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import java.util.ArrayList;
+
 /**
  * Created by Azami7 on 6/29/17.
  *
@@ -13,32 +15,33 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class FATUUS_AURUM extends BlockTransfigurationSuper
 {
+   public O2SpellType spellType = O2SpellType.FATUUS_AURUM;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("What glitters may not be gold; and even wolves may smile; and fools will be led by promises to their deaths.");
+      add("There is thy gold, worse poison to men's souls.");
+      add("Stone to Gold Spell");
+   }};
+
+   protected String text = "Turns a stone block in to gold.";
+
    protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FATUUS_AURUM (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("What glitters may not be gold; and even wolves may smile; and fools will be led by promises to their deaths.");
-      flavorText.add("There is thy gold, worse poison to men's souls.");
-      flavorText.add("Stone to Gold Spell");
-      text = "Turns a stone block in to gold.";
-   }
+   public FATUUS_AURUM () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public FATUUS_AURUM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public FATUUS_AURUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       materialWhitelist.add(Material.STONE);
       transfigureType = Material.GOLD_BLOCK;

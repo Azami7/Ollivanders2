@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Effect.MUCUS;
@@ -18,28 +19,29 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class MUCUS_AD_NAUSEAM extends DarkArts
 {
+   public O2SpellType spellType = O2SpellType.MUCUS_AD_NAUSEAM;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Curse of the Bogies");
+   }};
+
+   protected String text = "Mucus Ad Nauseam will cause your opponent to drip with slime.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MUCUS_AD_NAUSEAM (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Curse of the Bogies");
-      text = "Mucus Ad Nauseam will cause your opponent to drip with slime.";
-   }
+   public MUCUS_AD_NAUSEAM () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

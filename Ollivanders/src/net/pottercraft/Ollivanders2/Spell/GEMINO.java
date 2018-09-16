@@ -19,29 +19,30 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class GEMINO extends DarkArts
 {
+   public O2SpellType spellType = O2SpellType.GEMINO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("Hermione screamed in pain, and Harry turned his wand on her in time to see a jewelled goblet tumbling from her grip. But as it fell, it split, became a shower of goblets, so that a second later, with a great clatter, the floor was covered in identical cups rolling in every direction, the original impossible to discern amongst them.");
+      add("The Doubling Curse");
+   }};
+
+   protected String text = "Gemino will cause an item to duplicate when held by a person.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GEMINO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("Hermione screamed in pain, and Harry turned his wand on her in time to see a jewelled goblet tumbling from her grip. But as it fell, it split, became a shower of goblets, so that a second later, with a great clatter, the floor was covered in identical cups rolling in every direction, the original impossible to discern amongst them.");
-      flavorText.add("The Doubling Curse");
-      text = "Gemino will cause an item to duplicate when held by a person.";
-   }
+   public GEMINO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public GEMINO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public GEMINO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

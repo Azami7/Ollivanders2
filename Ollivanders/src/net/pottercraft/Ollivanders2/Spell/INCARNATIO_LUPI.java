@@ -20,26 +20,25 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class INCARNATIO_LUPI extends PlayerDisguiseSuper
 {
+   public O2SpellType spellType = O2SpellType.INCARNATIO_LUPI;
+
+   protected String text = "Turns target player in to a wolf or dog.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_LUPI (O2SpellType type)
-   {
-      super(type);
-      text = "Turns target player in to a wolf or dog.";
-   }
+   public INCARNATIO_LUPI () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public INCARNATIO_LUPI(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public INCARNATIO_LUPI(Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       targetType = EntityType.WOLF;
       disguiseType = DisguiseType.getType(targetType);

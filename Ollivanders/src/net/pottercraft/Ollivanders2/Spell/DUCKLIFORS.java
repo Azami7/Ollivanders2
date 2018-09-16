@@ -7,6 +7,8 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Transfigures entity into a chicken.
  *
@@ -15,27 +17,25 @@ import org.bukkit.entity.Player;
  */
 public final class DUCKLIFORS extends FriendlyMobDisguiseSuper
 {
+   public O2SpellType spellType = O2SpellType.DUCKLIFORS;
+
+   protected String text = "The transfiguration spell Ducklifors will transfigure an entity into a chicken.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DUCKLIFORS (O2SpellType type)
-   {
-      super(type);
-
-      text = "The transfiguration spell Ducklifors will transfigure an entity into a chicken.";
-   }
+   public DUCKLIFORS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public DUCKLIFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public DUCKLIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       targetType = EntityType.CHICKEN;
       disguiseType = DisguiseType.getType(targetType);

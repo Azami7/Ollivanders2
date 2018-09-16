@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.EntityType;
@@ -19,29 +20,31 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class BRACKIUM_EMENDO extends Healing
 {
+   public O2SpellType spellType = O2SpellType.BRACKIUM_EMENDO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("Bone-Healing Spell");
+      add("\"Lie back, Harry. It's a simple charm I've used countless times --\" - Gilderoy Lockhard");
+      add("As Harry got to his feet, he felt strangely lopsided. Taking a deep breath he looked down at his right side. What he saw nearly made him pass out again. Poking out of the end of his robes was what looked like a thick, fleshcoloured rubber glove. He tried to move his fingers. Nothing happened. Lockhart hadn't mended Harry's bones. He had removed them.");
+   }};
+
+   protected String text = "A healing spell when used on a player. When used on a skeleton or wither, it damages them.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BRACKIUM_EMENDO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("Bone-Healing Spell");
-      flavorText.add("As Harry got to his feet, he felt strangely lopsided. Taking a deep breath he looked down at his right side. What he saw nearly made him pass out again. Poking out of the end of his robes was what looked like a thick, fleshcoloured rubber glove. He tried to move his fingers. Nothing happened. Lockhart hadn't mended Harry's bones. He had removed them.");
-      text = "A healing spell when used on a player.  When used on a skeleton or wither, it damages them.";
-   }
+   public BRACKIUM_EMENDO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public BRACKIUM_EMENDO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public BRACKIUM_EMENDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

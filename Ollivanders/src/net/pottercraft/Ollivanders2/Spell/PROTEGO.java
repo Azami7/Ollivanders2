@@ -5,6 +5,8 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 
+import java.util.ArrayList;
+
 /**
  * Shield spell
  *
@@ -13,19 +15,27 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class PROTEGO extends Charms
 {
-   public PROTEGO (O2SpellType type)
+   public O2SpellType spellType = O2SpellType.PROTEGO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"I don't remember telling you to use a Shield Charm... but there is no doubt that it was effective...\" -Severus Snape");
+      add("The Shield Charm");
+   }};
+
+   protected String text = "Protego is a shield spell which, while you are crouching, will cause any spells cast at it to bounce off.";
+
+   public PROTEGO () { }
+
+   /**
+    * Constructor.
+    *
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
+    */
+   public PROTEGO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(type);
-
-      flavorText.add("\"I don't remember telling you to use a Shield Charm… but there is no doubt that it was effective…\" -Severus Snape");
-      flavorText.add("The Shield Charm");
-
-      text = "Protego is a shield spell which, while you are crouching, will cause any spells cast at it to bounce off.";
-   }
-
-   public PROTEGO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
-   {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

@@ -3,6 +3,8 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.*;
 
+import java.util.ArrayList;
+
 /**
  * Shrinks a giant to a normal zombie, makes certain entities babies and slimes smaller.
  *
@@ -11,29 +13,30 @@ import org.bukkit.entity.*;
  */
 public final class REDUCIO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.REDUCIO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Shrinking Charm");
+      add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink. You will be learning both charms together, so that you can always undo an over-enthusiastic cast. There is thus no excuse for having accidentally shrunk your homework down to microscopic size or for allowing a giant toad to rampage through your school’s flower gardens.");
+   }};
+
+   protected String text = "Shrinks a giant to a normal zombie, makes certain entities babies and slimes smaller.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REDUCIO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Shrinking Charm");
-      flavorText.add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink. You will be learning both charms together, so that you can always undo an over-enthusiastic cast. There is thus no excuse for having accidentally shrunk your homework down to microscopic size or for allowing a giant toad to rampage through your school’s flower gardens.");
-      text = "Shrinks a giant to a normal zombie, makes certain entities babies and slimes smaller.";
-   }
+   public REDUCIO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public REDUCIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public REDUCIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override
