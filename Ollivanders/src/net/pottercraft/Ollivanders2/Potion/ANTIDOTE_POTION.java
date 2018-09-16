@@ -36,11 +36,21 @@ public final class ANTIDOTE_POTION extends O2Potion
       name = "Common Antidote Potion";
       text = "Counteracts ordinary poisons, such as creature bites and stings.";
 
-      effect = new PotionEffect(PotionEffectType.HEAL, duration, 1);
       potionColor = Color.TEAL;
    }
 
+   @Override
    public void drink (O2Player o2p, Player player)
    {
+      if (player.hasPotionEffect(PotionEffectType.POISON))
+      {
+         player.removePotionEffect(PotionEffectType.POISON);
+
+         player.sendMessage(Ollivanders2.chatColor + "A cool feeling flows through your body as the poison is removed.");
+      }
+      else
+      {
+         player.sendMessage(Ollivanders2.chatColor + "You smell a faint odor that reminds you of winter, then it is gone.");
+      }
    }
 }
