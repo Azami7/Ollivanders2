@@ -30,15 +30,6 @@ public class LOQUELA_INEPTIAS extends Charms
    protected String text = "Causes your target to speak nonsense for a period of time.";
 
    O2EffectType effect = O2EffectType.BABBLING;
-   protected O2MagicBranch branch = O2MagicBranch.DARK_ARTS;
-   public O2SpellType spellType = O2SpellType.LOQUELA_INEPTIAS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"He usually picked Harry to help him with these reconstructions; so far, Harry had been forced to play a simple Transylvanian villager whom Lockhart had cured of a Babbling Curse, a yeti with a head cold, and a vampire who had been unable to eat anything except lettuce since Lockhart had dealt with him.\"");
-      add("The Babbling Curse");
-   }};
-
-   protected String text = "Causes your target to speak nonsense for a period of time.";
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
