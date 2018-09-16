@@ -6,7 +6,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 /**
- * Moste Potente O2Potions is a book by Phineas Bourne that gives instructions on how to brew advanced potions.
+ * Moste Potente Potions is a book by Phineas Bourne that gives instructions on how to brew advanced potions.
  *
  * http://harrypotter.wikia.com/wiki/Moste_Potente_Potions
  *
@@ -19,7 +19,7 @@ public class MOSTE_POTENTE_POTIONS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Moste Potente O2Potions";
+      title = shortTitle = "Moste Potente Potions";
       author = "Phineas Bourne";
       branch = O2MagicBranch.POTIONS;
 

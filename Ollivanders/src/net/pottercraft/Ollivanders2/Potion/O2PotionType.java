@@ -11,6 +11,7 @@ public enum O2PotionType
    HERBICIDE_POTION (net.pottercraft.Ollivanders2.Potion.HERBICIDE_POTION.class),
    MEMORY_POTION (net.pottercraft.Ollivanders2.Potion.MEMORY_POTION.class),
    REGENERATION_POTION (net.pottercraft.Ollivanders2.Potion.REGENERATION_POTION.class),
+   SLEEPING_DRAUGHT (net.pottercraft.Ollivanders2.Potion.SLEEPING_DRAUGHT.class),
    WIDEYE_POTION (net.pottercraft.Ollivanders2.Potion.WIDEYE_POTION.class),
    WIGGENWELD_POTION (net.pottercraft.Ollivanders2.Potion.WIGGENWELD_POTION.class),
    WIT_SHARPENING_POTION (net.pottercraft.Ollivanders2.Potion.WIT_SHARPENING_POTION.class),

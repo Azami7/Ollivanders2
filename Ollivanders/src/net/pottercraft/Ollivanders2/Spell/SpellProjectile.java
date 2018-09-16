@@ -130,6 +130,7 @@ public abstract class SpellProjectile implements Teachable
       {
          kill();
       }
+
       location.getWorld().playEffect(location, moveEffect, moveEffectData);
       if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE
             && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER

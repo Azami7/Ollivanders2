@@ -49,6 +49,11 @@ public class SLEEPING extends O2Effect
             playerSleep();
          }
       }
+
+      if (!permanent)
+      {
+         age(1);
+      }
    }
 
    @Override
@@ -75,7 +80,6 @@ public class SLEEPING extends O2Effect
     */
    private void playerSleep ()
    {
-      O2Player o2p = p.players.getPlayer(targetID);
       Player target = p.getServer().getPlayer(targetID);
 
       // tilt player head down
@@ -95,9 +99,10 @@ public class SLEEPING extends O2Effect
     */
    private void playerWake ()
    {
-      O2Player o2p = p.players.getPlayer(targetID);
-
       p.players.playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
       sleeping = false;
+
+      Player target = p.getServer().getPlayer(targetID);
+      target.sendMessage(Ollivanders2.chatColor + "You awaken from a deep sleep.");
    }
 }

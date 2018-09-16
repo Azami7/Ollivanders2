@@ -48,7 +48,7 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion
    {
       if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
       {
-         player.sendMessage(Ollivanders2.chatColor + "You yawn but otherwise nothing happens.");
+         player.sendMessage(Ollivanders2.chatColor + "You yawn, close your eyes for a moment, then feel fine.");
       }
       else
       {
