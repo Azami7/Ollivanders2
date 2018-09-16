@@ -10,6 +10,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
@@ -116,33 +117,9 @@ class OllivandersSchedule implements Runnable
 
       for (Player player : onlinePlayers)
       {
-         O2Player o2p = p.getO2Player(player);
          UUID pid = player.getUniqueId();
 
-         List<O2Effect> playerEffects = o2p.getEffects();
-         if (playerEffects == null)
-         {
-            continue;
-         }
-
-         try
-         {
-            for (O2Effect effect : playerEffects)
-            {
-               effect.checkEffect();
-               if (effect.isKilled())
-               {
-                  o2p.removeEffect(effect);
-               }
-            }
-
-            p.setO2Player(player, o2p);
-         }
-         catch (Exception e)
-         {
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-         }
+         p.players.playerEffects.upkeep(pid);
       }
    }
 
@@ -466,12 +443,9 @@ class OllivandersSchedule implements Runnable
             {
                if (player.getGameMode() == GameMode.SURVIVAL && (this.onBroom.contains(player.getUniqueId())))
                {
-                  for (O2Effect effect : p.getO2Player(player).getEffects())
+                  if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FLYING))
                   {
-                     if (effect instanceof FLYING)
-                     {
-                        continue playerIter;
-                     }
+                     continue playerIter;
                   }
                   //player.setAllowFlight(false);
                   player.setFlying(false);

@@ -15,7 +15,7 @@ public enum O2HouseType
 {
    GRYFFINDOR ("Gryffindor", ChatColor.DARK_RED),
    HUFFLEPUFF ("Hufflepuff", ChatColor.GOLD),
-   RAVENCLAW ("Ravenclaw", ChatColor.DARK_BLUE),
+   RAVENCLAW ("Ravenclaw", ChatColor.BLUE),
    SLYTHERIN ("Slytherin", ChatColor.DARK_GREEN);
 
    private String name;

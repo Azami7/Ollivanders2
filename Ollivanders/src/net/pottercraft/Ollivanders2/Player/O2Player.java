@@ -75,11 +75,6 @@ public class O2Player
    private Map<O2SpellType, Long> recentSpells = new HashMap<>();
 
    /**
-    * A list of all effects currently on this player
-    */
-   private Map<O2EffectType, O2Effect> effects = new HashMap<>();
-
-   /**
     * The spell loaded into the wand for casting with left click
     */
    private O2SpellType wandSpell = null;
@@ -133,11 +128,6 @@ public class O2Player
     * The player's year in school
     */
    private Year year = Year.YEAR_1;
-
-   /**
-    * Effects to add to this player at join
-    */
-   private HashMap<O2EffectType, Integer> effectsAtJoin = new HashMap<>();
 
    /**
     * Constructor.
@@ -514,6 +504,7 @@ public class O2Player
    {
       knownSpells.clear();
       masteredSpells.clear();
+      masterSpell = null;
    }
 
    /**
@@ -672,107 +663,6 @@ public class O2Player
    public void resetSouls ()
    {
       souls = 0;
-   }
-
-   /**
-    * Get a list of all the Ollivanders effects this user has on them.
-    *
-    * @return a list of the effects active on this player
-    */
-   public List<O2Effect> getEffects ()
-   {
-      List<O2Effect> effectsCopy = new ArrayList<>();
-
-      effectsCopy.addAll(effects.values());
-
-      return effectsCopy;
-   }
-
-   /**
-    * Gets a specific effect on a player.
-    *
-    * @param effectType the effect type to get
-    * @return the effect if the player has one, null otherwise
-    */
-   public O2Effect getEffect (O2EffectType effectType)
-   {
-      if (effects.containsKey(effectType))
-         return effects.get(effectType);
-      else
-         return null;
-   }
-
-   /**
-    * Add an effect to this player.
-    *
-    * @param e the effect to add to this player
-    */
-   public void addEffect (O2Effect e)
-   {
-      // do not allow multiple shape-shifting effects at the same time
-      if (e instanceof ShapeShiftSuper)
-      {
-         for (O2Effect effect : effects.values())
-         {
-            if (effect instanceof ShapeShiftSuper)
-            {
-               return;
-            }
-         }
-      }
-
-      if (effects.containsKey(e.effectType))
-      {
-         // increase effect duration by the amount of this effect's
-         O2Effect effect = effects.get(e.effectType);
-         e.duration = effect.duration + e.duration;
-         effects.replace(e.effectType, e);
-      }
-      else
-      {
-         // add this effect
-         effects.put(e.effectType, e);
-      }
-
-      if (Ollivanders2.debug)
-         p.getLogger().info("Adding effect " + e.effectType.toString() + " to " + playerName);
-   }
-
-   /**
-    * Remove an effect from this player.
-    *
-    * @param e the effect to remove from this player
-    */
-   public void removeEffect (O2Effect e)
-   {
-      removeEffect(e.effectType);
-   }
-
-   /**
-    * Remove an effect from this player.
-    *
-    * @param effectType the effect to remove from this player
-    */
-   public void removeEffect (O2EffectType effectType)
-   {
-      O2Effect effect = effects.get(effectType);
-
-      if (effect != null)
-      {
-         effect.kill();
-         effects.remove(effectType);
-
-         if (Ollivanders2.debug)
-            p.getLogger().info("Removing effect " + effectType.toString() + " to " + playerName);
-      }
-   }
-
-   /**
-    * Remove all effects from this player.
-    */
-   public void resetEffects ()
-   {
-      effects.clear();
    }
 
    /**
@@ -1074,24 +964,6 @@ public class O2Player
    }
 
    /**
-    * Determine if this player has the specified effect
-    *
-    * @param effectType the effect to check for
-    * @return true if the player is in their animal form, false otherwise
-    */
-   public boolean hasEffect (O2EffectType effectType)
-   {
-      boolean has = false;
-
-      if (effects.containsKey(effectType))
-      {
-         has = true;
-      }
-
-      return has;
-   }
-
-   /**
     * Get the player's UUID
     *
     * @return
@@ -1102,90 +974,28 @@ public class O2Player
    }
 
    /**
-    * Effects to add to this player when they join. Since effects require a Player object, these cannot
-    * be added at plugin load.
-    *
-    * @param effectType the effect type to add
-    * @param duration the duration for this effect
-    */
-   void addJoinEffect (O2EffectType effectType, Integer duration)
-   {
-      if (!effectsAtJoin.containsKey(effectType))
-      {
-         effectsAtJoin.put(effectType, duration);
-
-         if (Ollivanders2.debug)
-            p.getLogger().info("Adding join effect " + effectType + " for " + playerName);
-      }
-   }
-
-   /**
-    * Effects to be added to this player at join.
-    *
-    * @return a map of the effect type and duration
-    */
-   Map<O2EffectType, Integer> getJoinEffects ()
-   {
-      return effectsAtJoin;
-   }
-
-   /**
-    * Set up for this player on join.
+    * Do player onJoin set up
     */
    public void onJoin ()
    {
-      if (!effectsAtJoin.isEmpty())
-         onJoinEffects();
+      p.players.playerEffects.onJoin(pid);
    }
 
    public void onQuit ()
    {
-      effectsAtJoin.clear();
-
-      Collection<O2Effect> curEffects = effects.values();
-
-      for (O2Effect effect : curEffects)
-      {
-         O2EffectType effectType = effect.effectType;
-
-         // add permanent effects to the list to add back to this player on join
-         if (effect.isPermanent())
-         {
-            effectsAtJoin.put(effectType, effect.duration);
-            if (Ollivanders2.debug)
-               p.getLogger().info("onQuit: saving effect " + effectType);
-         }
-
-         effect.kill();
-         removeEffect(effect);
-      }
+      p.players.playerEffects.onQuit(pid);
    }
 
-   private void onJoinEffects ()
+   public void onDeath ()
    {
-      for (Entry<O2EffectType, Integer> entry : effectsAtJoin.entrySet())
+      if (p.getConfig().getBoolean("deathExpLoss"))
       {
-         O2EffectType effectType = entry.getKey();
-         Integer duration = entry.getValue();
-
-         Class effectClass = effectType.getClassName();
-
-         O2Effect effect;
-         try
-         {
-            effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, O2EffectType.class, Integer.class, UUID.class).newInstance(p, effectType, duration, pid);
-         }
-         catch (Exception e)
-         {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("Failed to create class for " + effectType.toString());
-               e.printStackTrace();
-            }
-            continue;
-         }
-
-         addEffect(effect);
+         resetSpellCount();
+         resetPotionCount();
+         resetSouls();
+         p.players.playerEffects.onDeath(pid);
       }
+
+      setWandSpell(null);
    }
 }

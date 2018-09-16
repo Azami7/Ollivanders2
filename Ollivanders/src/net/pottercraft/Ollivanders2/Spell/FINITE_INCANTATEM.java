@@ -57,11 +57,9 @@ public final class FINITE_INCANTATEM extends Charms
          if (live instanceof Player)
          {
             Player ply = (Player) live;
-            O2Player o2p = p.getO2Player(ply);
-            for (O2Effect effect : o2p.getEffects())
-            {
-               effect.age((int) (usesModifier * 1200));
-            }
+
+            p.players.playerEffects.ageAllEffects(ply.getUniqueId(), (int)(usesModifier * 1200));
+
             kill();
             return;
          }
