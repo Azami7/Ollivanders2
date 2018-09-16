@@ -52,14 +52,12 @@ public final class LIBERACORPUS extends Charms
          if (live instanceof Player)
          {
             Player player = (Player) live;
-            O2Player o2p = p.getO2Player(player);
-            for (O2Effect effect : o2p.getEffects())
+
+            if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.LEVICORPUS))
             {
-               if (effect.effectType == O2EffectType.LEVICORPUS)
-               {
-                  effect.age((int) (usesModifier * 2400));
-               }
+               p.players.playerEffects.ageEffect(player.getUniqueId(), O2EffectType.LEVICORPUS, (int)(usesModifier * 2400));
             }
+
             kill();
             return;
          }

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.*;
+import net.pottercraft.Ollivanders2.Effect.MUTED_SPEECH;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.LivingEntity;
@@ -53,10 +54,11 @@ public final class SILENCIO extends Charms
          if (live instanceof Player)
          {
             Player player = (Player) live;
-            O2Player o2p = p.getO2Player(player);
             int dur = (int) (usesModifier * 1200);
-            o2p.addEffect(new net.pottercraft.Ollivanders2.Effect.SILENCIO(p, O2EffectType.SILENCIO, dur, player.getUniqueId()));
-            p.setO2Player(player, o2p);
+
+            MUTED_SPEECH effect = new MUTED_SPEECH(p, dur, player.getUniqueId());
+            p.players.playerEffects.addEffect(effect);
+
             kill();
             return;
          }

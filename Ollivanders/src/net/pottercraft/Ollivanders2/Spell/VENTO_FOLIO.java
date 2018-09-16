@@ -78,8 +78,6 @@ public final class VENTO_FOLIO extends Charms
    {
       kill();
 
-      O2Player o2p = p.getO2Player(player);
-
       int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
       int duration;
 
@@ -107,7 +105,8 @@ public final class VENTO_FOLIO extends Charms
 
       if (rand < successRate)
       {
-         o2p.addEffect(new FLYING(p, O2EffectType.FLYING, duration, player.getUniqueId()));
+         FLYING effect = new FLYING(p, duration, player.getUniqueId());
+         p.players.playerEffects.addEffect(effect);
 
          if (Ollivanders2.debug)
             p.getLogger().info("Adding effect ");

@@ -8,6 +8,7 @@ import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.ShapeShiftSuper;
 import net.pottercraft.Ollivanders2.Player.O2Player;
+import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS;
@@ -73,23 +74,20 @@ public final class INFORMOUS extends Arithmancy
             player.sendMessage(Ollivanders2.chatColor + entity.getType().toString() + " has " + ((Damageable) entity).getHealth() + " health.");
             if (entity instanceof Player)
             {
-               Player ePlayer = (Player) entity;
-               O2Player o2p = p.getO2Player(ePlayer);
-               for (O2Effect effect : o2p.getEffects())
+               Player target = (Player)entity;
+
+               player.sendMessage(Ollivanders2.chatColor + " has " + target.getFoodLevel() + " food level.");
+               if (target.canSee(player))
+                  player.sendMessage(Ollivanders2.chatColor + " can see you.");
+               else
+                  player.sendMessage(Ollivanders2.chatColor + " cannot see you.");
+
+               if (p.houses.isSorted(target))
                {
-                  if (effect instanceof LYCANTHROPY)
-                  {
-                     player.sendMessage(Ollivanders2.chatColor + ePlayer.getName() + " has Lycanthropy.");
-                  }
-                  else if (effect instanceof ShapeShiftSuper)
-                  {
-                     // do nothing, this is not detectable
-                  }
-                  else
-                  {
-                     player.sendMessage(Ollivanders2.chatColor + ePlayer.getName() + " has " + O2EffectType.recode(effect.effectType) + " with " + effect.duration / 20 + " seconds left.");
-                  }
+                  player.sendMessage(Ollivanders2.chatColor + " is a member of " + p.houses.getHouse(target).getName() + ".");
                }
+               else
+                  player.sendMessage(Ollivanders2.chatColor + " has not been sorted.");
             }
             iEntity.add(entity);
          }
