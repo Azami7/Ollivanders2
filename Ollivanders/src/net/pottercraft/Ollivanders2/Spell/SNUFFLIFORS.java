@@ -7,6 +7,8 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * The Snufflifors Spell (Snufflifors) is a spell used to transfigure objects into mice, but Flying books are
  * especially vulnerable to this spell. Bats are used as the MC approximation of mice.
@@ -17,29 +19,29 @@ import org.bukkit.entity.Player;
  */
 public class SNUFFLIFORS extends FriendlyMobDisguiseSuper
 {
+   public O2SpellType spellType = O2SpellType.SNUFFLIFORS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"You're going to have a lot of fun with the Snufflifors Spell, Hermione! It's particularly useful at turning books into bats! How cool is that?\" -Fred Weasley");
+   }};
+
+   protected String text = "The Snufflifors Spell is a spell used to transfigure objects into bats.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public SNUFFLIFORS (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("\"You're going to have a lot of fun with the Snufflifors Spell, Hermione! It's particularly useful at turning books into bats! How cool is that?\" -Fred Weasley");
-
-      text = "The Snufflifors Spell is a spell used to transfigure objects into bats.";
-   }
+   public SNUFFLIFORS () { }
 
    /**
     * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public SNUFFLIFORS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public SNUFFLIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       targetType = EntityType.BAT;
       disguiseType = DisguiseType.getType(targetType);

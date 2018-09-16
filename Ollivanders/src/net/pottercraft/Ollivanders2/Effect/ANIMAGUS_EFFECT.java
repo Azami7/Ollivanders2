@@ -1,6 +1,12 @@
 package net.pottercraft.Ollivanders2.Effect;
 
-import me.libraryaddict.disguise.disguisetypes.watchers.*;
+import me.libraryaddict.disguise.disguisetypes.RabbitType;
+import me.libraryaddict.disguise.disguisetypes.watchers.AgeableWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.HorseWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.LlamaWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.OcelotWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.RabbitWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.WolfWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.DyeColor;
@@ -69,10 +75,26 @@ public class ANIMAGUS_EFFECT extends SHAPE_SHIFT
                e.printStackTrace();
          }
 
-         if (type != null)
+         ocelotWatcher.setType(type);
+      }
+      else if (form == EntityType.RABBIT)
+      {
+         RabbitWatcher rabbitWatcher = (RabbitWatcher)watcher;
+         RabbitType type = RabbitType.WHITE;
+         rabbitWatcher.isAdult();
+
+         try
          {
-            ocelotWatcher.setType(type);
+            type = RabbitType.valueOf(colorVariant);
          }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to parse Rabbit.Type " + colorVariant);
+            if (Ollivanders2.debug)
+               e.printStackTrace();
+         }
+
+         rabbitWatcher.setType(type);
       }
       else if (form == EntityType.WOLF)
       {
@@ -91,11 +113,8 @@ public class ANIMAGUS_EFFECT extends SHAPE_SHIFT
                e.printStackTrace();
          }
 
-         if (color != null)
-         {
-            wolfWatcher.isTamed();
-            wolfWatcher.setCollarColor(color);
-         }
+         wolfWatcher.isTamed();
+         wolfWatcher.setCollarColor(color);
       }
       else if (form == EntityType.HORSE)
       {
@@ -115,10 +134,7 @@ public class ANIMAGUS_EFFECT extends SHAPE_SHIFT
                e.printStackTrace();
          }
 
-         if (color != null)
-         {
-            horseWatcher.setColor(color);
-         }
+         horseWatcher.setColor(color);
       }
       else if (Ollivanders2.mcVersionCheck() && form == EntityType.LLAMA)
       {
@@ -136,10 +152,8 @@ public class ANIMAGUS_EFFECT extends SHAPE_SHIFT
             if (Ollivanders2.debug)
                e.printStackTrace();
          }
-         if (color != null)
-         {
-            llamaWatcher.setColor(color);
-         }
+
+         llamaWatcher.setColor(color);
       }
       else if (form == EntityType.COW || form == EntityType.DONKEY || form == EntityType.MULE || form == EntityType.SLIME || form == EntityType.POLAR_BEAR)
       {

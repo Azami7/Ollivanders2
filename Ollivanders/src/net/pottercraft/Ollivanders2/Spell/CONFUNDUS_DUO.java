@@ -3,6 +3,8 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * Casts a more powerful confusion potion effect that is twice as strong and lasts twice as long as Confundus.
  *
@@ -13,29 +15,30 @@ import org.bukkit.entity.Player;
  */
 public final class CONFUNDUS_DUO extends ConfundusSuper
 {
+   public O2SpellType spellType = O2SpellType.CONFUNDUS_DUO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Confundus Charm");
+      add("The guard was confused. He stared down at the thin, golden Probe and then at his companion, who said in a slightly dazed voice, 'Yeah, you've just checked them, Marius.'");
+   }};
+
+   protected String text = "Confundus Duo is a stronger variation of the Confundus Charm.  Effects are twice as strong and last twice as long as Confundo.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public CONFUNDUS_DUO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Confundus Charm");
-      flavorText.add("The guard was confused. He stared down at the thin, golden Probe and then at his companion, who said in a slightly dazed voice, 'Yeah, you've just checked them, Marius.'");
-      text = "Confundus Duo is a stronger variation of the Confundus Charm.  Effects are twice as strong and last twice as long as Confundo.";
-   }
+   public CONFUNDUS_DUO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public CONFUNDUS_DUO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public CONFUNDUS_DUO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       modifier = 2;
    }

@@ -8,6 +8,8 @@ import org.bukkit.material.Openable;
 
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 
+import java.util.ArrayList;
+
 /**
  * Opens a trapdoor or door.
  *
@@ -16,6 +18,15 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class DISSENDIUM extends Charms
 {
+   public O2SpellType spellType = O2SpellType.DISSENDIUM;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Opening Charm");
+      add("At once, the statue's hump opened wide enough to admit a fairly thin person.");
+   }};
+
+   protected String text = "Dissendium will open a door or trapdoor for a few seconds. To open a door, aim at the bottom half.";
+
    private double lifeTime;
    private boolean move;
    private int openTime;
@@ -24,26 +35,19 @@ public final class DISSENDIUM extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DISSENDIUM (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Opening Charm");
-      flavorText.add("At once, the statue's hump opened wide enough to admit a fairly thin person.");
-      text = "Dissendium will open a door or trapdoor for a few seconds. To open a door, aim at the bottom half.";
-   }
+   public DISSENDIUM () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public DISSENDIUM (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public DISSENDIUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
+
       lifeTime = usesModifier * 16;
       move = true;
       openTime = 160;

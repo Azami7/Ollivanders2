@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import java.util.ArrayList;
+
 /**
  * Creates a larger incendio that strafes and doubles the radius and duration.
  *
@@ -13,28 +15,29 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class INCENDIO_DUO extends IncendioSuper
 {
+   public O2SpellType spellType = O2SpellType.INCENDIO_DUO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("A Stronger Fire-Making Charm");
+   }};
+
+   protected String text = "Incendio Duo will burn blocks and entities it passes by. It's radius is twice that of Incendio and it's duration half.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCENDIO_DUO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("A Stronger Fire-Making Charm");
-      text = "Incendio Duo will burn blocks and entities it passes by. It's radius is twice that of Incendio and it's duration half.";
-   }
+   public INCENDIO_DUO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public INCENDIO_DUO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public INCENDIO_DUO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       location.add(vector);
       strafe = true;
       blockRadius = 2;

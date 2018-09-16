@@ -19,27 +19,25 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class CALAMUS extends Transfiguration
 {
+   public O2SpellType spellType = O2SpellType.CALAMUS;
+
+   protected String text = "Turns sticks in to arrows.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public CALAMUS (O2SpellType type)
-   {
-      super(type);
-
-      text = "Turns sticks in to arrows.";
-   }
+   public CALAMUS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public CALAMUS(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public CALAMUS(Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect()

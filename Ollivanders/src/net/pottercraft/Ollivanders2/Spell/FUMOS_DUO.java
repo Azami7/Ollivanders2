@@ -4,6 +4,8 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import java.util.ArrayList;
+
 /**
  * Causes blindness in a radius larger than fumos.
  *
@@ -14,28 +16,29 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class FUMOS_DUO extends FumosSuper
 {
+   public O2SpellType spellType = O2SpellType.FUMOS_DUO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("A Stronger Smoke-Screen Spell");
+   }};
+
+   protected String text = "Fumos Duo will cause those in an area to be blinded by a smoke cloud. The blindness lasts for a time twice as long as that created by Fumos";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FUMOS_DUO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("A Stronger Smoke-Screen Spell");
-      text = "Fumos Duo will cause those in an area to be blinded by a smoke cloud. The blindness lasts for a time twice as long as that created by Fumos";
-   }
+   public FUMOS_DUO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public FUMOS_DUO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public FUMOS_DUO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       strength = 2;
    }
 }

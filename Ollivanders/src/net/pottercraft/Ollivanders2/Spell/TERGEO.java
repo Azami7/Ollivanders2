@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+
 /**
  * The siphoning spell.
  *
@@ -14,31 +16,32 @@ import org.bukkit.entity.Player;
  */
 public final class TERGEO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.TERGEO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Siphoning Spell");
+      add("The wand siphoned off most of the grease. Looking rather pleased with himself, Ron handed the slightly smoking handkerchief to Hermione.");
+   }};
+
+   protected String text = "Tergeo will siphon off a block of water where it hits. It will also disable any Aguamenti-placed water blocks nearby.";
+
    boolean move;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public TERGEO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Siphoning Spell");
-      flavorText.add("The wand siphoned off most of the grease. Looking rather pleased with himself, Ron handed the slightly smoking handkerchief to Hermione.");
-      text = "Tergeo will siphon off a block of water where it hits. It will also disable any Aguamenti-placed water blocks nearby.";
-   }
+   public TERGEO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public TERGEO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public TERGEO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
       move = true;
    }
 

@@ -10,6 +10,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+
 /**
  * Turn animals to flower pots (approximation for water goblets).
  *
@@ -19,28 +21,29 @@ import org.bukkit.inventory.ItemStack;
  */
 public final class VERA_VERTO extends FriendlyMobDisguiseSuper
 {
+   public O2SpellType spellType = O2SpellType.VERA_VERTO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("\"Could I have your attention please? Right, now, today, we will be transforming animals into water goblets. Like so. One, two, three. Vera Verto.\" -Minerva McGonagall");
+   }};
+
+   protected String text = "Turns an entity in to a flower pot. Size of animal and duration of the spell depends on your experience.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VERA_VERTO (O2SpellType type)
-   {
-      super(type);
-      flavorText.add("\"Could I have your attention please? Right, now, today, we will be transforming animals into water goblets. Like so. One, two, three. Vera Verto.\" -Minerva McGonagall");
-
-      text = "Turns an entity in to a flower pot. Size of animal and duration of the spell depends on your experience.";
-   }
+   public VERA_VERTO () { }
 
    /**
     * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public VERA_VERTO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public VERA_VERTO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
 
       spellDuration = (int)(1200 * usesModifier);
       targetType = EntityType.FALLING_BLOCK;

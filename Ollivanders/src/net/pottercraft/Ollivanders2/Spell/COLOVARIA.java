@@ -12,6 +12,8 @@ import org.bukkit.material.MaterialData;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import java.util.ArrayList;
+
 /**
  * Changes color of sheep and colorable blocks to a random color
  *
@@ -20,29 +22,30 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class COLOVARIA extends Charms
 {
+   public O2SpellType spellType = O2SpellType.COLOVARIA;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Colour Change Charm");
+      add("[...] he wished he had not mixed up the incantations for Colour Change and Growth Charms, so that the rat he was supposed to be turning orange swelled shockingly and was the size of a badger before Harry could rectify his mistake.");
+   }};
+
+   protected String text = "Changes color of sheep and colorable blocks to another color.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLOVARIA (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Colour Change Charm");
-      flavorText.add("[...] he wished he had not mixed up the incantations for Colour Change and Growth Charms, so that the rat he was supposed to be turning orange swelled shockingly and was the size of a badger before Harry could rectify his mistake.");
-      text = "Changes color of sheep and colorable blocks to another color.";
-   }
+   public COLOVARIA () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public COLOVARIA (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public COLOVARIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

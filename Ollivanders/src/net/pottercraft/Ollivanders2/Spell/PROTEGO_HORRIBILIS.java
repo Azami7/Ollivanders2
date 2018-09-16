@@ -6,6 +6,8 @@ import org.bukkit.Material;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 
+import java.util.ArrayList;
+
 /**
  * Protego horribilis is the incantation to a protective spell.
  *
@@ -14,28 +16,29 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class PROTEGO_HORRIBILIS extends Charms
 {
+   public O2SpellType spellType = O2SpellType.PROTEGO_HORRIBILIS;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add(" [...] although he could barely see out of it, he pointed his wand through the smashed window and started muttering incantations of great complexity. Harry heard a weird rushing noise, as though Flitwick had unleashed the power of the wind into the grounds.");
+   }};
+
+   protected String text = "Protego horribilis is a stationary spell which will destroy any spells crossing it's barrier.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_HORRIBILIS (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add(" [...] although he could barely see out of it, he pointed his wand through the smashed window and started muttering incantations of great complexity. Harry heard a weird rushing noise, as though Flitwick had unleashed the power of the wind into the grounds.");
-      text = "Protego horribilis is a stationary spell which will destroy any spells crossing it's barrier.";
-   }
+   public PROTEGO_HORRIBILIS () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public PROTEGO_HORRIBILIS (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public PROTEGO_HORRIBILIS (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

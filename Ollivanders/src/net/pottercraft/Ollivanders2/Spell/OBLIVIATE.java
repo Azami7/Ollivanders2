@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Entity;
@@ -16,30 +17,31 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class OBLIVIATE extends Charms
 {
+   public O2SpellType spellType = O2SpellType.OBLIVIATE;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Memory Charm");
+      add("\"If there’s one thing I pride myself on, it’s my Memory Charms.\" -Gilderoy Lockhart");
+      add("\"Miss Dursley has been punctured and her memory has been modified. She has no recollection of the incident at all. So that's that, and no harm done.\" -Cornelius Fudge");
+   }};
+
+   protected String text = "Causes target player to lose some of their magical ability.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public OBLIVIATE (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Memory Charm");
-      flavorText.add("\"If there’s one thing I pride myself on, it’s my Memory Charms.\" -Gilderoy Lockhart");
-      flavorText.add("\"Miss Dursley has been punctured and her memory has been modified. She has no recollection of the incident at all. So that's that, and no harm done.\" -Cornelius Fudge");
-      text = "Causes target player to lose some of their magical ability.";
-   }
+   public OBLIVIATE () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin the plugin callback
-    * @param player the player who cast the spell
-    * @param type the name of the spell
-    * @param rightWand which wand they are using
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public OBLIVIATE (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public OBLIVIATE (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override

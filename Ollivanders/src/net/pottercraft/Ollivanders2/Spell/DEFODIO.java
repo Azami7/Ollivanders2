@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Location;
@@ -20,31 +21,33 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class DEFODIO extends Charms
 {
-   int depth;
+   public O2SpellType spellType = O2SpellType.DEFODIO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Gouging Spell enables a witch or wizard to carve through earth and stone with ease. From budding Herbologists digging for Snargaluff seedlings to treasure-hunting curse breakers uncovering ancient wizard tombs, the Gouging Spell makes all manner of heavy labour a matter of pointing a wand.");
+      add("The Gouging Charm");
+   }};
+
+   protected String text = "Mines a line of blocks.";
+
+   private int depth;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DEFODIO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Gouging Spell enables a witch or wizard to carve through earth and stone with ease. From budding Herbologists digging for Snargaluff seedlings to treasure-hunting curse breakers uncovering ancient wizard tombs, the Gouging Spell makes all manner of heavy labour a matter of pointing a wand.");
-      flavorText.add("The Gouging Charm");
-      text = "Mines a line of blocks.";
-   }
+   public DEFODIO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public DEFODIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public DEFODIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
+
       depth = (int) usesModifier;
    }
 

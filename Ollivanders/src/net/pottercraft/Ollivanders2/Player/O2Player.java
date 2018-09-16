@@ -427,8 +427,8 @@ public class O2Player
       Constructor c;
       try
       {
-         c = Class.forName(spellClass).getConstructor(O2SpellType.class);
-         SpellProjectile s = (SpellProjectile) c.newInstance(spellType);
+         c = Class.forName(spellClass).getConstructor();
+         SpellProjectile s = (SpellProjectile) c.newInstance();
 
          if (recentSpells.containsKey(spellType))
          {
@@ -952,6 +952,10 @@ public class O2Player
          if (animagusForm == EntityType.OCELOT)
          {
             animagusColor = p.common.randomOcelotType().toString();
+         }
+         else if(animagusForm == EntityType.RABBIT)
+         {
+            animagusColor = p.common.randomRabbitType().toString();
          }
          else if (animagusForm == EntityType.WOLF)
          {

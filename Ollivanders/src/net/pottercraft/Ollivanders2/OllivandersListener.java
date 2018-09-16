@@ -417,11 +417,11 @@ public class OllivandersListener implements Listener
                }
                else if (spell == O2SpellType.PORTUS)
                {
-                  p.addProjectile(new PORTUS(p, sender, O2SpellType.PORTUS, 1.0, words));
+                  p.addProjectile(new PORTUS(p, sender, 1.0, words));
                }
                else if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
                {
-                  p.addProjectile(new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, sender, O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS, 1.0));
+                  p.addProjectile(new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, sender, 1.0));
                }
                else
                {
@@ -688,7 +688,7 @@ public class OllivandersListener implements Listener
       try
       {
          //Maybe you have to use Integer.TYPE here instead of Integer.class
-         c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, O2SpellType.class, Double.class);
+         c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, Double.class);
       }
       catch (Exception e)
       {
@@ -698,7 +698,7 @@ public class OllivandersListener implements Listener
 
       try
       {
-         p.addProjectile((SpellProjectile) c.newInstance(p, player, name, wandC));
+         p.addProjectile((SpellProjectile) c.newInstance(p, player, wandC));
       }
       catch (Exception e)
       {

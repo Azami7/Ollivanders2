@@ -5,6 +5,8 @@ import org.bukkit.util.Vector;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import java.util.ArrayList;
+
 /**
  * Shoots caster high into air
  *
@@ -14,29 +16,30 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class ASCENDIO extends Charms
 {
+   public O2SpellType spellType = O2SpellType.ASCENDIO;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("The Climbing Charm");
+      add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
+   }};
+
+   protected String text = "Propels the caster into the air.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ASCENDIO (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("The Climbing Charm");
-      flavorText.add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
-      text = "Propels the caster into the air.";
-   }
+   public ASCENDIO () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public ASCENDIO (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public ASCENDIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    public void checkEffect ()

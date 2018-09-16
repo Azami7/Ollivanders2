@@ -12,6 +12,8 @@ import org.bukkit.inventory.Inventory;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 
+import java.util.ArrayList;
+
 /**
  * Pack is the incantation of a spell used to make items pack themselves into a trunk.
  *
@@ -20,30 +22,30 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class PACK extends Charms
 {
+   public O2SpellType spellType = O2SpellType.PACK;
+
+   protected ArrayList<String> flavorText = new ArrayList<String>() {{
+      add("Books, clothes, telescope and scales all soared into the air and flew pell-mell into the trunk.");
+      add("The Packing Charm");
+   }};
+
+   protected String text = "When this hits a chest, it will suck any items nearby into it.";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PACK (O2SpellType type)
-   {
-      super(type);
-
-      flavorText.add("Books, clothes, telescope and scales all soared into the air and flew pell-mell into the trunk.");
-      flavorText.add("The Packing Charm");
-
-      text = "When this hits a chest, it will suck any items nearby into it.";
-   }
+   public PACK () { }
 
    /**
-    * Constructor for casting the spell.
+    * Constructor.
     *
-    * @param plugin
-    * @param player
-    * @param type
-    * @param rightWand
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
     */
-   public PACK (Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public PACK (Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super(plugin, player, type, rightWand);
+      super(plugin, player, rightWand);
    }
 
    @Override
@@ -65,7 +67,7 @@ public final class PACK extends Charms
          Inventory inv = c.getInventory();
          if (inv.getHolder() instanceof DoubleChest)
          {
-            inv = ((DoubleChest) inv.getHolder()).getInventory();
+            inv = inv.getHolder().getInventory();
          }
          for (Item item : getItems(usesModifier))
          {

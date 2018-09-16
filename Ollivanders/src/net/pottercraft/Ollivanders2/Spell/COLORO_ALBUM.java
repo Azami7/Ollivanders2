@@ -1,27 +1,28 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import org.bukkit.DyeColor;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Creates a storm of a variable duration.
+ * Target sheep or colored block turns white.
  *
- * @version Ollivanders2
- * @see MetelojinxSuper
- * @author lownes
  * @author Azami7
+ * @since 2.2.8
  */
-public final class METELOJINX extends MetelojinxSuper
+public final class COLORO_ALBUM extends ColoroSuper
 {
-   public O2SpellType spellType = O2SpellType.METELOJINX;
+   public O2SpellType spellType = O2SpellType.COLORO_ALBUM;
 
-   protected String text = "Metelojinx will turn a sunny day into a storm.";
+   protected String text = "Turns target colorable entity or block white.";
+
+   DyeColor color = DyeColor.WHITE;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public METELOJINX () { }
+   public COLORO_ALBUM () { }
 
    /**
     * Constructor.
@@ -30,9 +31,8 @@ public final class METELOJINX extends MetelojinxSuper
     * @param player the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public METELOJINX (Ollivanders2 plugin, Player player, Double rightWand)
+   public COLORO_ALBUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-      storm = true;
    }
 }
