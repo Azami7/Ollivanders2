@@ -6,8 +6,6 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
-
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
