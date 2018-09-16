@@ -21,9 +21,16 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
 {
-   public WIGGENWELD_POTION (Ollivanders2 plugin, O2PotionType potionType)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the plugin
+    */
+   public WIGGENWELD_POTION (Ollivanders2 plugin)
    {
-      super(plugin, potionType);
+      super(plugin);
+
+      potionType = O2PotionType.WIGGENWELD_POTION;
 
       name = "Wiggenweld Potion";
 
@@ -43,6 +50,7 @@ public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
       ingredients.put(IngredientType.LIONFISH_SPINES, 10);
       ingredients.put(IngredientType.UNICORN_HORN, 1);
       ingredients.put(IngredientType.WOLFSBANE, 2);
+      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 1);
 
       text = "The Wiggenweld Potion is a healing potion which can also be used to wake the drinker from magically-induced sleep.";
       flavorText.add("\"Today you will learn to brew the Wiggenweld Potion. It is a powerful healing potion that can be used to heal injuries, or reverse the effects of a Sleeping Draught.\" -Severus Snape");
