@@ -20,7 +20,7 @@ public final class COLORO_VERIDI extends ColoroSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_VERIDI (O2SpellType type) { }
+   public COLORO_VERIDI () { }
 
    /**
     * Constructor.

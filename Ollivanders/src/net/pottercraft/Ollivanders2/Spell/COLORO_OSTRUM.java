@@ -20,7 +20,7 @@ public final class COLORO_OSTRUM extends ColoroSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_OSTRUM (O2SpellType type) { }
+   public COLORO_OSTRUM () { }
 
    /**
     * Constructor.
