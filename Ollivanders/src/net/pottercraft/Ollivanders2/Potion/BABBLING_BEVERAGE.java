@@ -16,9 +16,16 @@ import org.bukkit.entity.Player;
  */
 public class BABBLING_BEVERAGE extends O2Potion
 {
-   public BABBLING_BEVERAGE (Ollivanders2 plugin, O2PotionType potionType)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the plugin
+    */
+   public BABBLING_BEVERAGE (Ollivanders2 plugin)
    {
-      super(plugin, potionType);
+      super(plugin);
+
+      potionType = O2PotionType.BABBLING_BEVERAGE;
 
       ingredients.put(IngredientType.VALERIAN_SPRIGS, 2);
       ingredients.put(IngredientType.DITTANY, 1);

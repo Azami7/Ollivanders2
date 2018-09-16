@@ -15,9 +15,16 @@ import org.bukkit.entity.Player;
  */
 public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
 {
-   public BARUFFIOS_BRAIN_ELIXIR (Ollivanders2 plugin, O2PotionType potionType)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the plugin
+    */
+   public BARUFFIOS_BRAIN_ELIXIR (Ollivanders2 plugin)
    {
-      super(plugin, potionType);
+      super(plugin);
+
+      potionType = O2PotionType.BARUFFIOS_BRAIN_ELIXIR;
 
       ingredients.put(IngredientType.RUNESPOOR_EGG, 1);
       ingredients.put(IngredientType.GINGER_ROOT, 2);

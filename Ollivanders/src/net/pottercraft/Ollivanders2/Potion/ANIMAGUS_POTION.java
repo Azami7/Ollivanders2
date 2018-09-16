@@ -15,10 +15,16 @@ import org.bukkit.entity.Player;
  */
 public final class ANIMAGUS_POTION extends O2Potion
 {
-   public ANIMAGUS_POTION (Ollivanders2 plugin, O2PotionType potionType)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the plugin
+    */
+   public ANIMAGUS_POTION (Ollivanders2 plugin)
    {
+      super(plugin);
 
-      super(plugin, potionType);
+      potionType = O2PotionType.ANTIDOTE_POTION;
 
       ingredients.put(IngredientType.MANDRAKE_LEAF, 1);
       ingredients.put(IngredientType.DEW_DROP, 2);
