@@ -24,6 +24,8 @@ public final class REGENERATION_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.REGENERATION_POTION;
+      potionLevel = PotionLevel.NEWT;
+      name = "Regeneration Potion";
 
       ingredients.put(IngredientType.BONE, 1);
       ingredients.put(IngredientType.BLOOD, 1);
@@ -31,7 +33,6 @@ public final class REGENERATION_POTION extends O2Potion
       ingredients.put(IngredientType.SALAMANDER_FIRE, 1);
       ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 4);
 
-      name = "Regeneration Potion";
       text = "This potion will heal a player.";
       flavorText.add("\"Bone of the father, unknowingly given, you will renew your son! Flesh of the servant, willingly sacrificed, you will revive your master. Blood of the enemy, forcibly taken, you will resurrect your foe.\" -Peter Pettigrew");
 

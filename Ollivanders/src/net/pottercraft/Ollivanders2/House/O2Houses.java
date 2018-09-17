@@ -27,7 +27,6 @@ public class O2Houses
    private Ollivanders2 p;
    private Map <UUID, O2HouseType> O2HouseMap = new HashMap<>();
    private Map <O2HouseType, Team> O2HouseTeamMap = new HashMap<>();
-   private boolean isEnabled = true;
 
    private Scoreboard scoreboard;
    private String objectiveName = "o2_hpoints";
@@ -44,13 +43,8 @@ public class O2Houses
    {
       p = plugin;
 
-      if (!p.getConfig().getBoolean("houses"))
-      {
-         p.getLogger().info("O2Houses not enabled.");
-         isEnabled = false;
-
+      if (Ollivanders2.useHouses)
          return;
-      }
 
       readHouseConfig();
       createScoreboard();
@@ -367,7 +361,7 @@ public class O2Houses
     */
    private void createScoreboard ()
    {
-      if (!isEnabled)
+      if (!Ollivanders2.useHouses)
       {
          // do not allow if houses is not enabled
          p.getLogger().warning("Attempted to create scoreboard when houses is not enabled.");
@@ -443,7 +437,7 @@ public class O2Houses
     */
    private synchronized boolean updateScoreboard ()
    {
-      if (!isEnabled)
+      if (!Ollivanders2.useHouses)
       {
          p.getLogger().warning("Tried to update scoreboard when houses are not enabled.");
          return false;
@@ -505,7 +499,7 @@ public class O2Houses
     */
    private boolean hideScoreboard ()
    {
-      if (!isEnabled)
+      if (!Ollivanders2.useHouses)
       {
          p.getLogger().warning("Tried to hide scoreboard when houses are not enabled.");
          return false;
@@ -524,7 +518,7 @@ public class O2Houses
     */
    private void showScoreboard ()
    {
-      if (!isEnabled)
+      if (!Ollivanders2.useHouses)
       {
          p.getLogger().warning("Tried to show scoreboard when houses are not enabled.");
          return;

@@ -24,13 +24,14 @@ public final class WIT_SHARPENING_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.WIT_SHARPENING_POTION;
+      potionLevel = PotionLevel.OWL;
+      name = "Wit-Sharpening Potion";
 
       ingredients.put(IngredientType.GINGER_ROOT, 2);
       ingredients.put(IngredientType.GROUND_SCARAB_BEETLE, 3);
       ingredients.put(IngredientType.ARMADILLO_BILE, 2);
       ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
 
-      name = "Wit-Sharpening Potion";
       text = "The Wit-Sharpening Potion is a potion which allows the drinker to think more clearly. Due to this, it acts"
             + "as a counteragent to the Confundus Charm.";
       flavorText.add("\"Some of you will benefit from today's assignment: Wit-Sharpening Potion. Perhaps you should begin immediately.\" -Severus Snape");

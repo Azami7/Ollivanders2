@@ -24,6 +24,8 @@ public final class MEMORY_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.MEMORY_POTION;
+      potionLevel = PotionLevel.NEWT;
+      name = "Memory Potion";
 
       ingredients.put(IngredientType.MANDRAKE_LEAF, 3);
       ingredients.put(IngredientType.JOBBERKNOLL_FEATHER, 2);
@@ -31,8 +33,6 @@ public final class MEMORY_POTION extends O2Potion
       ingredients.put(IngredientType.POWDERED_SAGE, 1);
       ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
 
-
-      name = "Memory Potion";
       text = "This potion improves the drinker's memory. All spell experience is doubled.";
       potionColor = Color.fromRGB(255, 128, 0);
    }

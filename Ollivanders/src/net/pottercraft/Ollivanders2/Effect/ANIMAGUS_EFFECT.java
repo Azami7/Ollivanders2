@@ -18,6 +18,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
+import org.bukkit.entity.Player;
 
 /**
  * Transforms an Animagus player in to their animal form.

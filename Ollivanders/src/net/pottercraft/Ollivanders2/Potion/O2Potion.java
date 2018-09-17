@@ -35,10 +35,30 @@ import org.bukkit.entity.Player;
  */
 public abstract class O2Potion implements Teachable
 {
+   enum PotionLevel
+   {
+      BEGINNER (1),
+      OWL (2),
+      NEWT (3),
+      EXPERT (4);
+
+      int successModifier;
+
+      PotionLevel (int mod)
+      {
+         successModifier = mod;
+      }
+   }
+
    /**
     * The type this potion is.
     */
    protected O2PotionType potionType;
+
+   /**
+    * The difficulty level of this potion.
+    */
+   PotionLevel potionLevel = PotionLevel.BEGINNER;
 
    /**
     * The ingredients list for this potion.
@@ -218,8 +238,11 @@ public abstract class O2Potion implements Teachable
     *
     * @return an ItemStack with a single bottle of this potion
     */
-   public ItemStack brew ()
+   public ItemStack brew (Player brewer, boolean checkCanBrew)
    {
+      if (checkCanBrew && !canBrew(brewer))
+         return brewBadPotion();
+
       ItemStack potion = new ItemStack(potionMaterialType);
       PotionMeta meta = (PotionMeta)potion.getItemMeta();
 
@@ -234,6 +257,92 @@ public abstract class O2Potion implements Teachable
       potion.setItemMeta(meta);
 
       return potion;
+   }
+
+   /**
+    * Determine if a player can successfully brew this potion. This takes in to consideration whether book learning
+    * is enabled, the player's experience with the potion, and the difficulty of the potion.
+    *
+    * @param brewer the player brewing the potion
+    * @return true if the player will be successful, false otherwise.
+    */
+   private boolean canBrew (Player brewer)
+   {
+      boolean canBrew = true;
+
+      O2Player o2p = p.getO2Player(brewer);
+      if (o2p == null)
+         return false;
+
+      Integer potionCount = o2p.getPotionCount(potionType);
+
+      // do not allow them to brew if book learning is on and they do not know this potion
+      if (Ollivanders2.useBookLearning && (potionCount < 1))
+      {
+         brewer.sendMessage(Ollivanders2.chatColor + "You feel uncertain about how to make this potion.");
+         canBrew = false;
+      }
+      else
+      {
+         // first check player year versus potion difficulty
+         int year = o2p.getYear().getIntValue();
+
+         int yearModifier = 1; // year 1
+         if (year == 2) // year 2
+            yearModifier = 2;
+         else if (year == 3 || year == 4) // years 3-4
+            yearModifier = 3;
+         else if (year > 4 && year < 7) // years 5-7, OWL
+            yearModifier = 4;
+         else //year == 7, NEWT
+            yearModifier = 5;
+
+         int successRate = 0;
+         // If Years is enabled:
+         // success rate = ((potion count * year modifier * 2) / potion success modifier) - potion success modifier
+         //
+         // Examples:
+         //
+         // BEGINNER potion has a success modifier of 1, player has potion count of 10, player is a 7th year
+         // = 99% success rate
+         //
+         // EXPERT potion has a success modifier of 4, player has a potion count of 10, player is a 6th year
+         // = 16% success rate
+         //
+         // OWL potion has a success modifier of 2, player has a potion count of 2, player is a 1st year
+         // = 0% success rate
+         //
+         if (Ollivanders2.useYears)
+         {
+            successRate = ((potionCount * yearModifier * 2) / potionLevel.successModifier) - potionLevel.successModifier;
+         }
+         // If Years is not enabled:
+         // success rate = ((potion count * 10) / (potion success modifier) - potions success modifier
+         //
+         // Examples:
+         // BEGINNER potion has a success modifier of 1, player has potion count of 10, player is a 7th year
+         // = 99% success rate
+         //
+         // EXPERT potion has a success modifier of 4, player has a potion count of 10, player is a 6th year
+         // = 21% success rate
+         //
+         // OWL potion has a success modifier of 2, player has a potion count of 2, player is a 1st year
+         // = 8% success rate
+         //
+         else
+         {
+            successRate = ((potionCount * 10) / potionLevel.successModifier) - potionLevel.successModifier;
+         }
+
+         int rand = (Math.abs(Ollivanders2.random.nextInt()) % 100) + 1;
+
+         if (successRate > rand)
+            canBrew = true;
+         else
+            canBrew = false;
+      }
+
+      return canBrew;
    }
 
    /**

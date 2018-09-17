@@ -6,7 +6,6 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.ArrayList;
 
-import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
@@ -280,7 +279,7 @@ public class O2Players
          /**
           * Year
           */
-         Integer year = O2PlayerCommon.yearToInt(o2p.getYear());
+         Integer year = o2p.getYear().getIntValue();
          playerData.put(yearLabel, year.toString());
 
          /**
@@ -413,7 +412,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(masterSpellLabel))
             {
-               O2SpellType spellType = O2SpellType.spellsFromString(value);
+               O2SpellType spellType = O2SpellType.spellTypeFromString(value);
                if (spellType != null)
                {
                   o2p.setMasterSpell(spellType);
@@ -454,7 +453,7 @@ public class O2Players
             else
             {
                // it is a spell
-               O2SpellType spellType = O2SpellType.spellsFromString(label);
+               O2SpellType spellType = O2SpellType.spellTypeFromString(label);
                if (spellType == null)
                {
                   continue;

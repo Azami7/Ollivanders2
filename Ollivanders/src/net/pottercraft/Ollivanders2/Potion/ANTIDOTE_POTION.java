@@ -27,13 +27,14 @@ public final class ANTIDOTE_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.ANTIDOTE_POTION;
+      potionLevel = PotionLevel.BEGINNER;
+      name = "Common Antidote Potion";
 
       ingredients.put(IngredientType.MISTLETOE_BERRIES, 2);
       ingredients.put(IngredientType.BEZOAR, 1);
       ingredients.put(IngredientType.UNICORN_HAIR, 1);
       ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
 
-      name = "Common Antidote Potion";
       text = "Counteracts ordinary poisons, such as creature bites and stings.";
 
       potionColor = Color.TEAL;

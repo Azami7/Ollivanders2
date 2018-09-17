@@ -24,6 +24,8 @@ public final class WOLFSBANE_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.WOLFSBANE_POTION;
+      name = "Wolfsbane Potion";
+      potionLevel = PotionLevel.EXPERT;
 
       ingredients.put(IngredientType.WOLFSBANE, 2);
       ingredients.put(IngredientType.MANDRAKE_LEAF, 3);
@@ -31,7 +33,6 @@ public final class WOLFSBANE_POTION extends O2Potion
       ingredients.put(IngredientType.DITTANY, 2);
       ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 3);
 
-      name = "Wolfsbane Potion";
       text = "This potion will relieve, though not cure, the symptoms of Lycanthropy. It is a complex potion and requires"
             + "the most advanced potion-making skills.";
 

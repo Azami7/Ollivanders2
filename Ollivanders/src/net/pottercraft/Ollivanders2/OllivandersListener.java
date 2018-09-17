@@ -392,7 +392,7 @@ public class OllivandersListener implements Listener
       {
          if (p.canCast(sender, spell, true))
          {
-            if (p.getConfig().getBoolean("bookLearning") && p.getO2Player(sender).getSpellCount(spell) == 0)
+            if (Ollivanders2.useBookLearning && p.getO2Player(sender).getSpellCount(spell) == 0)
             {
                // if bookLearning is set to true then spell count must be > 0 to cast this spell
                if (Ollivanders2.debug)
@@ -878,7 +878,7 @@ public class OllivandersListener implements Listener
     */
    void rotateNonVerbalSpell (Player player, Action action)
    {
-      if (!Ollivanders2.nonVerbalCasting)
+      if (!Ollivanders2.useNonVerbalCasting)
          return;
 
       if (Ollivanders2.debug)
@@ -1552,7 +1552,7 @@ public class OllivandersListener implements Listener
    public void onBookRead (PlayerInteractEvent event)
    {
       // only run this if bookLearning is enabled
-      if (!p.getConfig().getBoolean("bookLearning"))
+      if (!Ollivanders2.useBookLearning)
          return;
 
       Action action = event.getAction();
@@ -1632,6 +1632,8 @@ public class OllivandersListener implements Listener
          return;
       }
 
+      String ingredientName = heldItem.getItemMeta().getDisplayName();
+
       // put the item in the player's off hand in to the cauldron
       Location spawnLoc = cauldron.getLocation();
       World world = cauldron.getWorld();
@@ -1644,6 +1646,10 @@ public class OllivandersListener implements Listener
             p.getLogger().info("onPotionBrewing: failed to spawn dropped item in cauldron");
 
          return;
+      }
+      else
+      {
+         player.sendMessage(Ollivanders2.chatColor + "Added " + ingredientName);
       }
 
       item.setVelocity(new Vector(0, 0, 0));
@@ -1690,7 +1696,7 @@ public class OllivandersListener implements Listener
       {
          O2Potions potions = p.getO2Potions();
 
-         ItemStack potion = potions.brewPotion(cauldron);
+         ItemStack potion = potions.brewPotion(cauldron, player);
 
          if (potion == null)
          {

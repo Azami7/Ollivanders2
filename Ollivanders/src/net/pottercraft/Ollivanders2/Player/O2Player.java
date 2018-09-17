@@ -3,19 +3,17 @@ package net.pottercraft.Ollivanders2.Player;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
-import net.pottercraft.Ollivanders2.Effect.O2EffectType;
-import net.pottercraft.Ollivanders2.Effect.ShapeShiftSuper;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.Potion.O2PotionType;
+
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -67,7 +65,7 @@ public class O2Player
    /**
     * A map of all the potions a player knows and the brew count.
     */
-   private Map<String, Integer> knownPotions = new HashMap<>();
+   private Map<O2PotionType, Integer> knownPotions = new HashMap<>();
 
    /**
     * A map of the recent spells a player has cast and their cast timestamp
@@ -292,16 +290,16 @@ public class O2Player
    /**
     * Get the brewing count for a potion
     *
-    * @param potion the spell to get a count for
+    * @param potionType the spell to get a count for
     * @return the number of times a player has cast this spell
     */
-   public int getPotionCount (String potion)
+   public int getPotionCount (O2PotionType potionType)
    {
       int count = 0;
 
-      if (knownPotions.containsKey(potion))
+      if (knownPotions.containsKey(potionType))
       {
-         count = knownPotions.get(potion);
+         count = knownPotions.get(potionType);
       }
 
       return count;
@@ -310,16 +308,16 @@ public class O2Player
    /**
     * Get the casting count for a spell
     *
-    * @param spell the spell to get a count for
+    * @param spellType the spell to get a count for
     * @return the number of times a player has cast this spell
     */
-   public Long getSpellLastCastTime (O2SpellType spell)
+   public Long getSpellLastCastTime (O2SpellType spellType)
    {
       Long count = new Long(0);
 
-      if (recentSpells.containsKey(spell))
+      if (recentSpells.containsKey(spellType))
       {
-         count = recentSpells.get(spell);
+         count = recentSpells.get(spellType);
       }
 
       return count;
@@ -335,7 +333,7 @@ public class O2Player
       return knownSpells;
    }
 
-   public Map<String, Integer> getKnownPotions ()
+   public Map<O2PotionType, Integer> getKnownPotions ()
    {
       return knownPotions;
    }
@@ -389,26 +387,26 @@ public class O2Player
     * Set the potion count for a potion. This will override the existing values for this potion and should
     * not be used when increment is intended.
     *
-    * @param potion the potion to set the count for
+    * @param potionType the potion to set the count for
     * @param count the count to set
     */
-   public void setPotionCount (String potion, int count)
+   public void setPotionCount (O2PotionType potionType, int count)
    {
       if (count >= 1)
       {
-         if (knownPotions.containsKey(potion))
+         if (knownPotions.containsKey(potionType))
          {
-            knownPotions.replace(potion, count);
+            knownPotions.replace(potionType, count);
          }
          else
          {
-            knownPotions.put(potion, count);
+            knownPotions.put(potionType, count);
          }
       }
       else
       {
-         if (knownPotions.containsKey(potion))
-            knownPotions.remove(potion);
+         if (knownPotions.containsKey(potionType))
+            knownPotions.remove(potionType);
       }
    }
 
@@ -459,41 +457,47 @@ public class O2Player
    /**
     * Increment the spell count by 1.
     *
-    * @param spell the spell to increment
+    * @param spellType the spell to increment
     */
-   public void incrementSpellCount (O2SpellType spell)
+   public void incrementSpellCount (O2SpellType spellType)
    {
-      if (knownSpells.containsKey(spell))
+      if (Ollivanders2.debug)
+         p.getLogger().info("Incrementing spell count for " + spellType.toString());
+
+      if (knownSpells.containsKey(spellType))
       {
-         int curCount = knownSpells.get(spell);
-         knownSpells.replace(spell, curCount + 1);
+         int curCount = knownSpells.get(spellType);
+         knownSpells.replace(spellType, curCount + 1);
 
          if (curCount + 1 >= 100)
          {
-            addMasteredSpell(spell);
+            addMasteredSpell(spellType);
          }
       }
       else
       {
-         knownSpells.put(spell, 1);
+         knownSpells.put(spellType, 1);
       }
    }
 
    /**
     * Increment the potion count by 1.
     *
-    * @param potion the potion to increment
+    * @param potionType the potion to increment
     */
-   public void incrementPotionCount (String potion)
+   public void incrementPotionCount (O2PotionType potionType)
    {
-      if (knownPotions.containsKey(potion))
+      if (Ollivanders2.debug)
+         p.getLogger().info("Incrementing potion count for " + potionType.toString());
+
+      if (knownPotions.containsKey(potionType))
       {
-         int curCount = knownPotions.get(potion);
-         knownPotions.replace(potion, curCount + 1);
+         int curCount = knownPotions.get(potionType);
+         knownPotions.replace(potionType, curCount + 1);
       }
       else
       {
-         knownPotions.put(potion, 1);
+         knownPotions.put(potionType, 1);
       }
    }
 
@@ -522,7 +526,7 @@ public class O2Player
     */
    public O2SpellType getWandSpell ()
    {
-      if (wandSpell == null && masterSpell != null && Ollivanders2.nonVerbalCasting)
+      if (wandSpell == null && masterSpell != null && Ollivanders2.useNonVerbalCasting)
          return masterSpell;
 
       return wandSpell;

@@ -25,6 +25,8 @@ public class SLEEPING_DRAUGHT extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.SLEEPING_DRAUGHT;
+      potionLevel = PotionLevel.BEGINNER;
+      text = "A Sleeping Draught causes the drinker to fall almost instantly into a deep, dreamless sleep.";
 
       name = "Sleeping Draught";
 
@@ -33,7 +35,6 @@ public class SLEEPING_DRAUGHT extends O2Potion
       ingredients.put(IngredientType.VALERIAN_SPRIGS, 4);
       ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 6);
 
-      text = "A Sleeping Draught causes the drinker to fall almost instantly into a deep, dreamless sleep.";
       flavorText.add("\"I've got it all worked out. I've filled these with a simple Sleeping Draught.\" -Hermione Granger");
       flavorText.add("\"You'll need to drink all of this, Harry. It's a potion for dreamless sleep.\" -Madam Pomfrey");
       flavorText.add("\"Then, without the smallest change of expression, they both keeled over backwards on to the floor.\"");

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -12,6 +13,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
@@ -76,9 +78,10 @@ public class O2Potions
     * Brew a potion in a cauldron.
     *
     * @param cauldron the cauldron with the potion ingredients
+    * @param brewer the player brewing this potion
     * @return the brewed potion if the recipe matches a known potion, null otherwise
     */
-   public ItemStack brewPotion (Block cauldron)
+   public ItemStack brewPotion (Block cauldron, Player brewer)
    {
       // make sure the block passed to us is a cauldron
       if (cauldron.getType() != Material.CAULDRON)
@@ -103,7 +106,7 @@ public class O2Potions
          return O2Potion.brewBadPotion();
       }
 
-      return potion.brew();
+      return potion.brew(brewer, true);
    }
 
    /**
@@ -212,6 +215,40 @@ public class O2Potions
    }
 
    /**
+    * Get a potion type by name.
+    *
+    * @param name the name of the potion
+    * @return the type if found, null otherwise
+    */
+   public O2PotionType getPotionTypeByName (String name)
+   {
+      if (O2PotionMap.containsKey(name))
+         return O2PotionMap.get(name);
+      else
+         return null;
+   }
+
+   /**
+    * Get potion name by type
+    *
+    * @param potionType the potion type
+    * @return the name if found, null otherwise
+    */
+   public String getPotionNameByType (O2PotionType potionType)
+   {
+      if (O2PotionMap.containsValue(potionType))
+      {
+         for (Entry<String, O2PotionType> e : O2PotionMap.entrySet())
+         {
+            if (e.getValue().equals(potionType))
+               return e.getKey();
+         }
+      }
+
+      return null;
+   }
+
+   /**
     * Get a potion ingredient by name.
     *
     * @param name the name of the ingredient to get
@@ -225,11 +262,6 @@ public class O2Potions
 
          if (iName.toLowerCase().startsWith(name.toLowerCase()))
             return getIngredient(i);
-         else
-         {
-            if (Ollivanders2.debug)
-               p.getLogger().info("Did not find ingredient " + name);
-         }
       }
 
       return null;
