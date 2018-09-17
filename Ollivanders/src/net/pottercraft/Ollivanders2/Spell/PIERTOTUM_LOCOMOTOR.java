@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class PIERTOTUM_LOCOMOTOR extends Transfiguration implements Spell
+public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
 {
    public O2SpellType spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
 

@@ -10,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author Azami7
  */
-public abstract class Healing extends SpellProjectile implements Spell
+public abstract class Healing extends O2Spell
 {
    protected O2MagicBranch branch = O2MagicBranch.HEALING;
 

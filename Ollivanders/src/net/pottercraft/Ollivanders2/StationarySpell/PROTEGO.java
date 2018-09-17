@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
-import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -45,10 +45,10 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
       {
          location = ply.getEyeLocation();
          flair(1);
-         List<SpellProjectile> projectiles = p.getProjectiles();
+         List<O2Spell> projectiles = p.getProjectiles();
          if (projectiles != null)
          {
-            for (SpellProjectile proj : projectiles)
+            for (O2Spell proj : projectiles)
             {
                if (isInside(proj.location))
                {

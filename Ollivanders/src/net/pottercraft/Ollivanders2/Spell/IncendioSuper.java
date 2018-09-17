@@ -104,7 +104,7 @@ public abstract class IncendioSuper extends Charms
                kill();
             }
          }
-         for (SpellProjectile proj : p.getProjectiles())
+         for (O2Spell proj : p.getProjectiles())
          {
             if ((proj.spellType == O2SpellType.GLACIUS || proj.spellType == O2SpellType.GLACIUS_DUO || proj.spellType == O2SpellType.GLACIUS_TRIA)
                   && proj.location.getWorld() == location.getWorld())

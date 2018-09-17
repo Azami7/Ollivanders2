@@ -48,7 +48,7 @@ public final class REPARIFARGE extends Charms
       List<Entity> entities = this.getCloseEntities(1);
       for (Entity entity : entities)
       {
-         for (SpellProjectile proj : p.getProjectiles())
+         for (O2Spell proj : p.getProjectiles())
          {
             if (proj instanceof Transfiguration)
             {

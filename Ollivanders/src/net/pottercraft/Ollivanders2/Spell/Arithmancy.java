@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
-public abstract class Arithmancy extends SpellProjectile implements Spell
+public abstract class Arithmancy extends O2Spell
 {
    protected O2MagicBranch branch = O2MagicBranch.ARITHMANCY;
 

@@ -6,9 +6,11 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.ArrayList;
 
+import net.pottercraft.Ollivanders2.Effect.O2Effects;
 import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
+
 import org.bukkit.entity.EntityType;
 
 /**
@@ -27,7 +29,7 @@ public class O2Players
    /**
     * Effects manager for player effects.
     */
-   public PlayerEffects playerEffects;
+   public O2Effects playerEffects;
 
    /**
     * The MC plugin callback
@@ -59,7 +61,7 @@ public class O2Players
    {
       p = plugin;
 
-      playerEffects = new PlayerEffects(p);
+      playerEffects = new O2Effects(p);
    }
 
    /**

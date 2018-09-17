@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.Collection;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.*;
@@ -25,12 +24,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 /**
- * Moving Spell Projectile
+ * A cast spell.
  *
- * @author lownes
+ * Used to be SpellProjectile.
+ *
  * @author Azami7
  */
-public abstract class SpellProjectile implements Teachable
+public abstract class O2Spell implements Teachable
 {
    /**
     * The player who cast this spell.
@@ -122,7 +122,7 @@ public abstract class SpellProjectile implements Teachable
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
     * text.
     */
-   public SpellProjectile () { }
+   public O2Spell () { }
 
    /**
     * Constructor
@@ -131,7 +131,7 @@ public abstract class SpellProjectile implements Teachable
     * @param player the player casting the spell
     * @param rightWand wand check for the player
     */
-   public SpellProjectile (Ollivanders2 plugin, Player player, Double rightWand)
+   public O2Spell (Ollivanders2 plugin, Player player, Double rightWand)
    {
       location = player.getEyeLocation();
       this.player = player;
@@ -332,6 +332,14 @@ public abstract class SpellProjectile implements Teachable
       {
          return null;
       }
+   }
+
+   /**
+    * Game tick update on this spell - must be overriden in child classes or the spell exits immediately.
+    */
+   public void checkEffect ()
+   {
+      kill();
    }
 
    /**

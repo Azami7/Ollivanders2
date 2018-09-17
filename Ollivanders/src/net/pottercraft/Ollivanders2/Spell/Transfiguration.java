@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
  * @author lownes
  * @author Azami7
  */
-public abstract class Transfiguration extends SpellProjectile implements Spell, Teachable
+public abstract class Transfiguration extends O2Spell
 {
    private final UUID nullUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
    private EntityType fromEType;
@@ -76,7 +76,7 @@ public abstract class Transfiguration extends SpellProjectile implements Spell, 
             fromStack = new ItemStack(((FallingBlock) entity).getMaterial());
          }
          loc = entity.getLocation();
-         for (SpellProjectile spell : p.getProjectiles())
+         for (O2Spell spell : p.getProjectiles())
          {
             if (spell instanceof Transfiguration)
             {

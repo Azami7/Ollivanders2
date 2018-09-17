@@ -60,7 +60,7 @@ public final class TERGEO extends Charms
             move = false;
             lifeTicks = (int) (-(usesModifier * 1200));
          }
-         for (SpellProjectile proj : p.getProjectiles())
+         for (O2Spell proj : p.getProjectiles())
          {
             if (proj.spellType == O2SpellType.AGUAMENTI && proj.location.getWorld() == location.getWorld())
             {

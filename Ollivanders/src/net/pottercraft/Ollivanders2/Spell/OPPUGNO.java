@@ -49,7 +49,7 @@ public final class OPPUGNO extends DarkArts
       move();
       for (LivingEntity e : getLivingEntities(2))
       {
-         for (SpellProjectile spell : p.getProjectiles())
+         for (O2Spell spell : p.getProjectiles())
          {
             if (spell instanceof Transfiguration)
             {

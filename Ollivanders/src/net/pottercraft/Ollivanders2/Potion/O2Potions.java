@@ -190,7 +190,7 @@ public class O2Potions
     * Get an O2Potions object from its type.
     *
     * @param potionType the type of potion to get
-    * @return the O2Potions object, if it could be created, or null otherwise
+    * @return the O2Potion object, if it could be created, or null otherwise
     */
    private O2Potion getPotionFromType (O2PotionType potionType)
    {

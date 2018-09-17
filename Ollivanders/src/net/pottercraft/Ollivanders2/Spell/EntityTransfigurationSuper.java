@@ -17,7 +17,7 @@ import java.util.List;
  * @since 2.2.6
  * @author Azami7
  */
-public abstract class EntityTransfigurationSuper extends SpellProjectile implements Spell
+public abstract class EntityTransfigurationSuper extends O2Spell
 {
    //
    // these should generally not be changed

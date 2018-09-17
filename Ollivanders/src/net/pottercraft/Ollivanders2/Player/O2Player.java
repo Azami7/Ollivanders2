@@ -11,7 +11,7 @@ import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
-import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 
 import org.bukkit.Material;
@@ -423,7 +423,7 @@ public class O2Player
       try
       {
          c = Class.forName(spellClass).getConstructor();
-         SpellProjectile s = (SpellProjectile) c.newInstance();
+         O2Spell s = (O2Spell) c.newInstance();
 
          if (recentSpells.containsKey(spellType))
          {

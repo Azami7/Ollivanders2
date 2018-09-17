@@ -9,7 +9,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
 
 /**
  * Destroys spell projectiles crossing the boundary.
@@ -35,11 +35,11 @@ public class PROTEGO_HORRIBILIS extends StationarySpellObj implements Stationary
    public void checkEffect ()
    {
       age();
-      List<SpellProjectile> projectiles = p.getProjectiles();
+      List<O2Spell> projectiles = p.getProjectiles();
       if (projectiles != null)
       {
-         List<SpellProjectile> projectiles2 = new ArrayList<>(projectiles);
-         for (SpellProjectile proj : projectiles2)
+         List<O2Spell> projectiles2 = new ArrayList<>(projectiles);
+         for (O2Spell proj : projectiles2)
          {
             if (isInside(proj.location))
             {

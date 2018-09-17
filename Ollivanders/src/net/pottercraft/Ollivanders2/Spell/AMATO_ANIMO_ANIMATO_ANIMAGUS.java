@@ -5,7 +5,6 @@ import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;

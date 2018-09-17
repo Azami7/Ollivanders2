@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
-public abstract class DarkArts extends SpellProjectile implements Spell
+public abstract class DarkArts extends O2Spell
 {
    protected O2MagicBranch branch = O2MagicBranch.DARK_ARTS;
 

@@ -7,8 +7,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-
 /**
  * Transfigures entity into a chicken.
  *

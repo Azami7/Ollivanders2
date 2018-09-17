@@ -19,7 +19,7 @@ import org.bukkit.entity.Entity;
  * @since 2.2.5
  * @author Azami7
  */
-public abstract class BlockTransfigurationSuper extends SpellProjectile implements Spell
+public abstract class BlockTransfigurationSuper extends O2Spell
 {
    //
    // these should generally not be changed

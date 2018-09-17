@@ -9,10 +9,9 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.UUID;
 
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
-import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -28,8 +27,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import net.pottercraft.Ollivanders2.Effect.FLYING;
-import net.pottercraft.Ollivanders2.Spell.Spell;
 import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
@@ -87,13 +84,13 @@ class OllivandersSchedule implements Runnable
     */
    private void projectileSched ()
    {
-      List<SpellProjectile> projectiles = p.getProjectiles();
-      List<SpellProjectile> projectiles2 = new ArrayList<>(projectiles);
+      List<O2Spell> projectiles = p.getProjectiles();
+      List<O2Spell> projectiles2 = new ArrayList<>(projectiles);
       if (projectiles2.size() > 0)
       {
-         for (SpellProjectile proj : projectiles2)
+         for (O2Spell proj : projectiles2)
          {
-            ((Spell) proj).checkEffect();
+            proj.checkEffect();
             if (proj.kill)
             {
                p.remProjectile(proj);
