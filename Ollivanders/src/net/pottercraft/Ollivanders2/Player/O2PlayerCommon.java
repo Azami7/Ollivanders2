@@ -9,16 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-enum Year {
-   YEAR_1,
-   YEAR_2,
-   YEAR_3,
-   YEAR_4,
-   YEAR_5,
-   YEAR_6,
-   YEAR_7
-}
-
 public final class O2PlayerCommon
 {
    private Ollivanders2 p;
@@ -69,7 +59,7 @@ public final class O2PlayerCommon
       animagusShapes.add(EntityType.MULE);
       animagusShapes.add(EntityType.DONKEY);
 
-      if (Ollivanders2.hostileMobAnimagi)
+      if (Ollivanders2.useHostileMobAnimagi)
       {
          animagusShapes.add(EntityType.SPIDER);
          animagusShapes.add(EntityType.SLIME);
@@ -116,32 +106,6 @@ public final class O2PlayerCommon
             return Year.YEAR_7;
          default:
             return null;
-      }
-   }
-
-   /**
-    * Take a year and get the corresponding integer
-    * @param year The year
-    * @return The corresponding number year
-    */
-   public static int yearToInt(Year year) {
-      switch (year) {
-         case YEAR_1:
-            return 1;
-         case YEAR_2:
-            return 2;
-         case YEAR_3:
-            return 3;
-         case YEAR_4:
-            return 4;
-         case YEAR_5:
-            return 5;
-         case YEAR_6:
-            return 6;
-         case YEAR_7:
-            return 7;
-         default:
-            return -1;
       }
    }
 

@@ -31,13 +31,14 @@ public final class FORGETFULLNESS_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.FORGETFULLNESS_POTION;
+      potionLevel = PotionLevel.OWL;
+      name = "Forgetfulness Potion";
 
       ingredients.put(IngredientType.MISTLETOE_BERRIES, 4);
       ingredients.put(IngredientType.VALERIAN_SPRIGS, 2);
       ingredients.put(IngredientType.LETHE_RIVER_WATER, 2);
       ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
 
-      name = "Forgetfulness Potion";
       text = "The Forgetfulness Potion is a potion which causes a degree of memory loss in the drinker.";
       flavorText.add("Hermione Granger: \"What are the three most crucial ingredients in a Forgetfulness Potion?\"\nRon Weasley: \"I forgot.\"");
 
@@ -67,15 +68,15 @@ public final class FORGETFULLNESS_POTION extends O2Potion
       }
       else
       {
-         Map<String, Integer> knownPotions = o2p.getKnownPotions();
+         Map<O2PotionType, Integer> knownPotions = o2p.getKnownPotions();
          if (knownPotions.size() > 0)
          {
-            Set<String> keySet = knownPotions.keySet();
-            ArrayList<String> listOfPotions = new ArrayList<>(keySet);
+            Set<O2PotionType> keySet = knownPotions.keySet();
+            ArrayList<O2PotionType> listOfPotions = new ArrayList<>(keySet);
             int index = Math.abs(Ollivanders2.random.nextInt() % listOfPotions.size());
 
             o2p.setPotionCount(listOfPotions.get(index), memLoss);
-            lostSpell = listOfPotions.get(index);
+            lostSpell = listOfPotions.get(index).toString();
          }
       }
 

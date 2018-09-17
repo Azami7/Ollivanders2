@@ -184,6 +184,7 @@ public enum O2SpellType
     * @param s - string to decode
     * @return spell type such that the spell matches the string in spelling or null if no such spell type exists
     */
+   @Deprecated
    public static O2SpellType decode (String s)
    {
       String[] words = s.split(" ");
@@ -227,12 +228,12 @@ public enum O2SpellType
    }
 
    /**
-    * Get a O2SpellType enum from a string.
+    * Get a O2SpellType enum from a string. This should be used as the opposite of toString() on the enum.
     *
-    * @param spellString the name of the spell
+    * @param spellString the name of the spell type, ex. "AQUA_ERUCTO"
     * @return the spell type
     */
-   public static O2SpellType spellsFromString (String spellString)
+   public static O2SpellType spellTypeFromString (String spellString)
    {
       O2SpellType spellType = null;
 

@@ -79,7 +79,7 @@ public class Ollivanders2 extends JavaPlugin
    public O2Houses houses;
    public O2Players players;
    public O2Books books;
-   private O2Potions potions;
+   public O2Potions potions;
    public O2StationarySpells stationarySpells;
    public Ollivanders2Common common;
    public O2PlayerCommon playerCommon;
@@ -87,8 +87,11 @@ public class Ollivanders2 extends JavaPlugin
    private static String mcVersion;
    public static Random random = new Random();
    public static boolean debug = false;
-   public static boolean nonVerbalCasting = false;
-   public static boolean hostileMobAnimagi = false;
+   public static boolean useNonVerbalCasting = false;
+   public static boolean useHostileMobAnimagi = false;
+   public static boolean useBookLearning = false;
+   public static boolean useHouses = false;
+   public static boolean useYears = false;
    public static Ollivanders2WorldGuard worldGuardO2;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
@@ -157,13 +160,39 @@ public class Ollivanders2 extends JavaPlugin
          this.saveDefaultConfig();
       }
 
-      // debug mode
-      if (getConfig().getBoolean("debug"))
-         debug = true;
+      //
+      // read configuration
+      //
 
-      // chat color
+      debug = getConfig().getBoolean("debug");
+      if (debug)
+         getLogger().info("Enabling debug mode.");
+
       if (getConfig().isSet("chatColor"))
+      {
          chatColor = ChatColor.getByChar(getConfig().getString("chatColor"));
+         getLogger().info("Setting plugin message color to " + chatColor.toString());
+      }
+
+      useNonVerbalCasting = getConfig().getBoolean("nonVerbalSpellCasting");
+      if (useNonVerbalCasting)
+         getLogger().info("Enabling non-verbal spell casting.");
+
+      useHostileMobAnimagi = getConfig().getBoolean("hostileMobAnimagi");
+      if (useHostileMobAnimagi)
+         getLogger().info("Enabling hostile mob types for animagi.");
+
+      useBookLearning = getConfig().getBoolean("bookLearning");
+      if (useBookLearning)
+         getLogger().info("Enabling book learning.");
+
+      useHouses = getConfig().getBoolean("houses");
+      if (useHouses)
+         getLogger().info("Enabling school houses.");
+
+      useYears = getConfig().getBoolean("years");
+      if (useYears)
+         getLogger().info("Enabling school years.");
 
       OllivandersSchedule schedule = new OllivandersSchedule(this);
       Bukkit.getScheduler().scheduleSyncRepeatingTask(this, schedule, 20L, 1L);
@@ -285,14 +314,6 @@ public class Ollivanders2 extends JavaPlugin
             worldGuardEnabled = false;
          }
       }
-
-      nonVerbalCasting = getConfig().getBoolean("nonVerbalSpellCasting");
-      if (nonVerbalCasting)
-         getLogger().info("Enabling non-verbal spell casting.");
-
-      hostileMobAnimagi = getConfig().getBoolean("hostileMobAnimagi");
-      if (hostileMobAnimagi)
-         getLogger().info("Enabling hostile mob types for animagi.");
 
       getLogger().info(this + " is now enabled!");
    }
@@ -465,11 +486,30 @@ public class Ollivanders2 extends JavaPlugin
          summary = summary + "\n";
       }
 
+      // sorted
+      if (useHouses)
+      {
+         if (houses.isSorted(player))
+         {
+            String house = houses.getHouse(player).getName();
+            summary = summary + "\nHouse: " + house + "\n";
+         }
+         else
+         {
+            summary = summary + "\nYou have not been sorted.\n";
+         }
+      }
+
+      //year
+      if (useYears)
+         summary = summary + "Year: " + o2p.getYear().getIntValue() + "\n";
+
+
       // effects
       if (isOp(sender))
       {
          List<O2EffectType> effects = players.playerEffects.getEffects(o2p.getID());
-         summary = summary + "\nAffected by:\n";
+         summary = summary + "\n\nAffected by:\n";
 
          if (effects == null || effects.isEmpty())
          {
@@ -486,35 +526,37 @@ public class Ollivanders2 extends JavaPlugin
          summary = summary + "\n";
       }
 
-      // sorted
-      if (houses.isSorted(player))
-      {
-         String house = houses.getHouse(player).getName();
-         summary = summary + "\nHouse: " + house + "\n";
-      }
-      else
-      {
-         summary = summary + "\nYou have not been sorted.\n";
-      }
-
-      //year
-      summary = summary + "Year: " + O2PlayerCommon.yearToInt(o2p.getYear()) + "\n";
-
       // spells
       Map<O2SpellType, Integer> spells = o2p.getKnownSpells();
 
       if (spells.size() > 0)
       {
-         summary = summary + "\nKnown Spells and Spell Level:";
+         summary = summary + "\n\nKnown Spells and Spell Level:";
 
          for (Map.Entry<O2SpellType, Integer> e : spells.entrySet())
          {
-            summary = summary + "\n" + e.getKey().toString() + " " + e.getValue().toString();
+            summary = summary + "\n* " + e.getKey().toString() + " " + e.getValue().toString();
          }
       }
       else
       {
-         summary = summary + "\nYou have not learned any spells.";
+         summary = summary + "\n\nYou have not learned any spells.";
+      }
+
+      Map<O2PotionType, Integer> knownPotions = o2p.getKnownPotions();
+      if (!knownPotions.isEmpty())
+      {
+         summary = summary + "\n\nKnown potions and Potion Level:";
+
+         for (Map.Entry<O2PotionType, Integer> e : knownPotions.entrySet())
+         {
+            O2PotionType type = e.getKey();
+            summary = summary + "\n* " + potions.getPotionNameByType(type) + " " + e.getValue().toString();
+         }
+      }
+      else
+      {
+         summary = summary + "\n\nYou have not learned any potions.";
       }
 
       sender.sendMessage(chatColor + summary);
@@ -925,7 +967,7 @@ public class Ollivanders2 extends JavaPlugin
                return true;
             }
             O2Player o2p = getO2Player(player);
-            sender.sendMessage(chatColor + "Player " + p + " is in year " + O2PlayerCommon.yearToInt(o2p.getYear()));
+            sender.sendMessage(chatColor + "Player " + p + " is in year " + o2p.getYear().getIntValue());
             return true;
          }
       }
@@ -1046,7 +1088,7 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
       O2Player o2p = getO2Player(player);
-      int year = O2PlayerCommon.yearToInt(o2p.getYear()) + yearChange;
+      int year = o2p.getYear().getIntValue() + yearChange;
       if (year > 0 && year < 8)
       {
          o2p.setYear(O2PlayerCommon.intToYear(year));
@@ -1385,15 +1427,15 @@ public class Ollivanders2 extends JavaPlugin
     * Increment the potion use count for a player.
     *
     * @param player the player to increment the count for
-    * @param potion the potion to increment
+    * @param potionType the potion to increment
     */
-   public void incPotionCount (Player player, String potion)
+   public void incPotionCount (Player player, O2PotionType potionType)
    {
       //returns the incremented potion count
       UUID pid = player.getUniqueId();
       O2Player o2p = players.getPlayer(pid);
 
-      o2p.incrementPotionCount(potion);
+      o2p.incrementPotionCount(potionType);
       players.updatePlayer(pid, o2p);
    }
 
@@ -1901,7 +1943,7 @@ public class Ollivanders2 extends JavaPlugin
 
       if (potion != null)
       {
-         ItemStack brewedPotion = potion.brew();
+         ItemStack brewedPotion = potion.brew((Player)sender, false);
 
          List<ItemStack> kit = new ArrayList<>();
          kit.add(brewedPotion);
@@ -1987,7 +2029,7 @@ public class Ollivanders2 extends JavaPlugin
 
       for (O2Potion potion : potions.getAllPotions())
       {
-         ItemStack brewedPotion = potion.brew();
+         ItemStack brewedPotion = potion.brew(player, false);
 
          if (debug)
             getLogger().info("Adding " + potion.getName());

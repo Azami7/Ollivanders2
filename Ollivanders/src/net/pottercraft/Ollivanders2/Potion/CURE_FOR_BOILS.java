@@ -23,6 +23,7 @@ public class CURE_FOR_BOILS extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.CURE_FOR_BOILS;
+      potionLevel = PotionLevel.BEGINNER;
       name = "Cure For Boils";
 
       ingredients.put(IngredientType.GROUND_SNAKE_FANGS, 3);

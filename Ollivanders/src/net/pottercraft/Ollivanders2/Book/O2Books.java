@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -192,7 +193,7 @@ public final class O2Books
     */
    public static void readLore (List<String> bookLore, Player player, Ollivanders2 p)
    {
-      if (bookLore == null || player == null || !p.getConfig().getBoolean("bookLearning"))
+      if (bookLore == null || player == null || !Ollivanders2.useBookLearning)
       {
          return;
       }
@@ -201,33 +202,44 @@ public final class O2Books
 
       for (String spell : bookLore)
       {
+         // see if it is a spell
          O2SpellType spellEnum = O2SpellType.decode(spell);
-         int spellLevel = 0;
 
          if (spellEnum != null)
-            spellLevel = o2p.getSpellCount(spellEnum);
-         else
-            spellLevel = o2p.getPotionCount(spell);
-
-         // if spell count is less than 25, learn this spell
-         if (spellLevel < 25)
          {
-            if (spellEnum != null)
+            int spellLevel = o2p.getSpellCount(spellEnum);
+
+            // if spell count is less than 25, learn this spell
+            if (spellLevel < 25)
             {
                p.incSpellCount(player, spellEnum);
-            }
-            else
-            {
-               p.incPotionCount(player, spell);
-            }
 
-            // if they have the improved learning effect, increment it again
-            if (p.players.playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
-            {
-               if (spellEnum != null)
+               // if they have the improved learning effect, increment it again
+               if (p.players.playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
+               {
                   p.incSpellCount(player, spellEnum);
-               else
-                  p.incPotionCount(player, spell);
+               }
+            }
+         }
+         else // see if it is a potion
+         {
+            O2PotionType potionEnum = p.potions.getPotionTypeByName(spell);
+
+            if (potionEnum != null)
+            {
+               int potionCount = o2p.getPotionCount(potionEnum);
+
+               // if potion count < 10, learn this potion
+               if (potionCount < 10)
+               {
+                  p.incPotionCount(player, potionEnum);
+
+                  // if they have the improved learning effect, increment it again
+                  if (p.players.playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
+                  {
+                     p.incPotionCount(player, potionEnum);
+                  }
+               }
             }
          }
       }

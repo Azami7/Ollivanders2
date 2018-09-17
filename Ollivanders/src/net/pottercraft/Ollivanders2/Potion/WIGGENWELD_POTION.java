@@ -30,7 +30,7 @@ public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
       super(plugin);
 
       potionType = O2PotionType.WIGGENWELD_POTION;
-
+      potionLevel = PotionLevel.OWL;
       name = "Wiggenweld Potion";
 
       potionMaterialType = Material.SPLASH_POTION;

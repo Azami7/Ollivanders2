@@ -300,7 +300,7 @@ public abstract class O2Book
 
       for (O2PotionType potionType : potions)
       {
-         String s = p.common.firstLetterCapitalize(p.common.enumRecode(potionType.toString()));
+         String s = p.potions.getPotionNameByType(potionType);
          lore.add(s);
       }
 

@@ -24,6 +24,8 @@ public class BABBLING_BEVERAGE extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.BABBLING_BEVERAGE;
+      potionLevel = PotionLevel.OWL;
+      name = "Babbling Beverage";
 
       ingredients.put(IngredientType.VALERIAN_SPRIGS, 2);
       ingredients.put(IngredientType.DITTANY, 1);
@@ -32,7 +34,6 @@ public class BABBLING_BEVERAGE extends O2Potion
 
       potionColor = Color.FUCHSIA;
 
-      name = "Babbling Beverage";
       text = "Babbling Beverage is a potion that causes the drinker to babble nonsense.";
       flavorText.add("\"Potter, when I want nonsense shouted at me I shall give you a Babbling Beverage.\" -Severus Snape");
    }

@@ -48,4 +48,23 @@ public enum O2PotionType
    {
       return className;
    }
+
+   /**
+    * Get a O2PotionType enum from a string. This should be used as the opposite of toString() on the enum.
+    *
+    * @param potionString the name of the spell type, ex. "AQUA_ERUCTO"
+    * @return the potion type
+    */
+   public static O2PotionType potionTypeFromString (String potionString)
+   {
+      O2PotionType potionType = null;
+
+      try
+      {
+         potionType = O2PotionType.valueOf(potionString);
+      }
+      catch (Exception e) { }
+
+      return potionType;
+   }
 }

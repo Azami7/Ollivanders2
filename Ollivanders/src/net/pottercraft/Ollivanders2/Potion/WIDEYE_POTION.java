@@ -24,7 +24,7 @@ public class WIDEYE_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.WIDEYE_POTION;
-
+      potionLevel = PotionLevel.BEGINNER;
       name = "Wideye Potion";
 
       ingredients.put(IngredientType.GROUND_SNAKE_FANGS, 3);
