@@ -19,20 +19,23 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class IMMOBULUS extends Charms
 {
-   public O2SpellType spellType = O2SpellType.IMMOBULUS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Freezing Charm");
-      add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");
-      add("The Freezing Charm is a spell which immobilises living targets.");
-   }};
-
-   protected String text = "Renders entry unable to move for a time period.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public IMMOBULUS () { }
+   public IMMOBULUS ()
+   {
+      super();
+
+      spellType = O2SpellType.IMMOBULUS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Freezing Charm");
+         add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");
+         add("The Freezing Charm is a spell which immobilises living targets.");
+      }};
+
+      text = "Renders entry unable to move for a time period.";
+   }
 
    /**
     * Constructor.
@@ -44,6 +47,8 @@ public final class IMMOBULUS extends Charms
    public IMMOBULUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.IMMOBULUS;
    }
 
    public void checkEffect ()

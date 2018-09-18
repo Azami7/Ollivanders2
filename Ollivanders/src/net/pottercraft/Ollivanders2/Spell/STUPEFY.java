@@ -18,19 +18,22 @@ import org.bukkit.potion.PotionEffectType;
  */
 public final class STUPEFY extends Charms
 {
-   public O2SpellType spellType = O2SpellType.STUPEFY;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Stunning Spell");
-      add("\"Stunning is one of the most useful spells in your arsenal. It's sort of a wizard's bread and butter, really.\" -Harry Potter");
-   }};
-
-   protected String text = "Stupefy will stun an opponent for a duration.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public STUPEFY () { }
+   public STUPEFY ()
+   {
+      super();
+
+      spellType = O2SpellType.STUPEFY;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Stunning Spell");
+         add("\"Stunning is one of the most useful spells in your arsenal. It's sort of a wizard's bread and butter, really.\" -Harry Potter");
+      }};
+
+      text = "Stupefy will stun an opponent for a duration.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public final class STUPEFY extends Charms
    public STUPEFY (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.STUPEFY;
    }
 
    @Override

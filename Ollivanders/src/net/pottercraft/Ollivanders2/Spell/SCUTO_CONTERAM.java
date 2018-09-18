@@ -16,14 +16,16 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class SCUTO_CONTERAM extends Charms
 {
-   public O2SpellType spellType = O2SpellType.SCUTO_CONTERAM;
-
-   protected String text = "Scuto conteram will shorten the duration of a stationary spell.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public SCUTO_CONTERAM () { }
+   public SCUTO_CONTERAM ()
+   {
+      super();
+
+      spellType = O2SpellType.SCUTO_CONTERAM;
+      text = "Scuto conteram will shorten the duration of a stationary spell.";
+   }
 
    /**
     * Constructor.
@@ -35,6 +37,8 @@ public final class SCUTO_CONTERAM extends Charms
    public SCUTO_CONTERAM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.SCUTO_CONTERAM;
    }
 
    @Override

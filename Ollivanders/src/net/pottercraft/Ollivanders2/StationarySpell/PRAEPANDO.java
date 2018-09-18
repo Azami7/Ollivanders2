@@ -13,7 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
 
 /**
  * Create a pocket of extra-dimensional space.
@@ -70,7 +70,7 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
             }
          }
       }
-      for (SpellProjectile sp : p.getProjectiles())
+      for (O2Spell sp : p.getProjectiles())
       {
          if (sp.getBlock().equals(edLocation.getBlock()))
          {

@@ -19,14 +19,16 @@ import java.util.ArrayList;
  */
 public final class EQUUSIFORS extends FriendlyMobDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.EQUUSIFORS;
-
-   protected String text = "Turns target entity in to a horse.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EQUUSIFORS () { }
+   public EQUUSIFORS ()
+   {
+      super();
+
+      spellType = O2SpellType.EQUUSIFORS;
+      text = "Turns target entity in to a horse.";
+   }
 
    /**
     * Constructor.
@@ -38,6 +40,8 @@ public final class EQUUSIFORS extends FriendlyMobDisguiseSuper
    public EQUUSIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.EQUUSIFORS;
 
       targetType = EntityType.HORSE;
       disguiseType = DisguiseType.getType(targetType);

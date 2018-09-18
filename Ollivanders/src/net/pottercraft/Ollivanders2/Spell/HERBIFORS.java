@@ -17,18 +17,21 @@ import java.util.ArrayList;
  */
 public final class HERBIFORS extends GaleatiSuper
 {
-   public O2SpellType spellType = O2SpellType.HERBIFORS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Flower-Hair Spell");
-   }};
-
-   protected String text = "Puts a flower on the target player's head.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public HERBIFORS () { }
+   public HERBIFORS ()
+   {
+      super();
+
+      spellType = O2SpellType.HERBIFORS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Flower-Hair Spell");
+      }};
+
+      text = "Puts a flower on the target player's head.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,7 @@ public final class HERBIFORS extends GaleatiSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.HERBIFORS;
       materialType = Material.YELLOW_FLOWER;
    }
 }

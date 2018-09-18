@@ -14,14 +14,16 @@ import java.util.ArrayList;
  */
 public final class FINESTRA extends Charms
 {
-   public O2SpellType spellType = O2SpellType.FINESTRA;
-
-   protected String text = "Breaks glass in a radius.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FINESTRA () { }
+   public FINESTRA ()
+   {
+      super();
+
+      spellType = O2SpellType.FINESTRA;
+      text = "Breaks glass in a radius.";
+   }
 
    /**
     * Constructor.
@@ -33,6 +35,8 @@ public final class FINESTRA extends Charms
    public FINESTRA(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.FINESTRA;
    }
 
    public void checkEffect ()

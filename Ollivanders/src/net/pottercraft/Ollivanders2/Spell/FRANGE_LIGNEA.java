@@ -20,15 +20,16 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public final class FRANGE_LIGNEA extends Charms
 {
-   public O2SpellType spellType = O2SpellType.FRANGE_LIGNEA;
-
-   protected String text = "Frange lignea will cause a log of the spruce, oak, birch, or jungle species to explode into coreless wands.";
-
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FRANGE_LIGNEA () { }
+   public FRANGE_LIGNEA ()
+   {
+      super();
+
+      spellType = O2SpellType.FRANGE_LIGNEA;
+      text = "Frange lignea will cause a log of the spruce, oak, birch, or jungle species to explode into coreless wands.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +41,8 @@ public final class FRANGE_LIGNEA extends Charms
    public FRANGE_LIGNEA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.FRANGE_LIGNEA;
    }
 
    @Override

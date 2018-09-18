@@ -16,21 +16,23 @@ import java.util.ArrayList;
  */
 public final class AQUA_ERUCTO extends BlockTransfigurationSuper
 {
-   public O2SpellType spellType = O2SpellType.AQUA_ERUCTO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Aqua Eructo Charm");
-      add("\"Very good. You'll need to use Aqua Eructo to put out the fires.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
-   }};
-
-   protected String text = "Shoots a jet of water from your wand tip.";
-
-   protected O2MagicBranch branch = O2MagicBranch.CHARMS;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AQUA_ERUCTO () { }
+   public AQUA_ERUCTO ()
+   {
+      super();
+
+      spellType = O2SpellType.AQUA_ERUCTO;
+      branch = O2MagicBranch.CHARMS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Aqua Eructo Charm");
+         add("\"Very good. You'll need to use Aqua Eructo to put out the fires.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
+      }};
+
+      text = "Shoots a jet of water from your wand tip.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +44,9 @@ public final class AQUA_ERUCTO extends BlockTransfigurationSuper
    public AQUA_ERUCTO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.AQUA_ERUCTO;
+      branch = O2MagicBranch.CHARMS;
 
       spellDuration = (int)(1200 * usesModifier);
       permanent = false;

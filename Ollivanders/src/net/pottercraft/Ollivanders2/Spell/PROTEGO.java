@@ -15,16 +15,22 @@ import java.util.ArrayList;
  */
 public final class PROTEGO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.PROTEGO;
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    */
+   public PROTEGO ()
+   {
+      super();
 
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"I don't remember telling you to use a Shield Charm... but there is no doubt that it was effective...\" -Severus Snape");
-      add("The Shield Charm");
-   }};
+      spellType = O2SpellType.PROTEGO;
 
-   protected String text = "Protego is a shield spell which, while you are crouching, will cause any spells cast at it to bounce off.";
+      flavorText = new ArrayList<String>() {{
+         add("\"I don't remember telling you to use a Shield Charm... but there is no doubt that it was effective...\" -Severus Snape");
+         add("The Shield Charm");
+      }};
 
-   public PROTEGO () { }
+      text = "Protego is a shield spell which, while you are crouching, will cause any spells cast at it to bounce off.";
+   }
 
    /**
     * Constructor.
@@ -36,6 +42,8 @@ public final class PROTEGO extends Charms
    public PROTEGO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.PROTEGO;
    }
 
    public void checkEffect ()

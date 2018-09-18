@@ -52,9 +52,9 @@ public enum O2SpellType
    DEPULSO (net.pottercraft.Ollivanders2.Spell.DEPULSO.class),
    DIFFINDO (net.pottercraft.Ollivanders2.Spell.DIFFINDO.class),
    DISSENDIUM (net.pottercraft.Ollivanders2.Spell.DISSENDIUM.class),
+   DRACONIFORS (net.pottercraft.Ollivanders2.Spell.DRACONIFORS.class),
    DUCKLIFORS (net.pottercraft.Ollivanders2.Spell.DUCKLIFORS.class),
    DURO (net.pottercraft.Ollivanders2.Spell.DURO.class),
-   DRACONIFORS (net.pottercraft.Ollivanders2.Spell.DRACONIFORS.class),
    EBUBLIO (net.pottercraft.Ollivanders2.Spell.EBUBLIO.class),
    ENGORGIO (net.pottercraft.Ollivanders2.Spell.ENGORGIO.class),
    ENTOMORPHIS (net.pottercraft.Ollivanders2.Spell.ENTOMORPHIS.class),
@@ -176,55 +176,6 @@ public enum O2SpellType
    public Class getClassName()
    {
       return className;
-   }
-
-   /**
-    * Find the spell type that corresponds to a string.
-    *
-    * @param s - string to decode
-    * @return spell type such that the spell matches the string in spelling or null if no such spell type exists
-    */
-   @Deprecated
-   public static O2SpellType decode (String s)
-   {
-      String[] words = s.split(" ");
-      O2SpellType spellType;
-
-      // handle spells with target words first
-      if (words[0].equalsIgnoreCase("Apparate"))
-      {
-         spellType = O2SpellType.APPARATE;
-      }
-      else if (words[0].equalsIgnoreCase("Portus"))
-      {
-         spellType = O2SpellType.PORTUS;
-      }
-      else // normal spells
-      {
-         for (int i = 0; i < words.length; i++)
-         {
-            words[i] = words[i].toUpperCase();
-         }
-
-         StringBuilder completeSB = new StringBuilder();
-         for (String word : words)
-         {
-            completeSB.append(word);
-            completeSB.append("_");
-         }
-
-         String complete = completeSB.substring(0, completeSB.length() - 1);
-         try
-         {
-            spellType = O2SpellType.valueOf(complete);
-         }
-         catch (Exception e)
-         {
-            spellType = null;
-         }
-      }
-
-      return spellType;
    }
 
    /**

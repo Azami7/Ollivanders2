@@ -18,19 +18,23 @@ import java.util.ArrayList;
  */
 public final class DRACONIFORS extends FriendlyMobDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.DRACONIFORS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Draconifors Transfiguration");
-      add("\"It was great! Now I can turn anything into dragons!\" -Hermione Granger");
-   }};
-
-   protected String text = "Turn an entity in to a dragon.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DRACONIFORS () { }
+   public DRACONIFORS ()
+   {
+      super();
+
+      spellType = O2SpellType.DRACONIFORS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Draconifors Transfiguration");
+         add("\"It was great! Now I can turn anything into dragons!\" -Hermione Granger");
+      }};
+
+      text = "Turn an entity in to a dragon.";
+   }
+
    /**
     * Constructor.
     *
@@ -41,6 +45,8 @@ public final class DRACONIFORS extends FriendlyMobDisguiseSuper
    public DRACONIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.DRACONIFORS;
 
       targetType = EntityType.ENDER_DRAGON;
       disguiseType = DisguiseType.getType(targetType);

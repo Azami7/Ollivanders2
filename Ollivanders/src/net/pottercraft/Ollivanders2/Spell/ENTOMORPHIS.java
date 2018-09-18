@@ -18,16 +18,23 @@ import java.util.ArrayList;
  */
 public final class ENTOMORPHIS extends PlayerDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.ENTOMORPHIS;
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    */
+   public ENTOMORPHIS ()
+   {
+      super();
 
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("What wouldn't he give to strike now, to jinx Dudley so thoroughly he'd have to crawl home like an insect, struck dumb, sprouting feelers...");
-      add("The Insect Jinx");
-   }};
+      spellType = O2SpellType.ENTOMORPHIS;
 
-   protected String text = "Entomorphis will transfigure an entity into a spider a duration dependent on your experience.";
+      flavorText = new ArrayList<String>() {{
+         add("What wouldn't he give to strike now, to jinx Dudley so thoroughly he'd have to crawl home like an insect, struck dumb, sprouting feelers...");
+         add("The Insect Jinx");
+      }};
 
-   public ENTOMORPHIS () { }
+      text = "Entomorphis will transfigure an entity into a spider a duration dependent on your experience.";
+
+   }
 
    /**
     * Constructor.
@@ -39,6 +46,8 @@ public final class ENTOMORPHIS extends PlayerDisguiseSuper
    public ENTOMORPHIS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.ENTOMORPHIS;
 
       targetType = EntityType.SPIDER;
       disguiseType = DisguiseType.getType(targetType);

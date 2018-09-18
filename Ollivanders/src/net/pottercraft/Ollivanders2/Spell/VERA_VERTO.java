@@ -21,18 +21,21 @@ import java.util.ArrayList;
  */
 public final class VERA_VERTO extends FriendlyMobDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.VERA_VERTO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Could I have your attention please? Right, now, today, we will be transforming animals into water goblets. Like so. One, two, three. Vera Verto.\" -Minerva McGonagall");
-   }};
-
-   protected String text = "Turns an entity in to a flower pot. Size of animal and duration of the spell depends on your experience.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VERA_VERTO () { }
+   public VERA_VERTO ()
+   {
+      super();
+
+      spellType = O2SpellType.VERA_VERTO;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Could I have your attention please? Right, now, today, we will be transforming animals into water goblets. Like so. One, two, three. Vera Verto.\" -Minerva McGonagall");
+      }};
+
+      text = "Turns an entity in to a flower pot. Size of animal and duration of the spell depends on your experience.";
+   }
 
    /**
     * Constructor.
@@ -45,6 +48,7 @@ public final class VERA_VERTO extends FriendlyMobDisguiseSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.VERA_VERTO;
       spellDuration = (int)(1200 * usesModifier);
       targetType = EntityType.FALLING_BLOCK;
       ItemStack flowerPot = new ItemStack(Material.FLOWER_POT, 1);

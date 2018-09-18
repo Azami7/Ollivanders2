@@ -16,20 +16,23 @@ import java.util.ArrayList;
  */
 public final class INCENDIO extends IncendioSuper
 {
-   public O2SpellType spellType = O2SpellType.INCENDIO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Fire-Making Charm");
-      add("The ability to produce fire with the flick or a wand can be dangerous to your fellow students (and worse, your books).");
-      add("From lighting a warm hearth to igniting a Christmas pudding, the Fire-Making Spell is always useful around the wizarding household.");
-   }};
-
-   protected String text = "Will set alight blocks and entities it passes by.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCENDIO () { }
+   public INCENDIO ()
+   {
+      super();
+
+      spellType = O2SpellType.INCENDIO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Fire-Making Charm");
+         add("The ability to produce fire with the flick or a wand can be dangerous to your fellow students (and worse, your books).");
+         add("From lighting a warm hearth to igniting a Christmas pudding, the Fire-Making Spell is always useful around the wizarding household.");
+      }};
+
+      text = "Will set alight blocks and entities it passes by.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class INCENDIO extends IncendioSuper
    public INCENDIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.INCENDIO;
       strafe = false;
       radius = 1;
       blockRadius = 1;

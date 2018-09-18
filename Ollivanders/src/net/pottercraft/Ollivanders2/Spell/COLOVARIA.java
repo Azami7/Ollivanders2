@@ -22,19 +22,22 @@ import java.util.ArrayList;
  */
 public final class COLOVARIA extends Charms
 {
-   public O2SpellType spellType = O2SpellType.COLOVARIA;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Colour Change Charm");
-      add("[...] he wished he had not mixed up the incantations for Colour Change and Growth Charms, so that the rat he was supposed to be turning orange swelled shockingly and was the size of a badger before Harry could rectify his mistake.");
-   }};
-
-   protected String text = "Changes color of sheep and colorable blocks to another color.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLOVARIA () { }
+   public COLOVARIA ()
+   {
+      super();
+
+      spellType = O2SpellType.COLOVARIA;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Colour Change Charm");
+         add("[...] he wished he had not mixed up the incantations for Colour Change and Growth Charms, so that the rat he was supposed to be turning orange swelled shockingly and was the size of a badger before Harry could rectify his mistake.");
+      }};
+
+      text = "Changes color of sheep and colorable blocks to another color.";
+   }
 
    /**
     * Constructor.
@@ -46,6 +49,8 @@ public final class COLOVARIA extends Charms
    public COLOVARIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.COLOVARIA;
    }
 
    public void checkEffect ()

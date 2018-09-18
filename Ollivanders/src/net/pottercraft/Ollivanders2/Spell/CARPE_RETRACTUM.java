@@ -17,19 +17,22 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class CARPE_RETRACTUM extends Charms
 {
-   public O2SpellType spellType = O2SpellType.CARPE_RETRACTUM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"...which is why the Carpe Retractum spell is useful. It allows you to seize and pull objects within your direct line of sight towards you...\" -Professor Flitwick");
-      add("Seize and Pull Charm");
-   }};
-
-   protected String text = "Pulls a living entity towards you.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public CARPE_RETRACTUM () { }
+   public CARPE_RETRACTUM ()
+   {
+      super();
+
+      spellType = O2SpellType.CARPE_RETRACTUM;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"...which is why the Carpe Retractum spell is useful. It allows you to seize and pull objects within your direct line of sight towards you...\" -Professor Flitwick");
+         add("Seize and Pull Charm");
+      }};
+
+      text = "Pulls a living entity towards you.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class CARPE_RETRACTUM extends Charms
    public CARPE_RETRACTUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.CARPE_RETRACTUM;
    }
 
    @Override

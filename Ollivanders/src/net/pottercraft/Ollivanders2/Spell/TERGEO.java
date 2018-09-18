@@ -16,21 +16,24 @@ import java.util.ArrayList;
  */
 public final class TERGEO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.TERGEO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Siphoning Spell");
-      add("The wand siphoned off most of the grease. Looking rather pleased with himself, Ron handed the slightly smoking handkerchief to Hermione.");
-   }};
-
-   protected String text = "Tergeo will siphon off a block of water where it hits. It will also disable any Aguamenti-placed water blocks nearby.";
-
    boolean move;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public TERGEO () { }
+   public TERGEO ()
+   {
+      super();
+
+      spellType = O2SpellType.TERGEO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Siphoning Spell");
+         add("The wand siphoned off most of the grease. Looking rather pleased with himself, Ron handed the slightly smoking handkerchief to Hermione.");
+      }};
+
+      text = "Tergeo will siphon off a block of water where it hits. It will also disable any Aguamenti-placed water blocks nearby.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public final class TERGEO extends Charms
    public TERGEO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.TERGEO;
       move = true;
    }
 
@@ -60,7 +65,7 @@ public final class TERGEO extends Charms
             move = false;
             lifeTicks = (int) (-(usesModifier * 1200));
          }
-         for (SpellProjectile proj : p.getProjectiles())
+         for (O2Spell proj : p.getProjectiles())
          {
             if (proj.spellType == O2SpellType.AGUAMENTI && proj.location.getWorld() == location.getWorld())
             {

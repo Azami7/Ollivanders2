@@ -17,16 +17,6 @@ import java.util.ArrayList;
  */
 public final class VENTO_FOLIO extends Charms
 {
-   protected O2MagicBranch branch = O2MagicBranch.DARK_ARTS;
-   public O2SpellType spellType = O2SpellType.VENTO_FOLIO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"And then Harry saw him. Voldemort was flying like smoke on the wind, without broomstick or thestral to hold him, his snake-like face gleaming out of the blackness, his white fingers raising his wand again —\"");
-      add("\"Remus, he can -\"\n\"Fly, I saw him too, he came after Hagrid and me.\" -Kingsley Shacklebolt and Harry Potter");
-   }};
-
-   protected String text = "Vento Folio gives the caster the ability to fly unassisted for an amount of time.";
-
    /**
     * The percent chance this spell will succeed each casting.
     */
@@ -35,7 +25,20 @@ public final class VENTO_FOLIO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VENTO_FOLIO () { }
+   public VENTO_FOLIO ()
+   {
+      super();
+
+      branch = O2MagicBranch.DARK_ARTS;
+      spellType = O2SpellType.VENTO_FOLIO;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"And then Harry saw him. Voldemort was flying like smoke on the wind, without broomstick or thestral to hold him, his snake-like face gleaming out of the blackness, his white fingers raising his wand again —\"");
+         add("\"Remus, he can -\"\n\"Fly, I saw him too, he came after Hagrid and me.\" -Kingsley Shacklebolt and Harry Potter");
+      }};
+
+      text = "Vento Folio gives the caster the ability to fly unassisted for an amount of time.";
+   }
 
    /**
     * Constructor.
@@ -48,6 +51,8 @@ public final class VENTO_FOLIO extends Charms
    {
       super(plugin, player, rightWand);
 
+      branch = O2MagicBranch.DARK_ARTS;
+      spellType = O2SpellType.VENTO_FOLIO;
       setSuccessRate();
    }
 

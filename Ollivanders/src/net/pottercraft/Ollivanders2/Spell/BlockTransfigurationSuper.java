@@ -19,13 +19,8 @@ import org.bukkit.entity.Entity;
  * @since 2.2.5
  * @author Azami7
  */
-public abstract class BlockTransfigurationSuper extends SpellProjectile implements Spell
+public abstract class BlockTransfigurationSuper extends O2Spell
 {
-   //
-   // these should generally not be changed
-   //
-   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
-
    /**
     * If the transfiguration has taken place or not.
     */
@@ -87,7 +82,12 @@ public abstract class BlockTransfigurationSuper extends SpellProjectile implemen
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BlockTransfigurationSuper () { }
+   public BlockTransfigurationSuper ()
+   {
+      super();
+
+      branch = O2MagicBranch.TRANSFIGURATION;
+   }
 
    /**
     * Constructor.

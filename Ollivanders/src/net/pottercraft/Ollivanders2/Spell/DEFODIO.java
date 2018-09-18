@@ -21,21 +21,24 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class DEFODIO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.DEFODIO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Gouging Spell enables a witch or wizard to carve through earth and stone with ease. From budding Herbologists digging for Snargaluff seedlings to treasure-hunting curse breakers uncovering ancient wizard tombs, the Gouging Spell makes all manner of heavy labour a matter of pointing a wand.");
-      add("The Gouging Charm");
-   }};
-
-   protected String text = "Mines a line of blocks.";
-
    private int depth;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DEFODIO () { }
+   public DEFODIO ()
+   {
+      super();
+
+      spellType = O2SpellType.DEFODIO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Gouging Spell enables a witch or wizard to carve through earth and stone with ease. From budding Herbologists digging for Snargaluff seedlings to treasure-hunting curse breakers uncovering ancient wizard tombs, the Gouging Spell makes all manner of heavy labour a matter of pointing a wand.");
+         add("The Gouging Charm");
+      }};
+
+      text = "Mines a line of blocks.";
+   }
 
    /**
     * Constructor.
@@ -48,6 +51,7 @@ public final class DEFODIO extends Charms
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.DEFODIO;
       depth = (int) usesModifier;
    }
 

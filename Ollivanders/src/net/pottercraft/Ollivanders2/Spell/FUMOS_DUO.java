@@ -16,18 +16,21 @@ import java.util.ArrayList;
  */
 public final class FUMOS_DUO extends FumosSuper
 {
-   public O2SpellType spellType = O2SpellType.FUMOS_DUO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("A Stronger Smoke-Screen Spell");
-   }};
-
-   protected String text = "Fumos Duo will cause those in an area to be blinded by a smoke cloud. The blindness lasts for a time twice as long as that created by Fumos";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FUMOS_DUO () { }
+   public FUMOS_DUO ()
+   {
+      super();
+
+      spellType = O2SpellType.FUMOS_DUO;
+
+      flavorText = new ArrayList<String>() {{
+         add("A Stronger Smoke-Screen Spell");
+      }};
+
+      text = "Fumos Duo will cause those in an area to be blinded by a smoke cloud. The blindness lasts for a time twice as long as that created by Fumos";
+   }
 
    /**
     * Constructor.
@@ -39,6 +42,8 @@ public final class FUMOS_DUO extends FumosSuper
    public FUMOS_DUO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.FUMOS_DUO;
       strength = 2;
    }
 }

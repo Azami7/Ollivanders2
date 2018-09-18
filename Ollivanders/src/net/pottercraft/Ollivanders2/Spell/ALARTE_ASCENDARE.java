@@ -18,20 +18,23 @@ import java.util.ArrayList;
  */
 public final class ALARTE_ASCENDARE extends Charms
 {
-   public O2SpellType spellType = O2SpellType.ALARTE_ASCENDARE;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Winged-Ascent Charm");
-      add("He brandished his wand at the snake and there was a loud bang; the snake, instead of vanishing, "
-            + "flew ten feet into the air and fell back to the floor with a loud smack.");
-   }};
-
-   protected String text = "Shoots target entity in to the air.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ALARTE_ASCENDARE () { }
+   public ALARTE_ASCENDARE ()
+   {
+      super();
+
+      spellType = O2SpellType.ALARTE_ASCENDARE;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Winged-Ascent Charm");
+         add("He brandished his wand at the snake and there was a loud bang; the snake, instead of vanishing, "
+               + "flew ten feet into the air and fell back to the floor with a loud smack.");
+      }};
+
+      text = "Shoots target entity in to the air.";
+   }
 
    /**
     * Constructor.
@@ -43,6 +46,8 @@ public final class ALARTE_ASCENDARE extends Charms
    public ALARTE_ASCENDARE (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.ALARTE_ASCENDARE;
    }
 
    public void checkEffect ()

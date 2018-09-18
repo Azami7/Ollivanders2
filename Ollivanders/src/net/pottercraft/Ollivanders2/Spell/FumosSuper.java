@@ -20,7 +20,10 @@ public abstract class FumosSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FumosSuper () { }
+   public FumosSuper ()
+   {
+      super();
+   }
 
    /**
     * Constructor.

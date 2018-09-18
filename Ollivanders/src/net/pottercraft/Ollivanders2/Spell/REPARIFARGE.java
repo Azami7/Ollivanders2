@@ -16,18 +16,21 @@ import org.bukkit.entity.Player;
  */
 public final class REPARIFARGE extends Charms
 {
-   public O2SpellType spellType = O2SpellType.REPARIFARGE;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("Incomplete Transfigurations are difficult to put right, but you must attempt to do so. Leaving the head of a rabbit on a footstool is irresponsible and dangerous. Say 'Reparifarge!' and the object or creature should return to its natural state.");
-   }};
-
-   protected String text = "Reparifarge will cause the duration of the transfiguration on the targeted entity to decrease.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REPARIFARGE () { }
+   public REPARIFARGE ()
+   {
+      super();
+
+      spellType = O2SpellType.REPARIFARGE;
+
+      flavorText = new ArrayList<String>() {{
+         add("Incomplete Transfigurations are difficult to put right, but you must attempt to do so. Leaving the head of a rabbit on a footstool is irresponsible and dangerous. Say 'Reparifarge!' and the object or creature should return to its natural state.");
+      }};
+
+      text = "Reparifarge will cause the duration of the transfiguration on the targeted entity to decrease.";
+   }
 
    /**
     * Constructor.
@@ -39,6 +42,8 @@ public final class REPARIFARGE extends Charms
    public REPARIFARGE (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.REPARIFARGE;
    }
 
    @Override
@@ -48,7 +53,7 @@ public final class REPARIFARGE extends Charms
       List<Entity> entities = this.getCloseEntities(1);
       for (Entity entity : entities)
       {
-         for (SpellProjectile proj : p.getProjectiles())
+         for (O2Spell proj : p.getProjectiles())
          {
             if (proj instanceof Transfiguration)
             {

@@ -19,18 +19,21 @@ import java.util.ArrayList;
  */
 public class SNUFFLIFORS extends FriendlyMobDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.SNUFFLIFORS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"You're going to have a lot of fun with the Snufflifors Spell, Hermione! It's particularly useful at turning books into bats! How cool is that?\" -Fred Weasley");
-   }};
-
-   protected String text = "The Snufflifors Spell is a spell used to transfigure objects into bats.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public SNUFFLIFORS () { }
+   public SNUFFLIFORS ()
+   {
+      super();
+
+      spellType = O2SpellType.SNUFFLIFORS;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"You're going to have a lot of fun with the Snufflifors Spell, Hermione! It's particularly useful at turning books into bats! How cool is that?\" -Fred Weasley");
+      }};
+
+      text = "The Snufflifors Spell is a spell used to transfigure objects into bats.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public class SNUFFLIFORS extends FriendlyMobDisguiseSuper
    public SNUFFLIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.SNUFFLIFORS;
 
       targetType = EntityType.BAT;
       disguiseType = DisguiseType.getType(targetType);

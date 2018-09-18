@@ -31,7 +31,8 @@ import net.pottercraft.Ollivanders2.Potion.IngredientType;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Potion.O2Potions;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
-import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
+import net.pottercraft.Ollivanders2.Spell.O2Spells;
 import net.pottercraft.Ollivanders2.Potion.O2Potion;
 
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
@@ -71,7 +72,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class Ollivanders2 extends JavaPlugin
 {
-   private List<SpellProjectile> projectiles = new ArrayList<>();
+   private List<O2Spell> projectiles = new ArrayList<>();
 
    private Set<Prophecy> prophecy = new HashSet<>();
    private List<Block> tempBlocks = new ArrayList<>();
@@ -79,6 +80,7 @@ public class Ollivanders2 extends JavaPlugin
    public O2Houses houses;
    public O2Players players;
    public O2Books books;
+   public O2Spells spells;
    public O2Potions potions;
    public O2StationarySpells stationarySpells;
    public Ollivanders2Common common;
@@ -108,7 +110,7 @@ public class Ollivanders2 extends JavaPlugin
       {
          block.setType(Material.AIR);
       }
-      for (SpellProjectile proj : projectiles)
+      for (O2Spell proj : projectiles)
       {
          if (proj instanceof Transfiguration)
          {
@@ -136,6 +138,7 @@ public class Ollivanders2 extends JavaPlugin
       Listener playerListener = new OllivandersListener(this);
       getServer().getPluginManager().registerEvents(playerListener, this);
       common = new Ollivanders2Common(this);
+
       //loads data
       if (new File("plugins/Ollivanders2/").mkdirs())
       {
@@ -276,6 +279,17 @@ public class Ollivanders2 extends JavaPlugin
       catch (Exception e)
       {
          getLogger().warning("Failure setting up potions.");
+         e.printStackTrace();
+      }
+
+      // set up spells
+      try
+      {
+         spells = new O2Spells(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up spells.");
          e.printStackTrace();
       }
 
@@ -527,15 +541,16 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // spells
-      Map<O2SpellType, Integer> spells = o2p.getKnownSpells();
+      Map<O2SpellType, Integer> knownSpells = o2p.getKnownSpells();
 
-      if (spells.size() > 0)
+      if (knownSpells.size() > 0)
       {
          summary = summary + "\n\nKnown Spells and Spell Level:";
 
-         for (Map.Entry<O2SpellType, Integer> e : spells.entrySet())
+         for (Map.Entry<O2SpellType, Integer> e : knownSpells.entrySet())
          {
-            summary = summary + "\n* " + e.getKey().toString() + " " + e.getValue().toString();
+            O2SpellType type = e.getKey();
+            summary = summary + "\n* " + spells.getSpellNameByType(type) + " " + e.getValue().toString();
          }
       }
       else
@@ -1348,7 +1363,7 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @return a list of all active spell projectiles
     */
-   public List<SpellProjectile> getProjectiles ()
+   public List<O2Spell> getProjectiles ()
    {
       return projectiles;
    }
@@ -1358,7 +1373,7 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param spell the spell projectile
     */
-   public void addProjectile (SpellProjectile spell)
+   public void addProjectile (O2Spell spell)
    {
       projectiles.add(spell);
    }
@@ -1368,7 +1383,7 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param spell the spell projectile
     */
-   public void remProjectile (SpellProjectile spell)
+   public void remProjectile (O2Spell spell)
    {
       projectiles.remove(spell);
    }
@@ -1580,7 +1595,7 @@ public class Ollivanders2 extends JavaPlugin
                }
                else
                {
-                  allowedSpells.add(O2SpellType.decode(spellString));
+                  allowedSpells.add(spells.getSpellTypeByName(spellString));
                }
             }
             List<O2SpellType> disallowedSpells = new ArrayList<>();
@@ -1592,7 +1607,7 @@ public class Ollivanders2 extends JavaPlugin
                }
                else
                {
-                  disallowedSpells.add(O2SpellType.decode(spellString));
+                  disallowedSpells.add(spells.getSpellTypeByName(spellString));
                }
             }
             if (type.equalsIgnoreCase("World"))

@@ -23,7 +23,7 @@ import org.bukkit.inventory.ItemStack;
  * @author lownes
  * @author Azami7
  */
-public abstract class Transfiguration extends SpellProjectile implements Spell, Teachable
+public abstract class Transfiguration extends O2Spell
 {
    private final UUID nullUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
    private EntityType fromEType;
@@ -32,12 +32,15 @@ public abstract class Transfiguration extends SpellProjectile implements Spell, 
    private boolean hasTransfigured;
    private int timeMultiplier = 1200;
 
-   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Transfiguration () { }
+   public Transfiguration ()
+   {
+      super();
+
+      branch = O2MagicBranch.TRANSFIGURATION;
+   }
 
    /**
     * Constructor.
@@ -49,6 +52,8 @@ public abstract class Transfiguration extends SpellProjectile implements Spell, 
    public Transfiguration (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       hasTransfigured = false;
    }
@@ -76,7 +81,7 @@ public abstract class Transfiguration extends SpellProjectile implements Spell, 
             fromStack = new ItemStack(((FallingBlock) entity).getMaterial());
          }
          loc = entity.getLocation();
-         for (SpellProjectile spell : p.getProjectiles())
+         for (O2Spell spell : p.getProjectiles())
          {
             if (spell instanceof Transfiguration)
             {

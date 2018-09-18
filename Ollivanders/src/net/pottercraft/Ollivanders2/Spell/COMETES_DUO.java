@@ -17,14 +17,17 @@ import java.util.ArrayList;
  */
 public final class COMETES_DUO extends PyrotechniaSuper
 {
-   public O2SpellType spellType = O2SpellType.COMETES_DUO;
-
-   protected String text = "Creates one or more orange burst fireworks with trails, flicker, and fades to white and yellow.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COMETES_DUO () { }
+   public COMETES_DUO ()
+   {
+      super();
+
+      spellType = O2SpellType.COMETES_DUO;
+
+      text = "Creates one or more orange burst fireworks with trails, flicker, and fades to white and yellow.";
+   }
 
    /**
     * Constructor.
@@ -36,6 +39,8 @@ public final class COMETES_DUO extends PyrotechniaSuper
    public COMETES_DUO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.COMETES_DUO;
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.ORANGE);

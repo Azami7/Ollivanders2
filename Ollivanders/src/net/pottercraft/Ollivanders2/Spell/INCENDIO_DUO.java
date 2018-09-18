@@ -15,18 +15,21 @@ import java.util.ArrayList;
  */
 public final class INCENDIO_DUO extends IncendioSuper
 {
-   public O2SpellType spellType = O2SpellType.INCENDIO_DUO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("A Stronger Fire-Making Charm");
-   }};
-
-   protected String text = "Incendio Duo will burn blocks and entities it passes by. It's radius is twice that of Incendio and it's duration half.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCENDIO_DUO () { }
+   public INCENDIO_DUO ()
+   {
+      super();
+
+      spellType = O2SpellType.INCENDIO_DUO;
+
+      flavorText = new ArrayList<String>() {{
+         add("A Stronger Fire-Making Charm");
+      }};
+
+      text = "Incendio Duo will burn blocks and entities it passes by. It's radius is twice that of Incendio and it's duration half.";
+   }
 
    /**
     * Constructor.
@@ -38,6 +41,8 @@ public final class INCENDIO_DUO extends IncendioSuper
    public INCENDIO_DUO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.INCENDIO_DUO;
       location.add(vector);
       strafe = true;
       blockRadius = 2;

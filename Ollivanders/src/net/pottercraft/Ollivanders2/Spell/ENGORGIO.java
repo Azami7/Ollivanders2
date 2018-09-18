@@ -19,19 +19,22 @@ import java.util.ArrayList;
  */
 public final class ENGORGIO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.ENGORGIO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Engorgement Charm");
-      add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink.");
-   }};
-
-   protected String text = "Grows a baby animal, slime, or zombie.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ENGORGIO () { }
+   public ENGORGIO ()
+   {
+      super();
+
+      spellType = O2SpellType.ENGORGIO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Engorgement Charm");
+         add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink.");
+      }};
+
+      text = "Grows a baby animal, slime, or zombie.";
+   }
 
    /**
     * Constructor.
@@ -43,6 +46,8 @@ public final class ENGORGIO extends Charms
    public ENGORGIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.ENGORGIO;
    }
 
    public void checkEffect ()

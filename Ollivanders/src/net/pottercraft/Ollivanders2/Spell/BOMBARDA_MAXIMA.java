@@ -16,19 +16,22 @@ import java.util.ArrayList;
  */
 public final class BOMBARDA_MAXIMA extends BombardaSuper
 {
-   public O2SpellType spellType = O2SpellType.BOMBARDA_MAXIMA;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("A more powerful explosion incantation.");
-      add("\"Come on, let’s get destroying... Confringo? Stupefy? Bombarda? Which would you use?\" -Albus Potter");
-   }};
-
-   protected String text = "Bombarda Maxima creates an explosion twice as powerful as Bombarda which doesn't damage the terrain.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BOMBARDA_MAXIMA () { }
+   public BOMBARDA_MAXIMA ()
+   {
+      super();
+
+      spellType = O2SpellType.BOMBARDA_MAXIMA;
+
+      flavorText = new ArrayList<String>() {{
+         add("A more powerful explosion incantation.");
+         add("\"Come on, let’s get destroying... Confringo? Stupefy? Bombarda? Which would you use?\" -Albus Potter");
+      }};
+
+      text = "Bombarda Maxima creates an explosion twice as powerful as Bombarda which doesn't damage the terrain.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +43,8 @@ public final class BOMBARDA_MAXIMA extends BombardaSuper
    public BOMBARDA_MAXIMA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.BOMBARDA_MAXIMA;
 
       strength = 1.6;
    }

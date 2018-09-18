@@ -14,20 +14,23 @@ import java.util.ArrayList;
  */
 public final class LUMOS_MAXIMA extends Charms
 {
-   public O2SpellType spellType = O2SpellType.LUMOS_MAXIMA;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Light your wands, can’t you? And hurry, we have little time!\" -Griphook");
-   }};
-
-   protected String text = "Lumos Maxima will spawn a glowstone at the impact site.";
-
    boolean lit;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LUMOS_MAXIMA () { }
+   public LUMOS_MAXIMA ()
+   {
+      super();
+
+      spellType = O2SpellType.LUMOS_MAXIMA;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Light your wands, can’t you? And hurry, we have little time!\" -Griphook");
+      }};
+
+      text = "Lumos Maxima will spawn a glowstone at the impact site.";
+   }
 
    /**
     * Constructor.
@@ -39,6 +42,8 @@ public final class LUMOS_MAXIMA extends Charms
    public LUMOS_MAXIMA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.LUMOS_MAXIMA;
       lit = false;
    }
 

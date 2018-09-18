@@ -17,23 +17,12 @@ import java.util.List;
  * @since 2.2.6
  * @author Azami7
  */
-public abstract class EntityTransfigurationSuper extends SpellProjectile implements Spell
+public abstract class EntityTransfigurationSuper extends O2Spell
 {
-   //
-   // these should generally not be changed
-   //
    /**
     * If the transfiguration has taken place or not.
     */
    boolean isTransfigured = false;
-
-   //
-   // these should be set by each spell as needed
-   //
-   /**
-    * The branch of magic this spell is - most likely Charms or Transfiguration
-    */
-   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
 
    /**
     * The type of entity this will transfigure.
@@ -88,7 +77,12 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EntityTransfigurationSuper () { }
+   public EntityTransfigurationSuper ()
+   {
+      super();
+
+      branch = O2MagicBranch.TRANSFIGURATION;
+   }
 
    /**
     * Constructor.
@@ -100,6 +94,8 @@ public abstract class EntityTransfigurationSuper extends SpellProjectile impleme
    public EntityTransfigurationSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       entityBlacklist.add(EntityType.AREA_EFFECT_CLOUD);
       entityBlacklist.add(EntityType.COMPLEX_PART);

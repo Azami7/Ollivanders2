@@ -25,16 +25,6 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class WINGARDIUM_LEVIOSA extends Charms
 {
-   public O2SpellType spellType = O2SpellType.WINGARDIUM_LEVIOSA;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Levitation Charm");
-      add("You're saying it wrong ...It's Wing-gar-dium Levi-o-sa, make the 'gar' nice and long.\" -Hermione Granger");
-      add("The Levitation Charm is one of the first spells learnt by any young witch or wizard.  With the charm a witch or wizard can make things fly with the flick of a wand.");
-   }};
-
-   protected String text = "Levitates and lets you move blocks while crouching.";
-
    Map<Location, Material> materialMap = new HashMap();
    List<Block> blockList = new ArrayList();
    List<Location> locList = new ArrayList();
@@ -49,7 +39,20 @@ public final class WINGARDIUM_LEVIOSA extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public WINGARDIUM_LEVIOSA () { }
+   public WINGARDIUM_LEVIOSA ()
+   {
+      super();
+
+      spellType = O2SpellType.WINGARDIUM_LEVIOSA;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Levitation Charm");
+         add("You're saying it wrong ...It's Wing-gar-dium Levi-o-sa, make the 'gar' nice and long.\" -Hermione Granger");
+         add("The Levitation Charm is one of the first spells learnt by any young witch or wizard.  With the charm a witch or wizard can make things fly with the flick of a wand.");
+      }};
+
+      text = "Levitates and lets you move blocks while crouching.";
+   }
 
    /**
     * Constructor.
@@ -61,6 +64,8 @@ public final class WINGARDIUM_LEVIOSA extends Charms
    public WINGARDIUM_LEVIOSA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.WINGARDIUM_LEVIOSA;
    }
 
    @Override

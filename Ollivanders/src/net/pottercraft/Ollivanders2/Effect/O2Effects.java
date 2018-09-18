@@ -1,9 +1,6 @@
-package net.pottercraft.Ollivanders2.Player;
+package net.pottercraft.Ollivanders2.Effect;
 
-import net.pottercraft.Ollivanders2.Effect.ShapeShiftSuper;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
-import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,13 +17,13 @@ import java.util.concurrent.Semaphore;
  * @author Azami7
  * @since 2.2.8
  */
-public class PlayerEffects
+public class O2Effects
 {
    Ollivanders2 p;
 
    static Semaphore semaphore = new Semaphore(1);
 
-   final String effectLabel = "Effect_";
+   public final String effectLabel = "Effect_";
 
    /**
     * Thread-safe storage class for the effect data on players.
@@ -265,7 +262,7 @@ public class PlayerEffects
     *
     * @param plugin a callback to the plugin
     */
-   public PlayerEffects (Ollivanders2 plugin)
+   public O2Effects (Ollivanders2 plugin)
    {
       p = plugin;
    }

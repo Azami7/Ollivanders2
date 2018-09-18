@@ -18,14 +18,16 @@ import org.bukkit.entity.Player;
  */
 public final class INCARNATIO_VACCULA extends PlayerDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.INCARNATIO_VACCULA;
-
-   protected String text = "Turns target player in to a cow.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_VACCULA () { }
+   public INCARNATIO_VACCULA ()
+   {
+      super();
+
+      spellType = O2SpellType.INCARNATIO_VACCULA;
+      text = "Turns target player in to a cow.";
+   }
 
    /**
     * Constructor.
@@ -38,6 +40,7 @@ public final class INCARNATIO_VACCULA extends PlayerDisguiseSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.INCARNATIO_VACCULA;
       int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
       if (rand == 0)
          targetType = EntityType.MUSHROOM_COW;

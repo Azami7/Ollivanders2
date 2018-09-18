@@ -18,19 +18,22 @@ import org.bukkit.entity.Player;
  */
 public final class SILENCIO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.SILENCIO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The raven continued to open and close its sharp beak, but no sound came out.");
-      add("The Silencing Charm");
-   }};
-
-   protected String text = "Mutes the target for a time.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public SILENCIO () { }
+   public SILENCIO ()
+   {
+      super();
+
+      spellType = O2SpellType.SILENCIO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The raven continued to open and close its sharp beak, but no sound came out.");
+         add("The Silencing Charm");
+      }};
+
+      text = "Mutes the target for a time.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public final class SILENCIO extends Charms
    public SILENCIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.SILENCIO;
    }
 
    @Override

@@ -17,19 +17,22 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class FLAGRANTE extends DarkArts
 {
-   public O2SpellType spellType = O2SpellType.FLAGRANTE;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("Burning Curse");
-      add("They have added Geminio and Flagrante curses! Everything you touch will burn and multiply, but the copies are worthless.");
-   }};
-
-   protected String text = "Flagrante will cause an item to burn it's bearer when picked up.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FLAGRANTE () { }
+   public FLAGRANTE ()
+   {
+      super();
+
+      spellType = O2SpellType.FLAGRANTE;
+
+      flavorText = new ArrayList<String>() {{
+         add("Burning Curse");
+         add("They have added Geminio and Flagrante curses! Everything you touch will burn and multiply, but the copies are worthless.");
+      }};
+
+      text = "Flagrante will cause an item to burn it's bearer when picked up.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class FLAGRANTE extends DarkArts
    public FLAGRANTE (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.FLAGRANTE;
    }
 
    @Override

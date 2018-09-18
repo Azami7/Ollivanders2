@@ -19,14 +19,16 @@ import org.bukkit.entity.Player;
  */
 public final class INCARNATIO_FELIS extends PlayerDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.INCARNATIO_FELIS;
-
-   protected String text = "Turns target player in to an ocelot or cat.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_FELIS () { }
+   public INCARNATIO_FELIS ()
+   {
+      super();
+
+      spellType = O2SpellType.INCARNATIO_FELIS;
+      text = "Turns target player in to an ocelot or cat.";
+   }
 
    /**
     * Constructor.
@@ -39,6 +41,7 @@ public final class INCARNATIO_FELIS extends PlayerDisguiseSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.INCARNATIO_FELIS;
       targetType = EntityType.OCELOT;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

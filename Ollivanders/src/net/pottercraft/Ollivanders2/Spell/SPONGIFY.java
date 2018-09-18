@@ -17,18 +17,23 @@ import java.util.ArrayList;
  */
 public class SPONGIFY extends BlockTransfigurationSuper
 {
-   public O2SpellType spellType = O2SpellType.SPONGIFY;
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    */
+   public SPONGIFY ()
+   {
+      super();
 
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Today's lesson will most assuredly involve learning how to cast the Softening Charm, Spongify.\" -Filius Flitwick");
-      add("The Softening Charm");
-   }};
+      spellType = O2SpellType.SPONGIFY;
+      branch = O2MagicBranch.CHARMS;
 
-   protected String text = "Turns the blocks in a radius in to slime blocks.";
+      flavorText = new ArrayList<String>() {{
+         add("\"Today's lesson will most assuredly involve learning how to cast the Softening Charm, Spongify.\" -Filius Flitwick");
+         add("The Softening Charm");
+      }};
 
-   protected O2MagicBranch branch = O2MagicBranch.CHARMS;
-
-   public SPONGIFY () { }
+      text = "Turns the blocks in a radius in to slime blocks.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +45,9 @@ public class SPONGIFY extends BlockTransfigurationSuper
    public SPONGIFY (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.SPONGIFY;
+      branch = O2MagicBranch.CHARMS;
 
       transfigureType = Material.SLIME_BLOCK;
       spellDuration = (int)(1200 * usesModifier);

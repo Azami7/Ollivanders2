@@ -12,15 +12,16 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class COLORO_OSTRUM extends ColoroSuper
 {
-   public O2SpellType spellType = O2SpellType.COLORO_OSTRUM;
-   protected String text = "Turns target colorable entity or block purple.";
-
-   DyeColor color = DyeColor.PURPLE;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_OSTRUM () { }
+   public COLORO_OSTRUM ()
+   {
+      super();
+
+      spellType = O2SpellType.COLORO_OSTRUM;
+      text = "Turns target colorable entity or block purple.";
+   }
 
    /**
     * Constructor.
@@ -32,5 +33,8 @@ public final class COLORO_OSTRUM extends ColoroSuper
    public COLORO_OSTRUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.COLORO_OSTRUM;
+      color = DyeColor.PURPLE;
    }
 }

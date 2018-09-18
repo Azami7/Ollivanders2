@@ -15,17 +15,23 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class FLIPENDO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.FLIPENDO;
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    */
+   public FLIPENDO ()
+   {
+      super();
 
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Knockback Jinx");
-      add("The incantation for the knockback jinx is 'Flipendo'. This jinx is the most utilitarian of Grade 2 spell, in that it will allow the caster to 'knock back' an opponent or object and can also be used to push and activate certain magically charmed switches. Like many Grade 2 spells, Flipendo can be targeted.");
-      add("\"There was a loud bang and he felt himself flying backwards as if punched; as he slammed into the kitchen wall and slid to the floor, he glimpsed the tail of Lupin's cloak disappearing round the door.\"");
-   }};
+      spellType = O2SpellType.FLIPENDO;
 
-   protected String text = "Flipendo can be used to repel an opponent away from oneself.";
+      flavorText = new ArrayList<String>() {{
+         add("The Knockback Jinx");
+         add("The incantation for the knockback jinx is 'Flipendo'. This jinx is the most utilitarian of Grade 2 spell, in that it will allow the caster to 'knock back' an opponent or object and can also be used to push and activate certain magically charmed switches. Like many Grade 2 spells, Flipendo can be targeted.");
+         add("\"There was a loud bang and he felt himself flying backwards as if punched; as he slammed into the kitchen wall and slid to the floor, he glimpsed the tail of Lupin's cloak disappearing round the door.\"");
+      }};
 
-   public FLIPENDO () { }
+      text = "Flipendo can be used to repel an opponent away from oneself.";
+   }
 
    /**
     * Constructor.
@@ -37,6 +43,8 @@ public final class FLIPENDO extends Charms
    public FLIPENDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.FLIPENDO;
    }
 
    public void checkEffect ()

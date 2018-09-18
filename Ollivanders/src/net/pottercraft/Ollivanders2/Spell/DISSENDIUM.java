@@ -18,15 +18,6 @@ import java.util.ArrayList;
  */
 public final class DISSENDIUM extends Charms
 {
-   public O2SpellType spellType = O2SpellType.DISSENDIUM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Opening Charm");
-      add("At once, the statue's hump opened wide enough to admit a fairly thin person.");
-   }};
-
-   protected String text = "Dissendium will open a door or trapdoor for a few seconds. To open a door, aim at the bottom half.";
-
    private double lifeTime;
    private boolean move;
    private int openTime;
@@ -35,7 +26,19 @@ public final class DISSENDIUM extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DISSENDIUM () { }
+   public DISSENDIUM ()
+   {
+      super();
+
+      spellType = O2SpellType.DISSENDIUM;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Opening Charm");
+         add("At once, the statue's hump opened wide enough to admit a fairly thin person.");
+      }};
+
+      text = "Dissendium will open a door or trapdoor for a few seconds. To open a door, aim at the bottom half.";
+   }
 
    /**
     * Constructor.
@@ -47,6 +50,8 @@ public final class DISSENDIUM extends Charms
    public DISSENDIUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.DISSENDIUM;
 
       lifeTime = usesModifier * 16;
       move = true;

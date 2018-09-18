@@ -17,19 +17,22 @@ import org.bukkit.entity.Player;
  */
 public final class DELETRIUS extends Charms
 {
-   public O2SpellType spellType = O2SpellType.DELETRIUS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Eradication Spell");
-      add("'Deletrius!' Mr Diggory shouted, and the smoky skull vanished in a wisp of smoke.");
-   }};
-
-   protected String text = "Cause an item entity to stop existing.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DELETRIUS () { }
+   public DELETRIUS ()
+   {
+      super();
+
+      spellType = O2SpellType.DELETRIUS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Eradication Spell");
+         add("'Deletrius!' Mr Diggory shouted, and the smoky skull vanished in a wisp of smoke.");
+      }};
+
+      text = "Cause an item entity to stop existing.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class DELETRIUS extends Charms
    public DELETRIUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.DELETRIUS;
    }
 
    public void checkEffect ()

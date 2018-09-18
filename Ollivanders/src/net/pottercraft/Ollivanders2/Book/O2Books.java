@@ -14,8 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import net.pottercraft.Ollivanders2.Effect.IMPROVED_BOOK_LEARNING;
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.inventory.meta.BookMeta;
@@ -203,7 +201,7 @@ public final class O2Books
       for (String spell : bookLore)
       {
          // see if it is a spell
-         O2SpellType spellEnum = O2SpellType.decode(spell);
+         O2SpellType spellEnum = p.spells.getSpellTypeByName(spell);
 
          if (spellEnum != null)
          {

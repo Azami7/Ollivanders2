@@ -15,19 +15,22 @@ import java.util.ArrayList;
  */
 public final class INCENDIO_TRIA extends IncendioSuper
 {
-   public O2SpellType spellType = O2SpellType.INCENDIO_TRIA;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Incendio!\" said Mr Weasley, pointing his wand at the hole in the wall behind him. Flames rose at once in the fireplace, crackling merrily as though they had been burning for hours.");
-      add("The Strongest Fire-Making Charm");
-   }};
-
-   protected String text = "Incendio Tria will burn blocks and entities it passes by. It's radius is four times that of Incendio and it's duration one quarter.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCENDIO_TRIA () { }
+   public INCENDIO_TRIA ()
+   {
+      super();
+
+      spellType = O2SpellType.INCENDIO_TRIA;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Incendio!\" said Mr Weasley, pointing his wand at the hole in the wall behind him. Flames rose at once in the fireplace, crackling merrily as though they had been burning for hours.");
+         add("The Strongest Fire-Making Charm");
+      }};
+
+      text = "Incendio Tria will burn blocks and entities it passes by. It's radius is four times that of Incendio and it's duration one quarter.";
+   }
 
    /**
     * Constructor.
@@ -39,6 +42,8 @@ public final class INCENDIO_TRIA extends IncendioSuper
    public INCENDIO_TRIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.INCENDIO_TRIA;
       location.add(vector.multiply(2));
       strafe = true;
       radius = 2;

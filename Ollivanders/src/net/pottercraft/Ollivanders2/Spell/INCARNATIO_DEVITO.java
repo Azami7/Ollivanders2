@@ -17,14 +17,16 @@ import org.bukkit.entity.Player;
  */
 public final class INCARNATIO_DEVITO extends PlayerDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.INCARNATIO_DEVITO;
-
-   protected String text = "Turns target player in to a chicken.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_DEVITO () { }
+   public INCARNATIO_DEVITO ()
+   {
+      super();
+
+      spellType = O2SpellType.INCARNATIO_DEVITO;
+      text = "Turns target player in to a chicken.";
+   }
 
    /**
     * Constructor.
@@ -37,6 +39,7 @@ public final class INCARNATIO_DEVITO extends PlayerDisguiseSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.INCARNATIO_DEVITO;
       targetType = EntityType.CHICKEN;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

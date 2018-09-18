@@ -9,14 +9,17 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
-public abstract class DarkArts extends SpellProjectile implements Spell
+public abstract class DarkArts extends O2Spell
 {
-   protected O2MagicBranch branch = O2MagicBranch.DARK_ARTS;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DarkArts () { }
+   public DarkArts ()
+   {
+      super();
+
+      branch = O2MagicBranch.DARK_ARTS;
+   }
 
    /**
     * Constructor.

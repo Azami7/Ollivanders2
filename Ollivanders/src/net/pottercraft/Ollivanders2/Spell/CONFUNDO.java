@@ -14,19 +14,22 @@ import java.util.ArrayList;
  */
 public final class CONFUNDO extends ConfundusSuper
 {
-   public O2SpellType spellType = O2SpellType.CONFUNDO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Confundus Charm");
-      add("\"Look who's talking. Confunded anyone lately?\" -Harry Potter");
-   }};
-
-   protected String text = "Confundo causes the target to become confused.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public CONFUNDO () { }
+   public CONFUNDO ()
+   {
+      super();
+
+      spellType = O2SpellType.CONFUNDO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Confundus Charm");
+         add("\"Look who's talking. Confunded anyone lately?\" -Harry Potter");
+      }};
+
+      text = "Confundo causes the target to become confused.";
+   }
 
    /**
     * Constructor.
@@ -39,6 +42,7 @@ public final class CONFUNDO extends ConfundusSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.CONFUNDO;
       modifier = 1;
    }
 }

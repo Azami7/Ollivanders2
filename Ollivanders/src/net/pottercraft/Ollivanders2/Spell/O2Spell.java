@@ -7,7 +7,6 @@ import java.util.Set;
 import java.util.Collection;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.*;
@@ -25,12 +24,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 /**
- * Moving Spell Projectile
+ * A cast spell.
  *
- * @author lownes
+ * Used to be SpellProjectile.
+ *
  * @author Azami7
  */
-public abstract class SpellProjectile implements Teachable
+public abstract class O2Spell implements Teachable
 {
    /**
     * The player who cast this spell.
@@ -40,7 +40,7 @@ public abstract class SpellProjectile implements Teachable
    /**
     * The type this spell is.
     */
-   public O2SpellType spellType = O2SpellType.LUMOS;
+   public O2SpellType spellType;
 
    /**
     * The location the spell was cast from.
@@ -111,18 +111,18 @@ public abstract class SpellProjectile implements Teachable
    /**
     * Flavor text for this spell in spellbooks, etc.  Optional.
     */
-   protected ArrayList<String> flavorText = new ArrayList<>();
+   protected ArrayList<String> flavorText;
 
    /**
     * The description text for this spell in spell books.  Required or spell cannot be written in a book.
     */
-   protected String text = "";
+   protected String text;
 
    /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
     * text.
     */
-   public SpellProjectile () { }
+   public O2Spell () { }
 
    /**
     * Constructor
@@ -131,7 +131,7 @@ public abstract class SpellProjectile implements Teachable
     * @param player the player casting the spell
     * @param rightWand wand check for the player
     */
-   public SpellProjectile (Ollivanders2 plugin, Player player, Double rightWand)
+   public O2Spell (Ollivanders2 plugin, Player player, Double rightWand)
    {
       location = player.getEyeLocation();
       this.player = player;
@@ -335,6 +335,14 @@ public abstract class SpellProjectile implements Teachable
    }
 
    /**
+    * Game tick update on this spell - must be overriden in child classes or the spell exits immediately.
+    */
+   public void checkEffect ()
+   {
+      kill();
+   }
+
+   /**
     * This kills the spell.
     */
    public void kill ()
@@ -358,7 +366,7 @@ public abstract class SpellProjectile implements Teachable
    @Override
    public String getFlavorText()
    {
-      if (flavorText.size() < 1)
+      if (flavorText == null || flavorText.size() < 1)
       {
          return null;
       }
@@ -380,6 +388,9 @@ public abstract class SpellProjectile implements Teachable
    {
       Ollivanders2Common common = new Ollivanders2Common(p);
 
-      return common.firstLetterCapitalize(spellType.toString().toLowerCase().replace("_", " "));
+      String spellTypeString = spellType.toString().toLowerCase();
+      String name = common.firstLetterCapitalize(spellTypeString.replace("_", " "));
+
+      return name;
    }
 }

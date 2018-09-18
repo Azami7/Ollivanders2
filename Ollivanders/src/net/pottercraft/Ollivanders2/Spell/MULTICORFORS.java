@@ -18,15 +18,18 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class MULTICORFORS extends Charms
 {
-   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
-   public O2SpellType spellType = O2SpellType.MULTICORFORS;
-
-   protected String text = "Multicorfors will change the color of leather armor of the target.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MULTICORFORS () { }
+   public MULTICORFORS ()
+   {
+      super();
+
+      branch = O2MagicBranch.TRANSFIGURATION;
+      spellType = O2SpellType.MULTICORFORS;
+
+      text = "Multicorfors will change the color of leather armor of the target.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,7 @@ public final class MULTICORFORS extends Charms
 
       // this is a transfiguration spell in HP but does not use the Transfiguration superclass.
       branch = O2MagicBranch.TRANSFIGURATION;
+      spellType = O2SpellType.MULTICORFORS;
    }
 
    public void checkEffect ()

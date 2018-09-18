@@ -16,7 +16,10 @@ public abstract class MetelojinxSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MetelojinxSuper () { }
+   public MetelojinxSuper ()
+   {
+      super();
+   }
 
    /**
     * Constructor.

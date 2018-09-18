@@ -6,9 +6,11 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.ArrayList;
 
+import net.pottercraft.Ollivanders2.Effect.O2Effects;
 import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
+
 import org.bukkit.entity.EntityType;
 
 /**
@@ -27,7 +29,7 @@ public class O2Players
    /**
     * Effects manager for player effects.
     */
-   public PlayerEffects playerEffects;
+   public O2Effects playerEffects;
 
    /**
     * The MC plugin callback
@@ -59,7 +61,7 @@ public class O2Players
    {
       p = plugin;
 
-      playerEffects = new PlayerEffects(p);
+      playerEffects = new O2Effects(p);
    }
 
    /**
@@ -94,7 +96,6 @@ public class O2Players
       if (!O2PlayerMap.containsKey(pid))
       {
          O2PlayerMap.put(pid, o2p);
-         p.getLogger().info("Added new O2Player " + o2p.getPlayerName());
       }
       else
       {
@@ -202,9 +203,6 @@ public class O2Players
           * Name
           */
          String pName = o2p.getPlayerName();
-         if (Ollivanders2.debug)
-            p.getLogger().info("\tAdding " + pName + "...");
-
          playerData.put(nameLabel, pName);
 
          /**
@@ -468,8 +466,6 @@ public class O2Players
          }
 
          deserializedMap.put(pid, o2p);
-         if (Ollivanders2.debug)
-            p.getLogger().info("Loaded player " + o2p.getPlayerName());
       }
 
       return deserializedMap;

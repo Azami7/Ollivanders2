@@ -14,14 +14,16 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class METELOJINX_RECANTO extends MetelojinxSuper
 {
-   public O2SpellType spellType = O2SpellType.METELOJINX_RECANTO;
-
-   protected String text = "Metelojinx Recanto will turn a storm into a sunny day.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public METELOJINX_RECANTO () { }
+   public METELOJINX_RECANTO ()
+   {
+      super();
+
+      spellType = O2SpellType.METELOJINX_RECANTO;
+      text = "Metelojinx Recanto will turn a storm into a sunny day.";
+   }
 
    /**
     * Constructor.
@@ -33,6 +35,8 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
    public METELOJINX_RECANTO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.METELOJINX_RECANTO;
       storm = false;
    }
 }

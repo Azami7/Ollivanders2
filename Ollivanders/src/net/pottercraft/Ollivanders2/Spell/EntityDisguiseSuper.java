@@ -23,7 +23,10 @@ public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EntityDisguiseSuper () { }
+   public EntityDisguiseSuper ()
+   {
+      super();
+   }
 
    /**
     * Constructor.

@@ -15,20 +15,23 @@ import java.util.ArrayList;
  */
 public final class PARTIS_TEMPORUS extends Charms
 {
-   public O2SpellType spellType = O2SpellType.PARTIS_TEMPORUS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Parting Charm");
-   }};
-
-   protected String text = "Partis temporus, if cast at a stationary spell that you have cast, will cause that stationary spell's effects to stop for a short time.";
-
    public boolean move;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PARTIS_TEMPORUS () { }
+   public PARTIS_TEMPORUS ()
+   {
+      super();
+
+      spellType = O2SpellType.PARTIS_TEMPORUS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Parting Charm");
+      }};
+
+      text = "Partis temporus, if cast at a stationary spell that you have cast, will cause that stationary spell's effects to stop for a short time.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +43,8 @@ public final class PARTIS_TEMPORUS extends Charms
    public PARTIS_TEMPORUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.PARTIS_TEMPORUS;
       move = true;
    }
 

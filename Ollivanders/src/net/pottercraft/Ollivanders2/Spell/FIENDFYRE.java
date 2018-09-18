@@ -21,21 +21,24 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class FIENDFYRE extends DarkArts
 {
-   public O2SpellType spellType = O2SpellType.FIENDFYRE;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("It was not normal fire; Crabbe had used a curse of which Harry had no knowledge: As they turned a corner the flames chased them as though they were alive, sentient, intent upon killing them. ");
-      add("Bewitched Flame Curse");
-   }};
-
-   protected String text = "Fiendfyre is a hellish curse which summons a mix of magma cubes, blazes, and ghasts.";
-
    private double lifeTime;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FIENDFYRE () { }
+   public FIENDFYRE ()
+   {
+      super();
+
+      spellType = O2SpellType.FIENDFYRE;
+
+      flavorText = new ArrayList<String>() {{
+         add("It was not normal fire; Crabbe had used a curse of which Harry had no knowledge: As they turned a corner the flames chased them as though they were alive, sentient, intent upon killing them. ");
+         add("Bewitched Flame Curse");
+      }};
+
+      text = "Fiendfyre is a hellish curse which summons a mix of magma cubes, blazes, and ghasts.";
+   }
 
    /**
     * Constructor.
@@ -47,6 +50,8 @@ public final class FIENDFYRE extends DarkArts
    public FIENDFYRE (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.FIENDFYRE;
       lifeTime = usesModifier * 4;
    }
 

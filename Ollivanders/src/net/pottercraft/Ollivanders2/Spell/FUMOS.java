@@ -16,18 +16,21 @@ import java.util.ArrayList;
  */
 public final class FUMOS extends FumosSuper
 {
-   public O2SpellType spellType = O2SpellType.FUMOS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Smoke-Screen Spell");
-   }};
-
-   protected String text = "Fumos will cause those in an area to be blinded by a smoke cloud.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FUMOS () { }
+   public FUMOS ()
+   {
+      super();
+
+      spellType = O2SpellType.FUMOS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Smoke-Screen Spell");
+      }};
+
+      text = "Fumos will cause those in an area to be blinded by a smoke cloud.";
+   }
 
    /**
     * Constructor.
@@ -39,6 +42,8 @@ public final class FUMOS extends FumosSuper
    public FUMOS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.FUMOS;
       strength = 1;
    }
 }

@@ -16,19 +16,22 @@ import java.util.ArrayList;
  */
 public final class MOLLIARE extends Charms
 {
-   public O2SpellType spellType = O2SpellType.MOLLIARE;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Cushioning Charm.");
-      add("Harry felt himself glide back toward the ground as though weightless, landing painlessly on the rocky passage floor.");
-   }};
-
-   protected String text = "Molliare softens the ground in a radius around the site.  All fall damage will be negated in this radius.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MOLLIARE () { }
+   public MOLLIARE ()
+   {
+      super();
+
+      spellType = O2SpellType.MOLLIARE;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Cushioning Charm.");
+         add("Harry felt himself glide back toward the ground as though weightless, landing painlessly on the rocky passage floor.");
+      }};
+
+      text = "Molliare softens the ground in a radius around the site.  All fall damage will be negated in this radius.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +43,8 @@ public final class MOLLIARE extends Charms
    public MOLLIARE (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.MOLLIARE;
    }
 
    @Override

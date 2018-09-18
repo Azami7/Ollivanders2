@@ -25,20 +25,23 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
 {
-   public O2SpellType spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("Tamper with the deepest mysteries — the source of life, the essence of self — only if prepared for consequences of the most extreme and dangerous kind.");
-   }};
-
-   protected String text = "The most horrifying and destructive act man can do is the creation of a Horcrux. Through splitting one's soul through the murder of another player, one is able to resurrect with all of their magical experience intact. "
-         + "However, this action has a terrible cost, for as long as the soul is split, the player's maximum health is halved for each Horcrux they have made. "
-         + "The only known way of destroying a Horcrux is with Fiendfyre.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ET_INTERFICIAM_ANIMAM_LIGAVERIS () { }
+   public ET_INTERFICIAM_ANIMAM_LIGAVERIS ()
+   {
+      super();
+
+      spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
+
+      flavorText = new ArrayList<String>() {{
+         add("Tamper with the deepest mysteries — the source of life, the essence of self — only if prepared for consequences of the most extreme and dangerous kind.");
+      }};
+
+      text = "The most horrifying and destructive act man can do is the creation of a Horcrux. Through splitting one's soul through the murder of another player, one is able to resurrect with all of their magical experience intact. "
+            + "However, this action has a terrible cost, for as long as the soul is split, the player's maximum health is halved for each Horcrux they have made. "
+            + "The only known way of destroying a Horcrux is with Fiendfyre.";
+   }
 
    /**
     * Constructor.
@@ -50,6 +53,8 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
    public ET_INTERFICIAM_ANIMAM_LIGAVERIS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
    }
 
    public void checkEffect ()

@@ -16,21 +16,22 @@ import java.util.ArrayList;
  */
 public final class DURO extends BlockTransfigurationSuper
 {
-   public O2SpellType spellType = O2SpellType.DURO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Hardening Charm");
-      add("The Hardening Charm will turn an object into solid stone. This can be surprisingly handy in a tight spot. Of course, most students only seem to use this spell to sabotage their fellow students' schoolbags or to turn a pumpkin pasty to stone just before someone bites into it. It is unwise to try this unworthy trick on any of your teachers.");
-   }};
-
-   protected String text = "Duro will turn the blocks in a radius in to stone.";
-
-   protected O2MagicBranch branch = O2MagicBranch.CHARMS;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DURO () { }
+   public DURO ()
+   {
+      super();
+
+      spellType = O2SpellType.DURO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Hardening Charm");
+         add("The Hardening Charm will turn an object into solid stone. This can be surprisingly handy in a tight spot. Of course, most students only seem to use this spell to sabotage their fellow students' schoolbags or to turn a pumpkin pasty to stone just before someone bites into it. It is unwise to try this unworthy trick on any of your teachers.");
+      }};
+
+      text = "Duro will turn the blocks in a radius in to stone.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +43,9 @@ public final class DURO extends BlockTransfigurationSuper
    public DURO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.DURO;
+      branch = O2MagicBranch.CHARMS;
 
       transfigureType = Material.STONE;
       spellDuration = (int)(1200 * usesModifier);

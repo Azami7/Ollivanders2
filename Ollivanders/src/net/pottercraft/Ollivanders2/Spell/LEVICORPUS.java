@@ -16,20 +16,23 @@ import java.util.ArrayList;
  */
 public final class LEVICORPUS extends DarkArts
 {
-   public O2SpellType spellType = O2SpellType.LEVICORPUS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Oh, that one had a great vogue during my time at Hogwarts. There were a few months in my fifth year when you couldn't move for being hoisted into the air by your ankle.\" -Remus Lupin");
-      add("Pointing his wand at nothing in particular, he gave it an upward flick and said Levicorpus! inside his head... There was a flash of light... Ron was dangling upside down in midair as though an invisible hook had hoisted him up by the ankle.");
-      add("The Suspension Jinx");
-   }};
-
-   protected String text = "Hoist a player up into the air for a duration.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LEVICORPUS () { }
+   public LEVICORPUS ()
+   {
+      super();
+
+      spellType = O2SpellType.LEVICORPUS;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Oh, that one had a great vogue during my time at Hogwarts. There were a few months in my fifth year when you couldn't move for being hoisted into the air by your ankle.\" -Remus Lupin");
+         add("Pointing his wand at nothing in particular, he gave it an upward flick and said Levicorpus! inside his head... There was a flash of light... Ron was dangling upside down in midair as though an invisible hook had hoisted him up by the ankle.");
+         add("The Suspension Jinx");
+      }};
+
+      text = "Hoist a player up into the air for a duration.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class LEVICORPUS extends DarkArts
    public LEVICORPUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.LEVICORPUS;
    }
 
    @Override

@@ -19,22 +19,25 @@ import java.util.List;
  */
 public class LOQUELA_INEPTIAS extends Charms
 {
-   protected O2MagicBranch branch = O2MagicBranch.DARK_ARTS;
-   public O2SpellType spellType = O2SpellType.LOQUELA_INEPTIAS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"He usually picked Harry to help him with these reconstructions; so far, Harry had been forced to play a simple Transylvanian villager whom Lockhart had cured of a Babbling Curse, a yeti with a head cold, and a vampire who had been unable to eat anything except lettuce since Lockhart had dealt with him.\"");
-      add("The Babbling Curse");
-   }};
-
-   protected String text = "Causes your target to speak nonsense for a period of time.";
-
    O2EffectType effect = O2EffectType.BABBLING;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LOQUELA_INEPTIAS () { }
+   public LOQUELA_INEPTIAS ()
+   {
+      super();
+
+      branch = O2MagicBranch.DARK_ARTS;
+      spellType = O2SpellType.LOQUELA_INEPTIAS;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"He usually picked Harry to help him with these reconstructions; so far, Harry had been forced to play a simple Transylvanian villager whom Lockhart had cured of a Babbling Curse, a yeti with a head cold, and a vampire who had been unable to eat anything except lettuce since Lockhart had dealt with him.\"");
+         add("The Babbling Curse");
+      }};
+
+      text = "Causes your target to speak nonsense for a period of time.";
+   }
 
    /**
     * Constructor.
@@ -48,6 +51,7 @@ public class LOQUELA_INEPTIAS extends Charms
       super(plugin, player, rightWand);
 
       branch = O2MagicBranch.DARK_ARTS;
+      spellType = O2SpellType.LOQUELA_INEPTIAS;
    }
 
    @Override

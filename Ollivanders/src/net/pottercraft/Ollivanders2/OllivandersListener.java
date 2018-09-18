@@ -7,7 +7,7 @@ import net.pottercraft.Ollivanders2.Effect.BABBLING;
 import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
-import net.pottercraft.Ollivanders2.Spell.SpellProjectile;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
 import net.pottercraft.Ollivanders2.Spell.AMATO_ANIMO_ANIMATO_ANIMAGUS;
 import net.pottercraft.Ollivanders2.Spell.MORTUOS_SUSCITATE;
@@ -285,16 +285,16 @@ public class OllivandersListener implements Listener
       //
       // Parse to see if they were casting a spell
       //
-      O2SpellType spell = O2SpellType.decode(message);
+      O2SpellType spell = p.spells.getSpellTypeByName(message);
       if (Ollivanders2.debug)
       {
          if (spell != null)
          {
-            p.getLogger().info("O2SpellType:decode(): spell is " + spell);
+            p.getLogger().info("Spell is " + spell);
          }
          else
          {
-            p.getLogger().info("O2SpellType:decode(): no spell found");
+            p.getLogger().info("No spell found");
          }
       }
 
@@ -725,7 +725,7 @@ public class OllivandersListener implements Listener
 
       try
       {
-         p.addProjectile((SpellProjectile) c.newInstance(p, player, wandC));
+         p.addProjectile((O2Spell) c.newInstance(p, player, wandC));
       }
       catch (Exception e)
       {
@@ -1329,7 +1329,7 @@ public class OllivandersListener implements Listener
    {
       if (event.getEntity() != null)
       {
-         for (SpellProjectile proj : p.getProjectiles())
+         for (O2Spell proj : p.getProjectiles())
          {
             if (proj instanceof Transfiguration)
             {
@@ -1440,7 +1440,7 @@ public class OllivandersListener implements Listener
    {
       Entity target = event.getTarget();
       Entity entity = event.getEntity();
-      for (SpellProjectile sp : p.getProjectiles())
+      for (O2Spell sp : p.getProjectiles())
       {
          if (sp instanceof MORTUOS_SUSCITATE)
          {

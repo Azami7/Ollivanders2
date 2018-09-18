@@ -16,19 +16,22 @@ import org.bukkit.entity.Player;
  */
 public final class DEPULSO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.DEPULSO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("They were supposed to be practising the opposite of the Summoning Charm today — the Banishing Charm. Owing to the potential for nasty accidents when objects kept flying across the room. Professor Flitwick had given each student a stack of cushions on which to practise, the theory being that these wouldn’t hurt anyone if they went off target.");
-      add("The Banishing Charm");
-   }};
-
-   protected String text = "Depulso will repel any entity you hit with it.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DEPULSO () { }
+   public DEPULSO ()
+   {
+      super();
+
+      spellType = O2SpellType.DEPULSO;
+
+      flavorText = new ArrayList<String>() {{
+         add("They were supposed to be practising the opposite of the Summoning Charm today — the Banishing Charm. Owing to the potential for nasty accidents when objects kept flying across the room. Professor Flitwick had given each student a stack of cushions on which to practise, the theory being that these wouldn’t hurt anyone if they went off target.");
+         add("The Banishing Charm");
+      }};
+
+      text = "Depulso will repel any entity you hit with it.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +43,8 @@ public final class DEPULSO extends Charms
    public DEPULSO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.DEPULSO;
    }
 
    public void checkEffect ()

@@ -17,20 +17,23 @@ import java.util.ArrayList;
  */
 public final class EBUBLIO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.EBUBLIO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Bubble-Head Charm");
-      add("Fleur Delacour, though she demonstrated excellent use of the Bubble-Head Charm, was attacked by grindylows as she approached her goal, and failed to retrieve her hostage.");
-      add("Cedric Diggory, who also used the Bubble-Head Charm, was first to return with his hostage, though he returned one minute outside the time limit of an hour.");
-   }};
-
-   protected String text = "Gives target player the ability to breathe underwater.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EBUBLIO () { }
+   public EBUBLIO ()
+   {
+      super();
+
+      spellType = O2SpellType.EBUBLIO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Bubble-Head Charm");
+         add("Fleur Delacour, though she demonstrated excellent use of the Bubble-Head Charm, was attacked by grindylows as she approached her goal, and failed to retrieve her hostage.");
+         add("Cedric Diggory, who also used the Bubble-Head Charm, was first to return with his hostage, though he returned one minute outside the time limit of an hour.");
+      }};
+
+      text = "Gives target player the ability to breathe underwater.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public final class EBUBLIO extends Charms
    public EBUBLIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.EBUBLIO;
    }
 
    public void checkEffect ()

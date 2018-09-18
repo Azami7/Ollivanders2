@@ -17,20 +17,23 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class REPARO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.REPARO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Mending Charm");
-      add("Mr. Weasley took Harry's glasses, gave them a tap of his wand and returned them, good as new.");
-      add("The Mending Charm will repair broken objects with a flick of the wand.  Accidents do happen, so it is essential to know how to mend our errors.");
-   }};
-
-   protected String text = "Repair the durability of a tool.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REPARO () { }
+   public REPARO ()
+   {
+      super();
+
+      spellType = O2SpellType.REPARO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Mending Charm");
+         add("Mr. Weasley took Harry's glasses, gave them a tap of his wand and returned them, good as new.");
+         add("The Mending Charm will repair broken objects with a flick of the wand.  Accidents do happen, so it is essential to know how to mend our errors.");
+      }};
+
+      text = "Repair the durability of a tool.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public final class REPARO extends Charms
    public REPARO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.REPARO;
    }
 
    @Override

@@ -13,14 +13,16 @@ import java.util.ArrayList;
  */
 public final class PERICULUM_DUO extends PyrotechniaSuper
 {
-   public O2SpellType spellType = O2SpellType.PERICULUM_DUO;
-
-   protected String text = "Conjures large red ball fireworks in the air.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PERICULUM_DUO () { }
+   public PERICULUM_DUO ()
+   {
+      super();
+
+      spellType = O2SpellType.PERICULUM_DUO;
+      text = "Conjures large red ball fireworks in the air.";
+   }
 
    /**
     * Constructor.
@@ -32,6 +34,8 @@ public final class PERICULUM_DUO extends PyrotechniaSuper
    public PERICULUM_DUO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.PERICULUM_DUO;
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.RED);

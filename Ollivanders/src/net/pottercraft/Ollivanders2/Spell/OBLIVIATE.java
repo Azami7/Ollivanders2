@@ -17,20 +17,23 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class OBLIVIATE extends Charms
 {
-   public O2SpellType spellType = O2SpellType.OBLIVIATE;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Memory Charm");
-      add("\"If there’s one thing I pride myself on, it’s my Memory Charms.\" -Gilderoy Lockhart");
-      add("\"Miss Dursley has been punctured and her memory has been modified. She has no recollection of the incident at all. So that's that, and no harm done.\" -Cornelius Fudge");
-   }};
-
-   protected String text = "Causes target player to lose some of their magical ability.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public OBLIVIATE () { }
+   public OBLIVIATE ()
+   {
+      super();
+
+      spellType = O2SpellType.OBLIVIATE;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Memory Charm");
+         add("\"If there’s one thing I pride myself on, it’s my Memory Charms.\" -Gilderoy Lockhart");
+         add("\"Miss Dursley has been punctured and her memory has been modified. She has no recollection of the incident at all. So that's that, and no harm done.\" -Cornelius Fudge");
+      }};
+
+      text = "Causes target player to lose some of their magical ability.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public final class OBLIVIATE extends Charms
    public OBLIVIATE (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.OBLIVIATE;
    }
 
    @Override

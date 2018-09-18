@@ -13,14 +13,16 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class NULLUM_EVANESCUNT extends Charms
 {
-   public O2SpellType spellType = O2SpellType.NULLUM_EVANESCUNT;
-
-   protected String text = "Nullum evanescunt creates a stationary spell which will not allow disapparition out of it.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public NULLUM_EVANESCUNT () { }
+   public NULLUM_EVANESCUNT ()
+   {
+      super();
+
+      spellType = O2SpellType.NULLUM_EVANESCUNT;
+      text = "Nullum evanescunt creates a stationary spell which will not allow disapparition out of it.";
+   }
 
    /**
     * Constructor.
@@ -32,6 +34,8 @@ public final class NULLUM_EVANESCUNT extends Charms
    public NULLUM_EVANESCUNT (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.NULLUM_EVANESCUNT;
    }
 
    public void checkEffect ()

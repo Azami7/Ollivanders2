@@ -38,6 +38,9 @@ public class O2Potions
 
       for (O2PotionType potionType : O2PotionType.values())
       {
+         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potionType))
+            continue;
+
          O2Potion potion = getPotionFromType(potionType);
 
          if (potion != null)
@@ -190,7 +193,7 @@ public class O2Potions
     * Get an O2Potions object from its type.
     *
     * @param potionType the type of potion to get
-    * @return the O2Potions object, if it could be created, or null otherwise
+    * @return the O2Potion object, if it could be created, or null otherwise
     */
    private O2Potion getPotionFromType (O2PotionType potionType)
    {
