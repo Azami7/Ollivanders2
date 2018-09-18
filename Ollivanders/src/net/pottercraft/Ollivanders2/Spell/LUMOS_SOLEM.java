@@ -20,21 +20,24 @@ import org.bukkit.entity.Zombie;
  */
 public final class LUMOS_SOLEM extends Charms
 {
-   public O2SpellType spellType = O2SpellType.LUMOS_SOLEM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("Light of the Sun");
-   }};
-
-   protected String text = "Lumos Solem will cause a sun-like light to erupt in an area around the impact which will burn entities sensitive to sun.";
-
    boolean move = true;
    Set<Block> blocks = new HashSet();
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LUMOS_SOLEM () { }
+   public LUMOS_SOLEM ()
+   {
+      super();
+
+      spellType = O2SpellType.LUMOS_SOLEM;
+
+      flavorText = new ArrayList<String>() {{
+         add("Light of the Sun");
+      }};
+
+      text = "Lumos Solem will cause a sun-like light to erupt in an area around the impact which will burn entities sensitive to sun.";
+   }
 
    /**
     * Constructor.
@@ -46,6 +49,8 @@ public final class LUMOS_SOLEM extends Charms
    public LUMOS_SOLEM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.LUMOS_SOLEM;
    }
 
    @Override

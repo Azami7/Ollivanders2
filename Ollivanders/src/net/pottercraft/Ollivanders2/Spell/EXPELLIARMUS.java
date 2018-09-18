@@ -20,22 +20,25 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public final class EXPELLIARMUS extends Charms
 {
-   public O2SpellType spellType = O2SpellType.EXPELLIARMUS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Disarming Charm");
-      add("They made the most of the last few hours in which they were allowed to do magic before the holidays... and practised disarming each other by magic. Harry was getting very good at it.");
-      add("A handy (even life-saving) spell for removing an object from an enemy’s grasp.");
-      add("\"Expelliarmus is a useful spell, Harry, but the Death Eaters seem to think it is your signature move, and I urge you not to let it become so!” -Remus Lupin");
-      add("The Disarming Charm lies at the heart of a good duelling technique. It allows the duelist to rebound an opponent's spell in the hope that the rebounded spell will strike the opponent and leave him or her vulnerable to further attack.");
-   }};
-
-   protected String text = "Item held by an entity is flung a distance.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EXPELLIARMUS () { }
+   public EXPELLIARMUS ()
+   {
+      super();
+
+      spellType = O2SpellType.EXPELLIARMUS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Disarming Charm");
+         add("They made the most of the last few hours in which they were allowed to do magic before the holidays... and practised disarming each other by magic. Harry was getting very good at it.");
+         add("A handy (even life-saving) spell for removing an object from an enemy’s grasp.");
+         add("\"Expelliarmus is a useful spell, Harry, but the Death Eaters seem to think it is your signature move, and I urge you not to let it become so!” -Remus Lupin");
+         add("The Disarming Charm lies at the heart of a good duelling technique. It allows the duelist to rebound an opponent's spell in the hope that the rebounded spell will strike the opponent and leave him or her vulnerable to further attack.");
+      }};
+
+      text = "Item held by an entity is flung a distance.";
+   }
 
    /**
     * Constructor.
@@ -47,6 +50,8 @@ public final class EXPELLIARMUS extends Charms
    public EXPELLIARMUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.EXPELLIARMUS;
    }
 
    public void checkEffect ()

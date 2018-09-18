@@ -13,16 +13,17 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class COLORO_ALBUM extends ColoroSuper
 {
-   public O2SpellType spellType = O2SpellType.COLORO_ALBUM;
-
-   protected String text = "Turns target colorable entity or block white.";
-
-   DyeColor color = DyeColor.WHITE;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_ALBUM () { }
+   public COLORO_ALBUM ()
+   {
+      super();
+
+      spellType = O2SpellType.COLORO_ALBUM;
+
+      text = "Turns target colorable entity or block white.";
+   }
 
    /**
     * Constructor.
@@ -34,5 +35,8 @@ public final class COLORO_ALBUM extends ColoroSuper
    public COLORO_ALBUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.COLORO_ALBUM;
+      color = DyeColor.WHITE;
    }
 }

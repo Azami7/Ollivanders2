@@ -18,14 +18,16 @@ import org.bukkit.entity.Player;
  */
 public final class INCARNATIO_EQUUS extends PlayerDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.INCARNATIO_EQUUS;
-
-   protected String text = "Turns target player in to a horse.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_EQUUS () { }
+   public INCARNATIO_EQUUS ()
+   {
+      super();
+
+      spellType = O2SpellType.INCARNATIO_EQUUS;
+      text = "Turns target player in to a horse.";
+   }
 
    /**
     * Constructor.
@@ -38,6 +40,7 @@ public final class INCARNATIO_EQUUS extends PlayerDisguiseSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.INCARNATIO_EQUUS;
       targetType = EntityType.HORSE;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

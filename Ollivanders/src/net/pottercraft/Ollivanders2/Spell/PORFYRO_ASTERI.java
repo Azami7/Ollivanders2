@@ -16,14 +16,16 @@ import java.util.ArrayList;
  */
 public final class PORFYRO_ASTERI extends PyrotechniaSuper
 {
-   public O2SpellType spellType = O2SpellType.PORFYRO_ASTERI;
-
-   protected String text = "Conjures purple star fireworks in the sky.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PORFYRO_ASTERI () { }
+   public PORFYRO_ASTERI ()
+   {
+      super();
+
+      spellType = O2SpellType.PORFYRO_ASTERI;
+      text = "Conjures purple star fireworks in the sky.";
+   }
 
    /**
     * Constructor.
@@ -35,6 +37,8 @@ public final class PORFYRO_ASTERI extends PyrotechniaSuper
    public PORFYRO_ASTERI (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.PORFYRO_ASTERI;
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);

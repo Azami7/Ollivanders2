@@ -13,19 +13,22 @@ import java.util.ArrayList;
  */
 public final class EVANESCO extends Transfiguration
 {
-   public O2SpellType spellType = O2SpellType.EVANESCO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Vanishing Spell");
-      add("The contents of Harry’s potion vanished; he was left standing foolishly beside an empty cauldron.");
-   }};
-
-   protected String text = "Evanesco will vanish an entity.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EVANESCO () { }
+   public EVANESCO ()
+   {
+      super();
+
+      spellType = O2SpellType.EVANESCO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Vanishing Spell");
+         add("The contents of Harry’s potion vanished; he was left standing foolishly beside an empty cauldron.");
+      }};
+
+      text = "Evanesco will vanish an entity.";
+   }
 
    /**
     * Constructor.
@@ -37,6 +40,8 @@ public final class EVANESCO extends Transfiguration
    public EVANESCO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.EVANESCO;
    }
 
    public void checkEffect ()

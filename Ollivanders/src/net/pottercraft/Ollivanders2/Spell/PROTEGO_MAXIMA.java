@@ -16,19 +16,22 @@ import java.util.ArrayList;
  */
 public final class PROTEGO_MAXIMA extends Charms
 {
-   public O2SpellType spellType = O2SpellType.PROTEGO_MAXIMA;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" -Filius Flitwick");
-      add("A Stronger Shield Charm");
-   }};
-
-   protected String text = "Protego maxima is a stationary spell which will hurt any entities close to it's boundary.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_MAXIMA () { }
+   public PROTEGO_MAXIMA ()
+   {
+      super();
+
+      spellType = O2SpellType.PROTEGO_MAXIMA;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" -Filius Flitwick");
+         add("A Stronger Shield Charm");
+      }};
+
+      text = "Protego maxima is a stationary spell which will hurt any entities close to it's boundary.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +43,8 @@ public final class PROTEGO_MAXIMA extends Charms
    public PROTEGO_MAXIMA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.PROTEGO_MAXIMA;
    }
 
    @Override

@@ -14,19 +14,22 @@ import java.util.ArrayList;
  */
 public final class GLACIUS extends GlaciusSuper
 {
-   public O2SpellType spellType = O2SpellType.GLACIUS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("A charm that conjures a blast of freezing cold air from the end of the wand.");
-      add("The Freezing Charm");
-   }};
-
-   protected String text = "Turns fire in to air, water in to ice, ice to packed ice, and lava in to obsidian.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GLACIUS () { }
+   public GLACIUS ()
+   {
+      super();
+
+      spellType = O2SpellType.GLACIUS;
+
+      flavorText = new ArrayList<String>() {{
+         add("A charm that conjures a blast of freezing cold air from the end of the wand.");
+         add("The Freezing Charm");
+      }};
+
+      text = "Turns fire in to air, water in to ice, ice to packed ice, and lava in to obsidian.";
+   }
 
    /**
     * Constructor.
@@ -38,6 +41,8 @@ public final class GLACIUS extends GlaciusSuper
    public GLACIUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.GLACIUS;
 
       // normal duration
       durationModifier = 1.0;

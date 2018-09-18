@@ -17,19 +17,22 @@ import java.util.ArrayList;
  */
 public final class NOX extends Charms
 {
-   public O2SpellType spellType = O2SpellType.NOX;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Wand-Extinguishing Charm");
-      add("With difficulty he dragged it over himself, murmured, 'Nox,' extinguishing his wand light, and continued on his hands and knees, as silently as possible, all his senses straining, expecting every second to be discovered, to hear a cold clear voice, see a flash of green light.");
-   }};
-
-   protected String text = "Cancels the effect of the Lumos spell or removes the effect of a Night Vision potion.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public NOX () { }
+   public NOX ()
+   {
+      super();
+
+      spellType = O2SpellType.NOX;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Wand-Extinguishing Charm");
+         add("With difficulty he dragged it over himself, murmured, 'Nox,' extinguishing his wand light, and continued on his hands and knees, as silently as possible, all his senses straining, expecting every second to be discovered, to hear a cold clear voice, see a flash of green light.");
+      }};
+
+      text = "Cancels the effect of the Lumos spell or removes the effect of a Night Vision potion.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class NOX extends Charms
    public NOX(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.NOX;
    }
 
    @Override

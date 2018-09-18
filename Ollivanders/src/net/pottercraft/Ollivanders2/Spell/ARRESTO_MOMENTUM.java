@@ -18,20 +18,23 @@ import org.bukkit.entity.Player;
  */
 public final class ARRESTO_MOMENTUM extends Charms
 {
-   public O2SpellType spellType = O2SpellType.ARRESTO_MOMENTUM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("An incantation for slowing velocity.");
-      add("\"Dumbledore ...ran onto the field as you fell, waved his wand, and you sort of slowed down before you hit the ground.\" - Hermione Granger");
-      add("The witch Daisy Pennifold had the idea of bewitching the Quaffle so that if dropped, it would fall slowly earthwards as though sinking through water, meaning that Chasers could grab it in mid-air.");
-   }};
-
-   protected String text = "Arresto Momentum will immediately slow down any entity or item.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ARRESTO_MOMENTUM () { }
+   public ARRESTO_MOMENTUM ()
+   {
+      super();
+
+      spellType = O2SpellType.ARRESTO_MOMENTUM;
+
+      flavorText = new ArrayList<String>() {{
+         add("An incantation for slowing velocity.");
+         add("\"Dumbledore ...ran onto the field as you fell, waved his wand, and you sort of slowed down before you hit the ground.\" - Hermione Granger");
+         add("The witch Daisy Pennifold had the idea of bewitching the Quaffle so that if dropped, it would fall slowly earthwards as though sinking through water, meaning that Chasers could grab it in mid-air.");
+      }};
+
+      text = "Arresto Momentum will immediately slow down any entity or item.";
+   }
 
    /**
     * Constructor.
@@ -43,6 +46,8 @@ public final class ARRESTO_MOMENTUM extends Charms
    public ARRESTO_MOMENTUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.ARRESTO_MOMENTUM;
    }
 
    public void checkEffect ()

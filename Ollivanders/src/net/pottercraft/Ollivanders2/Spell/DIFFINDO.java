@@ -18,20 +18,23 @@ import org.bukkit.inventory.PlayerInventory;
  */
 public final class DIFFINDO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.DIFFINDO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Severing Charm");
-      add("With the Severing Charm, cutting or tearing objects is a simple matter of wand control.");
-      add("The spell can be quite precise in skilled hands, and the Severing Charm is widely used in a variety of wizarding trades.");
-   }};
-
-   protected String text = "Breaks logs in a radius or drops items from a player’s inventory.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DIFFINDO () { }
+   public DIFFINDO ()
+   {
+      super();
+
+      spellType = O2SpellType.DIFFINDO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Severing Charm");
+         add("With the Severing Charm, cutting or tearing objects is a simple matter of wand control.");
+         add("The spell can be quite precise in skilled hands, and the Severing Charm is widely used in a variety of wizarding trades.");
+      }};
+
+      text = "Breaks logs in a radius or drops items from a player’s inventory.";
+   }
 
    /**
     * Constructor.
@@ -43,6 +46,8 @@ public final class DIFFINDO extends Charms
    public DIFFINDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.DIFFINDO;
    }
 
    public void checkEffect ()

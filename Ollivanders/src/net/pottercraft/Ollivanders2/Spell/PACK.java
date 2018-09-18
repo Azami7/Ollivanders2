@@ -22,19 +22,22 @@ import java.util.ArrayList;
  */
 public final class PACK extends Charms
 {
-   public O2SpellType spellType = O2SpellType.PACK;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("Books, clothes, telescope and scales all soared into the air and flew pell-mell into the trunk.");
-      add("The Packing Charm");
-   }};
-
-   protected String text = "When this hits a chest, it will suck any items nearby into it.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PACK () { }
+   public PACK ()
+   {
+      super();
+
+      spellType = O2SpellType.PACK;
+
+      flavorText = new ArrayList<String>() {{
+         add("Books, clothes, telescope and scales all soared into the air and flew pell-mell into the trunk.");
+         add("The Packing Charm");
+      }};
+
+      text = "When this hits a chest, it will suck any items nearby into it.";
+   }
 
    /**
     * Constructor.
@@ -46,6 +49,8 @@ public final class PACK extends Charms
    public PACK (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.PACK;
    }
 
    @Override

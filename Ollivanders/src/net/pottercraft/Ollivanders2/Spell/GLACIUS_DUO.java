@@ -13,19 +13,22 @@ import java.util.ArrayList;
  */
 public final class GLACIUS_DUO extends GlaciusSuper
 {
-   public O2SpellType spellType = O2SpellType.APARECIUM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("A Stronger Freezing Charm");
-      add("\"It's about preparing ourselves ...for what's waiting for us out there.\" -Hermione Granger");
-   }};
-
-   protected String text = "Glacius Duo will freeze blocks in a radius twice that of glacius, but for half the time.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GLACIUS_DUO () { }
+   public GLACIUS_DUO ()
+   {
+      super();
+
+      spellType = O2SpellType.APARECIUM;
+
+      flavorText = new ArrayList<String>() {{
+         add("A Stronger Freezing Charm");
+         add("\"It's about preparing ourselves ...for what's waiting for us out there.\" -Hermione Granger");
+      }};
+
+      text = "Glacius Duo will freeze blocks in a radius twice that of glacius, but for half the time.";
+   }
 
    /**
     * Constructor.
@@ -37,6 +40,8 @@ public final class GLACIUS_DUO extends GlaciusSuper
    public GLACIUS_DUO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.APARECIUM;
 
       // 50% duration
       durationModifier = 0.5;

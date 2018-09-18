@@ -20,23 +20,26 @@ import java.util.ArrayList;
  */
 public final class ALIQUAM_FLOO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.ALIQUAM_FLOO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"In use for centuries, the Floo Network, while somewhat uncomfortable, has many advantages. Firstly, unlike broomsticks, the Network can be used without fear of breaking the International Statute of Secrecy. Secondly, unlike Apparition, there is little to no danger of serious injury. Thirdly, it can be used to transport children, the elderly and the infirm.\"");
-   }};
-
-   protected String text = "Aliquam Floo will register a fireplace with the Floo Network. "
-         + "Place a sign above a fire with the unique name of the fireplace and cast this spell at the fire. "
-         + "Once your fireplace is registered, you can destroy the sign and even put out the fire, but you must not "
-         + "place a solid block where the fire was, or you will have to re-register your fireplace. "
-         + "People can use your fireplace via Floo powder, which is made by smelting ender pearl. "
-         + "Toss the powder into a registered fireplace, walk into the fire, and say the name of your destination.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ALIQUAM_FLOO () { }
+   public ALIQUAM_FLOO ()
+   {
+      super();
+
+      spellType = O2SpellType.ALIQUAM_FLOO;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"In use for centuries, the Floo Network, while somewhat uncomfortable, has many advantages. Firstly, unlike broomsticks, the Network can be used without fear of breaking the International Statute of Secrecy. Secondly, unlike Apparition, there is little to no danger of serious injury. Thirdly, it can be used to transport children, the elderly and the infirm.\"");
+      }};
+
+      text = "Aliquam Floo will register a fireplace with the Floo Network. "
+            + "Place a sign above a fire with the unique name of the fireplace and cast this spell at the fire. "
+            + "Once your fireplace is registered, you can destroy the sign and even put out the fire, but you must not "
+            + "place a solid block where the fire was, or you will have to re-register your fireplace. "
+            + "People can use your fireplace via Floo powder, which is made by smelting ender pearl. "
+            + "Toss the powder into a registered fireplace, walk into the fire, and say the name of your destination.";
+   }
 
    /**
     * Constructor.
@@ -48,6 +51,8 @@ public final class ALIQUAM_FLOO extends Charms
    public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.ALIQUAM_FLOO;
    }
 
    public void checkEffect ()

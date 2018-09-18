@@ -15,7 +15,10 @@ public abstract class BombardaSuper extends Charms
 {
    double strength;
 
-   public BombardaSuper () { }
+   public BombardaSuper ()
+   {
+      super();
+   }
 
    /**
     * Constructor.

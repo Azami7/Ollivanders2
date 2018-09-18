@@ -20,20 +20,22 @@ import java.util.ArrayList;
  */
 public final class AVIFORS extends FriendlyMobDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.AVIFORS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("However, mastering a Transfiguration spell such as \"Avifors\" can be both rewarding and useful.");
-   }};
-
-   protected String text = "Turns target entity in to a bird.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
    public AVIFORS ()
    {
-      if (!Ollivanders2.mcVersionCheck())
+      super();
+
+      spellType = O2SpellType.AVIFORS;
+
+      flavorText = new ArrayList<String>() {{
+         add("However, mastering a Transfiguration spell such as \"Avifors\" can be both rewarding and useful.");
+      }};
+
+      if (Ollivanders2.mcVersionCheck())
+         text = "Turns target entity in to a bird.";
+      else
          text = "Turns target entity in to a bat.";
    }
 

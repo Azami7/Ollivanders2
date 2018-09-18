@@ -22,7 +22,10 @@ public abstract class ConfundusSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ConfundusSuper () { }
+   public ConfundusSuper ()
+   {
+      super();
+   }
 
    /**
     * Constructor.

@@ -15,21 +15,24 @@ import java.util.ArrayList;
  */
 public final class LUMOS extends Charms
 {
-   public O2SpellType spellType = O2SpellType.LUMOS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("If in any doubt about your abilities you would do better to buy yourself a magic lantern.");
-      add("The Wand-Lighting Charm");
-      add("\"Ron, where are you? Oh this is stupid - lumos!\"  She illuminated her wand and directed its narrow beam across the path. Ron was lying sprawled on the ground.");
-      add("The Wand-Lighting Charm is simple, but requires concentration.  Take care not to accidentally set your wand alight as damage of this kind can be permanent.");
-   }};
-
-   protected String text = "Gives night vision.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LUMOS () { }
+   public LUMOS ()
+   {
+      super();
+
+      spellType = O2SpellType.LUMOS;
+
+      flavorText = new ArrayList<String>() {{
+         add("If in any doubt about your abilities you would do better to buy yourself a magic lantern.");
+         add("The Wand-Lighting Charm");
+         add("\"Ron, where are you? Oh this is stupid - lumos!\"  She illuminated her wand and directed its narrow beam across the path. Ron was lying sprawled on the ground.");
+         add("The Wand-Lighting Charm is simple, but requires concentration.  Take care not to accidentally set your wand alight as damage of this kind can be permanent.");
+      }};
+
+      text = "Gives night vision.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class LUMOS extends Charms
    public LUMOS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.LUMOS;
    }
 
    @Override

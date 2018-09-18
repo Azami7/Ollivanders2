@@ -15,12 +15,15 @@ import org.bukkit.entity.Player;
  */
 public abstract class GlaciusSuper extends BlockTransfigurationSuper
 {
-   protected O2MagicBranch branch = O2MagicBranch.CHARMS;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GlaciusSuper () { }
+   public GlaciusSuper ()
+   {
+      super();
+
+      branch = O2MagicBranch.CHARMS;
+   }
 
    /**
     * Constructor.
@@ -32,6 +35,8 @@ public abstract class GlaciusSuper extends BlockTransfigurationSuper
    public GlaciusSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      branch = O2MagicBranch.CHARMS;
 
       if (usesModifier > 50)
       {

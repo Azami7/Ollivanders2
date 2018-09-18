@@ -19,18 +19,21 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class VOLATUS extends Charms
 {
-   public O2SpellType spellType = O2SpellType.VOLATUS;
-
-   protected String text = "Volatus is used to enchant a broomstick for flight. "
-         + "To make a magical broomstick, you must first craft a broomstick.  This recipe requires two sticks and a wheat. "
-         + "Place the first stick in the upper-right corner, the next stick in the center, and the wheat in the lower-left. "
-         + "Once you have a broomstick, place it in the ground in front of you and cast the spell Volatus at it. "
-         + "Your experience with this spell determines how fast the broomstick can go.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VOLATUS () { }
+   public VOLATUS ()
+   {
+      super();
+
+      spellType = O2SpellType.VOLATUS;
+
+      text = "Volatus is used to enchant a broomstick for flight. "
+            + "To make a magical broomstick, you must first craft a broomstick.  This recipe requires two sticks and a wheat. "
+            + "Place the first stick in the upper-right corner, the next stick in the center, and the wheat in the lower-left. "
+            + "Once you have a broomstick, place it in the ground in front of you and cast the spell Volatus at it. "
+            + "Your experience with this spell determines how fast the broomstick can go.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public final class VOLATUS extends Charms
    public VOLATUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.VOLATUS;
    }
 
    @Override

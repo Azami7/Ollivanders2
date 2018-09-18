@@ -21,12 +21,15 @@ public abstract class GaleatiSuper extends Charms
 {
    Material materialType = Material.AIR;
 
-   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GaleatiSuper () { }
+   public GaleatiSuper ()
+   {
+      super();
+
+      branch = O2MagicBranch.TRANSFIGURATION;
+   }
 
    /**
     * Constructor.
@@ -38,6 +41,8 @@ public abstract class GaleatiSuper extends Charms
    public GaleatiSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      branch = O2MagicBranch.TRANSFIGURATION;
    }
 
    public void checkEffect ()

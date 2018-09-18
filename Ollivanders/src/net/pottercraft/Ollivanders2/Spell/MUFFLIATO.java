@@ -18,18 +18,21 @@ import java.util.ArrayList;
  */
 public final class MUFFLIATO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.MUFFLIATO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add(" [...] perhaps most useful of all, Muffliato, a spell that filled the ears of anyone nearby with an unidentifiable buzzing, so that lengthy conversations could be held in class without being overheard.");
-   }};
-
-   protected String text = "Muffliato creates a stationary spell which only allows the people inside to hear anything spoken inside the effect.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MUFFLIATO () { }
+   public MUFFLIATO ()
+   {
+      super();
+
+      spellType = O2SpellType.MUFFLIATO;
+
+      flavorText = new ArrayList<String>() {{
+         add(" [...] perhaps most useful of all, Muffliato, a spell that filled the ears of anyone nearby with an unidentifiable buzzing, so that lengthy conversations could be held in class without being overheard.");
+      }};
+
+      text = "Muffliato creates a stationary spell which only allows the people inside to hear anything spoken inside the effect.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class MUFFLIATO extends Charms
    public MUFFLIATO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.MUFFLIATO;
    }
 
    @Override

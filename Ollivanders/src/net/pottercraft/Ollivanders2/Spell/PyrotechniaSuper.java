@@ -33,7 +33,10 @@ public abstract class PyrotechniaSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PyrotechniaSuper () { }
+   public PyrotechniaSuper ()
+   {
+      super();
+   }
 
    /**
     * Constructor.

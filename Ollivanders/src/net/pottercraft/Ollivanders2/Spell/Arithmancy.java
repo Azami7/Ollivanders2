@@ -11,12 +11,15 @@ import org.bukkit.entity.Player;
  */
 public abstract class Arithmancy extends O2Spell
 {
-   protected O2MagicBranch branch = O2MagicBranch.ARITHMANCY;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Arithmancy () { }
+   public Arithmancy ()
+   {
+      super();
+
+      branch = O2MagicBranch.ARITHMANCY;
+   }
 
    /**
     * Constructor.
@@ -28,6 +31,8 @@ public abstract class Arithmancy extends O2Spell
    public Arithmancy (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      branch = O2MagicBranch.ARITHMANCY;
    }
 }
 

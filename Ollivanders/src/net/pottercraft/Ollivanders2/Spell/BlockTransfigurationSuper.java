@@ -21,11 +21,6 @@ import org.bukkit.entity.Entity;
  */
 public abstract class BlockTransfigurationSuper extends O2Spell
 {
-   //
-   // these should generally not be changed
-   //
-   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
-
    /**
     * If the transfiguration has taken place or not.
     */
@@ -87,7 +82,12 @@ public abstract class BlockTransfigurationSuper extends O2Spell
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BlockTransfigurationSuper () { }
+   public BlockTransfigurationSuper ()
+   {
+      super();
+
+      branch = O2MagicBranch.TRANSFIGURATION;
+   }
 
    /**
     * Constructor.

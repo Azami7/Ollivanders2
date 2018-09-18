@@ -17,19 +17,22 @@ import org.bukkit.entity.Player;
  */
 public final class ARANIA_EXUMAI extends Charms
 {
-   public O2SpellType spellType = O2SpellType.ARANIA_EXUMAI;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Know any spells?\"\n\"One, but it's not powerful enough for all of them.\"\n\"Where's Hermione when you need her?\"\n\"Let's go! Arania Exumai\" -Harry Potter and Ron Weasley");
-      add("Defense Against Spiders");
-   }};
-
-   protected String text = "Blasts away spiders.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ARANIA_EXUMAI () { }
+   public ARANIA_EXUMAI ()
+   {
+      super();
+
+      spellType = O2SpellType.ARANIA_EXUMAI;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Know any spells?\"\n\"One, but it's not powerful enough for all of them.\"\n\"Where's Hermione when you need her?\"\n\"Let's go! Arania Exumai\" -Harry Potter and Ron Weasley");
+         add("Defense Against Spiders");
+      }};
+
+      text = "Blasts away spiders.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class ARANIA_EXUMAI extends Charms
    public ARANIA_EXUMAI (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.ARANIA_EXUMAI;
    }
 
    public void checkEffect ()

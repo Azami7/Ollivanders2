@@ -26,7 +26,10 @@ public abstract class ColoroSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ColoroSuper () { }
+   public ColoroSuper ()
+   {
+      super();
+   }
 
    /**
     * Constructor.

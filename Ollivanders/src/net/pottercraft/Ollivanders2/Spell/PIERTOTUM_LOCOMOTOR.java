@@ -19,18 +19,21 @@ import java.util.ArrayList;
  */
 public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
 {
-   public O2SpellType spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("And all along the corridor the statues and suits of armour jumped down from their plinths, and from the echoing crashes from the floors above and below, Harry knew that their fellows throughout the castle had done the same... Cheering and yelling, the horde of moving statues stampeded past Harry; some of them smaller, others larger than life.");
-   }};
-
-   protected String text = "Piertotum locomotor, if cast at an iron or snow block, will transfigure that block into an iron or snow golem. This transfiguration's duration depends on your experience.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PIERTOTUM_LOCOMOTOR () { }
+   public PIERTOTUM_LOCOMOTOR ()
+   {
+      super();
+
+      spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
+
+      flavorText = new ArrayList<String>() {{
+         add("And all along the corridor the statues and suits of armour jumped down from their plinths, and from the echoing crashes from the floors above and below, Harry knew that their fellows throughout the castle had done the same... Cheering and yelling, the horde of moving statues stampeded past Harry; some of them smaller, others larger than life.");
+      }};
+
+      text = "Piertotum locomotor, if cast at an iron or snow block, will transfigure that block into an iron or snow golem. This transfiguration's duration depends on your experience.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
    public PIERTOTUM_LOCOMOTOR (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
 
       if (Ollivanders2.debug)
          p.getLogger().info("PIERTOTUM_LOCOMOTOR: create");

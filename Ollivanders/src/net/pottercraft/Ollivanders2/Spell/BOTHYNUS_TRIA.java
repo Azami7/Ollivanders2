@@ -17,14 +17,17 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class BOTHYNUS_TRIA extends PyrotechniaSuper
 {
-   public O2SpellType spellType = O2SpellType.BOTHYNUS_TRIA;
-
-   protected String text = "Creates one or more yellow and orange star fireworks with trails and that fades to silver.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BOTHYNUS_TRIA () { }
+   public BOTHYNUS_TRIA ()
+   {
+      super();
+
+      spellType = O2SpellType.BOTHYNUS_TRIA;
+
+      text = "Creates one or more yellow and orange star fireworks with trails and that fades to silver.";
+   }
 
    /**
     * Constructor.
@@ -36,6 +39,8 @@ public final class BOTHYNUS_TRIA extends PyrotechniaSuper
    public BOTHYNUS_TRIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.BOTHYNUS_TRIA;
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.YELLOW);

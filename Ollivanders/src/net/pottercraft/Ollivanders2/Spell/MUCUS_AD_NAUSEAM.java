@@ -19,18 +19,21 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class MUCUS_AD_NAUSEAM extends DarkArts
 {
-   public O2SpellType spellType = O2SpellType.MUCUS_AD_NAUSEAM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Curse of the Bogies");
-   }};
-
-   protected String text = "Mucus Ad Nauseam will cause your opponent to drip with slime.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MUCUS_AD_NAUSEAM () { }
+   public MUCUS_AD_NAUSEAM ()
+   {
+      super();
+
+      spellType = O2SpellType.MUCUS_AD_NAUSEAM;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Curse of the Bogies");
+      }};
+
+      text = "Mucus Ad Nauseam will cause your opponent to drip with slime.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
    public MUCUS_AD_NAUSEAM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.MUCUS_AD_NAUSEAM;
    }
 
    @Override

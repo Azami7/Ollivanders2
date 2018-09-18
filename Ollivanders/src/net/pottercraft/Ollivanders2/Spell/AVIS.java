@@ -16,16 +16,6 @@ import java.util.ArrayList;
  */
 public final class AVIS extends Charms
 {
-   public O2SpellType spellType = O2SpellType.AVIS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Bird-Conjuring Charm");
-      add("Most of the class had already left, although several twittering yellow birds were still zooming around the room, all of Hermione's creation; nobody else had succeeded in conjuring so much as a feather from thin air.");
-      add("\"Oh, hello, Harry ... I was just practicing.\" -Hermione Granger conjuring small golden birds just before sending them to attack Ron");
-   }};
-
-   protected String text = "Causes one or more birds to fly out of the tip of your wand.";
-
    private int birdCount = 0;
    private int maxBirds = 2;
 
@@ -34,7 +24,19 @@ public final class AVIS extends Charms
     */
    public AVIS ()
    {
-      if (!Ollivanders2.mcVersionCheck())
+      super();
+
+      spellType = O2SpellType.AVIS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Bird-Conjuring Charm");
+         add("Most of the class had already left, although several twittering yellow birds were still zooming around the room, all of Hermione's creation; nobody else had succeeded in conjuring so much as a feather from thin air.");
+         add("\"Oh, hello, Harry ... I was just practicing.\" -Hermione Granger conjuring small golden birds just before sending them to attack Ron");
+      }};
+
+      if (Ollivanders2.mcVersionCheck())
+         text = "Causes one or more birds to fly out of the tip of your wand.";
+      else
          text = "Causes one or more bats to fly out of the tip of your wand.";
    }
 
@@ -48,6 +50,8 @@ public final class AVIS extends Charms
    public AVIS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.AVIS;
 
       if (usesModifier > 100)
          maxBirds += 10;

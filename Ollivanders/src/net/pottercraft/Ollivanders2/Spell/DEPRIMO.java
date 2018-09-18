@@ -18,19 +18,22 @@ import org.bukkit.entity.Player;
  */
 public final class DEPRIMO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.DEPRIMO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("She had blasted a hole in the sitting-room floor. They fell like boulders, Harry still holding onto her hand for dear life, there as a scream from below and he glimpsed two men trying to get out of the way as vast quantities of rubble and broken furniture rained all around them from the shattered ceiling.");
-      add("The Blasting Charm");
-   }};
-
-   protected String text = "Deprimo creates an immense downward pressure which will cause all blocks within a radius to fall like sand.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DEPRIMO () { }
+   public DEPRIMO ()
+   {
+      super();
+
+      spellType = O2SpellType.DEPRIMO;
+
+      flavorText = new ArrayList<String>() {{
+         add("She had blasted a hole in the sitting-room floor. They fell like boulders, Harry still holding onto her hand for dear life, there as a scream from below and he glimpsed two men trying to get out of the way as vast quantities of rubble and broken furniture rained all around them from the shattered ceiling.");
+         add("The Blasting Charm");
+      }};
+
+      text = "Deprimo creates an immense downward pressure which will cause all blocks within a radius to fall like sand.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +45,8 @@ public final class DEPRIMO extends Charms
    public DEPRIMO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.DEPRIMO;
    }
 
    public void checkEffect ()

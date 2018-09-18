@@ -17,19 +17,22 @@ import java.util.ArrayList;
  */
 public final class OPPUGNO extends DarkArts
 {
-   public O2SpellType spellType = O2SpellType.OPPUGNO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("Harry spun around to see Hermione pointing her wand at Ron, her expression wild: The little flock of birds was speeding like a hail of fat golden bullets toward Ron, who yelped and covered his face with his hands, but the birds attacked, pecking and clawing at every bit of flesh they could reach.");
-      add("The Oppugno Jinx");
-   }};
-
-   protected String text = "Oppugno will cause any entities transfigured by you to attack the targeted entity.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public OPPUGNO () { }
+   public OPPUGNO ()
+   {
+      super();
+
+      spellType = O2SpellType.OPPUGNO;
+
+      flavorText = new ArrayList<String>() {{
+         add("Harry spun around to see Hermione pointing her wand at Ron, her expression wild: The little flock of birds was speeding like a hail of fat golden bullets toward Ron, who yelped and covered his face with his hands, but the birds attacked, pecking and clawing at every bit of flesh they could reach.");
+         add("The Oppugno Jinx");
+      }};
+
+      text = "Oppugno will cause any entities transfigured by you to attack the targeted entity.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class OPPUGNO extends DarkArts
    public OPPUGNO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.OPPUGNO;
    }
 
    @Override

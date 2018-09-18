@@ -14,14 +14,16 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class METELOJINX extends MetelojinxSuper
 {
-   public O2SpellType spellType = O2SpellType.METELOJINX;
-
-   protected String text = "Metelojinx will turn a sunny day into a storm.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public METELOJINX () { }
+   public METELOJINX ()
+   {
+      super();
+
+      spellType = O2SpellType.METELOJINX;
+      text = "Metelojinx will turn a sunny day into a storm.";
+   }
 
    /**
     * Constructor.
@@ -33,6 +35,8 @@ public final class METELOJINX extends MetelojinxSuper
    public METELOJINX (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.METELOJINX;
       storm = true;
    }
 }

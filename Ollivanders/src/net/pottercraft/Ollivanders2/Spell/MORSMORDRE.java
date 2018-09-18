@@ -16,20 +16,23 @@ import java.util.ArrayList;
  */
 public final class MORSMORDRE extends PyrotechniaSuper
 {
-   protected O2MagicBranch branch = O2MagicBranch.DARK_ARTS;
-   public O2SpellType spellType = O2SpellType.MORSMORDRE;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Should the Dark Mark appear over any dwelling place or other  building, DO NOT ENTER, but contact the Auror office immediately.\" -Ministry of Magic");
-      add("Then he realised it was a colossal skull, comprised of what looked like emerald stars, with a serpent protruding from its mouth like a tongue. As they watched, it rose higher and higher, blazing in a haze of greenish smoke, etched against the black sky like a new constellation.");
-   }};
-
-   protected String text = "Conjures the Dark Mark in the sky.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MORSMORDRE () { }
+   public MORSMORDRE ()
+   {
+      super();
+
+      branch = O2MagicBranch.DARK_ARTS;
+      spellType = O2SpellType.MORSMORDRE;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Should the Dark Mark appear over any dwelling place or other  building, DO NOT ENTER, but contact the Auror office immediately.\" -Ministry of Magic");
+         add("Then he realised it was a colossal skull, comprised of what looked like emerald stars, with a serpent protruding from its mouth like a tongue. As they watched, it rose higher and higher, blazing in a haze of greenish smoke, etched against the black sky like a new constellation.");
+      }};
+
+      text = "Conjures the Dark Mark in the sky.";
+   }
 
    /**
     * Constructor.
@@ -41,7 +44,9 @@ public final class MORSMORDRE extends PyrotechniaSuper
    public MORSMORDRE (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
       branch = O2MagicBranch.DARK_ARTS;
+      spellType = O2SpellType.MORSMORDRE;
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.GREEN);

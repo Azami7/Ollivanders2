@@ -14,39 +14,44 @@ import java.util.ArrayList;
  */
 public class POINT_ME extends Charms
 {
-    public O2SpellType spellType = O2SpellType.POINT_ME;
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    */
+   public POINT_ME ()
+   {
+      super();
 
-    protected ArrayList<String> flavorText = new ArrayList<String>() {{
-        add("\"\'Point Me!\' he whispered again to his wand, and it spun around and pointed him to the right-hand one.\"");
-        add("The Four-Point Spell");
-    }};
+      spellType = O2SpellType.POINT_ME;
 
-    protected String text = "Points the player north.";
+      flavorText = new ArrayList<String>() {{
+         add("\"\'Point Me!\' he whispered again to his wand, and it spun around and pointed him to the right-hand one.\"");
+         add("The Four-Point Spell");
+      }};
 
-    /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
-     */
-    public POINT_ME () { }
+      text = "Points the player north.";
+   }
 
-    /**
-     * Constructor.
-     *
-     * @param plugin a callback to the MC plugin
-     * @param player the player who cast this spell
-     * @param rightWand which wand the player was using
-     */
-    public POINT_ME (Ollivanders2 plugin, Player player, Double rightWand)
-    {
-        super(plugin, player, rightWand);
-    }
+   /**
+    * Constructor.
+    *
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
+    * @param rightWand which wand the player was using
+    */
+   public POINT_ME (Ollivanders2 plugin, Player player, Double rightWand)
+   {
+      super(plugin, player, rightWand);
+
+      spellType = O2SpellType.POINT_ME;
+   }
 
 
-    @Override
-    public void checkEffect ()
-    {
-        Location l = player.getLocation().clone();
-        l.setYaw(180);
-        player.teleport(l);
-        kill();
-    }
+   @Override
+   public void checkEffect ()
+   {
+      Location l = player.getLocation().clone();
+      l.setYaw(180);
+      player.teleport(l);
+      kill();
+   }
 }

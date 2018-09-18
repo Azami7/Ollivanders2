@@ -15,14 +15,16 @@ import org.bukkit.entity.Player;
  */
 public class INCARNATIO_URSUS extends PlayerDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.INCARNATIO_URSUS;
-
-   protected String text = "Turns target player in to a polar bear.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_URSUS () { }
+   public INCARNATIO_URSUS ()
+   {
+      super();
+
+      spellType = O2SpellType.INCARNATIO_URSUS;
+      text = "Turns target player in to a polar bear.";
+   }
 
    /**
     * Constructor.
@@ -35,6 +37,7 @@ public class INCARNATIO_URSUS extends PlayerDisguiseSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.INCARNATIO_URSUS;
       targetType = EntityType.POLAR_BEAR;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

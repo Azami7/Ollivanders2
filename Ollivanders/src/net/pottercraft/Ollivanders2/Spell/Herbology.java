@@ -11,12 +11,15 @@ import org.bukkit.entity.Player;
  */
 public abstract class Herbology extends O2Spell
 {
-   protected O2MagicBranch branch = O2MagicBranch.HERBOLOGY;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Herbology () { }
+   public Herbology ()
+   {
+      super();
+
+      branch = O2MagicBranch.HERBOLOGY;
+   }
 
    /**
     * Constructor.
@@ -28,5 +31,7 @@ public abstract class Herbology extends O2Spell
    public Herbology (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      branch = O2MagicBranch.HERBOLOGY;
    }
 }

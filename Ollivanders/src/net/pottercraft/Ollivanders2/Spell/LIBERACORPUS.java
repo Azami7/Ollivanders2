@@ -17,19 +17,22 @@ import java.util.ArrayList;
  */
 public final class LIBERACORPUS extends Charms
 {
-   public O2SpellType spellType = O2SpellType.LIBERACORPUS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Levicorpus Counter-Spell");
-      add("...he jerked his wand upwards; Snape fell into a crumpled heap on the ground.");
-   }};
-
-   protected String text = "Liberacorpus will reduce the time left on any levicorpus effects on the target by an amount determined by your experience.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LIBERACORPUS () { }
+   public LIBERACORPUS ()
+   {
+      super();
+
+      spellType = O2SpellType.LIBERACORPUS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Levicorpus Counter-Spell");
+         add("...he jerked his wand upwards; Snape fell into a crumpled heap on the ground.");
+      }};
+
+      text = "Liberacorpus will reduce the time left on any levicorpus effects on the target by an amount determined by your experience.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class LIBERACORPUS extends Charms
    public LIBERACORPUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.LIBERACORPUS;
    }
 
    @Override

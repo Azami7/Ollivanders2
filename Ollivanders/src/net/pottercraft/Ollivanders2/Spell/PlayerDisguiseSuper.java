@@ -16,7 +16,10 @@ public abstract class PlayerDisguiseSuper extends EntityDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PlayerDisguiseSuper () { }
+   public PlayerDisguiseSuper ()
+   {
+      super();
+   }
 
    /**
     * Constructor.

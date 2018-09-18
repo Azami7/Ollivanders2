@@ -16,19 +16,22 @@ import java.util.ArrayList;
  */
 public final class ASCENDIO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.ASCENDIO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Climbing Charm");
-      add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
-   }};
-
-   protected String text = "Propels the caster into the air.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ASCENDIO () { }
+   public ASCENDIO ()
+   {
+      super();
+
+      spellType = O2SpellType.ASCENDIO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Climbing Charm");
+         add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
+      }};
+
+      text = "Propels the caster into the air.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +43,8 @@ public final class ASCENDIO extends Charms
    public ASCENDIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.ASCENDIO;
    }
 
    public void checkEffect ()

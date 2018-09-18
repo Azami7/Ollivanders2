@@ -16,18 +16,21 @@ import java.util.ArrayList;
  */
 public final class REPELLO_MUGGLETON extends Charms
 {
-   public O2SpellType spellType = O2SpellType.REPELLO_MUGGLETON;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("Muggle-Repelling Charms on every inch of it. Every time Muggles have got anywhere near here all year, they've suddenly remembered urgent appointments and had to dash away again.");
-   }};
-
-   protected String text = "Repello Muggleton will hide any blocks and players in it's radius from those outside of it.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REPELLO_MUGGLETON () { }
+   public REPELLO_MUGGLETON ()
+   {
+      super();
+
+      spellType = O2SpellType.REPELLO_MUGGLETON;
+
+      flavorText = new ArrayList<String>() {{
+         add("Muggle-Repelling Charms on every inch of it. Every time Muggles have got anywhere near here all year, they've suddenly remembered urgent appointments and had to dash away again.");
+      }};
+
+      text = "Repello Muggleton will hide any blocks and players in it's radius from those outside of it.";
+   }
 
    /**
     * Constructor.
@@ -39,6 +42,8 @@ public final class REPELLO_MUGGLETON extends Charms
    public REPELLO_MUGGLETON (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.REPELLO_MUGGLETON;
    }
 
    @Override

@@ -40,7 +40,7 @@ public abstract class O2Spell implements Teachable
    /**
     * The type this spell is.
     */
-   public O2SpellType spellType = O2SpellType.LUMOS;
+   public O2SpellType spellType;
 
    /**
     * The location the spell was cast from.
@@ -111,12 +111,12 @@ public abstract class O2Spell implements Teachable
    /**
     * Flavor text for this spell in spellbooks, etc.  Optional.
     */
-   protected ArrayList<String> flavorText = new ArrayList<>();
+   protected ArrayList<String> flavorText;
 
    /**
     * The description text for this spell in spell books.  Required or spell cannot be written in a book.
     */
-   protected String text = "";
+   protected String text;
 
    /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
@@ -366,7 +366,7 @@ public abstract class O2Spell implements Teachable
    @Override
    public String getFlavorText()
    {
-      if (flavorText.size() < 1)
+      if (flavorText == null || flavorText.size() < 1)
       {
          return null;
       }
@@ -388,6 +388,9 @@ public abstract class O2Spell implements Teachable
    {
       Ollivanders2Common common = new Ollivanders2Common(p);
 
-      return common.firstLetterCapitalize(spellType.toString().toLowerCase().replace("_", " "));
+      String spellTypeString = spellType.toString().toLowerCase();
+      String name = common.firstLetterCapitalize(spellTypeString.replace("_", " "));
+
+      return name;
    }
 }

@@ -16,18 +16,21 @@ import java.util.ArrayList;
  */
 public final class OBSCURO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.OBSCURO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("A black blindfold appeared over Phineas Nigellus' clever, dark eyes, causing him to bump into the frame and shriek with pain.");
-   }};
-
-   protected String text = "Obscuro will blind the target.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public OBSCURO () { }
+   public OBSCURO ()
+   {
+      super();
+
+      spellType = O2SpellType.OBSCURO;
+
+      flavorText = new ArrayList<String>() {{
+         add("A black blindfold appeared over Phineas Nigellus' clever, dark eyes, causing him to bump into the frame and shriek with pain.");
+      }};
+
+      text = "Obscuro will blind the target.";
+   }
 
    /**
     * Constructor.
@@ -39,6 +42,8 @@ public final class OBSCURO extends Charms
    public OBSCURO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.OBSCURO;
    }
 
    @Override

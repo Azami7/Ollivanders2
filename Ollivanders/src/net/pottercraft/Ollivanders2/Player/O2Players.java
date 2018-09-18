@@ -96,7 +96,6 @@ public class O2Players
       if (!O2PlayerMap.containsKey(pid))
       {
          O2PlayerMap.put(pid, o2p);
-         p.getLogger().info("Added new O2Player " + o2p.getPlayerName());
       }
       else
       {
@@ -204,9 +203,6 @@ public class O2Players
           * Name
           */
          String pName = o2p.getPlayerName();
-         if (Ollivanders2.debug)
-            p.getLogger().info("\tAdding " + pName + "...");
-
          playerData.put(nameLabel, pName);
 
          /**
@@ -470,8 +466,6 @@ public class O2Players
          }
 
          deserializedMap.put(pid, o2p);
-         if (Ollivanders2.debug)
-            p.getLogger().info("Loaded player " + o2p.getPlayerName());
       }
 
       return deserializedMap;

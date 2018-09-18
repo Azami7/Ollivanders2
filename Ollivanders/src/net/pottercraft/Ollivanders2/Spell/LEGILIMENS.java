@@ -15,19 +15,23 @@ import java.util.ArrayList;
  */
 public final class LEGILIMENS extends DarkArts
 {
-   public O2SpellType spellType = O2SpellType.APARECIUM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"The mind is not a book, to be opened at will and examined at leisure. Thoughts are not etched on the inside of skulls, to be perused by any invader. The mind is a complex and many-layered thing, Potter. Or at least most minds are... It is true, however, that those who have mastered Legilimency are able, under certain conditions, to delve into the minds of their victims and to interpret their findings correctly.\" -Severus Snape");
-      add("The Legilimency Spell");
-   }};
-
-   protected String text = "Legilimens, when cast at a player, will allow you to open their inventory if your level in legilimens is higher than theirs.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LEGILIMENS () { }
+   public LEGILIMENS ()
+   {
+      super();
+
+      spellType = O2SpellType.APARECIUM;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"The mind is not a book, to be opened at will and examined at leisure. Thoughts are not etched on the inside of skulls, to be perused by any invader. The mind is a complex and many-layered thing, Potter. Or at least most minds are... It is true, however, that those who have mastered Legilimency are able, under certain conditions, to delve into the minds of their victims and to interpret their findings correctly.\" -Severus Snape");
+         add("The Legilimency Spell");
+      }};
+
+      text = "Legilimens, when cast at a player, will allow you to open their inventory if your level in legilimens is higher than theirs.";
+
+   }
 
    /**
     * Constructor.
@@ -39,6 +43,8 @@ public final class LEGILIMENS extends DarkArts
    public LEGILIMENS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.APARECIUM;
    }
 
    @Override

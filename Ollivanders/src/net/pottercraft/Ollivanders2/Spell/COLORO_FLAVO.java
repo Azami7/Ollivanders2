@@ -12,15 +12,16 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class COLORO_FLAVO extends ColoroSuper
 {
-   public O2SpellType spellType = O2SpellType.COLORO_FLAVO;
-   protected String text = "Turns target colorable entity or block yellow.";
-
-   DyeColor color = DyeColor.YELLOW;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_FLAVO () { }
+   public COLORO_FLAVO ()
+   {
+      super();
+
+      spellType = O2SpellType.COLORO_FLAVO;
+      text = "Turns target colorable entity or block yellow.";
+   }
 
    /**
     * Constructor.
@@ -32,5 +33,8 @@ public final class COLORO_FLAVO extends ColoroSuper
    public COLORO_FLAVO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.COLORO_FLAVO;
+      color = DyeColor.YELLOW;
    }
 }

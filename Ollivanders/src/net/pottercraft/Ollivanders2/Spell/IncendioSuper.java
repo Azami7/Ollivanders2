@@ -33,7 +33,10 @@ public abstract class IncendioSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public IncendioSuper () { }
+   public IncendioSuper ()
+   {
+      super();
+   }
 
    /**
     * Constructor.

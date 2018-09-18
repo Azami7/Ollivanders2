@@ -12,15 +12,16 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class COLORO_CAERULUS extends ColoroSuper
 {
-   public O2SpellType spellType = O2SpellType.COLORO_CAERULUS;
-   protected String text = "Turns target colorable entity or block blue.";
-
-   DyeColor color = DyeColor.BLUE;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_CAERULUS () { }
+   public COLORO_CAERULUS ()
+   {
+      super();
+
+      spellType = O2SpellType.COLORO_CAERULUS;
+      text = "Turns target colorable entity or block blue.";
+   }
 
    /**
     * Constructor.
@@ -32,5 +33,8 @@ public final class COLORO_CAERULUS extends ColoroSuper
    public COLORO_CAERULUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.COLORO_CAERULUS;
+      color = DyeColor.BLUE;
    }
 }

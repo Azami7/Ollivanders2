@@ -13,19 +13,22 @@ import java.util.ArrayList;
  */
 public final class REDUCIO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.REDUCIO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Shrinking Charm");
-      add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink. You will be learning both charms together, so that you can always undo an over-enthusiastic cast. There is thus no excuse for having accidentally shrunk your homework down to microscopic size or for allowing a giant toad to rampage through your school’s flower gardens.");
-   }};
-
-   protected String text = "Shrinks a giant to a normal zombie, makes certain entities babies and slimes smaller.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REDUCIO () { }
+   public REDUCIO ()
+   {
+      super();
+
+      spellType = O2SpellType.REDUCIO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Shrinking Charm");
+         add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink. You will be learning both charms together, so that you can always undo an over-enthusiastic cast. There is thus no excuse for having accidentally shrunk your homework down to microscopic size or for allowing a giant toad to rampage through your school’s flower gardens.");
+      }};
+
+      text = "Shrinks a giant to a normal zombie, makes certain entities babies and slimes smaller.";
+   }
 
    /**
     * Constructor.
@@ -37,6 +40,8 @@ public final class REDUCIO extends Charms
    public REDUCIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.REDUCIO;
    }
 
    @Override

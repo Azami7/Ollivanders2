@@ -19,18 +19,21 @@ import java.util.ArrayList;
  */
 public final class LAPIFORS extends FriendlyMobDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.LAPIFORS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
-   }};
-
-   protected String text = "The transfiguration spell Lapifors will transfigure an entity into a rabbit.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LAPIFORS () { }
+   public LAPIFORS ()
+   {
+      super();
+
+      spellType = O2SpellType.LAPIFORS;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
+      }};
+
+      text = "The transfiguration spell Lapifors will transfigure an entity into a rabbit.";
+   }
 
    /**
     * Constructor.
@@ -43,6 +46,7 @@ public final class LAPIFORS extends FriendlyMobDisguiseSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.LAPIFORS;
       targetType = EntityType.RABBIT;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

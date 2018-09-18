@@ -17,7 +17,10 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FriendlyMobDisguiseSuper () { }
+   public FriendlyMobDisguiseSuper ()
+   {
+      super();
+   }
 
    /**
     * Constructor.

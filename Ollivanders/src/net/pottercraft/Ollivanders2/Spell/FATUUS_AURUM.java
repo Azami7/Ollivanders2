@@ -15,22 +15,24 @@ import java.util.ArrayList;
  */
 public final class FATUUS_AURUM extends BlockTransfigurationSuper
 {
-   public O2SpellType spellType = O2SpellType.FATUUS_AURUM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("What glitters may not be gold; and even wolves may smile; and fools will be led by promises to their deaths.");
-      add("There is thy gold, worse poison to men's souls.");
-      add("Stone to Gold Spell");
-   }};
-
-   protected String text = "Turns a stone block in to gold.";
-
-   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FATUUS_AURUM () { }
+   public FATUUS_AURUM ()
+   {
+      super();
+
+      spellType = O2SpellType.FATUUS_AURUM;
+      branch = O2MagicBranch.TRANSFIGURATION;
+
+      flavorText = new ArrayList<String>() {{
+         add("What glitters may not be gold; and even wolves may smile; and fools will be led by promises to their deaths.");
+         add("There is thy gold, worse poison to men's souls.");
+         add("Stone to Gold Spell");
+      }};
+
+      text = "Turns a stone block in to gold.";
+   }
 
    /**
     * Constructor.
@@ -42,6 +44,9 @@ public final class FATUUS_AURUM extends BlockTransfigurationSuper
    public FATUUS_AURUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.FATUUS_AURUM;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       materialWhitelist.add(Material.STONE);
       transfigureType = Material.GOLD_BLOCK;

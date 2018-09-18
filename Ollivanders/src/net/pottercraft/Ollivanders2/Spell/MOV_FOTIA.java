@@ -19,19 +19,22 @@ import java.util.ArrayList;
  */
 public final class MOV_FOTIA extends PyrotechniaSuper
 {
-   public O2SpellType spellType = O2SpellType.MOV_FOTIA;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("It took several purple firecrackers exploding from the end of Professor Dumbledore's wand to bring silence.");
-      add("Purple Firecrackers");
-   }};
-
-   protected String text = "Causes purple firecrackers to shoot out from the tip of one's wand.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MOV_FOTIA () { }
+   public MOV_FOTIA ()
+   {
+      super();
+
+      spellType = O2SpellType.MOV_FOTIA;
+
+      flavorText = new ArrayList<String>() {{
+         add("It took several purple firecrackers exploding from the end of Professor Dumbledore's wand to bring silence.");
+         add("Purple Firecrackers");
+      }};
+
+      text = "Causes purple firecrackers to shoot out from the tip of one's wand.";
+   }
 
    /**
     * Constructor.
@@ -43,6 +46,8 @@ public final class MOV_FOTIA extends PyrotechniaSuper
    public MOV_FOTIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.MOV_FOTIA;
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);

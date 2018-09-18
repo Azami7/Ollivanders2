@@ -17,19 +17,22 @@ import java.util.ArrayList;
  */
 public final class EPISKEY extends Healing
 {
-   public O2SpellType spellType = O2SpellType.EPISKEY;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Episkey,\" said Tonks. Harry's nose felt very hot, then very cold. He raised a hand and felt it gingerly. It seemed to be mended.");
-      add("A minor healing spell.");
-   }};
-
-   protected String text = "Episkey will heal minor injuries.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EPISKEY () { }
+   public EPISKEY ()
+   {
+      super();
+
+      spellType = O2SpellType.EPISKEY;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Episkey,\" said Tonks. Harry's nose felt very hot, then very cold. He raised a hand and felt it gingerly. It seemed to be mended.");
+         add("A minor healing spell.");
+      }};
+
+      text = "Episkey will heal minor injuries.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class EPISKEY extends Healing
    public EPISKEY (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.EPISKEY;
    }
 
    public void checkEffect ()

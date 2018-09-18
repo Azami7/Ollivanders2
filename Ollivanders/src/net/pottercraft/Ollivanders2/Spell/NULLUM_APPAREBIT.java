@@ -14,14 +14,16 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
  */
 public final class NULLUM_APPAREBIT extends Charms
 {
-   public O2SpellType spellType = O2SpellType.NULLUM_APPAREBIT;
-
-   protected String text = "Nullum apparebit creates a stationary spell which will not allow apparition into it.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public NULLUM_APPAREBIT () { }
+   public NULLUM_APPAREBIT ()
+   {
+      super();
+
+      spellType = O2SpellType.NULLUM_APPAREBIT;
+      text = "Nullum apparebit creates a stationary spell which will not allow apparition into it.";
+   }
 
    /**
     * Constructor.
@@ -33,6 +35,8 @@ public final class NULLUM_APPAREBIT extends Charms
    public NULLUM_APPAREBIT (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.NULLUM_APPAREBIT;
    }
 
    @Override

@@ -138,6 +138,7 @@ public class Ollivanders2 extends JavaPlugin
       Listener playerListener = new OllivandersListener(this);
       getServer().getPluginManager().registerEvents(playerListener, this);
       common = new Ollivanders2Common(this);
+
       //loads data
       if (new File("plugins/Ollivanders2/").mkdirs())
       {

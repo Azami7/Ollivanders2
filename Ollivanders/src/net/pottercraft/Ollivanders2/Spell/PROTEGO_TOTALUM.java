@@ -16,18 +16,21 @@ import java.util.ArrayList;
  */
 public final class PROTEGO_TOTALUM extends Charms
 {
-   public O2SpellType spellType = O2SpellType.PROTEGO_TOTALUM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("Raising her wand, she began to walk in a wide circle around Harry and Ron, murmuring incantations as she went. Harry saw little disturbances in the surrounding air: it was as if Hermione had cast a heat haze across their clearing.");
-   }};
-
-   protected String text = "Protego totalum is a stationary spell which will prevent any entities from crossing it's boundary.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_TOTALUM () { }
+   public PROTEGO_TOTALUM ()
+   {
+      super();
+
+      spellType = O2SpellType.PROTEGO_TOTALUM;
+
+      flavorText = new ArrayList<String>() {{
+         add("Raising her wand, she began to walk in a wide circle around Harry and Ron, murmuring incantations as she went. Harry saw little disturbances in the surrounding air: it was as if Hermione had cast a heat haze across their clearing.");
+      }};
+
+      text = "Protego totalum is a stationary spell which will prevent any entities from crossing it's boundary.";
+   }
 
    /**
     * Constructor.
@@ -39,6 +42,8 @@ public final class PROTEGO_TOTALUM extends Charms
    public PROTEGO_TOTALUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.PROTEGO_TOTALUM;
    }
 
    @Override

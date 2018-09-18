@@ -12,12 +12,15 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public abstract class Healing extends O2Spell
 {
-   protected O2MagicBranch branch = O2MagicBranch.HEALING;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Healing () { }
+   public Healing ()
+   {
+      super();
+
+      branch = O2MagicBranch.HEALING;
+   }
 
    /**
     * Constructor.
@@ -29,5 +32,7 @@ public abstract class Healing extends O2Spell
    public Healing (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      branch = O2MagicBranch.HEALING;
    }
 }

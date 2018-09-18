@@ -16,19 +16,22 @@ import java.util.ArrayList;
  */
 public final class BOMBARDA extends BombardaSuper
 {
-   public O2SpellType spellType = O2SpellType.BOMBARDA;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Bombarda?\"\n\"And wake up everyone in Hogwarts?\" -Albus Potter and Scorpius Malfoy");
-      add("An explosion incantation.");
-   }};
-
-   protected String text = "Bombarda creates an explosion which doesn't damage the terrain.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BOMBARDA () { }
+   public BOMBARDA ()
+   {
+      super();
+
+      spellType = O2SpellType.BOMBARDA;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Bombarda?\"\n\"And wake up everyone in Hogwarts?\" -Albus Potter and Scorpius Malfoy");
+         add("An explosion incantation.");
+      }};
+
+      text = "Bombarda creates an explosion which doesn't damage the terrain.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +43,8 @@ public final class BOMBARDA extends BombardaSuper
    public BOMBARDA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.BOMBARDA;
 
       strength = 0.8;
    }

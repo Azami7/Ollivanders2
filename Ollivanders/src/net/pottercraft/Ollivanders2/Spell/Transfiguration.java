@@ -32,12 +32,15 @@ public abstract class Transfiguration extends O2Spell
    private boolean hasTransfigured;
    private int timeMultiplier = 1200;
 
-   protected O2MagicBranch branch = O2MagicBranch.TRANSFIGURATION;;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Transfiguration () { }
+   public Transfiguration ()
+   {
+      super();
+
+      branch = O2MagicBranch.TRANSFIGURATION;
+   }
 
    /**
     * Constructor.
@@ -49,6 +52,8 @@ public abstract class Transfiguration extends O2Spell
    public Transfiguration (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       hasTransfigured = false;
    }

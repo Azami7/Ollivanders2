@@ -11,12 +11,15 @@ import org.bukkit.entity.Player;
  */
 public abstract class Charms extends O2Spell
 {
-   protected O2MagicBranch branch = O2MagicBranch.CHARMS;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Charms () { }
+   public Charms ()
+   {
+      super();
+
+      branch = O2MagicBranch.CHARMS;
+   }
 
    /**
     * Constructor.
@@ -28,5 +31,7 @@ public abstract class Charms extends O2Spell
    public Charms (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      branch = O2MagicBranch.CHARMS;
    }
 }

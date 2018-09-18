@@ -16,18 +16,21 @@ import java.util.ArrayList;
  */
 public final class PROTEGO_HORRIBILIS extends Charms
 {
-   public O2SpellType spellType = O2SpellType.PROTEGO_HORRIBILIS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add(" [...] although he could barely see out of it, he pointed his wand through the smashed window and started muttering incantations of great complexity. Harry heard a weird rushing noise, as though Flitwick had unleashed the power of the wind into the grounds.");
-   }};
-
-   protected String text = "Protego horribilis is a stationary spell which will destroy any spells crossing it's barrier.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_HORRIBILIS () { }
+   public PROTEGO_HORRIBILIS ()
+   {
+      super();
+
+      spellType = O2SpellType.PROTEGO_HORRIBILIS;
+
+      flavorText = new ArrayList<String>() {{
+         add(" [...] although he could barely see out of it, he pointed his wand through the smashed window and started muttering incantations of great complexity. Harry heard a weird rushing noise, as though Flitwick had unleashed the power of the wind into the grounds.");
+      }};
+
+      text = "Protego horribilis is a stationary spell which will destroy any spells crossing it's barrier.";
+   }
 
    /**
     * Constructor.
@@ -39,6 +42,8 @@ public final class PROTEGO_HORRIBILIS extends Charms
    public PROTEGO_HORRIBILIS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.PROTEGO_HORRIBILIS;
    }
 
    @Override

@@ -9,8 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
-import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -22,21 +20,24 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class FINITE_INCANTATEM extends Charms
 {
-   public O2SpellType spellType = O2SpellType.FINITE_INCANTATEM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"He pointed his wand at the rampart, cried, \"Finite!\" and it steadied.\"");
-      add("\"Try Finite Incantatem, that should stop the rain if it’s a hex or curse.\"  -Hermione Granger");
-      add("\"Stop! Stop!\" screamed Lockhart, but Snape took charge. \"Finite Incantatum!\" he shouted; Harry's feet stopped dancing, Malfoy stopped laughing, and they were able to look up.");
-      add("The General Counter-Spell");
-   }};
-
-   protected String text = "Reduces all spell effects on an item or player.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FINITE_INCANTATEM () { }
+   public FINITE_INCANTATEM ()
+   {
+      super();
+
+      spellType = O2SpellType.FINITE_INCANTATEM;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"He pointed his wand at the rampart, cried, \"Finite!\" and it steadied.\"");
+         add("\"Try Finite Incantatem, that should stop the rain if it’s a hex or curse.\"  -Hermione Granger");
+         add("\"Stop! Stop!\" screamed Lockhart, but Snape took charge. \"Finite Incantatum!\" he shouted; Harry's feet stopped dancing, Malfoy stopped laughing, and they were able to look up.");
+         add("The General Counter-Spell");
+      }};
+
+      text = "Reduces all spell effects on an item or player.";
+   }
 
    /**
     * Constructor.
@@ -48,6 +49,8 @@ public final class FINITE_INCANTATEM extends Charms
    public FINITE_INCANTATEM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.FINITE_INCANTATEM;
    }
 
    public void checkEffect ()

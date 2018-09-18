@@ -16,14 +16,16 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class VERDIMILLIOUS extends PyrotechniaSuper
 {
-   public O2SpellType spellType = O2SpellType.VERDIMILLIOUS;
-
-   protected String text = "Conjures large green ball fireworks in the air.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VERDIMILLIOUS () { }
+   public VERDIMILLIOUS ()
+   {
+      super();
+
+      spellType = O2SpellType.VERDIMILLIOUS;
+      text = "Conjures large green ball fireworks in the air.";
+   }
 
    /**
     * Constructor.
@@ -36,6 +38,7 @@ public final class VERDIMILLIOUS extends PyrotechniaSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.VERDIMILLIOUS;
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.GREEN);
       fireworkType = Type.BALL_LARGE;

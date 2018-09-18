@@ -22,23 +22,26 @@ import java.util.ArrayList;
  */
 public final class APPARATE extends Charms
 {
-   public O2SpellType spellType = O2SpellType.APPARATE;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("A magical means of transportation.");
-      add("Harry felt Dumbledore's arm twist away from him and re-doubled his grip: the next thing he knew everything went black; he was pressed very hard from all directions; he could not breathe, there were iron bands tightening around his chest; his eyeballs were being forced back into his head; his ear-drums were being pushed deeper into his skull.");
-      add("\"We just Apparated, didn't we sir?\"\n\"Yes, and quite successfully too, I might add. Most people vomit the first time.\" -Harry Potter and Albus Dumbledore");
-   }};
-
-   protected String text = "Apparition is a two sided spell. To apparate to a predetermined location, simply say apparate and list your x, y, and z coordinates. "
-         + "To apparate to the location of your cursor, within 140 meters, just say the word apparate. "
-         + "Your accuracy is determined by the distance traveled and your experience. "
-         + "If there are any entities close to you when you apparate, they will be taken with you as well by side-along apparition.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public APPARATE () { }
+   public APPARATE ()
+   {
+      super();
+
+      spellType = O2SpellType.APPARATE;
+
+      flavorText = new ArrayList<String>() {{
+         add("A magical means of transportation.");
+         add("Harry felt Dumbledore's arm twist away from him and re-doubled his grip: the next thing he knew everything went black; he was pressed very hard from all directions; he could not breathe, there were iron bands tightening around his chest; his eyeballs were being forced back into his head; his ear-drums were being pushed deeper into his skull.");
+         add("\"We just Apparated, didn't we sir?\"\n\"Yes, and quite successfully too, I might add. Most people vomit the first time.\" -Harry Potter and Albus Dumbledore");
+      }};
+
+      text = "Apparition is a two sided spell. To apparate to a predetermined location, simply say apparate and list your x, y, and z coordinates. "
+            + "To apparate to the location of your cursor, within 140 meters, just say the word apparate. "
+            + "Your accuracy is determined by the distance traveled and your experience. "
+            + "If there are any entities close to you when you apparate, they will be taken with you as well by side-along apparition.";
+   }
 
    /**
     * Constructor.
@@ -50,6 +53,8 @@ public final class APPARATE extends Charms
    public APPARATE (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.APPARATE;
    }
 
    public void checkEffect ()

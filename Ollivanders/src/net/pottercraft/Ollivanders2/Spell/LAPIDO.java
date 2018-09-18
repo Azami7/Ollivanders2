@@ -17,18 +17,21 @@ import java.util.ArrayList;
  */
 public final class LAPIDO extends BlockTransfigurationSuper
 {
-   public O2SpellType spellType = O2SpellType.LAPIDO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("Cobblestone to Stone Spell");
-   }};
-
-   protected String text = "Turns cobblestone in to stone.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LAPIDO () { }
+   public LAPIDO ()
+   {
+      super();
+
+      spellType = O2SpellType.LAPIDO;
+
+      flavorText = new ArrayList<String>() {{
+         add("Cobblestone to Stone Spell");
+      }};
+
+      text = "Turns cobblestone in to stone.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,7 @@ public final class LAPIDO extends BlockTransfigurationSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.LAPIDO;
       transfigureType = Material.STONE;
       materialWhitelist.add(Material.COBBLESTONE);
    }

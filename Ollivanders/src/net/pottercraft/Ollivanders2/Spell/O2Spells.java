@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,11 +29,19 @@ public class O2Spells
 
       for (O2SpellType spellType : O2SpellType.values())
       {
+         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType))
+            continue;
+
          O2Spell spell = getSpellFromType(spellType);
 
          if (spell != null)
          {
-            O2SpellMap.put(spell.getName(), spellType);
+            if (spell.spellType == null)
+               p.getLogger().info("spell type is null for " + spell.getClass().toString());
+            else
+            {
+               O2SpellMap.put(spell.getName(), spellType);
+            }
          }
       }
    }

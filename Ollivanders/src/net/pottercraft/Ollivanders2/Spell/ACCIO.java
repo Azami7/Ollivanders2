@@ -18,20 +18,23 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class ACCIO extends Charms
 {
-   public O2SpellType spellType = O2SpellType.ACCIO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("\"Accio Firebolt!\" -Harry Potter");
-      add("The Summoning Charm");
-   }};
-
-   protected String text = "Can use used to pull an item towards you. The strength of the pull is determined by your experience. "
-         + "This cannot be used on living things.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ACCIO () { }
+   public ACCIO ()
+   {
+      super();
+
+      spellType = O2SpellType.ACCIO;
+
+      flavorText = new ArrayList<String>() {{
+         add("\"Accio Firebolt!\" -Harry Potter");
+         add("The Summoning Charm");
+      }};
+
+      text = "Can use used to pull an item towards you. The strength of the pull is determined by your experience. "
+            + "This cannot be used on living things.";
+   }
 
    /**
     * Constructor.
@@ -43,6 +46,8 @@ public final class ACCIO extends Charms
    public ACCIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.ACCIO;
    }
 
    @Override

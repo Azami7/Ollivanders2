@@ -18,14 +18,17 @@ import org.bukkit.entity.Player;
  */
 public final class INCARNATIO_LAMA extends PlayerDisguiseSuper
 {
-   public O2SpellType spellType = O2SpellType.INCARNATIO_LAMA;
-
-   protected String text = "Turns target player in to a llama.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_LAMA () { }
+   public INCARNATIO_LAMA ()
+   {
+      super();
+
+      spellType = O2SpellType.INCARNATIO_LAMA;
+      text = "Turns target player in to a llama.";
+   }
+
    /**
     * Constructor.
     *
@@ -37,6 +40,7 @@ public final class INCARNATIO_LAMA extends PlayerDisguiseSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.INCARNATIO_LAMA;
       targetType = EntityType.LLAMA;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

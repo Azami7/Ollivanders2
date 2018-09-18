@@ -17,19 +17,22 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class APARECIUM extends Charms
 {
-   public O2SpellType spellType = O2SpellType.APARECIUM;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Revealing Charm will reveal invisible ink and messages hidden by magical means. Simply tap a book or parchment with your wand and any hidden message will be revealed. This spell is more than sufficient to overcome the basic concealing charms and so is a favourite of parents and teachers alike.");
-      add("The Revealing Charm");
-   }};
-
-   protected String text = "Causes any area spells to reveal their borders.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public APARECIUM () { }
+   public APARECIUM ()
+   {
+      super();
+
+      spellType = O2SpellType.APARECIUM;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Revealing Charm will reveal invisible ink and messages hidden by magical means. Simply tap a book or parchment with your wand and any hidden message will be revealed. This spell is more than sufficient to overcome the basic concealing charms and so is a favourite of parents and teachers alike.");
+         add("The Revealing Charm");
+      }};
+
+      text = "Causes any area spells to reveal their borders.";
+   }
 
    /**
     * Constructor.
@@ -41,6 +44,8 @@ public final class APARECIUM extends Charms
    public APARECIUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.APARECIUM;
    }
 
    public void checkEffect ()

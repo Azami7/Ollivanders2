@@ -12,15 +12,14 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class COLORO_VERMICULO extends ColoroSuper
 {
-   public O2SpellType spellType = O2SpellType.COLORO_VERMICULO;
-   protected String text = "Turns target colorable entity or block red.";
-
-   DyeColor color = DyeColor.RED;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_VERMICULO () { }
+   public COLORO_VERMICULO ()
+   {
+      spellType = O2SpellType.COLORO_VERMICULO;
+      text = "Turns target colorable entity or block red.";
+   }
 
    /**
     * Constructor.
@@ -32,5 +31,8 @@ public final class COLORO_VERMICULO extends ColoroSuper
    public COLORO_VERMICULO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.COLORO_VERMICULO;
+      color = DyeColor.RED;
    }
 }

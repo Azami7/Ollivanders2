@@ -16,14 +16,16 @@ import java.util.ArrayList;
  */
 public final class PORFYRO_ASTERI_TRIA extends PyrotechniaSuper
 {
-   public O2SpellType spellType = O2SpellType.PORFYRO_ASTERI_TRIA;
-
-   protected String text = "Conjures purple star fireworks with trails and that fades to white.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PORFYRO_ASTERI_TRIA () { }
+   public PORFYRO_ASTERI_TRIA ()
+   {
+      super();
+
+      spellType = O2SpellType.PORFYRO_ASTERI_TRIA;
+      text = "Conjures purple star fireworks with trails and that fades to white.";
+   }
 
    /**
     * Constructor.
@@ -35,6 +37,8 @@ public final class PORFYRO_ASTERI_TRIA extends PyrotechniaSuper
    public PORFYRO_ASTERI_TRIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.PORFYRO_ASTERI_TRIA;
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);

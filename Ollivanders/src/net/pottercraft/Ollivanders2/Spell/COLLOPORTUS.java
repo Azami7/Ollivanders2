@@ -17,18 +17,21 @@ import java.util.ArrayList;
  */
 public final class COLLOPORTUS extends Charms
 {
-   public O2SpellType spellType = O2SpellType.COLLOPORTUS;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Locking Spell.");
-   }};
-
-   protected String text = "Locks blocks in to place.  This spell does not age and can only be removed with the Unlocking Spell, Alohomora.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLLOPORTUS () { }
+   public COLLOPORTUS ()
+   {
+      super();
+
+      spellType = O2SpellType.COLLOPORTUS;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Locking Spell.");
+      }};
+
+      text = "Locks blocks in to place.  This spell does not age and can only be removed with the Unlocking Spell, Alohomora.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +43,8 @@ public final class COLLOPORTUS extends Charms
    public COLLOPORTUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.COLLOPORTUS;
    }
 
    public void checkEffect ()

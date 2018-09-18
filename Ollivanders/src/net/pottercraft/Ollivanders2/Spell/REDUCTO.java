@@ -16,19 +16,22 @@ import java.util.ArrayList;
  */
 public final class REDUCTO extends DarkArts
 {
-   public O2SpellType spellType = O2SpellType.REDUCTO;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Reductor Curse");
-      add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
-   }};
-
-   protected String text = "Reducto creates an explosion which will damage the terrain.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REDUCTO () { }
+   public REDUCTO ()
+   {
+      super();
+
+      spellType = O2SpellType.REDUCTO;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Reductor Curse");
+         add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
+      }};
+
+      text = "Reducto creates an explosion which will damage the terrain.";
+   }
 
    /**
     * Constructor.
@@ -40,6 +43,8 @@ public final class REDUCTO extends DarkArts
    public REDUCTO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.REDUCTO;
    }
 
    @Override

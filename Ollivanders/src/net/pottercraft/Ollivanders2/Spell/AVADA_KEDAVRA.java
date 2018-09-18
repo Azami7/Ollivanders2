@@ -18,20 +18,21 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class AVADA_KEDAVRA extends DarkArts
 {
-   public O2SpellType spellType = O2SpellType.AVADA_KEDAVRA;
-
-   protected ArrayList<String> flavorText = new ArrayList<String>() {{
-      add("The Killing Curse");
-      add("There was a flash of blinding green light and a rushing sound, as though a vast, invisible something was soaring through the air — instantaneously the spider rolled over onto its back, unmarked, but unmistakably dead");
-      add("\"Yes, the last and worst. Avada Kedavra. ...the Killing Curse.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
-   }};
-
-   protected String text = "Cause direct damage to a living thing, possibly killing it.";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AVADA_KEDAVRA () { }
+   public AVADA_KEDAVRA ()
+   {
+      spellType = O2SpellType.AVADA_KEDAVRA;
+
+      flavorText = new ArrayList<String>() {{
+         add("The Killing Curse");
+         add("There was a flash of blinding green light and a rushing sound, as though a vast, invisible something was soaring through the air — instantaneously the spider rolled over onto its back, unmarked, but unmistakably dead");
+         add("\"Yes, the last and worst. Avada Kedavra. ...the Killing Curse.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
+      }};
+
+      text = "Cause direct damage to a living thing, possibly killing it.";
+   }
 
    /**
     * Constructor.
@@ -43,6 +44,8 @@ public final class AVADA_KEDAVRA extends DarkArts
    public AVADA_KEDAVRA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      spellType = O2SpellType.AVADA_KEDAVRA;
 
       moveEffectData = Material.MELON_BLOCK;
    }
