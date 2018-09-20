@@ -162,7 +162,7 @@ public final class O2PlayerCommon
    {
       if (p.common.isWand(stack))
       {
-         O2Player o2Player = p.getO2Player(player);
+         O2Player o2Player = p.players.getPlayer(player.getUniqueId());
 
          if (o2Player == null)
          {

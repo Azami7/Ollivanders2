@@ -70,7 +70,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
    @Override
    public void checkEffect ()
    {
-      O2Player o2p = p.getO2Player(player);
+      O2Player o2p = p.players.getPlayer(player.getUniqueId());
 
       if (o2p.isAnimagus())
       {

@@ -392,7 +392,7 @@ public class OllivandersListener implements Listener
       {
          if (p.canCast(sender, spellType, true))
          {
-            if (Ollivanders2.useBookLearning && p.getO2Player(sender).getSpellCount(spellType) < 1)
+            if (Ollivanders2.useBookLearning && p.players.getPlayer(sender.getUniqueId()).getSpellCount(spellType) < 1)
             {
                // if bookLearning is set to true then spell count must be > 0 to cast this spell
                if (Ollivanders2.debug)
@@ -414,7 +414,7 @@ public class OllivandersListener implements Listener
                   p.getLogger().info("onPlayerChat: player not holding destined wand");
                }
 
-               int uses = p.getO2Player(sender).getSpellCount(spellType);
+               int uses = p.players.getPlayer(sender.getUniqueId()).getSpellCount(spellType);
                castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
             }
 
@@ -452,7 +452,7 @@ public class OllivandersListener implements Listener
                }
                else
                {
-                  O2Player o2p = p.getO2Player(sender);
+                  O2Player o2p = p.players.getPlayer(sender.getUniqueId());
                   o2p.setWandSpell(spellType);
                   p.setO2Player(sender, o2p);
                }
@@ -752,7 +752,7 @@ public class OllivandersListener implements Listener
     */
    private void castSpell (Player player)
    {
-      O2Player o2p = p.getO2Player(player);
+      O2Player o2p = p.players.getPlayer(player.getUniqueId());
       O2SpellType spell = o2p.getWandSpell();
 
       if (spell != null)
@@ -898,7 +898,7 @@ public class OllivandersListener implements Listener
       if (!p.playerCommon.holdsWand(player, EquipmentSlot.OFF_HAND))
          return;
 
-      O2Player o2p = p.getO2Player(player);
+      O2Player o2p = p.players.getPlayer(player.getUniqueId());
       boolean reverse = false;
       // right click rotates through spells backwards
       if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
@@ -930,18 +930,19 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      O2Player o2p = p.getO2Player(player);
+      O2Player o2p = p.players.getPlayer(player.getUniqueId());
+
       // update player's name if it has changed
       o2p.setPlayerName(player.getName());
-
-      // do player join actions
-      o2p.onJoin();
 
       // add them to player list
       p.setO2Player(player, o2p);
 
       // add player to their house team
       p.houses.addPlayerToHouseTeam(player);
+
+      // do player join actions
+      o2p.onJoin();
 
       p.getLogger().info("Player " + player.getName() + " joined.");
    }
@@ -975,7 +976,7 @@ public class OllivandersListener implements Listener
     */
    private void playerQuit (Player player)
    {
-      O2Player o2p = p.getO2Player(player);
+      O2Player o2p = p.players.getPlayer(player.getUniqueId());
 
       // do player quit actions
       o2p.onQuit();
@@ -993,7 +994,7 @@ public class OllivandersListener implements Listener
    {
       if (p.getConfig().getBoolean("deathExpLoss"))
       {
-         O2Player o2p = p.getO2Player(event.getEntity());
+         O2Player o2p = p.players.getPlayer(event.getEntity().getUniqueId());
 
          o2p.onDeath();
 
@@ -1019,7 +1020,7 @@ public class OllivandersListener implements Listener
             Player attacker = (Player) event.getDamager();
             if (damaged.getHealth() - event.getDamage() <= 0)
             {
-               p.getO2Player(attacker).addSoul();
+               p.players.getPlayer(attacker.getUniqueId()).addSoul();
             }
          }
          if (event.getDamager() instanceof Wolf)
@@ -1418,7 +1419,7 @@ public class OllivandersListener implements Listener
       Entity target = event.getTarget();
       if (target instanceof Player)
       {
-         if (p.getO2Player((Player) target).isInvisible())
+         if (p.players.getPlayer(target.getUniqueId()).isInvisible())
          {
             event.setCancelled(true);
          }
@@ -1507,7 +1508,7 @@ public class OllivandersListener implements Listener
             p.getLogger().info(player.getDisplayName() + " drank a potion.");
          }
 
-         O2Player o2p = p.getO2Player(player);
+         O2Player o2p = p.players.getPlayer(player.getUniqueId());
 
          ItemMeta meta = item.getItemMeta();
          if (meta.hasLore())
@@ -1606,7 +1607,7 @@ public class OllivandersListener implements Listener
          BookMeta bookMeta = (BookMeta)heldItem.getItemMeta();
          if (bookMeta.getTitle().equalsIgnoreCase("Spell Journal"))
          {
-            O2Player o2Player = p.getO2Player(player);
+            O2Player o2Player = p.players.getPlayer(player.getUniqueId());
             ItemStack spellJournal = o2Player.getSpellJournal();
 
             player.getInventory().setItem(slotIndex, spellJournal);

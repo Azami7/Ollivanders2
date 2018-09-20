@@ -242,7 +242,7 @@ class OllivandersSchedule implements Runnable
       {
          for (Player player : world.getPlayers())
          {
-            O2Player o2p = p.getO2Player(player);
+            O2Player o2p = p.players.getPlayer(player.getUniqueId());
 
             boolean alreadyInvis = o2p.isInvisible();
             boolean alreadyInRepelloMuggleton = o2p.isInRepelloMuggleton();
@@ -272,7 +272,7 @@ class OllivandersSchedule implements Runnable
                      continue;
                   }
 
-                  O2Player viewer = p.getO2Player(player2);
+                  O2Player viewer = p.players.getPlayer(player2.getUniqueId());
 
                   if (hasCloak) {
                      player2.hidePlayer(p, player);
@@ -284,7 +284,7 @@ class OllivandersSchedule implements Runnable
             } else if (!hasCloak && alreadyInvis) {
                for (Player player2 : world.getPlayers())
                {
-                  O2Player viewer = p.getO2Player(player2);
+                  O2Player viewer = p.players.getPlayer(player2.getUniqueId());
                   if (!inRepelloMuggletons && viewer.isMuggle()) {
                      player2.showPlayer(p, player);
                   }
@@ -348,7 +348,7 @@ class OllivandersSchedule implements Runnable
             {
                return;
             }
-            double experience = p.getO2Player(player).getSpellCount(O2SpellType.INFORMOUS);
+            double experience = p.players.getPlayer(player.getUniqueId()).getSpellCount(O2SpellType.INFORMOUS);
             if (Math.random() < experience / 1000.0)
             {
                //The scrying is successful

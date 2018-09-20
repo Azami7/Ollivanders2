@@ -989,11 +989,17 @@ public class O2Player
       p.players.playerEffects.onJoin(pid);
    }
 
+   /**
+    * Do player onQuit clean up
+    */
    public void onQuit ()
    {
       p.players.playerEffects.onQuit(pid);
    }
 
+   /**
+    * Do player onDeath actions
+    */
    public void onDeath ()
    {
       if (p.getConfig().getBoolean("deathExpLoss"))

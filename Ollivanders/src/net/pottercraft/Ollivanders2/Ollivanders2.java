@@ -1008,7 +1008,7 @@ public class Ollivanders2 extends JavaPlugin
                sender.sendMessage(chatColor + "Unable to find a player named " + p + ".\n");
                return true;
             }
-            O2Player o2p = getO2Player(player);
+            O2Player o2p = players.getPlayer(player.getUniqueId());
             sender.sendMessage(chatColor + "Player " + p + " is in year " + o2p.getYear().getIntValue());
             return true;
          }
@@ -1092,7 +1092,7 @@ public class Ollivanders2 extends JavaPlugin
          sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
          return true;
       }
-      O2Player o2p = getO2Player(player);
+      O2Player o2p = players.getPlayer(player.getUniqueId());
       int year;
       try
       {
@@ -1129,7 +1129,7 @@ public class Ollivanders2 extends JavaPlugin
          sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
          return true;
       }
-      O2Player o2p = getO2Player(player);
+      O2Player o2p = players.getPlayer(player.getUniqueId());
       int year = o2p.getYear().getIntValue() + yearChange;
       if (year > 0 && year < 8)
       {
@@ -1164,7 +1164,6 @@ public class Ollivanders2 extends JavaPlugin
             return true;
          }
 
-         O2Player o2p = getO2Player((Player)sender);
          if (players.playerEffects.hasEffect(((Player) sender).getUniqueId(), effectType))
          {
             players.playerEffects.removeEffect(((Player) sender).getUniqueId(), effectType);
@@ -1482,27 +1481,6 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Gets the O2Player associated with the Player
-    *
-    * @param player the player to get
-    * @return O2Player object for this player
-    */
-   public O2Player getO2Player (Player player)
-   {
-      UUID pid = player.getUniqueId();
-      O2Player o2p = players.getPlayer(pid);
-
-      if (o2p == null)
-      {
-         players.addPlayer(pid, player.getDisplayName());
-
-         o2p = players.getPlayer(pid);
-      }
-
-      return o2p;
-   }
-
-   /**
     * Sets the player's OPlayer by their playername
     *
     * @param player      the player
@@ -1572,7 +1550,7 @@ public class Ollivanders2 extends JavaPlugin
          }
       }
 
-      O2Player p = getO2Player(player);
+      O2Player p = players.getPlayer(player.getUniqueId());
       boolean coolDown = System.currentTimeMillis() < p.getSpellLastCastTime(spell);
 
       if (coolDown)

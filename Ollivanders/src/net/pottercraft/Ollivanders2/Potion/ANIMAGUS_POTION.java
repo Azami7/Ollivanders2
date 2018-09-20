@@ -44,13 +44,28 @@ public final class ANIMAGUS_POTION extends O2Potion
    @Override
    public void drink (O2Player o2p, Player player)
    {
-      if (o2p.isAnimagus())
+      if (!Ollivanders2.libsDisguisesEnabled)
       {
-         // they are already an Animagus so this has no effect
+         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+               + "Nothing seems to happen.");
+
          return;
       }
 
-      if (!Ollivanders2.libsDisguisesEnabled || !player.getWorld().isThundering())
+      if (o2p.isAnimagus())
+      {
+         if (p.players.playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION))
+         {
+            p.players.playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION);
+         }
+
+         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
+               + "You taste something vaguely familiar.");
+
+         return;
+      }
+
+      if (!player.getWorld().isThundering())
       {
          // potion only works in a thunderstorm
          player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
@@ -61,6 +76,7 @@ public final class ANIMAGUS_POTION extends O2Potion
       if (p.players.playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION))
       {
          o2p.setIsAnimagus();
+         p.players.playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION);
 
          ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
          p.players.playerEffects.addEffect(animagusEffect);

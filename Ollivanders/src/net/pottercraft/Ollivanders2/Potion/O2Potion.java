@@ -265,7 +265,7 @@ public abstract class O2Potion implements Teachable
    {
       boolean canBrew = true;
 
-      O2Player o2p = p.getO2Player(brewer);
+      O2Player o2p = p.players.getPlayer(brewer.getUniqueId());
       if (o2p == null)
          return false;
 
