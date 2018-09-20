@@ -1960,6 +1960,10 @@ public class Ollivanders2 extends JavaPlugin
                }
             }
          }
+         else if (subCommand.equalsIgnoreCase("list"))
+         {
+            return listAllPotions((Player)sender);
+         }
          else if (subCommand.equalsIgnoreCase("all"))
          {
             return giveAllPotions((Player)sender);
@@ -1994,6 +1998,37 @@ public class Ollivanders2 extends JavaPlugin
     */
    public boolean givePotion (CommandSender sender, Player player, String potionName)
    {
+      O2PotionType potionType = null;
+
+      // need to iterate rather than call potions.getPotionTypeByName so we can do startsWith
+      for (O2PotionType p : O2PotionType.values())
+      {
+         if (p.getPotionName().toLowerCase().startsWith(potionName.toLowerCase()))
+         {
+            potionType = p;
+            break;
+         }
+      }
+
+      if (potionType == null)
+      {
+         sender.sendMessage(chatColor + "Unable to find potion " + potionName);
+         
+         return true;
+      }
+
+      O2Potion potion = potions.getPotionFromType(potionType);
+
+      if (potion == null)
+         return true;
+
+      ItemStack brewedPotion = potion.brew((Player)sender, false);
+      List<ItemStack> kit = new ArrayList<>();
+      kit.add(brewedPotion);
+
+      givePlayerKit(player, kit);
+
+      /*
       O2Potion potion = null;
 
       for (O2Potion p : potions.getAllPotions())
@@ -2018,6 +2053,7 @@ public class Ollivanders2 extends JavaPlugin
       {
          sender.sendMessage(chatColor + "Unable to find potion " + potionName);
       }
+      */
 
       return true;
    }
@@ -2047,6 +2083,28 @@ public class Ollivanders2 extends JavaPlugin
       String displayString = "Ingredients:";
 
       for (String name : ingredientList)
+      {
+         displayString = displayString + "\n" + name;
+      }
+      displayString = displayString + "\n";
+
+      player.sendMessage(chatColor + displayString);
+
+      return true;
+   }
+
+   /**
+    * Lists all the potions active in the game.
+    *
+    * @param player the player to display the list to
+    * @return true
+    */
+   private boolean listAllPotions (Player player)
+   {
+      String displayString = "Potions:";
+
+      List<String> potionNames = potions.getAllPotionNames();
+      for (String name : potionNames)
       {
          displayString = displayString + "\n" + name;
       }

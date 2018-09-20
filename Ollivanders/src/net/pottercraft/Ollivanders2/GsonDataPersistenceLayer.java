@@ -150,9 +150,6 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
          }
 
          map.put(pid, hType);
-
-         if (Ollivanders2.debug)
-            p.getLogger().info("Read " + playerID + " : " + house);
       }
 
       return map;
@@ -205,9 +202,6 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
          }
 
          map.put(hType, pts);
-
-         if (Ollivanders2.debug)
-            p.getLogger().info("Read " + house + " : " + points);
       }
 
       return map;

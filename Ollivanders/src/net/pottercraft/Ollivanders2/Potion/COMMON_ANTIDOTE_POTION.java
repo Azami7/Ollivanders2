@@ -4,7 +4,6 @@ import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 /**
@@ -15,18 +14,18 @@ import org.bukkit.potion.PotionEffectType;
  * @since 2.2.7
  * @author Azami7
  */
-public final class ANTIDOTE_POTION extends O2Potion
+public final class COMMON_ANTIDOTE_POTION extends O2Potion
 {
    /**
     * Constructor
     *
     * @param plugin a callback to the plugin
     */
-   public ANTIDOTE_POTION (Ollivanders2 plugin)
+   public COMMON_ANTIDOTE_POTION (Ollivanders2 plugin)
    {
       super(plugin);
 
-      potionType = O2PotionType.ANTIDOTE_POTION;
+      potionType = O2PotionType.COMMON_ANTIDOTE_POTION;
       potionLevel = PotionLevel.BEGINNER;
 
       ingredients.put(IngredientType.MISTLETOE_BERRIES, 2);

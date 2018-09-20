@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -70,6 +70,23 @@ public class O2Potions
       }
 
       return potions;
+   }
+
+   /**
+    * Get the names of all potions loaded in the game.
+    *
+    * @return the list of active potion names
+    */
+   public List<String> getAllPotionNames ()
+   {
+      ArrayList<String> potionNames = new ArrayList<>();
+
+      for (O2PotionType potionType : O2PotionType.values())
+      {
+         potionNames.add(potionType.getPotionName());
+      }
+
+      return potionNames;
    }
 
    /**
@@ -190,7 +207,7 @@ public class O2Potions
     * @param potionType the type of potion to get
     * @return the O2Potion object, if it could be created, or null otherwise
     */
-   private O2Potion getPotionFromType (O2PotionType potionType)
+   public O2Potion getPotionFromType (O2PotionType potionType)
    {
       O2Potion potion;
 
