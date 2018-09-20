@@ -491,7 +491,12 @@ public class Ollivanders2 extends JavaPlugin
       if (debug)
          getLogger().info("Running playerSummary");
 
-      O2Player o2p = players.getPlayer(player.getUniqueId());
+      O2Player o2p = getO2Player(player);
+      if (o2p == null)
+      {
+         sender.sendMessage(chatColor + "Unable to find player.");
+         return true;
+      }
 
       String summary = "Ollivanders2 player summary:\n\n";
 
@@ -1008,8 +1013,13 @@ public class Ollivanders2 extends JavaPlugin
                sender.sendMessage(chatColor + "Unable to find a player named " + p + ".\n");
                return true;
             }
-            O2Player o2p = players.getPlayer(player.getUniqueId());
-            sender.sendMessage(chatColor + "Player " + p + " is in year " + o2p.getYear().getIntValue());
+
+            O2Player o2p = getO2Player(player);
+            if (o2p != null)
+              sender.sendMessage(chatColor + "Player " + p + " is in year " + o2p.getYear().getIntValue());
+            else
+               sender.sendMessage(chatColor + "Unable to find player.");
+
             return true;
          }
       }
@@ -1092,7 +1102,7 @@ public class Ollivanders2 extends JavaPlugin
          sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
          return true;
       }
-      O2Player o2p = players.getPlayer(player.getUniqueId());
+      O2Player o2p = getO2Player(player);
       int year;
       try
       {
@@ -1129,7 +1139,13 @@ public class Ollivanders2 extends JavaPlugin
          sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
          return true;
       }
-      O2Player o2p = players.getPlayer(player.getUniqueId());
+      O2Player o2p = getO2Player(player);
+      if (o2p == null)
+      {
+         sender.sendMessage(chatColor + "Unable to find player.");
+         return true;
+      }
+
       int year = o2p.getYear().getIntValue() + yearChange;
       if (year > 0 && year < 8)
       {
@@ -1423,7 +1439,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public int getSpellNum (Player player, O2SpellType spell)
    {
-      O2Player o2p = players.getPlayer(player.getUniqueId());
+      O2Player o2p = getO2Player(player);
 
       return o2p.getSpellCount(spell);
    }
@@ -1438,7 +1454,7 @@ public class Ollivanders2 extends JavaPlugin
    public void setSpellNum (Player player, O2SpellType spell, int count)
    {
       UUID pid = player.getUniqueId();
-      O2Player o2p = players.getPlayer(pid);
+      O2Player o2p = getO2Player(player);
 
       o2p.setSpellCount(spell, count);
 
@@ -1456,7 +1472,7 @@ public class Ollivanders2 extends JavaPlugin
    {
       //returns the incremented spell count
       UUID pid = player.getUniqueId();
-      O2Player o2p = players.getPlayer(pid);
+      O2Player o2p = getO2Player(player);
 
       o2p.incrementSpellCount(spell);
       players.updatePlayer(pid, o2p);
@@ -1474,10 +1490,31 @@ public class Ollivanders2 extends JavaPlugin
    {
       //returns the incremented potion count
       UUID pid = player.getUniqueId();
-      O2Player o2p = players.getPlayer(pid);
+      O2Player o2p = getO2Player(player);
 
       o2p.incrementPotionCount(potionType);
       players.updatePlayer(pid, o2p);
+   }
+
+   /**
+    * Gets the O2Player associated with the Player
+    *
+    * @param player the player to get
+    * @return O2Player object for this player
+    */
+   public O2Player getO2Player (Player player)
+   {
+      UUID pid = player.getUniqueId();
+      O2Player o2p = players.getPlayer(pid);
+
+      if (o2p == null)
+      {
+         players.addPlayer(pid, player.getDisplayName());
+
+         o2p = players.getPlayer(pid);
+      }
+
+      return o2p;
    }
 
    /**
@@ -1551,6 +1588,9 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       O2Player p = players.getPlayer(player.getUniqueId());
+      if (p == null)
+         return false;
+
       boolean coolDown = System.currentTimeMillis() < p.getSpellLastCastTime(spell);
 
       if (coolDown)

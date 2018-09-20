@@ -8,11 +8,10 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 
+import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.StationarySpell.HORCRUX;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
@@ -60,6 +59,13 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
 
    public void checkEffect ()
    {
+      O2Player o2p = p.players.getPlayer(player.getUniqueId());
+      if (o2p == null)
+      {
+         kill();
+         return;
+      }
+
       move();
       if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType()
             != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
@@ -69,7 +75,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
          {
             futureHealth = player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0;
          }
-         int souls = p.players.getPlayer(player.getUniqueId()).getSouls();
+         int souls = o2p.getSouls();
          //If the player's soul is split enough and they can survive making another horcrux, then make a new one and damage them
          if (futureHealth - 1 > 0 && souls > 0)
          {
@@ -78,7 +84,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
             p.stationarySpells.addStationarySpell(horcrux);
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
                   player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0);
-            p.players.getPlayer(player.getUniqueId()).subtractSoul();
+            o2p.subtractSoul();
             player.damage(1.0);
             kill();
          }

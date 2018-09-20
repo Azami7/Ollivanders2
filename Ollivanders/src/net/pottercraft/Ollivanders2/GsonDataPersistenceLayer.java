@@ -16,6 +16,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class GsonDataPersistenceLayer implements DataPersistenceLayer
 {
@@ -23,6 +26,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
    private Ollivanders2 p;
 
    private String saveDirectory = "plugins/Ollivanders2";
+   private String archiveDirectory = "plugins/Ollivanders2/archive";
    private String housesJSONFile = "O2Houses.txt";
    private String housePointsJSONFile = "O2HousePoints.txt";
    private String o2PlayerJSONFile = "O2Players.txt";
@@ -246,8 +250,13 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       {
          if(file.exists())
          {
-            // if the file exists, we want to rewrite it
-            file.delete();
+            // if the file exists, we want to move it
+            File archiveDir = new File(archiveDirectory);
+            archiveDir.mkdirs();
+            String archiveFile = archiveDirectory + "/" + path + "-" + getCurrentTimestamp();
+
+            File prev = new File(archiveFile);
+            file.renameTo(prev);
          }
 
          // create the directory and file
@@ -353,5 +362,13 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       }
 
       return json;
+   }
+
+   private String getCurrentTimestamp ()
+   {
+      DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+      Date date = new Date();
+
+      return dateFormat.format(date);
    }
 }

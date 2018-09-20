@@ -238,81 +238,85 @@ class OllivandersSchedule implements Runnable
          }
       }
 
-      for (World world : p.getServer().getWorlds())
+      for (Player player : p.getServer().getOnlinePlayers())
       {
-         for (Player player : world.getPlayers())
-         {
-            O2Player o2p = p.players.getPlayer(player.getUniqueId());
+         O2Player o2p = p.getO2Player(player);
+         if (o2p == null)
+            continue;
 
-            boolean alreadyInvis = o2p.isInvisible();
-            boolean alreadyInRepelloMuggleton = o2p.isInRepelloMuggleton();
+         boolean alreadyInvis = o2p.isInvisible();
+         boolean alreadyInRepelloMuggleton = o2p.isInRepelloMuggleton();
 
-            boolean hasCloak = hasCloak(player);
-            if (hasCloak) {
-               if (!alreadyInvis) {
-                  o2p.setInvisible(true);
-                  player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
-               }
+         boolean hasCloak = hasCloak(player);
+         if (hasCloak) {
+            if (!alreadyInvis) {
+               o2p.setInvisible(true);
+               player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
             }
-
-            boolean inRepelloMuggletons = false;
-            for (StationarySpellObj stat : repelloMuggletons) {
-               if (stat.isInside(player.getLocation())) {
-                  inRepelloMuggletons = true;
-                  if (!alreadyInRepelloMuggleton) {
-                     o2p.setInRepelloMuggleton(true);
-                  }
-                  break;
-               }
-            }
-
-            if (hasCloak || inRepelloMuggletons) {
-               for (Player player2 : world.getPlayers()) {
-                  if (player2.isPermissionSet("Ollivanders2.BYPASS") && player2.hasPermission("Ollivanders2.BYPASS")) {
-                     continue;
-                  }
-
-                  O2Player viewer = p.players.getPlayer(player2.getUniqueId());
-
-                  if (hasCloak) {
-                     player2.hidePlayer(p, player);
-                     System.out.println(player2.canSee(player));
-                  } else if (viewer.isMuggle()) {
-                     player2.hidePlayer(p, player);
-                  }
-               }
-            } else if (!hasCloak && alreadyInvis) {
-               for (Player player2 : world.getPlayers())
-               {
-                  O2Player viewer = p.players.getPlayer(player2.getUniqueId());
-                  if (!inRepelloMuggletons && viewer.isMuggle()) {
-                     player2.showPlayer(p, player);
-                  }
-               }
-               o2p.setInvisible(false);
-               player.removePotionEffect(PotionEffectType.INVISIBILITY);
-            } else if (!inRepelloMuggletons && alreadyInRepelloMuggleton) {
-               if (!hasCloak) {
-                  for (Player player2 : world.getPlayers()) {
-                     player2.showPlayer(p, player);
-                  }
-               }
-               o2p.setInRepelloMuggleton(false);
-            }
-
-            if (o2p.isInvisible()) {
-               for (Entity entity : player.getWorld().getEntities()) {
-                  if (entity instanceof Creature) {
-                     Creature creature = (Creature) entity;
-                     if (creature.getTarget() == player) {
-                        creature.setTarget(null);
-                     }
-                  }
-               }
-            }
-
-            p.setO2Player(player, o2p);
          }
+
+         boolean inRepelloMuggletons = false;
+         for (StationarySpellObj stat : repelloMuggletons) {
+            if (stat.isInside(player.getLocation())) {
+               inRepelloMuggletons = true;
+               if (!alreadyInRepelloMuggleton) {
+                  o2p.setInRepelloMuggleton(true);
+               }
+               break;
+            }
+         }
+
+         if (hasCloak || inRepelloMuggletons) {
+            for (Player player2 : p.getServer().getOnlinePlayers()) {
+               if (player2.isPermissionSet("Ollivanders2.BYPASS") && player2.hasPermission("Ollivanders2.BYPASS")) {
+                  continue;
+               }
+
+               O2Player viewer = p.getO2Player(player2);
+               if (viewer == null)
+                  continue;
+
+               if (hasCloak) {
+                  player2.hidePlayer(p, player);
+                  System.out.println(player2.canSee(player));
+               } else if (viewer.isMuggle()) {
+                  player2.hidePlayer(p, player);
+               }
+            }
+         } else if (!hasCloak && alreadyInvis) {
+            for (Player player2 : p.getServer().getOnlinePlayers())
+            {
+               O2Player viewer = p.players.getPlayer(player2.getUniqueId());
+               if (viewer == null)
+                  continue;
+
+               if (!inRepelloMuggletons && viewer.isMuggle()) {
+                  player2.showPlayer(p, player);
+               }
+            }
+            o2p.setInvisible(false);
+            player.removePotionEffect(PotionEffectType.INVISIBILITY);
+         } else if (!inRepelloMuggletons && alreadyInRepelloMuggleton) {
+            if (!hasCloak) {
+               for (Player player2 : p.getServer().getOnlinePlayers()) {
+                  player2.showPlayer(p, player);
+               }
+            }
+            o2p.setInRepelloMuggleton(false);
+         }
+
+         if (o2p.isInvisible()) {
+            for (Entity entity : player.getWorld().getEntities()) {
+               if (entity instanceof Creature) {
+                  Creature creature = (Creature) entity;
+                  if (creature.getTarget() == player) {
+                     creature.setTarget(null);
+                  }
+               }
+            }
+         }
+
+         p.setO2Player(player, o2p);
       }
    }
 
@@ -340,48 +344,48 @@ class OllivandersSchedule implements Runnable
    {
       Material ball = Material.getMaterial("divinationBlock");
 
-      for (World world : p.getServer().getWorlds())
+      for (Player player : p.getServer().getOnlinePlayers())
       {
-         for (Player player : world.getPlayers())
+         if (player.getTargetBlock(null, 100).getType() != ball || !player.isSneaking())
+            return;
+
+         O2Player o2p = p.players.getPlayer(player.getUniqueId());
+         if (o2p == null)
+            continue;
+
+         double experience = o2p.getSpellCount(O2SpellType.INFORMOUS);
+         if (Math.random() < experience / 1000.0)
          {
-            if (player.getTargetBlock((java.util.Set) null, 100).getType() != ball || !player.isSneaking())
+            //The scrying is successful
+            Prophecy prophecy = new Prophecy(player);
+            p.getProphecy().add(prophecy);
+            String message = "";
+            List<String> lore = prophecy.toLore();
+            for (String str : lore)
             {
-               return;
+               message = message.concat(str + " ");
             }
-            double experience = p.players.getPlayer(player.getUniqueId()).getSpellCount(O2SpellType.INFORMOUS);
-            if (Math.random() < experience / 1000.0)
+            player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + message);
+            ItemStack hand = player.getInventory().getItemInMainHand();
+            if (hand.getType() == ball)
             {
-               //The scrying is successful
-               Prophecy prophecy = new Prophecy(player);
-               p.getProphecy().add(prophecy);
-               String message = "";
-               List<String> lore = prophecy.toLore();
-               for (String str : lore)
+               ItemStack record = new ItemStack(ball, 1);
+               ItemMeta recordM = record.getItemMeta();
+               recordM.setDisplayName("Prophecy Record");
+               recordM.setLore(lore);
+               record.setItemMeta(recordM);
+               if (hand.getAmount() == 1)
                {
-                  message = message.concat(str + " ");
+                  player.getInventory().setItemInMainHand(null);
                }
-               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + message);
-               ItemStack hand = player.getInventory().getItemInMainHand();
-               if (hand.getType() == ball)
+               else
                {
-                  ItemStack record = new ItemStack(ball, 1);
-                  ItemMeta recordM = record.getItemMeta();
-                  recordM.setDisplayName("Prophecy Record");
-                  recordM.setLore(lore);
-                  record.setItemMeta(recordM);
-                  if (hand.getAmount() == 1)
-                  {
-                     player.getInventory().setItemInMainHand(null);
-                  }
-                  else
-                  {
-                     hand.setAmount(hand.getAmount() - 1);
-                     player.getInventory().setItemInMainHand(hand);
-                  }
-                  for (ItemStack drop : player.getInventory().addItem(record).values())
-                  {
-                     player.getWorld().dropItem(player.getLocation(), drop);
-                  }
+                  hand.setAmount(hand.getAmount() - 1);
+                  player.getInventory().setItemInMainHand(hand);
+               }
+               for (ItemStack drop : player.getInventory().addItem(record).values())
+               {
+                  player.getWorld().dropItem(player.getLocation(), drop);
                }
             }
          }

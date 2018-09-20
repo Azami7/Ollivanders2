@@ -110,8 +110,6 @@ public class LYCANTHROPY extends ShapeShiftSuper
     */
    private void addAdditionalEffects ()
    {
-      O2Player o2p = p.players.getPlayer(targetID);
-
       AGGRESSION aggression = new AGGRESSION(p, 5, targetID);
       aggression.setAggressionLevel(10);
       p.players.playerEffects.addEffect(aggression);

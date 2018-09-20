@@ -77,7 +77,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -392,7 +392,7 @@ public class OllivandersListener implements Listener
       {
          if (p.canCast(sender, spellType, true))
          {
-            if (Ollivanders2.useBookLearning && p.players.getPlayer(sender.getUniqueId()).getSpellCount(spellType) < 1)
+            if (Ollivanders2.useBookLearning && p.getO2Player(sender).getSpellCount(spellType) < 1)
             {
                // if bookLearning is set to true then spell count must be > 0 to cast this spell
                if (Ollivanders2.debug)
@@ -414,7 +414,7 @@ public class OllivandersListener implements Listener
                   p.getLogger().info("onPlayerChat: player not holding destined wand");
                }
 
-               int uses = p.players.getPlayer(sender.getUniqueId()).getSpellCount(spellType);
+               int uses = p.getO2Player(sender).getSpellCount(spellType);
                castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
             }
 
@@ -452,7 +452,7 @@ public class OllivandersListener implements Listener
                }
                else
                {
-                  O2Player o2p = p.players.getPlayer(sender.getUniqueId());
+                  O2Player o2p = p.getO2Player(sender);
                   o2p.setWandSpell(spellType);
                   p.setO2Player(sender, o2p);
                }
@@ -753,6 +753,14 @@ public class OllivandersListener implements Listener
    private void castSpell (Player player)
    {
       O2Player o2p = p.players.getPlayer(player.getUniqueId());
+      if (o2p == null)
+      {
+         if (Ollivanders2.debug)
+            p.getLogger().info("Unable to find o2player casting spell.");
+
+         return;
+      }
+
       O2SpellType spell = o2p.getWandSpell();
 
       if (spell != null)
@@ -899,6 +907,9 @@ public class OllivandersListener implements Listener
          return;
 
       O2Player o2p = p.players.getPlayer(player.getUniqueId());
+      if (o2p == null)
+         return;
+
       boolean reverse = false;
       // right click rotates through spells backwards
       if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
@@ -926,23 +937,34 @@ public class OllivandersListener implements Listener
     * @param event the player join event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onPlayerJoin (PlayerLoginEvent event)
+   public void onPlayerJoin (PlayerJoinEvent event)
    {
       Player player = event.getPlayer();
 
       O2Player o2p = p.players.getPlayer(player.getUniqueId());
 
-      // update player's name if it has changed
-      o2p.setPlayerName(player.getName());
+      if (o2p == null) // new player
+      {
+         o2p = p.getO2Player(player);
+      }
+      else // existing player
+      {
 
-      // add them to player list
+         // update player's display name in case it has changed
+         if (!o2p.getPlayerName().equalsIgnoreCase(player.getName()))
+         {
+            o2p.setPlayerName(player.getName());
+         }
+
+         // add player to their house team
+         p.houses.addPlayerToHouseTeam(player);
+
+         // do player join actions
+         o2p.onJoin();
+      }
+
+      // re-add them to player list (in case they have changed from above actions)
       p.setO2Player(player, o2p);
-
-      // add player to their house team
-      p.houses.addPlayerToHouseTeam(player);
-
-      // do player join actions
-      o2p.onJoin();
 
       p.getLogger().info("Player " + player.getName() + " joined.");
    }
@@ -977,6 +999,8 @@ public class OllivandersListener implements Listener
    private void playerQuit (Player player)
    {
       O2Player o2p = p.players.getPlayer(player.getUniqueId());
+      if (o2p == null)
+         return;
 
       // do player quit actions
       o2p.onQuit();
@@ -995,6 +1019,9 @@ public class OllivandersListener implements Listener
       if (p.getConfig().getBoolean("deathExpLoss"))
       {
          O2Player o2p = p.players.getPlayer(event.getEntity().getUniqueId());
+
+         if (o2p == null)
+            return;
 
          o2p.onDeath();
 
@@ -1020,7 +1047,7 @@ public class OllivandersListener implements Listener
             Player attacker = (Player) event.getDamager();
             if (damaged.getHealth() - event.getDamage() <= 0)
             {
-               p.players.getPlayer(attacker.getUniqueId()).addSoul();
+               p.getO2Player(attacker).addSoul();
             }
          }
          if (event.getDamager() instanceof Wolf)
@@ -1419,7 +1446,7 @@ public class OllivandersListener implements Listener
       Entity target = event.getTarget();
       if (target instanceof Player)
       {
-         if (p.players.getPlayer(target.getUniqueId()).isInvisible())
+         if (p.getO2Player((Player)target).isInvisible())
          {
             event.setCancelled(true);
          }
@@ -1508,7 +1535,7 @@ public class OllivandersListener implements Listener
             p.getLogger().info(player.getDisplayName() + " drank a potion.");
          }
 
-         O2Player o2p = p.players.getPlayer(player.getUniqueId());
+         O2Player o2p = p.getO2Player(player);
 
          ItemMeta meta = item.getItemMeta();
          if (meta.hasLore())
@@ -1607,7 +1634,7 @@ public class OllivandersListener implements Listener
          BookMeta bookMeta = (BookMeta)heldItem.getItemMeta();
          if (bookMeta.getTitle().equalsIgnoreCase("Spell Journal"))
          {
-            O2Player o2Player = p.players.getPlayer(player.getUniqueId());
+            O2Player o2Player = p.getO2Player(player);
             ItemStack spellJournal = o2Player.getSpellJournal();
 
             player.getInventory().setItem(slotIndex, spellJournal);

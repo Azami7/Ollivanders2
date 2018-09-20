@@ -72,6 +72,12 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
    {
       O2Player o2p = p.players.getPlayer(player.getUniqueId());
 
+      if (o2p == null)
+      {
+         kill();
+         return;
+      }
+
       if (o2p.isAnimagus())
       {
          // If the player is already an animagus, the incantation changes them to and from their animal form.

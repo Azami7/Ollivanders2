@@ -187,7 +187,7 @@ public final class O2Books
     *
     * @param bookLore the lore from a book
     * @param player the player reading the book
-    * @param p
+    * @param p the callback to the MC plugin
     */
    public static void readLore (List<String> bookLore, Player player, Ollivanders2 p)
    {
@@ -197,6 +197,8 @@ public final class O2Books
       }
 
       O2Player o2p = p.players.getPlayer(player.getUniqueId());
+      if (o2p == null)
+         return;
 
       for (String spell : bookLore)
       {
