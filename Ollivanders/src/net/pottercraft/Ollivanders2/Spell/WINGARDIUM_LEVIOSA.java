@@ -66,6 +66,7 @@ public final class WINGARDIUM_LEVIOSA extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.WINGARDIUM_LEVIOSA;
+      setUsesModifier();
    }
 
    @Override

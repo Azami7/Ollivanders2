@@ -44,6 +44,8 @@ public final class INCENDIO_TRIA extends IncendioSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCENDIO_TRIA;
+      setUsesModifier();
+
       location.add(vector.multiply(2));
       strafe = true;
       radius = 2;

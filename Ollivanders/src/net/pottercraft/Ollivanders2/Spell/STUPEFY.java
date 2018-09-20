@@ -47,6 +47,7 @@ public final class STUPEFY extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.STUPEFY;
+      setUsesModifier();
    }
 
    @Override

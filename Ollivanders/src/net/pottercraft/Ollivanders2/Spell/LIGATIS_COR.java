@@ -48,6 +48,7 @@ public final class LIGATIS_COR extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LIGATIS_COR;
+      setUsesModifier();
    }
 
    public void checkEffect ()

@@ -42,6 +42,8 @@ public final class INCARNATIO_FELIS extends PlayerDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCARNATIO_FELIS;
+      setUsesModifier();
+
       targetType = EntityType.OCELOT;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

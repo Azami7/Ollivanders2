@@ -61,6 +61,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS;
+      setUsesModifier();
    }
 
    /**
@@ -84,7 +85,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
          if (Ollivanders2.debug)
             p.getLogger().info(player.getDisplayName() + " is not an Animagus.");
 
-         setAnimagusIncantation(o2p);
+         setAnimagusIncantation();
       }
 
       kill();
@@ -93,10 +94,8 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
    /**
     * If the player is not an animagus, saying the incantation at the correct time of day is the first
     * step to becoming one. Once said, the player must drink the Animagus potion within 15 seconds.
-    *
-    * @param o2p the target player
     */
-   private void setAnimagusIncantation (O2Player o2p)
+   private void setAnimagusIncantation ()
    {
       long curTime = player.getWorld().getTime();
 

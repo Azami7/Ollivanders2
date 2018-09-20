@@ -47,6 +47,7 @@ public final class MORSMORDRE extends PyrotechniaSuper
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.MORSMORDRE;
+      setUsesModifier();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.GREEN);

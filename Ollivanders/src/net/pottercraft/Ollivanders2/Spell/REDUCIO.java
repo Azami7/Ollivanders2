@@ -42,6 +42,7 @@ public final class REDUCIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.REDUCIO;
+      setUsesModifier();
    }
 
    @Override

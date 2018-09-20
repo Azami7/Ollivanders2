@@ -66,11 +66,6 @@ public abstract class O2Potion implements Teachable
    protected Map<IngredientType, Integer> ingredients = new HashMap<>();
 
    /**
-    * The name of this potion as it should appear on the bottle.
-    */
-   protected String name = "Water";
-
-   /**
     * The description text for this spell in spell books.  Required or spell cannot be written in a book.
     */
    protected String text = "";
@@ -150,7 +145,7 @@ public abstract class O2Potion implements Teachable
     */
    public String getName ()
    {
-      return name;
+      return potionType.getPotionName();
    }
 
    /**
@@ -246,8 +241,8 @@ public abstract class O2Potion implements Teachable
       ItemStack potion = new ItemStack(potionMaterialType);
       PotionMeta meta = (PotionMeta)potion.getItemMeta();
 
-      meta.setDisplayName(name);
-      meta.setLore(Arrays.asList(name));
+      meta.setDisplayName(potionType.getPotionName());
+      meta.setLore(Arrays.asList(potionType.getPotionName()));
       meta.setColor(potionColor);
       if (effect != null)
          meta.addCustomEffect(effect, true);

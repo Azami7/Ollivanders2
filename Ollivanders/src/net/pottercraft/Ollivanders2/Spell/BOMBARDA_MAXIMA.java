@@ -45,6 +45,7 @@ public final class BOMBARDA_MAXIMA extends BombardaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.BOMBARDA_MAXIMA;
+      setUsesModifier();
 
       strength = 1.6;
    }

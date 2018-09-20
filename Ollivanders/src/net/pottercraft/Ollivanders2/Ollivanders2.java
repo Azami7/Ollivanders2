@@ -399,7 +399,7 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (!isOp(sender))
       {
-         return playerSummary(sender);
+         return playerSummary(sender, (Player)sender);
       }
 
       // parse args
@@ -448,7 +448,15 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("summary"))
          {
-            return playerSummary(sender);
+            if (args.length == 1)
+            {
+               return playerSummary(sender, (Player)sender);
+            }
+            else
+            {
+               Player target = getServer().getPlayer(args[1]);
+               return playerSummary(sender, target);
+            }
          }
          else if (subCommand.equalsIgnoreCase("potions"))
          {
@@ -475,12 +483,14 @@ public class Ollivanders2 extends JavaPlugin
     * @param sender the player who issued the command
     * @return true if no error occurred
     */
-   private boolean playerSummary (CommandSender sender)
+   private boolean playerSummary (CommandSender sender, Player player)
    {
+      if (player == null)
+         return true;
+
       if (debug)
          getLogger().info("Running playerSummary");
 
-      Player player = getServer().getPlayer(sender.getName());
       O2Player o2p = players.getPlayer(player.getUniqueId());
 
       String summary = "Ollivanders2 player summary:\n\n";
@@ -516,8 +526,13 @@ public class Ollivanders2 extends JavaPlugin
 
       //year
       if (useYears)
-         summary = summary + "Year: " + o2p.getYear().getIntValue() + "\n";
+         summary = summary + "\nYear: " + o2p.getYear().getIntValue() + "\n";
 
+      //animagus
+      if (o2p.isAnimagus())
+      {
+         summary = summary + "\nAnimagus Form: " + common.enumRecode(o2p.getAnimagusForm().toString());
+      }
 
       // effects
       if (isOp(sender))
@@ -547,10 +562,16 @@ public class Ollivanders2 extends JavaPlugin
       {
          summary = summary + "\n\nKnown Spells and Spell Level:";
 
-         for (Map.Entry<O2SpellType, Integer> e : knownSpells.entrySet())
+         for (O2SpellType spellType : O2SpellType.values())
          {
-            O2SpellType type = e.getKey();
-            summary = summary + "\n* " + spells.getSpellNameByType(type) + " " + e.getValue().toString();
+            if (knownSpells.containsKey(spellType))
+            {
+               String name = spellType.getSpellName();
+               if (name != null) // happens if a spell is not currently loaded, such as if a server removes LibsDisguises
+               {
+                  summary = summary + "\n* " + name + " " + knownSpells.get(spellType).toString();
+               }
+            }
          }
       }
       else
@@ -563,10 +584,16 @@ public class Ollivanders2 extends JavaPlugin
       {
          summary = summary + "\n\nKnown potions and Potion Level:";
 
-         for (Map.Entry<O2PotionType, Integer> e : knownPotions.entrySet())
+         for (O2PotionType potionType : O2PotionType.values())
          {
-            O2PotionType type = e.getKey();
-            summary = summary + "\n* " + potions.getPotionNameByType(type) + " " + e.getValue().toString();
+            if (knownPotions.containsKey(potionType))
+            {
+               String name = potionType.getPotionName();
+               if (name != null) // happens if a spell is not currently loaded, such as if a server removes LibsDisguises
+               {
+                  summary = summary + "\n* " + name + " " + knownPotions.get(potionType).toString();
+               }
+            }
          }
       }
       else
@@ -1529,6 +1556,10 @@ public class Ollivanders2 extends JavaPlugin
     */
    public boolean canCast (Player player, O2SpellType spell, boolean verbose)
    {
+      if (spell == null)
+      {
+         getLogger().info("canCast called for null spell");
+      }
       if (player.isPermissionSet("Ollivanders2." + spell.toString()))
       {
          if (!player.hasPermission("Ollivanders2." + spell.toString()))

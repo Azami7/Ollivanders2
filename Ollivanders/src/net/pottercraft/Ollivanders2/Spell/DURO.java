@@ -46,6 +46,7 @@ public final class DURO extends BlockTransfigurationSuper
 
       spellType = O2SpellType.DURO;
       branch = O2MagicBranch.CHARMS;
+      setUsesModifier();
 
       transfigureType = Material.STONE;
       spellDuration = (int)(1200 * usesModifier);

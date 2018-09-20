@@ -47,6 +47,7 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.MUCUS_AD_NAUSEAM;
+      setUsesModifier();
    }
 
    @Override

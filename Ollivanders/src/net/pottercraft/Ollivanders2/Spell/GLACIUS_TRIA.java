@@ -42,6 +42,7 @@ public final class GLACIUS_TRIA extends GlaciusSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.GLACIUS_TRIA;
+      setUsesModifier();
 
       //25% duration
       durationModifier = 0.25;

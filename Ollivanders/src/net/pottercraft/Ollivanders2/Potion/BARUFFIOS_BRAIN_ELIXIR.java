@@ -24,7 +24,6 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.BARUFFIOS_BRAIN_ELIXIR;
-      name = "Baruffio's Brain Elixir";
       potionLevel = PotionLevel.EXPERT;
 
       ingredients.put(IngredientType.RUNESPOOR_EGG, 1);

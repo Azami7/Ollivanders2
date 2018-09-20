@@ -46,6 +46,7 @@ public final class APARECIUM extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.APARECIUM;
+      setUsesModifier();
    }
 
    public void checkEffect ()

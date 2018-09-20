@@ -55,6 +55,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
+      setUsesModifier();
    }
 
    public void checkEffect ()

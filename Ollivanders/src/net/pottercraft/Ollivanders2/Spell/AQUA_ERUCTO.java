@@ -47,6 +47,7 @@ public final class AQUA_ERUCTO extends BlockTransfigurationSuper
 
       spellType = O2SpellType.AQUA_ERUCTO;
       branch = O2MagicBranch.CHARMS;
+      setUsesModifier();
 
       spellDuration = (int)(1200 * usesModifier);
       permanent = false;

@@ -47,6 +47,7 @@ public final class FATUUS_AURUM extends BlockTransfigurationSuper
 
       spellType = O2SpellType.FATUUS_AURUM;
       branch = O2MagicBranch.TRANSFIGURATION;
+      setUsesModifier();
 
       materialWhitelist.add(Material.STONE);
       transfigureType = Material.GOLD_BLOCK;

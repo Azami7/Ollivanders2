@@ -48,6 +48,7 @@ public final class DIFFINDO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.DIFFINDO;
+      setUsesModifier();
    }
 
    public void checkEffect ()

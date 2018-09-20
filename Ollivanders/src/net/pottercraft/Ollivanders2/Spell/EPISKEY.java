@@ -46,6 +46,7 @@ public final class EPISKEY extends Healing
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.EPISKEY;
+      setUsesModifier();
    }
 
    public void checkEffect ()

@@ -46,6 +46,7 @@ public final class AVADA_KEDAVRA extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.AVADA_KEDAVRA;
+      setUsesModifier();
 
       moveEffectData = Material.MELON_BLOCK;
    }

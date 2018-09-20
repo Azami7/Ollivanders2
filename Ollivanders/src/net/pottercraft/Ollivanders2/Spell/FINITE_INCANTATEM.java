@@ -51,6 +51,7 @@ public final class FINITE_INCANTATEM extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.FINITE_INCANTATEM;
+      setUsesModifier();
    }
 
    public void checkEffect ()

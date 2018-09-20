@@ -43,6 +43,7 @@ public final class FRANGE_LIGNEA extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.FRANGE_LIGNEA;
+      setUsesModifier();
    }
 
    @Override

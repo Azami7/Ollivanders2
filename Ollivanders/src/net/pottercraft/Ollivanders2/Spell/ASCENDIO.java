@@ -45,6 +45,7 @@ public final class ASCENDIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ASCENDIO;
+      setUsesModifier();
    }
 
    public void checkEffect ()

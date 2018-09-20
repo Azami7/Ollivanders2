@@ -45,6 +45,7 @@ public final class CONFUNDUS_DUO extends ConfundusSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.CONFUNDUS_DUO;
+      setUsesModifier();
 
       modifier = 2;
    }

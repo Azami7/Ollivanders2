@@ -53,6 +53,7 @@ public final class FIENDFYRE extends DarkArts
 
       spellType = O2SpellType.FIENDFYRE;
       lifeTime = usesModifier * 4;
+      setUsesModifier();
    }
 
    @Override

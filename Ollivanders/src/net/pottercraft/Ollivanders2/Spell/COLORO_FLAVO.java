@@ -35,6 +35,8 @@ public final class COLORO_FLAVO extends ColoroSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.COLORO_FLAVO;
+      setUsesModifier();
+
       color = DyeColor.YELLOW;
    }
 }

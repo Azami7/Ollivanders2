@@ -41,6 +41,7 @@ public final class COMETES_DUO extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.COMETES_DUO;
+      setUsesModifier();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.ORANGE);

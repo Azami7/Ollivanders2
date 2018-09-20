@@ -40,6 +40,7 @@ public final class VERDIMILLIOUS_DUO extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.VERDIMILLIOUS_DUO;
+      setUsesModifier();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.GREEN);

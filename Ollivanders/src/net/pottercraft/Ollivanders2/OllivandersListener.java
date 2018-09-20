@@ -285,12 +285,12 @@ public class OllivandersListener implements Listener
       //
       // Parse to see if they were casting a spell
       //
-      O2SpellType spell = p.spells.getSpellTypeByName(message);
+      O2SpellType spellType = p.spells.getSpellTypeByName(message);
       if (Ollivanders2.debug)
       {
-         if (spell != null)
+         if (spellType != null)
          {
-            p.getLogger().info("Spell is " + spell);
+            p.getLogger().info("Spell is " + spellType);
          }
          else
          {
@@ -323,7 +323,7 @@ public class OllivandersListener implements Listener
       Set<Player> remRecipients = new HashSet<>();
 
       // If player cast a spell, only show that chat to players within range
-      if (spell != null)
+      if (spellType != null)
       {
          for (Player recipient : recipients)
          {
@@ -388,11 +388,11 @@ public class OllivandersListener implements Listener
       // Handle spell casting
       //
       // If the spell is valid AND player is allowed to cast spells per server permissions
-      if (spell != null && p.canCast(sender, spell, true))
+      if (spellType != null && p.canCast(sender, spellType, true))
       {
-         if (p.canCast(sender, spell, true))
+         if (p.canCast(sender, spellType, true))
          {
-            if (Ollivanders2.useBookLearning && p.getO2Player(sender).getSpellCount(spell) == 0)
+            if (Ollivanders2.useBookLearning && p.getO2Player(sender).getSpellCount(spellType) < 1)
             {
                // if bookLearning is set to true then spell count must be > 0 to cast this spell
                if (Ollivanders2.debug)
@@ -414,16 +414,16 @@ public class OllivandersListener implements Listener
                   p.getLogger().info("onPlayerChat: player not holding destined wand");
                }
 
-               int uses = p.getO2Player(sender).getSpellCount(spell);
+               int uses = p.getO2Player(sender).getSpellCount(spellType);
                castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
             }
 
             // wandless spells
-            if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+            if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
             {
                if (Ollivanders2.debug)
                {
-                  p.getLogger().info("onPlayerChat: allow wandless casting of " + spell);
+                  p.getLogger().info("onPlayerChat: allow wandless casting of " + spellType);
                }
                castSuccess = true;
             }
@@ -432,29 +432,40 @@ public class OllivandersListener implements Listener
             {
                if (Ollivanders2.debug)
                {
-                  p.getLogger().info("onPlayerChat: begin casting " + spell);
+                  p.getLogger().info("onPlayerChat: begin casting " + spellType);
                }
 
                String[] words = message.split(" ");
 
-               if (spell == O2SpellType.APPARATE)
+               if (spellType == O2SpellType.APPARATE)
                {
                   apparate(sender, words);
                   event.setMessage("apparate");
                }
-               else if (spell == O2SpellType.PORTUS)
+               else if (spellType == O2SpellType.PORTUS)
                {
                   p.addProjectile(new PORTUS(p, sender, 1.0, words));
                }
-               else if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+               else if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
                {
                   p.addProjectile(new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, sender, 1.0));
                }
                else
                {
                   O2Player o2p = p.getO2Player(sender);
-                  o2p.setWandSpell(spell);
+                  o2p.setWandSpell(spellType);
                   p.setO2Player(sender, o2p);
+               }
+
+               boolean fastLearning = false;
+               if (p.players.playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.FAST_LEARNING))
+               {
+                  fastLearning = true;
+               }
+               p.incSpellCount(sender, spellType);
+               if (fastLearning)
+               {
+                  p.incSpellCount(sender, spellType);
                }
             }
          }

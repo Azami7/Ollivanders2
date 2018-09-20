@@ -46,6 +46,7 @@ public final class NOX extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.NOX;
+      setUsesModifier();
    }
 
    @Override

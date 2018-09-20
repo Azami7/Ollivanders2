@@ -25,7 +25,6 @@ public final class REGENERATION_POTION extends O2Potion
 
       potionType = O2PotionType.REGENERATION_POTION;
       potionLevel = PotionLevel.NEWT;
-      name = "Regeneration Potion";
 
       ingredients.put(IngredientType.BONE, 1);
       ingredients.put(IngredientType.BLOOD, 1);

@@ -35,6 +35,8 @@ public final class COLORO_CAERULUS extends ColoroSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.COLORO_CAERULUS;
+      setUsesModifier();
+
       color = DyeColor.BLUE;
    }
 }

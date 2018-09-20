@@ -48,6 +48,7 @@ public final class ALARTE_ASCENDARE extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ALARTE_ASCENDARE;
+      setUsesModifier();
    }
 
    public void checkEffect ()

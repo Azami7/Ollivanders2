@@ -46,6 +46,7 @@ public final class DELETRIUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.DELETRIUS;
+      setUsesModifier();
    }
 
    public void checkEffect ()

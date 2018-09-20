@@ -44,6 +44,7 @@ public final class PROTEGO_TOTALUM extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PROTEGO_TOTALUM;
+      setUsesModifier();
    }
 
    @Override

@@ -28,7 +28,6 @@ public final class ANTIDOTE_POTION extends O2Potion
 
       potionType = O2PotionType.ANTIDOTE_POTION;
       potionLevel = PotionLevel.BEGINNER;
-      name = "Common Antidote Potion";
 
       ingredients.put(IngredientType.MISTLETOE_BERRIES, 2);
       ingredients.put(IngredientType.BEZOAR, 1);

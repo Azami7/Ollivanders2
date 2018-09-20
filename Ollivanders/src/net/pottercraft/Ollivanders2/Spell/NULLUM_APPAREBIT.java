@@ -37,6 +37,7 @@ public final class NULLUM_APPAREBIT extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.NULLUM_APPAREBIT;
+      setUsesModifier();
    }
 
    @Override

@@ -47,6 +47,7 @@ public final class ALOHOMORA extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ALOHOMORA;
+      setUsesModifier();
    }
 
    public void checkEffect ()

@@ -49,6 +49,7 @@ public final class HERBIVICUS extends Herbology
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.HERBIVICUS;
+      setUsesModifier();
    }
 
    @Override

@@ -40,6 +40,8 @@ public final class INCARNATIO_DEVITO extends PlayerDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCARNATIO_DEVITO;
+      setUsesModifier();
+
       targetType = EntityType.CHICKEN;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

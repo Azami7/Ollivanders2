@@ -47,6 +47,7 @@ public final class DEPRIMO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.DEPRIMO;
+      setUsesModifier();
    }
 
    public void checkEffect ()

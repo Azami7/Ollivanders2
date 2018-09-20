@@ -51,6 +51,7 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.HARMONIA_NECTERE_PASSUS;
+      setUsesModifier();
    }
 
    @Override

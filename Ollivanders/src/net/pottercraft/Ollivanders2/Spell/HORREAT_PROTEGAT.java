@@ -44,6 +44,7 @@ public final class HORREAT_PROTEGAT extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.HORREAT_PROTEGAT;
+      setUsesModifier();
    }
 
    @Override

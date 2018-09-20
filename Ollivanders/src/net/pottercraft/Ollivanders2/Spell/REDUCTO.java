@@ -45,6 +45,7 @@ public final class REDUCTO extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.REDUCTO;
+      setUsesModifier();
    }
 
    @Override

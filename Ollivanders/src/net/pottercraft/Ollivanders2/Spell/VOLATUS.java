@@ -47,6 +47,7 @@ public final class VOLATUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.VOLATUS;
+      setUsesModifier();
    }
 
    @Override

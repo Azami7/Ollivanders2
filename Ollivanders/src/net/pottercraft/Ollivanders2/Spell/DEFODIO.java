@@ -52,6 +52,7 @@ public final class DEFODIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.DEFODIO;
+      setUsesModifier();
       depth = (int) usesModifier;
    }
 

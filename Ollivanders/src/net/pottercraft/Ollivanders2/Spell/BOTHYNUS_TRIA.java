@@ -41,6 +41,7 @@ public final class BOTHYNUS_TRIA extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.BOTHYNUS_TRIA;
+      setUsesModifier();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.YELLOW);

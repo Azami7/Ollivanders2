@@ -48,6 +48,7 @@ public final class GEMINO extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.GEMINO;
+      setUsesModifier();
    }
 
    @Override

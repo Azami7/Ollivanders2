@@ -26,7 +26,6 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion
 
       potionType = O2PotionType.DRAUGHT_OF_LIVING_DEATH;
       potionLevel = PotionLevel.NEWT;
-      name = "Draught of Living Death";
 
       ingredients.put(IngredientType.POWDERED_ASHPODEL, 1);
       ingredients.put(IngredientType.INFUSION_OF_WORMWOOD, 1);

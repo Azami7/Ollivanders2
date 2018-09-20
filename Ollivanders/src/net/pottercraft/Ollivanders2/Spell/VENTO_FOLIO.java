@@ -53,6 +53,8 @@ public final class VENTO_FOLIO extends Charms
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.VENTO_FOLIO;
+      setUsesModifier();
+
       setSuccessRate();
    }
 

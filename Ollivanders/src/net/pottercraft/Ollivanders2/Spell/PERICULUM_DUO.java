@@ -36,6 +36,7 @@ public final class PERICULUM_DUO extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PERICULUM_DUO;
+      setUsesModifier();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.RED);

@@ -47,6 +47,7 @@ public final class TERGEO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.TERGEO;
+      setUsesModifier();
       move = true;
    }
 

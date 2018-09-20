@@ -46,6 +46,8 @@ public final class INCENDIO extends IncendioSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCENDIO;
+      setUsesModifier();
+
       strafe = false;
       radius = 1;
       blockRadius = 1;

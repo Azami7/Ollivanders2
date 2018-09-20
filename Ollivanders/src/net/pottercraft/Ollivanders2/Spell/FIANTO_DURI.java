@@ -46,6 +46,7 @@ public final class FIANTO_DURI extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.FIANTO_DURI;
+      setUsesModifier();
    }
 
    @Override

@@ -26,7 +26,6 @@ public final class ANIMAGUS_POTION extends O2Potion
 
       potionType = O2PotionType.ANTIDOTE_POTION;
       potionLevel = PotionLevel.NEWT;
-      name = "Animagus Potion";
 
       ingredients.put(IngredientType.MANDRAKE_LEAF, 1);
       ingredients.put(IngredientType.DEW_DROP, 2);

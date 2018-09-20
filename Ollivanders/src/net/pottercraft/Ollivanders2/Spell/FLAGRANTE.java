@@ -46,6 +46,7 @@ public final class FLAGRANTE extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.FLAGRANTE;
+      setUsesModifier();
    }
 
    @Override

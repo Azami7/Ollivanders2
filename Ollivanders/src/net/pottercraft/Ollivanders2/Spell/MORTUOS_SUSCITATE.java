@@ -49,6 +49,8 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.MORTUOS_SUSCITATE;
+
+      setUsesModifier();
    }
 
    @Override

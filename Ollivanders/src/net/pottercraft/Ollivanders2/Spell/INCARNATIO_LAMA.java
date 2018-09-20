@@ -41,6 +41,8 @@ public final class INCARNATIO_LAMA extends PlayerDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCARNATIO_LAMA;
+      setUsesModifier();
+
       targetType = EntityType.LLAMA;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

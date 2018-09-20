@@ -32,7 +32,6 @@ public final class FORGETFULLNESS_POTION extends O2Potion
 
       potionType = O2PotionType.FORGETFULLNESS_POTION;
       potionLevel = PotionLevel.OWL;
-      name = "Forgetfulness Potion";
 
       ingredients.put(IngredientType.MISTLETOE_BERRIES, 4);
       ingredients.put(IngredientType.VALERIAN_SPRIGS, 2);

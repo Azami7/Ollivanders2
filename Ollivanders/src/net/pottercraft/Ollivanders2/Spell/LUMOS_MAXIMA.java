@@ -44,6 +44,8 @@ public final class LUMOS_MAXIMA extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LUMOS_MAXIMA;
+      setUsesModifier();
+
       lit = false;
    }
 

@@ -39,6 +39,7 @@ public final class PORFYRO_ASTERI_DUO extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PORFYRO_ASTERI_DUO;
+      setUsesModifier();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);

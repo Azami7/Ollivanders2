@@ -24,7 +24,6 @@ public final class WOLFSBANE_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.WOLFSBANE_POTION;
-      name = "Wolfsbane Potion";
       potionLevel = PotionLevel.EXPERT;
 
       ingredients.put(IngredientType.WOLFSBANE, 2);

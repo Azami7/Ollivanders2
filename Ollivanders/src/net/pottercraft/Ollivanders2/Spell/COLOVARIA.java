@@ -51,6 +51,7 @@ public final class COLOVARIA extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.COLOVARIA;
+      setUsesModifier();
    }
 
    public void checkEffect ()

@@ -25,7 +25,6 @@ public final class WIT_SHARPENING_POTION extends O2Potion
 
       potionType = O2PotionType.WIT_SHARPENING_POTION;
       potionLevel = PotionLevel.OWL;
-      name = "Wit-Sharpening Potion";
 
       ingredients.put(IngredientType.GINGER_ROOT, 2);
       ingredients.put(IngredientType.GROUND_SCARAB_BEETLE, 3);

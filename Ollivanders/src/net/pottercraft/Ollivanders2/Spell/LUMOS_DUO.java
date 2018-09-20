@@ -47,6 +47,8 @@ public final class LUMOS_DUO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LUMOS_DUO;
+      setUsesModifier();
+
       lifeTicks = (int) (-(usesModifier * 20));
    }
 

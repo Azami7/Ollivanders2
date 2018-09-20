@@ -50,6 +50,7 @@ public final class BRACKIUM_EMENDO extends Healing
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.BRACKIUM_EMENDO;
+      setUsesModifier();
    }
 
    public void checkEffect ()

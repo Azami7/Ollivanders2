@@ -46,6 +46,7 @@ public final class LACARNUM_INFLAMARI extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LACARNUM_INFLAMARI;
+      setUsesModifier();
    }
 
    @Override

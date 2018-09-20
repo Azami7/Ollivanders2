@@ -44,6 +44,7 @@ public final class REPARIFARGE extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.REPARIFARGE;
+      setUsesModifier();
    }
 
    @Override

@@ -42,6 +42,7 @@ public final class EVANESCO extends Transfiguration
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.EVANESCO;
+      setUsesModifier();
    }
 
    public void checkEffect ()
