@@ -46,6 +46,7 @@ public final class LIBERACORPUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LIBERACORPUS;
+      setUsesModifier();
    }
 
    @Override

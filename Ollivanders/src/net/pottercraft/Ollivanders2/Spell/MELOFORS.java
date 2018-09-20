@@ -47,6 +47,8 @@ public final class MELOFORS extends GaleatiSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.MELOFORS;
+      setUsesModifier();
+
       materialType = melons[Math.abs(Ollivanders2.random.nextInt() % melons.length)];
    }
 }

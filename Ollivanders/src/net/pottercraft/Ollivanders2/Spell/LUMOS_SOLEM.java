@@ -51,6 +51,7 @@ public final class LUMOS_SOLEM extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LUMOS_SOLEM;
+      setUsesModifier();
    }
 
    @Override

@@ -48,6 +48,7 @@ public final class IMPEDIMENTA extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.IMPEDIMENTA;
+      setUsesModifier();
    }
 
    @Override

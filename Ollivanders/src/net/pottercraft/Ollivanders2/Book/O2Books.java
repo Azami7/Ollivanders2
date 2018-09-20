@@ -196,7 +196,7 @@ public final class O2Books
          return;
       }
 
-      O2Player o2p = p.getO2Player(player);
+      O2Player o2p = p.players.getPlayer(player.getUniqueId());
 
       for (String spell : bookLore)
       {

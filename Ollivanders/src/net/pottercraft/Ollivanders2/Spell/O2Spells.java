@@ -32,17 +32,7 @@ public class O2Spells
          if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType))
             continue;
 
-         O2Spell spell = getSpellFromType(spellType);
-
-         if (spell != null)
-         {
-            if (spell.spellType == null)
-               p.getLogger().info("spell type is null for " + spell.getClass().toString());
-            else
-            {
-               O2SpellMap.put(spell.getName(), spellType);
-            }
-         }
+         O2SpellMap.put(spellType.getSpellName().toLowerCase(), spellType);
       }
    }
 
@@ -82,29 +72,9 @@ public class O2Spells
     */
    public O2SpellType getSpellTypeByName (String name)
    {
-      if (O2SpellMap.containsKey(name))
-         return O2SpellMap.get(name);
+      if (O2SpellMap.containsKey(name.toLowerCase()))
+         return O2SpellMap.get(name.toLowerCase());
       else
          return null;
-   }
-
-   /**
-    * Get potion name by type
-    *
-    * @param spellType the potion type
-    * @return the name if found, null otherwise
-    */
-   public String getSpellNameByType (O2SpellType spellType)
-   {
-      if (O2SpellMap.containsValue(spellType))
-      {
-         for (Map.Entry<String, O2SpellType> e : O2SpellMap.entrySet())
-         {
-            if (e.getValue().equals(spellType))
-               return e.getKey();
-         }
-      }
-
-      return null;
    }
 }

@@ -36,6 +36,7 @@ public final class NULLUM_EVANESCUNT extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.NULLUM_EVANESCUNT;
+      setUsesModifier();
    }
 
    public void checkEffect ()

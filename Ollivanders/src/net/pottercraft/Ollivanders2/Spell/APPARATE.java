@@ -55,6 +55,7 @@ public final class APPARATE extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.APPARATE;
+      setUsesModifier();
    }
 
    public void checkEffect ()

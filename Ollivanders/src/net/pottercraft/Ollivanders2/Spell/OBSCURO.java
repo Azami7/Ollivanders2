@@ -44,6 +44,7 @@ public final class OBSCURO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.OBSCURO;
+      setUsesModifier();
    }
 
    @Override

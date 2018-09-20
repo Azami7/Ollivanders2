@@ -1,5 +1,7 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
+
 /**
  * Enum of all potions types.
  *
@@ -47,6 +49,19 @@ public enum O2PotionType
    public Class getClassName()
    {
       return className;
+   }
+
+   /**
+    * Get the name for this potion type.
+    *
+    * @return the spell name for this potion type.
+    */
+   public String getPotionName ()
+   {
+      String potionTypeString = this.toString().toLowerCase();
+      String name = Ollivanders2Common.firstLetterCapitalize(potionTypeString.replace("_", " "));
+
+      return name;
    }
 
    /**

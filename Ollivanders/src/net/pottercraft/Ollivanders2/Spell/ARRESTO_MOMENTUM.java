@@ -48,6 +48,7 @@ public final class ARRESTO_MOMENTUM extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ARRESTO_MOMENTUM;
+      setUsesModifier();
    }
 
    public void checkEffect ()

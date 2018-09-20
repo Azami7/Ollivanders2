@@ -22,7 +22,7 @@ public final class LEGILIMENS extends DarkArts
    {
       super();
 
-      spellType = O2SpellType.APARECIUM;
+      spellType = O2SpellType.LEGILIMENS;
 
       flavorText = new ArrayList<String>() {{
          add("\"The mind is not a book, to be opened at will and examined at leisure. Thoughts are not etched on the inside of skulls, to be perused by any invader. The mind is a complex and many-layered thing, Potter. Or at least most minds are... It is true, however, that those who have mastered Legilimency are able, under certain conditions, to delve into the minds of their victims and to interpret their findings correctly.\" -Severus Snape");
@@ -44,7 +44,8 @@ public final class LEGILIMENS extends DarkArts
    {
       super(plugin, player, rightWand);
 
-      spellType = O2SpellType.APARECIUM;
+      spellType = O2SpellType.LEGILIMENS;
+      setUsesModifier();
    }
 
    @Override
@@ -56,7 +57,7 @@ public final class LEGILIMENS extends DarkArts
          if (live instanceof Player)
          {
             Player target = (Player) live;
-            double experience = p.getO2Player(target).getSpellCount(O2SpellType.LEGILIMENS);
+            double experience = p.players.getPlayer(target.getUniqueId()).getSpellCount(O2SpellType.LEGILIMENS);
             if (usesModifier > experience)
             {
                player.openInventory(target.getInventory());

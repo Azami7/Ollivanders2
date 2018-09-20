@@ -30,6 +30,7 @@ public abstract class BombardaSuper extends Charms
    public BombardaSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+      setUsesModifier();
    }
 
    public void checkEffect ()

@@ -46,6 +46,7 @@ public final class LEVICORPUS extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LEVICORPUS;
+      setUsesModifier();
    }
 
    @Override

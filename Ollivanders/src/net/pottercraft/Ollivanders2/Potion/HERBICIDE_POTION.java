@@ -33,7 +33,6 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
 
       potionType = O2PotionType.HERBICIDE_POTION;
       potionLevel = PotionLevel.BEGINNER;
-      name = "Herbicide Potion";
       potionMaterialType = Material.SPLASH_POTION;
 
       ingredients.put(IngredientType.LIONFISH_SPINES, 4);

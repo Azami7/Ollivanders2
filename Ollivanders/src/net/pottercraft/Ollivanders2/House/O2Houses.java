@@ -43,7 +43,7 @@ public class O2Houses
    {
       p = plugin;
 
-      if (Ollivanders2.useHouses)
+      if (!Ollivanders2.useHouses)
          return;
 
       readHouseConfig();
@@ -542,6 +542,15 @@ public class O2Houses
       String name = player.getName();
       String displayName = player.getDisplayName();
       Team team = O2HouseTeamMap.get(houseType);
+
+      if (team == null)
+      {
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("Team " + houseType + " does not exist.");
+            return;
+         }
+      }
 
       if (add)
       {

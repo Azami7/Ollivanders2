@@ -49,6 +49,7 @@ public final class IMMOBULUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.IMMOBULUS;
+      setUsesModifier();
    }
 
    public void checkEffect ()

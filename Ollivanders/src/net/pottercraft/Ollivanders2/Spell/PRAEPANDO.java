@@ -37,7 +37,9 @@ public final class PRAEPANDO extends Charms
    public PRAEPANDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
       spellType = O2SpellType.PRAEPANDO;
+      setUsesModifier();
    }
 
    @Override

@@ -44,6 +44,7 @@ public final class PROTEGO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PROTEGO;
+      setUsesModifier();
    }
 
    public void checkEffect ()

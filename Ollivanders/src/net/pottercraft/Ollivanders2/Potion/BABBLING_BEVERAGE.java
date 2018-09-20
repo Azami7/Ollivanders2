@@ -25,7 +25,6 @@ public class BABBLING_BEVERAGE extends O2Potion
 
       potionType = O2PotionType.BABBLING_BEVERAGE;
       potionLevel = PotionLevel.OWL;
-      name = "Babbling Beverage";
 
       ingredients.put(IngredientType.VALERIAN_SPRIGS, 2);
       ingredients.put(IngredientType.DITTANY, 1);

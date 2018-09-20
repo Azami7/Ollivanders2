@@ -35,6 +35,8 @@ public final class COLORO_VERIDI extends ColoroSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.COLORO_VERIDI;
+      setUsesModifier();
+
       color = DyeColor.GREEN;
    }
 }

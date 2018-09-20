@@ -43,6 +43,7 @@ public final class CALAMUS extends Transfiguration
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.CALAMUS;
+      setUsesModifier();
    }
 
    public void checkEffect()

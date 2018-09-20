@@ -38,6 +38,7 @@ public final class DUCKLIFORS extends FriendlyMobDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.DUCKLIFORS;
+      setUsesModifier();
 
       targetType = EntityType.CHICKEN;
       disguiseType = DisguiseType.getType(targetType);

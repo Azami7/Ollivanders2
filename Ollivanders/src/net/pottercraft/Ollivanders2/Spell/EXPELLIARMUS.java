@@ -52,6 +52,7 @@ public final class EXPELLIARMUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.EXPELLIARMUS;
+      setUsesModifier();
    }
 
    public void checkEffect ()

@@ -46,6 +46,7 @@ public final class OPPUGNO extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.OPPUGNO;
+      setUsesModifier();
    }
 
    @Override

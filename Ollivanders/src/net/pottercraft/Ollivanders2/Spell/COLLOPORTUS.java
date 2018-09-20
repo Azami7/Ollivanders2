@@ -45,6 +45,7 @@ public final class COLLOPORTUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.COLLOPORTUS;
+      setUsesModifier();
    }
 
    public void checkEffect ()

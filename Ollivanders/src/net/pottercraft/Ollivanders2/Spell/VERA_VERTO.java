@@ -49,6 +49,8 @@ public final class VERA_VERTO extends FriendlyMobDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.VERA_VERTO;
+      setUsesModifier();
+
       spellDuration = (int)(1200 * usesModifier);
       targetType = EntityType.FALLING_BLOCK;
       ItemStack flowerPot = new ItemStack(Material.FLOWER_POT, 1);

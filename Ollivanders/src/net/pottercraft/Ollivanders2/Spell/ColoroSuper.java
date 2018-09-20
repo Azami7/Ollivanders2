@@ -41,6 +41,7 @@ public abstract class ColoroSuper extends Charms
    public ColoroSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+      setUsesModifier();
    }
 
    public void checkEffect ()

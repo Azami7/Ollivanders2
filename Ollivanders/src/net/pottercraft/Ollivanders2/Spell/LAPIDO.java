@@ -45,6 +45,8 @@ public final class LAPIDO extends BlockTransfigurationSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LAPIDO;
+      setUsesModifier();
+
       transfigureType = Material.STONE;
       materialWhitelist.add(Material.COBBLESTONE);
    }

@@ -43,6 +43,8 @@ public final class INCENDIO_DUO extends IncendioSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCENDIO_DUO;
+      setUsesModifier();
+
       location.add(vector);
       strafe = true;
       blockRadius = 2;

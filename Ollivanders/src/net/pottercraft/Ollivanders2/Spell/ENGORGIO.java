@@ -48,6 +48,7 @@ public final class ENGORGIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ENGORGIO;
+      setUsesModifier();
    }
 
    public void checkEffect ()

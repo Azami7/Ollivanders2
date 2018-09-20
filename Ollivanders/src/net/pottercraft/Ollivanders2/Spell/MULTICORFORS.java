@@ -45,6 +45,7 @@ public final class MULTICORFORS extends Charms
       // this is a transfiguration spell in HP but does not use the Transfiguration superclass.
       branch = O2MagicBranch.TRANSFIGURATION;
       spellType = O2SpellType.MULTICORFORS;
+      setUsesModifier();
    }
 
    public void checkEffect ()

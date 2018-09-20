@@ -47,6 +47,7 @@ public final class SILENCIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.SILENCIO;
+      setUsesModifier();
    }
 
    @Override

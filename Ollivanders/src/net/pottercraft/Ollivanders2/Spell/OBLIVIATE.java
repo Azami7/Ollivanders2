@@ -47,6 +47,7 @@ public final class OBLIVIATE extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.OBLIVIATE;
+      setUsesModifier();
    }
 
    @Override

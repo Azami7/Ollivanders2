@@ -43,7 +43,27 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
 
       effectType = O2EffectType.ANIMAGUS_EFFECT;
 
+      transformed = false;
       permanent = true;
+
+
+      O2Player o2p = p.players.getPlayer(pid);
+      if (o2p == null)
+      {
+         p.getLogger().info("o2player cannot be found");
+
+         kill();
+         return;
+      }
+
+      form = o2p.getAnimagusForm();
+      colorVariant = o2p.getAnimagusColor();
+
+      if (form == null)
+      {
+         p.getLogger().info("Unable to get animagus form for " + p.players.getPlayer(pid).getPlayerName());
+         kill();
+      }
    }
 
    @Override
@@ -64,15 +84,6 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
    @Override
    protected void customizeWatcher ()
    {
-      O2Player o2p = p.getO2Player(p.getServer().getPlayer(targetID));
-
-      if (form == null)
-      {
-         // set the details of their animal form
-         form = o2p.getAnimagusForm();
-         colorVariant = o2p.getAnimagusColor();
-      }
-
       if (form == EntityType.OCELOT)
       {
          OcelotWatcher ocelotWatcher = (OcelotWatcher)watcher;

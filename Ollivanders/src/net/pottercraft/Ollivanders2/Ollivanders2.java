@@ -399,7 +399,7 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (!isOp(sender))
       {
-         return playerSummary(sender);
+         return playerSummary(sender, (Player)sender);
       }
 
       // parse args
@@ -448,7 +448,15 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("summary"))
          {
-            return playerSummary(sender);
+            if (args.length == 1)
+            {
+               return playerSummary(sender, (Player)sender);
+            }
+            else
+            {
+               Player target = getServer().getPlayer(args[1]);
+               return playerSummary(sender, target);
+            }
          }
          else if (subCommand.equalsIgnoreCase("potions"))
          {
@@ -475,12 +483,14 @@ public class Ollivanders2 extends JavaPlugin
     * @param sender the player who issued the command
     * @return true if no error occurred
     */
-   private boolean playerSummary (CommandSender sender)
+   private boolean playerSummary (CommandSender sender, Player player)
    {
+      if (player == null)
+         return true;
+
       if (debug)
          getLogger().info("Running playerSummary");
 
-      Player player = getServer().getPlayer(sender.getName());
       O2Player o2p = players.getPlayer(player.getUniqueId());
 
       String summary = "Ollivanders2 player summary:\n\n";
@@ -516,8 +526,13 @@ public class Ollivanders2 extends JavaPlugin
 
       //year
       if (useYears)
-         summary = summary + "Year: " + o2p.getYear().getIntValue() + "\n";
+         summary = summary + "\nYear: " + o2p.getYear().getIntValue() + "\n";
 
+      //animagus
+      if (o2p.isAnimagus())
+      {
+         summary = summary + "\nAnimagus Form: " + common.enumRecode(o2p.getAnimagusForm().toString());
+      }
 
       // effects
       if (isOp(sender))
@@ -547,10 +562,16 @@ public class Ollivanders2 extends JavaPlugin
       {
          summary = summary + "\n\nKnown Spells and Spell Level:";
 
-         for (Map.Entry<O2SpellType, Integer> e : knownSpells.entrySet())
+         for (O2SpellType spellType : O2SpellType.values())
          {
-            O2SpellType type = e.getKey();
-            summary = summary + "\n* " + spells.getSpellNameByType(type) + " " + e.getValue().toString();
+            if (knownSpells.containsKey(spellType))
+            {
+               String name = spellType.getSpellName();
+               if (name != null) // happens if a spell is not currently loaded, such as if a server removes LibsDisguises
+               {
+                  summary = summary + "\n* " + name + " " + knownSpells.get(spellType).toString();
+               }
+            }
          }
       }
       else
@@ -563,10 +584,16 @@ public class Ollivanders2 extends JavaPlugin
       {
          summary = summary + "\n\nKnown potions and Potion Level:";
 
-         for (Map.Entry<O2PotionType, Integer> e : knownPotions.entrySet())
+         for (O2PotionType potionType : O2PotionType.values())
          {
-            O2PotionType type = e.getKey();
-            summary = summary + "\n* " + potions.getPotionNameByType(type) + " " + e.getValue().toString();
+            if (knownPotions.containsKey(potionType))
+            {
+               String name = potionType.getPotionName();
+               if (name != null) // happens if a spell is not currently loaded, such as if a server removes LibsDisguises
+               {
+                  summary = summary + "\n* " + name + " " + knownPotions.get(potionType).toString();
+               }
+            }
          }
       }
       else
@@ -981,7 +1008,7 @@ public class Ollivanders2 extends JavaPlugin
                sender.sendMessage(chatColor + "Unable to find a player named " + p + ".\n");
                return true;
             }
-            O2Player o2p = getO2Player(player);
+            O2Player o2p = players.getPlayer(player.getUniqueId());
             sender.sendMessage(chatColor + "Player " + p + " is in year " + o2p.getYear().getIntValue());
             return true;
          }
@@ -1065,7 +1092,7 @@ public class Ollivanders2 extends JavaPlugin
          sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
          return true;
       }
-      O2Player o2p = getO2Player(player);
+      O2Player o2p = players.getPlayer(player.getUniqueId());
       int year;
       try
       {
@@ -1102,7 +1129,7 @@ public class Ollivanders2 extends JavaPlugin
          sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
          return true;
       }
-      O2Player o2p = getO2Player(player);
+      O2Player o2p = players.getPlayer(player.getUniqueId());
       int year = o2p.getYear().getIntValue() + yearChange;
       if (year > 0 && year < 8)
       {
@@ -1137,7 +1164,6 @@ public class Ollivanders2 extends JavaPlugin
             return true;
          }
 
-         O2Player o2p = getO2Player((Player)sender);
          if (players.playerEffects.hasEffect(((Player) sender).getUniqueId(), effectType))
          {
             players.playerEffects.removeEffect(((Player) sender).getUniqueId(), effectType);
@@ -1455,27 +1481,6 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Gets the O2Player associated with the Player
-    *
-    * @param player the player to get
-    * @return O2Player object for this player
-    */
-   public O2Player getO2Player (Player player)
-   {
-      UUID pid = player.getUniqueId();
-      O2Player o2p = players.getPlayer(pid);
-
-      if (o2p == null)
-      {
-         players.addPlayer(pid, player.getDisplayName());
-
-         o2p = players.getPlayer(pid);
-      }
-
-      return o2p;
-   }
-
-   /**
     * Sets the player's OPlayer by their playername
     *
     * @param player      the player
@@ -1529,6 +1534,10 @@ public class Ollivanders2 extends JavaPlugin
     */
    public boolean canCast (Player player, O2SpellType spell, boolean verbose)
    {
+      if (spell == null)
+      {
+         getLogger().info("canCast called for null spell");
+      }
       if (player.isPermissionSet("Ollivanders2." + spell.toString()))
       {
          if (!player.hasPermission("Ollivanders2." + spell.toString()))
@@ -1541,7 +1550,7 @@ public class Ollivanders2 extends JavaPlugin
          }
       }
 
-      O2Player p = getO2Player(player);
+      O2Player p = players.getPlayer(player.getUniqueId());
       boolean coolDown = System.currentTimeMillis() < p.getSpellLastCastTime(spell);
 
       if (coolDown)

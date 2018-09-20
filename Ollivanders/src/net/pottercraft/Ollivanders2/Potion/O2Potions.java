@@ -41,12 +41,7 @@ public class O2Potions
          if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potionType))
             continue;
 
-         O2Potion potion = getPotionFromType(potionType);
-
-         if (potion != null)
-         {
-            O2PotionMap.put(potion.getName(), potionType);
-         }
+         O2PotionMap.put(potionType.getPotionName().toLowerCase(), potionType);
       }
    }
 
@@ -179,9 +174,9 @@ public class O2Potions
       {
          for (String lore : meta.getLore())
          {
-            if (O2PotionMap.containsKey(lore))
+            if (O2PotionMap.containsKey(lore.toLowerCase()))
             {
-               return getPotionFromType(O2PotionMap.get(lore));
+               return getPotionFromType(O2PotionMap.get(lore.toLowerCase()));
             }
          }
       }
@@ -225,30 +220,10 @@ public class O2Potions
     */
    public O2PotionType getPotionTypeByName (String name)
    {
-      if (O2PotionMap.containsKey(name))
-         return O2PotionMap.get(name);
+      if (O2PotionMap.containsKey(name.toLowerCase()))
+         return O2PotionMap.get(name.toLowerCase());
       else
          return null;
-   }
-
-   /**
-    * Get potion name by type
-    *
-    * @param potionType the potion type
-    * @return the name if found, null otherwise
-    */
-   public String getPotionNameByType (O2PotionType potionType)
-   {
-      if (O2PotionMap.containsValue(potionType))
-      {
-         for (Entry<String, O2PotionType> e : O2PotionMap.entrySet())
-         {
-            if (e.getValue().equals(potionType))
-               return e.getKey();
-         }
-      }
-
-      return null;
    }
 
    /**

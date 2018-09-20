@@ -35,6 +35,8 @@ public final class COLORO_OSTRUM extends ColoroSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.COLORO_OSTRUM;
+      setUsesModifier();
+
       color = DyeColor.PURPLE;
    }
 }

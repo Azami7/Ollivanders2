@@ -50,6 +50,9 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.AVIFORS;
+      setUsesModifier();
+
       if (Ollivanders2.mcVersionCheck())
       {
          targetType = EntityType.PARROT;

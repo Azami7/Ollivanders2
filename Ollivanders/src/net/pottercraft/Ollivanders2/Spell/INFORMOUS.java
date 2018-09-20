@@ -65,6 +65,8 @@ public final class INFORMOUS extends Arithmancy
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INFORMOUS;
+      setUsesModifier();
+
       lifeTime = usesModifier * 16;
    }
 

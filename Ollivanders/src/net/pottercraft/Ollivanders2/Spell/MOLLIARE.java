@@ -45,6 +45,7 @@ public final class MOLLIARE extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.MOLLIARE;
+      setUsesModifier();
    }
 
    @Override

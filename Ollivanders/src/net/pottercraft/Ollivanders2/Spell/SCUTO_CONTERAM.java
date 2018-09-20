@@ -39,6 +39,7 @@ public final class SCUTO_CONTERAM extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.SCUTO_CONTERAM;
+      setUsesModifier();
    }
 
    @Override

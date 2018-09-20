@@ -70,7 +70,7 @@ public abstract class O2Spell implements Teachable
    /**
     * The modifier for this spell based on usage. This is for spells that change behavior based on the caster's experience.
     */
-   public double usesModifier;
+   public double usesModifier = 1;
 
    /**
     * The vector of the projectile.
@@ -137,36 +137,9 @@ public abstract class O2Spell implements Teachable
       this.player = player;
       p = plugin;
 
-      if (!p.canCast(player, spellType, true))
-      {
-         kill();
-         return;
-      }
-
-      spellUses = p.getSpellNum(player, spellType);
-      usesModifier = spellUses;
-      boolean fastLearning = false;
-
       vector = location.getDirection().normalize();
       location.add(vector);
       this.rightWand = rightWand;
-
-      usesModifier = getUsesModifier();
-
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
-      {
-         fastLearning = true;
-      }
-      else if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
-      {
-         usesModifier *= 2;
-      }
-
-      p.incSpellCount(player, spellType);
-      if (fastLearning)
-      {
-         p.incSpellCount(player, spellType);
-      }
    }
 
    /**
@@ -295,15 +268,17 @@ public abstract class O2Spell implements Teachable
    }
 
    /**
-    * Provides the uses modifier that takes into account spell uses and wand type. Returns 10.0 if the uses are 100 and the right wand is held.
-    *
-    * @return Uses modifier
+    * Sets the uses modifier that takes into account spell uses and wand type. Returns 10.0 if the uses are 100 and the right wand is held.
     */
-   private double getUsesModifier ()
+   protected void setUsesModifier ()
    {
-      double modifier = Math.sqrt(p.getSpellNum(player, spellType)) / rightWand;
+      spellUses = p.getSpellNum(player, spellType);
+      usesModifier = Math.sqrt(spellUses) / rightWand;
 
-      return modifier;
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+      {
+         usesModifier *= 2;
+      }
    }
 
    /**
@@ -386,11 +361,12 @@ public abstract class O2Spell implements Teachable
    @Override
    public String getName ()
    {
-      Ollivanders2Common common = new Ollivanders2Common(p);
-
+      /*
       String spellTypeString = spellType.toString().toLowerCase();
-      String name = common.firstLetterCapitalize(spellTypeString.replace("_", " "));
+      String name = Ollivanders2Common.firstLetterCapitalize(spellTypeString.replace("_", " "));
 
       return name;
+      */
+      return spellType.getSpellName();
    }
 }

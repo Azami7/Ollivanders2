@@ -46,6 +46,7 @@ public final class CARPE_RETRACTUM extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.CARPE_RETRACTUM;
+      setUsesModifier();
    }
 
    @Override

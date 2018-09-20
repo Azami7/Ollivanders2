@@ -44,6 +44,7 @@ public final class PROTEGO_HORRIBILIS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PROTEGO_HORRIBILIS;
+      setUsesModifier();
    }
 
    @Override

@@ -44,6 +44,7 @@ public final class REPELLO_MUGGLETON extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.REPELLO_MUGGLETON;
+      setUsesModifier();
    }
 
    @Override

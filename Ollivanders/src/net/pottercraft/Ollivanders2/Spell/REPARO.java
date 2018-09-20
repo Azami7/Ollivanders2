@@ -47,6 +47,7 @@ public final class REPARO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.REPARO;
+      setUsesModifier();
    }
 
    @Override

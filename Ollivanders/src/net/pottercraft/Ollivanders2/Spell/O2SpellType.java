@@ -1,5 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
+
 /**
  * Represents allowable spells.
  *
@@ -173,9 +175,22 @@ public enum O2SpellType
     *
     * @return the classname for this spell type
     */
-   public Class getClassName()
+   public Class getClassName ()
    {
       return className;
+   }
+
+   /**
+    * Get the spell name for this spell type.
+    *
+    * @return the spell name for this spell type.
+    */
+   public String getSpellName ()
+   {
+      String spellTypeString = this.toString().toLowerCase();
+      String name = Ollivanders2Common.firstLetterCapitalize(spellTypeString.replace("_", " "));
+
+      return name;
    }
 
    /**

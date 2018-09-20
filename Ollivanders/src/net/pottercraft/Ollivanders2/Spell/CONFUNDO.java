@@ -43,6 +43,8 @@ public final class CONFUNDO extends ConfundusSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.CONFUNDO;
+      setUsesModifier();
+
       modifier = 1;
    }
 }

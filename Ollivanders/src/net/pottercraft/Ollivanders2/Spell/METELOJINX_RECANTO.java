@@ -37,6 +37,7 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.METELOJINX_RECANTO;
+      setUsesModifier();
       storm = false;
    }
 }

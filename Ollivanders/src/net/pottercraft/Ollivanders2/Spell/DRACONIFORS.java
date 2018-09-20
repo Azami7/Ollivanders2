@@ -47,6 +47,7 @@ public final class DRACONIFORS extends FriendlyMobDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.DRACONIFORS;
+      setUsesModifier();
 
       targetType = EntityType.ENDER_DRAGON;
       disguiseType = DisguiseType.getType(targetType);

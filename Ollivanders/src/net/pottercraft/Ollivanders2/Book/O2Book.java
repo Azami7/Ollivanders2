@@ -294,13 +294,13 @@ public abstract class O2Book
 
       for (O2SpellType spellType : spells)
       {
-         String s = p.common.firstLetterCapitalize(p.common.enumRecode(spellType.toString()));
+         String s = spellType.getSpellName();
          lore.add(s);
       }
 
       for (O2PotionType potionType : potions)
       {
-         String s = p.potions.getPotionNameByType(potionType);
+         String s = potionType.getPotionName();
          lore.add(s);
       }
 

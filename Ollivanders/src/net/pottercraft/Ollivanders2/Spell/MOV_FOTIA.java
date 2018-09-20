@@ -48,6 +48,7 @@ public final class MOV_FOTIA extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.MOV_FOTIA;
+      setUsesModifier();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);

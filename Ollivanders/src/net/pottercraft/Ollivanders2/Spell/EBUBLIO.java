@@ -47,6 +47,7 @@ public final class EBUBLIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.EBUBLIO;
+      setUsesModifier();
    }
 
    public void checkEffect ()

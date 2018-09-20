@@ -80,6 +80,8 @@ public abstract class ShapeShiftSuper extends O2Effect
 
       if (form != null)
       {
+         p.getLogger().info("transforming " + p.players.getPlayer(targetID).getPlayerName());
+
          // disguisePlayer the player
          DisguiseType disguiseType = DisguiseType.getType(form);
          disguise = new MobDisguise(disguiseType);

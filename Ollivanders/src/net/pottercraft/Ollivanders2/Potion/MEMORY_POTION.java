@@ -25,7 +25,6 @@ public final class MEMORY_POTION extends O2Potion
 
       potionType = O2PotionType.MEMORY_POTION;
       potionLevel = PotionLevel.NEWT;
-      name = "Memory Potion";
 
       ingredients.put(IngredientType.MANDRAKE_LEAF, 3);
       ingredients.put(IngredientType.JOBBERKNOLL_FEATHER, 2);

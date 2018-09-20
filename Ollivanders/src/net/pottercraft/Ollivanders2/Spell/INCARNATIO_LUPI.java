@@ -43,6 +43,8 @@ public final class INCARNATIO_LUPI extends PlayerDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCARNATIO_LUPI;
+      setUsesModifier();
+
       targetType = EntityType.WOLF;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

@@ -60,6 +60,8 @@ public final class PORTUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PORTUS;
+      setUsesModifier();
+
       this.wordsArray = wordsArray;
    }
 

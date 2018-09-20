@@ -45,6 +45,7 @@ public final class FLIPENDO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.FLIPENDO;
+      setUsesModifier();
    }
 
    public void checkEffect ()

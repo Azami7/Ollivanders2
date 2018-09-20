@@ -33,6 +33,8 @@ public final class COLORO_VERMICULO extends ColoroSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.COLORO_VERMICULO;
+      setUsesModifier();
+
       color = DyeColor.RED;
    }
 }

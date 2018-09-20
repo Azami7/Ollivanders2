@@ -52,6 +52,7 @@ public class LOQUELA_INEPTIAS extends Charms
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.LOQUELA_INEPTIAS;
+      setUsesModifier();
    }
 
    @Override

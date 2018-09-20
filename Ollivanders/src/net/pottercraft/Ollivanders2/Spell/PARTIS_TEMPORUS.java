@@ -45,6 +45,8 @@ public final class PARTIS_TEMPORUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PARTIS_TEMPORUS;
+      setUsesModifier();
+
       move = true;
    }
 

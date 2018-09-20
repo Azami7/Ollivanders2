@@ -48,6 +48,7 @@ public final class ENTOMORPHIS extends PlayerDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ENTOMORPHIS;
+      setUsesModifier();
 
       targetType = EntityType.SPIDER;
       disguiseType = DisguiseType.getType(targetType);

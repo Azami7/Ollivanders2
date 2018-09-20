@@ -45,6 +45,7 @@ public final class DEPULSO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.DEPULSO;
+      setUsesModifier();
    }
 
    public void checkEffect ()

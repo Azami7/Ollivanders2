@@ -47,6 +47,8 @@ public final class LAPIFORS extends FriendlyMobDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LAPIFORS;
+      setUsesModifier();
+
       targetType = EntityType.RABBIT;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

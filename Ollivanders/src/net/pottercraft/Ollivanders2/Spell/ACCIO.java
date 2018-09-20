@@ -48,6 +48,7 @@ public final class ACCIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ACCIO;
+      setUsesModifier();
    }
 
    @Override

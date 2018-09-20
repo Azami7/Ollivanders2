@@ -35,6 +35,8 @@ public final class COLORO_AURANTIACO extends ColoroSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.COLORO_AURANTIACO;
+      setUsesModifier();
+
       color = DyeColor.ORANGE;
    }
 }

@@ -48,6 +48,7 @@ public class SPONGIFY extends BlockTransfigurationSuper
 
       spellType = O2SpellType.SPONGIFY;
       branch = O2MagicBranch.CHARMS;
+      setUsesModifier();
 
       transfigureType = Material.SLIME_BLOCK;
       spellDuration = (int)(1200 * usesModifier);

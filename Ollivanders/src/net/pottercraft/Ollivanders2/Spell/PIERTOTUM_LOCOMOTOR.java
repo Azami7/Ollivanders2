@@ -47,9 +47,7 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
-
-      if (Ollivanders2.debug)
-         p.getLogger().info("PIERTOTUM_LOCOMOTOR: create");
+      setUsesModifier();
    }
 
    @Override

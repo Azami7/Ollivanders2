@@ -46,6 +46,7 @@ public final class MUFFLIATO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.MUFFLIATO;
+      setUsesModifier();
    }
 
    @Override

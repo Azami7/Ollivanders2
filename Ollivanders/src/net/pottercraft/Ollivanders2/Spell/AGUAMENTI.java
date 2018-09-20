@@ -49,6 +49,7 @@ public final class AGUAMENTI extends BlockTransfigurationSuper
       branch = O2MagicBranch.CHARMS;
 
       transfigureType = Material.WATER;
+      setUsesModifier();
       spellDuration = (int)(1200 * usesModifier);
       permanent = false;
       radius = 1;

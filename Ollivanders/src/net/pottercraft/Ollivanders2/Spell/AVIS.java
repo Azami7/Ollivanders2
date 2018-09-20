@@ -52,6 +52,7 @@ public final class AVIS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.AVIS;
+      setUsesModifier();
 
       if (usesModifier > 100)
          maxBirds += 10;

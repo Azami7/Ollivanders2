@@ -41,6 +41,8 @@ public final class INCARNATIO_VACCULA extends PlayerDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCARNATIO_VACCULA;
+      setUsesModifier();
+
       int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
       if (rand == 0)
          targetType = EntityType.MUSHROOM_COW;

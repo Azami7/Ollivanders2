@@ -53,6 +53,7 @@ public final class ALIQUAM_FLOO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ALIQUAM_FLOO;
+      setUsesModifier();
    }
 
    public void checkEffect ()

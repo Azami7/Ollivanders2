@@ -51,6 +51,7 @@ public final class PACK extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PACK;
+      setUsesModifier();
    }
 
    @Override

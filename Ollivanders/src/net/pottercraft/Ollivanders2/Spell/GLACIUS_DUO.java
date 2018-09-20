@@ -20,7 +20,7 @@ public final class GLACIUS_DUO extends GlaciusSuper
    {
       super();
 
-      spellType = O2SpellType.APARECIUM;
+      spellType = O2SpellType.GLACIUS_DUO;
 
       flavorText = new ArrayList<String>() {{
          add("A Stronger Freezing Charm");
@@ -41,7 +41,8 @@ public final class GLACIUS_DUO extends GlaciusSuper
    {
       super(plugin, player, rightWand);
 
-      spellType = O2SpellType.APARECIUM;
+      spellType = O2SpellType.GLACIUS_DUO;
+      setUsesModifier();
 
       // 50% duration
       durationModifier = 0.5;

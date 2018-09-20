@@ -52,6 +52,7 @@ public final class DISSENDIUM extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.DISSENDIUM;
+      setUsesModifier();
 
       lifeTime = usesModifier * 16;
       move = true;

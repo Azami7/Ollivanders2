@@ -37,6 +37,7 @@ public final class FINESTRA extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.FINESTRA;
+      setUsesModifier();
    }
 
    public void checkEffect ()

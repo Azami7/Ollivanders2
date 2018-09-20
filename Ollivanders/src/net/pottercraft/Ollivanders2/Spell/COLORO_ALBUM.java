@@ -37,6 +37,8 @@ public final class COLORO_ALBUM extends ColoroSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.COLORO_ALBUM;
+      setUsesModifier();
+
       color = DyeColor.WHITE;
    }
 }

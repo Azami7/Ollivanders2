@@ -44,6 +44,7 @@ public final class FUMOS extends FumosSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.FUMOS;
+      setUsesModifier();
       strength = 1;
    }
 }

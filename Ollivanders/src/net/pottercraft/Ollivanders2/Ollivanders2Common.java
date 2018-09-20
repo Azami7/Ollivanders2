@@ -526,7 +526,7 @@ public class Ollivanders2Common
     * @param str - String to convert.
     * @return String with correct formatting.
     */
-   public String firstLetterCapitalize (String str)
+   public static String firstLetterCapitalize (String str)
    {
       StringBuilder sb = new StringBuilder();
       String[] wordList = str.split(" ");

@@ -40,6 +40,7 @@ public final class CRESCERE_PROTEGAT extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.CRESCERE_PROTEGAT;
+      setUsesModifier();
    }
 
    public void checkEffect ()

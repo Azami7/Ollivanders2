@@ -45,6 +45,7 @@ public final class PROTEGO_MAXIMA extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PROTEGO_MAXIMA;
+      setUsesModifier();
    }
 
    @Override

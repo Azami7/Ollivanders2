@@ -38,6 +38,8 @@ public class INCARNATIO_URSUS extends PlayerDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCARNATIO_URSUS;
+      setUsesModifier();
+
       targetType = EntityType.POLAR_BEAR;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);

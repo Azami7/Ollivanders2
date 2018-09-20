@@ -43,6 +43,7 @@ public class POINT_ME extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.POINT_ME;
+      setUsesModifier();
    }
 
 

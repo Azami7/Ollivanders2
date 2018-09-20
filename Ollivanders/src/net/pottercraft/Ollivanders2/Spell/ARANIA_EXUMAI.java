@@ -46,6 +46,7 @@ public final class ARANIA_EXUMAI extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ARANIA_EXUMAI;
+      setUsesModifier();
    }
 
    public void checkEffect ()

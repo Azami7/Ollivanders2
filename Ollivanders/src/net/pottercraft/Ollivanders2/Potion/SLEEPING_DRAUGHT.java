@@ -26,9 +26,8 @@ public class SLEEPING_DRAUGHT extends O2Potion
 
       potionType = O2PotionType.SLEEPING_DRAUGHT;
       potionLevel = PotionLevel.BEGINNER;
-      text = "A Sleeping Draught causes the drinker to fall almost instantly into a deep, dreamless sleep.";
 
-      name = "Sleeping Draught";
+      text = "A Sleeping Draught causes the drinker to fall almost instantly into a deep, dreamless sleep.";
 
       ingredients.put(IngredientType.LAVENDER_SPRIG, 4);
       ingredients.put(IngredientType.FLOBBERWORM_MUCUS, 2);

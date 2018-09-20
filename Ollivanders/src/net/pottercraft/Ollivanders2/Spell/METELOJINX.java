@@ -37,6 +37,8 @@ public final class METELOJINX extends MetelojinxSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.METELOJINX;
+      setUsesModifier();
+
       storm = true;
    }
 }
