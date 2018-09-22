@@ -152,17 +152,6 @@ public class O2StationarySpells
     */
    public void saveO2StationarySpells ()
    {
-      try
-      {
-         Ollivanders2.SLAPI.save(O2StationarySpells, "plugins/Ollivanders2/stationary.bin");
-         p.getLogger().finest("Saved stationary.bin");
-      }
-      catch (Exception e)
-      {
-         p.getLogger().warning("Could not save stationary.bin");
-      }
-
-      // serialize the stationary spell list
       List <Map<String, String>> serializedList = serializeO2StationarySpells();
 
       GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
