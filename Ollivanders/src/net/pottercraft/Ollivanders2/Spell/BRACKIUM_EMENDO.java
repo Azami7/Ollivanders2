@@ -56,9 +56,12 @@ public final class BRACKIUM_EMENDO extends Healing
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> entities = getLivingEntities(2);
+      List<LivingEntity> entities = getLivingEntities(1.5);
       for (LivingEntity entity : entities)
       {
+         if (entity.getUniqueId() == player.getUniqueId())
+            continue;
+
          EntityType type = entity.getType();
          if (type == EntityType.SKELETON || type == EntityType.WITHER_SKULL || type == EntityType.WITHER)
          {

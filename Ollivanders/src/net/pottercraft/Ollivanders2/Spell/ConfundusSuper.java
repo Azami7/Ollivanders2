@@ -43,14 +43,19 @@ public abstract class ConfundusSuper extends Charms
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> entities = getLivingEntities(2);
+      List<LivingEntity> entities = getLivingEntities(1.5);
       if (entities.size() > 0)
       {
-         LivingEntity entity = entities.get(0);
-         modifier = modifier * (int) usesModifier;
-         PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, modifier * 20, modifier);
-         entity.addPotionEffect(confusion);
-         kill();
+         for (LivingEntity entity : entities)
+         {
+            if (entity.getUniqueId() == player.getUniqueId())
+               continue;
+
+            modifier = modifier * (int) usesModifier;
+            PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, modifier * 20, modifier);
+            entity.addPotionEffect(confusion);
+            kill();
+         }
       }
    }
 }

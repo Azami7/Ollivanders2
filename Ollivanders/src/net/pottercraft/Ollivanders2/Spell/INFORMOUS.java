@@ -74,8 +74,11 @@ public final class INFORMOUS extends Arithmancy
    public void checkEffect ()
    {
       move();
-      for (LivingEntity entity : getLivingEntities(2))
+      for (LivingEntity entity : getLivingEntities(1.5))
       {
+         if (entity.getUniqueId() == player.getUniqueId())
+            continue;
+
          if (!iEntity.contains(entity))
          {
             player.sendMessage(Ollivanders2.chatColor + entity.getType().toString() + " has " + ((Damageable) entity).getHealth() + " health.");

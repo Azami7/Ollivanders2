@@ -205,6 +205,9 @@ public abstract class Transfiguration extends O2Spell
          move();
          for (Entity e : getCloseEntities(1))
          {
+            if (e.getUniqueId() == player.getUniqueId())
+               continue;
+
             if (e.getType() != EntityType.PLAYER)
             {
                transfigureEntity(e, type, stack);

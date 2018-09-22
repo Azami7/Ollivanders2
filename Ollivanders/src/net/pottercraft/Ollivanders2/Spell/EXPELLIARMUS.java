@@ -58,8 +58,11 @@ public final class EXPELLIARMUS extends Charms
    public void checkEffect ()
    {
       move();
-      for (LivingEntity entity : getLivingEntities(2))
+      for (LivingEntity entity : getLivingEntities(1.5))
       {
+         if (entity.getUniqueId() == player.getUniqueId())
+            continue;
+
          ItemStack itemInHand = entity.getEquipment().getItemInMainHand().clone();
          if (itemInHand.getType() != Material.AIR)
          {
