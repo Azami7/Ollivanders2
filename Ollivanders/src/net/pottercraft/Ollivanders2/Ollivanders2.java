@@ -553,7 +553,8 @@ public class Ollivanders2 extends JavaPlugin
          {
             for (O2EffectType effectType : effects)
             {
-               summary = summary + effectType.toString() + "\n";
+
+               summary = summary + common.enumRecode(effectType.toString()) + "\n";
             }
          }
 

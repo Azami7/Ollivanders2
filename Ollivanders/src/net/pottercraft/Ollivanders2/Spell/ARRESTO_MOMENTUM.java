@@ -55,9 +55,12 @@ public final class ARRESTO_MOMENTUM extends Charms
    {
       move();
       double modifier = usesModifier;
-      List<LivingEntity> entities = getLivingEntities(2);
+      List<LivingEntity> entities = getLivingEntities(1.5);
       for (LivingEntity entity : entities)
       {
+         if (entity.getUniqueId() == player.getUniqueId())
+            continue;
+
          double speed = entity.getVelocity().length() / (Math.pow(modifier, 2));
          entity.setVelocity(entity.getVelocity().normalize().multiply(speed));
          entity.setFallDistance((float) (entity.getFallDistance() / modifier));

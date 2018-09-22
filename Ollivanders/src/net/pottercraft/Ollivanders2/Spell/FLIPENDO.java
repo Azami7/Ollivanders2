@@ -51,9 +51,12 @@ public final class FLIPENDO extends Charms
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> living = this.getLivingEntities(2);
+      List<LivingEntity> living = this.getLivingEntities(1.5);
       for (LivingEntity live : living)
       {
+         if (live.getUniqueId() == player.getUniqueId())
+            continue;
+
          if (live instanceof Player)
          {
             live.setVelocity(player.getLocation().getDirection().normalize().multiply(usesModifier / 10));

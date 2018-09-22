@@ -18,7 +18,7 @@ public enum O2EffectType
    FLYING (net.pottercraft.Ollivanders2.Effect.FLYING.class),
    HIGHER_SKILL (HIGHER_SKILL.class),
    IMPROVED_BOOK_LEARNING(IMPROVED_BOOK_LEARNING.class),
-   LEVICORPUS (net.pottercraft.Ollivanders2.Effect.LEVICORPUS.class),
+   SUSPENSION (net.pottercraft.Ollivanders2.Effect.SUSPENSION.class),
    LYCANTHROPY (net.pottercraft.Ollivanders2.Effect.LYCANTHROPY.class),
    LYCANTHROPY_SPEECH (net.pottercraft.Ollivanders2.Effect.LYCANTHROPY_SPEECH.class),
    LYCANTHROPY_RELIEF (LYCANTHROPY_RELIEF.class),

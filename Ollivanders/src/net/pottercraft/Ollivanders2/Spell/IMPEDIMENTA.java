@@ -55,9 +55,12 @@ public final class IMPEDIMENTA extends DarkArts
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> entities = getLivingEntities(2);
+      List<LivingEntity> entities = getLivingEntities(1.5);
       for (LivingEntity entity : entities)
       {
+         if (entity.getUniqueId() == player.getUniqueId())
+            continue;
+
          int modifier = (int) usesModifier;
          PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, modifier * 20, modifier);
          entity.addPotionEffect(slow);

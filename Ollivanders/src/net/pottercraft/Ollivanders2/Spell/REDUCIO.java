@@ -51,6 +51,9 @@ public final class REDUCIO extends Charms
       move();
       for (LivingEntity live : getLivingEntities(usesModifier))
       {
+         if (live.getUniqueId() == player.getUniqueId())
+            continue;
+
          if (live instanceof Giant)
          {
             live.getWorld().spawnEntity(live.getLocation(), EntityType.ZOMBIE);

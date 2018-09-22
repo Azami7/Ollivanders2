@@ -80,8 +80,11 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
+import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -125,13 +128,13 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
       {
-         // do not allow the player to move if they are asleep
-         Location fromLoc = event.getFrom();
-         event.setTo(fromLoc);
-
-         player.sendMessage(Ollivanders2.chatColor + "You are in a deep sleep and cannot move.");
+         // do not allow the player to move if they are asleep or suspended
+         //Location fromLoc = event.getFrom();
+         //event.setTo(fromLoc);
+         event.setCancelled(true);
       }
       else
       {
@@ -261,7 +264,10 @@ public class OllivandersListener implements Listener
          effect = p.players.playerEffects.getEffect(sender.getUniqueId(), O2EffectType.MUTED_SPEECH);
 
          if (effect != null)
-            ((MUTED_SPEECH)effect).doSilencio(event);
+         {
+            ((MUTED_SPEECH) effect).doSilencio(event);
+            return;
+         }
       }
       else // speech replacement effects
       {
@@ -824,7 +830,8 @@ public class OllivandersListener implements Listener
       //
       if ((event.getHand() == EquipmentSlot.HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
-         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+               || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
          {
             event.setCancelled(true);
             return;
@@ -879,7 +886,8 @@ public class OllivandersListener implements Listener
       //
       else if ((event.getHand() == EquipmentSlot.OFF_HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
-         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+               || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
          {
             event.setCancelled(true);
             return;
@@ -1797,9 +1805,10 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
       {
-         // cannot interact with anything while asleep
+         // cannot interact with anything while asleep or suspended
          event.setCancelled(true);
          return;
       }
@@ -1818,6 +1827,58 @@ public class OllivandersListener implements Listener
       if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
       {
          // cannot sleep while awake effect is active
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   @EventHandler (priority = EventPriority.HIGH)
+   public void playerFlightSuspension (PlayerToggleFlightEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   @EventHandler (priority = EventPriority.HIGH)
+   public void playerSneakSuspension (PlayerToggleSneakEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   @EventHandler (priority = EventPriority.HIGH)
+   public void playerSprintSuspension (PlayerToggleSprintEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   @EventHandler (priority = EventPriority.HIGH)
+   public void playerVelocitySuspension (PlayerVelocityEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      {
          event.setCancelled(true);
          return;
       }

@@ -51,8 +51,11 @@ public final class MULTICORFORS extends Charms
    public void checkEffect ()
    {
       move();
-      for (LivingEntity live : getLivingEntities(2))
+      for (LivingEntity live : getLivingEntities(1.5))
       {
+         if (live.getUniqueId() == player.getUniqueId())
+            continue;
+
          EntityEquipment equipment = live.getEquipment();
          for (ItemStack armor : equipment.getArmorContents())
          {
