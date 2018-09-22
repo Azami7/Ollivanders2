@@ -4,7 +4,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 
 import java.util.ArrayList;
 
@@ -57,8 +57,8 @@ public final class MUFFLIATO extends Charms
             && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
       {
          int duration = (int) usesModifier * 1200;
-         net.pottercraft.Ollivanders2.StationarySpell.MUFFLIATO muffliato = new net.pottercraft.Ollivanders2.StationarySpell.MUFFLIATO(p, player, location,
-               StationarySpells.MUFFLIATO, 5, duration);
+         net.pottercraft.Ollivanders2.StationarySpell.MUFFLIATO muffliato = new net.pottercraft.Ollivanders2.StationarySpell.MUFFLIATO(p, player.getUniqueId(), location,
+               O2StationarySpellType.MUFFLIATO, 5, duration);
          muffliato.flair(20);
          p.stationarySpells.addStationarySpell(muffliato);
          kill();

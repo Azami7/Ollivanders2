@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.StationarySpell;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
@@ -9,7 +10,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
@@ -21,9 +21,29 @@ public abstract class ExtraDimensional extends StationarySpellObj
    int dimenRadius;
    private Location edLoc;
 
-   public ExtraDimensional (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration, Integer dimenRadius)
+   /**
+    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+    *
+    * @param plugin a callback to the MC plugin
+    */
+   public ExtraDimensional (Ollivanders2 plugin)
    {
-      super(plugin, player, location, name, radius, duration);
+      super(plugin);
+   }
+
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param pid the player who cast the spell
+    * @param location the center location of the spell
+    * @param type the type of this spell
+    * @param radius the radius for this spell
+    * @param duration the duration of the spell
+    */
+   public ExtraDimensional (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius, Integer duration, Integer dimenRadius)
+   {
+      super(plugin, pid, location, type, radius, duration);
       this.dimenRadius = dimenRadius;
       createSpace();
    }

@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
 import org.bukkit.material.Openable;
 
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 
 import java.util.ArrayList;
 
@@ -65,7 +65,7 @@ public final class DISSENDIUM extends Charms
       if (move)
       {
          move();
-         if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, location))
+         if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, location))
          {
             kill();
             return;

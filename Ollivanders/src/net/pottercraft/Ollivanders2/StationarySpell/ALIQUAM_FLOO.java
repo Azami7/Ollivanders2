@@ -4,14 +4,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -32,19 +31,36 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
 
    private final String flooNameLabel = "name";
 
-   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                        String flooName)
+   /**
+    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+    *
+    * @param plugin a callback to the MC plugin
+    */
+   public ALIQUAM_FLOO (Ollivanders2 plugin)
    {
-      super(plugin, player, location, name, radius, duration);
-      this.flooName = flooName;
+      super(plugin);
+
+      spellType = O2StationarySpellType.ALIQUAM_FLOO;
    }
 
-   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                        Map<String, String> spellData)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param pid the player who cast the spell
+    * @param location the center location of the spell
+    * @param type the type of this spell
+    * @param radius the radius for this spell
+    * @param duration the duration of the spell
+    * @param flooName the name of this floo location
+    */
+   public ALIQUAM_FLOO (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
+                        Integer duration, String flooName)
    {
-      super(plugin, player, location, name, radius, duration);
+      super(plugin, pid, location, type, radius, duration);
 
-      deserializeSpellData(spellData);
+      spellType = O2StationarySpellType.ALIQUAM_FLOO;
+      this.flooName = flooName;
    }
 
    @Override
@@ -99,9 +115,9 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
    }
 
    /**
-    * Is it acceping floo destinations?
+    * Is it accepting floo destinations?
     *
-    * @return
+    * @return true if this floo destination is online, false otherwise
     */
    public boolean isWorking ()
    {

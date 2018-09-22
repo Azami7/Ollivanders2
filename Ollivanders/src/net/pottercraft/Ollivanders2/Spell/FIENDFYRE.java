@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -63,7 +63,7 @@ public final class FIENDFYRE extends DarkArts
       List<StationarySpellObj> stationaries = p.stationarySpells.getStationarySpellsAtLocation(location);
       for (StationarySpellObj stationary : stationaries)
       {
-         if (stationary.name.equals(StationarySpells.HORCRUX))
+         if (stationary.getSpellType().equals(O2StationarySpellType.HORCRUX))
          {
             stationary.kill();
          }

@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 
@@ -18,17 +18,33 @@ import net.pottercraft.Ollivanders2.Spell.O2Spell;
  */
 public class PROTEGO_HORRIBILIS extends StationarySpellObj implements StationarySpell
 {
-   public PROTEGO_HORRIBILIS (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration)
+   /**
+    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+    *
+    * @param plugin a callback to the MC plugin
+    */
+   public PROTEGO_HORRIBILIS (Ollivanders2 plugin)
    {
-      super(plugin, player, location, name, radius, duration);
+      super(plugin);
+
+      spellType = O2StationarySpellType.PROTEGO_HORRIBILIS;
    }
 
-   public PROTEGO_HORRIBILIS (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                              Map<String, String> spellData)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param pid the player who cast the spell
+    * @param location the center location of the spell
+    * @param type the type of this spell
+    * @param radius the radius for this spell
+    * @param duration the duration of the spell
+    */
+   public PROTEGO_HORRIBILIS (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius, Integer duration)
    {
-      super(plugin, player, location, name, radius, duration);
+      super(plugin, pid, location, type, radius, duration);
 
-      deserializeSpellData(spellData);
+      spellType = O2StationarySpellType.PROTEGO_HORRIBILIS;
    }
 
    @Override
