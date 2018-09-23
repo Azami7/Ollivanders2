@@ -213,7 +213,18 @@ public class O2Houses
     */
    public boolean isSorted (Player player)
    {
-      return O2HouseMap.containsKey(player.getUniqueId());
+      return isSorted(player.getUniqueId());
+   }
+
+   /**
+    * Determines if a player has been sorted already or not.
+    *
+    * @param pid the uuid of the player to check
+    * @return true if the player has been sorted, false otherwise.
+    */
+   public boolean isSorted (UUID pid)
+   {
+      return O2HouseMap.containsKey(pid);
    }
 
    /**
@@ -240,18 +251,28 @@ public class O2Houses
     */
    public O2HouseType getHouse (Player player)
    {
+      return getHouse(player.getUniqueId());
+   }
+
+   /**
+    * Get the house a player is sorted in to.
+    *
+    * @param pid the uuid of the player to search for
+    * @return the House the player is sorted in to, null otherwise.
+    */
+   public O2HouseType getHouse (UUID pid)
+   {
       O2HouseType houseType = null;
 
-      if (O2HouseMap.containsKey(player.getUniqueId()))
+      if (O2HouseMap.containsKey(pid))
       {
          try
          {
-            houseType = O2HouseMap.get(player.getUniqueId());
-            p.getLogger().info(player.getDisplayName() + " is in " + houseType.getName());
+            houseType = O2HouseMap.get(pid);
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failure retrieving player " + player.getName() + " from O2HouseMap.");
+            p.getLogger().warning("Failure retrieving player from O2HouseMap.");
             if (Ollivanders2.debug)
                e.printStackTrace();
          }
