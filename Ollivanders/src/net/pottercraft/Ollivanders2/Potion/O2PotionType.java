@@ -11,9 +11,9 @@ import net.pottercraft.Ollivanders2.Ollivanders2Common;
 public enum O2PotionType
 {
    ANIMAGUS_POTION (net.pottercraft.Ollivanders2.Potion.ANIMAGUS_POTION.class),
-   ANTIDOTE_POTION (net.pottercraft.Ollivanders2.Potion.ANTIDOTE_POTION.class),
    BABBLING_BEVERAGE (net.pottercraft.Ollivanders2.Potion.BABBLING_BEVERAGE.class),
    BARUFFIOS_BRAIN_ELIXIR (net.pottercraft.Ollivanders2.Potion.BARUFFIOS_BRAIN_ELIXIR.class),
+   COMMON_ANTIDOTE_POTION(net.pottercraft.Ollivanders2.Potion.COMMON_ANTIDOTE_POTION.class),
    CURE_FOR_BOILS (net.pottercraft.Ollivanders2.Potion.CURE_FOR_BOILS.class),
    DRAUGHT_OF_LIVING_DEATH (net.pottercraft.Ollivanders2.Potion.DRAUGHT_OF_LIVING_DEATH.class),
    FORGETFULLNESS_POTION (net.pottercraft.Ollivanders2.Potion.FORGETFULLNESS_POTION.class),

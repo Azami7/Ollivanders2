@@ -20,7 +20,7 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book
       author = "Arsenius Jigger";
       branch = O2MagicBranch.POTIONS;
 
-      potions.add(O2PotionType.ANTIDOTE_POTION);
+      potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
       potions.add(O2PotionType.WIT_SHARPENING_POTION);
       potions.add(O2PotionType.FORGETFULLNESS_POTION);
       potions.add(O2PotionType.HERBICIDE_POTION);

@@ -23,7 +23,7 @@ public class O2Effects
 
    static Semaphore semaphore = new Semaphore(1);
 
-   public final String effectLabel = "Effect_";
+   public final String effectLabelPrefix = "Effect_";
 
    /**
     * Thread-safe storage class for the effect data on players.
@@ -334,7 +334,7 @@ public class O2Effects
          return;
 
       if (Ollivanders2.debug)
-         p.getLogger().info("Applying effects for " + p.players.getPlayer(pid).getPlayerName());
+         p.getLogger().info("Applying effects for " + p.getServer().getPlayer(pid).getDisplayName());
 
       for (Entry<O2EffectType, Integer> entry : savedEffects.entrySet())
       {
@@ -419,7 +419,7 @@ public class O2Effects
          Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
          for (Entry<O2EffectType, Integer> entry : savedEffects.entrySet())
          {
-            serialized.put(effectLabel + entry.getKey().toString(), entry.getValue().toString());
+            serialized.put(effectLabelPrefix + entry.getKey().toString(), entry.getValue().toString());
          }
       }
 
@@ -440,7 +440,7 @@ public class O2Effects
 
       Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
 
-      String effectName = effectsString.replaceFirst(effectLabel, "");
+      String effectName = effectsString.replaceFirst(effectLabelPrefix, "");
       Integer duration = p.common.integerFromString(durationString);
 
       if (duration != null)
@@ -513,7 +513,7 @@ public class O2Effects
       effectsData.updatePlayerActiveEffects(pid, playerEffects);
 
       if (Ollivanders2.debug)
-         p.getLogger().info("Added effect " + e.effectType.toString() + " to " + p.players.getPlayer(pid).getPlayerName());
+         p.getLogger().info("Added effect " + e.effectType.toString() + " to " + p.getServer().getPlayer(pid).getDisplayName());
    }
 
    /**
@@ -543,7 +543,7 @@ public class O2Effects
       effectsData.updatePlayerActiveEffects(pid, playerEffects);
 
       if (Ollivanders2.debug)
-         p.getLogger().info("Removed effect " + effectType.toString() + " to " + p.players.getPlayer(pid).getPlayerName());
+         p.getLogger().info("Removed effect " + effectType.toString() + " to " + p.getServer().getPlayer(pid).getDisplayName());
    }
 
    /**

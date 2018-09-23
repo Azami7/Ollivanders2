@@ -164,6 +164,7 @@ public class O2Houses
          O2HouseType houseType = e.getKey();
 
          houseType.setScore(e.getValue());
+         p.getLogger().info(e.getKey().getName() + " : " + e.getValue());
       }
    }
 
@@ -293,9 +294,6 @@ public class O2Houses
    public synchronized boolean setHousePoints (O2HouseType houseType, int points)
    {
       houseType.setScore(points);
-
-      if (Ollivanders2.debug)
-         p.getLogger().info("Set house points for " + houseType.getName() + " to " + points);
 
       return updateScoreboard();
    }
@@ -455,8 +453,6 @@ public class O2Houses
          {
             updateScoreboardScore(houseType);
          }
-
-         p.getLogger().info("Updated scoreboard with current house points...");
 
          return true;
       }

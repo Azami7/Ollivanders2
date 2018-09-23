@@ -25,7 +25,7 @@ public class THE_HEALERS_HELPMATE extends O2Book
       spells.add(O2SpellType.AGUAMENTI);
       spells.add(O2SpellType.BRACKIUM_EMENDO);
       spells.add(O2SpellType.EPISKEY);
-      potions.add(O2PotionType.ANTIDOTE_POTION);
+      potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
       // wound cleaning potion
       // pepperup potion
       // wideye potion

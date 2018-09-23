@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import net.pottercraft.Ollivanders2.Effect.O2Effects;
 import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 import org.bukkit.entity.EntityType;
@@ -37,6 +38,12 @@ public class O2Players
    private Ollivanders2 p;
 
    /**
+    * A count of the player records read at start. This can be used to prevent writing back out at server
+    * shut down if something goes wrong on plugin load.
+    */
+   private int recordCount = 0;
+
+   /**
     * Labels for serializing player data
     */
    private final String nameLabel = "Name";
@@ -51,6 +58,8 @@ public class O2Players
    private final String animagusColorLabel = "Animagus_Color";
    private final String muggleLabel = "Muggle";
    private final String yearLabel = "Year";
+   private final String spellLabelPrefix = "Spell_";
+   private final String potionLabelPrefix = "Potion_";
 
    /**
     * Constructor
@@ -140,6 +149,11 @@ public class O2Players
    {
       // serialize the player map
       Map <String, Map<String, String>> serializedMap = serializeO2Players(O2PlayerMap);
+      if (serializedMap == null)
+      {
+         p.getLogger().warning("Something went wrong serializing players, no records will be saved.");
+         return;
+      }
 
       GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
       gsonLayer.writeO2Players(serializedMap);
@@ -175,12 +189,19 @@ public class O2Players
     * Key - UUID
     * ArrayList {{
     *    Name : playerName
+    *    FoundWand : foundWand
     *    WandWood : wandWood
     *    WandCore : wandCore
     *    Souls : souls
     *    Invisible : invisible
     *    Muggleton : muggleton
+    *    Animagus : [EntityType]
+    *    AnimagusColor : [EntityColorType]
+    *    MasterSpell : [Spell Type]
+    *    Year : [Year]
     *    [Spell] : [Count]
+    *    [Potion] : [Count]
+    *    [Effect] : [Duration]
     * }};
     * @param o2PlayerMap a map of all player MC UUIDs and corresponding O2Player object
     * @return all player data as a map of strings per player
@@ -191,6 +212,20 @@ public class O2Players
 
       if (Ollivanders2.debug)
          p.getLogger().info("Serializing O2Players...");
+
+      if (recordCount != 0)
+      {
+         if (o2PlayerMap.size() == 0)
+         {
+            p.getLogger().warning("Something went wrong and all player records lost, skipping save for safety.");
+            return null;
+         }
+
+         if (o2PlayerMap.size() < (recordCount / 2))
+         {
+            p.getLogger().info("Player list is less than half the size when the server started, this may indicate a problem.");
+         }
+      }
 
       for (Map.Entry<UUID, O2Player> e : o2PlayerMap.entrySet())
       {
@@ -292,12 +327,24 @@ public class O2Players
          /**
           * Spell Experience
           */
-         Map<O2SpellType, Integer> spells = o2p.getKnownSpells();
-         if (spells != null)
+         Map<O2SpellType, Integer> knownSpells = o2p.getKnownSpells();
+         if (knownSpells != null)
          {
-            for (Entry<O2SpellType, Integer> s : spells.entrySet())
+            for (Entry<O2SpellType, Integer> s : knownSpells.entrySet())
             {
-               playerData.put(s.getKey().toString(), s.getValue().toString());
+               playerData.put(spellLabelPrefix + s.getKey().toString(), s.getValue().toString());
+            }
+         }
+
+         /**
+          * Potion Experience
+          */
+         Map<O2PotionType, Integer> knownPotions = o2p.getKnownPotions();
+         if (knownPotions != null)
+         {
+            for (Entry<O2PotionType, Integer> p : knownPotions.entrySet())
+            {
+               playerData.put(potionLabelPrefix + p.getKey().toString(), p.getValue().toString());
             }
          }
 
@@ -314,13 +361,19 @@ public class O2Players
     * Key - UUID
     * ArrayList {{
     *    Name : playerName
+    *    FoundWand : foundWand
     *    WandWood : wandWood
     *    WandCore : wandCore
-    *    WandSpell: spell
     *    Souls : souls
     *    Invisible : invisible
     *    Muggleton : muggleton
+    *    Animagus : [EntityType]
+    *    AnimagusColor : [EntityColorType]
+    *    MasterSpell : [Spell Type]
+    *    Year : [Year]
     *    [Spell] : [Count]
+    *    [Potion] : [Count]
+    *    [Effect] : [Duration]
     * }};
     *
     * @param map a map of player data as strings
@@ -444,30 +497,73 @@ public class O2Players
                   o2p.setYear(O2PlayerCommon.intToYear(year));
                }
             }
-            else if (label.startsWith(playerEffects.effectLabel))
+            else if (label.startsWith(playerEffects.effectLabelPrefix))
             {
                playerEffects.deserializeEffect(pid, label, value);
             }
+            else if (label.startsWith(spellLabelPrefix))
+            {
+               String spellName = label.replaceFirst(spellLabelPrefix, "");
+               deserializeSpell(o2p, spellName, value);
+            }
+            else if (label.startsWith(potionLabelPrefix))
+            {
+               String potionName = label.replaceFirst(potionLabelPrefix, "");
+               deserializePotion(o2p, potionName, value);
+            }
             else
             {
-               // it is a spell
-               O2SpellType spellType = O2SpellType.spellTypeFromString(label);
-               if (spellType == null)
-               {
-                  continue;
-               }
-
-               Integer count = p.common.integerFromString(value);
-               if (count != null)
-               {
-                  o2p.setSpellCount(spellType, count);
-               }
+               // assume it is a spell
+               deserializeSpell(o2p, label, value);
             }
          }
 
          deserializedMap.put(pid, o2p);
+         recordCount++;
       }
 
       return deserializedMap;
+   }
+
+   /**
+    * Deserialize a spell and set spell experience on the player.
+    *
+    * @param o2p the player this spell count is for
+    * @param label the serialized name of the spell
+    * @param value the serialized count of spell experience
+    */
+   private void deserializeSpell (O2Player o2p, String label, String value)
+   {
+      if (o2p == null || label == null || value == null)
+         return;
+
+      O2SpellType spellType = O2SpellType.spellTypeFromString(label);
+      if (spellType == null)
+         return;
+
+      Integer count = p.common.integerFromString(value);
+      if (count != null)
+         o2p.setSpellCount(spellType, count);
+   }
+
+   /**
+    * Deserialize a potion and set potion experience on the player.
+    *
+    * @param o2p the player this potion count is for
+    * @param label the serialized name of the potion
+    * @param value the serialized count of potion experience
+    */
+   private void deserializePotion (O2Player o2p, String label, String value)
+   {
+      if (o2p == null || label == null || value == null)
+         return;
+
+      O2PotionType potionType = O2PotionType.potionTypeFromString(label);
+      if (potionType == null)
+         return;
+
+      Integer count = p.common.integerFromString(value);
+      if (count != null)
+         o2p.setPotionCount(potionType, count);
    }
 }

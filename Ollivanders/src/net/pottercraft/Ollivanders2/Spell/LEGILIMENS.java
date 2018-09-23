@@ -57,7 +57,7 @@ public final class LEGILIMENS extends DarkArts
          if (live instanceof Player)
          {
             Player target = (Player) live;
-            double experience = p.players.getPlayer(target.getUniqueId()).getSpellCount(O2SpellType.LEGILIMENS);
+            double experience = p.getO2Player(target).getSpellCount(O2SpellType.LEGILIMENS);
             if (usesModifier > experience)
             {
                player.openInventory(target.getInventory());
