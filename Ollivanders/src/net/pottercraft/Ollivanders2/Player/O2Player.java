@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import net.pottercraft.Ollivanders2.House.O2HouseType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
@@ -16,6 +17,7 @@ import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -987,6 +989,46 @@ public class O2Player
    public void onJoin ()
    {
       p.players.playerEffects.onJoin(pid);
+   }
+
+   /**
+    * Show log in message
+    */
+   public String getLogInMessage ()
+   {
+      p.getLogger().info("creating log in message");
+
+      // check to see what they have done so far to let them know next steps
+      StringBuilder message = new StringBuilder();
+
+      if (Ollivanders2.useHouses)
+      {
+         O2HouseType houseType = p.houses.getHouse(pid);
+         if (houseType != null)
+         {
+            message.append("\n");
+            message.append(houseType.getName());
+            message.append(" is currently ");
+            message.append(O2HouseType.getHousePlaceTxt(houseType));
+            message.append(".");
+         }
+      }
+
+      if (!foundWand)
+         message.append("\nFind your destined wand to begin using magic.");
+      else if (Ollivanders2.useHouses && !p.houses.isSorted(pid))
+         message.append("\nGet sorted in to your school house to start earning house points.");
+      else if (knownSpells.size() < 1 && Ollivanders2.useBookLearning)
+         message.append("\nFind a spell book to get started learning magic.");
+      else if (knownSpells.size() < 1)
+         message.append("\nTry casting a spell by saying the incantation and waving your wand.");
+      else if (knownPotions.size() < 1 && Ollivanders2.useBookLearning)
+         message.append("\nFind a potions book and a water-filled cauldron to get started brewing potions.");
+      else if (knownPotions.size() < 1)
+         message.append("\nTry brewing a potion by using a water-filled cauldron and the potion ingredients.");
+
+      p.getLogger().info(message.toString());
+      return message.toString();
    }
 
    /**
