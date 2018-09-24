@@ -328,7 +328,7 @@ public class OllivandersListener implements Listener
          for (Player recipient : recipients)
          {
             Location location = sender.getLocation();
-            if (!p.common.isInside(location, recipient.getLocation(), 15))
+            if (!p.common.isInside(location, recipient.getLocation(), Ollivanders2.chatDropoff))
             {
                remRecipients.add(recipient);
             }

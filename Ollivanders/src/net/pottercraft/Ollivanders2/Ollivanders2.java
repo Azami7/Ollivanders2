@@ -98,6 +98,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
    public static ChatColor chatColor = ChatColor.AQUA;
+   public static int chatDropoff = 15;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -175,6 +176,13 @@ public class Ollivanders2 extends JavaPlugin
       {
          chatColor = ChatColor.getByChar(getConfig().getString("chatColor"));
          getLogger().info("Setting plugin message color to " + chatColor.toString());
+      }
+
+      if (getConfig().isSet("chatDropoff"))
+      {
+         int drop = getConfig().getInt("chatDropoff");
+         if (drop > 0)
+            chatDropoff = drop;
       }
 
       useNonVerbalCasting = getConfig().getBoolean("nonVerbalSpellCasting");
@@ -1388,16 +1396,6 @@ public class Ollivanders2 extends JavaPlugin
       {
          player.getWorld().dropItem(loc, item);
       }
-   }
-
-   /**
-    * Get the chat dropoff distance configuration.
-    *
-    * @return the chatDropoff config value
-    */
-   public int getChatDistance ()
-   {
-      return fileConfig.getInt("chatDropoff");
    }
 
    /**
