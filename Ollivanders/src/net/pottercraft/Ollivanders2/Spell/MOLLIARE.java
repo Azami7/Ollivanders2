@@ -4,7 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 
 import java.util.ArrayList;
 
@@ -55,7 +55,7 @@ public final class MOLLIARE extends Charms
       if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
       {
          int duration = (int) (usesModifier * 1200);
-         net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE molliare = new net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE(p, player, location, StationarySpells.MOLLIARE, 5, duration);
+         net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE molliare = new net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE(p, player.getUniqueId(), location, O2StationarySpellType.MOLLIARE, 5, duration);
          molliare.flair(10);
          p.stationarySpells.addStationarySpell(molliare);
          kill();

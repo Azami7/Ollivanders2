@@ -11,7 +11,6 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 /**
@@ -23,22 +22,65 @@ public abstract class StationarySpellObj implements Serializable
 {
    Ollivanders2 p;
    public UUID playerUUID;
-   public StationarySpells name;
+   protected O2StationarySpellType spellType;
    public Location location;
    public int duration;
    public boolean kill = false;
    public boolean active = true;
    public int radius;
 
-   public StationarySpellObj (Ollivanders2 plugin, Player player, Location loc, StationarySpells name, Integer radius, Integer duration)
+   public StationarySpellObj (Ollivanders2 plugin)
+   {
+      p = plugin;
+      duration = 10;
+      radius = 1;
+      active = false;
+   }
+
+   public StationarySpellObj (Ollivanders2 plugin, UUID playerID, Location loc, O2StationarySpellType type, Integer radius, Integer duration)
    {
       p = plugin;
 
       location = loc;
-      this.name = name;
-      playerUUID = player.getUniqueId();
+      this.spellType = type;
+      playerUUID = playerID;
       this.duration = duration;
       this.radius = radius;
+   }
+
+   void setDuration (Integer d)
+   {
+      duration = d;
+   }
+
+   void setRadius (Integer r)
+   {
+      radius = r;
+   }
+
+   void setLocation (Location l)
+   {
+      location = l;
+   }
+
+   void setPlayerID (UUID pid)
+   {
+      playerUUID = pid;
+   }
+
+   public O2StationarySpellType getSpellType ()
+   {
+      return spellType;
+   }
+
+   void setSpellType (O2StationarySpellType t)
+   {
+      spellType = t;
+   }
+
+   void setActive (boolean a)
+   {
+      active = a;
    }
 
    /**
@@ -80,6 +122,9 @@ public abstract class StationarySpellObj implements Serializable
     */
    public boolean isInside (Location loc)
    {
+      if (location == null || loc == null)
+         return false;
+
       return p.common.isInside(location, loc, radius);
    }
 
@@ -90,7 +135,10 @@ public abstract class StationarySpellObj implements Serializable
     */
    public Block getBlock ()
    {
-      return location.getBlock();
+      if (location != null)
+         return location.getBlock();
+
+      return null;
    }
 
    /**

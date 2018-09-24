@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.Material;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 
 import java.util.ArrayList;
 
@@ -58,7 +58,7 @@ public final class PROTEGO_MAXIMA extends Charms
          int duration = (int) (usesModifier * 1200);
          double damage = usesModifier / 10;
          net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_MAXIMA max =
-               new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_MAXIMA(p, player, location, StationarySpells.PROTEGO_MAXIMA, 5, duration, damage);
+               new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_MAXIMA(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO_MAXIMA, 5, duration, damage);
          max.flair(10);
          p.stationarySpells.addStationarySpell(max);
          kill();

@@ -3,7 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 
 import java.util.ArrayList;
 
@@ -50,7 +50,7 @@ public final class PROTEGO extends Charms
    public void checkEffect ()
    {
       net.pottercraft.Ollivanders2.StationarySpell.PROTEGO protego =
-            new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO(p, player, location, StationarySpells.PROTEGO, 5, 12000);
+            new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO, 5, 12000);
       protego.flair(2);
       p.stationarySpells.addStationarySpell(protego);
       kill();

@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.Material;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 
 import java.util.ArrayList;
 
@@ -56,7 +56,7 @@ public final class PROTEGO_TOTALUM extends Charms
       {
          int duration = (int) (usesModifier * 1200);
          net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM total =
-               new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM(p, player, location, StationarySpells.PROTEGO_TOTALUM, 5, duration);
+               new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO_TOTALUM, 5, duration);
          total.flair(10);
          p.stationarySpells.addStationarySpell(total);
          kill();
