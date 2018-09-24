@@ -43,19 +43,14 @@ public abstract class O2Book
    protected String shortTitle;
 
    /**
-    * The item metadata for this book
-    */
-   private BookMeta bookMeta;
-
-   /**
     * The branch of magic this book covers
     */
    protected O2MagicBranch branch;
 
    /**
-    * Table of contents
+    * The book item object.
     */
-   private String toc;
+   private ItemStack bookItem;
 
    /**
     * No more than 256 characters
@@ -83,24 +78,29 @@ public abstract class O2Book
       author = "Unknown";
       title = "Untitled";
       shortTitle = "Untitled";
-      toc = "";
+
       openingPage = "";
       closingPage = "";
 
+      bookItem = new ItemStack(Material.WRITTEN_BOOK, 1);
+
       spells = new ArrayList<>();
       potions = new ArrayList<>();
-      bookMeta = null;
       p = plugin;
+
+      bookItem = new ItemStack(Material.WRITTEN_BOOK, 1);
+      writeSpellBookMeta();
    }
 
    /**
     * Write all the metadata for this book.
-    *
-    * @param bookItem the book item to write metadata on.
     */
-   private void writeSpellBookMeta (ItemStack bookItem)
+   private void writeSpellBookMeta ()
    {
-      bookMeta = (BookMeta)bookItem.getItemMeta();
+      if (bookItem == null)
+         return;
+
+      BookMeta bookMeta = (BookMeta)bookItem.getItemMeta();
       bookMeta.setAuthor(author);
       bookMeta.setTitle(shortTitle);
 
@@ -108,7 +108,8 @@ public abstract class O2Book
       String titlePage = title + "\n\nby " + author;
       bookMeta.addPage(titlePage);
 
-      toc = "Contents:\n\n";
+      StringBuilder toc = new StringBuilder();
+      toc.append("Contents:\n\n");
       ArrayList<String> mainContent = new ArrayList<>();
 
       // add the names of all spells in the book
@@ -133,7 +134,7 @@ public abstract class O2Book
             continue;
          }
 
-         toc = toc + name + "\n";
+         toc.append(name).append("\n");
 
          String text;
          String mainText = p.books.spellText.getText(content);
@@ -153,7 +154,7 @@ public abstract class O2Book
       }
 
       // add TOC page
-      bookMeta.addPage(toc);
+      bookMeta.addPage(toc.toString());
 
       // add opening page
       if (openingPage.length() > 0)
@@ -169,7 +170,12 @@ public abstract class O2Book
       if (closingPage.length() > 0)
          bookMeta.addPage(closingPage);
 
+      // add lore
+      List<String> lore = getBookLore();
+
+      bookMeta.setLore(lore);
       bookMeta.setGeneration(BookMeta.Generation.ORIGINAL);
+
       bookItem.setItemMeta(bookMeta);
    }
 
@@ -219,7 +225,7 @@ public abstract class O2Book
     *
     * Assumes there is no word in the list that is >= 200 characters.
     *
-    * @param words
+    * @param words an array of all the words in the book
     * @return a list of book pages
     */
    private ArrayList<String> makePages (ArrayList<String> words)
@@ -228,7 +234,7 @@ public abstract class O2Book
 
       // first page
       int remaining = 175;
-      String page = "";
+      StringBuilder page = new StringBuilder();
 
       // first page
       while (remaining > 0)
@@ -241,21 +247,22 @@ public abstract class O2Book
          if (word.length() >= remaining)
             break;
 
-         page = page + word + " ";
+         page.append(word).append(" ");
 
          // decrement remaining, remove word from list
          remaining = remaining - word.length() - 1;
          words.remove(0);
       }
       if (!words.isEmpty())
-         page = page + "(cont.)";
-      pages.add(page);
+         page.append("(cont.)");
+
+      pages.add(page.toString());
 
       // remaining pages
       while (!words.isEmpty())
       {
          remaining = 200;
-         page = "";
+         page = new StringBuilder();
 
          while (remaining > 0)
          {
@@ -267,16 +274,16 @@ public abstract class O2Book
             if (word.length() >= remaining)
                break;
 
-            page = page + word + " ";
+            page.append(word).append(" ");
 
             // decrement remaining, remove word from list
             remaining = remaining - word.length() - 1;
             words.remove(0);
          }
          if (!words.isEmpty())
-            page = page + "(cont.)";
+            page.append("(cont.)");
 
-         pages.add(page);
+         pages.add(page.toString());
       }
 
       return pages;
@@ -308,24 +315,12 @@ public abstract class O2Book
    }
 
    /**
-    * Create a BookItem of this book.
+    * Get the book item for this book
     *
-    * @return the book as a BookItem
+    * @return the book item
     */
-   public ItemStack createBook ()
+   public ItemStack getBookItem()
    {
-      ItemStack bookItem = new ItemStack(Material.WRITTEN_BOOK, 1);
-      List<String> lore = null;
-
-      if (bookMeta == null)
-      {
-         writeSpellBookMeta(bookItem);
-         lore = getBookLore();
-      }
-
-      bookMeta.setLore(lore);
-      bookItem.setItemMeta(bookMeta);
-
       return bookItem;
    }
 
