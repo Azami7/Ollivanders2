@@ -70,11 +70,7 @@ class OllivandersSchedule implements Runnable
       {
          invisPlayer();
       }
-      if (counter % 20 == 2 && p.getConfig().getBoolean("divination"))
-      {
-         scry();
-         effectProphecy();
-      }
+
       counter = (counter + 1) % 20;
    }
 
@@ -334,88 +330,6 @@ class OllivandersSchedule implements Runnable
          return p.common.isInvisibilityCloak(chestPlate);
       }
       return false;
-   }
-
-   /**
-    * Checks all players to see if they will receive a prophecy
-    */
-   @Deprecated
-   private void scry ()
-   {
-      Material ball = Material.getMaterial("divinationBlock");
-
-      for (Player player : p.getServer().getOnlinePlayers())
-      {
-         if (player.getTargetBlock(null, 100).getType() != ball || !player.isSneaking())
-            return;
-
-         O2Player o2p = p.players.getPlayer(player.getUniqueId());
-         if (o2p == null)
-            continue;
-
-         double experience = o2p.getSpellCount(O2SpellType.INFORMOUS);
-         if (Math.random() < experience / 1000.0)
-         {
-            //The scrying is successful
-            Prophecy prophecy = new Prophecy(player);
-            p.getProphecy().add(prophecy);
-            String message = "";
-            List<String> lore = prophecy.toLore();
-            for (String str : lore)
-            {
-               message = message.concat(str + " ");
-            }
-            player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor")) + message);
-            ItemStack hand = player.getInventory().getItemInMainHand();
-            if (hand.getType() == ball)
-            {
-               ItemStack record = new ItemStack(ball, 1);
-               ItemMeta recordM = record.getItemMeta();
-               recordM.setDisplayName("Prophecy Record");
-               recordM.setLore(lore);
-               record.setItemMeta(recordM);
-               if (hand.getAmount() == 1)
-               {
-                  player.getInventory().setItemInMainHand(null);
-               }
-               else
-               {
-                  hand.setAmount(hand.getAmount() - 1);
-                  player.getInventory().setItemInMainHand(hand);
-               }
-               for (ItemStack drop : player.getInventory().addItem(record).values())
-               {
-                  player.getWorld().dropItem(player.getLocation(), drop);
-               }
-            }
-         }
-      }
-   }
-
-   /**
-    * Goes through all prophecies and enacts them if they are due
-    * and deletes them if they are past
-    */
-   @Deprecated
-   private void effectProphecy ()
-   {
-      Iterator<Prophecy> iter = p.getProphecy().iterator();
-      while (iter.hasNext())
-      {
-         Prophecy prop = iter.next();
-         if (prop.isActive())
-         {
-            Player player = p.getServer().getPlayer(prop.getPlayerUUID());
-            if (player != null)
-            {
-               player.addPotionEffect(prop.toPotionEffect(), true);
-            }
-         }
-         else if (prop.isFinished())
-         {
-            iter.remove();
-         }
-      }
    }
 
    /**

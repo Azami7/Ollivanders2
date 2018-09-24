@@ -74,7 +74,6 @@ public class Ollivanders2 extends JavaPlugin
 {
    private List<O2Spell> projectiles = new ArrayList<>();
 
-   private Set<Prophecy> prophecy = new HashSet<>();
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
    public O2Houses houses;
@@ -146,7 +145,6 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().info("File directory for Ollivanders2");
       }
       projectiles = new ArrayList<>();
-      prophecy = new HashSet<>();
       fileConfig = getConfig();
 
       random.setSeed(System.currentTimeMillis());
@@ -1527,16 +1525,6 @@ public class Ollivanders2 extends JavaPlugin
       {
          players.updatePlayer(player.getUniqueId(), o2p);
       }
-   }
-
-   /**
-    * Gets the set of prophecy objects
-    *
-    * @return Set of prophecy objects in server
-    */
-   public Set<Prophecy> getProphecy ()
-   {
-      return prophecy;
    }
 
    /**

@@ -72,7 +72,8 @@ public enum O2HouseType
     */
    void setName (String n)
    {
-      name = n;
+      if (n != null && n.length() > 0)
+         name = n;
    }
 
    /**
