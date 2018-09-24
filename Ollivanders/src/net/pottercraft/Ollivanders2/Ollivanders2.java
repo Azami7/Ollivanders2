@@ -1734,14 +1734,6 @@ public class Ollivanders2 extends JavaPlugin
    @Deprecated
    public static class SLAPI
    {
-      public static void save (Object obj, String path) throws Exception
-      {
-         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(path));
-         oos.writeObject(obj);
-         oos.flush();
-         oos.close();
-      }
-
       public static Object load (String path) throws Exception
       {
          ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path));
