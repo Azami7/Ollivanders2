@@ -936,7 +936,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the player join event
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   @EventHandler(priority = EventPriority.NORMAL)
    public void onPlayerJoin (PlayerJoinEvent event)
    {
       Player player = event.getPlayer();
@@ -965,6 +965,23 @@ public class OllivandersListener implements Listener
 
       // re-add them to player list (in case they have changed from above actions)
       p.setO2Player(player, o2p);
+
+      // show log in message
+      if (p.getConfig().getBoolean("showLogInMessage"))
+      {
+         StringBuilder message = new StringBuilder();
+
+         if (player.hasPlayedBefore())
+         {
+            message.append("Welcome back, ").append(player.getName()).append("\n").append(o2p.getLogInMessage());
+         }
+         else
+         {
+            message.append("You're a wizard, ").append(player.getName());
+         }
+
+         player.sendMessage(Ollivanders2.chatColor + message.toString());
+      }
 
       p.getLogger().info("Player " + player.getName() + " joined.");
    }

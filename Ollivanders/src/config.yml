@@ -1,6 +1,17 @@
 #
 # Configuration for the Ollivanders2 plugin.
 #
+# Details for configuring the Ollivanders2 plugin can be found on our wiki at https://github.com/Azami7/Ollivanders2/wiki/Configuration
+#
+# *** READ THE INSTRUCTIONS BEFORE CHANGING THE DEFAULT CONFIGURATION ***
+#
+# Some of the configurations below will alter your MC server. When in doubt, use the default config, which is
+# always on the safe option.
+#
+# *** BACKUP OF YOUR SERVER BEFORE ALTERING CONFIGURATION ***
+#
+# This should be standard practice for any change you make to your server.
+
 chatDropoff: 50
 witchDrop: false
 divination: true
@@ -9,49 +20,70 @@ divinationMaxDuration: 86400000
 divinationMaxStartOffset: 604800000
 muggletonBlockChange: true
 #
-# When death exp loss is enabled, players will lose their spell experience if they die.  It is not recommended to set
+# When death exp loss is enabled, players will lose their spell experience if they die. It is not recommended to set
 # this to true if your server supports minigames or other plugins that expect players will die.
 deathExpLoss: false
 #
-# When book learning is true, players can only cast spells they have learned from a book.  This prevents players
+# When book learning is true, players can only cast spells they have learned from a book. This prevents players
 # being able to cast spells they have not "learned" but have seen in chat, etc.
 bookLearning: true
 #
 spellJournal: true
 #
-# When nonVerbalSpellCasting is set to true, once players master a spell they can cast it without saying the incantation
+# When nonVerbalSpellCasting is set to true, once players master a spell they can cast it without saying the incantation.
 nonVerbalSpellCasting: true
 #
-# When hostileMobAnimagi is set to true, the possible animagus forms will include hostile mobs such as spiders
+# When hostileMobAnimagi is set to true, the possible animagus forms will include hostile mobs such as spiders.
 hostileMobAnimagi: false
 chatColor: 5
 flooPowder: REDSTONE
 broomstick: STICK
+
 #
-# When houses are enabled, Ollivanders will use the built-in minecraft scoreboard to create house teams and points.
-# IMPORTANT: Enabling houses will take over your server's main scoreboard.  If you do not want this, you must
-# set this to false.
+# Sorting and Houses
+#
+# https://github.com/Azami7/Ollivanders2/wiki/Configuration#houses
 houses: false
 #
-# If houses are enabled, you can change the name of them in the game by uncommenting and editing
+# If houses are enabled, you can change the name of them in the game by uncommenting and editing below.
 # gryffindorName: Gryffindor
 # hufflepuffName: Hufflepuff
 # ravenclawName: Ravenclaw
 # slytherinName: Slytherin
 #
-# If houses are enabled, you can change the color for player name tags and chat by uncommenting and editing
+# If houses are enabled, you can change the color for player name tags and chat by uncommenting and editing below.
 # Options are: WHITE, GRAY, RED, GOLD, YELLOW, GREEN, AQUA, BLUE, LIGHT_PURPLE, DARK_GRAY, DARK_RED, DARK_AQUA, DARK_BLUE, DARK_PURPLE
 # gryffindorColor: DARK_RED
 # hufflepuffColor: GOLD
 # ravenclawColor: BLUE
 # slytherinColor: DARK_GREEN
+
+#
+# Years
 #
 # When years is set to true, it enables the /olli year command
 years: false
+
+# Log In Message
+#
+# showWelcomeMessage: whether to show the log in message on player join or not. This message shows
+# information about where the player is at in the progression of the game.
+showLogInMessage: false
+
+# Debug Mode
 #
 # Turns on debug output in your logs. This can also be done while the game is running by using the command
 # /olli debug
+#
+# This will make your logs meaningfully bigger and may impact server performance, therefore it is not
+# recommended to run with debug mode set to 'true' for long periods of time.
 debug: false
+
+#
+# Zones
+#
+# https://github.com/Azami7/Ollivanders2/wiki/Configuration#zones
+#
 zones:
   default-world:
     type: World
