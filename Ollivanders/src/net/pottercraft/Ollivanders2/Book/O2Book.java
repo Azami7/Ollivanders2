@@ -82,14 +82,12 @@ public abstract class O2Book
       openingPage = "";
       closingPage = "";
 
-      bookItem = new ItemStack(Material.WRITTEN_BOOK, 1);
+      // create the book on first request to ensure texts, etc are loaded before trying to create it
+      bookItem = null;
 
       spells = new ArrayList<>();
       potions = new ArrayList<>();
       p = plugin;
-
-      bookItem = new ItemStack(Material.WRITTEN_BOOK, 1);
-      writeSpellBookMeta();
    }
 
    /**
@@ -321,6 +319,12 @@ public abstract class O2Book
     */
    public ItemStack getBookItem()
    {
+      if (bookItem == null)
+      {
+         bookItem = new ItemStack(Material.WRITTEN_BOOK, 1);
+         writeSpellBookMeta();
+      }
+
       return bookItem;
    }
 
