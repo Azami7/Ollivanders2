@@ -973,15 +973,11 @@ public class OllivandersListener implements Listener
 
          if (player.hasPlayedBefore())
          {
-            message.append("Welcome back, ");
-            message.append(player.getName());
-            message.append("\n");
-            message.append(o2p.getLogInMessage());
+            message.append("Welcome back, ").append(player.getName()).append("\n").append(o2p.getLogInMessage());
          }
          else
          {
-            message.append("You're a wizard, ");
-            message.append(player.getName());
+            message.append("You're a wizard, ").append(player.getName());
          }
 
          player.sendMessage(Ollivanders2.chatColor + message.toString());

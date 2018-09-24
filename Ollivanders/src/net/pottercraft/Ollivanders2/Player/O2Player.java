@@ -1006,11 +1006,7 @@ public class O2Player
          O2HouseType houseType = p.houses.getHouse(pid);
          if (houseType != null)
          {
-            message.append("\n");
-            message.append(houseType.getName());
-            message.append(" is currently ");
-            message.append(O2HouseType.getHousePlaceTxt(houseType));
-            message.append(".");
+            message.append("\n").append(houseType.getName()).append(" is currently ").append(O2HouseType.getHousePlaceTxt(houseType)).append(".");
          }
       }
 
