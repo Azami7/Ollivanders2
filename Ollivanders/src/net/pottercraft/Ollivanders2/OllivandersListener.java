@@ -132,8 +132,6 @@ public class OllivandersListener implements Listener
             || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
       {
          // do not allow the player to move if they are asleep or suspended
-         //Location fromLoc = event.getFrom();
-         //event.setTo(fromLoc);
          event.setCancelled(true);
       }
       else
