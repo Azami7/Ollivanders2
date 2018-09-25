@@ -23,7 +23,7 @@ import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT;
 import net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM;
 import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE;
 
 import org.bukkit.Bukkit;
@@ -80,8 +80,11 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
+import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -125,13 +128,11 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
       {
-         // do not allow the player to move if they are asleep
-         Location fromLoc = event.getFrom();
-         event.setTo(fromLoc);
-
-         player.sendMessage(Ollivanders2.chatColor + "You are in a deep sleep and cannot move.");
+         // do not allow the player to move if they are asleep or suspended
+         event.setCancelled(true);
       }
       else
       {
@@ -261,7 +262,10 @@ public class OllivandersListener implements Listener
          effect = p.players.playerEffects.getEffect(sender.getUniqueId(), O2EffectType.MUTED_SPEECH);
 
          if (effect != null)
-            ((MUTED_SPEECH)effect).doSilencio(event);
+         {
+            ((MUTED_SPEECH) effect).doSilencio(event);
+            return;
+         }
       }
       else // speech replacement effects
       {
@@ -311,7 +315,7 @@ public class OllivandersListener implements Listener
             p.getLogger().info("onPlayerChat: handling stationary spells");
          }
 
-         if (stationary.name.equals(StationarySpells.MUFFLIATO) && stationary.active)
+         if (stationary.getSpellType().equals(O2StationarySpellType.MUFFLIATO) && stationary.active)
          {
             muffliatos.add(stationary);
          }
@@ -328,7 +332,7 @@ public class OllivandersListener implements Listener
          for (Player recipient : recipients)
          {
             Location location = sender.getLocation();
-            if (!p.common.isInside(location, recipient.getLocation(), 15))
+            if (!p.common.isInside(location, recipient.getLocation(), Ollivanders2.chatDropoff))
             {
                remRecipients.add(recipient);
             }
@@ -824,7 +828,8 @@ public class OllivandersListener implements Listener
       //
       if ((event.getHand() == EquipmentSlot.HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
-         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+               || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
          {
             event.setCancelled(true);
             return;
@@ -879,7 +884,8 @@ public class OllivandersListener implements Listener
       //
       else if ((event.getHand() == EquipmentSlot.OFF_HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
-         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+               || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
          {
             event.setCancelled(true);
             return;
@@ -936,7 +942,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the player join event
     */
-   @EventHandler(priority = EventPriority.HIGHEST)
+   @EventHandler(priority = EventPriority.NORMAL)
    public void onPlayerJoin (PlayerJoinEvent event)
    {
       Player player = event.getPlayer();
@@ -965,6 +971,23 @@ public class OllivandersListener implements Listener
 
       // re-add them to player list (in case they have changed from above actions)
       p.setO2Player(player, o2p);
+
+      // show log in message
+      if (p.getConfig().getBoolean("showLogInMessage"))
+      {
+         StringBuilder message = new StringBuilder();
+
+         if (player.hasPlayedBefore())
+         {
+            message.append("Welcome back, ").append(player.getName()).append("\n").append(o2p.getLogInMessage());
+         }
+         else
+         {
+            message.append("You're a wizard, ").append(player.getName());
+         }
+
+         player.sendMessage(Ollivanders2.chatColor + message.toString());
+      }
 
       p.getLogger().info("Player " + player.getName() + " joined.");
    }
@@ -1088,7 +1111,7 @@ public class OllivandersListener implements Listener
          {
             for (StationarySpellObj stationary : stationarys)
             {
-               if (stationary.name == StationarySpells.HORCRUX && stationary.getCasterID().equals(pid))
+               if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(pid))
                {
                   Location tp = stationary.location;
                   tp.setY(tp.getY() + 1);
@@ -1140,7 +1163,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloBlockPlaceEvent (BlockPlaceEvent event)
    {
-      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
+      if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
          {
@@ -1164,7 +1187,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloBlockBreakEvent (BlockBreakEvent event)
    {
-      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
+      if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
          {
@@ -1188,7 +1211,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloBlockPhysicsEvent (BlockPhysicsEvent event)
    {
-      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
+      if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          event.setCancelled(true);
       }
@@ -1204,7 +1227,7 @@ public class OllivandersListener implements Listener
    {
       if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
       {
-         if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getClickedBlock().getLocation()))
+         if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getClickedBlock().getLocation()))
          {
             if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
             {
@@ -1264,7 +1287,7 @@ public class OllivandersListener implements Listener
    {
       if (event.isSticky())
       {
-         if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getRetractLocation()))
+         if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getRetractLocation()))
          {
             event.setCancelled(true);
          }
@@ -1281,7 +1304,7 @@ public class OllivandersListener implements Listener
    {
       Location loc = event.getBlock().getLocation();
       Entity entity = event.getEntity();
-      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, loc))
+      if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, loc))
       {
          event.setCancelled(true);
          if (event.getEntityType() == EntityType.FALLING_BLOCK)
@@ -1797,9 +1820,10 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
       {
-         // cannot interact with anything while asleep
+         // cannot interact with anything while asleep or suspended
          event.setCancelled(true);
       }
    }
@@ -1818,6 +1842,58 @@ public class OllivandersListener implements Listener
       {
          // cannot sleep while awake effect is active
          event.setCancelled(true);
+      }
+   }
+
+   @EventHandler (priority = EventPriority.HIGH)
+   public void playerFlightSuspension (PlayerToggleFlightEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   @EventHandler (priority = EventPriority.HIGH)
+   public void playerSneakSuspension (PlayerToggleSneakEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   @EventHandler (priority = EventPriority.HIGH)
+   public void playerSprintSuspension (PlayerToggleSprintEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   @EventHandler (priority = EventPriority.HIGH)
+   public void playerVelocitySuspension (PlayerVelocityEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      {
+         event.setCancelled(true);
+         return;
       }
    }
 }

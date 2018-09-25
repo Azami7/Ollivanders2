@@ -72,7 +72,8 @@ public enum O2HouseType
     */
    void setName (String n)
    {
-      name = n;
+      if (n != null && n.length() > 0)
+         name = n;
    }
 
    /**
@@ -128,6 +129,52 @@ public enum O2HouseType
    public Integer getScore ()
    {
       return score;
+   }
+
+   /**
+    * Get text for displaying the ranking of a specific house in the house cup.
+    *
+    * @param houseType the house to get text for, cannot be null
+    * @return a string like "in 4th place" or "tied for 3rd place"
+    */
+   public static String getHousePlaceTxt (O2HouseType houseType)
+   {
+      if (houseType == null)
+         return null;
+
+      int score = houseType.getScore();
+      boolean tied = false;
+      int place = 1;
+
+      for (O2HouseType type : O2HouseType.values())
+      {
+         if (type == houseType)
+            continue;
+
+         if (type.getScore() > score)
+            place ++;
+         else if (type.getScore() == score)
+            tied = true;
+      }
+
+      StringBuilder placeString = new StringBuilder();
+      if (tied)
+         placeString.append("tied for ");
+      else
+         placeString.append("in ");
+
+      if (place == 1)
+         placeString.append("1st ");
+      else if (place == 2)
+         placeString.append("2nd ");
+      else if (place == 3)
+         placeString.append("3rd ");
+      else
+         placeString.append("4th ");
+
+      placeString.append("place");
+
+      return placeString.toString();
    }
 
    /**

@@ -9,6 +9,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Hurts any entities within 0.5 meters of the spell wall.
@@ -21,19 +22,36 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
 
    private final String damageLabel = "Damage";
 
-   public PROTEGO_MAXIMA (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                          double damage)
+   /**
+    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+    *
+    * @param plugin a callback to the MC plugin
+    */
+   public PROTEGO_MAXIMA (Ollivanders2 plugin)
    {
-      super(plugin, player, location, name, radius, duration);
-      this.damage = damage;
+      super(plugin);
+
+      spellType = O2StationarySpellType.PROTEGO_MAXIMA;
    }
 
-   public PROTEGO_MAXIMA (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                          Map<String, String> spellData)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param pid the player who cast the spell
+    * @param location the center location of the spell
+    * @param type the type of this spell
+    * @param radius the radius for this spell
+    * @param duration the duration of the spell
+    * @param damage the damage done to other entities in this spell area
+    */
+   public PROTEGO_MAXIMA (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
+                          Integer duration, double damage)
    {
-      super(plugin, player, location, name, radius, duration);
+      super(plugin, pid, location, type, radius, duration);
 
-      deserializeSpellData(spellData);
+      spellType = O2StationarySpellType.PROTEGO_MAXIMA;
+      this.damage = damage;
    }
 
    @Override

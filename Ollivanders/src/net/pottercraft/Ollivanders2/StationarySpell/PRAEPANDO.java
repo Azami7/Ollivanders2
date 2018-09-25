@@ -25,19 +25,37 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
 
    private final String radiusLabel = "Radius";
 
-   public PRAEPANDO (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                     Integer dimenRadius)
+   /**
+    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+    *
+    * @param plugin a callback to the MC plugin
+    */
+   public PRAEPANDO (Ollivanders2 plugin)
    {
-      super(plugin, player, location, name, radius, duration, dimenRadius);
+      super(plugin);
+
+      spellType = O2StationarySpellType.PRAEPANDO;
    }
 
-   public PRAEPANDO (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                     Map<String, String> spellData)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param pid the player who cast the spell
+    * @param location the center location of the spell
+    * @param type the type of this spell
+    * @param radius the radius for this spell
+    * @param duration the duration of the spell
+    * @param dimenRadius the size of the extra-dimensional space
+    */
+   public PRAEPANDO (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
+                     Integer duration, Integer dimenRadius)
    {
-      super(plugin, player, location, name, radius, duration, 1);
+      super(plugin, pid, location, type, radius, duration, dimenRadius);
 
-      deserializeSpellData(spellData);
+      spellType = O2StationarySpellType.PRAEPANDO;
    }
+
 
    @Override
    public void checkEffect ()

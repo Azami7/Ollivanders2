@@ -53,9 +53,12 @@ public final class CARPE_RETRACTUM extends Charms
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> living = getLivingEntities(2);
+      List<LivingEntity> living = getLivingEntities(1.5);
       for (LivingEntity live : living)
       {
+         if (live.getUniqueId() == player.getUniqueId())
+            continue;
+
          live.setVelocity(player.getEyeLocation().toVector().subtract(live.getLocation().toVector()).normalize().multiply(usesModifier / 10));
          kill();
          return;

@@ -17,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Damageable;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -74,11 +75,18 @@ public final class INFORMOUS extends Arithmancy
    public void checkEffect ()
    {
       move();
-      for (LivingEntity entity : getLivingEntities(2))
+      for (LivingEntity entity : getLivingEntities(1.5))
       {
+         if (entity.getUniqueId() == player.getUniqueId())
+            continue;
+
          if (!iEntity.contains(entity))
          {
-            player.sendMessage(Ollivanders2.chatColor + entity.getType().toString() + " has " + ((Damageable) entity).getHealth() + " health.");
+            String entityName = entity.getType().toString();
+            if (entity instanceof HumanEntity)
+               entityName = entity.getName();
+
+            player.sendMessage(Ollivanders2.chatColor + entityName + " has " + ((Damageable) entity).getHealth() + " health.");
             if (entity instanceof Player)
             {
                Player target = (Player)entity;
@@ -111,11 +119,11 @@ public final class INFORMOUS extends Arithmancy
                else
                   power = 1;
 
-               player.sendMessage(Ollivanders2.chatColor + spell.name.toString() + " of radius " + spell.radius + " has " + power + " power left.");
+               player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.radius + " has " + power + " power left.");
             }
             else if (spell instanceof HORCRUX)
             {
-               player.sendMessage(Ollivanders2.chatColor + spell.name.toString() + " of player " + Bukkit.getPlayer(spell.getCasterID()).getName() + " of radius " + spell.radius);
+               player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of player " + Bukkit.getPlayer(spell.getCasterID()).getName() + " of radius " + spell.radius);
             }
             else if (spell instanceof ALIQUAM_FLOO)
             {
@@ -127,7 +135,7 @@ public final class INFORMOUS extends Arithmancy
             }
             else
             {
-               player.sendMessage(Ollivanders2.chatColor + spell.name.toString() + " of radius " + spell.radius + " has " + spell.duration / 20 + " seconds left.");
+               player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.radius + " has " + spell.duration / 20 + " seconds left.");
             }
             iSpell.add(spell);
          }

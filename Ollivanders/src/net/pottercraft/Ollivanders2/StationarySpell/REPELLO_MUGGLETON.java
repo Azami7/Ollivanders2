@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 /**
  * Hides all blocks within its area by sending out block changes.
@@ -19,63 +20,78 @@ import java.util.Map;
  */
 public class REPELLO_MUGGLETON extends StationarySpellObj implements StationarySpell
 {
-   public REPELLO_MUGGLETON (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration)
+   /**
+    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+    *
+    * @param plugin a callback to the MC plugin
+    */
+   public REPELLO_MUGGLETON (Ollivanders2 plugin)
    {
-      super(plugin, player, location, name, radius, duration);
+      super(plugin);
+
+      spellType = O2StationarySpellType.REPELLO_MUGGLETON;
    }
 
-   public REPELLO_MUGGLETON (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius, Integer duration,
-                             Map<String, String> spellData)
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param pid the player who cast the spell
+    * @param location the center location of the spell
+    * @param type the type of this spell
+    * @param radius the radius for this spell
+    * @param duration the duration of the spell
+    */
+   public REPELLO_MUGGLETON (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
+                             Integer duration)
    {
-      super(plugin, player, location, name, radius, duration);
+      super(plugin, pid, location, type, radius, duration);
 
-      deserializeSpellData(spellData);
+      spellType = O2StationarySpellType.REPELLO_MUGGLETON;
    }
 
    @Override
    public void checkEffect ()
    {
       age();
-      if (p.getConfig().getBoolean("muggletonBlockChange"))
+
+      if (duration % 20 == 0)
       {
-         if (duration % 20 == 0)
+         Material toMat = getBlock().getType();
+         byte toDat = getBlock().getData();
+         double viewDistance = Math.sqrt(2 * Math.pow(((Bukkit.getServer().getViewDistance() + 1) * 16), 2));
+         for (Player player : getBlock().getWorld().getPlayers())
          {
-            Material toMat = getBlock().getType();
-            byte toDat = getBlock().getData();
-            double viewDistance = Math.sqrt(2 * Math.pow(((Bukkit.getServer().getViewDistance() + 1) * 16), 2));
-            for (Player player : getBlock().getWorld().getPlayers())
+            if (player.isPermissionSet("Ollivanders2.BYPASS"))
             {
-               if (player.isPermissionSet("Ollivanders2.BYPASS"))
+               if (player.hasPermission("Ollivanders2.BYPASS"))
                {
-                  if (player.hasPermission("Ollivanders2.BYPASS"))
-                  {
-                     continue;
-                  }
-               }
-               if (player.getLocation().distance(location) < viewDistance && !isInside(player.getLocation()))
-               {
-                  for (Block block : p.common.getBlocksInRadius(location, radius))
-                  {
-                     player.sendBlockChange(block.getLocation(), toMat, toDat);
-                  }
-               }
-               else if (isInside(player.getLocation()))
-               {
-                  for (Block block : p.common.getBlocksInRadius(location, radius))
-                  {
-                     player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
-                  }
+                  continue;
                }
             }
-         }
-         if (duration <= 1)
-         {
-            for (Player player : getBlock().getWorld().getPlayers())
+            if (player.getLocation().distance(location) < viewDistance && !isInside(player.getLocation()))
+            {
+               for (Block block : p.common.getBlocksInRadius(location, radius))
+               {
+                  player.sendBlockChange(block.getLocation(), toMat, toDat);
+               }
+            }
+            else if (isInside(player.getLocation()))
             {
                for (Block block : p.common.getBlocksInRadius(location, radius))
                {
                   player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
                }
+            }
+         }
+      }
+      if (duration <= 1)
+      {
+         for (Player player : getBlock().getWorld().getPlayers())
+         {
+            for (Block block : p.common.getBlocksInRadius(location, radius))
+            {
+               player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
             }
          }
       }

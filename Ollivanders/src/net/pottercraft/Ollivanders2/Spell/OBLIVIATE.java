@@ -55,9 +55,12 @@ public final class OBLIVIATE extends Charms
    {
       move();
       int i = spellUses;
-      List<LivingEntity> entities = getLivingEntities(2);
+      List<LivingEntity> entities = getLivingEntities(1.5);
       for (Entity entity : entities)
       {
+         if (entity.getUniqueId() == player.getUniqueId())
+            continue;
+
          if (entity instanceof Player)
          {
             Player ply = (Player) entity;

@@ -55,9 +55,11 @@ public final class STUPEFY extends Charms
    {
       move();
       List<LivingEntity> entities = getLivingEntities(2);
-      if (entities.size() > 0)
+      for (LivingEntity entity : entities)
       {
-         LivingEntity entity = entities.get(0);
+         if (entity.getUniqueId() == player.getUniqueId())
+            continue;
+
          int modifier = (int) usesModifier;
          PotionEffect blindness = new PotionEffect(PotionEffectType.BLINDNESS, modifier * 20, modifier);
          PotionEffect slowness = new PotionEffect(PotionEffectType.SLOW, modifier * 20, modifier);

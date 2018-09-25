@@ -11,7 +11,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 /**
  * Checks for entities going into a vanishing cabinet
@@ -25,20 +24,37 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
 
    private final String twinLabel = "Twin";
 
-   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius,
+   /**
+    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+    *
+    * @param plugin a callback to the MC plugin
+    */
+   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin)
+   {
+      super(plugin);
+
+      spellType = O2StationarySpellType.HARMONIA_NECTERE_PASSUS;
+   }
+
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the MC plugin
+    * @param pid the player who cast the spell
+    * @param location the center location of the spell
+    * @param type the type of this spell
+    * @param radius the radius for this spell
+    * @param duration the duration of the spell
+    * @param twin the location of this cabinet's twin
+    */
+   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
                                    Integer duration, Location twin)
    {
 
-      super(plugin, player, location, name, radius, duration);
+      super(plugin, pid, location, type, radius, duration);
+
+      spellType = O2StationarySpellType.HARMONIA_NECTERE_PASSUS;
       this.twin = twin;
-   }
-
-   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, Location location, StationarySpells name, Integer radius,
-                                   Integer duration, Map<String, String> spellData)
-   {
-      super(plugin, player, location, name, radius, duration);
-
-      deserializeSpellData(spellData);
    }
 
    @Override
@@ -83,7 +99,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     * @param feet - The block at the player's feet if the player is standing in the cabinet
     * @return - True if the cabinet is whole, false if not
     */
-   public boolean cabinetCheck (Block feet)
+   private boolean cabinetCheck (Block feet)
    {
       if (feet.getType() != Material.AIR && feet.getType() != Material.WALL_SIGN && feet.getType() != Material.SIGN_POST)
       {
@@ -111,9 +127,9 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
    /**
     * Send the entity to the twin cabinet.
     *
-    * @param entity
+    * @param entity the entity being transported
     */
-   public void teleport (Entity entity)
+   private void teleport (Entity entity)
    {
       location.setPitch(entity.getLocation().getPitch());
       location.setYaw(entity.getLocation().getYaw());

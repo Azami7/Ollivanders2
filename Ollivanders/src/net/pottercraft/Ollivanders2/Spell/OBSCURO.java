@@ -51,8 +51,11 @@ public final class OBSCURO extends Charms
    public void checkEffect ()
    {
       move();
-      for (LivingEntity live : getLivingEntities(2))
+      for (LivingEntity live : getLivingEntities(1.5))
       {
+         if (live.getUniqueId() == player.getUniqueId())
+            continue;
+
          PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, (int) (usesModifier * 1200), 0);
          live.addPotionEffect(blind);
          kill();
