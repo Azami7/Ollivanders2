@@ -51,9 +51,12 @@ public final class DEPULSO extends Charms
    public void checkEffect ()
    {
       move();
-      List<Entity> entities = getCloseEntities(1);
+      List<Entity> entities = getCloseEntities(1.5);
       for (Entity entity : entities)
       {
+         if (entity.getUniqueId() == player.getUniqueId())
+            continue;
+
          entity.setVelocity(player.getLocation().getDirection().normalize().multiply(usesModifier / 20));
          kill();
          return;

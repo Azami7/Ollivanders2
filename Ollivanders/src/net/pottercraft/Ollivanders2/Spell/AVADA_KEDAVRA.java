@@ -57,10 +57,15 @@ public final class AVADA_KEDAVRA extends DarkArts
       List<LivingEntity> entities = getLivingEntities(1.5);
       if (entities.size() > 0)
       {
-         LivingEntity entity = entities.get(0);
-         entity.damage(usesModifier * 2, player);
-         kill = true;
-         return;
+         for (LivingEntity entity : entities)
+         {
+            if (entity.getUniqueId() == player.getUniqueId())
+               continue;
+
+            entity.damage(usesModifier * 2, player);
+            kill = true;
+            return;
+         }
       }
    }
 }
