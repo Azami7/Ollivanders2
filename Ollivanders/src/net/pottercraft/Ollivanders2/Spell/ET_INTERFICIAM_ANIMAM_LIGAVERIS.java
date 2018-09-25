@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -79,7 +79,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
          //If the player's soul is split enough and they can survive making another horcrux, then make a new one and damage them
          if (futureHealth - 1 > 0 && souls > 0)
          {
-            HORCRUX horcrux = new HORCRUX(p, player, location, StationarySpells.HORCRUX, 5, 10);
+            HORCRUX horcrux = new HORCRUX(p, player.getUniqueId(), location, O2StationarySpellType.HORCRUX, 5, 10);
             horcrux.flair(10);
             p.stationarySpells.addStationarySpell(horcrux);
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
@@ -102,7 +102,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
                List<StationarySpellObj> stationarys = p.stationarySpells.getActiveStationarySpells();
                for (StationarySpellObj stationary : stationarys)
                {
-                  if (stationary.name == StationarySpells.HORCRUX && stationary.getCasterID().equals(player.getUniqueId()))
+                  if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(player.getUniqueId()))
                   {
                      Location tp = stationary.location;
                      tp.setY(tp.getY() + 1);

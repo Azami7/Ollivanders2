@@ -23,7 +23,7 @@ import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT;
 import net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM;
 import net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE;
 
 import org.bukkit.Bukkit;
@@ -315,7 +315,7 @@ public class OllivandersListener implements Listener
             p.getLogger().info("onPlayerChat: handling stationary spells");
          }
 
-         if (stationary.name.equals(StationarySpells.MUFFLIATO) && stationary.active)
+         if (stationary.getSpellType().equals(O2StationarySpellType.MUFFLIATO) && stationary.active)
          {
             muffliatos.add(stationary);
          }
@@ -1094,7 +1094,7 @@ public class OllivandersListener implements Listener
          {
             for (StationarySpellObj stationary : stationarys)
             {
-               if (stationary.name == StationarySpells.HORCRUX && stationary.getCasterID().equals(pid))
+               if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(pid))
                {
                   Location tp = stationary.location;
                   tp.setY(tp.getY() + 1);
@@ -1146,7 +1146,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloBlockPlaceEvent (BlockPlaceEvent event)
    {
-      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
+      if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
          {
@@ -1170,7 +1170,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloBlockBreakEvent (BlockBreakEvent event)
    {
-      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
+      if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
          {
@@ -1194,7 +1194,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloBlockPhysicsEvent (BlockPhysicsEvent event)
    {
-      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getBlock().getLocation()))
+      if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          event.setCancelled(true);
       }
@@ -1210,7 +1210,7 @@ public class OllivandersListener implements Listener
    {
       if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
       {
-         if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getClickedBlock().getLocation()))
+         if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getClickedBlock().getLocation()))
          {
             if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
             {
@@ -1270,7 +1270,7 @@ public class OllivandersListener implements Listener
    {
       if (event.isSticky())
       {
-         if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, event.getRetractLocation()))
+         if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getRetractLocation()))
          {
             event.setCancelled(true);
          }
@@ -1287,7 +1287,7 @@ public class OllivandersListener implements Listener
    {
       Location loc = event.getBlock().getLocation();
       Entity entity = event.getEntity();
-      if (p.stationarySpells.isInsideOf(StationarySpells.COLLOPORTUS, loc))
+      if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, loc))
       {
          event.setCancelled(true);
          if (event.getEntityType() == EntityType.FALLING_BLOCK)

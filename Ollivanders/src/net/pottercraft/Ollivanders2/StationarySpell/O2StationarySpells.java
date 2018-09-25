@@ -5,10 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 
 public class O2StationarySpells
@@ -16,10 +16,11 @@ public class O2StationarySpells
    private List<StationarySpellObj> O2StationarySpells = new ArrayList<>();
    Ollivanders2 p;
 
-   private String playerUUIDLabel = "Player_UUID";
-   private String spellLabel = "Name";
-   private String durationLabel = "Duration";
-   private String radiusLabel = "Radius";
+   private final String playerUUIDLabel = "Player_UUID";
+   private final String spellLabel = "Name";
+   private final String durationLabel = "Duration";
+   private final String radiusLabel = "Radius";
+   private final String spellLocLabel = "Spell_Loc";
 
    /**
     * Constructor
@@ -41,7 +42,7 @@ public class O2StationarySpells
    public void addStationarySpell (StationarySpellObj spell)
    {
       if (Ollivanders2.debug)
-         p.getLogger().info("O2StationarySpells.addStationarySpell: adding " + spell.name.toString());
+         p.getLogger().info("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString());
 
       if (spell != null)
          O2StationarySpells.add(spell);
@@ -56,7 +57,7 @@ public class O2StationarySpells
    public void removeStationarySpell (StationarySpellObj spell)
    {
       if (Ollivanders2.debug)
-         p.getLogger().info("O2StationarySpells.removeStationarySpell: removing " + spell.name.toString());
+         p.getLogger().info("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType().toString());
 
       spell.kill();
    }
@@ -108,11 +109,11 @@ public class O2StationarySpells
     * @param loc
     * @return
     */
-   public boolean isInsideOf (StationarySpells stationarySpell, Location loc)
+   public boolean isInsideOf (O2StationarySpellType stationarySpell, Location loc)
    {
       for (StationarySpellObj spell : O2StationarySpells)
       {
-         if (spell.name == stationarySpell)
+         if (spell.getSpellType() == stationarySpell)
          {
             if (spell.isInside(loc) && !spell.kill && spell.active)
             {
@@ -139,7 +140,7 @@ public class O2StationarySpells
          if (spell.kill)
          {
             if (Ollivanders2.debug)
-               p.getLogger().info("O2StationarySpells.upkeep: removing " + spell.name.toString());
+               p.getLogger().info("O2StationarySpells.upkeep: removing " + spell.getSpellType().toString());
 
             O2StationarySpells.remove(spell);
          }
@@ -151,17 +152,6 @@ public class O2StationarySpells
     */
    public void saveO2StationarySpells ()
    {
-      try
-      {
-         Ollivanders2.SLAPI.save(O2StationarySpells, "plugins/Ollivanders2/stationary.bin");
-         p.getLogger().finest("Saved stationary.bin");
-      }
-      catch (Exception e)
-      {
-         p.getLogger().warning("Could not save stationary.bin");
-      }
-
-      // serialize the stationary spell list
       List <Map<String, String>> serializedList = serializeO2StationarySpells();
 
       GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
@@ -173,26 +163,38 @@ public class O2StationarySpells
     */
    void loadO2StationarySpells ()
    {
-      try
+      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      List<Map<String, String>> serializedSpells = gsonLayer.readO2StationarySpells();
+
+      if (serializedSpells == null)
       {
-         O2StationarySpells = (List<StationarySpellObj>) Ollivanders2.SLAPI.load("plugins/Ollivanders2/stationary.bin");
-         p.getLogger().info("Loaded save file stationary.bin");
+         try
+         {
+            O2StationarySpells = (List<StationarySpellObj>) Ollivanders2.SLAPI.load("plugins/Ollivanders2/stationary.bin");
+            p.getLogger().info("Loaded save file stationary.bin");
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Did not find stationary.bin");
+         }
       }
-      catch (Exception e)
+      else
       {
-         p.getLogger().warning("Did not find stationary.bin");
+         p.getLogger().info("Reading saved stationary spells");
+         O2StationarySpells = deserializeO2StationarySpells(serializedSpells);
       }
    }
 
    /**
     * Serialize stationary spells for writing out json
-    * @return
+    *
+    * @return a map of the serialized stationary spell data
     */
    private List<Map<String, String>> serializeO2StationarySpells ()
    {
       List <Map<String, String>> serializedList = new ArrayList<>();
 
-      if (p.debug)
+      if (Ollivanders2.debug)
          p.getLogger().info("Serializing O2StationarySpells...");
 
       for (StationarySpellObj spell : O2StationarySpells)
@@ -200,9 +202,9 @@ public class O2StationarySpells
          Map<String, String> spellData = new HashMap<>();
 
          /**
-          * Spell name
+          * Spell type
           */
-         spellData.put(spellLabel, spell.name.toString());
+         spellData.put(spellLabel, spell.getSpellType().toString());
 
          /**
           * Player UUID
@@ -212,7 +214,7 @@ public class O2StationarySpells
          /**
           * Location
           */
-         Map<String, String> locData = p.common.serializeLocation(spell.location, "Spell_Loc");
+         Map<String, String> locData = p.common.serializeLocation(spell.location, spellLocLabel);
          for (Entry<String, String> e : locData.entrySet())
          {
             spellData.put(e.getKey(), e.getValue());
@@ -232,7 +234,9 @@ public class O2StationarySpells
 
          serializedList.add(spellData);
 
+         //
          // get spell-specific data
+         //
          Map <String, String> uniqueData = ((StationarySpell)spell).serializeSpellData();
          for (Entry<String, String> e : uniqueData.entrySet())
          {
@@ -241,5 +245,109 @@ public class O2StationarySpells
       }
 
       return serializedList;
+   }
+
+   /**
+    * Deserialize stationary spells
+    */
+   private List<StationarySpellObj> deserializeO2StationarySpells (List<Map<String, String>> serializedSpells)
+   {
+      List<StationarySpellObj> statSpells = new ArrayList<>();
+
+      if (serializedSpells == null || serializedSpells.size() < 1)
+         return statSpells;
+
+      for (Map<String, String> spellData : serializedSpells)
+      {
+         //
+         // spell name
+         //
+         if (!spellData.containsKey(spellLabel))
+            continue;
+         String name = spellData.get(spellLabel);
+         O2StationarySpellType spellType = O2StationarySpellType.getStationarySpellTypeFromString(name);
+         if (spellType == null)
+            continue;
+
+         StationarySpellObj statSpell = getStationarySpellByType(spellType);
+         if (statSpell == null)
+            continue;
+
+         //
+         // caster uuid
+         //
+         if (!spellData.containsKey(playerUUIDLabel))
+            continue;
+         UUID pid = p.common.uuidFromString(spellData.get(playerUUIDLabel));
+         if (pid == null)
+            continue;
+         statSpell.setPlayerID(pid);
+
+         //
+         // spell radius
+         //
+         if (!spellData.containsKey(radiusLabel))
+            continue;
+         Integer radius = p.common.integerFromString(spellData.get(radiusLabel));
+         if (radius == null)
+            continue;
+         statSpell.setRadius(radius);
+
+         //
+         // spell duration
+         //
+         if (!spellData.containsKey(durationLabel))
+            continue;
+         Integer duration = p.common.integerFromString(spellData.get(durationLabel));
+         if (duration == null)
+            continue;
+         statSpell.setDuration(duration);
+
+         //
+         // spell location
+         //
+         Location location = p.common.deserializeLocation(spellData, spellLocLabel);
+         if (location == null)
+            continue;
+         statSpell.setLocation(location);
+
+         //
+         // spell unique data
+         //
+         ((StationarySpell)statSpell).deserializeSpellData(spellData);
+
+         statSpell.setActive(true);
+         statSpells.add(statSpell);
+      }
+
+      return statSpells;
+   }
+
+   /**
+    * Create a basic stationary spell object by type. This will not have all the fields set to be active so
+    * will be set inactive by default.
+    *
+    * @param spellType the type of spell to create
+    * @return the spell if it could be created, null otherwise
+    */
+   public StationarySpellObj getStationarySpellByType (O2StationarySpellType spellType)
+   {
+      StationarySpellObj statSpell;
+
+      Class spellClass = spellType.getClassName();
+      try
+      {
+         statSpell = (StationarySpellObj)spellClass.getConstructor(Ollivanders2.class).newInstance(p);
+      }
+      catch (Exception e)
+      {
+         p.getLogger().info("Exception trying to create new instance of " + spellType.toString());
+         if (Ollivanders2.debug)
+            e.printStackTrace();
+
+         return null;
+      }
+
+      return statSpell;
    }
 }

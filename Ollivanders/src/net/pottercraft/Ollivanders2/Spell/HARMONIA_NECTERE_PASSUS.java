@@ -2,7 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.*;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpells;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -110,8 +110,8 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
                }
             }
          }
-         net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS harmoniaFrom = new net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS(p, player, fromLoc, StationarySpells.HARMONIA_NECTERE_PASSUS, 1, 10, toLoc);
-         net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS harmoniaTo = new net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS(p, player, toLoc, StationarySpells.HARMONIA_NECTERE_PASSUS, 1, 10, fromLoc);
+         net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS harmoniaFrom = new net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS(p, player.getUniqueId(), fromLoc, O2StationarySpellType.HARMONIA_NECTERE_PASSUS, 1, 10, toLoc);
+         net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS harmoniaTo = new net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS(p, player.getUniqueId(), toLoc, O2StationarySpellType.HARMONIA_NECTERE_PASSUS, 1, 10, fromLoc);
 
          harmoniaFrom.flair(20);
          harmoniaTo.flair(20);

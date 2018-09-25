@@ -19,5 +19,7 @@ public interface DataPersistenceLayer
 
    Map<O2HouseType, Integer> readHousePoints ();
 
-   Map <String, Map<String, String>> readO2Players ();
+   Map<String, Map<String, String>> readO2Players ();
+
+   List <Map<String, String>> readO2StationarySpells ();
 }

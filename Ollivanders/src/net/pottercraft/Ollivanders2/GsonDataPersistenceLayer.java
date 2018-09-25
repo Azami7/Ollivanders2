@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -224,6 +225,20 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       strMap = (Map <String, Map<String, String>>) gson.fromJson(json, strMap.getClass());
 
       return strMap;
+   }
+
+   @Override
+   public List <Map<String, String>> readO2StationarySpells ()
+   {
+      String json = readJSON(o2StationarySpellsJSONFile);
+
+      if (json == null)
+         return null;
+
+      List <Map<String, String>> strList = new ArrayList<>();
+      strList = (List <Map<String, String>>) gson.fromJson(json, strList.getClass());
+
+      return strList;
    }
 
    /**
