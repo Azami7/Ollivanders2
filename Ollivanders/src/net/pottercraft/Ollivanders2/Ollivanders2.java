@@ -74,7 +74,6 @@ public class Ollivanders2 extends JavaPlugin
 {
    private List<O2Spell> projectiles = new ArrayList<>();
 
-   private Set<Prophecy> prophecy = new HashSet<>();
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
    public O2Houses houses;
@@ -98,6 +97,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
    public static ChatColor chatColor = ChatColor.AQUA;
+   public static int chatDropoff = 15;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -145,7 +145,6 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().info("File directory for Ollivanders2");
       }
       projectiles = new ArrayList<>();
-      prophecy = new HashSet<>();
       fileConfig = getConfig();
 
       random.setSeed(System.currentTimeMillis());
@@ -175,6 +174,13 @@ public class Ollivanders2 extends JavaPlugin
       {
          chatColor = ChatColor.getByChar(getConfig().getString("chatColor"));
          getLogger().info("Setting plugin message color to " + chatColor.toString());
+      }
+
+      if (getConfig().isSet("chatDropoff"))
+      {
+         int drop = getConfig().getInt("chatDropoff");
+         if (drop > 0)
+            chatDropoff = drop;
       }
 
       useNonVerbalCasting = getConfig().getBoolean("nonVerbalSpellCasting");
@@ -1391,16 +1397,6 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Get the chat dropoff distance configuration.
-    *
-    * @return the chatDropoff config value
-    */
-   public int getChatDistance ()
-   {
-      return fileConfig.getInt("chatDropoff");
-   }
-
-   /**
     * Get all the active spell projectiles
     *
     * @return a list of all active spell projectiles
@@ -1529,16 +1525,6 @@ public class Ollivanders2 extends JavaPlugin
       {
          players.updatePlayer(player.getUniqueId(), o2p);
       }
-   }
-
-   /**
-    * Gets the set of prophecy objects
-    *
-    * @return Set of prophecy objects in server
-    */
-   public Set<Prophecy> getProphecy ()
-   {
-      return prophecy;
    }
 
    /**

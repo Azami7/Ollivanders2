@@ -54,46 +54,44 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
    public void checkEffect ()
    {
       age();
-      if (p.getConfig().getBoolean("muggletonBlockChange"))
+
+      if (duration % 20 == 0)
       {
-         if (duration % 20 == 0)
+         Material toMat = getBlock().getType();
+         byte toDat = getBlock().getData();
+         double viewDistance = Math.sqrt(2 * Math.pow(((Bukkit.getServer().getViewDistance() + 1) * 16), 2));
+         for (Player player : getBlock().getWorld().getPlayers())
          {
-            Material toMat = getBlock().getType();
-            byte toDat = getBlock().getData();
-            double viewDistance = Math.sqrt(2 * Math.pow(((Bukkit.getServer().getViewDistance() + 1) * 16), 2));
-            for (Player player : getBlock().getWorld().getPlayers())
+            if (player.isPermissionSet("Ollivanders2.BYPASS"))
             {
-               if (player.isPermissionSet("Ollivanders2.BYPASS"))
+               if (player.hasPermission("Ollivanders2.BYPASS"))
                {
-                  if (player.hasPermission("Ollivanders2.BYPASS"))
-                  {
-                     continue;
-                  }
-               }
-               if (player.getLocation().distance(location) < viewDistance && !isInside(player.getLocation()))
-               {
-                  for (Block block : p.common.getBlocksInRadius(location, radius))
-                  {
-                     player.sendBlockChange(block.getLocation(), toMat, toDat);
-                  }
-               }
-               else if (isInside(player.getLocation()))
-               {
-                  for (Block block : p.common.getBlocksInRadius(location, radius))
-                  {
-                     player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
-                  }
+                  continue;
                }
             }
-         }
-         if (duration <= 1)
-         {
-            for (Player player : getBlock().getWorld().getPlayers())
+            if (player.getLocation().distance(location) < viewDistance && !isInside(player.getLocation()))
+            {
+               for (Block block : p.common.getBlocksInRadius(location, radius))
+               {
+                  player.sendBlockChange(block.getLocation(), toMat, toDat);
+               }
+            }
+            else if (isInside(player.getLocation()))
             {
                for (Block block : p.common.getBlocksInRadius(location, radius))
                {
                   player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
                }
+            }
+         }
+      }
+      if (duration <= 1)
+      {
+         for (Player player : getBlock().getWorld().getPlayers())
+         {
+            for (Block block : p.common.getBlocksInRadius(location, radius))
+            {
+               player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
             }
          }
       }
