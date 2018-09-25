@@ -53,8 +53,11 @@ public final class OPPUGNO extends DarkArts
    public void checkEffect ()
    {
       move();
-      for (LivingEntity e : getLivingEntities(2))
+      for (LivingEntity e : getLivingEntities(1.5))
       {
+         if (e.getUniqueId() == player.getUniqueId())
+            continue;
+
          for (O2Spell spell : p.getProjectiles())
          {
             if (spell instanceof Transfiguration)

@@ -49,7 +49,7 @@ public abstract class GaleatiSuper extends Charms
    {
       move();
 
-      for (LivingEntity live : getLivingEntities(2))
+      for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live instanceof Player)
          {

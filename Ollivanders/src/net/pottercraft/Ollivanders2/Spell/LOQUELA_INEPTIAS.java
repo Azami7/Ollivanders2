@@ -59,9 +59,12 @@ public class LOQUELA_INEPTIAS extends Charms
    public void checkEffect ()
    {
       move();
-      List<LivingEntity> living = getLivingEntities(2);
+      List<LivingEntity> living = getLivingEntities(1.5);
       for (LivingEntity live : living)
       {
+         if (live.getUniqueId() == player.getUniqueId())
+            continue;
+
          if (live instanceof Player)
          {
             Player player = (Player) live;

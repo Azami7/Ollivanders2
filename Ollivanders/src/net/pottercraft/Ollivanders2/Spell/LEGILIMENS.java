@@ -52,10 +52,13 @@ public final class LEGILIMENS extends DarkArts
    public void checkEffect ()
    {
       move();
-      for (LivingEntity live : getLivingEntities(2))
+      for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live instanceof Player)
          {
+            if (live.getUniqueId() == player.getUniqueId())
+               continue;
+
             Player target = (Player) live;
             double experience = p.getO2Player(target).getSpellCount(O2SpellType.LEGILIMENS);
             if (usesModifier > experience)

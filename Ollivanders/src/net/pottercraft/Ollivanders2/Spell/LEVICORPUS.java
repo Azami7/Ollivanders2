@@ -1,8 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.*;
-import net.pottercraft.Ollivanders2.Effect.O2EffectType;
-import net.pottercraft.Ollivanders2.Player.O2Player;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Effect.SUSPENSION;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -53,11 +52,14 @@ public final class LEVICORPUS extends DarkArts
    public void checkEffect ()
    {
       move();
-      for (LivingEntity live : getLivingEntities(2))
+      for (LivingEntity live : getLivingEntities(1.5))
       {
+         if (live.getUniqueId() == player.getUniqueId())
+            continue;
+
          if (live instanceof Player)
          {
-            net.pottercraft.Ollivanders2.Effect.LEVICORPUS levi = new net.pottercraft.Ollivanders2.Effect.LEVICORPUS(p, (int)(usesModifier * 1200.0), live.getUniqueId());
+            SUSPENSION levi = new SUSPENSION(p, (int)(usesModifier * 1200.0), live.getUniqueId());
 
             p.players.playerEffects.addEffect(levi);
 
