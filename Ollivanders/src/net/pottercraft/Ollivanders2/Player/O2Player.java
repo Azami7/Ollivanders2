@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.House.O2HouseType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
@@ -704,28 +705,29 @@ public class O2Player
       bookMeta.setAuthor(playerName);
       bookMeta.setTitle("Spell Journal");
 
-      String content = "Spell Journal\n\n";
+      StringBuilder content = new StringBuilder();
+      content.append("Spell Journal\n\n");
       int lineCount = 2;
       for (Entry <O2SpellType, Integer> e : knownSpells.entrySet())
       {
          // if we have done 14 lines, make a new page
          if (lineCount == 14)
          {
-            bookMeta.addPage(content);
+            bookMeta.addPage(content.toString());
             lineCount = 0;
-            content = "";
+            content = new StringBuilder();
          }
 
          // add a newline to all lines except the first
          if (lineCount != 0)
          {
-            content = content + "\n";
+            content.append("\n");
          }
 
-         String spell = p.common.firstLetterCapitalize(p.common.enumRecode(e.getKey().toString().toLowerCase()));
+         String spell = Ollivanders2Common.firstLetterCapitalize(p.common.enumRecode(e.getKey().toString().toLowerCase()));
          String count = e.getValue().toString();
          String line = spell + " " + count;
-         content = content + spell + " " + count;
+         content.append(spell).append(" ").append(count);
 
          lineCount++;
          // ~18 characters per line, this will likely wrap
@@ -735,7 +737,7 @@ public class O2Player
          }
       }
 
-      bookMeta.addPage(content);
+      bookMeta.addPage(content.toString());
 
       bookMeta.setGeneration(BookMeta.Generation.ORIGINAL);
       spellJournal.setItemMeta(bookMeta);

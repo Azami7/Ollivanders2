@@ -511,11 +511,13 @@ public class Ollivanders2Common
       String nameLow = s.toLowerCase();
       String[] words = nameLow.split("_");
       String comp = "";
+
       for (String st : words)
       {
          comp = comp.concat(st);
          comp = comp.concat(" ");
       }
+
       comp = comp.substring(0, comp.length() - 1);
       return comp;
    }
@@ -575,14 +577,14 @@ public class Ollivanders2Common
    {
       Map<String, String> locData = new HashMap<>();
 
-      /**
-       * Location world
-       */
+      //
+      // Location world
+      //
       locData.put(labelPrefix + "_" + locationWorldLabel, location.getWorld().getName());
 
-      /**
-       * Location x, y, z
-       */
+      //
+      //Location x, y, z
+
       Double x = location.getX();
       locData.put(labelPrefix + "_" + locationXLabel, x.toString());
 
@@ -754,14 +756,14 @@ public class Ollivanders2Common
     */
    public String stringArrayToString (String[] strArray)
    {
-      String newString = "";
+      StringBuilder newString = new StringBuilder();
+
       for (String str : strArray)
       {
-         newString = newString + " " + str;
+         newString.append(" ").append(str);
       }
-      newString = newString.trim();
 
-      return newString;
+      return newString.toString().trim();
    }
 
    public Color colorByNumber (int number)

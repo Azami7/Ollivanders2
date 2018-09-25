@@ -504,21 +504,23 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      String summary = "Ollivanders2 player summary:\n\n";
+      StringBuilder summary = new StringBuilder();
+
+      summary.append("Ollivanders2 player summary:\n\n");
 
       // wand type
       if (o2p.foundWand())
       {
          String wandlore = o2p.getDestinedWandLore();
-         summary = summary + "\nWand Type: " + wandlore;
+         summary.append("\nWand Type: ").append(wandlore);
 
          O2SpellType masterSpell = o2p.getMasterSpell();
          if (masterSpell != null)
          {
-            summary = summary + "\nMaster Spell: " + common.enumRecode(masterSpell.toString().toLowerCase());
+            summary.append("\nMaster Spell: ").append(common.enumRecode(masterSpell.toString().toLowerCase()));
          }
 
-         summary = summary + "\n";
+         summary.append("\n");
       }
 
       // sorted
@@ -527,44 +529,43 @@ public class Ollivanders2 extends JavaPlugin
          if (houses.isSorted(player))
          {
             String house = houses.getHouse(player).getName();
-            summary = summary + "\nHouse: " + house + "\n";
+            summary.append("\nHouse: ").append(house).append("\n");
          }
          else
          {
-            summary = summary + "\nYou have not been sorted.\n";
+            summary.append("\nYou have not been sorted.\n");
          }
       }
 
       //year
       if (useYears)
-         summary = summary + "\nYear: " + o2p.getYear().getIntValue() + "\n";
+         summary.append("\nYear: ").append(o2p.getYear().getIntValue()).append("\n");
 
       //animagus
       if (o2p.isAnimagus())
       {
-         summary = summary + "\nAnimagus Form: " + common.enumRecode(o2p.getAnimagusForm().toString());
+         summary.append("\nAnimagus Form: ").append(common.enumRecode(o2p.getAnimagusForm().toString()));
       }
 
       // effects
       if (isOp(sender))
       {
          List<O2EffectType> effects = players.playerEffects.getEffects(o2p.getID());
-         summary = summary + "\n\nAffected by:\n";
+         summary.append("\n\nAffected by:\n");
 
          if (effects == null || effects.isEmpty())
          {
-            summary = summary + "Nothing";
+            summary.append("Nothing");
          }
          else
          {
             for (O2EffectType effectType : effects)
             {
-
-               summary = summary + common.enumRecode(effectType.toString()) + "\n";
+               summary.append(common.enumRecode(effectType.toString())).append("\n");
             }
          }
 
-         summary = summary + "\n";
+         summary.append("\n");
       }
 
       // spells
@@ -572,7 +573,7 @@ public class Ollivanders2 extends JavaPlugin
 
       if (knownSpells.size() > 0)
       {
-         summary = summary + "\n\nKnown Spells and Spell Level:";
+         summary.append("\n\nKnown Spells and Spell Level:");
 
          for (O2SpellType spellType : O2SpellType.values())
          {
@@ -581,20 +582,20 @@ public class Ollivanders2 extends JavaPlugin
                String name = spellType.getSpellName();
                if (name != null) // happens if a spell is not currently loaded, such as if a server removes LibsDisguises
                {
-                  summary = summary + "\n* " + name + " " + knownSpells.get(spellType).toString();
+                  summary.append("\n* ").append(name).append(" ").append(knownSpells.get(spellType).toString());
                }
             }
          }
       }
       else
       {
-         summary = summary + "\n\nYou have not learned any spells.";
+         summary.append("\n\nYou have not learned any spells.");
       }
 
       Map<O2PotionType, Integer> knownPotions = o2p.getKnownPotions();
       if (!knownPotions.isEmpty())
       {
-         summary = summary + "\n\nKnown potions and Potion Level:";
+         summary.append("\n\nKnown potions and Potion Level:");
 
          for (O2PotionType potionType : O2PotionType.values())
          {
@@ -603,17 +604,17 @@ public class Ollivanders2 extends JavaPlugin
                String name = potionType.getPotionName();
                if (name != null) // happens if a spell is not currently loaded, such as if a server removes LibsDisguises
                {
-                  summary = summary + "\n* " + name + " " + knownPotions.get(potionType).toString();
+                  summary.append("\n* ").append(name).append(" ").append(knownPotions.get(potionType).toString());
                }
             }
          }
       }
       else
       {
-         summary = summary + "\n\nYou have not learned any potions.";
+         summary.append("\n\nYou have not learned any potions.");
       }
 
-      sender.sendMessage(chatColor + summary);
+      sender.sendMessage(chatColor + summary.toString());
 
       return true;
    }
@@ -737,19 +738,19 @@ public class Ollivanders2 extends JavaPlugin
          if (house != null)
          {
             ArrayList<String> members = houses.getHouseMembers(house);
-            String memberStr = "";
+            StringBuilder memberStr = new StringBuilder();
 
             if (members.isEmpty())
-               memberStr = "no members";
+               memberStr.append("no members");
             else
             {
                for (String p : members)
                {
-                  memberStr = memberStr + p + " ";
+                  memberStr.append(p).append(" ");
                }
             }
 
-            sender.sendMessage(chatColor + "Members of " + targetHouse + " are:\n" + memberStr);
+            sender.sendMessage(chatColor + "Members of " + targetHouse + " are:\n" + memberStr.toString());
 
             return true;
          }
@@ -757,16 +758,16 @@ public class Ollivanders2 extends JavaPlugin
          sender.sendMessage(chatColor + "Invalid house name '" + targetHouse + "'");
       }
 
-      String houseNames = "";
+      StringBuilder houseNames = new StringBuilder();
       ArrayList<String> h = houses.getAllHouseNames();
 
       for (String name : h)
       {
-         houseNames = houseNames + name + " ";
+         houseNames.append(name).append(" ");
       }
 
       sender.sendMessage(chatColor
-            + "Ollivanders2 House are:\n" + houseNames + "\n"
+            + "Ollivanders2 House are:\n" + houseNames.toString() + "\n"
             + "\nTo see the members of a specific house, run the command /ollivanders2 house list [house]"
             + "\nFor example, /ollivanders2 list Hufflepuff");
 
@@ -1561,6 +1562,7 @@ public class Ollivanders2 extends JavaPlugin
       if (spell == null)
       {
          getLogger().info("canCast called for null spell");
+         return false;
       }
       if (player.isPermissionSet("Ollivanders2." + spell.toString()))
       {
@@ -2059,15 +2061,16 @@ public class Ollivanders2 extends JavaPlugin
    private boolean listAllIngredients (Player player)
    {
       List<String> ingredientList = IngredientType.getAllIngredientNames();
-      String displayString = "Ingredients:";
+      StringBuilder displayString = new StringBuilder();
+      displayString.append("Ingredients:");
 
       for (String name : ingredientList)
       {
-         displayString = displayString + "\n" + name;
+         displayString.append("\n").append(name);
       }
-      displayString = displayString + "\n";
+      displayString.append("\n");
 
-      player.sendMessage(chatColor + displayString);
+      player.sendMessage(chatColor + displayString.toString());
 
       return true;
    }
@@ -2080,16 +2083,17 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean listAllPotions (Player player)
    {
-      String displayString = "Potions:";
+      StringBuilder displayString = new StringBuilder();
+      displayString.append("Potions:");
 
       List<String> potionNames = potions.getAllPotionNames();
       for (String name : potionNames)
       {
-         displayString = displayString + "\n" + name;
+         displayString.append("\n").append(name);
       }
-      displayString = displayString + "\n";
+      displayString.append("\n");
 
-      player.sendMessage(chatColor + displayString);
+      player.sendMessage(chatColor + displayString.toString());
 
       return true;
    }
@@ -2160,12 +2164,14 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void listAllBooks (Player player)
    {
-      String titleList = "Book Titles:";
+      StringBuilder titleList = new StringBuilder();
+      titleList.append("Book Titles:");
+
       for (String bookTitle : books.getAllBookTitles())
       {
-         titleList = titleList + "\n" + bookTitle;
+         titleList.append("\n").append(bookTitle);
       }
 
-      player.sendMessage(chatColor + titleList);
+      player.sendMessage(chatColor + titleList.toString());
    }
 }

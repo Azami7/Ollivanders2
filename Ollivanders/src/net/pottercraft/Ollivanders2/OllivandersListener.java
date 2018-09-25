@@ -901,7 +901,7 @@ public class OllivandersListener implements Listener
     * @param player the player rotating spells
     * @param action the player action
     */
-   void rotateNonVerbalSpell (Player player, Action action)
+   private void rotateNonVerbalSpell (Player player, Action action)
    {
       if (!Ollivanders2.useNonVerbalCasting)
          return;
@@ -1367,7 +1367,7 @@ public class OllivandersListener implements Listener
     *
     * @param player player holding a wand.
     */
-   public void allyWand (Player player)
+   private void allyWand (Player player)
    {
       ItemStack wand = player.getInventory().getItemInMainHand();
       ItemMeta wandMeta = wand.getItemMeta();
@@ -1748,7 +1748,7 @@ public class OllivandersListener implements Listener
     * @param player the player brewing the potion
     * @param cauldron the cauldron of ingredients
     */
-   void brewPotion (Player player, Block cauldron)
+   private void brewPotion (Player player, Block cauldron)
    {
       if (Ollivanders2.debug)
          p.getLogger().info("OllivandersListener:brewPotion: brewing potion");
@@ -1825,7 +1825,6 @@ public class OllivandersListener implements Listener
       {
          // cannot interact with anything while asleep or suspended
          event.setCancelled(true);
-         return;
       }
    }
 
@@ -1843,7 +1842,6 @@ public class OllivandersListener implements Listener
       {
          // cannot sleep while awake effect is active
          event.setCancelled(true);
-         return;
       }
    }
 

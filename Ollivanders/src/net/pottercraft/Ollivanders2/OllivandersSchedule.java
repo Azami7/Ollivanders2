@@ -37,10 +37,10 @@ import net.pottercraft.Ollivanders2.Spell.O2SpellType;
  */
 class OllivandersSchedule implements Runnable
 {
-   Ollivanders2 p;
-   int counter = 0;
-   static Set<UUID> flying = new HashSet<>();
-   Set<UUID> onBroom = new HashSet<>();
+   private Ollivanders2 p;
+   private int counter = 0;
+   private static Set<UUID> flying = new HashSet<>();
+   private Set<UUID> onBroom = new HashSet<>();
 
    public OllivandersSchedule (Ollivanders2 plugin)
    {
@@ -174,11 +174,11 @@ class OllivandersSchedule implements Runnable
       ItemMeta meta = item.getItemMeta();
       List<String> lore = meta.getLore();
       ArrayList<String> newLore = new ArrayList<>();
-      for (int i = 0; i < lore.size(); i++)
+      for (String l : lore)
       {
-         if (lore.get(i).contains("Geminio "))
+         if (l.contains("Geminio "))
          {
-            String[] loreParts = lore.get(i).split(" ");
+            String[] loreParts = l.split(" ");
             int magnitude = Integer.parseInt(loreParts[1]);
             if (magnitude > 1)
             {
@@ -189,7 +189,7 @@ class OllivandersSchedule implements Runnable
          }
          else
          {
-            newLore.add(lore.get(i));
+            newLore.add(l);
          }
       }
       meta.setLore(newLore);
@@ -206,11 +206,11 @@ class OllivandersSchedule implements Runnable
       ItemMeta meta = item.getItemMeta();
       List<String> lore = meta.getLore();
       int magnitude = 0;
-      for (int i = 0; i < lore.size(); i++)
+      for (String l : lore)
       {
-         if (lore.get(i).contains("Flagrante "))
+         if (l.contains("Flagrante "))
          {
-            String[] loreParts = lore.get(i).split(" ");
+            String[] loreParts = l.split(" ");
             magnitude = Integer.parseInt(loreParts[1]);
          }
       }
@@ -362,7 +362,6 @@ class OllivandersSchedule implements Runnable
                   {
                      continue playerIter;
                   }
-                  //player.setAllowFlight(false);
                   player.setFlying(false);
                   this.onBroom.remove(player.getUniqueId());
                }

@@ -157,7 +157,7 @@ public final class O2Books
 
       O2Book o2book = getO2BookByType(match);
 
-      return o2book.createBook();
+      return o2book.getBookItem();
    }
 
    /**
@@ -175,7 +175,7 @@ public final class O2Books
 
          if (o2book != null)
          {
-            bookStack.add(o2book.createBook());
+            bookStack.add(o2book.getBookItem());
          }
       }
 
