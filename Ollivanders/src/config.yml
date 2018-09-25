@@ -45,9 +45,6 @@ witchDrop: false
 #
 # Turns on debug output in your logs. This can also be toggled on and off in game by using the command
 # /olli debug
-#
-# This will make your logs meaningfully bigger and may impact server performance, therefore it is not
-# recommended to run with debug mode set to 'true' for long periods of time.
 debug: false
 
 #
