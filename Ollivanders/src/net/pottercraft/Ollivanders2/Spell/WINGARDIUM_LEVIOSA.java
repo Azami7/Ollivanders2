@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -82,14 +83,14 @@ public final class WINGARDIUM_LEVIOSA extends Charms
             moving = false;
             double radius = usesModifier / 4;
             ArrayList<COLLOPORTUS> collos = new ArrayList<>();
-            for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
+            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
             {
                if (stat instanceof COLLOPORTUS)
                {
                   collos.add((COLLOPORTUS) stat);
                }
             }
-            for (Block block : p.common.getBlocksInRadius(location, radius))
+            for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
             {
                boolean insideCollo = false;
                for (COLLOPORTUS collo : collos)

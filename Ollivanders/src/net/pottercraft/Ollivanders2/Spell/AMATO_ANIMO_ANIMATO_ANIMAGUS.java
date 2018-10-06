@@ -3,8 +3,10 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_EFFECT;
 import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -70,7 +72,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
    @Override
    public void checkEffect ()
    {
-      O2Player o2p = p.players.getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
 
       if (o2p == null)
       {
@@ -108,7 +110,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
       if ((curTime >= 23000 && curTime <= 24000) || (curTime >=12000 && curTime <= 13000))
       {
          ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, player.getUniqueId());
-         p.players.playerEffects.addEffect(effect);
+         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
          player.sendMessage(Ollivanders2.chatColor + "You feel slightly different.");
       }
@@ -127,10 +129,10 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
     */
    private void transform (O2Player o2p)
    {
-      if (p.players.playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT))
       {
          // change them back to human form
-         p.players.playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT);
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT);
       }
       else
       {
@@ -140,7 +142,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
 
    private void transformToAnimalForm (O2Player o2p)
    {
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
+      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
 
       int uses = (int)(usesModifier * 10);
 
@@ -157,7 +159,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
       if (rand < successRate)
       {
          ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
-         p.players.playerEffects.addEffect(animagusEffect);
+         Ollivanders2API.getPlayers().playerEffects.addEffect(animagusEffect);
 
          player.sendMessage(Ollivanders2.chatColor + "You feel very different.");
       }

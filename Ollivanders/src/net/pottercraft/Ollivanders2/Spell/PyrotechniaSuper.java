@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 /**
  * Shoots one or more fireworks in to the air.
@@ -75,7 +76,7 @@ public abstract class PyrotechniaSuper extends Charms
 
          if (shuffleTypes)
          {
-            int rand = Ollivanders2.random.nextInt() % 4;
+            int rand = Ollivanders2Common.random.nextInt() % 4;
             if (rand == 0)
                fireworkType = Type.STAR;
             else if (rand == 1)

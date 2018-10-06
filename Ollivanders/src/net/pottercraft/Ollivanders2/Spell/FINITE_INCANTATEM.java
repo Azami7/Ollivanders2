@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -63,7 +64,7 @@ public final class FINITE_INCANTATEM extends Charms
          {
             Player ply = (Player) live;
 
-            p.players.playerEffects.ageAllEffects(ply.getUniqueId(), (int)(usesModifier * 1200));
+            Ollivanders2API.getPlayers().playerEffects.ageAllEffects(ply.getUniqueId(), (int)(usesModifier * 1200));
 
             kill();
             return;

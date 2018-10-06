@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -56,7 +57,7 @@ public final class FLAGRANTE extends DarkArts
       List<Item> items = getItems(1);
       for (Item item : items)
       {
-         if (p.common.isWand(item.getItemStack()))
+         if (Ollivanders2API.common.isWand(item.getItemStack()))
          {
             return;
          }

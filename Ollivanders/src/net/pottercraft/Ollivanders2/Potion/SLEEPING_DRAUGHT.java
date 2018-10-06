@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Potion;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Effect.SLEEPING;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
@@ -45,7 +46,7 @@ public class SLEEPING_DRAUGHT extends O2Potion
    @Override
    public void drink (O2Player o2p, Player player)
    {
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
       {
          player.sendMessage(Ollivanders2.chatColor + "You yawn, otherwise nothing happens.");
       }
@@ -53,7 +54,7 @@ public class SLEEPING_DRAUGHT extends O2Potion
       {
          // put them asleep for ~2 minutes
          SLEEPING effect = new SLEEPING(p, 2400, player.getUniqueId());
-         p.players.playerEffects.addEffect(effect);
+         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
          player.sendMessage(Ollivanders2.chatColor + "You fall in to a deep, dreamless, enchanted sleep.");
       }

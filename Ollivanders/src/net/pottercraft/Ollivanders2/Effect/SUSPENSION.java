@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Effect;
 
 import java.util.UUID;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -94,7 +95,7 @@ public class SUSPENSION extends O2Effect
 
       if (!canFly)
       {
-         if (!p.players.playerEffects.hasEffect(targetID, O2EffectType.FLYING))
+         if (!Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, O2EffectType.FLYING))
          {
             target.setAllowFlight(false);
          }
