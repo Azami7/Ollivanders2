@@ -7,7 +7,7 @@ import java.util.UUID;
 import java.util.ArrayList;
 
 import net.pottercraft.Ollivanders2.Effect.O2Effects;
-import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
+import net.pottercraft.Ollivanders2.GsonDAO;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
@@ -103,14 +103,7 @@ public class O2Players
          return;
       }
 
-      if (!O2PlayerMap.containsKey(pid))
-      {
-         O2PlayerMap.put(pid, o2p);
-      }
-      else
-      {
-         O2PlayerMap.replace(pid, o2p);
-      }
+      O2PlayerMap.put(pid, o2p);
    }
 
    /**
@@ -156,7 +149,7 @@ public class O2Players
          return;
       }
 
-      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      GsonDAO gsonLayer = new GsonDAO(p);
       gsonLayer.writeO2Players(serializedMap);
    }
 
@@ -165,7 +158,7 @@ public class O2Players
     */
    public void loadO2Players ()
    {
-      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      GsonDAO gsonLayer = new GsonDAO(p);
 
       // load players from the save file, if it exists
       Map <String, Map<String, String>> serializedMap = gsonLayer.readO2Players();

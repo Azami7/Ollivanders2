@@ -49,6 +49,13 @@ public class Ollivanders2Common
    private final String locationYLabel = "Y-Value";
    private final String locationZLabel = "Z-Value";
 
+   public static final String galleon = "Galleon";
+   public static final Material galleonMaterial = Material.GOLD_INGOT;
+   public static final String sickle = "Sickle";
+   public static final Material sickleMaterial = Material.IRON_INGOT;
+   public static final String knut = "Knut";
+   public static final Material knutMaterial = Material.NETHER_BRICK;
+
    public static final ArrayList<EntityType> smallFriendlyAnimals = new ArrayList<EntityType>() {{
       add(EntityType.BAT);
       add(EntityType.CHICKEN);

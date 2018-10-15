@@ -360,14 +360,7 @@ public class O2Player
    {
       if (count >= 1)
       {
-         if (knownSpells.containsKey(spell))
-         {
-            knownSpells.replace(spell, count);
-         }
-         else
-         {
-            knownSpells.put(spell, count);
-         }
+         knownSpells.put(spell, count);
       }
       else
       {
@@ -398,14 +391,7 @@ public class O2Player
    {
       if (count >= 1)
       {
-         if (knownPotions.containsKey(potionType))
-         {
-            knownPotions.replace(potionType, count);
-         }
-         else
-         {
-            knownPotions.put(potionType, count);
-         }
+         knownPotions.put(potionType, count);
       }
       else
       {
@@ -429,14 +415,7 @@ public class O2Player
          c = Class.forName(spellClass).getConstructor();
          O2Spell s = (O2Spell) c.newInstance();
 
-         if (recentSpells.containsKey(spellType))
-         {
-            recentSpells.replace(spellType, System.currentTimeMillis() + s.getCoolDown());
-         }
-         else
-         {
-            recentSpells.put(spellType, System.currentTimeMillis() + s.getCoolDown());
-         }
+         recentSpells.put(spellType, System.currentTimeMillis() + s.getCoolDown());
       }
       catch (InvocationTargetException e)
       {

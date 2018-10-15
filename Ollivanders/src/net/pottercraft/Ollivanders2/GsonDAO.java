@@ -21,7 +21,7 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class GsonDataPersistenceLayer
+public class GsonDAO
 {
    private Gson gson;
    private Ollivanders2 p;
@@ -38,7 +38,7 @@ public class GsonDataPersistenceLayer
     *
     * @param plugin
     */
-   public GsonDataPersistenceLayer (Ollivanders2 plugin)
+   public GsonDAO (Ollivanders2 plugin)
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
       p = plugin;
