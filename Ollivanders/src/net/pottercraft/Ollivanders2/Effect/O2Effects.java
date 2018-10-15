@@ -235,7 +235,15 @@ public class O2Effects
 
                if (activeEffects.containsKey(pid))
                {
-                  activeEffects.remove(pid);
+                  if (activeEffects.containsKey(pid))
+                  {
+                     Map<O2EffectType, O2Effect> playerEffects = activeEffects.get(pid);
+
+                     for (O2Effect effect : playerEffects.values())
+                     {
+                        effect.kill();
+                     }
+                  }
                }
                if (savedEffects.containsKey(pid))
                {
