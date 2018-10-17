@@ -212,8 +212,13 @@ public class O2Houses
     */
    public void unsort (Player player)
    {
-      if (!isSorted(player))
+      if (isSorted(player))
+      {
+         O2HouseType houseType = O2HouseMap.get(player.getUniqueId());
+         updateTeam(player, houseType, false);
+
          O2HouseMap.remove(player.getUniqueId());
+      }
    }
 
    /**
@@ -247,11 +252,8 @@ public class O2Houses
     */
    public void forceSetHouse(Player player, O2HouseType houseType)
    {
-      if (!sort(player, houseType))
-      {
-         O2HouseMap.put(player.getUniqueId(), houseType);
-         addPlayerToHouseTeam(player);
-      }
+      unsort(player);
+      sort(player, houseType);
    }
 
    /**

@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
+import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 
@@ -856,5 +857,33 @@ public class Ollivanders2Common
       Date date = new Date();
 
       return dateFormat.format(date);
+   }
+
+   /**
+    * Get all the wands in the game.
+    *
+    * @return a list of all the wands
+    */
+   public ArrayList<ItemStack> getAllWands ()
+   {
+      ArrayList<ItemStack> wands = new ArrayList<>();
+
+      for (String wood : O2PlayerCommon.woodArray)
+      {
+         for (String core : O2PlayerCommon.coreArray)
+         {
+            ItemStack wand = new ItemStack(Ollivanders2.wandMaterial);
+            List<String> lore = new ArrayList<>();
+            lore.add(wood + " and " + core);
+            ItemMeta meta = wand.getItemMeta();
+            meta.setLore(lore);
+            meta.setDisplayName("Wand");
+            wand.setItemMeta(meta);
+            wand.setAmount(1);
+            wands.add(wand);
+         }
+      }
+
+      return wands;
    }
 }

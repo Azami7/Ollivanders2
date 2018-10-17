@@ -77,6 +77,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
    public static ChatColor chatColor = ChatColor.AQUA;
+   public static Material wandMaterial = Material.STICK;
    public static int chatDropoff = 15;
 
    /**
@@ -1319,7 +1320,7 @@ public class Ollivanders2 extends JavaPlugin
       String core = coreArray[Math.abs(Ollivanders2Common.random.nextInt() % coreArray.length)];
 
       List<ItemStack> kit = new ArrayList<>();
-      ItemStack wand = new ItemStack(Material.STICK);
+      ItemStack wand = new ItemStack(wandMaterial);
       List<String> lore = new ArrayList<>();
       lore.add(wood + " and " + core);
       ItemMeta meta = wand.getItemMeta();
@@ -1342,26 +1343,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean okitWands (Player player)
    {
-      String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
-      String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
-
-      List<ItemStack> kit = new ArrayList<>();
-
-      for (String wood : woodArray)
-      {
-         for (String core : coreArray)
-         {
-            ItemStack wand = new ItemStack(Material.STICK);
-            List<String> lore = new ArrayList<>();
-            lore.add(wood + " and " + core);
-            ItemMeta meta = wand.getItemMeta();
-            meta.setLore(lore);
-            meta.setDisplayName("Wand");
-            wand.setItemMeta(meta);
-            wand.setAmount(1);
-            kit.add(wand);
-         }
-      }
+      List<ItemStack> kit = Ollivanders2API.common.getAllWands();
 
       givePlayerKit(player, kit);
 
