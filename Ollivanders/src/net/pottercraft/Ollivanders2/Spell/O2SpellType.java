@@ -140,6 +140,7 @@ public enum O2SpellType
    PROTEGO_HORRIBILIS (net.pottercraft.Ollivanders2.Spell.PROTEGO_HORRIBILIS.class),
    PROTEGO_MAXIMA (net.pottercraft.Ollivanders2.Spell.PROTEGO_MAXIMA.class),
    PROTEGO_TOTALUM (net.pottercraft.Ollivanders2.Spell.PROTEGO_TOTALUM.class),
+   PYROSVESTIRAS (net.pottercraft.Ollivanders2.Spell. PYROSVESTIRAS.class),
    REDUCIO (net.pottercraft.Ollivanders2.Spell.REDUCIO.class),
    REDUCTO (net.pottercraft.Ollivanders2.Spell.REDUCTO.class),
    REPARIFARGE (net.pottercraft.Ollivanders2.Spell.REPARIFARGE.class),
