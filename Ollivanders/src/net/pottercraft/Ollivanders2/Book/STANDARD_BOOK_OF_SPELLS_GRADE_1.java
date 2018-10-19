@@ -28,7 +28,6 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_1 extends O2Book
       spells.add(O2SpellType.DIFFINDO);
       spells.add(O2SpellType.WINGARDIUM_LEVIOSA);
       spells.add(O2SpellType.INCENDIO);
-      spells.add(O2SpellType. PYROSVESTIRAS);
       //9
       //10
       //11
