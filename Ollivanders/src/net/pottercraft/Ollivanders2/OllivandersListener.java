@@ -873,10 +873,13 @@ public class OllivandersListener implements Listener
                p.getLogger().info("OllivandersListener:onPlayerInteract: waving destined wand");
 
             // play a sound and visual effect when they right-click their destined wand with no spell
-            Location location = player.getLocation();
-            location.setY(location.getY() + 1.6);
-            player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
-            player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+            if (p.playerCommon.wandCheck(player, EquipmentSlot.HAND) < 2)
+            {
+               Location location = player.getLocation();
+               location.setY(location.getY() + 1.6);
+               player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
+               player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+            }
          }
       }
       //
