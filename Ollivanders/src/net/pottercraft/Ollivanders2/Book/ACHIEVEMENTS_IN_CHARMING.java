@@ -23,5 +23,6 @@ public class ACHIEVEMENTS_IN_CHARMING extends O2Book
       spells.add(O2SpellType.LUMOS);
       spells.add(O2SpellType.WINGARDIUM_LEVIOSA);
       spells.add(O2SpellType.SPONGIFY);
+      spells.add(O2SpellType.PYROSVESTIRAS);
    }
 }
