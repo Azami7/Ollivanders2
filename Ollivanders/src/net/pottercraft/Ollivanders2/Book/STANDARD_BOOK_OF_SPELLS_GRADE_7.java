@@ -1,6 +1,8 @@
 package net.pottercraft.Ollivanders2.Book;
 
+import net.pottercraft.Ollivanders2.House.O2HouseType;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
@@ -29,7 +31,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book
       spells.add(O2SpellType.GLACIUS_TRIA);
       spells.add(O2SpellType.INCENDIO_TRIA);
       spells.add(O2SpellType.DEFODIO);
-      //7
+      spells.add(O2SpellType.APPARATE);
       //8
       //9
       //10
