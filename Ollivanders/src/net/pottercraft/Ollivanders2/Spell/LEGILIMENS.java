@@ -1,7 +1,10 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import net.pottercraft.Ollivanders2.Player.O2Player;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -29,8 +32,7 @@ public final class LEGILIMENS extends DarkArts
          add("The Legilimency Spell");
       }};
 
-      text = "Legilimens, when cast at a player, will allow you to open their inventory if your level in legilimens is higher than theirs.";
-
+      text = "Legilimens, when cast at a player, will reveal certain information about the player. Your success depends both on your level of experience with Legilimens and the target player's experience.";
    }
 
    /**
@@ -60,13 +62,179 @@ public final class LEGILIMENS extends DarkArts
                continue;
 
             Player target = (Player) live;
-            double experience = p.getO2Player(target).getSpellCount(O2SpellType.LEGILIMENS);
-            if (usesModifier > experience)
+
+            int targetExperience = p.getO2Player(target).getSpellCount(O2SpellType.LEGILIMENS) / 10;
+
+            int randLess = (Math.abs(Ollivanders2.random.nextInt()) % 10);
+            int randEqual = (Math.abs(Ollivanders2.random.nextInt()) % 3);
+            int randGreater = (Math.abs(Ollivanders2.random.nextInt()) % 5);
+
+            // Legilimens will be successful:
+            // 80% of the time if the caster's legilimens level is greater than the target's
+            // 33% of the time if the caster and target have the same legilimens level
+            // 10% of the time if the caster's legilimens level is less than the target
+            if (((usesModifier > targetExperience) && (randGreater < 4)) // success on 3, 2, 1, 0
+                  || ((usesModifier == targetExperience) && (randEqual > 0)) // success on 1, 2
+                  || ((usesModifier < targetExperience) && (randLess < 1))) // success on 0
             {
-               player.openInventory(target.getInventory());
+               if (p.players.playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+               {
+                  p.getLogger().info("Legilimens: target is in animagus form");
+                  p.getLogger().info("Uses modifier = " + usesModifier);
+
+                  // when in animagus form, only someone who has mastered legilimens can mind read a person
+                  if (usesModifier >= 10)
+                  {
+                     int rand = (Math.abs(Ollivanders2.random.nextInt()) % 100);
+
+                     p.getLogger().info("rand = " + rand);
+                     // 10% chance to detect animagus
+                     if (rand < 90)
+                     {
+                        kill();
+                        return;
+                     }
+                  }
+                  else
+                  {
+                     kill();
+                     return;
+                  }
+               }
+
+               readMind(target);
             }
+            else
+            {
+               player.sendMessage(Ollivanders2.chatColor + target.getDisplayName() + " resists your mind.");
+            }
+
             kill();
             return;
+         }
+      }
+   }
+
+   /**
+    * Read a target player's mind
+    *
+    * @param target the player to mind read
+    */
+   private void readMind (Player target)
+   {
+      O2Player o2p = p.getO2Player(target);
+
+      player.sendMessage(Ollivanders2.chatColor + "You search in to " + o2p.getPlayerName() + "'s mind ...");
+
+      // detect if they are a muggle
+      if (o2p.isMuggle())
+      {
+         player.sendMessage(Ollivanders2.chatColor + " is a muggle.");
+      }
+      else
+      {
+         player.sendMessage(Ollivanders2.chatColor + " is a witch/wizard.");
+      }
+
+      // detect house and year
+      if (Ollivanders2.useHouses)
+      {
+         StringBuilder message = new StringBuilder();
+         message.append(Ollivanders2.chatColor);
+
+         if (p.houses.isSorted(target))
+         {
+            message.append(" is a ");
+
+            if (Ollivanders2.useYears)
+            {
+               message.append(o2p.getYear().getDisplayText()).append(" year ");
+            }
+
+            message.append(p.houses.getHouse(target).getName()).append(".");
+         }
+         else
+         {
+            message.append(" has not started school yet.");
+         }
+
+         player.sendMessage(message.toString());
+      }
+
+      int rand = (Math.abs(Ollivanders2.random.nextInt()) % 100);
+
+      // 50% chance detect destined wand
+      if (rand >= 50)
+      {
+         if (o2p.foundWand())
+         {
+            player.sendMessage(Ollivanders2.chatColor + " uses a " + o2p.getWandWood() + " and " + o2p.getWandCore() + " wand.");
+         }
+         else
+         {
+            player.sendMessage(Ollivanders2.chatColor + " has not gotten a wand.");
+         }
+      }
+
+      // information beyond this depends on legilimens level
+      if (usesModifier > 2)
+      {
+         // 50% chance detect recent spell cast
+         if (rand >= 50)
+         {
+            O2SpellType lastSpell = o2p.getLastSpell();
+            if (lastSpell != null)
+            {
+               player.sendMessage(Ollivanders2.chatColor + " last cast " + lastSpell.getSpellName() + ".");
+            }
+
+         }
+
+         if (usesModifier > 3)
+         {
+            // 33% chance detect mastered spell
+            if (rand >= 66)
+            {
+               if (Ollivanders2.useNonVerbalCasting)
+               {
+                  O2SpellType masteredSpell = o2p.getMasterSpell();
+                  if (masteredSpell != null)
+                  {
+                     player.sendMessage(Ollivanders2.chatColor + " can non-verbally cast the spell " + masteredSpell.getSpellName() + ".");
+                  }
+               }
+            }
+
+            if (usesModifier > 5)
+            {
+               // 40% chance detect effects
+               if (rand >= 40)
+               {
+                  String legilText = p.players.playerEffects.detectEffectWithInformous(o2p.getID());
+                  if (legilText != null)
+                  {
+                     player.sendMessage(Ollivanders2.chatColor + " " + legilText + ".");
+                  }
+               }
+
+               if (usesModifier >= 10)
+               {
+                  // 10% chance detect is animagus
+                  if (rand >= 90)
+                  {
+                     if (o2p.isAnimagus())
+                     {
+                        player.sendMessage(Ollivanders2.chatColor + " is an animagus.");
+
+                        EntityType animagusForm = o2p.getAnimagusForm();
+                        if (animagusForm != null)
+                        {
+                           player.sendMessage(Ollivanders2.chatColor + " has the animagus form of a " + p.common.enumRecode(animagusForm.toString()) + ".");
+                        }
+                     }
+                  }
+               }
+            }
          }
       }
    }

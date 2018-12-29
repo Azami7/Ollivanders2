@@ -34,7 +34,7 @@ public final class IMMOBULUS extends Charms
          add("The Freezing Charm is a spell which immobilises living targets.");
       }};
 
-      text = "Renders entry unable to move for a time period.";
+      text = "Slows entity movement for a time period.";
    }
 
    /**

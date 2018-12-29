@@ -2,9 +2,8 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import net.pottercraft.Ollivanders2.*;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS;
@@ -82,6 +81,7 @@ public final class INFORMOUS extends Arithmancy
 
             // health level
             player.sendMessage(Ollivanders2.chatColor + entityName + " has " + ((Damageable) entity).getHealth() + " health.");
+
             if (entity instanceof Player)
             {
                Player target = (Player)entity;
@@ -89,12 +89,14 @@ public final class INFORMOUS extends Arithmancy
                // food level
                player.sendMessage(Ollivanders2.chatColor + " has " + target.getFoodLevel() + " food level.");
 
+               // exhaustion level
+               player.sendMessage(Ollivanders2.chatColor + " has " + target.getExhaustion() + " exhaustion level.");
+
                // detectable effects
-               UUID pid = player.getUniqueId();
-               String infoText = p.players.playerEffects.detectEffectWithInformous(pid);
+               String infoText = p.players.playerEffects.detectEffectWithInformous(entity.getUniqueId());
                if (infoText != null)
                {
-                  player.sendMessage(Ollivanders2.chatColor + infoText);
+                  player.sendMessage(Ollivanders2.chatColor + " " + infoText + ".");
                }
 
                // line of sight

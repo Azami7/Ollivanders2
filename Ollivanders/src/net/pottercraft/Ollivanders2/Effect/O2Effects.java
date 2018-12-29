@@ -638,16 +638,21 @@ public class O2Effects
     */
    public String detectEffectWithInformous (UUID pid)
    {
+      p.getLogger().info("detecting effcts with Informous");
       String infoText = null;
 
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
       Collection<O2Effect> effects = activeEffects.values();
 
+      p.getLogger().info("found " + activeEffects.keySet().size() + " active effects");
+
       for (O2Effect effect : effects)
       {
+         p.getLogger().info("checking effect " + effect.effectType.toString());
          if (effect.informousText != null)
          {
             infoText = effect.informousText;
+            p.getLogger().info(effect.informousText);
             break;
          }
       }
