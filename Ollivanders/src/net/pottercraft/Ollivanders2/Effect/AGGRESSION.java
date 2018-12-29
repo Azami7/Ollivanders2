@@ -34,6 +34,7 @@ public class AGGRESSION extends O2Effect
       super(plugin, duration, pid);
 
       effectType = O2EffectType.AGGRESSION;
+      legilimensText = "feels aggressive";
 
       permanent = true;
    }

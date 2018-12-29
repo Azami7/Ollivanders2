@@ -2,26 +2,20 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.*;
-import net.pottercraft.Ollivanders2.Effect.O2EffectType;
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
-import net.pottercraft.Ollivanders2.Effect.ShapeShiftSuper;
-import net.pottercraft.Ollivanders2.Player.O2Player;
-import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS;
 import net.pottercraft.Ollivanders2.StationarySpell.HORCRUX;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 
 /**
@@ -94,6 +88,14 @@ public final class INFORMOUS extends Arithmancy
 
                // food level
                player.sendMessage(Ollivanders2.chatColor + " has " + target.getFoodLevel() + " food level.");
+
+               // detectable effects
+               UUID pid = player.getUniqueId();
+               String infoText = p.players.playerEffects.detectEffectWithInformous(pid);
+               if (infoText != null)
+               {
+                  player.sendMessage(Ollivanders2.chatColor + infoText);
+               }
 
                // line of sight
                if (target.canSee(player))

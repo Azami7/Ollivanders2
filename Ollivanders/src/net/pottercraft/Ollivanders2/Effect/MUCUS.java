@@ -23,6 +23,7 @@ public class MUCUS extends O2Effect
       super(plugin, duration, pid);
 
       effectType = O2EffectType.MUCUS;
+      informousText = "is unnaturally congested";
    }
 
    /**

@@ -17,6 +17,7 @@ public class IMMOBILIZE extends O2Effect
       super(plugin, duration, pid);
 
       effectType = O2EffectType.IMMOBILIZE;
+      informousText = legilimensText = "is unable to move";
    }
 
    /**
