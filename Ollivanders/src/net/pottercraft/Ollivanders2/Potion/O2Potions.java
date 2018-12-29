@@ -130,7 +130,7 @@ public class O2Potions
     * @param ingredientsInCauldron the ingredients in this cauldron
     * @return the matching potion if found, null otherwise
     */
-   O2Potion matchPotion (Map<IngredientType, Integer> ingredientsInCauldron)
+   private O2Potion matchPotion (Map<IngredientType, Integer> ingredientsInCauldron)
    {
       // compare ingredients in the cauldron to the recipe for each potion
       for (O2PotionType potionType : O2PotionType.values())
@@ -150,7 +150,7 @@ public class O2Potions
     * @param cauldron the brewing cauldron
     * @return a Map of the ingredients and count of each ingredient
     */
-   Map<IngredientType, Integer> getIngredientsInCauldron (Block cauldron)
+   private Map<IngredientType, Integer> getIngredientsInCauldron (Block cauldron)
    {
       Map<IngredientType, Integer> ingredientsInCauldron = new HashMap<>();
       Location location = cauldron.getLocation();
@@ -182,7 +182,7 @@ public class O2Potions
    /**
     * Get an O2Potion from ItemMeta
     *
-    * @param meta
+    * @param meta the metadata for this item
     * @return the O2Potion, if one was found, null otherwise
     */
    public O2Potion findPotionByItemMeta (ItemMeta meta)
@@ -211,7 +211,7 @@ public class O2Potions
    {
       O2Potion potion;
 
-      Class potionClass = potionType.getClassName();
+      Class<?> potionClass = potionType.getClassName();
 
       try
       {
