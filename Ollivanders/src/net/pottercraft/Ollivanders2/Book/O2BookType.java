@@ -19,6 +19,7 @@ public enum O2BookType
    CHADWICKS_CHARMS_VOLUME_1 (CHADWICKS_CHARMS_VOLUME_1.class),
    CONFRONTING_THE_FACELESS (net.pottercraft.Ollivanders2.Book.CONFRONTING_THE_FACELESS.class),
    CURSES_AND_COUNTERCURSES (net.pottercraft.Ollivanders2.Book.CURSES_AND_COUNTERCURSES.class),
+   DE_MEDICINA_PRAECEPTA(net.pottercraft.Ollivanders2.Book.DE_MEDICINA_PRAECEPTA.class),
    ESSENTIAL_DARK_ARTS (net.pottercraft.Ollivanders2.Book.ESSENTIAL_DARK_ARTS.class),
    EXTREME_INCANTATIONS (net.pottercraft.Ollivanders2.Book.EXTREME_INCANTATIONS.class),
    //FANTASTIC_BEASTS (net.pottercraft.Ollivanders2.Book.FANTASTIC_BEASTS.class),
