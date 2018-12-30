@@ -7,9 +7,8 @@ import java.util.List;
 
 public enum IngredientType
 {
-   ACONITE (Material.SPIDER_EYE, (short)0, "Aconite"),
+   ACONITE(Material.RED_ROSE, (short) 2, "Aconite"), //allium
    ARMADILLO_BILE (Material.POTION, (short)9, "Armadillo Bile"),
-   ASPHODEL (Material.DEAD_BUSH, (short)0, "Asphodel"),
    BEZOAR (Material.COAL, (short)1, "Bezoar"), // charcoal
    BILLYWIG_STING_SLIME (Material.SLIME_BALL, (short)0, "Billywig Sting Slime"),
    BOOM_BERRY_JUICE (Material.POTION, (short)11, "Boom Berry Juice"),
@@ -17,6 +16,7 @@ public enum IngredientType
    BONE (Material.BONE, (short)0, "Bone"),
    BLOOD (Material.POTION, (short)7, "Blood"),
    CHIZPURFLE_FANGS (Material.PUMPKIN_SEEDS, (short)0, "Chizpurfle Fangs"),
+   CRUSHED_FIRE_SEEDS(Material.REDSTONE, (short) 0, "Crushed Fire Seeds"),
    DEATHS_HEAD_MOTH_CHRYSALIS (Material.COAL, (short)0, "Death's Head Moth Chrysalis"),
    DEW_DROP (Material.GHAST_TEAR, (short)0, "Dew Drop"),
    DITTANY (Material.SAPLING, (short)2, "Dittany"), //birch sapling
@@ -24,10 +24,9 @@ public enum IngredientType
    DRAGONFLY_THORAXES (Material.BEETROOT_SEEDS, (short)0, "Dragonfly Thoraxes"),
    DRIED_NETTLES (Material.SAPLING, (short)0, "Dried Nettles"), // oak sapling
    FAIRY_WING (Material.GOLD_NUGGET, (short)0, "Fairy Wing"),
-   FIRE_SEEDS (Material.NETHER_WARTS, (short)0, "Fire Seeds"),
    FLOBBERWORM_MUCUS (Material.SLIME_BALL, (short)0, "Flobberworm Mucus"),
-   FLUXWEED (Material.DEAD_BUSH, (short)0, "Fluxweed"),
-   FULGURITE (Material.GLOWSTONE_DUST, (short)0, "Fulgurite)"),
+   FLUXWEED(Material.VINE, (short) 0, "Fluxweed"),
+   FULGURITE(Material.GLOWSTONE_DUST, (short) 0, "Fulgurite"),
    GALANTHUS_NIVALIS (Material.RED_ROSE, (short)3, "Galanthus Nivalis"), //azure bluet
    GINGER_ROOT (Material.BEETROOT, (short)0, "Ginger Root"),
    GROUND_DRAGON_HORN (Material.GLOWSTONE_DUST, (short)0, "Ground Dragon Horn"),
@@ -40,18 +39,17 @@ public enum IngredientType
    HORN_OF_BICORN (Material.BLAZE_ROD, (short)0, "Horn of Bicorn"),
    INFUSION_OF_WORMWOOD (Material.POTION, (short)5, "Infusion of Wormwood"),
    JOBBERKNOLL_FEATHER (Material.FEATHER, (short)0, "Jobberknoll Feather"),
-   Knotgrass (Material.LONG_GRASS, (short)0, "Knotgrass"),
+   KNOTGRASS(Material.LONG_GRASS, (short) 0, "Knotgrass"),
    LACEWING_FLIES (Material.PUMPKIN_SEEDS, (short)0, "Lacewing Flies"),
    LAVENDER_SPRIG (Material.DOUBLE_PLANT, (short)1, "Lavender Sprig"), //lilac
    LEECHES (Material.INK_SACK, (short)0, "Leeches"),
    LETHE_RIVER_WATER (Material.POTION, (short)0, "Lethe River Water"), //bottle of water
    LIONFISH_SPINES (Material.RAW_FISH, (short)0, "Lionfish Spines"),
    MANDRAKE_LEAF (Material.WATER_LILY, (short)0, "Mandrake Leaf"),
-   MERCURY (Material.INK_SACK, (short)0, "Mercury"),
+   MERCURY(Material.POTION, (short) 13, "Mercury"), // silver liquid
    MINT_SPRIG (Material.MELON_STEM, (short)0, "Mint Sprig"),
    MISTLETOE_BERRIES (Material.INK_SACK, (short)3, "Mistletoe Berries"),
    MOONDEW_DROP (Material.GHAST_TEAR, (short)0, "Moondew Drop"),
-   PHILOSOPHERS_STONE (Material.REDSTONE, (short)0, "Philosophers Stone"),
    POISONOUS_POTATO (Material.POISONOUS_POTATO, (short)0, "Poisonous Potato"),
    POWDERED_ASHPODEL (Material.INK_SACK, (short)14, "Powedered Root of Asphodel"), // orange dye
    POWDERED_SAGE (Material.INK_SACK, (short)10, "Powdered Sage"), //lime dye
