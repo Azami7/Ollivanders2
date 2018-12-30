@@ -50,7 +50,6 @@ public class PRIOR_INCANTATO extends Charms
       {
          if (live instanceof Player)
          {
-            p.getLogger().info("checking player " + ((Player) live).getName());
             if (live.getUniqueId() == player.getUniqueId())
             {
                continue;
