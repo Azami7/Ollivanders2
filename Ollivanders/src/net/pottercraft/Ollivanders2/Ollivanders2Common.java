@@ -96,6 +96,26 @@ public class Ollivanders2Common
       add(O2PotionType.ANIMAGUS_POTION);
    }};
 
+   public enum TimeOfDay
+   {
+      MIDNIGHT(18000),
+      DAWN(23000),
+      MIDDAY(6000),
+      SUNSET(12000);
+
+      private int gameTick;
+
+      TimeOfDay (int tick)
+      {
+         gameTick = tick;
+      }
+
+      public int getTick ()
+      {
+         return gameTick;
+      }
+   }
+
    private Ollivanders2 p;
 
    public Ollivanders2Common (Ollivanders2 plugin)
