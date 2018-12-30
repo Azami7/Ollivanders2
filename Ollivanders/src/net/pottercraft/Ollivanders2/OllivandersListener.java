@@ -129,7 +129,7 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
 
       if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          // do not allow the player to move if they are asleep or suspended
          event.setCancelled(true);
@@ -829,7 +829,7 @@ public class OllivandersListener implements Listener
       if ((event.getHand() == EquipmentSlot.HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
          if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-               || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
+               || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
          {
             event.setCancelled(true);
             return;
@@ -888,7 +888,7 @@ public class OllivandersListener implements Listener
       else if ((event.getHand() == EquipmentSlot.OFF_HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
          if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-               || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
+               || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
          {
             event.setCancelled(true);
             return;
@@ -1824,7 +1824,7 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
 
       if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          // cannot interact with anything while asleep or suspended
          event.setCancelled(true);
@@ -1854,7 +1854,8 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
 
       if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
-            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
          return;
@@ -1866,7 +1867,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE)
             || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
@@ -1879,7 +1880,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE)
             || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
@@ -1893,7 +1894,8 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
 
       if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
-            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
          return;

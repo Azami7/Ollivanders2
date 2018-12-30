@@ -86,17 +86,22 @@ public final class INFORMOUS extends Arithmancy
             if (entity instanceof HumanEntity)
                entityName = entity.getName();
 
+            // health level
             player.sendMessage(Ollivanders2.chatColor + entityName + " has " + ((Damageable) entity).getHealth() + " health.");
             if (entity instanceof Player)
             {
                Player target = (Player)entity;
 
+               // food level
                player.sendMessage(Ollivanders2.chatColor + " has " + target.getFoodLevel() + " food level.");
+
+               // line of sight
                if (target.canSee(player))
                   player.sendMessage(Ollivanders2.chatColor + " can see you.");
                else
                   player.sendMessage(Ollivanders2.chatColor + " cannot see you.");
 
+               // house
                if (p.houses.isSorted(target))
                {
                   player.sendMessage(Ollivanders2.chatColor + " is a member of " + p.houses.getHouse(target).getName() + ".");
