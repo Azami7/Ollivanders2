@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Effect;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
@@ -14,11 +15,13 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 
 import org.bukkit.DyeColor;
+import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Ocelot;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Transforms an Animagus player in to their animal form.
@@ -74,6 +77,8 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
    {
       if (!transformed && !kill)
       {
+         Player player = p.getServer().getPlayer(targetID);
+
          transform();
       }
    }

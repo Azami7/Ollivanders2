@@ -73,7 +73,9 @@ import org.bukkit.event.entity.PotionSplashEvent;
 
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -1413,7 +1415,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the player Pickup Item Event
     */
-   @EventHandler(priority = EventPriority.HIGH)
+   @EventHandler(priority = EventPriority.NORMAL)
    public void portkeyPickUp (EntityPickupItemEvent event)
    {
       Entity entity = event.getEntity();
@@ -1814,6 +1816,29 @@ public class OllivandersListener implements Listener
    }
 
    /**
+    * Handle player sleep event.
+    *
+    * @param event the player bed enter event
+    */
+   @EventHandler(priority = EventPriority.HIGH)
+   public void onPlayerSleep (PlayerBedEnterEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
+      {
+         // cannot sleep while awake effect is active
+         event.setCancelled(true);
+      }
+   }
+
+   //****************************************************************************
+   //
+   // Immobilization, Suspension, and Sleep Effect Events
+   //
+   //****************************************************************************
+
+   /**
     * Handle player interact events when they are affected by an effect that alters interacts.
     *
     * @param event the player interact event
@@ -1832,22 +1857,10 @@ public class OllivandersListener implements Listener
    }
 
    /**
-    * Handle player sleep event.
+    * Do not allow a player to toggle flight while sleeping or immobilized
     *
-    * @param event the player bed enter event
+    * @param event the player toggle flight event
     */
-   @EventHandler (priority = EventPriority.HIGH)
-   public void onPlayerSleep (PlayerBedEnterEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
-      {
-         // cannot sleep while awake effect is active
-         event.setCancelled(true);
-      }
-   }
-
    @EventHandler (priority = EventPriority.HIGH)
    public void playerFlightSuspension (PlayerToggleFlightEvent event)
    {
@@ -1861,6 +1874,11 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * Do not allow player to toggle sneak while sleeping or immbolized
+    *
+    * @param event the player toggle sneak event
+    */
    @EventHandler (priority = EventPriority.HIGH)
    public void playerSneakSuspension (PlayerToggleSneakEvent event)
    {
@@ -1874,6 +1892,11 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * Do not allow player to toggle running while sleeping or immobilized
+    *
+    * @param event the player toggle sprint event
+    */
    @EventHandler (priority = EventPriority.HIGH)
    public void playerSprintSuspension (PlayerToggleSprintEvent event)
    {
@@ -1887,6 +1910,11 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * Do not allow player to change velocity when sleeping or immobolized
+    *
+    * @param event the player velocity event
+    */
    @EventHandler (priority = EventPriority.HIGH)
    public void playerVelocitySuspension (PlayerVelocityEvent event)
    {
@@ -1897,6 +1925,106 @@ public class OllivandersListener implements Listener
       {
          event.setCancelled(true);
          return;
+      }
+   }
+
+   //****************************************************************************
+   //
+   // Animagus Events
+   //
+   //****************************************************************************
+
+   /**
+    * Do not allow animagus to pick up items while in animal form
+    *
+    * @param event entity item pick up event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void animagusItemPickUp (EntityPickupItemEvent event)
+   {
+      Entity entity = event.getEntity();
+      if (entity instanceof Player)
+      {
+         Player player = (Player) entity;
+
+         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+         {
+            event.setCancelled(true);
+            return;
+         }
+      }
+   }
+
+   /**
+    * Do not allow animagus to hold items while in animal form
+    *
+    * @param event item hold event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void animagusItemHeld (PlayerItemHeldEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   /**
+    * Do not allow animagus to consume items while in animal form
+    *
+    * @param event item consume event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void animagusItemConsume (PlayerItemConsumeEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   /**
+    * Do not allow animagus to drop items while in animal form
+    *
+    * @param event drop event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void animagusItemDropEvent (PlayerDropItemEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   /**
+    * Do not allow animagus to click blocks while in animal form
+    *
+    * @param event drop event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void animagusInteractEvent (PlayerInteractEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      {
+         Action action = event.getAction();
+
+         if (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)
+         {
+            event.setCancelled(true);
+            return;
+         }
       }
    }
 }
