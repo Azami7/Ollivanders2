@@ -20,7 +20,7 @@ public enum IngredientType
    DEATHS_HEAD_MOTH_CHRYSALIS (Material.COAL, (short)0, "Death's Head Moth Chrysalis"),
    DEW_DROP (Material.GHAST_TEAR, (short)0, "Dew Drop"),
    DITTANY (Material.SAPLING, (short)2, "Dittany"), //birch sapling
-   DRAGON_BLOOD (Material.SPLASH_POTION, (short)1, "Dragon Blood"),
+   DRAGON_BLOOD(Material.POTION, (short) 1, "Dragon Blood"),
    DRAGONFLY_THORAXES (Material.BEETROOT_SEEDS, (short)0, "Dragonfly Thoraxes"),
    DRIED_NETTLES (Material.SAPLING, (short)0, "Dried Nettles"), // oak sapling
    FAIRY_WING (Material.GOLD_NUGGET, (short)0, "Fairy Wing"),
