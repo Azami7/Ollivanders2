@@ -400,7 +400,7 @@ public class O2Player
     *
     * @param spell the spell they most recently cast
     */
-   private void setLastSpell (O2SpellType spell)
+   void setLastSpell (O2SpellType spell)
    {
       if (spell != null)
       {
@@ -408,6 +408,11 @@ public class O2Player
       }
    }
 
+   /**
+    * Get the last spell cast by this player.
+    *
+    * @return the last spell cast
+    */
    public O2SpellType getLastSpell ()
    {
       return lastSpell;
@@ -426,6 +431,11 @@ public class O2Player
       }
    }
 
+   /**
+    * Get the last spell cast by this player's wand.
+    *
+    * @return the last spell cast by this player with a wand
+    */
    public O2SpellType getPriorIncantatem ()
    {
       return priorIncantatem;

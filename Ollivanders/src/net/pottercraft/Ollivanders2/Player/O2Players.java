@@ -10,6 +10,7 @@ import net.pottercraft.Ollivanders2.Effect.O2Effects;
 import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 import org.bukkit.entity.EntityType;
@@ -60,6 +61,8 @@ public class O2Players
    private final String yearLabel = "Year";
    private final String spellLabelPrefix = "Spell_";
    private final String potionLabelPrefix = "Potion_";
+   private final String priorIncantatumLabel = "Prior_Incantatum";
+   private final String lastSpellLabel = "Last_Spell";
 
    /**
     * Constructor
@@ -289,6 +292,24 @@ public class O2Players
          }
 
          /**
+          * Last Spell
+          */
+         O2SpellType lastSpell = o2p.getLastSpell();
+         if (lastSpell != null)
+         {
+            playerData.put(lastSpellLabel, lastSpell.toString());
+         }
+
+         /**
+          * Prior Incantatum
+          */
+         O2SpellType prior = o2p.getPriorIncantatem();
+         if (prior != null)
+         {
+            playerData.put(priorIncantatumLabel, prior.toString());
+         }
+
+         /**
           * Animagus
           */
          EntityType animagus = o2p.getAnimagusForm();
@@ -467,6 +488,22 @@ public class O2Players
                if (spellType != null)
                {
                   o2p.setMasterSpell(spellType);
+               }
+            }
+            else if (label.equalsIgnoreCase(lastSpellLabel))
+            {
+               O2SpellType lastSpell = O2SpellType.spellTypeFromString(value);
+               if (lastSpell != null)
+               {
+                  o2p.setLastSpell(lastSpell);
+               }
+            }
+            else if (label.equalsIgnoreCase(priorIncantatumLabel))
+            {
+               O2SpellType prior = O2SpellType.spellTypeFromString(value);
+               if (prior != null)
+               {
+                  o2p.setPriorIncantatem(prior);
                }
             }
             else if (label.equalsIgnoreCase(animagusLabel))

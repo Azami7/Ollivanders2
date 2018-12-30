@@ -137,6 +137,7 @@ public enum O2SpellType
    PORFYRO_ASTERI_TRIA (net.pottercraft.Ollivanders2.Spell.PORFYRO_ASTERI_TRIA.class),
    PORTUS (net.pottercraft.Ollivanders2.Spell.PORTUS.class),
    PRAEPANDO (net.pottercraft.Ollivanders2.Spell.PRAEPANDO.class),
+   PRIOR_INCANTATO(net.pottercraft.Ollivanders2.Spell.PRIOR_INCANTATO.class),
    PROTEGO (net.pottercraft.Ollivanders2.Spell.PROTEGO.class),
    PROTEGO_HORRIBILIS (net.pottercraft.Ollivanders2.Spell.PROTEGO_HORRIBILIS.class),
    PROTEGO_MAXIMA (net.pottercraft.Ollivanders2.Spell.PROTEGO_MAXIMA.class),
