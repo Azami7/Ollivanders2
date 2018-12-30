@@ -18,7 +18,6 @@ import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -79,6 +78,16 @@ public class O2Player
     * The spell loaded into the wand for casting with left click
     */
    private O2SpellType wandSpell = null;
+
+   /**
+    * The last spell cast by this player's wand
+    */
+   private O2SpellType priorIncantatem = null;
+
+   /**
+    * The last spell cast by this player
+    */
+   private O2SpellType lastSpell = null;
 
    /**
     * The mastered spell set for silent casting - is cast anytime a player left-clicks their wand in their primary hand.
@@ -387,6 +396,42 @@ public class O2Player
    }
 
    /**
+    * Set the last spell cast by this player.
+    *
+    * @param spell the spell they most recently cast
+    */
+   private void setLastSpell (O2SpellType spell)
+   {
+      if (spell != null)
+      {
+         lastSpell = spell;
+      }
+   }
+
+   public O2SpellType getLastSpell ()
+   {
+      return lastSpell;
+   }
+
+   /**
+    * Set the last spell successfully cast by this player's wand.
+    *
+    * @param spell the spell they most recently cast
+    */
+   public void setPriorIncantatem (O2SpellType spell)
+   {
+      if (spell != null)
+      {
+         priorIncantatem = spell;
+      }
+   }
+
+   public O2SpellType getPriorIncantatem ()
+   {
+      return priorIncantatem;
+   }
+
+   /**
     * Set the potion count for a potion. This will override the existing values for this potion and should
     * not be used when increment is intended.
     *
@@ -436,6 +481,8 @@ public class O2Player
          {
             recentSpells.put(spellType, System.currentTimeMillis() + s.getCoolDown());
          }
+
+         setLastSpell(spellType);
       }
       catch (InvocationTargetException e)
       {
@@ -753,14 +800,17 @@ public class O2Player
     */
    private void addMasteredSpell (O2SpellType spell)
    {
-      if (!masteredSpells.contains(spell))
+      if (spell != O2SpellType.AVADA_KEDAVRA)
       {
-         if (masteredSpells.size() < 1)
+         if (!masteredSpells.contains(spell))
          {
-            // this is their first mastered spell, set it on their wand
-            masterSpell = spell;
+            if (masteredSpells.size() < 1)
+            {
+               // this is their first mastered spell, set it on their wand
+               masterSpell = spell;
+            }
+            masteredSpells.add(spell);
          }
-         masteredSpells.add(spell);
       }
    }
 

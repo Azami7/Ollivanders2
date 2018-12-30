@@ -3,25 +3,18 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.pottercraft.Ollivanders2.*;
-import net.pottercraft.Ollivanders2.Effect.O2EffectType;
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
-import net.pottercraft.Ollivanders2.Effect.ShapeShiftSuper;
-import net.pottercraft.Ollivanders2.Player.O2Player;
-import net.pottercraft.Ollivanders2.Potion.O2Potion;
+import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS;
 import net.pottercraft.Ollivanders2.StationarySpell.HORCRUX;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 
 /**
@@ -88,12 +81,23 @@ public final class INFORMOUS extends Arithmancy
 
             // health level
             player.sendMessage(Ollivanders2.chatColor + entityName + " has " + ((Damageable) entity).getHealth() + " health.");
+
             if (entity instanceof Player)
             {
                Player target = (Player)entity;
 
                // food level
                player.sendMessage(Ollivanders2.chatColor + " has " + target.getFoodLevel() + " food level.");
+
+               // exhaustion level
+               player.sendMessage(Ollivanders2.chatColor + " has " + target.getExhaustion() + " exhaustion level.");
+
+               // detectable effects
+               String infoText = p.players.playerEffects.detectEffectWithInformous(entity.getUniqueId());
+               if (infoText != null)
+               {
+                  player.sendMessage(Ollivanders2.chatColor + " " + infoText + ".");
+               }
 
                // line of sight
                if (target.canSee(player))

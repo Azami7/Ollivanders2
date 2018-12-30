@@ -23,6 +23,7 @@ public class IMPROVED_BOOK_LEARNING extends O2Effect
       super(plugin, duration, pid);
 
       effectType = O2EffectType.IMPROVED_BOOK_LEARNING;
+      legilimensText = "feels more studious than usual";
    }
 
    /**

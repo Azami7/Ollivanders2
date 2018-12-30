@@ -44,6 +44,18 @@ public abstract class O2Effect
    protected UUID targetID;
 
    /**
+    * The output to be shown for information spells like Informous, if this effect can be detected in this way. This string is the predicate of
+    * a sentence that starts with the player's name and should not include ending punctuation. Example: "feels unnaturally tired"
+    */
+   protected String informousText;
+
+   /**
+    * The output to be shown for mind-reading spells like Legilimens, if this effect can be detected in this way. This string is the predicate of
+    * a sentence that starts with the player's name and should not include ending punctuation. Example: "feels aggressive"
+    */
+   protected String legilimensText;
+
+   /**
     * Constructor. If you change this method signature, be sure to update all reflection code that uses it.
     *
     * @param plugin a callback to the MC plugin
@@ -57,6 +69,8 @@ public abstract class O2Effect
       this.duration = duration;
       kill = false;
       targetID = pid;
+
+      informousText = null;
    }
 
    /**
