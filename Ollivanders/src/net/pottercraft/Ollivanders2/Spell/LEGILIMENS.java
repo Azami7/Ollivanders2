@@ -106,7 +106,7 @@ public final class LEGILIMENS extends DarkArts
             }
             else
             {
-               player.sendMessage(Ollivanders2.chatColor + target.getDisplayName() + " resists your mind.");
+               player.sendMessage(Ollivanders2.chatColor + target.getName() + " resists your mind.");
             }
 
             kill();
