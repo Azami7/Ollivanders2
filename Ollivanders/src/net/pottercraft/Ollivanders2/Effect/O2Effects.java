@@ -534,8 +534,6 @@ public class O2Effects
 
       Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
 
-      p.getLogger().info(playerEffects.size() + " effects on player");
-
       if(playerEffects == null)
          return;
 
@@ -551,7 +549,6 @@ public class O2Effects
          p.getLogger().warning("Effect to remove is null.");
       }
 
-      p.getLogger().info("after removal, " + playerEffects.size() + " effects on player");
       effectsData.updatePlayerActiveEffects(pid, playerEffects);
 
       if (Ollivanders2.debug)
