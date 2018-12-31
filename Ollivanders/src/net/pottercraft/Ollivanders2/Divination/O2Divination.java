@@ -1,12 +1,21 @@
 package net.pottercraft.Ollivanders2.Divination;
 
+import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
+/**
+ * Super class for all divination methods. Creates a prophecy which may come to pass at a future time.
+ *
+ * @author Azami7
+ * @since 2.2.9
+ */
 public abstract class O2Divination
 {
    Ollivanders2 p;
@@ -39,6 +48,8 @@ public abstract class O2Divination
       target = tar;
       prophet = pro;
       experience = exp;
+
+      prophecyPrefix.add("The portents and omens say that");
    }
 
    /**
@@ -56,20 +67,115 @@ public abstract class O2Divination
     */
    public void divine ()
    {
-      prophet.sendMessage(Ollivanders2.chatColor + "You make a prophecy about " + target.getName() + " using " + p.common.enumRecode(divintationType.toString()));
-      target.sendMessage(Ollivanders2.chatColor + prophet.getName() + " makes a prophecy about you using " + p.common.enumRecode(divintationType.toString()));
+      UUID prophetID = prophet.getUniqueId();
+      UUID targetID = target.getUniqueId();
+
+      StringBuilder prophecyMessage = new StringBuilder();
 
       //
-      // first, determine the success odds of this prophecy
+      // first, determine the accuracy of this prophecy
       //
       // Calculation:
-      // the prophet gets a 4% chance per level of experience at this type of divination
-      // the type of divination method has a maximum accuracy level, regardless of skill
+      // - the prophet gets a 0.5% accuracy per level of experience at this type of divination
+      // - the type of divination method has a maximum accuracy level, regardless of skill, which caps accuracy
       //
-      int accuracy = 4 * experience;
+      int accuracy = experience / 2;
       if (accuracy > maxAccuracy)
       {
          accuracy = maxAccuracy;
       }
+
+      //
+      // second, pick the effect
+      //
+      int rand = (Math.abs(Ollivanders2.random.nextInt()) % divinationEffects.size());
+      O2EffectType effectType = divinationEffects.get(rand);
+
+      O2Effect effect = getEffect(targetID, effectType);
+      if (effect == null)
+      {
+         return;
+      }
+
+      if (prophecyPrefix.size() > 0)
+      {
+         rand = (Math.abs(Ollivanders2.random.nextInt()) % prophecyPrefix.size());
+         prophecyMessage.append(prophecyPrefix.get(rand)).append(" ");
+      }
+
+      //
+      // finally, the time of day and duration - via a lot of random chance
+      //
+      rand = (Math.abs(Ollivanders2.random.nextInt()) % Ollivanders2Common.TimeOfDay.values().length);
+      Ollivanders2Common.TimeOfDay timeOfDay = Ollivanders2Common.TimeOfDay.values()[rand];
+
+      prophecyMessage.append("at ").append(timeOfDay.toString().toLowerCase()).append(" ");
+
+      rand = (Math.abs(Ollivanders2.random.nextInt()) % 4);
+      long curTime = target.getWorld().getTime();
+      long ticks = 24000 - curTime;
+
+      if (rand == 0)
+      {
+         //tomorrow
+         prophecyMessage.append("tomorrow, ");
+      }
+      else if (rand == 1)
+      {
+         //tomorrow
+         prophecyMessage.append("in two days, ");
+         ticks = ticks + 24000;
+      }
+      else if (rand == 2)
+      {
+         //3rd day
+         prophecyMessage.append("in three days, ");
+         ticks = ticks + 48000;
+      }
+      else
+      {
+         //4th day
+         prophecyMessage.append("in four days, ");
+         ticks = ticks + 72000;
+      }
+
+      ticks = ticks + timeOfDay.getTick();
+
+      //
+      // duration
+      //
+      int duration = 1200 * experience;
+      if (duration > 12000)
+      {
+         duration = 12000;
+      }
+
+      //
+      // finish prophecy
+      //
+      prophecyMessage.append(target.getName()).append(" ").append(effect.getDivinationText()).append(".");
+      String finalMessage = prophecyMessage.toString();
+
+      prophet.chat(finalMessage);
+      O2Prophecy prophecy = new O2Prophecy(p, effectType, finalMessage, targetID, prophetID, ticks, duration, accuracy);
+      p.prophecies.addProphecy(prophecy);
+   }
+
+   private O2Effect getEffect (UUID targetID, O2EffectType effectType)
+   {
+      Class<?> effectClass = effectType.getClassName();
+      O2Effect effect;
+
+      try
+      {
+         effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, 1, targetID);
+      }
+      catch (Exception e)
+      {
+         e.printStackTrace();
+         return null;
+      }
+
+      return effect;
    }
 }

@@ -4,22 +4,19 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 import java.util.Map;
 import java.util.UUID;
 
 import Quidditch.Arena;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
+import net.pottercraft.Ollivanders2.Divination.O2Prophecies;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.House.O2Houses;
@@ -81,6 +78,7 @@ public class Ollivanders2 extends JavaPlugin
    public O2Books books;
    public O2Spells spells;
    public O2Potions potions;
+   public O2Prophecies prophecies;
    public O2StationarySpells stationarySpells;
    public Ollivanders2Common common;
    public O2PlayerCommon playerCommon;
@@ -121,7 +119,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       stationarySpells.saveO2StationarySpells();
-
+      prophecies.saveProphecies();
       houses.saveHouses();
       players.saveO2Players();
 
@@ -310,6 +308,17 @@ public class Ollivanders2 extends JavaPlugin
       catch (Exception e)
       {
          getLogger().warning("Failure setting up books.");
+         e.printStackTrace();
+      }
+
+      // set up prophecies
+      try
+      {
+         prophecies = new O2Prophecies(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up prophecies.");
          e.printStackTrace();
       }
 
@@ -1209,6 +1218,7 @@ public class Ollivanders2 extends JavaPlugin
                e.printStackTrace();
                return true;
             }
+
 
             players.playerEffects.addEffect(effect);
             sender.sendMessage(chatColor + "Added " + effectName + " to " + sender + ".\n");

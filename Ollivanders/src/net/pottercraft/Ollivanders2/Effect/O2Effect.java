@@ -94,6 +94,16 @@ public abstract class O2Effect
    }
 
    /**
+    * Override default permanent setting for an effect.
+    *
+    * @param perm true if this is permanent, false otherwise
+    */
+   public void setPermanent (boolean perm)
+   {
+      permanent = perm;
+   }
+
+   /**
     * This kills the effect.
     */
    public void kill ()

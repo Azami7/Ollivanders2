@@ -88,11 +88,15 @@ public class AGGRESSION extends O2Effect
 
          LivingEntity toDamage = nArray[rand % nearby.size()];
 
-         double curHealth = toDamage.getHealth();
-         // damage is entities current health divided by 2, 3, or 4
-         rand = Math.abs(Ollivanders2.random.nextInt());
-         double damage = curHealth / ((rand % 3) + 2);
-         toDamage.damage(damage, target);
+         // don't let the player hit themselves
+         if (toDamage.getUniqueId() != targetID)
+         {
+            double curHealth = toDamage.getHealth();
+            // damage is entities current health divided by 2, 3, or 4
+            rand = Math.abs(Ollivanders2.random.nextInt());
+            double damage = curHealth / ((rand % 3) + 2);
+            toDamage.damage(damage, target);
+         }
       }
    }
 

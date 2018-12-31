@@ -11,23 +11,19 @@ import java.util.UUID;
  * @author Azami7
  * @since 2.2.9
  */
-public class Prophecies
+public class O2Prophecies
 {
    private Ollivanders2 p;
 
-   /**
-    * Class representing a prophecy. Every prophecy involves predicting an effect on a player in the future and
-    * has a specific accuracy which changes the likelihood the prophecy will come to pass.
-    */
-
-   private ArrayList<Prophecy> prophecies = new ArrayList<>();
+   private ArrayList<O2Prophecy> activeProphecies = new ArrayList<>();
+   private ArrayList<O2Prophecy> offlineProphecies = new ArrayList<>();
 
    /**
     * Constructor
     *
     * @param plugin a callback to the plugin
     */
-   public Prophecies (Ollivanders2 plugin)
+   public O2Prophecies (Ollivanders2 plugin)
    {
       p = plugin;
    }
@@ -37,9 +33,29 @@ public class Prophecies
     *
     * @param prophecy
     */
-   public void addProphecy (Prophecy prophecy)
+   public void addProphecy (O2Prophecy prophecy)
    {
-      prophecies.add(prophecy);
+      if (Ollivanders2.debug)
+      {
+         p.getLogger().info("Adding prophecy");
+      }
+
+      activeProphecies.add(prophecy);
+   }
+
+   /**
+    * Add a prophecy to the offline prophecies when the target user is offline
+    *
+    * @param prophecy
+    */
+   void addOfflineProphecy (O2Prophecy prophecy)
+   {
+      if (Ollivanders2.debug)
+      {
+         p.getLogger().info("Adding prophecy");
+      }
+
+      offlineProphecies.add(prophecy);
    }
 
    /**
@@ -48,9 +64,9 @@ public class Prophecies
     * @param pid the player
     * @return a prophecy if found, null otherwise
     */
-   public Prophecy getProphecyAboutPlayer (UUID pid)
+   public O2Prophecy getProphecyAboutPlayer (UUID pid)
    {
-      for (Prophecy prophecy : prophecies)
+      for (O2Prophecy prophecy : activeProphecies)
       {
          if (prophecy.getTargetID() == pid)
          {
@@ -67,9 +83,9 @@ public class Prophecies
     * @param pid the player
     * @return a prophecy if found, null otherwise
     */
-   public Prophecy getProphecyByPlayer (UUID pid)
+   public O2Prophecy getProphecyByPlayer (UUID pid)
    {
-      for (Prophecy prophecy : prophecies)
+      for (O2Prophecy prophecy : activeProphecies)
       {
          if (prophecy.getProphetID() == pid)
          {
@@ -85,9 +101,9 @@ public class Prophecies
     */
    public void upkeep ()
    {
-      ArrayList<Prophecy> activeProphecies = new ArrayList<>(prophecies);
+      ArrayList<O2Prophecy> prophecies = new ArrayList<>(activeProphecies);
 
-      for (Prophecy prophecy : activeProphecies)
+      for (O2Prophecy prophecy : prophecies)
       {
          if (!prophecy.isKilled())
          {
@@ -96,13 +112,23 @@ public class Prophecies
             if (prophecy.getTime() < 1)
             {
                prophecy.fulfill();
+
+               if (offlineProphecies.contains(prophecy))
+               {
+                  activeProphecies.remove(prophecy);
+               }
             }
          }
 
          if (prophecy.isKilled())
          {
-            prophecies.remove(prophecy);
+            activeProphecies.remove(prophecy);
          }
       }
+   }
+
+   public void saveProphecies ()
+   {
+
    }
 }

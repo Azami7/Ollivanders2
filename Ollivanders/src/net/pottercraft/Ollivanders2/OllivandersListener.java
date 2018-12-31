@@ -265,7 +265,7 @@ public class OllivandersListener implements Listener
 
          if (effect != null)
          {
-            ((MUTED_SPEECH) effect).doSilencio(event);
+            event.setCancelled(true);
             return;
          }
       }
@@ -459,12 +459,12 @@ public class OllivandersListener implements Listener
                }
                else if (Divination.divinationSpells.contains(spellType))
                {
-                  //todo delete
-                  p.getLogger().info("spell cast is divination");
                   if (!divine(spellType, sender, words))
                   {
                      return;
                   }
+                  // remove original chat event since divination chats a prophecy
+                  event.setCancelled(true);
                }
                else
                {

@@ -96,7 +96,7 @@ public class Ollivanders2Common
       add(O2PotionType.ANIMAGUS_POTION);
    }};
 
-   public enum TimeOfDay
+   public static enum TimeOfDay
    {
       MIDNIGHT(18000),
       DAWN(23000),

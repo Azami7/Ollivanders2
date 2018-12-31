@@ -34,31 +34,4 @@ public class MUTED_SPEECH extends O2Effect
    {
       age(1);
    }
-
-   /**
-    * Remove all recepients from chat if the player.
-    *
-    * @param event the player chat event
-    */
-   public void doSilencio (AsyncPlayerChatEvent event)
-   {
-      Player sender = event.getPlayer();
-
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("onPlayerChat: SILENCIO");
-      }
-
-      if (sender.isPermissionSet("Ollivanders2.BYPASS"))
-      {
-         if (!sender.hasPermission("Ollivanders2.BYPASS"))
-         {
-            event.getRecipients().clear();
-         }
-      }
-      else
-      {
-         event.getRecipients().clear();
-      }
-   }
 }
