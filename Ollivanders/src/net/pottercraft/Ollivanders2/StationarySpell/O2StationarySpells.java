@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
+import net.pottercraft.Ollivanders2.GsonDAO;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
 
@@ -154,8 +154,8 @@ public class O2StationarySpells
    {
       List <Map<String, String>> serializedList = serializeO2StationarySpells();
 
-      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
-      gsonLayer.writeO2StationarySpells(serializedList);
+      GsonDAO gsonLayer = new GsonDAO(p);
+      gsonLayer.writeSaveData(serializedList, GsonDAO.o2StationarySpellsJSONFile);
    }
 
    /**
@@ -163,8 +163,8 @@ public class O2StationarySpells
     */
    void loadO2StationarySpells ()
    {
-      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
-      List<Map<String, String>> serializedSpells = gsonLayer.readO2StationarySpells();
+      GsonDAO gsonLayer = new GsonDAO(p);
+      List<Map<String, String>> serializedSpells = gsonLayer.readSavedDataListMap(GsonDAO.o2StationarySpellsJSONFile);
 
       if (serializedSpells == null)
       {

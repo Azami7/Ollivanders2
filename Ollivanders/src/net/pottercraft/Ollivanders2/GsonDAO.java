@@ -21,24 +21,25 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class GsonDataPersistenceLayer implements DataPersistenceLayer
+public class GsonDAO implements GenericDAO
 {
    private Gson gson;
    private Ollivanders2 p;
 
    private String saveDirectory = "plugins/Ollivanders2";
    private String archiveDirectory = "plugins/Ollivanders2/archive";
-   private String housesJSONFile = "O2Houses.txt";
-   private String housePointsJSONFile = "O2HousePoints.txt";
-   private String o2PlayerJSONFile = "O2Players.txt";
-   private String o2StationarySpellsJSONFile = "O2StationarySpells.txt";
+   public static final String housesJSONFile = "O2Houses.txt";
+   public static final String housePointsJSONFile = "O2HousePoints.txt";
+   public static final String o2PlayerJSONFile = "O2Players.txt";
+   public static final String o2StationarySpellsJSONFile = "O2StationarySpells.txt";
+   public static final String o2PropheciesJSONFile = "O2Prophecies.txt";
 
    /**
     * Constructor
     *
     * @param plugin
     */
-   public GsonDataPersistenceLayer (Ollivanders2 plugin)
+   public GsonDAO (Ollivanders2 plugin)
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
       p = plugin;
@@ -82,27 +83,40 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
    }
 
    /**
-    * Write the O2Player data
+    * Write save data serialized in to a hashmap of String, String pairs
+    *
+    * @param map the map of saved data
+    * @param filename the file to write to
+    */
+   @Override
+   public void writeSaveData (HashMap<String, String> map, String filename)
+   {
+      String json = gson.toJson(map);
+      writeJSON(json, filename);
+   }
+
+   /**
+    * Write save data serialized in to a map of String, Map pairs
     *
     * @param map a map of the player data as strings
     */
    @Override
-   public void writeO2Players (Map <String, Map<String, String>> map)
+   public void writeSaveData (Map<String, Map<String, String>> map, String filename)
    {
       String json = gson.toJson(map);
-      writeJSON(json, o2PlayerJSONFile);
+      writeJSON(json, filename);
    }
 
    /**
-    * Write the stationary spells json file
+    * Write the prophecies to json file
     *
-    * @param map a map of stationary spell data as strings
+    * @param map a map of prophecy data as strings
     */
    @Override
-   public void writeO2StationarySpells (List <Map<String, String>> map)
+   public void writeSaveData (List<Map<String, String>> map, String filename)
    {
       String json = gson.toJson(map);
-      writeJSON(json, o2StationarySpellsJSONFile);
+      writeJSON(json, filename);
    }
 
    /**
@@ -209,14 +223,14 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
    }
 
    /**
-    * Read the O2Players json file
+    * Read a serilaized map of strings and maps from json file
     *
     * @return a map of the player json data
     */
    @Override
-   public Map <String, Map<String, String>> readO2Players ()
+   public Map<String, Map<String, String>> readSavedDataMapStringMap (String filename)
    {
-      String json = readJSON(o2PlayerJSONFile);
+      String json = readJSON(filename);
 
       if (json == null)
          return null;
@@ -227,10 +241,15 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       return strMap;
    }
 
+   /**
+    * Read a serilized list of maps from json file
+    *
+    * @return a list of the serialized stationary spells
+    */
    @Override
-   public List <Map<String, String>> readO2StationarySpells ()
+   public List<Map<String, String>> readSavedDataListMap (String filename)
    {
-      String json = readJSON(o2StationarySpellsJSONFile);
+      String json = readJSON(filename);
 
       if (json == null)
          return null;

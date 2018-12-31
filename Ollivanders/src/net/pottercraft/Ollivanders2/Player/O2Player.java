@@ -1041,6 +1041,8 @@ public class O2Player
    public void onJoin ()
    {
       p.players.playerEffects.onJoin(pid);
+
+      p.prophecies.onJoin(pid);
    }
 
    /**

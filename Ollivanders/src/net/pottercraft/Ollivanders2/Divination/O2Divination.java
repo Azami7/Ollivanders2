@@ -142,12 +142,16 @@ public abstract class O2Divination
       ticks = ticks + timeOfDay.getTick();
 
       //
-      // duration
+      // duration (min 30 seconds, max 10 minutes)
       //
-      int duration = 1200 * experience;
+      int duration = 120 * experience;
       if (duration > 12000)
       {
          duration = 12000;
+      }
+      else if (duration < 600)
+      {
+         duration = 600;
       }
 
       //

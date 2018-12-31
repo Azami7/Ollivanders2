@@ -68,7 +68,7 @@ public class O2Prophecy
     * @param d   the duration of the effect, 0 for permanent
     * @param a   the accuracy of this prophecy as a percent from 0 to 99, greater than 99 will be rounded down to 99
     */
-   public O2Prophecy (Ollivanders2 plugin, O2EffectType e, String m, UUID tid, UUID pid, long t, int d, int a)
+   O2Prophecy (Ollivanders2 plugin, O2EffectType e, String m, UUID tid, UUID pid, long t, int d, int a)
    {
       p = plugin;
       effectType = e;
@@ -102,7 +102,7 @@ public class O2Prophecy
       return targetID;
    }
 
-   public UUID getProphetID ()
+   UUID getProphetID ()
    {
       return prophetID;
    }
@@ -117,7 +117,17 @@ public class O2Prophecy
       return duration;
    }
 
-   public boolean isKilled ()
+   String getProphecyMessage ()
+   {
+      return prophecyMessage;
+   }
+
+   Integer getAccuracy ()
+   {
+      return accuracy;
+   }
+
+   boolean isKilled ()
    {
       return kill;
    }
@@ -132,7 +142,7 @@ public class O2Prophecy
       kill = true;
    }
 
-   public void fulfill ()
+   void fulfill ()
    {
       if (Ollivanders2.debug)
       {
