@@ -72,6 +72,11 @@ public class BABBLING extends O2Effect
 
       effectType = O2EffectType.BABBLING;
       informousText = "is unable to speak clearly";
+
+      divinationText.add("shall be afflicted in the mind");
+      divinationText.add("shall lose their mind to insanity");
+      divinationText.add("will begin to speak in tongues");
+      divinationText.add("will be possessed by a demon spirit");
    }
 
    /**

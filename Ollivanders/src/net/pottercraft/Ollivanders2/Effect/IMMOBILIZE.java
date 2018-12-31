@@ -18,6 +18,11 @@ public class IMMOBILIZE extends O2Effect
 
       effectType = O2EffectType.IMMOBILIZE;
       informousText = legilimensText = "is unable to move";
+
+      divinationText.add("will be possessed by a demon spirit");
+      divinationText.add("will succomb to a primal fear");
+      divinationText.add("shall become as if frozen");
+      divinationText.add("shall be struck by a terrible affliction");
    }
 
    /**

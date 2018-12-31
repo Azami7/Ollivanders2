@@ -49,6 +49,7 @@ public enum O2BookType
    THE_DARK_FORCES (net.pottercraft.Ollivanders2.Book.THE_DARK_FORCES.class),
    THE_HEALERS_HELPMATE (net.pottercraft.Ollivanders2.Book.THE_HEALERS_HELPMATE.class),
    TRAVELS_WITH_TROLLS (net.pottercraft.Ollivanders2.Book.TRAVELS_WITH_TROLLS.class),
+   UNFOGGING_THE_FUTURE(net.pottercraft.Ollivanders2.Book.UNFOGGING_THE_FUTURE.class),
    VOYAGES_WITH_VAMPIRES (net.pottercraft.Ollivanders2.Book.VOYAGES_WITH_VAMPIRES.class),
    WANDERINGS_WITH_WEREWOLVES (net.pottercraft.Ollivanders2.Book.WANDERINGS_WITH_WEREWOLVES.class),
    WORLD_OF_COLOR (net.pottercraft.Ollivanders2.Book.WORLD_OF_COLOR.class),

@@ -1,45 +1,44 @@
 package net.pottercraft.Ollivanders2.Divination;
 
-import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
-import net.pottercraft.Ollivanders2.Effect.SLEEPING;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
-public class O2Divination
+public abstract class O2Divination
 {
    Ollivanders2 p;
 
-   int minAccuracy;
-   int maxAccuracy;
+   O2DivinationType divintationType = O2DivinationType.ASTROLOGY;
+
+   int maxAccuracy = 10;
 
    Material itemHeld = null;
    Material itemNearby = null;
 
-   Player target = null;
-   Player prophet = null;
+   Player target;
+   Player prophet;
+   int experience;
 
-   String prophecyPrefix = null;
+   ArrayList<String> prophecyPrefix = new ArrayList<>();
 
    public static final ArrayList<O2EffectType> divinationEffects = new ArrayList<O2EffectType>()
    {{
       add(O2EffectType.SLEEPING);
-      add(O2EffectType.AWAKE);
       add(O2EffectType.BABBLING);
       add(O2EffectType.AGGRESSION);
+      add(O2EffectType.IMMOBILIZE);
+      add(O2EffectType.MUTED_SPEECH);
    }};
 
-   public O2Divination (Ollivanders2 plugin, int min, int max, Player pro, Player tar)
+   public O2Divination (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
    {
       p = plugin;
       target = tar;
       prophet = pro;
-
-      minAccuracy = min;
-      maxAccuracy = max;
+      experience = exp;
    }
 
    /**
@@ -57,6 +56,20 @@ public class O2Divination
     */
    public void divine ()
    {
+      prophet.sendMessage(Ollivanders2.chatColor + "You make a prophecy about " + target.getName() + " using " + p.common.enumRecode(divintationType.toString()));
+      target.sendMessage(Ollivanders2.chatColor + prophet.getName() + " makes a prophecy about you using " + p.common.enumRecode(divintationType.toString()));
 
+      //
+      // first, determine the success odds of this prophecy
+      //
+      // Calculation:
+      // the prophet gets a 4% chance per level of experience at this type of divination
+      // the type of divination method has a maximum accuracy level, regardless of skill
+      //
+      int accuracy = 4 * experience;
+      if (accuracy > maxAccuracy)
+      {
+         accuracy = maxAccuracy;
+      }
    }
 }

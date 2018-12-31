@@ -36,6 +36,12 @@ public class AGGRESSION extends O2Effect
       effectType = O2EffectType.AGGRESSION;
       legilimensText = "feels aggressive";
 
+      divinationText.add("will suffer from an insatiable rage");
+      divinationText.add("will succomb to a primal fear");
+      divinationText.add("shall be afflicted in the mind");
+      divinationText.add("shall lose their mind to insanity");
+      divinationText.add("will be possessed by a demon spirit");
+
       permanent = true;
    }
 

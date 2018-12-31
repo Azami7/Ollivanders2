@@ -32,6 +32,11 @@ public class SLEEPING extends O2Effect
       effectType = O2EffectType.SLEEPING;
       informousText = legilimensText = "is affected by an unnatural sleep";
 
+      divinationText.add("will fall silent");
+      divinationText.add("shall fall in to a deep sleep");
+      divinationText.add("shall pass beyond this realm");
+      divinationText.add("will surrender to a sleeping death");
+
       permanent = false;
    }
 

@@ -8,10 +8,10 @@ package net.pottercraft.Ollivanders2.Divination;
  */
 public enum O2DivinationType
 {
-   ASTROLOGY(net.pottercraft.Ollivanders2.Divination.ASTROLOGY.class, 0, 25),
+   ASTROLOGY(net.pottercraft.Ollivanders2.Divination.ASTROLOGY.class);
    //CARTOMANCY,
    //CATOPTROMANCY,
-   CENTAUR_ASTROLOGY(net.pottercraft.Ollivanders2.Divination.ASTROLOGY.class, 0, 99);
+   //CENTAUR_ASTROLOGY
    //CHINESE_FORTUNE_STICKS,
    //CRYSTAL_BALL,
    //DREAM_INTERPRETATION,
@@ -27,14 +27,13 @@ public enum O2DivinationType
 
    private Class className;
 
-   int minAccuracy;
-   int maxAccuracy;
-
-   O2DivinationType (Class c, int min, int max)
+   O2DivinationType (Class c)
    {
       className = c;
+   }
 
-      minAccuracy = min;
-      maxAccuracy = max;
+   public Class getClassName ()
+   {
+      return className;
    }
 }

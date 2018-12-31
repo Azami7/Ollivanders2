@@ -23,6 +23,7 @@ public enum O2SpellType
    ARANIA_EXUMAI (net.pottercraft.Ollivanders2.Spell.ARANIA_EXUMAI.class),
    ARRESTO_MOMENTUM (net.pottercraft.Ollivanders2.Spell.ARRESTO_MOMENTUM.class),
    ASCENDIO (net.pottercraft.Ollivanders2.Spell.ASCENDIO.class),
+   ASTROLOGIA(net.pottercraft.Ollivanders2.Spell.ASTROLOGIA.class),
    AVADA_KEDAVRA (net.pottercraft.Ollivanders2.Spell.AVADA_KEDAVRA.class),
    AVIFORS (net.pottercraft.Ollivanders2.Spell.AVIFORS.class),
    AVIS (net.pottercraft.Ollivanders2.Spell.AVIS.class),
