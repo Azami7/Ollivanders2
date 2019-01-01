@@ -129,7 +129,6 @@ public class Ollivanders2Common
       }
    }
 
-   private Ollivanders2 p;
    public static Random random = new Random();
 
    private JavaPlugin p;

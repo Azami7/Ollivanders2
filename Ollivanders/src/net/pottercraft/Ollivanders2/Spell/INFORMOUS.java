@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS;
@@ -93,7 +94,7 @@ public final class INFORMOUS extends Arithmancy
                player.sendMessage(Ollivanders2.chatColor + " has " + target.getExhaustion() + " exhaustion level.");
 
                // detectable effects
-               String infoText = p.players.playerEffects.detectEffectWithInformous(entity.getUniqueId());
+               String infoText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithInformous(entity.getUniqueId());
                if (infoText != null)
                {
                   player.sendMessage(Ollivanders2.chatColor + " " + infoText + ".");

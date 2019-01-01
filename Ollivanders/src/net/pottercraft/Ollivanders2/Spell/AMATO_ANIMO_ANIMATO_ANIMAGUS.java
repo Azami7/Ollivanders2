@@ -179,7 +179,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
    {
       usesModifier = p.getSpellNum(player, spellType);
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
       {
          usesModifier *= 2;
       }

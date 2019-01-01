@@ -51,7 +51,7 @@ class OllivandersSchedule implements Runnable
          projectileSched();
          oeffectSched();
          Ollivanders2API.getStationarySpells().upkeep();
-         p.prophecies.upkeep();
+         Ollivanders2API.getProphecies().upkeep();
          broomSched();
       }
       catch (Exception e)

@@ -326,7 +326,7 @@ public class O2Player
     */
    public Long getSpellLastCastTime (O2SpellType spellType)
    {
-      Long count = (long)0;
+      Long count = (long) 0;
 
       if (recentSpells.containsKey(spellType))
       {

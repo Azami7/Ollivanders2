@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Divination;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -158,7 +159,7 @@ public abstract class O2Divination
 
       prophet.chat(finalMessage);
       O2Prophecy prophecy = new O2Prophecy(p, effectType, finalMessage, targetID, prophetID, ticks, duration, accuracy);
-      p.prophecies.addProphecy(prophecy);
+      Ollivanders2API.getProphecies().addProphecy(prophecy);
    }
 
    private O2Effect getEffect (UUID targetID, O2EffectType effectType)

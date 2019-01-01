@@ -5,6 +5,7 @@ import net.pottercraft.Ollivanders2.Divination.O2DivinationType;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public abstract class Divination extends O2Spell
    {
       usesModifier = p.getSpellNum(player, spellType);
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
       {
          usesModifier *= 2;
       }

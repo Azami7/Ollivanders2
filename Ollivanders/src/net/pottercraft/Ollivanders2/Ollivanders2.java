@@ -7,16 +7,16 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import Quidditch.Arena;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
-import net.pottercraft.Ollivanders2.Divination.O2Prophecies;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.House.O2HouseType;
@@ -68,15 +68,7 @@ public class Ollivanders2 extends JavaPlugin
 
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
-   public O2Houses houses;
-   public O2Players players;
    public O2Books books;
-   public O2Spells spells;
-   public O2Potions potions;
-   public O2Prophecies prophecies;
-   public O2StationarySpells stationarySpells;
-   public Ollivanders2Common common;
-   public O2PlayerCommon playerCommon;
 
    private static String mcVersion;
    public static boolean debug = false;
@@ -91,6 +83,8 @@ public class Ollivanders2 extends JavaPlugin
    public static ChatColor chatColor = ChatColor.AQUA;
    public static Material wandMaterial = Material.STICK;
    public static int chatDropoff = 15;
+
+   public static Random random = new Random();
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -114,7 +108,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       Ollivanders2API.saveStationarySpells();
-      prophecies.saveProphecies();
+      Ollivanders2API.saveProphecies();
       if (useHouses)
       {
          Ollivanders2API.saveHouses();
@@ -156,6 +150,8 @@ public class Ollivanders2 extends JavaPlugin
       {
          this.saveDefaultConfig();
       }
+
+      random.setSeed(Calendar.getInstance().getTimeInMillis());
 
       //
       // read configuration
@@ -309,7 +305,7 @@ public class Ollivanders2 extends JavaPlugin
       // set up prophecies
       try
       {
-         prophecies = new O2Prophecies(this);
+         Ollivanders2API.initProphecies(this);
       }
       catch (Exception e)
       {

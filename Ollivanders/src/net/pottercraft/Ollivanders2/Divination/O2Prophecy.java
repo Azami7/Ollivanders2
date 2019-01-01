@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Divination;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -150,7 +151,7 @@ public class O2Prophecy
       if (target == null)
       {
          // player is offline, stash this prophecy for when the player returns
-         p.prophecies.addOfflineProphecy(this);
+         Ollivanders2API.getProphecies().addOfflineProphecy(this);
          return;
       }
 
@@ -175,9 +176,9 @@ public class O2Prophecy
             }
 
             effect.setPermanent(false);
-            p.players.playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-            p.getServer().broadcastMessage(Ollivanders2.chatColor + "And so came to pass the prophecy of " + p.players.getPlayer(prophetID).getPlayerName() + ", \"" + prophecyMessage + "\"");
+            p.getServer().broadcastMessage(Ollivanders2.chatColor + "And so came to pass the prophecy of " + Ollivanders2API.getPlayers().getPlayer(prophetID).getPlayerName() + ", \"" + prophecyMessage + "\"");
          }
          else
          {
