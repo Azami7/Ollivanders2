@@ -84,8 +84,6 @@ public class Ollivanders2 extends JavaPlugin
    public static Material wandMaterial = Material.STICK;
    public static int chatDropoff = 15;
 
-   public static Random random = new Random();
-
    /**
     * onDisable runs when the Minecraft server is shutting down.
     *
@@ -150,8 +148,6 @@ public class Ollivanders2 extends JavaPlugin
       {
          this.saveDefaultConfig();
       }
-
-      random.setSeed(Calendar.getInstance().getTimeInMillis());
 
       //
       // read configuration

@@ -4,6 +4,7 @@ import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -66,9 +67,9 @@ public final class LEGILIMENS extends DarkArts
 
             int targetExperience = p.getO2Player(target).getSpellCount(O2SpellType.LEGILIMENS) / 10;
 
-            int randLess = (Math.abs(Ollivanders2.random.nextInt()) % 10);
-            int randEqual = (Math.abs(Ollivanders2.random.nextInt()) % 3);
-            int randGreater = (Math.abs(Ollivanders2.random.nextInt()) % 5);
+            int randLess = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
+            int randEqual = (Math.abs(Ollivanders2Common.random.nextInt()) % 3);
+            int randGreater = (Math.abs(Ollivanders2Common.random.nextInt()) % 5);
 
             // Legilimens will be successful:
             // 80% of the time if the caster's legilimens level is greater than the target's
@@ -86,7 +87,7 @@ public final class LEGILIMENS extends DarkArts
                   // when in animagus form, only someone who has mastered legilimens can mind read a person
                   if (usesModifier >= 10)
                   {
-                     int rand = (Math.abs(Ollivanders2.random.nextInt()) % 100);
+                     int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100);
 
                      p.getLogger().info("rand = " + rand);
                      // 10% chance to detect animagus
@@ -162,7 +163,7 @@ public final class LEGILIMENS extends DarkArts
          player.sendMessage(message.toString());
       }
 
-      int rand = (Math.abs(Ollivanders2.random.nextInt()) % 100);
+      int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100);
 
       // 50% chance detect destined wand
       if (rand >= 50)

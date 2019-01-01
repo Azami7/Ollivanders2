@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Divination.O2DivinationType;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -57,7 +58,7 @@ public class MANTEIA_KENTAVROS extends Divination
    {
       usesModifier = p.getSpellNum(player, spellType) / 3;
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
       {
          usesModifier *= 2;
       }

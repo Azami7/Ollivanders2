@@ -4,6 +4,7 @@ import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
 
 import java.util.UUID;
@@ -165,7 +166,7 @@ public class O2Prophecy
          return;
       }
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
+      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
 
       if (accuracy > rand)
       {

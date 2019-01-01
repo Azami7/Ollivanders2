@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 /**
  * An effect is either a temporary or semi-permanent alteration of an O2Player. O2EffectType cannot
@@ -161,7 +162,7 @@ public abstract class O2Effect
       }
       else
       {
-         int rand = (Math.abs(Ollivanders2.random.nextInt()) % divinationText.size());
+         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % divinationText.size());
          return divinationText.get(rand);
       }
    }

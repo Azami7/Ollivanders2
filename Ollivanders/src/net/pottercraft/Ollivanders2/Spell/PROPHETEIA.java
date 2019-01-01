@@ -2,6 +2,8 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -58,11 +60,11 @@ public class PROPHETEIA extends Charms
       {
          if (live instanceof Player && live.getUniqueId() != player.getUniqueId())
          {
-            int rand = (Math.abs(Ollivanders2.random.nextInt()) % 10);
+            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
 
             if (usesModifier > rand)
             {
-               String prophecy = p.prophecies.getProphecy(live.getUniqueId());
+               String prophecy = Ollivanders2API.getProphecies().getProphecy(live.getUniqueId());
 
                if (prophecy != null)
                {
