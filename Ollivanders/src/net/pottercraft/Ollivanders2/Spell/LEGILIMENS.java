@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -77,7 +78,7 @@ public final class LEGILIMENS extends DarkArts
                   || ((usesModifier == targetExperience) && (randEqual > 0)) // success on 1, 2
                   || ((usesModifier < targetExperience) && (randLess < 1))) // success on 0
             {
-               if (p.players.playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+               if (Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
                {
                   p.getLogger().info("Legilimens: target is in animagus form");
                   p.getLogger().info("Uses modifier = " + usesModifier);
@@ -142,7 +143,7 @@ public final class LEGILIMENS extends DarkArts
          StringBuilder message = new StringBuilder();
          message.append(Ollivanders2.chatColor);
 
-         if (p.houses.isSorted(target))
+         if (Ollivanders2API.getHouses().isSorted(target))
          {
             message.append(" is a ");
 
@@ -151,7 +152,7 @@ public final class LEGILIMENS extends DarkArts
                message.append(o2p.getYear().getDisplayText()).append(" year ");
             }
 
-            message.append(p.houses.getHouse(target).getName()).append(".");
+            message.append(Ollivanders2API.getHouses().getHouse(target).getName()).append(".");
          }
          else
          {
@@ -210,7 +211,7 @@ public final class LEGILIMENS extends DarkArts
                // 40% chance detect effects
                if (rand >= 40)
                {
-                  String legilText = p.players.playerEffects.detectEffectWithInformous(o2p.getID());
+                  String legilText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithInformous(o2p.getID());
                   if (legilText != null)
                   {
                      player.sendMessage(Ollivanders2.chatColor + " " + legilText + ".");
@@ -229,7 +230,7 @@ public final class LEGILIMENS extends DarkArts
                         EntityType animagusForm = o2p.getAnimagusForm();
                         if (animagusForm != null)
                         {
-                           player.sendMessage(Ollivanders2.chatColor + " has the animagus form of a " + p.common.enumRecode(animagusForm.toString()) + ".");
+                           player.sendMessage(Ollivanders2.chatColor + " has the animagus form of a " + Ollivanders2API.common.enumRecode(animagusForm.toString()) + ".");
                         }
                      }
                   }

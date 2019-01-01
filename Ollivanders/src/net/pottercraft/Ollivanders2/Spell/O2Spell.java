@@ -275,7 +275,7 @@ public abstract class O2Spell implements Teachable
       spellUses = p.getSpellNum(player, spellType);
       usesModifier = Math.sqrt(spellUses) / rightWand;
 
-      if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
       {
          usesModifier *= 2;
       }
@@ -347,7 +347,7 @@ public abstract class O2Spell implements Teachable
       }
       else
       {
-         int index = Math.abs(Ollivanders2.random.nextInt() % flavorText.size());
+         int index = Math.abs(Ollivanders2Common.random.nextInt() % flavorText.size());
          return flavorText.get(index);
       }
    }
@@ -361,12 +361,6 @@ public abstract class O2Spell implements Teachable
    @Override
    public String getName ()
    {
-      /*
-      String spellTypeString = spellType.toString().toLowerCase();
-      String name = Ollivanders2Common.firstLetterCapitalize(spellTypeString.replace("_", " "));
-
-      return name;
-      */
       return spellType.getSpellName();
    }
 }

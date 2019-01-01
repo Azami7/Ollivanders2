@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.AWAKE;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
@@ -40,7 +41,7 @@ public class WIDEYE_POTION extends O2Potion
    public void drink (O2Player o2p, Player player)
    {
       AWAKE effect = new AWAKE(p, duration, player.getUniqueId());
-      p.players.playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel alert.");
    }

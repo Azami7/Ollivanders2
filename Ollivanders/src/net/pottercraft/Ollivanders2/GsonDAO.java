@@ -143,7 +143,7 @@ public class GsonDAO implements GenericDAO
          if (house == null || playerID == null)
             continue;
 
-         UUID pid = p.common.uuidFromString(playerID);
+         UUID pid = Ollivanders2API.common.uuidFromString(playerID);
          if (pid == null)
          {
             continue;
@@ -210,7 +210,7 @@ public class GsonDAO implements GenericDAO
             continue;
          }
 
-         pts = p.common.integerFromString(points);
+         pts = Ollivanders2API.common.integerFromString(points);
          if (pts == null)
          {
             continue;
@@ -281,7 +281,7 @@ public class GsonDAO implements GenericDAO
             // if the file exists, we want to move it
             File archiveDir = new File(archiveDirectory);
             archiveDir.mkdirs();
-            String archiveFile = archiveDirectory + "/" + path + "-" + getCurrentTimestamp();
+            String archiveFile = archiveDirectory + "/" + path + "-" + Ollivanders2API.common.getCurrentTimestamp();
 
             File prev = new File(archiveFile);
             file.renameTo(prev);
@@ -390,13 +390,5 @@ public class GsonDAO implements GenericDAO
       }
 
       return json;
-   }
-
-   private String getCurrentTimestamp ()
-   {
-      DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-      Date date = new Date();
-
-      return dateFormat.format(date);
    }
 }

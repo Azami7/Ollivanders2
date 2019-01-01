@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import org.bukkit.entity.Player;
 
@@ -54,7 +55,7 @@ public final class ALOHOMORA extends Charms
    {
       move();
       List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
          if (spell instanceof COLLOPORTUS)
          {

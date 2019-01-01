@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -46,9 +47,9 @@ public final class FORGETFULLNESS_POTION extends O2Potion
 
    public void drink (O2Player o2p, Player player)
    {
-      int coinToss = Math.abs(Ollivanders2.random.nextInt() % 2);
+      int coinToss = Math.abs(Ollivanders2Common.random.nextInt() % 2);
 
-      int memLoss = Math.abs(Ollivanders2.random.nextInt() % 20) + 1;
+      int memLoss = Math.abs(Ollivanders2Common.random.nextInt() % 20) + 1;
 
       String lostSpell = "";
 
@@ -59,7 +60,7 @@ public final class FORGETFULLNESS_POTION extends O2Potion
          {
             Set<O2SpellType> keySet = knownSpells.keySet();
             ArrayList<O2SpellType> listOfSpells = new ArrayList<>(keySet);
-            int index = Math.abs(Ollivanders2.random.nextInt() % listOfSpells.size());
+            int index = Math.abs(Ollivanders2Common.random.nextInt() % listOfSpells.size());
 
             o2p.setSpellCount(listOfSpells.get(index), memLoss);
             lostSpell = listOfSpells.get(index).toString();
@@ -72,7 +73,7 @@ public final class FORGETFULLNESS_POTION extends O2Potion
          {
             Set<O2PotionType> keySet = knownPotions.keySet();
             ArrayList<O2PotionType> listOfPotions = new ArrayList<>(keySet);
-            int index = Math.abs(Ollivanders2.random.nextInt() % listOfPotions.size());
+            int index = Math.abs(Ollivanders2Common.random.nextInt() % listOfPotions.size());
 
             o2p.setPotionCount(listOfPotions.get(index), memLoss);
             lostSpell = listOfPotions.get(index).toString();

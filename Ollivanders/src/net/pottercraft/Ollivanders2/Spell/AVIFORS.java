@@ -5,6 +5,7 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.BatWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.ParrotWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
@@ -68,7 +69,7 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
       if (Ollivanders2.mcVersionCheck())
       {
          ParrotWatcher watcher = (ParrotWatcher)disguise.getWatcher();
-         int rand = Math.abs(Ollivanders2.random.nextInt() % 20);
+         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 20);
          if (rand > 18)
          {
             watcher.setVariant(Parrot.Variant.GRAY);

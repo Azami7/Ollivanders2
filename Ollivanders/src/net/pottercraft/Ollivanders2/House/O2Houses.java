@@ -206,6 +206,22 @@ public class O2Houses
    }
 
    /**
+    * Remove a player from any house, making them unsorted. This should only be used on a player reset.
+    *
+    * @param player the player to unsort
+    */
+   public void unsort (Player player)
+   {
+      if (isSorted(player))
+      {
+         O2HouseType houseType = O2HouseMap.get(player.getUniqueId());
+         updateTeam(player, houseType, false);
+
+         O2HouseMap.remove(player.getUniqueId());
+      }
+   }
+
+   /**
     * Determines if a player has been sorted already or not.
     *
     * @param player the player to check
@@ -236,11 +252,8 @@ public class O2Houses
     */
    public void forceSetHouse(Player player, O2HouseType houseType)
    {
-      if (!sort(player, houseType))
-      {
-         O2HouseMap.replace(player.getUniqueId(), houseType);
-         addPlayerToHouseTeam(player);
-      }
+      unsort(player);
+      sort(player, houseType);
    }
 
    /**

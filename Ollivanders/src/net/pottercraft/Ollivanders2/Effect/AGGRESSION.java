@@ -56,7 +56,7 @@ public class AGGRESSION extends O2Effect
       // only take action once per 10 seconds, which is every 120 ticks
       if ((duration % 120) == 0)
       {
-         int rand = Math.abs(Ollivanders2.random.nextInt()) % 10;
+         int rand = Math.abs(Ollivanders2Common.random.nextInt()) % 10;
 
          Ollivanders2Common common = new Ollivanders2Common(p);
          if (rand < aggressionLevel)
@@ -83,7 +83,7 @@ public class AGGRESSION extends O2Effect
 
       if (nearby != null && !nearby.isEmpty())
       {
-         int rand = Math.abs(Ollivanders2.random.nextInt());
+         int rand = Math.abs(Ollivanders2Common.random.nextInt());
          LivingEntity[] nArray = nearby.toArray(new LivingEntity[nearby.size()]);
 
          LivingEntity toDamage = nArray[rand % nearby.size()];
@@ -102,7 +102,7 @@ public class AGGRESSION extends O2Effect
 
          double curHealth = toDamage.getHealth();
          // damage is entities current health divided by 2, 3, or 4
-         rand = Math.abs(Ollivanders2.random.nextInt());
+         rand = Math.abs(Ollivanders2Common.random.nextInt());
          double damage = curHealth / ((rand % 3) + 2);
          toDamage.damage(damage, target);
       }
@@ -111,7 +111,7 @@ public class AGGRESSION extends O2Effect
    /**
     * Provoke nearby Creatures to target this player.
     *
-    * @param nearby
+    * @param nearby collection of nearby living entities
     */
    private void provoke (Collection<LivingEntity> nearby)
    {
@@ -134,7 +134,7 @@ public class AGGRESSION extends O2Effect
     *
     * @param level 1-10 where 1 is the lowest
     */
-   public void setAggressionLevel (int level)
+   void setAggressionLevel (int level)
    {
       if (level < 1)
          level = 1;

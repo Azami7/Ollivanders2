@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -58,7 +59,7 @@ public final class COLLOPORTUS extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS total = new net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS(p, player.getUniqueId(), location,
                O2StationarySpellType.COLLOPORTUS, 5, duration);
          total.flair(10);
-         p.stationarySpells.addStationarySpell(total);
+         Ollivanders2API.getStationarySpells().addStationarySpell(total);
          kill();
       }
    }

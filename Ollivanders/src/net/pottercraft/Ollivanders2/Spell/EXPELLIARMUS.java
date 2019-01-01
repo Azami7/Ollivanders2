@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -87,7 +88,7 @@ public final class EXPELLIARMUS extends Charms
     */
    public boolean holdsWand (LivingEntity entity)
    {
-      return p.common.isWand(entity.getEquipment().getItemInMainHand());
+      return Ollivanders2API.common.isWand(entity.getEquipment().getItemInMainHand());
    }
 
    /**

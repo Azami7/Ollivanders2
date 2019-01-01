@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.pottercraft.Ollivanders2.Effect.MUCUS;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -66,7 +67,7 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
             int dur = (int) (usesModifier * 1200);
 
             MUCUS effect = new MUCUS(p, dur, player.getUniqueId());
-            p.players.playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             kill();
          }
