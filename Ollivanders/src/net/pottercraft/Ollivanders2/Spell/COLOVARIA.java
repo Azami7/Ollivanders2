@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -11,6 +12,7 @@ import org.bukkit.material.Colorable;
 import org.bukkit.material.MaterialData;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 import java.util.ArrayList;
 
@@ -58,7 +60,7 @@ public final class COLOVARIA extends Charms
    {
       move();
       DyeColor[] values = DyeColor.values();
-      DyeColor newColor = values[Math.abs(Ollivanders2.random.nextInt() % values.length)];
+      DyeColor newColor = values[Math.abs(Ollivanders2Common.random.nextInt() % values.length)];
       for (LivingEntity live : getLivingEntities(2))
       {
          if (live instanceof Sheep)
@@ -71,7 +73,7 @@ public final class COLOVARIA extends Charms
       }
       if (getBlock().getType() != Material.AIR)
       {
-         for (Block block : p.common.getBlocksInRadius(location, usesModifier))
+         for (Block block : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
          {
             if (block.getState().getData() instanceof Colorable)
             {

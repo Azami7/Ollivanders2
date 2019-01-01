@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -60,7 +61,7 @@ public abstract class ColoroSuper extends Charms
       }
       if (getBlock().getType() != Material.AIR)
       {
-         for (Block block : p.common.getBlocksInRadius(location, usesModifier))
+         for (Block block : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
          {
             if (block.getState().getData() instanceof Colorable)
             {

@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -53,7 +54,7 @@ public final class PRAEPANDO extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO prae = new net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO(p, player.getUniqueId(), location, O2StationarySpellType.PRAEPANDO,
                1, duration, 5);
          prae.flair(10);
-         p.stationarySpells.addStationarySpell(prae);
+         Ollivanders2API.getStationarySpells().addStationarySpell(prae);
          kill();
       }
    }

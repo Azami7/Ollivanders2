@@ -5,6 +5,7 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import me.libraryaddict.disguise.disguisetypes.watchers.RabbitWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -56,6 +57,6 @@ public final class LAPIFORS extends FriendlyMobDisguiseSuper
       RabbitWatcher watcher = (RabbitWatcher)disguise.getWatcher();
       watcher.setAdult();
 
-      watcher.setType(p.common.randomRabbitType());
+      watcher.setType(Ollivanders2API.common.randomRabbitType());
    }
 }

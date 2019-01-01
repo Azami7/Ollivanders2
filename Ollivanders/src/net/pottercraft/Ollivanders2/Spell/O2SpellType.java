@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 /**
@@ -191,7 +192,7 @@ public enum O2SpellType
    public String getSpellName ()
    {
       String spellTypeString = this.toString().toLowerCase();
-      String name = Ollivanders2Common.firstLetterCapitalize(spellTypeString.replace("_", " "));
+      String name = Ollivanders2API.common.firstLetterCapitalize(spellTypeString.replace("_", " "));
 
       return name;
    }

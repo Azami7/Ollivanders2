@@ -6,6 +6,7 @@ import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Bat;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 import java.util.ArrayList;
 
@@ -70,7 +71,7 @@ public final class AVIS extends Charms
          {
             Parrot bird = (Parrot) location.getWorld().spawnEntity(location, EntityType.PARROT);
 
-            int rand = Math.abs(Ollivanders2.random.nextInt() % 5);
+            int rand = Math.abs(Ollivanders2Common.random.nextInt() % 5);
             Parrot.Variant variant;
             if (rand == 0)
                variant = Parrot.Variant.CYAN;

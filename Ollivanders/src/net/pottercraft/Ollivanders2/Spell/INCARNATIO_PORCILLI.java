@@ -4,6 +4,7 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.PigWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -50,7 +51,7 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguiseSuper
       PigWatcher watcher = (PigWatcher)disguise.getWatcher();
       watcher.setAdult();
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
+      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
       if (rand == 0)
          watcher.setSaddled(true);
       else

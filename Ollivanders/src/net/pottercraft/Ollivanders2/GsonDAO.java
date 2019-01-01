@@ -21,7 +21,7 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class GsonDataPersistenceLayer implements DataPersistenceLayer
+public class GsonDAO
 {
    private Gson gson;
    private Ollivanders2 p;
@@ -38,7 +38,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     *
     * @param plugin
     */
-   public GsonDataPersistenceLayer (Ollivanders2 plugin)
+   public GsonDAO (Ollivanders2 plugin)
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
       p = plugin;
@@ -49,7 +49,6 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     *
     * @param map a map of player and house data as strings
     */
-   @Override
    public void writeHouses (Map<UUID, O2HouseType> map)
    {
       // convert to something that can be properly serialized
@@ -68,7 +67,6 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     *
     * @param map a map of the O2House points data as strings
     */
-   @Override
    public void writeHousePoints (Map<O2HouseType, Integer> map)
    {
       Map <String, String> strMap = new HashMap<>();
@@ -86,7 +84,6 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     *
     * @param map a map of the player data as strings
     */
-   @Override
    public void writeO2Players (Map <String, Map<String, String>> map)
    {
       String json = gson.toJson(map);
@@ -98,7 +95,6 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     *
     * @param map a map of stationary spell data as strings
     */
-   @Override
    public void writeO2StationarySpells (List <Map<String, String>> map)
    {
       String json = gson.toJson(map);
@@ -110,7 +106,6 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     *
     * @return a map of player UUIDs and their O2House
     */
-   @Override
    public Map<UUID, O2HouseType> readHouses ()
    {
       String json = readJSON(housesJSONFile);
@@ -129,7 +124,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
          if (house == null || playerID == null)
             continue;
 
-         UUID pid = p.common.uuidFromString(playerID);
+         UUID pid = Ollivanders2API.common.uuidFromString(playerID);
          if (pid == null)
          {
             continue;
@@ -161,7 +156,6 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     *
     * @return a map of O2Houses and their points
     */
-   @Override
    public Map<O2HouseType, Integer> readHousePoints ()
    {
       String json = readJSON(housePointsJSONFile);
@@ -196,7 +190,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
             continue;
          }
 
-         pts = p.common.integerFromString(points);
+         pts = Ollivanders2API.common.integerFromString(points);
          if (pts == null)
          {
             continue;
@@ -213,7 +207,6 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
     *
     * @return a map of the player json data
     */
-   @Override
    public Map <String, Map<String, String>> readO2Players ()
    {
       String json = readJSON(o2PlayerJSONFile);
@@ -227,7 +220,11 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       return strMap;
    }
 
-   @Override
+   /**
+    * Read stationary spells from json file
+    *
+    * @return a list of the stationary spell json data
+    */
    public List <Map<String, String>> readO2StationarySpells ()
    {
       String json = readJSON(o2StationarySpellsJSONFile);
@@ -262,7 +259,7 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
             // if the file exists, we want to move it
             File archiveDir = new File(archiveDirectory);
             archiveDir.mkdirs();
-            String archiveFile = archiveDirectory + "/" + path + "-" + getCurrentTimestamp();
+            String archiveFile = archiveDirectory + "/" + path + "-" + Ollivanders2API.common.getCurrentTimestamp();
 
             File prev = new File(archiveFile);
             file.renameTo(prev);
@@ -371,13 +368,5 @@ public class GsonDataPersistenceLayer implements DataPersistenceLayer
       }
 
       return json;
-   }
-
-   private String getCurrentTimestamp ()
-   {
-      DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
-      Date date = new Date();
-
-      return dateFormat.format(date);
    }
 }
