@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT;
 import org.bukkit.Effect;
@@ -63,7 +64,7 @@ public final class APPARATE extends Charms
       kill();
       location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
       boolean canApparateOut = true;
-      for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
          if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation()))
          {
@@ -93,7 +94,7 @@ public final class APPARATE extends Charms
          to.setX(newX);
          to.setZ(newZ);
          boolean canApparateIn = true;
-         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
+         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
          {
             if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to))
             {

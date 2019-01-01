@@ -5,6 +5,7 @@ import java.util.Set;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -76,7 +77,7 @@ public abstract class ExtraDimensional extends StationarySpellObj
       {
          block.setType(Material.BEDROCK);
       }
-      for (Block block : p.common.getBlocksInRadius(loc, dimenRadius))
+      for (Block block : Ollivanders2API.common.getBlocksInRadius(loc, dimenRadius))
       {
          block.setType(Material.AIR);
       }

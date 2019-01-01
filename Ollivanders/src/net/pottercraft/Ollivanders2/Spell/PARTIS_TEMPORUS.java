@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -61,7 +62,7 @@ public final class PARTIS_TEMPORUS extends Charms
       {
          lifeTicks++;
       }
-      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
          if (spell.isInside(location) && spell.getCasterID().equals(player.getUniqueId()))
          {
@@ -72,7 +73,7 @@ public final class PARTIS_TEMPORUS extends Charms
       }
       if (lifeTicks > 160)
       {
-         for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
+         for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
          {
             if (spell.isInside(location))
             {

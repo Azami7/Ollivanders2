@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -57,7 +58,7 @@ public final class MOLLIARE extends Charms
          int duration = (int) (usesModifier * 1200);
          net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE molliare = new net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE(p, player.getUniqueId(), location, O2StationarySpellType.MOLLIARE, 5, duration);
          molliare.flair(10);
-         p.stationarySpells.addStationarySpell(molliare);
+         Ollivanders2API.getStationarySpells().addStationarySpell(molliare);
          kill();
       }
    }

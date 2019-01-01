@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.ChatColor;
@@ -59,7 +60,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
 
    public void checkEffect ()
    {
-      O2Player o2p = p.players.getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
       {
          kill();
@@ -81,7 +82,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
          {
             HORCRUX horcrux = new HORCRUX(p, player.getUniqueId(), location, O2StationarySpellType.HORCRUX, 5, 10);
             horcrux.flair(10);
-            p.stationarySpells.addStationarySpell(horcrux);
+            Ollivanders2API.getStationarySpells().addStationarySpell(horcrux);
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
                   player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0);
             o2p.subtractSoul();
@@ -99,7 +100,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
             //If they player couldn't survive making another horcrux then they are sent back to a previous horcrux
             else if ((futureHealth - 1) <= 0)
             {
-               List<StationarySpellObj> stationarys = p.stationarySpells.getActiveStationarySpells();
+               List<StationarySpellObj> stationarys = Ollivanders2API.getStationarySpells().getActiveStationarySpells();
                for (StationarySpellObj stationary : stationarys)
                {
                   if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(player.getUniqueId()))
@@ -109,7 +110,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
                      player.teleport(tp);
                      player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 
-                     p.stationarySpells.removeStationarySpell(stationary);
+                     Ollivanders2API.getStationarySpells().removeStationarySpell(stationary);
                      return;
                   }
                }

@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -64,7 +65,7 @@ public final class DEFODIO extends Charms
       List<Block> tempBlocks = p.getTempBlocks();
       if (depth > 0)
       {
-         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
+         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)
             {

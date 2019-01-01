@@ -7,8 +7,9 @@ import java.util.UUID;
 import java.util.ArrayList;
 
 import net.pottercraft.Ollivanders2.Effect.O2Effects;
-import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
+import net.pottercraft.Ollivanders2.GsonDAO;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
@@ -102,14 +103,7 @@ public class O2Players
          return;
       }
 
-      if (!O2PlayerMap.containsKey(pid))
-      {
-         O2PlayerMap.put(pid, o2p);
-      }
-      else
-      {
-         O2PlayerMap.replace(pid, o2p);
-      }
+      O2PlayerMap.put(pid, o2p);
    }
 
    /**
@@ -155,7 +149,7 @@ public class O2Players
          return;
       }
 
-      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      GsonDAO gsonLayer = new GsonDAO(p);
       gsonLayer.writeO2Players(serializedMap);
    }
 
@@ -164,7 +158,7 @@ public class O2Players
     */
    public void loadO2Players ()
    {
-      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      GsonDAO gsonLayer = new GsonDAO(p);
 
       // load players from the save file, if it exists
       Map <String, Map<String, String>> serializedMap = gsonLayer.readO2Players();
@@ -318,7 +312,7 @@ public class O2Players
          /**
           * Effects
           */
-         Map<String, String> effects = p.players.playerEffects.serializeEffects(pid);
+         Map<String, String> effects = Ollivanders2API.getPlayers().playerEffects.serializeEffects(pid);
          for (Entry<String, String> entry : effects.entrySet())
          {
             playerData.put(entry.getKey(), entry.getValue());
@@ -390,7 +384,7 @@ public class O2Players
 
       for (Entry<String, Map<String, String>> e : map.entrySet())
       {
-         UUID pid = p.common.uuidFromString(e.getKey());
+         UUID pid = Ollivanders2API.common.uuidFromString(e.getKey());
          if (pid == null)
          {
             continue;
@@ -431,7 +425,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(soulsLabel))
             {
-               Integer souls = p.common.integerFromString(value);
+               Integer souls = Ollivanders2API.common.integerFromString(value);
                if (souls != null)
                {
                   o2p.setSouls(souls);
@@ -439,7 +433,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(inMuggletonLabel))
             {
-               Boolean muggleton = p.common.booleanFromString(value);
+               Boolean muggleton = Ollivanders2API.common.booleanFromString(value);
                if (muggleton != null)
                {
                   o2p.setInRepelloMuggleton(muggleton);
@@ -447,7 +441,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(invisibleLabel))
             {
-               Boolean invisible = p.common.booleanFromString(value);
+               Boolean invisible = Ollivanders2API.common.booleanFromString(value);
                if (invisible != null)
                {
                   o2p.setInvisible(invisible);
@@ -455,7 +449,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(foundWandLabel))
             {
-               Boolean foundWand = p.common.booleanFromString(value);
+               Boolean foundWand = Ollivanders2API.common.booleanFromString(value);
                if (foundWand != null)
                {
                   o2p.setFoundWand(foundWand);
@@ -471,7 +465,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(animagusLabel))
             {
-               EntityType animagus = p.common.entityTypeFromString(value);
+               EntityType animagus = Ollivanders2API.common.entityTypeFromString(value);
                if (animagus != null)
                {
                   o2p.setAnimagusForm(animagus);
@@ -483,7 +477,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(muggleLabel))
             {
-               Boolean muggle = p.common.booleanFromString(value);
+               Boolean muggle = Ollivanders2API.common.booleanFromString(value);
                if (muggle != null)
                {
                   o2p.setMuggle(muggle);
@@ -491,7 +485,7 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(yearLabel))
             {
-               Integer year = p.common.integerFromString(value);
+               Integer year = Ollivanders2API.common.integerFromString(value);
                if (year != null)
                {
                   o2p.setYear(O2PlayerCommon.intToYear(year));
@@ -541,7 +535,7 @@ public class O2Players
       if (spellType == null)
          return;
 
-      Integer count = p.common.integerFromString(value);
+      Integer count = Ollivanders2API.common.integerFromString(value);
       if (count != null)
          o2p.setSpellCount(spellType, count);
    }
@@ -562,7 +556,7 @@ public class O2Players
       if (potionType == null)
          return;
 
-      Integer count = p.common.integerFromString(value);
+      Integer count = Ollivanders2API.common.integerFromString(value);
       if (count != null)
          o2p.setPotionCount(potionType, count);
    }

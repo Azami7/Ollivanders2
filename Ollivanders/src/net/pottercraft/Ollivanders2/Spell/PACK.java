@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -61,7 +62,7 @@ public final class PACK extends Charms
       Block block = getBlock();
       if (block.getType() == Material.CHEST)
       {
-         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
+         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)
             {

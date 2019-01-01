@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -54,7 +55,7 @@ public final class FIANTO_DURI extends Charms
    {
       move();
       List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
          if (spell.isInside(location))
          {

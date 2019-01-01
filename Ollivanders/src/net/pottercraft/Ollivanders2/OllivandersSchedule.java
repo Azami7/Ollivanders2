@@ -3,7 +3,6 @@ package net.pottercraft.Ollivanders2;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Set;
@@ -13,9 +12,7 @@ import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Creature;
@@ -42,7 +39,7 @@ class OllivandersSchedule implements Runnable
    private static Set<UUID> flying = new HashSet<>();
    private Set<UUID> onBroom = new HashSet<>();
 
-   public OllivandersSchedule (Ollivanders2 plugin)
+   OllivandersSchedule (Ollivanders2 plugin)
    {
       p = plugin;
    }
@@ -53,7 +50,7 @@ class OllivandersSchedule implements Runnable
       {
          projectileSched();
          oeffectSched();
-         p.stationarySpells.upkeep();
+         Ollivanders2API.getStationarySpells().upkeep();
          p.prophecies.upkeep();
          broomSched();
       }
@@ -113,7 +110,7 @@ class OllivandersSchedule implements Runnable
       {
          UUID pid = player.getUniqueId();
 
-         p.players.playerEffects.upkeep(pid);
+         Ollivanders2API.getPlayers().playerEffects.upkeep(pid);
       }
    }
 
@@ -227,7 +224,7 @@ class OllivandersSchedule implements Runnable
    private void invisPlayer ()
    {
       Set<REPELLO_MUGGLETON> repelloMuggletons = new HashSet<>();
-      for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
          if (stat instanceof REPELLO_MUGGLETON)
          {
@@ -283,7 +280,7 @@ class OllivandersSchedule implements Runnable
          } else if (!hasCloak && alreadyInvis) {
             for (Player player2 : p.getServer().getOnlinePlayers())
             {
-               O2Player viewer = p.players.getPlayer(player2.getUniqueId());
+               O2Player viewer = Ollivanders2API.getPlayers().getPlayer(player2.getUniqueId());
                if (viewer == null)
                   continue;
 
@@ -328,7 +325,7 @@ class OllivandersSchedule implements Runnable
       ItemStack chestPlate = player.getInventory().getChestplate();
       if (chestPlate != null)
       {
-         return p.common.isInvisibilityCloak(chestPlate);
+         return Ollivanders2API.common.isInvisibilityCloak(chestPlate);
       }
       return false;
    }
@@ -343,7 +340,7 @@ class OllivandersSchedule implements Runnable
       {
          for (Player player : world.getPlayers())
          {
-            if (p.common.isBroom(player.getInventory().getItemInMainHand()) && p.canLive(player.getLocation(), O2SpellType.VOLATUS))
+            if (Ollivanders2API.common.isBroom(player.getInventory().getItemInMainHand()) && p.canLive(player.getLocation(), O2SpellType.VOLATUS))
             {
                player.setAllowFlight(true);
                player.setFlying(true);
@@ -359,7 +356,7 @@ class OllivandersSchedule implements Runnable
             {
                if (player.getGameMode() == GameMode.SURVIVAL && (this.onBroom.contains(player.getUniqueId())))
                {
-                  if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FLYING))
+                  if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FLYING))
                   {
                      continue playerIter;
                   }

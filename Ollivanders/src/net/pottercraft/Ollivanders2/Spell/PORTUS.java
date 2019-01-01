@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT;
 import org.bukkit.Location;
@@ -91,7 +92,7 @@ public final class PORTUS extends Charms
       for (Item item : getItems(1))
       {
          boolean canApparateOut = true;
-         for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
+         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
          {
             if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation())
                   && !stat.getCasterID().equals(player.getUniqueId()))
@@ -130,7 +131,7 @@ public final class PORTUS extends Charms
                to = player.getLocation().clone();
             }
             boolean canApparateIn = true;
-            for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
+            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
             {
                if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to) && !stat.getCasterID().equals(player.getUniqueId()))
                {
