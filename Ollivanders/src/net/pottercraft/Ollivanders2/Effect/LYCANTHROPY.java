@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
@@ -112,11 +113,11 @@ public class LYCANTHROPY extends ShapeShiftSuper
    {
       AGGRESSION aggression = new AGGRESSION(p, 5, targetID);
       aggression.setAggressionLevel(10);
-      p.players.playerEffects.addEffect(aggression);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(aggression);
       additionalEffects.add(O2EffectType.AGGRESSION);
 
       LYCANTHROPY_SPEECH speech = new LYCANTHROPY_SPEECH(p, 5, targetID);
-      p.players.playerEffects.addEffect(speech);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(speech);
       additionalEffects.add(O2EffectType.LYCANTHROPY_SPEECH);
    }
 
@@ -127,7 +128,7 @@ public class LYCANTHROPY extends ShapeShiftSuper
    {
       for (O2EffectType effectType : additionalEffects)
       {
-         p.players.playerEffects.removeEffect(targetID, effectType);
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, effectType);
       }
    }
 }

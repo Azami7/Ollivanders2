@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
+import net.pottercraft.Ollivanders2.GsonDAO;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
@@ -151,7 +151,7 @@ public class O2Houses
     */
    private void loadHouses()
    {
-      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      GsonDAO gsonLayer = new GsonDAO(p);
       Map <UUID, O2HouseType> houses = gsonLayer.readHouses();
       if (houses != null)
       {
@@ -174,7 +174,7 @@ public class O2Houses
    public void saveHouses()
    {
       // write house data out as JSON
-      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      GsonDAO gsonLayer = new GsonDAO(p);
       gsonLayer.writeHouses(O2HouseMap);
 
       Map <O2HouseType, Integer> housePoints = new HashMap<>();
@@ -203,6 +203,22 @@ public class O2Houses
       addPlayerToHouseTeam(player);
 
       return true;
+   }
+
+   /**
+    * Remove a player from any house, making them unsorted. This should only be used on a player reset.
+    *
+    * @param player the player to unsort
+    */
+   public void unsort (Player player)
+   {
+      if (isSorted(player))
+      {
+         O2HouseType houseType = O2HouseMap.get(player.getUniqueId());
+         updateTeam(player, houseType, false);
+
+         O2HouseMap.remove(player.getUniqueId());
+      }
    }
 
    /**
@@ -236,11 +252,8 @@ public class O2Houses
     */
    public void forceSetHouse(Player player, O2HouseType houseType)
    {
-      if (!sort(player, houseType))
-      {
-         O2HouseMap.replace(player.getUniqueId(), houseType);
-         addPlayerToHouseTeam(player);
-      }
+      unsort(player);
+      sort(player, houseType);
    }
 
    /**

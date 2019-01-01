@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
@@ -52,7 +53,7 @@ public final class PROTEGO extends Charms
       net.pottercraft.Ollivanders2.StationarySpell.PROTEGO protego =
             new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO, 5, 12000);
       protego.flair(2);
-      p.stationarySpells.addStationarySpell(protego);
+      Ollivanders2API.getStationarySpells().addStationarySpell(protego);
       kill();
    }
 }

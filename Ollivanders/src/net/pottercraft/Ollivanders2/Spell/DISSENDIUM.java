@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
@@ -65,7 +66,7 @@ public final class DISSENDIUM extends Charms
       if (move)
       {
          move();
-         if (p.stationarySpells.isInsideOf(O2StationarySpellType.COLLOPORTUS, location))
+         if (Ollivanders2API.getStationarySpells().isInsideOf(O2StationarySpellType.COLLOPORTUS, location))
          {
             kill();
             return;

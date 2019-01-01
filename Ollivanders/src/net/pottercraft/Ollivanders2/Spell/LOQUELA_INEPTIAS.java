@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Effect.BABBLING;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.LivingEntity;
@@ -71,7 +72,7 @@ public class LOQUELA_INEPTIAS extends Charms
             int dur = (int) (usesModifier * 1200);
 
             BABBLING effect = new BABBLING(p, dur, player.getUniqueId());
-            p.players.playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             kill();
             return;

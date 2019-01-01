@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.Location;
@@ -68,7 +69,7 @@ public final class ALIQUAM_FLOO extends Charms
             String flooName = sign.getLine(0).trim() + " " + sign.getLine(1).trim() + " " + sign.getLine(2).trim() + " " + sign.getLine(3).trim();
             flooName = flooName.trim();
             flooName = flooName.toLowerCase();
-            for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
+            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
             {
                if (stat instanceof net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO)
                {
@@ -81,7 +82,7 @@ public final class ALIQUAM_FLOO extends Charms
             }
             net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO aliquam = new net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO(p, player.getUniqueId(), statLocation, O2StationarySpellType.ALIQUAM_FLOO, 2, 10, flooName);
             aliquam.flair(20);
-            p.stationarySpells.addStationarySpell(aliquam);
+            Ollivanders2API.getStationarySpells().addStationarySpell(aliquam);
          }
          kill();
       }

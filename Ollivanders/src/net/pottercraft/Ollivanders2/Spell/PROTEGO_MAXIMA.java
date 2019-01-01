@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 import org.bukkit.Material;
 
@@ -60,7 +61,7 @@ public final class PROTEGO_MAXIMA extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_MAXIMA max =
                new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_MAXIMA(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO_MAXIMA, 5, duration, damage);
          max.flair(10);
-         p.stationarySpells.addStationarySpell(max);
+         Ollivanders2API.getStationarySpells().addStationarySpell(max);
          kill();
       }
    }

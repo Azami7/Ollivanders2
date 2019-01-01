@@ -97,9 +97,9 @@ public final class INFORMOUS extends Arithmancy
                else
                   player.sendMessage(Ollivanders2.chatColor + " cannot see you.");
 
-               if (p.houses.isSorted(target))
+               if (Ollivanders2API.getHouses().isSorted(target))
                {
-                  player.sendMessage(Ollivanders2.chatColor + " is a member of " + p.houses.getHouse(target).getName() + ".");
+                  player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses().getHouse(target).getName() + ".");
                }
                else
                   player.sendMessage(Ollivanders2.chatColor + " has not been sorted.");
@@ -107,7 +107,7 @@ public final class INFORMOUS extends Arithmancy
             iEntity.add(entity);
          }
       }
-      for (StationarySpellObj spell : p.stationarySpells.getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
          if (spell.isInside(location) && !iSpell.contains(spell))
          {

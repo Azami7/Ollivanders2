@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -68,7 +69,7 @@ public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
          if (e instanceof Player)
          {
             Player player = (Player)e;
-            p.players.playerEffects.removeEffect(player.getUniqueId(), O2EffectType.SLEEPING);
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.SLEEPING);
          }
       }
    }

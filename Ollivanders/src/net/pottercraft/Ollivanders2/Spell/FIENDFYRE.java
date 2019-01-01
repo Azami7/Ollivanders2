@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.Material;
@@ -60,7 +61,7 @@ public final class FIENDFYRE extends DarkArts
    public void checkEffect ()
    {
       move();
-      List<StationarySpellObj> stationaries = p.stationarySpells.getStationarySpellsAtLocation(location);
+      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location);
       for (StationarySpellObj stationary : stationaries)
       {
          if (stationary.getSpellType().equals(O2StationarySpellType.HORCRUX))

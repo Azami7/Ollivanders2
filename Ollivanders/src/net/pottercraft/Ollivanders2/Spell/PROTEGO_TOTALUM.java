@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 import org.bukkit.Material;
 
@@ -58,7 +59,7 @@ public final class PROTEGO_TOTALUM extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM total =
                new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_TOTALUM(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO_TOTALUM, 5, duration);
          total.flair(10);
-         p.stationarySpells.addStationarySpell(total);
+         Ollivanders2API.getStationarySpells().addStationarySpell(total);
          kill();
       }
    }
