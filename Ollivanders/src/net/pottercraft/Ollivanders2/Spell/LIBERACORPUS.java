@@ -63,7 +63,7 @@ public final class LIBERACORPUS extends Charms
 
             if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
             {
-               Ollivanders2API.getPlayers().playerEffects.ageEffect(player.getUniqueId(), O2EffectType.SUSPENSION, (int)(usesModifier * 2400));
+               Ollivanders2API.getPlayers().playerEffects.ageEffect(player.getUniqueId(), O2EffectType.SUSPENSION, (int) (usesModifier * 2400));
             }
 
             kill();

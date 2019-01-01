@@ -676,7 +676,9 @@ public class Ollivanders2 extends JavaPlugin
             return runHousePoints(sender, args);
          }
          else if (subCommand.equalsIgnoreCase("reset"))
+         {
             return Ollivanders2API.getHouses().reset();
+         }
       }
 
       usageMessageHouse(sender);
@@ -802,7 +804,9 @@ public class Ollivanders2 extends JavaPlugin
          success = true;
       }
       else
+      {
          success = Ollivanders2API.getHouses().sort(player, house);
+      }
 
       if (success)
       {
@@ -905,11 +909,17 @@ public class Ollivanders2 extends JavaPlugin
             }
 
             if (option.equalsIgnoreCase("add"))
+            {
                return Ollivanders2API.getHouses().addHousePoints(houseType, value);
+            }
             else if (option.equalsIgnoreCase("subtract"))
+            {
                return Ollivanders2API.getHouses().subtractHousePoints(houseType, value);
+            }
             else if (option.equalsIgnoreCase("set"))
+            {
                return Ollivanders2API.getHouses().setHousePoints(houseType, value);
+            }
          }
       }
 
@@ -1900,7 +1910,7 @@ public class Ollivanders2 extends JavaPlugin
                {
                   // potion ingredient mandrake leaf
                   String [] subArgs = Arrays.copyOfRange(args, 2, args.length);
-                  return givePotionIngredient((Player)sender, Ollivanders2API.common.stringArrayToString(subArgs));
+                  return givePotionIngredient((Player) sender, Ollivanders2API.common.stringArrayToString(subArgs));
                }
             }
          }
@@ -1926,7 +1936,7 @@ public class Ollivanders2 extends JavaPlugin
          {
             // potions memory potion
             String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
-            return givePotion(sender, (Player)sender, Ollivanders2API.common.stringArrayToString(subArgs));
+            return givePotion(sender, (Player) sender, Ollivanders2API.common.stringArrayToString(subArgs));
          }
       }
 

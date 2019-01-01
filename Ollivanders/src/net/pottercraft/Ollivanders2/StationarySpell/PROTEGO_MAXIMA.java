@@ -60,7 +60,7 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
    {
       age();
 
-      Collection<LivingEntity> nearbyEntities = Ollivanders2API.common.getLivingEntitiesInRadius(location,radius + 1);
+      Collection<LivingEntity> nearbyEntities = Ollivanders2API.common.getLivingEntitiesInRadius(location, radius + 1);
 
       for (LivingEntity e : nearbyEntities)
       {
