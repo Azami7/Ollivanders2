@@ -33,7 +33,7 @@ public abstract class O2Divination
 
    ArrayList<String> prophecyPrefix = new ArrayList<>();
 
-   public static final ArrayList<O2EffectType> divinationEffects = new ArrayList<O2EffectType>()
+   static final ArrayList<O2EffectType> divinationEffects = new ArrayList<O2EffectType>()
    {{
       add(O2EffectType.SLEEPING);
       add(O2EffectType.BABBLING);
@@ -42,7 +42,7 @@ public abstract class O2Divination
       add(O2EffectType.MUTED_SPEECH);
    }};
 
-   public O2Divination (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
+   O2Divination (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
    {
       p = plugin;
       target = tar;

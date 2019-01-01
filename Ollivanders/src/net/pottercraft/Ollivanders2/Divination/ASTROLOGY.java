@@ -19,7 +19,7 @@ public class ASTROLOGY extends O2Divination
       prophecyPrefix.add("Because of the influence of Saturn,");
       prophecyPrefix.add("Due to the influence of the Moon,");
       prophecyPrefix.add("The angle of Saturn and Venus means that");
-      prophecyPrefix.add("The angle of Mercury and Mars will cause");
+      prophecyPrefix.add("The angle of Mercury and Mars means");
       prophecyPrefix.add("The angle of Jupiter and the Moon predicts that");
       prophecyPrefix.add("The angle of the Moon and Saturn reveals that");
       prophecyPrefix.add("Mars in the 6th house fortells that");
@@ -27,11 +27,11 @@ public class ASTROLOGY extends O2Divination
       prophecyPrefix.add("The Moon in the 7th house will cause");
       prophecyPrefix.add("Saturn in the 5th house indicates that");
       prophecyPrefix.add("Jupiter in the 4th house predicts that");
-      prophecyPrefix.add("Because of the position of the Moon in your birth chart,");
-      prophecyPrefix.add("The position of Mercury in your birth chart reveals that");
-      prophecyPrefix.add("Due to the position of Venus in your birth chart predicts that");
-      prophecyPrefix.add("From the position of Mars in your birth chart indicates that");
-      prophecyPrefix.add("The position of Jupiter in your birth chart assures that");
-      prophecyPrefix.add("The position of Saturn in your birth chart will cause");
+      prophecyPrefix.add("Because of the position of the Moon in their birth chart,");
+      prophecyPrefix.add("The position of Mercury in their birth chart reveals that");
+      prophecyPrefix.add("Due to the position of Venus in their birth chart predicts that");
+      prophecyPrefix.add("From the position of Mars in their birth chart indicates that");
+      prophecyPrefix.add("The position of Jupiter in their birth chart assures that");
+      prophecyPrefix.add("The position of Saturn in their birth chart means");
    }
 }

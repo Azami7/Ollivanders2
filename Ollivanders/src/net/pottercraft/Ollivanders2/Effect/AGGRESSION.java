@@ -91,12 +91,20 @@ public class AGGRESSION extends O2Effect
          // don't let the player hit themselves
          if (toDamage.getUniqueId() != targetID)
          {
-            double curHealth = toDamage.getHealth();
-            // damage is entities current health divided by 2, 3, or 4
-            rand = Math.abs(Ollivanders2.random.nextInt());
-            double damage = curHealth / ((rand % 3) + 2);
-            toDamage.damage(damage, target);
+            return;
          }
+
+         // don't do damage if worldguard is protecting where the entity is
+         if (Ollivanders2.worldGuardEnabled && !Ollivanders2.worldGuardO2.checkWGFriendlyMobDamage(target, toDamage.getLocation()))
+         {
+            return;
+         }
+
+         double curHealth = toDamage.getHealth();
+         // damage is entities current health divided by 2, 3, or 4
+         rand = Math.abs(Ollivanders2.random.nextInt());
+         double damage = curHealth / ((rand % 3) + 2);
+         toDamage.damage(damage, target);
       }
    }
 
