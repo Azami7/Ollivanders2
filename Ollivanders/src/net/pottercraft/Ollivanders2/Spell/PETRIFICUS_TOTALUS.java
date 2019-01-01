@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Effect.IMMOBILIZE;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -62,7 +63,7 @@ public class PETRIFICUS_TOTALUS extends Charms
          {
             IMMOBILIZE immobilize = new IMMOBILIZE(p, (int) (usesModifier * 1200.0), live.getUniqueId());
 
-            p.players.playerEffects.addEffect(immobilize);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(immobilize);
 
             kill();
             return;

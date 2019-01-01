@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import org.bukkit.Bukkit;
@@ -58,7 +59,7 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
          kill();
          return;
       }
-      double rightWand = p.playerCommon.wandCheck(ply);
+      double rightWand = Ollivanders2API.playerCommon.wandCheck(ply);
       if (ply.isSneaking() && rightWand != -1)
       {
          location = ply.getEyeLocation();

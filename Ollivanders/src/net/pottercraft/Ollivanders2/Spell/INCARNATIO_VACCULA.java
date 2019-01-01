@@ -4,6 +4,7 @@ import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.AgeableWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -43,7 +44,7 @@ public final class INCARNATIO_VACCULA extends PlayerDisguiseSuper
       spellType = O2SpellType.INCARNATIO_VACCULA;
       setUsesModifier();
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
+      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
       if (rand == 0)
          targetType = EntityType.MUSHROOM_COW;
       else

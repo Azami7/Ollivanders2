@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 import net.pottercraft.Ollivanders2.Ollivanders2WorldGuard;
 import org.bukkit.entity.Entity;
@@ -184,7 +185,7 @@ public abstract class EntityTransfigurationSuper extends O2Spell
       }
 
       // check success
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
+      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
       if (rand < successRate)
       {
          transfigureEntity(entity);

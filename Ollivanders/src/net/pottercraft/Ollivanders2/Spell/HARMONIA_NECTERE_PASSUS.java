@@ -98,7 +98,7 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
             return;
          }
 
-         for (StationarySpellObj statSpell : p.stationarySpells.getActiveStationarySpells())
+         for (StationarySpellObj statSpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
          {
             if (statSpell instanceof net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS)
             {
@@ -116,8 +116,8 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
          harmoniaFrom.flair(20);
          harmoniaTo.flair(20);
 
-         p.stationarySpells.addStationarySpell(harmoniaFrom);
-         p.stationarySpells.addStationarySpell(harmoniaTo);
+         Ollivanders2API.getStationarySpells().addStationarySpell(harmoniaFrom);
+         Ollivanders2API.getStationarySpells().addStationarySpell(harmoniaTo);
       }
    }
 

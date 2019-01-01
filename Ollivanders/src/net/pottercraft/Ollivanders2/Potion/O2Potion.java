@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Teachable;
@@ -183,7 +185,7 @@ public abstract class O2Potion implements Teachable
       }
       else
       {
-         int index = Math.abs(Ollivanders2.random.nextInt() % flavorText.size());
+         int index = Math.abs(Ollivanders2Common.random.nextInt() % flavorText.size());
          return flavorText.get(index);
       }
    }
@@ -265,7 +267,7 @@ public abstract class O2Potion implements Teachable
    {
       boolean canBrew = true;
 
-      O2Player o2p = p.players.getPlayer(brewer.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(brewer.getUniqueId());
       if (o2p == null)
          return false;
 
@@ -329,7 +331,7 @@ public abstract class O2Potion implements Teachable
             successRate = ((potionCount * 10) / potionLevel.successModifier) - potionLevel.successModifier;
          }
 
-         int rand = (Math.abs(Ollivanders2.random.nextInt()) % 100) + 1;
+         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) + 1;
 
          if (successRate > rand)
             canBrew = true;
@@ -350,7 +352,7 @@ public abstract class O2Potion implements Teachable
       ItemStack potion = new ItemStack(Material.POTION);
       PotionMeta meta = (PotionMeta)potion.getItemMeta();
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 10);
+      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 10);
       String name = "Watery Potion";
       Color color = Color.BLUE;
 
@@ -385,7 +387,7 @@ public abstract class O2Potion implements Teachable
       meta.setLore(Arrays.asList(name));
       meta.setColor(color);
 
-      rand = Math.abs(Ollivanders2.random.nextInt() % 10);
+      rand = Math.abs(Ollivanders2Common.random.nextInt() % 10);
 
       int duration = 1200;
       int amplifier = 1;

@@ -1,9 +1,10 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.*;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Effect.FLYING;
-import net.pottercraft.Ollivanders2.Effect.O2EffectType;
-import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public final class VENTO_FOLIO extends Charms
    {
       kill();
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 100);
+      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
       int duration;
 
       int uses = (int)(usesModifier * 100);
@@ -113,7 +114,7 @@ public final class VENTO_FOLIO extends Charms
       if (rand < successRate)
       {
          FLYING effect = new FLYING(p, duration, player.getUniqueId());
-         p.players.playerEffects.addEffect(effect);
+         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
          if (Ollivanders2.debug)
             p.getLogger().info("Adding effect ");

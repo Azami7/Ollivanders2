@@ -7,6 +7,8 @@ import java.util.List;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -170,7 +172,7 @@ public abstract class BlockTransfigurationSuper extends O2Spell
       }
 
       // get the objects to be transfigured
-      for (Block b : p.common.getBlocksInRadius(block.getLocation(), (int)(radius * radiusModifier)))
+      for (Block b : Ollivanders2API.common.getBlocksInRadius(block.getLocation(), (int) (radius * radiusModifier)))
       {
          if (!canTransfigure(b))
          {
@@ -270,7 +272,7 @@ public abstract class BlockTransfigurationSuper extends O2Spell
       }
       else
       {
-         int index = Math.abs(Ollivanders2.random.nextInt() % flavorText.size());
+         int index = Math.abs(Ollivanders2Common.random.nextInt() % flavorText.size());
          return flavorText.get(index);
       }
    }
