@@ -3,6 +3,8 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -65,9 +67,9 @@ public final class LEGILIMENS extends DarkArts
 
             int targetExperience = p.getO2Player(target).getSpellCount(O2SpellType.LEGILIMENS) / 10;
 
-            int randLess = (Math.abs(Ollivanders2.random.nextInt()) % 10);
-            int randEqual = (Math.abs(Ollivanders2.random.nextInt()) % 3);
-            int randGreater = (Math.abs(Ollivanders2.random.nextInt()) % 5);
+            int randLess = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
+            int randEqual = (Math.abs(Ollivanders2Common.random.nextInt()) % 3);
+            int randGreater = (Math.abs(Ollivanders2Common.random.nextInt()) % 5);
 
             // Legilimens will be successful:
             // 80% of the time if the caster's legilimens level is greater than the target's
@@ -77,7 +79,7 @@ public final class LEGILIMENS extends DarkArts
                   || ((usesModifier == targetExperience) && (randEqual > 0)) // success on 1, 2
                   || ((usesModifier < targetExperience) && (randLess < 1))) // success on 0
             {
-               if (p.players.playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+               if (Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
                {
                   p.getLogger().info("Legilimens: target is in animagus form");
                   p.getLogger().info("Uses modifier = " + usesModifier);
@@ -85,7 +87,7 @@ public final class LEGILIMENS extends DarkArts
                   // when in animagus form, only someone who has mastered legilimens can mind read a person
                   if (usesModifier >= 10)
                   {
-                     int rand = (Math.abs(Ollivanders2.random.nextInt()) % 100);
+                     int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100);
 
                      p.getLogger().info("rand = " + rand);
                      // 10% chance to detect animagus
@@ -142,7 +144,7 @@ public final class LEGILIMENS extends DarkArts
          StringBuilder message = new StringBuilder();
          message.append(Ollivanders2.chatColor);
 
-         if (p.houses.isSorted(target))
+         if (Ollivanders2API.getHouses().isSorted(target))
          {
             message.append(" is a ");
 
@@ -151,7 +153,7 @@ public final class LEGILIMENS extends DarkArts
                message.append(o2p.getYear().getDisplayText()).append(" year ");
             }
 
-            message.append(p.houses.getHouse(target).getName()).append(".");
+            message.append(Ollivanders2API.getHouses().getHouse(target).getName()).append(".");
          }
          else
          {
@@ -161,7 +163,7 @@ public final class LEGILIMENS extends DarkArts
          player.sendMessage(message.toString());
       }
 
-      int rand = (Math.abs(Ollivanders2.random.nextInt()) % 100);
+      int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100);
 
       // 50% chance detect destined wand
       if (rand >= 50)
@@ -210,7 +212,7 @@ public final class LEGILIMENS extends DarkArts
                // 40% chance detect effects
                if (rand >= 40)
                {
-                  String legilText = p.players.playerEffects.detectEffectWithInformous(o2p.getID());
+                  String legilText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithInformous(o2p.getID());
                   if (legilText != null)
                   {
                      player.sendMessage(Ollivanders2.chatColor + " " + legilText + ".");
@@ -229,7 +231,7 @@ public final class LEGILIMENS extends DarkArts
                         EntityType animagusForm = o2p.getAnimagusForm();
                         if (animagusForm != null)
                         {
-                           player.sendMessage(Ollivanders2.chatColor + " has the animagus form of a " + p.common.enumRecode(animagusForm.toString()) + ".");
+                           player.sendMessage(Ollivanders2.chatColor + " has the animagus form of a " + Ollivanders2API.common.enumRecode(animagusForm.toString()) + ".");
                         }
                      }
                   }

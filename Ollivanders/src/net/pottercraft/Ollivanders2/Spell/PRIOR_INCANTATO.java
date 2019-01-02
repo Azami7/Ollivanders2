@@ -1,6 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -55,7 +57,7 @@ public class PRIOR_INCANTATO extends Charms
                continue;
             }
 
-            int rand = (Math.abs(Ollivanders2.random.nextInt()) % 10);
+            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
 
             if (usesModifier > rand)
             {
@@ -90,7 +92,7 @@ public class PRIOR_INCANTATO extends Charms
          return;
       }
 
-      List<Entity> nearbyPlayers = p.common.getTypedCloseEntities(target.getLocation(), 20, EntityType.PLAYER);
+      List<Entity> nearbyPlayers = Ollivanders2API.common.getTypedCloseEntities(target.getLocation(), 20, EntityType.PLAYER);
 
       for (Entity entity : nearbyPlayers)
       {

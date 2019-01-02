@@ -114,7 +114,9 @@ public final class INFORMOUS extends Arithmancy
                      player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses().getHouse(target).getName() + ".");
                   }
                   else
+                  {
                      player.sendMessage(Ollivanders2.chatColor + " has not been sorted.");
+                  }
                }
             }
             iEntity.add(entity);

@@ -99,7 +99,7 @@ public class SUSPENSION extends O2Effect
       // add an immbolize effect with a duration slightly longer than this one so they cannot
       // move while suspended
       IMMOBILIZE immbobilize = new IMMOBILIZE(p, duration + 10, targetID);
-      p.players.playerEffects.addEffect(immbobilize);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(immbobilize);
       additionalEffects.add(O2EffectType.IMMOBILIZE);
    }
 
@@ -134,7 +134,7 @@ public class SUSPENSION extends O2Effect
    {
       for (O2EffectType effectType : additionalEffects)
       {
-         p.players.playerEffects.removeEffect(targetID, effectType);
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, effectType);
       }
    }
 }
