@@ -73,7 +73,9 @@ import org.bukkit.event.entity.PotionSplashEvent;
 
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -767,6 +769,14 @@ public class OllivandersListener implements Listener
 
       O2SpellType spell = o2p.getWandSpell();
 
+      // if no spell set, check to see if they have a master spell
+      boolean nonverbal = false;
+      if (spell == null && Ollivanders2.useNonVerbalCasting)
+      {
+         spell = o2p.getMasterSpell();
+         nonverbal = true;
+      }
+
       if (spell != null)
       {
          double wandCheck;
@@ -789,18 +799,19 @@ public class OllivandersListener implements Listener
          }
 
          createSpellProjectile(player, spell, wandCheck);
-         o2p.setSpellRecentCastTime(spell);
-         int spellCastCount = p.getSpellNum(player, spell);
-         if (spellCastCount < 100 || spell == O2SpellType.AVADA_KEDAVRA)
-         {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("OllivandersListener:castSpell: allow cast spell");
-            }
 
-            o2p.setWandSpell(null);
-            p.setO2Player(player, o2p);
+         o2p.setSpellRecentCastTime(spell);
+         if (!nonverbal)
+         {
+            o2p.setPriorIncantatem(spell);
          }
+
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("OllivandersListener:castSpell: allow cast spell");
+         }
+
+         o2p.setWandSpell(null);
       }
    }
 
@@ -1413,7 +1424,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the player Pickup Item Event
     */
-   @EventHandler(priority = EventPriority.HIGH)
+   @EventHandler(priority = EventPriority.NORMAL)
    public void portkeyPickUp (EntityPickupItemEvent event)
    {
       Entity entity = event.getEntity();
@@ -1811,6 +1822,12 @@ public class OllivandersListener implements Listener
       }
    }
 
+   //****************************************************************************
+   //
+   // Immobilization, Suspension, and Sleep Effect Events
+   //
+   //****************************************************************************
+
    /**
     * Handle player interact events when they are affected by an effect that alters interacts.
     *
@@ -1830,11 +1847,11 @@ public class OllivandersListener implements Listener
    }
 
    /**
-    * Handle player sleep event.
+    * Do not allow a player to toggle flight while sleeping or immobilized
     *
-    * @param event the player bed enter event
+    * @param event the player toggle flight event
     */
-   @EventHandler (priority = EventPriority.HIGH)
+   @EventHandler(priority = EventPriority.HIGH)
    public void onPlayerSleep (PlayerBedEnterEvent event)
    {
       Player player = event.getPlayer();
@@ -1860,6 +1877,11 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * Do not allow player to toggle sneak while sleeping or immbolized
+    *
+    * @param event the player toggle sneak event
+    */
    @EventHandler (priority = EventPriority.HIGH)
    public void playerSneakSuspension (PlayerToggleSneakEvent event)
    {
@@ -1873,6 +1895,11 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * Do not allow player to toggle running while sleeping or immobilized
+    *
+    * @param event the player toggle sprint event
+    */
    @EventHandler (priority = EventPriority.HIGH)
    public void playerSprintSuspension (PlayerToggleSprintEvent event)
    {
@@ -1886,6 +1913,11 @@ public class OllivandersListener implements Listener
       }
    }
 
+   /**
+    * Do not allow player to change velocity when sleeping or immobolized
+    *
+    * @param event the player velocity event
+    */
    @EventHandler (priority = EventPriority.HIGH)
    public void playerVelocitySuspension (PlayerVelocityEvent event)
    {
@@ -1897,6 +1929,106 @@ public class OllivandersListener implements Listener
       {
          event.setCancelled(true);
          return;
+      }
+   }
+
+   //****************************************************************************
+   //
+   // Animagus Events
+   //
+   //****************************************************************************
+
+   /**
+    * Do not allow animagus to pick up items while in animal form
+    *
+    * @param event entity item pick up event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void animagusItemPickUp (EntityPickupItemEvent event)
+   {
+      Entity entity = event.getEntity();
+      if (entity instanceof Player)
+      {
+         Player player = (Player) entity;
+
+         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+         {
+            event.setCancelled(true);
+            return;
+         }
+      }
+   }
+
+   /**
+    * Do not allow animagus to hold items while in animal form
+    *
+    * @param event item hold event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void animagusItemHeld (PlayerItemHeldEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   /**
+    * Do not allow animagus to consume items while in animal form
+    *
+    * @param event item consume event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void animagusItemConsume (PlayerItemConsumeEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   /**
+    * Do not allow animagus to drop items while in animal form
+    *
+    * @param event drop event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void animagusItemDropEvent (PlayerDropItemEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      {
+         event.setCancelled(true);
+         return;
+      }
+   }
+
+   /**
+    * Do not allow animagus to click blocks while in animal form
+    *
+    * @param event drop event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void animagusInteractEvent (PlayerInteractEvent event)
+   {
+      Player player = event.getPlayer();
+
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      {
+         Action action = event.getAction();
+
+         if (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)
+         {
+            event.setCancelled(true);
+            return;
+         }
       }
    }
 }
