@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.Collection;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -125,7 +126,7 @@ public abstract class StationarySpellObj implements Serializable
       if (location == null || loc == null)
          return false;
 
-      return p.common.isInside(location, loc, radius);
+      return Ollivanders2API.common.isInside(location, loc, radius);
    }
 
    /**
@@ -148,7 +149,7 @@ public abstract class StationarySpellObj implements Serializable
     */
    public List<LivingEntity> getCloseLivingEntities ()
    {
-      Collection<LivingEntity> entities = p.common.getLivingEntitiesInRadius(location, radius);
+      Collection<LivingEntity> entities = Ollivanders2API.common.getLivingEntitiesInRadius(location, radius);
       List<LivingEntity> close = new ArrayList<>();
 
       /* only add living entities if their eye location is within the radius */

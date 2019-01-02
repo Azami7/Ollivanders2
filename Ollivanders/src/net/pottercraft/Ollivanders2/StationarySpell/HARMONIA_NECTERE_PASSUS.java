@@ -6,6 +6,7 @@ import java.util.Set;
 import java.util.HashSet;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -61,7 +62,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
    public void checkEffect ()
    {
       HARMONIA_NECTERE_PASSUS twinHarm = null;
-      for (StationarySpellObj stat : p.stationarySpells.getActiveStationarySpells())
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
          if (stat instanceof HARMONIA_NECTERE_PASSUS
                && stat.location.getBlock().equals(twin.getBlock()))

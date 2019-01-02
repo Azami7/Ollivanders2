@@ -12,6 +12,7 @@ import me.libraryaddict.disguise.disguisetypes.watchers.RabbitWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.WolfWatcher;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 
 import org.bukkit.DyeColor;
@@ -50,7 +51,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       permanent = true;
 
 
-      O2Player o2p = p.players.getPlayer(pid);
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(pid);
       if (o2p == null)
       {
          p.getLogger().info("o2player cannot be found");
@@ -64,7 +65,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
 
       if (form == null)
       {
-         p.getLogger().info("Unable to get animagus form for " + p.players.getPlayer(pid).getPlayerName());
+         p.getLogger().info("Unable to get animagus form for " + Ollivanders2API.getPlayers().getPlayer(pid).getPlayerName());
          kill();
       }
    }

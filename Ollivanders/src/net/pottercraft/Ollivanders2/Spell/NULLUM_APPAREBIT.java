@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -49,7 +50,7 @@ public final class NULLUM_APPAREBIT extends Charms
          int duration = (int) (usesModifier * 1200);
          net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT nullum = new net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT(p, player.getUniqueId(), location, O2StationarySpellType.NULLUM_APPAREBIT, 5, duration);
          nullum.flair(10);
-         p.stationarySpells.addStationarySpell(nullum);
+         Ollivanders2API.getStationarySpells().addStationarySpell(nullum);
          kill();
       }
    }

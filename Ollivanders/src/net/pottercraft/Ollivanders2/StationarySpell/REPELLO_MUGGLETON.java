@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.StationarySpell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -71,14 +72,14 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
             }
             if (player.getLocation().distance(location) < viewDistance && !isInside(player.getLocation()))
             {
-               for (Block block : p.common.getBlocksInRadius(location, radius))
+               for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
                {
                   player.sendBlockChange(block.getLocation(), toMat, toDat);
                }
             }
             else if (isInside(player.getLocation()))
             {
-               for (Block block : p.common.getBlocksInRadius(location, radius))
+               for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
                {
                   player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
                }
@@ -89,7 +90,7 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
       {
          for (Player player : getBlock().getWorld().getPlayers())
          {
-            for (Block block : p.common.getBlocksInRadius(location, radius))
+            for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
             {
                player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
             }

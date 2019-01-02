@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Effect.SUSPENSION;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -61,7 +62,7 @@ public final class LEVICORPUS extends DarkArts
          {
             SUSPENSION levi = new SUSPENSION(p, (int)(usesModifier * 1200.0), live.getUniqueId());
 
-            p.players.playerEffects.addEffect(levi);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(levi);
 
             kill();
             return;

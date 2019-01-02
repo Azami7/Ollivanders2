@@ -54,7 +54,7 @@ public final class INCARNATIO_FELIS extends PlayerDisguiseSuper
       Ollivanders2Common common = new Ollivanders2Common(p);
       watcher.setType(common.randomOcelotType());
 
-      int rand = Ollivanders2.random.nextInt() % 10;
+      int rand = Ollivanders2Common.random.nextInt() % 10;
       if (rand == 0)
          watcher.isTamed();
    }
