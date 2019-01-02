@@ -46,6 +46,7 @@ public enum O2BookType
    STANDARD_BOOK_OF_SPELLS_GRADE_5 (net.pottercraft.Ollivanders2.Book.STANDARD_BOOK_OF_SPELLS_GRADE_5.class),
    STANDARD_BOOK_OF_SPELLS_GRADE_6 (net.pottercraft.Ollivanders2.Book.STANDARD_BOOK_OF_SPELLS_GRADE_6.class),
    STANDARD_BOOK_OF_SPELLS_GRADE_7 (net.pottercraft.Ollivanders2.Book.STANDARD_BOOK_OF_SPELLS_GRADE_7.class),
+   TETRABIBLIOS(net.pottercraft.Ollivanders2.Book.TETRABIBLIOS.class),
    THE_DARK_FORCES (net.pottercraft.Ollivanders2.Book.THE_DARK_FORCES.class),
    THE_HEALERS_HELPMATE (net.pottercraft.Ollivanders2.Book.THE_HEALERS_HELPMATE.class),
    TRAVELS_WITH_TROLLS (net.pottercraft.Ollivanders2.Book.TRAVELS_WITH_TROLLS.class),

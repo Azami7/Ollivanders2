@@ -1031,6 +1031,7 @@ public class O2Player
    public void onJoin ()
    {
       Ollivanders2API.getPlayers().playerEffects.onJoin(pid);
+      Ollivanders2API.getProphecies().onJoin(pid);
    }
 
    /**
