@@ -107,12 +107,17 @@ public final class INFORMOUS extends Arithmancy
                   player.sendMessage(Ollivanders2.chatColor + " cannot see you.");
 
                // house
-               if (Ollivanders2API.getHouses().isSorted(target))
+               if (Ollivanders2.useHouses)
                {
-                  player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses().getHouse(target).getName() + ".");
+                  if (Ollivanders2API.getHouses().isSorted(target))
+                  {
+                     player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses().getHouse(target).getName() + ".");
+                  }
+                  else
+                  {
+                     player.sendMessage(Ollivanders2.chatColor + " has not been sorted.");
+                  }
                }
-               else
-                  player.sendMessage(Ollivanders2.chatColor + " has not been sorted.");
             }
             iEntity.add(entity);
          }
