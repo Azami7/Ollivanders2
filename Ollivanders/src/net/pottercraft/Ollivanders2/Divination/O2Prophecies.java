@@ -356,4 +356,38 @@ public class O2Prophecies
          p.getLogger().info("Loaded " + count + " prophecies for player.");
       }
    }
+
+   /**
+    * Get a prophecy about a specific player.
+    *
+    * @param targetID the player to get a prophecy about
+    * @return the prophecy text if found, null otherwise
+    */
+   public String getProphecy (UUID targetID)
+   {
+      String prophecy = null;
+
+      for (O2Prophecy prop : activeProphecies)
+      {
+         if (prop.getTargetID() == targetID)
+         {
+            prophecy = prop.getProphecyMessage();
+         }
+      }
+
+      if (prophecy != null)
+      {
+         return prophecy;
+      }
+
+      for (O2Prophecy prop : offlineProphecies)
+      {
+         if (prop.getTargetID() == targetID)
+         {
+            prophecy = prop.getProphecyMessage();
+         }
+      }
+
+      return prophecy;
+   }
 }

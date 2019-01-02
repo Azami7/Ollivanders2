@@ -8,10 +8,10 @@ package net.pottercraft.Ollivanders2.Divination;
  */
 public enum O2DivinationType
 {
-   ASTROLOGY(net.pottercraft.Ollivanders2.Divination.ASTROLOGY.class);
+   ASTROLOGY(net.pottercraft.Ollivanders2.Divination.ASTROLOGY.class),
    //CARTOMANCY,
    //CATOPTROMANCY,
-   //CENTAUR_ASTROLOGY
+   CENTAUR_DIVINATION(CENTAUR_DIVINATION.class);
    //CHINESE_FORTUNE_STICKS,
    //CRYSTAL_BALL,
    //DREAM_INTERPRETATION,

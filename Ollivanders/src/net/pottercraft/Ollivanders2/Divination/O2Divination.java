@@ -34,7 +34,7 @@ public abstract class O2Divination
 
    ArrayList<String> prophecyPrefix = new ArrayList<>();
 
-   public static final ArrayList<O2EffectType> divinationEffects = new ArrayList<O2EffectType>()
+   static final ArrayList<O2EffectType> divinationEffects = new ArrayList<O2EffectType>()
    {{
       add(O2EffectType.SLEEPING);
       add(O2EffectType.BABBLING);
@@ -43,7 +43,7 @@ public abstract class O2Divination
       add(O2EffectType.MUTED_SPEECH);
    }};
 
-   public O2Divination (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
+   O2Divination (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
    {
       p = plugin;
       target = tar;
@@ -89,7 +89,7 @@ public abstract class O2Divination
       //
       // second, pick the effect
       //
-      int rand = (Math.abs(Ollivanders2.random.nextInt()) % divinationEffects.size());
+      int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % divinationEffects.size());
       O2EffectType effectType = divinationEffects.get(rand);
 
       O2Effect effect = getEffect(targetID, effectType);
@@ -100,19 +100,19 @@ public abstract class O2Divination
 
       if (prophecyPrefix.size() > 0)
       {
-         rand = (Math.abs(Ollivanders2.random.nextInt()) % prophecyPrefix.size());
+         rand = (Math.abs(Ollivanders2Common.random.nextInt()) % prophecyPrefix.size());
          prophecyMessage.append(prophecyPrefix.get(rand)).append(" ");
       }
 
       //
       // finally, the time of day and duration - via a lot of random chance
       //
-      rand = (Math.abs(Ollivanders2.random.nextInt()) % Ollivanders2Common.TimeOfDay.values().length);
+      rand = (Math.abs(Ollivanders2Common.random.nextInt()) % Ollivanders2Common.TimeOfDay.values().length);
       Ollivanders2Common.TimeOfDay timeOfDay = Ollivanders2Common.TimeOfDay.values()[rand];
 
       prophecyMessage.append("at ").append(timeOfDay.toString().toLowerCase()).append(" ");
 
-      rand = (Math.abs(Ollivanders2.random.nextInt()) % 4);
+      rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 4);
       long curTime = target.getWorld().getTime();
       long ticks = 24000 - curTime;
 
