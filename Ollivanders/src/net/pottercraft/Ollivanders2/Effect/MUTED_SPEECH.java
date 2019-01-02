@@ -20,6 +20,11 @@ public class MUTED_SPEECH extends O2Effect
 
       effectType = O2EffectType.MUTED_SPEECH;
       informousText = legilimensText = "is unable to speak";
+
+      divinationText.add("will be struck mute");
+      divinationText.add("shall lose their mind to insanity");
+      divinationText.add("shall be afflicted in the mind");
+      divinationText.add("will fall silent");
    }
 
    /**
@@ -28,32 +33,5 @@ public class MUTED_SPEECH extends O2Effect
    public void checkEffect ()
    {
       age(1);
-   }
-
-   /**
-    * Remove all recepients from chat if the player.
-    *
-    * @param event the player chat event
-    */
-   public void doSilencio (AsyncPlayerChatEvent event)
-   {
-      Player sender = event.getPlayer();
-
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("onPlayerChat: SILENCIO");
-      }
-
-      if (sender.isPermissionSet("Ollivanders2.BYPASS"))
-      {
-         if (!sender.hasPermission("Ollivanders2.BYPASS"))
-         {
-            event.getRecipients().clear();
-         }
-      }
-      else
-      {
-         event.getRecipients().clear();
-      }
    }
 }

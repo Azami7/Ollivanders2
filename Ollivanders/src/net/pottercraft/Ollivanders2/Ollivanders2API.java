@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
+import net.pottercraft.Ollivanders2.Divination.O2Prophecies;
 import net.pottercraft.Ollivanders2.House.O2Houses;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
 import net.pottercraft.Ollivanders2.Player.O2Players;
@@ -10,12 +11,13 @@ import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpells;
 
 public class Ollivanders2API
 {
-   static O2Houses houses;
-   static O2Players players;
-   static O2Books books;
-   static O2Spells spells;
-   static O2Potions potions;
-   static O2StationarySpells stationarySpells;
+   private static O2Houses houses;
+   private static O2Players players;
+   private static O2Books books;
+   private static O2Spells spells;
+   private static O2Potions potions;
+   private static O2StationarySpells stationarySpells;
+   private static O2Prophecies prophecies;
 
    public static O2PlayerCommon playerCommon;
    public static Ollivanders2Common common;
@@ -100,5 +102,20 @@ public class Ollivanders2API
    public static O2StationarySpells getStationarySpells ()
    {
       return stationarySpells;
+   }
+
+   static void initProphecies (Ollivanders2 p)
+   {
+      prophecies = new O2Prophecies(p);
+   }
+
+   static void saveProphecies ()
+   {
+      prophecies.saveProphecies();
+   }
+
+   public static O2Prophecies getProphecies ()
+   {
+      return prophecies;
    }
 }

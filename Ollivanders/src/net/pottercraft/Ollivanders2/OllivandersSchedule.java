@@ -39,7 +39,7 @@ class OllivandersSchedule implements Runnable
    private static Set<UUID> flying = new HashSet<>();
    private Set<UUID> onBroom = new HashSet<>();
 
-   public OllivandersSchedule (Ollivanders2 plugin)
+   OllivandersSchedule (Ollivanders2 plugin)
    {
       p = plugin;
    }
@@ -51,6 +51,7 @@ class OllivandersSchedule implements Runnable
          projectileSched();
          oeffectSched();
          Ollivanders2API.getStationarySpells().upkeep();
+         Ollivanders2API.getProphecies().upkeep();
          broomSched();
       }
       catch (Exception e)

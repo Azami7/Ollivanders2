@@ -170,4 +170,18 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
 
       p.setO2Player(player, o2p);
    }
+
+   /**
+    * Override setUsesModifier because this spell does not require holding a wand.
+    */
+   @Override
+   protected void setUsesModifier ()
+   {
+      usesModifier = p.getSpellNum(player, spellType);
+
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+      {
+         usesModifier *= 2;
+      }
+   }
 }

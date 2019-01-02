@@ -1,8 +1,10 @@
 package net.pottercraft.Ollivanders2.Effect;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 /**
  * An effect is either a temporary or semi-permanent alteration of an O2Player. O2EffectType cannot
@@ -56,6 +58,11 @@ public abstract class O2Effect
    protected String legilimensText;
 
    /**
+    * The output to be shown for prophecies that use this effect. This should be in future tense.
+    */
+   protected ArrayList<String> divinationText = new ArrayList<>();
+
+   /**
     * Constructor. If you change this method signature, be sure to update all reflection code that uses it.
     *
     * @param plugin a callback to the MC plugin
@@ -85,6 +92,16 @@ public abstract class O2Effect
       {
          kill();
       }
+   }
+
+   /**
+    * Override default permanent setting for an effect.
+    *
+    * @param perm true if this is permanent, false otherwise
+    */
+   public void setPermanent (boolean perm)
+   {
+      permanent = perm;
    }
 
    /**
@@ -122,8 +139,31 @@ public abstract class O2Effect
       return permanent;
    }
 
+   /**
+    * Has this effect been killed.
+    *
+    * @return true if it is killed, false otherwise
+    */
    public boolean isKilled ()
    {
       return kill;
+   }
+
+   /**
+    * Get the text to be used for this effect in a prophecy
+    *
+    * @return a random divination text for this effect
+    */
+   public String getDivinationText ()
+   {
+      if (divinationText.size() < 1)
+      {
+         return "will be affected by an unseen affliction";
+      }
+      else
+      {
+         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % divinationText.size());
+         return divinationText.get(rand);
+      }
    }
 }

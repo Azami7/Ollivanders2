@@ -1,7 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 /**
  * Represents allowable spells.
@@ -24,6 +23,7 @@ public enum O2SpellType
    ARANIA_EXUMAI (net.pottercraft.Ollivanders2.Spell.ARANIA_EXUMAI.class),
    ARRESTO_MOMENTUM (net.pottercraft.Ollivanders2.Spell.ARRESTO_MOMENTUM.class),
    ASCENDIO (net.pottercraft.Ollivanders2.Spell.ASCENDIO.class),
+   ASTROLOGIA(net.pottercraft.Ollivanders2.Spell.ASTROLOGIA.class),
    AVADA_KEDAVRA (net.pottercraft.Ollivanders2.Spell.AVADA_KEDAVRA.class),
    AVIFORS (net.pottercraft.Ollivanders2.Spell.AVIFORS.class),
    AVIS (net.pottercraft.Ollivanders2.Spell.AVIS.class),
@@ -110,6 +110,7 @@ public enum O2SpellType
    LUMOS_DUO (net.pottercraft.Ollivanders2.Spell.LUMOS_DUO.class),
    LUMOS_MAXIMA (net.pottercraft.Ollivanders2.Spell.LUMOS_MAXIMA.class),
    LUMOS_SOLEM (net.pottercraft.Ollivanders2.Spell.LUMOS_SOLEM.class),
+   MANTEIA_KENTAVROS(net.pottercraft.Ollivanders2.Spell.MANTEIA_KENTAVROS.class),
    MELOFORS (net.pottercraft.Ollivanders2.Spell.MELOFORS.class),
    METELOJINX (net.pottercraft.Ollivanders2.Spell.METELOJINX.class),
    METELOJINX_RECANTO (net.pottercraft.Ollivanders2.Spell.METELOJINX_RECANTO.class),
@@ -139,6 +140,7 @@ public enum O2SpellType
    PORTUS (net.pottercraft.Ollivanders2.Spell.PORTUS.class),
    PRAEPANDO (net.pottercraft.Ollivanders2.Spell.PRAEPANDO.class),
    PRIOR_INCANTATO(net.pottercraft.Ollivanders2.Spell.PRIOR_INCANTATO.class),
+   PROPHETEIA(net.pottercraft.Ollivanders2.Spell.PROPHETEIA.class),
    PROTEGO (net.pottercraft.Ollivanders2.Spell.PROTEGO.class),
    PROTEGO_HORRIBILIS (net.pottercraft.Ollivanders2.Spell.PROTEGO_HORRIBILIS.class),
    PROTEGO_MAXIMA (net.pottercraft.Ollivanders2.Spell.PROTEGO_MAXIMA.class),

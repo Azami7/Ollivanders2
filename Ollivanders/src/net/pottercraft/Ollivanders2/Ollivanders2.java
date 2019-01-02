@@ -7,13 +7,16 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import Quidditch.Arena;
 
+import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.House.O2HouseType;
@@ -65,6 +68,7 @@ public class Ollivanders2 extends JavaPlugin
 
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
+   public O2Books books;
 
    private static String mcVersion;
    public static boolean debug = false;
@@ -102,12 +106,11 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       Ollivanders2API.saveStationarySpells();
-
+      Ollivanders2API.saveProphecies();
       if (useHouses)
       {
          Ollivanders2API.saveHouses();
       }
-
       Ollivanders2API.savePlayers();
 
       getLogger().info(this + " is now disabled!");
@@ -292,6 +295,17 @@ public class Ollivanders2 extends JavaPlugin
       catch (Exception e)
       {
          getLogger().warning("Failure setting up books.");
+         e.printStackTrace();
+      }
+
+      // set up prophecies
+      try
+      {
+         Ollivanders2API.initProphecies(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up prophecies.");
          e.printStackTrace();
       }
 

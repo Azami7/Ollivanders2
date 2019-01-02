@@ -62,6 +62,7 @@ public final class O2Books
       add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_7);
       add(O2BookType.THE_DARK_FORCES);
       add(O2BookType.TRAVELS_WITH_TROLLS);
+      add(O2BookType.UNFOGGING_THE_FUTURE);
       add(O2BookType.VOYAGES_WITH_VAMPIRES);
       add(O2BookType.WANDERINGS_WITH_WEREWOLVES);
       add(O2BookType.YEAR_WITH_A_YETI);

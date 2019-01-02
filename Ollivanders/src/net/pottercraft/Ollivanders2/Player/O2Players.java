@@ -153,18 +153,18 @@ public class O2Players
       }
 
       GsonDAO gsonLayer = new GsonDAO(p);
-      gsonLayer.writeO2Players(serializedMap);
+      gsonLayer.writeSaveData(serializedMap, GsonDAO.o2PlayerJSONFile);
    }
 
    /**
-    *
+    * Load players from save file
     */
    public void loadO2Players ()
    {
       GsonDAO gsonLayer = new GsonDAO(p);
 
       // load players from the save file, if it exists
-      Map <String, Map<String, String>> serializedMap = gsonLayer.readO2Players();
+      Map<String, Map<String, String>> serializedMap = gsonLayer.readSavedDataMapStringMap(GsonDAO.o2PlayerJSONFile);
 
       if (serializedMap != null)
       {
@@ -172,6 +172,8 @@ public class O2Players
 
          if (deserializedMap != null && deserializedMap.size() > 0)
             O2PlayerMap = deserializedMap;
+
+         p.getLogger().info("Loaded " + O2PlayerMap.size() + " saved players.");
       }
       else
       {

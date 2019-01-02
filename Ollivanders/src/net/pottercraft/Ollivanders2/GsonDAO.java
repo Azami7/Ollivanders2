@@ -21,17 +21,18 @@ import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
-public class GsonDAO
+public class GsonDAO implements GenericDAO
 {
    private Gson gson;
    private Ollivanders2 p;
 
    private String saveDirectory = "plugins/Ollivanders2";
    private String archiveDirectory = "plugins/Ollivanders2/archive";
-   private String housesJSONFile = "O2Houses.txt";
-   private String housePointsJSONFile = "O2HousePoints.txt";
-   private String o2PlayerJSONFile = "O2Players.txt";
-   private String o2StationarySpellsJSONFile = "O2StationarySpells.txt";
+   public static final String housesJSONFile = "O2Houses.txt";
+   public static final String housePointsJSONFile = "O2HousePoints.txt";
+   public static final String o2PlayerJSONFile = "O2Players.txt";
+   public static final String o2StationarySpellsJSONFile = "O2StationarySpells.txt";
+   public static final String o2PropheciesJSONFile = "O2Prophecies.txt";
 
    /**
     * Constructor
@@ -49,6 +50,7 @@ public class GsonDAO
     *
     * @param map a map of player and house data as strings
     */
+   @Override
    public void writeHouses (Map<UUID, O2HouseType> map)
    {
       // convert to something that can be properly serialized
@@ -67,6 +69,7 @@ public class GsonDAO
     *
     * @param map a map of the O2House points data as strings
     */
+   @Override
    public void writeHousePoints (Map<O2HouseType, Integer> map)
    {
       Map <String, String> strMap = new HashMap<>();
@@ -80,25 +83,40 @@ public class GsonDAO
    }
 
    /**
-    * Write the O2Player data
+    * Write save data serialized in to a hashmap of String, String pairs
     *
-    * @param map a map of the player data as strings
+    * @param map the map of saved data
+    * @param filename the file to write to
     */
-   public void writeO2Players (Map <String, Map<String, String>> map)
+   @Override
+   public void writeSaveData (HashMap<String, String> map, String filename)
    {
       String json = gson.toJson(map);
-      writeJSON(json, o2PlayerJSONFile);
+      writeJSON(json, filename);
    }
 
    /**
-    * Write the stationary spells json file
+    * Write save data serialized in to a map of String, Map pairs
     *
-    * @param map a map of stationary spell data as strings
+    * @param map a map of the player data as strings
     */
-   public void writeO2StationarySpells (List <Map<String, String>> map)
+   @Override
+   public void writeSaveData (Map<String, Map<String, String>> map, String filename)
    {
       String json = gson.toJson(map);
-      writeJSON(json, o2StationarySpellsJSONFile);
+      writeJSON(json, filename);
+   }
+
+   /**
+    * Write the prophecies to json file
+    *
+    * @param map a map of prophecy data as strings
+    */
+   @Override
+   public void writeSaveData (List<Map<String, String>> map, String filename)
+   {
+      String json = gson.toJson(map);
+      writeJSON(json, filename);
    }
 
    /**
@@ -106,6 +124,7 @@ public class GsonDAO
     *
     * @return a map of player UUIDs and their O2House
     */
+   @Override
    public Map<UUID, O2HouseType> readHouses ()
    {
       String json = readJSON(housesJSONFile);
@@ -156,6 +175,7 @@ public class GsonDAO
     *
     * @return a map of O2Houses and their points
     */
+   @Override
    public Map<O2HouseType, Integer> readHousePoints ()
    {
       String json = readJSON(housePointsJSONFile);
@@ -203,13 +223,14 @@ public class GsonDAO
    }
 
    /**
-    * Read the O2Players json file
+    * Read a serilaized map of strings and maps from json file
     *
     * @return a map of the player json data
     */
-   public Map <String, Map<String, String>> readO2Players ()
+   @Override
+   public Map<String, Map<String, String>> readSavedDataMapStringMap (String filename)
    {
-      String json = readJSON(o2PlayerJSONFile);
+      String json = readJSON(filename);
 
       if (json == null)
          return null;
@@ -221,13 +242,14 @@ public class GsonDAO
    }
 
    /**
-    * Read stationary spells from json file
+    * Read a serilized list of maps from json file
     *
-    * @return a list of the stationary spell json data
+    * @return a list of the serialized stationary spells
     */
-   public List <Map<String, String>> readO2StationarySpells ()
+   @Override
+   public List<Map<String, String>> readSavedDataListMap (String filename)
    {
-      String json = readJSON(o2StationarySpellsJSONFile);
+      String json = readJSON(filename);
 
       if (json == null)
          return null;
