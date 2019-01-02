@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.House.O2HouseType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
@@ -181,7 +182,7 @@ public class O2Player
       if (wandWood == null || wandCore == null)
          return false;
 
-      if (p.common.isWand(stack))
+      if (Ollivanders2API.common.isWand(stack))
       {
          List<String> lore = stack.getItemMeta().getLore();
          String[] comps = lore.get(0).split(O2PlayerCommon.wandLoreConjunction);
@@ -368,14 +369,7 @@ public class O2Player
    {
       if (count >= 1)
       {
-         if (knownSpells.containsKey(spell))
-         {
-            knownSpells.replace(spell, count);
-         }
-         else
-         {
-            knownSpells.put(spell, count);
-         }
+         knownSpells.put(spell, count);
       }
       else
       {
@@ -400,7 +394,7 @@ public class O2Player
     *
     * @param spell the spell they most recently cast
     */
-   private void setLastSpell (O2SpellType spell)
+   void setLastSpell (O2SpellType spell)
    {
       if (spell != null)
       {
@@ -408,6 +402,11 @@ public class O2Player
       }
    }
 
+   /**
+    * Get the last spell cast by this player.
+    *
+    * @return the last spell cast
+    */
    public O2SpellType getLastSpell ()
    {
       return lastSpell;
@@ -426,6 +425,11 @@ public class O2Player
       }
    }
 
+   /**
+    * Get the last spell cast by this player's wand.
+    *
+    * @return the last spell cast by this player with a wand
+    */
    public O2SpellType getPriorIncantatem ()
    {
       return priorIncantatem;
@@ -442,14 +446,7 @@ public class O2Player
    {
       if (count >= 1)
       {
-         if (knownPotions.containsKey(potionType))
-         {
-            knownPotions.replace(potionType, count);
-         }
-         else
-         {
-            knownPotions.put(potionType, count);
-         }
+         knownPotions.put(potionType, count);
       }
       else
       {
@@ -473,16 +470,7 @@ public class O2Player
          c = Class.forName(spellClass).getConstructor();
          O2Spell s = (O2Spell) c.newInstance();
 
-         if (recentSpells.containsKey(spellType))
-         {
-            recentSpells.replace(spellType, System.currentTimeMillis() + s.getCoolDown());
-         }
-         else
-         {
-            recentSpells.put(spellType, System.currentTimeMillis() + s.getCoolDown());
-         }
-
-         setLastSpell(spellType);
+         recentSpells.put(spellType, System.currentTimeMillis() + s.getCoolDown());
       }
       catch (InvocationTargetException e)
       {
@@ -492,6 +480,8 @@ public class O2Player
       {
          e.printStackTrace();
       }
+
+      setLastSpell(spellType);
    }
 
    /**
@@ -771,7 +761,7 @@ public class O2Player
             content.append("\n");
          }
 
-         String spell = Ollivanders2Common.firstLetterCapitalize(p.common.enumRecode(e.getKey().toString().toLowerCase()));
+         String spell = Ollivanders2API.common.firstLetterCapitalize(Ollivanders2API.common.enumRecode(e.getKey().toString().toLowerCase()));
          String count = e.getValue().toString();
          String line = spell + " " + count;
          content.append(spell).append(" ").append(count);
@@ -935,23 +925,23 @@ public class O2Player
          // determine color variations for certain types
          if (animagusForm == EntityType.OCELOT)
          {
-            animagusColor = p.common.randomOcelotType().toString();
+            animagusColor = Ollivanders2API.common.randomOcelotType().toString();
          }
          else if(animagusForm == EntityType.RABBIT)
          {
-            animagusColor = p.common.randomRabbitType().toString();
+            animagusColor = Ollivanders2API.common.randomRabbitType().toString();
          }
          else if (animagusForm == EntityType.WOLF)
          {
-            animagusColor = p.common.randomSecondaryDyeColor().toString();
+            animagusColor = Ollivanders2API.common.randomSecondaryDyeColor().toString();
          }
          else if (animagusForm == EntityType.HORSE)
          {
-            animagusColor = p.common.randomHorseColor().toString();
+            animagusColor = Ollivanders2API.common.randomHorseColor().toString();
          }
          else if (Ollivanders2.mcVersionCheck() && animagusForm == EntityType.LLAMA)
          {
-            animagusColor = p.common.randomLlamaColor().toString();
+            animagusColor = Ollivanders2API.common.randomLlamaColor().toString();
          }
 
          if (animagusColor != null && Ollivanders2.debug)
@@ -1040,7 +1030,7 @@ public class O2Player
     */
    public void onJoin ()
    {
-      p.players.playerEffects.onJoin(pid);
+      Ollivanders2API.getPlayers().playerEffects.onJoin(pid);
    }
 
    /**
@@ -1055,7 +1045,7 @@ public class O2Player
 
       if (Ollivanders2.useHouses)
       {
-         O2HouseType houseType = p.houses.getHouse(pid);
+         O2HouseType houseType = Ollivanders2API.getHouses().getHouse(pid);
          if (houseType != null)
          {
             message.append("\n").append(houseType.getName()).append(" is currently ").append(O2HouseType.getHousePlaceTxt(houseType)).append(".");
@@ -1064,7 +1054,7 @@ public class O2Player
 
       if (!foundWand)
          message.append("\nFind your destined wand to begin using magic.");
-      else if (Ollivanders2.useHouses && !p.houses.isSorted(pid))
+      else if (Ollivanders2.useHouses && !Ollivanders2API.getHouses().isSorted(pid))
          message.append("\nGet sorted in to your school house to start earning house points.");
       else if (knownSpells.size() < 1 && Ollivanders2.useBookLearning)
          message.append("\nFind a spell book to get started learning magic.");
@@ -1084,7 +1074,7 @@ public class O2Player
     */
    public void onQuit ()
    {
-      p.players.playerEffects.onQuit(pid);
+      Ollivanders2API.getPlayers().playerEffects.onQuit(pid);
    }
 
    /**
@@ -1097,7 +1087,7 @@ public class O2Player
          resetSpellCount();
          resetPotionCount();
          resetSouls();
-         p.players.playerEffects.onDeath(pid);
+         Ollivanders2API.getPlayers().playerEffects.onDeath(pid);
       }
 
       setWandSpell(null);

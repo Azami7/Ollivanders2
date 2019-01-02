@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.material.MaterialData;
 import org.bukkit.block.Block;
@@ -58,7 +59,7 @@ public final class DEPRIMO extends Charms
       List<Block> tempBlocks = p.getTempBlocks();
       if (center.getType() != Material.AIR)
       {
-         for (Block block : p.common.getBlocksInRadius(location, radius))
+         for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
          {
             if (!tempBlocks.contains(block) &&
                   block.getType() != Material.WATER && block.getType() != Material.LAVA &&

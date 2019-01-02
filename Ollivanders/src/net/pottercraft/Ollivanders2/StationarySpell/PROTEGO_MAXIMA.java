@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.StationarySpell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -59,7 +60,7 @@ public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpel
    {
       age();
 
-      Collection<LivingEntity> nearbyEntities = p.common.getLivingEntitiesInRadius(location,radius + 1);
+      Collection<LivingEntity> nearbyEntities = Ollivanders2API.common.getLivingEntitiesInRadius(location, radius + 1);
 
       for (LivingEntity e : nearbyEntities)
       {

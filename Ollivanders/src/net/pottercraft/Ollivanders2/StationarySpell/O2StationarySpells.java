@@ -7,8 +7,9 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import net.pottercraft.Ollivanders2.GsonDataPersistenceLayer;
+import net.pottercraft.Ollivanders2.GsonDAO;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 
 public class O2StationarySpells
@@ -154,7 +155,7 @@ public class O2StationarySpells
    {
       List <Map<String, String>> serializedList = serializeO2StationarySpells();
 
-      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      GsonDAO gsonLayer = new GsonDAO(p);
       gsonLayer.writeO2StationarySpells(serializedList);
    }
 
@@ -163,7 +164,7 @@ public class O2StationarySpells
     */
    void loadO2StationarySpells ()
    {
-      GsonDataPersistenceLayer gsonLayer = new GsonDataPersistenceLayer(p);
+      GsonDAO gsonLayer = new GsonDAO(p);
       List<Map<String, String>> serializedSpells = gsonLayer.readO2StationarySpells();
 
       if (serializedSpells == null)
@@ -214,7 +215,7 @@ public class O2StationarySpells
          /**
           * Location
           */
-         Map<String, String> locData = p.common.serializeLocation(spell.location, spellLocLabel);
+         Map<String, String> locData = Ollivanders2API.common.serializeLocation(spell.location, spellLocLabel);
          for (Entry<String, String> e : locData.entrySet())
          {
             spellData.put(e.getKey(), e.getValue());
@@ -278,7 +279,7 @@ public class O2StationarySpells
          //
          if (!spellData.containsKey(playerUUIDLabel))
             continue;
-         UUID pid = p.common.uuidFromString(spellData.get(playerUUIDLabel));
+         UUID pid = Ollivanders2API.common.uuidFromString(spellData.get(playerUUIDLabel));
          if (pid == null)
             continue;
          statSpell.setPlayerID(pid);
@@ -288,7 +289,7 @@ public class O2StationarySpells
          //
          if (!spellData.containsKey(radiusLabel))
             continue;
-         Integer radius = p.common.integerFromString(spellData.get(radiusLabel));
+         Integer radius = Ollivanders2API.common.integerFromString(spellData.get(radiusLabel));
          if (radius == null)
             continue;
          statSpell.setRadius(radius);
@@ -298,7 +299,7 @@ public class O2StationarySpells
          //
          if (!spellData.containsKey(durationLabel))
             continue;
-         Integer duration = p.common.integerFromString(spellData.get(durationLabel));
+         Integer duration = Ollivanders2API.common.integerFromString(spellData.get(durationLabel));
          if (duration == null)
             continue;
          statSpell.setDuration(duration);
@@ -306,7 +307,7 @@ public class O2StationarySpells
          //
          // spell location
          //
-         Location location = p.common.deserializeLocation(spellData, spellLocLabel);
+         Location location = Ollivanders2API.common.deserializeLocation(spellData, spellLocLabel);
          if (location == null)
             continue;
          statSpell.setLocation(location);

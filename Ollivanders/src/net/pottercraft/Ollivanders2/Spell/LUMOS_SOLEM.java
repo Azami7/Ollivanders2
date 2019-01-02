@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
@@ -84,7 +85,7 @@ public final class LUMOS_SOLEM extends Charms
             }
             kill = false;
             move = false;
-            for (Block block : p.common.getBlocksInRadius(location, usesModifier))
+            for (Block block : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
             {
                if (block.getType() == Material.AIR)
                {

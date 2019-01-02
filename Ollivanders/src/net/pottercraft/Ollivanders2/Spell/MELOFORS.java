@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -49,6 +50,6 @@ public final class MELOFORS extends GaleatiSuper
       spellType = O2SpellType.MELOFORS;
       setUsesModifier();
 
-      materialType = melons[Math.abs(Ollivanders2.random.nextInt() % melons.length)];
+      materialType = melons[Math.abs(Ollivanders2Common.random.nextInt() % melons.length)];
    }
 }

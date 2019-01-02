@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Book;
 import java.util.Map;
 import java.util.HashMap;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
@@ -73,7 +74,7 @@ public final class BookTexts
    {
       for (O2SpellType spellType : O2SpellType.values())
       {
-         if (!Ollivanders2.libsDisguisesEnabled && p.common.libsDisguisesSpells.contains(spellType))
+         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2API.common.libsDisguisesSpells.contains(spellType))
          {
             continue;
          }
@@ -145,7 +146,7 @@ public final class BookTexts
             continue;
          }
 
-         String name = p.common.firstLetterCapitalize(p.common.enumRecode(potionType.toString().toLowerCase()));
+         String name = Ollivanders2API.common.firstLetterCapitalize(Ollivanders2API.common.enumRecode(potionType.toString().toLowerCase()));
 
          BookText sText = new BookText(name, text, flavorText);
          O2MagicTextMap.put(potionType.toString(), sText);
