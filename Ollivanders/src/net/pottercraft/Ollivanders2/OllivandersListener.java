@@ -1813,23 +1813,6 @@ public class OllivandersListener implements Listener
       }
    }
 
-   /**
-    * Handle player sleep event.
-    *
-    * @param event the player bed enter event
-    */
-   @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerSleep (PlayerBedEnterEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
-      {
-         // cannot sleep while awake effect is active
-         event.setCancelled(true);
-      }
-   }
-
    //****************************************************************************
    //
    // Immobilization, Suspension, and Sleep Effect Events
@@ -1859,7 +1842,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the player toggle flight event
     */
-   @EventHandler (priority = EventPriority.HIGH)
+   @EventHandler(priority = EventPriority.HIGH)
    public void onPlayerSleep (PlayerBedEnterEvent event)
    {
       Player player = event.getPlayer();

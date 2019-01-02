@@ -172,7 +172,7 @@ public abstract class BlockTransfigurationSuper extends O2Spell
       }
 
       // get the objects to be transfigured
-      for (Block b : Ollivanders2API.common.getBlocksInRadius(block.getLocation(), (int)(radius * radiusModifier)))
+      for (Block b : Ollivanders2API.common.getBlocksInRadius(block.getLocation(), (int) (radius * radiusModifier)))
       {
          if (!canTransfigure(b))
          {

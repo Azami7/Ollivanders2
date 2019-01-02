@@ -838,7 +838,7 @@ public class Ollivanders2Common
       else if (number == 14)
          color = Color.TEAL;
 
-      // 15 is white again
+         // 15 is white again
 
       else if (number == 16)
          color = Color.WHITE;

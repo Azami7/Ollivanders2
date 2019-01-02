@@ -20,17 +20,17 @@ public class Ollivanders2API
    public static O2PlayerCommon playerCommon;
    public static Ollivanders2Common common;
 
-   static void init(Ollivanders2 p)
+   static void init (Ollivanders2 p)
    {
       common = new Ollivanders2Common(p);
    }
 
-   static void initHouses(Ollivanders2 p)
+   static void initHouses (Ollivanders2 p)
    {
       houses = new O2Houses(p);
    }
 
-   static void saveHouses()
+   static void saveHouses ()
    {
       houses.saveHouses();
    }
@@ -40,14 +40,14 @@ public class Ollivanders2API
       return houses;
    }
 
-   static void initPlayers(Ollivanders2 p)
+   static void initPlayers (Ollivanders2 p)
    {
       players = new O2Players(p);
       players.loadO2Players();
       playerCommon = new O2PlayerCommon(p);
    }
 
-   static void savePlayers()
+   static void savePlayers ()
    {
       players.saveO2Players();
    }
@@ -57,7 +57,7 @@ public class Ollivanders2API
       return players;
    }
 
-   static void initBooks(Ollivanders2 p)
+   static void initBooks (Ollivanders2 p)
    {
       books = new O2Books(p);
    }
