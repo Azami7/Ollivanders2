@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -21,7 +22,7 @@ public final class O2PlayerCommon
    /**
     * Wand wood types
     */
-   static final ArrayList<String> woodArray = new ArrayList<String>() {{
+   public static final ArrayList<String> woodArray = new ArrayList<String>() {{
       add("Spruce");
       add("Jungle");
       add("Birch");
@@ -31,7 +32,7 @@ public final class O2PlayerCommon
    /**
     * Wand core types
     */
-   static final ArrayList<String> coreArray = new ArrayList<String>() {{
+   public static final ArrayList<String> coreArray = new ArrayList<String>() {{
       add("Spider Eye");
       add("Bone");
       add("Rotten Flesh");
@@ -148,7 +149,7 @@ public final class O2PlayerCommon
       if (held == null)
          return false;
 
-      return p.common.isWand(held);
+      return Ollivanders2API.common.isWand(held);
    }
 
    /**
@@ -160,9 +161,9 @@ public final class O2PlayerCommon
     */
    public boolean destinedWand (Player player, ItemStack stack)
    {
-      if (p.common.isWand(stack))
+      if (Ollivanders2API.common.isWand(stack))
       {
-         O2Player o2Player = p.players.getPlayer(player.getUniqueId());
+         O2Player o2Player = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
 
          if (o2Player == null)
          {

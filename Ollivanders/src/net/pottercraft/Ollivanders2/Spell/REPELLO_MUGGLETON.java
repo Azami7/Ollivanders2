@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -58,7 +59,7 @@ public final class REPELLO_MUGGLETON extends Charms
          net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON stat = new net.pottercraft.Ollivanders2.StationarySpell.REPELLO_MUGGLETON(p, player.getUniqueId(), location,
                O2StationarySpellType.REPELLO_MUGGLETON, 5, duration);
          stat.flair(10);
-         p.stationarySpells.addStationarySpell(stat);
+         Ollivanders2API.getStationarySpells().addStationarySpell(stat);
          kill();
       }
    }

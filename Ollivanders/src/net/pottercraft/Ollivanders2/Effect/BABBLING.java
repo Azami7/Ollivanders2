@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 /**
@@ -94,11 +95,11 @@ public class BABBLING extends O2Effect
    private String getNonsense ()
    {
       String nonsense = "";
-      int numWords = Math.abs(Ollivanders2.random.nextInt() % maxWords) + 1;
+      int numWords = Math.abs(Ollivanders2Common.random.nextInt() % maxWords) + 1;
 
       for (int i = 0; i < numWords; i++)
       {
-         String random = dictionary.get(Math.abs(Ollivanders2.random.nextInt()) % dictionary.size());
+         String random = dictionary.get(Math.abs(Ollivanders2Common.random.nextInt()) % dictionary.size());
 
          if (nonsense.length() > 0)
             nonsense = nonsense + " ";

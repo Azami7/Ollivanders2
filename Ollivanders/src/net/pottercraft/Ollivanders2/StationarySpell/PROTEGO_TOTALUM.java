@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.StationarySpell;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -52,7 +53,7 @@ public class PROTEGO_TOTALUM extends StationarySpellObj implements StationarySpe
    public void checkEffect ()
    {
       age();
-      Collection<Entity> nearbyEntities = p.common.getEntitiesInRadius(location, radius + 1);
+      Collection<Entity> nearbyEntities = Ollivanders2API.common.getEntitiesInRadius(location, radius + 1);
 
       for (Entity entity : nearbyEntities)
       {

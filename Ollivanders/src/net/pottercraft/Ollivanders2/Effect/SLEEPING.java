@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Effect;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
@@ -40,7 +41,7 @@ public class SLEEPING extends O2Effect
    {
       if (!sleeping)
       {
-         if (p.players.playerEffects.hasEffect(targetID, O2EffectType.AWAKE))
+         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, O2EffectType.AWAKE))
          {
             kill();
          }
@@ -89,7 +90,7 @@ public class SLEEPING extends O2Effect
 
       // add sleep speech
       SLEEP_SPEECH effect = new SLEEP_SPEECH(p, 5, targetID);
-      p.players.playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
       sleeping = true;
    }
@@ -99,7 +100,7 @@ public class SLEEPING extends O2Effect
     */
    private void playerWake ()
    {
-      p.players.playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
+      Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
       sleeping = false;
 
       Player target = p.getServer().getPlayer(targetID);

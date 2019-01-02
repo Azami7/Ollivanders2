@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -84,7 +85,7 @@ public final class DIFFINDO extends Charms
       }
       if (getBlock().getType() == Material.LOG)
       {
-         for (Block block : p.common.getBlocksInRadius(location, usesModifier))
+         for (Block block : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
          {
             if (block.getType() == Material.LOG)
             {

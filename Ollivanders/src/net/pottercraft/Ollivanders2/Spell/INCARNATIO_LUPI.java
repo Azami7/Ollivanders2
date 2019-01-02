@@ -8,6 +8,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 /**
  * Created by Azami7 on 6/28/17.
@@ -52,7 +53,7 @@ public final class INCARNATIO_LUPI extends PlayerDisguiseSuper
       WolfWatcher watcher = (WolfWatcher)disguise.getWatcher();
       watcher.setAdult();
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 10);
+      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 10);
       if (rand < 9)
       {
          watcher.isTamed();

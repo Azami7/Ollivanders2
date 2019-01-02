@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
@@ -125,7 +126,7 @@ public abstract class O2Book
 
       for (String content : bookContents)
       {
-         String name = p.books.spellText.getName(content);
+         String name = Ollivanders2API.getBooks().spellText.getName(content);
          if (name == null)
          {
             p.getLogger().warning(this.title + " contains unknown spell or potion " + content);
@@ -135,8 +136,8 @@ public abstract class O2Book
          toc.append(name).append("\n");
 
          String text;
-         String mainText = p.books.spellText.getText(content);
-         String flavorText = p.books.spellText.getFlavorText(content);
+         String mainText = Ollivanders2API.getBooks().spellText.getText(content);
+         String flavorText = Ollivanders2API.getBooks().spellText.getFlavorText(content);
 
          if (flavorText == null)
          {

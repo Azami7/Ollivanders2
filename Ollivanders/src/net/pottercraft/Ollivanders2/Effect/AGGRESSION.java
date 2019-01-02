@@ -50,7 +50,7 @@ public class AGGRESSION extends O2Effect
       // only take action once per 10 seconds, which is every 120 ticks
       if ((duration % 120) == 0)
       {
-         int rand = Math.abs(Ollivanders2.random.nextInt()) % 10;
+         int rand = Math.abs(Ollivanders2Common.random.nextInt()) % 10;
 
          Ollivanders2Common common = new Ollivanders2Common(p);
          if (rand < aggressionLevel)
@@ -77,14 +77,14 @@ public class AGGRESSION extends O2Effect
 
       if (nearby != null && !nearby.isEmpty())
       {
-         int rand = Math.abs(Ollivanders2.random.nextInt());
+         int rand = Math.abs(Ollivanders2Common.random.nextInt());
          LivingEntity[] nArray = nearby.toArray(new LivingEntity[nearby.size()]);
 
          LivingEntity toDamage = nArray[rand % nearby.size()];
 
          double curHealth = toDamage.getHealth();
          // damage is entities current health divided by 2, 3, or 4
-         rand = Math.abs(Ollivanders2.random.nextInt());
+         rand = Math.abs(Ollivanders2Common.random.nextInt());
          double damage = curHealth / ((rand % 3) + 2);
          toDamage.damage(damage, target);
       }

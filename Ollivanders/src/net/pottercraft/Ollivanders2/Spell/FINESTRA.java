@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -48,7 +49,7 @@ public final class FINESTRA extends Charms
       if (type == Material.GLASS || type == Material.STAINED_GLASS ||
           type == Material.STAINED_GLASS_PANE || type == Material.THIN_GLASS)
       {
-         for (Block block : p.common.getBlocksInRadius(location, usesModifier))
+         for (Block block : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
          {
             Material type2 = block.getType();
             System.out.println("Type 2: " + type2.toString());

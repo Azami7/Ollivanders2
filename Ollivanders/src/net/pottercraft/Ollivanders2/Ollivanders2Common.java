@@ -1,14 +1,19 @@
 package net.pottercraft.Ollivanders2;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.UUID;
 
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
+import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 
@@ -29,6 +34,7 @@ import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * Common functions and data
@@ -43,6 +49,13 @@ public class Ollivanders2Common
    private final String locationXLabel = "X-Value";
    private final String locationYLabel = "Y-Value";
    private final String locationZLabel = "Z-Value";
+
+   public static final String galleon = "Galleon";
+   public static final Material galleonMaterial = Material.GOLD_INGOT;
+   public static final String sickle = "Sickle";
+   public static final Material sickleMaterial = Material.IRON_INGOT;
+   public static final String knut = "Knut";
+   public static final Material knutMaterial = Material.NETHER_BRICK;
 
    public static final ArrayList<EntityType> smallFriendlyAnimals = new ArrayList<EntityType>() {{
       add(EntityType.BAT);
@@ -96,11 +109,15 @@ public class Ollivanders2Common
       add(O2PotionType.ANIMAGUS_POTION);
    }};
 
-   private Ollivanders2 p;
+   public static Random random = new Random();
 
-   public Ollivanders2Common (Ollivanders2 plugin)
+   private JavaPlugin p;
+
+   public Ollivanders2Common (JavaPlugin plugin)
    {
       p = plugin;
+
+      random.setSeed(System.currentTimeMillis());
    }
 
    /**
@@ -200,14 +217,14 @@ public class Ollivanders2Common
 
    /**
     * Determine if a location is within a radius of another location
-    * @param loc1 the source location
-    * @param loc2 the location to check
+    * @param sourceLocation the source location
+    * @param checkLocation the location to check
     * @param radius the radius from the source location
-    * @return true if loc2 is in the radius of loc1
+    * @return true if checkLocation is in the radius of sourceLocation
     */
-   public boolean isInside (Location loc1, Location loc2, int radius)
+   public boolean isInside (Location sourceLocation, Location checkLocation, int radius)
    {
-      double distance = loc2.distance(loc1);
+      double distance = checkLocation.distance(sourceLocation);
 
       return (distance < radius);
    }
@@ -219,7 +236,7 @@ public class Ollivanders2Common
     */
    public Ocelot.Type randomOcelotType ()
    {
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 4);
+      int rand = Math.abs(random.nextInt() % 4);
 
       Ocelot.Type type;
 
@@ -251,7 +268,7 @@ public class Ollivanders2Common
    {
       RabbitType type;
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 61);
+      int rand = Math.abs(random.nextInt() % 61);
 
       if (rand < 10)
          type = RabbitType.BROWN;
@@ -280,7 +297,7 @@ public class Ollivanders2Common
    {
       DyeColor color;
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 4);
+      int rand = Math.abs(random.nextInt() % 4);
 
       switch (rand)
       {
@@ -316,7 +333,7 @@ public class Ollivanders2Common
    {
       Horse.Style style;
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 20);
+      int rand = Math.abs(random.nextInt() % 20);
 
       switch (rand)
       {
@@ -349,7 +366,7 @@ public class Ollivanders2Common
    {
       Horse.Color color;
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 7);
+      int rand = Math.abs(random.nextInt() % 7);
 
       switch (rand)
       {
@@ -388,7 +405,7 @@ public class Ollivanders2Common
    {
       Llama.Color color;
 
-      int rand = Math.abs(Ollivanders2.random.nextInt() % 4);
+      int rand = Math.abs(random.nextInt() % 4);
 
       switch (rand)
       {
@@ -528,7 +545,7 @@ public class Ollivanders2Common
     * @param str - String to convert.
     * @return String with correct formatting.
     */
-   public static String firstLetterCapitalize (String str)
+   public String firstLetterCapitalize (String str)
    {
       StringBuilder sb = new StringBuilder();
       String[] wordList = str.split(" ");
@@ -766,6 +783,12 @@ public class Ollivanders2Common
       return newString.toString().trim();
    }
 
+   /**
+    * Get the basic color associated with a number 1-16
+    *
+    * @param number a number between 1-16, numbers outside of this range will be set to WHITE
+    * @return the color associated with this number
+    */
    public Color colorByNumber (int number)
    {
       Color color = Color.WHITE;
@@ -821,5 +844,46 @@ public class Ollivanders2Common
          color = Color.WHITE;
 
       return color;
+   }
+
+   /**
+    * Get the current timestamp as a string.
+    *
+    * @return timestamp in the format 2018-09-30-12-15-30
+    */
+   public String getCurrentTimestamp ()
+   {
+      DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+      Date date = new Date();
+
+      return dateFormat.format(date);
+   }
+
+   /**
+    * Get all the wands in the game.
+    *
+    * @return a list of all the wands
+    */
+   public ArrayList<ItemStack> getAllWands ()
+   {
+      ArrayList<ItemStack> wands = new ArrayList<>();
+
+      for (String wood : O2PlayerCommon.woodArray)
+      {
+         for (String core : O2PlayerCommon.coreArray)
+         {
+            ItemStack wand = new ItemStack(Ollivanders2.wandMaterial);
+            List<String> lore = new ArrayList<>();
+            lore.add(wood + " and " + core);
+            ItemMeta meta = wand.getItemMeta();
+            meta.setLore(lore);
+            meta.setDisplayName("Wand");
+            wand.setItemMeta(meta);
+            wand.setAmount(1);
+            wands.add(wand);
+         }
+      }
+
+      return wands;
    }
 }

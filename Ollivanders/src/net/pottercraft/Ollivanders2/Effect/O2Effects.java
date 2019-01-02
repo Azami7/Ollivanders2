@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Effect;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -446,21 +447,14 @@ public class O2Effects
       Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
 
       String effectName = effectsString.replaceFirst(effectLabelPrefix, "");
-      Integer duration = p.common.integerFromString(durationString);
+      Integer duration = Ollivanders2API.common.integerFromString(durationString);
 
       if (duration != null)
       {
          try
          {
             O2EffectType effectType = O2EffectType.valueOf(effectName);
-            if (savedEffects.containsKey(effectType))
-            {
-               savedEffects.replace(effectType, duration);
-            }
-            else
-            {
-               savedEffects.put(effectType, duration);
-            }
+            savedEffects.put(effectType, duration);
          }
          catch (Exception e)
          {

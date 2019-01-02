@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 /**
@@ -59,7 +60,7 @@ public enum O2PotionType
    public String getPotionName ()
    {
       String potionTypeString = this.toString().toLowerCase();
-      String name = Ollivanders2Common.firstLetterCapitalize(potionTypeString.replace("_", " "));
+      String name = Ollivanders2API.common.firstLetterCapitalize(potionTypeString.replace("_", " "));
 
       return name;
    }
