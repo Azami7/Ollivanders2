@@ -19,6 +19,7 @@ public class MUTED_SPEECH extends O2Effect
       super(plugin, duration, pid);
 
       effectType = O2EffectType.MUTED_SPEECH;
+      informousText = legilimensText = "is unable to speak";
    }
 
    /**

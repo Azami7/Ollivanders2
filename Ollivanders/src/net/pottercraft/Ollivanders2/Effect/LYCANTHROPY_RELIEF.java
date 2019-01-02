@@ -17,6 +17,7 @@ public class LYCANTHROPY_RELIEF extends O2Effect
       super(plugin, duration, pid);
 
       effectType = O2EffectType.LYCANTHROPY_RELIEF;
+      informousText = "looks unwell";
    }
 
    /**

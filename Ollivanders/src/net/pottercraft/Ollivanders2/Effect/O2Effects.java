@@ -629,4 +629,59 @@ public class O2Effects
 
       effectsData.updatePlayerActiveEffects(pid, activeEffects);
    }
+
+   /**
+    * Get the information for a detectable effect, if any can be detected. This is primarily used for the spell Informous.
+    *
+    * @param pid the id of the player to check
+    * @return text about detectable effect or null if none found.
+    */
+   public String detectEffectWithInformous (UUID pid)
+   {
+      p.getLogger().info("detecting effcts with Informous");
+      String infoText = null;
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
+      Collection<O2Effect> effects = activeEffects.values();
+
+      p.getLogger().info("found " + activeEffects.keySet().size() + " active effects");
+
+      for (O2Effect effect : effects)
+      {
+         p.getLogger().info("checking effect " + effect.effectType.toString());
+         if (effect.informousText != null)
+         {
+            infoText = effect.informousText;
+            p.getLogger().info(effect.informousText);
+            break;
+         }
+      }
+
+      return infoText;
+   }
+
+   /**
+    * Get the information for a mind readable effect, if any can be detected. This is primarily used for the spell Legilimens.
+    *
+    * @param pid the id of the player to check
+    * @return text about detectable effect or null if none found.
+    */
+   public String detectEffectWithLegilimens (UUID pid)
+   {
+      String infoText = null;
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
+      Collection<O2Effect> effects = activeEffects.values();
+
+      for (O2Effect effect : effects)
+      {
+         if (effect.legilimensText != null)
+         {
+            infoText = effect.legilimensText;
+            break;
+         }
+      }
+
+      return infoText;
+   }
 }

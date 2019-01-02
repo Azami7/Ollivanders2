@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -47,10 +48,10 @@ public class REPARIFORS extends Charms
          {
             Player player = (Player) live;
 
-            // if they are affected by immobilize, remove the effect unless they are also affected by SUSPENSION
-            if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE) && !(p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)))
+            // if they are affected by immobilize, remove the effect
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE) && !(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)))
             {
-               p.players.playerEffects.ageEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier * 2400));
+               Ollivanders2API.getPlayers().playerEffects.ageEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier * 2400));
             }
 
             // do a minor heal

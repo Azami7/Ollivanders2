@@ -769,6 +769,14 @@ public class OllivandersListener implements Listener
 
       O2SpellType spell = o2p.getWandSpell();
 
+      // if no spell set, check to see if they have a master spell
+      boolean nonverbal = false;
+      if (spell == null && Ollivanders2.useNonVerbalCasting)
+      {
+         spell = o2p.getMasterSpell();
+         nonverbal = true;
+      }
+
       if (spell != null)
       {
          double wandCheck;
@@ -791,18 +799,19 @@ public class OllivandersListener implements Listener
          }
 
          createSpellProjectile(player, spell, wandCheck);
-         o2p.setSpellRecentCastTime(spell);
-         int spellCastCount = p.getSpellNum(player, spell);
-         if (spellCastCount < 100 || spell == O2SpellType.AVADA_KEDAVRA)
-         {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("OllivandersListener:castSpell: allow cast spell");
-            }
 
-            o2p.setWandSpell(null);
-            p.setO2Player(player, o2p);
+         o2p.setSpellRecentCastTime(spell);
+         if (!nonverbal)
+         {
+            o2p.setPriorIncantatem(spell);
          }
+
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("OllivandersListener:castSpell: allow cast spell");
+         }
+
+         o2p.setWandSpell(null);
       }
    }
 

@@ -24,6 +24,7 @@ public class AWAKE extends O2Effect
       super(plugin, duration, pid);
 
       effectType = O2EffectType.AWAKE;
+      informousText = legilimensText = "is unnaturally alert";
    }
 
    /**
