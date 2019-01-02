@@ -64,7 +64,7 @@ public final class FINITE_INCANTATEM extends Charms
          {
             Player ply = (Player) live;
 
-            Ollivanders2API.getPlayers().playerEffects.ageAllEffects(ply.getUniqueId(), (int)(usesModifier * 1200));
+            Ollivanders2API.getPlayers().playerEffects.ageAllEffects(ply.getUniqueId(), (int) (usesModifier * 1200));
 
             kill();
             return;

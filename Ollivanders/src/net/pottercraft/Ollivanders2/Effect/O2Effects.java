@@ -386,12 +386,12 @@ public class O2Effects
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
       Map<O2EffectType, Integer> savedEffects = new HashMap<>();
 
-      if (activeEffects.size() < 1)
-         return;
-
-      for (Entry<O2EffectType, O2Effect> entry : activeEffects.entrySet())
+      if (activeEffects != null)
       {
-         savedEffects.put(entry.getKey(), entry.getValue().duration);
+         for (Entry<O2EffectType, O2Effect> entry : activeEffects.entrySet())
+         {
+            savedEffects.put(entry.getKey(), entry.getValue().duration);
+         }
       }
 
       effectsData.updatePlayerSavedEffects(pid, savedEffects);
@@ -538,11 +538,17 @@ public class O2Effects
          effect.kill();
          playerEffects.remove(effectType);
       }
+      else
+      {
+         p.getLogger().warning("Effect to remove is null.");
+      }
 
       effectsData.updatePlayerActiveEffects(pid, playerEffects);
 
       if (Ollivanders2.debug)
-         p.getLogger().info("Removed effect " + effectType.toString() + " to " + p.getServer().getPlayer(pid).getDisplayName());
+      {
+         p.getLogger().info("Removed effect " + effectType.toString() + " from " + p.getServer().getPlayer(pid).getDisplayName());
+      }
    }
 
    /**
