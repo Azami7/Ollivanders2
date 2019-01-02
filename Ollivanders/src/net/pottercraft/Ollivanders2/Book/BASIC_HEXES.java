@@ -6,6 +6,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
  * Basic Hexes for the Busy and Vexed
+ * http://harrypotter.wikia.com/wiki/Basic_Hexes_for_the_Busy_and_Vexed
  *
  * @since 2.2.4
  * @author Azami7
@@ -26,5 +27,6 @@ public class BASIC_HEXES extends O2Book
       spells.add(O2SpellType.IMMOBULUS);
       spells.add(O2SpellType.OBSCURO);
       spells.add(O2SpellType.LOQUELA_INEPTIAS);
+      // pepper breath
    }
 }

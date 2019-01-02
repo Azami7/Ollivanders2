@@ -131,7 +131,7 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
 
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
+            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          // do not allow the player to move if they are asleep or suspended
          event.setCancelled(true);
@@ -831,7 +831,7 @@ public class OllivandersListener implements Listener
       if ((event.getHand() == EquipmentSlot.HAND) && (Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
          if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-               || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
+               || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
          {
             event.setCancelled(true);
             return;
@@ -890,7 +890,7 @@ public class OllivandersListener implements Listener
       else if ((event.getHand() == EquipmentSlot.OFF_HAND) && (Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
          if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-               || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
+               || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
          {
             event.setCancelled(true);
             return;
@@ -1830,7 +1830,7 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
 
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
+            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          // cannot interact with anything while asleep or suspended
          event.setCancelled(true);
@@ -1860,7 +1860,8 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
 
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
-            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
          return;
@@ -1877,7 +1878,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE)
             || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
@@ -1895,7 +1896,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE)
             || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
@@ -1914,7 +1915,8 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
 
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
-            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
          return;

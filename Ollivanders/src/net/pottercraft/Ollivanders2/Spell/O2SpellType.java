@@ -1,7 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 /**
  * Represents allowable spells.
@@ -130,6 +129,7 @@ public enum O2SpellType
    PARTIS_TEMPORUS (net.pottercraft.Ollivanders2.Spell.PARTIS_TEMPORUS.class),
    PERICULUM (net.pottercraft.Ollivanders2.Spell.PERICULUM.class),
    PERICULUM_DUO (net.pottercraft.Ollivanders2.Spell.PERICULUM_DUO.class),
+   PETRIFICUS_TOTALUS(net.pottercraft.Ollivanders2.Spell.PETRIFICUS_TOTALUS.class),
    PIERTOTUM_LOCOMOTOR (net.pottercraft.Ollivanders2.Spell.PIERTOTUM_LOCOMOTOR.class),
    POINT_ME (net.pottercraft.Ollivanders2.Spell.POINT_ME.class),
    PORFYRO_ASTERI (net.pottercraft.Ollivanders2.Spell.PORFYRO_ASTERI.class),
@@ -145,6 +145,7 @@ public enum O2SpellType
    REDUCIO (net.pottercraft.Ollivanders2.Spell.REDUCIO.class),
    REDUCTO (net.pottercraft.Ollivanders2.Spell.REDUCTO.class),
    REPARIFARGE (net.pottercraft.Ollivanders2.Spell.REPARIFARGE.class),
+   REPARIFORS(net.pottercraft.Ollivanders2.Spell.REPARIFORS.class),
    REPARO (net.pottercraft.Ollivanders2.Spell.REPARO.class),
    REPELLO_MUGGLETON (net.pottercraft.Ollivanders2.Spell.REPELLO_MUGGLETON.class),
    SCUTO_CONTERAM (net.pottercraft.Ollivanders2.Spell.SCUTO_CONTERAM.class),

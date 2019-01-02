@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Effect;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
@@ -19,6 +20,8 @@ public class SUSPENSION extends O2Effect
    Location originalLocation;
    boolean suspended = false;
    boolean canFly = false;
+
+   ArrayList<O2EffectType> additionalEffects = new ArrayList<>();
 
    /**
     * Constructor
@@ -52,9 +55,14 @@ public class SUSPENSION extends O2Effect
    public void kill ()
    {
       release();
+      removeAdditionalEffect();
+
       kill = true;
    }
 
+   /**
+    * Suspend the player in the air.
+    */
    private void suspend ()
    {
       Player target = p.getServer().getPlayer(targetID);
@@ -63,6 +71,8 @@ public class SUSPENSION extends O2Effect
          kill();
          return;
       }
+
+      addAdditionalEffects();
 
       // make them fly so they do not fall from suspension
       canFly = target.getAllowFlight();
@@ -81,6 +91,21 @@ public class SUSPENSION extends O2Effect
       suspended = true;
    }
 
+   /**
+    * Add additional effects for suspension such as immobilizing them.
+    */
+   private void addAdditionalEffects ()
+   {
+      // add an immbolize effect with a duration slightly longer than this one so they cannot
+      // move while suspended
+      IMMOBILIZE immbobilize = new IMMOBILIZE(p, duration + 10, targetID);
+      p.players.playerEffects.addEffect(immbobilize);
+      additionalEffects.add(O2EffectType.IMMOBILIZE);
+   }
+
+   /**
+    * Release player from the suspension and return to original location
+    */
    private void release ()
    {
       Player target = p.getServer().getPlayer(targetID);
@@ -99,6 +124,17 @@ public class SUSPENSION extends O2Effect
          {
             target.setAllowFlight(false);
          }
+      }
+   }
+
+   /**
+    * Remove additional effects of Suspension
+    */
+   private void removeAdditionalEffect ()
+   {
+      for (O2EffectType effectType : additionalEffects)
+      {
+         p.players.playerEffects.removeEffect(targetID, effectType);
       }
    }
 }
