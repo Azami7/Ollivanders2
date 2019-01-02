@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
@@ -16,7 +17,7 @@ public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Practical Defensive Magic";
+      title = shortTitle = "Practical Defensive Magic Volume One";
       author = "Unknown";
       branch = O2MagicBranch.DARK_ARTS;
 
@@ -27,5 +28,6 @@ public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book
       spells.add(O2SpellType.ARANIA_EXUMAI);
       spells.add(O2SpellType.FIANTO_DURI);
       spells.add(O2SpellType.SCUTO_CONTERAM);
+      spells.add(O2SpellType.PRIOR_INCANTATO);
    }
 }
