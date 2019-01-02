@@ -49,7 +49,7 @@ public class REPARIFORS extends Charms
             Player player = (Player) live;
 
             // if they are affected by immobilize, remove the effect
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE) && !(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)))
             {
                Ollivanders2API.getPlayers().playerEffects.ageEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier * 2400));
             }
@@ -62,7 +62,7 @@ public class REPARIFORS extends Charms
             {
                int duration = player.getPotionEffect(PotionEffectType.POISON).getDuration();
                player.removePotionEffect(PotionEffectType.POISON);
-               player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (int) (duration / 2), 1), true);
+               player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (duration / 2), 1), true);
             }
 
             kill();
