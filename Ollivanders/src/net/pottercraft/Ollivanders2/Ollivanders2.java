@@ -1327,7 +1327,7 @@ public class Ollivanders2 extends JavaPlugin
       cloak.setItemMeta(cloakMeta);
       kit.add(cloak);
 
-      givePlayerKit(player, kit);
+      Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
    }
@@ -1354,7 +1354,7 @@ public class Ollivanders2 extends JavaPlugin
       wand.setAmount(1);
       kit.add(wand);
 
-      givePlayerKit(player, kit);
+      Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
    }
@@ -1369,20 +1369,9 @@ public class Ollivanders2 extends JavaPlugin
    {
       List<ItemStack> kit = Ollivanders2API.common.getAllWands();
 
-      givePlayerKit(player, kit);
+      Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
-   }
-
-   private void givePlayerKit (Player player, List<ItemStack> kit)
-   {
-      Location loc = player.getEyeLocation();
-      ItemStack[] kitArray = kit.toArray(new ItemStack[kit.size()]);
-      HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(kitArray);
-      for (ItemStack item : leftover.values())
-      {
-         player.getWorld().dropItem(loc, item);
-      }
    }
 
    /**
@@ -1553,10 +1542,17 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // players cannot cast spells when in animagus form, except the spell to change form
-      if (spell != O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS && Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
-         player.sendMessage(Ollivanders2.chatColor + "You cannot cast spells while in your animagus form.");
-         return false;
+         if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+         {
+            return true;
+         }
+         else
+         {
+            player.sendMessage(Ollivanders2.chatColor + "You cannot cast spells while in your animagus form.");
+            return false;
+         }
       }
 
       if (player.isPermissionSet("Ollivanders2." + spell.toString()))
@@ -1759,7 +1755,7 @@ public class Ollivanders2 extends JavaPlugin
       List<ItemStack> fpStack = new ArrayList<>();
       fpStack.add(flooPowder);
 
-      givePlayerKit(player, fpStack);
+      Ollivanders2API.common.givePlayerKit(player, fpStack);
 
       return true;
    }
@@ -1847,7 +1843,7 @@ public class Ollivanders2 extends JavaPlugin
          bookStack.add(bookItem);
       }
 
-      givePlayerKit(targetPlayer, bookStack);
+      Ollivanders2API.common.givePlayerKit(targetPlayer, bookStack);
 
       return true;
    }
@@ -2002,7 +1998,7 @@ public class Ollivanders2 extends JavaPlugin
       List<ItemStack> kit = new ArrayList<>();
       kit.add(brewedPotion);
 
-      givePlayerKit(player, kit);
+      Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
    }
@@ -2081,7 +2077,7 @@ public class Ollivanders2 extends JavaPlugin
       if (ingredient != null)
       {
          kit.add(ingredient);
-         givePlayerKit(player, kit);
+         Ollivanders2API.common.givePlayerKit(player, kit);
       }
 
       return true;
@@ -2110,7 +2106,7 @@ public class Ollivanders2 extends JavaPlugin
          kit.add(brewedPotion);
       }
 
-      givePlayerKit(player, kit);
+      Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
    }

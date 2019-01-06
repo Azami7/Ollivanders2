@@ -6,7 +6,10 @@ import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
@@ -21,9 +24,17 @@ public abstract class Divination extends O2Spell
    O2DivinationType divinationType = null;
    Player target = null;
 
+   Material itemHeld = null;
+   String itemHeldString = "";
+   Material facingBlock = null;
+   String facingBlockString = "";
+
    public static final ArrayList<O2SpellType> divinationSpells = new ArrayList<O2SpellType>()
    {{
       add(O2SpellType.ASTROLOGIA);
+      add(O2SpellType.OVOGNOSIS);
+      add(O2SpellType.INTUEOR);
+      add(O2SpellType.MANTEIA_KENTAVROS);
    }};
 
    /**
@@ -80,6 +91,30 @@ public abstract class Divination extends O2Spell
    @Override
    public void checkEffect ()
    {
+      // if this divination type requires the player be facing an block, like a crystal ball, check for the block
+      if (facingBlock != null)
+      {
+         Block facing = Ollivanders2API.common.playerFacingBlockType(player, facingBlock);
+         if (facing == null)
+         {
+            player.sendMessage(Ollivanders2.chatColor + "You must be facing " + facingBlockString + " to do that.");
+            kill();
+            return;
+         }
+      }
+
+      // if this divination type requires the player hold an item, like an egg, check for the item
+      if (itemHeld != null)
+      {
+         ItemStack held = player.getInventory().getItemInMainHand();
+         if (held == null || held.getType() != itemHeld)
+         {
+            player.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
+            kill();
+            return;
+         }
+      }
+
       // target must be logged in to make prophecy about them
       if (target == null || !target.isOnline())
       {
@@ -107,6 +142,13 @@ public abstract class Divination extends O2Spell
       }
 
       divination.divine();
+
+      // if requires item held, consume it
+      if (itemHeld != null)
+      {
+         int amount = player.getInventory().getItemInMainHand().getAmount();
+         player.getInventory().getItemInMainHand().setAmount(amount - 1);
+      }
 
       kill();
    }
