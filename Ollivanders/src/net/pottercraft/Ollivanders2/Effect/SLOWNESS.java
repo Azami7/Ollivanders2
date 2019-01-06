@@ -13,19 +13,19 @@ import java.util.UUID;
  */
 public class SLOWNESS extends PotionEffectSuper
 {
-    int strength = 1;
+   int strength = 1;
 
-    public SLOWNESS(Ollivanders2 plugin, Integer duration, UUID pid)
-    {
-        super(plugin, duration, pid);
+   public SLOWNESS (Ollivanders2 plugin, Integer duration, UUID pid)
+   {
+      super(plugin, duration, pid);
 
-        effectType = O2EffectType.SLOWNESS;
-        potionEffectType = PotionEffectType.SLOW;
-        informousText = legilimensText = "feels confused";
+      effectType = O2EffectType.SLOWNESS;
+      potionEffectType = PotionEffectType.SLOW;
+      informousText = legilimensText = "feels confused";
 
-        divinationText.add("shall be cursed");
-        divinationText.add("will be afflicted in the mind");
-        divinationText.add("will be struck by a terrible affliction");
-        divinationText.add("will suffer a mental breakdown");
-    }
+      divinationText.add("shall be cursed");
+      divinationText.add("will be afflicted in the mind");
+      divinationText.add("will be struck by a terrible affliction");
+      divinationText.add("will suffer a mental breakdown");
+   }
 }

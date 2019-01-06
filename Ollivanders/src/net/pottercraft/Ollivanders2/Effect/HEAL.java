@@ -13,18 +13,18 @@ import java.util.UUID;
  */
 public class HEAL extends PotionEffectSuper
 {
-    int strength = 1;
+   int strength = 1;
 
-    public HEAL (Ollivanders2 plugin, Integer duration, UUID pid)
-    {
-        super(plugin, duration, pid);
+   public HEAL (Ollivanders2 plugin, Integer duration, UUID pid)
+   {
+      super(plugin, duration, pid);
 
-        effectType = O2EffectType.HEAL;
-        potionEffectType = PotionEffectType.HEAL;
-        informousText = legilimensText = "feels healthy";
+      effectType = O2EffectType.HEAL;
+      potionEffectType = PotionEffectType.HEAL;
+      informousText = legilimensText = "feels healthy";
 
-        divinationText.add("will feel rejuvenated");
-        divinationText.add("will be blessed by fortune");
-        divinationText.add("shall be blessed");
-    }
+      divinationText.add("will feel rejuvenated");
+      divinationText.add("will be blessed by fortune");
+      divinationText.add("shall be blessed");
+   }
 }
