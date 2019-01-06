@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Book;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 
 /**
@@ -24,7 +25,7 @@ public class UNFOGGING_THE_FUTURE extends O2Book
       spells.add(O2SpellType.ASTROLOGIA);
       // Palmistry
       // Tessomancy
-      // Crystal Balls
+      spells.add(O2SpellType.INTUEOR);
       // Bird Entrails
    }
 }

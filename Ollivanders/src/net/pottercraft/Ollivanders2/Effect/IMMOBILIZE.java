@@ -23,6 +23,7 @@ public class IMMOBILIZE extends O2Effect
       divinationText.add("will succomb to a primal fear");
       divinationText.add("shall become as if frozen");
       divinationText.add("shall be struck by a terrible affliction");
+      divinationText.add("shall be cursed");
    }
 
    /**

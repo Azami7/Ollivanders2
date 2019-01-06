@@ -2,7 +2,6 @@ package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
-import net.pottercraft.Ollivanders2.Effect.MUTED_SPEECH;
 import net.pottercraft.Ollivanders2.Effect.BABBLING;
 import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
@@ -17,7 +16,6 @@ import net.pottercraft.Ollivanders2.Spell.PORTUS;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import net.pottercraft.Ollivanders2.Potion.O2SplashPotion;
-import net.pottercraft.Ollivanders2.Potion.O2Potions;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
@@ -77,7 +75,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -295,7 +292,13 @@ public class OllivandersListener implements Listener
       //
       String[] words = message.split(" ");
 
-      O2SpellType spellType = Ollivanders2API.getSpells().getSpellTypeByName(words[0]);
+      O2SpellType spellType = Ollivanders2API.getSpells().getSpellTypeByName(message);
+
+      if (spellType == null && words.length > 1)
+      {
+         spellType = Ollivanders2API.getSpells().getSpellTypeByName(words[0]);
+      }
+
       if (Ollivanders2.debug)
       {
          if (spellType != null)
@@ -891,7 +894,7 @@ public class OllivandersListener implements Listener
             if (Ollivanders2.debug)
                p.getLogger().info("OllivandersListener:onPlayerInteract: right click action");
 
-            Block cauldron = (playerFacingCauldron(player));
+            Block cauldron = (Ollivanders2API.common.playerFacingBlockType(player, Material.CAULDRON));
             if ((cauldron != null) && (player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE))
             {
                if (Ollivanders2.debug)
@@ -1716,7 +1719,7 @@ public class OllivandersListener implements Listener
          return;
       }
 
-      Block cauldron = playerFacingCauldron(player);
+      Block cauldron = Ollivanders2API.common.playerFacingBlockType(player, Material.CAULDRON);
       if (cauldron == null)
       {
          return;
@@ -1751,29 +1754,6 @@ public class OllivandersListener implements Listener
 
       item.setVelocity(new Vector(0, 0, 0));
       player.getInventory().setItemInOffHand(null);
-   }
-
-   /**
-    * Determine if a player is facing a cauldron.
-    *
-    * @param player the player to check
-    * @return the cauldron if a player is facing one, null otherwise
-    */
-   private Block playerFacingCauldron (Player player)
-   {
-      List<Block> blocksInFront = player.getLineOfSight(null, 3);
-      Block cauldron = null;
-
-      for (Block block : blocksInFront)
-      {
-         if (block.getType() == Material.CAULDRON)
-         {
-            cauldron = block;
-            break;
-         }
-      }
-
-      return cauldron;
    }
 
    /**
@@ -2052,9 +2032,15 @@ public class OllivandersListener implements Listener
     */
    private boolean divine (O2SpellType spellType, Player sender, String[] words)
    {
+      if (Ollivanders2.debug)
+      {
+         p.getLogger().info("Casting divination spell");
+      }
+
       // parse the words for the target player's name
       if (words.length < 2)
       {
+         sender.sendMessage(Ollivanders2.chatColor + "You must say the name of the player. Example: 'astrologia steve'.");
          return false;
       }
       String targetName = words[1];
