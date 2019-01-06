@@ -5,7 +5,6 @@ import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -46,7 +45,7 @@ public abstract class O2Divination
       add(O2EffectType.MUTED_SPEECH);
       add(O2EffectType.POISON);
       add(O2EffectType.SLEEPING);
-      add(O2EffectType.SLOW);
+      add(O2EffectType.SLOWNESS);
       add(O2EffectType.UNLUCK);
       add(O2EffectType.WEAKNESS);
       add(O2EffectType.WEALTH);

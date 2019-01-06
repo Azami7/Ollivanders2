@@ -43,6 +43,7 @@ public class AGGRESSION extends O2Effect
       divinationText.add("shall be afflicted in the mind");
       divinationText.add("shall lose their mind to insanity");
       divinationText.add("will be possessed by a demon spirit");
+      divinationText.add("shall be cursed");
 
       permanent = true;
       target = p.getServer().getPlayer(targetID);

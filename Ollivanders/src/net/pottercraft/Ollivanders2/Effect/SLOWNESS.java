@@ -6,21 +6,21 @@ import org.bukkit.potion.PotionEffectType;
 import java.util.UUID;
 
 /**
- * Make a player confused
+ * Make a player slow
  *
  * @author Azami7
  * @since 2.2.9
  */
-public class CONFUSION extends PotionEffectSuper
+public class SLOWNESS extends PotionEffectSuper
 {
     int strength = 1;
 
-    public CONFUSION (Ollivanders2 plugin, Integer duration, UUID pid)
+    public SLOWNESS(Ollivanders2 plugin, Integer duration, UUID pid)
     {
         super(plugin, duration, pid);
 
-        effectType = O2EffectType.CONFUSION;
-        potionEffectType = PotionEffectType.CONFUSION;
+        effectType = O2EffectType.SLOWNESS;
+        potionEffectType = PotionEffectType.SLOW;
         informousText = legilimensText = "feels confused";
 
         divinationText.add("shall be cursed");
