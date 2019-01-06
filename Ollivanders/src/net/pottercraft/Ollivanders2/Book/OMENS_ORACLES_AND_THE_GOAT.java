@@ -21,8 +21,6 @@ public class OMENS_ORACLES_AND_THE_GOAT extends O2Book
         author = "Bathilda Bagshot";
         branch = O2MagicBranch.DIVINATION;
 
-        openingPage = "Within these pages, seekers will discover mysteries of the Orphic rites and rituals, the ancient Greek magic of true sight and knowledge of the future.";
-
-        spells.add(O2SpellType.GNOSTIKOS_AVGO);
+        spells.add(O2SpellType.OVOGNOSIS);
     }
 }

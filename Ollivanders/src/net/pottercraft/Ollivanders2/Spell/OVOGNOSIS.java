@@ -14,16 +14,16 @@ import java.util.ArrayList;
  * @author Azami7
  * @since 2.2.9
  */
-public class GNOSTIKOS_AVGO extends Divination
+public class OVOGNOSIS extends Divination
 {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      */
-    public GNOSTIKOS_AVGO ()
+    public OVOGNOSIS ()
     {
         super();
 
-        spellType = O2SpellType.GNOSTIKOS_AVGO;
+        spellType = O2SpellType.OVOGNOSIS;
         divinationType = O2DivinationType.OVOMANCY;
 
         flavorText = new ArrayList<String>()
@@ -42,11 +42,11 @@ public class GNOSTIKOS_AVGO extends Divination
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public GNOSTIKOS_AVGO (Ollivanders2 plugin, Player player, Double rightWand)
+    public OVOGNOSIS (Ollivanders2 plugin, Player player, Double rightWand)
     {
         super(plugin, player, rightWand);
 
-        spellType = O2SpellType.GNOSTIKOS_AVGO;
+        spellType = O2SpellType.OVOGNOSIS;
         divinationType = O2DivinationType.OVOMANCY;
 
         facingBlock = Material.CAULDRON;
