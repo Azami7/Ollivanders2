@@ -1542,10 +1542,17 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // players cannot cast spells when in animagus form, except the spell to change form
-      if (spell != O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS && Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
-         player.sendMessage(Ollivanders2.chatColor + "You cannot cast spells while in your animagus form.");
-         return false;
+         if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+         {
+            return true;
+         }
+         else
+         {
+            player.sendMessage(Ollivanders2.chatColor + "You cannot cast spells while in your animagus form.");
+            return false;
+         }
       }
 
       if (player.isPermissionSet("Ollivanders2." + spell.toString()))

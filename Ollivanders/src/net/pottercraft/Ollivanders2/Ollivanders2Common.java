@@ -909,6 +909,29 @@ public class Ollivanders2Common
    }
 
    /**
+    * Determine if a player is facing a block type.
+    *
+    * @param player the player to check
+    * @return the cauldron if a player is facing one, null otherwise
+    */
+   public Block playerFacingBlockType (Player player, Material blockType)
+   {
+      List<Block> blocksInFront = player.getLineOfSight(null, 3);
+      Block target = null;
+
+      for (Block block : blocksInFront)
+      {
+         if (block.getType() == blockType)
+         {
+            target = block;
+            break;
+         }
+      }
+
+      return target;
+   }
+
+   /**
     * Get an item stack of Galleons
     *
     * @param amount the number of galleons to create
