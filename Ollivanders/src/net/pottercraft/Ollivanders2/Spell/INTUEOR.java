@@ -46,6 +46,7 @@ public class INTUEOR extends Divination
       divinationType = O2DivinationType.CRYSTAL_BALL;
 
       facingBlock = Material.GLASS;
+      facingBlockString = "a crystal ball";
 
       setUsesModifier();
    }

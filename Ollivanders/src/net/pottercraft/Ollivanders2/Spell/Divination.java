@@ -10,6 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
@@ -25,7 +26,9 @@ public abstract class Divination extends O2Spell
    Player target = null;
 
    Material itemHeld = null;
+   String itemHeldString = "";
    Material facingBlock = null;
+   String facingBlockString = "";
 
    public static final ArrayList<O2SpellType> divinationSpells = new ArrayList<O2SpellType>()
    {{
@@ -94,9 +97,19 @@ public abstract class Divination extends O2Spell
          Block facing = Ollivanders2API.common.playerFacingBlockType(player, Material.GLASS);
          if (facing == null)
          {
-            player.sendMessage(Ollivanders2.chatColor + "You must be facing a crystal ball to do that.");
+            player.sendMessage(Ollivanders2.chatColor + "You must be facing " + facingBlockString + " to do that.");
             kill();
             return;
+         }
+      }
+
+      // if this divination type requires the player hold an item, like an egg, check for the item
+      if (itemHeld != null)
+      {
+         ItemStack held = player.getInventory().getItemInMainHand();
+         if (held == null || held.getType() != itemHeld)
+         {
+            player.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
          }
       }
 
@@ -127,6 +140,13 @@ public abstract class Divination extends O2Spell
       }
 
       divination.divine();
+
+      // if requires item held, consume it
+      if (itemHeld != null)
+      {
+         int amount = player.getInventory().getItemInMainHand().getAmount();
+         player.getInventory().getItemInMainHand().setAmount(amount - 1);
+      }
 
       kill();
    }
