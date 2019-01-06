@@ -98,6 +98,7 @@ public enum O2SpellType
    INCENDIO_DUO (net.pottercraft.Ollivanders2.Spell.INCENDIO_DUO.class),
    INCENDIO_TRIA (net.pottercraft.Ollivanders2.Spell.INCENDIO_TRIA.class),
    INFORMOUS (net.pottercraft.Ollivanders2.Spell.INFORMOUS.class),
+   INTUEOR(net.pottercraft.Ollivanders2.Spell.INTUEOR.class),
    LACARNUM_INFLAMARI (net.pottercraft.Ollivanders2.Spell.LACARNUM_INFLAMARI.class),
    LAPIDO (net.pottercraft.Ollivanders2.Spell.LAPIDO.class),
    LAPIFORS (net.pottercraft.Ollivanders2.Spell.LAPIFORS.class),
@@ -163,7 +164,7 @@ public enum O2SpellType
    VERDIMILLIOUS (net.pottercraft.Ollivanders2.Spell.VERDIMILLIOUS.class),
    VERDIMILLIOUS_DUO (net.pottercraft.Ollivanders2.Spell.VERDIMILLIOUS_DUO.class),
    VOLATUS (net.pottercraft.Ollivanders2.Spell.VOLATUS.class),
-   WINGARDIUM_LEVIOSA (net.pottercraft.Ollivanders2.Spell.WINGARDIUM_LEVIOSA.class);
+   WINGARDIUM_LEVIOSA(net.pottercraft.Ollivanders2.Spell.WINGARDIUM_LEVIOSA.class),;
 
    Class className;
 

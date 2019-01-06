@@ -32,6 +32,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -905,5 +906,28 @@ public class Ollivanders2Common
       }
 
       return wands;
+   }
+
+   /**
+    * Determine if a player is facing a block type.
+    *
+    * @param player the player to check
+    * @return the cauldron if a player is facing one, null otherwise
+    */
+   public Block playerFacingBlockType (Player player, Material blockType)
+   {
+      List<Block> blocksInFront = player.getLineOfSight(null, 3);
+      Block target = null;
+
+      for (Block block : blocksInFront)
+      {
+         if (block.getType() == blockType)
+         {
+            target = block;
+            break;
+         }
+      }
+
+      return target;
    }
 }

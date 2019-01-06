@@ -11,9 +11,9 @@ public enum O2DivinationType
    ASTROLOGY(net.pottercraft.Ollivanders2.Divination.ASTROLOGY.class),
    //CARTOMANCY,
    //CATOPTROMANCY,
-   CENTAUR_DIVINATION(CENTAUR_DIVINATION.class);
+   CENTAUR_DIVINATION(net.pottercraft.Ollivanders2.Divination.CENTAUR_DIVINATION.class),
    //CHINESE_FORTUNE_STICKS,
-   //CRYSTAL_BALL,
+   CRYSTAL_BALL(net.pottercraft.Ollivanders2.Divination.CRYSTAL_BALL.class),
    //DREAM_INTERPRETATION,
    //FIRE_OMEN,
    //HEPTOMOLOGY,
@@ -23,7 +23,8 @@ public enum O2DivinationType
    //ORNITHOMANCY,
    //OVOMANCY,
    //TESSOMANCY,
-   //XYLOMANCY;
+   //XYLOMANCY,
+   ;
 
    private Class className;
 

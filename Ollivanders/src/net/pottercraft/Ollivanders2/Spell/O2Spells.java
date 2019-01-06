@@ -22,6 +22,8 @@ public class O2Spells
    {{
       add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       add(O2SpellType.ASTROLOGIA);
+      add(O2SpellType.MANTEIA_KENTAVROS);
+      add(O2SpellType.INTUEOR);
    }};
 
    /**

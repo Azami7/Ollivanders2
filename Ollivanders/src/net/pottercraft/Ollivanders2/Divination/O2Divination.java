@@ -25,9 +25,6 @@ public abstract class O2Divination
 
    int maxAccuracy = 10;
 
-   Material itemHeld = null;
-   Material itemNearby = null;
-
    Player target;
    Player prophet;
    int experience;
