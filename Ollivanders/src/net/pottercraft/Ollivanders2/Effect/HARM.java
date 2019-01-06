@@ -13,19 +13,19 @@ import java.util.UUID;
  */
 public class HARM extends PotionEffectSuper
 {
-    int strength = 1;
+   int strength = 1;
 
-    public HARM (Ollivanders2 plugin, Integer duration, UUID pid)
-    {
-        super(plugin, duration, pid);
+   public HARM (Ollivanders2 plugin, Integer duration, UUID pid)
+   {
+      super(plugin, duration, pid);
 
-        effectType = O2EffectType.HARM;
-        potionEffectType = PotionEffectType.HARM;
-        informousText = legilimensText = "feels unwell";
+      effectType = O2EffectType.HARM;
+      potionEffectType = PotionEffectType.HARM;
+      informousText = legilimensText = "feels unwell";
 
-        divinationText.add("shall be struck by a terrible affliction");
-        divinationText.add("will come to harm");
-        divinationText.add("shall be cursed");
-        divinationText.add("will be develop a terrible illness");
-    }
+      divinationText.add("shall be struck by a terrible affliction");
+      divinationText.add("will come to harm");
+      divinationText.add("shall be cursed");
+      divinationText.add("will be develop a terrible illness");
+   }
 }
