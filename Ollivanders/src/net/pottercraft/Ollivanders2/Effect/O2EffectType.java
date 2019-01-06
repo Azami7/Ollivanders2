@@ -14,6 +14,7 @@ public enum O2EffectType
    ANIMAGUS_INCANTATION (net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION.class),
    AWAKE (net.pottercraft.Ollivanders2.Effect.AWAKE.class),
    BABBLING(net.pottercraft.Ollivanders2.Effect.BABBLING.class),
+   BLINDNESS(net.pottercraft.Ollivanders2.Effect.BLINDNESS.class),
    FAST_LEARNING(net.pottercraft.Ollivanders2.Effect.FAST_LEARNING.class),
    FLYING (net.pottercraft.Ollivanders2.Effect.FLYING.class),
    HIGHER_SKILL(net.pottercraft.Ollivanders2.Effect.HIGHER_SKILL.class),
