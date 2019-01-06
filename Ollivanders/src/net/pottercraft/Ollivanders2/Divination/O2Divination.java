@@ -36,11 +36,13 @@ public abstract class O2Divination
 
    static final ArrayList<O2EffectType> divinationEffects = new ArrayList<O2EffectType>()
    {{
-      add(O2EffectType.SLEEPING);
-      add(O2EffectType.BABBLING);
       add(O2EffectType.AGGRESSION);
+      add(O2EffectType.BABBLING);
       add(O2EffectType.IMMOBILIZE);
+      add(O2EffectType.LUCK);
       add(O2EffectType.MUTED_SPEECH);
+      add(O2EffectType.SLEEPING);
+      add(O2EffectType.WEALTH);
    }};
 
    O2Divination (Ollivanders2 plugin, Player pro, Player tar, Integer exp)

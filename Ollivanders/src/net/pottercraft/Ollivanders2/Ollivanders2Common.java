@@ -32,6 +32,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -905,5 +906,71 @@ public class Ollivanders2Common
       }
 
       return wands;
+   }
+
+   /**
+    * Get an item stack of Galleons
+    *
+    * @param amount the number of galleons to create
+    * @return the item stack of galleons
+    */
+   public ItemStack getGalleon (int amount)
+   {
+      ItemStack gal = new ItemStack(galleonMaterial);
+      ItemMeta meta = gal.getItemMeta();
+
+      meta.setDisplayName(galleon);
+      gal.setItemMeta(meta);
+      gal.setAmount(amount);
+
+      return gal;
+   }
+
+   /**
+    * Get an item stack of Sickle
+    *
+    * @param amount the number of sickles to create
+    * @return the item stack of sickles
+    */
+   public ItemStack getSickle (int amount)
+   {
+      ItemStack sic = new ItemStack(sickleMaterial);
+      ItemMeta meta = sic.getItemMeta();
+
+      meta.setDisplayName(sickle);
+      sic.setItemMeta(meta);
+      sic.setAmount(amount);
+
+      return sic;
+   }
+
+   /**
+    * Get an item stack of Knuts
+    *
+    * @param amount the number of knuts to create
+    * @return the item stack of knuts
+    */
+   public ItemStack getKnut (int amount)
+   {
+      ItemStack knu = new ItemStack(knutMaterial);
+      ItemMeta meta = knu.getItemMeta();
+
+      meta.setDisplayName(knut);
+      knu.setItemMeta(meta);
+      knu.setAmount(amount);
+
+      return knu;
+   }
+
+
+   public void givePlayerKit (Player player, List<ItemStack> kit)
+   {
+      Location loc = player.getEyeLocation();
+      ItemStack[] kitArray = kit.toArray(new ItemStack[kit.size()]);
+      HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(kitArray);
+      for (ItemStack item : leftover.values())
+      {
+         player.getWorld().dropItem(loc, item);
+      }
    }
 }

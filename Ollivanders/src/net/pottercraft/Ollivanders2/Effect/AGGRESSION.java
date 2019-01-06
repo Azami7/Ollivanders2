@@ -22,6 +22,8 @@ public class AGGRESSION extends O2Effect
    // Value from 1-10 for how aggressive this player will be with 1 being lowest level
    int aggressionLevel = 5;
 
+   Player target;
+
    /**
     * Constructor
     *
@@ -43,6 +45,7 @@ public class AGGRESSION extends O2Effect
       divinationText.add("will be possessed by a demon spirit");
 
       permanent = true;
+      target = p.getServer().getPlayer(targetID);
    }
 
    /**
@@ -51,7 +54,10 @@ public class AGGRESSION extends O2Effect
    @Override
    public void checkEffect ()
    {
-      Player target = p.getServer().getPlayer(targetID);
+      if (!permanent)
+      {
+         age(1);
+      }
 
       // only take action once per 10 seconds, which is every 120 ticks
       if ((duration % 120) == 0)

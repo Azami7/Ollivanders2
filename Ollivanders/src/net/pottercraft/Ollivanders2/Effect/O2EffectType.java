@@ -19,14 +19,16 @@ public enum O2EffectType
    HIGHER_SKILL(net.pottercraft.Ollivanders2.Effect.HIGHER_SKILL.class),
    IMMOBILIZE(net.pottercraft.Ollivanders2.Effect.IMMOBILIZE.class),
    IMPROVED_BOOK_LEARNING(net.pottercraft.Ollivanders2.Effect.IMPROVED_BOOK_LEARNING.class),
-   SUSPENSION (net.pottercraft.Ollivanders2.Effect.SUSPENSION.class),
+   LUCK(net.pottercraft.Ollivanders2.Effect.LUCK.class),
    LYCANTHROPY (net.pottercraft.Ollivanders2.Effect.LYCANTHROPY.class),
    LYCANTHROPY_SPEECH (net.pottercraft.Ollivanders2.Effect.LYCANTHROPY_SPEECH.class),
    LYCANTHROPY_RELIEF(net.pottercraft.Ollivanders2.Effect.LYCANTHROPY_RELIEF.class),
    MUCUS (net.pottercraft.Ollivanders2.Effect.MUCUS.class),
    MUTED_SPEECH (net.pottercraft.Ollivanders2.Effect.MUTED_SPEECH.class),
    SLEEP_SPEECH (net.pottercraft.Ollivanders2.Effect.SLEEP_SPEECH.class),
-   SLEEPING(net.pottercraft.Ollivanders2.Effect.SLEEPING.class);
+   SLEEPING(net.pottercraft.Ollivanders2.Effect.SLEEPING.class),
+   SUSPENSION(net.pottercraft.Ollivanders2.Effect.SUSPENSION.class),
+   WEALTH(net.pottercraft.Ollivanders2.Effect.WEALTH.class),;
 
    private Class className;
 
