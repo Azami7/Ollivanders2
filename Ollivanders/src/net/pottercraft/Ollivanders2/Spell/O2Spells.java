@@ -4,7 +4,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * Manages all spells
@@ -17,6 +17,15 @@ public class O2Spells
    private Ollivanders2 p;
 
    private HashMap<String, O2SpellType> O2SpellMap = new HashMap<>();
+
+   public static final ArrayList<O2SpellType> wandlessSpells = new ArrayList<O2SpellType>()
+   {{
+      add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
+      add(O2SpellType.ASTROLOGIA);
+      add(O2SpellType.OVOGNOSIS);
+      add(O2SpellType.INTUEOR);
+      add(O2SpellType.MANTEIA_KENTAVROS);
+   }};
 
    /**
     * Constructor
@@ -67,7 +76,7 @@ public class O2Spells
    /**
     * Get a spell type by name.
     *
-    * @param name the name of the potion
+    * @param name the name of the spell or potion
     * @return the type if found, null otherwise
     */
    public O2SpellType getSpellTypeByName (String name)

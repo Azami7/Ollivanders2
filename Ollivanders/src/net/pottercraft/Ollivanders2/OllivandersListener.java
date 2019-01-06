@@ -2,12 +2,13 @@ package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
-import net.pottercraft.Ollivanders2.Effect.MUTED_SPEECH;
 import net.pottercraft.Ollivanders2.Effect.BABBLING;
 import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
+import net.pottercraft.Ollivanders2.Spell.Divination;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
+import net.pottercraft.Ollivanders2.Spell.O2Spells;
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
 import net.pottercraft.Ollivanders2.Spell.AMATO_ANIMO_ANIMATO_ANIMAGUS;
 import net.pottercraft.Ollivanders2.Spell.MORTUOS_SUSCITATE;
@@ -15,7 +16,6 @@ import net.pottercraft.Ollivanders2.Spell.PORTUS;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Potion.O2Potion;
 import net.pottercraft.Ollivanders2.Potion.O2SplashPotion;
-import net.pottercraft.Ollivanders2.Potion.O2Potions;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
@@ -75,7 +75,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerKickEvent;
@@ -265,7 +264,7 @@ public class OllivandersListener implements Listener
 
          if (effect != null)
          {
-            ((MUTED_SPEECH) effect).doSilencio(event);
+            event.setCancelled(true);
             return;
          }
       }
@@ -291,7 +290,15 @@ public class OllivandersListener implements Listener
       //
       // Parse to see if they were casting a spell
       //
+      String[] words = message.split(" ");
+
       O2SpellType spellType = Ollivanders2API.getSpells().getSpellTypeByName(message);
+
+      if (spellType == null && words.length > 1)
+      {
+         spellType = Ollivanders2API.getSpells().getSpellTypeByName(words[0]);
+      }
+
       if (Ollivanders2.debug)
       {
          if (spellType != null)
@@ -425,7 +432,7 @@ public class OllivandersListener implements Listener
             }
 
             // wandless spells
-            if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+            if (O2Spells.wandlessSpells.contains(spellType))
             {
                if (Ollivanders2.debug)
                {
@@ -441,8 +448,6 @@ public class OllivandersListener implements Listener
                   p.getLogger().info("onPlayerChat: begin casting " + spellType);
                }
 
-               String[] words = message.split(" ");
-
                if (spellType == O2SpellType.APPARATE)
                {
                   apparate(sender, words);
@@ -455,6 +460,15 @@ public class OllivandersListener implements Listener
                else if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
                {
                   p.addProjectile(new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, sender, 1.0));
+               }
+               else if (Divination.divinationSpells.contains(spellType))
+               {
+                  if (!divine(spellType, sender, words))
+                  {
+                     return;
+                  }
+                  // remove original chat event since divination chats a prophecy
+                  event.setCancelled(true);
                }
                else
                {
@@ -718,11 +732,11 @@ public class OllivandersListener implements Listener
     * @param name the name of the spell cast
     * @param wandC the wand check value for the held wand
     */
-   private void createSpellProjectile (Player player, O2SpellType name, double wandC)
+   private O2Spell createSpellProjectile (Player player, O2SpellType name, double wandC)
    {
       if (Ollivanders2Common.libsDisguisesSpells.contains(name) && !Ollivanders2.libsDisguisesEnabled)
       {
-         return;
+         return null;
       }
 
       //spells go here, using any of the three types of m
@@ -731,23 +745,27 @@ public class OllivandersListener implements Listener
       Constructor c;
       try
       {
-         //Maybe you have to use Integer.TYPE here instead of Integer.class
          c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, Double.class);
       }
       catch (Exception e)
       {
          e.printStackTrace();
-         return;
+         return null;
       }
+
+      O2Spell spell;
 
       try
       {
-         p.addProjectile((O2Spell) c.newInstance(p, player, wandC));
+         spell = (O2Spell) c.newInstance(p, player, wandC);
       }
       catch (Exception e)
       {
          e.printStackTrace();
+         return null;
       }
+
+      return spell;
    }
 
    /**
@@ -767,17 +785,17 @@ public class OllivandersListener implements Listener
          return;
       }
 
-      O2SpellType spell = o2p.getWandSpell();
+      O2SpellType spellType = o2p.getWandSpell();
 
       // if no spell set, check to see if they have a master spell
       boolean nonverbal = false;
-      if (spell == null && Ollivanders2.useNonVerbalCasting)
+      if (spellType == null && Ollivanders2.useNonVerbalCasting)
       {
-         spell = o2p.getMasterSpell();
+         spellType = o2p.getMasterSpell();
          nonverbal = true;
       }
 
-      if (spell != null)
+      if (spellType != null)
       {
          double wandCheck;
          boolean playerHoldsWand = Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.HAND);
@@ -798,12 +816,18 @@ public class OllivandersListener implements Listener
             return;
          }
 
-         createSpellProjectile(player, spell, wandCheck);
+         O2Spell castSpell = createSpellProjectile(player, spellType, wandCheck);
+         if (castSpell == null)
+         {
+            return;
+         }
 
-         o2p.setSpellRecentCastTime(spell);
+         p.addProjectile(castSpell);
+
+         o2p.setSpellRecentCastTime(spellType);
          if (!nonverbal)
          {
-            o2p.setPriorIncantatem(spell);
+            o2p.setPriorIncantatem(spellType);
          }
 
          if (Ollivanders2.debug)
@@ -870,7 +894,7 @@ public class OllivandersListener implements Listener
             if (Ollivanders2.debug)
                p.getLogger().info("OllivandersListener:onPlayerInteract: right click action");
 
-            Block cauldron = (playerFacingCauldron(player));
+            Block cauldron = (Ollivanders2API.common.playerFacingBlockType(player, Material.CAULDRON));
             if ((cauldron != null) && (player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE))
             {
                if (Ollivanders2.debug)
@@ -899,7 +923,7 @@ public class OllivandersListener implements Listener
       else if ((event.getHand() == EquipmentSlot.OFF_HAND) && (Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
          if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-               || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
+               || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
          {
             event.setCancelled(true);
             return;
@@ -1695,7 +1719,7 @@ public class OllivandersListener implements Listener
          return;
       }
 
-      Block cauldron = playerFacingCauldron(player);
+      Block cauldron = Ollivanders2API.common.playerFacingBlockType(player, Material.CAULDRON);
       if (cauldron == null)
       {
          return;
@@ -1730,29 +1754,6 @@ public class OllivandersListener implements Listener
 
       item.setVelocity(new Vector(0, 0, 0));
       player.getInventory().setItemInOffHand(null);
-   }
-
-   /**
-    * Determine if a player is facing a cauldron.
-    *
-    * @param player the player to check
-    * @return the cauldron if a player is facing one, null otherwise
-    */
-   private Block playerFacingCauldron (Player player)
-   {
-      List<Block> blocksInFront = player.getLineOfSight(null, 3);
-      Block cauldron = null;
-
-      for (Block block : blocksInFront)
-      {
-         if (block.getType() == Material.CAULDRON)
-         {
-            cauldron = block;
-            break;
-         }
-      }
-
-      return cauldron;
    }
 
    /**
@@ -1873,7 +1874,6 @@ public class OllivandersListener implements Listener
             || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
-         return;
       }
    }
 
@@ -1891,7 +1891,6 @@ public class OllivandersListener implements Listener
             || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
-         return;
       }
    }
 
@@ -1909,7 +1908,6 @@ public class OllivandersListener implements Listener
             || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
-         return;
       }
    }
 
@@ -1928,7 +1926,6 @@ public class OllivandersListener implements Listener
             || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
-         return;
       }
    }
 
@@ -1954,7 +1951,6 @@ public class OllivandersListener implements Listener
          if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
          {
             event.setCancelled(true);
-            return;
          }
       }
    }
@@ -1972,7 +1968,6 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
-         return;
       }
    }
 
@@ -1989,7 +1984,6 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
-         return;
       }
    }
 
@@ -2006,7 +2000,6 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
-         return;
       }
    }
 
@@ -2027,8 +2020,48 @@ public class OllivandersListener implements Listener
          if (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)
          {
             event.setCancelled(true);
-            return;
          }
       }
+   }
+
+   /**
+    * @param spellType the type of divination spell
+    * @param sender the player doing the spell
+    * @param words the additional args to the spell
+    * @return true if spell was successfully created, false otherwise
+    */
+   private boolean divine (O2SpellType spellType, Player sender, String[] words)
+   {
+      if (Ollivanders2.debug)
+      {
+         p.getLogger().info("Casting divination spell");
+      }
+
+      // parse the words for the target player's name
+      if (words.length < 2)
+      {
+         sender.sendMessage(Ollivanders2.chatColor + "You must say the name of the player. Example: 'astrologia steve'.");
+         return false;
+      }
+      String targetName = words[1];
+      Player target = p.getServer().getPlayer(targetName);
+
+      if (target == null)
+      {
+         sender.sendMessage(Ollivanders2.chatColor + "Unable to find player named " + targetName + ".");
+         return false;
+      }
+
+      O2Spell spell = createSpellProjectile(sender, spellType, 1.0);
+
+      if (!(spell instanceof Divination))
+      {
+         return false;
+      }
+
+      ((Divination) spell).setTarget(target);
+      p.addProjectile(spell);
+
+      return true;
    }
 }

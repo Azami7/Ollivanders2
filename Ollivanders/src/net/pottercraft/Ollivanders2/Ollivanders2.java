@@ -7,13 +7,16 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.UUID;
 
 import Quidditch.Arena;
 
+import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.House.O2HouseType;
@@ -65,6 +68,7 @@ public class Ollivanders2 extends JavaPlugin
 
    private List<Block> tempBlocks = new ArrayList<>();
    private FileConfiguration fileConfig;
+   public O2Books books;
 
    private static String mcVersion;
    public static boolean debug = false;
@@ -102,12 +106,11 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       Ollivanders2API.saveStationarySpells();
-
+      Ollivanders2API.saveProphecies();
       if (useHouses)
       {
          Ollivanders2API.saveHouses();
       }
-
       Ollivanders2API.savePlayers();
 
       getLogger().info(this + " is now disabled!");
@@ -292,6 +295,17 @@ public class Ollivanders2 extends JavaPlugin
       catch (Exception e)
       {
          getLogger().warning("Failure setting up books.");
+         e.printStackTrace();
+      }
+
+      // set up prophecies
+      try
+      {
+         Ollivanders2API.initProphecies(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up prophecies.");
          e.printStackTrace();
       }
 
@@ -1313,7 +1327,7 @@ public class Ollivanders2 extends JavaPlugin
       cloak.setItemMeta(cloakMeta);
       kit.add(cloak);
 
-      givePlayerKit(player, kit);
+      Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
    }
@@ -1340,7 +1354,7 @@ public class Ollivanders2 extends JavaPlugin
       wand.setAmount(1);
       kit.add(wand);
 
-      givePlayerKit(player, kit);
+      Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
    }
@@ -1355,20 +1369,9 @@ public class Ollivanders2 extends JavaPlugin
    {
       List<ItemStack> kit = Ollivanders2API.common.getAllWands();
 
-      givePlayerKit(player, kit);
+      Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
-   }
-
-   private void givePlayerKit (Player player, List<ItemStack> kit)
-   {
-      Location loc = player.getEyeLocation();
-      ItemStack[] kitArray = kit.toArray(new ItemStack[kit.size()]);
-      HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(kitArray);
-      for (ItemStack item : leftover.values())
-      {
-         player.getWorld().dropItem(loc, item);
-      }
    }
 
    /**
@@ -1539,10 +1542,17 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // players cannot cast spells when in animagus form, except the spell to change form
-      if (spell != O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS && Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
-         player.sendMessage(Ollivanders2.chatColor + "You cannot cast spells while in your animagus form.");
-         return false;
+         if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+         {
+            return true;
+         }
+         else
+         {
+            player.sendMessage(Ollivanders2.chatColor + "You cannot cast spells while in your animagus form.");
+            return false;
+         }
       }
 
       if (player.isPermissionSet("Ollivanders2." + spell.toString()))
@@ -1745,7 +1755,7 @@ public class Ollivanders2 extends JavaPlugin
       List<ItemStack> fpStack = new ArrayList<>();
       fpStack.add(flooPowder);
 
-      givePlayerKit(player, fpStack);
+      Ollivanders2API.common.givePlayerKit(player, fpStack);
 
       return true;
    }
@@ -1833,7 +1843,7 @@ public class Ollivanders2 extends JavaPlugin
          bookStack.add(bookItem);
       }
 
-      givePlayerKit(targetPlayer, bookStack);
+      Ollivanders2API.common.givePlayerKit(targetPlayer, bookStack);
 
       return true;
    }
@@ -1988,7 +1998,7 @@ public class Ollivanders2 extends JavaPlugin
       List<ItemStack> kit = new ArrayList<>();
       kit.add(brewedPotion);
 
-      givePlayerKit(player, kit);
+      Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
    }
@@ -2067,7 +2077,7 @@ public class Ollivanders2 extends JavaPlugin
       if (ingredient != null)
       {
          kit.add(ingredient);
-         givePlayerKit(player, kit);
+         Ollivanders2API.common.givePlayerKit(player, kit);
       }
 
       return true;
@@ -2096,7 +2106,7 @@ public class Ollivanders2 extends JavaPlugin
          kit.add(brewedPotion);
       }
 
-      givePlayerKit(player, kit);
+      Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
    }

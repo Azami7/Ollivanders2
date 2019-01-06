@@ -326,7 +326,7 @@ public class O2Player
     */
    public Long getSpellLastCastTime (O2SpellType spellType)
    {
-      Long count = new Long(0);
+      Long count = (long) 0;
 
       if (recentSpells.containsKey(spellType))
       {
@@ -471,6 +471,8 @@ public class O2Player
          O2Spell s = (O2Spell) c.newInstance();
 
          recentSpells.put(spellType, System.currentTimeMillis() + s.getCoolDown());
+
+         setLastSpell(spellType);
       }
       catch (InvocationTargetException e)
       {
@@ -480,8 +482,6 @@ public class O2Player
       {
          e.printStackTrace();
       }
-
-      setLastSpell(spellType);
    }
 
    /**
@@ -1031,6 +1031,7 @@ public class O2Player
    public void onJoin ()
    {
       Ollivanders2API.getPlayers().playerEffects.onJoin(pid);
+      Ollivanders2API.getProphecies().onJoin(pid);
    }
 
    /**

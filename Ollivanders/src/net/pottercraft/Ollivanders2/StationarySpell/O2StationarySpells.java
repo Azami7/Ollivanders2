@@ -156,7 +156,7 @@ public class O2StationarySpells
       List <Map<String, String>> serializedList = serializeO2StationarySpells();
 
       GsonDAO gsonLayer = new GsonDAO(p);
-      gsonLayer.writeO2StationarySpells(serializedList);
+      gsonLayer.writeSaveData(serializedList, GsonDAO.o2StationarySpellsJSONFile);
    }
 
    /**
@@ -165,7 +165,7 @@ public class O2StationarySpells
    void loadO2StationarySpells ()
    {
       GsonDAO gsonLayer = new GsonDAO(p);
-      List<Map<String, String>> serializedSpells = gsonLayer.readO2StationarySpells();
+      List<Map<String, String>> serializedSpells = gsonLayer.readSavedDataListMap(GsonDAO.o2StationarySpellsJSONFile);
 
       if (serializedSpells == null)
       {

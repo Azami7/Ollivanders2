@@ -22,6 +22,8 @@ public class AGGRESSION extends O2Effect
    // Value from 1-10 for how aggressive this player will be with 1 being lowest level
    int aggressionLevel = 5;
 
+   Player target;
+
    /**
     * Constructor
     *
@@ -36,7 +38,15 @@ public class AGGRESSION extends O2Effect
       effectType = O2EffectType.AGGRESSION;
       legilimensText = "feels aggressive";
 
+      divinationText.add("will suffer from an insatiable rage");
+      divinationText.add("will succomb to a primal fear");
+      divinationText.add("shall be afflicted in the mind");
+      divinationText.add("shall lose their mind to insanity");
+      divinationText.add("will be possessed by a demon spirit");
+      divinationText.add("shall be cursed");
+
       permanent = true;
+      target = p.getServer().getPlayer(targetID);
    }
 
    /**
@@ -45,7 +55,10 @@ public class AGGRESSION extends O2Effect
    @Override
    public void checkEffect ()
    {
-      Player target = p.getServer().getPlayer(targetID);
+      if (!permanent)
+      {
+         age(1);
+      }
 
       // only take action once per 10 seconds, which is every 120 ticks
       if ((duration % 120) == 0)
@@ -82,6 +95,18 @@ public class AGGRESSION extends O2Effect
 
          LivingEntity toDamage = nArray[rand % nearby.size()];
 
+         // don't let the player hit themselves
+         if (toDamage.getUniqueId() != targetID)
+         {
+            return;
+         }
+
+         // don't do damage if worldguard is protecting where the entity is
+         if (Ollivanders2.worldGuardEnabled && !Ollivanders2.worldGuardO2.checkWGFriendlyMobDamage(target, toDamage.getLocation()))
+         {
+            return;
+         }
+
          double curHealth = toDamage.getHealth();
          // damage is entities current health divided by 2, 3, or 4
          rand = Math.abs(Ollivanders2Common.random.nextInt());
@@ -93,7 +118,7 @@ public class AGGRESSION extends O2Effect
    /**
     * Provoke nearby Creatures to target this player.
     *
-    * @param nearby
+    * @param nearby collection of nearby living entities
     */
    private void provoke (Collection<LivingEntity> nearby)
    {
@@ -116,7 +141,7 @@ public class AGGRESSION extends O2Effect
     *
     * @param level 1-10 where 1 is the lowest
     */
-   public void setAggressionLevel (int level)
+   void setAggressionLevel (int level)
    {
       if (level < 1)
          level = 1;
