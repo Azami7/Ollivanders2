@@ -13,14 +13,14 @@ import net.pottercraft.Ollivanders2.Spell.O2SpellType;
  */
 public class OMENS_ORACLES_AND_THE_GOAT extends O2Book
 {
-   public OMENS_ORACLES_AND_THE_GOAT (Ollivanders2 plugin)
-   {
-      super(plugin);
+    public OMENS_ORACLES_AND_THE_GOAT (Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      shortTitle = title = "Omens, Oracles & the Goat";
-      author = "Bathilda Bagshot";
-      branch = O2MagicBranch.DIVINATION;
+        shortTitle = title = "Omens, Oracles & the Goat";
+        author = "Bathilda Bagshot";
+        branch = O2MagicBranch.DIVINATION;
 
-      spells.add(O2SpellType.OVOGNOSIS);
-   }
+        spells.add(O2SpellType.OVOGNOSIS);
+    }
 }

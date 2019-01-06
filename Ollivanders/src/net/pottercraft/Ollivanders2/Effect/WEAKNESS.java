@@ -13,18 +13,18 @@ import java.util.UUID;
  */
 public class WEAKNESS extends PotionEffectSuper
 {
-   int strength = 1;
+    int strength = 1;
 
-   public WEAKNESS (Ollivanders2 plugin, Integer duration, UUID pid)
-   {
-      super(plugin, duration, pid);
+    public WEAKNESS(Ollivanders2 plugin, Integer duration, UUID pid)
+    {
+        super(plugin, duration, pid);
 
-      effectType = O2EffectType.WEAKNESS;
-      potionEffectType = PotionEffectType.WEAKNESS;
-      informousText = legilimensText = "feels weak";
+        effectType = O2EffectType.WEAKNESS;
+        potionEffectType = PotionEffectType.WEAKNESS;
+        informousText = legilimensText = "feels weak";
 
-      divinationText.add("shall be cursed");
-      divinationText.add("will be cursed by weakness");
-      divinationText.add("will be struck by a terrible affliction");
-   }
+        divinationText.add("shall be cursed");
+        divinationText.add("will be cursed by weakness");
+        divinationText.add("will be struck by a terrible affliction");
+    }
 }

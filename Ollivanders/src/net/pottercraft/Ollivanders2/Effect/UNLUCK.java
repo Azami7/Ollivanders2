@@ -13,18 +13,18 @@ import java.util.UUID;
  */
 public class UNLUCK extends PotionEffectSuper
 {
-   int strength = 1;
+    int strength = 1;
 
-   public UNLUCK (Ollivanders2 plugin, Integer duration, UUID pid)
-   {
-      super(plugin, duration, pid);
+    public UNLUCK (Ollivanders2 plugin, Integer duration, UUID pid)
+    {
+        super(plugin, duration, pid);
 
-      effectType = O2EffectType.UNLUCK;
-      potionEffectType = PotionEffectType.UNLUCK;
-      informousText = legilimensText = "feels unlucky";
+        effectType = O2EffectType.UNLUCK;
+        potionEffectType = PotionEffectType.UNLUCK;
+        informousText = legilimensText = "feels unlucky";
 
-      divinationText.add("will be cursed by misfortune");
-      divinationText.add("shall be cursed");
-      divinationText.add("will find nothing but misfortune");
-   }
+        divinationText.add("will be cursed by misfortune");
+        divinationText.add("shall be cursed");
+        divinationText.add("will find nothing but misfortune");
+    }
 }

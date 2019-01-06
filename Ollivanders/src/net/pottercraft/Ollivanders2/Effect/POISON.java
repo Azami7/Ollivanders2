@@ -13,19 +13,19 @@ import java.util.UUID;
  */
 public class POISON extends PotionEffectSuper
 {
-   int strength = 1;
+    int strength = 1;
 
-   public POISON (Ollivanders2 plugin, Integer duration, UUID pid)
-   {
-      super(plugin, duration, pid);
+    public POISON (Ollivanders2 plugin, Integer duration, UUID pid)
+    {
+        super(plugin, duration, pid);
 
-      effectType = O2EffectType.POISON;
-      potionEffectType = PotionEffectType.POISON;
-      informousText = legilimensText = "feels sick";
+        effectType = O2EffectType.POISON;
+        potionEffectType = PotionEffectType.POISON;
+        informousText = legilimensText = "feels sick";
 
-      divinationText.add("will be struck by a terrible affliction");
-      divinationText.add("shall come to harm");
-      divinationText.add("will be cursed");
-      divinationText.add("will be possessed by a demon spirit");
-   }
+        divinationText.add("will be struck by a terrible affliction");
+        divinationText.add("shall come to harm");
+        divinationText.add("will be cursed");
+        divinationText.add("will be possessed by a demon spirit");
+    }
 }
