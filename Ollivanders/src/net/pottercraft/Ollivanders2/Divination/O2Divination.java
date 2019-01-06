@@ -35,10 +35,20 @@ public abstract class O2Divination
    {{
       add(O2EffectType.AGGRESSION);
       add(O2EffectType.BABBLING);
+      add(O2EffectType.BLINDNESS);
+      add(O2EffectType.CONFUSION);
       add(O2EffectType.IMMOBILIZE);
+      add(O2EffectType.HARM);
+      add(O2EffectType.HEAL);
+      add(O2EffectType.HUNGER);
+      add(O2EffectType.HEALTH_BOOST);
       add(O2EffectType.LUCK);
       add(O2EffectType.MUTED_SPEECH);
+      add(O2EffectType.POISON);
       add(O2EffectType.SLEEPING);
+      add(O2EffectType.SLOW);
+      add(O2EffectType.UNLUCK);
+      add(O2EffectType.WEAKNESS);
       add(O2EffectType.WEALTH);
    }};
 
