@@ -805,7 +805,7 @@ public class Ollivanders2Common
    }
 
    /**
-    * Get the basic iantcolor associated with a number 1-16
+    * Get the basic color associated with a number 1-16
     *
     * @param number a number between 1-16, numbers outside of this range will be set to WHITE
     * @return the color associated with this number
