@@ -16,7 +16,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * Created by Azami7 on 6/30/17.
  *
- * Change a sheep or a colorable block to a specific color.
+ * Change a sheep or a colorable block to a specific variant.
  *
  * @author Azami7
  */

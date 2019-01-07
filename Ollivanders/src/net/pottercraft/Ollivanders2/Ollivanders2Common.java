@@ -310,9 +310,9 @@ public class Ollivanders2Common
    }
 
    /**
-    * Generate a random primary or secondary color - red, orange, yellow, green, blue, purple
+    * Generate a random primary or secondary variant - red, orange, yellow, green, blue, purple
     *
-    * @return the dye color
+    * @return the dye variant
     */
    public DyeColor randomSecondaryDyeColor ()
    {
@@ -379,9 +379,9 @@ public class Ollivanders2Common
    }
 
    /**
-    * Generate a random horse color.
+    * Generate a random horse variant.
     *
-    * @return the color
+    * @return the variant
     */
    public Horse.Color randomHorseColor ()
    {
@@ -418,9 +418,9 @@ public class Ollivanders2Common
    }
 
    /**
-    * Generate random llama color.
+    * Generate random llama variant.
     *
-    * @return the color
+    * @return the variant
     */
    public Llama.Color randomLlamaColor ()
    {
@@ -805,10 +805,10 @@ public class Ollivanders2Common
    }
 
    /**
-    * Get the basic color associated with a number 1-16
+    * Get the basic variant associated with a number 1-16
     *
     * @param number a number between 1-16, numbers outside of this range will be set to WHITE
-    * @return the color associated with this number
+    * @return the variant associated with this number
     */
    public Color colorByNumber (int number)
    {

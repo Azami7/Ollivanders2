@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -34,10 +35,10 @@ public final class FORGETFULLNESS_POTION extends O2Potion
       potionType = O2PotionType.FORGETFULLNESS_POTION;
       potionLevel = PotionLevel.OWL;
 
-      ingredients.put(IngredientType.MISTLETOE_BERRIES, 4);
-      ingredients.put(IngredientType.VALERIAN_SPRIGS, 2);
-      ingredients.put(IngredientType.LETHE_RIVER_WATER, 2);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
+      ingredients.put(O2ItemType.MISTLETOE_BERRIES, 4);
+      ingredients.put(O2ItemType.VALERIAN_SPRIGS, 2);
+      ingredients.put(O2ItemType.LETHE_RIVER_WATER, 2);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
       text = "The Forgetfulness Potion is a potion which causes a degree of memory loss in the drinker.";
       flavorText.add("Hermione Granger: \"What are the three most crucial ingredients in a Forgetfulness Potion?\"\nRon Weasley: \"I forgot.\"");

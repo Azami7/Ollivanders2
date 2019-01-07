@@ -11,7 +11,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * If an entity has leather armor on, then this changes it's color.
+ * If an entity has leather armor on, then this changes it's variant.
  *
  * @author lownes
  * @author Azami7
@@ -28,7 +28,7 @@ public final class MULTICORFORS extends Charms
       branch = O2MagicBranch.TRANSFIGURATION;
       spellType = O2SpellType.MULTICORFORS;
 
-      text = "Multicorfors will change the color of leather armor of the target.";
+      text = "Multicorfors will change the variant of leather armor of the target.";
    }
 
    /**

@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -65,7 +66,7 @@ public abstract class O2Potion implements Teachable
    /**
     * The ingredients list for this potion.
     */
-   protected Map<IngredientType, Integer> ingredients = new HashMap<>();
+   protected Map<O2ItemType, Integer> ingredients = new HashMap<>();
 
    /**
     * The description text for this spell in spell books.  Required or spell cannot be written in a book.
@@ -119,10 +120,10 @@ public abstract class O2Potion implements Teachable
    {
       String s = "\n\nIngredients:";
 
-      for (Entry<IngredientType, Integer> e : ingredients.entrySet())
+      for (Entry<O2ItemType, Integer> e : ingredients.entrySet())
       {
-         IngredientType ingredientType = e.getKey();
-         String name = ingredientType.getName();
+         O2ItemType ingredientType = e.getKey();
+         String name = Ollivanders2API.getItems().getItemDisplayNameByType(ingredientType);
 
          s = s + "\n" + e.getValue().toString() + " " + name;
       }
@@ -155,7 +156,7 @@ public abstract class O2Potion implements Teachable
     *
     * @return a Map of the ingredients for this potion
     */
-   Map<IngredientType, Integer> getIngredients ()
+   Map<O2ItemType, Integer> getIngredients ()
    {
       return ingredients;
    }
@@ -201,7 +202,7 @@ public abstract class O2Potion implements Teachable
     * @param cauldronIngredients the ingredients found in the cauldron
     * @return true if the ingredient list matches this potion recipe exactly, false otherwise
     */
-   public boolean checkRecipe (Map<IngredientType, Integer> cauldronIngredients)
+   public boolean checkRecipe (Map<O2ItemType, Integer> cauldronIngredients)
    {
       // are there the right number of ingredients?
       if (ingredients.size() != cauldronIngredients.size())
@@ -209,9 +210,9 @@ public abstract class O2Potion implements Teachable
          return false;
       }
 
-      for (Map.Entry<IngredientType, Integer> e : ingredients.entrySet())
+      for (Map.Entry<O2ItemType, Integer> e : ingredients.entrySet())
       {
-         IngredientType ingredientType = e.getKey();
+         O2ItemType ingredientType = e.getKey();
          Integer count = e.getValue();
 
          // is this ingredient in the recipe?

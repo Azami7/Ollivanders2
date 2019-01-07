@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.BABBLING;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -27,10 +28,10 @@ public class BABBLING_BEVERAGE extends O2Potion
       potionType = O2PotionType.BABBLING_BEVERAGE;
       potionLevel = PotionLevel.OWL;
 
-      ingredients.put(IngredientType.VALERIAN_SPRIGS, 2);
-      ingredients.put(IngredientType.DITTANY, 1);
-      ingredients.put(IngredientType.WOLFSBANE, 1);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
+      ingredients.put(O2ItemType.VALERIAN_SPRIGS, 2);
+      ingredients.put(O2ItemType.DITTANY, 1);
+      ingredients.put(O2ItemType.WOLFSBANE, 1);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
       potionColor = Color.FUCHSIA;
 

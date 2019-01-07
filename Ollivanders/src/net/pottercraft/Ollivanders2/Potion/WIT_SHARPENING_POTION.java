@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.IMPROVED_BOOK_LEARNING;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -27,10 +28,10 @@ public final class WIT_SHARPENING_POTION extends O2Potion
       potionType = O2PotionType.WIT_SHARPENING_POTION;
       potionLevel = PotionLevel.OWL;
 
-      ingredients.put(IngredientType.GINGER_ROOT, 2);
-      ingredients.put(IngredientType.GROUND_SCARAB_BEETLE, 3);
-      ingredients.put(IngredientType.ARMADILLO_BILE, 2);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
+      ingredients.put(O2ItemType.GINGER_ROOT, 2);
+      ingredients.put(O2ItemType.GROUND_SCARAB_BEETLE, 3);
+      ingredients.put(O2ItemType.ARMADILLO_BILE, 2);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
       text = "The Wit-Sharpening Potion is a potion which allows the drinker to think more clearly. Due to this, it acts"
             + "as a counteragent to the Confundus Charm.";

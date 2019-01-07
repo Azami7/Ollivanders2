@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Effect.SLEEPING;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -28,12 +29,12 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion
       potionType = O2PotionType.DRAUGHT_OF_LIVING_DEATH;
       potionLevel = PotionLevel.NEWT;
 
-      ingredients.put(IngredientType.POWDERED_ASHPODEL, 1);
-      ingredients.put(IngredientType.INFUSION_OF_WORMWOOD, 1);
-      ingredients.put(IngredientType.VALERIAN_ROOT, 1);
-      ingredients.put(IngredientType.SOPOPHORUS_BEAN_JUICE, 1);
-      ingredients.put(IngredientType.SLOTH_BRAIN, 1);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
+      ingredients.put(O2ItemType.POWDERED_ASHPODEL_ROOT, 1);
+      ingredients.put(O2ItemType.INFUSION_OF_WORMWOOD, 1);
+      ingredients.put(O2ItemType.VALERIAN_ROOT, 1);
+      ingredients.put(O2ItemType.SOPOPHORUS_BEAN_JUICE, 1);
+      ingredients.put(O2ItemType.SLOTH_BRAIN, 1);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
       text = "Puts the drinker in a permanent magical sleep.";
       flavorText.add("The Draught of Living Death brings upon its drinker a very powerful sleep that can last indefinitely. This is an extremely dangerous potion. Execute with maximum caution.");

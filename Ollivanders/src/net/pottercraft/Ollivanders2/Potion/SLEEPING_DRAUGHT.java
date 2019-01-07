@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Effect.SLEEPING;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -30,10 +31,10 @@ public class SLEEPING_DRAUGHT extends O2Potion
 
       text = "A Sleeping Draught causes the drinker to fall almost instantly into a deep, dreamless sleep.";
 
-      ingredients.put(IngredientType.LAVENDER_SPRIG, 4);
-      ingredients.put(IngredientType.FLOBBERWORM_MUCUS, 2);
-      ingredients.put(IngredientType.VALERIAN_SPRIGS, 4);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 6);
+      ingredients.put(O2ItemType.LAVENDER_SPRIG, 4);
+      ingredients.put(O2ItemType.FLOBBERWORM_MUCUS, 2);
+      ingredients.put(O2ItemType.VALERIAN_SPRIGS, 4);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 6);
 
       flavorText.add("\"I've got it all worked out. I've filled these with a simple Sleeping Draught.\" -Hermione Granger");
       flavorText.add("\"You'll need to drink all of this, Harry. It's a potion for dreamless sleep.\" -Madam Pomfrey");

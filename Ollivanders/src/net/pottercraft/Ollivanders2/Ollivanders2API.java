@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2;
 import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Divination.O2Prophecies;
 import net.pottercraft.Ollivanders2.House.O2Houses;
+import net.pottercraft.Ollivanders2.Item.O2Items;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
 import net.pottercraft.Ollivanders2.Player.O2Players;
 import net.pottercraft.Ollivanders2.Potion.O2Potions;
@@ -18,6 +19,7 @@ public class Ollivanders2API
    private static O2Potions potions;
    private static O2StationarySpells stationarySpells;
    private static O2Prophecies prophecies;
+   private static O2Items items;
 
    public static O2PlayerCommon playerCommon;
    public static Ollivanders2Common common;
@@ -117,5 +119,15 @@ public class Ollivanders2API
    public static O2Prophecies getProphecies ()
    {
       return prophecies;
+   }
+
+   public static void initItems (Ollivanders2 p)
+   {
+      items = new O2Items(p);
+   }
+
+   public static O2Items getItems ()
+   {
+      return items;
    }
 }

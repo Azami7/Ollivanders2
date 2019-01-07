@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY_RELIEF;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -27,11 +28,11 @@ public final class WOLFSBANE_POTION extends O2Potion
       potionType = O2PotionType.WOLFSBANE_POTION;
       potionLevel = PotionLevel.EXPERT;
 
-      ingredients.put(IngredientType.WOLFSBANE, 2);
-      ingredients.put(IngredientType.MANDRAKE_LEAF, 3);
-      ingredients.put(IngredientType.POISONOUS_POTATO, 1);
-      ingredients.put(IngredientType.DITTANY, 2);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 3);
+      ingredients.put(O2ItemType.WOLFSBANE, 2);
+      ingredients.put(O2ItemType.MANDRAKE_LEAF, 3);
+      ingredients.put(O2ItemType.POISONOUS_POTATO, 1);
+      ingredients.put(O2ItemType.DITTANY, 2);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 3);
 
       text = "This potion will relieve, though not cure, the symptoms of Lycanthropy. It is a complex potion and requires"
             + "the most advanced potion-making skills.";

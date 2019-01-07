@@ -12,8 +12,9 @@ public class CRYSTAL_BALL extends O2Divination
       divintationType = O2DivinationType.CRYSTAL_BALL;
       maxAccuracy = 30;
 
-      prophecyPrefix.add("Gazing in to the crystal ball, it is revealed that");
+      prophecyPrefix.add("The crystal ball has revealed that");
       prophecyPrefix.add("The clairvoyant vibrations of the orb show that");
-      prophecyPrefix.add("The shadowy portents of the orb say that");
+      prophecyPrefix.add("The shadowy portents have been read,");
+      prophecyPrefix.add("The orb tells the future,");
    }
 }

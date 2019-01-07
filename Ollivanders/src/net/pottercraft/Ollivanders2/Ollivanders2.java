@@ -7,11 +7,8 @@ import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.UUID;
 
 import Quidditch.Arena;
@@ -20,9 +17,9 @@ import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.House.O2HouseType;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
-import net.pottercraft.Ollivanders2.Potion.IngredientType;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
@@ -82,6 +79,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean libsDisguisesEnabled = false;
    public static ChatColor chatColor = ChatColor.AQUA;
    public static Material wandMaterial = Material.STICK;
+   public static Material flooPowderMaterial = Material.REDSTONE;
    public static int chatDropoff = 15;
 
    /**
@@ -160,7 +158,7 @@ public class Ollivanders2 extends JavaPlugin
       if (getConfig().isSet("chatColor"))
       {
          chatColor = ChatColor.getByChar(getConfig().getString("chatColor"));
-         getLogger().info("Setting plugin message color to " + chatColor.toString());
+         getLogger().info("Setting plugin message variant to " + chatColor.toString());
       }
 
       if (getConfig().isSet("chatDropoff"))
@@ -168,6 +166,12 @@ public class Ollivanders2 extends JavaPlugin
          int drop = getConfig().getInt("chatDropoff");
          if (drop > 0)
             chatDropoff = drop;
+      }
+
+      if (getConfig().isSet("flooPowder"))
+      {
+         flooPowderMaterial = Material.getMaterial(fileConfig.getString("flooPowder"));
+         O2ItemType.FLOO_POWDER.setMaterial(flooPowderMaterial);
       }
 
       useNonVerbalCasting = getConfig().getBoolean("nonVerbalSpellCasting");
@@ -192,32 +196,6 @@ public class Ollivanders2 extends JavaPlugin
 
       OllivandersSchedule schedule = new OllivandersSchedule(this);
       Bukkit.getScheduler().scheduleSyncRepeatingTask(this, schedule, 20L, 1L);
-
-      //floo powder recipe
-      ItemStack flooPowder = new ItemStack(Material.getMaterial(fileConfig.getString("flooPowder")), 8);
-      ItemMeta fmeta = flooPowder.getItemMeta();
-      fmeta.setDisplayName("Floo Powder");
-      List<String> flore = new ArrayList<>();
-      flore.add("Glittery, silver powder");
-      fmeta.setLore(flore);
-      flooPowder.setItemMeta(fmeta);
-
-      //broomstick recipe
-      ItemStack broomstick = new ItemStack(Material.getMaterial(fileConfig.getString("broomstick")));
-      ItemMeta bmeta = broomstick.getItemMeta();
-      bmeta.setDisplayName("Broomstick");
-      List<String> blore = new ArrayList<>();
-      blore.add("Flying vehicle used by magical folk");
-      bmeta.setLore(blore);
-      broomstick.setItemMeta(bmeta);
-      Plugin plugin = Bukkit.getPluginManager().getPlugin("Ollivanders2");
-      NamespacedKey recipeKey = new NamespacedKey(plugin, "broomstick");
-      ShapedRecipe bRecipe = new ShapedRecipe(recipeKey, broomstick);
-      bRecipe.shape("  S", " S ", "W  ");
-      bRecipe.setIngredient('S', Material.STICK);
-      bRecipe.setIngredient('W', Material.WHEAT);
-      getServer().addRecipe(new FurnaceRecipe(flooPowder, Material.ENDER_PEARL));
-      getServer().addRecipe(bRecipe);
 
       // set up libDisguises
       Plugin libsDisguises = Bukkit.getServer().getPluginManager().getPlugin("LibsDisguises");
@@ -259,6 +237,17 @@ public class Ollivanders2 extends JavaPlugin
       catch (Exception e)
       {
          getLogger().warning("Failure setting up houses.");
+         e.printStackTrace();
+      }
+
+      // set up items
+      try
+      {
+         Ollivanders2API.initItems(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up items.");
          e.printStackTrace();
       }
 
@@ -330,6 +319,19 @@ public class Ollivanders2 extends JavaPlugin
             worldGuardEnabled = false;
          }
       }
+
+      //broomstick recipe
+      ItemStack broomstick = Ollivanders2API.getItems().getItemByType(O2ItemType.BROOMSTICK, 1);
+      NamespacedKey recipeKey = new NamespacedKey(this, "broomstick");
+      ShapedRecipe bRecipe = new ShapedRecipe(recipeKey, broomstick);
+      bRecipe.shape("  S", " S ", "W  ");
+      bRecipe.setIngredient('S', Material.STICK);
+      bRecipe.setIngredient('W', Material.WHEAT);
+
+      //floo powder recipe
+      ItemStack flooPowder = Ollivanders2API.getItems().getItemByType(O2ItemType.FLOO_POWDER, 8);
+      getServer().addRecipe(new FurnaceRecipe(flooPowder, Material.ENDER_PEARL));
+      getServer().addRecipe(bRecipe);
 
       getLogger().info(this + " is now enabled!");
    }
@@ -427,7 +429,9 @@ public class Ollivanders2 extends JavaPlugin
          else if (subCommand.equalsIgnoreCase("reload"))
             return runReloadConfigs(sender);
          else if (subCommand.equalsIgnoreCase("items"))
-            return okitItems((Player) sender);
+         {
+            return okitItems((Player) sender, args);
+         }
          else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
             return runHouse(sender, args);
          else if (subCommand.equalsIgnoreCase("debug"))
@@ -436,7 +440,7 @@ public class Ollivanders2 extends JavaPlugin
          {
             if (args.length == 1)
             {
-               return giveFlooPowder((Player)sender);
+               return giveFlooPowder((Player) sender);
             }
             else
             {
@@ -452,7 +456,7 @@ public class Ollivanders2 extends JavaPlugin
          {
             if (args.length == 1)
             {
-               return playerSummary(sender, (Player)sender);
+               return playerSummary(sender, (Player) sender);
             }
             else
             {
@@ -1303,30 +1307,26 @@ public class Ollivanders2 extends JavaPlugin
     * @param player the player to give items to
     * @return true unless an error occurred
     */
-   private boolean okitItems (Player player)
+   private boolean okitItems (Player player, String[] args)
    {
       List<ItemStack> kit = new ArrayList<>();
 
-      //Elder Wand
-      ItemStack wand = new ItemStack(Material.BLAZE_ROD);
-      List<String> lore = new ArrayList<>();
-      lore.add("Blaze and Ender Pearl");
-      ItemMeta meta = wand.getItemMeta();
-      meta.setLore(lore);
-      meta.setDisplayName("Elder Wand");
-      wand.setItemMeta(meta);
-      kit.add(wand);
+      if (args.length < 2)
+      {
+         player.sendMessage("You need to include the name of the item.");
+         return true;
+      }
 
-      //Cloak of Invisibility
-      ItemStack cloak = new ItemStack(Material.CHAINMAIL_CHESTPLATE);
-      List<String> cloakLore = new ArrayList<>();
-      cloakLore.add("Silvery Transparent Cloak");
-      ItemMeta cloakMeta = cloak.getItemMeta();
-      cloakMeta.setLore(cloakLore);
-      cloakMeta.setDisplayName("Cloak of Invisibility");
-      cloak.setItemMeta(cloakMeta);
-      kit.add(cloak);
+      String itemName = Ollivanders2API.common.stringArrayToString(Arrays.copyOfRange(args, 1, args.length));
+      ItemStack item = Ollivanders2API.getItems().getItemStartsWith(itemName, 1);
 
+      if (item == null)
+      {
+         player.sendMessage("Unable to find an item with that name.");
+         return true;
+      }
+
+      kit.add(item);
       Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
@@ -1337,11 +1337,11 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean giveRandomWand (Player player)
    {
-      String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
-      String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
+      //String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
+      //String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
 
-      String wood = woodArray[Math.abs(Ollivanders2Common.random.nextInt() % woodArray.length)];
-      String core = coreArray[Math.abs(Ollivanders2Common.random.nextInt() % coreArray.length)];
+      String wood = O2PlayerCommon.woodArray.get(Math.abs(Ollivanders2Common.random.nextInt() % O2PlayerCommon.woodArray.size()));
+      String core = O2PlayerCommon.coreArray.get(Math.abs(Ollivanders2Common.random.nextInt() % O2PlayerCommon.coreArray.size()));
 
       List<ItemStack> kit = new ArrayList<>();
       ItemStack wand = new ItemStack(wandMaterial);
@@ -1910,6 +1910,13 @@ public class Ollivanders2 extends JavaPlugin
       player.sendMessage(chatColor + "You are too tired to cast this spell right now.");
    }
 
+   /**
+    * Potions subcommand
+    *
+    * @param sender the command sender
+    * @param args   args to the command
+    * @return true
+    */
    public boolean runPotions (CommandSender sender, String[] args)
    {
       if (args.length > 1)
@@ -1928,7 +1935,7 @@ public class Ollivanders2 extends JavaPlugin
                {
                   // potion ingredient mandrake leaf
                   String [] subArgs = Arrays.copyOfRange(args, 2, args.length);
-                  return givePotionIngredient((Player) sender, Ollivanders2API.common.stringArrayToString(subArgs));
+                  return giveItem((Player) sender, Ollivanders2API.common.stringArrayToString(subArgs));
                }
             }
          }
@@ -2024,7 +2031,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean listAllIngredients (Player player)
    {
-      List<String> ingredientList = IngredientType.getAllIngredientNames();
+      List<String> ingredientList = Ollivanders2API.getPotions().getAllIngredientNames();
       StringBuilder displayString = new StringBuilder();
       displayString.append("Ingredients:");
 
@@ -2069,14 +2076,14 @@ public class Ollivanders2 extends JavaPlugin
     * @param name the name of the ingredient
     * @return true
     */
-   private boolean givePotionIngredient(Player player, String name)
+   private boolean giveItem (Player player, String name)
    {
       List<ItemStack> kit = new ArrayList<>();
-      ItemStack ingredient = Ollivanders2API.getPotions().getIngredientByName(name);
+      ItemStack item = Ollivanders2API.getItems().getItemStartsWith(name, 1);
 
-      if (ingredient != null)
+      if (item != null)
       {
-         kit.add(ingredient);
+         kit.add(item);
          Ollivanders2API.common.givePlayerKit(player, kit);
       }
 

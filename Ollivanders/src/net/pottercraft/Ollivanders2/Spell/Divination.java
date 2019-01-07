@@ -32,9 +32,11 @@ public abstract class Divination extends O2Spell
    public static final ArrayList<O2SpellType> divinationSpells = new ArrayList<O2SpellType>()
    {{
       add(O2SpellType.ASTROLOGIA);
-      add(O2SpellType.OVOGNOSIS);
+      add(O2SpellType.CARTOMANCIE);
+      add(O2SpellType.CHARTIA);
       add(O2SpellType.INTUEOR);
       add(O2SpellType.MANTEIA_KENTAVROS);
+      add(O2SpellType.OVOGNOSIS);
    }};
 
    /**

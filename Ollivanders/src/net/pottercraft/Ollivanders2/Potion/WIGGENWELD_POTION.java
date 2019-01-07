@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -35,21 +36,21 @@ public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
 
       potionMaterialType = Material.SPLASH_POTION;
 
-      ingredients.put(IngredientType.HORKLUMP_JUICE, 1);
-      ingredients.put(IngredientType.FLOBBERWORM_MUCUS, 2);
-      ingredients.put(IngredientType.CHIZPURFLE_FANGS, 1);
-      ingredients.put(IngredientType.BILLYWIG_STING_SLIME, 2);
-      ingredients.put(IngredientType.MINT_SPRIG, 1);
-      ingredients.put(IngredientType.BOOM_BERRY_JUICE, 1);
-      ingredients.put(IngredientType.MANDRAKE_LEAF, 2);
-      ingredients.put(IngredientType.HONEYWATER, 1);
-      ingredients.put(IngredientType.SLOTH_BRAIN_MUCUS, 1);
-      ingredients.put(IngredientType.MOONDEW_DROP, 3);
-      ingredients.put(IngredientType.SALAMANDER_BLOOD, 1);
-      ingredients.put(IngredientType.LIONFISH_SPINES, 10);
-      ingredients.put(IngredientType.UNICORN_HORN, 1);
-      ingredients.put(IngredientType.WOLFSBANE, 2);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 1);
+      ingredients.put(O2ItemType.HORKLUMP_JUICE, 1);
+      ingredients.put(O2ItemType.FLOBBERWORM_MUCUS, 2);
+      ingredients.put(O2ItemType.CHIZPURFLE_FANGS, 1);
+      ingredients.put(O2ItemType.BILLYWIG_STING_SLIME, 2);
+      ingredients.put(O2ItemType.MINT_SPRIG, 1);
+      ingredients.put(O2ItemType.BOOM_BERRY_JUICE, 1);
+      ingredients.put(O2ItemType.MANDRAKE_LEAF, 2);
+      ingredients.put(O2ItemType.HONEYWATER, 1);
+      ingredients.put(O2ItemType.SLOTH_BRAIN_MUCUS, 1);
+      ingredients.put(O2ItemType.MOONDEW_DROP, 3);
+      ingredients.put(O2ItemType.SALAMANDER_BLOOD, 1);
+      ingredients.put(O2ItemType.LIONFISH_SPINES, 10);
+      ingredients.put(O2ItemType.UNICORN_HORN, 1);
+      ingredients.put(O2ItemType.WOLFSBANE, 2);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 1);
 
       text = "The Wiggenweld Potion is a healing potion which can also be used to wake the drinker from magically-induced sleep.";
       flavorText.add("\"Today you will learn to brew the Wiggenweld Potion. It is a powerful healing potion that can be used to heal injuries, or reverse the effects of a Sleeping Draught.\" -Severus Snape");

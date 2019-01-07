@@ -15,5 +15,9 @@ public class OVOMANCY extends O2Divination
         prophecyPrefix.add("The shape of the egg whites means that");
         prophecyPrefix.add("Through the teachings of Orpheus, it is foretold that");
         prophecyPrefix.add("The omen of the egg reveals that");
+       prophecyPrefix.add("Egg whites and yolks take form,");
+       prophecyPrefix.add("The egg forms the shape of a bell,");
+       prophecyPrefix.add("The egg forms the shape of a snake,");
+       prophecyPrefix.add("The egg takes the shape of a boat,");
     }
 }

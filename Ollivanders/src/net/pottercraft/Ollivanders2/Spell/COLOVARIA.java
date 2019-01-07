@@ -17,7 +17,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import java.util.ArrayList;
 
 /**
- * Changes color of sheep and colorable blocks to a random color
+ * Changes variant of sheep and colorable blocks to a random variant
  *
  * @author lownes
  * @author Azami7
@@ -38,7 +38,7 @@ public final class COLOVARIA extends Charms
          add("[...] he wished he had not mixed up the incantations for Colour Change and Growth Charms, so that the rat he was supposed to be turning orange swelled shockingly and was the size of a badger before Harry could rectify his mistake.");
       }};
 
-      text = "Changes color of sheep and colorable blocks to another color.";
+      text = "Changes variant of sheep and colorable blocks to another variant.";
    }
 
    /**
