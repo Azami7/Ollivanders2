@@ -38,7 +38,7 @@ public final class COLOVARIA extends Charms
          add("[...] he wished he had not mixed up the incantations for Colour Change and Growth Charms, so that the rat he was supposed to be turning orange swelled shockingly and was the size of a badger before Harry could rectify his mistake.");
       }};
 
-      text = "Changes variant of sheep and colorable blocks to another variant.";
+      text = "Changes color of sheep and colorable blocks to another color.";
    }
 
    /**

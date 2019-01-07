@@ -158,7 +158,7 @@ public class Ollivanders2 extends JavaPlugin
       if (getConfig().isSet("chatColor"))
       {
          chatColor = ChatColor.getByChar(getConfig().getString("chatColor"));
-         getLogger().info("Setting plugin message variant to " + chatColor.toString());
+         getLogger().info("Setting plugin message color to " + chatColor.toString());
       }
 
       if (getConfig().isSet("chatDropoff"))

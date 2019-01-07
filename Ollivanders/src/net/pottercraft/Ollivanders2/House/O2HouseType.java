@@ -45,7 +45,7 @@ public enum O2HouseType
     * Constructor
     *
     * @param name the display name for this house
-    * @param color the chat variant for this house
+    * @param color the chat color for this house
     */
    O2HouseType (String name, ChatColor color)
    {
@@ -77,7 +77,7 @@ public enum O2HouseType
    }
 
    /**
-    * Get the chat variant for this house
+    * Get the chat color for this house
     *
     * @return the ChatColor for this house
     */
@@ -87,9 +87,9 @@ public enum O2HouseType
    }
 
    /**
-    * Get the string prefix for this house variant
+    * Get the string prefix for this house color
     *
-    * @return the string prefix that sets this variant
+    * @return the string prefix that sets this color
     */
    public String getColorPrefix ()
    {
@@ -97,10 +97,10 @@ public enum O2HouseType
    }
 
    /**
-    * Set the variant for this house. Should only be done from within the House package. No change is
+    * Set the color for this house. Should only be done from within the House package. No change is
     * made if the string is not a valid ChatColor value.
     *
-    * @param name the variant as a string
+    * @param name the color as a string
     */
    void setColor (String name)
    {

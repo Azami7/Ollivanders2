@@ -72,7 +72,7 @@ public class O2Houses
       if (p.getConfig().isSet("slytherinName"))
          O2HouseType.SLYTHERIN.setName(p.getConfig().getString("slytherinName"));
 
-      // read house variant config
+      // read house color config
       if (p.getConfig().isSet("gryffindorColor"))
          O2HouseType.GRYFFINDOR.setColor(p.getConfig().getString("gryffindorColor"));
 
@@ -592,7 +592,7 @@ public class O2Houses
          team.removeEntry(name);
          if (displayName.startsWith("§"));
          {
-            // we have set a variant on their display name, change it back
+            // we have set a color on their display name, change it back
             player.setDisplayName(name);
          }
       }
