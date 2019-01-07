@@ -126,7 +126,7 @@ public class O2Player
    private EntityType animagusForm = null;
 
    /**
-    * The variant variant for the animagus form
+    * The color variant for the animagus form
     */
    private String animagusColor = null;
 
@@ -922,7 +922,7 @@ public class O2Player
          if (Ollivanders2.debug)
             p.getLogger().info(playerName + " is an animagus type " + animagusForm.toString());
 
-         // determine variant variations for certain types
+         // determine color variations for certain types
          if (animagusForm == EntityType.OCELOT)
          {
             animagusColor = Ollivanders2API.common.randomOcelotType().toString();
@@ -989,13 +989,13 @@ public class O2Player
    }
 
    /**
-    * Get the variant variation for this animagus.
+    * Get the color variation for this animagus.
     *
-    * @return the variant variation or null if not applicable
+    * @return the color variation or null if not applicable
     */
    public String getAnimagusColor ()
    {
-      // in case variant was set when player has no animagus form
+      // in case color was set when player has no animagus form
       if (animagusForm != null)
          return animagusColor;
       else

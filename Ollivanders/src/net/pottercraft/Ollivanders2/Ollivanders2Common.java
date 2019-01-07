@@ -283,7 +283,7 @@ public class Ollivanders2Common
    /**
     * Get a random rabbit type. Odds are 1/60 to get a Killer Bunny.
     *
-    * @return the type variant for the rabbit
+    * @return the type color for the rabbit
     */
    public RabbitType randomRabbitType ()
    {
@@ -310,9 +310,9 @@ public class Ollivanders2Common
    }
 
    /**
-    * Generate a random primary or secondary variant - red, orange, yellow, green, blue, purple
+    * Generate a random primary or secondary color - red, orange, yellow, green, blue, purple
     *
-    * @return the dye variant
+    * @return the dye color
     */
    public DyeColor randomSecondaryDyeColor ()
    {
@@ -379,9 +379,9 @@ public class Ollivanders2Common
    }
 
    /**
-    * Generate a random horse variant.
+    * Generate a random horse color.
     *
-    * @return the variant
+    * @return the color
     */
    public Horse.Color randomHorseColor ()
    {
@@ -418,9 +418,9 @@ public class Ollivanders2Common
    }
 
    /**
-    * Generate random llama variant.
+    * Generate random llama color.
     *
-    * @return the variant
+    * @return the color
     */
    public Llama.Color randomLlamaColor ()
    {
@@ -805,10 +805,10 @@ public class Ollivanders2Common
    }
 
    /**
-    * Get the basic variant associated with a number 1-16
+    * Get the basic iantcolor associated with a number 1-16
     *
     * @param number a number between 1-16, numbers outside of this range will be set to WHITE
-    * @return the variant associated with this number
+    * @return the color associated with this number
     */
    public Color colorByNumber (int number)
    {

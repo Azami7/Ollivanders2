@@ -17,7 +17,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import java.util.ArrayList;
 
 /**
- * Changes variant of sheep and colorable blocks to a random variant
+ * Changes color of sheep and colorable blocks to a random variant
  *
  * @author lownes
  * @author Azami7
