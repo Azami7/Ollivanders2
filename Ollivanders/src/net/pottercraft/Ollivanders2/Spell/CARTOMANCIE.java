@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Divination.O2DivinationType;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
@@ -46,6 +47,9 @@ public class CARTOMANCIE extends Divination
 
       spellType = O2SpellType.CARTOMANCIE;
       divinationType = O2DivinationType.CARTOMANCY_TAROT;
+
+      itemHeld = O2ItemType.TAROT_CARDS;
+      itemHeldString = "tarot cards";
 
       setUsesModifier();
    }

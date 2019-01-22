@@ -23,7 +23,7 @@ public enum O2DivinationType
    //PALMISTRY,
    //ORNITHOMANCY,
    OVOMANCY(net.pottercraft.Ollivanders2.Divination.OVOMANCY.class),
-   //TESSOMANCY,
+   TASSEOMANCY(TASSEOMANCY.class),
    //XYLOMANCY,
    ;
 

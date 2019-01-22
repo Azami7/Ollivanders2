@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Divination.O2Divination;
 import net.pottercraft.Ollivanders2.Divination.O2DivinationType;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
@@ -10,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 
@@ -24,14 +26,17 @@ public abstract class Divination extends O2Spell
    O2DivinationType divinationType = null;
    Player target = null;
 
-   Material itemHeld = null;
+   O2ItemType itemHeld = null;
    String itemHeldString = "";
+   boolean consumeHeld = false;
+
    Material facingBlock = null;
    String facingBlockString = "";
 
    public static final ArrayList<O2SpellType> divinationSpells = new ArrayList<O2SpellType>()
    {{
       add(O2SpellType.ASTROLOGIA);
+      add(O2SpellType.BAO_ZHONG_CHA);
       add(O2SpellType.CARTOMANCIE);
       add(O2SpellType.CHARTIA);
       add(O2SpellType.INTUEOR);
@@ -109,7 +114,23 @@ public abstract class Divination extends O2Spell
       if (itemHeld != null)
       {
          ItemStack held = player.getInventory().getItemInMainHand();
-         if (held == null || held.getType() != itemHeld)
+
+         if (held == null)
+         {
+            player.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
+            kill();
+            return;
+         }
+
+         // if the item has a display name, it is a custom item
+         String itemName = held.getItemMeta().getDisplayName();
+         if (itemName == null)
+         {
+            // it is a base object type
+            itemName = held.getType().toString();
+         }
+
+         if (!itemName.toLowerCase().equals(itemHeld.getName().toLowerCase()))
          {
             player.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
             kill();
@@ -145,8 +166,8 @@ public abstract class Divination extends O2Spell
 
       divination.divine();
 
-      // if requires item held, consume it
-      if (itemHeld != null)
+      // if requires consume item held, consume it
+      if (itemHeld != null && consumeHeld)
       {
          int amount = player.getInventory().getItemInMainHand().getAmount();
          player.getInventory().getItemInMainHand().setAmount(amount - 1);

@@ -416,7 +416,7 @@ public class Ollivanders2 extends JavaPlugin
             usageMessageOllivanders(sender);
             return true;
          }
-         else if (subCommand.equalsIgnoreCase("wands"))
+         else if (subCommand.equalsIgnoreCase("wands") || subCommand.equalsIgnoreCase("wand"))
          {
             if (args.length == 1)
                return okitWands((Player) sender);
@@ -428,7 +428,7 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("reload"))
             return runReloadConfigs(sender);
-         else if (subCommand.equalsIgnoreCase("items"))
+         else if (subCommand.equalsIgnoreCase("items") || subCommand.equalsIgnoreCase("item"))
          {
             return okitItems((Player) sender, args);
          }
@@ -464,15 +464,15 @@ public class Ollivanders2 extends JavaPlugin
                return playerSummary(sender, target);
             }
          }
-         else if (subCommand.equalsIgnoreCase("potions"))
+         else if (subCommand.equalsIgnoreCase("potions") || subCommand.equalsIgnoreCase("potion"))
          {
             return runPotions(sender, args);
          }
-         else if (subCommand.equalsIgnoreCase("year"))
+         else if (subCommand.equalsIgnoreCase("year") || subCommand.equalsIgnoreCase("years"))
          {
             return runYear(sender, args);
          }
-         else if (subCommand.equalsIgnoreCase("effect"))
+         else if (subCommand.equalsIgnoreCase("effect") || subCommand.equalsIgnoreCase("effects"))
          {
             return runEffect(sender, args);
          }

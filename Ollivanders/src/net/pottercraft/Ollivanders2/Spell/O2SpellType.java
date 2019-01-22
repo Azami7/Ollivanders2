@@ -27,6 +27,7 @@ public enum O2SpellType
    AVADA_KEDAVRA(net.pottercraft.Ollivanders2.Spell.AVADA_KEDAVRA.class),
    AVIFORS(net.pottercraft.Ollivanders2.Spell.AVIFORS.class),
    AVIS(net.pottercraft.Ollivanders2.Spell.AVIS.class),
+   BAO_ZHONG_CHA(net.pottercraft.Ollivanders2.Spell.BAO_ZHONG_CHA.class),
    BOMBARDA(net.pottercraft.Ollivanders2.Spell.BOMBARDA.class),
    BOMBARDA_MAXIMA(net.pottercraft.Ollivanders2.Spell.BOMBARDA_MAXIMA.class),
    BOTHYNUS(net.pottercraft.Ollivanders2.Spell.BOTHYNUS.class),

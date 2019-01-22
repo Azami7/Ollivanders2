@@ -27,6 +27,7 @@ public enum O2ItemType
    DRAGON_BLOOD(Material.POTION, (short) 1, "Dragon Blood", null),
    DRAGONFLY_THORAXES(Material.BEETROOT_SEEDS, (short) 0, "Dragonfly Thoraxes", null),
    DRIED_NETTLES(Material.SAPLING, (short) 0, "Dried Nettles", null), // oak sapling
+   EGG(Material.EGG, (short) 0, "Egg", null),
    ELDER_WAND(Material.BLAZE_ROD, (short) 0, "Elder Wand", "Blaze and Ender Pearl"),
    FAIRY_WING(Material.GOLD_NUGGET, (short) 0, "Fairy Wing", null),
    FLOBBERWORM_MUCUS(Material.SLIME_BALL, (short) 0, "Flobberworm Mucus", null),
@@ -57,7 +58,7 @@ public enum O2ItemType
    MINT_SPRIG(Material.MELON_STEM, (short) 0, "Mint Sprig", null),
    MISTLETOE_BERRIES(Material.INK_SACK, (short) 3, "Mistletoe Berries", null),
    MOONDEW_DROP(Material.GHAST_TEAR, (short) 0, "Moondew Drop", null),
-   PLAYING_CARDs(Material.PAPER, (short) 0, "Playing Cards", null),
+   PLAYING_CARDS(Material.PAPER, (short) 0, "Playing Cards", null),
    POISONOUS_POTATO(Material.POISONOUS_POTATO, (short) 0, "Poisonous Potato", null),
    POWDERED_ASHPODEL_ROOT(Material.INK_SACK, (short) 14, "Powedered Root of Asphodel", null), // orange dye
    POWDERED_SAGE(Material.INK_SACK, (short) 10, "Powdered Sage", null), //lime dye
@@ -71,6 +72,7 @@ public enum O2ItemType
    SPIDER_EYE(Material.SPIDER_EYE, (short) 0, "Spider Eye", null),
    STANDARD_POTION_INGREDIENT(Material.SUGAR, (short) 0, "Standard Potion Ingredient", null),
    TAROT_CARDS(Material.PAPER, (short) 0, "Tarot Cards", null),
+   TEA_LEAVES(Material.INK_SACK, (short) 2, "Tea Leaves", null), //cactus green
    UNICORN_HAIR(Material.STRING, (short) 0, "Unicorn Hair", null),
    UNICORN_HORN(Material.BLAZE_ROD, (short) 0, "Unicorn Horn", null),
    VALERIAN_SPRIGS(Material.VINE, (short) 0, "Valerian Sprigs", null),
