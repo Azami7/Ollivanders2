@@ -476,6 +476,10 @@ public class Ollivanders2 extends JavaPlugin
          {
             return runEffect(sender, args);
          }
+         else if (subCommand.equalsIgnoreCase("prophecy"))
+         {
+            return runProphecies(sender, args);
+         }
       }
 
       usageMessageOllivanders(sender);
@@ -2134,5 +2138,36 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       player.sendMessage(chatColor + titleList.toString());
+   }
+
+   /**
+    * Prophecies sub-command
+    *
+    * @param sender the command sender
+    * @param args   the command args
+    * @return true unless an error occurred
+    */
+   public boolean runProphecies (CommandSender sender, String[] args)
+   {
+      StringBuilder output = new StringBuilder();
+      List<String> prophecies = Ollivanders2API.getProphecies().getProphecies();
+
+      if (prophecies.size() > 0)
+      {
+         output.append("Prophecies:\n");
+
+         for (String prophecy : prophecies)
+         {
+            output.append(prophecy).append("\n");
+         }
+      }
+      else
+      {
+         output.append("There are no unfulfilled prophecies.");
+      }
+
+      sender.sendMessage(chatColor + output.toString());
+
+      return true;
    }
 }

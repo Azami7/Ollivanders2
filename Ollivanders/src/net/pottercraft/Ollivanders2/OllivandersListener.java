@@ -292,11 +292,20 @@ public class OllivandersListener implements Listener
       //
       String[] words = message.split(" ");
 
-      O2SpellType spellType = Ollivanders2API.getSpells().getSpellTypeByName(message);
+      StringBuilder spellName = new StringBuilder();
+      O2SpellType spellType = null;
 
-      if (spellType == null && words.length > 1)
+      for (int i = 0; i < O2Spell.max_spell_words; i++)
       {
-         spellType = Ollivanders2API.getSpells().getSpellTypeByName(words[0]);
+         spellName.append(words[i]);
+         spellType = Ollivanders2API.getSpells().getSpellTypeByName(spellName.toString());
+
+         if (spellType != null)
+         {
+            break;
+         }
+
+         spellName.append(" ");
       }
 
       if (Ollivanders2.debug)
@@ -432,7 +441,7 @@ public class OllivandersListener implements Listener
             }
 
             // wandless spells
-            if (O2Spells.wandlessSpells.contains(spellType))
+            if (O2Spells.wandlessSpells.contains(spellType) || Divination.divinationSpells.contains(spellType))
             {
                if (Ollivanders2.debug)
                {
@@ -2043,7 +2052,9 @@ public class OllivandersListener implements Listener
          sender.sendMessage(Ollivanders2.chatColor + "You must say the name of the player. Example: 'astrologia steve'.");
          return false;
       }
-      String targetName = words[1];
+
+      // name should be the last word the player said
+      String targetName = words[words.length - 1];
       Player target = p.getServer().getPlayer(targetName);
 
       if (target == null)
