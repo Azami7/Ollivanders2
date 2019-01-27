@@ -824,9 +824,41 @@ public class OllivandersListener implements Listener
       }
 
       //
+      // A right or left click of the primary hand
+      //
+      if ((event.getHand() == EquipmentSlot.HAND))
+      {
+         primaryHandInteractEvents(event);
+      }
+
+      //
+      // A right or left click that is not their primary hand
+      //
+      if (action == Action.LEFT_CLICK_AIR || action == Action.RIGHT_CLICK_AIR)
+      {
+         if (p.playerCommon.holdsWand(player, EquipmentSlot.OFF_HAND))
+         {
+            if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+                  || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
+            {
+               event.setCancelled(true);
+               return;
+            }
+
+            rotateNonVerbalSpell(player, action);
+         }
+      }
+   }
+
+   private void primaryHandInteractEvents (PlayerInteractEvent event)
+   {
+      Player player = event.getPlayer();
+      Action action = event.getAction();
+
+      //
       // A right or left click of the primary hand when holding a wand is used to make a magical action.
       //
-      if ((event.getHand() == EquipmentSlot.HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
+      if ((p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
          if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
                || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
@@ -841,7 +873,9 @@ public class OllivandersListener implements Listener
          if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
          {
             if (Ollivanders2.debug)
+            {
                p.getLogger().info("OllivandersListener:onPlayerInteract: left click action");
+            }
 
             castSpell(player);
          }
@@ -854,46 +888,44 @@ public class OllivandersListener implements Listener
          else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
          {
             if (!p.playerCommon.holdsWand(player))
+            {
                return;
+            }
 
             if (Ollivanders2.debug)
+            {
                p.getLogger().info("OllivandersListener:onPlayerInteract: right click action");
+            }
 
             Block cauldron = (playerFacingCauldron(player));
             if ((cauldron != null) && (player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE))
             {
                if (Ollivanders2.debug)
+               {
                   p.getLogger().info("OllivandersListener:onPlayerInteract: brewing potion");
+               }
 
                brewPotion(player, cauldron);
                return;
             }
 
             if (Ollivanders2.debug)
+            {
                p.getLogger().info("OllivandersListener:onPlayerInteract: waving destined wand");
+            }
 
             // play a sound and visual effect when they right-click their destined wand with no spell
-            Location location = player.getLocation();
-            location.setY(location.getY() + 1.6);
-            player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
-            player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+            if (p.playerCommon.wandCheck(player, EquipmentSlot.HAND) < 2)
+            {
+               Location location = player.getLocation();
+               location.setY(location.getY() + 1.6);
+               player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
+               player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+            }
          }
-      }
-      //
-      // A right or left click of the off hand is used to rotate through mastered spells for non-verbal spell casting.
-      //
-      else if ((event.getHand() == EquipmentSlot.OFF_HAND) && (p.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
-      {
-         if (p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-               || p.players.playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
-         {
-            event.setCancelled(true);
-            return;
-         }
-
-         rotateNonVerbalSpell(player, action);
       }
    }
+
 
    /**
     * If non-verbal spell casting is enabled, selects a new spell from mastered spells.
