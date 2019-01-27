@@ -25,7 +25,7 @@ public final class ANIMAGUS_POTION extends O2Potion
    {
       super(plugin);
 
-      potionType = O2PotionType.COMMON_ANTIDOTE_POTION;
+      potionType = O2PotionType.ANIMAGUS_POTION;
       potionLevel = PotionLevel.NEWT;
 
       ingredients.put(IngredientType.MANDRAKE_LEAF, 1);
