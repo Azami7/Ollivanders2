@@ -212,7 +212,7 @@ public final class LEGILIMENS extends DarkArts
                // 40% chance detect effects
                if (rand >= 40)
                {
-                  String legilText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithInformous(o2p.getID());
+                  String legilText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithLegilimens(o2p.getID());
                   if (legilText != null)
                   {
                      player.sendMessage(Ollivanders2.chatColor + " " + legilText + ".");

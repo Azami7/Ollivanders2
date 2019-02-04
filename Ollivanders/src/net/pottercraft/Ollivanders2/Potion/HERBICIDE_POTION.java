@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Color;
@@ -35,10 +36,10 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
       potionLevel = PotionLevel.BEGINNER;
       potionMaterialType = Material.SPLASH_POTION;
 
-      ingredients.put(IngredientType.LIONFISH_SPINES, 4);
-      ingredients.put(IngredientType.FLOBBERWORM_MUCUS, 2);
-      ingredients.put(IngredientType.HORKLUMP_JUICE, 2);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
+      ingredients.put(O2ItemType.LIONFISH_SPINES, 4);
+      ingredients.put(O2ItemType.FLOBBERWORM_MUCUS, 2);
+      ingredients.put(O2ItemType.HORKLUMP_JUICE, 2);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
       text = "The Herbicide Potion is damages or kills Creepers. It is also harmful to other living creatures.";
 

@@ -33,6 +33,11 @@ import org.bukkit.util.Vector;
 public abstract class O2Spell implements Teachable
 {
    /**
+    * The most number of words a spell name can be.
+    */
+   public static int max_spell_words = 3;
+
+   /**
     * The player who cast this spell.
     */
    public Player player;

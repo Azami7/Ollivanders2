@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.HIGHER_SKILL;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -27,9 +28,9 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
       potionType = O2PotionType.BARUFFIOS_BRAIN_ELIXIR;
       potionLevel = PotionLevel.EXPERT;
 
-      ingredients.put(IngredientType.RUNESPOOR_EGG, 1);
-      ingredients.put(IngredientType.GINGER_ROOT, 2);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
+      ingredients.put(O2ItemType.RUNESPOOR_EGG, 1);
+      ingredients.put(O2ItemType.GINGER_ROOT, 2);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
       text = "Baruffio's Brain Elixir is a potion that increases the taker's brain power. All spells cast are twice as powerful.";
 

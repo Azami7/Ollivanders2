@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Color;
@@ -26,11 +27,11 @@ public final class REGENERATION_POTION extends O2Potion
       potionType = O2PotionType.REGENERATION_POTION;
       potionLevel = PotionLevel.NEWT;
 
-      ingredients.put(IngredientType.BONE, 1);
-      ingredients.put(IngredientType.BLOOD, 1);
-      ingredients.put(IngredientType.ROTTEN_FLESH, 1);
-      ingredients.put(IngredientType.SALAMANDER_FIRE, 1);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 4);
+      ingredients.put(O2ItemType.BONE, 1);
+      ingredients.put(O2ItemType.BLOOD, 1);
+      ingredients.put(O2ItemType.ROTTEN_FLESH, 1);
+      ingredients.put(O2ItemType.SALAMANDER_FIRE, 1);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 4);
 
       text = "This potion will heal a player.";
       flavorText.add("\"Bone of the father, unknowingly given, you will renew your son! Flesh of the servant, willingly sacrificed, you will revive your master. Blood of the enemy, forcibly taken, you will resurrect your foe.\" -Peter Pettigrew");

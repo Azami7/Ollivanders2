@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.AWAKE;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
@@ -27,10 +28,10 @@ public class WIDEYE_POTION extends O2Potion
       potionType = O2PotionType.WIDEYE_POTION;
       potionLevel = PotionLevel.BEGINNER;
 
-      ingredients.put(IngredientType.GROUND_SNAKE_FANGS, 3);
-      ingredients.put(IngredientType.BILLYWIG_STING_SLIME, 6);
-      ingredients.put(IngredientType.WOLFSBANE, 2);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 4);
+      ingredients.put(O2ItemType.GROUND_SNAKE_FANGS, 3);
+      ingredients.put(O2ItemType.BILLYWIG_STING_SLIME, 6);
+      ingredients.put(O2ItemType.WOLFSBANE, 2);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 4);
 
       text = "The Wideye Potion, also known as the Awakening Potion, is used to prevent the drinker from falling asleep.";
 

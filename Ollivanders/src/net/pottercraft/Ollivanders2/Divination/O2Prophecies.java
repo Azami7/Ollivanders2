@@ -93,6 +93,28 @@ public class O2Prophecies
    }
 
    /**
+    * Get a list of all unfulfilled prophecies
+    *
+    * @return a list of all prophecies
+    */
+   public List<String> getProphecies ()
+   {
+      ArrayList<String> prophecies = new ArrayList<>();
+
+      for (O2Prophecy prophecy : activeProphecies)
+      {
+         prophecies.add(prophecy.getProphecyMessage());
+      }
+
+      for (O2Prophecy prophecy : offlineProphecies)
+      {
+         prophecies.add(prophecy.getProphecyMessage());
+      }
+
+      return prophecies;
+   }
+
+   /**
     * Get a prophecy made by a player
     *
     * @param pid the player

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Potion;
 
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Color;
@@ -28,10 +29,10 @@ public final class COMMON_ANTIDOTE_POTION extends O2Potion
       potionType = O2PotionType.COMMON_ANTIDOTE_POTION;
       potionLevel = PotionLevel.BEGINNER;
 
-      ingredients.put(IngredientType.MISTLETOE_BERRIES, 2);
-      ingredients.put(IngredientType.BEZOAR, 1);
-      ingredients.put(IngredientType.UNICORN_HAIR, 1);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 2);
+      ingredients.put(O2ItemType.MISTLETOE_BERRIES, 2);
+      ingredients.put(O2ItemType.BEZOAR, 1);
+      ingredients.put(O2ItemType.UNICORN_HAIR, 1);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
       text = "Counteracts ordinary poisons, such as creature bites and stings.";
 

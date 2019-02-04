@@ -24,8 +24,9 @@ public class UNFOGGING_THE_FUTURE extends O2Book
 
       spells.add(O2SpellType.ASTROLOGIA);
       // Palmistry
-      // Tessomancy
+      spells.add(O2SpellType.BAO_ZHONG_CHA);
       spells.add(O2SpellType.INTUEOR);
       // Bird Entrails
+      spells.add(O2SpellType.CHARTIA);
    }
 }

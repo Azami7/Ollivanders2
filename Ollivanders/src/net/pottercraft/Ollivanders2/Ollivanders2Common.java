@@ -283,7 +283,7 @@ public class Ollivanders2Common
    /**
     * Get a random rabbit type. Odds are 1/60 to get a Killer Bunny.
     *
-    * @return the type variant for the rabbit
+    * @return the type color for the rabbit
     */
    public RabbitType randomRabbitType ()
    {

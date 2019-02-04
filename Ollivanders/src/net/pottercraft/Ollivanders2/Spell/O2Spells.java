@@ -21,10 +21,6 @@ public class O2Spells
    public static final ArrayList<O2SpellType> wandlessSpells = new ArrayList<O2SpellType>()
    {{
       add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
-      add(O2SpellType.ASTROLOGIA);
-      add(O2SpellType.OVOGNOSIS);
-      add(O2SpellType.INTUEOR);
-      add(O2SpellType.MANTEIA_KENTAVROS);
    }};
 
    /**

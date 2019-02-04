@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Potion;
 
 import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_EFFECT;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -28,10 +29,10 @@ public final class ANIMAGUS_POTION extends O2Potion
       potionType = O2PotionType.ANIMAGUS_POTION;
       potionLevel = PotionLevel.NEWT;
 
-      ingredients.put(IngredientType.MANDRAKE_LEAF, 1);
-      ingredients.put(IngredientType.DEW_DROP, 2);
-      ingredients.put(IngredientType.DEATHS_HEAD_MOTH_CHRYSALIS, 1);
-      ingredients.put(IngredientType.STANDARD_POTION_INGREDIENT, 3);
+      ingredients.put(O2ItemType.MANDRAKE_LEAF, 1);
+      ingredients.put(O2ItemType.DEW_DROP, 2);
+      ingredients.put(O2ItemType.DEATHS_HEAD_MOTH_CHRYSALIS, 1);
+      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 3);
 
       text = "An Animagus is a wizard who elects to turn into an animal. This potion, if brewed and consumed correctly, " +
             "will disguisePlayer the drinker in to their animal form. Thereafter, the Animagus can disguisePlayer without the " +
