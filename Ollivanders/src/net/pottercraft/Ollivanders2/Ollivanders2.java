@@ -74,6 +74,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean useBookLearning = false;
    public static boolean useHouses = false;
    public static boolean useYears = false;
+   public static int divinationMaxDays = 4;
    public static Ollivanders2WorldGuard worldGuardO2;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
@@ -193,6 +194,15 @@ public class Ollivanders2 extends JavaPlugin
       useYears = getConfig().getBoolean("years");
       if (useYears)
          getLogger().info("Enabling school years.");
+
+      if (getConfig().isSet("divinationMaxDays"))
+      {
+         divinationMaxDays = getConfig().getInt("divinationMaxDays");
+         if (divinationMaxDays < 0)
+         {
+            divinationMaxDays = 4;
+         }
+      }
 
       OllivandersSchedule schedule = new OllivandersSchedule(this);
       Bukkit.getScheduler().scheduleSyncRepeatingTask(this, schedule, 20L, 1L);
@@ -430,7 +440,7 @@ public class Ollivanders2 extends JavaPlugin
             return runReloadConfigs(sender);
          else if (subCommand.equalsIgnoreCase("items") || subCommand.equalsIgnoreCase("item"))
          {
-            return okitItems((Player) sender, args);
+            return runItems((Player) sender, args);
          }
          else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
             return runHouse(sender, args);
@@ -1306,12 +1316,12 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Give a player all the items.
+    * Give a player an item.
     *
-    * @param player the player to give items to
+    * @param player the player to give item to
     * @return true unless an error occurred
     */
-   private boolean okitItems (Player player, String[] args)
+   private boolean runItems (Player player, String[] args)
    {
       List<ItemStack> kit = new ArrayList<>();
 
