@@ -13,7 +13,6 @@ import java.util.UUID;
 
 import Quidditch.Arena;
 
-import net.pottercraft.Ollivanders2.Book.O2Books;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.House.O2HouseType;
@@ -45,7 +44,6 @@ import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.command.Command;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -62,25 +60,32 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Ollivanders2 extends JavaPlugin
 {
    private List<O2Spell> projectiles = new ArrayList<>();
-
    private List<Block> tempBlocks = new ArrayList<>();
-   private FileConfiguration fileConfig;
-   public O2Books books;
 
+   // file config
+   public static int chatDropoff = 15;
+   public static ChatColor chatColor;
+   public static boolean showLogInMessage;
+   public static boolean bookLearning;
+   public static boolean enableNonVerbalSpellCasting;
+   public static boolean useSpellJournal;
+   public static boolean useHostileMobAnimagi;
+   public static boolean enableDeathExpLoss;
+   public static int divinationMaxDays = 4;
+   public static boolean useHouses;
+   public static boolean useYears;
+   public static boolean debug;
+   public static Material flooPowderMaterial;
+   public static Material broomstickMaterial;
+   public static boolean enableWitchDrop;
+   private ConfigurationSection zoneConfig;
+
+   // other config
    private static String mcVersion;
-   public static boolean debug = false;
-   public static boolean useNonVerbalCasting = false;
-   public static boolean useHostileMobAnimagi = false;
-   public static boolean useBookLearning = false;
-   public static boolean useHouses = false;
-   public static boolean useYears = false;
-   public static Ollivanders2WorldGuard worldGuardO2;
+   public static Material wandMaterial = Material.STICK;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
-   public static ChatColor chatColor = ChatColor.AQUA;
-   public static Material wandMaterial = Material.STICK;
-   public static Material flooPowderMaterial = Material.REDSTONE;
-   public static int chatDropoff = 15;
+   public static Ollivanders2WorldGuard worldGuardO2;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -123,16 +128,15 @@ public class Ollivanders2 extends JavaPlugin
    {
       Ollivanders2API.init(this);
 
+      // set up event listeners
       Listener playerListener = new OllivandersListener(this);
       getServer().getPluginManager().registerEvents(playerListener, this);
 
-      //loads data
+      // check for plugin data directory
       if (new File("plugins/Ollivanders2/").mkdirs())
       {
-         getLogger().info("File directory for Ollivanders2");
+         getLogger().info("Creating directory for Ollivanders2");
       }
-      projectiles = new ArrayList<>();
-      fileConfig = getConfig();
 
       //check version of server
       mcVersion = Bukkit.getBukkitVersion();
@@ -141,82 +145,15 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().warning("MC version " + mcVersion + ". Some features of Ollivanders2 require MC 1.12 and higher.");
       }
 
-      // write the config.yml to the Ollivanders2 folder if there wasn't one already
-      if (!new File(this.getDataFolder(), "config.yml").exists())
-      {
-         this.saveDefaultConfig();
-      }
-
-      //
       // read configuration
-      //
+      initConfig();
 
-      debug = getConfig().getBoolean("debug");
-      if (debug)
-         getLogger().info("Enabling debug mode.");
-
-      if (getConfig().isSet("chatColor"))
-      {
-         chatColor = ChatColor.getByChar(getConfig().getString("chatColor"));
-         getLogger().info("Setting plugin message color to " + chatColor.toString());
-      }
-
-      if (getConfig().isSet("chatDropoff"))
-      {
-         int drop = getConfig().getInt("chatDropoff");
-         if (drop > 0)
-            chatDropoff = drop;
-      }
-
-      if (getConfig().isSet("flooPowder"))
-      {
-         flooPowderMaterial = Material.getMaterial(fileConfig.getString("flooPowder"));
-         O2ItemType.FLOO_POWDER.setMaterial(flooPowderMaterial);
-      }
-
-      useNonVerbalCasting = getConfig().getBoolean("nonVerbalSpellCasting");
-      if (useNonVerbalCasting)
-         getLogger().info("Enabling non-verbal spell casting.");
-
-      useHostileMobAnimagi = getConfig().getBoolean("hostileMobAnimagi");
-      if (useHostileMobAnimagi)
-         getLogger().info("Enabling hostile mob types for animagi.");
-
-      useBookLearning = getConfig().getBoolean("bookLearning");
-      if (useBookLearning)
-         getLogger().info("Enabling book learning.");
-
-      useHouses = getConfig().getBoolean("houses");
-      if (useHouses)
-         getLogger().info("Enabling school houses.");
-
-      useYears = getConfig().getBoolean("years");
-      if (useYears)
-         getLogger().info("Enabling school years.");
-
+      // set up scheduler
       OllivandersSchedule schedule = new OllivandersSchedule(this);
       Bukkit.getScheduler().scheduleSyncRepeatingTask(this, schedule, 20L, 1L);
 
-      // set up libDisguises
-      Plugin libsDisguises = Bukkit.getServer().getPluginManager().getPlugin("LibsDisguises");
-      if (libsDisguises != null)
-      {
-         libsDisguisesEnabled = true;
-         getLogger().info("LibsDisguises found, enabled entity transfiguration spells.");
-      }
-      else
-      {
-         getLogger().info("LibsDisguises not found, disabling entity transfiguration spells.");
-      }
-
-      if (worldGuardEnabled)
-      {
-         getLogger().info("WorldGuard found, enabled WorldGuard features.");
-      }
-      else
-      {
-         getLogger().info("WorldGuard not found, disabled WorldGuard features.");
-      }
+      // set up dependencies
+      loadDependenciesPlugins();
 
       // set up players
       try
@@ -298,9 +235,198 @@ public class Ollivanders2 extends JavaPlugin
          e.printStackTrace();
       }
 
+      // set up all plugin crafting recipes
+      initRecipes();
+
+      getLogger().info(this + " is now enabled!");
+   }
+
+   /**
+    * Load plugin config. If there is a config.yml file, load any config
+    * set there and set everything else to default values.
+    */
+   private void initConfig ()
+   {
+      //
+      // chatDropoff
+      //
+      if (getConfig().isSet("chatDropoff"))
+      {
+         chatDropoff = getConfig().getInt("chatDropoff");
+      }
+      if (chatDropoff <= 0)
+      {
+         chatDropoff = 15;
+      }
+
+      //
+      // chatColor
+      //
+      if (getConfig().isSet("chatColor"))
+      {
+         chatColor = ChatColor.getByChar(getConfig().getString("chatColor"));
+      }
+      if (chatColor == null)
+      {
+         chatColor = ChatColor.AQUA;
+      }
+      getLogger().info("Setting plugin message color to " + chatColor.toString());
+
+      //
+      // showLogInMessage
+      //
+      showLogInMessage = getConfig().getBoolean("showLogInMessage");
+      if (showLogInMessage)
+      {
+         getLogger().info("Enabling player log in message.");
+      }
+
+      //
+      // bookLearning
+      //
+      bookLearning = getConfig().getBoolean("bookLearning");
+      if (bookLearning)
+      {
+         getLogger().info("Enabling book learning.");
+      }
+
+      //
+      // nonVerbalSpellCasting
+      //
+      enableNonVerbalSpellCasting = getConfig().getBoolean("nonVerbalSpellCasting");
+      if (enableNonVerbalSpellCasting)
+      {
+         getLogger().info("Enabling non-verbal spell casting.");
+      }
+
+      //
+      // spellJournal
+      //
+      useSpellJournal = getConfig().getBoolean("spellJournal");
+      if (useSpellJournal)
+      {
+         getLogger().info("Enabling spell journal.");
+      }
+
+      //
+      // hostileMobAnimagi
+      //
+      useHostileMobAnimagi = getConfig().getBoolean("hostileMobAnimagi");
+      if (useHostileMobAnimagi)
+      {
+         getLogger().info("Enabling hostile mob types for animagi.");
+      }
+
+      //
+      // deathExpLoss
+      //
+      enableDeathExpLoss = getConfig().getBoolean("deathExpLoss");
+      if (enableDeathExpLoss)
+      {
+         getLogger().info("Enabling death experience loss.");
+      }
+
+      //
+      // divinationMaxDays
+      //
+      if (getConfig().isSet("divinationMaxDays"))
+      {
+         divinationMaxDays = getConfig().getInt("divinationMaxDays");
+      }
+      if (divinationMaxDays <= 0)
+      {
+         divinationMaxDays = 4;
+      }
+
+      //
+      // houses
+      //
+      useHouses = getConfig().getBoolean("houses");
+      if (useHouses)
+      {
+         getLogger().info("Enabling school houses.");
+      }
+
+      //
+      // years
+      //
+      useYears = getConfig().getBoolean("years");
+      if (useYears)
+      {
+         getLogger().info("Enabling school years.");
+      }
+
+      //
+      // flooPowder
+      //
+      if (getConfig().isSet("flooPowder"))
+      {
+         flooPowderMaterial = Material.getMaterial(getConfig().getString("flooPowder"));
+      }
+      if (flooPowderMaterial == null)
+      {
+         flooPowderMaterial = Material.REDSTONE;
+      }
+      O2ItemType.FLOO_POWDER.setMaterial(flooPowderMaterial);
+
+      //
+      // broomstick
+      //
+      if (getConfig().isSet("broomstick"))
+      {
+         broomstickMaterial = Material.getMaterial(getConfig().getString("broomstick"));
+      }
+      if (broomstickMaterial == null)
+      {
+         broomstickMaterial = Material.STICK;
+      }
+      O2ItemType.BROOMSTICK.setMaterial(broomstickMaterial);
+
+      //
+      // witchDrop
+      //
+      enableWitchDrop = getConfig().getBoolean("witchDrop");
+      if (enableWitchDrop)
+      {
+         getLogger().info("Enabling witch wand drop");
+      }
+
+      //
+      // debug
+      //
+      debug = getConfig().getBoolean("debug");
+      if (debug)
+      {
+         getLogger().info("Enabling debug mode.");
+      }
+
+      //
+      // Zones
+      //
+      zoneConfig = getConfig().getConfigurationSection("zones");
+   }
+
+   /**
+    * Load dependency plugins or turn of the features that require them if
+    * they are not present.
+    */
+   private void loadDependenciesPlugins ()
+   {
+      // set up libDisguises
+      Plugin libsDisguises = Bukkit.getServer().getPluginManager().getPlugin("LibsDisguises");
+      if (libsDisguises != null)
+      {
+         libsDisguisesEnabled = true;
+         getLogger().info("LibsDisguises found, enabled entity transfiguration spells.");
+      }
+      else
+      {
+         getLogger().info("LibsDisguises not found, disabling entity transfiguration spells.");
+      }
+
       // set up WorldGuard manager
-      Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
-      if (wg == null)
+      Plugin worldGuard = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
+      if (worldGuard == null)
       {
          worldGuardEnabled = false;
       }
@@ -308,7 +434,7 @@ public class Ollivanders2 extends JavaPlugin
       {
          try
          {
-            if (wg instanceof WorldGuardPlugin)
+            if (worldGuard instanceof WorldGuardPlugin)
             {
                worldGuardO2 = new Ollivanders2WorldGuard(this);
                worldGuardEnabled = true;
@@ -320,6 +446,21 @@ public class Ollivanders2 extends JavaPlugin
          }
       }
 
+      if (worldGuard != null)
+      {
+         getLogger().info("WorldGuard found, enabled WorldGuard features.");
+      }
+      else
+      {
+         getLogger().info("WorldGuard not found, disabled WorldGuard features.");
+      }
+   }
+
+   /**
+    * Set up all the Ollivanders2 crafting recipes
+    */
+   private void initRecipes ()
+   {
       //broomstick recipe
       ItemStack broomstick = Ollivanders2API.getItems().getItemByType(O2ItemType.BROOMSTICK, 1);
       NamespacedKey recipeKey = new NamespacedKey(this, "broomstick");
@@ -332,8 +473,6 @@ public class Ollivanders2 extends JavaPlugin
       ItemStack flooPowder = Ollivanders2API.getItems().getItemByType(O2ItemType.FLOO_POWDER, 8);
       getServer().addRecipe(new FurnaceRecipe(flooPowder, Material.ENDER_PEARL));
       getServer().addRecipe(bRecipe);
-
-      getLogger().info(this + " is now enabled!");
    }
 
    /**
@@ -655,7 +794,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runHouse (CommandSender sender, String[] args)
    {
-      if (!getConfig().getBoolean("houses"))
+      if (!useHouses)
       {
          sender.sendMessage(chatColor
                + "House are not currently enabled for your server."
@@ -978,7 +1117,7 @@ public class Ollivanders2 extends JavaPlugin
 
    private boolean runYear (CommandSender sender, String[] args)
    {
-      if (!getConfig().getBoolean("years"))
+      if (!useYears)
       {
          sender.sendMessage(chatColor
                + "Years are not currently enabled for your server."
@@ -1299,9 +1438,9 @@ public class Ollivanders2 extends JavaPlugin
    private boolean runReloadConfigs(CommandSender sender)
    {
       reloadConfig();
-      fileConfig = getConfig();
-      sender.sendMessage(chatColor + "Config reloaded");
+      initConfig();
 
+      sender.sendMessage(chatColor + "Config reloaded");
       return true;
    }
 
@@ -1608,19 +1747,18 @@ public class Ollivanders2 extends JavaPlugin
       double x = loc.getX();
       double y = loc.getY();
       double z = loc.getZ();
-      if (fileConfig.contains("zones"))
+      if (zoneConfig != null)
       {
-         ConfigurationSection config = fileConfig.getConfigurationSection("zones");
-         for (String zone : config.getKeys(false))
+         for (String zone : zoneConfig.getKeys(false))
          {
             String prefix = zone + ".";
-            String type = config.getString(prefix + "type");
-            String world = config.getString(prefix + "world");
-            String areaString = config.getString(prefix + "area");
+            String type = zoneConfig.getString(prefix + "type");
+            String world = zoneConfig.getString(prefix + "world");
+            String areaString = zoneConfig.getString(prefix + "area");
             boolean allAllowed = false;
             boolean allDisallowed = false;
             List<O2SpellType> allowedSpells = new ArrayList<>();
-            for (String spellString : config.getStringList(prefix + "allowed-spells"))
+            for (String spellString : zoneConfig.getStringList(prefix + "allowed-spells"))
             {
                if (spellString.equalsIgnoreCase("ALL"))
                {
@@ -1632,7 +1770,7 @@ public class Ollivanders2 extends JavaPlugin
                }
             }
             List<O2SpellType> disallowedSpells = new ArrayList<>();
-            for (String spellString : config.getStringList(prefix + "disallowed-spells"))
+            for (String spellString : zoneConfig.getStringList(prefix + "disallowed-spells"))
             {
                if (spellString.equalsIgnoreCase("ALL"))
                {
@@ -1696,17 +1834,6 @@ public class Ollivanders2 extends JavaPlugin
          }
       }
       return cast;
-   }
-
-   /**
-    * Get the file configuration
-    *
-    * @return FileConfiguration
-    */
-   @Deprecated
-   public FileConfiguration getFileConfig ()
-   {
-      return fileConfig;
    }
 
    /**

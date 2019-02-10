@@ -732,7 +732,7 @@ public class Ollivanders2Common
     */
    public boolean isBroom (ItemStack item)
    {
-      if (item.getType() == Material.getMaterial(p.getConfig().getString("broomstick")))
+      if (item.getType() == Ollivanders2.broomstickMaterial)
       {
          if (item.containsEnchantment(Enchantment.PROTECTION_FALL))
          {
