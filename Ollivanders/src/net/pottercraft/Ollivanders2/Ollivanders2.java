@@ -569,7 +569,7 @@ public class Ollivanders2 extends JavaPlugin
             return runReloadConfigs(sender);
          else if (subCommand.equalsIgnoreCase("items") || subCommand.equalsIgnoreCase("item"))
          {
-            return okitItems((Player) sender, args);
+            return runItems((Player) sender, args);
          }
          else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
             return runHouse(sender, args);
@@ -1445,12 +1445,12 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Give a player all the items.
+    * Give a player an item.
     *
-    * @param player the player to give items to
+    * @param player the player to give item to
     * @return true unless an error occurred
     */
-   private boolean okitItems (Player player, String[] args)
+   private boolean runItems (Player player, String[] args)
    {
       List<ItemStack> kit = new ArrayList<>();
 

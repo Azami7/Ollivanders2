@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Divination.O2DivinationType;
 import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -50,8 +51,12 @@ public class BAO_ZHONG_CHA extends Divination
       spellType = O2SpellType.BAO_ZHONG_CHA;
       divinationType = O2DivinationType.TASSEOMANCY;
 
+      facingBlock = Material.CAULDRON;
+      facingBlockString = "a cauldron";
+
       itemHeld = O2ItemType.TEA_LEAVES;
       itemHeldString = "tea leaves";
+      consumeHeld = true;
 
       setUsesModifier();
    }
