@@ -169,15 +169,7 @@ public class O2StationarySpells
 
       if (serializedSpells == null)
       {
-         try
-         {
-            O2StationarySpells = (List<StationarySpellObj>) Ollivanders2.SLAPI.load("plugins/Ollivanders2/stationary.bin");
-            p.getLogger().info("Loaded save file stationary.bin");
-         }
-         catch (Exception e)
-         {
-            p.getLogger().warning("Did not find stationary.bin");
-         }
+         p.getLogger().warning("Did not find stationary.bin");
       }
       else
       {

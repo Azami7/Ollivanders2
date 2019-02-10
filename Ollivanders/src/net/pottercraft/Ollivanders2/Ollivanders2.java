@@ -3,8 +3,6 @@ package net.pottercraft.Ollivanders2;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -56,7 +54,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  * @author cakenggt
  * @author lownes
  * @author Azami7
- * @author autumnwoz
+ * @author lil_miss_giggles
  */
 
 public class Ollivanders2 extends JavaPlugin
@@ -1720,24 +1718,6 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * SLAPI = Saving/Loading API
-    * API for Saving and Loading Objects.
-    *
-    * @author Tomsik68
-    */
-   @Deprecated
-   public static class SLAPI
-   {
-      public static Object load (String path) throws Exception
-      {
-         ObjectInputStream ois = new ObjectInputStream(new FileInputStream(path));
-         Object result = ois.readObject();
-         ois.close();
-         return result;
-      }
-   }
-
-   /**
     * Check to see if we're running MC version 1.12 or higher, which many Ollivanders2 features depend on.
     *
     * @return true of version string is 1.12, false otherwise.
@@ -1759,7 +1739,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean giveFlooPowder (Player player)
    {
-      ItemStack flooPowder = new ItemStack(Material.REDSTONE);
+      ItemStack flooPowder = new ItemStack(Ollivanders2.flooPowderMaterial);
       List<String> lore = new ArrayList<>();
       lore.add("Glittery, silver powder");
       flooPowder.getItemMeta().setLore(lore);
