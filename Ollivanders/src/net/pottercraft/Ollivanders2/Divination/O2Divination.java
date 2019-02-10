@@ -23,6 +23,7 @@ public abstract class O2Divination
    O2DivinationType divintationType = O2DivinationType.ASTROLOGY;
 
    int maxAccuracy = 10;
+   int maxDurationDays = 4;
 
    Player target;
    Player prophet;
@@ -59,6 +60,7 @@ public abstract class O2Divination
       experience = exp;
 
       prophecyPrefix.add("The portents and omens say that");
+      maxDurationDays = Ollivanders2.divinationMaxDays;
    }
 
    /**
@@ -120,7 +122,7 @@ public abstract class O2Divination
 
       prophecyMessage.append("at ").append(timeOfDay.toString().toLowerCase()).append(" ");
 
-      rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 4);
+      rand = (Math.abs(Ollivanders2Common.random.nextInt()) % maxDurationDays);
       long curTime = target.getWorld().getTime();
       long ticks = 24000 - curTime;
 

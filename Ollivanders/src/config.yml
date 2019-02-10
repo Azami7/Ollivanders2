@@ -41,6 +41,11 @@ flooPowder: REDSTONE
 broomstick: STICK
 witchDrop: false
 
+# Divination
+#
+# https://github.com/Azami7/Ollivanders2/wiki/Configuration#divination
+divinationMaxDays: 4
+
 # Debug Mode
 #
 # Turns on debug output in your logs. This can also be toggled on and off in game by using the command
