@@ -417,7 +417,7 @@ public class OllivandersListener implements Listener
       {
          if (p.canCast(sender, spellType, true))
          {
-            if (Ollivanders2.useBookLearning && p.getO2Player(sender).getSpellCount(spellType) < 1)
+            if (Ollivanders2.bookLearning && p.getO2Player(sender).getSpellCount(spellType) < 1)
             {
                // if bookLearning is set to true then spell count must be > 0 to cast this spell
                if (Ollivanders2.debug)
@@ -801,7 +801,7 @@ public class OllivandersListener implements Listener
 
       // if no spell set, check to see if they have a master spell
       boolean nonverbal = false;
-      if (spellType == null && Ollivanders2.useNonVerbalCasting)
+      if (spellType == null && Ollivanders2.enableNonVerbalSpellCasting)
       {
          spellType = o2p.getMasterSpell();
          nonverbal = true;
@@ -981,7 +981,7 @@ public class OllivandersListener implements Listener
     */
    private void rotateNonVerbalSpell (Player player, Action action)
    {
-      if (!Ollivanders2.useNonVerbalCasting)
+      if (!Ollivanders2.enableNonVerbalSpellCasting)
          return;
 
       if (Ollivanders2.debug)
@@ -1051,7 +1051,7 @@ public class OllivandersListener implements Listener
       p.setO2Player(player, o2p);
 
       // show log in message
-      if (p.getConfig().getBoolean("showLogInMessage"))
+      if (Ollivanders2.showLogInMessage)
       {
          StringBuilder message = new StringBuilder();
 
@@ -1117,7 +1117,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerDeath (PlayerDeathEvent event)
    {
-      if (p.getConfig().getBoolean("deathExpLoss"))
+      if (Ollivanders2.enableDeathExpLoss)
       {
          O2Player o2p = Ollivanders2API.getPlayers().getPlayer(event.getEntity().getUniqueId());
 
@@ -1601,7 +1601,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.NORMAL)
    public void witchWandDrop (EntityDeathEvent event)
    {
-      if (event.getEntityType() == EntityType.WITCH && p.getConfig().getBoolean("witchDrop"))
+      if (event.getEntityType() == EntityType.WITCH && Ollivanders2.enableWitchDrop)
       {
          int wandType = Math.abs(Ollivanders2Common.random.nextInt() % 4);
          int coreType = Math.abs(Ollivanders2Common.random.nextInt() % 4);
@@ -1692,7 +1692,7 @@ public class OllivandersListener implements Listener
    public void onBookRead (PlayerInteractEvent event)
    {
       // only run this if bookLearning is enabled
-      if (!Ollivanders2.useBookLearning)
+      if (!Ollivanders2.bookLearning)
          return;
 
       Action action = event.getAction();
@@ -1723,7 +1723,7 @@ public class OllivandersListener implements Listener
    public void onSpellJournalHold (PlayerItemHeldEvent event)
    {
       // only run this if spellJournal is enabled
-      if (event == null || !p.getConfig().getBoolean("spellJournal"))
+      if (event == null || !Ollivanders2.useSpellJournal)
          return;
 
       Player player = event.getPlayer();
