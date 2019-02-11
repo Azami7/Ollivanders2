@@ -295,7 +295,7 @@ public class OllivandersListener implements Listener
       StringBuilder spellName = new StringBuilder();
       O2SpellType spellType = null;
 
-      for (int i = 0; i < O2Spell.max_spell_words; i++)
+      for (int i = 0; i < words.length; i++)
       {
          spellName.append(words[i]);
          spellType = Ollivanders2API.getSpells().getSpellTypeByName(spellName.toString());
@@ -304,6 +304,9 @@ public class OllivandersListener implements Listener
          {
             break;
          }
+
+         if (i == O2Spell.max_spell_words)
+            break;
 
          spellName.append(" ");
       }
