@@ -74,7 +74,7 @@ public final class VOLATUS extends Charms
     */
    public boolean isBroom (ItemStack item)
    {
-      if (item.getType() == Material.getMaterial(p.getConfig().getString("broomstick")))
+      if (item.getType() == Ollivanders2.broomstickMaterial)
       {
          ItemMeta meta = item.getItemMeta();
          if (meta.hasLore())

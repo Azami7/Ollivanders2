@@ -59,7 +59,9 @@ public class O2Houses
     */
    private void readHouseConfig ()
    {
-      // read house name config
+      //
+      // house names
+      //
       if (p.getConfig().isSet("gryffindorName"))
          O2HouseType.GRYFFINDOR.setName(p.getConfig().getString("gryffindorName"));
 
@@ -72,7 +74,9 @@ public class O2Houses
       if (p.getConfig().isSet("slytherinName"))
          O2HouseType.SLYTHERIN.setName(p.getConfig().getString("slytherinName"));
 
-      // read house color config
+      //
+      // house colors
+      //
       if (p.getConfig().isSet("gryffindorColor"))
          O2HouseType.GRYFFINDOR.setColor(p.getConfig().getString("gryffindorColor"));
 

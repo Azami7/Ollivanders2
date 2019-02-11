@@ -27,11 +27,24 @@ nonVerbalSpellCasting: false
 spellJournal: true
 hostileMobAnimagi: false
 deathExpLoss: false
+divinationMaxDays: 4
 
 # Houses
 #
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#houses-and-years
 houses: false
+gryffindorName: "Gryffindor"
+hufflepuffName: "Hufflepuff"
+ravenclawName: "Ravenclaw"
+slytherinName: "Slytherin"
+gryffindorColor: DARK_RED
+hufflepuffColor: GOLD
+ravenclawColor: BLUE
+slytherinColor: DARK_GREEN
+
+# Years
+#
+# https://github.com/Azami7/Ollivanders2/wiki/Configuration#years
 years: false
 
 # Magical Items
