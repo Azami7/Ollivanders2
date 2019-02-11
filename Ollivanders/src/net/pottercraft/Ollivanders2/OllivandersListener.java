@@ -301,6 +301,9 @@ public class OllivandersListener implements Listener
          spellType = Ollivanders2API.getSpells().getSpellTypeByName(spellName.toString());
 
          if (spellType != null)
+            break;
+
+         if (i == O2Spell.max_spell_words)
          {
             break;
          }
@@ -642,7 +645,7 @@ public class OllivandersListener implements Listener
                if (entity.getLocation().distance(sender.getLocation()) <= 10)
                {
                   Creature owl;
-                  if (Ollivanders2.mcVersionCheck() && entity instanceof Parrot)
+                  if (Ollivanders2.mcVersion > 11 && entity instanceof Parrot)
                   {
                      owl = (Parrot) entity;
                   }
@@ -671,7 +674,7 @@ public class OllivandersListener implements Listener
                            {
                               if (recipient.getWorld().getUID().equals(world.getUID()))
                               {
-                                 if (Ollivanders2.mcVersionCheck())
+                                 if (Ollivanders2.mcVersion > 11)
                                  {
                                     world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
                                  }
@@ -681,7 +684,7 @@ public class OllivandersListener implements Listener
                                  }
                                  owl.teleport(recipient.getLocation());
                                  item.teleport(recipient.getLocation());
-                                 if (Ollivanders2.mcVersionCheck())
+                                 if (Ollivanders2.mcVersion > 11)
                                  {
                                     world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
                                  }
@@ -692,7 +695,7 @@ public class OllivandersListener implements Listener
                               }
                               else
                               {
-                                 if (Ollivanders2.mcVersionCheck())
+                                 if (Ollivanders2.mcVersion > 11)
                                  {
                                     world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
                                  }
@@ -705,7 +708,7 @@ public class OllivandersListener implements Listener
                            }
                            else
                            {
-                              if (Ollivanders2.mcVersionCheck())
+                              if (Ollivanders2.mcVersion > 11)
                               {
                                  world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
                               }
@@ -718,7 +721,7 @@ public class OllivandersListener implements Listener
                         }
                         else
                         {
-                           if (Ollivanders2.mcVersionCheck())
+                           if (Ollivanders2.mcVersion > 11)
                            {
                               world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
                            }

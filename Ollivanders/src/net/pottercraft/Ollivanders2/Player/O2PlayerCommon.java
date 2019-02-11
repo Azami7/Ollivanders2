@@ -76,7 +76,7 @@ public final class O2PlayerCommon
          animagusShapes.add(EntityType.SHULKER);
       }
 
-      if (Ollivanders2.mcVersionCheck())
+      if (Ollivanders2.mcVersion > 11)
       {
          animagusShapes.add(EntityType.POLAR_BEAR);
          animagusShapes.add(EntityType.LLAMA);
