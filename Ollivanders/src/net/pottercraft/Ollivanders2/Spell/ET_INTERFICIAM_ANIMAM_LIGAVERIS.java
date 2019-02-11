@@ -93,15 +93,14 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
          {
             if (souls == 0)
             {
-               player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-                     + "Your soul is not yet so damaged to allow this.");
+               player.sendMessage(Ollivanders2.chatColor + "Your soul is not yet so damaged to allow this.");
                return;
             }
             //If they player couldn't survive making another horcrux then they are sent back to a previous horcrux
             else if ((futureHealth - 1) <= 0)
             {
-               List<StationarySpellObj> stationarys = Ollivanders2API.getStationarySpells().getActiveStationarySpells();
-               for (StationarySpellObj stationary : stationarys)
+               List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells().getActiveStationarySpells();
+               for (StationarySpellObj stationary : stationaries)
                {
                   if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(player.getUniqueId()))
                   {

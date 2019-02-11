@@ -34,7 +34,7 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
          add("However, mastering a Transfiguration spell such as \"Avifors\" can be both rewarding and useful.");
       }};
 
-      if (Ollivanders2.mcVersionCheck())
+      if (Ollivanders2.mcVersion > 11)
          text = "Turns target entity in to a bird.";
       else
          text = "Turns target entity in to a bat.";
@@ -54,7 +54,7 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
       spellType = O2SpellType.AVIFORS;
       setUsesModifier();
 
-      if (Ollivanders2.mcVersionCheck())
+      if (Ollivanders2.mcVersion > 11)
       {
          targetType = EntityType.PARROT;
       }
@@ -66,7 +66,7 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
 
-      if (Ollivanders2.mcVersionCheck())
+      if (Ollivanders2.mcVersion > 11)
       {
          ParrotWatcher watcher = (ParrotWatcher)disguise.getWatcher();
          int rand = Math.abs(Ollivanders2Common.random.nextInt() % 20);

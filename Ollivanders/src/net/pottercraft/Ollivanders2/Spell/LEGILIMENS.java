@@ -197,7 +197,7 @@ public final class LEGILIMENS extends DarkArts
             // 33% chance detect mastered spell
             if (rand >= 66)
             {
-               if (Ollivanders2.useNonVerbalCasting)
+               if (Ollivanders2.enableNonVerbalSpellCasting)
                {
                   O2SpellType masteredSpell = o2p.getMasterSpell();
                   if (masteredSpell != null)

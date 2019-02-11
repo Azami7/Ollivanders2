@@ -48,8 +48,7 @@ public final class ANIMAGUS_POTION extends O2Potion
    {
       if (!Ollivanders2.libsDisguisesEnabled)
       {
-         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-               + "Nothing seems to happen.");
+         player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
 
          return;
       }
@@ -61,8 +60,7 @@ public final class ANIMAGUS_POTION extends O2Potion
             Ollivanders2API.getPlayers().playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION);
          }
 
-         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-               + "You taste something vaguely familiar.");
+         player.sendMessage(Ollivanders2.chatColor + "You taste something vaguely familiar.");
 
          return;
       }
@@ -70,8 +68,7 @@ public final class ANIMAGUS_POTION extends O2Potion
       if (!player.getWorld().isThundering())
       {
          // potion only works in a thunderstorm
-         player.sendMessage(ChatColor.getByChar(p.getConfig().getString("chatColor"))
-               + "Nothing seems to happen.");
+         player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
          return;
       }
 

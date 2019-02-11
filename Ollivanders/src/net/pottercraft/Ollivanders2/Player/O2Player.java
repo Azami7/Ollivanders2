@@ -12,7 +12,6 @@ import java.util.UUID;
 import net.pottercraft.Ollivanders2.House.O2HouseType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
@@ -566,7 +565,7 @@ public class O2Player
     */
    public O2SpellType getWandSpell ()
    {
-      if (wandSpell == null && masterSpell != null && Ollivanders2.useNonVerbalCasting)
+      if (wandSpell == null && masterSpell != null && Ollivanders2.enableNonVerbalSpellCasting)
          return masterSpell;
 
       return wandSpell;
@@ -907,16 +906,7 @@ public class O2Player
          int form = 0;
 
          ArrayList<EntityType> animagusShapes = O2PlayerCommon.getAnimagusShapes();
-
-         if (Ollivanders2.mcVersionCheck())
-         {
-            form = Math.abs(pid.hashCode() % animagusShapes.size());
-         }
-         else
-         {
-            // last 2 types are MC 1.12 and higher
-            form = Math.abs(pid.hashCode() % (animagusShapes.size() - 2));
-         }
+         form = Math.abs(pid.hashCode() % animagusShapes.size());
 
          animagusForm = animagusShapes.get(form);
          if (Ollivanders2.debug)
@@ -939,7 +929,7 @@ public class O2Player
          {
             animagusColor = Ollivanders2API.common.randomHorseColor().toString();
          }
-         else if (Ollivanders2.mcVersionCheck() && animagusForm == EntityType.LLAMA)
+         else if (Ollivanders2.mcVersion > 11 && animagusForm == EntityType.LLAMA)
          {
             animagusColor = Ollivanders2API.common.randomLlamaColor().toString();
          }
@@ -1057,11 +1047,11 @@ public class O2Player
          message.append("\nFind your destined wand to begin using magic.");
       else if (Ollivanders2.useHouses && !Ollivanders2API.getHouses().isSorted(pid))
          message.append("\nGet sorted in to your school house to start earning house points.");
-      else if (knownSpells.size() < 1 && Ollivanders2.useBookLearning)
+      else if (knownSpells.size() < 1 && Ollivanders2.bookLearning)
          message.append("\nFind a spell book to get started learning magic.");
       else if (knownSpells.size() < 1)
          message.append("\nTry casting a spell by saying the incantation and waving your wand.");
-      else if (knownPotions.size() < 1 && Ollivanders2.useBookLearning)
+      else if (knownPotions.size() < 1 && Ollivanders2.bookLearning)
          message.append("\nFind a potions book and a water-filled cauldron to get started brewing potions.");
       else if (knownPotions.size() < 1)
          message.append("\nTry brewing a potion by using a water-filled cauldron and the potion ingredients.");
@@ -1083,7 +1073,7 @@ public class O2Player
     */
    public void onDeath ()
    {
-      if (p.getConfig().getBoolean("deathExpLoss"))
+      if (Ollivanders2.enableDeathExpLoss)
       {
          resetSpellCount();
          resetPotionCount();

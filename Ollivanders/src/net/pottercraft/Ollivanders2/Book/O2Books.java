@@ -193,7 +193,7 @@ public final class O2Books
     */
    public static void readLore (List<String> bookLore, Player player, Ollivanders2 p)
    {
-      if (bookLore == null || player == null || !Ollivanders2.useBookLearning)
+      if (bookLore == null || player == null || !Ollivanders2.bookLearning)
       {
          return;
       }

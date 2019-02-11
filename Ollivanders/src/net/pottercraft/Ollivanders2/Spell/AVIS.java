@@ -35,7 +35,7 @@ public final class AVIS extends Charms
          add("\"Oh, hello, Harry ... I was just practicing.\" -Hermione Granger conjuring small golden birds just before sending them to attack Ron");
       }};
 
-      if (Ollivanders2.mcVersionCheck())
+      if (Ollivanders2.mcVersion > 11)
          text = "Causes one or more birds to fly out of the tip of your wand.";
       else
          text = "Causes one or more bats to fly out of the tip of your wand.";
@@ -67,7 +67,7 @@ public final class AVIS extends Charms
       {
          move();
 
-         if (Ollivanders2.mcVersionCheck())
+         if (Ollivanders2.mcVersion > 11)
          {
             Parrot bird = (Parrot) location.getWorld().spawnEntity(location, EntityType.PARROT);
 

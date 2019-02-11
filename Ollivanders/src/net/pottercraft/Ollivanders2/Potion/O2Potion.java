@@ -275,7 +275,7 @@ public abstract class O2Potion implements Teachable
       Integer potionCount = o2p.getPotionCount(potionType);
 
       // do not allow them to brew if book learning is on and they do not know this potion
-      if (Ollivanders2.useBookLearning && (potionCount < 1))
+      if (Ollivanders2.bookLearning && (potionCount < 1))
       {
          brewer.sendMessage(Ollivanders2.chatColor + "You feel uncertain about how to make this potion.");
          canBrew = false;
