@@ -168,7 +168,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
 
          horseWatcher.setColor(color);
       }
-      else if (Ollivanders2.mcVersionCheck() && form == EntityType.LLAMA)
+      else if (Ollivanders2.mcVersion > 11 && form == EntityType.LLAMA)
       {
          LlamaWatcher llamaWatcher = (LlamaWatcher)watcher;
          Llama.Color color = Llama.Color.WHITE;

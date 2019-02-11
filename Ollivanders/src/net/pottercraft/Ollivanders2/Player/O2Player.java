@@ -906,16 +906,7 @@ public class O2Player
          int form = 0;
 
          ArrayList<EntityType> animagusShapes = O2PlayerCommon.getAnimagusShapes();
-
-         if (Ollivanders2.mcVersionCheck())
-         {
-            form = Math.abs(pid.hashCode() % animagusShapes.size());
-         }
-         else
-         {
-            // last 2 types are MC 1.12 and higher
-            form = Math.abs(pid.hashCode() % (animagusShapes.size() - 2));
-         }
+         form = Math.abs(pid.hashCode() % animagusShapes.size());
 
          animagusForm = animagusShapes.get(form);
          if (Ollivanders2.debug)
@@ -938,7 +929,7 @@ public class O2Player
          {
             animagusColor = Ollivanders2API.common.randomHorseColor().toString();
          }
-         else if (Ollivanders2.mcVersionCheck() && animagusForm == EntityType.LLAMA)
+         else if (Ollivanders2.mcVersion > 11 && animagusForm == EntityType.LLAMA)
          {
             animagusColor = Ollivanders2API.common.randomLlamaColor().toString();
          }

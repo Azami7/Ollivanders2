@@ -79,11 +79,11 @@ public class Ollivanders2 extends JavaPlugin
    private ConfigurationSection zoneConfig;
 
    // other config
-   private static String mcVersion;
    public static Material wandMaterial = Material.STICK;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
    public static Ollivanders2WorldGuard worldGuardO2;
+   public static int mcVersion = 11;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -134,14 +134,11 @@ public class Ollivanders2 extends JavaPlugin
       if (new File("plugins/Ollivanders2/").mkdirs())
       {
          getLogger().info("Creating directory for Ollivanders2");
+         this.saveDefaultConfig();
       }
 
       //check version of server
-      mcVersion = Bukkit.getBukkitVersion();
-      if (!mcVersionCheck())
-      {
-         getLogger().warning("MC version " + mcVersion + ". Some features of Ollivanders2 require MC 1.12 and higher.");
-      }
+      mcVersionCheck();
 
       // read configuration
       initConfig();
@@ -1835,16 +1832,25 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Check to see if we're running MC version 1.12 or higher, which many Ollivanders2 features depend on.
-    *
-    * @return true of version string is 1.12, false otherwise.
+    * Check to see what MC version is being run to determine what Ollivanders2 features are supported.
     */
-   public static boolean mcVersionCheck ()
+   private void mcVersionCheck ()
    {
-      if (mcVersion.startsWith("1.12"))
-         return true;
+      String versionString = Bukkit.getBukkitVersion();
 
-      return false;
+      if (versionString.startsWith("1.12"))
+      {
+         mcVersion = 12;
+      }
+      else if (versionString.startsWith("1.13"))
+      {
+         mcVersion = 13;
+      }
+
+      if (mcVersion < 12)
+      {
+         getLogger().warning("MC version " + versionString + ". Some features of Ollivanders2 require MC 1.12 and higher.");
+      }
    }
 
    /**
