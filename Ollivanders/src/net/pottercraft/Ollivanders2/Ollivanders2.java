@@ -484,7 +484,7 @@ public class Ollivanders2 extends JavaPlugin
          {
             return runEffect(sender, args);
          }
-         else if (subCommand.equalsIgnoreCase("prophecy"))
+         else if (subCommand.equalsIgnoreCase("prophecy") || subCommand.equalsIgnoreCase("prophecies"))
          {
             return runProphecies(sender, args);
          }
