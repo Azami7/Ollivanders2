@@ -1,12 +1,25 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.MultipleFacing;
+import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.data.type.GlassPane;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
+import org.bukkit.util.Vector;
+import org.bukkit.block.Banner;
 
 import net.pottercraft.Ollivanders2.O2Color;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Azami7 on 6/30/17.
@@ -56,10 +69,12 @@ public abstract class ColoroSuper extends Charms
          }
       }
 
-      Material blockType = getBlock().getType();
-      if (O2Color.isColorable(blockType))
+      Block target = getBlock();
+      if (O2Color.isColorable(target.getType()))
       {
-         Material newBlockType = O2Color.changeColor(blockType, color);
+         Material newColor = O2Color.changeColor(target.getType(), color);
+         target.setType(newColor);
+
          kill();
          return;
       }

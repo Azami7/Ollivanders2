@@ -74,55 +74,6 @@ public enum O2Color
       return dyeColor;
    }
 
-   public Material getBannerMaterial ()
-   {
-      Material material = getColoredMaterial("BANNER");
-
-      if (material == null)
-      {
-         material = Material.WHITE_BANNER;
-      }
-
-      return material;
-   }
-
-   public Material getWallBannerMaterial ()
-   {
-      Material material = getColoredMaterial("WALL_BANNER");
-
-      if (material == null)
-      {
-         material = Material.WHITE_WALL_BANNER;
-      }
-
-      return material;
-   }
-
-   public Material getDyeMaterial ()
-   {
-      Material material;
-
-      if (dyeColor == DyeColor.YELLOW)
-      {
-         material = Material.DANDELION_YELLOW;
-      }
-      else if (dyeColor == DyeColor.RED)
-      {
-         material = Material.ROSE_RED;
-      }
-      else
-      {
-         material = getColoredMaterial("DYE");
-
-         if (material == null)
-         {
-            material = Material.BONE_MEAL;
-         }
-      }
-
-      return material;
-   }
-
    public Material getWoolMaterial ()
    {
       Material material = getColoredMaterial("WOOL");
@@ -190,18 +141,6 @@ public enum O2Color
       if (material == null)
       {
          material = Material.WHITE_STAINED_GLASS;
-      }
-
-      return material;
-   }
-
-   public Material getStainedGlassPaneMaterial ()
-   {
-      Material material = getColoredMaterial("STAINED_GLASS_PANE");
-
-      if (material == null)
-      {
-         material = Material.WHITE_STAINED_GLASS_PANE;
       }
 
       return material;
@@ -277,9 +216,9 @@ public enum O2Color
       // determine if a material is colorable
       String materialName = material.toString();
 
-      if (materialName.endsWith("_BANNER") || materialName.endsWith("_DYE") || materialName.endsWith("_WOOL")
-            || materialName.endsWith("_CARPET") || materialName.endsWith("_CONCRETE") || materialName.endsWith("_CONCRETE_POWDER")
-            || materialName.endsWith("_SHULKER_BOX") || materialName.endsWith("_STAINED_GLASS") || materialName.endsWith("_STAINED_GLASS_PANE"))
+      if (materialName.endsWith("_WOOL") || materialName.endsWith("_CARPET") || materialName.endsWith("_CONCRETE")
+            || materialName.endsWith("_CONCRETE_POWDER") || materialName.endsWith("_SHULKER_BOX")
+            || materialName.endsWith("_STAINED_GLASS"))
       {
          return true;
       }
@@ -299,19 +238,7 @@ public enum O2Color
       String materialName = material.toString();
       Material newColor = material;
 
-      if (materialName.endsWith("WALL_BANNER"))
-      {
-         newColor = color.getWallBannerMaterial();
-      }
-      else if (materialName.endsWith("_BANNER"))
-      {
-         newColor = color.getBannerMaterial();
-      }
-      else if (materialName.endsWith("_DYE"))
-      {
-         newColor = color.getDyeMaterial();
-      }
-      else if (materialName.endsWith("_WOOL"))
+      if (materialName.endsWith("_WOOL"))
       {
          newColor = color.getWoolMaterial();
       }
@@ -334,10 +261,6 @@ public enum O2Color
       else if (materialName.endsWith("_STAINED_GLASS"))
       {
          newColor = color.getStainedGlassMaterial();
-      }
-      else if (materialName.endsWith("_STAINED_GLASS_PANE"))
-      {
-         newColor = color.getStainedGlassPaneMaterial();
       }
 
       return newColor;
