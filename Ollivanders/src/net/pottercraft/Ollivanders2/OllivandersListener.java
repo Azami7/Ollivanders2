@@ -308,6 +308,9 @@ public class OllivandersListener implements Listener
             break;
          }
 
+         if (i == O2Spell.max_spell_words)
+            break;
+
          spellName.append(" ");
       }
 
