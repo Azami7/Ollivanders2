@@ -61,14 +61,16 @@ public final class DEPRIMO extends Charms
       {
          for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
          {
-            if (!tempBlocks.contains(block) &&
-                  block.getType() != Material.WATER && block.getType() != Material.LAVA &&
-                  block.getType() != Material.STATIONARY_WATER && block.getType() != Material.STATIONARY_LAVA &&
-                  block.getType() != Material.AIR && block.getType() != Material.BEDROCK && block.getType().isSolid())
+            if (Ollivanders2.mcVersion < 13)
             {
-               MaterialData data = block.getState().getData();
-               block.setType(Material.AIR);
-               block.getWorld().spawnFallingBlock(block.getLocation(), data);
+               Material blockType = block.getType();
+               if (!tempBlocks.contains(block) && blockType != Material.WATER && blockType != Material.LAVA
+                     && blockType != Material.AIR && blockType != Material.BEDROCK && blockType.isSolid())
+               {
+                  MaterialData data = block.getState().getData();
+                  block.setType(Material.AIR);
+                  block.getWorld().spawnFallingBlock(block.getLocation(), data);
+               }
             }
          }
          kill();

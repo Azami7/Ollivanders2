@@ -8,15 +8,16 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 
 /**
- * Encases target's head in a melon itemstack with amount 0
+ * Encases target's head in a melon
  *
  * @author lownes
  */
 public final class MELOFORS extends GaleatiSuper
 {
    Material [] melons = {
-         Material.MELON_BLOCK,
+         Material.MELON,
          Material.JACK_O_LANTERN,
+         Material.PUMPKIN,
    };
 
    /**

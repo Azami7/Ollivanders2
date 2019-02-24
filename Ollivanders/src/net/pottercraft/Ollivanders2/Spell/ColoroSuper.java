@@ -1,16 +1,11 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.Ollivanders2API;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
-import org.bukkit.material.Colorable;
-import org.bukkit.material.MaterialData;
 
+import net.pottercraft.Ollivanders2.O2Color;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
@@ -22,7 +17,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public abstract class ColoroSuper extends Charms
 {
-   DyeColor color = DyeColor.WHITE;
+   O2Color color = O2Color.WHITE;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -49,30 +44,24 @@ public abstract class ColoroSuper extends Charms
    {
       move();
 
+      // first try to recolor any sheep in range
       for (LivingEntity live : getLivingEntities(2))
       {
          if (live instanceof Sheep)
          {
             Sheep sheep = (Sheep) live;
-            sheep.setColor(color);
+            sheep.setColor(color.getDyeColor());
             kill();
             return;
          }
       }
-      if (getBlock().getType() != Material.AIR)
+
+      Material blockType = getBlock().getType();
+      if (O2Color.isColorable(blockType))
       {
-         for (Block block : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
-         {
-            if (block.getState().getData() instanceof Colorable)
-            {
-               BlockState bs = block.getState();
-               Colorable colorable = (Colorable) bs.getData();
-               colorable.setColor(color);
-               bs.setData((MaterialData) colorable);
-               bs.update();
-               kill();
-            }
-         }
+         Material newBlockType = O2Color.changeColor(blockType, color);
+         kill();
+         return;
       }
    }
 }

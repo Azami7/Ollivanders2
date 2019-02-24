@@ -62,7 +62,7 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
       if (Ollivanders2.debug)
          p.getLogger().info("Block is " + blockType.toString());
 
-      if (blockType == Material.WALL_SIGN || blockType == Material.SIGN_POST || blockType == Material.SIGN)
+      if (blockType == Material.WALL_SIGN || blockType == Material.SIGN)
       {
          if (Ollivanders2.debug)
             p.getLogger().info("detected sign object");
@@ -81,7 +81,7 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
 
          Block toBlock = toLoc.getBlock();
          Material toBlockType = toBlock.getType();
-         if (toBlockType != Material.WALL_SIGN && toBlockType != Material.SIGN_POST && toBlockType != Material.SIGN)
+         if (toBlockType != Material.WALL_SIGN && toBlockType != Material.SIGN)
          {
             if (Ollivanders2.debug)
                p.getLogger().info("Block at toLoc is not a sign block");

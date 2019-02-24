@@ -99,7 +99,7 @@ public final class PORTUS extends Charms
             {
                stat.flair(10);
                canApparateOut = false;
-               player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_PLING, 1, 1);
+               player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
             }
          }
          if (player.isPermissionSet("Ollivanders2.BYPASS"))
@@ -137,7 +137,7 @@ public final class PORTUS extends Charms
                {
                   stat.flair(10);
                   canApparateIn = false;
-                  player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BASS, 1, 1);
+                  player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
                }
             }
             if (player.isPermissionSet("Ollivanders2.BYPASS"))

@@ -1,6 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import org.bukkit.DyeColor;
+import net.pottercraft.Ollivanders2.O2Color;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -11,16 +11,16 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author Azami7
  * @since 2.2.8
  */
-public final class COLORO_ALBUM extends ColoroSuper
+public final class COLOVARIA_ALBUM extends ColoroSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_ALBUM ()
+   public COLOVARIA_ALBUM ()
    {
       super();
 
-      spellType = O2SpellType.COLORO_ALBUM;
+      spellType = O2SpellType.COLOVARIA_ALBUM;
 
       text = "Turns target colorable entity or block white.";
    }
@@ -32,13 +32,13 @@ public final class COLORO_ALBUM extends ColoroSuper
     * @param player the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public COLORO_ALBUM (Ollivanders2 plugin, Player player, Double rightWand)
+   public COLOVARIA_ALBUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 
-      spellType = O2SpellType.COLORO_ALBUM;
+      spellType = O2SpellType.COLOVARIA_ALBUM;
       setUsesModifier();
 
-      color = DyeColor.WHITE;
+      color = O2Color.WHITE;
    }
 }

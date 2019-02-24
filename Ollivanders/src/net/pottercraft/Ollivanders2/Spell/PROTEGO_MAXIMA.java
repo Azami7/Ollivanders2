@@ -53,8 +53,8 @@ public final class PROTEGO_MAXIMA extends Charms
    public void checkEffect ()
    {
       move();
-      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE
-            && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
+      Material targetBlockType = getBlock().getType();
+      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
       {
          int duration = (int) (usesModifier * 1200);
          double damage = usesModifier / 10;

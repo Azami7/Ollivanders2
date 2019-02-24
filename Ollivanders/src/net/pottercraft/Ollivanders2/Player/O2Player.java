@@ -12,6 +12,7 @@ import java.util.UUID;
 import net.pottercraft.Ollivanders2.House.O2HouseType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.O2Color;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
@@ -923,7 +924,7 @@ public class O2Player
          }
          else if (animagusForm == EntityType.WOLF)
          {
-            animagusColor = Ollivanders2API.common.randomSecondaryDyeColor().toString();
+            animagusColor = O2Color.getRandomPrimaryDyeableColor().getDyeColor().toString();
          }
          else if (animagusForm == EntityType.HORSE)
          {

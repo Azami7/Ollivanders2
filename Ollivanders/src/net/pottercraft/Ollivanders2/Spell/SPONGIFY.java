@@ -68,9 +68,7 @@ public class SPONGIFY extends BlockTransfigurationSuper
       }
 
       materialBlacklist.add(Material.WATER);
-      materialBlacklist.add(Material.STATIONARY_WATER);
       materialBlacklist.add(Material.LAVA);
-      materialBlacklist.add(Material.STATIONARY_LAVA);
       materialBlacklist.add(Material.FIRE);
    }
 }

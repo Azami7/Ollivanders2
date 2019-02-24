@@ -1,26 +1,26 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import org.bukkit.DyeColor;
+import net.pottercraft.Ollivanders2.O2Color;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Target sheep or colored block turns yellow.
+ * Target sheep or colored block turns purple.
  *
  * @author Azami7
  */
-public final class COLORO_FLAVO extends ColoroSuper
+public final class COLOVARIA_OSTRUM extends ColoroSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COLORO_FLAVO ()
+   public COLOVARIA_OSTRUM ()
    {
       super();
 
-      spellType = O2SpellType.COLORO_FLAVO;
-      text = "Turns target colorable entity or block yellow.";
+      spellType = O2SpellType.COLOVARIA_OSTRUM;
+      text = "Turns target colorable entity or block purple.";
    }
 
    /**
@@ -30,13 +30,13 @@ public final class COLORO_FLAVO extends ColoroSuper
     * @param player the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public COLORO_FLAVO (Ollivanders2 plugin, Player player, Double rightWand)
+   public COLOVARIA_OSTRUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 
-      spellType = O2SpellType.COLORO_FLAVO;
+      spellType = O2SpellType.COLOVARIA_OSTRUM;
       setUsesModifier();
 
-      color = DyeColor.YELLOW;
+      color = O2Color.PURPLE;
    }
 }

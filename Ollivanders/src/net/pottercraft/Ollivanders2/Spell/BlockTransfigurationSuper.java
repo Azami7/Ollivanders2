@@ -106,6 +106,7 @@ public abstract class BlockTransfigurationSuper extends O2Spell
 
       materialBlacklist.add(Material.BEDROCK);
       materialBlacklist.add(Material.ENDER_CHEST);
+      materialBlacklist.add(Material.BARRIER);
    }
 
    @Override

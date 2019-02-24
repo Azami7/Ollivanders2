@@ -47,6 +47,6 @@ public final class HERBIFORS extends GaleatiSuper
       spellType = O2SpellType.HERBIFORS;
       setUsesModifier();
 
-      materialType = Material.YELLOW_FLOWER;
+      materialType = Material.DANDELION;
    }
 }

@@ -83,13 +83,13 @@ public final class DIFFINDO extends Charms
             return;
          }
       }
-      if (getBlock().getType() == Material.LOG)
+      if (Ollivanders2API.common.isNaturalLog(getBlock()))
       {
-         for (Block block : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
+         for (Block nearbyBlock : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
          {
-            if (block.getType() == Material.LOG)
+            if (Ollivanders2API.common.isNaturalLog(nearbyBlock))
             {
-               block.breakNaturally();
+               nearbyBlock.breakNaturally();
             }
          }
          kill();

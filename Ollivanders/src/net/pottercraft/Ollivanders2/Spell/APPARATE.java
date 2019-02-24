@@ -79,7 +79,7 @@ public final class APPARATE extends Charms
          Location eyeLocation = player.getEyeLocation();
          Material inMat = eyeLocation.getBlock().getType();
          int distance = 0;
-         while ((inMat == Material.AIR || inMat == Material.FIRE || inMat == Material.WATER || inMat == Material.STATIONARY_WATER || inMat == Material.LAVA || inMat == Material.STATIONARY_LAVA) && distance < 160)
+         while ((inMat == Material.AIR || inMat == Material.FIRE || inMat == Material.WATER || inMat == Material.LAVA) && distance < 160)
          {
             eyeLocation = eyeLocation.add(eyeLocation.getDirection());
             distance++;

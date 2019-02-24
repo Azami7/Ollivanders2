@@ -54,11 +54,9 @@ public final class AQUA_ERUCTO extends BlockTransfigurationSuper
       radius = 1;
 
       transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
-      transfigurationMap.put(Material.STATIONARY_LAVA, Material.OBSIDIAN);
       transfigurationMap.put(Material.FIRE, Material.AIR);
 
       materialWhitelist.add(Material.LAVA);
-      materialWhitelist.add(Material.STATIONARY_LAVA);
       materialWhitelist.add(Material.FIRE);
 
       moveEffectData = Material.WATER;
