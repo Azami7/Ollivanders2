@@ -6,7 +6,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.block.Block;
-import org.bukkit.material.MaterialData;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
