@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import org.bukkit.Material;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
@@ -56,8 +57,9 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
       if (!hasTransfigured())
       {
          move();
-         Block block = getBlock();
-         Material material = block.getType();
+         Block target = getBlock();
+         Material material = target.getType();
+         BlockData targetBlockData = target.getBlockData();
 
          if (material == Material.IRON_BLOCK || material == Material.SNOW_BLOCK)
          {
@@ -67,8 +69,8 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
             else
                entityType = EntityType.SNOWMAN;
 
-            block.setType(Material.AIR);
-            FallingBlock falling = location.getWorld().spawnFallingBlock(location, new MaterialData(material));
+            target.setType(Material.AIR);
+            FallingBlock falling = location.getWorld().spawnFallingBlock(location, targetBlockData);
             transfigureEntity(falling, entityType, null);
             kill = false;
          }
