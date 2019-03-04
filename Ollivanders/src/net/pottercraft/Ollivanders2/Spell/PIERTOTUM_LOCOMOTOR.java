@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;

@@ -16,6 +16,7 @@ import java.util.List;
 /**
  * Opens a trapdoor
  *
+ * @author lownes
  * @author Azami7
  */
 public final class DISSENDIUM extends Charms

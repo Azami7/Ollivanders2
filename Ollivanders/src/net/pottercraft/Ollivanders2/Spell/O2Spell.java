@@ -48,7 +48,7 @@ public abstract class O2Spell implements Teachable
    public O2SpellType spellType;
 
    /**
-    * The location the spell was cast from.
+    * The location the spell targets
     */
    public Location location;
 
@@ -124,6 +124,13 @@ public abstract class O2Spell implements Teachable
    protected String text;
 
    /**
+    * A list of block types that cannot be affected by this spell
+    */
+   protected List<Material> materialBlackList = new ArrayList<>();
+
+   protected List<Material> projectilePassThrough = new ArrayList<>();
+
+   /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
     * text.
     */
@@ -145,6 +152,16 @@ public abstract class O2Spell implements Teachable
       vector = location.getDirection().normalize();
       location.add(vector);
       this.rightWand = rightWand;
+
+      // block types that cannot be affected by any spell
+      materialBlackList.add(Material.AIR);
+      materialBlackList.add(Material.BEDROCK);
+      materialBlackList.add(Material.BARRIER);
+      materialBlackList.add(Material.CAVE_AIR);
+
+      // block types that all spell projectiles pass through
+      projectilePassThrough.add(Material.AIR);
+      projectilePassThrough.add(Material.CAVE_AIR);
    }
 
    /**
@@ -163,17 +180,16 @@ public abstract class O2Spell implements Teachable
       // if block type is not a pass-through type, kill the projectile
       location.getWorld().playEffect(location, moveEffect, moveEffectData);
       Material targetBlockType = getBlock().getType();
-      if (targetBlockType != Material.AIR && targetBlockType != Material.CAVE_AIR && targetBlockType != Material.FIRE
-            && targetBlockType != Material.WATER && targetBlockType != Material.LAVA)
+      if (!projectilePassThrough.contains(targetBlockType))
       {
-         kill = true;
+         kill();
       }
 
       // if the max duration of the projectile is reached, kill the projectile
       lifeTicks++;
       if (lifeTicks > 160)
       {
-         kill = true;
+         kill();
       }
    }
 
@@ -206,7 +222,8 @@ public abstract class O2Spell implements Teachable
       {
          if (e instanceof LivingEntity)
          {
-            if (((LivingEntity) e).getEyeLocation().distance(location) < radius || ((e instanceof EnderDragon || e instanceof Giant) && ((LivingEntity) e).getEyeLocation().distance(location) < (radius + 5)))
+            if (((LivingEntity) e).getEyeLocation().distance(location) < radius || ((e instanceof EnderDragon
+                  || e instanceof Giant) && ((LivingEntity) e).getEyeLocation().distance(location) < (radius + 5)))
             {
                if (!e.equals(player))
                {
@@ -309,7 +326,7 @@ public abstract class O2Spell implements Teachable
    {
       Block center = getBlock();
 
-      if (center.getType() != Material.AIR)
+      if (!projectilePassThrough.contains(center.getType()))
       {
          return center;
       }

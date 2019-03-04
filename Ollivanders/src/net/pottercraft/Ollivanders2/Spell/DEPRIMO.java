@@ -5,8 +5,9 @@ import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.material.MaterialData;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -49,31 +50,36 @@ public final class DEPRIMO extends Charms
 
       spellType = O2SpellType.DEPRIMO;
       setUsesModifier();
+
+      materialBlackList.add(Material.WATER);
+      materialBlackList.add(Material.LAVA);
    }
 
+   @Override
    public void checkEffect ()
    {
       move();
-      Block center = getBlock();
-      double radius = usesModifier / 2;
-      List<Block> tempBlocks = p.getTempBlocks();
-      if (center.getType() != Material.AIR)
+
+      Block target = getBlock();
+
+      if (target != null)
       {
-         for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
+         double radius = usesModifier / 2;
+
+         List<Block> nearbyBlocks = Ollivanders2API.common.getBlocksInRadius(target.getLocation(), radius);
+
+         for (Block block : nearbyBlocks)
          {
-            if (Ollivanders2.mcVersion < 13)
+            if (materialBlackList.contains(block.getType()))
             {
-               Material blockType = block.getType();
-               if (!tempBlocks.contains(block) && blockType != Material.WATER && blockType != Material.LAVA
-                     && blockType != Material.AIR && blockType != Material.BEDROCK && blockType.isSolid())
-               {
-                  MaterialData data = block.getState().getData();
-                  block.setType(Material.AIR);
-                  block.getWorld().spawnFallingBlock(block.getLocation(), data);
-               }
+               continue;
             }
+
+            Location blockLocation = block.getLocation();
+            BlockData blockData = block.getBlockData();
+            target.setType(Material.AIR);
+            blockLocation.getWorld().spawnFallingBlock(blockLocation, blockData);
          }
-         kill();
       }
    }
 }
