@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -31,7 +32,7 @@ public final class ARANIA_EXUMAI extends Charms
          add("Defense Against Spiders");
       }};
 
-      text = "Blasts away spiders.";
+      text = "Knocks back spiders.";
    }
 
    /**
@@ -49,10 +50,13 @@ public final class ARANIA_EXUMAI extends Charms
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   /**
+    * If any spiders are within the radius of the spell projectile, knock them back away from the caster.
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
-      List<Entity> entities = getCloseEntities(1);
+      List<Entity> entities = getCloseEntities(1.5);
       for (Entity entity : entities)
       {
          EntityType type = entity.getType();
@@ -62,6 +66,12 @@ public final class ARANIA_EXUMAI extends Charms
             kill();
             return;
          }
+      }
+
+      // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

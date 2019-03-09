@@ -8,6 +8,7 @@ import org.bukkit.util.Vector;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Shoots target high into air.
@@ -51,15 +52,20 @@ public final class ALARTE_ASCENDARE extends Charms
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   /**
+    * Search for entities or items at the projectile's current location
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
       double up = usesModifier * 0.4;
       if (up > 4)
       {
          up = 4;
       }
       Vector vec = new Vector(0, up, 0);
+
+      // check for entities first
       for (LivingEntity lentity : getLivingEntities(1.5))
       {
          if (lentity.getUniqueId() == player.getUniqueId())
@@ -69,11 +75,22 @@ public final class ALARTE_ASCENDARE extends Charms
          kill();
          return;
       }
-      for (Item item : getItems(1))
+
+      // check for items next
+      List<Item> items = getItems(1.5);
+
+      if (items != null && items.size() > 0)
       {
+         Item item = items.get(0);
          item.setVelocity(item.getVelocity().add(vec));
+
          kill();
-         return;
+      }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

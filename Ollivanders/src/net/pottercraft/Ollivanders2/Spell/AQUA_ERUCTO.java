@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
@@ -52,6 +53,8 @@ public final class AQUA_ERUCTO extends BlockTransfigurationSuper
       spellDuration = (int)(1200 * usesModifier);
       permanent = false;
       radius = 1;
+
+      worldGuardFlags.add(DefaultFlag.BUILD);
 
       transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
       transfigurationMap.put(Material.FIRE, Material.AIR);

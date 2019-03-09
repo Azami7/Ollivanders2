@@ -33,7 +33,7 @@ public final class ACCIO extends Charms
       }};
 
       text = "Can use used to pull an item towards you. The strength of the pull is determined by your experience. "
-            + "This cannot be used on living things.";
+            + "This can only be used on items.";
    }
 
    /**
@@ -51,16 +51,27 @@ public final class ACCIO extends Charms
       setUsesModifier();
    }
 
+   /**
+    * Check for any items within a radius of the projectile's current location, if one is found, pull it towards the
+    * caster.
+    */
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      List<Item> items = getItems(1);
-      for (Item item : items)
+      List<Item> items = getItems(1.5);
+
+      if (items != null && items.size() > 0)
       {
+         Item item = items.get(0);
          item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(usesModifier / 10));
+
          kill();
-         return;
+      }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

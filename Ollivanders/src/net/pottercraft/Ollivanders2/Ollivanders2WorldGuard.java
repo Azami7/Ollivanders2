@@ -3,7 +3,6 @@ package net.pottercraft.Ollivanders2;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -122,44 +121,17 @@ public class Ollivanders2WorldGuard
    }
 
    /**
-    * If WorldGuard is enabled, determine if this player has permissions to damage friendly mobs in this location.
-    * This is done so that Ollivanders2 actions do not complete partially, such as mob transfiguration spells, and then
-    * cannot complete because WorldGuard is enabled.
-    *
-    * @param player the player to check WG for
-    * @param location the location to check (since it may not be where the player is)
-    * @return true if the player is allowed to damage friendly mobs in this location, false otherwise.
-    */
-   public boolean checkWGFriendlyMobDamage (Player player, Location location)
-   {
-      return wgTestState(player, location, DefaultFlag.DAMAGE_ANIMALS);
-   }
-
-   /**
-    * If WorldGuard is enabled, determine if PVP is allowed in this location. This is done so that Ollivanders2 actions
-    * do not complete partially, such as mob transfiguration spells, and then cannot complete because WorldGuard is enabled.
-    *
-    * @param player the player to check WG for
-    * @param location the location to check (since it may not be where the player is)
-    * @return true if the player can damage friendly mobs at this location, false otherwise
-    */
-   public boolean checkWGPVP (Player player, Location location)
-   {
-      return wgTestState(player, location, DefaultFlag.PVP);
-   }
-
-   /**
-    * If WorldGuard is enabled, determine if mobs can be spawned at a location.  This is done so that
+    * If WorldGuard is enabled, determine if player is allowed a specific permission.  This is done so that
     * Ollivanders2 actions do not complete partially, such as mob transfiguration spells, and then cannot
     * complete because WorldGuard is enabled.
     *
     * @param player the player to check for
     * @param location the location to check (since it may not be where the player is)
-    * @return true if mobs can be spawned in this location, false otherwise
+    * @return true if the player has this permission at this location, false otherwise
     */
-   public boolean checkWGSpawn (Player player, Location location)
+   public boolean checkWGFlag (Player player, Location location, StateFlag flag)
    {
-      return wgTestState(player, location, DefaultFlag.MOB_SPAWNING);
+      return wgTestState(player, location, flag);
    }
 
    /**

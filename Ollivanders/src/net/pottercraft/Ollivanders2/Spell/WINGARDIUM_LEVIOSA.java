@@ -9,10 +9,10 @@ import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
-import org.bukkit.material.MaterialData;
 
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -26,7 +26,7 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class WINGARDIUM_LEVIOSA extends Charms
 {
-   Map<Location, Material> materialMap = new HashMap();
+   Map<Location, BlockData> blockDataMap = new HashMap();
    List<Block> blockList = new ArrayList();
    List<Location> locList = new ArrayList();
    boolean moving = true;
@@ -68,6 +68,10 @@ public final class WINGARDIUM_LEVIOSA extends Charms
 
       spellType = O2SpellType.WINGARDIUM_LEVIOSA;
       setUsesModifier();
+
+      materialBlackList.add(Material.LAVA);
+      materialBlackList.add(Material.SAND);
+      materialBlackList.add(Material.GRAVEL);
    }
 
    @Override
@@ -102,12 +106,10 @@ public final class WINGARDIUM_LEVIOSA extends Charms
                if (!insideCollo)
                {
                   type = block.getType();
-                  if (type != Material.WATER && type != Material.LAVA && type != Material.SAND && type != Material.GRAVEL
-                        && type != Material.AIR && type != Material.BEDROCK && type.isSolid() && !p.getTempBlocks().contains(block))
+                  if (!materialBlackList.contains(type) && type.isSolid() && !p.getTempBlocks().contains(block))
                   {
                      Location loc = centerOfBlock(block).subtract(location);
-                     Material mat = block.getType();
-                     materialMap.put(loc, mat);
+                     blockDataMap.put(loc, block.getBlockData());
                      locList.add(loc);
                      blockList.add(block);
                   }
@@ -143,7 +145,7 @@ public final class WINGARDIUM_LEVIOSA extends Charms
                Location toLoc = center.clone().add(loc);
                if (toLoc.getBlock().getType() == Material.AIR)
                {
-                  toLoc.getBlock().setType(materialMap.get(loc));
+                  toLoc.getBlock().setType(blockDataMap.get(loc).getMaterial());
                   blockList.add(toLoc.getBlock());
                }
             }
@@ -160,8 +162,8 @@ public final class WINGARDIUM_LEVIOSA extends Charms
             for (Location loc : locList)
             {
                Location toLoc = center.clone().add(loc);
-               MaterialData material = new MaterialData(materialMap.get(loc));
-               FallingBlock fall = loc.getWorld().spawnFallingBlock(toLoc, material);
+               BlockData blockData = blockDataMap.get(loc);
+               FallingBlock fall = loc.getWorld().spawnFallingBlock(toLoc, blockData);
                fall.setVelocity(moveVec);
             }
             kill();

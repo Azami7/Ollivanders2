@@ -9,7 +9,10 @@ import java.util.Collection;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
-import net.pottercraft.Ollivanders2.*;
+import net.pottercraft.Ollivanders2.Ollivanders2WorldGuard;
+import net.pottercraft.Ollivanders2.Teachable;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -22,6 +25,8 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+
+import com.sk89q.worldguard.protection.flags.StateFlag;
 
 /**
  * A cast spell.
@@ -48,7 +53,7 @@ public abstract class O2Spell implements Teachable
    public O2SpellType spellType;
 
    /**
-    * The location the spell targets
+    * The location of the spell projectile
     */
    public Location location;
 
@@ -58,9 +63,9 @@ public abstract class O2Spell implements Teachable
    public int lifeTicks = 0;
 
    /**
-    * Whether this spell projectile should be terminated.
+    * Whether this spell should be terminated.
     */
-   public boolean kill = false;
+   private boolean kill = false;
 
    /**
     * The callback to the MC plugin
@@ -86,6 +91,11 @@ public abstract class O2Spell implements Teachable
     * Represents which wand the user was holding. See Ollivanders2Common.wandCheck()
     */
    public double rightWand;
+
+   /**
+    * Whether the projectile has hit a target
+    */
+   private boolean hitTarget = false;
 
    /**
     * The sound this projectile makes as it moves.
@@ -126,9 +136,17 @@ public abstract class O2Spell implements Teachable
    /**
     * A list of block types that cannot be affected by this spell
     */
-   protected List<Material> materialBlackList = new ArrayList<>();
+   List<Material> materialBlackList = new ArrayList<>();
 
-   protected List<Material> projectilePassThrough = new ArrayList<>();
+   /**
+    * A list of block types that this projectile will pass through
+    */
+   List<Material> projectilePassThrough = new ArrayList<>();
+
+   /**
+    * A list of the worldguard permissions needed for this spell
+    */
+   List<StateFlag> worldGuardFlags = new ArrayList<>();
 
    /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
@@ -154,10 +172,8 @@ public abstract class O2Spell implements Teachable
       this.rightWand = rightWand;
 
       // block types that cannot be affected by any spell
-      materialBlackList.add(Material.AIR);
       materialBlackList.add(Material.BEDROCK);
       materialBlackList.add(Material.BARRIER);
-      materialBlackList.add(Material.CAVE_AIR);
 
       // block types that all spell projectiles pass through
       projectilePassThrough.add(Material.AIR);
@@ -165,42 +181,134 @@ public abstract class O2Spell implements Teachable
    }
 
    /**
+    * Game tick update on this spell - must be overriden in child classes or the spell exits immediately.
+    */
+   public void checkEffect ()
+   {
+      // do nothing if spell is already marked as killed
+      if (!kill)
+      {
+         // only move the projectile if a target has not been hit
+         if (!hitTarget)
+         {
+            move();
+         }
+
+         doCheckEffect();
+      }
+   }
+
+   /**
     * Moves the projectile forward, creating a particle effect
     */
    public void move ()
    {
-      location.add(vector);
-
-      // if spell cannot exist in this location, kill the projectile
-      if (!p.canLive(location, spellType))
+      // if we've already targeted a block, do not move further
+      // if this is somehow called when the spell is set to killed, do nothing
+      if (kill)
       {
-         kill();
+         return;
       }
 
-      // if block type is not a pass-through type, kill the projectile
+      location.add(vector);
       location.getWorld().playEffect(location, moveEffect, moveEffectData);
-      Material targetBlockType = getBlock().getType();
+
+      // if current block type is not a pass-through type, we have hit a target
+      Material targetBlockType = location.getBlock().getType();
       if (!projectilePassThrough.contains(targetBlockType))
       {
-         kill();
+         targetBlock();
       }
 
-      // if the max duration of the projectile is reached, kill the projectile
+      // increment spell projectile lifeticks
       lifeTicks++;
-      if (lifeTicks > 160)
+
+      // if the max duration of the projectile is reached and we have not hit a target, kill the spell
+      if (lifeTicks > 160 && !hitTarget)
       {
          kill();
       }
    }
 
    /**
-    * Gets the block the projectile is inside
+    * Target the current block with this spell.
     *
-    * @return Block the projectile is inside
+    * If the block is a pass-through, nothing happens and the projectile will continue
+    * If the block is on the blacklist or the spell cannot be cast in this location, kills the spell
+    * Otherwise, targets the block
     */
-   public Block getBlock ()
+   private void targetBlock ()
    {
-      return location.getBlock();
+      Block target = location.getBlock();
+
+      // if we are on a pass-through block, keep going
+      if (projectilePassThrough.contains(target.getType()))
+      {
+         return;
+      }
+
+      // determine if this spell is allowed in this location per Ollivanders2 config
+      if (!p.isSpellTypeAllowed(location, spellType))
+      {
+         kill();
+      }
+      else
+      {
+         // check blockBlackList
+         if (materialBlackList.contains(target.getType()))
+         {
+            kill();
+         }
+         else
+         {
+            // determine if spell is allowed in this location per WorldGuard
+            if (Ollivanders2.worldGuardEnabled && !checkWorldGuard())
+            {
+               kill();
+            }
+         }
+      }
+
+      // if a condition above resulted in a kill then send player a message, otherwise we hit a valid target
+      if (kill)
+      {
+         p.spellCannotBeCastMessage(player);
+      }
+      else
+      {
+         hitTarget = true;
+      }
+   }
+
+   /**
+    * Checks world guard, if enabled, to determine if this spell can be cast here.
+    *
+    * @return true if the spell can be cast, false otherwise
+    */
+   private boolean checkWorldGuard ()
+   {
+      if (!Ollivanders2.worldGuardEnabled)
+      {
+         return true;
+      }
+
+      Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
+
+      // check every flag needed for this spell
+      for (StateFlag flag : worldGuardFlags)
+      {
+         if (!wg.checkWGFlag(player, location, flag))
+         {
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag.toString());
+            }
+
+            return false;
+         }
+      }
+
+      return true;
    }
 
    /**
@@ -309,39 +417,26 @@ public abstract class O2Spell implements Teachable
    }
 
    /**
-    * Reverts any changes made to blocks if the effects are temporary.
-    * Changed blocks are in this.changed
-    */
-   public void revert ()
-   {
-
-   }
-
-   /**
     * Get the target block for the spell.
     *
     * @return the target block
     */
    protected Block getTargetBlock ()
    {
-      Block center = getBlock();
-
-      if (!projectilePassThrough.contains(center.getType()))
+      if (!hitTarget)
       {
-         return center;
+         return location.getBlock();
       }
       else
-      {
          return null;
-      }
    }
 
    /**
-    * Game tick update on this spell - must be overriden in child classes or the spell exits immediately.
+    * The spell-specific actions taken for each check effect. This must be overridden by each spell or the spell
+    * will do nothing.
     */
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      kill();
    }
 
    /**
@@ -350,6 +445,43 @@ public abstract class O2Spell implements Teachable
    public void kill ()
    {
       kill = true;
+      revert();
+   }
+
+   /**
+    * Reverts any changes made to blocks if the effects are temporary. This must be overridden by each spell that has
+    * a revert action.
+    */
+   protected void revert ()
+   {
+   }
+
+   /**
+    * Whether this spell has been killed
+    *
+    * @return true if the spell has been terminated, false otherwise
+    */
+   public boolean isKilled ()
+   {
+      return kill;
+   }
+
+   /**
+    * Stops the spell projectile from moving further
+    */
+   public void stopProjectile ()
+   {
+      hitTarget = true;
+   }
+
+   /**
+    * Whether this spell has hit a target
+    *
+    * @return true if the spell has hit a target, false otherwise
+    */
+   public boolean hasHitTarget ()
+   {
+      return hitTarget;
    }
 
    /**

@@ -96,14 +96,10 @@ public class Ollivanders2 extends JavaPlugin
       {
          block.setType(Material.AIR);
       }
+
       for (O2Spell proj : projectiles)
       {
-         if (proj instanceof Transfiguration)
-         {
-            getLogger().finest("Ended transfiguration");
-            ((Transfiguration) proj).endTransfigure();
-         }
-         proj.revert();
+         proj.kill();
       }
 
       Ollivanders2API.saveStationarySpells();
@@ -1723,7 +1719,7 @@ public class Ollivanders2 extends JavaPlugin
          return false;
       }
 
-      boolean cast = canLive(player.getLocation(), spell);
+      boolean cast = isSpellTypeAllowed(player.getLocation(), spell);
 
       if (!cast && verbose)
       {
@@ -1739,7 +1735,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param spell the spell to check
     * @return true if the spell can exist, false otherwise
     */
-   public boolean canLive (Location loc, O2SpellType spell)
+   public boolean isSpellTypeAllowed (Location loc, O2SpellType spell)
    {
       boolean cast = true;
       double x = loc.getX();

@@ -8,10 +8,9 @@ import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.CropState;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.material.Crops;
-import org.bukkit.material.MaterialData;
 
 /**
  * Herbivicus causes crops in a radius to grow.
@@ -22,6 +21,8 @@ import org.bukkit.material.MaterialData;
  */
 public final class HERBIVICUS extends Herbology
 {
+   private List<CropState> stateList = new ArrayList<>();
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -51,41 +52,45 @@ public final class HERBIVICUS extends Herbology
 
       spellType = O2SpellType.HERBIVICUS;
       setUsesModifier();
+
+      projectilePassThrough.add(Material.WATER);
+
+      stateList.add(CropState.SEEDED);
+      stateList.add(CropState.GERMINATED);
+      stateList.add(CropState.VERY_SMALL);
+      stateList.add(CropState.SMALL);
+      stateList.add(CropState.MEDIUM);
+      stateList.add(CropState.TALL);
+      stateList.add(CropState.VERY_TALL);
+      stateList.add(CropState.RIPE);
    }
 
    @Override
    public void checkEffect ()
    {
       move();
-      double radius = usesModifier;
-      Material targetBlockType = getBlock().getType();
-      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER && targetBlockType != Material.LAVA)
+
+      if (getBlock() != null)
       {
+         double radius = usesModifier;
+
          for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
          {
-            if (block.getState().getData() instanceof Crops)
+            BlockData blockData = block.getBlockData();
+
+            if (blockData instanceof Crops)
             {
-               List<CropState> stateList = new ArrayList<>();
-               stateList.add(CropState.SEEDED);
-               stateList.add(CropState.GERMINATED);
-               stateList.add(CropState.VERY_SMALL);
-               stateList.add(CropState.SMALL);
-               stateList.add(CropState.MEDIUM);
-               stateList.add(CropState.TALL);
-               stateList.add(CropState.VERY_TALL);
-               stateList.add(CropState.RIPE);
-               int currentState = stateList.indexOf(((Crops) block.getState().getData()).getState());
+               CropState cropState = ((Crops) blockData).getState();
+               int currentState = stateList.indexOf(cropState);
                int newState = currentState + 1;
                if (newState > 7)
                {
                   newState = 7;
                }
-               BlockState blockState = block.getState();
-               MaterialData blockData = blockState.getData();
-               CropState newCropState = stateList.get(newState);
-               ((Crops) blockData).setState(newCropState);
-               blockState.setData(blockData);
-               blockState.update();
+
+               cropState = stateList.get(newState);
+               ((Crops) blockData).setState(cropState);
+               block.setBlockData(blockData);
             }
          }
          kill();

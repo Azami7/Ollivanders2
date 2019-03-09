@@ -59,8 +59,6 @@ public final class DISSENDIUM extends Charms
 
       maxOpenTime = usesModifier * 20;
 
-      p.getLogger().info("dissendium max open time is " + maxOpenTime);
-
       openTime = 0;
       isOpen = false;
    }
@@ -90,8 +88,6 @@ public final class DISSENDIUM extends Charms
          // count down the open time
          openTime++;
 
-         p.getLogger().info("open time = " + openTime);
-
          if (openTime >= maxOpenTime)
          {
             closeTrapDoor();
@@ -115,7 +111,6 @@ public final class DISSENDIUM extends Charms
       {
          if (statSpell instanceof COLLOPORTUS)
          {
-            p.getLogger().info("trapdoor in a colloportus");
             kill();
             return;
          }
@@ -126,7 +121,6 @@ public final class DISSENDIUM extends Charms
       // check to see if the trap door is already open
       if (((TrapDoor) targetBlockData).isOpen())
       {
-         p.getLogger().info("trapdoor already open");
          kill();
          return;
       }

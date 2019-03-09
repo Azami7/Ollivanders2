@@ -1,10 +1,11 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
 
 /**
  * Super class for transfiguring friendly mobs.
@@ -20,6 +21,9 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
    public FriendlyMobDisguiseSuper ()
    {
       super();
+
+      worldGuardFlags = new ArrayList<>();
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
    }
 
    /**
@@ -46,23 +50,5 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
       {
          entityWhitelist.addAll(Ollivanders2Common.largeFriendlyAnimals);
       }
-   }
-
-   /**
-    * Check whether player has permissions to damage friendly mobs in their current location and in the
-    * target entity's location.
-    *
-    * @param e the target entity
-    * @return true if the player has the right permissions, false otherwise
-    */
-   @Override
-   protected boolean wgPermissionsCheck(Entity e)
-   {
-      if (worldGuard.checkWGFriendlyMobDamage(player, player.getLocation()) && worldGuard.checkWGFriendlyMobDamage(player, e.getLocation()))
-      {
-         return true;
-      }
-
-      return false;
    }
 }

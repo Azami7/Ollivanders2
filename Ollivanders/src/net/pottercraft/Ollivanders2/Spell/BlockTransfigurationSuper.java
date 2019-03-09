@@ -109,55 +109,48 @@ public abstract class BlockTransfigurationSuper extends O2Spell
       materialBlacklist.add(Material.BARRIER);
    }
 
+   /**
+    * If we have hit a target, transform it if it is not transformed or change it back if it is already transformed and
+    * the duration is expired for a temporary spell.
+    */
    @Override
-   public void checkEffect()
+   protected void doCheckEffect ()
    {
-      // if the object has not transfigured, transfigure it
-      if (!isTransfigured)
+      if (hasHitTarget())
       {
-         // move the projectile
-         move();
-         Block target = getTargetBlock();
-         if (target != null)
+         // if the object has not transfigured, transfigure it
+         if (!isTransfigured)
          {
-            // if the server is running WorldGuard, make sure the player has permissions
-            if (Ollivanders2.worldGuardEnabled && !Ollivanders2.worldGuardO2.checkWGBuild(player, target.getLocation()))
+            Block target = getTargetBlock();
+            if (target != null)
             {
-               kill();
-               p.spellCannotBeCastMessage(player);
-               return;
+               transfigure(target);
+
+               if (!permanent)
+               {
+                  spellDuration = (int) (spellDuration * durationModifier);
+               }
+               else
+               {
+                  spellDuration = 0;
+                  kill();
+               }
             }
-
-            transfigure(target);
-
-            if (!permanent)
+         }
+         // if the entity has transfigured, check time to change back
+         else
+         {
+            // check time to live on the spell
+            if (spellDuration <= 0)
             {
-               spellDuration = (int) (spellDuration * durationModifier);
-               kill = false;
+               // spell duration is up, kill the spell
+               kill();
             }
             else
             {
-               spellDuration = 0;
-               kill();
+               spellDuration--;
             }
          }
-      }
-      // if the entity has transfigured, check time to change back
-      else
-      {
-         // check time to live on the spell
-         if (lifeTicks >= spellDuration)
-         {
-            // spell duration is up, transfigure back to original shape
-            if (!permanent)
-            {
-               revert();
-            }
-            kill();
-            return;
-         }
-
-         lifeTicks++;
       }
    }
 

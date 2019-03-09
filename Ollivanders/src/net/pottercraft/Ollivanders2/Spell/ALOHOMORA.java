@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
@@ -49,11 +50,17 @@ public final class ALOHOMORA extends Charms
 
       spellType = O2SpellType.ALOHOMORA;
       setUsesModifier();
+
+      worldGuardFlags.add(DefaultFlag.INTERACT);
    }
 
-   public void checkEffect ()
+   /**
+    * Checks for colloportus stationary spells and ages them, if found
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
+      // check all the stationary spells in the location of the projectile for a Colloportus
       List<StationarySpellObj> inside = new ArrayList<>();
       for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
@@ -62,15 +69,27 @@ public final class ALOHOMORA extends Charms
             if (spell.isInside(location))
             {
                inside.add(spell);
-               kill();
             }
          }
       }
-      int subAmount = (int) ((usesModifier * 1200) / inside.size());
-      for (StationarySpellObj spell : inside)
+
+      // age all the colloportus spells found
+      if (inside.size() > 0)
       {
-         spell.age(subAmount);
-         spell.flair(10);
+         int subAmount = (int) ((usesModifier * 1200) / inside.size());
+         for (StationarySpellObj spell : inside)
+         {
+            spell.age(subAmount);
+            spell.flair(10);
+         }
+
+         kill();
+      }
+
+      // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

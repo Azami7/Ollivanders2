@@ -48,6 +48,10 @@ public final class ASCENDIO extends Charms
       setUsesModifier();
    }
 
+   /**
+    * Propel the caster into the air
+    */
+   @Override
    public void checkEffect ()
    {
       double up = usesModifier * 0.8;
@@ -57,6 +61,7 @@ public final class ASCENDIO extends Charms
       }
       Vector vec = new Vector(0, up, 0);
       player.setVelocity(player.getVelocity().add(vec));
+
       kill();
    }
 }

@@ -6,7 +6,6 @@ import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2WorldGuard;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 /**
@@ -89,27 +88,8 @@ public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
 
          return false;
       }
-      else if (!wgPermissionsCheck(e))
-      {
-         if (Ollivanders2.debug)
-            p.getLogger().info("WG permissions not allowed.");
-
-         return false;
-      }
 
       return true;
-   }
-
-   /**
-    * Check for WorldGuard permissions related to this entity type. This needs to be overridden by each
-    * child class or it will fail all transfigurations.
-    *
-    * @param e the target entity
-    * @return true if there are no restrictions, false otherwise
-    */
-   protected boolean wgPermissionsCheck(Entity e)
-   {
-      return false;
    }
 
    /**

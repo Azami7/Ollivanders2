@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.Location;
@@ -31,17 +32,24 @@ public abstract class BombardaSuper extends Charms
    {
       super(plugin, player, rightWand);
       setUsesModifier();
+
+      projectilePassThrough.add(Material.FIRE);
+      projectilePassThrough.add(Material.WATER);
+
+      worldGuardFlags.add(DefaultFlag.CREEPER_EXPLOSION);
    }
 
-   public void checkEffect ()
+   /**
+    * Create an explosion in front of the target block
+    */
+   protected void doCheckEffect ()
    {
-      move();
-      Material targetBlockType = getBlock().getType();
-      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
+      if (hasHitTarget())
       {
-         Location backLoc = super.location.clone().subtract(vector);
-         backLoc.getWorld().createExplosion(backLoc.getX(), backLoc.getY(), backLoc.getZ(),
-               (float) (strength * usesModifier), false, false);
+         Location backLoc = location.clone().subtract(vector);
+         backLoc.getWorld().createExplosion(backLoc.getX(), backLoc.getY(), backLoc.getZ(), (float) (strength * usesModifier), false, false);
+
+         kill();
       }
    }
 }

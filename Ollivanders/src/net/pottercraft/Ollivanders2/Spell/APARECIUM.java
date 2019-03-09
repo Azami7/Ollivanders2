@@ -50,18 +50,33 @@ public final class APARECIUM extends Charms
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   /**
+    * If any stationary spells are at the location of the spell projectile, make them flair.
+    */
+   @Override
+   public void doCheckEffect ()
    {
-      move();
       List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location);
-      for (StationarySpellObj stationary : stationaries)
+
+      if (stationaries.size() > 0)
       {
-         int level = (int) usesModifier;
-         if (level > 10)
+         for (StationarySpellObj stationary : stationaries)
          {
-            level = 10;
+            int level = (int) usesModifier;
+            if (level > 10)
+            {
+               level = 10;
+            }
+            stationary.flair(level);
          }
-         stationary.flair(level);
+
+         kill();
+      }
+
+      // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

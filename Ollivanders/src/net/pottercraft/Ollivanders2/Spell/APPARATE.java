@@ -1,6 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2WorldGuard;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT;
 import org.bukkit.Effect;
@@ -59,20 +61,14 @@ public final class APPARATE extends Charms
       setUsesModifier();
    }
 
+   /**
+    * Teleport the caster to the location, or close to it, depending on skill level
+    */
+   @Override
    public void checkEffect ()
    {
-      kill();
-      location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
-      boolean canApparateOut = true;
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-      {
-         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation()))
-         {
-            stat.flair(10);
-            canApparateOut = false;
-         }
-      }
-      if (canApparateOut)
+      // check to see if the player can apparate out of this location
+      if (canApparateOut())
       {
          Location from = player.getLocation().clone();
          Location to;
@@ -93,17 +89,12 @@ public final class APPARATE extends Charms
          Double newZ = to.getZ() - (radius / 2) + (radius * Math.random());
          to.setX(newX);
          to.setZ(newZ);
-         boolean canApparateIn = true;
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+
+         // check to see if the player can apparate in to the target location
+         if (canApparateTo(to))
          {
-            if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to))
-            {
-               stat.flair(10);
-               canApparateIn = false;
-            }
-         }
-         if (canApparateIn)
-         {
+            location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
+
             player.getWorld().createExplosion(player.getLocation(), 0);
             player.teleport(to);
             for (Entity e : player.getWorld().getEntities())
@@ -116,5 +107,70 @@ public final class APPARATE extends Charms
             player.getWorld().createExplosion(player.getLocation(), 0);
          }
       }
+
+      kill();
+   }
+
+   /**
+    * Check to see if the player can apparate out of this location.
+    *
+    * @return true if the player can apparate, false otherwise
+    */
+   private boolean canApparateOut ()
+   {
+      // check world guard permissions at location
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
+
+         if (!wg.checkWGFlag(player, location, DefaultFlag.EXIT_VIA_TELEPORT))
+         {
+            return false;
+         }
+      }
+
+      // check for Nullum Evanescunt at location
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      {
+         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation()))
+         {
+            stat.flair(10);
+            return false;
+         }
+      }
+
+      return true;
+   }
+
+   /**
+    * Check to see if the player can apparate to the destination
+    *
+    * @param destination the target location to apparate to
+    * @return true if the player can apparate, false otherwise
+    */
+   private boolean canApparateTo (Location destination)
+   {
+      // check world guard permissions at destination
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
+
+         if (!wg.checkWGFlag(player, destination, DefaultFlag.ENTRY))
+         {
+            return false;
+         }
+      }
+
+      // check for Nullum Apparebit at destination
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      {
+         if (stat instanceof NULLUM_APPAREBIT && stat.isInside(destination))
+         {
+            stat.flair(10);
+            return false;
+         }
+      }
+
+      return true;
    }
 }

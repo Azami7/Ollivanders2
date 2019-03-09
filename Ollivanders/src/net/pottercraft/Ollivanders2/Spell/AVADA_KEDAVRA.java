@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -48,12 +49,15 @@ public final class AVADA_KEDAVRA extends DarkArts
       spellType = O2SpellType.AVADA_KEDAVRA;
       setUsesModifier();
 
+      worldGuardFlags.add(DefaultFlag.PVP);
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+
       moveEffectData = Material.MELON;
    }
 
-   public void checkEffect ()
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
       List<LivingEntity> entities = getLivingEntities(1.5);
       if (entities.size() > 0)
       {
@@ -63,9 +67,15 @@ public final class AVADA_KEDAVRA extends DarkArts
                continue;
 
             entity.damage(usesModifier * 2, player);
-            kill = true;
+            kill();
             return;
          }
+      }
+
+      // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

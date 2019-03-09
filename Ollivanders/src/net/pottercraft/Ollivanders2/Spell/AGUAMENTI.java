@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
@@ -54,25 +55,30 @@ public final class AGUAMENTI extends BlockTransfigurationSuper
       permanent = false;
       radius = 1;
 
+      // required worldGuard state flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
+
+      // pass-through materials
+      projectilePassThrough.add(Material.FIRE);
+
+      // set materials that can be transfigured by this spell
       materialWhitelist.add(Material.AIR);
    }
 
+   /**
+    * Override to make the target block the pass-through block before the actual target block
+    *
+    * @return the target block for aguamenti
+    */
    @Override
    protected Block getTargetBlock ()
    {
-      Block center = getBlock();
-
-      if (center.getType() != Material.AIR)
+      if (hasHitTarget())
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("finding aguamenti block");
-
-         // we want the air block before this block
+         // we want the pass-through block before this block
          return location.subtract(super.vector).getBlock();
       }
-      else
-      {
-         return null;
-      }
+
+      return null;
    }
 }

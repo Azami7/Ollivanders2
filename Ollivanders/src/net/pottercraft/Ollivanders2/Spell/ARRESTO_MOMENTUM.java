@@ -51,10 +51,15 @@ public final class ARRESTO_MOMENTUM extends Charms
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   /**
+    * Checks for entities or items in a radius around the projectile and slows their velocity, if found
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
       double modifier = usesModifier;
+
+      // check for entities first
       List<LivingEntity> entities = getLivingEntities(1.5);
       for (LivingEntity entity : entities)
       {
@@ -64,16 +69,26 @@ public final class ARRESTO_MOMENTUM extends Charms
          double speed = entity.getVelocity().length() / (Math.pow(modifier, 2));
          entity.setVelocity(entity.getVelocity().normalize().multiply(speed));
          entity.setFallDistance((float) (entity.getFallDistance() / modifier));
-         kill = true;
+         kill();
          return;
       }
-      List<Item> items = getItems(1);
-      for (Item item : items)
+
+      // check for items next
+      List<Item> items = getItems(1.5);
+      if (items.size() > 0)
       {
+         Item item = items.get(0);
+
          double speed = item.getVelocity().length() / (Math.pow(modifier, 2));
          item.setVelocity(item.getVelocity().normalize().multiply(speed));
-         kill = true;
+         kill();
          return;
+      }
+
+      // if the spell has hit a solid block, the projectile is dead and wont go further so kill the spell
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }
