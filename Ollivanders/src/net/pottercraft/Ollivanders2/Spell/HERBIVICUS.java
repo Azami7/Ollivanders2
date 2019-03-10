@@ -58,7 +58,8 @@ public final class HERBIVICUS extends Herbology
    {
       move();
       double radius = usesModifier;
-      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER && getBlock().getType() != Material.LAVA && getBlock().getType() != Material.STATIONARY_LAVA)
+      Material targetBlockType = getBlock().getType();
+      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER && targetBlockType != Material.LAVA)
       {
          for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
          {

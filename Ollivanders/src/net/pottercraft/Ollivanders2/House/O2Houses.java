@@ -422,7 +422,7 @@ public class O2Houses
          p.getLogger().info("Unregistered previous scoreboard objective...");
       }
 
-      scoreboard.registerNewObjective(objectiveName, "dummy");
+      scoreboard.registerNewObjective(objectiveName, "dummy", "House Points");
       Objective objective = scoreboard.getObjective(objectiveName);
       objective.setDisplayName(objectiveDisplayName);
       objective.setDisplaySlot(scoreboardSlot);
@@ -459,7 +459,7 @@ public class O2Houses
             p.getLogger().info("Team " + houseName + " already registered.");
       }
 
-      team.setColor(houseType.getColor());
+      team.setColor(houseType.getChatColorCode());
       team.setAllowFriendlyFire(true);
       team.setOption(Team.Option.DEATH_MESSAGE_VISIBILITY, Team.OptionStatus.FOR_OWN_TEAM);
 

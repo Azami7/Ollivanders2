@@ -52,8 +52,8 @@ public final class REDUCTO extends DarkArts
    public void checkEffect ()
    {
       move();
-      if (super.getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE
-            && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
+      Material targetBlockType = getBlock().getType();
+      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
       {
          Location backLoc = super.location.clone().subtract(vector);
          backLoc.getWorld().createExplosion(backLoc, (float) (usesModifier * 0.4));

@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Created by Azami7 on 6/29/17. Imported from iarepandemonium/Ollivanders.
+ * Turns sticks in to arrows. Created by Azami7 on 6/29/17. Imported from iarepandemonium/Ollivanders.
  *
  * @version Ollivanders2
  * @author lownes

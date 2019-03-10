@@ -309,7 +309,9 @@ public class OllivandersListener implements Listener
          }
 
          if (i == O2Spell.max_spell_words)
+         {
             break;
+         }
 
          spellName.append(" ");
       }
@@ -567,7 +569,7 @@ public class OllivandersListener implements Listener
             Location eyeLocation = sender.getEyeLocation();
             Material inMat = eyeLocation.getBlock().getType();
             int distance = 0;
-            while ((inMat == Material.AIR || inMat == Material.FIRE || inMat == Material.WATER || inMat == Material.STATIONARY_WATER || inMat == Material.LAVA || inMat == Material.STATIONARY_LAVA) && distance < 160)
+            while ((inMat == Material.AIR || inMat == Material.FIRE || inMat == Material.WATER || inMat == Material.LAVA) && distance < 160)
             {
                eyeLocation = eyeLocation.add(eyeLocation.getDirection());
                distance++;
@@ -1812,7 +1814,7 @@ public class OllivandersListener implements Listener
          p.getLogger().info("OllivandersListener:brewPotion: brewing potion");
 
       Block under = cauldron.getRelative(BlockFace.DOWN);
-      if (under.getType() == Material.FIRE || under.getType() == Material.LAVA || under.getType() == Material.STATIONARY_LAVA)
+      if (under.getType() == Material.FIRE || under.getType() == Material.LAVA)
       {
          ItemStack potion = Ollivanders2API.getPotions().brewPotion(cauldron, player);
 

@@ -153,18 +153,23 @@ public abstract class O2Spell implements Teachable
    public void move ()
    {
       location.add(vector);
+
+      // if spell cannot exist in this location, kill the projectile
       if (!p.canLive(location, spellType))
       {
          kill();
       }
 
+      // if block type is not a pass-through type, kill the projectile
       location.getWorld().playEffect(location, moveEffect, moveEffectData);
-      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE
-            && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER
-            && getBlock().getType() != Material.STATIONARY_LAVA && getBlock().getType() != Material.LAVA)
+      Material targetBlockType = getBlock().getType();
+      if (targetBlockType != Material.AIR && targetBlockType != Material.CAVE_AIR && targetBlockType != Material.FIRE
+            && targetBlockType != Material.WATER && targetBlockType != Material.LAVA)
       {
          kill = true;
       }
+
+      // if the max duration of the projectile is reached, kill the projectile
       lifeTicks++;
       if (lifeTicks > 160)
       {

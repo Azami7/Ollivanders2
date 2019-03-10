@@ -44,23 +44,53 @@ public final class FINESTRA extends Charms
    public void checkEffect ()
    {
       move();
-      Material type = getBlock().getType();
-      System.out.println("Type 1: " + type.toString());
-      if (type == Material.GLASS || type == Material.STAINED_GLASS ||
-          type == Material.STAINED_GLASS_PANE || type == Material.THIN_GLASS)
+
+      if (isGlass(getBlock()))
       {
-         for (Block block : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
+         for (Block nearbyBlock : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
          {
-            Material type2 = block.getType();
-            System.out.println("Type 2: " + type2.toString());
-            if (type2 == Material.GLASS || type2 == Material.STAINED_GLASS ||
-                type2 == Material.STAINED_GLASS_PANE || type2 == Material.THIN_GLASS)
+            if (isGlass(nearbyBlock))
             {
-               System.out.println("Break block");
-               block.breakNaturally();
+               nearbyBlock.breakNaturally();
             }
          }
          kill();
+      }
+   }
+
+   /**
+    * Determine if a block is glass.
+    *
+    * @param block the block to check
+    * @return true if the block is glass, false otherwise
+    */
+   private boolean isGlass (Block block)
+   {
+      Material blockType = block.getType();
+
+      if (blockType == Material.GLASS || blockType == Material.GLASS_PANE
+            || blockType == Material.BLACK_STAINED_GLASS || blockType == Material.BLACK_STAINED_GLASS_PANE
+            || blockType == Material.GRAY_STAINED_GLASS || blockType == Material.GRAY_STAINED_GLASS_PANE
+            || blockType == Material.BLUE_STAINED_GLASS || blockType == Material.BLUE_STAINED_GLASS_PANE
+            || blockType == Material.BROWN_STAINED_GLASS || blockType == Material.BROWN_STAINED_GLASS_PANE
+            || blockType == Material.CYAN_STAINED_GLASS || blockType == Material.CYAN_STAINED_GLASS_PANE
+            || blockType == Material.GREEN_STAINED_GLASS || blockType == Material.GREEN_STAINED_GLASS_PANE
+            || blockType == Material.LIGHT_BLUE_STAINED_GLASS || blockType == Material.LIGHT_BLUE_STAINED_GLASS_PANE
+            || blockType == Material.RED_STAINED_GLASS || blockType == Material.RED_STAINED_GLASS_PANE
+            || blockType == Material.YELLOW_STAINED_GLASS || blockType == Material.YELLOW_STAINED_GLASS_PANE
+            || blockType == Material.LIME_STAINED_GLASS || blockType == Material.LIME_STAINED_GLASS_PANE
+            || blockType == Material.ORANGE_STAINED_GLASS || blockType == Material.ORANGE_STAINED_GLASS_PANE
+            || blockType == Material.LIGHT_GRAY_STAINED_GLASS || blockType == Material.LIGHT_GRAY_STAINED_GLASS_PANE
+            || blockType == Material.MAGENTA_STAINED_GLASS || blockType == Material.MAGENTA_STAINED_GLASS_PANE
+            || blockType == Material.PURPLE_STAINED_GLASS || blockType == Material.PURPLE_STAINED_GLASS_PANE
+            || blockType == Material.WHITE_STAINED_GLASS || blockType == Material.WHITE_STAINED_GLASS_PANE
+            || blockType == Material.PINK_STAINED_GLASS || blockType == Material.PINK_STAINED_GLASS_PANE)
+      {
+         return true;
+      }
+      else
+      {
+         return false;
       }
    }
 }

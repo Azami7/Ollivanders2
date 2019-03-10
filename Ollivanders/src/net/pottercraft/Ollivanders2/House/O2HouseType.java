@@ -1,9 +1,7 @@
 package net.pottercraft.Ollivanders2.House;
 
+import net.pottercraft.Ollivanders2.O2Color;
 import org.bukkit.ChatColor;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * House types
@@ -13,33 +11,14 @@ import java.util.Map;
  */
 public enum O2HouseType
 {
-   GRYFFINDOR ("Gryffindor", ChatColor.DARK_RED),
-   HUFFLEPUFF ("Hufflepuff", ChatColor.GOLD),
-   RAVENCLAW ("Ravenclaw", ChatColor.BLUE),
-   SLYTHERIN ("Slytherin", ChatColor.DARK_GREEN);
+   GRYFFINDOR("Gryffindor", O2Color.DARK_RED),
+   HUFFLEPUFF("Hufflepuff", O2Color.GOLD),
+   RAVENCLAW("Ravenclaw", O2Color.BLUE),
+   SLYTHERIN("Slytherin", O2Color.DARK_GREEN);
 
    private String name;
-   private String prefix;
-   private ChatColor color;
+   private O2Color color;
    private Integer score;
-
-   private Map<ChatColor, String> colorPrefixes = new HashMap<ChatColor, String>() {{
-      put(ChatColor.DARK_BLUE, "§1");
-      put(ChatColor.DARK_GREEN, "§2");
-      put(ChatColor.DARK_AQUA, "§3");
-      put(ChatColor.DARK_RED, "§4");
-      put(ChatColor.DARK_PURPLE, "§5");
-      put(ChatColor.GOLD, "§6");
-      put(ChatColor.GRAY, "§7");
-      put(ChatColor.DARK_GRAY, "§8");
-      put(ChatColor.BLUE, "§9");
-      put(ChatColor.GREEN, "§a");
-      put(ChatColor.AQUA, "§b");
-      put(ChatColor.RED, "§c");
-      put(ChatColor.LIGHT_PURPLE, "§d");
-      put(ChatColor.YELLOW, "§e");
-      put(ChatColor.WHITE, "§f");
-   }};
 
    /**
     * Constructor
@@ -47,11 +26,10 @@ public enum O2HouseType
     * @param name the display name for this house
     * @param color the chat color for this house
     */
-   O2HouseType (String name, ChatColor color)
+   O2HouseType (String name, O2Color color)
    {
       this.name = name;
       this.color = color;
-      prefix = colorPrefixes.get(color);
       score = 0;
    }
 
@@ -81,9 +59,9 @@ public enum O2HouseType
     *
     * @return the ChatColor for this house
     */
-   public ChatColor getColor()
+   public ChatColor getChatColorCode ()
    {
-      return color;
+      return color.getChatColor();
    }
 
    /**
@@ -93,7 +71,7 @@ public enum O2HouseType
     */
    public String getColorPrefix ()
    {
-      return prefix;
+      return color.getChatColorCode();
    }
 
    /**
@@ -104,11 +82,11 @@ public enum O2HouseType
     */
    void setColor (String name)
    {
-      ChatColor c = null;
+      O2Color c = null;
 
       try
       {
-         c = ChatColor.valueOf(name);
+         c = O2Color.valueOf(name);
       }
       catch (Exception e)
       {
@@ -117,8 +95,6 @@ public enum O2HouseType
 
       if (c != null)
          color = c;
-
-      prefix = colorPrefixes.get(color);
    }
 
    /**

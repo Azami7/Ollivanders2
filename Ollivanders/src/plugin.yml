@@ -4,6 +4,7 @@ version: 2.3
 authors: [Azami7, autumnwoz]
 website: https://www.spigotmc.org/resources/ollivanders2.38992/
 softdepend: [WorldGuard, LibsDisguises]
+api-version: 1.13
 commands:
   Ollivanders2:
     description: This is the main admin command for the Ollivanders2 plugin

@@ -57,7 +57,7 @@ public final class TERGEO extends Charms
       if (move)
       {
          move();
-         if (getBlock().getType() == Material.WATER || getBlock().getType() == Material.STATIONARY_WATER)
+         if (getBlock().getType() == Material.WATER)
          {
             Block block = location.getBlock();
             block.setType(Material.AIR);
@@ -97,7 +97,7 @@ public final class TERGEO extends Charms
          Material mat = block.getType();
          if (mat == Material.AIR)
          {
-            block.setType(Material.STATIONARY_WATER);
+            block.setType(Material.WATER);
          }
       }
    }

@@ -61,7 +61,8 @@ public final class LUMOS_SOLEM extends Charms
       if (move)
       {
          move();
-         if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType() != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
+         Material targetBlockType = getBlock().getType();
+         if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
          {
             for (LivingEntity live : getLivingEntities(usesModifier))
             {

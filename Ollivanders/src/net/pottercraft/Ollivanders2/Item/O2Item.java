@@ -1,7 +1,7 @@
 package net.pottercraft.Ollivanders2.Item;
 
+import net.pottercraft.Ollivanders2.O2Color;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -43,10 +43,8 @@ public class O2Item
 
       if (materialType == Material.POTION)
       {
-         Ollivanders2Common common = new Ollivanders2Common(p);
-
          meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-         ((PotionMeta) meta).setColor(common.colorByNumber((int) variant));
+         ((PotionMeta) meta).setColor(O2Color.getBukkitColorByNumber((int) variant).getBukkitColor());
       }
 
       ingredient.setItemMeta(meta);

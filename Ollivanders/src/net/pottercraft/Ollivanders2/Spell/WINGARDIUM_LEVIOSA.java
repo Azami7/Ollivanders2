@@ -77,8 +77,7 @@ public final class WINGARDIUM_LEVIOSA extends Charms
       {
          move();
          Material type = getBlock().getType();
-         if (type != Material.AIR && type != Material.WATER && type != Material.STATIONARY_WATER
-               && type != Material.LAVA && type != Material.STATIONARY_LAVA)
+         if (type != Material.AIR && type != Material.WATER && type != Material.LAVA)
          {
             moving = false;
             double radius = usesModifier / 4;
@@ -103,10 +102,8 @@ public final class WINGARDIUM_LEVIOSA extends Charms
                if (!insideCollo)
                {
                   type = block.getType();
-                  if (type != Material.WATER && type != Material.STATIONARY_WATER && type != Material.LAVA
-                        && type != Material.STATIONARY_LAVA && type != Material.SAND && type != Material.GRAVEL
-                        && type != Material.AIR && type != Material.BEDROCK && type.isSolid()
-                        && !p.getTempBlocks().contains(block))
+                  if (type != Material.WATER && type != Material.LAVA && type != Material.SAND && type != Material.GRAVEL
+                        && type != Material.AIR && type != Material.BEDROCK && type.isSolid() && !p.getTempBlocks().contains(block))
                   {
                      Location loc = centerOfBlock(block).subtract(location);
                      Material mat = block.getType();

@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -51,7 +52,7 @@ public final class FRANGE_LIGNEA extends Charms
    {
       move();
       Block block = super.getBlock();
-      if (block.getType() == Material.LOG)
+      if (Ollivanders2API.common.isNaturalLog(block))
       {
          block.getLocation().getWorld().createExplosion(block.getLocation(), 0);
          int data = block.getState().getData().toItemStack(1).getDurability() % 4;
@@ -62,7 +63,7 @@ public final class FRANGE_LIGNEA extends Charms
             ItemStack shellStack = new ItemStack(Material.STICK, number);
             ItemMeta shellM = shellStack.getItemMeta();
             shellM.setDisplayName("Coreless Wand");
-            List<String> lore = new ArrayList<String>();
+            List<String> lore = new ArrayList<>();
             lore.add(woodTypes[data]);
             shellM.setLore(lore);
             shellStack.setItemMeta(shellM);

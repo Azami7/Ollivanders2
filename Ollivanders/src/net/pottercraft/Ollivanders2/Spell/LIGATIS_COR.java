@@ -70,19 +70,19 @@ public final class LIGATIS_COR extends Charms
                   {
                      Item e2 = (Item) e;
                      Material mat = e2.getItemStack().getType();
-                     Material[] cores = {Material.SPIDER_EYE, Material.ROTTEN_FLESH, Material.BONE, Material.SULPHUR};
+                     Material[] cores = {Material.SPIDER_EYE, Material.ROTTEN_FLESH, Material.BONE, Material.GUNPOWDER};
                      if (Arrays.asList(cores).contains(mat))
                      {
-                        Map<Material, String> matMap = new HashMap<Material, String>();
+                        Map<Material, String> matMap = new HashMap<>();
                         matMap.put(Material.SPIDER_EYE, "Spider Eye");
                         matMap.put(Material.ROTTEN_FLESH, "Rotten Flesh");
                         matMap.put(Material.BONE, "Bone");
-                        matMap.put(Material.SULPHUR, "Gunpowder");
+                        matMap.put(Material.GUNPOWDER, "Gunpowder");
                         String lore = corM.getLore().get(0);
                         lore = lore.concat(" and ");
                         lore = lore.concat(matMap.get(mat));
                         corM.setDisplayName("Wand");
-                        List<String> loreL = new ArrayList<String>();
+                        List<String> loreL = new ArrayList<>();
                         loreL.add(lore);
                         corM.setLore(loreL);
                         ItemStack coreStack = item.getItemStack();

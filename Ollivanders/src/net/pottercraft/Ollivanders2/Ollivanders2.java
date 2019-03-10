@@ -83,7 +83,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
    public static Ollivanders2WorldGuard worldGuardO2;
-   public static int mcVersion = 11;
+   public static int mcVersion = 13;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -137,8 +137,11 @@ public class Ollivanders2 extends JavaPlugin
          this.saveDefaultConfig();
       }
 
-      //check version of server
       mcVersionCheck();
+      if (mcVersion < 13)
+      {
+         Bukkit.getPluginManager().disablePlugin(this);
+      }
 
       // read configuration
       initConfig();
@@ -1846,10 +1849,14 @@ public class Ollivanders2 extends JavaPlugin
       {
          mcVersion = 13;
       }
-
-      if (mcVersion < 12)
+      else // anything lower than 1.12 set to 11 because there are no plugin features specific to versions before that
       {
-         getLogger().warning("MC version " + versionString + ". Some features of Ollivanders2 require MC 1.12 and higher.");
+         mcVersion = 11;
+      }
+
+      if (mcVersion < 13)
+      {
+         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.13. Use Ollivanders 2.2.9.* for Minecraft versions 1.12.2 and lower.");
       }
    }
 

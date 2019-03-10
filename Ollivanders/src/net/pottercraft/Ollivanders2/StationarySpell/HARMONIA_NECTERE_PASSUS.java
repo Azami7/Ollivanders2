@@ -102,7 +102,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     */
    private boolean cabinetCheck (Block feet)
    {
-      if (feet.getType() != Material.AIR && feet.getType() != Material.WALL_SIGN && feet.getType() != Material.SIGN_POST)
+      if (feet.getType() != Material.AIR && feet.getType() != Material.WALL_SIGN)
       {
          return false;
       }

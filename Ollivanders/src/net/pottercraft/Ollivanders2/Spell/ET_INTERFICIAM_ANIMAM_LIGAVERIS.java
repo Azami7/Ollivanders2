@@ -68,8 +68,9 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
       }
 
       move();
-      if (getBlock().getType() != Material.AIR && getBlock().getType() != Material.FIRE && getBlock().getType()
-            != Material.WATER && getBlock().getType() != Material.STATIONARY_WATER)
+
+      Material targetBlockType = getBlock().getType();
+      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
       {
          double futureHealth = player.getHealth();
          if (futureHealth > player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0)

@@ -18,8 +18,6 @@ import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.DyeColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
@@ -307,42 +305,6 @@ public class Ollivanders2Common
          type = RabbitType.KILLER_BUNNY;
 
       return type;
-   }
-
-   /**
-    * Generate a random primary or secondary color - red, orange, yellow, green, blue, purple
-    *
-    * @return the dye color
-    */
-   public DyeColor randomSecondaryDyeColor ()
-   {
-      DyeColor color;
-
-      int rand = Math.abs(random.nextInt() % 4);
-
-      switch (rand)
-      {
-         case 1:
-            color = DyeColor.RED;
-            break;
-         case 2:
-            color = DyeColor.ORANGE;
-            break;
-         case 3:
-            color = DyeColor.YELLOW;
-            break;
-         case 4:
-            color = DyeColor.GREEN;
-            break;
-         case 5:
-            color = DyeColor.BLUE;
-            break;
-         default:
-            color = DyeColor.PURPLE;
-            break;
-      }
-
-      return color;
    }
 
    /**
@@ -805,69 +767,6 @@ public class Ollivanders2Common
    }
 
    /**
-    * Get the basic color associated with a number 1-16
-    *
-    * @param number a number between 1-16, numbers outside of this range will be set to WHITE
-    * @return the color associated with this number
-    */
-   public Color colorByNumber (int number)
-   {
-      Color color = Color.WHITE;
-
-      if (number == 0)
-         color = Color.AQUA;
-
-      else if (number == 1)
-         color = Color.BLACK;
-
-      else if (number == 2)
-         color = Color.BLUE;
-
-      else if (number == 3)
-         color = Color.FUCHSIA;
-
-      else if (number == 4)
-         color = Color.GRAY;
-
-      else if (number == 5)
-         color = Color.GREEN;
-
-      else if (number == 6)
-         color = Color.LIME;
-
-      else if (number == 7)
-         color = Color.MAROON;
-
-      else if (number == 8)
-         color = Color.NAVY;
-
-      else if (number == 9)
-         color = Color.OLIVE;
-
-      else if (number == 10)
-         color = Color.ORANGE;
-
-      else if (number == 11)
-         color = Color.PURPLE;
-
-      else if (number == 12)
-         color = Color.RED;
-
-      else if (number == 13)
-         color = Color.SILVER;
-
-      else if (number == 14)
-         color = Color.TEAL;
-
-         // 15 is white again
-
-      else if (number == 16)
-         color = Color.WHITE;
-
-      return color;
-   }
-
-   /**
     * Get the current timestamp as a string.
     *
     * @return timestamp in the format 2018-09-30-12-15-30
@@ -985,7 +884,12 @@ public class Ollivanders2Common
       return knu;
    }
 
-
+   /**
+    * Gives a player an item stack
+    *
+    * @param player the player to give the items to
+    * @param kit    the items to give
+    */
    public void givePlayerKit (Player player, List<ItemStack> kit)
    {
       Location loc = player.getEyeLocation();
@@ -994,6 +898,27 @@ public class Ollivanders2Common
       for (ItemStack item : leftover.values())
       {
          player.getWorld().dropItem(loc, item);
+      }
+   }
+
+   /**
+    * Is this material a natural log (ie. living tree)
+    *
+    * @param block the block to check
+    * @return true if it is a natural log, false otherwise
+    */
+   public boolean isNaturalLog (Block block)
+   {
+      Material material = block.getType();
+
+      if (material == Material.OAK_LOG || material == Material.BIRCH_LOG || material == Material.ACACIA_LOG
+            || material == Material.DARK_OAK_LOG || material == Material.JUNGLE_LOG || material == Material.SPRUCE_LOG)
+      {
+         return true;
+      }
+      else
+      {
+         return false;
       }
    }
 }
