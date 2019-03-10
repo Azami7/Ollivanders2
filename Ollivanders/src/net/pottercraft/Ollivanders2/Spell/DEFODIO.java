@@ -3,7 +3,9 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,6 +25,8 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 public final class DEFODIO extends Charms
 {
    private int depth;
+
+   private Block curBlock = null;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -55,38 +59,53 @@ public final class DEFODIO extends Charms
       spellType = O2SpellType.DEFODIO;
       setUsesModifier();
       depth = (int) usesModifier;
+
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
-   public void checkEffect ()
+   /**
+    * Break a row of blocks
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      Location newl = location.clone();
-      Location forward = newl.add(vector);
-      Block block = forward.getBlock();
-      List<Block> tempBlocks = p.getTempBlocks();
-      if (depth > 0)
+      // if we have hit a target, start digging on the target block
+      if (hasHitTarget())
       {
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+         curBlock = getTargetBlock();
+      }
+
+      // dig
+      if (curBlock != null)
+      {
+         if (materialBlackList.contains(curBlock) || depth <= 0)
          {
-            if (stat instanceof COLLOPORTUS)
-            {
-               if (stat.isInside(block.getLocation()))
-               {
-                  return;
-               }
-            }
+            // stop the spell if we hit a blacklisted block type or when the max depth is reached
+            kill();
+            return;
          }
-         if (block.getType() != Material.BEDROCK && !tempBlocks.contains(block))
+
+         Location curLoc = curBlock.getLocation();
+
+         if (Ollivanders2API.getStationarySpells().checkLocationForSpell(curLoc, O2StationarySpellType.COLLOPORTUS))
          {
-            if (block.breakNaturally())
-            {
-               depth--;
-            }
+            // stop the spell if we hit a colloportus stationary spell
+            kill();
+            return;
+         }
+
+         if (curBlock.breakNaturally())
+         {
+            depth--;
+
+            Location nextLoc = curLoc.add(vector);
+            curBlock = nextLoc.getBlock();
          }
          else
          {
+            // stop the spell if something prevented the current block breaking naturally
             kill();
          }
       }
-      move();
    }
 }

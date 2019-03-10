@@ -55,6 +55,9 @@ public final class AVADA_KEDAVRA extends DarkArts
       moveEffectData = Material.MELON;
    }
 
+   /**
+    * Kill a living entity
+    */
    @Override
    protected void doCheckEffect ()
    {

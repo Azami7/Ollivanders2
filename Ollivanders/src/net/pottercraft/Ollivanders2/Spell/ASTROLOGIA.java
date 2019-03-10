@@ -13,7 +13,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @since 2.2.9
  */
-public class ASTROLOGIA extends Divination
+public final class ASTROLOGIA extends Divination
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.

@@ -53,9 +53,13 @@ public final class BRACKIUM_EMENDO extends Healing
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   /**
+    * Find living entity near the projectile - if it is a skeleton, damage it, if it is a player,
+    * heal them.
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
       List<LivingEntity> entities = getLivingEntities(1.5);
       for (LivingEntity entity : entities)
       {
@@ -73,6 +77,7 @@ public final class BRACKIUM_EMENDO extends Healing
          {
             player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, (int) (usesModifier * 1200), 1), true);
             kill();
+            return;
          }
       }
    }

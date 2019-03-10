@@ -44,10 +44,14 @@ public final class CRESCERE_PROTEGAT extends Charms
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   /**
+    * Look for stationary spells at the projectile's target location and increase its radius
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
       List<StationarySpellObj> inside = new ArrayList<>();
+
       for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
          if (spell.isInside(location) && spell.radius < (int) usesModifier)
@@ -56,7 +60,7 @@ public final class CRESCERE_PROTEGAT extends Charms
             kill();
          }
       }
-      //int limit = (int)(usesModifier/inside.size());
+
       int limit = (int) usesModifier;
       for (StationarySpellObj spell : inside)
       {

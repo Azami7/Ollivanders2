@@ -24,11 +24,6 @@ import java.util.ArrayList;
 public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
 {
    /**
-    * The percent chance this spell will succeed each casting.
-    */
-   protected int successRate = 0;
-
-   /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
    public AMATO_ANIMO_ANIMATO_ANIMAGUS ()
@@ -142,6 +137,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
 
    private void transformToAnimalForm (O2Player o2p)
    {
+      int successRate = 0;
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
 
       int uses = (int)(usesModifier * 10);

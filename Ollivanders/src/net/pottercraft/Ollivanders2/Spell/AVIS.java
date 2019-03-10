@@ -1,9 +1,9 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Parrot;
-import org.bukkit.entity.Bat;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -59,16 +59,18 @@ public final class AVIS extends Charms
          maxBirds += 10;
       else
          maxBirds += (int)usesModifier / 10;
+
+      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
    }
 
-   public void checkEffect()
+   /**
+    * Shoot a stream of birds from the caster's wand
+    */
+   @Override
+   protected void doCheckEffect()
    {
       if (birdCount < maxBirds)
       {
-         move();
-
-         if (Ollivanders2.mcVersion > 11)
-         {
             Parrot bird = (Parrot) location.getWorld().spawnEntity(location, EntityType.PARROT);
 
             int rand = Math.abs(Ollivanders2Common.random.nextInt() % 5);
@@ -84,11 +86,6 @@ public final class AVIS extends Charms
             else
                variant = Parrot.Variant.RED;
             bird.setVariant(variant);
-         }
-         else
-         {
-            Bat bird = (Bat) location.getWorld().spawnEntity(location, EntityType.BAT);
-         }
 
          birdCount++;
       }

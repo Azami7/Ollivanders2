@@ -1,6 +1,5 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -22,7 +21,7 @@ public abstract class ConfundusSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ConfundusSuper ()
+   ConfundusSuper ()
    {
       super();
    }
@@ -34,15 +33,17 @@ public abstract class ConfundusSuper extends Charms
     * @param player the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ConfundusSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   ConfundusSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
    }
 
+   /**
+    * Look for living entities in the projectile's location and add confusion effect to them
+    */
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       List<LivingEntity> entities = getLivingEntities(1.5);
       if (entities.size() > 0)
       {
@@ -55,6 +56,7 @@ public abstract class ConfundusSuper extends Charms
             PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, modifier * 20, modifier);
             entity.addPotionEffect(confusion);
             kill();
+            return;
          }
       }
    }

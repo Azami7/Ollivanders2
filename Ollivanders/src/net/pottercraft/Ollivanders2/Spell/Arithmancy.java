@@ -9,12 +9,12 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
-public abstract class Arithmancy extends O2Spell
+abstract class Arithmancy extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Arithmancy ()
+   Arithmancy ()
    {
       super();
 
@@ -28,7 +28,7 @@ public abstract class Arithmancy extends O2Spell
     * @param player the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public Arithmancy (Ollivanders2 plugin, Player player, Double rightWand)
+   Arithmancy (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 

@@ -5,6 +5,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2WorldGuard;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -130,13 +131,9 @@ public final class APPARATE extends Charms
       }
 
       // check for Nullum Evanescunt at location
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      if (Ollivanders2API.getStationarySpells().checkLocationForSpell(player.getLocation(), O2StationarySpellType.NULLUM_EVANESCUNT))
       {
-         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation()))
-         {
-            stat.flair(10);
-            return false;
-         }
+         return false;
       }
 
       return true;
@@ -162,13 +159,9 @@ public final class APPARATE extends Charms
       }
 
       // check for Nullum Apparebit at destination
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      if (Ollivanders2API.getStationarySpells().checkLocationForSpell(player.getLocation(), O2StationarySpellType.NULLUM_APPAREBIT))
       {
-         if (stat instanceof NULLUM_APPAREBIT && stat.isInside(destination))
-         {
-            stat.flair(10);
-            return false;
-         }
+         return false;
       }
 
       return true;

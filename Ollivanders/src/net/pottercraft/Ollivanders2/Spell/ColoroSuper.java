@@ -35,7 +35,7 @@ public abstract class ColoroSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ColoroSuper ()
+   ColoroSuper ()
    {
       super();
    }
@@ -47,36 +47,45 @@ public abstract class ColoroSuper extends Charms
     * @param player the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ColoroSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   ColoroSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   /**
+    * Look for colorable entities or blocks, if one is found, change its color
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
-
       // first try to recolor any sheep in range
-      for (LivingEntity live : getLivingEntities(2))
+      List<LivingEntity> entities = getLivingEntities(1.5);
+
+      if (entities.size() > 0)
       {
-         if (live instanceof Sheep)
+         for (LivingEntity livingEntity : entities)
          {
-            Sheep sheep = (Sheep) live;
-            sheep.setColor(color.getDyeColor());
-            kill();
-            return;
+            if (livingEntity instanceof Sheep)
+            {
+               Sheep sheep = (Sheep)livingEntity;
+               sheep.setColor(color.getDyeColor());
+               kill();
+               return;
+            }
          }
       }
-
-      Block target = getBlock();
-      if (O2Color.isColorable(target.getType()))
+      else if (hasHitTarget())
       {
-         Material newColor = O2Color.changeColor(target.getType(), color);
-         target.setType(newColor);
+         Block target = getTargetBlock();
 
-         kill();
-         return;
+         if (O2Color.isColorable(target.getType()))
+         {
+            Material newColor = O2Color.changeColor(target.getType(), color);
+            target.setType(newColor);
+
+            kill();
+         }
       }
    }
 }

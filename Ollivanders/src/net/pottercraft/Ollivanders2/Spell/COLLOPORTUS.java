@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -47,17 +48,24 @@ public final class COLLOPORTUS extends Charms
 
       spellType = O2SpellType.COLLOPORTUS;
       setUsesModifier();
+
+      projectilePassThrough.add(Material.FIRE);
+      projectilePassThrough.add(Material.WATER);
+
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
-   public void checkEffect ()
+   /**
+    * When a target is hit, create a colloportus stationary spell
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
-      Material targetBlockType = getBlock().getType();
-      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
+      if (hasHitTarget())
       {
          int duration = (int) (usesModifier * 1200);
-         net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS total = new net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS(p, player.getUniqueId(), location,
-               O2StationarySpellType.COLLOPORTUS, 5, duration);
+         net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS total
+                 = new net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS(p, player.getUniqueId(), location, O2StationarySpellType.COLLOPORTUS, 5, duration);
          total.flair(10);
          Ollivanders2API.getStationarySpells().addStationarySpell(total);
          kill();

@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -44,13 +45,20 @@ public final class CALAMUS extends Transfiguration
 
       spellType = O2SpellType.CALAMUS;
       setUsesModifier();
+
+      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
    }
 
-   public void checkEffect()
+   /**
+    * Look for sticks in the projectile's location and turn them in to arrows
+    */
+   @Override
+   protected void doCheckEffect()
    {
-      move();
-      List<Item> items = super.getItems(1);
-      for (Item item : items){
+      List<Item> items = getItems(1.5);
+
+      for (Item item : items)
+      {
          Material mat = item.getItemStack().getType();
          if (mat == Material.STICK)
          {
@@ -60,6 +68,9 @@ public final class CALAMUS extends Transfiguration
             drop.setAmount(amount);
             loc.getWorld().dropItem(loc, drop);
             item.remove();
+
+            kill();
+            return;
          }
       }
    }

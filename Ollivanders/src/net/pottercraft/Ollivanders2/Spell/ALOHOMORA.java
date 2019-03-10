@@ -7,6 +7,7 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
@@ -62,14 +63,11 @@ public final class ALOHOMORA extends Charms
    {
       // check all the stationary spells in the location of the projectile for a Colloportus
       List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
       {
          if (spell instanceof COLLOPORTUS)
          {
-            if (spell.isInside(location))
-            {
-               inside.add(spell);
-            }
+            inside.add(spell);
          }
       }
 

@@ -3,13 +3,14 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Pulls a living entity towards the caster.
+ * Pulls an item towards the caster.
  *
  * @version Ollivanders2
  * @author lownes
@@ -31,7 +32,7 @@ public final class CARPE_RETRACTUM extends Charms
          add("Seize and Pull Charm");
       }};
 
-      text = "Pulls a living entity towards you.";
+      text = "Pulls an item towards you.";
    }
 
    /**
@@ -49,17 +50,17 @@ public final class CARPE_RETRACTUM extends Charms
       setUsesModifier();
    }
 
+   /**
+    * Look for an item in the projectile's location and pull that item towards the caster
+    */
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      List<LivingEntity> living = getLivingEntities(1.5);
-      for (LivingEntity live : living)
-      {
-         if (live.getUniqueId() == player.getUniqueId())
-            continue;
+      List<Item> items = getItems(1.5);
 
-         live.setVelocity(player.getEyeLocation().toVector().subtract(live.getLocation().toVector()).normalize().multiply(usesModifier / 10));
+      for (Item item : items)
+      {
+         item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(usesModifier / 10));
          kill();
          return;
       }

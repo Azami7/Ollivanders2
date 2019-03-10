@@ -16,7 +16,7 @@ public abstract class BombardaSuper extends Charms
 {
    double strength;
 
-   public BombardaSuper ()
+   BombardaSuper ()
    {
       super();
    }
@@ -28,7 +28,7 @@ public abstract class BombardaSuper extends Charms
     * @param player the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public BombardaSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   BombardaSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
       setUsesModifier();
@@ -36,7 +36,7 @@ public abstract class BombardaSuper extends Charms
       projectilePassThrough.add(Material.FIRE);
       projectilePassThrough.add(Material.WATER);
 
-      worldGuardFlags.add(DefaultFlag.CREEPER_EXPLOSION);
+      worldGuardFlags.add(DefaultFlag.TNT);
    }
 
    /**

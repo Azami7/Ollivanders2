@@ -14,7 +14,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @since 2.2.9
  */
-public class CARTOMANCIE extends Divination
+public final class CARTOMANCIE extends Divination
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.

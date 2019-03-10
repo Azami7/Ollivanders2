@@ -21,7 +21,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2Common;
 public abstract class PyrotechniaSuper extends Charms
 {
    int maxFireworks;
-   int fireworkCount;
+   private int fireworkCount;
    int fireworkPower = 2;
    List <org.bukkit.Color> fireworkColors = null;
    List <org.bukkit.Color> fadeColors = null;
@@ -53,11 +53,14 @@ public abstract class PyrotechniaSuper extends Charms
       maxFireworks = 1;
    }
 
+   /**
+    * Shoot a firework in to the sky from caster's location
+    */
+   @Override
    public void checkEffect ()
    {
       if (fireworkCount < maxFireworks)
       {
-         move();
          Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
 
          FireworkMeta meta = firework.getFireworkMeta();
@@ -112,6 +115,8 @@ public abstract class PyrotechniaSuper extends Charms
 
          fireworkCount++;
       }
+      else
+         kill();
    }
 
    /**

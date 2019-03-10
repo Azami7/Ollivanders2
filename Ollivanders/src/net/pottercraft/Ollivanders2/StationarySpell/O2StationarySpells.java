@@ -104,6 +104,26 @@ public class O2StationarySpells
    }
 
    /**
+    * Check for a specific type of stationary spell at a location
+    *
+    * @param location the location to check
+    * @param stationarySpellType the stationary spell type to check for
+    * @return true if spell of that type exists at that location, false otherwise
+    */
+   public boolean checkLocationForSpell (Location location, O2StationarySpellType stationarySpellType)
+   {
+      List<StationarySpellObj> spellsAtLocation = getStationarySpellsAtLocation(location);
+
+      for (StationarySpellObj statSpell : spellsAtLocation)
+      {
+         if (statSpell.spellType == stationarySpellType)
+            return true;
+      }
+
+      return false;
+   }
+
+   /**
     * Determine if the location is inside of a stationary spell area.
     *
     * @param stationarySpell
