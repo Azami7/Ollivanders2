@@ -3,8 +3,10 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
@@ -47,17 +49,27 @@ public final class DELETRIUS extends Charms
 
       spellType = O2SpellType.DELETRIUS;
       setUsesModifier();
+
+      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
+
+      projectilePassThrough.add(Material.FIRE);
+      projectilePassThrough.add(Material.WATER);
    }
 
-   public void checkEffect ()
+   /**
+    * Delete a item
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
-      List<Item> items = getItems(1);
-      for (Item item : items)
+      List<Item> items = getItems(1.5);
+
+      if (items.size() > 0)
       {
+         Item item = items.get(0);
+
          item.remove();
          kill();
-         return;
       }
    }
 }
