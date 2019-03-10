@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
@@ -53,32 +54,36 @@ public final class DEPRIMO extends Charms
 
       materialBlackList.add(Material.WATER);
       materialBlackList.add(Material.LAVA);
+
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
+   /**
+    *
+    */
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-
-      Block target = getBlock();
-
-      if (target != null)
+      if (hasHitTarget())
       {
-         double radius = usesModifier / 2;
+         Block target = getTargetBlock();
 
-         List<Block> nearbyBlocks = Ollivanders2API.common.getBlocksInRadius(target.getLocation(), radius);
+         if (target != null) {
+            double radius = usesModifier / 2;
 
-         for (Block block : nearbyBlocks)
-         {
-            if (materialBlackList.contains(block.getType()))
-            {
-               continue;
+            List<Block> nearbyBlocks = Ollivanders2API.common.getBlocksInRadius(target.getLocation(), radius);
+
+            for (Block block : nearbyBlocks) {
+               if (materialBlackList.contains(block.getType()))
+               {
+                  continue;
+               }
+
+               Location blockLocation = block.getLocation();
+               BlockData blockData = block.getBlockData();
+               target.setType(Material.AIR);
+               blockLocation.getWorld().spawnFallingBlock(blockLocation, blockData);
             }
-
-            Location blockLocation = block.getLocation();
-            BlockData blockData = block.getBlockData();
-            target.setType(Material.AIR);
-            blockLocation.getWorld().spawnFallingBlock(blockLocation, blockData);
          }
       }
    }
