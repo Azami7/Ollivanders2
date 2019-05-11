@@ -1,12 +1,14 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Gives an entity a healing effect for usesModifier seconds
@@ -44,19 +46,36 @@ public final class EPISKEY extends Healing
    public EPISKEY (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.EPISKEY;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   /**
+    * Look for living entities in the projectile location and give them regeneration
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
-      for (LivingEntity live : getLivingEntities(1.5))
+      List<LivingEntity> livingEntities = getLivingEntities(1.5);
+
+      if (livingEntities.size() > 0)
       {
-         live.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int) (usesModifier * 20), 0), true);
+         for (LivingEntity live : getLivingEntities(1.5))
+         {
+            if (live.getUniqueId().equals(player.getUniqueId()))
+            {
+               live.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int) (usesModifier * Ollivanders2Common.ticksPerSecond), 0), true);
+            }
+         }
+
          kill();
          return;
       }
+
+      // projectile is stopped, kill spell
+      if (hasHitTarget())
+         kill();
    }
 }

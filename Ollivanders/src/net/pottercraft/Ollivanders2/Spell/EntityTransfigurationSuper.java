@@ -4,7 +4,6 @@ import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
-import net.pottercraft.Ollivanders2.Ollivanders2WorldGuard;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -29,11 +28,6 @@ public abstract class EntityTransfigurationSuper extends O2Spell
     * The type of entity this will transfigure.
     */
    EntityType targetType = EntityType.SHEEP;
-
-   /**
-    * Whether this transfiguration permanent or not.  Usually for Charms it is false and for Transfiguration it is true.
-    */
-   protected boolean permanent = false;
 
    /**
     * How many blocks out from the target are affects.  Usually for permanent spells this is 1.
@@ -71,9 +65,9 @@ public abstract class EntityTransfigurationSuper extends O2Spell
    List<EntityType> entityWhitelist = new ArrayList<>();
 
    /**
-    * A class for checking WorldGuard permissions
+    * The duration of the transfiguration for non-permanent instances
     */
-   Ollivanders2WorldGuard worldGuard;
+   private int transfigurationTime = 0;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -104,70 +98,50 @@ public abstract class EntityTransfigurationSuper extends O2Spell
       entityBlacklist.add(EntityType.FALLING_BLOCK);
       entityBlacklist.add(EntityType.EXPERIENCE_ORB);
       entityBlacklist.add(EntityType.UNKNOWN);
+
+      permanent = false;
    }
 
+   /**
+    * Look for entities in the radius of the projectile and transfigure one if found
+    */
    @Override
-   public void checkEffect()
+   protected void doCheckEffect()
    {
-      // if the entity has not transfigured, transfigure it
+      // if an entity has not transfigured, look for one to transfigure
       if (!isTransfigured)
       {
-         // move the projectile
-         move();
-
-         // kill the spell if it is not allowed to be cast here
-         if (Ollivanders2.worldGuardEnabled && !Ollivanders2.worldGuardO2.checkWGBuild(player, player.getLocation()))
+         for (Entity e : getCloseEntities(1.5))
          {
-            kill();
-            p.spellCannotBeCastMessage(player);
+            if (e.getUniqueId() == player.getUniqueId())
+               continue;
+
+            transfigure(e);
+            stopProjectile();
+
+            // if entity did not change, the spell failed
+            if (!isTransfigured)
+            {
+               kill();
+            }
+
             return;
          }
 
-         for (Entity e : getCloseEntities(1))
-         {
-            // kill the spell if it is not allowed to be cast here
-            if (Ollivanders2.worldGuardEnabled && !Ollivanders2.worldGuardO2.checkWGBuild(player, e.getLocation()))
-            {
-               kill();
-               p.spellCannotBeCastMessage(player);
-               return;
-            }
-
-            transfigure(e);
-
-            if (!permanent)
-            {
-               spellDuration = (int) (spellDuration * durationModifier);
-
-               // do not let the spell last more than 24 hours
-               if (spellDuration > 86400)
-                  spellDuration = 86400;
-
-               kill = false;
-            }
-            else
-            {
-               spellDuration = 0;
-               kill();
-            }
-         }
+         // if projectile has stopped moving and we did not transfigure an entity, kill the spell
+         if (!isTransfigured && hasHitTarget())
+            kill();
       }
       else
       {
-         // check time to live on the spell
-         if (lifeTicks >= spellDuration)
+         // check duration on the transfiguration
+         if (transfigurationTime >= spellDuration)
          {
-            // spell duration is up, transfigure back to original shape
-            if (!permanent)
-            {
-               revert();
-            }
-
             kill();
             return;
          }
 
-         lifeTicks++;
+         transfigurationTime++;
       }
    }
 
@@ -189,6 +163,12 @@ public abstract class EntityTransfigurationSuper extends O2Spell
       if (rand < successRate)
       {
          transfigureEntity(entity);
+
+         spellDuration = (int) (spellDuration * durationModifier);
+
+         // do not let the spell last more than 24 hours
+         if (spellDuration > 86400)
+            spellDuration = 86400;
       }
       else
       {

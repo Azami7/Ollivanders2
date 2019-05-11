@@ -1,19 +1,17 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 
 /**
  * Mines a line of blocks of length depending on the player's level in this spell.
@@ -55,12 +53,26 @@ public final class DEFODIO extends Charms
    public DEFODIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.DEFODIO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
+
       depth = (int) usesModifier;
 
+      // world-guard flags
       worldGuardFlags.add(DefaultFlag.BUILD);
+
+      // material black list
+      materialBlackList.add(Material.WATER);
+      materialBlackList.add(Material.LAVA);
+      materialBlackList.add(Material.FIRE);
+
+      for (Material material : Ollivanders2Common.unbreakableMaterials)
+      {
+         if (!materialBlackList.contains(material))
+            materialBlackList.add(material);
+      }
    }
 
    /**
@@ -69,43 +81,38 @@ public final class DEFODIO extends Charms
    @Override
    protected void doCheckEffect ()
    {
-      // if we have hit a target, start digging on the target block
-      if (hasHitTarget())
+      if (!hasHitTarget())
+         return;
+
+      curBlock = getTargetBlock();
+
+      // stop the spell if we hit a blacklisted block type or when the max depth is reached
+      if (materialBlackList.contains(curBlock.getType()) || depth <= 0)
       {
-         curBlock = getTargetBlock();
+         kill();
+         return;
       }
 
-      // dig
-      if (curBlock != null)
+      Location curLoc = curBlock.getLocation();
+
+      // stop the spell if we hit a colloportus stationary spell
+      if (Ollivanders2API.getStationarySpells().checkLocationForSpell(curLoc, O2StationarySpellType.COLLOPORTUS))
       {
-         if (materialBlackList.contains(curBlock) || depth <= 0)
-         {
-            // stop the spell if we hit a blacklisted block type or when the max depth is reached
-            kill();
-            return;
-         }
+         kill();
+         return;
+      }
 
-         Location curLoc = curBlock.getLocation();
+      // stop the spell if something prevented the current block breaking naturally
+      if (curBlock.breakNaturally())
+      {
+         depth--;
 
-         if (Ollivanders2API.getStationarySpells().checkLocationForSpell(curLoc, O2StationarySpellType.COLLOPORTUS))
-         {
-            // stop the spell if we hit a colloportus stationary spell
-            kill();
-            return;
-         }
-
-         if (curBlock.breakNaturally())
-         {
-            depth--;
-
-            Location nextLoc = curLoc.add(vector);
-            curBlock = nextLoc.getBlock();
-         }
-         else
-         {
-            // stop the spell if something prevented the current block breaking naturally
-            kill();
-         }
+         Location nextLoc = curLoc.add(vector);
+         curBlock = nextLoc.getBlock();
+      }
+      else
+      {
+         kill();
       }
    }
 }

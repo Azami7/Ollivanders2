@@ -65,35 +65,37 @@ public final class HERBIVICUS extends Herbology
       stateList.add(CropState.RIPE);
    }
 
+   /**
+    * Grow all the crops in a radius of the spell target
+    */
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
+      if (!hasHitTarget())
+         return;
 
-      if (getBlock() != null)
+      double radius = usesModifier;
+
+      for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
       {
-         double radius = usesModifier;
+         BlockData blockData = block.getBlockData();
 
-         for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
+         if (blockData instanceof Crops)
          {
-            BlockData blockData = block.getBlockData();
-
-            if (blockData instanceof Crops)
+            CropState cropState = ((Crops) blockData).getState();
+            int currentState = stateList.indexOf(cropState);
+            int newState = currentState + 1;
+            if (newState > 7)
             {
-               CropState cropState = ((Crops) blockData).getState();
-               int currentState = stateList.indexOf(cropState);
-               int newState = currentState + 1;
-               if (newState > 7)
-               {
-                  newState = 7;
-               }
-
-               cropState = stateList.get(newState);
-               ((Crops) blockData).setState(cropState);
-               block.setBlockData(blockData);
+               newState = 7;
             }
+
+            cropState = stateList.get(newState);
+            ((Crops) blockData).setState(cropState);
+            block.setBlockData(blockData);
          }
-         kill();
       }
+
+      kill();
    }
 }

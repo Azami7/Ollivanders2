@@ -49,9 +49,8 @@ public final class LIBERACORPUS extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live instanceof Player)
@@ -70,5 +69,9 @@ public final class LIBERACORPUS extends Charms
             return;
          }
       }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 }

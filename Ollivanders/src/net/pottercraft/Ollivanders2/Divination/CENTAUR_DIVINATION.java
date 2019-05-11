@@ -3,6 +3,13 @@ package net.pottercraft.Ollivanders2.Divination;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
+/**
+ * Divination is a branch of magic that involves attempting to foresee the future, or gather insights into past, present and future events.
+ * https://harrypotter.fandom.com/wiki/Divination
+ *
+ * @author Azami7
+ * @since 2.2.9
+ */
 public class CENTAUR_DIVINATION extends O2Divination
 {
    public CENTAUR_DIVINATION (Ollivanders2 plugin, Player pro, Player tar, Integer exp)

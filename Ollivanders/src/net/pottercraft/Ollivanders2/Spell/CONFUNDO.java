@@ -41,10 +41,11 @@ public final class CONFUNDO extends ConfundusSuper
    public CONFUNDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.CONFUNDO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
-      modifier = 1;
+      strengthModifier = 1;
    }
 }

@@ -15,8 +15,8 @@ import java.util.ArrayList;
 /**
  * Open the target LivingEntity's inventory
  *
- * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
 public final class LEGILIMENS extends DarkArts
 {
@@ -53,9 +53,8 @@ public final class LEGILIMENS extends DarkArts
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live instanceof Player)
@@ -115,6 +114,10 @@ public final class LEGILIMENS extends DarkArts
             return;
          }
       }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 
    /**

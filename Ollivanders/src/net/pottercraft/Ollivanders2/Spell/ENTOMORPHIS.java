@@ -2,7 +2,6 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import me.libraryaddict.disguise.disguisetypes.watchers.SpiderWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -32,8 +31,7 @@ public final class ENTOMORPHIS extends PlayerDisguiseSuper
          add("The Insect Jinx");
       }};
 
-      text = "Entomorphis will transfigure an entity into a spider a duration dependent on your experience.";
-
+      text = "Entomorphis will transfigure a player into a spider for a duration dependent on your experience.";
    }
 
    /**
@@ -46,14 +44,13 @@ public final class ENTOMORPHIS extends PlayerDisguiseSuper
    public ENTOMORPHIS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.ENTOMORPHIS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       targetType = EntityType.SPIDER;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
-
-      SpiderWatcher watcher = (SpiderWatcher)disguise.getWatcher();
    }
 }

@@ -1,13 +1,14 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -15,21 +16,19 @@ import org.bukkit.entity.Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Sets fire to blocks. Also sets fire to living entities and items for an amount of time depending on the player's
- * spell level.
+ * Sets fire to blocks or living entities for an amount of time depending on the player's spell level.
  *
  * @author Azami7
  */
 public abstract class IncendioSuper extends Charms
 {
    private double lifeTime;
-   boolean move;
    boolean strafe = false;
+   boolean burning = false;
    int radius = 1;
    int blockRadius = 1;
    int distance = 1;
    int duration = 1;
-   private int ticksModifier = 16;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -49,95 +48,98 @@ public abstract class IncendioSuper extends Charms
    public IncendioSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-      lifeTime = usesModifier * ticksModifier;
-      move = true;
+
+      lifeTime = usesModifier * Ollivanders2Common.ticksPerSecond;
+      if (lifeTime > 120)
+         lifeTime = 120;
+
+      // world-guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(DefaultFlag.LIGHTER);
+      worldGuardFlags.add(DefaultFlag.PVP);
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
    }
 
+   @Override
    public void checkEffect ()
    {
-      if (move)
+      if (!hasHitTarget())
+         return;
+
+      if (burning)
       {
-         move();
-         //Check if the blocks set on fire are still on fire
-         Set<Block> remChange = new HashSet<>();
-         for (Block block : changed)
+         lifeTime--;
+
+         if (lifeTime <= 0)
+            kill();
+      }
+      else
+      {
+         Block target = getTargetBlock();
+
+         // blocks
+         if (!strafe)
          {
-            if (block.getType() != Material.FIRE)
-            {
-               remChange.add(block);
-            }
-         }
-         changed.removeAll(remChange);
-         if (strafe)
-         {
-            for (Block block : Ollivanders2API.common.getBlocksInRadius(location, blockRadius))
-            {
-               block.getWorld().playEffect(block.getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
-               if (block.getType() == Material.AIR)
-               {
-                  block.setType(Material.FIRE);
-                  changed.add(block);
-               }
-            }
+            Block above = target.getRelative(BlockFace.UP);
+            setBlockOnFire(above);
          }
          else
          {
-            Block block = getBlock();
-            Material type = block.getType();
-            if (type == Material.AIR)
+            for (Block block : Ollivanders2API.common.getBlocksInRadius(target.getLocation(), blockRadius))
             {
-               block.setType(Material.FIRE);
-               changed.add(block);
+               setBlockOnFire(block);
             }
          }
+
+         // items
          List<Item> items = getItems(radius);
          for (Item item : items)
          {
             item.setFireTicks((int)lifeTime);
+
             if (!strafe)
             {
-               kill();
+               break;
             }
          }
+
+         // entities
          List<LivingEntity> living = getLivingEntities(radius);
          for (LivingEntity live : living)
          {
             live.setFireTicks((int)lifeTime);
+
             if (!strafe)
             {
-               kill();
+               break;
             }
          }
-         for (O2Spell proj : p.getProjectiles())
-         {
-            if ((proj.spellType == O2SpellType.GLACIUS || proj.spellType == O2SpellType.GLACIUS_DUO || proj.spellType == O2SpellType.GLACIUS_TRIA)
-                  && proj.location.getWorld() == location.getWorld())
-            {
-               if (proj.location.distance(location) < distance)
-               {
-                  proj.revert();
-                  proj.kill();
-               }
-            }
-         }
-         if (lifeTicks > lifeTime)
-         {
-            kill = false;
-            move = false;
-            lifeTicks = (int) (-(usesModifier * 1200 / duration));
-         }
-      }
-      else
-      {
-         lifeTicks++;
-      }
-      if (lifeTicks >= 159)
-      {
-         revert();
-         kill();
+
+         burning = true;
       }
    }
 
+   /**
+    * Set an air block to fire
+    *
+    * @param block the block to change
+    */
+   private void setBlockOnFire (Block block)
+   {
+      Material type = block.getType();
+      if (type == Material.AIR)
+      {
+         block.getWorld().playEffect(block.getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
+
+         block.setType(Material.FIRE);
+         changed.add(block);
+      }
+   }
+
+   /**
+    * Change fire blocks back to air
+    */
+   @Override
    public void revert ()
    {
       for (Block block : changed)

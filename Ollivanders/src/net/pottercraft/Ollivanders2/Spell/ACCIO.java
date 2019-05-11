@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
@@ -48,6 +49,8 @@ public final class ACCIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ACCIO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 
@@ -70,8 +73,6 @@ public final class ACCIO extends Charms
 
       // projectile has stopped, kill the spell
       if (hasHitTarget())
-      {
          kill();
-      }
    }
 }

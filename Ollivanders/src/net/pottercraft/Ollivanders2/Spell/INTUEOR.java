@@ -7,6 +7,13 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
+/**
+ * Crystal-gazing was the art of looking into a crystal ball in order to try to gain insight into the future events.
+ * https://harrypotter.fandom.com/wiki/Crystal-gazing
+ *
+ * @author Azami7
+ * @since
+ */
 public class INTUEOR extends Divination
 {
    /**

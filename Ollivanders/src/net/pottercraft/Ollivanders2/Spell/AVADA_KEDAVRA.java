@@ -45,14 +45,16 @@ public final class AVADA_KEDAVRA extends DarkArts
    public AVADA_KEDAVRA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.AVADA_KEDAVRA;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
+      // world guard flags
       worldGuardFlags.add(DefaultFlag.PVP);
       worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
 
-      moveEffectData = Material.MELON;
+      moveEffectData = Material.GREEN_WOOL;
    }
 
    /**
@@ -70,15 +72,16 @@ public final class AVADA_KEDAVRA extends DarkArts
                continue;
 
             entity.damage(usesModifier * 2, player);
-            kill();
-            return;
+
+            break;
          }
+
+         kill();
+         return;
       }
 
       // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
       if (hasHitTarget())
-      {
          kill();
-      }
    }
 }

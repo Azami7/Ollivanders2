@@ -33,8 +33,9 @@ public final class COLOVARIA_FLAVO extends ColoroSuper
    public COLOVARIA_FLAVO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.COLOVARIA_FLAVO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       color = O2Color.YELLOW;

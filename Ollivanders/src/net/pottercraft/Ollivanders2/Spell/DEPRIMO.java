@@ -6,6 +6,7 @@ import java.util.List;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -48,13 +49,23 @@ public final class DEPRIMO extends Charms
    public DEPRIMO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.DEPRIMO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
+      // material black list
       materialBlackList.add(Material.WATER);
       materialBlackList.add(Material.LAVA);
+      materialBlackList.add(Material.FIRE);
 
+      for (Material material : Ollivanders2Common.unbreakableMaterials)
+      {
+         if (!materialBlackList.contains(material))
+            materialBlackList.add(material);
+      }
+
+      // world guard flags
       worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
@@ -64,27 +75,29 @@ public final class DEPRIMO extends Charms
    @Override
    protected void doCheckEffect ()
    {
-      if (hasHitTarget())
-      {
-         Block target = getTargetBlock();
+      if (!hasHitTarget())
+         return;
 
-         if (target != null) {
-            double radius = usesModifier / 2;
+      Block target = getTargetBlock();
 
-            List<Block> nearbyBlocks = Ollivanders2API.common.getBlocksInRadius(target.getLocation(), radius);
+      if (target != null) {
+         double radius = usesModifier / 2;
 
-            for (Block block : nearbyBlocks) {
-               if (materialBlackList.contains(block.getType()))
-               {
-                  continue;
-               }
+         List<Block> nearbyBlocks = Ollivanders2API.common.getBlocksInRadius(target.getLocation(), radius);
 
-               Location blockLocation = block.getLocation();
-               BlockData blockData = block.getBlockData();
-               target.setType(Material.AIR);
-               blockLocation.getWorld().spawnFallingBlock(blockLocation, blockData);
+         for (Block block : nearbyBlocks) {
+            if (materialBlackList.contains(block.getType()))
+            {
+               continue;
             }
+
+            Location blockLocation = block.getLocation();
+            BlockData blockData = block.getBlockData();
+            target.setType(Material.AIR);
+            blockLocation.getWorld().spawnFallingBlock(blockLocation, blockData);
          }
       }
+
+      kill();
    }
 }

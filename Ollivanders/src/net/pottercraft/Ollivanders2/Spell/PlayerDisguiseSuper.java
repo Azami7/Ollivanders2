@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -42,29 +43,7 @@ public abstract class PlayerDisguiseSuper extends EntityDisguiseSuper
          successRate = uses;
       else
          successRate = 100;
-   }
 
-   /**
-    * Check whether player has permissions to affect other players in their current location or in the
-    * target entity's location.
-    *
-    * @param e the target entity
-    * @return true if the player has the right permissions, false otherwise
-    */
-   @Override
-   protected boolean wgPermissionsCheck(Entity e)
-   {
-      if (worldGuard.checkWGPVP(player, player.getLocation()))
-      {
-         return true;
-      }
-      else if (worldGuard.checkWGPVP(player, e.getLocation()))
-      {
-         return true;
-      }
-      else
-      {
-         return false;
-      }
+      worldGuardFlags.add(DefaultFlag.PVP);
    }
 }

@@ -50,9 +50,8 @@ public final class LEVICORPUS extends DarkArts
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live.getUniqueId() == player.getUniqueId())
@@ -68,5 +67,9 @@ public final class LEVICORPUS extends DarkArts
             return;
          }
       }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 }

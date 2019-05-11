@@ -3,8 +3,6 @@ package net.pottercraft.Ollivanders2.Spell;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2WorldGuard;
-import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
-import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.Effect;
 import org.bukkit.Location;
@@ -13,7 +11,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 
 import java.util.ArrayList;
 
@@ -57,8 +54,9 @@ public final class APPARATE extends Charms
    public APPARATE (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.APPARATE;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 

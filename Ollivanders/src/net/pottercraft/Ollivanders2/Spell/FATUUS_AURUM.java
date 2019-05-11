@@ -44,9 +44,10 @@ public final class FATUUS_AURUM extends BlockTransfigurationSuper
    public FATUUS_AURUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.FATUUS_AURUM;
       branch = O2MagicBranch.TRANSFIGURATION;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       materialWhitelist.add(Material.STONE);

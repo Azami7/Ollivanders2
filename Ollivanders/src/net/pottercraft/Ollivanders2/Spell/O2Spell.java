@@ -38,6 +38,12 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 public abstract class O2Spell implements Teachable
 {
    /**
+    * Max spell lifetime in gameticks, 12000 = 10 minutes, this is used to ensure a code bug doesn't create never-ending
+    * spells. Permanent and semi-permanent spells need to use stationary spells or effects.
+    */
+   public static final int maxSpellLifetime = 12000;
+
+   /**
     * The most number of words a spell name can be.
     */
    public static int max_spell_words = 3;
@@ -66,6 +72,11 @@ public abstract class O2Spell implements Teachable
     * Whether this spell should be terminated.
     */
    private boolean kill = false;
+
+   /**
+    * Whether the effects of this spell should be permanent
+    */
+   protected boolean permanent = false;
 
    /**
     * The callback to the MC plugin
@@ -178,6 +189,8 @@ public abstract class O2Spell implements Teachable
       // block types that all spell projectiles pass through
       projectilePassThrough.add(Material.AIR);
       projectilePassThrough.add(Material.CAVE_AIR);
+      projectilePassThrough.add(Material.WATER);
+      projectilePassThrough.add(Material.FIRE);
    }
 
    /**
@@ -185,6 +198,13 @@ public abstract class O2Spell implements Teachable
     */
    public void checkEffect ()
    {
+      lifeTicks++;
+
+      if (lifeTicks > maxSpellLifetime)
+      {
+         kill();
+      }
+
       // do nothing if spell is already marked as killed
       if (!kill)
       {
@@ -220,11 +240,8 @@ public abstract class O2Spell implements Teachable
          targetBlock();
       }
 
-      // increment spell projectile lifeticks
-      lifeTicks++;
-
-      // if the max duration of the projectile is reached and we have not hit a target, kill the spell
-      if (lifeTicks > 160 && !hitTarget)
+      // if the max duration of the projectile is reached, kill the spell
+      if (lifeTicks > 160)
       {
          kill();
       }
@@ -407,9 +424,13 @@ public abstract class O2Spell implements Teachable
     */
    protected void setUsesModifier ()
    {
+      // set up spell use modifier
+      // modifier is 10% of number of times the spell has been cast and then halved if the player is not using their
+      // destined wand, doubled if they are using the elder wand
       spellUses = p.getSpellNum(player, spellType);
-      usesModifier = Math.sqrt(spellUses) / rightWand;
+      usesModifier = (spellUses * .1) / rightWand;
 
+      // if the caster is affected by HIGHER_SKILL, double their usesModifier
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
       {
          usesModifier *= 2;
@@ -444,8 +465,12 @@ public abstract class O2Spell implements Teachable
     */
    public void kill ()
    {
+      stopProjectile();
+
+      if (!permanent)
+         revert();
+
       kill = true;
-      revert();
    }
 
    /**

@@ -2,7 +2,6 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -45,13 +44,12 @@ public final class COLLOPORTUS extends Charms
    public COLLOPORTUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.COLLOPORTUS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
-      projectilePassThrough.add(Material.FIRE);
-      projectilePassThrough.add(Material.WATER);
-
+      // world guard flags
       worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
@@ -62,13 +60,14 @@ public final class COLLOPORTUS extends Charms
    protected void doCheckEffect ()
    {
       if (hasHitTarget())
-      {
-         int duration = (int) (usesModifier * 1200);
-         net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS total
-                 = new net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS(p, player.getUniqueId(), location, O2StationarySpellType.COLLOPORTUS, 5, duration);
-         total.flair(10);
-         Ollivanders2API.getStationarySpells().addStationarySpell(total);
-         kill();
-      }
+         return;
+
+      int duration = (int) (usesModifier * 1200);
+      net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS total
+            = new net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS(p, player.getUniqueId(), location, O2StationarySpellType.COLLOPORTUS, 5, duration);
+      total.flair(10);
+      Ollivanders2API.getStationarySpells().addStationarySpell(total);
+
+      kill();
    }
 }

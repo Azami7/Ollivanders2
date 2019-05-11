@@ -33,8 +33,9 @@ public final class COLOVARIA_AURANTIACO extends ColoroSuper
    public COLOVARIA_AURANTIACO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.COLOVARIA_AURANTIACO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       color = O2Color.ORANGE;

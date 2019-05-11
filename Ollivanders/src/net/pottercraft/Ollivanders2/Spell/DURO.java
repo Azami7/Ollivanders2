@@ -43,9 +43,10 @@ public final class DURO extends BlockTransfigurationSuper
    public DURO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.DURO;
       branch = O2MagicBranch.CHARMS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       transfigureType = Material.STONE;
@@ -64,9 +65,5 @@ public final class DURO extends BlockTransfigurationSuper
       {
          radius = (int) (usesModifier / 10);
       }
-
-      materialBlacklist.add(Material.WATER);
-      materialBlacklist.add(Material.LAVA);
-      materialBlacklist.add(Material.FIRE);
    }
 }

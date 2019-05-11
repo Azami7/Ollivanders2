@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.*;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
@@ -55,20 +56,16 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      Material blockType = getBlock().getType();
-      if (Ollivanders2.debug)
-         p.getLogger().info("Block is " + blockType.toString());
+      if (!hasHitTarget())
+         return;
+
+      Block fromBlock = getTargetBlock();
+      Material blockType = fromBlock.getType();
 
       if (blockType == Material.WALL_SIGN || blockType == Material.SIGN)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("detected sign object");
-         kill();
-
-         Block fromBlock = getBlock();
          // determine the location of the other vanishing cabinet
          Location toLoc = getSignLocation(fromBlock);
          if (toLoc == null)
@@ -119,6 +116,8 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
          Ollivanders2API.getStationarySpells().addStationarySpell(harmoniaFrom);
          Ollivanders2API.getStationarySpells().addStationarySpell(harmoniaTo);
       }
+
+      kill();
    }
 
    /**

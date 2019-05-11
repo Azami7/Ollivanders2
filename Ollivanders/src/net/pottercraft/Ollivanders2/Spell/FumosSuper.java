@@ -35,20 +35,28 @@ public abstract class FumosSuper extends Charms
    public FumosSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      // material black list
+      materialBlackList.add(Material.WATER);
+      materialBlackList.add(Material.LAVA);
+      materialBlackList.add(Material.FIRE);
    }
 
+   /**
+    * Blind targets in a radius of the spell location
+    */
    @Override
    public void checkEffect ()
    {
-      move();
-      Material targetBlockType = getBlock().getType();
-      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
+      for (LivingEntity living : getLivingEntities(usesModifier))
       {
-         for (LivingEntity live : getLivingEntities(usesModifier))
-         {
-            PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, (int) (usesModifier * 20 * strength), 0);
-            live.addPotionEffect(blind);
-         }
+         if (living.getUniqueId() == player.getUniqueId())
+            continue;
+
+         PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, (int) (usesModifier * 20 * strength), 0);
+         living.addPotionEffect(blind);
       }
+
+      kill();
    }
 }

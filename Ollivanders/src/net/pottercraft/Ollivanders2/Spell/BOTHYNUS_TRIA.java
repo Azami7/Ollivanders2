@@ -39,8 +39,9 @@ public final class BOTHYNUS_TRIA extends PyrotechniaSuper
    public BOTHYNUS_TRIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.BOTHYNUS_TRIA;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       fireworkColors = new ArrayList<>();

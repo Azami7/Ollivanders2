@@ -40,8 +40,9 @@ public final class COMETES extends PyrotechniaSuper
    public COMETES (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.COMETES;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       fireworkColors = new ArrayList<>();

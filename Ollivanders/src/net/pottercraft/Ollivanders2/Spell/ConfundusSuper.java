@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public abstract class ConfundusSuper extends Charms
 {
-   int modifier = 0;
+   int strengthModifier = 0;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -45,6 +46,7 @@ public abstract class ConfundusSuper extends Charms
    protected void doCheckEffect ()
    {
       List<LivingEntity> entities = getLivingEntities(1.5);
+
       if (entities.size() > 0)
       {
          for (LivingEntity entity : entities)
@@ -52,12 +54,18 @@ public abstract class ConfundusSuper extends Charms
             if (entity.getUniqueId() == player.getUniqueId())
                continue;
 
-            modifier = modifier * (int) usesModifier;
-            PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, modifier * 20, modifier);
+            int strength = strengthModifier * (int) usesModifier;
+            PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, strength * Ollivanders2Common.ticksPerSecond, strength);
             entity.addPotionEffect(confusion);
-            kill();
-            return;
+            break;
          }
+
+         kill();
+         return;
       }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 }

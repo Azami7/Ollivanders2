@@ -45,10 +45,10 @@ public final class ASTROLOGIA extends Divination
    public ASTROLOGIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.ASTROLOGIA;
       divinationType = O2DivinationType.ASTROLOGY;
 
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 }

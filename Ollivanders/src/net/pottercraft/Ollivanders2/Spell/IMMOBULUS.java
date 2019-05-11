@@ -52,10 +52,14 @@ public final class IMMOBULUS extends Charms
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   /**
+    * Slow entities within range of the projectile.
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
       List<LivingEntity> entities = getLivingEntities(1.5);
+
       for (LivingEntity entity : entities)
       {
          if (entity.getUniqueId() == player.getUniqueId())
@@ -64,7 +68,9 @@ public final class IMMOBULUS extends Charms
          int modifier = (int) usesModifier;
          PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, modifier * 20, 10);
          entity.addPotionEffect(slow);
-         kill();
       }
+
+      if (entities.size() > 0 || hasHitTarget())
+         kill();
    }
 }

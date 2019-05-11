@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
@@ -21,6 +22,8 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public final class FRANGE_LIGNEA extends Charms
 {
+   public static final String corelessWandLabel = "Coreless Wand";
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -42,34 +45,55 @@ public final class FRANGE_LIGNEA extends Charms
    public FRANGE_LIGNEA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.FRANGE_LIGNEA;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
+
+      // material black list
+      materialBlackList.add(Material.WATER);
+
+      // world-guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
+   /**
+    * Break a natural log in to sticks
+    */
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      Block block = super.getBlock();
+      if (!hasHitTarget())
+         return;
+
+      Block block = getTargetBlock();
+
       if (Ollivanders2API.common.isNaturalLog(block))
       {
+         // break the log in to the correct wand core type
+         String woodType = Ollivanders2API.common.enumRecode(block.getType().toString()).split("_")[0];
+         woodType = Ollivanders2API.common.firstLetterCapitalize(woodType);
+
          block.getLocation().getWorld().createExplosion(block.getLocation(), 0);
-         int data = block.getState().getData().toItemStack(1).getDurability() % 4;
-         String[] woodTypes = {"Oak", "Spruce", "Birch", "Jungle"};
          int number = (int) (usesModifier * 0.8);
+
+         // make a stack of sticks
          if (number > 0)
          {
-            ItemStack shellStack = new ItemStack(Material.STICK, number);
-            ItemMeta shellM = shellStack.getItemMeta();
-            shellM.setDisplayName("Coreless Wand");
+            ItemStack stickStack = new ItemStack(Material.STICK, number);
+            ItemMeta stickMeta = stickStack.getItemMeta();
+
+            stickMeta.setDisplayName(corelessWandLabel);
             List<String> lore = new ArrayList<>();
-            lore.add(woodTypes[data]);
-            shellM.setLore(lore);
-            shellStack.setItemMeta(shellM);
-            player.getWorld().dropItemNaturally(block.getLocation(), shellStack);
+            lore.add(woodType);
+            stickMeta.setLore(lore);
+            stickStack.setItemMeta(stickMeta);
+
+            player.getWorld().dropItemNaturally(block.getLocation(), stickStack);
          }
+
          block.setType(Material.AIR);
+         kill();
       }
    }
 }

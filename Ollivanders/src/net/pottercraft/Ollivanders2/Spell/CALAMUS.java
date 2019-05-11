@@ -42,8 +42,9 @@ public final class CALAMUS extends Transfiguration
    public CALAMUS(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.CALAMUS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       worldGuardFlags.add(DefaultFlag.ITEM_DROP);
@@ -57,21 +58,31 @@ public final class CALAMUS extends Transfiguration
    {
       List<Item> items = getItems(1.5);
 
-      for (Item item : items)
+      if (items.size() > 0)
       {
-         Material mat = item.getItemStack().getType();
-         if (mat == Material.STICK)
+         for (Item item : items)
          {
-            int amount = item.getItemStack().getAmount();
-            Location loc = item.getLocation();
-            ItemStack drop = new ItemStack(Material.ARROW);
-            drop.setAmount(amount);
-            loc.getWorld().dropItem(loc, drop);
-            item.remove();
+            Material mat = item.getItemStack().getType();
 
-            kill();
-            return;
+            if (mat == Material.STICK)
+            {
+               int amount = item.getItemStack().getAmount();
+               Location loc = item.getLocation();
+               ItemStack drop = new ItemStack(Material.ARROW);
+               drop.setAmount(amount);
+               loc.getWorld().dropItem(loc, drop);
+               item.remove();
+
+               break;
+            }
          }
+
+         kill();
+         return;
       }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 }

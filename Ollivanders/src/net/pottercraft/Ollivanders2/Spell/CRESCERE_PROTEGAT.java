@@ -1,9 +1,9 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -18,6 +18,16 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class CRESCERE_PROTEGAT extends Charms
 {
+   /**
+    * Stationary spell types that cannot be targeted by this spell.
+    */
+   ArrayList<O2StationarySpellType> spellBlacklist = new ArrayList<O2StationarySpellType>() {{
+      add(O2StationarySpellType.COLLOPORTUS);
+      add(O2StationarySpellType.HORCRUX);
+      add(O2StationarySpellType.HARMONIA_NECTERE_PASSUS);
+      add(O2StationarySpellType.ALIQUAM_FLOO);
+   }};
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -39,8 +49,9 @@ public final class CRESCERE_PROTEGAT extends Charms
    public CRESCERE_PROTEGAT (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.CRESCERE_PROTEGAT;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 
@@ -50,25 +61,39 @@ public final class CRESCERE_PROTEGAT extends Charms
    @Override
    protected void doCheckEffect ()
    {
-      List<StationarySpellObj> inside = new ArrayList<>();
+      StationarySpellObj inside = null;
 
       for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
-         if (spell.isInside(location) && spell.radius < (int) usesModifier)
+         // if the stationary spell type is not in the blacklist for this spell
+         // was cast by the caster of this spell
+         // and is inside the radius of this spell, then target it
+         if (!spellBlacklist.contains(spell.getSpellType()) && spell.getCasterID().equals(player.getUniqueId())
+               && spell.isInside(location) && spell.radius < (int) usesModifier)
          {
-            inside.add(spell);
-            kill();
+            inside = spell;
+
+            break;
          }
       }
 
-      int limit = (int) usesModifier;
-      for (StationarySpellObj spell : inside)
+      // if we found a target stationary spell, increase its radius
+      if (inside != null)
       {
-         if (spell.radius < limit && spell.getCasterID().equals(player.getUniqueId()))
+         int limit = (int) usesModifier;
+
+         if (inside.radius < limit && inside.getCasterID().equals(player.getUniqueId()))
          {
-            spell.radius++;
-            spell.flair(10);
+            inside.radius++;
+            inside.flair(10);
+
+            kill();
+            return;
          }
       }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 }

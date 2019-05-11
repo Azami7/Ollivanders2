@@ -35,10 +35,7 @@ public final class AVIS extends Charms
          add("\"Oh, hello, Harry ... I was just practicing.\" -Hermione Granger conjuring small golden birds just before sending them to attack Ron");
       }};
 
-      if (Ollivanders2.mcVersion > 11)
-         text = "Causes one or more birds to fly out of the tip of your wand.";
-      else
-         text = "Causes one or more bats to fly out of the tip of your wand.";
+      text = "Causes one or more birds to fly out of the tip of your wand.";
    }
 
    /**
@@ -51,8 +48,9 @@ public final class AVIS extends Charms
    public AVIS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.AVIS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       if (usesModifier > 100)
@@ -60,6 +58,7 @@ public final class AVIS extends Charms
       else
          maxBirds += (int)usesModifier / 10;
 
+      // world guard flags
       worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
    }
 
@@ -67,25 +66,25 @@ public final class AVIS extends Charms
     * Shoot a stream of birds from the caster's wand
     */
    @Override
-   protected void doCheckEffect()
+   public void checkEffect()
    {
       if (birdCount < maxBirds)
       {
-            Parrot bird = (Parrot) location.getWorld().spawnEntity(location, EntityType.PARROT);
+         Parrot bird = (Parrot) location.getWorld().spawnEntity(location, EntityType.PARROT);
 
-            int rand = Math.abs(Ollivanders2Common.random.nextInt() % 5);
-            Parrot.Variant variant;
-            if (rand == 0)
-               variant = Parrot.Variant.CYAN;
-            else if (rand == 1)
-               variant = Parrot.Variant.GRAY;
-            else if (rand == 2)
-               variant = Parrot.Variant.BLUE;
-            else if (rand == 3)
-               variant = Parrot.Variant.GREEN;
-            else
-               variant = Parrot.Variant.RED;
-            bird.setVariant(variant);
+         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 5);
+         Parrot.Variant variant;
+         if (rand == 0)
+            variant = Parrot.Variant.CYAN;
+         else if (rand == 1)
+            variant = Parrot.Variant.GRAY;
+         else if (rand == 2)
+            variant = Parrot.Variant.BLUE;
+         else if (rand == 3)
+            variant = Parrot.Variant.GREEN;
+         else
+            variant = Parrot.Variant.RED;
+         bird.setVariant(variant);
 
          birdCount++;
       }

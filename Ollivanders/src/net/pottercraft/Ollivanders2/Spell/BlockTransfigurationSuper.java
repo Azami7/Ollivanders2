@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
@@ -45,11 +46,6 @@ public abstract class BlockTransfigurationSuper extends O2Spell
     * The material type to change this block to.
     */
    Material transfigureType = Material.AIR;
-
-   /**
-    * Whether this transfiguration permanent or not.  Usually for Charms it is false and for Transfiguration it is true.
-    */
-   protected boolean permanent = true;
 
    /**
     * How many blocks out from the target are affects.  Usually for permanent spells this is 1.
@@ -104,9 +100,15 @@ public abstract class BlockTransfigurationSuper extends O2Spell
 
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      materialBlacklist.add(Material.BEDROCK);
-      materialBlacklist.add(Material.ENDER_CHEST);
-      materialBlacklist.add(Material.BARRIER);
+      // material black list
+      for (Material material : Ollivanders2Common.unbreakableMaterials)
+      {
+         if (!materialBlackList.contains(material))
+            materialBlackList.add(material);
+      }
+
+      // required worldGuard state flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
    /**
@@ -116,40 +118,40 @@ public abstract class BlockTransfigurationSuper extends O2Spell
    @Override
    protected void doCheckEffect ()
    {
-      if (hasHitTarget())
-      {
-         // if the object has not transfigured, transfigure it
-         if (!isTransfigured)
-         {
-            Block target = getTargetBlock();
-            if (target != null)
-            {
-               transfigure(target);
+      if (!hasHitTarget())
+         return;
 
-               if (!permanent)
-               {
-                  spellDuration = (int) (spellDuration * durationModifier);
-               }
-               else
-               {
-                  spellDuration = 0;
-                  kill();
-               }
-            }
-         }
-         // if the entity has transfigured, check time to change back
-         else
+      // if the object has not transfigured, transfigure it
+      if (!isTransfigured)
+      {
+         Block target = getTargetBlock();
+         if (target != null)
          {
-            // check time to live on the spell
-            if (spellDuration <= 0)
+            transfigure(target);
+
+            if (!permanent)
             {
-               // spell duration is up, kill the spell
-               kill();
+               spellDuration = (int) (spellDuration * durationModifier);
             }
             else
             {
-               spellDuration--;
+               spellDuration = 0;
+               kill();
             }
+         }
+      }
+      // if the entity has transfigured, check time to change back
+      else
+      {
+         // check time to live on the spell
+         if (spellDuration <= 0)
+         {
+            // spell duration is up, kill the spell
+            kill();
+         }
+         else
+         {
+            spellDuration--;
          }
       }
    }

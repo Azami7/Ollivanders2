@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -25,8 +26,10 @@ public final class ALARTE_ASCENDARE extends Charms
    public ALARTE_ASCENDARE ()
    {
       super();
-
       spellType = O2SpellType.ALARTE_ASCENDARE;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
+      setUsesModifier();
 
       flavorText = new ArrayList<String>() {{
          add("The Winged-Ascent Charm");
@@ -49,7 +52,9 @@ public final class ALARTE_ASCENDARE extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ALARTE_ASCENDARE;
-      setUsesModifier();
+
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      worldGuardFlags.add(DefaultFlag.PVP);
    }
 
    /**
@@ -66,12 +71,19 @@ public final class ALARTE_ASCENDARE extends Charms
       Vector vec = new Vector(0, up, 0);
 
       // check for entities first
-      for (LivingEntity lentity : getLivingEntities(1.5))
-      {
-         if (lentity.getUniqueId() == player.getUniqueId())
-            continue;
+      List<LivingEntity> livingEntities = getLivingEntities(1.5);
 
-         lentity.setVelocity(lentity.getVelocity().add(vec));
+      if (livingEntities.size() > 0)
+      {
+         for (LivingEntity lentity : livingEntities)
+         {
+            if (lentity.getUniqueId() == player.getUniqueId())
+               continue;
+
+            lentity.setVelocity(lentity.getVelocity().add(vec));
+            break;
+         }
+
          kill();
          return;
       }
@@ -79,18 +91,17 @@ public final class ALARTE_ASCENDARE extends Charms
       // check for items next
       List<Item> items = getItems(1.5);
 
-      if (items != null && items.size() > 0)
+      if (items.size() > 0)
       {
          Item item = items.get(0);
          item.setVelocity(item.getVelocity().add(vec));
 
          kill();
+         return;
       }
 
       // projectile has stopped, kill the spell
       if (hasHitTarget())
-      {
          kill();
-      }
    }
 }

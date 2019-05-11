@@ -4,7 +4,7 @@ import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2WorldGuard;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -37,9 +37,6 @@ public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
    public EntityDisguiseSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super (plugin, player, rightWand);
-
-      worldGuard = new Ollivanders2WorldGuard(plugin);
-      permanent = false;
    }
 
    /**

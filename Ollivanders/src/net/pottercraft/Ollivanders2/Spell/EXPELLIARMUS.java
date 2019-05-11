@@ -5,13 +5,11 @@ import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
-import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Disarms an entity of it's held item, flinging the item in the direction of the caster with force determined by the spell level.
@@ -51,66 +49,66 @@ public final class EXPELLIARMUS extends Charms
    public EXPELLIARMUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.EXPELLIARMUS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
+
+      // pass-through materials
+      projectilePassThrough.remove(Material.WATER);
    }
 
-   public void checkEffect ()
+   /**
+    * Look for entities in the projectile location and disarm them if they are holding something
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
-      for (LivingEntity entity : getLivingEntities(1.5))
-      {
-         if (entity.getUniqueId() == player.getUniqueId())
-            continue;
+      List<LivingEntity> livingEntities = getLivingEntities(1.5);
 
-         ItemStack itemInHand = entity.getEquipment().getItemInMainHand().clone();
-         if (itemInHand.getType() != Material.AIR)
+      if (livingEntities.size() > 0)
+      {
+         for (LivingEntity entity : livingEntities)
          {
-            if (holdsWand(entity))
+            if (entity.getUniqueId() == player.getUniqueId())
+               continue;
+
+            // is entity holding something
+            ItemStack held = entity.getEquipment().getItemInMainHand();
+            boolean offHand = false;
+
+            if (held.getType() == Material.AIR)
             {
-               allyWand(itemInHand);
+               // try the other hand
+               held = entity.getEquipment().getItemInOffHand();
+
+               // this entity is not holding something
+               if (held.getType() == Material.AIR)
+                  continue;
+               else
+                  offHand = true;
             }
-            entity.getEquipment().setItemInMainHand(null);
+
+            // clone the item so we do not change the actual object held by the player
+            ItemStack itemInHand = held.clone();
+
+            // remove the item in the player's hand
+            if (offHand)
+               entity.getEquipment().setItemInOffHand(null);
+            else
+               entity.getEquipment().setItemInMainHand(null);
+
+            // drop the item the player held
             Item item = entity.getWorld().dropItem(entity.getEyeLocation(), itemInHand);
             item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(usesModifier / 10));
          }
+
          kill();
          return;
       }
-   }
 
-   /**
-    * Does the player hold a wand item?
-    *
-    * @param entity - Player to check.
-    * @return True if the player holds a wand. False if not.
-    */
-   public boolean holdsWand (LivingEntity entity)
-   {
-      return Ollivanders2API.common.isWand(entity.getEquipment().getItemInMainHand());
-   }
-
-   /**
-    * Modifies the ItemStack, allying it to the disarming player.
-    *
-    * @param wand - ItemStack that may be a wand.
-    */
-   private void allyWand (ItemStack wand)
-   {
-      ItemMeta wandMeta = wand.getItemMeta();
-      List<String> wandLore = wandMeta.getLore();
-      if (wandLore.size() == 1)
-      {
-         wandLore.add(player.getUniqueId().toString());
-         wandMeta.setLore(wandLore);
-         wand.setItemMeta(wandMeta);
-      }
-      else
-      {
-         wandLore.set(1, player.getUniqueId().toString());
-      }
-      wandMeta.setLore(wandLore);
-      wand.setItemMeta(wandMeta);
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 }

@@ -7,7 +7,6 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
-import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
@@ -48,8 +47,9 @@ public final class ALOHOMORA extends Charms
    public ALOHOMORA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.ALOHOMORA;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       worldGuardFlags.add(DefaultFlag.INTERACT);
@@ -86,8 +86,6 @@ public final class ALOHOMORA extends Charms
 
       // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
       if (hasHitTarget())
-      {
          kill();
-      }
    }
 }

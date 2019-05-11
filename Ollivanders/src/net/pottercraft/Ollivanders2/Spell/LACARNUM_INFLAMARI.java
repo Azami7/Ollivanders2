@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
 
@@ -8,7 +9,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import java.util.ArrayList;
 
 /**
- * Shoots out a SmallFireball projectile.
+ * Shoots out a small fireball projectile.
  *
  * @author lownes
  * @author Azami7
@@ -47,13 +48,16 @@ public final class LACARNUM_INFLAMARI extends Charms
 
       spellType = O2SpellType.LACARNUM_INFLAMARI;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.LIGHTER);
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      kill();
       player.launchProjectile(SmallFireball.class, vector);
+
+      kill();
    }
 }

@@ -2,7 +2,6 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Player;
@@ -39,8 +38,9 @@ public final class BOTHYNUS extends PyrotechniaSuper
    public BOTHYNUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.BOTHYNUS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       fireworkColors = new ArrayList<>();

@@ -51,11 +51,14 @@ public final class IMPEDIMENTA extends DarkArts
       setUsesModifier();
    }
 
+   /**
+    * Slows all entities within range of the projectile
+    */
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       List<LivingEntity> entities = getLivingEntities(1.5);
+
       for (LivingEntity entity : entities)
       {
          if (entity.getUniqueId() == player.getUniqueId())
@@ -64,7 +67,9 @@ public final class IMPEDIMENTA extends DarkArts
          int modifier = (int) usesModifier;
          PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, modifier * 20, modifier);
          entity.addPotionEffect(slow);
-         kill();
       }
+
+      if (entities.size() > 0 || hasHitTarget())
+         kill();
    }
 }

@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
+import net.pottercraft.Ollivanders2.Spell.FLAGRANTE;
+import net.pottercraft.Ollivanders2.Spell.GEMINO;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.GameMode;
@@ -60,16 +62,16 @@ class OllivandersSchedule implements Runnable
             e.printStackTrace();
       }
 
-      if (counter % 20 == 0)
+      if (counter % Ollivanders2Common.ticksPerSecond == 0)
       {
          itemCurseSched();
       }
-      if (counter % 20 == 1)
+      if (counter % Ollivanders2Common.ticksPerSecond == 1)
       {
          invisPlayer();
       }
 
-      counter = (counter + 1) % 20;
+      counter = (counter + 1) % Ollivanders2Common.ticksPerSecond;
    }
 
    /**
@@ -138,12 +140,12 @@ class OllivandersSchedule implements Runnable
                      List<String> lored = meta.getLore();
                      for (String lore : lored)
                      {
-                        if (lore.contains("Geminio "))
+                        if (lore.contains(GEMINO.geminio))
                         {
                            geminioIS.add(geminio(item.clone()));
                            invIt.set(null);
                         }
-                        if (lore.contains("Flagrante "))
+                        if (lore.contains(FLAGRANTE.flagrante))
                         {
                            flagrante(player, item);
                         }

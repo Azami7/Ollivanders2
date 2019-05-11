@@ -47,9 +47,11 @@ public final class BAO_ZHONG_CHA extends Divination
    public BAO_ZHONG_CHA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.BAO_ZHONG_CHA;
       divinationType = O2DivinationType.TASSEOMANCY;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
+      setUsesModifier();
 
       facingBlock = Material.CAULDRON;
       facingBlockString = "a cauldron";
@@ -57,7 +59,5 @@ public final class BAO_ZHONG_CHA extends Divination
       itemHeld = O2ItemType.TEA_LEAVES;
       itemHeldString = "tea leaves";
       consumeHeld = true;
-
-      setUsesModifier();
    }
 }

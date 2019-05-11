@@ -3,7 +3,6 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -45,8 +44,9 @@ public final class ARANIA_EXUMAI extends Charms
    public ARANIA_EXUMAI (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.ARANIA_EXUMAI;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 
@@ -57,21 +57,25 @@ public final class ARANIA_EXUMAI extends Charms
    protected void doCheckEffect ()
    {
       List<Entity> entities = getCloseEntities(1.5);
-      for (Entity entity : entities)
+
+      if (entities.size() > 0)
       {
-         EntityType type = entity.getType();
-         if (type == EntityType.SPIDER || type == EntityType.CAVE_SPIDER)
+         for (Entity entity : entities)
          {
-            entity.setVelocity(player.getLocation().getDirection().normalize().multiply(usesModifier / 10));
-            kill();
-            return;
+            EntityType type = entity.getType();
+            if (type == EntityType.SPIDER || type == EntityType.CAVE_SPIDER)
+            {
+               entity.setVelocity(player.getLocation().getDirection().normalize().multiply(usesModifier / 10));
+               break;
+            }
          }
+
+         kill();
+         return;
       }
 
       // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
       if (hasHitTarget())
-      {
          kill();
-      }
    }
 }

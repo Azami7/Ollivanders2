@@ -44,13 +44,13 @@ public final class CARTOMANCIE extends Divination
    public CARTOMANCIE (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.CARTOMANCIE;
       divinationType = O2DivinationType.CARTOMANCY_TAROT;
 
+      // set up usage modifier, has to be done here to get the uses for this specific spell
+      setUsesModifier();
+
       itemHeld = O2ItemType.TAROT_CARDS;
       itemHeldString = "tarot cards";
-
-      setUsesModifier();
    }
 }

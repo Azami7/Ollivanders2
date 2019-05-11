@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
@@ -40,9 +41,14 @@ public final class EVANESCO extends Transfiguration
    public EVANESCO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.EVANESCO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      worldGuardFlags.add(DefaultFlag.USE);
    }
 
    public void checkEffect ()

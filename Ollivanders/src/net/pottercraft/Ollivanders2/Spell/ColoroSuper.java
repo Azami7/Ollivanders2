@@ -1,25 +1,16 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.banner.Pattern;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.block.data.MultipleFacing;
-import org.bukkit.block.data.Rotatable;
-import org.bukkit.block.data.type.GlassPane;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
-import org.bukkit.util.Vector;
-import org.bukkit.block.Banner;
 
 import net.pottercraft.Ollivanders2.O2Color;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Azami7 on 6/30/17.
@@ -50,7 +41,9 @@ public abstract class ColoroSuper extends Charms
    ColoroSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-      setUsesModifier();
+
+      // world-guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
    /**
@@ -70,10 +63,11 @@ public abstract class ColoroSuper extends Charms
             {
                Sheep sheep = (Sheep)livingEntity;
                sheep.setColor(color.getDyeColor());
-               kill();
-               return;
+               break;
             }
          }
+
+         kill();
       }
       else if (hasHitTarget())
       {
@@ -83,9 +77,9 @@ public abstract class ColoroSuper extends Charms
          {
             Material newColor = O2Color.changeColor(target.getType(), color);
             target.setType(newColor);
-
-            kill();
          }
+
+         kill();
       }
    }
 }

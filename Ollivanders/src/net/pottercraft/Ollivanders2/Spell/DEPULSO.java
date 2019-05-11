@@ -1,10 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
-
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 /**
@@ -14,7 +11,7 @@ import org.bukkit.entity.Player;
  * @author lownes
  * @author Azami7
  */
-public final class DEPULSO extends Charms
+public final class DEPULSO extends Knockback
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -43,23 +40,11 @@ public final class DEPULSO extends Charms
    public DEPULSO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.DEPULSO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
-   }
 
-   public void checkEffect ()
-   {
-      move();
-      List<Entity> entities = getCloseEntities(1.5);
-      for (Entity entity : entities)
-      {
-         if (entity.getUniqueId() == player.getUniqueId())
-            continue;
-
-         entity.setVelocity(player.getLocation().getDirection().normalize().multiply(usesModifier / 20));
-         kill();
-         return;
-      }
+      strengthReducer = 20;
    }
 }

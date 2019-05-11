@@ -54,12 +54,17 @@ public final class ALIQUAM_FLOO extends Charms
    public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.ALIQUAM_FLOO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       // required worldGuard state flags
-      worldGuardFlags.add(DefaultFlag.USE);
+      worldGuardFlags.add(DefaultFlag.INTERACT);
+      worldGuardFlags.add(DefaultFlag.BUILD);
+
+      // pass-through materials
+      projectilePassThrough.remove(Material.WATER);
    }
 
    /**
@@ -68,43 +73,43 @@ public final class ALIQUAM_FLOO extends Charms
    @Override
    protected void doCheckEffect ()
    {
-      if (hasHitTarget())
+      if (!hasHitTarget())
+         return;
+
+      Block target = getTargetBlock();
+
+      if (target != null && target.getType() == Material.FIRE)
       {
-         Block target = getTargetBlock();
+         Location statLocation = new Location(location.getWorld(), target.getX() + 0.5, target.getY() + 0.125, target.getZ() + 0.5);
 
-         if (target != null && target.getType() == Material.FIRE)
+         // find the sign above the fire
+         if (target.getRelative(BlockFace.UP).getType() == Material.WALL_SIGN)
          {
-            Location statLocation = new Location(location.getWorld(), target.getX() + 0.5, target.getY() + 0.125, target.getZ() + 0.5);
+            Sign sign = (Sign) target.getRelative(BlockFace.UP).getState();
+            String flooName = sign.getLine(0).trim() + " " + sign.getLine(1).trim() + " " + sign.getLine(2).trim() + " " + sign.getLine(3).trim();
+            flooName = flooName.trim();
+            flooName = flooName.toLowerCase();
 
-            // find the sign above the fire
-            if (target.getRelative(BlockFace.UP).getType() == Material.WALL_SIGN)
+            // make sure there is not already an aliquam floo spell at this block
+            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
             {
-               Sign sign = (Sign) target.getRelative(BlockFace.UP).getState();
-               String flooName = sign.getLine(0).trim() + " " + sign.getLine(1).trim() + " " + sign.getLine(2).trim() + " " + sign.getLine(3).trim();
-               flooName = flooName.trim();
-               flooName = flooName.toLowerCase();
-
-               // make sure there is not already an aliquam floo spell at this block
-               for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+               if (stat instanceof net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO)
                {
-                  if (stat instanceof net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO)
+                  net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO ali = (net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO) stat;
+                  if (ali.getFlooName().equals(flooName) || ali.getBlock().equals(statLocation.getBlock()))
                   {
-                     net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO ali = (net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO) stat;
-                     if (ali.getFlooName().equals(flooName) || ali.getBlock().equals(statLocation.getBlock()))
-                     {
-                        kill();
-                        return;
-                     }
+                     kill();
+                     return;
                   }
                }
-
-               net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO aliquam = new net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO(p, player.getUniqueId(), statLocation, O2StationarySpellType.ALIQUAM_FLOO, 2, 10, flooName);
-               aliquam.flair(20);
-               Ollivanders2API.getStationarySpells().addStationarySpell(aliquam);
             }
-         }
 
-         kill();
+            net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO aliquam = new net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO(p, player.getUniqueId(), statLocation, O2StationarySpellType.ALIQUAM_FLOO, 2, 10, flooName);
+            aliquam.flair(20);
+            Ollivanders2API.getStationarySpells().addStationarySpell(aliquam);
+         }
       }
+
+      kill();
    }
 }

@@ -1,17 +1,17 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.HARMONIA_NECTERE_PASSUS;
 import net.pottercraft.Ollivanders2.StationarySpell.HORCRUX;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -27,11 +27,6 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  */
 public final class INFORMOUS extends Arithmancy
 {
-   List<LivingEntity> iEntity = new ArrayList();
-   List<StationarySpellObj> iSpell = new ArrayList();
-   boolean toldWeather = false;
-   private double lifeTime;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -61,125 +56,162 @@ public final class INFORMOUS extends Arithmancy
 
       spellType = O2SpellType.INFORMOUS;
       setUsesModifier();
-
-      lifeTime = usesModifier * 16;
    }
 
+   /**
+    * Give information about an entity, stationary spells at the target, or the weather at the player's location.
+    */
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
+      if (!hasHitTarget())
+         return;
+
+      boolean gaveInfo = false;
+
       for (LivingEntity entity : getLivingEntities(1.5))
       {
          if (entity.getUniqueId() == player.getUniqueId())
             continue;
 
-         if (!iEntity.contains(entity))
+         entityInfo(entity);
+
+         gaveInfo = true;
+      }
+
+      if (!gaveInfo)
+      {
+         for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
          {
-            String entityName = entity.getType().toString();
-            if (entity instanceof HumanEntity)
-               entityName = entity.getName();
-
-            // health level
-            player.sendMessage(Ollivanders2.chatColor + entityName + " has " + ((Damageable) entity).getHealth() + " health.");
-
-            if (entity instanceof Player)
+            if (spell.isInside(location))
             {
-               Player target = (Player)entity;
+               stationarySpellInfo(spell);
 
-               // food level
-               player.sendMessage(Ollivanders2.chatColor + " has " + target.getFoodLevel() + " food level.");
-
-               // exhaustion level
-               player.sendMessage(Ollivanders2.chatColor + " has " + target.getExhaustion() + " exhaustion level.");
-
-               // detectable effects
-               String infoText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithInformous(entity.getUniqueId());
-               if (infoText != null)
-               {
-                  player.sendMessage(Ollivanders2.chatColor + " " + infoText + ".");
-               }
-
-               // line of sight
-               if (target.canSee(player))
-                  player.sendMessage(Ollivanders2.chatColor + " can see you.");
-               else
-                  player.sendMessage(Ollivanders2.chatColor + " cannot see you.");
-
-               // house
-               if (Ollivanders2.useHouses)
-               {
-                  if (Ollivanders2API.getHouses().isSorted(target))
-                  {
-                     player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses().getHouse(target).getName() + ".");
-                  }
-                  else
-                  {
-                     player.sendMessage(Ollivanders2.chatColor + " has not been sorted.");
-                  }
-               }
+               gaveInfo = true;
             }
-            iEntity.add(entity);
          }
       }
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-      {
-         if (spell.isInside(location) && !iSpell.contains(spell))
-         {
-            if (spell instanceof COLLOPORTUS)
-            {
-               int power;
-               if (spell.duration >= 1200)
-                  power = spell.duration / 1200;
-               else
-                  power = 1;
 
-               player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.radius + " has " + power + " power left.");
-            }
-            else if (spell instanceof HORCRUX)
+      if (!gaveInfo)
+      {
+         Location playerLocation = player.getLocation();
+
+         if (playerLocation.getY() > 256)
+         {
+            String weather;
+            World world = playerLocation.getWorld();
+
+            boolean thunder = world.isThundering();
+
+            if (world.hasStorm())
             {
-               player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of player " + Bukkit.getPlayer(spell.getCasterID()).getName() + " of radius " + spell.radius);
-            }
-            else if (spell instanceof ALIQUAM_FLOO)
-            {
-               player.sendMessage(Ollivanders2.chatColor + "Floo registration of " + ((ALIQUAM_FLOO) spell).getFlooName());
-            }
-            else if (spell instanceof HARMONIA_NECTERE_PASSUS)
-            {
-               player.sendMessage(Ollivanders2.chatColor + "Vanishing Cabinet");
+               weather = "rain";
             }
             else
             {
-               player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.radius + " has " + spell.duration / 20 + " seconds left.");
+               weather = "clear skies";
             }
-            iSpell.add(spell);
+            int weatherTime = world.getWeatherDuration();
+            int thunderTime = world.getThunderDuration();
+
+            player.sendMessage(Ollivanders2.chatColor + "There will be " + weather + " for " + weatherTime / Ollivanders2Common.ticksPerSecond + " more seconds.");
+            if (thunder)
+            {
+               player.sendMessage(Ollivanders2.chatColor + "There will be thunder for " + thunderTime / Ollivanders2Common.ticksPerSecond + " more seconds.");
+            }
          }
       }
-      if (location.getY() > 256 && !toldWeather)
+
+      kill();
+   }
+
+   /**
+    * Give information about a player.
+    *
+    * @param entity the entity
+    */
+   private void entityInfo (LivingEntity entity)
+   {
+      String entityName;
+
+      if (entity instanceof HumanEntity)
+         entityName = entity.getName();
+      else
+         entityName = entity.getType().toString();
+
+      // health level
+      player.sendMessage(Ollivanders2.chatColor + entityName + " has " + entity.getHealth() + " health.");
+
+      if (entity instanceof Player)
       {
-         toldWeather = true;
-         String weather;
-         World world = location.getWorld();
-         boolean thunder = world.isThundering();
-         if (world.hasStorm())
+         Player target = (Player) entity;
+
+         // food level
+         player.sendMessage(Ollivanders2.chatColor + " has " + target.getFoodLevel() + " food level.");
+
+         // exhaustion level
+         player.sendMessage(Ollivanders2.chatColor + " has " + target.getExhaustion() + " exhaustion level.");
+
+         // detectable effects
+         String infoText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithInformous(entity.getUniqueId());
+         if (infoText != null)
          {
-            weather = "rain";
+            player.sendMessage(Ollivanders2.chatColor + " " + infoText + ".");
          }
+
+         // line of sight
+         if (target.canSee(player))
+            player.sendMessage(Ollivanders2.chatColor + " can see you.");
          else
+            player.sendMessage(Ollivanders2.chatColor + " cannot see you.");
+
+         // house
+         if (Ollivanders2.useHouses)
          {
-            weather = "clear skies";
-         }
-         int weatherTime = world.getWeatherDuration();
-         int thunderTime = world.getThunderDuration();
-         player.sendMessage(Ollivanders2.chatColor + "There will be " + weather + " for " + weatherTime / 20 + " more seconds.");
-         if (thunder)
-         {
-            player.sendMessage(Ollivanders2.chatColor + "There will be thunder for " + thunderTime / 20 + " more seconds.");
+            if (Ollivanders2API.getHouses().isSorted(target))
+            {
+               player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses().getHouse(target).getName() + ".");
+            }
+            else
+            {
+               player.sendMessage(Ollivanders2.chatColor + " has not been sorted.");
+            }
          }
       }
-      if (lifeTicks > lifeTime)
+   }
+
+   /**
+    * Information about a stationary spell.
+    *
+    * @param spell the stationary spell
+    */
+   private void stationarySpellInfo (StationarySpellObj spell)
+   {
+      if (spell instanceof COLLOPORTUS)
       {
-         kill();
+         int power;
+         if (spell.duration >= 1200)
+            power = spell.duration / 1200;
+         else
+            power = 1;
+
+         player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.radius + " has " + power + " power left.");
+      }
+      else if (spell instanceof HORCRUX)
+      {
+         player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of player " + Bukkit.getPlayer(spell.getCasterID()).getName() + " of radius " + spell.radius);
+      }
+      else if (spell instanceof ALIQUAM_FLOO)
+      {
+         player.sendMessage(Ollivanders2.chatColor + "Floo registration of " + ((ALIQUAM_FLOO) spell).getFlooName());
+      }
+      else if (spell instanceof HARMONIA_NECTERE_PASSUS)
+      {
+         player.sendMessage(Ollivanders2.chatColor + "Vanishing Cabinet");
+      }
+      else
+      {
+         player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.radius + " has " + spell.duration / 20 + " seconds left.");
       }
    }
 }

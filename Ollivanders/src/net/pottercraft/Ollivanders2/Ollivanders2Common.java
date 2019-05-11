@@ -56,6 +56,8 @@ public class Ollivanders2Common
    public static final String knut = "Knut";
    public static final Material knutMaterial = Material.NETHER_BRICK;
 
+   public static final int ticksPerSecond = 20;
+
    public static final ArrayList<EntityType> smallFriendlyAnimals = new ArrayList<EntityType>() {{
       add(EntityType.BAT);
       add(EntityType.CHICKEN);
@@ -106,6 +108,29 @@ public class Ollivanders2Common
 
    public static final ArrayList<O2PotionType> libDisguisesPotions = new ArrayList<O2PotionType>() {{
       add(O2PotionType.ANIMAGUS_POTION);
+   }};
+
+   public static final ArrayList<Material> unbreakableMaterials = new ArrayList<Material>() {{
+      add(Material.BARRIER);
+      add(Material.BEDROCK);
+      add(Material.ENDER_CHEST);
+      add(Material.WHITE_SHULKER_BOX);
+      add(Material.BLACK_SHULKER_BOX);
+      add(Material.BLUE_SHULKER_BOX);
+      add(Material.SHULKER_BOX);
+      add(Material.BROWN_SHULKER_BOX);
+      add(Material.CYAN_SHULKER_BOX);
+      add(Material.GRAY_SHULKER_BOX);
+      add(Material.GREEN_SHULKER_BOX);
+      add(Material.LIGHT_BLUE_SHULKER_BOX);
+      add(Material.LIGHT_GRAY_SHULKER_BOX);
+      add(Material.LIME_SHULKER_BOX);
+      add(Material.MAGENTA_SHULKER_BOX);
+      add(Material.ORANGE_SHULKER_BOX);
+      add(Material.PINK_SHULKER_BOX);
+      add(Material.PURPLE_SHULKER_BOX);
+      add(Material.RED_SHULKER_BOX);
+      add(Material.YELLOW_SHULKER_BOX);
    }};
 
    public static enum TimeOfDay

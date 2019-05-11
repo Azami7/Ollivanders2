@@ -45,8 +45,9 @@ public final class APARECIUM extends Charms
    public APARECIUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.APARECIUM;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 
@@ -71,12 +72,11 @@ public final class APARECIUM extends Charms
          }
 
          kill();
+         return;
       }
 
       // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
       if (hasHitTarget())
-      {
          kill();
-      }
    }
 }

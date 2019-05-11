@@ -3,6 +3,13 @@ package net.pottercraft.Ollivanders2.Divination;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
+/**
+ * Astrology is the system of using the relative positions of celestial bodies (including the sun, moon, and planets) to try to predict future events or gain insight into personality, relationships, and health.
+ * http://harrypotter.wikia.com/wiki/Astrology
+ *
+ * @author Azami7
+ * @since 2.2.9
+ */
 public class ASTROLOGY extends O2Divination
 {
    public ASTROLOGY (Ollivanders2 plugin, Player pro, Player tar, Integer exp)

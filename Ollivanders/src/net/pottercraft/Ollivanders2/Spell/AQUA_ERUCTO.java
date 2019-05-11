@@ -1,6 +1,5 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
@@ -45,23 +44,26 @@ public final class AQUA_ERUCTO extends BlockTransfigurationSuper
    public AQUA_ERUCTO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.AQUA_ERUCTO;
       branch = O2MagicBranch.CHARMS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       spellDuration = (int)(1200 * usesModifier);
       permanent = false;
       radius = 1;
 
-      worldGuardFlags.add(DefaultFlag.BUILD);
-
       transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
       transfigurationMap.put(Material.FIRE, Material.AIR);
 
+      // materials that can be transfigured by this spell
       materialWhitelist.add(Material.LAVA);
       materialWhitelist.add(Material.FIRE);
 
       moveEffectData = Material.WATER;
+
+      // pass-through materials
+      projectilePassThrough.remove(Material.WATER);
    }
 }

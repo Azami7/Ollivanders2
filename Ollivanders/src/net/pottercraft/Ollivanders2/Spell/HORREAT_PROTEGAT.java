@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -46,12 +47,22 @@ public final class HORREAT_PROTEGAT extends Charms
 
       spellType = O2SpellType.HORREAT_PROTEGAT;
       setUsesModifier();
+
+      // pass-through materials
+      projectilePassThrough.remove(Material.WATER);
+      projectilePassThrough.remove(Material.LAVA);
+      projectilePassThrough.add(Material.CAVE_AIR);
    }
 
+   /**
+    * Reduce the radius of any stationary spells within a radius of the target, if they were cast by this player
+    */
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
+      if (!hasHitTarget())
+         return;
+
       List<StationarySpellObj> inside = new ArrayList<>();
       for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
       {
@@ -75,5 +86,7 @@ public final class HORREAT_PROTEGAT extends Charms
             spell.flair(10);
          }
       }
+
+      kill();
    }
 }

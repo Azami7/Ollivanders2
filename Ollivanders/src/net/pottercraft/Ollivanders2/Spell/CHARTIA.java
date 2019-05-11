@@ -45,13 +45,13 @@ public final class CHARTIA extends Divination
    public CHARTIA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.CHARTIA;
       divinationType = O2DivinationType.CARTOMANCY;
 
+      // set up usage modifier, has to be done here to get the uses for this specific spell
+      setUsesModifier();
+
       itemHeld = O2ItemType.PLAYING_CARDS;
       itemHeldString = "playing cards";
-
-      setUsesModifier();
    }
 }

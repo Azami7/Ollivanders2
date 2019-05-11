@@ -1,10 +1,11 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
+import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -47,51 +48,77 @@ public final class DIFFINDO extends Charms
    public DIFFINDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.DIFFINDO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.PVP);
+      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
    }
 
-   public void checkEffect ()
+   /**
+    * Split a log or a player's inventory
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
-      for (LivingEntity live : getLivingEntities(1.5))
-      {
-         if (live.getUniqueId() == player.getUniqueId())
-            continue;
+      // first check for players
+      List<LivingEntity> livingEntities = getLivingEntities(1.5);
 
-         if (live instanceof Player)
+      if (livingEntities.size() > 0)
+      {
+         for (LivingEntity live : livingEntities)
          {
-            PlayerInventory inv = ((Player) live).getInventory();
-            ArrayList<ItemStack> remStack = new ArrayList<>();
-            for (ItemStack stack : inv.getContents())
+            if (live.getUniqueId() == player.getUniqueId())
+               continue;
+
+            if (live instanceof Player)
             {
-               if (stack != null)
+               PlayerInventory inv = ((Player) live).getInventory();
+               ArrayList<ItemStack> remStack = new ArrayList<>();
+               for (ItemStack stack : inv.getContents())
                {
-                  if (Math.random() * usesModifier > 1)
+                  if (stack != null)
                   {
-                     remStack.add(stack);
+                     if (Math.random() * usesModifier > 1)
+                     {
+                        remStack.add(stack);
+                     }
                   }
                }
+               for (ItemStack rem : remStack)
+               {
+                  inv.remove(rem);
+                  live.getWorld().dropItemNaturally(live.getLocation(), rem);
+               }
+
+               break;
             }
-            for (ItemStack rem : remStack)
-            {
-               inv.remove(rem);
-               live.getWorld().dropItemNaturally(live.getLocation(), rem);
-            }
-            kill();
-            return;
          }
+
+         kill();
+         return;
       }
-      if (Ollivanders2API.common.isNaturalLog(getBlock()))
+
+      // next check for log
+      if (hasHitTarget())
       {
-         for (Block nearbyBlock : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
+         Block target = getTargetBlock();
+
+         if (Ollivanders2API.common.isNaturalLog(target))
          {
-            if (Ollivanders2API.common.isNaturalLog(nearbyBlock))
+            for (Block nearbyBlock : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
             {
-               nearbyBlock.breakNaturally();
+               if (Ollivanders2API.common.isNaturalLog(nearbyBlock))
+               {
+                  nearbyBlock.breakNaturally();
+               }
             }
          }
+
          kill();
       }
    }

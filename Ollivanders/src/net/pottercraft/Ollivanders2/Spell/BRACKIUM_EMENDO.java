@@ -48,8 +48,9 @@ public final class BRACKIUM_EMENDO extends Healing
    public BRACKIUM_EMENDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.BRACKIUM_EMENDO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 
@@ -61,24 +62,33 @@ public final class BRACKIUM_EMENDO extends Healing
    protected void doCheckEffect ()
    {
       List<LivingEntity> entities = getLivingEntities(1.5);
-      for (LivingEntity entity : entities)
-      {
-         if (entity.getUniqueId() == player.getUniqueId())
-            continue;
 
-         EntityType type = entity.getType();
-         if (type == EntityType.SKELETON || type == EntityType.WITHER_SKULL || type == EntityType.WITHER)
+      if (entities.size() > 0)
+      {
+         for (LivingEntity entity : entities)
          {
-            entity.damage(usesModifier * 2, player);
-            kill();
-            return;
+            if (entity.getUniqueId() == player.getUniqueId())
+               continue;
+
+            EntityType type = entity.getType();
+            if (type == EntityType.SKELETON || type == EntityType.WITHER_SKULL || type == EntityType.WITHER)
+            {
+               entity.damage(usesModifier * 2, player);
+               break;
+            }
+            else if (type == EntityType.PLAYER)
+            {
+               player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, (int) (usesModifier * 1200), 1), true);
+               break;
+            }
          }
-         else if (type == EntityType.PLAYER)
-         {
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, (int) (usesModifier * 1200), 1), true);
-            kill();
-            return;
-         }
+
+         kill();
+         return;
       }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 }

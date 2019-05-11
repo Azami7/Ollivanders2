@@ -1,9 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -13,7 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author lownes
  */
-public final class FLIPENDO extends Charms
+public final class FLIPENDO extends Knockback
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -43,26 +40,11 @@ public final class FLIPENDO extends Charms
    public FLIPENDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.FLIPENDO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
-   }
 
-   public void checkEffect ()
-   {
-      move();
-      List<LivingEntity> living = this.getLivingEntities(1.5);
-      for (LivingEntity live : living)
-      {
-         if (live.getUniqueId() == player.getUniqueId())
-            continue;
-
-         if (live instanceof Player)
-         {
-            live.setVelocity(player.getLocation().getDirection().normalize().multiply(usesModifier / 10));
-            kill();
-            return;
-         }
-      }
+      strengthReducer = 10;
    }
 }

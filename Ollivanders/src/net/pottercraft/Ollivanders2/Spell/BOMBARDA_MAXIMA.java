@@ -43,8 +43,9 @@ public final class BOMBARDA_MAXIMA extends BombardaSuper
    public BOMBARDA_MAXIMA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.BOMBARDA_MAXIMA;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       strength = 1.6;

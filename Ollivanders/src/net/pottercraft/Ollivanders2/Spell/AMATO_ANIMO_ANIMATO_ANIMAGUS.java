@@ -56,8 +56,9 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
    public AMATO_ANIMO_ANIMATO_ANIMAGUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 

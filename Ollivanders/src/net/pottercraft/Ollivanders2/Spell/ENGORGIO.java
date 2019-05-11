@@ -1,6 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -9,6 +11,7 @@ import org.bukkit.entity.Slime;
 import org.bukkit.entity.Zombie;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Makes certain entities grow into adults, slimes grow larger, and at usesModifier 10, zombies grow into giants
@@ -46,44 +49,68 @@ public final class ENGORGIO extends Charms
    public ENGORGIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.ENGORGIO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
    }
 
-   public void checkEffect ()
+   /**
+    * Look for entities within the projectile range and grow them, if possible
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
-      for (LivingEntity live : getLivingEntities(1.5))
-      {
-         if (live.getUniqueId() == player.getUniqueId())
-            continue;
+      List<LivingEntity> livingEntities = getLivingEntities(1.5);
 
-         if (live instanceof Ageable)
+      if (livingEntities.size() > 0)
+      {
+         for (LivingEntity live : livingEntities)
          {
-            Ageable age = (Ageable) live;
-            age.setAge((int) (age.getAge() + (usesModifier * 240)));
-         }
-         if (live instanceof Zombie)
-         {
-            Zombie zombie = (Zombie) live;
-            if (zombie.isBaby())
+            if (live.getUniqueId() == player.getUniqueId())
+               continue;
+
+            if (live instanceof Ageable)
             {
-               zombie.setBaby(false);
+               Ageable age = (Ageable) live;
+               age.setAge((int) (age.getAge() + (usesModifier * 240)));
+
+               break;
             }
-            else if (usesModifier >= 10)
+            else if (live instanceof Zombie)
             {
-               zombie.getWorld().spawnEntity(zombie.getLocation(), EntityType.GIANT);
-               zombie.remove();
+               Zombie zombie = (Zombie) live;
+               if (zombie.isBaby())
+               {
+                  zombie.setBaby(false);
+               }
+               else if (usesModifier >= 10)
+               {
+                  zombie.getWorld().spawnEntity(zombie.getLocation(), EntityType.GIANT);
+                  zombie.remove();
+               }
+
+               break;
+            }
+            else if (live instanceof Slime)
+            {
+               Slime slime = (Slime) live;
+               slime.setSize((int) (slime.getSize() + usesModifier));
+
+               break;
             }
          }
-         if (live instanceof Slime)
-         {
-            Slime slime = (Slime) live;
-            slime.setSize((int) (slime.getSize() + usesModifier));
-         }
+
          kill();
          return;
       }
+
+      // projectile is stopped, kill spell
+      if (hasHitTarget())
+         kill();
    }
 }

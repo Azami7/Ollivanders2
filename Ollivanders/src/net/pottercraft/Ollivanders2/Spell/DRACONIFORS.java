@@ -45,15 +45,14 @@ public final class DRACONIFORS extends FriendlyMobDisguiseSuper
    public DRACONIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.DRACONIFORS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       targetType = EntityType.ENDER_DRAGON;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
-
-      EnderDragonWatcher watcher = (EnderDragonWatcher)disguise.getWatcher();
 
       if (usesModifier < 20)
          successRate = 5;

@@ -1,7 +1,9 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.Location;
@@ -53,14 +55,18 @@ public final class DISSENDIUM extends Charms
    public DISSENDIUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.DISSENDIUM;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
-      maxOpenTime = usesModifier * 20;
+      maxOpenTime = usesModifier * Ollivanders2Common.ticksPerSecond;
 
       openTime = 0;
       isOpen = false;
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.USE);
    }
 
    /**
@@ -68,31 +74,38 @@ public final class DISSENDIUM extends Charms
     * duration of the spell is reached.
     */
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
+      if (!hasHitTarget())
+         return;
+
       // continue until the spell opens a trapdoor, hits another block type and is killed, or projectile expires
-      if (!isOpen)
-      {
-         move();
-
-         Block target = getBlock();
-         BlockData targetBlockData = target.getBlockData();
-
-         if (targetBlockData instanceof TrapDoor)
-         {
-            openTrapDoor();
-         }
-      }
-      else
+      if (isOpen)
       {
          // count down the open time
          openTime++;
 
+         // if the open time has expired, close the trap door and kill the spell
          if (openTime >= maxOpenTime)
          {
             closeTrapDoor();
             kill();
          }
+      }
+      else
+      {
+         Block target = getTargetBlock();
+         BlockData targetBlockData = target.getBlockData();
+
+         // if the target is a trap door, open it
+         if (targetBlockData instanceof TrapDoor)
+         {
+            openTrapDoor();
+         }
+
+         // kill the spell if we did not open a trap door after hitting a target
+         if (!isOpen)
+            kill();
       }
    }
 
@@ -101,7 +114,7 @@ public final class DISSENDIUM extends Charms
     */
    private void openTrapDoor ()
    {
-      Block target = getBlock();
+      Block target = getTargetBlock();
 
       // check for colloportus spell locking this door
       Location targetLocation = target.getLocation();
@@ -130,7 +143,6 @@ public final class DISSENDIUM extends Charms
       trapDoorBlock.setBlockData(targetBlockData);
 
       isOpen = true;
-      kill = false;
    }
 
    /**

@@ -1,12 +1,11 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
 
 /**
  * Breaks glass.
@@ -33,19 +32,28 @@ public final class FINESTRA extends Charms
     * @param player the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public FINESTRA(Ollivanders2 plugin, Player player, Double rightWand)
+   public FINESTRA (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.FINESTRA;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
-   public void checkEffect ()
+   /**
+    * Break glass blocks
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
+      if (!hasHitTarget())
+         return;
 
-      if (isGlass(getBlock()))
+      if (isGlass(getTargetBlock()))
       {
          for (Block nearbyBlock : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
          {
@@ -54,8 +62,9 @@ public final class FINESTRA extends Charms
                nearbyBlock.breakNaturally();
             }
          }
-         kill();
       }
+
+      kill();
    }
 
    /**

@@ -2,7 +2,6 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import me.libraryaddict.disguise.disguisetypes.watchers.BatWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.ParrotWatcher;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 
 
 /**
- * Transfigures entity into a parrot (MC >= 1.12) or bat (MC < 1.12)
+ * Transfigures entity into a parrot
  *
  * @since 1.0
  * @author Azami7
@@ -34,10 +33,7 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
          add("However, mastering a Transfiguration spell such as \"Avifors\" can be both rewarding and useful.");
       }};
 
-      if (Ollivanders2.mcVersion > 11)
-         text = "Turns target entity in to a bird.";
-      else
-         text = "Turns target entity in to a bat.";
+      text = "Turns target entity in to a bird.";
    }
 
    /**
@@ -50,52 +46,39 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
    public AVIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.AVIFORS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
-      if (Ollivanders2.mcVersion > 11)
-      {
-         targetType = EntityType.PARROT;
-      }
-      else
-      {
-         targetType = EntityType.BAT;
-      }
+      targetType = EntityType.PARROT;
 
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
 
-      if (Ollivanders2.mcVersion > 11)
+      ParrotWatcher watcher = (ParrotWatcher)disguise.getWatcher();
+      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 20);
+      if (rand > 18)
       {
-         ParrotWatcher watcher = (ParrotWatcher)disguise.getWatcher();
-         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 20);
-         if (rand > 18)
-         {
-            watcher.setVariant(Parrot.Variant.GRAY);
-         }
-         else if (rand > 14)
-         {
-            watcher.setVariant(Parrot.Variant.GREEN);
-         }
-         else if (rand > 11)
-         {
-            watcher.setVariant(Parrot.Variant.CYAN);
-         }
-         else if (rand > 6)
-         {
-            watcher.setVariant(Parrot.Variant.BLUE);
-         }
-         else
-         {
-            watcher.setVariant(Parrot.Variant.RED);
-         }
-         watcher.setFlyingWithElytra(true);
+         watcher.setVariant(Parrot.Variant.GRAY);
+      }
+      else if (rand > 14)
+      {
+         watcher.setVariant(Parrot.Variant.GREEN);
+      }
+      else if (rand > 11)
+      {
+         watcher.setVariant(Parrot.Variant.CYAN);
+      }
+      else if (rand > 6)
+      {
+         watcher.setVariant(Parrot.Variant.BLUE);
       }
       else
       {
-         BatWatcher watcher = (BatWatcher)disguise.getWatcher();
-         watcher.setFlyingWithElytra(true);
+         watcher.setVariant(Parrot.Variant.RED);
       }
+
+      watcher.setFlyingWithElytra(true);
    }
 }

@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Item;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -45,8 +44,9 @@ public final class CARPE_RETRACTUM extends Charms
    public CARPE_RETRACTUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.CARPE_RETRACTUM;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 
@@ -58,11 +58,17 @@ public final class CARPE_RETRACTUM extends Charms
    {
       List<Item> items = getItems(1.5);
 
-      for (Item item : items)
+      if (items.size() > 0)
       {
+         Item item = items.get(0);
          item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(usesModifier / 10));
+
          kill();
          return;
       }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 }

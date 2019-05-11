@@ -9,6 +9,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
+
 /**
  * Sets a player's helmet to a specific block type.
  *
@@ -45,11 +47,15 @@ public abstract class GaleatiSuper extends Charms
       branch = O2MagicBranch.TRANSFIGURATION;
    }
 
-   public void checkEffect ()
+   /**
+    * Targets a player in radius of the projectile and changes their helmet.
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
+      List<LivingEntity> livingEntities = getLivingEntities(1.5);
 
-      for (LivingEntity live : getLivingEntities(1.5))
+      for (LivingEntity live : livingEntities)
       {
          if (live instanceof Player)
          {
@@ -70,5 +76,9 @@ public abstract class GaleatiSuper extends Charms
             return;
          }
       }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 }

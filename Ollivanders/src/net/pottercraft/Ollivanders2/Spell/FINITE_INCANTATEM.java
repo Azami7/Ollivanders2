@@ -13,7 +13,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 /**
- * Reduces any spell effects on an item.
+ * Reduces any spell effects on an item or player.
  *
  * @version Ollivanders2
  * @author lownes
@@ -50,15 +50,20 @@ public final class FINITE_INCANTATEM extends Charms
    public FINITE_INCANTATEM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.FINITE_INCANTATEM;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   /**
+    *
+    */
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
-      for (LivingEntity live : getLivingEntities(2))
+      // look for entities first
+      for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live instanceof Player)
          {
@@ -70,10 +75,13 @@ public final class FINITE_INCANTATEM extends Charms
             return;
          }
       }
-      for (Item item : getItems(1))
+
+      // look for items next
+      for (Item item : getItems(1.5))
       {
          ItemStack stack = item.getItemStack();
          ItemMeta meta = stack.getItemMeta();
+
          if (meta.hasLore())
          {
             List<String> lore = meta.getLore();
@@ -113,7 +121,15 @@ public final class FINITE_INCANTATEM extends Charms
             meta.setLore(newLore);
             stack.setItemMeta(meta);
             item.setItemStack(stack);
+
+            kill();
+            return;
          }
+      }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+      {
          kill();
       }
    }

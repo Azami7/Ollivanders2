@@ -8,8 +8,6 @@ import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-
 /**
  * Transfigures an entity into a horse.
  *
@@ -40,8 +38,9 @@ public final class EQUUSIFORS extends FriendlyMobDisguiseSuper
    public EQUUSIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.EQUUSIFORS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       targetType = EntityType.HORSE;

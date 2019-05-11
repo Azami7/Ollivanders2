@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.StationarySpell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -56,7 +57,7 @@ public class REPELLO_MUGGLETON extends StationarySpellObj implements StationaryS
    {
       age();
 
-      if (duration % 20 == 0)
+      if (duration % Ollivanders2Common.ticksPerSecond == 0)
       {
          Material toMat = getBlock().getType();
          byte toDat = getBlock().getData();

@@ -6,7 +6,6 @@ import java.util.List;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
-import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
@@ -46,14 +45,13 @@ public final class DELETRIUS extends Charms
    public DELETRIUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.DELETRIUS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
+      // world guard flags
       worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
-
-      projectilePassThrough.add(Material.FIRE);
-      projectilePassThrough.add(Material.WATER);
    }
 
    /**
@@ -71,5 +69,9 @@ public final class DELETRIUS extends Charms
          item.remove();
          kill();
       }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+         kill();
    }
 }

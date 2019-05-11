@@ -36,8 +36,9 @@ public final class DUCKLIFORS extends FriendlyMobDisguiseSuper
    public DUCKLIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.DUCKLIFORS;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       targetType = EntityType.CHICKEN;

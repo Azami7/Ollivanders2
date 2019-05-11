@@ -45,24 +45,25 @@ public final class AGUAMENTI extends BlockTransfigurationSuper
    public AGUAMENTI (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.AGUAMENTI;
       branch = O2MagicBranch.CHARMS;
 
-      transfigureType = Material.WATER;
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
+
+      transfigureType = Material.WATER;
       spellDuration = (int)(1200 * usesModifier);
       permanent = false;
       radius = 1;
 
-      // required worldGuard state flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
-
       // pass-through materials
-      projectilePassThrough.add(Material.FIRE);
+      projectilePassThrough.remove(Material.WATER);
 
       // set materials that can be transfigured by this spell
       materialWhitelist.add(Material.AIR);
+
+      // world-guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
    /**

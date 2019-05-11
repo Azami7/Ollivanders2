@@ -46,8 +46,9 @@ public final class ARRESTO_MOMENTUM extends Charms
    public ARRESTO_MOMENTUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.ARRESTO_MOMENTUM;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 
@@ -61,14 +62,21 @@ public final class ARRESTO_MOMENTUM extends Charms
 
       // check for entities first
       List<LivingEntity> entities = getLivingEntities(1.5);
-      for (LivingEntity entity : entities)
-      {
-         if (entity.getUniqueId() == player.getUniqueId())
-            continue;
 
-         double speed = entity.getVelocity().length() / (Math.pow(modifier, 2));
-         entity.setVelocity(entity.getVelocity().normalize().multiply(speed));
-         entity.setFallDistance((float) (entity.getFallDistance() / modifier));
+      if (entities.size() > 0)
+      {
+         for (LivingEntity entity : entities)
+         {
+            if (entity.getUniqueId() == player.getUniqueId())
+               continue;
+
+            double speed = entity.getVelocity().length() / (Math.pow(modifier, 2));
+            entity.setVelocity(entity.getVelocity().normalize().multiply(speed));
+            entity.setFallDistance((float) (entity.getFallDistance() / modifier));
+
+            break;
+         }
+
          kill();
          return;
       }
@@ -81,14 +89,13 @@ public final class ARRESTO_MOMENTUM extends Charms
 
          double speed = item.getVelocity().length() / (Math.pow(modifier, 2));
          item.setVelocity(item.getVelocity().normalize().multiply(speed));
+
          kill();
          return;
       }
 
       // if the spell has hit a solid block, the projectile is dead and wont go further so kill the spell
       if (hasHitTarget())
-      {
          kill();
-      }
    }
 }

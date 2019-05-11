@@ -45,15 +45,20 @@ public final class EBUBLIO extends Charms
    public EBUBLIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.EBUBLIO;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
    }
 
+   /**
+    * Give the caster water-breathing
+    */
+   @Override
    public void checkEffect ()
    {
-      move();
       player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, (int) (usesModifier * 1200), 1), true);
+
       kill();
    }
 }

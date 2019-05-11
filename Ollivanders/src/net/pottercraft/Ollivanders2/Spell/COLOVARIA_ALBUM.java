@@ -35,8 +35,9 @@ public final class COLOVARIA_ALBUM extends ColoroSuper
    public COLOVARIA_ALBUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.COLOVARIA_ALBUM;
+
+      // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
 
       color = O2Color.WHITE;

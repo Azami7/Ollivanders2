@@ -31,11 +31,8 @@ public abstract class BombardaSuper extends Charms
    BombardaSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-      setUsesModifier();
 
-      projectilePassThrough.add(Material.FIRE);
-      projectilePassThrough.add(Material.WATER);
-
+      // world guard flags
       worldGuardFlags.add(DefaultFlag.TNT);
    }
 
