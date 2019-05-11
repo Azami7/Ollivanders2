@@ -163,6 +163,7 @@ public class O2Houses
       }
 
       Map<O2HouseType, Integer> housePoints = gsonLayer.readHousePoints();
+
       for (Entry<O2HouseType, Integer> e : housePoints.entrySet())
       {
          O2HouseType houseType = e.getKey();

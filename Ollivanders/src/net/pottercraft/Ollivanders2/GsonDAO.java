@@ -128,13 +128,17 @@ public class GsonDAO implements GenericDAO
    public Map<UUID, O2HouseType> readHouses ()
    {
       String json = readJSON(housesJSONFile);
-      if (json == null)
-         return null;
 
       Map<String, String> strMap = new HashMap<>();
+      Map<UUID, O2HouseType> map = new HashMap<>();
+
+      if (json == null)
+      {
+         return map;
+      }
+
       strMap = (Map<String, String>) gson.fromJson(json, strMap.getClass());
 
-      Map<UUID, O2HouseType> map = new HashMap<>();
       for (Entry <String, String> entry : strMap.entrySet())
       {
          String playerID = entry.getKey();
@@ -179,13 +183,17 @@ public class GsonDAO implements GenericDAO
    public Map<O2HouseType, Integer> readHousePoints ()
    {
       String json = readJSON(housePointsJSONFile);
-      if (json == null)
-         return null;
 
       Map<String, String> strMap = new HashMap<>();
+      Map<O2HouseType, Integer> map = new HashMap<>();
+
+      if (json == null)
+      {
+         return map;
+      }
+
       strMap = (Map<String, String>) gson.fromJson(json, strMap.getClass());
 
-      Map<O2HouseType, Integer> map = new HashMap<>();
       for (Entry <String, String> entry : strMap.entrySet())
       {
          String house = entry.getKey();
@@ -232,10 +240,13 @@ public class GsonDAO implements GenericDAO
    {
       String json = readJSON(filename);
 
-      if (json == null)
-         return null;
-
       Map <String, Map<String, String>> strMap = new HashMap<>();
+
+      if (json == null)
+      {
+         return strMap;
+      }
+
       strMap = (Map <String, Map<String, String>>) gson.fromJson(json, strMap.getClass());
 
       return strMap;
@@ -251,10 +262,13 @@ public class GsonDAO implements GenericDAO
    {
       String json = readJSON(filename);
 
-      if (json == null)
-         return null;
-
       List <Map<String, String>> strList = new ArrayList<>();
+
+      if (json == null)
+      {
+         return strList;
+      }
+
       strList = (List <Map<String, String>>) gson.fromJson(json, strList.getClass());
 
       return strList;
