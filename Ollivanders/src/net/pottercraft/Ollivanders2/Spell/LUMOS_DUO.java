@@ -1,8 +1,11 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -19,6 +22,24 @@ public final class LUMOS_DUO extends Charms
 {
    private List<Block> line = new ArrayList();
 
+   private int lineLength = 0;
+   private int maxLineLength = 5;
+
+   /**
+    * If this is not permanent, how long it should last. Default is 15 seconds.
+    */
+   int spellDuration = Ollivanders2Common.ticksPerSecond * 15;
+
+   /**
+    * Allows spell variants to change the duration of this spell.
+    */
+   double durationModifier = 1.0;
+
+   /**
+    * Max duration of this spell. Default is 5 minutes.
+    */
+   int maxDuration = Ollivanders2Common.ticksPerSecond * 300;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -32,7 +53,7 @@ public final class LUMOS_DUO extends Charms
          add("A variation of the Wand-Lighting Charm.");
       }};
 
-      text = "Creates a stream of flowstone to light your way.";
+      text = "Creates a stream of glowstone to light your way.";
    }
 
    /**
@@ -50,32 +71,67 @@ public final class LUMOS_DUO extends Charms
       setUsesModifier();
 
       lifeTicks = (int) (-(usesModifier * 20));
+
+      // pass-through materials
+      projectilePassThrough.remove(Material.WATER);
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
-   public void checkEffect ()
+   @Override
+   protected void doCheckEffect ()
    {
-      move();
-      if (getBlock().getType() != Material.AIR)
+      if (!hasHitTarget())
       {
-         kill = false;
+         // wait 2 before starting to create the line
+         if (lifeTicks < 2)
+         {
+            return;
+         }
+
+         if (lineLength < maxLineLength)
+         {
+            Block curBlock = location.getBlock();
+            if (curBlock.getType() == Material.AIR)
+            {
+               curBlock.setType(Material.GLOWSTONE);
+               line.add(curBlock);
+               p.addTempBlock(curBlock, Material.AIR);
+            }
+            else
+            {
+               stopProjectile();
+            }
+         }
+         else
+         {
+            stopProjectile();
+         }
       }
       else
       {
-         location.getBlock().setType(Material.GLOWSTONE);
-         p.getTempBlocks().add(getBlock());
-         line.add(getBlock());
-      }
-      if (lifeTicks >= 159)
-      {
-         for (Block block : line)
+         // check time to live on the spell
+         if (spellDuration <= 0)
          {
-            if (block.getType() == Material.GLOWSTONE)
-            {
-               block.setType(Material.AIR);
-            }
-            p.getTempBlocks().remove(block);
+            // spell duration is up, kill the spell
+            kill();
          }
-         kill = true;
+         else
+         {
+            spellDuration--;
+         }
       }
+   }
+
+   @Override
+   protected void revert ()
+   {
+      for (Block block : line)
+      {
+         p.revertTempBlock(block);
+      }
+
+      line.clear();
    }
 }

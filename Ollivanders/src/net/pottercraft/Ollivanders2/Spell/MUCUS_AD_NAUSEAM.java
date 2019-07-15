@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Effect.MUCUS;
-import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
-import net.pottercraft.Ollivanders2.Player.O2Player;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -20,6 +19,8 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class MUCUS_AD_NAUSEAM extends DarkArts
 {
+   private static int maxDurationInSeconds = 300;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -52,9 +53,8 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       List<LivingEntity> living = getLivingEntities(1.5);
       for (LivingEntity live : living)
       {
@@ -64,13 +64,23 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
          if (live instanceof Player)
          {
             Player player = (Player) live;
-            int dur = (int) (usesModifier * 1200);
 
-            MUCUS effect = new MUCUS(p, dur, player.getUniqueId());
+            int durationInSeconds = ((int) usesModifier + 30);
+            if (durationInSeconds > maxDurationInSeconds)
+            {
+               durationInSeconds = maxDurationInSeconds;
+            }
+
+            MUCUS effect = new MUCUS(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             kill();
          }
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

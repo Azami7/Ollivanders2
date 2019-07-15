@@ -104,7 +104,5 @@ public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
       {
          // in case entity no longer exists
       }
-
-      kill();
    }
 }

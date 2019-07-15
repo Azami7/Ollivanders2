@@ -1,8 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2API;
-import org.bukkit.Material;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
@@ -13,7 +13,7 @@ import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
  * @author Azami7
  * @author cakenggt
  */
-public final class PRAEPANDO extends Charms
+public final class PRAEPANDO extends StationarySpellSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -41,21 +41,19 @@ public final class PRAEPANDO extends Charms
 
       spellType = O2SpellType.PRAEPANDO;
       setUsesModifier();
+
+      baseRadius = 5;
+      radiusModifier = 1;
+      flairSize = 10;
+      centerOnCaster = true;
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
    @Override
-   public void checkEffect ()
+   protected StationarySpellObj createStationarySpell ()
    {
-      move();
-      Material targetBlockType = getBlock().getType();
-      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
-      {
-         int duration = (int) (usesModifier * 1200);
-         net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO prae = new net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO(p, player.getUniqueId(), location, O2StationarySpellType.PRAEPANDO,
-               1, duration, 5);
-         prae.flair(10);
-         Ollivanders2API.getStationarySpells().addStationarySpell(prae);
-         kill();
-      }
+      return new net.pottercraft.Ollivanders2.StationarySpell.PRAEPANDO(p, player.getUniqueId(), location, O2StationarySpellType.PRAEPANDO, 1, duration, radius);
    }
 }

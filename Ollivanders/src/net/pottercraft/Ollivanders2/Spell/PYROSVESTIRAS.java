@@ -49,6 +49,8 @@ public class PYROSVESTIRAS extends BlockTransfigurationSuper
 
       branch = O2MagicBranch.CHARMS;
 
+      initSpell();
+
       if (usesModifier > 50)
       {
          radius = 10;

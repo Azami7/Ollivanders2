@@ -10,7 +10,6 @@ import java.util.HashMap;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
@@ -90,7 +89,7 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
       }
       for (O2Spell sp : p.getProjectiles())
       {
-         if (sp.getBlock().equals(edLocation.getBlock()))
+         if (sp.getTargetBlock().equals(edLocation.getBlock()))
          {
             System.out.println("teleported projectile");
             sp.location = normLocation.clone();

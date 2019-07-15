@@ -963,7 +963,7 @@ public class OllivandersListener implements Listener
 
             if (Ollivanders2.debug)
             {
-               p.getLogger().info("OllivandersListener:onPlayerInteract: waving destined wand");
+               p.getLogger().info("OllivandersListener:onPlayerInteract: waving wand");
             }
 
             // play a sound and visual effect when they right-click their destined wand with no spell
@@ -1406,17 +1406,15 @@ public class OllivandersListener implements Listener
    public void onTemporaryBlockBreak (BlockBreakEvent event)
    {
       Block block = event.getBlock();
-      List<Block> tempBlocks = p.getTempBlocks();
-      if (tempBlocks.contains(block))
+
+      if (p.isTempBlock(block))
       {
-         event.setCancelled(true);
-         tempBlocks.remove(block);
-         block.setType(Material.AIR);
+         event.setDropItems(false);
       }
    }
 
    /**
-    * If a block is a tempBlock or is inside colloportus, then don't blow it up.
+    * If a block is inside colloportus, then don't blow it up.
     *
     * @param event the entity explode event
     */
@@ -1425,13 +1423,9 @@ public class OllivandersListener implements Listener
    {
       List<Block> blockListCopy = new ArrayList<>();
       blockListCopy.addAll(event.blockList());
-      List<Block> tempBlocks = p.getTempBlocks();
+
       for (Block block : blockListCopy)
       {
-         if (tempBlocks.contains(block))
-         {
-            event.blockList().remove(block);
-         }
          for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)

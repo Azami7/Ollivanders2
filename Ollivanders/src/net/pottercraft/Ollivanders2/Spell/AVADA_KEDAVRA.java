@@ -47,8 +47,7 @@ public final class AVADA_KEDAVRA extends DarkArts
       super(plugin, player, rightWand);
       spellType = O2SpellType.AVADA_KEDAVRA;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.PVP);
@@ -73,11 +72,9 @@ public final class AVADA_KEDAVRA extends DarkArts
 
             entity.damage(usesModifier * 2, player);
 
-            break;
+            kill();
+            return;
          }
-
-         kill();
-         return;
       }
 
       // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell

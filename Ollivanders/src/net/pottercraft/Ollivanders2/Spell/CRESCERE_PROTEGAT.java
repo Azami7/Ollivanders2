@@ -51,8 +51,7 @@ public final class CRESCERE_PROTEGAT extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.CRESCERE_PROTEGAT;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
    }
 
    /**

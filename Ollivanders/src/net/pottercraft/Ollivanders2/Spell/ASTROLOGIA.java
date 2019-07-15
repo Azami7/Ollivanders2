@@ -48,7 +48,6 @@ public final class ASTROLOGIA extends Divination
       spellType = O2SpellType.ASTROLOGIA;
       divinationType = O2DivinationType.ASTROLOGY;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
    }
 }

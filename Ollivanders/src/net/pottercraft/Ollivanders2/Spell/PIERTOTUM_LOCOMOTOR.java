@@ -1,6 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import org.bukkit.Location;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
@@ -49,43 +49,40 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
 
       spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      if (!hasTransfigured())
+      if (!hasHitTarget())
       {
-         move();
-         Block target = getBlock();
-         Material material = target.getType();
-         BlockData targetBlockData = target.getBlockData();
-
-         if (material == Material.IRON_BLOCK || material == Material.SNOW_BLOCK)
-         {
-            EntityType entityType;
-            if (material == Material.IRON_BLOCK)
-               entityType = EntityType.IRON_GOLEM;
-            else
-               entityType = EntityType.SNOWMAN;
-
-            target.setType(Material.AIR);
-            FallingBlock falling = location.getWorld().spawnFallingBlock(location, targetBlockData);
-            transfigureEntity(falling, entityType, null);
-            kill = false;
-         }
+         return;
       }
-      else
+
+      Block target = getTargetBlock();
+      Material material = target.getType();
+      BlockData targetBlockData = target.getBlockData();
+
+      if (material == Material.IRON_BLOCK || material == Material.SNOW_BLOCK)
       {
-         if (lifeTicks > 160)
+         EntityType entityType;
+         if (material == Material.IRON_BLOCK)
          {
-            kill = true;
-            endTransfigure();
+            entityType = EntityType.IRON_GOLEM;
          }
          else
          {
-            lifeTicks++;
+            entityType = EntityType.SNOWMAN;
          }
+
+         target.setType(Material.AIR);
+         FallingBlock falling = location.getWorld().spawnFallingBlock(location, targetBlockData);
+         transfigureEntity(falling, entityType, null);
       }
+
+      kill();
    }
 }

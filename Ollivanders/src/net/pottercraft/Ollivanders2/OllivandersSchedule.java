@@ -87,7 +87,7 @@ class OllivandersSchedule implements Runnable
          for (O2Spell proj : projectiles2)
          {
             proj.checkEffect();
-            if (proj.kill)
+            if (proj.isKilled())
             {
                p.remProjectile(proj);
             }

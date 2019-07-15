@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;

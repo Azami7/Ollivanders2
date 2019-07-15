@@ -17,6 +17,7 @@ public enum O2WandWoodType
    O2WandWoodType (Material m, String l)
    {
       material = m;
+      label = l;
    }
 
    public Material getMaterial ()

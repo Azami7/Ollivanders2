@@ -55,8 +55,7 @@ public final class DEFODIO extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.DEFODIO;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       depth = (int) usesModifier;
 

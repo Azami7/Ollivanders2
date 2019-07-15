@@ -1,9 +1,9 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class EBUBLIO extends Charms
+public final class EBUBLIO extends O2EffectOnSelf
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -49,16 +49,19 @@ public final class EBUBLIO extends Charms
 
       // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
-   }
 
-   /**
-    * Give the caster water-breathing
-    */
-   @Override
-   public void checkEffect ()
-   {
-      player.addPotionEffect(new PotionEffect(PotionEffectType.WATER_BREATHING, (int) (usesModifier * 1200), 1), true);
+      effectsToAdd.add(O2EffectType.WATER_BREATHING);
+      strengthModifier = 1;
+      minDurationInSeconds = 30;
 
-      kill();
+      durationInSeconds = (int) usesModifier;
+      if (durationInSeconds < minDurationInSeconds)
+      {
+         durationInSeconds = minDurationInSeconds;
+      }
+      else if (durationInSeconds > maxDurationInSeconds)
+      {
+         durationInSeconds = maxDurationInSeconds;
+      }
    }
 }

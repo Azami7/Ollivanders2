@@ -1,10 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -17,7 +14,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class ACCIO extends Charms
+public final class ACCIO extends Knockback
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -49,30 +46,9 @@ public final class ACCIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ACCIO;
+      pull = true;
+      strengthReducer = 10;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-   }
-
-   /**
-    * Check for any items within a radius of the projectile's current location, if one is found, pull it towards the
-    * caster.
-    */
-   @Override
-   protected void doCheckEffect ()
-   {
-      List<Item> items = getItems(1.5);
-
-      if (items != null && items.size() > 0)
-      {
-         Item item = items.get(0);
-         item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(usesModifier / 10));
-
-         kill();
-      }
-
-      // projectile has stopped, kill the spell
-      if (hasHitTarget())
-         kill();
+      initSpell();
    }
 }

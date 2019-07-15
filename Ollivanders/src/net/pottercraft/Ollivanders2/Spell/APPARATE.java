@@ -56,8 +56,10 @@ public final class APPARATE extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.APPARATE;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
+
+      // world-guard flags
+      worldGuardFlags.add(DefaultFlag.EXIT_VIA_TELEPORT);
    }
 
    /**
@@ -66,8 +68,14 @@ public final class APPARATE extends Charms
    @Override
    public void checkEffect ()
    {
+      if (!checkSpellAllowed())
+      {
+         kill();
+         return;
+      }
+
       // check to see if the player can apparate out of this location
-      if (canApparateOut())
+      if (canApparateFrom())
       {
          Location from = player.getLocation().clone();
          Location to;
@@ -92,9 +100,8 @@ public final class APPARATE extends Charms
          // check to see if the player can apparate in to the target location
          if (canApparateTo(to))
          {
-            location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
+            player.getWorld().createExplosion(from.getX(), from.getY(), from.getZ(), 2, false, false);
 
-            player.getWorld().createExplosion(player.getLocation(), 0);
             player.teleport(to);
             for (Entity e : player.getWorld().getEntities())
             {
@@ -103,7 +110,10 @@ public final class APPARATE extends Charms
                   e.teleport(to);
                }
             }
-            player.getWorld().createExplosion(player.getLocation(), 0);
+
+            // where the player actually ended up
+            Location resultingLocation = player.getLocation();
+            player.getWorld().createExplosion(resultingLocation.getX(), resultingLocation.getY(), resultingLocation.getZ(), 2, false, false);
          }
       }
 
@@ -115,7 +125,7 @@ public final class APPARATE extends Charms
     *
     * @return true if the player can apparate, false otherwise
     */
-   private boolean canApparateOut ()
+   private boolean canApparateFrom ()
    {
       // check world guard permissions at location
       if (Ollivanders2.worldGuardEnabled)

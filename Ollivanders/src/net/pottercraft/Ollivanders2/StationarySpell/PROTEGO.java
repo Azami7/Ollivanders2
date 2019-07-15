@@ -19,7 +19,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * Shield spell
  *
  */
-public class PROTEGO extends StationarySpellObj implements StationarySpell
+public class PROTEGO extends ShieldSpell implements StationarySpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -53,17 +53,21 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
 
    public void checkEffect ()
    {
+      age();
+
       Player ply = Bukkit.getPlayer(getCasterID());
       if (ply == null)
       {
          kill();
          return;
       }
+
       double rightWand = Ollivanders2API.playerCommon.wandCheck(ply);
       if (ply.isSneaking() && rightWand != -1)
       {
          location = ply.getEyeLocation();
          flair(1);
+
          List<O2Spell> projectiles = p.getProjectiles();
          if (projectiles != null)
          {
@@ -83,10 +87,6 @@ public class PROTEGO extends StationarySpellObj implements StationarySpell
                }
             }
          }
-      }
-      else
-      {
-         kill();
       }
    }
 

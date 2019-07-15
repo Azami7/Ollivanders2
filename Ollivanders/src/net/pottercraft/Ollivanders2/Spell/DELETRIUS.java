@@ -47,8 +47,7 @@ public final class DELETRIUS extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.DELETRIUS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);

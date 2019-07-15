@@ -35,15 +35,23 @@ public abstract class PlayerDisguiseSuper extends EntityDisguiseSuper
 
       entityWhitelist.add(EntityType.PLAYER);
 
-      int uses = (int)(usesModifier * 5);
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.PVP);
+   }
 
-      if (uses < 10)
+   /**
+    * Calculate the success rate for this spell. This has to be run from the spell itself after setting
+    * usesModifier since it is based on specific spell usage.
+    */
+   void calculateSuccessRate ()
+   {
+      if (usesModifier < 10)
          successRate = 10;
-      else if (uses < 100)
-         successRate = uses;
+      else if (usesModifier < 100)
+      {
+         successRate = (int) usesModifier;
+      }
       else
          successRate = 100;
-
-      worldGuardFlags.add(DefaultFlag.PVP);
    }
 }

@@ -54,11 +54,17 @@ public abstract class PyrotechniaSuper extends Charms
    }
 
    /**
-    * Shoot a firework in to the sky from caster's location
+    * Shoot a firework in to the sky from caster's location.
     */
    @Override
    public void checkEffect ()
    {
+      if (!checkSpellAllowed())
+      {
+         kill();
+         return;
+      }
+
       if (fireworkCount < maxFireworks)
       {
          Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);

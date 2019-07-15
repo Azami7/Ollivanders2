@@ -2,9 +2,11 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,6 +20,8 @@ import org.bukkit.entity.Player;
  */
 public final class ARRESTO_MOMENTUM extends Charms
 {
+   double multiplier = 0.5;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -48,8 +52,32 @@ public final class ARRESTO_MOMENTUM extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.ARRESTO_MOMENTUM;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell ()
+   {
+      if (usesModifier > 100)
+      {
+         multiplier = 0;
+      }
+      else if (multiplier > 75)
+      {
+         multiplier = 0.2;
+      }
+      else if (usesModifier > 50)
+      {
+         multiplier = 0.3;
+      }
+      else if (usesModifier > 25)
+      {
+         multiplier = 0.4;
+      }
+      else
+      {
+         multiplier = 0.5;
+      }
    }
 
    /**
@@ -61,36 +89,31 @@ public final class ARRESTO_MOMENTUM extends Charms
       double modifier = usesModifier;
 
       // check for entities first
-      List<LivingEntity> entities = getLivingEntities(1.5);
+      List<Entity> entities = getCloseEntities(1.5);
 
       if (entities.size() > 0)
       {
-         for (LivingEntity entity : entities)
+         for (Entity entity : entities)
          {
             if (entity.getUniqueId() == player.getUniqueId())
                continue;
 
-            double speed = entity.getVelocity().length() / (Math.pow(modifier, 2));
-            entity.setVelocity(entity.getVelocity().normalize().multiply(speed));
-            entity.setFallDistance((float) (entity.getFallDistance() / modifier));
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("current speed = " + entity.getVelocity().length());
+            }
 
-            break;
+            entity.setVelocity(entity.getVelocity().multiply(multiplier));
+
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("new speed = " + entity.getVelocity().length());
+            }
+
+            kill();
+            return;
          }
 
-         kill();
-         return;
-      }
-
-      // check for items next
-      List<Item> items = getItems(1.5);
-      if (items.size() > 0)
-      {
-         Item item = items.get(0);
-
-         double speed = item.getVelocity().length() / (Math.pow(modifier, 2));
-         item.setVelocity(item.getVelocity().normalize().multiply(speed));
-
-         kill();
          return;
       }
 

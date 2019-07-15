@@ -50,9 +50,16 @@ public class POINT_ME extends Charms
    @Override
    public void checkEffect ()
    {
+      if (!checkSpellAllowed())
+      {
+         kill();
+         return;
+      }
+
       Location l = player.getLocation().clone();
       l.setYaw(180);
       player.teleport(l);
+
       kill();
    }
 }

@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
  * @author lownes
  * @author Azami7
  */
-public final class ARANIA_EXUMAI extends Charms
+public final class ARANIA_EXUMAI extends Knockback
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -46,36 +46,10 @@ public final class ARANIA_EXUMAI extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.ARANIA_EXUMAI;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-   }
+      initSpell();
 
-   /**
-    * If any spiders are within the radius of the spell projectile, knock them back away from the caster.
-    */
-   @Override
-   protected void doCheckEffect ()
-   {
-      List<Entity> entities = getCloseEntities(1.5);
+      strengthReducer = 10;
 
-      if (entities.size() > 0)
-      {
-         for (Entity entity : entities)
-         {
-            EntityType type = entity.getType();
-            if (type == EntityType.SPIDER || type == EntityType.CAVE_SPIDER)
-            {
-               entity.setVelocity(player.getLocation().getDirection().normalize().multiply(usesModifier / 10));
-               break;
-            }
-         }
-
-         kill();
-         return;
-      }
-
-      // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
-      if (hasHitTarget())
-         kill();
+      entityWhitelist.add(EntityType.SPIDER);
    }
 }

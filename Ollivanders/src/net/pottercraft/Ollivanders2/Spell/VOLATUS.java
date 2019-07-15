@@ -2,7 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.List;
 
-import org.bukkit.Material;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -48,13 +48,16 @@ public final class VOLATUS extends Charms
 
       spellType = O2SpellType.VOLATUS;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      for (Item item : getItems(1))
+      for (Item item : getItems(1.5))
       {
          ItemStack stack = item.getItemStack();
          if (usesModifier >= 1 && isBroom(stack))
@@ -63,6 +66,11 @@ public final class VOLATUS extends Charms
             item.setItemStack(stack);
          }
          return;
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 

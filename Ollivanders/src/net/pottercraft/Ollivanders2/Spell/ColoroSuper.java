@@ -63,13 +63,16 @@ public abstract class ColoroSuper extends Charms
             {
                Sheep sheep = (Sheep)livingEntity;
                sheep.setColor(color.getDyeColor());
-               break;
+
+               kill();
+               return;
             }
          }
 
-         kill();
+         return;
       }
-      else if (hasHitTarget())
+
+      if (hasHitTarget())
       {
          Block target = getTargetBlock();
 

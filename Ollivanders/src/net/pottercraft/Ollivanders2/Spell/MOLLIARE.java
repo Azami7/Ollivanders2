@@ -1,7 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.Ollivanders2API;
-import org.bukkit.Material;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -15,7 +14,7 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class MOLLIARE extends Charms
+public final class MOLLIARE extends StationarySpellSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -47,20 +46,17 @@ public final class MOLLIARE extends Charms
 
       spellType = O2SpellType.MOLLIARE;
       setUsesModifier();
+
+      baseDurationInSeconds = 30;
+      durationModifierInSeconds = 1;
+      baseRadius = 5;
+      radiusModifier = 1;
+      flairSize = 10;
    }
 
    @Override
-   public void checkEffect ()
+   protected StationarySpellObj createStationarySpell ()
    {
-      move();
-      Material targetBlockType = getBlock().getType();
-      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
-      {
-         int duration = (int) (usesModifier * 1200);
-         net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE molliare = new net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE(p, player.getUniqueId(), location, O2StationarySpellType.MOLLIARE, 5, duration);
-         molliare.flair(10);
-         Ollivanders2API.getStationarySpells().addStationarySpell(molliare);
-         kill();
-      }
+      return new net.pottercraft.Ollivanders2.StationarySpell.MOLLIARE(p, player.getUniqueId(), location, O2StationarySpellType.MOLLIARE, radius, duration);
    }
 }

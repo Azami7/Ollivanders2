@@ -17,6 +17,7 @@ public enum O2WandCoreType
    O2WandCoreType (Material m, String l)
    {
       material = m;
+      label = l;
    }
 
    public Material getMaterial ()

@@ -24,6 +24,9 @@ import org.bukkit.entity.Entity;
  */
 public abstract class BlockTransfigurationSuper extends O2Spell
 {
+   int minDurationInSeconds = 15;
+   int maxDurationInSeconds = 600; // 10 minutes
+
    /**
     * If the transfiguration has taken place or not.
     */
@@ -32,7 +35,7 @@ public abstract class BlockTransfigurationSuper extends O2Spell
    /**
     * A map of the transfigured blocks and their original types for use with revert()
     */
-   private HashMap<Block, Material> originalBlocks = new HashMap<>();
+   private ArrayList<Block> changedBlocks = new ArrayList<>();
 
    //
    // these should be set by each spell as needed
@@ -60,7 +63,7 @@ public abstract class BlockTransfigurationSuper extends O2Spell
    /**
     * If this is not permanent, how long it should last.
     */
-   int spellDuration = 1200;
+   int spellDuration = 300 * Ollivanders2Common.ticksPerSecond; // 5 minutes
 
    /**
     * Allows spell variants to change the duration of this spell.
@@ -109,6 +112,23 @@ public abstract class BlockTransfigurationSuper extends O2Spell
 
       // required worldGuard state flags
       worldGuardFlags.add(DefaultFlag.BUILD);
+   }
+
+   @Override
+   void doInitSpell ()
+   {
+      // spell duration
+      int durationInSeconds = (int) usesModifier;
+      if (durationInSeconds < minDurationInSeconds)
+      {
+         durationInSeconds = minDurationInSeconds;
+      }
+      else if (durationInSeconds > maxDurationInSeconds)
+      {
+         durationInSeconds = maxDurationInSeconds;
+      }
+
+      spellDuration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
    }
 
    /**
@@ -168,27 +188,28 @@ public abstract class BlockTransfigurationSuper extends O2Spell
       }
 
       // get the objects to be transfigured
-      for (Block b : Ollivanders2API.common.getBlocksInRadius(block.getLocation(), (int) (radius * radiusModifier)))
+      for (Block blockToChange : Ollivanders2API.common.getBlocksInRadius(block.getLocation(), (int) (radius * radiusModifier)))
       {
-         if (!canTransfigure(b))
+         if (!canTransfigure(blockToChange))
          {
             continue;
          }
 
-         Material orig = b.getType();
+         Material orig = blockToChange.getType();
          // if not permanent, keep track of what the original block was
          if (!permanent)
          {
-            originalBlocks.put(b, orig);
+            p.addTempBlock(blockToChange, orig);
+            changedBlocks.add(blockToChange);
          }
 
          if (transfigurationMap.containsKey(orig))
          {
-            b.setType(transfigurationMap.get(orig));
+            blockToChange.setType(transfigurationMap.get(orig));
          }
          else
          {
-            b.setType(transfigureType);
+            blockToChange.setType(transfigureType);
          }
       }
 
@@ -236,20 +257,12 @@ public abstract class BlockTransfigurationSuper extends O2Spell
    {
       if (!permanent)
       {
-         for (Entry<Block, Material> entry : originalBlocks.entrySet())
+         for (Block block : changedBlocks)
          {
-            Block b = entry.getKey();
-            Material m = entry.getValue();
-
-            try
-            {
-               b.setType(m);
-            }
-            catch (Exception e)
-            {
-               // in case the blocks do not exist anymore.
-            }
+            p.revertTempBlock(block);
          }
+
+         changedBlocks.clear();
       }
    }
 

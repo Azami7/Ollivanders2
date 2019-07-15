@@ -1,13 +1,10 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 /**
@@ -16,7 +13,7 @@ import org.bukkit.potion.PotionEffectType;
  * @author lownes
  * @author Azami7
  */
-public final class STUPEFY extends Charms
+public final class STUPEFY extends PotionEffectSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -48,24 +45,21 @@ public final class STUPEFY extends Charms
 
       spellType = O2SpellType.STUPEFY;
       setUsesModifier();
-   }
 
-   @Override
-   public void checkEffect ()
-   {
-      move();
-      List<LivingEntity> entities = getLivingEntities(2);
-      for (LivingEntity entity : entities)
+      effectTypes.add(PotionEffectType.BLINDNESS);
+      effectTypes.add(PotionEffectType.SLOW);
+      strengthModifier = (int) usesModifier / 10;
+      minDurationInSeconds = 1;
+      maxDurationInSeconds = 180;
+
+      durationInSeconds = (int) usesModifier;
+      if (durationInSeconds < minDurationInSeconds)
       {
-         if (entity.getUniqueId() == player.getUniqueId())
-            continue;
-
-         int modifier = (int) usesModifier;
-         PotionEffect blindness = new PotionEffect(PotionEffectType.BLINDNESS, modifier * 20, modifier);
-         PotionEffect slowness = new PotionEffect(PotionEffectType.SLOW, modifier * 20, modifier);
-         entity.addPotionEffect(blindness);
-         entity.addPotionEffect(slowness);
-         kill = true;
+         durationInSeconds = minDurationInSeconds;
+      }
+      else if (durationInSeconds > maxDurationInSeconds)
+      {
+         durationInSeconds = maxDurationInSeconds;
       }
    }
 }

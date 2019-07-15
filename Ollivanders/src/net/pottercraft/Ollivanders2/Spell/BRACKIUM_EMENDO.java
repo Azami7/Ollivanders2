@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -20,6 +21,12 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class BRACKIUM_EMENDO extends Healing
 {
+   private final int maxDuration = 300;
+   private final int minDuration = 10;
+
+   private final double maxDamage = 10;
+   private final double minDamage = 0.25;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -50,8 +57,7 @@ public final class BRACKIUM_EMENDO extends Healing
       super(plugin, player, rightWand);
       spellType = O2SpellType.BRACKIUM_EMENDO;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
    }
 
    /**
@@ -73,17 +79,48 @@ public final class BRACKIUM_EMENDO extends Healing
             EntityType type = entity.getType();
             if (type == EntityType.SKELETON || type == EntityType.WITHER_SKULL || type == EntityType.WITHER)
             {
-               entity.damage(usesModifier * 2, player);
+               double damage = usesModifier * 0.2;
+               if (damage < minDamage)
+               {
+                  damage = minDamage;
+               }
+               else if (damage > maxDamage)
+               {
+                  damage = maxDamage;
+               }
+
+               entity.damage(damage, player);
+
+               kill();
                break;
             }
             else if (type == EntityType.PLAYER)
             {
-               player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, (int) (usesModifier * 1200), 1), true);
+               int duration = (int) usesModifier;
+               if (duration < minDuration)
+               {
+                  duration = minDuration;
+               }
+               else if (duration > maxDuration)
+               {
+                  duration = maxDuration;
+               }
+
+               int durationInTicks = duration * Ollivanders2Common.ticksPerSecond;
+
+               PotionEffect effect = new PotionEffect(PotionEffectType.HEAL, durationInTicks, 1);
+               entity.addPotionEffect(effect);
+
+               if (Ollivanders2.debug)
+               {
+                  p.getLogger().info("Adding heal potion effect to " + entity.getName() + " for " + durationInTicks + " game ticks.");
+               }
+
+               kill();
                break;
             }
          }
 
-         kill();
          return;
       }
 

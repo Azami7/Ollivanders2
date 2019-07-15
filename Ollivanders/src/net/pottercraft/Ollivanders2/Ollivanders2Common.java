@@ -14,10 +14,13 @@ import java.util.UUID;
 
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
+import net.pottercraft.Ollivanders2.Player.O2WandCoreType;
+import net.pottercraft.Ollivanders2.Player.O2WandWoodType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Effect;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
@@ -34,6 +37,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 /**
  * Common functions and data
@@ -86,6 +90,22 @@ public class Ollivanders2Common
       add(EntityType.SHULKER); // not large in size but complex
    }};
 
+   public static final ArrayList<EntityType> undeadEntities = new ArrayList<EntityType>()
+   {{
+      add(EntityType.DROWNED);
+      add(EntityType.HUSK);
+      add(EntityType.PHANTOM);
+      add(EntityType.PIG_ZOMBIE);
+      add(EntityType.SKELETON);
+      add(EntityType.SKELETON_HORSE);
+      add(EntityType.STRAY);
+      add(EntityType.WITHER);
+      add(EntityType.WITHER_SKELETON);
+      add(EntityType.ZOMBIE);
+      add(EntityType.ZOMBIE_HORSE);
+      add(EntityType.ZOMBIE_VILLAGER);
+   }};
+
    public static final ArrayList<O2SpellType> libsDisguisesSpells = new ArrayList<O2SpellType>() {{
       add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       add(O2SpellType.AVIFORS);
@@ -113,6 +133,29 @@ public class Ollivanders2Common
    public static final ArrayList<Material> unbreakableMaterials = new ArrayList<Material>() {{
       add(Material.BARRIER);
       add(Material.BEDROCK);
+      add(Material.ENDER_CHEST);
+      add(Material.WHITE_SHULKER_BOX);
+      add(Material.BLACK_SHULKER_BOX);
+      add(Material.BLUE_SHULKER_BOX);
+      add(Material.SHULKER_BOX);
+      add(Material.BROWN_SHULKER_BOX);
+      add(Material.CYAN_SHULKER_BOX);
+      add(Material.GRAY_SHULKER_BOX);
+      add(Material.GREEN_SHULKER_BOX);
+      add(Material.LIGHT_BLUE_SHULKER_BOX);
+      add(Material.LIGHT_GRAY_SHULKER_BOX);
+      add(Material.LIME_SHULKER_BOX);
+      add(Material.MAGENTA_SHULKER_BOX);
+      add(Material.ORANGE_SHULKER_BOX);
+      add(Material.PINK_SHULKER_BOX);
+      add(Material.PURPLE_SHULKER_BOX);
+      add(Material.RED_SHULKER_BOX);
+      add(Material.YELLOW_SHULKER_BOX);
+   }};
+
+   public static final ArrayList<Material> chests = new ArrayList<Material>()
+   {{
+      add(Material.CHEST);
       add(Material.ENDER_CHEST);
       add(Material.WHITE_SHULKER_BOX);
       add(Material.BLACK_SHULKER_BOX);
@@ -813,9 +856,9 @@ public class Ollivanders2Common
    {
       ArrayList<ItemStack> wands = new ArrayList<>();
 
-      for (String wood : O2PlayerCommon.woodArray)
+      for (String wood : O2WandWoodType.getAllWoodsByName())
       {
-         for (String core : O2PlayerCommon.coreArray)
+         for (String core : O2WandCoreType.getAllCoresByName())
          {
             ItemStack wand = new ItemStack(Ollivanders2.wandMaterial);
             List<String> lore = new ArrayList<>();
@@ -945,5 +988,64 @@ public class Ollivanders2Common
       {
          return false;
       }
+   }
+
+   /**
+    * Makes a particle effect at all points along the radius of
+    * spell and at spell loc
+    *
+    * @param intensity - Intensity of the flair. If greater than 10, is reduced to 10.
+    */
+   public static void flair (Location location, int radius, double intensity)
+   {
+      if (intensity > 10)
+      {
+         intensity = 10;
+      }
+      for (double inc = (Math.random() * Math.PI) / intensity; inc < Math.PI; inc += Math.PI / intensity)
+      {
+         for (double azi = (Math.random() * Math.PI) / intensity; azi < 2 * Math.PI; azi += Math.PI / intensity)
+         {
+            double[] spher = new double[2];
+            spher[0] = inc;
+            spher[1] = azi;
+            Location e = location.clone().add(spherToVec(spher, radius));
+            e.getWorld().playEffect(e, Effect.SMOKE, 4);
+         }
+      }
+   }
+
+   /**
+    * Translates vector to spherical coords
+    *
+    * @param vec - Vector to be translated
+    * @return Spherical coords in double array with
+    * indexes 0=inclination 1=azimuth
+    */
+   public static double[] vecToSpher (Vector vec)
+   {
+      double inc = Math.acos(vec.getZ());
+      double azi = Math.atan2(vec.getY(), vec.getX());
+      double[] ret = new double[2];
+      ret[0] = inc;
+      ret[1] = azi;
+      return ret;
+   }
+
+   /**
+    * Translates spherical coords to vector
+    *
+    * @param spher array with indexes 0=inclination 1=azimuth
+    * @return Vector
+    */
+   public static Vector spherToVec (double[] spher, int radius)
+   {
+      double inc = spher[0];
+      double azi = spher[1];
+      double x = radius * Math.sin(inc) * Math.cos(azi);
+      double z = radius * Math.sin(inc) * Math.sin(azi);
+      double y = radius * Math.cos(inc);
+      Vector ret = new Vector(x, y, z);
+      return ret;
    }
 }

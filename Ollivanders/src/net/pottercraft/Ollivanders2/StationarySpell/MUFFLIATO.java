@@ -13,7 +13,7 @@ import java.util.UUID;
  *
  * @author lownes
  */
-public class MUFFLIATO extends StationarySpellObj implements StationarySpell
+public class MUFFLIATO extends ShieldSpell implements StationarySpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.

@@ -3,11 +3,14 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Repairs an itemstack you aim it at.
@@ -48,24 +51,38 @@ public final class REPARO extends Charms
 
       spellType = O2SpellType.REPARO;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      List<Item> items = getItems(1);
+      List<Item> items = getItems(1.5);
       for (Item item : items)
       {
          ItemStack stack = item.getItemStack();
-         int dur = stack.getDurability();
-         dur -= usesModifier * usesModifier;
-         if (dur < 0)
+         ItemMeta itemMeta = stack.getItemMeta();
+
+         if (itemMeta instanceof Damageable)
          {
-            dur = 0;
+            int damage = ((Damageable) itemMeta).getDamage();
+            damage -= usesModifier * usesModifier;
+            if (damage < 0)
+            {
+               damage = 0;
+            }
+
+            ((Damageable) itemMeta).setDamage(damage);
+            item.setItemStack(stack);
+            kill();
          }
-         stack.setDurability((short) dur);
-         item.setItemStack(stack);
+      }
+
+      if (hasHitTarget())
+      {
          kill();
       }
    }

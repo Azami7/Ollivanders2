@@ -1,14 +1,11 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Gives an entity a healing effect for usesModifier seconds
@@ -17,7 +14,7 @@ import java.util.List;
  * @author lownes
  * @author Azami7
  */
-public final class EPISKEY extends Healing
+public final class EPISKEY extends PotionEffectSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -26,6 +23,7 @@ public final class EPISKEY extends Healing
    {
       super();
 
+      branch = O2MagicBranch.HEALING;
       spellType = O2SpellType.EPISKEY;
 
       flavorText = new ArrayList<String>() {{
@@ -46,36 +44,26 @@ public final class EPISKEY extends Healing
    public EPISKEY (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      branch = O2MagicBranch.HEALING;
       spellType = O2SpellType.EPISKEY;
 
       // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
-   }
 
-   /**
-    * Look for living entities in the projectile location and give them regeneration
-    */
-   @Override
-   protected void doCheckEffect ()
-   {
-      List<LivingEntity> livingEntities = getLivingEntities(1.5);
+      effectTypes.add(PotionEffectType.REGENERATION);
+      strengthModifier = 0;
+      minDurationInSeconds = 15;
+      maxDurationInSeconds = 120;
 
-      if (livingEntities.size() > 0)
+      durationInSeconds = (int) usesModifier;
+      if (durationInSeconds < minDurationInSeconds)
       {
-         for (LivingEntity live : getLivingEntities(1.5))
-         {
-            if (live.getUniqueId().equals(player.getUniqueId()))
-            {
-               live.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, (int) (usesModifier * Ollivanders2Common.ticksPerSecond), 0), true);
-            }
-         }
-
-         kill();
-         return;
+         durationInSeconds = minDurationInSeconds;
       }
-
-      // projectile is stopped, kill spell
-      if (hasHitTarget())
-         kill();
+      else if (durationInSeconds > maxDurationInSeconds)
+      {
+         durationInSeconds = maxDurationInSeconds;
+      }
    }
 }

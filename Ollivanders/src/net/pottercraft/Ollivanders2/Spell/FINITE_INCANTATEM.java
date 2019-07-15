@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
@@ -11,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import org.bukkit.potion.PotionEffect;
 
 /**
  * Reduces any spell effects on an item or player.
@@ -21,6 +23,9 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class FINITE_INCANTATEM extends Charms
 {
+   private final int minPercent = 10;
+   private int percent;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -52,8 +57,7 @@ public final class FINITE_INCANTATEM extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.FINITE_INCANTATEM;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
    }
 
    /**
@@ -62,75 +66,172 @@ public final class FINITE_INCANTATEM extends Charms
    @Override
    protected void doCheckEffect ()
    {
-      // look for entities first
-      for (LivingEntity live : getLivingEntities(1.5))
+      percent = (int) usesModifier / 2;
+      if (percent < minPercent)
       {
-         if (live instanceof Player)
-         {
-            Player ply = (Player) live;
-
-            Ollivanders2API.getPlayers().playerEffects.ageAllEffects(ply.getUniqueId(), (int) (usesModifier * 1200));
-
-            kill();
-            return;
-         }
+         percent = minPercent;
+      }
+      else if (percent > 100)
+      {
+         percent = 100;
       }
 
-      // look for items next
-      for (Item item : getItems(1.5))
+      if (Ollivanders2.debug)
       {
-         ItemStack stack = item.getItemStack();
-         ItemMeta meta = stack.getItemMeta();
+         p.getLogger().info("Finite incantatem percent = " + percent);
+      }
 
-         if (meta.hasLore())
-         {
-            List<String> lore = meta.getLore();
-            ArrayList<String> newLore = new ArrayList<>();
-            for (int i = 0; i < lore.size(); i++)
-            {
-               String string = lore.get(i);
-               if (string.contains("Geminio "))
-               {
-                  String[] loreParts = lore.get(i).split(" ");
-                  int magnitude = Integer.parseInt(loreParts[1]);
-                  magnitude -= (int) usesModifier;
-                  if (magnitude > 0)
-                  {
-                     newLore.add("Geminio " + magnitude);
-                  }
-               }
-               else if (string.contains("Flagrante "))
-               {
-                  String[] loreParts = lore.get(i).split(" ");
-                  int magnitude = Integer.parseInt(loreParts[1]);
-                  magnitude -= (int) usesModifier;
-                  if (magnitude > 0)
-                  {
-                     newLore.add("Flagrante " + magnitude);
-                  }
-               }
-               else if (string.contains("Portkey "))
-               {
-                  //remove the portkey by not adding it to newLore
-               }
-               else
-               {
-                  newLore.add(lore.get(i));
-               }
-            }
-            meta.setLore(newLore);
-            stack.setItemMeta(meta);
-            item.setItemStack(stack);
+      // look for entities first
+      finiteIncantatemEntities();
 
-            kill();
-            return;
-         }
+      // look for items next
+      if (!isKilled())
+      {
+         finiteIncantatemItems();
       }
 
       // projectile has stopped, kill the spell
       if (hasHitTarget())
       {
          kill();
+      }
+   }
+
+   /**
+    * Finite Incantatem on entities.
+    */
+   private void finiteIncantatemEntities ()
+   {
+      for (LivingEntity live : getLivingEntities(1.5))
+      {
+         if (live.getUniqueId() == player.getUniqueId())
+         {
+            continue;
+         }
+
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("finite incantatem targeting " + live.getName());
+         }
+
+         if (live instanceof Player)
+         {
+            Player ply = (Player) live;
+
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffects(ply.getUniqueId()))
+            {
+               if (usesModifier < 100)
+               {
+                  Ollivanders2API.getPlayers().playerEffects.ageAllEffectsByPercent(ply.getUniqueId(), percent);
+               }
+
+               kill();
+               return;
+            }
+         }
+
+         Collection<PotionEffect> potionEffects = live.getActivePotionEffects();
+
+         for (PotionEffect effect : potionEffects)
+         {
+            int curDuration = effect.getDuration();
+            int newDuration = curDuration - (curDuration * (percent / 100));
+
+            PotionEffect newEffect = new PotionEffect(effect.getType(), newDuration, effect.getAmplifier(), effect.isAmbient(), effect.hasParticles(), effect.hasIcon());
+
+            live.removePotionEffect(effect.getType());
+
+            if (percent < 100)
+            {
+               live.addPotionEffect(newEffect);
+            }
+
+            kill();
+         }
+
+         return;
+      }
+   }
+
+   /**
+    * Finite Incantatem on items.
+    */
+   private void finiteIncantatemItems ()
+   {
+      for (Item item : getItems(1.5))
+      {
+         ItemStack stack = item.getItemStack();
+         ItemMeta meta = stack.getItemMeta();
+
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("finite incantatem targeting " + item.getName());
+         }
+
+         if (meta.hasLore())
+         {
+            List<String> lore = meta.getLore();
+            ArrayList<String> newLore = new ArrayList<>();
+
+            for (int i = 0; i < lore.size(); i++)
+            {
+               String[] loreParts = lore.get(i).split(" ");
+
+               if (Ollivanders2.debug)
+               {
+                  p.getLogger().info("item meta line starts with " + loreParts[0]);
+               }
+
+               if (ItemCurse.itemCurseNames.contains(loreParts[0]))
+               {
+                  if (Ollivanders2.debug)
+                  {
+                     p.getLogger().info("item has " + lore.get(i) + " curse");
+                  }
+
+                  int curMagnitude = 0;
+
+                  try
+                  {
+                     curMagnitude = Integer.parseInt(loreParts[1]);
+                  }
+                  catch (Exception e)
+                  {
+                     continue;
+                  }
+
+                  if (curMagnitude > 0)
+                  {
+                     int newMagnitude = curMagnitude - (curMagnitude * (percent / 100));
+
+                     if (Ollivanders2.debug)
+                     {
+                        p.getLogger().info("reducing magnitude from  " + curMagnitude + " to " + newMagnitude);
+                     }
+
+                     if (percent < 100)
+                     {
+                        newLore.add(loreParts[0] + " " + newMagnitude);
+                     }
+                  }
+
+                  kill();
+               }
+               else // this is not a curse line, add it back to the new lore set
+               {
+                  newLore.add(lore.get(i));
+               }
+            }
+
+            meta.setLore(newLore);
+            stack.setItemMeta(meta);
+            item.setItemStack(stack);
+
+            if (isKilled())
+            {
+               return;
+            }
+         }
       }
    }
 }

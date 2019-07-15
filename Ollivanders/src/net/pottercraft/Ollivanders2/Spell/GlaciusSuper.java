@@ -38,6 +38,8 @@ public abstract class GlaciusSuper extends BlockTransfigurationSuper
 
       branch = O2MagicBranch.CHARMS;
 
+      initSpell();
+
       if (usesModifier > 50)
       {
          radius = 5;
@@ -51,8 +53,6 @@ public abstract class GlaciusSuper extends BlockTransfigurationSuper
          radius = (int) (usesModifier / 10);
       }
       permanent = false;
-
-      spellDuration = (int)(usesModifier * 1200);
 
       transfigurationMap.put(Material.FIRE, Material.AIR);
       transfigurationMap.put(Material.WATER, Material.ICE);

@@ -43,6 +43,7 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguiseSuper
 
       spellType = O2SpellType.INCARNATIO_PORCILLI;
       setUsesModifier();
+      calculateSuccessRate();
 
       targetType = EntityType.PIG;
       disguiseType = DisguiseType.getType(targetType);

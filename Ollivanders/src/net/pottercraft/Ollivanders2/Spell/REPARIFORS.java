@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -34,9 +35,8 @@ public class REPARIFORS extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live.getUniqueId() == player.getUniqueId())
@@ -51,11 +51,11 @@ public class REPARIFORS extends Charms
             // if they are affected by immobilize, remove the effect
             if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE) && !(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)))
             {
-               Ollivanders2API.getPlayers().playerEffects.ageEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier * 2400));
-            }
+               Ollivanders2API.getPlayers().playerEffects.ageEffectByPercent(player.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier / 20));
 
-            // do a minor heal
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, (int) (usesModifier * 600), 1), true);
+               kill();
+               return;
+            }
 
             // reduce duration of poison by half
             if (player.hasPotionEffect(PotionEffectType.POISON))
@@ -63,11 +63,23 @@ public class REPARIFORS extends Charms
                int duration = player.getPotionEffect(PotionEffectType.POISON).getDuration();
                player.removePotionEffect(PotionEffectType.POISON);
                player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (duration / 2), 1), true);
+
+               kill();
+               return;
             }
+
+            // do a minor heal
+            int duration = (((int) usesModifier / 10) * Ollivanders2Common.ticksPerSecond) + (15 * Ollivanders2Common.ticksPerSecond);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, duration, 1), true);
 
             kill();
             return;
          }
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

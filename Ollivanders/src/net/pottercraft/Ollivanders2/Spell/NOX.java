@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class NOX extends Charms
+public final class NOX extends RemovePotionEffectFromSelfSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -47,11 +47,7 @@ public final class NOX extends Charms
 
       spellType = O2SpellType.NOX;
       setUsesModifier();
-   }
 
-   @Override
-   public void checkEffect() {
-      player.removePotionEffect(PotionEffectType.NIGHT_VISION);
-      kill();
+      potionEffectTypes.add(PotionEffectType.NIGHT_VISION);
    }
 }

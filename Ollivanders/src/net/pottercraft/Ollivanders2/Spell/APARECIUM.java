@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 
 /**
- * The Revealing Charm.  Causes any stationary spell objects to flair with an intensity equal to your level
+ * The Revealing Charm. Causes any stationary spell objects to flair with an intensity equal to your level.
  *
  * @version Ollivanders2
  * @author lownes
@@ -47,29 +47,25 @@ public final class APARECIUM extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.APARECIUM;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
    }
 
    /**
     * If any stationary spells are at the location of the spell projectile, make them flair.
     */
    @Override
-   public void doCheckEffect ()
+   protected void doCheckEffect ()
    {
       List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location);
 
       if (stationaries.size() > 0)
       {
-         for (StationarySpellObj stationary : stationaries)
+         if (Ollivanders2.debug)
          {
-            int level = (int) usesModifier;
-            if (level > 10)
-            {
-               level = 10;
-            }
-            stationary.flair(level);
+            p.getLogger().info("Found " + stationaries.size() + " stationary spells");
          }
+
+         stationaries.get(0).flair(10);
 
          kill();
          return;

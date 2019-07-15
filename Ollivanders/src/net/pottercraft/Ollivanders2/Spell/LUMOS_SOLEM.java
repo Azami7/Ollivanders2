@@ -1,28 +1,26 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2API;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.entity.EntityType;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
 
 /**
- * Burns sun-sensitive entities with a radius
+ * Burns sun-sensitive entities with a radius.
  *
- * @author lownes
+ * @version Ollivanders2
  * @author Azami7
  */
 public final class LUMOS_SOLEM extends Charms
 {
-   boolean move = true;
-   Set<Block> blocks = new HashSet();
+   int duration;
+   int targetCount;
+
+   static int maxDuration = Ollivanders2Common.ticksPerSecond * 120; // 2 minutes
+   static int maxTargetCount = 10;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -53,56 +51,50 @@ public final class LUMOS_SOLEM extends Charms
 
       spellType = O2SpellType.LUMOS_SOLEM;
       setUsesModifier();
+
+      // duration of fire damage, min is 1 second
+      duration = Ollivanders2Common.ticksPerSecond * (int) usesModifier;
+      if (duration > maxDuration)
+      {
+         duration = maxDuration;
+      }
+
+      // max number of entities targeted
+      targetCount = 1 + ((int) usesModifier / 10);
+      if (targetCount > maxTargetCount)
+      {
+         targetCount = maxTargetCount;
+      }
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      if (move)
+      List<LivingEntity> entities = getLivingEntities(1.5);
+
+      for (LivingEntity entity : entities)
       {
-         move();
-         Material targetBlockType = getBlock().getType();
-         if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
+         if (entity.getUniqueId() == player.getUniqueId())
          {
-            for (LivingEntity live : getLivingEntities(usesModifier))
-            {
-               boolean burn = false;
-               if (live.getType() == EntityType.ZOMBIE)
-               {
-                  Zombie zombie = (Zombie) live;
-                  if (!zombie.isBaby())
-                  {
-                     burn = true;
-                  }
-               }
-               if (live.getType() == EntityType.SKELETON)
-               {
-                  burn = true;
-               }
-               if (burn)
-               {
-                  live.setFireTicks(160);
-               }
-            }
-            kill = false;
-            move = false;
-            for (Block block : Ollivanders2API.common.getBlocksInRadius(location, usesModifier))
-            {
-               if (block.getType() == Material.AIR)
-               {
-                  blocks.add(block);
-                  block.setType(Material.GLOWSTONE);
-               }
-            }
+            continue;
+         }
+
+         if (Ollivanders2Common.undeadEntities.contains(entity.getType()))
+         {
+            entity.setFireTicks(duration);
+            targetCount--;
+         }
+
+         if (targetCount <= 0)
+         {
+            kill();
+            return;
          }
       }
-      else
+
+      if (entities.size() > 0 || hasHitTarget())
       {
          kill();
-         for (Block block : blocks)
-         {
-            block.setType(Material.AIR);
-         }
       }
    }
 }

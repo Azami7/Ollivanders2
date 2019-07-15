@@ -17,7 +17,7 @@ import java.util.UUID;
  *
  * @author lownes
  */
-public class PROTEGO_MAXIMA extends StationarySpellObj implements StationarySpell
+public class PROTEGO_MAXIMA extends ShieldSpell implements StationarySpell
 {
    double damage;
 

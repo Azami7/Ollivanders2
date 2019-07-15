@@ -35,8 +35,7 @@ public final class COLOVARIA_OSTRUM extends ColoroSuper
       super(plugin, player, rightWand);
       spellType = O2SpellType.COLOVARIA_OSTRUM;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       color = O2Color.PURPLE;
    }

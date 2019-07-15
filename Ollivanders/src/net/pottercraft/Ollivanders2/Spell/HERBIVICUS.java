@@ -53,6 +53,7 @@ public final class HERBIVICUS extends Herbology
       spellType = O2SpellType.HERBIVICUS;
       setUsesModifier();
 
+      // pass-through materials
       projectilePassThrough.add(Material.WATER);
 
       stateList.add(CropState.SEEDED);

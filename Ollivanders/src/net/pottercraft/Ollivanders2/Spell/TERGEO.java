@@ -1,9 +1,11 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -11,12 +13,12 @@ import java.util.ArrayList;
 /**
  * The siphoning spell.
  *
- * @author cakenggt
+ * @version Ollivanders2
  * @author Azami7
  */
-public final class TERGEO extends Charms
+public final class TERGEO extends BlockTransfigurationSuper
 {
-   boolean move;
+   static private int maxRadius = 20;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -26,13 +28,14 @@ public final class TERGEO extends Charms
       super();
 
       spellType = O2SpellType.TERGEO;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("The Siphoning Spell");
          add("The wand siphoned off most of the grease. Looking rather pleased with himself, Ron handed the slightly smoking handkerchief to Hermione.");
       }};
 
-      text = "Tergeo will siphon off a block of water where it hits. It will also disable any Aguamenti-placed water blocks nearby.";
+      text = "Tergeo will siphon water where it hits.";
    }
 
    /**
@@ -47,58 +50,26 @@ public final class TERGEO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.TERGEO;
-      setUsesModifier();
-      move = true;
-   }
+      branch = O2MagicBranch.CHARMS;
 
-   @Override
-   public void checkEffect ()
-   {
-      if (move)
-      {
-         move();
-         if (getBlock().getType() == Material.WATER)
-         {
-            Block block = location.getBlock();
-            block.setType(Material.AIR);
-            changed.add(block);
-            kill = false;
-            move = false;
-            lifeTicks = (int) (-(usesModifier * 1200));
-         }
-         for (O2Spell proj : p.getProjectiles())
-         {
-            if (proj.spellType == O2SpellType.AGUAMENTI && proj.location.getWorld() == location.getWorld())
-            {
-               if (proj.location.distance(location) < 1)
-               {
-                  proj.revert();
-                  proj.kill();
-               }
-            }
-         }
-      }
-      else
-      {
-         lifeTicks++;
-      }
-      if (lifeTicks >= 159)
-      {
-         revert();
-         kill();
-      }
-   }
+      transfigureType = Material.AIR;
+      permanent = false;
 
-   @Override
-   public void revert ()
-   {
-      for (Block block : changed)
+      initSpell();
+
+      radius = 1 + ((int) usesModifier / 20);
+      if (radius > maxRadius)
       {
-         Material mat = block.getType();
-         if (mat == Material.AIR)
-         {
-            block.setType(Material.WATER);
-         }
+         radius = maxRadius;
       }
+
+      // set materials that can be transfigured by this spell
+      materialWhitelist.add(Material.WATER);
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
+
+      // pass-through
+      projectilePassThrough.remove(Material.WATER);
    }
 }

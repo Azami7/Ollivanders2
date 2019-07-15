@@ -56,8 +56,7 @@ public final class ALIQUAM_FLOO extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.ALIQUAM_FLOO;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       // required worldGuard state flags
       worldGuardFlags.add(DefaultFlag.INTERACT);
@@ -65,6 +64,7 @@ public final class ALIQUAM_FLOO extends Charms
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+      projectilePassThrough.remove(Material.FIRE);
    }
 
    /**
@@ -90,6 +90,11 @@ public final class ALIQUAM_FLOO extends Charms
             flooName = flooName.trim();
             flooName = flooName.toLowerCase();
 
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("Floo name on sign is " + flooName);
+            }
+
             // make sure there is not already an aliquam floo spell at this block
             for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
             {
@@ -99,6 +104,8 @@ public final class ALIQUAM_FLOO extends Charms
                   if (ali.getFlooName().equals(flooName) || ali.getBlock().equals(statLocation.getBlock()))
                   {
                      kill();
+
+                     player.sendMessage(Ollivanders2.chatColor + "There is already a fireplace registered with the name " + flooName + ".");
                      return;
                   }
                }
@@ -107,6 +114,20 @@ public final class ALIQUAM_FLOO extends Charms
             net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO aliquam = new net.pottercraft.Ollivanders2.StationarySpell.ALIQUAM_FLOO(p, player.getUniqueId(), statLocation, O2StationarySpellType.ALIQUAM_FLOO, 2, 10, flooName);
             aliquam.flair(20);
             Ollivanders2API.getStationarySpells().addStationarySpell(aliquam);
+         }
+      }
+      else
+      {
+         if (Ollivanders2.debug)
+         {
+            if (target != null)
+            {
+               p.getLogger().info("target block was " + target.getType().toString());
+            }
+            else
+            {
+               p.getLogger().info("target block was null");
+            }
          }
       }
 

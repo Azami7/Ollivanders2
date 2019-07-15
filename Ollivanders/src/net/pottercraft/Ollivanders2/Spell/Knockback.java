@@ -1,10 +1,11 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,10 +16,25 @@ import java.util.List;
  */
 public abstract class Knockback extends Charms
 {
+   boolean pull = false;
+
    /**
     * This reduces strong the knockback is. 1 is max strength, any number higher than one will reduce the strength.
     */
-   protected int strengthReducer = 1;
+   protected int strengthReducer = 20;
+
+   protected double minVelocity = 1;
+   protected double maxVelocity = 5;
+
+   /**
+    * Whitelist of entity types this spell works on.
+    */
+   protected ArrayList<EntityType> entityWhitelist = new ArrayList<>();
+
+   /**
+    * Blacklist of entity types this spell will not work on.
+    */
+   protected ArrayList<EntityType> entityBlacklist = new ArrayList<>();
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -36,15 +52,11 @@ public abstract class Knockback extends Charms
    {
       super(plugin, player, rightWand);
 
-      setUsesModifier();
-
-      // world guard flags
-      worldGuardFlags.add(DefaultFlag.PVP);
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      initSpell();
    }
 
    /**
-    * Looks for an entity within the radius of the
+    * Looks for an entity near the radius of the spell projectile
     */
    @Override
    protected void doCheckEffect ()
@@ -56,16 +68,36 @@ public abstract class Knockback extends Charms
          // look for entities within radius of the projectile and knockback one of them
          for (Entity entity : entities)
          {
-            // do not knockback the caster
-            if (entity.getUniqueId() == player.getUniqueId())
+            // first check entity whitelist
+            if (entityWhitelist.size() > 0 && !entityWhitelist.contains(entity.getType()))
                continue;
 
-            entity.setVelocity(player.getLocation().getDirection().normalize().multiply(usesModifier / strengthReducer));
-            break;
-         }
+            // do not knockback the caster or any blacklisted entity
+            if (entity.getUniqueId() == player.getUniqueId() || entityBlacklist.contains(entity.getType()))
+            {
+               continue;
+            }
 
-         kill();
-         return;
+            double velocity = usesModifier / strengthReducer;
+            if (velocity < minVelocity)
+            {
+               velocity = minVelocity;
+            }
+            else if (velocity > maxVelocity)
+            {
+               velocity = maxVelocity;
+            }
+
+            if (pull)
+            {
+               velocity = velocity * -1;
+            }
+
+            entity.setVelocity(player.getLocation().getDirection().normalize().multiply(velocity));
+
+            kill();
+            return;
+         }
       }
 
       // projectile is stopped, kill spell

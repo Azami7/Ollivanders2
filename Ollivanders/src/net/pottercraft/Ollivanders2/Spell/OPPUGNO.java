@@ -1,22 +1,28 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Entity;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
 /**
- * All animals that you have created through transfiguration will target the targeted LivingEntity.
+ * Causes a living entity to damage another living entity.
  *
- * @author lownes
+ * @version Ollivanders2
  * @author Azami7
  */
 public final class OPPUGNO extends DarkArts
 {
+   double damage;
+
+   static double maxDamage = 6.0;
+   static double minDamage = 0.5;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -31,7 +37,7 @@ public final class OPPUGNO extends DarkArts
          add("The Oppugno Jinx");
       }};
 
-      text = "Oppugno will cause any entities transfigured by you to attack the targeted entity.";
+      text = "Oppugno will cause a creature or player to attack the targeted entity.";
    }
 
    /**
@@ -47,37 +53,74 @@ public final class OPPUGNO extends DarkArts
 
       spellType = O2SpellType.OPPUGNO;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.PVP);
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+
+      damage = usesModifier / 20;
+      if (damage < minDamage)
+      {
+         damage = minDamage;
+      }
+      else if (damage > maxDamage)
+      {
+         damage = maxDamage;
+      }
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      for (LivingEntity e : getLivingEntities(1.5))
+      // get the target to be attacked
+      LivingEntity target = null;
+
+      for (LivingEntity livingEntity : getLivingEntities(1.5))
       {
-         if (e.getUniqueId() == player.getUniqueId())
+         if (livingEntity.getUniqueId() == player.getUniqueId())
             continue;
 
-         for (O2Spell spell : p.getProjectiles())
+         target = livingEntity;
+         stopProjectile();
+      }
+
+      if (target != null)
+      {
+         // get an entity to attack the target
+         LivingEntity attacker = null;
+
+         for (LivingEntity livingEntity : getLivingEntities(10))
          {
-            if (spell instanceof Transfiguration)
+            if (livingEntity.getUniqueId() == player.getUniqueId())
             {
-               if (spell.player.equals(player))
-               {
-                  for (Entity entity : player.getWorld().getEntities())
-                  {
-                     if (entity.getUniqueId() == ((Transfiguration) spell).getToID())
-                     {
-                        if (entity instanceof LivingEntity)
-                        {
-                           ((Creature) entity).damage(0.0, e);
-                           kill();
-                        }
-                     }
-                  }
-               }
+               continue;
             }
+
+            attacker = livingEntity;
          }
+
+         if (attacker == null)
+         {
+            kill();
+            return;
+         }
+
+         if (attacker instanceof Monster)
+         {
+            ((Monster) attacker).setTarget(target);
+         }
+
+         Vector targetPos = target.getLocation().toVector();
+         Vector attackerPos = attacker.getLocation().toVector();
+         Vector velocity = targetPos.subtract(attackerPos);
+         attacker.setVelocity(velocity.normalize().multiply(2.0));
+
+         target.damage(damage, attacker);
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

@@ -1,22 +1,30 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.StationarySpell.ShieldSpell;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 
 /**
- * Shortens the duration of shield spells.
+ * Shortens the duration of shield spells. https://harrypotter.fandom.com/wiki/Shield_penetration_spell
  *
- * @author lownes
+ * @version Ollivanders2
  * @author Azami7
  */
 public final class SCUTO_CONTERAM extends Charms
 {
+   /**
+    * The number of shield spells that can be targeted by this spell.
+    */
+   private int targets = 1;
+
+   /**
+    * The amount to reduce the duration of the shields.
+    */
+   private int percent = 1;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -41,26 +49,43 @@ public final class SCUTO_CONTERAM extends Charms
 
       spellType = O2SpellType.SCUTO_CONTERAM;
       setUsesModifier();
+
+      percent = (int) usesModifier / 10;
+      if (percent > 100)
+      {
+         percent = 100;
+      }
+
+      targets = (int) usesModifier / 20;
+      if (targets < 1)
+      {
+         targets = 1;
+      }
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
       {
-         if (spell.isInside(location))
+         if (stationarySpell instanceof ShieldSpell)
          {
-            inside.add(spell);
+            stationarySpell.ageByPercent(percent);
+            stationarySpell.flair(10);
+
+            targets--;
+         }
+
+         if (targets < 1)
+         {
             kill();
+            return;
          }
       }
-      int subAmount = (int) ((usesModifier * 1200) / inside.size());
-      for (StationarySpellObj spell : inside)
+
+      if (hasHitTarget())
       {
-         spell.duration -= subAmount;
-         spell.flair(10);
+         kill();
       }
    }
 }

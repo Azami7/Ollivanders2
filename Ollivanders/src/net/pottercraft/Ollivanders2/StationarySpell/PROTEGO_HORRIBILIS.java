@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Spell.AVADA_KEDAVRA;
 import org.bukkit.Location;
 
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
@@ -16,7 +17,7 @@ import net.pottercraft.Ollivanders2.Spell.O2Spell;
  *
  * @author lownes
  */
-public class PROTEGO_HORRIBILIS extends StationarySpellObj implements StationarySpell
+public class PROTEGO_HORRIBILIS extends ShieldSpell implements StationarySpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -57,6 +58,13 @@ public class PROTEGO_HORRIBILIS extends StationarySpellObj implements Stationary
          List<O2Spell> projectiles2 = new ArrayList<>(projectiles);
          for (O2Spell proj : projectiles2)
          {
+            // https://harrypotter.fandom.com/wiki/Shield_Charm
+            // "However, this shield isn't completely impenetrable, as it cannot block a Killing Curse."
+            if (proj instanceof AVADA_KEDAVRA)
+            {
+               continue;
+            }
+
             if (isInside(proj.location))
             {
                if (location.distance(proj.location) > radius - 1)

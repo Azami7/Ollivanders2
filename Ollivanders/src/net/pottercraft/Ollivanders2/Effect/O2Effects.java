@@ -324,6 +324,29 @@ public class O2Effects
    }
 
    /**
+    * Determines if this player is affected by any effect. Only checks active effects.
+    *
+    * @param pid the id of the player
+    * @return true if they have this effect, false otherwise
+    */
+   public boolean hasEffects (UUID pid)
+   {
+      if (pid != null)
+      {
+         if (effectsData.getPlayerActiveEffects(pid).isEmpty())
+         {
+            return false;
+         }
+         else
+         {
+            return true;
+         }
+      }
+
+      return false;
+   }
+
+   /**
     * On player join, add any saved effects.
     *
     * @param pid the id of the player.
@@ -628,6 +651,58 @@ public class O2Effects
       }
 
       effectsData.updatePlayerActiveEffects(pid, activeEffects);
+   }
+
+   /**
+    * Age a specific effect on a player by a specified percent.
+    *
+    * @param pid        the id of the player
+    * @param effectType the effect to age
+    * @param percent    the percent to age the effect
+    */
+   public void ageEffectByPercent (UUID pid, O2EffectType effectType, int percent)
+   {
+      if (percent > 100)
+      {
+         percent = 100;
+      }
+      else if (percent < 1)
+      {
+         percent = 1;
+      }
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
+      if (activeEffects.containsKey(effectType))
+      {
+         O2Effect effect = activeEffects.get(effectType);
+
+         if (!effect.isPermanent())
+         {
+            effect.duration -= effect.duration * (percent / 100);
+         }
+      }
+
+      effectsData.updatePlayerActiveEffects(pid, activeEffects);
+   }
+
+   /**
+    * Age all effects on a player by a specified percent.
+    *
+    * @param pid     the id of the player
+    * @param percent the percent to age the effect
+    */
+   public void ageAllEffectsByPercent (UUID pid, int percent)
+   {
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
+      Collection<O2Effect> effects = activeEffects.values();
+
+      for (O2Effect effect : effects)
+      {
+         if (!effect.isPermanent())
+         {
+            ageEffectByPercent(pid, effect.effectType, percent);
+         }
+      }
    }
 
    /**

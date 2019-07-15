@@ -53,6 +53,9 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
 
       spellType = O2SpellType.HARMONIA_NECTERE_PASSUS;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
    @Override

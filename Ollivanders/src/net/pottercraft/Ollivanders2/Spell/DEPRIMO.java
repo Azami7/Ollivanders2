@@ -22,6 +22,9 @@ import org.bukkit.entity.Player;
  */
 public final class DEPRIMO extends Charms
 {
+   private final double minRadius = 1.0;
+   private final double maxRadius = 10.0;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -51,9 +54,6 @@ public final class DEPRIMO extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.DEPRIMO;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-
       // material black list
       materialBlackList.add(Material.WATER);
       materialBlackList.add(Material.LAVA);
@@ -67,6 +67,8 @@ public final class DEPRIMO extends Charms
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.BUILD);
+
+      initSpell();
    }
 
    /**
@@ -78,24 +80,35 @@ public final class DEPRIMO extends Charms
       if (!hasHitTarget())
          return;
 
-      Block target = getTargetBlock();
+      double radius = usesModifier / 10;
+      if (radius < minRadius)
+      {
+         radius = minRadius;
+      }
+      else if (radius > maxRadius)
+      {
+         radius = maxRadius;
+      }
 
-      if (target != null) {
-         double radius = usesModifier / 2;
+      List<Block> nearbyBlocks = Ollivanders2API.common.getBlocksInRadius(location, radius);
 
-         List<Block> nearbyBlocks = Ollivanders2API.common.getBlocksInRadius(target.getLocation(), radius);
-
-         for (Block block : nearbyBlocks) {
-            if (materialBlackList.contains(block.getType()))
-            {
-               continue;
-            }
-
-            Location blockLocation = block.getLocation();
-            BlockData blockData = block.getBlockData();
-            target.setType(Material.AIR);
-            blockLocation.getWorld().spawnFallingBlock(blockLocation, blockData);
+      for (Block block : nearbyBlocks)
+      {
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("block type is " + block.getType().toString());
          }
+
+         if (materialBlackList.contains(block.getType()))
+         {
+            continue;
+         }
+
+         Location blockLocation = block.getLocation();
+         BlockData blockData = block.getBlockData();
+         block.setType(Material.AIR);
+
+         //blockLocation.getWorld().spawnFallingBlock(blockLocation, blockData);
       }
 
       kill();

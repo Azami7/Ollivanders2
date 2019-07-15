@@ -42,6 +42,7 @@ public final class INCARNATIO_EQUUS extends PlayerDisguiseSuper
 
       spellType = O2SpellType.INCARNATIO_EQUUS;
       setUsesModifier();
+      calculateSuccessRate();
 
       targetType = EntityType.HORSE;
       disguiseType = DisguiseType.getType(targetType);

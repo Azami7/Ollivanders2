@@ -58,8 +58,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
       super(plugin, player, rightWand);
       spellType = O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
    }
 
    /**
@@ -68,6 +67,12 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
    @Override
    public void checkEffect ()
    {
+      if (!checkSpellAllowed())
+      {
+         kill();
+         return;
+      }
+
       O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
 
       if (o2p == null)

@@ -40,8 +40,7 @@ public final class BOTHYNUS extends PyrotechniaSuper
       super(plugin, player, rightWand);
       spellType = O2SpellType.BOTHYNUS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.YELLOW);

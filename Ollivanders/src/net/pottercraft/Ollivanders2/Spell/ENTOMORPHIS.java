@@ -48,6 +48,7 @@ public final class ENTOMORPHIS extends PlayerDisguiseSuper
 
       // set up usage modifier, has to be done here to get the uses for this specific spell
       setUsesModifier();
+      calculateSuccessRate();
 
       targetType = EntityType.SPIDER;
       disguiseType = DisguiseType.getType(targetType);

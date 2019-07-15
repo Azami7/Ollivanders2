@@ -1,9 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import org.bukkit.Material;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -13,9 +11,10 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author Azami7
  */
-public abstract class FumosSuper extends Charms
+public abstract class FumosSuper extends PotionEffectInRadiusSuper
 {
-   int strength = 1;
+   int minRadius = 5;
+   int maxRadius = 20;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -40,23 +39,44 @@ public abstract class FumosSuper extends Charms
       materialBlackList.add(Material.WATER);
       materialBlackList.add(Material.LAVA);
       materialBlackList.add(Material.FIRE);
+
+      // pass-through materials
+      projectilePassThrough.remove(Material.WATER);
+
+      effectTypes.add(PotionEffectType.BLINDNESS);
+      strengthModifier = 1;
+      minDurationInSeconds = 15;
+      maxDurationInSeconds = 120;
+
+      durationInSeconds = minDurationInSeconds;
+      radius = minRadius;
    }
 
    /**
-    * Blind targets in a radius of the spell location
+    * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
+    * constants.
     */
    @Override
-   public void checkEffect ()
+   void doInitSpell ()
    {
-      for (LivingEntity living : getLivingEntities(usesModifier))
+      radius = (int) usesModifier / 10;
+      if (radius < minDurationInSeconds)
       {
-         if (living.getUniqueId() == player.getUniqueId())
-            continue;
-
-         PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, (int) (usesModifier * 20 * strength), 0);
-         living.addPotionEffect(blind);
+         radius = minRadius;
+      }
+      else if (radius > maxRadius)
+      {
+         radius = maxRadius;
       }
 
-      kill();
+      durationInSeconds = (int) usesModifier;
+      if (durationInSeconds < minDurationInSeconds)
+      {
+         durationInSeconds = minDurationInSeconds;
+      }
+      else if (durationInSeconds > maxDurationInSeconds)
+      {
+         durationInSeconds = maxDurationInSeconds;
+      }
    }
 }

@@ -50,13 +50,12 @@ public final class DIFFINDO extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.DIFFINDO;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-
       // world guard flags
       worldGuardFlags.add(DefaultFlag.PVP);
       worldGuardFlags.add(DefaultFlag.BUILD);
       worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+
+      initSpell();
    }
 
    /**
@@ -95,12 +94,10 @@ public final class DIFFINDO extends Charms
                   live.getWorld().dropItemNaturally(live.getLocation(), rem);
                }
 
-               break;
+               kill();
+               return;
             }
          }
-
-         kill();
-         return;
       }
 
       // next check for log

@@ -1,9 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
@@ -14,7 +12,7 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class OBSCURO extends Charms
+public final class OBSCURO extends PotionEffectSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -45,21 +43,19 @@ public final class OBSCURO extends Charms
 
       spellType = O2SpellType.OBSCURO;
       setUsesModifier();
-   }
 
-   @Override
-   public void checkEffect ()
-   {
-      move();
-      for (LivingEntity live : getLivingEntities(1.5))
+      effectTypes.add(PotionEffectType.BLINDNESS);
+      strengthModifier = 0;
+      minDurationInSeconds = 30;
+
+      durationInSeconds = (int) usesModifier;
+      if (durationInSeconds < minDurationInSeconds)
       {
-         if (live.getUniqueId() == player.getUniqueId())
-            continue;
-
-         PotionEffect blind = new PotionEffect(PotionEffectType.BLINDNESS, (int) (usesModifier * 1200), 0);
-         live.addPotionEffect(blind);
-         kill();
-         return;
+         durationInSeconds = minDurationInSeconds;
+      }
+      else if (durationInSeconds > maxDurationInSeconds)
+      {
+         durationInSeconds = maxDurationInSeconds;
       }
    }
 }

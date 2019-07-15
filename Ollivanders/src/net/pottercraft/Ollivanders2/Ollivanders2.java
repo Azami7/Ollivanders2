@@ -5,6 +5,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -17,12 +18,12 @@ import net.pottercraft.Ollivanders2.House.O2HouseType;
 import net.pottercraft.Ollivanders2.Item.O2ItemType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
+import net.pottercraft.Ollivanders2.Player.O2WandCoreType;
+import net.pottercraft.Ollivanders2.Player.O2WandWoodType;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Potion.O2Potion;
-
-import net.pottercraft.Ollivanders2.Spell.Transfiguration;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -58,7 +59,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class Ollivanders2 extends JavaPlugin
 {
    private List<O2Spell> projectiles = new ArrayList<>();
-   private List<Block> tempBlocks = new ArrayList<>();
+   private HashMap<Block, Material> tempBlocks = new HashMap<>();
 
    // file config
    public static int chatDropoff = 15;
@@ -92,15 +93,12 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void onDisable ()
    {
-      for (Block block : tempBlocks)
-      {
-         block.setType(Material.AIR);
-      }
-
       for (O2Spell proj : projectiles)
       {
          proj.kill();
       }
+
+      revertAllTempBlocks();
 
       Ollivanders2API.saveStationarySpells();
       Ollivanders2API.saveProphecies();
@@ -1474,11 +1472,8 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean giveRandomWand (Player player)
    {
-      //String[] woodArray = {"Spruce", "Jungle", "Birch", "Oak"};
-      //String[] coreArray = {"Spider Eye", "Bone", "Rotten Flesh", "Gunpowder"};
-
-      String wood = O2PlayerCommon.woodArray.get(Math.abs(Ollivanders2Common.random.nextInt() % O2PlayerCommon.woodArray.size()));
-      String core = O2PlayerCommon.coreArray.get(Math.abs(Ollivanders2Common.random.nextInt() % O2PlayerCommon.coreArray.size()));
+      String wood = O2WandWoodType.getAllWoodsByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandWoodType.getAllWoodsByName().size()));
+      String core = O2WandCoreType.getAllCoresByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandCoreType.getAllCoresByName().size()));
 
       List<ItemStack> kit = new ArrayList<>();
       ItemStack wand = new ItemStack(wandMaterial);
@@ -1640,16 +1635,6 @@ public class Ollivanders2 extends JavaPlugin
       {
          Ollivanders2API.getPlayers().updatePlayer(player.getUniqueId(), o2p);
       }
-   }
-
-   /**
-    * Gets the tempBlocks list.
-    *
-    * @return tempBlocks Block list.
-    */
-   public List<Block> getTempBlocks ()
-   {
-      return tempBlocks;
    }
 
    /**
@@ -2019,6 +2004,18 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
+    * When a spell cannot be used in a location, such as from WorldGuard protection, send a message.
+    * This is not the message to use for bookLearning enforcement.
+    *
+    * @param player the player that cast the spell
+    * @since 2.3
+    */
+   public void spellFailedMessage (Player player)
+   {
+      player.sendMessage(chatColor + "A powerful protective magic blocks your spell.");
+   }
+
+   /**
     * When a spell is not allowed be cast, such as from WorldGuard protection, send a message.
     * This is not the message to use for bookLearning enforcement.
     *
@@ -2285,5 +2282,110 @@ public class Ollivanders2 extends JavaPlugin
       sender.sendMessage(chatColor + output.toString());
 
       return true;
+   }
+
+   /**
+    * Add a temporary block. A temp block is a block that has been temporarily changed to a different type.
+    *
+    * @param block            the block to add
+    * @param originalMaterial the original material of this block
+    * @return true if the block was added to the list, false if the block is already in the list or if a null param was passed
+    */
+   public boolean addTempBlock (Block block, Material originalMaterial)
+   {
+      if (block == null || originalMaterial == null)
+      {
+         return false;
+      }
+
+      if (tempBlocks.containsKey(block))
+      {
+         if (tempBlocks.get(block) == originalMaterial)
+         {
+            return true;
+         }
+         else
+         {
+            return false;
+         }
+      }
+
+      tempBlocks.put(block, originalMaterial);
+
+      return true;
+   }
+
+   /**
+    * Reverts a temp block back to its original type.
+    *
+    * @param block the block to remove
+    */
+   public void revertTempBlock (Block block)
+   {
+      if (tempBlocks.containsKey(block))
+      {
+         revertBlockType(block);
+
+         tempBlocks.remove(block);
+      }
+   }
+
+   private void revertBlockType (Block block)
+   {
+      if (tempBlocks.containsKey(block))
+      {
+         Material material = tempBlocks.get(block);
+
+         try
+         {
+            block.setType(material);
+         }
+         catch (Exception e)
+         {
+            // in case the block does not exist anymore.
+         }
+      }
+   }
+
+   /**
+    * Is a block a temp block or not.
+    *
+    * @param block the block to check
+    * @return true if it is a temp block, false otherwise
+    */
+   public boolean isTempBlock (Block block)
+   {
+      return tempBlocks.containsKey(block);
+   }
+
+   /**
+    * Returns the original material for a temp block.
+    *
+    * @param block the temp block
+    * @return the material, if found, null otherwise
+    */
+   public Material getTempBlockOriginalMaterial (Block block)
+   {
+      if (tempBlocks.containsKey(block))
+      {
+         return tempBlocks.get(block);
+      }
+      else
+      {
+         return null;
+      }
+   }
+
+   /**
+    * Revert all temporary blocks to their original type.
+    */
+   private void revertAllTempBlocks ()
+   {
+      for (Block block : tempBlocks.keySet())
+      {
+         revertBlockType(block);
+      }
+
+      tempBlocks.clear();
    }
 }

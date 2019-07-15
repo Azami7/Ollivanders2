@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.Location;
@@ -46,17 +47,20 @@ public final class REDUCTO extends DarkArts
 
       spellType = O2SpellType.REDUCTO;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.OTHER_EXPLOSION);
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      Material targetBlockType = getBlock().getType();
-      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
+      if (!hasHitTarget())
       {
-         Location backLoc = super.location.clone().subtract(vector);
-         backLoc.getWorld().createExplosion(backLoc, (float) (usesModifier * 0.4));
+         return;
       }
+
+      Location backLoc = location.clone().subtract(vector);
+      backLoc.getWorld().createExplosion(backLoc, (float) (usesModifier * 0.4));
    }
 }

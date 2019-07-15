@@ -1,11 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -17,7 +14,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class IMMOBULUS extends Charms
+public final class IMMOBULUS extends PotionEffectSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -50,27 +47,20 @@ public final class IMMOBULUS extends Charms
 
       spellType = O2SpellType.IMMOBULUS;
       setUsesModifier();
-   }
 
-   /**
-    * Slow entities within range of the projectile.
-    */
-   @Override
-   protected void doCheckEffect ()
-   {
-      List<LivingEntity> entities = getLivingEntities(1.5);
+      effectTypes.add(PotionEffectType.SLOW);
+      effectTypes.add(PotionEffectType.SLOW_FALLING);
+      strengthModifier = 10;
+      minDurationInSeconds = 10;
 
-      for (LivingEntity entity : entities)
+      durationInSeconds = (int) usesModifier;
+      if (durationInSeconds < minDurationInSeconds)
       {
-         if (entity.getUniqueId() == player.getUniqueId())
-            continue;
-
-         int modifier = (int) usesModifier;
-         PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, modifier * 20, 10);
-         entity.addPotionEffect(slow);
+         durationInSeconds = minDurationInSeconds;
       }
-
-      if (entities.size() > 0 || hasHitTarget())
-         kill();
+      else if (durationInSeconds > maxDurationInSeconds)
+      {
+         durationInSeconds = maxDurationInSeconds;
+      }
    }
 }

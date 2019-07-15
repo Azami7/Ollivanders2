@@ -40,8 +40,7 @@ public final class EQUUSIFORS extends FriendlyMobDisguiseSuper
       super(plugin, player, rightWand);
       spellType = O2SpellType.EQUUSIFORS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       targetType = EntityType.HORSE;
       disguiseType = DisguiseType.getType(targetType);

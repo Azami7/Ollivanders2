@@ -1,6 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
+
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -46,5 +48,9 @@ public final class FLIPENDO extends Knockback
       setUsesModifier();
 
       strengthReducer = 10;
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.PVP);
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
    }
 }

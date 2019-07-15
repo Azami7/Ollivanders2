@@ -48,9 +48,8 @@ public final class MULTICORFORS extends Charms
       setUsesModifier();
    }
 
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live.getUniqueId() == player.getUniqueId())
@@ -71,9 +70,15 @@ public final class MULTICORFORS extends Charms
                Color newColor = Color.fromRGB(red, green, blue);
                meta.setColor(newColor);
                armor.setItemMeta(meta);
+
                kill();
             }
          }
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

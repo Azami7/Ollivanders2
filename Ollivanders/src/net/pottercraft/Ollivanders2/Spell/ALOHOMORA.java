@@ -49,9 +49,9 @@ public final class ALOHOMORA extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.ALOHOMORA;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
+      // world guard
       worldGuardFlags.add(DefaultFlag.INTERACT);
    }
 
@@ -71,13 +71,12 @@ public final class ALOHOMORA extends Charms
          }
       }
 
-      // age all the colloportus spells found
+      // remove the colloportus spells found
       if (inside.size() > 0)
       {
-         int subAmount = (int) ((usesModifier * 1200) / inside.size());
          for (StationarySpellObj spell : inside)
          {
-            spell.age(subAmount);
+            spell.kill();
             spell.flair(10);
          }
 

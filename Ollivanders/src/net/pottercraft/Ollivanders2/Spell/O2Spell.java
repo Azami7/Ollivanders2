@@ -183,8 +183,10 @@ public abstract class O2Spell implements Teachable
       this.rightWand = rightWand;
 
       // block types that cannot be affected by any spell
-      materialBlackList.add(Material.BEDROCK);
-      materialBlackList.add(Material.BARRIER);
+      for (Material material : Ollivanders2Common.unbreakableMaterials)
+      {
+         materialBlackList.add(material);
+      }
 
       // block types that all spell projectiles pass through
       projectilePassThrough.add(Material.AIR);
@@ -194,10 +196,38 @@ public abstract class O2Spell implements Teachable
    }
 
    /**
+    * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
+    * constants. This must be called by each spell constructor since usage is based on the specific class
+    * type and cannot be determined in the super-class constructors.
+    */
+   void initSpell ()
+   {
+      setUsesModifier();
+
+      // do spell-specific initialization
+      doInitSpell();
+   }
+
+   /**
+    * The spell-specific initialization based on usage, etc.. Must be overridden by each spell class that
+    * has any initializations.
+    */
+   void doInitSpell ()
+   {
+   }
+
+   /**
     * Game tick update on this spell - must be overriden in child classes or the spell exits immediately.
     */
    public void checkEffect ()
    {
+      // check whether this spell can exist up until it hits a target
+      if (!hitTarget && !checkSpellAllowed())
+      {
+         kill();
+         return;
+      }
+
       lifeTicks++;
 
       if (lifeTicks > maxSpellLifetime)
@@ -264,37 +294,52 @@ public abstract class O2Spell implements Teachable
          return;
       }
 
+      // determine if this spell is allowed in this location per Ollivanders2 config and WorldGuard
+      if (!checkSpellAllowed())
+      {
+         kill();
+      }
+
+      // check blockBlackList
+      if (materialBlackList.contains(target.getType()))
+      {
+         kill();
+      }
+
+      if (!kill)
+      {
+         hitTarget = true;
+      }
+   }
+
+   /**
+    * Check to see if this spell is allowed per Ollivanders2 config and WorldGuard.
+    *
+    * @return true if the spell can exist here, false otherwise
+    */
+   boolean checkSpellAllowed ()
+   {
+      boolean isAllowed = true;
+
       // determine if this spell is allowed in this location per Ollivanders2 config
       if (!p.isSpellTypeAllowed(location, spellType))
       {
          kill();
+         isAllowed = false;
       }
-      else
+      // determine if spell is allowed in this location per WorldGuard
+      else if (!checkWorldGuard())
       {
-         // check blockBlackList
-         if (materialBlackList.contains(target.getType()))
-         {
-            kill();
-         }
-         else
-         {
-            // determine if spell is allowed in this location per WorldGuard
-            if (Ollivanders2.worldGuardEnabled && !checkWorldGuard())
-            {
-               kill();
-            }
-         }
+         kill();
+         isAllowed = false;
       }
 
-      // if a condition above resulted in a kill then send player a message, otherwise we hit a valid target
-      if (kill)
+      if (!isAllowed)
       {
-         p.spellCannotBeCastMessage(player);
+         p.spellFailedMessage(player);
       }
-      else
-      {
-         hitTarget = true;
-      }
+
+      return isAllowed;
    }
 
    /**
@@ -309,12 +354,15 @@ public abstract class O2Spell implements Teachable
          return true;
       }
 
-      Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
-
       // check every flag needed for this spell
       for (StateFlag flag : worldGuardFlags)
       {
-         if (!wg.checkWGFlag(player, location, flag))
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("checking WG flag " + flag.toString());
+         }
+
+         if (!Ollivanders2.worldGuardO2.checkWGFlag(player, location, flag))
          {
             if (Ollivanders2.debug)
             {
@@ -334,7 +382,7 @@ public abstract class O2Spell implements Teachable
     * @param radius - radius within which to get entities
     * @return List of entities within one block of projectile
     */
-   public List<Entity> getCloseEntities (double radius)
+   List<Entity> getCloseEntities (double radius)
    {
       if (radius <= 0)
          radius = 1.0;
@@ -425,10 +473,10 @@ public abstract class O2Spell implements Teachable
    protected void setUsesModifier ()
    {
       // set up spell use modifier
-      // modifier is 10% of number of times the spell has been cast and then halved if the player is not using their
+      // the number of times the spell has been cast and then halved if the player is not using their
       // destined wand, doubled if they are using the elder wand
       spellUses = p.getSpellNum(player, spellType);
-      usesModifier = (spellUses * .1) / rightWand;
+      usesModifier = spellUses / rightWand;
 
       // if the caster is affected by HIGHER_SKILL, double their usesModifier
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
@@ -442,9 +490,9 @@ public abstract class O2Spell implements Teachable
     *
     * @return the target block
     */
-   protected Block getTargetBlock ()
+   public Block getTargetBlock ()
    {
-      if (!hitTarget)
+      if (hitTarget)
       {
          return location.getBlock();
       }
@@ -494,7 +542,7 @@ public abstract class O2Spell implements Teachable
    /**
     * Stops the spell projectile from moving further
     */
-   public void stopProjectile ()
+   void stopProjectile ()
    {
       hitTarget = true;
    }

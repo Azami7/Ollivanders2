@@ -4,7 +4,6 @@ import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 /**
@@ -14,7 +13,10 @@ import org.bukkit.entity.Player;
  */
 public abstract class BombardaSuper extends Charms
 {
-   double strength;
+   double minStrength = 1;
+   double maxStrength = 4.0; // 4.0 is the strength of TNT
+
+   double strengthMultiplier = 0.25;
 
    BombardaSuper ()
    {
@@ -34,6 +36,7 @@ public abstract class BombardaSuper extends Charms
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.TNT);
+      worldGuardFlags.add(DefaultFlag.OTHER_EXPLOSION);
    }
 
    /**
@@ -43,8 +46,18 @@ public abstract class BombardaSuper extends Charms
    {
       if (hasHitTarget())
       {
+         double strength = (usesModifier / 10) * strengthMultiplier;
+         if (strength < minStrength)
+         {
+            strength = minStrength;
+         }
+         else if (strength > maxStrength)
+         {
+            strength = maxStrength;
+         }
+
          Location backLoc = location.clone().subtract(vector);
-         backLoc.getWorld().createExplosion(backLoc.getX(), backLoc.getY(), backLoc.getZ(), (float) (strength * usesModifier), false, false);
+         backLoc.getWorld().createExplosion(backLoc.getX(), backLoc.getY(), backLoc.getZ(), (float) strength, false, true);
 
          kill();
       }

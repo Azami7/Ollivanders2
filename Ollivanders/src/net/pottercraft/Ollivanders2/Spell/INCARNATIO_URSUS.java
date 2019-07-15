@@ -39,6 +39,7 @@ public class INCARNATIO_URSUS extends PlayerDisguiseSuper
 
       spellType = O2SpellType.INCARNATIO_URSUS;
       setUsesModifier();
+      calculateSuccessRate();
 
       targetType = EntityType.POLAR_BEAR;
       disguiseType = DisguiseType.getType(targetType);

@@ -61,7 +61,7 @@ public abstract class IncendioSuper extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
       if (!hasHitTarget())
          return;

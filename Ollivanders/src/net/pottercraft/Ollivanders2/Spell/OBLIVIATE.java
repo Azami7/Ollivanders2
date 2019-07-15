@@ -1,10 +1,9 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -48,15 +47,17 @@ public final class OBLIVIATE extends Charms
 
       spellType = O2SpellType.OBLIVIATE;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.PVP);
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       int i = spellUses;
-      List<LivingEntity> entities = getLivingEntities(1.5);
-      for (Entity entity : entities)
+
+      for (Entity entity : getLivingEntities(1.5))
       {
          if (entity.getUniqueId() == player.getUniqueId())
             continue;
@@ -74,8 +75,15 @@ public final class OBLIVIATE extends Charms
                }
                p.setSpellNum(ply, spellType, to);
             }
+
             kill();
+            return;
          }
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

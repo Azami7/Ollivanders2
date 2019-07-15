@@ -45,9 +45,9 @@ public class SNUFFLIFORS extends FriendlyMobDisguiseSuper
    public SNUFFLIFORS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.SNUFFLIFORS;
-      setUsesModifier();
+
+      initSpell();
 
       targetType = EntityType.BAT;
       disguiseType = DisguiseType.getType(targetType);

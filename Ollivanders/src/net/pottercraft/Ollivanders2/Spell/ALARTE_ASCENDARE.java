@@ -28,9 +28,6 @@ public final class ALARTE_ASCENDARE extends Charms
       super();
       spellType = O2SpellType.ALARTE_ASCENDARE;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-
       flavorText = new ArrayList<String>() {{
          add("The Winged-Ascent Charm");
          add("He brandished his wand at the snake and there was a loud bang; the snake, instead of vanishing, "
@@ -51,8 +48,11 @@ public final class ALARTE_ASCENDARE extends Charms
    {
       super(plugin, player, rightWand);
 
+      initSpell();
+
       spellType = O2SpellType.ALARTE_ASCENDARE;
 
+      // world guard
       worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
       worldGuardFlags.add(DefaultFlag.PVP);
    }
@@ -63,11 +63,16 @@ public final class ALARTE_ASCENDARE extends Charms
    @Override
    protected void doCheckEffect ()
    {
-      double up = usesModifier * 0.4;
-      if (up > 4)
+      double up = usesModifier / 20;
+      if (up < 1)
       {
-         up = 4;
+         up = 1;
       }
+      else if (up > 5)
+      {
+         up = 5;
+      }
+
       Vector vec = new Vector(0, up, 0);
 
       // check for entities first
@@ -75,16 +80,22 @@ public final class ALARTE_ASCENDARE extends Charms
 
       if (livingEntities.size() > 0)
       {
-         for (LivingEntity lentity : livingEntities)
+         for (LivingEntity living : livingEntities)
          {
-            if (lentity.getUniqueId() == player.getUniqueId())
+            if (living.getUniqueId() == player.getUniqueId())
                continue;
 
-            lentity.setVelocity(lentity.getVelocity().add(vec));
-            break;
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("targeting entity " + living.getName());
+            }
+
+            living.setVelocity(living.getVelocity().add(vec));
+
+            kill();
+            return;
          }
 
-         kill();
          return;
       }
 
@@ -94,6 +105,12 @@ public final class ALARTE_ASCENDARE extends Charms
       if (items.size() > 0)
       {
          Item item = items.get(0);
+
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("targeting item " + item.getName());
+         }
+
          item.setVelocity(item.getVelocity().add(vec));
 
          kill();

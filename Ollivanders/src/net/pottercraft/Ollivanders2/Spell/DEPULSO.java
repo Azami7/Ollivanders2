@@ -1,6 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
+
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
@@ -42,9 +44,12 @@ public final class DEPULSO extends Knockback
       super(plugin, player, rightWand);
       spellType = O2SpellType.DEPULSO;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-
       strengthReducer = 20;
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.PVP);
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+
+      initSpell();
    }
 }

@@ -54,8 +54,8 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
       super(plugin, player, rightWand);
       spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.MOB_SPAWNING); // needed because Fiendfyre requires it, otherwise horcruxes could get made in locations players couldn't kill them
@@ -64,6 +64,12 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
    @Override
    public void checkEffect ()
    {
+      if (!checkSpellAllowed())
+      {
+         kill();
+         return;
+      }
+
       O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
       {

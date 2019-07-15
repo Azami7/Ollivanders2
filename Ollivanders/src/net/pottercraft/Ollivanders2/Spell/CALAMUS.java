@@ -44,9 +44,9 @@ public final class CALAMUS extends Transfiguration
       super(plugin, player, rightWand);
       spellType = O2SpellType.CALAMUS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
+      // world guard
       worldGuardFlags.add(DefaultFlag.ITEM_DROP);
    }
 

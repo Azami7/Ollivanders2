@@ -48,8 +48,7 @@ public final class CHARTIA extends Divination
       spellType = O2SpellType.CHARTIA;
       divinationType = O2DivinationType.CARTOMANCY;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       itemHeld = O2ItemType.PLAYING_CARDS;
       itemHeldString = "playing cards";

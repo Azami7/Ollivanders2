@@ -1,13 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-
-import java.util.List;
 
 /**
  * Confundus Charm super class which causes confusion in the target
@@ -15,9 +10,9 @@ import java.util.List;
  * @author Azami7
  * @author lownes
  */
-public abstract class ConfundusSuper extends Charms
+public abstract class ConfundusSuper extends PotionEffectSuper
 {
-   int strengthModifier = 0;
+   int durationMultiplier = 1;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -37,35 +32,25 @@ public abstract class ConfundusSuper extends Charms
    ConfundusSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
+      effectTypes.add(PotionEffectType.CONFUSION);
+
+      strengthModifier = 1;
+      minDurationInSeconds = 15;
+      maxDurationInSeconds = 120;
    }
 
-   /**
-    * Look for living entities in the projectile's location and add confusion effect to them
-    */
    @Override
-   protected void doCheckEffect ()
+   void doInitSpell ()
    {
-      List<LivingEntity> entities = getLivingEntities(1.5);
-
-      if (entities.size() > 0)
+      durationInSeconds = (int) usesModifier * durationMultiplier;
+      if (durationInSeconds < minDurationInSeconds)
       {
-         for (LivingEntity entity : entities)
-         {
-            if (entity.getUniqueId() == player.getUniqueId())
-               continue;
-
-            int strength = strengthModifier * (int) usesModifier;
-            PotionEffect confusion = new PotionEffect(PotionEffectType.CONFUSION, strength * Ollivanders2Common.ticksPerSecond, strength);
-            entity.addPotionEffect(confusion);
-            break;
-         }
-
-         kill();
-         return;
+         durationInSeconds = minDurationInSeconds;
       }
-
-      // projectile has stopped, kill the spell
-      if (hasHitTarget())
-         kill();
+      else if (durationInSeconds > maxDurationInSeconds)
+      {
+         durationInSeconds = maxDurationInSeconds;
+      }
    }
 }

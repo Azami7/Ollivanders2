@@ -22,6 +22,12 @@ public abstract class ItemCurse extends DarkArts
 {
    protected String curseLabel;
 
+   final int minMagnitude = 1;
+   final int maxMagnitude = 100;
+   int magnitude;
+
+   static ArrayList<String> itemCurseNames = new ArrayList<>();
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -47,6 +53,20 @@ public abstract class ItemCurse extends DarkArts
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+   }
+
+   @Override
+   void doInitSpell ()
+   {
+      magnitude = (int) usesModifier / 2;
+      if (magnitude < minMagnitude)
+      {
+         magnitude = minMagnitude;
+      }
+      else if (magnitude > maxMagnitude)
+      {
+         magnitude = maxMagnitude;
+      }
    }
 
    /**
@@ -83,22 +103,23 @@ public abstract class ItemCurse extends DarkArts
                if (lore.get(i).contains(curseLabel))
                {
                   String[] loreParts = lore.get(i).split(" ");
-                  int magnitude = Integer.parseInt(loreParts[1]);
-                  if (magnitude < usesModifier)
+                  int curMagnitude = Integer.parseInt(loreParts[1]);
+                  if (magnitude < curMagnitude)
                   {
-                     magnitude = (int) usesModifier;
+                     magnitude = curMagnitude;
                   }
+
                   lore.set(i, curseLabel + " " + magnitude);
                }
                else
                {
-                  lore.add(curseLabel + " " + (int) usesModifier);
+                  lore.add(curseLabel + " " + magnitude);
                }
             }
          }
          else
          {
-            lore.add(curseLabel + " " + (int) usesModifier);
+            lore.add(curseLabel + " " + magnitude);
          }
          meta.setLore(lore);
          stack.setItemMeta(meta);

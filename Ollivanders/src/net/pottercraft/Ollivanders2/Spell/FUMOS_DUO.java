@@ -44,9 +44,10 @@ public final class FUMOS_DUO extends FumosSuper
       super(plugin, player, rightWand);
       spellType = O2SpellType.FUMOS_DUO;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      strengthModifier = 2;
+      minDurationInSeconds = 30;
+      maxDurationInSeconds = 240;
 
-      strength = 2;
+      initSpell();
    }
 }

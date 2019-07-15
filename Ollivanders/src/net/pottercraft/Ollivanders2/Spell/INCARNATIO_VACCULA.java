@@ -43,6 +43,7 @@ public final class INCARNATIO_VACCULA extends PlayerDisguiseSuper
 
       spellType = O2SpellType.INCARNATIO_VACCULA;
       setUsesModifier();
+      calculateSuccessRate();
 
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
       if (rand == 0)

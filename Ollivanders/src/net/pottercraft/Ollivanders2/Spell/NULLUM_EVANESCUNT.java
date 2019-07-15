@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -12,7 +13,7 @@ import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
  *
  * @author lownes
  */
-public final class NULLUM_EVANESCUNT extends Charms
+public final class NULLUM_EVANESCUNT extends StationarySpellSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -38,19 +39,18 @@ public final class NULLUM_EVANESCUNT extends Charms
 
       spellType = O2SpellType.NULLUM_EVANESCUNT;
       setUsesModifier();
+
+      baseDurationInSeconds = 300;
+      durationModifierInSeconds = 15;
+      baseRadius = 5;
+      radiusModifier = 1;
+      flairSize = 10;
+      centerOnCaster = true;
    }
 
-   public void checkEffect ()
+   @Override
+   protected StationarySpellObj createStationarySpell ()
    {
-      move();
-      Material targetBlockType = getBlock().getType();
-      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
-      {
-         int duration = (int) (usesModifier * 1200);
-         net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT nullum = new net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT(p, player.getUniqueId(), location, O2StationarySpellType.NULLUM_EVANESCUNT, 5, duration);
-         nullum.flair(10);
-         Ollivanders2API.getStationarySpells().addStationarySpell(nullum);
-         kill();
-      }
+      return new net.pottercraft.Ollivanders2.StationarySpell.NULLUM_EVANESCUNT(p, player.getUniqueId(), location, O2StationarySpellType.NULLUM_EVANESCUNT, radius, duration);
    }
 }

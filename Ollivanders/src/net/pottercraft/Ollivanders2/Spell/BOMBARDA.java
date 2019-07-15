@@ -45,9 +45,6 @@ public final class BOMBARDA extends BombardaSuper
       super(plugin, player, rightWand);
       spellType = O2SpellType.BOMBARDA;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-
-      strength = 0.8;
+      initSpell();
    }
 }

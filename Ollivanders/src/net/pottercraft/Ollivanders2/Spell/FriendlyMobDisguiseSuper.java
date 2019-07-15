@@ -15,15 +15,15 @@ import java.util.ArrayList;
  */
 public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
 {
+   int minDurationInSeconds = 15;
+   int maxDurationInSeconds = 600; // 10 minutes
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
    public FriendlyMobDisguiseSuper ()
    {
       super();
-
-      worldGuardFlags = new ArrayList<>();
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
    }
 
    /**
@@ -37,9 +37,16 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
    {
       super(plugin, player, rightWand);
 
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+   }
+
+   @Override
+   void doInitSpell ()
+   {
+      // whitelist of entities that can be targeted by this spell
       entityWhitelist.addAll(Ollivanders2Common.smallFriendlyAnimals);
 
-      int uses = (int)(usesModifier * 5);
+      int uses = (int) (usesModifier * 4);
 
       if (uses > 100)
       {
@@ -50,5 +57,18 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
       {
          entityWhitelist.addAll(Ollivanders2Common.largeFriendlyAnimals);
       }
+
+      // spell duration
+      int durationInSeconds = (int) usesModifier;
+      if (durationInSeconds < minDurationInSeconds)
+      {
+         durationInSeconds = minDurationInSeconds;
+      }
+      else if (durationInSeconds > maxDurationInSeconds)
+      {
+         durationInSeconds = maxDurationInSeconds;
+      }
+
+      spellDuration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
    }
 }

@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -16,7 +17,8 @@ import java.util.ArrayList;
  */
 public final class PARTIS_TEMPORUS extends Charms
 {
-   public boolean move;
+   private int duration;
+   private static int minDurationInSeconds = 15;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -48,40 +50,55 @@ public final class PARTIS_TEMPORUS extends Charms
       spellType = O2SpellType.PARTIS_TEMPORUS;
       setUsesModifier();
 
-      move = true;
+      int durationInSeconds = (int) usesModifier;
+      if (durationInSeconds < minDurationInSeconds)
+      {
+         durationInSeconds = minDurationInSeconds;
+      }
+
+      duration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      if (move)
+      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
       {
-         move();
-      }
-      else
-      {
-         lifeTicks++;
-      }
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-      {
-         if (spell.isInside(location) && spell.getCasterID().equals(player.getUniqueId()))
+         if (stationarySpell.getCasterID() == player.getUniqueId())
          {
-            spell.active = false;
-            spell.flair(10);
-            move = false;
-         }
-      }
-      if (lifeTicks > 160)
-      {
-         for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-         {
-            if (spell.isInside(location))
+            stopProjectile();
+
+            stationarySpell.active = false;
+            stationarySpell.flair(10);
+
+            if (duration > stationarySpell.duration)
             {
-               spell.active = true;
-               spell.flair(10);
+               duration = stationarySpell.duration;
             }
          }
-         kill = true;
+      }
+
+      if (hasHitTarget())
+      {
+         duration--;
+
+         if (duration <= 0)
+         {
+            kill();
+         }
+      }
+   }
+
+   @Override
+   protected void revert ()
+   {
+      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
+      {
+         if (stationarySpell.getCasterID() == player.getUniqueId())
+         {
+            stationarySpell.active = true;
+            stationarySpell.flair(10);
+         }
       }
    }
 }

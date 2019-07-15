@@ -49,5 +49,6 @@ public final class GEMINO extends ItemCurse
       setUsesModifier();
 
       curseLabel = geminio;
+      ItemCurse.itemCurseNames.add(curseLabel);
    }
 }

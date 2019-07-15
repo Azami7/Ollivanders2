@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 
 /**
- * Transfigures entity into a parrot
+ * Transfigures entity into a parrot.
  *
  * @since 1.0
  * @author Azami7
@@ -48,8 +48,7 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
       super(plugin, player, rightWand);
       spellType = O2SpellType.AVIFORS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       targetType = EntityType.PARROT;
 

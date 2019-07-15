@@ -2,9 +2,13 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Vanishes an entity. The entity will reappear after a certain time.
@@ -43,16 +47,58 @@ public final class EVANESCO extends Transfiguration
       super(plugin, player, rightWand);
       spellType = O2SpellType.EVANESCO;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
       worldGuardFlags.add(DefaultFlag.USE);
+      worldGuardFlags.add(DefaultFlag.BUILD);
+
+      // pass-through materials
+      projectilePassThrough.remove(Material.WATER);
    }
 
-   public void checkEffect ()
+   @Override
+   protected void doCheckEffect ()
    {
-      simpleTransfigure(null, null);
+      if (!hasTransfigured())
+      {
+         List<Entity> entities = getCloseEntities(1.5);
+
+         for (Entity e : entities)
+         {
+            if (e.getUniqueId() == player.getUniqueId())
+            {
+               continue;
+            }
+
+            if (e.getType() != EntityType.PLAYER)
+            {
+               if (transfigureEntity(e, null, null) == null)
+               {
+                  kill();
+                  return;
+               }
+            }
+         }
+
+         // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
+         if (hasHitTarget())
+         {
+            kill();
+         }
+      }
+      else
+      {
+         // check time to live on the spell
+         if (spellDuration <= 0)
+         {
+            // spell duration is up, kill the spell
+            kill();
+         }
+         else
+         {
+            spellDuration--;
+         }
+      }
    }
 }

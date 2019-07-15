@@ -98,6 +98,12 @@ public abstract class Divination extends O2Spell
    @Override
    public void checkEffect ()
    {
+      if (!checkSpellAllowed())
+      {
+         kill();
+         return;
+      }
+
       // if this divination type requires the player be facing an block, like a crystal ball, check for the block
       if (facingBlock != null)
       {

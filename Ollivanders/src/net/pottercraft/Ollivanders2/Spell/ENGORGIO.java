@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
@@ -22,6 +23,8 @@ import java.util.List;
  */
 public final class ENGORGIO extends Charms
 {
+   private final int maxSlimeSize = 10;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -77,9 +80,18 @@ public final class ENGORGIO extends Charms
             if (live instanceof Ageable)
             {
                Ageable age = (Ageable) live;
-               age.setAge((int) (age.getAge() + (usesModifier * 240)));
+               double ageIncreaseInMinutes = usesModifier / 5;
 
-               break;
+               // baby animals become adults after 20 minutes, or ~24000 ticks
+               if (ageIncreaseInMinutes > 20)
+               {
+                  ageIncreaseInMinutes = 20;
+               }
+
+               age.setAge((int) (age.getAge() + (ageIncreaseInMinutes * Ollivanders2Common.ticksPerSecond)));
+
+               kill();
+               return;
             }
             else if (live instanceof Zombie)
             {
@@ -88,25 +100,35 @@ public final class ENGORGIO extends Charms
                {
                   zombie.setBaby(false);
                }
-               else if (usesModifier >= 10)
+               else if (usesModifier >= 100)
                {
                   zombie.getWorld().spawnEntity(zombie.getLocation(), EntityType.GIANT);
                   zombie.remove();
                }
 
-               break;
+               kill();
+               return;
             }
             else if (live instanceof Slime)
             {
                Slime slime = (Slime) live;
-               slime.setSize((int) (slime.getSize() + usesModifier));
+               int slimeSize = (int) usesModifier / 20;
 
-               break;
+               if (slimeSize < slime.getSize())
+               {
+                  slimeSize = slime.getSize();
+               }
+               else if (slimeSize > maxSlimeSize)
+               {
+                  slimeSize = maxSlimeSize;
+               }
+
+               slime.setSize(slimeSize);
+
+               kill();
+               return;
             }
          }
-
-         kill();
-         return;
       }
 
       // projectile is stopped, kill spell

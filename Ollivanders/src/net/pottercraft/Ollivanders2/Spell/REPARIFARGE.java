@@ -48,23 +48,25 @@ public final class REPARIFARGE extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   public void doCheckEffect ()
    {
-      move();
-      List<Entity> entities = this.getCloseEntities(1);
-      for (Entity entity : entities)
+      for (Entity entity : getCloseEntities(1.5))
       {
-         for (O2Spell proj : p.getProjectiles())
+         if (entity instanceof EnderDragonPart)
          {
-            if (proj instanceof Transfiguration)
+            entity = ((EnderDragonPart) entity).getParent();
+         }
+
+         // determine if the entity is temporarily transfigured
+         for (O2Spell spell : p.getProjectiles())
+         {
+            if (spell instanceof Transfiguration)
             {
-               if (entity instanceof EnderDragonPart)
+               if (entity.getUniqueId() == ((Transfiguration) spell).getToID())
                {
-                  entity = ((EnderDragonPart) entity).getParent();
-               }
-               if (entity.getUniqueId() == ((Transfiguration) proj).getToID())
-               {
-                  proj.lifeTicks = proj.lifeTicks + (int) (usesModifier * 1200) + 160;
+                  int percent = (int) usesModifier / 20;
+
+                  ((Transfiguration) spell).reparifarge(percent);
                }
             }
          }

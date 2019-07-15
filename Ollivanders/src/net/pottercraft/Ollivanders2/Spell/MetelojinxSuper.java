@@ -34,13 +34,13 @@ public abstract class MetelojinxSuper extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       if (location.getY() > 256)
       {
          World world = location.getWorld();
          int duration = world.getWeatherDuration();
+
          if (storm == world.hasStorm()) // storm and hasStorm() are either both true or both false
          {
             world.setWeatherDuration((int) (duration + (usesModifier * 1200)));
@@ -55,7 +55,11 @@ public abstract class MetelojinxSuper extends Charms
             }
             world.setWeatherDuration(duration);
          }
+
          kill();
       }
+
+      if (hasHitTarget())
+         kill();
    }
 }

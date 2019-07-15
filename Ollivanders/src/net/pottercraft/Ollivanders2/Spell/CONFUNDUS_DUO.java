@@ -45,9 +45,11 @@ public final class CONFUNDUS_DUO extends ConfundusSuper
       super(plugin, player, rightWand);
       spellType = O2SpellType.CONFUNDUS_DUO;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-
       strengthModifier = 2;
+      minDurationInSeconds = 30;
+      maxDurationInSeconds = 240;
+      durationMultiplier = 2;
+
+      initSpell();
    }
 }

@@ -4,8 +4,9 @@ import net.pottercraft.Ollivanders2.Effect.BABBLING;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
-import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
+import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -21,6 +22,8 @@ import java.util.List;
 public class LOQUELA_INEPTIAS extends Charms
 {
    O2EffectType effect = O2EffectType.BABBLING;
+
+   private static int maxDurationInSeconds = 300;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -54,13 +57,16 @@ public class LOQUELA_INEPTIAS extends Charms
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.LOQUELA_INEPTIAS;
       setUsesModifier();
+
+      // pass-through materials
+      projectilePassThrough.remove(Material.WATER);
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       List<LivingEntity> living = getLivingEntities(1.5);
+
       for (LivingEntity live : living)
       {
          if (live.getUniqueId() == player.getUniqueId())
@@ -69,14 +75,24 @@ public class LOQUELA_INEPTIAS extends Charms
          if (live instanceof Player)
          {
             Player player = (Player) live;
-            int dur = (int) (usesModifier * 1200);
 
-            BABBLING effect = new BABBLING(p, dur, player.getUniqueId());
+            int durationInSeconds = ((int) usesModifier + 30);
+            if (durationInSeconds > maxDurationInSeconds)
+            {
+               durationInSeconds = maxDurationInSeconds;
+            }
+
+            BABBLING effect = new BABBLING(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             kill();
             return;
          }
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

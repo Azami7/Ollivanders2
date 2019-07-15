@@ -1,8 +1,10 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Effect.SUSPENSION;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -16,6 +18,8 @@ import java.util.ArrayList;
  */
 public final class LEVICORPUS extends DarkArts
 {
+   private static int maxDurationInSeconds = 300;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -47,6 +51,9 @@ public final class LEVICORPUS extends DarkArts
 
       spellType = O2SpellType.LEVICORPUS;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.PVP);
    }
 
    @Override
@@ -59,7 +66,13 @@ public final class LEVICORPUS extends DarkArts
 
          if (live instanceof Player)
          {
-            SUSPENSION levi = new SUSPENSION(p, (int)(usesModifier * 1200.0), live.getUniqueId());
+            int durationInSeconds = ((int) usesModifier + 30);
+            if (durationInSeconds > maxDurationInSeconds)
+            {
+               durationInSeconds = maxDurationInSeconds;
+            }
+
+            SUSPENSION levi = new SUSPENSION(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, live.getUniqueId());
 
             Ollivanders2API.getPlayers().playerEffects.addEffect(levi);
 

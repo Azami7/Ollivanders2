@@ -8,7 +8,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import java.util.ArrayList;
 
 /**
- * Shoots caster high into air
+ * Shoots caster high into air.
  *
  * @version Ollivanders2
  * @author lownes
@@ -45,8 +45,7 @@ public final class ASCENDIO extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.ASCENDIO;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
    }
 
    /**
@@ -55,10 +54,16 @@ public final class ASCENDIO extends Charms
    @Override
    public void checkEffect ()
    {
-      double up = usesModifier * 0.8;
-      if (up > 4)
+      if (!checkSpellAllowed())
       {
-         up = 4;
+         kill();
+         return;
+      }
+
+      double up = usesModifier * 0.25;
+      if (up > 2)
+      {
+         up = 2;
       }
       Vector vec = new Vector(0, up, 0);
       player.setVelocity(player.getVelocity().add(vec));

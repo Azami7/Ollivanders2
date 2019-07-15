@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.mysql.fabric.xmlrpc.base.Array;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
@@ -52,6 +53,10 @@ public final class LIGATIS_COR extends Charms
 
       spellType = O2SpellType.LIGATIS_COR;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
+      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
    }
 
    @Override
@@ -80,39 +85,6 @@ public final class LIGATIS_COR extends Charms
             }
          }
 
-         if (corM.hasLore())
-         {
-            ArrayList<String> wandWood = O2WandWoodType.getAllWoodsByName();
-            if (wandWood.contains(corM.getLore().get(0)))
-            {
-               List<Entity> entities = item.getNearbyEntities(2, 2, 2);
-               for (Entity e : entities)
-               {
-                  if (e instanceof Item)
-                  {
-                     Item e2 = (Item) e;
-                     Material mat = e2.getItemStack().getType();
-
-                     if (Arrays.asList(O2WandCoreType.getAllCoresByName()).contains(mat))
-                     {
-                        String lore = corM.getLore().get(0);
-                        lore = lore.concat(" and ");
-                        lore = lore.concat(wandWood.get(mat));
-                        corM.setDisplayName("Wand");
-                        List<String> loreL = new ArrayList<>();
-                        loreL.add(lore);
-                        corM.setLore(loreL);
-                        ItemStack coreStack = item.getItemStack();
-                        coreStack.setAmount(1);
-                        coreStack.setItemMeta(corM);
-                        item.setItemStack(coreStack);
-                        e2.remove();
-                     }
-                  }
-               }
-            }
-         }
-
          kill();
          return;
       }
@@ -122,11 +94,11 @@ public final class LIGATIS_COR extends Charms
          kill();
    }
 
-   private ItemStack createWand (Item item)
+   private ItemStack createWand (Item corelessWand)
    {
       ItemStack wand = null;
 
-      ItemMeta meta = item.getItemStack().getItemMeta();
+      ItemMeta meta = corelessWand.getItemStack().getItemMeta();
       List<String> lore = meta.getLore();
 
       // pick a random wood type
@@ -136,6 +108,33 @@ public final class LIGATIS_COR extends Charms
       String woodType = woodTypes.get(rand);
 
       // determine core based on nearby materials
+      List<Entity> entities = corelessWand.getNearbyEntities(2, 2, 2);
+      for (Entity e : entities)
+      {
+         if (e instanceof Item)
+         {
+            Material material = ((Item) e).getItemStack().getType();
+
+            if (Arrays.asList(O2WandCoreType.getAllCoresByName()).contains(material))
+            {
+               String newlore = meta.getLore().get(0);
+
+               newlore = newlore.concat(" and ");
+               newlore = newlore.concat(O2WandCoreType.getWandCoreTypeByMaterial(material).getLabel());
+
+               meta.setDisplayName("Wand");
+               List<String> loreL = new ArrayList<>();
+               loreL.add(newlore);
+               meta.setLore(loreL);
+
+               wand = corelessWand.getItemStack();
+               wand.setAmount(1);
+               wand.setItemMeta(meta);
+               corelessWand.setItemStack(wand);
+               e.remove();
+            }
+         }
+      }
 
       return wand;
    }

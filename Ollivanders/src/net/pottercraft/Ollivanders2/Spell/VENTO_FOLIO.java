@@ -60,9 +60,7 @@ public final class VENTO_FOLIO extends Charms
    }
 
    /**
-    * Set the successRate for this spell. If the player is not already an Animagus the spell needs to be
-    * recited at the correct time of day. If they are already an Animagus, their success will depend
-    * on their experience.
+    * Set the successRate for this spell.
     */
    private void setSuccessRate ()
    {
@@ -84,7 +82,11 @@ public final class VENTO_FOLIO extends Charms
    @Override
    public void checkEffect ()
    {
-      kill();
+      if (!checkSpellAllowed())
+      {
+         kill();
+         return;
+      }
 
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
       int duration;
@@ -119,5 +121,7 @@ public final class VENTO_FOLIO extends Charms
          if (Ollivanders2.debug)
             p.getLogger().info("Adding effect ");
       }
+
+      kill();
    }
 }

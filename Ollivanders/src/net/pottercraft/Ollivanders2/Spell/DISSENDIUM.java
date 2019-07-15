@@ -57,8 +57,7 @@ public final class DISSENDIUM extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.DISSENDIUM;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       maxOpenTime = usesModifier * Ollivanders2Common.ticksPerSecond;
 

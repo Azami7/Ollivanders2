@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.World;
@@ -22,6 +23,9 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  */
 public final class FIENDFYRE extends DarkArts
 {
+   private final int minCreatures = 1;
+   private final int maxCreatures = 10;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -29,9 +33,6 @@ public final class FIENDFYRE extends DarkArts
    {
       super();
       spellType = O2SpellType.FIENDFYRE;
-
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
 
       flavorText = new ArrayList<String>() {{
          add("It was not normal fire; Crabbe had used a curse of which Harry had no knowledge: As they turned a corner the flames chased them as though they were alive, sentient, intent upon killing them. ");
@@ -53,7 +54,8 @@ public final class FIENDFYRE extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.FIENDFYRE;
-      setUsesModifier();
+
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
@@ -94,17 +96,50 @@ public final class FIENDFYRE extends DarkArts
    private void spawnCreatures ()
    {
       World world = location.getWorld();
-      for (int x = 1; x < usesModifier; x++)
+
+      int numCreatures = (int) usesModifier / 10;
+      if (numCreatures < minCreatures)
       {
-         world.spawnEntity(location, EntityType.MAGMA_CUBE);
+         numCreatures = minCreatures;
       }
-      for (int x = 1; x < usesModifier / 5; x++)
+      else if (numCreatures > maxCreatures)
       {
-         world.spawnEntity(location, EntityType.BLAZE);
+         numCreatures = maxCreatures;
       }
-      for (int x = 1; x < usesModifier / 10; x++)
+
+      if (Ollivanders2.debug)
       {
-         world.spawnEntity(location, EntityType.GHAST);
+         p.getLogger().info("spawning " + numCreatures + " fiendfyre creatures...");
+      }
+
+      if (usesModifier > 100)
+      {
+         int numGhasts = Math.abs(Ollivanders2Common.random.nextInt()) % numCreatures;
+
+         for (int x = 0; x < numGhasts; x++)
+         {
+            world.spawnEntity(location, EntityType.GHAST);
+            numCreatures--;
+         }
+      }
+
+      if (usesModifier > 50 && numCreatures > 0)
+      {
+         int numBlazes = Math.abs(Ollivanders2Common.random.nextInt()) % numCreatures;
+
+         for (int x = 0; x < numBlazes; x++)
+         {
+            world.spawnEntity(location, EntityType.BLAZE);
+            numCreatures--;
+         }
+      }
+
+      if (numCreatures > 0)
+      {
+         for (int x = 0; x < numCreatures; x++)
+         {
+            world.spawnEntity(location, EntityType.MAGMA_CUBE);
+         }
       }
    }
 }

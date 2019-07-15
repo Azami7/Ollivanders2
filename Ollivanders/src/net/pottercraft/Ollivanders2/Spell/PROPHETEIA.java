@@ -52,26 +52,31 @@ public class PROPHETEIA extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-
-      for (LivingEntity live : getLivingEntities(1.5))
+      for (LivingEntity livingEntity : getLivingEntities(1.5))
       {
-         if (live instanceof Player && live.getUniqueId() != player.getUniqueId())
+         if (livingEntity.getUniqueId() == player.getUniqueId())
          {
-            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
+            continue;
+         }
 
-            if (usesModifier > rand)
+         if (!(livingEntity instanceof Player))
+         {
+            continue;
+         }
+
+         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
+
+         if (usesModifier > rand)
+         {
+            String prophecy = Ollivanders2API.getProphecies().getProphecy(livingEntity.getUniqueId());
+
+            if (prophecy != null)
             {
-               String prophecy = Ollivanders2API.getProphecies().getProphecy(live.getUniqueId());
-
-               if (prophecy != null)
-               {
-                  player.sendMessage(Ollivanders2.chatColor + prophecy);
-                  kill();
-                  return;
-               }
+               player.sendMessage(Ollivanders2.chatColor + prophecy);
+               kill();
+               return;
             }
          }
 
@@ -79,6 +84,11 @@ public class PROPHETEIA extends Charms
 
          kill();
          return;
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

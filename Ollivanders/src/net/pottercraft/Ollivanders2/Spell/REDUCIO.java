@@ -46,9 +46,8 @@ public final class REDUCIO extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       for (LivingEntity live : getLivingEntities(usesModifier))
       {
          if (live.getUniqueId() == player.getUniqueId())
@@ -79,6 +78,10 @@ public final class REDUCIO extends Charms
             slime.setSize((int) (slime.getSize() - usesModifier));
          }
          kill();
+         return;
       }
+
+      if (hasHitTarget())
+         kill();
    }
 }

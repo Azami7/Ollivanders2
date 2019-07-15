@@ -8,6 +8,7 @@ import java.util.Collection;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -30,6 +31,11 @@ public abstract class StationarySpellObj implements Serializable
    public boolean active = true;
    public int radius;
 
+   /**
+    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+    *
+    * @param plugin a callback to the MC plugin
+    */
    public StationarySpellObj (Ollivanders2 plugin)
    {
       p = plugin;
@@ -38,6 +44,16 @@ public abstract class StationarySpellObj implements Serializable
       active = false;
    }
 
+   /**
+    * Constructor
+    *
+    * @param plugin   a callback to the MC plugin
+    * @param playerID the player who cast the spell
+    * @param loc      the center location of the spell
+    * @param type     the type of this spell
+    * @param radius   the radius for this spell
+    * @param duration the duration of the spell
+    */
    public StationarySpellObj (Ollivanders2 plugin, UUID playerID, Location loc, O2StationarySpellType type, Integer radius, Integer duration)
    {
       p = plugin;
@@ -100,10 +116,28 @@ public abstract class StationarySpellObj implements Serializable
    public void age (int i)
    {
       duration -= i;
-      if (duration < 0)
-      {
+
+      if (duration <= 0)
          kill();
+   }
+
+   /**
+    * Ages the stationary spell by the specified percent.
+    *
+    * @param percent the percent to age the spell by
+    */
+   public void ageByPercent (int percent)
+   {
+      if (percent < 1)
+      {
+         percent = 1;
       }
+      else if (percent > 100)
+      {
+         percent = 100;
+      }
+
+      age(duration * (percent/100));
    }
 
    /**
@@ -172,55 +206,7 @@ public abstract class StationarySpellObj implements Serializable
     */
    public void flair (double d)
    {
-      if (d > 10)
-      {
-         d = 10;
-      }
-      for (double inc = (Math.random() * Math.PI) / d; inc < Math.PI; inc += Math.PI / d)
-      {
-         for (double azi = (Math.random() * Math.PI) / d; azi < 2 * Math.PI; azi += Math.PI / d)
-         {
-            double[] spher = new double[2];
-            spher[0] = inc;
-            spher[1] = azi;
-            Location e = location.clone().add(spherToVec(spher));
-            e.getWorld().playEffect(e, Effect.SMOKE, 4);
-         }
-      }
-   }
-
-   /**
-    * Translates vector to spherical coords
-    *
-    * @param vec - Vector to be translated
-    * @return Spherical coords in double array with
-    * indexes 0=inclination 1=azimuth
-    */
-   private double[] vecToSpher (Vector vec)
-   {
-      double inc = Math.acos(vec.getZ());
-      double azi = Math.atan2(vec.getY(), vec.getX());
-      double[] ret = new double[2];
-      ret[0] = inc;
-      ret[1] = azi;
-      return ret;
-   }
-
-   /**
-    * Translates spherical coords to vector
-    *
-    * @param spher array with indexes 0=inclination 1=azimuth
-    * @return Vector
-    */
-   private Vector spherToVec (double[] spher)
-   {
-      double inc = spher[0];
-      double azi = spher[1];
-      double x = radius * Math.sin(inc) * Math.cos(azi);
-      double z = radius * Math.sin(inc) * Math.sin(azi);
-      double y = radius * Math.cos(inc);
-      Vector ret = new Vector(x, y, z);
-      return ret;
+      Ollivanders2Common.flair(location, radius, d);
    }
 
    /**

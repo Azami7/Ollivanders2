@@ -36,7 +36,7 @@ public class ASTROLOGY extends O2Divination
       prophecyPrefix.add("Jupiter in the 4th house predicts that");
       prophecyPrefix.add("Because of the position of the Moon in their birth chart,");
       prophecyPrefix.add("The position of Mercury in their birth chart reveals that");
-      prophecyPrefix.add("Due to the position of Venus in their birth chart predicts that");
+      prophecyPrefix.add("The position of Venus in their birth chart predicts that");
       prophecyPrefix.add("From the position of Mars in their birth chart indicates that");
       prophecyPrefix.add("The position of Jupiter in their birth chart assures that");
       prophecyPrefix.add("The position of Saturn in their birth chart means");

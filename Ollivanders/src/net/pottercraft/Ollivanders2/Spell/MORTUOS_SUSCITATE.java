@@ -1,6 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -19,6 +21,10 @@ import java.util.ArrayList;
  */
 public final class MORTUOS_SUSCITATE extends Transfiguration
 {
+   int duration;
+
+   static int maxDuration = Ollivanders2Common.ticksPerSecond * 1200; // 10 minutes
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -51,33 +57,51 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
       spellType = O2SpellType.MORTUOS_SUSCITATE;
 
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
+
+      duration = ((int) usesModifier * Ollivanders2Common.ticksPerSecond * 2) + (Ollivanders2Common.ticksPerSecond * 30);
+      if (duration > maxDuration)
+      {
+         duration = maxDuration;
+      }
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
       if (!hasTransfigured())
       {
-         move();
-         for (Item item : getItems(1))
+         for (Item item : getItems(1.5))
          {
             if (item.getItemStack().getType() == Material.ROTTEN_FLESH)
             {
                Zombie inferi = (Zombie) transfigureEntity(item, EntityType.ZOMBIE, null);
+
                inferi.setCustomName("Inferius");
             }
          }
       }
       else
       {
-         if (lifeTicks > 160)
+         duration--;
+
+         if (duration <= 0)
          {
-            endTransfigure();
-         }
-         else
-         {
-            lifeTicks++;
+            kill();
          }
       }
+
+      if (hasHitTarget() && !hasTransfigured())
+      {
+         kill();
+      }
+   }
+
+   @Override
+   protected void revert ()
+   {
+      endTransfigure();
    }
 }

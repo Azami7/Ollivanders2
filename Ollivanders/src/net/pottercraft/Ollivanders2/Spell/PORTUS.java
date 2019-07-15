@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
@@ -21,6 +22,8 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 public final class PORTUS extends Charms
 {
    private final String[] wordsArray;
+
+   public static final String portus = "Portkey";
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -64,6 +67,10 @@ public final class PORTUS extends Charms
       setUsesModifier();
 
       this.wordsArray = wordsArray;
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(DefaultFlag.INTERACT);
    }
 
    /**
@@ -86,10 +93,9 @@ public final class PORTUS extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      for (Item item : getItems(1))
+      for (Item item : getItems(1.5))
       {
          boolean canApparateOut = true;
          for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
@@ -164,6 +170,11 @@ public final class PORTUS extends Charms
                item.getItemStack().setItemMeta(meta);
             }
          }
+         kill();
+      }
+
+      if (hasHitTarget())
+      {
          kill();
       }
    }

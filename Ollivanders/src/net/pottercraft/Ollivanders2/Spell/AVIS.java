@@ -50,16 +50,19 @@ public final class AVIS extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.AVIS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
+   }
+
+   @Override
+   void doInitSpell ()
+   {
       if (usesModifier > 100)
          maxBirds += 10;
       else
          maxBirds += (int)usesModifier / 10;
-
-      // world guard flags
-      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
    }
 
    /**
@@ -68,6 +71,12 @@ public final class AVIS extends Charms
    @Override
    public void checkEffect()
    {
+      if (!checkSpellAllowed())
+      {
+         kill();
+         return;
+      }
+
       if (birdCount < maxBirds)
       {
          Parrot bird = (Parrot) location.getWorld().spawnEntity(location, EntityType.PARROT);

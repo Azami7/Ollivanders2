@@ -43,7 +43,9 @@ public class O2StationarySpells
    public void addStationarySpell (StationarySpellObj spell)
    {
       if (Ollivanders2.debug)
-         p.getLogger().info("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString());
+      {
+         p.getLogger().info("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString() + " with duration " + spell.duration + " and radius of " + spell.radius);
+      }
 
       if (spell != null)
          O2StationarySpells.add(spell);

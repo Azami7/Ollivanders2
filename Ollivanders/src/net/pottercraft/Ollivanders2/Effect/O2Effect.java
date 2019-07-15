@@ -66,14 +66,14 @@ public abstract class O2Effect
     * Constructor. If you change this method signature, be sure to update all reflection code that uses it.
     *
     * @param plugin a callback to the MC plugin
-    * @param duration the length this effect should remain
+    * @param durationInTicks the length this effect should remain
     * @param pid the player this effect acts on
     */
-   public O2Effect (Ollivanders2 plugin, Integer duration, UUID pid)
+   public O2Effect (Ollivanders2 plugin, Integer durationInTicks, UUID pid)
    {
       p = plugin;
 
-      this.duration = duration;
+      duration = durationInTicks;
       kill = false;
       targetID = pid;
 

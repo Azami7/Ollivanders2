@@ -1,9 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -15,7 +13,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class CARPE_RETRACTUM extends Charms
+public final class CARPE_RETRACTUM extends Knockback
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -46,29 +44,10 @@ public final class CARPE_RETRACTUM extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.CARPE_RETRACTUM;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-   }
+      minVelocity = 0.25;
+      maxVelocity = 3;
+      pull = true;
 
-   /**
-    * Look for an item in the projectile's location and pull that item towards the caster
-    */
-   @Override
-   protected void doCheckEffect ()
-   {
-      List<Item> items = getItems(1.5);
-
-      if (items.size() > 0)
-      {
-         Item item = items.get(0);
-         item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(usesModifier / 10));
-
-         kill();
-         return;
-      }
-
-      // projectile has stopped, kill the spell
-      if (hasHitTarget())
-         kill();
+      initSpell();
    }
 }

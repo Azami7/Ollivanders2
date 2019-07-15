@@ -1,6 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -23,6 +25,9 @@ import java.util.ArrayList;
  */
 public final class PACK extends Charms
 {
+   private int radius;
+   private static int maxRadius = 20;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -53,30 +58,63 @@ public final class PACK extends Charms
 
       spellType = O2SpellType.PACK;
       setUsesModifier();
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.CHEST_ACCESS);
+
+      // remove chests from material blacklist
+      for (Material chest : Ollivanders2Common.chests)
+      {
+         materialBlackList.remove(chest);
+      }
+
+      radius = ((int) usesModifier / 10) + 1;
+      if (radius > maxRadius)
+      {
+         radius = maxRadius;
+      }
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      Block block = getBlock();
-      if (block.getType() == Material.CHEST)
+      if (!hasHitTarget())
+      {
+         return;
+      }
+
+      Block block = getTargetBlock();
+      if (Ollivanders2Common.chests.contains(block.getType()))
       {
          for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)
             {
                stat.flair(10);
+
+               kill();
                return;
             }
          }
-         Chest c = (Chest) block.getState();
-         Inventory inv = c.getInventory();
-         if (inv.getHolder() instanceof DoubleChest)
+
+         Inventory inv = null;
+
+         try
          {
-            inv = inv.getHolder().getInventory();
+            Chest c = (Chest) block.getState();
+            inv = c.getInventory();
+            if (inv.getHolder() instanceof DoubleChest)
+            {
+               inv = inv.getHolder().getInventory();
+            }
          }
-         for (Item item : getItems(usesModifier))
+         catch (Exception e)
+         {
+            kill();
+            return;
+         }
+
+         for (Item item : getItems(radius))
          {
             if (inv.addItem(item.getItemStack()).size() == 0)
             {
@@ -84,5 +122,7 @@ public final class PACK extends Charms
             }
          }
       }
+
+      kill();
    }
 }

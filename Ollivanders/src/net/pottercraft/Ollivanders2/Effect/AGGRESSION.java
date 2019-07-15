@@ -3,11 +3,13 @@ package net.pottercraft.Ollivanders2.Effect;
 import java.util.Collection;
 import java.util.UUID;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 
 /**
@@ -102,9 +104,16 @@ public class AGGRESSION extends O2Effect
          }
 
          // don't do damage if worldguard is protecting where the entity is
-         if (Ollivanders2.worldGuardEnabled && !Ollivanders2.worldGuardO2.checkWGFriendlyMobDamage(target, toDamage.getLocation()))
+         if (Ollivanders2.worldGuardEnabled)
          {
-            return;
+            if (toDamage instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(target, toDamage.getEyeLocation(), DefaultFlag.PVP))
+            {
+               return;
+            }
+            else if (!(toDamage instanceof Monster) && !Ollivanders2.worldGuardO2.checkWGFlag(target, toDamage.getEyeLocation(), DefaultFlag.DAMAGE_ANIMALS))
+            {
+               return;
+            }
          }
 
          double curHealth = toDamage.getHealth();

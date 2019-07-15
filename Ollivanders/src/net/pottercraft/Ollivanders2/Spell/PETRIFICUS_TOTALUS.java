@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Effect.IMMOBILIZE;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
@@ -17,6 +18,8 @@ import java.util.ArrayList;
  */
 public class PETRIFICUS_TOTALUS extends Charms
 {
+   private static int maxDurationInSeconds = 300;
+
    public PETRIFICUS_TOTALUS ()
    {
       super();
@@ -49,9 +52,8 @@ public class PETRIFICUS_TOTALUS extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live.getUniqueId() == player.getUniqueId())
@@ -61,13 +63,25 @@ public class PETRIFICUS_TOTALUS extends Charms
 
          if (live instanceof Player)
          {
-            IMMOBILIZE immobilize = new IMMOBILIZE(p, (int) (usesModifier * 1200.0), live.getUniqueId());
+            int durationInSeconds = ((int) usesModifier + 30);
+            if (durationInSeconds > maxDurationInSeconds)
+            {
+               durationInSeconds = maxDurationInSeconds;
+            }
+
+            IMMOBILIZE immobilize = new IMMOBILIZE(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, live.getUniqueId());
 
             Ollivanders2API.getPlayers().playerEffects.addEffect(immobilize);
 
             kill();
             return;
          }
+      }
+
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

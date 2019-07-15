@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Teachable;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -30,7 +30,21 @@ public abstract class Transfiguration extends O2Spell
    private ItemStack fromStack;
    private UUID toID = nullUUID;
    private boolean hasTransfigured;
-   private int timeMultiplier = 1200;
+
+   /**
+    * If this is not permanent, how long it should last. Default is 15 seconds.
+    */
+   int spellDuration = Ollivanders2Common.ticksPerSecond * 15;
+
+   /**
+    * Allows spell variants to change the duration of this spell.
+    */
+   double durationModifier = 1.0;
+
+   /**
+    * Max duration of this spell. Default is 10 minutes.
+    */
+   int maxDuration = Ollivanders2Common.ticksPerSecond * 600;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -117,7 +131,14 @@ public abstract class Transfiguration extends O2Spell
       {
          toID = newEntity.getUniqueId();
       }
-      this.lifeTicks = (int) (usesModifier * -1 * timeMultiplier);
+
+      spellDuration = (int) (spellDuration * usesModifier * durationModifier);
+
+      if (spellDuration > maxDuration)
+      {
+         spellDuration = maxDuration;
+      }
+
       return newEntity;
    }
 
@@ -193,42 +214,6 @@ public abstract class Transfiguration extends O2Spell
    }
 
    /**
-    * Moves the spell forward until it meets an entity and then performs a simple transfiguration on a non-player entity. This is the basic transfiguration code for most simple transfiguration spells.
-    *
-    * @param type  - The EntityType to transfigure the non-player entity into
-    * @param stack - The itemstack to transfigure into, if the entitytype is Item
-    */
-   public void simpleTransfigure (EntityType type, ItemStack stack)
-   {
-      if (!hasTransfigured())
-      {
-         move();
-         for (Entity e : getCloseEntities(1))
-         {
-            if (e.getUniqueId() == player.getUniqueId())
-               continue;
-
-            if (e.getType() != EntityType.PLAYER)
-            {
-               transfigureEntity(e, type, stack);
-               return;
-            }
-         }
-      }
-      else
-      {
-         if (lifeTicks > 160)
-         {
-            endTransfigure();
-         }
-         else
-         {
-            lifeTicks++;
-         }
-      }
-   }
-
-   /**
     * Gets the id of the transfigured entity
     *
     * @return the toID
@@ -239,12 +224,28 @@ public abstract class Transfiguration extends O2Spell
    }
 
    /**
-    * Sets the time multiplier for the Transfiguration.
+    * Decrease the duration of this transfiguration, if it is not permanent, by the percent.
     *
-    * @param mult - Multiplier so that the duration is 8 plus (mult/20) seconds.
+    * @param percent
     */
-   public void setTimeMultiplier (int mult)
+   public void reparifarge (int percent)
    {
-      timeMultiplier = mult;
+      if (permanent)
+      {
+         return;
+      }
+
+      if (percent > 50)
+      {
+         percent = 50;
+      }
+      else if (percent < 1)
+      {
+         percent = 1;
+      }
+
+      double reduction = spellDuration * (percent / 100);
+
+      spellDuration = spellDuration - (int) reduction;
    }
 }

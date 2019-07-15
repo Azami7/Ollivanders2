@@ -47,8 +47,7 @@ public final class CARTOMANCIE extends Divination
       spellType = O2SpellType.CARTOMANCIE;
       divinationType = O2DivinationType.CARTOMANCY_TAROT;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       itemHeld = O2ItemType.TAROT_CARDS;
       itemHeldString = "tarot cards";

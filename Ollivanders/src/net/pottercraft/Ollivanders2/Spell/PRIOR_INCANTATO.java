@@ -45,14 +45,13 @@ public class PRIOR_INCANTATO extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-      for (LivingEntity live : getLivingEntities(1.5))
+      for (LivingEntity livingEntity : getLivingEntities(1.5))
       {
-         if (live instanceof Player)
+         if (livingEntity instanceof Player)
          {
-            if (live.getUniqueId() == player.getUniqueId())
+            if (livingEntity.getUniqueId() == player.getUniqueId())
             {
                continue;
             }
@@ -61,16 +60,21 @@ public class PRIOR_INCANTATO extends Charms
 
             if (usesModifier > rand)
             {
-               doPriorIncanto((Player) live);
+               doPriorIncanto((Player) livingEntity);
             }
             else
             {
-               player.sendMessage(Ollivanders2.chatColor + ((Player) live).getName() + "'s wand resists your spell.");
+               player.sendMessage(Ollivanders2.chatColor + ((Player) livingEntity).getName() + "'s wand resists your spell.");
             }
 
             kill();
             return;
          }
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 

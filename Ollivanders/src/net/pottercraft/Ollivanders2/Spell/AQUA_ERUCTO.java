@@ -47,12 +47,10 @@ public final class AQUA_ERUCTO extends BlockTransfigurationSuper
       spellType = O2SpellType.AQUA_ERUCTO;
       branch = O2MagicBranch.CHARMS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-
-      spellDuration = (int)(1200 * usesModifier);
-      permanent = false;
+      permanent = true;
       radius = 1;
+
+      initSpell();
 
       transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
       transfigurationMap.put(Material.FIRE, Material.AIR);

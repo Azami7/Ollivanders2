@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -48,11 +49,7 @@ public final class AGUAMENTI extends BlockTransfigurationSuper
       spellType = O2SpellType.AGUAMENTI;
       branch = O2MagicBranch.CHARMS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-
       transfigureType = Material.WATER;
-      spellDuration = (int)(1200 * usesModifier);
       permanent = false;
       radius = 1;
 
@@ -64,6 +61,8 @@ public final class AGUAMENTI extends BlockTransfigurationSuper
 
       // world-guard flags
       worldGuardFlags.add(DefaultFlag.BUILD);
+
+      initSpell();
    }
 
    /**
@@ -72,7 +71,7 @@ public final class AGUAMENTI extends BlockTransfigurationSuper
     * @return the target block for aguamenti
     */
    @Override
-   protected Block getTargetBlock ()
+   public Block getTargetBlock ()
    {
       if (hasHitTarget())
       {

@@ -1,7 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
-import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -13,10 +12,9 @@ import java.util.ArrayList;
  * Locks blocks in to place.
  *
  * @version Ollivanders2
- * @author lownes
  * @author Azami7
  */
-public final class COLLOPORTUS extends Charms
+public final class COLLOPORTUS extends StationarySpellSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -46,28 +44,16 @@ public final class COLLOPORTUS extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.COLLOPORTUS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
-      // world guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      baseRadius = 5;
+      radiusModifier = 1;
+      flairSize = 10;
    }
 
-   /**
-    * When a target is hit, create a colloportus stationary spell
-    */
    @Override
-   protected void doCheckEffect ()
+   protected StationarySpellObj createStationarySpell ()
    {
-      if (hasHitTarget())
-         return;
-
-      int duration = (int) (usesModifier * 1200);
-      net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS total
-            = new net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS(p, player.getUniqueId(), location, O2StationarySpellType.COLLOPORTUS, 5, duration);
-      total.flair(10);
-      Ollivanders2API.getStationarySpells().addStationarySpell(total);
-
-      kill();
+      return new net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS(p, player.getUniqueId(), location, O2StationarySpellType.COLLOPORTUS, radius, duration);
    }
 }

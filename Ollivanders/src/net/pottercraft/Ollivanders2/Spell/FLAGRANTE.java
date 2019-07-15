@@ -10,6 +10,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * Places a flagrante affect on the item.
  *
  * @author lownes
+ * @author Azami7
  */
 public final class FLAGRANTE extends ItemCurse
 {
@@ -44,9 +45,9 @@ public final class FLAGRANTE extends ItemCurse
       super(plugin, player, rightWand);
       spellType = O2SpellType.FLAGRANTE;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       curseLabel = flagrante;
+      ItemCurse.itemCurseNames.add(curseLabel);
    }
 }

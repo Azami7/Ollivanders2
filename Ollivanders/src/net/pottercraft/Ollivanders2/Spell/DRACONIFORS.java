@@ -32,7 +32,7 @@ public final class DRACONIFORS extends FriendlyMobDisguiseSuper
          add("\"It was great! Now I can turn anything into dragons!\" -Hermione Granger");
       }};
 
-      text = "Turn an entity in to a dragon.";
+      text = "The Draconifors spell turns an entity in to a dragon. It is one of the most challenging transfigurations owing to the size and power of the dragon form.";
    }
 
    /**
@@ -47,8 +47,7 @@ public final class DRACONIFORS extends FriendlyMobDisguiseSuper
       super(plugin, player, rightWand);
       spellType = O2SpellType.DRACONIFORS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       targetType = EntityType.ENDER_DRAGON;
       disguiseType = DisguiseType.getType(targetType);

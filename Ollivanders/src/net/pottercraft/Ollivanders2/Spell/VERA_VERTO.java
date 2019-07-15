@@ -34,7 +34,7 @@ public final class VERA_VERTO extends FriendlyMobDisguiseSuper
          add("\"Could I have your attention please? Right, now, today, we will be transforming animals into water goblets. Like so. One, two, three. Vera Verto.\" -Minerva McGonagall");
       }};
 
-      text = "Turns an entity in to a flower pot. Size of animal and duration of the spell depends on your experience.";
+      text = "Turns an animal in to a flower pot. Size of animal and duration of the spell depends on your experience.";
    }
 
    /**
@@ -47,11 +47,10 @@ public final class VERA_VERTO extends FriendlyMobDisguiseSuper
    public VERA_VERTO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.VERA_VERTO;
-      setUsesModifier();
 
-      spellDuration = (int)(1200 * usesModifier);
+      initSpell();
+
       targetType = EntityType.FALLING_BLOCK;
       ItemStack flowerPot = new ItemStack(Material.FLOWER_POT, 1);
 

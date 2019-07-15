@@ -61,6 +61,11 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
 
       spellType = O2StationarySpellType.ALIQUAM_FLOO;
       this.flooName = flooName;
+
+      if (Ollivanders2.debug)
+      {
+         p.getLogger().info("Creating stationary spell type " + spellType.name());
+      }
    }
 
    @Override

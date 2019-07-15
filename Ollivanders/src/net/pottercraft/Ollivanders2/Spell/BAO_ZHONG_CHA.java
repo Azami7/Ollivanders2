@@ -50,8 +50,7 @@ public final class BAO_ZHONG_CHA extends Divination
       spellType = O2SpellType.BAO_ZHONG_CHA;
       divinationType = O2DivinationType.TASSEOMANCY;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       facingBlock = Material.CAULDRON;
       facingBlockString = "a cauldron";

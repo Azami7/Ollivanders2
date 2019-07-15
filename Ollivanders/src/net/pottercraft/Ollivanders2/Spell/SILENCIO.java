@@ -3,7 +3,8 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.pottercraft.Ollivanders2.*;
+import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Effect.MUTED_SPEECH;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -11,7 +12,7 @@ import org.bukkit.entity.Player;
 /**
  * Silences a player for a duration depending on the spell's level. The target player can only use nonverbal spells.
  *
- * @author lownes
+ * @version Ollivanders2
  * @author Azami7
  */
 public final class SILENCIO extends Charms
@@ -49,9 +50,8 @@ public final class SILENCIO extends Charms
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       List<LivingEntity> living = getLivingEntities(1.5);
       for (LivingEntity live : living)
       {
@@ -69,6 +69,11 @@ public final class SILENCIO extends Charms
             kill();
             return;
          }
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

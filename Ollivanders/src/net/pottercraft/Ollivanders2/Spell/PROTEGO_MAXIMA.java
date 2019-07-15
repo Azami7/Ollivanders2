@@ -1,8 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
-import org.bukkit.Material;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
@@ -12,11 +11,13 @@ import java.util.ArrayList;
 /**
  * Makes a spell projectile that creates a shield that hurts any entities within 0.5 meters of the spell wall.
  *
- * @author lownes
+ * @version Ollivanders2
  * @author Azami7
  */
-public final class PROTEGO_MAXIMA extends Charms
+public final class PROTEGO_MAXIMA extends StationarySpellSuper
 {
+   double damage;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -47,22 +48,20 @@ public final class PROTEGO_MAXIMA extends Charms
 
       spellType = O2SpellType.PROTEGO_MAXIMA;
       setUsesModifier();
+
+      baseDurationInSeconds = 300;
+      durationModifierInSeconds = 10;
+      baseRadius = 5;
+      radiusModifier = 1;
+      flairSize = 10;
+      centerOnCaster = true;
+
+      damage = (usesModifier / 10) + 1;
    }
 
    @Override
-   public void checkEffect ()
+   protected StationarySpellObj createStationarySpell ()
    {
-      move();
-      Material targetBlockType = getBlock().getType();
-      if (targetBlockType != Material.AIR && targetBlockType != Material.FIRE && targetBlockType != Material.WATER)
-      {
-         int duration = (int) (usesModifier * 1200);
-         double damage = usesModifier / 10;
-         net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_MAXIMA max =
-               new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_MAXIMA(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO_MAXIMA, 5, duration, damage);
-         max.flair(10);
-         Ollivanders2API.getStationarySpells().addStationarySpell(max);
-         kill();
-      }
+      return new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO_MAXIMA(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO_MAXIMA, radius, duration, damage);
    }
 }

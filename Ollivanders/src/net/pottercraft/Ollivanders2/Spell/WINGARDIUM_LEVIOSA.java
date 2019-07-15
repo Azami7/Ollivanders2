@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -72,15 +73,28 @@ public final class WINGARDIUM_LEVIOSA extends Charms
       materialBlackList.add(Material.LAVA);
       materialBlackList.add(Material.SAND);
       materialBlackList.add(Material.GRAVEL);
+
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
+      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
    }
 
    @Override
    public void checkEffect ()
    {
+      if (!checkSpellAllowed())
+      {
+         kill();
+         return;
+      }
+
       if (moving)
       {
          move();
-         Material type = getBlock().getType();
+
+         Material type = location.getBlock().getType();
          if (type != Material.AIR && type != Material.WATER && type != Material.LAVA)
          {
             moving = false;
@@ -93,6 +107,7 @@ public final class WINGARDIUM_LEVIOSA extends Charms
                   collos.add((COLLOPORTUS) stat);
                }
             }
+
             for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
             {
                boolean insideCollo = false;
@@ -103,10 +118,11 @@ public final class WINGARDIUM_LEVIOSA extends Charms
                      insideCollo = true;
                   }
                }
+
                if (!insideCollo)
                {
                   type = block.getType();
-                  if (!materialBlackList.contains(type) && type.isSolid() && !p.getTempBlocks().contains(block))
+                  if (!materialBlackList.contains(type) && type.isSolid())
                   {
                      Location loc = centerOfBlock(block).subtract(location);
                      blockDataMap.put(loc, block.getBlockData());
@@ -116,7 +132,6 @@ public final class WINGARDIUM_LEVIOSA extends Charms
                }
             }
             length = player.getEyeLocation().distance(location);
-            kill = false;
          }
       }
       else

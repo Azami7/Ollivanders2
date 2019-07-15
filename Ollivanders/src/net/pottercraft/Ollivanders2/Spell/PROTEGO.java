@@ -1,7 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
+import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
@@ -11,10 +12,10 @@ import java.util.ArrayList;
 /**
  * Shield spell
  *
- * @author cakenggt
+ * @version Ollivanders2
  * @author Azami7
  */
-public final class PROTEGO extends Charms
+public final class PROTEGO extends StationarySpellSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -46,14 +47,24 @@ public final class PROTEGO extends Charms
 
       spellType = O2SpellType.PROTEGO;
       setUsesModifier();
+
+      baseDurationInSeconds = 1;
+      durationModifierInSeconds = 1;
+      baseRadius = 5;
+      radiusModifier = 1;
+      flairSize = 10;
+      centerOnCaster = true;
    }
 
-   public void checkEffect ()
+   @Override
+   protected StationarySpellObj createStationarySpell ()
    {
-      net.pottercraft.Ollivanders2.StationarySpell.PROTEGO protego =
-            new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO, 5, 12000);
-      protego.flair(2);
-      Ollivanders2API.getStationarySpells().addStationarySpell(protego);
-      kill();
+      // protego has a limited duration, ensure duration is not set too high
+      if (duration > (3 * Ollivanders2Common.ticksPerSecond))
+      {
+         duration = 3 * Ollivanders2Common.ticksPerSecond;
+      }
+
+      return new net.pottercraft.Ollivanders2.StationarySpell.PROTEGO(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO, radius, duration);
    }
 }

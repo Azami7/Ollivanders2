@@ -19,6 +19,10 @@ import org.bukkit.inventory.ItemStack;
  */
 public final class EXPELLIARMUS extends Charms
 {
+   private final double minVelocity = 0.25;
+   private final double maxVelocity = 3;
+   private double velocity = 0.25;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
@@ -51,11 +55,24 @@ public final class EXPELLIARMUS extends Charms
       super(plugin, player, rightWand);
       spellType = O2SpellType.EXPELLIARMUS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+   }
+
+   @Override
+   void doInitSpell ()
+   {
+      velocity = usesModifier / 10;
+      if (velocity < minVelocity)
+      {
+         velocity = minVelocity;
+      }
+      else if (velocity > maxVelocity)
+      {
+         velocity = maxVelocity;
+      }
    }
 
    /**
@@ -100,11 +117,11 @@ public final class EXPELLIARMUS extends Charms
 
             // drop the item the player held
             Item item = entity.getWorld().dropItem(entity.getEyeLocation(), itemInHand);
-            item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(usesModifier / 10));
-         }
+            item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(velocity));
 
-         kill();
-         return;
+            kill();
+            return;
+         }
       }
 
       // projectile has stopped, kill the spell

@@ -1,8 +1,11 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
+import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -10,11 +13,19 @@ import java.util.ArrayList;
 /**
  * Creates a glowstone at the reticule that goes away after a time.
  *
- * @author lownes
+ * @version Ollivanders2
+ * @author azami7
  */
 public final class LUMOS_MAXIMA extends Charms
 {
-   boolean lit;
+   int lineLength;
+   int duration;
+
+   static int maxLineLength = 20;
+   static int maxDuration = Ollivanders2Common.ticksPerSecond * 600; // 10 minutes
+   static int minDuration = Ollivanders2Common.ticksPerSecond * 30; // 30 seconds
+
+   ArrayList<Block> changedBlocks = new ArrayList<>();
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -46,52 +57,75 @@ public final class LUMOS_MAXIMA extends Charms
       spellType = O2SpellType.LUMOS_MAXIMA;
       setUsesModifier();
 
-      lit = false;
+      // base line length on experience
+      lineLength = 1 + (int) usesModifier / 10;
+      if (lineLength > maxLineLength)
+      {
+         lineLength = maxLineLength;
+      }
+
+      // set duration based on experience, min 30 seconds
+      duration = Ollivanders2Common.ticksPerSecond * (int) usesModifier;
+      if (duration < minDuration)
+      {
+         duration = minDuration;
+      }
+      else if (duration > maxDuration)
+      {
+         duration = maxDuration;
+      }
+
+      // pass-through materials
+      projectilePassThrough.remove(Material.WATER);
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      if (!lit)
+      if (!hasHitTarget())
       {
-         move();
-         if (getBlock().getType() != Material.AIR)
+         // if we have not hit a solid target and still have more line to draw, add a glowstone
+         if (lineLength > 0)
          {
-            location.subtract(vector);
-            location.getBlock().setType(Material.GLOWSTONE);
-            p.getTempBlocks().add(getBlock());
-            lit = true;
-            lifeTicks = (int) (-(usesModifier * 1200));
-            kill = false;
+            Block curBlock = location.getBlock();
+
+            if (curBlock.getType() == Material.AIR)
+            {
+               curBlock.setType(Material.GLOWSTONE);
+               location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
+
+               changedBlocks.add(curBlock);
+               p.addTempBlock(curBlock, Material.AIR);
+            }
+         }
+         // if we have not hit a solid target but don't have more line left, stop the projectile
+         else
+         {
+            stopProjectile();
          }
       }
       else
       {
-         if (getBlock().getType() == Material.GLOWSTONE)
-         {
-            location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
-            lifeTicks++;
-         }
-         else
+         duration--;
+
+         if (duration <= 0)
          {
             kill();
          }
-      }
-      if (lifeTicks >= 159)
-      {
-         revert();
-         kill();
       }
    }
 
    @Override
    public void revert ()
    {
-      if (getBlock().getType() == Material.GLOWSTONE)
+      for (Block block : changedBlocks)
       {
-         location.getBlock().setType(Material.AIR);
+         p.revertTempBlock(block);
       }
-      p.getTempBlocks().remove(location.getBlock());
-   }
 
+      changedBlocks.clear();
+   }
 }

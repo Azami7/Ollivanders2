@@ -23,5 +23,6 @@ public class SECRETS_OF_THE_DARKEST_ART extends O2Book
 
       spells.add(O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS);
       spells.add(O2SpellType.VENTO_FOLIO);
+      spells.add(O2SpellType.SCUTO_CONTERAM);
    }
 }

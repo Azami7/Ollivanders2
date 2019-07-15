@@ -41,9 +41,6 @@ public final class FIANTO_DURI extends Charms
       super();
       spellType = O2SpellType.FIANTO_DURI;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
-
       flavorText = new ArrayList<String>() {{
          add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" - Filius Flitwick");
          add("");
@@ -63,15 +60,16 @@ public final class FIANTO_DURI extends Charms
    {
       super(plugin, player, rightWand);
 
+      initSpell();
+
       spellType = O2SpellType.FIANTO_DURI;
-      setUsesModifier();
    }
 
    /**
     * Look for any shield spells in the projectile location and increase their duration
     */
    @Override
-   public void doCheckEffect ()
+   protected void doCheckEffect ()
    {
       List<StationarySpellObj> inside = new ArrayList<>();
 
