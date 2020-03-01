@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
-import net.pottercraft.Ollivanders2.Player.O2Player;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -125,11 +124,19 @@ public class LYCANTHROPY extends ShapeShiftSuper
    /**
     * Remove additional effects of Lycanthropy
     */
-   private void removeAdditionalEffect ()
+   private void removeAdditionalEffect()
    {
       for (O2EffectType effectType : additionalEffects)
       {
          Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, effectType);
       }
    }
+
+   /**
+    * Override setPermanent so that no code can inadvertently make lycanthropy effect age.
+    *
+    * @param perm true if this is permanent, false otherwise
+    */
+   @Override
+   public void setPermanent(boolean perm) { }
 }

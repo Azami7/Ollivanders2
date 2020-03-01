@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Player;
@@ -11,20 +12,21 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * A fancier version of Bothynus.
  *
- * @see BOTHYNUS
- * @see PyrotechniaSuper
  * @author Azami7
+ * @see BOTHYNUS
+ * @see Pyrotechnia
  */
-public final class BOTHYNUS_DUO extends PyrotechniaSuper
+public final class BOTHYNUS_DUO extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BOTHYNUS_DUO ()
+   public BOTHYNUS_DUO()
    {
       super();
 
       spellType = O2SpellType.BOTHYNUS_DUO;
+      branch = O2MagicBranch.CHARMS;
 
       text = "Creates one or more yellow and orange star fireworks with trails.";
    }
@@ -40,6 +42,7 @@ public final class BOTHYNUS_DUO extends PyrotechniaSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.BOTHYNUS_DUO;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
@@ -12,22 +13,24 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 /**
  * The Revealing Charm. Causes any stationary spell objects to flair with an intensity equal to your level.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class APARECIUM extends Charms
+public final class APARECIUM extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public APARECIUM ()
+   public APARECIUM()
    {
       super();
 
       spellType = O2SpellType.APARECIUM;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Revealing Charm will reveal invisible ink and messages hidden by magical means. Simply tap a book or parchment with your wand and any hidden message will be revealed. This spell is more than sufficient to overcome the basic concealing charms and so is a favourite of parents and teachers alike.");
          add("The Revealing Charm");
       }};
@@ -46,6 +49,7 @@ public final class APARECIUM extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.APARECIUM;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
    }

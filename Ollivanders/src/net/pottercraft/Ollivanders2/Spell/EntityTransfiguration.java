@@ -14,10 +14,10 @@ import java.util.List;
 /**
  * The super class for transfiguration of all entities.
  *
- * @since 2.2.6
  * @author Azami7
+ * @since 2.2.6
  */
-public abstract class EntityTransfigurationSuper extends O2Spell
+public abstract class EntityTransfiguration extends O2Spell
 {
    /**
     * If the transfiguration has taken place or not.
@@ -72,7 +72,7 @@ public abstract class EntityTransfigurationSuper extends O2Spell
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EntityTransfigurationSuper ()
+   public EntityTransfiguration()
    {
       super();
 
@@ -82,11 +82,11 @@ public abstract class EntityTransfigurationSuper extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public EntityTransfigurationSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public EntityTransfiguration(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 

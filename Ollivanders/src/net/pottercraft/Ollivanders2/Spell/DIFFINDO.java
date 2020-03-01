@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.block.Block;
@@ -18,18 +19,20 @@ import org.bukkit.inventory.PlayerInventory;
  * @author lownes
  * @author Azami7
  */
-public final class DIFFINDO extends Charms
+public final class DIFFINDO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DIFFINDO ()
+   public DIFFINDO()
    {
       super();
 
       spellType = O2SpellType.DIFFINDO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Severing Charm");
          add("With the Severing Charm, cutting or tearing objects is a simple matter of wand control.");
          add("The spell can be quite precise in skilled hands, and the Severing Charm is widely used in a variety of wizarding trades.");
@@ -49,6 +52,7 @@ public final class DIFFINDO extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DIFFINDO;
+      branch = O2MagicBranch.CHARMS;
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.PVP);

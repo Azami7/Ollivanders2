@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Divination.O2DivinationType;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,6 +26,7 @@ public class INTUEOR extends Divination
 
       spellType = O2SpellType.INTUEOR;
       divinationType = O2DivinationType.CRYSTAL_BALL;
+      branch = O2MagicBranch.DIVINATION;
 
       flavorText = new ArrayList<String>()
       {{
@@ -51,10 +53,11 @@ public class INTUEOR extends Divination
 
       spellType = O2SpellType.INTUEOR;
       divinationType = O2DivinationType.CRYSTAL_BALL;
+      branch = O2MagicBranch.DIVINATION;
 
       facingBlock = Material.GLASS;
       facingBlockString = "a crystal ball";
 
-      setUsesModifier();
+      initSpell();
    }
 }

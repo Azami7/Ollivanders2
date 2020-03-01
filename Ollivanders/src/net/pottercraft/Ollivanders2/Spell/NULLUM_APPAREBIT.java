@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
@@ -12,16 +13,18 @@ import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
  * @author lownes
  * @author Azami7
  */
-public final class NULLUM_APPAREBIT extends StationarySpellSuper
+public final class NULLUM_APPAREBIT extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public NULLUM_APPAREBIT ()
+   public NULLUM_APPAREBIT()
    {
       super();
 
       spellType = O2SpellType.NULLUM_APPAREBIT;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Nullum apparebit creates a stationary spell which will not allow apparition into it.";
    }
 
@@ -37,7 +40,9 @@ public final class NULLUM_APPAREBIT extends StationarySpellSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.NULLUM_APPAREBIT;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       baseDurationInSeconds = 300;
       durationModifierInSeconds = 15;

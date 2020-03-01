@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -14,7 +15,7 @@ import org.bukkit.entity.Player;
  * @author Azami7
  * @since 2.3
  */
-public abstract class StationarySpellSuper extends Charms
+public abstract class StationarySpell extends O2Spell
 {
    /**
     * The time left for this stationary spell.
@@ -64,9 +65,11 @@ public abstract class StationarySpellSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public StationarySpellSuper ()
+   public StationarySpell()
    {
       super();
+
+      branch = O2MagicBranch.CHARMS;
    }
 
    /**
@@ -76,9 +79,10 @@ public abstract class StationarySpellSuper extends Charms
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public StationarySpellSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public StationarySpell(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+      branch = O2MagicBranch.CHARMS;
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.BUILD);
@@ -110,7 +114,12 @@ public abstract class StationarySpellSuper extends Charms
       kill();
    }
 
-   protected StationarySpellObj createStationarySpell ()
+   /**
+    * Create the stationary spell. Has to be overridden by child spells to have effect.
+    *
+    * @return the stationary spell or null if one is not created.
+    */
+   protected StationarySpellObj createStationarySpell()
    {
       return null;
    }

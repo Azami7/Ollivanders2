@@ -226,7 +226,7 @@ public abstract class Transfiguration extends O2Spell
    /**
     * Decrease the duration of this transfiguration, if it is not permanent, by the percent.
     *
-    * @param percent
+    * @param percent the percent to reduce this transfiguration duration
     */
    public void reparifarge (int percent)
    {

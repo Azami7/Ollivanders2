@@ -1,10 +1,10 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -18,7 +18,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class LUMOS_DUO extends Charms
+public final class LUMOS_DUO extends O2Spell
 {
    private List<Block> line = new ArrayList();
 
@@ -48,6 +48,7 @@ public final class LUMOS_DUO extends Charms
       super();
 
       spellType = O2SpellType.LUMOS_DUO;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("A variation of the Wand-Lighting Charm.");
@@ -68,7 +69,9 @@ public final class LUMOS_DUO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LUMOS_DUO;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       lifeTicks = (int) (-(usesModifier * 20));
 

@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -15,6 +16,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 public final class FLAGRANTE extends ItemCurse
 {
    public static final String flagrante = "Flagrante";
+   public static final double baseDamage = 3.0;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -24,6 +26,7 @@ public final class FLAGRANTE extends ItemCurse
       super();
 
       spellType = O2SpellType.FLAGRANTE;
+      branch = O2MagicBranch.DARK_ARTS;
 
       flavorText = new ArrayList<String>() {{
          add("Burning Curse");
@@ -44,10 +47,10 @@ public final class FLAGRANTE extends ItemCurse
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FLAGRANTE;
+      branch = O2MagicBranch.DARK_ARTS;
+
+      curseLabel = FLAGRANTE.flagrante;
 
       initSpell();
-
-      curseLabel = flagrante;
-      ItemCurse.itemCurseNames.add(curseLabel);
    }
 }

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.entity.Player;
@@ -24,6 +25,7 @@ public final class BOMBARDA_MAXIMA extends BombardaSuper
       super();
 
       spellType = O2SpellType.BOMBARDA_MAXIMA;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("A more powerful explosion incantation.");
@@ -44,6 +46,7 @@ public final class BOMBARDA_MAXIMA extends BombardaSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.BOMBARDA_MAXIMA;
+      branch = O2MagicBranch.CHARMS;
 
       strengthMultiplier = 0.5;
       maxStrength = 8.0; // double TNT strength

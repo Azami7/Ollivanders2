@@ -1,31 +1,32 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
-import net.pottercraft.Ollivanders2.Ollivanders2API;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 
 /**
- * Reduces the time duration of any levicorpus effects on the target
+ * Reduces the time duration of any levicorpus effects on the target.
  *
  * @author lownes
  * @author Azami7
  */
-public final class LIBERACORPUS extends Charms
+public final class LIBERACORPUS extends ReduceO2Effect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LIBERACORPUS ()
+   public LIBERACORPUS()
    {
       super();
 
       spellType = O2SpellType.LIBERACORPUS;
+      branch = O2MagicBranch.COUNTER_SPELL;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Levicorpus Counter-Spell");
          add("...he jerked his wand upwards; Snape fell into a crumpled heap on the ground.");
       }};
@@ -45,33 +46,10 @@ public final class LIBERACORPUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LIBERACORPUS;
-      setUsesModifier();
-   }
+      branch = O2MagicBranch.COUNTER_SPELL;
 
-   @Override
-   protected void doCheckEffect ()
-   {
-      for (LivingEntity live : getLivingEntities(1.5))
-      {
-         if (live instanceof Player)
-         {
-            if (live.getUniqueId() == player.getUniqueId())
-               continue;
+      initSpell();
 
-            Player player = (Player) live;
-
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
-            {
-               Ollivanders2API.getPlayers().playerEffects.ageEffect(player.getUniqueId(), O2EffectType.SUSPENSION, (int) (usesModifier * 2400));
-            }
-
-            kill();
-            return;
-         }
-      }
-
-      // projectile has stopped, kill the spell
-      if (hasHitTarget())
-         kill();
+      effectsToReduce.add(O2EffectType.SUSPENSION);
    }
 }

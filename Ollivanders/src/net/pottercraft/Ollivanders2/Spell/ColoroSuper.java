@@ -14,19 +14,19 @@ import java.util.List;
 
 /**
  * Created by Azami7 on 6/30/17.
- *
+ * <p>
  * Change a sheep or a colorable block to a specific color.
  *
  * @author Azami7
  */
-public abstract class ColoroSuper extends Charms
+public abstract class ColoroSuper extends O2Spell
 {
    O2Color color = O2Color.WHITE;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   ColoroSuper ()
+   ColoroSuper()
    {
       super();
    }

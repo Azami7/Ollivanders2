@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -28,6 +29,7 @@ public final class CALAMUS extends Transfiguration
       super();
 
       spellType = O2SpellType.CALAMUS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       text = "Turns sticks in to arrows.";
    }
@@ -43,6 +45,7 @@ public final class CALAMUS extends Transfiguration
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.CALAMUS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       initSpell();
 

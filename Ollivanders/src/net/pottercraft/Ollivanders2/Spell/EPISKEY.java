@@ -10,23 +10,24 @@ import java.util.ArrayList;
 /**
  * Gives an entity a healing effect for usesModifier seconds
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class EPISKEY extends PotionEffectSuper
+public final class EPISKEY extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EPISKEY ()
+   public EPISKEY()
    {
       super();
 
       branch = O2MagicBranch.HEALING;
       spellType = O2SpellType.EPISKEY;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"Episkey,\" said Tonks. Harry's nose felt very hot, then very cold. He raised a hand and felt it gingerly. It seemed to be mended.");
          add("A minor healing spell.");
       }};
@@ -48,8 +49,7 @@ public final class EPISKEY extends PotionEffectSuper
       branch = O2MagicBranch.HEALING;
       spellType = O2SpellType.EPISKEY;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       effectTypes.add(PotionEffectType.REGENERATION);
       strengthModifier = 0;

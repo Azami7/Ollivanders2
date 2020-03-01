@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Effect.IMMOBILIZE;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -16,15 +17,16 @@ import java.util.ArrayList;
  * @author Azami7
  * @since 2.2.9
  */
-public class PETRIFICUS_TOTALUS extends Charms
+public class PETRIFICUS_TOTALUS extends O2Spell
 {
    private static int maxDurationInSeconds = 300;
 
-   public PETRIFICUS_TOTALUS ()
+   public PETRIFICUS_TOTALUS()
    {
       super();
 
       spellType = O2SpellType.PETRIFICUS_TOTALUS;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>()
       {{
@@ -48,7 +50,9 @@ public class PETRIFICUS_TOTALUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PETRIFICUS_TOTALUS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
    }
 
    @Override

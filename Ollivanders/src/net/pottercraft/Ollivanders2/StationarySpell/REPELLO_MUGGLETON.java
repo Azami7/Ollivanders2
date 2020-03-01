@@ -15,8 +15,7 @@ import java.util.UUID;
 
 /**
  * Hides all blocks within its area by sending out block changes.
- * Hides all players within its area. The code to hide players is located
- * in OllivandersSchedule.invisPlayer()
+ * Hides all players within its area. The code to hide players is located in OllivandersSchedule.invisPlayer()
  *
  * @author lownes
  */

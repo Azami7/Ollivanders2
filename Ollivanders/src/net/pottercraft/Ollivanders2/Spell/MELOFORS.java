@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
@@ -28,6 +29,7 @@ public final class MELOFORS extends GaleatiSuper
       super();
 
       spellType = O2SpellType.MELOFORS;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("Harry overheard one second-year girl assuring another that Fudge was now lying in St Mungo’s with a pumpkin for a head.\"");
@@ -49,7 +51,9 @@ public final class MELOFORS extends GaleatiSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.MELOFORS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       materialType = melons[Math.abs(Ollivanders2Common.random.nextInt() % melons.length)];
    }

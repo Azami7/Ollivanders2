@@ -3,7 +3,6 @@ package net.pottercraft.Ollivanders2.Spell;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -13,16 +12,16 @@ import java.util.ArrayList;
 /**
  * Spell which places a block of water against the targeted block.
  *
- * @since 2.2.4
- * @version Ollivanders2
  * @author Azami7
+ * @version Ollivanders2
+ * @since 2.2.4
  */
-public final class AGUAMENTI extends BlockTransfigurationSuper
+public final class AGUAMENTI extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AGUAMENTI ()
+   public AGUAMENTI()
    {
       super();
 
@@ -30,7 +29,8 @@ public final class AGUAMENTI extends BlockTransfigurationSuper
       branch = O2MagicBranch.CHARMS;
 
       text = "Aguamenti will cause water to erupt against the surface you cast it on.";
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Water-Making Spell conjures clean, drinkable water from the end of the wand.");
          add("The Water-Making Spell");
       }};

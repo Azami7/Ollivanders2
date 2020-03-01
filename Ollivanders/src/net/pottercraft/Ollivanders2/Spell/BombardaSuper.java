@@ -11,14 +11,14 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
-public abstract class BombardaSuper extends Charms
+public abstract class BombardaSuper extends O2Spell
 {
    double minStrength = 1;
    double maxStrength = 4.0; // 4.0 is the strength of TNT
 
    double strengthMultiplier = 0.25;
 
-   BombardaSuper ()
+   BombardaSuper()
    {
       super();
    }

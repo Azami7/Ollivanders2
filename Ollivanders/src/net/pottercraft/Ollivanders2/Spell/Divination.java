@@ -47,7 +47,7 @@ public abstract class Divination extends O2Spell
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Divination ()
+   public Divination()
    {
       super();
 
@@ -61,7 +61,7 @@ public abstract class Divination extends O2Spell
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public Divination (Ollivanders2 plugin, Player player, Double rightWand)
+   public Divination(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 

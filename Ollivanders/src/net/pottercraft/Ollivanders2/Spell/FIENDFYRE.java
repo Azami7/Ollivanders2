@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
@@ -17,11 +18,11 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * Spawns magma cubes, blazes, and ghasts
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class FIENDFYRE extends DarkArts
+public final class FIENDFYRE extends O2Spell
 {
    private final int minCreatures = 1;
    private final int maxCreatures = 10;
@@ -29,12 +30,14 @@ public final class FIENDFYRE extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FIENDFYRE ()
+   public FIENDFYRE()
    {
       super();
       spellType = O2SpellType.FIENDFYRE;
+      branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("It was not normal fire; Crabbe had used a curse of which Harry had no knowledge: As they turned a corner the flames chased them as though they were alive, sentient, intent upon killing them. ");
          add("Bewitched Flame Curse");
       }};
@@ -54,6 +57,7 @@ public final class FIENDFYRE extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.FIENDFYRE;
+      branch = O2MagicBranch.DARK_ARTS;
 
       initSpell();
 

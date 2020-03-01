@@ -1,8 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.Ollivanders2API;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -13,16 +12,18 @@ import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
  *
  * @author lownes
  */
-public final class NULLUM_EVANESCUNT extends StationarySpellSuper
+public final class NULLUM_EVANESCUNT extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public NULLUM_EVANESCUNT ()
+   public NULLUM_EVANESCUNT()
    {
       super();
 
       spellType = O2SpellType.NULLUM_EVANESCUNT;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Nullum evanescunt creates a stationary spell which will not allow disapparition out of it.";
    }
 
@@ -38,7 +39,9 @@ public final class NULLUM_EVANESCUNT extends StationarySpellSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.NULLUM_EVANESCUNT;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       baseDurationInSeconds = 300;
       durationModifierInSeconds = 15;

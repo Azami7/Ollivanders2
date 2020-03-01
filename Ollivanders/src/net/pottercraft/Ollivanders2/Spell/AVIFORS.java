@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.ParrotWatcher;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
@@ -15,21 +16,23 @@ import java.util.ArrayList;
 /**
  * Transfigures entity into a parrot.
  *
- * @since 1.0
  * @author Azami7
+ * @since 1.0
  */
-public final class AVIFORS extends FriendlyMobDisguiseSuper
+public final class AVIFORS extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AVIFORS ()
+   public AVIFORS()
    {
       super();
 
       spellType = O2SpellType.AVIFORS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("However, mastering a Transfiguration spell such as \"Avifors\" can be both rewarding and useful.");
       }};
 
@@ -47,6 +50,7 @@ public final class AVIFORS extends FriendlyMobDisguiseSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.AVIFORS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       initSpell();
 

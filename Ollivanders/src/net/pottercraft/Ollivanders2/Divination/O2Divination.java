@@ -36,6 +36,7 @@ public abstract class O2Divination
       add(O2EffectType.AGGRESSION);
       add(O2EffectType.BABBLING);
       add(O2EffectType.BLINDNESS);
+      add(O2EffectType.BURNING);
       add(O2EffectType.CONFUSION);
       add(O2EffectType.IMMOBILIZE);
       add(O2EffectType.HARM);

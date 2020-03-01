@@ -20,7 +20,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author Azami7
  */
-public abstract class IncendioSuper extends Charms
+public abstract class IncendioSuper extends O2Spell
 {
    private double lifeTime;
    boolean strafe = false;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -13,20 +14,22 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * Does direct damage to a living entity according to your level in the spell.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class AVADA_KEDAVRA extends DarkArts
+public final class AVADA_KEDAVRA extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AVADA_KEDAVRA ()
+   public AVADA_KEDAVRA()
    {
       spellType = O2SpellType.AVADA_KEDAVRA;
+      branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Killing Curse");
          add("There was a flash of blinding green light and a rushing sound, as though a vast, invisible something was soaring through the air — instantaneously the spider rolled over onto its back, unmarked, but unmistakably dead");
          add("\"Yes, the last and worst. Avada Kedavra. ...the Killing Curse.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");

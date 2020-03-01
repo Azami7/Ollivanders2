@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -9,21 +10,23 @@ import java.util.ArrayList;
 /**
  * Spell which points you in the direction of north.
  *
- * @version Ollivanders2
  * @author autumnwoz
+ * @version Ollivanders2
  */
-public class POINT_ME extends Charms
+public class POINT_ME extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public POINT_ME ()
+   public POINT_ME()
    {
       super();
 
       spellType = O2SpellType.POINT_ME;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"\'Point Me!\' he whispered again to his wand, and it spun around and pointed him to the right-hand one.\"");
          add("The Four-Point Spell");
       }};
@@ -43,9 +46,10 @@ public class POINT_ME extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.POINT_ME;
-      setUsesModifier();
-   }
+      branch = O2MagicBranch.CHARMS;
 
+      initSpell();
+   }
 
    @Override
    public void checkEffect ()

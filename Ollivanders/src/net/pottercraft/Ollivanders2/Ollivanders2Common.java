@@ -1009,8 +1009,8 @@ public class Ollivanders2Common
             double[] spher = new double[2];
             spher[0] = inc;
             spher[1] = azi;
-            Location e = location.clone().add(spherToVec(spher, radius));
-            e.getWorld().playEffect(e, Effect.SMOKE, 4);
+            Location effectLocation = location.clone().add(spherToVec(spher, radius));
+            effectLocation.getWorld().playEffect(effectLocation, Effect.SMOKE, 4);
          }
       }
    }

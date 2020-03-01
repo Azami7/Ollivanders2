@@ -14,7 +14,7 @@ import java.util.List;
  * @author Azami7
  * @since 2.3
  */
-public abstract class Knockback extends Charms
+public abstract class Knockback extends O2Spell
 {
    boolean pull = false;
 

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Player;
@@ -10,22 +11,23 @@ import java.util.ArrayList;
 
 /**
  * Created by Azami7 on 6/29/17.
- *
+ * <p>
  * Shoots mutliple orange burst fireworks in to the air.
  *
- * @see PyrotechniaSuper
  * @author Azami7
+ * @see Pyrotechnia
  */
-public final class COMETES extends PyrotechniaSuper
+public final class COMETES extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COMETES ()
+   public COMETES()
    {
       super();
 
       spellType = O2SpellType.COMETES;
+      branch = O2MagicBranch.CHARMS;
 
       text = "Creates one or more orange burst fireworks.";
    }
@@ -41,6 +43,7 @@ public final class COMETES extends PyrotechniaSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.COMETES;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

@@ -11,7 +11,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  *
  * @author Azami7
  */
-public abstract class FumosSuper extends PotionEffectInRadiusSuper
+public abstract class FumosSuper extends AddPotionEffectInRadius
 {
    int minRadius = 5;
    int maxRadius = 20;
@@ -19,7 +19,7 @@ public abstract class FumosSuper extends PotionEffectInRadiusSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FumosSuper ()
+   public FumosSuper()
    {
       super();
    }

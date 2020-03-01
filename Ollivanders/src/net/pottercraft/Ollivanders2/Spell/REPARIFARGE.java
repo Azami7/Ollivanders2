@@ -1,8 +1,8 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EnderDragonPart;
 import org.bukkit.entity.Entity;
@@ -14,18 +14,20 @@ import org.bukkit.entity.Player;
  * @author cakenggt
  * @author Azami7
  */
-public final class REPARIFARGE extends Charms
+public final class REPARIFARGE extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REPARIFARGE ()
+   public REPARIFARGE()
    {
       super();
 
       spellType = O2SpellType.REPARIFARGE;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("Incomplete Transfigurations are difficult to put right, but you must attempt to do so. Leaving the head of a rabbit on a footstool is irresponsible and dangerous. Say 'Reparifarge!' and the object or creature should return to its natural state.");
       }};
 
@@ -44,7 +46,9 @@ public final class REPARIFARGE extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.REPARIFARGE;
-      setUsesModifier();
+      branch = O2MagicBranch.TRANSFIGURATION;
+
+      initSpell();
    }
 
    @Override

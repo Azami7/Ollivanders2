@@ -49,6 +49,8 @@ public class AGGRESSION extends O2Effect
 
       permanent = true;
       target = p.getServer().getPlayer(targetID);
+
+      aggressionLevel = duration;
    }
 
    /**
@@ -57,11 +59,6 @@ public class AGGRESSION extends O2Effect
    @Override
    public void checkEffect ()
    {
-      if (!permanent)
-      {
-         age(1);
-      }
-
       // only take action once per 10 seconds, which is every 120 ticks
       if ((duration % 120) == 0)
       {
@@ -152,11 +149,22 @@ public class AGGRESSION extends O2Effect
     */
    void setAggressionLevel (int level)
    {
-      if (level < 1)
-         level = 1;
-      else if (level > 10)
-         level = 10;
-
       aggressionLevel = level;
+
+      if (aggressionLevel < 1)
+         aggressionLevel = 1;
+      else if (aggressionLevel > 10)
+         aggressionLevel = 10;
+
+      duration = aggressionLevel;
    }
+
+   /**
+    * Override set permanent so that it cannot be called and alter duration, which we override to also set
+    * the aggression level since this is always permanent.
+    *
+    * @param perm true if this is permanent, false otherwise
+    */
+   @Override
+   public void setPermanent(boolean perm) { }
 }

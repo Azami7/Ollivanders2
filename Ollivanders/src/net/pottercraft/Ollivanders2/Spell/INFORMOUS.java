@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -25,18 +26,20 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  * @author lownes
  * @author Azami7
  */
-public final class INFORMOUS extends Arithmancy
+public final class INFORMOUS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INFORMOUS ()
+   public INFORMOUS()
    {
       super();
 
       spellType = O2SpellType.INFORMOUS;
+      branch = O2MagicBranch.ARITHMANCY;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("Basic Arithmancy");
       }};
 
@@ -55,7 +58,9 @@ public final class INFORMOUS extends Arithmancy
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INFORMOUS;
-      setUsesModifier();
+      branch = O2MagicBranch.ARITHMANCY;
+
+      initSpell();
    }
 
    /**

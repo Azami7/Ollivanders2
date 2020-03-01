@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.NULLUM_APPAREBIT;
@@ -19,22 +20,25 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 /**
  * Creates a port key.
  */
-public final class PORTUS extends Charms
+public final class PORTUS extends O2Spell
 {
    private final String[] wordsArray;
 
    public static final String portus = "Portkey";
+   private Location toLoc;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PORTUS ()
+   public PORTUS()
    {
       super();
 
       spellType = O2SpellType.PORTUS;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("For a moment the kettle trembled, glowing with an odd blue light; then it quivered to rest, as solidly black as ever.");
          add("Almost any inanimate object can be turned into a Portkey. Once bewitched, the object will transport anyone who grasps it to a pre-arranged destination.");
       }};
@@ -64,13 +68,11 @@ public final class PORTUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PORTUS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       this.wordsArray = wordsArray;
-
-      // world guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
-      worldGuardFlags.add(DefaultFlag.INTERACT);
    }
 
    /**
@@ -84,6 +86,11 @@ public final class PORTUS extends Charms
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.PORTUS;
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
+
       Location loc = player.getLocation();
       wordsArray = new String[4];
       wordsArray[0] = "portus";
@@ -93,83 +100,40 @@ public final class PORTUS extends Charms
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doInitSpell()
    {
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(DefaultFlag.INTERACT);
+   }
+
+   @Override
+   protected void doCheckEffect()
+   {
+      if (toLoc == null)
+         setDestinationLocation();
+
       for (Item item : getItems(1.5))
       {
-         boolean canApparateOut = true;
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+         if (!checkPermissions(item.getLocation(), toLoc))
          {
-            if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(player.getLocation())
-                  && !stat.getCasterID().equals(player.getUniqueId()))
-            {
-               stat.flair(10);
-               canApparateOut = false;
-               player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
-            }
+            continue;
          }
-         if (player.isPermissionSet("Ollivanders2.BYPASS"))
+
+         // update item meta
+         ItemMeta meta = item.getItemStack().getItemMeta();
+         List<String> lore;
+         if (meta.hasLore())
          {
-            if (player.hasPermission("Ollivanders2.BYPASS"))
-            {
-               canApparateOut = true;
-            }
-         }
-         if (canApparateOut)
+            lore = meta.getLore();
+         } else
          {
-            Location to;
-            if (wordsArray.length == 4)
-            {
-               try
-               {
-                  to = new Location(player.getWorld(),
-                        Double.parseDouble(wordsArray[1]),
-                        Double.parseDouble(wordsArray[2]),
-                        Double.parseDouble(wordsArray[3]));
-               }
-               catch (NumberFormatException e)
-               {
-                  to = player.getLocation().clone();
-               }
-            }
-            else
-            {
-               to = player.getLocation().clone();
-            }
-            boolean canApparateIn = true;
-            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-            {
-               if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to) && !stat.getCasterID().equals(player.getUniqueId()))
-               {
-                  stat.flair(10);
-                  canApparateIn = false;
-                  player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
-               }
-            }
-            if (player.isPermissionSet("Ollivanders2.BYPASS"))
-            {
-               if (player.hasPermission("Ollivanders2.BYPASS"))
-               {
-                  canApparateIn = true;
-               }
-            }
-            if (canApparateIn)
-            {
-               ItemMeta meta = item.getItemStack().getItemMeta();
-               List<String> lore;
-               if (meta.hasLore())
-               {
-                  lore = meta.getLore();
-               }
-               else
-               {
-                  lore = new ArrayList<>();
-               }
-               lore.add("Portkey " + to.getWorld().getUID() + " " + Double.toString(to.getX()) + " " + Double.toString(to.getY()) + " " + Double.toString(to.getZ()));
-               meta.setLore(lore);
-               item.getItemStack().setItemMeta(meta);
-            }
+            lore = new ArrayList<>();
          }
+         lore.add(portus + " " + toLoc.getWorld().getUID() + " " + Double.toString(toLoc.getX()) + " " + Double.toString(toLoc.getY()) + " " + Double.toString(toLoc.getZ()));
+         meta.setLore(lore);
+         item.getItemStack().setItemMeta(meta);
+
          kill();
       }
 
@@ -177,5 +141,72 @@ public final class PORTUS extends Charms
       {
          kill();
       }
+   }
+
+   private void setDestinationLocation()
+   {
+      if (wordsArray.length == 4)
+      {
+         try
+         {
+            toLoc = new Location(player.getWorld(),
+                  Double.parseDouble(wordsArray[1]),
+                  Double.parseDouble(wordsArray[2]),
+                  Double.parseDouble(wordsArray[3]));
+         }
+         catch (NumberFormatException e)
+         {
+            toLoc = player.getLocation().clone();
+         }
+      } else
+      {
+         toLoc = player.getLocation().clone();
+      }
+   }
+
+   private boolean checkPermissions(Location fromLoc, Location toLoc)
+   {
+      // can you apparate out of this location?
+      boolean canApparateOut = true;
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      {
+         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(fromLoc)
+               && !stat.getCasterID().equals(player.getUniqueId()))
+         {
+            stat.flair(10);
+            canApparateOut = false;
+            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+         }
+      }
+      if (player.isPermissionSet("Ollivanders2.BYPASS"))
+      {
+         if (player.hasPermission("Ollivanders2.BYPASS"))
+         {
+            canApparateOut = true;
+         }
+      }
+
+      if (!canApparateOut)
+         return false;
+
+      boolean canApparateIn = true;
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      {
+         if (stat instanceof NULLUM_APPAREBIT && stat.isInside(toLoc) && !stat.getCasterID().equals(player.getUniqueId()))
+         {
+            stat.flair(10);
+            canApparateIn = false;
+            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
+         }
+      }
+      if (player.isPermissionSet("Ollivanders2.BYPASS"))
+      {
+         if (player.hasPermission("Ollivanders2.BYPASS"))
+         {
+            canApparateIn = true;
+         }
+      }
+
+      return canApparateIn;
    }
 }

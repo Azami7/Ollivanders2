@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
@@ -12,21 +13,23 @@ import java.util.ArrayList;
 /**
  * Shield spell
  *
- * @version Ollivanders2
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class PROTEGO extends StationarySpellSuper
+public final class PROTEGO extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO ()
+   public PROTEGO()
    {
       super();
 
       spellType = O2SpellType.PROTEGO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"I don't remember telling you to use a Shield Charm... but there is no doubt that it was effective...\" -Severus Snape");
          add("The Shield Charm");
       }};
@@ -46,7 +49,8 @@ public final class PROTEGO extends StationarySpellSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PROTEGO;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       baseDurationInSeconds = 1;
       durationModifierInSeconds = 1;

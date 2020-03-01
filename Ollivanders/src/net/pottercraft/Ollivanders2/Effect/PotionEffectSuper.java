@@ -50,5 +50,4 @@ public abstract class PotionEffectSuper extends O2Effect
    {
       strength = s;
    }
-
 }

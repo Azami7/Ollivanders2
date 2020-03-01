@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -13,10 +14,10 @@ import java.util.ArrayList;
 /**
  * Causes a living entity to damage another living entity.
  *
- * @version Ollivanders2
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class OPPUGNO extends DarkArts
+public final class OPPUGNO extends O2Spell
 {
    double damage;
 
@@ -26,13 +27,15 @@ public final class OPPUGNO extends DarkArts
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public OPPUGNO ()
+   public OPPUGNO()
    {
       super();
 
       spellType = O2SpellType.OPPUGNO;
+      branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("Harry spun around to see Hermione pointing her wand at Ron, her expression wild: The little flock of birds was speeding like a hail of fat golden bullets toward Ron, who yelped and covered his face with his hands, but the birds attacked, pecking and clawing at every bit of flesh they could reach.");
          add("The Oppugno Jinx");
       }};
@@ -52,7 +55,9 @@ public final class OPPUGNO extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.OPPUGNO;
-      setUsesModifier();
+      branch = O2MagicBranch.DARK_ARTS;
+
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.PVP);

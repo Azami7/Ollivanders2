@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Divination.O2DivinationType;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
@@ -22,6 +23,7 @@ public class MANTEIA_KENTAVROS extends Divination
 
       spellType = O2SpellType.MANTEIA_KENTAVROS;
       divinationType = O2DivinationType.CENTAUR_DIVINATION;
+      branch = O2MagicBranch.DIVINATION;
 
       flavorText = new ArrayList<String>()
       {{
@@ -46,8 +48,9 @@ public class MANTEIA_KENTAVROS extends Divination
 
       spellType = O2SpellType.ASTROLOGIA;
       divinationType = O2DivinationType.ASTROLOGY;
+      branch = O2MagicBranch.DIVINATION;
 
-      setUsesModifier();
+      initSpell();
    }
 
    /**

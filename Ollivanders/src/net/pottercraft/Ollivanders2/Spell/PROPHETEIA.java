@@ -15,12 +15,12 @@ import java.util.ArrayList;
  * @author Azami7
  * @since 2.2.9
  */
-public class PROPHETEIA extends Charms
+public class PROPHETEIA extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROPHETEIA ()
+   public PROPHETEIA()
    {
       super();
 
@@ -32,7 +32,7 @@ public class PROPHETEIA extends Charms
          add("\"But when Sybill Trelawney spoke, it was not in her usual ethereal, mystic voice, but in the hard, hoarse tones Harry had heard her use once before.\"");
       }};
 
-      text = "Propheteia allows one to reveal amn unfulfilled prophecy that has been made about a target player. Chances of success depend on experience.";
+      text = "Propheteia allows one to reveal an unfulfilled prophecy that has been made about a target player. Chances of success depend on experience.";
    }
 
    /**
@@ -48,7 +48,7 @@ public class PROPHETEIA extends Charms
 
       branch = O2MagicBranch.DIVINATION;
       spellType = O2SpellType.PROPHETEIA;
-      setUsesModifier();
+      initSpell();
    }
 
    @Override

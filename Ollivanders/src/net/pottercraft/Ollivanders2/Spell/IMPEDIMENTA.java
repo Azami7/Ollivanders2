@@ -11,23 +11,24 @@ import org.bukkit.potion.PotionEffectType;
 /**
  * Slows any living entity by an amount and time depending on the player's spell level.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class IMPEDIMENTA extends PotionEffectSuper
+public final class IMPEDIMENTA extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public IMPEDIMENTA ()
+   public IMPEDIMENTA()
    {
       super();
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.IMPEDIMENTA;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal.");
          add("\"I like the look of this one, this Impediment Jinx. Should slow down anything that’s trying to attack you, Harry. We’ll start with that one.\" -Hermione Granger");
       }};
@@ -48,7 +49,7 @@ public final class IMPEDIMENTA extends PotionEffectSuper
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.IMPEDIMENTA;
-      setUsesModifier();
+      initSpell();
 
       effectTypes.add(PotionEffectType.SLOW);
       strengthModifier = 0;

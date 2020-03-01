@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.HorseWatcher;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
@@ -11,20 +12,22 @@ import org.bukkit.entity.Player;
 /**
  * Transfigures an entity into a horse.
  *
- * @since 1.0
  * @author lownes
  * @author Azami7
+ * @since 1.0
  */
-public final class EQUUSIFORS extends FriendlyMobDisguiseSuper
+public final class EQUUSIFORS extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EQUUSIFORS ()
+   public EQUUSIFORS()
    {
       super();
 
       spellType = O2SpellType.EQUUSIFORS;
+      branch = O2MagicBranch.TRANSFIGURATION;
+
       text = "Turns target entity in to a horse.";
    }
 
@@ -39,6 +42,7 @@ public final class EQUUSIFORS extends FriendlyMobDisguiseSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.EQUUSIFORS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       initSpell();
 

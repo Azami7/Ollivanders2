@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
@@ -12,16 +13,18 @@ import org.bukkit.entity.Player;
  *
  * @author autumnwoz
  */
-public final class FINESTRA extends Charms
+public final class FINESTRA extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FINESTRA ()
+   public FINESTRA()
    {
       super();
 
       spellType = O2SpellType.FINESTRA;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Breaks glass in a radius.";
    }
 
@@ -36,6 +39,7 @@ public final class FINESTRA extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FINESTRA;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

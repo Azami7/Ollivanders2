@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
  * @author cakenggt
  * @author Azami7
  */
-public final class PACK extends Charms
+public final class PACK extends O2Spell
 {
    private int radius;
    private static int maxRadius = 20;
@@ -31,13 +32,15 @@ public final class PACK extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PACK ()
+   public PACK()
    {
       super();
 
       spellType = O2SpellType.PACK;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("Books, clothes, telescope and scales all soared into the air and flew pell-mell into the trunk.");
          add("The Packing Charm");
       }};
@@ -57,7 +60,9 @@ public final class PACK extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PACK;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.CHEST_ACCESS);
@@ -97,7 +102,7 @@ public final class PACK extends Charms
             }
          }
 
-         Inventory inv = null;
+         Inventory inv;
 
          try
          {

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -24,6 +25,7 @@ public final class FUMOS extends FumosSuper
       super();
 
       spellType = O2SpellType.FUMOS;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("The Smoke-Screen Spell");
@@ -43,6 +45,7 @@ public final class FUMOS extends FumosSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FUMOS;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
    }

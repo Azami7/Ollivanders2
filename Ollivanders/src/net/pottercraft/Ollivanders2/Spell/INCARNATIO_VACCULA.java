@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.AgeableWatcher;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
@@ -10,23 +11,25 @@ import org.bukkit.entity.Player;
 
 /**
  * Created by Azami7 on 6/28/17.
- *
+ * <p>
  * Turn a target player in to a cow.
  *
- * @since 2.2.3
  * @author lownes
  * @author Azami7
+ * @since 2.2.3
  */
-public final class INCARNATIO_VACCULA extends PlayerDisguiseSuper
+public final class INCARNATIO_VACCULA extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public INCARNATIO_VACCULA ()
+   public INCARNATIO_VACCULA()
    {
       super();
 
       spellType = O2SpellType.INCARNATIO_VACCULA;
+      branch = O2MagicBranch.TRANSFIGURATION;
+
       text = "Turns target player in to a cow.";
    }
 
@@ -42,7 +45,9 @@ public final class INCARNATIO_VACCULA extends PlayerDisguiseSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCARNATIO_VACCULA;
-      setUsesModifier();
+      branch = O2MagicBranch.TRANSFIGURATION;
+
+      initSpell();
       calculateSuccessRate();
 
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);

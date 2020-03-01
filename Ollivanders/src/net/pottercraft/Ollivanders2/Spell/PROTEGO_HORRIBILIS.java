@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
@@ -11,21 +12,23 @@ import java.util.ArrayList;
 /**
  * Protego horribilis is the incantation to a protective spell.
  *
- * @version Ollivanders2
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class PROTEGO_HORRIBILIS extends StationarySpellSuper
+public final class PROTEGO_HORRIBILIS extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_HORRIBILIS ()
+   public PROTEGO_HORRIBILIS()
    {
       super();
 
       spellType = O2SpellType.PROTEGO_HORRIBILIS;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add(" [...] although he could barely see out of it, he pointed his wand through the smashed window and started muttering incantations of great complexity. Harry heard a weird rushing noise, as though Flitwick had unleashed the power of the wind into the grounds.");
       }};
 
@@ -44,7 +47,8 @@ public final class PROTEGO_HORRIBILIS extends StationarySpellSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PROTEGO_HORRIBILIS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       baseDurationInSeconds = 30;
       durationModifierInSeconds = 10;

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
@@ -22,6 +23,7 @@ public final class GLACIUS_TRIA extends GlaciusSuper
       super();
 
       spellType = O2SpellType.GLACIUS_TRIA;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("The Strongest Freezing Charm");
@@ -42,7 +44,9 @@ public final class GLACIUS_TRIA extends GlaciusSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.GLACIUS_TRIA;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       //25% duration
       durationModifier = 0.25;

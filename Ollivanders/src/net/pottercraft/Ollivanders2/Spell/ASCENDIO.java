@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -10,22 +11,24 @@ import java.util.ArrayList;
 /**
  * Shoots caster high into air.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class ASCENDIO extends Charms
+public final class ASCENDIO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ASCENDIO ()
+   public ASCENDIO()
    {
       super();
 
       spellType = O2SpellType.ASCENDIO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Climbing Charm");
          add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
       }};
@@ -43,7 +46,9 @@ public final class ASCENDIO extends Charms
    public ASCENDIO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
       spellType = O2SpellType.ASCENDIO;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
    }

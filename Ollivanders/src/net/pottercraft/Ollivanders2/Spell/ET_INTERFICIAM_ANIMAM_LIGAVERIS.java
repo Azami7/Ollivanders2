@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
@@ -22,18 +23,20 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
+public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ET_INTERFICIAM_ANIMAM_LIGAVERIS ()
+   public ET_INTERFICIAM_ANIMAM_LIGAVERIS()
    {
       super();
 
       spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
+      branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("Tamper with the deepest mysteries — the source of life, the essence of self — only if prepared for consequences of the most extreme and dangerous kind.");
       }};
 
@@ -53,7 +56,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
-
+      branch = O2MagicBranch.DARK_ARTS;
 
       initSpell();
 
@@ -91,8 +94,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends DarkArts
          HORCRUX horcrux = new HORCRUX(p, player.getUniqueId(), location, O2StationarySpellType.HORCRUX, 5, 10);
          horcrux.flair(10);
          Ollivanders2API.getStationarySpells().addStationarySpell(horcrux);
-         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(
-               player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0);
+         player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0);
          o2p.subtractSoul();
          player.damage(1.0);
       }

@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -16,18 +17,20 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  * @author lownes
  * @author Azami7
  */
-public final class HORREAT_PROTEGAT extends Charms
+public final class HORREAT_PROTEGAT extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public HORREAT_PROTEGAT ()
+   public HORREAT_PROTEGAT()
    {
       super();
 
       spellType = O2SpellType.HORREAT_PROTEGAT;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Spell-Reduction Charm");
       }};
 
@@ -46,7 +49,9 @@ public final class HORREAT_PROTEGAT extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.HORREAT_PROTEGAT;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);

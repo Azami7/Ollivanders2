@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -17,16 +18,17 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class VOLATUS extends Charms
+public final class VOLATUS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VOLATUS ()
+   public VOLATUS()
    {
       super();
 
       spellType = O2SpellType.VOLATUS;
+      branch = O2MagicBranch.CHARMS;
 
       text = "Volatus is used to enchant a broomstick for flight. "
             + "To make a magical broomstick, you must first craft a broomstick.  This recipe requires two sticks and a wheat. "
@@ -47,7 +49,8 @@ public final class VOLATUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.VOLATUS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.ITEM_DROP);

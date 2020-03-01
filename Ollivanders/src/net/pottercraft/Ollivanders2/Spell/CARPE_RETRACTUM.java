@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -23,6 +24,7 @@ public final class CARPE_RETRACTUM extends Knockback
       super();
 
       spellType = O2SpellType.CARPE_RETRACTUM;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("\"...which is why the Carpe Retractum spell is useful. It allows you to seize and pull objects within your direct line of sight towards you...\" -Professor Flitwick");
@@ -43,6 +45,7 @@ public final class CARPE_RETRACTUM extends Knockback
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.CARPE_RETRACTUM;
+      branch = O2MagicBranch.CHARMS;
 
       minVelocity = 0.25;
       maxVelocity = 3;

@@ -1,12 +1,10 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import net.pottercraft.Ollivanders2.Effect.MUCUS;
-import net.pottercraft.Ollivanders2.Ollivanders2API;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
-import org.bukkit.entity.LivingEntity;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -17,20 +15,20 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class MUCUS_AD_NAUSEAM extends DarkArts
+public final class MUCUS_AD_NAUSEAM extends AddO2Effect
 {
-   private static int maxDurationInSeconds = 300;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MUCUS_AD_NAUSEAM ()
+   public MUCUS_AD_NAUSEAM()
    {
       super();
 
       spellType = O2SpellType.MUCUS_AD_NAUSEAM;
+      branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Curse of the Bogies");
       }};
 
@@ -49,38 +47,17 @@ public final class MUCUS_AD_NAUSEAM extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.MUCUS_AD_NAUSEAM;
-      setUsesModifier();
-   }
+      branch = O2MagicBranch.DARK_ARTS;
+      initSpell();
 
-   @Override
-   protected void doCheckEffect ()
-   {
-      List<LivingEntity> living = getLivingEntities(1.5);
-      for (LivingEntity live : living)
-      {
-         if (live.getUniqueId() == player.getUniqueId())
-            continue;
+      // effect
+      effectsToAdd.add(O2EffectType.MUCUS);
 
-         if (live instanceof Player)
-         {
-            Player player = (Player) live;
+      // duration
+      durationInSeconds = ((int) usesModifier + 30);
+      maxDurationInSeconds = 180; // 3 minutes
 
-            int durationInSeconds = ((int) usesModifier + 30);
-            if (durationInSeconds > maxDurationInSeconds)
-            {
-               durationInSeconds = maxDurationInSeconds;
-            }
-
-            MUCUS effect = new MUCUS(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, player.getUniqueId());
-            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
-
-            kill();
-         }
-      }
-
-      if (hasHitTarget())
-      {
-         kill();
-      }
+      // pass-through materials
+      projectilePassThrough.remove(Material.WATER);
    }
 }

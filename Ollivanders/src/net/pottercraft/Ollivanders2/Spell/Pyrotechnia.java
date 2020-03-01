@@ -18,13 +18,13 @@ import net.pottercraft.Ollivanders2.Ollivanders2Common;
  *
  * @author Azami7
  */
-public abstract class PyrotechniaSuper extends Charms
+public abstract class Pyrotechnia extends O2Spell
 {
    int maxFireworks;
    private int fireworkCount;
    int fireworkPower = 2;
-   List <org.bukkit.Color> fireworkColors = null;
-   List <org.bukkit.Color> fadeColors = null;
+   List<org.bukkit.Color> fireworkColors = null;
+   List<org.bukkit.Color> fadeColors = null;
    FireworkEffect.Type fireworkType = null;
    boolean hasTrails = false;
    boolean hasFade = false;
@@ -34,7 +34,7 @@ public abstract class PyrotechniaSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PyrotechniaSuper ()
+   public Pyrotechnia()
    {
       super();
    }
@@ -42,11 +42,11 @@ public abstract class PyrotechniaSuper extends Charms
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public PyrotechniaSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public Pyrotechnia(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
       fireworkCount = 0;

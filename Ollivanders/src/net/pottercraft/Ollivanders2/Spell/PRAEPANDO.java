@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
@@ -13,16 +14,17 @@ import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
  * @author Azami7
  * @author cakenggt
  */
-public final class PRAEPANDO extends StationarySpellSuper
+public final class PRAEPANDO extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PRAEPANDO ()
+   public PRAEPANDO()
    {
       super();
 
       spellType = O2SpellType.PRAEPANDO;
+      branch = O2MagicBranch.CHARMS;
 
       text = "Praepando is a space-extension spell which allows you to create a pocket of extra-dimensional space at a location. "
             + "Spells can travel from the extra-dimensional pocket through to the real-world, but cannot go the other way around.";
@@ -40,7 +42,9 @@ public final class PRAEPANDO extends StationarySpellSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PRAEPANDO;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       baseRadius = 5;
       radiusModifier = 1;

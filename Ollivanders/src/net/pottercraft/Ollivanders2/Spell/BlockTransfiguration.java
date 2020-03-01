@@ -19,10 +19,10 @@ import org.bukkit.entity.Entity;
 /**
  * The super class for transfiguration of objects.  Not for use on players or entities.
  *
- * @since 2.2.5
  * @author Azami7
+ * @since 2.2.5
  */
-public abstract class BlockTransfigurationSuper extends O2Spell
+public abstract class BlockTransfiguration extends O2Spell
 {
    int minDurationInSeconds = 15;
    int maxDurationInSeconds = 600; // 10 minutes
@@ -83,7 +83,7 @@ public abstract class BlockTransfigurationSuper extends O2Spell
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BlockTransfigurationSuper ()
+   public BlockTransfiguration()
    {
       super();
 
@@ -93,11 +93,11 @@ public abstract class BlockTransfigurationSuper extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public BlockTransfigurationSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public BlockTransfiguration(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 

@@ -19,18 +19,20 @@ import java.util.ArrayList;
  *
  * @author lownes
  */
-public final class HARMONIA_NECTERE_PASSUS extends Charms
+public final class HARMONIA_NECTERE_PASSUS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public HARMONIA_NECTERE_PASSUS ()
+   public HARMONIA_NECTERE_PASSUS()
    {
       super();
 
       spellType = O2SpellType.HARMONIA_NECTERE_PASSUS;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("He stares at the monolith before him, lifts his wand and begins to chant eerily. The surface of the cabinet glimmers, atremble in the ambient light. Almost alive. Then he stops. Looking back, his eyes haunted, he slips away. Light plays within the cabinet. Movement. Shadows flicker within, coalesce.");
          add("\" ...we forced him head-first into that Vanishing Cabinet on the first floor.\"\n" +
                "\"But you'll get into terrible trouble!\"\n" +
@@ -52,7 +54,9 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.HARMONIA_NECTERE_PASSUS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.BUILD);
@@ -163,7 +167,7 @@ public final class HARMONIA_NECTERE_PASSUS extends Charms
             return null;
          }
 
-         location = new Location(world, (double)x, (double)y, (double)z);
+         location = new Location(world, x, y, z);
       }
 
       return location;

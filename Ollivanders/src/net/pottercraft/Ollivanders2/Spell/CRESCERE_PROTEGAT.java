@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.entity.Player;
@@ -12,16 +13,17 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 /**
  * Grows a Stationary Spell's radius. Only the player who created the Stationary Spell can change it's radius.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class CRESCERE_PROTEGAT extends Charms
+public final class CRESCERE_PROTEGAT extends O2Spell
 {
    /**
     * Stationary spell types that cannot be targeted by this spell.
     */
-   ArrayList<O2StationarySpellType> spellBlacklist = new ArrayList<O2StationarySpellType>() {{
+   ArrayList<O2StationarySpellType> spellBlacklist = new ArrayList<O2StationarySpellType>()
+   {{
       add(O2StationarySpellType.COLLOPORTUS);
       add(O2StationarySpellType.HORCRUX);
       add(O2StationarySpellType.HARMONIA_NECTERE_PASSUS);
@@ -36,6 +38,8 @@ public final class CRESCERE_PROTEGAT extends Charms
       super();
 
       spellType = O2SpellType.CRESCERE_PROTEGAT;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Grows a stationary spell's radius. Only the player who created the Stationary Spell can change it's radius.";
    }
 
@@ -50,6 +54,7 @@ public final class CRESCERE_PROTEGAT extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.CRESCERE_PROTEGAT;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
    }

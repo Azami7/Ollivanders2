@@ -13,24 +13,22 @@ import java.util.List;
 
 /**
  * Sets a player's helmet to a specific block type.
- *
+ * <p>
  * In HP, these would be Transfiguration spells but for code purposes they behave like charm projectiles so we
  * extend Charms then override the spell type.
  *
  * @author Azami7
  */
-public abstract class GaleatiSuper extends Charms
+public abstract class GaleatiSuper extends O2Spell
 {
    Material materialType = Material.AIR;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GaleatiSuper ()
+   public GaleatiSuper()
    {
       super();
-
-      branch = O2MagicBranch.TRANSFIGURATION;
    }
 
    /**
@@ -43,8 +41,6 @@ public abstract class GaleatiSuper extends Charms
    public GaleatiSuper (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
-      branch = O2MagicBranch.TRANSFIGURATION;
    }
 
    /**

@@ -10,14 +10,14 @@ import org.bukkit.potion.PotionEffectType;
  * @author Azami7
  * @author lownes
  */
-public abstract class ConfundusSuper extends PotionEffectSuper
+public abstract class ConfundusSuper extends AddPotionEffect
 {
    int durationMultiplier = 1;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   ConfundusSuper ()
+   ConfundusSuper()
    {
       super();
    }

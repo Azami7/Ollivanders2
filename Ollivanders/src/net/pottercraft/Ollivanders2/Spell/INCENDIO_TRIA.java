@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -23,6 +24,7 @@ public final class INCENDIO_TRIA extends IncendioSuper
       super();
 
       spellType = O2SpellType.INCENDIO_TRIA;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("\"Incendio!\" said Mr Weasley, pointing his wand at the hole in the wall behind him. Flames rose at once in the fireplace, crackling merrily as though they had been burning for hours.");
@@ -44,7 +46,9 @@ public final class INCENDIO_TRIA extends IncendioSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCENDIO_TRIA;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       location.add(vector.multiply(2));
       strafe = true;

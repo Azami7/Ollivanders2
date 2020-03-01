@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -9,24 +10,26 @@ import java.util.ArrayList;
 
 /**
  * Created by Azami7 on 6/29/17.
- *
+ * <p>
  * Cancels the effect of the LUMOS spell or removes the effect of a Night Vision potion.
  *
- * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class NOX extends RemovePotionEffectFromSelfSuper
+public final class NOX extends RemovePotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public NOX ()
+   public NOX()
    {
       super();
 
       spellType = O2SpellType.NOX;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Wand-Extinguishing Charm");
          add("With difficulty he dragged it over himself, murmured, 'Nox,' extinguishing his wand light, and continued on his hands and knees, as silently as possible, all his senses straining, expecting every second to be discovered, to hear a cold clear voice, see a flash of green light.");
       }};
@@ -46,7 +49,9 @@ public final class NOX extends RemovePotionEffectFromSelfSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.NOX;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       potionEffectTypes.add(PotionEffectType.NIGHT_VISION);
    }

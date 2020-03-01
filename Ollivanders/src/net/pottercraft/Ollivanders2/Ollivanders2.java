@@ -21,6 +21,7 @@ import net.pottercraft.Ollivanders2.Player.O2PlayerCommon;
 import net.pottercraft.Ollivanders2.Player.O2WandCoreType;
 import net.pottercraft.Ollivanders2.Player.O2WandWoodType;
 import net.pottercraft.Ollivanders2.Potion.O2PotionType;
+import net.pottercraft.Ollivanders2.Potion.O2Potions;
 import net.pottercraft.Ollivanders2.Spell.O2SpellType;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Potion.O2Potion;
@@ -463,7 +464,7 @@ public class Ollivanders2 extends JavaPlugin
 
       //floo powder recipe
       ItemStack flooPowder = Ollivanders2API.getItems().getItemByType(O2ItemType.FLOO_POWDER, 8);
-      getServer().addRecipe(new FurnaceRecipe(flooPowder, Material.ENDER_PEARL));
+      getServer().addRecipe(new FurnaceRecipe(new NamespacedKey(this, "floo_powder"), flooPowder, Material.ENDER_PEARL, 2, (5 * Ollivanders2Common.ticksPerSecond)));
       getServer().addRecipe(bRecipe);
    }
 
@@ -858,10 +859,10 @@ public class Ollivanders2 extends JavaPlugin
     * List all houses or the members of a house
     *
     * @param sender the player who issued the command
-    * @param args the arguments for the command, if any
+    * @param args   the arguments for the command, if any
     * @return true if no error occurred
     */
-   private boolean runListHouse (CommandSender sender, String args[])
+   private boolean runListHouse(CommandSender sender, String[] args)
    {
       // list houses
       if (debug)
@@ -929,7 +930,10 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().info("Running house sort");
 
       if (targetPlayer == null || targetPlayer.length() < 1 || targetHouse == null || targetHouse.length() < 1)
+      {
          usageMessageHouseSort(sender);
+         return (true);
+      }
 
       Player player = getServer().getPlayer(targetPlayer);
       if (player == null)
@@ -1153,10 +1157,11 @@ public class Ollivanders2 extends JavaPlugin
             }
 
             return runYearChange(sender, args[2], -1);
-         }
-         else if (args.length == 2) {
+         } else if (args.length == 2)
+         {
             String p = args[1];
-            if (p == null || p.length() < 1) {
+            if (p.length() < 1)
+            {
                usageMessageHouseSort(sender);
                return true;
             }
@@ -1169,7 +1174,7 @@ public class Ollivanders2 extends JavaPlugin
 
             O2Player o2p = getO2Player(player);
             if (o2p != null)
-              sender.sendMessage(chatColor + "Player " + p + " is in year " + o2p.getYear().getIntValue());
+               sender.sendMessage(chatColor + "Player " + p + " is in year " + o2p.getYear().getIntValue());
             else
                sender.sendMessage(chatColor + "Unable to find player.");
 
@@ -1340,13 +1345,14 @@ public class Ollivanders2 extends JavaPlugin
          }
          else
          {
-            Class effectClass = effectType.getClassName();
+            Class<?> effectClass = effectType.getClassName();
             getLogger().info("Trying to add effect " + effectClass);
 
-            O2Effect effect = null;
+            O2Effect effect;
+
             try
             {
-               effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(this, 1200, ((Player) sender).getUniqueId());
+               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(this, 1200, ((Player) sender).getUniqueId());
             }
             catch (Exception e)
             {
@@ -1480,6 +1486,7 @@ public class Ollivanders2 extends JavaPlugin
       List<String> lore = new ArrayList<>();
       lore.add(wood + " and " + core);
       ItemMeta meta = wand.getItemMeta();
+
       meta.setLore(lore);
       meta.setDisplayName("Wand");
       wand.setItemMeta(meta);
@@ -1734,6 +1741,7 @@ public class Ollivanders2 extends JavaPlugin
             String type = zoneConfig.getString(prefix + "type");
             String world = zoneConfig.getString(prefix + "world");
             String areaString = zoneConfig.getString(prefix + "area");
+
             boolean allAllowed = false;
             boolean allDisallowed = false;
             List<O2SpellType> allowedSpells = new ArrayList<>();
@@ -1760,7 +1768,7 @@ public class Ollivanders2 extends JavaPlugin
                   disallowedSpells.add(Ollivanders2API.getSpells().getSpellTypeByName(spellString));
                }
             }
-            if (type.equalsIgnoreCase("World"))
+            if (type != null && type.equalsIgnoreCase("World"))
             {
                if (loc.getWorld().getName().equals(world))
                {
@@ -1774,7 +1782,7 @@ public class Ollivanders2 extends JavaPlugin
                   }
                }
             }
-            if (type.equalsIgnoreCase("Cuboid"))
+            if (type != null && type.equalsIgnoreCase("Cuboid"))
             {
                List<String> areaStringList = Arrays.asList(areaString.split(" "));
                List<Integer> area = new ArrayList<>();
@@ -1852,9 +1860,13 @@ public class Ollivanders2 extends JavaPlugin
    {
       ItemStack flooPowder = new ItemStack(Ollivanders2.flooPowderMaterial);
       List<String> lore = new ArrayList<>();
+
       lore.add("Glittery, silver powder");
-      flooPowder.getItemMeta().setLore(lore);
-      flooPowder.getItemMeta().setDisplayName("Floo Powder");
+      ItemMeta meta = flooPowder.getItemMeta();
+      meta.setLore(lore);
+      meta.setDisplayName("Floo Powder");
+      flooPowder.setItemMeta(meta);
+
       flooPowder.setAmount(8);
 
       List<ItemStack> fpStack = new ArrayList<>();
@@ -2109,7 +2121,7 @@ public class Ollivanders2 extends JavaPlugin
       if (potionType == null)
       {
          sender.sendMessage(chatColor + "Unable to find potion " + potionName);
-         
+
          return true;
       }
 
@@ -2148,7 +2160,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean listAllIngredients (Player player)
    {
-      List<String> ingredientList = Ollivanders2API.getPotions().getAllIngredientNames();
+      List<String> ingredientList = O2Potions.getAllIngredientNames();
       StringBuilder displayString = new StringBuilder();
       displayString.append("Ingredients:");
 

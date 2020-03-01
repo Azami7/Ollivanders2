@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -17,25 +18,26 @@ import org.bukkit.potion.PotionEffect;
 /**
  * Reduces any spell effects on an item or player.
  *
- * @version Ollivanders2
- * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class FINITE_INCANTATEM extends Charms
+public final class FINITE_INCANTATEM extends O2Spell
 {
-   private final int minPercent = 10;
-   private int percent;
+   private final double minPercent = 0.1;
+   private double percent;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FINITE_INCANTATEM ()
+   public FINITE_INCANTATEM()
    {
       super();
 
       spellType = O2SpellType.FINITE_INCANTATEM;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"He pointed his wand at the rampart, cried, \"Finite!\" and it steadied.\"");
          add("\"Try Finite Incantatem, that should stop the rain if it’s a hex or curse.\"  -Hermione Granger");
          add("\"Stop! Stop!\" screamed Lockhart, but Snape took charge. \"Finite Incantatum!\" he shouted; Harry's feet stopped dancing, Malfoy stopped laughing, and they were able to look up.");
@@ -56,31 +58,30 @@ public final class FINITE_INCANTATEM extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FINITE_INCANTATEM;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      percent = (usesModifier / 2) / 100;
+      if (percent < minPercent)
+      {
+         percent = minPercent;
+      } else if (percent > 1)
+      {
+         percent = 1;
+      }
    }
 
    /**
     *
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
-      percent = (int) usesModifier / 2;
-      if (percent < minPercent)
-      {
-         percent = minPercent;
-      }
-      else if (percent > 100)
-      {
-         percent = 100;
-      }
-
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("Finite incantatem percent = " + percent);
-      }
-
       // look for entities first
       finiteIncantatemEntities();
 
@@ -118,11 +119,12 @@ public final class FINITE_INCANTATEM extends Charms
          {
             Player ply = (Player) live;
 
+            // look for any effects on the player
             if (Ollivanders2API.getPlayers().playerEffects.hasEffects(ply.getUniqueId()))
             {
                if (usesModifier < 100)
                {
-                  Ollivanders2API.getPlayers().playerEffects.ageAllEffectsByPercent(ply.getUniqueId(), percent);
+                  Ollivanders2API.getPlayers().playerEffects.ageAllEffectsByPercent(ply.getUniqueId(), (int) (percent * 100));
                }
 
                kill();
@@ -135,7 +137,8 @@ public final class FINITE_INCANTATEM extends Charms
          for (PotionEffect effect : potionEffects)
          {
             int curDuration = effect.getDuration();
-            int newDuration = curDuration - (curDuration * (percent / 100));
+            double difference = curDuration * percent;
+            int newDuration = curDuration - (int) difference;
 
             PotionEffect newEffect = new PotionEffect(effect.getType(), newDuration, effect.getAmplifier(), effect.isAmbient(), effect.hasParticles(), effect.hasIcon());
 
@@ -158,10 +161,19 @@ public final class FINITE_INCANTATEM extends Charms
     */
    private void finiteIncantatemItems ()
    {
+      if (hasHitTarget())
+      {
+         kill();
+         return;
+      }
+
       for (Item item : getItems(1.5))
       {
          ItemStack stack = item.getItemStack();
          ItemMeta meta = stack.getItemMeta();
+
+         if (meta == null)
+            continue;
 
          if (Ollivanders2.debug)
          {
@@ -171,67 +183,82 @@ public final class FINITE_INCANTATEM extends Charms
          if (meta.hasLore())
          {
             List<String> lore = meta.getLore();
-            ArrayList<String> newLore = new ArrayList<>();
+            if (lore == null)
+               continue;
 
-            for (int i = 0; i < lore.size(); i++)
-            {
-               String[] loreParts = lore.get(i).split(" ");
-
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("item meta line starts with " + loreParts[0]);
-               }
-
-               if (ItemCurse.itemCurseNames.contains(loreParts[0]))
-               {
-                  if (Ollivanders2.debug)
-                  {
-                     p.getLogger().info("item has " + lore.get(i) + " curse");
-                  }
-
-                  int curMagnitude = 0;
-
-                  try
-                  {
-                     curMagnitude = Integer.parseInt(loreParts[1]);
-                  }
-                  catch (Exception e)
-                  {
-                     continue;
-                  }
-
-                  if (curMagnitude > 0)
-                  {
-                     int newMagnitude = curMagnitude - (curMagnitude * (percent / 100));
-
-                     if (Ollivanders2.debug)
-                     {
-                        p.getLogger().info("reducing magnitude from  " + curMagnitude + " to " + newMagnitude);
-                     }
-
-                     if (percent < 100)
-                     {
-                        newLore.add(loreParts[0] + " " + newMagnitude);
-                     }
-                  }
-
-                  kill();
-               }
-               else // this is not a curse line, add it back to the new lore set
-               {
-                  newLore.add(lore.get(i));
-               }
-            }
+            List<String> newLore = updateLore(lore);
+            if (newLore == null)
+               continue;
 
             meta.setLore(newLore);
             stack.setItemMeta(meta);
             item.setItemStack(stack);
 
-            if (isKilled())
-            {
-               return;
-            }
+            stopProjectile();
+            return;
          }
       }
+   }
+
+   private List<String> updateLore(List<String> lore)
+   {
+      if (lore == null)
+         return null;
+
+      ArrayList<String> newLore = new ArrayList<>();
+
+      for (String loreLine : lore)
+      {
+         String[] loreParts = loreLine.split(" ");
+         String curseName = loreParts[0];
+
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("item meta line starts with " + curseName);
+         }
+
+         if (curseName.equals(GEMINIO.geminio))
+         {
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("item has " + curseName + " curse");
+            }
+
+            int curMagnitude = 0;
+
+            try
+            {
+               curMagnitude = Integer.parseInt(loreParts[1]);
+            }
+            catch (Exception e)
+            {
+               continue;
+            }
+
+            if (curMagnitude > 0)
+            {
+               double difference = curMagnitude * percent;
+               int newMagnitude = curMagnitude - (int) difference;
+
+               if (Ollivanders2.debug)
+               {
+                  p.getLogger().info("reducing magnitude by " + percent + "%, " + difference + ", from " + curMagnitude + " to " + newMagnitude);
+               }
+
+               if (percent < 100)
+               {
+                  newLore.add(loreParts[0] + " " + newMagnitude);
+               }
+            }
+         } else if (curseName.equals(FLAGRANTE.flagrante))
+         {
+            // special case for flagrante, do nothing which will just remove the effect entirely
+         } else
+         {
+            newLore.add(loreLine);
+         }
+      }
+
+      return newLore;
    }
 }

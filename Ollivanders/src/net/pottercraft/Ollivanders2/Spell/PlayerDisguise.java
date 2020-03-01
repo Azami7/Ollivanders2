@@ -2,22 +2,21 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 /**
  * Super class for all transfigurations of players.
  *
- * @since 2.2.6
  * @author Azami7
+ * @since 2.2.6
  */
-public abstract class PlayerDisguiseSuper extends EntityDisguiseSuper
+public abstract class PlayerDisguise extends EntityDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PlayerDisguiseSuper ()
+   public PlayerDisguise()
    {
       super();
    }
@@ -25,11 +24,11 @@ public abstract class PlayerDisguiseSuper extends EntityDisguiseSuper
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public PlayerDisguiseSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public PlayerDisguise(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 

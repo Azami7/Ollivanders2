@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
@@ -11,21 +12,23 @@ import java.util.ArrayList;
 /**
  * Creates a PROTEGO_TOTALUM Stationary Spell Object
  *
- * @version Ollivanders2
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class PROTEGO_TOTALUM extends StationarySpellSuper
+public final class PROTEGO_TOTALUM extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_TOTALUM ()
+   public PROTEGO_TOTALUM()
    {
       super();
 
       spellType = O2SpellType.PROTEGO_TOTALUM;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("Raising her wand, she began to walk in a wide circle around Harry and Ron, murmuring incantations as she went. Harry saw little disturbances in the surrounding air: it was as if Hermione had cast a heat haze across their clearing.");
       }};
 
@@ -44,7 +47,8 @@ public final class PROTEGO_TOTALUM extends StationarySpellSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PROTEGO_TOTALUM;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       baseDurationInSeconds = 300;
       durationModifierInSeconds = 10;

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -12,18 +13,20 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class OBSCURO extends PotionEffectSuper
+public final class OBSCURO extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public OBSCURO ()
+   public OBSCURO()
    {
       super();
 
       spellType = O2SpellType.OBSCURO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("A black blindfold appeared over Phineas Nigellus' clever, dark eyes, causing him to bump into the frame and shriek with pain.");
       }};
 
@@ -42,7 +45,8 @@ public final class OBSCURO extends PotionEffectSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.OBSCURO;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       effectTypes.add(PotionEffectType.BLINDNESS);
       strengthModifier = 0;

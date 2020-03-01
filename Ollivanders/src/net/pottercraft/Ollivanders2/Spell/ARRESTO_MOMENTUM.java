@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.entity.Entity;
@@ -14,24 +15,26 @@ import org.bukkit.entity.Player;
 /**
  * Slows down any item or living entity according to your level in the spell.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class ARRESTO_MOMENTUM extends Charms
+public final class ARRESTO_MOMENTUM extends O2Spell
 {
    double multiplier = 0.5;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ARRESTO_MOMENTUM ()
+   public ARRESTO_MOMENTUM()
    {
       super();
 
       spellType = O2SpellType.ARRESTO_MOMENTUM;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("An incantation for slowing velocity.");
          add("\"Dumbledore ...ran onto the field as you fell, waved his wand, and you sort of slowed down before you hit the ground.\" - Hermione Granger");
          add("The witch Daisy Pennifold had the idea of bewitching the Quaffle so that if dropped, it would fall slowly earthwards as though sinking through water, meaning that Chasers could grab it in mid-air.");
@@ -51,6 +54,7 @@ public final class ARRESTO_MOMENTUM extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.ARRESTO_MOMENTUM;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
    }

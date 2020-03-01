@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
@@ -11,23 +12,25 @@ import java.util.ArrayList;
 /**
  * Makes a spell projectile that creates a shield that hurts any entities within 0.5 meters of the spell wall.
  *
- * @version Ollivanders2
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class PROTEGO_MAXIMA extends StationarySpellSuper
+public final class PROTEGO_MAXIMA extends StationarySpell
 {
    double damage;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROTEGO_MAXIMA ()
+   public PROTEGO_MAXIMA()
    {
       super();
 
       spellType = O2SpellType.PROTEGO_MAXIMA;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" -Filius Flitwick");
          add("A Stronger Shield Charm");
       }};
@@ -47,7 +50,8 @@ public final class PROTEGO_MAXIMA extends StationarySpellSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PROTEGO_MAXIMA;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       baseDurationInSeconds = 300;
       durationModifierInSeconds = 10;

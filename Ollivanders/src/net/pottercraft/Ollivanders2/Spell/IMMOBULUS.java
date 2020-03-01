@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
 
@@ -10,22 +11,24 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 /**
  * Immobilizes a player for an amount of time depending on the player's spell level.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class IMMOBULUS extends PotionEffectSuper
+public final class IMMOBULUS extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public IMMOBULUS ()
+   public IMMOBULUS()
    {
       super();
 
       spellType = O2SpellType.IMMOBULUS;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Freezing Charm");
          add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");
          add("The Freezing Charm is a spell which immobilises living targets.");
@@ -46,7 +49,9 @@ public final class IMMOBULUS extends PotionEffectSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.IMMOBULUS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       effectTypes.add(PotionEffectType.SLOW);
       effectTypes.add(PotionEffectType.SLOW_FALLING);

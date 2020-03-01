@@ -25,10 +25,7 @@ public enum O2WandCoreType
       return material;
    }
 
-   public String getLabel ()
-   {
-      return label;
-   }
+   public String getLabel() { return label; }
 
    /**
     * Get the wand core type for this material.
@@ -52,12 +49,27 @@ public enum O2WandCoreType
     *
     * @return the names of all wand cores as a list
     */
-   public static ArrayList<String> getAllCoresByName ()
+   public static ArrayList<String> getAllCoresByName()
    {
       ArrayList<String> cores = new ArrayList<>();
 
       for (O2WandCoreType coreType : O2WandCoreType.values())
          cores.add(coreType.getLabel());
+
+      return cores;
+   }
+
+   /**
+    * Get a list of all the wand core types by material type.
+    *
+    * @return the names of all wand cores as a list
+    */
+   public static ArrayList<Material> getAllCoresByMaterial()
+   {
+      ArrayList<Material> cores = new ArrayList<>();
+
+      for (O2WandCoreType coreType : O2WandCoreType.values())
+         cores.add(coreType.getMaterial());
 
       return cores;
    }

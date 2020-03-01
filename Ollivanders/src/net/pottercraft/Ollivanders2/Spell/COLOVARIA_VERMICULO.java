@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.O2Color;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -18,6 +19,8 @@ public final class COLOVARIA_VERMICULO extends ColoroSuper
    public COLOVARIA_VERMICULO ()
    {
       spellType = O2SpellType.COLOVARIA_VERMICULO;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Turns target colorable entity or block red.";
    }
 
@@ -32,6 +35,7 @@ public final class COLOVARIA_VERMICULO extends ColoroSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.COLOVARIA_VERMICULO;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

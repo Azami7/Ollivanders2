@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.entity.Player;
@@ -13,18 +14,20 @@ import org.bukkit.potion.PotionEffectType;
  * @author lownes
  * @author Azami7
  */
-public final class STUPEFY extends PotionEffectSuper
+public final class STUPEFY extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public STUPEFY ()
+   public STUPEFY()
    {
       super();
 
       spellType = O2SpellType.STUPEFY;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Stunning Spell");
          add("\"Stunning is one of the most useful spells in your arsenal. It's sort of a wizard's bread and butter, really.\" -Harry Potter");
       }};
@@ -44,7 +47,9 @@ public final class STUPEFY extends PotionEffectSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.STUPEFY;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       effectTypes.add(PotionEffectType.BLINDNESS);
       effectTypes.add(PotionEffectType.SLOW);

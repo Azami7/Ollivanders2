@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.*;
 
@@ -11,18 +12,20 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class REDUCIO extends Charms
+public final class REDUCIO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REDUCIO ()
+   public REDUCIO()
    {
       super();
 
       spellType = O2SpellType.REDUCIO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Shrinking Charm");
          add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink. You will be learning both charms together, so that you can always undo an over-enthusiastic cast. There is thus no excuse for having accidentally shrunk your homework down to microscopic size or for allowing a giant toad to rampage through your school’s flower gardens.");
       }};
@@ -42,7 +45,9 @@ public final class REDUCIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.REDUCIO;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
    }
 
    @Override

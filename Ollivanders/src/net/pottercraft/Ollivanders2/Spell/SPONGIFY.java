@@ -10,24 +10,25 @@ import java.util.ArrayList;
 /**
  * The Softening Charm (Spongify) is a spell that softens a target area or object, making it rubbery and bouncy.
  *
- * @link https://github.com/Azami7/Ollivanders2/issues/93
- * @since 2.2.5
- * @see BlockTransfigurationSuper
  * @author Azami7
+ * @link https://github.com/Azami7/Ollivanders2/issues/93
+ * @see BlockTransfiguration
+ * @since 2.2.5
  */
-public class SPONGIFY extends BlockTransfigurationSuper
+public class SPONGIFY extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public SPONGIFY ()
+   public SPONGIFY()
    {
       super();
 
       spellType = O2SpellType.SPONGIFY;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"Today's lesson will most assuredly involve learning how to cast the Softening Charm, Spongify.\" -Filius Flitwick");
          add("The Softening Charm");
       }};

@@ -11,22 +11,23 @@ import java.util.ArrayList;
 /**
  * Spell shoots a block of water at a target, extinguishing fire.
  *
- * @version Ollivanders2
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class AQUA_ERUCTO extends BlockTransfigurationSuper
+public final class AQUA_ERUCTO extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AQUA_ERUCTO ()
+   public AQUA_ERUCTO()
    {
       super();
 
       spellType = O2SpellType.AQUA_ERUCTO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Aqua Eructo Charm");
          add("\"Very good. You'll need to use Aqua Eructo to put out the fires.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
       }};

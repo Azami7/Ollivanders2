@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -19,7 +20,7 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class BRACKIUM_EMENDO extends Healing
+public final class BRACKIUM_EMENDO extends O2Spell
 {
    private final int maxDuration = 300;
    private final int minDuration = 10;
@@ -35,6 +36,7 @@ public final class BRACKIUM_EMENDO extends Healing
       super();
 
       spellType = O2SpellType.BRACKIUM_EMENDO;
+      branch = O2MagicBranch.HEALING;
 
       flavorText = new ArrayList<String>() {{
          add("Bone-Healing Spell");
@@ -55,7 +57,9 @@ public final class BRACKIUM_EMENDO extends Healing
    public BRACKIUM_EMENDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
       spellType = O2SpellType.BRACKIUM_EMENDO;
+      branch = O2MagicBranch.HEALING;
 
       initSpell();
    }

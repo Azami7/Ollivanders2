@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.O2Color;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -21,6 +22,7 @@ public final class COLOVARIA_ALBUM extends ColoroSuper
       super();
 
       spellType = O2SpellType.COLOVARIA_ALBUM;
+      branch = O2MagicBranch.CHARMS;
 
       text = "Turns target colorable entity or block white.";
    }
@@ -36,6 +38,7 @@ public final class COLOVARIA_ALBUM extends ColoroSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.COLOVARIA_ALBUM;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

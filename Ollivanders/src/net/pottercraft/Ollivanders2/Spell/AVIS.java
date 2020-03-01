@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Parrot;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  *
  * @author Azami7
  */
-public final class AVIS extends Charms
+public final class AVIS extends O2Spell
 {
    private int birdCount = 0;
    private int maxBirds = 2;
@@ -23,13 +24,15 @@ public final class AVIS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public AVIS ()
+   public AVIS()
    {
       super();
 
       spellType = O2SpellType.AVIS;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Bird-Conjuring Charm");
          add("Most of the class had already left, although several twittering yellow birds were still zooming around the room, all of Hermione's creation; nobody else had succeeded in conjuring so much as a feather from thin air.");
          add("\"Oh, hello, Harry ... I was just practicing.\" -Hermione Granger conjuring small golden birds just before sending them to attack Ron");
@@ -49,6 +52,7 @@ public final class AVIS extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.AVIS;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

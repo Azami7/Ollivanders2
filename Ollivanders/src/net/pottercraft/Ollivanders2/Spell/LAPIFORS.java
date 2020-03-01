@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.RabbitWatcher;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.entity.EntityType;
@@ -13,22 +14,24 @@ import java.util.ArrayList;
 /**
  * Transfigures entity into a rabbit.
  *
- * @since 2.2.3
- * @link https://github.com/Azami7/Ollivanders2/issues/51
  * @author Azami7
+ * @link https://github.com/Azami7/Ollivanders2/issues/51
+ * @since 2.2.3
  */
-public final class LAPIFORS extends FriendlyMobDisguiseSuper
+public final class LAPIFORS extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LAPIFORS ()
+   public LAPIFORS()
    {
       super();
 
       spellType = O2SpellType.LAPIFORS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
       }};
 
@@ -46,6 +49,7 @@ public final class LAPIFORS extends FriendlyMobDisguiseSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.LAPIFORS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       initSpell();
 

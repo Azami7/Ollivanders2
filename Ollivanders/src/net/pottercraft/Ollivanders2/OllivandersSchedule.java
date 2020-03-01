@@ -10,8 +10,7 @@ import java.util.UUID;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
-import net.pottercraft.Ollivanders2.Spell.FLAGRANTE;
-import net.pottercraft.Ollivanders2.Spell.GEMINO;
+import net.pottercraft.Ollivanders2.Spell.GEMINIO;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.GameMode;
@@ -117,8 +116,7 @@ class OllivandersSchedule implements Runnable
    }
 
    /**
-    * Scheduling method that checks for any geminio or
-    * flagrante curses on items in player inventories and
+    * Scheduling method that checks for any curses on items in player inventories and
     * performs their effect.
     */
    private void itemCurseSched ()
@@ -135,19 +133,21 @@ class OllivandersSchedule implements Runnable
                if (item != null)
                {
                   ItemMeta meta = item.getItemMeta();
+                  if (meta == null)
+                     continue;
+
                   if (meta.hasLore())
                   {
-                     List<String> lored = meta.getLore();
-                     for (String lore : lored)
+                     List<String> itemLore = meta.getLore();
+                     if (itemLore == null)
+                        continue;
+
+                     for (String lore : itemLore)
                      {
-                        if (lore.contains(GEMINO.geminio))
+                        if (lore.contains(GEMINIO.geminio))
                         {
                            geminioIS.add(geminio(item.clone()));
                            invIt.set(null);
-                        }
-                        if (lore.contains(FLAGRANTE.flagrante))
-                        {
-                           flagrante(player, item);
                         }
                      }
                   }
@@ -176,14 +176,14 @@ class OllivandersSchedule implements Runnable
       ArrayList<String> newLore = new ArrayList<>();
       for (String l : lore)
       {
-         if (l.contains("Geminio "))
+         if (l.contains(GEMINIO.geminio))
          {
             String[] loreParts = l.split(" ");
             int magnitude = Integer.parseInt(loreParts[1]);
             if (magnitude > 1)
             {
                magnitude--;
-               newLore.add("Geminio " + magnitude);
+               newLore.add(GEMINIO.geminio + " " + magnitude);
             }
             stackSize = stackSize * 2;
          }
@@ -196,26 +196,6 @@ class OllivandersSchedule implements Runnable
       item.setItemMeta(meta);
       item.setAmount(stackSize);
       return item;
-   }
-
-   /**
-    * Enacts the flagrante burning effect on the player
-    */
-   private void flagrante (Player player, ItemStack item)
-   {
-      ItemMeta meta = item.getItemMeta();
-      List<String> lore = meta.getLore();
-      int magnitude = 0;
-      for (String l : lore)
-      {
-         if (l.contains("Flagrante "))
-         {
-            String[] loreParts = l.split(" ");
-            magnitude = Integer.parseInt(loreParts[1]);
-         }
-      }
-      player.damage(magnitude * 0.05 * item.getAmount());
-      player.setFireTicks(160);
    }
 
    /**

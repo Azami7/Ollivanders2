@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Divination.O2DivinationType;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
@@ -24,6 +25,7 @@ public final class ASTROLOGIA extends Divination
 
       spellType = O2SpellType.ASTROLOGIA;
       divinationType = O2DivinationType.ASTROLOGY;
+      branch = O2MagicBranch.DIVINATION;
 
       flavorText = new ArrayList<String>()
       {{
@@ -47,6 +49,7 @@ public final class ASTROLOGIA extends Divination
       super(plugin, player, rightWand);
       spellType = O2SpellType.ASTROLOGIA;
       divinationType = O2DivinationType.ASTROLOGY;
+      branch = O2MagicBranch.DIVINATION;
 
       initSpell();
    }

@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
@@ -11,10 +12,10 @@ import org.bukkit.entity.Player;
 /**
  * Burns sun-sensitive entities with a radius.
  *
- * @version Ollivanders2
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class LUMOS_SOLEM extends Charms
+public final class LUMOS_SOLEM extends O2Spell
 {
    int duration;
    int targetCount;
@@ -30,6 +31,7 @@ public final class LUMOS_SOLEM extends Charms
       super();
 
       spellType = O2SpellType.LUMOS_SOLEM;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("Light of the Sun");
@@ -50,7 +52,9 @@ public final class LUMOS_SOLEM extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LUMOS_SOLEM;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       // duration of fire damage, min is 1 second
       duration = Ollivanders2Common.ticksPerSecond * (int) usesModifier;

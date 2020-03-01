@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -25,7 +26,7 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
  * @author lownes
  * @author Azami7
  */
-public final class WINGARDIUM_LEVIOSA extends Charms
+public final class WINGARDIUM_LEVIOSA extends O2Spell
 {
    Map<Location, BlockData> blockDataMap = new HashMap();
    List<Block> blockList = new ArrayList();
@@ -45,6 +46,7 @@ public final class WINGARDIUM_LEVIOSA extends Charms
    {
       super();
 
+      branch = O2MagicBranch.CHARMS;
       spellType = O2SpellType.WINGARDIUM_LEVIOSA;
 
       flavorText = new ArrayList<String>() {{
@@ -68,7 +70,8 @@ public final class WINGARDIUM_LEVIOSA extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.WINGARDIUM_LEVIOSA;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       materialBlackList.add(Material.LAVA);
       materialBlackList.add(Material.SAND);

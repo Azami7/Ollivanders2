@@ -13,22 +13,23 @@ import java.util.ArrayList;
  *
  * @author Azami7
  */
-public final class FATUUS_AURUM extends BlockTransfigurationSuper
+public final class FATUUS_AURUM extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FATUUS_AURUM ()
+   public FATUUS_AURUM()
    {
       super();
 
       spellType = O2SpellType.FATUUS_AURUM;
-      branch = O2MagicBranch.TRANSFIGURATION;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("What glitters may not be gold; and even wolves may smile; and fools will be led by promises to their deaths.");
          add("There is thy gold, worse poison to men's souls.");
-         add("Stone to Gold Spell");
+         add("Stone to Gold Charm");
       }};
 
       text = "Turns a stone block in to gold.";
@@ -45,7 +46,7 @@ public final class FATUUS_AURUM extends BlockTransfigurationSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FATUUS_AURUM;
-      branch = O2MagicBranch.TRANSFIGURATION;
+      branch = O2MagicBranch.CHARMS;
 
       materialWhitelist.add(Material.STONE);
       transfigureType = Material.GOLD_BLOCK;

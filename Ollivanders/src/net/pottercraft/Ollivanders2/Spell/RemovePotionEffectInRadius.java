@@ -2,21 +2,26 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-
-public abstract class RemovePotionEffectFromSelfSuper extends Charms
+/**
+ *
+ */
+public class RemovePotionEffectInRadius extends RemovePotionEffect
 {
    /**
-    * The potion effect. Set to luck by default.
+    * Radius of the spell from the caster.
     */
-   ArrayList<PotionEffectType> potionEffectTypes = new ArrayList<>();
+   int radius = 5;
+
+   /**
+    * Whether the spell targets the caster
+    */
+   boolean targetSelf = false;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public RemovePotionEffectFromSelfSuper ()
+   public RemovePotionEffectInRadius()
    {
       super();
    }
@@ -28,7 +33,7 @@ public abstract class RemovePotionEffectFromSelfSuper extends Charms
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public RemovePotionEffectFromSelfSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public RemovePotionEffectInRadius(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
    }
@@ -45,9 +50,12 @@ public abstract class RemovePotionEffectFromSelfSuper extends Charms
          return;
       }
 
-      for (PotionEffectType effectType : potionEffectTypes)
+      if (targetSelf)
       {
-         player.removePotionEffect(effectType);
+         removePotionEffects(player);
+      } else
+      {
+         affectRadius(radius, true);
       }
 
       kill();

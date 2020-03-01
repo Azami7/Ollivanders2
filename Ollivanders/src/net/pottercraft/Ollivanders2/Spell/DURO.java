@@ -10,22 +10,24 @@ import java.util.ArrayList;
 /**
  * Turns a target area or object to stone.
  *
- * @since 2.2.5
- * @see BlockTransfigurationSuper
  * @author Azami7
+ * @see BlockTransfiguration
+ * @since 2.2.5
  */
-public final class DURO extends BlockTransfigurationSuper
+public final class DURO extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DURO ()
+   public DURO()
    {
       super();
 
       spellType = O2SpellType.DURO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Hardening Charm");
          add("The Hardening Charm will turn an object into solid stone. This can be surprisingly handy in a tight spot. Of course, most students only seem to use this spell to sabotage their fellow students' schoolbags or to turn a pumpkin pasty to stone just before someone bites into it. It is unwise to try this unworthy trick on any of your teachers.");
       }};

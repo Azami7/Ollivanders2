@@ -16,12 +16,12 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class MULTICORFORS extends Charms
+public final class MULTICORFORS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MULTICORFORS ()
+   public MULTICORFORS()
    {
       super();
 
@@ -45,7 +45,8 @@ public final class MULTICORFORS extends Charms
       // this is a transfiguration spell in HP but does not use the Transfiguration superclass.
       branch = O2MagicBranch.TRANSFIGURATION;
       spellType = O2SpellType.MULTICORFORS;
-      setUsesModifier();
+
+      initSpell();
    }
 
    protected void doCheckEffect ()

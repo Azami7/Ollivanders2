@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
 import org.bukkit.entity.Player;
@@ -13,16 +14,17 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 /**
  * Lengthens the duration of shield spells.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class FIANTO_DURI extends Charms
+public final class FIANTO_DURI extends O2Spell
 {
    /**
     * Shield spells that can be targeted by this spell.
     */
-   private ArrayList<O2StationarySpellType> shieldSpells = new ArrayList<O2StationarySpellType>() {{
+   private ArrayList<O2StationarySpellType> shieldSpells = new ArrayList<O2StationarySpellType>()
+   {{
       add(O2StationarySpellType.PROTEGO);
       add(O2StationarySpellType.PROTEGO_HORRIBILIS);
       add(O2StationarySpellType.PROTEGO_MAXIMA);
@@ -40,6 +42,7 @@ public final class FIANTO_DURI extends Charms
    {
       super();
       spellType = O2SpellType.FIANTO_DURI;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" - Filius Flitwick");
@@ -60,9 +63,10 @@ public final class FIANTO_DURI extends Charms
    {
       super(plugin, player, rightWand);
 
-      initSpell();
-
       spellType = O2SpellType.FIANTO_DURI;
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
    }
 
    /**

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
@@ -23,6 +24,7 @@ public final class CONFUNDUS_DUO extends ConfundusSuper
       super();
 
       spellType = O2SpellType.CONFUNDUS_DUO;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("The Confundus Charm");
@@ -44,6 +46,7 @@ public final class CONFUNDUS_DUO extends ConfundusSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.CONFUNDUS_DUO;
+      branch = O2MagicBranch.CHARMS;
 
       strengthModifier = 2;
       minDurationInSeconds = 30;

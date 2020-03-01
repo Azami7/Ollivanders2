@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
@@ -16,18 +17,20 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class MUFFLIATO extends StationarySpellSuper
+public final class MUFFLIATO extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MUFFLIATO ()
+   public MUFFLIATO()
    {
       super();
 
       spellType = O2SpellType.MUFFLIATO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add(" [...] perhaps most useful of all, Muffliato, a spell that filled the ears of anyone nearby with an unidentifiable buzzing, so that lengthy conversations could be held in class without being overheard.");
       }};
 
@@ -46,7 +49,8 @@ public final class MUFFLIATO extends StationarySpellSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.MUFFLIATO;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       baseDurationInSeconds = 30;
       durationModifierInSeconds = 10;

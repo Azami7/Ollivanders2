@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MiscDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.FallingBlockWatcher;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.Material;
@@ -15,22 +16,24 @@ import java.util.ArrayList;
 /**
  * Turn animals to flower pots (approximation for water goblets).
  *
- * @since 2.2.6
- * @link https://github.com/Azami7/Ollivanders2/issues/81
  * @author Azami7
+ * @link https://github.com/Azami7/Ollivanders2/issues/81
+ * @since 2.2.6
  */
-public final class VERA_VERTO extends FriendlyMobDisguiseSuper
+public final class VERA_VERTO extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VERA_VERTO ()
+   public VERA_VERTO()
    {
       super();
 
       spellType = O2SpellType.VERA_VERTO;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"Could I have your attention please? Right, now, today, we will be transforming animals into water goblets. Like so. One, two, three. Vera Verto.\" -Minerva McGonagall");
       }};
 
@@ -48,6 +51,7 @@ public final class VERA_VERTO extends FriendlyMobDisguiseSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.VERA_VERTO;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       initSpell();
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.entity.Item;
@@ -12,22 +13,24 @@ import org.bukkit.entity.Player;
 /**
  * Deletes an item entity.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class DELETRIUS extends Charms
+public final class DELETRIUS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DELETRIUS ()
+   public DELETRIUS()
    {
       super();
 
       spellType = O2SpellType.DELETRIUS;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Eradication Spell");
          add("'Deletrius!' Mr Diggory shouted, and the smoky skull vanished in a wisp of smoke.");
       }};
@@ -46,6 +49,7 @@ public final class DELETRIUS extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DELETRIUS;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

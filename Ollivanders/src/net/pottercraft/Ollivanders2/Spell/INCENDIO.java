@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -24,6 +25,7 @@ public final class INCENDIO extends IncendioSuper
       super();
 
       spellType = O2SpellType.INCENDIO;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("The Fire-Making Charm");
@@ -46,7 +48,9 @@ public final class INCENDIO extends IncendioSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INCENDIO;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       strafe = false;
       radius = 1;

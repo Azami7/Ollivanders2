@@ -7,18 +7,18 @@ import org.bukkit.entity.Player;
 
 /**
  * Created by Azami7 on 7/2/17.
- *
+ * <p>
  * Glacius will cause a great cold to descend in a radius from it's impact point which freezes blocks. The radius and
  * duration of the freeze depend on your experience.
  *
  * @author Azami7
  */
-public abstract class GlaciusSuper extends BlockTransfigurationSuper
+public abstract class GlaciusSuper extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public GlaciusSuper ()
+   public GlaciusSuper()
    {
       super();
 

@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
@@ -17,22 +18,24 @@ import java.util.ArrayList;
 /**
  * Registers a new floo network entry
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class ALIQUAM_FLOO extends Charms
+public final class ALIQUAM_FLOO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ALIQUAM_FLOO ()
+   public ALIQUAM_FLOO()
    {
       super();
 
       spellType = O2SpellType.ALIQUAM_FLOO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"In use for centuries, the Floo Network, while somewhat uncomfortable, has many advantages. Firstly, unlike broomsticks, the Network can be used without fear of breaking the International Statute of Secrecy. Secondly, unlike Apparition, there is little to no danger of serious injury. Thirdly, it can be used to transport children, the elderly and the infirm.\"");
       }};
 
@@ -55,6 +58,7 @@ public final class ALIQUAM_FLOO extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.ALIQUAM_FLOO;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

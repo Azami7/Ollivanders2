@@ -1,6 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
-import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -10,21 +10,23 @@ import java.util.ArrayList;
 /**
  * Gives night vision for an amount of time depending on the player's spell level.
  *
- * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class LUMOS extends O2EffectOnSelf
+public final class LUMOS extends AddPotionEffectInRadius
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LUMOS ()
+   public LUMOS()
    {
       super();
 
       spellType = O2SpellType.LUMOS;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("If in any doubt about your abilities you would do better to buy yourself a magic lantern.");
          add("The Wand-Lighting Charm");
          add("\"Ron, where are you? Oh this is stupid - lumos!\"  She illuminated her wand and directed its narrow beam across the path. Ron was lying sprawled on the ground.");
@@ -46,18 +48,20 @@ public final class LUMOS extends O2EffectOnSelf
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LUMOS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
 
-      effectsToAdd.add(O2EffectType.NIGHT_VISION);
+      initSpell();
+
+      effectTypes.add(PotionEffectType.NIGHT_VISION);
       strengthModifier = 1;
       minDurationInSeconds = 30;
+      targetSelf = true;
 
       durationInSeconds = (int) usesModifier;
       if (durationInSeconds < minDurationInSeconds)
       {
          durationInSeconds = minDurationInSeconds;
-      }
-      else if (durationInSeconds > maxDurationInSeconds)
+      } else if (durationInSeconds > maxDurationInSeconds)
       {
          durationInSeconds = maxDurationInSeconds;
       }

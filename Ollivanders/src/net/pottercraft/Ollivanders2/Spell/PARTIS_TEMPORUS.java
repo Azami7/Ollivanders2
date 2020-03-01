@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
@@ -15,7 +16,7 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class PARTIS_TEMPORUS extends Charms
+public final class PARTIS_TEMPORUS extends O2Spell
 {
    private int duration;
    private static int minDurationInSeconds = 15;
@@ -23,13 +24,15 @@ public final class PARTIS_TEMPORUS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PARTIS_TEMPORUS ()
+   public PARTIS_TEMPORUS()
    {
       super();
 
       spellType = O2SpellType.PARTIS_TEMPORUS;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Parting Charm");
       }};
 
@@ -48,7 +51,9 @@ public final class PARTIS_TEMPORUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PARTIS_TEMPORUS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       int durationInSeconds = (int) usesModifier;
       if (durationInSeconds < minDurationInSeconds)

@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import org.bukkit.CropState;
@@ -15,24 +16,26 @@ import org.bukkit.material.Crops;
 /**
  * Herbivicus causes crops in a radius to grow.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class HERBIVICUS extends Herbology
+public final class HERBIVICUS extends O2Spell
 {
    private List<CropState> stateList = new ArrayList<>();
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public HERBIVICUS ()
+   public HERBIVICUS()
    {
       super();
 
       spellType = O2SpellType.HERBIVICUS;
+      branch = O2MagicBranch.HERBOLOGY;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Plant-Growing Charm");
       }};
 
@@ -51,7 +54,9 @@ public final class HERBIVICUS extends Herbology
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.HERBIVICUS;
-      setUsesModifier();
+      branch = O2MagicBranch.HERBOLOGY;
+
+      initSpell();
 
       // pass-through materials
       projectilePassThrough.add(Material.WATER);

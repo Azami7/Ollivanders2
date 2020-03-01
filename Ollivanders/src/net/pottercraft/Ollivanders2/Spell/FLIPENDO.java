@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -22,6 +23,7 @@ public final class FLIPENDO extends Knockback
       super();
 
       spellType = O2SpellType.FLIPENDO;
+      branch = O2MagicBranch.DARK_ARTS;
 
       flavorText = new ArrayList<String>() {{
          add("The Knockback Jinx");
@@ -43,9 +45,9 @@ public final class FLIPENDO extends Knockback
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FLIPENDO;
+      branch = O2MagicBranch.DARK_ARTS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       strengthReducer = 10;
 

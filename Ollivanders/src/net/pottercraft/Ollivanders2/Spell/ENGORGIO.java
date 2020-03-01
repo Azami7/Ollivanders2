@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
@@ -17,24 +18,26 @@ import java.util.List;
 /**
  * Makes certain entities grow into adults, slimes grow larger, and at usesModifier 10, zombies grow into giants
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class ENGORGIO extends Charms
+public final class ENGORGIO extends O2Spell
 {
    private final int maxSlimeSize = 10;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ENGORGIO ()
+   public ENGORGIO()
    {
       super();
 
       spellType = O2SpellType.ENGORGIO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Engorgement Charm");
          add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink.");
       }};
@@ -53,9 +56,9 @@ public final class ENGORGIO extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.ENGORGIO;
+      branch = O2MagicBranch.CHARMS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);

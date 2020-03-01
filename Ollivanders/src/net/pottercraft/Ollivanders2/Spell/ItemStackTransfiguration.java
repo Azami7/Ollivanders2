@@ -6,16 +6,16 @@ import org.bukkit.entity.Player;
 /**
  * The super class for all ItemStack transfigurations.  This cannot be used on Entities or Blocks.
  *
- * @since 2.2.6
- * @see BlockTransfigurationSuper
  * @author Azami7
+ * @see BlockTransfiguration
+ * @since 2.2.6
  */
-public abstract class ItemStackTransfigurationSuper extends BlockTransfigurationSuper
+public abstract class ItemStackTransfiguration extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ItemStackTransfigurationSuper ()
+   public ItemStackTransfiguration()
    {
       super();
    }
@@ -23,11 +23,11 @@ public abstract class ItemStackTransfigurationSuper extends BlockTransfiguration
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ItemStackTransfigurationSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public ItemStackTransfiguration(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 

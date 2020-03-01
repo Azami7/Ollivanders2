@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Player;
@@ -11,20 +12,21 @@ import java.util.ArrayList;
 /**
  * A fancier version of COMETES.
  *
- * @see COMETES
- * @see PyrotechniaSuper
  * @author Azami7
+ * @see COMETES
+ * @see Pyrotechnia
  */
-public final class COMETES_DUO extends PyrotechniaSuper
+public final class COMETES_DUO extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public COMETES_DUO ()
+   public COMETES_DUO()
    {
       super();
 
       spellType = O2SpellType.COMETES_DUO;
+      branch = O2MagicBranch.CHARMS;
 
       text = "Creates one or more orange burst fireworks with trails, flicker, and fades to white and yellow.";
    }
@@ -40,6 +42,7 @@ public final class COMETES_DUO extends PyrotechniaSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.COMETES_DUO;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

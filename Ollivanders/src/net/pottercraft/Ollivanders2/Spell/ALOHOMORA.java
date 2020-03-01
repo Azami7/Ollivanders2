@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.COLLOPORTUS;
@@ -14,22 +15,24 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 /**
  * The unlocking spell.
  *
- * @version Ollivanders2
  * @author cakenggt
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class ALOHOMORA extends Charms
+public final class ALOHOMORA extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ALOHOMORA ()
+   public ALOHOMORA()
    {
       super();
 
       spellType = O2SpellType.ALOHOMORA;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("There are many ways to pass through locked doors in the magical world.  When you wish to enter or depart discreetly, however, the Unlocking Charm is your best friend.");
          add("The Unlocking Charm");
       }};
@@ -48,6 +51,7 @@ public final class ALOHOMORA extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.ALOHOMORA;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

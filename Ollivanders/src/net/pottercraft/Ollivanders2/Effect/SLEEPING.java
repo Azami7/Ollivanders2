@@ -74,14 +74,6 @@ public class SLEEPING extends O2Effect
    }
 
    /**
-    * Make this effect permanent.
-    */
-   public void setPermanent ()
-   {
-      permanent = true;
-   }
-
-   /**
     * Put the player to sleep.
     */
    private void playerSleep ()

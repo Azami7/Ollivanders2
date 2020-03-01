@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -14,21 +15,23 @@ import java.util.List;
 /**
  * Shoots target high into air.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class ALARTE_ASCENDARE extends Charms
+public final class ALARTE_ASCENDARE extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ALARTE_ASCENDARE ()
+   public ALARTE_ASCENDARE()
    {
       super();
       spellType = O2SpellType.ALARTE_ASCENDARE;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Winged-Ascent Charm");
          add("He brandished his wand at the snake and there was a loud bang; the snake, instead of vanishing, "
                + "flew ten feet into the air and fell back to the floor with a loud smack.");
@@ -51,6 +54,7 @@ public final class ALARTE_ASCENDARE extends Charms
       initSpell();
 
       spellType = O2SpellType.ALARTE_ASCENDARE;
+      branch = O2MagicBranch.CHARMS;
 
       // world guard
       worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);

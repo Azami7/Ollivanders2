@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.StationarySpell.ShieldSpell;
 import org.bukkit.entity.Player;
@@ -10,10 +11,10 @@ import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 /**
  * Shortens the duration of shield spells. https://harrypotter.fandom.com/wiki/Shield_penetration_spell
  *
- * @version Ollivanders2
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class SCUTO_CONTERAM extends Charms
+public final class SCUTO_CONTERAM extends O2Spell
 {
    /**
     * The number of shield spells that can be targeted by this spell.
@@ -33,6 +34,8 @@ public final class SCUTO_CONTERAM extends Charms
       super();
 
       spellType = O2SpellType.SCUTO_CONTERAM;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Scuto conteram will shorten the duration of a stationary spell.";
    }
 
@@ -48,7 +51,8 @@ public final class SCUTO_CONTERAM extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.SCUTO_CONTERAM;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       percent = (int) usesModifier / 10;
       if (percent > 100)

@@ -1,10 +1,10 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2WorldGuard;
 import net.pottercraft.Ollivanders2.StationarySpell.O2StationarySpellType;
-import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -17,22 +17,24 @@ import java.util.ArrayList;
 /**
  * Apparition code for players who have over 100 uses in apparition.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class APPARATE extends Charms
+public final class APPARATE extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public APPARATE ()
+   public APPARATE()
    {
       super();
 
       spellType = O2SpellType.APPARATE;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("A magical means of transportation.");
          add("Harry felt Dumbledore's arm twist away from him and re-doubled his grip: the next thing he knew everything went black; he was pressed very hard from all directions; he could not breathe, there were iron bands tightening around his chest; his eyeballs were being forced back into his head; his ear-drums were being pushed deeper into his skull.");
          add("\"We just Apparated, didn't we sir?\"\n\"Yes, and quite successfully too, I might add. Most people vomit the first time.\" -Harry Potter and Albus Dumbledore");
@@ -55,6 +57,7 @@ public final class APPARATE extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.APPARATE;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 
@@ -91,9 +94,9 @@ public final class APPARATE extends Charms
          to = eyeLocation.subtract(eyeLocation.getDirection()).clone();
          to.setPitch(from.getPitch());
          to.setYaw(from.getYaw());
-         Double radius = (1 / usesModifier) * from.distance(to) * 0.1;
-         Double newX = to.getX() - (radius / 2) + (radius * Math.random());
-         Double newZ = to.getZ() - (radius / 2) + (radius * Math.random());
+         double radius = (1 / usesModifier) * from.distance(to) * 0.1;
+         double newX = (to.getX() - (radius / 2)) + (radius * Math.random());
+         double newZ = (to.getZ() - (radius / 2)) + (radius * Math.random());
          to.setX(newX);
          to.setZ(newZ);
 

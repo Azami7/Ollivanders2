@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @since 2.2.8
  */
-public final class VENTO_FOLIO extends Charms
+public final class VENTO_FOLIO extends O2Spell
 {
    /**
     * The percent chance this spell will succeed each casting.
@@ -26,14 +26,15 @@ public final class VENTO_FOLIO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VENTO_FOLIO ()
+   public VENTO_FOLIO()
    {
       super();
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.VENTO_FOLIO;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"And then Harry saw him. Voldemort was flying like smoke on the wind, without broomstick or thestral to hold him, his snake-like face gleaming out of the blackness, his white fingers raising his wand again —\"");
          add("\"Remus, he can -\"\n\"Fly, I saw him too, he came after Hagrid and me.\" -Kingsley Shacklebolt and Harry Potter");
       }};
@@ -54,7 +55,7 @@ public final class VENTO_FOLIO extends Charms
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.VENTO_FOLIO;
-      setUsesModifier();
+      initSpell();
 
       setSuccessRate();
    }
@@ -79,8 +80,11 @@ public final class VENTO_FOLIO extends Charms
          successRate = 5;
    }
 
+   /**
+    * Override checkEffect since this spell should not projectile. Add flying effect to caster.
+    */
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!checkSpellAllowed())
       {
@@ -96,18 +100,15 @@ public final class VENTO_FOLIO extends Charms
       {
          // > 30 seconds
          duration = uses + 300;
-      }
-      else if (uses >= 50)
+      } else if (uses >= 50)
       {
          // 30 seconds
          duration = 300;
-      }
-      else if (uses >= 10)
+      } else if (uses >= 10)
       {
          // 10 seconds
          duration = 200;
-      }
-      else // < 10
+      } else // < 10
       {
          // 5 seconds
          duration = 100;

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -19,13 +20,14 @@ import java.util.List;
  * @author Azami7
  * @since 2.2.9
  */
-public class PRIOR_INCANTATO extends Charms
+public class PRIOR_INCANTATO extends O2Spell
 {
-   public PRIOR_INCANTATO ()
+   public PRIOR_INCANTATO()
    {
       super();
 
       spellType = O2SpellType.PRIOR_INCANTATO;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>()
       {{
@@ -41,7 +43,9 @@ public class PRIOR_INCANTATO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.INFORMOUS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
    }
 
    @Override
@@ -64,7 +68,7 @@ public class PRIOR_INCANTATO extends Charms
             }
             else
             {
-               player.sendMessage(Ollivanders2.chatColor + ((Player) livingEntity).getName() + "'s wand resists your spell.");
+               player.sendMessage(Ollivanders2.chatColor + livingEntity.getName() + "'s wand resists your spell.");
             }
 
             kill();

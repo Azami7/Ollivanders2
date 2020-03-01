@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
 import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
@@ -9,12 +10,12 @@ import java.util.ArrayList;
 
 /**
  * Created by Phevek on 10/17/18.
- *
+ * <p>
  * Pyrosvestiras is a fire extinquishing spell if you decide that you want to put out that thing you lit on fire.
  *
  * @author Phevek
  */
-public class PYROSVESTIRAS extends BlockTransfigurationSuper
+public class PYROSVESTIRAS extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -24,8 +25,6 @@ public class PYROSVESTIRAS extends BlockTransfigurationSuper
       super();
 
       branch = O2MagicBranch.CHARMS;
-
-
       spellType = O2SpellType.PYROSVESTIRAS;
 
       flavorText = new ArrayList<String>() {{
@@ -47,6 +46,7 @@ public class PYROSVESTIRAS extends BlockTransfigurationSuper
    {
       super(plugin, player, rightWand);
 
+      spellType = O2SpellType.PYROSVESTIRAS;
       branch = O2MagicBranch.CHARMS;
 
       initSpell();
@@ -68,6 +68,10 @@ public class PYROSVESTIRAS extends BlockTransfigurationSuper
 
       transfigurationMap.put(Material.FIRE, Material.AIR);
 
+      // whitelist only fire blocks
       materialWhitelist.add(Material.FIRE);
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.BUILD);
    }
 }

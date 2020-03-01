@@ -2,7 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import me.libraryaddict.disguise.disguisetypes.watchers.EnderDragonWatcher;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -12,22 +12,24 @@ import java.util.ArrayList;
 /**
  * Turn target entity in to a Dragon.
  *
- * @since 1.0
  * @author lownes
  * @author Azami7
+ * @since 1.0
  */
-public final class DRACONIFORS extends FriendlyMobDisguiseSuper
+public final class DRACONIFORS extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DRACONIFORS ()
+   public DRACONIFORS()
    {
       super();
 
       spellType = O2SpellType.DRACONIFORS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Draconifors Transfiguration");
          add("\"It was great! Now I can turn anything into dragons!\" -Hermione Granger");
       }};
@@ -46,6 +48,7 @@ public final class DRACONIFORS extends FriendlyMobDisguiseSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DRACONIFORS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       initSpell();
 

@@ -1,12 +1,14 @@
 package net.pottercraft.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Book.O2Books;
+import net.pottercraft.Ollivanders2.Effect.BURNING;
 import net.pottercraft.Ollivanders2.Effect.O2Effect;
 import net.pottercraft.Ollivanders2.Effect.BABBLING;
 import net.pottercraft.Ollivanders2.Effect.LYCANTHROPY;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Spell.Divination;
+import net.pottercraft.Ollivanders2.Spell.FLAGRANTE;
 import net.pottercraft.Ollivanders2.Spell.O2Spell;
 import net.pottercraft.Ollivanders2.Spell.O2Spells;
 import net.pottercraft.Ollivanders2.Spell.Transfiguration;
@@ -1507,7 +1509,7 @@ public class OllivandersListener implements Listener
          }
          for (String s : lore)
          {
-            if (s.startsWith("Portkey"))
+            if (s.startsWith(PORTUS.portus))
             {
                String[] portArray = s.split(" ");
                Location to;
@@ -1533,6 +1535,74 @@ public class OllivandersListener implements Listener
       }
    }
 
+   @EventHandler(priority = EventPriority.NORMAL)
+   public void cursedItemPickUp(EntityPickupItemEvent event)
+   {
+      Entity entity = event.getEntity();
+      if (!(entity instanceof Player))
+         return;
+
+      Item item = event.getItem();
+      ItemMeta meta = item.getItemStack().getItemMeta();
+      if (meta == null || !meta.hasLore())
+         return;
+
+      int stackSize = item.getItemStack().getAmount();
+
+      List<String> itemLore = meta.getLore();
+      for (String lore : itemLore)
+      {
+         if (lore.startsWith(FLAGRANTE.flagrante))
+         {
+            BURNING burning = new BURNING(p, 0, entity.getUniqueId());
+            burning.addDamage(FLAGRANTE.baseDamage * stackSize);
+
+            Ollivanders2API.getPlayers().playerEffects.addEffect(burning);
+
+            if (Ollivanders2.debug)
+               p.getLogger().info("Added flagrante curse to " + ((Player) entity).getDisplayName());
+         }
+      }
+   }
+
+   @EventHandler(priority = EventPriority.NORMAL)
+   public void cursedItemPickDrop(PlayerDropItemEvent event)
+   {
+      Player player = event.getPlayer();
+      Item item = event.getItemDrop();
+
+      ItemMeta meta = item.getItemStack().getItemMeta();
+      if (meta == null || !meta.hasLore())
+         return;
+
+      int stackSize = item.getItemStack().getAmount();
+
+      List<String> itemLore = meta.getLore();
+      for (String lore : itemLore)
+      {
+         if (lore.startsWith(FLAGRANTE.flagrante))
+         {
+            UUID pid = player.getUniqueId();
+
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(pid, O2EffectType.BURNING))
+            {
+               BURNING burning = (BURNING) Ollivanders2API.getPlayers().playerEffects.getEffect(pid, O2EffectType.BURNING);
+               burning.removeDamage(FLAGRANTE.baseDamage * stackSize);
+
+               Ollivanders2API.getPlayers().playerEffects.removeEffect(pid, O2EffectType.BURNING);
+
+               if (burning.getDamage() > 0)
+               {
+                  Ollivanders2API.getPlayers().playerEffects.addEffect(burning);
+               }
+            }
+         }
+      }
+
+      if (Ollivanders2.debug)
+         p.getLogger().info("Removed flagrante curse on " + player.getDisplayName());
+   }
+
    /**
     * Cancels any targeting of players with the Cloak of Invisibility
     * or inside of a REPELLO_MUGGLETON while the targeting entity is
@@ -1541,12 +1611,12 @@ public class OllivandersListener implements Listener
     * @param event the Entity Target Event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void cloakPlayer (EntityTargetEvent event)
+   public void cloakPlayer(EntityTargetEvent event)
    {
       Entity target = event.getTarget();
       if (target instanceof Player)
       {
-         if (p.getO2Player((Player)target).isInvisible())
+         if (p.getO2Player((Player) target).isInvisible())
          {
             event.setCancelled(true);
          }

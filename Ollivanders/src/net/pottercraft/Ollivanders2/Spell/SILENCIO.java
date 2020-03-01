@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Effect.MUTED_SPEECH;
@@ -12,21 +13,23 @@ import org.bukkit.entity.Player;
 /**
  * Silences a player for a duration depending on the spell's level. The target player can only use nonverbal spells.
  *
- * @version Ollivanders2
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class SILENCIO extends Charms
+public final class SILENCIO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public SILENCIO ()
+   public SILENCIO()
    {
       super();
 
       spellType = O2SpellType.SILENCIO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The raven continued to open and close its sharp beak, but no sound came out.");
          add("The Silencing Charm");
       }};
@@ -46,7 +49,9 @@ public final class SILENCIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.SILENCIO;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
    }
 
    @Override

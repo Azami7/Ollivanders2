@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -10,23 +11,25 @@ import java.util.ArrayList;
 /**
  * Turns cobblestone in to stone. Originally imported from iarepandemonium/Ollivanders.
  *
- * @version Ollivanders2
- * @since 2.5.3
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
+ * @since 2.5.3
  */
-public final class LAPIDO extends BlockTransfigurationSuper
+public final class LAPIDO extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LAPIDO ()
+   public LAPIDO()
    {
       super();
 
       spellType = O2SpellType.LAPIDO;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("Cobblestone to Stone Spell");
       }};
 
@@ -45,6 +48,7 @@ public final class LAPIDO extends BlockTransfigurationSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LAPIDO;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       transfigureType = Material.STONE;
       materialWhitelist.add(Material.COBBLESTONE);

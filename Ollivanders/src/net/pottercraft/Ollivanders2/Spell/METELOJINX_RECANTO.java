@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -22,6 +23,8 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
       super();
 
       spellType = O2SpellType.METELOJINX_RECANTO;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Metelojinx Recanto will turn a storm into a sunny day.";
    }
 
@@ -37,7 +40,9 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.METELOJINX_RECANTO;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
       storm = false;
    }
 }

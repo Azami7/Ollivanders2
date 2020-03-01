@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
@@ -9,7 +10,12 @@ import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 
-public abstract class PotionEffectSuper extends Charms
+/**
+ * Spell that adds a potion effect to one or more targets.
+ *
+ * @author Azami7
+ */
+public abstract class AddPotionEffect extends O2Spell
 {
    /**
     * The duration for this effect.
@@ -44,9 +50,11 @@ public abstract class PotionEffectSuper extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PotionEffectSuper ()
+   public AddPotionEffect()
    {
       super();
+
+      branch = O2MagicBranch.CHARMS;
    }
 
    /**
@@ -56,10 +64,11 @@ public abstract class PotionEffectSuper extends Charms
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public PotionEffectSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public AddPotionEffect(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 
+      branch = O2MagicBranch.CHARMS;
       durationInSeconds = minDurationInSeconds;
    }
 
@@ -67,36 +76,58 @@ public abstract class PotionEffectSuper extends Charms
     * If a target player is within the radius of the projectile, add the potion effect to the player.
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
-      for (LivingEntity livingEntity : getLivingEntities(1.5))
+      affectRadius(1.5, false);
+
+      if (hasHitTarget())
       {
-         if (livingEntity.getUniqueId() == player.getUniqueId())
+         kill();
+      }
+   }
+
+   /**
+    * Affect targets within the radius.
+    *
+    * @param radius the radius of the spell
+    * @param flair  whether or not to show a visual flair
+    */
+   void affectRadius(double radius, boolean flair)
+   {
+      if (flair)
+      {
+         Ollivanders2Common.flair(location, (int) radius, 10);
+      }
+
+      for (LivingEntity livingEntity : getLivingEntities(radius))
+      {
+         if ((livingEntity.getUniqueId() == player.getUniqueId()) || !(livingEntity instanceof Player))
          {
             continue;
          }
 
-         int duration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
+         addEffectsToTarget((Player) livingEntity);
+         numberOfTargets--;
 
-         for (PotionEffectType effectType : effectTypes)
-         {
-            PotionEffect effect = new PotionEffect(effectType, duration, strengthModifier);
-            livingEntity.addPotionEffect(effect);
-
-            numberOfTargets--;
-         }
-
-         // if the spell can only target a limited number, stop when the limit is reached
+         // stop when the limit of targets is reached
          if (numberOfTargets <= 0)
          {
             kill();
             return;
          }
       }
+   }
 
-      if (hasHitTarget())
+   void addEffectsToTarget(Player target)
+   {
+      int duration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
+
+      for (PotionEffectType effectType : effectTypes)
       {
-         kill();
+         org.bukkit.potion.PotionEffect effect = new org.bukkit.potion.PotionEffect(effectType, duration, strengthModifier);
+         target.addPotionEffect(effect);
+
+         numberOfTargets--;
       }
    }
 }

@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
@@ -14,18 +15,20 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class REPELLO_MUGGLETON extends StationarySpellSuper
+public final class REPELLO_MUGGLETON extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REPELLO_MUGGLETON ()
+   public REPELLO_MUGGLETON()
    {
       super();
 
       spellType = O2SpellType.REPELLO_MUGGLETON;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("Muggle-Repelling Charms on every inch of it. Every time Muggles have got anywhere near here all year, they've suddenly remembered urgent appointments and had to dash away again.");
       }};
 
@@ -44,7 +47,8 @@ public final class REPELLO_MUGGLETON extends StationarySpellSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.REPELLO_MUGGLETON;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       baseDurationInSeconds = 30;
       durationModifierInSeconds = 15;

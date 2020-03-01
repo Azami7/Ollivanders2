@@ -1,11 +1,9 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import net.pottercraft.Ollivanders2.Effect.SUSPENSION;
-import net.pottercraft.Ollivanders2.Ollivanders2API;
-import net.pottercraft.Ollivanders2.Ollivanders2Common;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -16,20 +14,20 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class LEVICORPUS extends DarkArts
+public final class LEVICORPUS extends AddO2Effect
 {
-   private static int maxDurationInSeconds = 300;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LEVICORPUS ()
+   public LEVICORPUS()
    {
       super();
 
       spellType = O2SpellType.LEVICORPUS;
+      branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("\"Oh, that one had a great vogue during my time at Hogwarts. There were a few months in my fifth year when you couldn't move for being hoisted into the air by your ankle.\" -Remus Lupin");
          add("Pointing his wand at nothing in particular, he gave it an upward flick and said Levicorpus! inside his head... There was a flash of light... Ron was dangling upside down in midair as though an invisible hook had hoisted him up by the ankle.");
          add("The Suspension Jinx");
@@ -50,39 +48,16 @@ public final class LEVICORPUS extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LEVICORPUS;
-      setUsesModifier();
+      branch = O2MagicBranch.DARK_ARTS;
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.PVP);
-   }
 
-   @Override
-   protected void doCheckEffect ()
-   {
-      for (LivingEntity live : getLivingEntities(1.5))
-      {
-         if (live.getUniqueId() == player.getUniqueId())
-            continue;
+      effectsToAdd.add(O2EffectType.SUSPENSION);
 
-         if (live instanceof Player)
-         {
-            int durationInSeconds = ((int) usesModifier + 30);
-            if (durationInSeconds > maxDurationInSeconds)
-            {
-               durationInSeconds = maxDurationInSeconds;
-            }
-
-            SUSPENSION levi = new SUSPENSION(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, live.getUniqueId());
-
-            Ollivanders2API.getPlayers().playerEffects.addEffect(levi);
-
-            kill();
-            return;
-         }
-      }
-
-      // projectile has stopped, kill the spell
-      if (hasHitTarget())
-         kill();
+      // duration
+      maxDurationInSeconds = 180; // 3 minutes
+      durationInSeconds = ((int) usesModifier + 30);
    }
 }

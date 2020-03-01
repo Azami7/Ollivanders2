@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -10,20 +11,22 @@ import java.util.ArrayList;
 /**
  * A fancier version of PORFYRO_ASTERI.
  *
- * @see PORFYRO_ASTERI
- * @see PyrotechniaSuper
  * @author Azami7
+ * @see PORFYRO_ASTERI
+ * @see Pyrotechnia
  */
-public final class PORFYRO_ASTERI_DUO extends PyrotechniaSuper
+public final class PORFYRO_ASTERI_DUO extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PORFYRO_ASTERI_DUO  ()
+   public PORFYRO_ASTERI_DUO()
    {
       super();
 
       spellType = O2SpellType.PORFYRO_ASTERI_DUO;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Conjures purple star fireworks that fade to white.";
    }
 
@@ -39,7 +42,8 @@ public final class PORFYRO_ASTERI_DUO extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PORFYRO_ASTERI_DUO;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);

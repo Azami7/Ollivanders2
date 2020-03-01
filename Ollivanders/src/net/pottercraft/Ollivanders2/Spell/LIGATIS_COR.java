@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mysql.fabric.xmlrpc.base.Array;
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
-import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import net.pottercraft.Ollivanders2.Player.O2WandCoreType;
-import net.pottercraft.Ollivanders2.Player.O2WandWoodType;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -20,24 +19,25 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 /**
- * If a coreless wand is near enough a core material, makes a wand of
- * the wand wood type and core type. Itemstack amount is 1 regardless of
- * how many items were in either starting stack.
+ * If a coreless wand is near enough a core material, makes a wand of the wand wood type and core type. Itemstack amount
+ * is 1 regardless of how many items were in either starting stack.
  *
  * @author lownes
  * @author Azami7
  */
-public final class LIGATIS_COR extends Charms
+public final class LIGATIS_COR extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public LIGATIS_COR ()
+   public LIGATIS_COR()
    {
       super();
 
       spellType = O2SpellType.LIGATIS_COR;
-      text = "Ligatis cor will bind a coreless wand to a core material.  Make sure the two items are near each other when this spell is cast. You can only use this on one coreless wand and one core material at a time.";
+      branch = O2MagicBranch.CHARMS;
+
+      text = "Ligatis Cor will bind a coreless wand to a core material. Make sure the two items are near each other when this spell is cast. You can only use this on one coreless wand and one core material at a time.";
    }
 
    /**
@@ -52,7 +52,9 @@ public final class LIGATIS_COR extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LIGATIS_COR;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
@@ -77,7 +79,13 @@ public final class LIGATIS_COR extends Charms
             {
                if (l.contains(FRANGE_LIGNEA.corelessWandLabel))
                {
-                  createWand(item);
+                  Location loc = item.getLocation();
+
+                  // create the wand
+                  ItemStack wand = createWand(item);
+
+                  // spawn in to the world
+                  item.getWorld().dropItem(loc, wand);
 
                   kill();
                   return;
@@ -94,7 +102,13 @@ public final class LIGATIS_COR extends Charms
          kill();
    }
 
-   private ItemStack createWand (Item corelessWand)
+   /**
+    * Create the wand from the material and core.
+    *
+    * @param corelessWand
+    * @return
+    */
+   private ItemStack createWand(Item corelessWand)
    {
       ItemStack wand = null;
 
@@ -109,13 +123,13 @@ public final class LIGATIS_COR extends Charms
 
       // determine core based on nearby materials
       List<Entity> entities = corelessWand.getNearbyEntities(2, 2, 2);
-      for (Entity e : entities)
+      for (Entity core : entities)
       {
-         if (e instanceof Item)
+         if (core instanceof Item)
          {
-            Material material = ((Item) e).getItemStack().getType();
+            Material material = ((Item) core).getItemStack().getType();
 
-            if (Arrays.asList(O2WandCoreType.getAllCoresByName()).contains(material))
+            if (O2WandCoreType.getAllCoresByMaterial().contains(material))
             {
                String newlore = meta.getLore().get(0);
 
@@ -130,8 +144,10 @@ public final class LIGATIS_COR extends Charms
                wand = corelessWand.getItemStack();
                wand.setAmount(1);
                wand.setItemMeta(meta);
-               corelessWand.setItemStack(wand);
-               e.remove();
+
+               // use up the wand materials
+               corelessWand.remove();
+               core.remove();
             }
          }
       }

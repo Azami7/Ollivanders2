@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_EFFECT;
 import net.pottercraft.Ollivanders2.Effect.ANIMAGUS_INCANTATION;
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Player.O2Player;
 import net.pottercraft.Ollivanders2.Ollivanders2;
@@ -31,6 +32,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
       super();
 
       spellType = O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       flavorText = new ArrayList<String>() {{
          add("An Animagus is a wizard who elects to turn into an animal.");
@@ -56,7 +58,9 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
    public AMATO_ANIMO_ANIMATO_ANIMAGUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
+
       spellType = O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       initSpell();
    }

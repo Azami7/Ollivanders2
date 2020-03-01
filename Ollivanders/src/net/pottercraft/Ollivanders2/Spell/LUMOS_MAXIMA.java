@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.Effect;
@@ -13,10 +14,10 @@ import java.util.ArrayList;
 /**
  * Creates a glowstone at the reticule that goes away after a time.
  *
- * @version Ollivanders2
  * @author azami7
+ * @version Ollivanders2
  */
-public final class LUMOS_MAXIMA extends Charms
+public final class LUMOS_MAXIMA extends O2Spell
 {
    int lineLength;
    int duration;
@@ -35,6 +36,7 @@ public final class LUMOS_MAXIMA extends Charms
       super();
 
       spellType = O2SpellType.LUMOS_MAXIMA;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("\"Light your wands, can’t you? And hurry, we have little time!\" -Griphook");
@@ -55,7 +57,8 @@ public final class LUMOS_MAXIMA extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.LUMOS_MAXIMA;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+      initSpell();
 
       // base line length on experience
       lineLength = 1 + (int) usesModifier / 10;

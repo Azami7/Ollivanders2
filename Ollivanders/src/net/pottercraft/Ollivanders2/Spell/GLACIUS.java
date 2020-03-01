@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
@@ -22,6 +23,7 @@ public final class GLACIUS extends GlaciusSuper
       super();
 
       spellType = O2SpellType.GLACIUS;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("A charm that conjures a blast of freezing cold air from the end of the wand.");
@@ -43,7 +45,9 @@ public final class GLACIUS extends GlaciusSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.GLACIUS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       // normal duration
       durationModifier = 1.0;

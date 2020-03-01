@@ -1,10 +1,10 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -15,18 +15,20 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class REDUCTO extends DarkArts
+public final class REDUCTO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public REDUCTO ()
+   public REDUCTO()
    {
       super();
 
       spellType = O2SpellType.REDUCTO;
+      branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Reductor Curse");
          add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
       }};
@@ -46,7 +48,9 @@ public final class REDUCTO extends DarkArts
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.REDUCTO;
-      setUsesModifier();
+      branch = O2MagicBranch.DARK_ARTS;
+
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.OTHER_EXPLOSION);

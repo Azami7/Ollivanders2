@@ -9,14 +9,14 @@ import org.bukkit.entity.Player;
  *
  * @author Azami7
  */
-public abstract class MetelojinxSuper extends Charms
+public abstract class MetelojinxSuper extends O2Spell
 {
    boolean storm = true;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MetelojinxSuper ()
+   public MetelojinxSuper()
    {
       super();
    }

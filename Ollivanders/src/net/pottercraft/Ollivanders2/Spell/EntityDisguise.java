@@ -4,17 +4,16 @@ import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 /**
  * Super class for all disguise-based transfigurations
  *
- * @since 2.2.6
  * @author Azami7
+ * @since 2.2.6
  */
-public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
+public abstract class EntityDisguise extends EntityTransfiguration
 {
    protected DisguiseType disguiseType;
    protected TargetedDisguise disguise;
@@ -22,7 +21,7 @@ public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EntityDisguiseSuper ()
+   public EntityDisguise()
    {
       super();
    }
@@ -30,13 +29,13 @@ public abstract class EntityDisguiseSuper extends EntityTransfigurationSuper
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public EntityDisguiseSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public EntityDisguise(Ollivanders2 plugin, Player player, Double rightWand)
    {
-      super (plugin, player, rightWand);
+      super(plugin, player, rightWand);
    }
 
    /**

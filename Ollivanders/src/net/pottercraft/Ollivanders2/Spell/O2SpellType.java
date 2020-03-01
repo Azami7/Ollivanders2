@@ -79,7 +79,7 @@ public enum O2SpellType
    FRANGE_LIGNEA(net.pottercraft.Ollivanders2.Spell.FRANGE_LIGNEA.class),
    FUMOS(net.pottercraft.Ollivanders2.Spell.FUMOS.class),
    FUMOS_DUO(net.pottercraft.Ollivanders2.Spell.FUMOS_DUO.class),
-   GEMINO(net.pottercraft.Ollivanders2.Spell.GEMINO.class),
+   GEMINIO(GEMINIO.class),
    GLACIUS(net.pottercraft.Ollivanders2.Spell.GLACIUS.class),
    GLACIUS_DUO(net.pottercraft.Ollivanders2.Spell.GLACIUS_DUO.class),
    GLACIUS_TRIA(net.pottercraft.Ollivanders2.Spell.GLACIUS_TRIA.class),

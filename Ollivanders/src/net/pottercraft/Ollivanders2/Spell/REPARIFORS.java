@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import net.pottercraft.Ollivanders2.Effect.O2EffectType;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -16,13 +17,14 @@ import org.bukkit.potion.PotionEffectType;
  * @author Azami7
  * @since 2.2.9
  */
-public class REPARIFORS extends Charms
+public class REPARIFORS extends O2Spell
 {
-   public REPARIFORS ()
+   public REPARIFORS()
    {
       super();
 
       spellType = O2SpellType.REPARIFORS;
+      branch = O2MagicBranch.CHARMS;
 
       text = "A healing spell for minor ailments such as paralysis or poisoning.";
    }
@@ -32,6 +34,9 @@ public class REPARIFORS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.REPARIFORS;
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
    }
 
    @Override

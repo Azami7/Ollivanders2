@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Player;
@@ -10,25 +11,27 @@ import java.util.ArrayList;
 
 /**
  * Causes purple firecrackers to shoot out from the tip of one's wand.
- *
+ * <p>
  * Seen/Mentioned: On 31 October 1991, Albus Dumbledore used this spell to get the attention of panicking diners in the
  * Great Hall when a troll was loose in the castle.
  *
- * @see PyrotechniaSuper
  * @author Azami7
+ * @see Pyrotechnia
  */
-public final class MOV_FOTIA extends PyrotechniaSuper
+public final class MOV_FOTIA extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MOV_FOTIA ()
+   public MOV_FOTIA()
    {
       super();
 
       spellType = O2SpellType.MOV_FOTIA;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("It took several purple firecrackers exploding from the end of Professor Dumbledore's wand to bring silence.");
          add("Purple Firecrackers");
       }};
@@ -48,7 +51,9 @@ public final class MOV_FOTIA extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.MOV_FOTIA;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);

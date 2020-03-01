@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -21,7 +22,7 @@ import java.util.List;
  * @author lownes
  * @author Azami7
  */
-public final class DISSENDIUM extends Charms
+public final class DISSENDIUM extends O2Spell
 {
    private double maxOpenTime;
    private int openTime;
@@ -31,13 +32,15 @@ public final class DISSENDIUM extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DISSENDIUM ()
+   public DISSENDIUM()
    {
       super();
 
       spellType = O2SpellType.DISSENDIUM;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Opening Charm");
          add("At once, the statue's hump opened wide enough to admit a fairly thin person.");
       }};
@@ -56,6 +59,7 @@ public final class DISSENDIUM extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DISSENDIUM;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

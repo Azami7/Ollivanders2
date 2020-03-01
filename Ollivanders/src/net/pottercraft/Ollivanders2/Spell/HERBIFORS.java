@@ -25,6 +25,7 @@ public final class HERBIFORS extends GaleatiSuper
       super();
 
       spellType = O2SpellType.HERBIFORS;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("The Flower-Hair Spell");
@@ -45,7 +46,9 @@ public final class HERBIFORS extends GaleatiSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.HERBIFORS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       materialType = Material.DANDELION;
    }

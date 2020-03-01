@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.AgeableWatcher;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -10,19 +11,21 @@ import org.bukkit.entity.Player;
 /**
  * Transfigures entity into a chicken.
  *
- * @since 1.0
  * @author Azami7
+ * @since 1.0
  */
-public final class DUCKLIFORS extends FriendlyMobDisguiseSuper
+public final class DUCKLIFORS extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DUCKLIFORS ()
+   public DUCKLIFORS()
    {
       super();
 
       spellType = O2SpellType.DUCKLIFORS;
+      branch = O2MagicBranch.TRANSFIGURATION;
+
       text = "The transfiguration spell Ducklifors will transfigure an entity into a chicken.";
    }
 
@@ -37,6 +40,7 @@ public final class DUCKLIFORS extends FriendlyMobDisguiseSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DUCKLIFORS;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       initSpell();
 

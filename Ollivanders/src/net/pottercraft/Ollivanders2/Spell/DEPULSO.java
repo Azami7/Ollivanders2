@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
@@ -23,6 +24,7 @@ public final class DEPULSO extends Knockback
       super();
 
       spellType = O2SpellType.DEPULSO;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("They were supposed to be practising the opposite of the Summoning Charm today — the Banishing Charm. Owing to the potential for nasty accidents when objects kept flying across the room. Professor Flitwick had given each student a stack of cushions on which to practise, the theory being that these wouldn’t hurt anyone if they went off target.");
@@ -43,6 +45,7 @@ public final class DEPULSO extends Knockback
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DEPULSO;
+      branch = O2MagicBranch.CHARMS;
 
       strengthReducer = 20;
 

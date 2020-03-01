@@ -1,5 +1,6 @@
 package net.pottercraft.Ollivanders2.Spell;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.StationarySpell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
@@ -14,18 +15,20 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class MOLLIARE extends StationarySpellSuper
+public final class MOLLIARE extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MOLLIARE ()
+   public MOLLIARE()
    {
       super();
 
       spellType = O2SpellType.MOLLIARE;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Cushioning Charm.");
          add("Harry felt himself glide back toward the ground as though weightless, landing painlessly on the rocky passage floor.");
       }};
@@ -45,7 +48,9 @@ public final class MOLLIARE extends StationarySpellSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.MOLLIARE;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       baseDurationInSeconds = 30;
       durationModifierInSeconds = 1;

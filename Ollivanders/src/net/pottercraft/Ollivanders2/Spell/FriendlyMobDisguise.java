@@ -5,15 +5,13 @@ import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-
 /**
  * Super class for transfiguring friendly mobs.
  *
- * @since 2.2.6
  * @author Azami7
+ * @since 2.2.6
  */
-public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
+public abstract class FriendlyMobDisguise extends EntityDisguise
 {
    int minDurationInSeconds = 15;
    int maxDurationInSeconds = 600; // 10 minutes
@@ -21,7 +19,7 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FriendlyMobDisguiseSuper ()
+   public FriendlyMobDisguise()
    {
       super();
    }
@@ -29,11 +27,11 @@ public abstract class FriendlyMobDisguiseSuper extends EntityDisguiseSuper
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public FriendlyMobDisguiseSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public FriendlyMobDisguise(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 

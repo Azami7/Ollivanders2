@@ -3,6 +3,7 @@ package net.pottercraft.Ollivanders2.Spell;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import org.bukkit.Material;
@@ -17,7 +18,7 @@ import org.bukkit.inventory.ItemStack;
  * @author lownes
  * @author Azami7
  */
-public final class EXPELLIARMUS extends Charms
+public final class EXPELLIARMUS extends O2Spell
 {
    private final double minVelocity = 0.25;
    private final double maxVelocity = 3;
@@ -26,13 +27,15 @@ public final class EXPELLIARMUS extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public EXPELLIARMUS ()
+   public EXPELLIARMUS()
    {
       super();
 
       spellType = O2SpellType.EXPELLIARMUS;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Disarming Charm");
          add("They made the most of the last few hours in which they were allowed to do magic before the holidays... and practised disarming each other by magic. Harry was getting very good at it.");
          add("A handy (even life-saving) spell for removing an object from an enemy’s grasp.");
@@ -54,6 +57,7 @@ public final class EXPELLIARMUS extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.EXPELLIARMUS;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

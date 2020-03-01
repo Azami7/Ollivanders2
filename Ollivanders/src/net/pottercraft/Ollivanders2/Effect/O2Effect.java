@@ -74,6 +74,9 @@ public abstract class O2Effect
       p = plugin;
 
       duration = durationInTicks;
+      if (duration < 0)
+         permanent = true;
+
       kill = false;
       targetID = pid;
 
@@ -87,6 +90,9 @@ public abstract class O2Effect
     */
    public void age (int i)
    {
+      if (permanent)
+         return;
+
       duration -= i;
       if (duration < 0)
       {
@@ -102,6 +108,9 @@ public abstract class O2Effect
    public void setPermanent (boolean perm)
    {
       permanent = perm;
+
+      if (permanent)
+         duration = -1;
    }
 
    /**

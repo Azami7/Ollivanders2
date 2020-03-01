@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import net.pottercraft.Ollivanders2.Ollivanders2API;
 import net.pottercraft.Ollivanders2.Ollivanders2Common;
@@ -16,11 +17,11 @@ import org.bukkit.entity.Player;
 /**
  * Turns all blocks in a radius into fallingBlock entities
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class DEPRIMO extends Charms
+public final class DEPRIMO extends O2Spell
 {
    private final double minRadius = 1.0;
    private final double maxRadius = 10.0;
@@ -28,13 +29,15 @@ public final class DEPRIMO extends Charms
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public DEPRIMO ()
+   public DEPRIMO()
    {
       super();
 
       spellType = O2SpellType.DEPRIMO;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("She had blasted a hole in the sitting-room floor. They fell like boulders, Harry still holding onto her hand for dear life, there as a scream from below and he glimpsed two men trying to get out of the way as vast quantities of rubble and broken furniture rained all around them from the shattered ceiling.");
          add("The Blasting Charm");
       }};
@@ -53,6 +56,7 @@ public final class DEPRIMO extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DEPRIMO;
+      branch = O2MagicBranch.CHARMS;
 
       // material black list
       materialBlackList.add(Material.WATER);
@@ -108,7 +112,7 @@ public final class DEPRIMO extends Charms
          BlockData blockData = block.getBlockData();
          block.setType(Material.AIR);
 
-         //blockLocation.getWorld().spawnFallingBlock(blockLocation, blockData);
+         blockLocation.getWorld().spawnFallingBlock(blockLocation, blockData);
       }
 
       kill();

@@ -1,10 +1,9 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
@@ -25,6 +24,7 @@ public final class ARANIA_EXUMAI extends Knockback
       super();
 
       spellType = O2SpellType.ARANIA_EXUMAI;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("\"Know any spells?\"\n\"One, but it's not powerful enough for all of them.\"\n\"Where's Hermione when you need her?\"\n\"Let's go! Arania Exumai\" -Harry Potter and Ron Weasley");
@@ -45,6 +45,7 @@ public final class ARANIA_EXUMAI extends Knockback
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.ARANIA_EXUMAI;
+      branch = O2MagicBranch.CHARMS;
 
       initSpell();
 

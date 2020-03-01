@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 
 import net.pottercraft.Ollivanders2.Ollivanders2API;
@@ -16,22 +17,24 @@ import org.bukkit.inventory.meta.ItemMeta;
 /**
  * Bursts a log into a stack of coreless wands, whose number depends on the player's spell level.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class FRANGE_LIGNEA extends Charms
+public final class FRANGE_LIGNEA extends O2Spell
 {
    public static final String corelessWandLabel = "Coreless Wand";
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public FRANGE_LIGNEA ()
+   public FRANGE_LIGNEA()
    {
       super();
 
       spellType = O2SpellType.FRANGE_LIGNEA;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Frange lignea will cause a log of the spruce, oak, birch, or jungle species to explode into coreless wands.";
    }
 
@@ -46,9 +49,9 @@ public final class FRANGE_LIGNEA extends Charms
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FRANGE_LIGNEA;
+      branch = O2MagicBranch.CHARMS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
 
       // material black list
       materialBlackList.add(Material.WATER);

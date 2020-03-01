@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -26,6 +27,7 @@ public final class EVANESCO extends Transfiguration
       super();
 
       spellType = O2SpellType.EVANESCO;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       flavorText = new ArrayList<String>() {{
          add("The Vanishing Spell");
@@ -46,6 +48,7 @@ public final class EVANESCO extends Transfiguration
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.EVANESCO;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       initSpell();
 

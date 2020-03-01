@@ -18,20 +18,20 @@ import java.util.List;
  * @author Azami7
  * @since 2.3
  */
-public abstract class ItemCurse extends DarkArts
+public abstract class ItemCurse extends O2Spell
 {
    protected String curseLabel;
 
    final int minMagnitude = 1;
    final int maxMagnitude = 100;
-   int magnitude;
 
-   static ArrayList<String> itemCurseNames = new ArrayList<>();
+   double strength = 1;
+   int magnitude;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ItemCurse ()
+   public ItemCurse()
    {
       super();
    }
@@ -53,17 +53,20 @@ public abstract class ItemCurse extends DarkArts
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+
+      // set to an empty string to protect against NPEs
+      curseLabel = "";
    }
 
    @Override
    void doInitSpell ()
    {
-      magnitude = (int) usesModifier / 2;
+      magnitude = (int) ((usesModifier / 4) * strength);
+
       if (magnitude < minMagnitude)
       {
          magnitude = minMagnitude;
-      }
-      else if (magnitude > maxMagnitude)
+      } else if (magnitude > maxMagnitude)
       {
          magnitude = maxMagnitude;
       }
@@ -75,6 +78,12 @@ public abstract class ItemCurse extends DarkArts
    @Override
    protected void doCheckEffect ()
    {
+      if (hasHitTarget())
+      {
+         kill();
+         return;
+      }
+
       List<Item> items = getItems(1.5);
 
       if (items.size() > 0)
@@ -84,62 +93,74 @@ public abstract class ItemCurse extends DarkArts
          // if this is a wand, skip
          if (Ollivanders2API.common.isWand(item.getItemStack()))
          {
-            kill();
+            stopProjectile();
             return;
          }
 
          // get item meta
          ItemStack stack = item.getItemStack().clone();
          int amount = stack.getAmount();
-         ItemMeta meta = stack.getItemMeta();
-         List<String> lore = new ArrayList<>();
+         ItemMeta meta = newItemMeta(stack.getItemMeta());
 
-         // set the lore on the item to indicate it is affected by Flagrante
-         if (meta.hasLore())
-         {
-            lore = meta.getLore();
-            for (int i = 0; i < lore.size(); i++)
-            {
-               if (lore.get(i).contains(curseLabel))
-               {
-                  String[] loreParts = lore.get(i).split(" ");
-                  int curMagnitude = Integer.parseInt(loreParts[1]);
-                  if (magnitude < curMagnitude)
-                  {
-                     magnitude = curMagnitude;
-                  }
+         if (meta == null)
+            return;
 
-                  lore.set(i, curseLabel + " " + magnitude);
-               }
-               else
-               {
-                  lore.add(curseLabel + " " + magnitude);
-               }
-            }
-         }
-         else
-         {
-            lore.add(curseLabel + " " + magnitude);
-         }
-         meta.setLore(lore);
+         // mark target hit
+         stopProjectile();
+
+         // create new stack
          stack.setItemMeta(meta);
          stack.setAmount(1);
+
+         // update original itemStack
          if (amount > 1)
          {
             item.getItemStack().setAmount(amount - 1);
-         }
-         else
+         } else
          {
             item.remove();
          }
-         item.getWorld().dropItem(item.getLocation(), stack);
 
-         kill();
-         return;
+         // drop cursed item
+         item.getWorld().dropItem(item.getLocation(), stack);
+      }
+   }
+
+   private ItemMeta newItemMeta(ItemMeta itemMeta)
+   {
+      if (itemMeta == null)
+         return null;
+
+      List<String> itemLore;
+
+      itemLore = itemMeta.getLore();
+
+      if (itemLore != null)
+      {
+         for (int i = 0; i < itemLore.size(); i++)
+         {
+            if (itemLore.get(i).contains(curseLabel))
+            {
+               String[] loreParts = itemLore.get(i).split(" ");
+               int curMagnitude = Integer.parseInt(loreParts[1]);
+               if (magnitude < curMagnitude)
+               {
+                  magnitude = curMagnitude;
+               }
+
+               itemLore.set(i, curseLabel + " " + magnitude);
+            }
+         }
       }
 
-      // projectile has stopped, kill the spell
-      if (hasHitTarget())
-         kill();
+      if (itemLore == null)
+         itemLore = new ArrayList<>();
+
+      if (itemLore.size() < 1)
+         itemLore.add(curseLabel + " " + magnitude);
+
+      itemMeta.setLore(itemLore);
+
+      return itemMeta;
    }
 }

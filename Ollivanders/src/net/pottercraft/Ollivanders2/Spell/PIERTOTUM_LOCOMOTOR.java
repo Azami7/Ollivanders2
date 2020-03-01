@@ -1,6 +1,7 @@
 package net.pottercraft.Ollivanders2.Spell;
 
 import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
@@ -28,6 +29,7 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
       super();
 
       spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
+      branch = O2MagicBranch.TRANSFIGURATION;
 
       flavorText = new ArrayList<String>() {{
          add("And all along the corridor the statues and suits of armour jumped down from their plinths, and from the echoing crashes from the floors above and below, Harry knew that their fellows throughout the castle had done the same... Cheering and yelling, the horde of moving statues stampeded past Harry; some of them smaller, others larger than life.");
@@ -48,7 +50,9 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
-      setUsesModifier();
+      branch = O2MagicBranch.TRANSFIGURATION;
+
+      initSpell();
 
       // world guard flags
       worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);

@@ -2,6 +2,7 @@ package net.pottercraft.Ollivanders2.Spell;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
+import net.pottercraft.Ollivanders2.O2MagicBranch;
 import net.pottercraft.Ollivanders2.Ollivanders2;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -11,22 +12,24 @@ import java.util.ArrayList;
 /**
  * Turn target player in to a spider.
  *
- * @since 2.2.6
- * @link https://github.com/Azami7/Ollivanders2/issues/30
  * @author Azami7
+ * @link https://github.com/Azami7/Ollivanders2/issues/30
+ * @since 2.2.6
  */
-public final class ENTOMORPHIS extends PlayerDisguiseSuper
+public final class ENTOMORPHIS extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ENTOMORPHIS ()
+   public ENTOMORPHIS()
    {
       super();
 
       spellType = O2SpellType.ENTOMORPHIS;
+      branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("What wouldn't he give to strike now, to jinx Dudley so thoroughly he'd have to crawl home like an insect, struck dumb, sprouting feelers...");
          add("The Insect Jinx");
       }};
@@ -45,9 +48,9 @@ public final class ENTOMORPHIS extends PlayerDisguiseSuper
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.ENTOMORPHIS;
+      branch = O2MagicBranch.DARK_ARTS;
 
-      // set up usage modifier, has to be done here to get the uses for this specific spell
-      setUsesModifier();
+      initSpell();
       calculateSuccessRate();
 
       targetType = EntityType.SPIDER;
