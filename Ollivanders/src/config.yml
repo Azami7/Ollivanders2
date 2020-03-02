@@ -27,7 +27,6 @@ nonVerbalSpellCasting: false
 spellJournal: true
 hostileMobAnimagi: false
 deathExpLoss: false
-divinationMaxDays: 4
 
 # Houses
 #
