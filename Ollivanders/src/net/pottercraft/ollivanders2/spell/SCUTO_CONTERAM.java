@@ -67,8 +67,11 @@ public final class SCUTO_CONTERAM extends O2Spell
       }
    }
 
+   /**
+    * Look for shield spells and shorten their duration
+    */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
       {

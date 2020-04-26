@@ -31,8 +31,6 @@ public final class REPARO extends O2Spell
       spellType = O2SpellType.REPARO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       flavorText = new ArrayList<String>()
       {{
          add("The Mending Charm");

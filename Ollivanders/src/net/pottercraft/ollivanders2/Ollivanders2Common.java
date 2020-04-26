@@ -311,7 +311,17 @@ public class Ollivanders2Common
     */
    public boolean isInside (Location sourceLocation, Location checkLocation, int radius)
    {
-      double distance = checkLocation.distance(sourceLocation);
+      double distance;
+
+      try
+      {
+         distance = checkLocation.distance(sourceLocation);
+      }
+      catch (Exception e)
+      {
+         // this call can generate java.lang.IllegalArgumentException: Cannot measure distance between world_nether and world
+         return false;
+      }
 
       return (distance < radius);
    }

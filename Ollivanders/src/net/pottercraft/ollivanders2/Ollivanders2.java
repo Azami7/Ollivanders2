@@ -52,7 +52,6 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @author lil_miss_giggles
  */
-
 public class Ollivanders2 extends JavaPlugin
 {
    private List<O2Spell> projectiles = new ArrayList<>();
