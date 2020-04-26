@@ -35,15 +35,18 @@ public class FLYING extends O2Effect
    {
       Player target = p.getServer().getPlayer(targetID);
 
-      age(1);
-      if (duration > 1)
+      if (target != null)
       {
-         target.setAllowFlight(true);
-         target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
-      }
-      else
-      {
-         target.setAllowFlight(false);
-      }
+         age(1);
+         if (duration > 1)
+         {
+            target.setAllowFlight(true);
+            target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
+         } else
+         {
+            target.setAllowFlight(false);
+         }
+      } else
+         kill();
    }
 }

@@ -15,12 +15,12 @@ import java.util.ArrayList;
  * @author Azami7
  * @since 2.2.9
  */
-public class PROPHETEIA extends Charms
+public class PROPHETEIA extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PROPHETEIA ()
+   public PROPHETEIA()
    {
       super();
 
@@ -32,7 +32,7 @@ public class PROPHETEIA extends Charms
          add("\"But when Sybill Trelawney spoke, it was not in her usual ethereal, mystic voice, but in the hard, hoarse tones Harry had heard her use once before.\"");
       }};
 
-      text = "Propheteia allows one to reveal amn unfulfilled prophecy that has been made about a target player. Chances of success depend on experience.";
+      text = "Propheteia allows one to reveal an unfulfilled prophecy that has been made about a target player. Chances of success depend on experience.";
    }
 
    /**
@@ -48,30 +48,35 @@ public class PROPHETEIA extends Charms
 
       branch = O2MagicBranch.DIVINATION;
       spellType = O2SpellType.PROPHETEIA;
-      setUsesModifier();
+      initSpell();
    }
 
    @Override
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
-
-      for (LivingEntity live : getLivingEntities(1.5))
+      for (LivingEntity livingEntity : getLivingEntities(1.5))
       {
-         if (live instanceof Player && live.getUniqueId() != player.getUniqueId())
+         if (livingEntity.getUniqueId() == player.getUniqueId())
          {
-            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
+            continue;
+         }
 
-            if (usesModifier > rand)
+         if (!(livingEntity instanceof Player))
+         {
+            continue;
+         }
+
+         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
+
+         if (usesModifier > rand)
+         {
+            String prophecy = Ollivanders2API.getProphecies().getProphecy(livingEntity.getUniqueId());
+
+            if (prophecy != null)
             {
-               String prophecy = Ollivanders2API.getProphecies().getProphecy(live.getUniqueId());
-
-               if (prophecy != null)
-               {
-                  player.sendMessage(Ollivanders2.chatColor + prophecy);
-                  kill();
-                  return;
-               }
+               player.sendMessage(Ollivanders2.chatColor + prophecy);
+               kill();
+               return;
             }
          }
 
@@ -79,6 +84,11 @@ public class PROPHETEIA extends Charms
 
          kill();
          return;
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

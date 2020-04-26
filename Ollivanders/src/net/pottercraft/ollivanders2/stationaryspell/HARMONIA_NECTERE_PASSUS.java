@@ -148,9 +148,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
    {
       Ollivanders2Common o2c = new Ollivanders2Common(p);
 
-      Map<String, String> locData = o2c.serializeLocation(location, twinLabel);
-
-      return locData;
+      return o2c.serializeLocation(location, twinLabel);
    }
 
    /**

@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
+import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -24,6 +25,7 @@ public final class BOMBARDA extends BombardaSuper
       super();
 
       spellType = O2SpellType.BOMBARDA;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("\"Bombarda?\"\n\"And wake up everyone in Hogwarts?\" -Albus Potter and Scorpius Malfoy");
@@ -45,8 +47,8 @@ public final class BOMBARDA extends BombardaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.BOMBARDA;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
 
-      strength = 0.8;
+      initSpell();
    }
 }

@@ -19,28 +19,6 @@ public final class O2PlayerCommon
       p = plugin;
    }
 
-   /**
-    * Wand wood types
-    */
-   public static final ArrayList<String> woodArray = new ArrayList<String>()
-   {{
-      add("Spruce");
-      add("Jungle");
-      add("Birch");
-      add("Oak");
-   }};
-
-   /**
-    * Wand core types
-    */
-   public static final ArrayList<String> coreArray = new ArrayList<String>()
-   {{
-      add("Spider Eye");
-      add("Bone");
-      add("Rotten Flesh");
-      add("Gunpowder");
-   }};
-
    static String wandLoreConjunction = " and ";
 
    /**

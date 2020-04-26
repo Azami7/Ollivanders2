@@ -99,7 +99,8 @@ public class BABBLING extends O2Effect
     */
    private String getNonsense ()
    {
-      String nonsense = "";
+      StringBuilder nonsense = new StringBuilder();
+
       int numWords = Math.abs(Ollivanders2Common.random.nextInt() % maxWords) + 1;
 
       for (int i = 0; i < numWords; i++)
@@ -107,12 +108,12 @@ public class BABBLING extends O2Effect
          String random = dictionary.get(Math.abs(Ollivanders2Common.random.nextInt()) % dictionary.size());
 
          if (nonsense.length() > 0)
-            nonsense = nonsense + " ";
+            nonsense.append(" ");
 
-         nonsense = nonsense + random;
+         nonsense.append(random);
       }
 
-      return nonsense;
+      return nonsense.toString();
    }
 
    /**

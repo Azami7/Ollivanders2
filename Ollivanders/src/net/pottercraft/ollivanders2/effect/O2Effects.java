@@ -50,7 +50,7 @@ public class O2Effects
        * Get a copy of the effects active on this player.
        *
        * @param pid the id of the player
-       * @return
+       * @return a map of all the effects on this player
        */
       synchronized Map<O2EffectType, O2Effect> getPlayerActiveEffects (UUID pid)
       {
@@ -124,7 +124,7 @@ public class O2Effects
        * Get a copy of the effects saved for this player.
        *
        * @param pid the id of the player
-       * @return
+       * @return a map of all the saved effects for this player
        */
       synchronized Map<O2EffectType, Integer> getPlayerSavedEffects (UUID pid)
       {
@@ -169,10 +169,7 @@ public class O2Effects
             {
                semaphore.acquire();
 
-               if (savedEffects.containsKey(pid))
-               {
-                  savedEffects.remove(pid);
-               }
+               savedEffects.remove(pid);
 
                savedEffects.put(pid, effects);
             }
@@ -202,10 +199,7 @@ public class O2Effects
             {
                semaphore.acquire();
 
-               if (activeEffects.containsKey(pid))
-               {
-                  activeEffects.remove(pid);
-               }
+               activeEffects.remove(pid);
 
                activeEffects.put(pid, effects);
             }
@@ -243,10 +237,8 @@ public class O2Effects
                      effect.kill();
                   }
                }
-               if (savedEffects.containsKey(pid))
-               {
-                  savedEffects.remove(pid);
-               }
+
+               savedEffects.remove(pid);
             }
             catch (Exception e)
             {
@@ -324,6 +316,20 @@ public class O2Effects
    }
 
    /**
+    * Determines if this player is affected by any effect. Only checks active effects.
+    *
+    * @param pid the id of the player
+    * @return true if they have this effect, false otherwise
+    */
+   public boolean hasEffects (UUID pid)
+   {
+      if (pid == null)
+         return false;
+
+      return !effectsData.getPlayerActiveEffects(pid).isEmpty();
+   }
+
+   /**
     * On player join, add any saved effects.
     *
     * @param pid the id of the player.
@@ -347,7 +353,7 @@ public class O2Effects
          O2EffectType effectType = entry.getKey();
          Integer duration = entry.getValue();
 
-         Class effectClass = effectType.getClassName();
+         Class<?> effectClass = effectType.getClassName();
 
          O2Effect effect;
          try
@@ -628,6 +634,58 @@ public class O2Effects
       }
 
       effectsData.updatePlayerActiveEffects(pid, activeEffects);
+   }
+
+   /**
+    * Age a specific effect on a player by a specified percent.
+    *
+    * @param pid        the id of the player
+    * @param effectType the effect to age
+    * @param percent    the percent to age the effect
+    */
+   public void ageEffectByPercent (UUID pid, O2EffectType effectType, int percent)
+   {
+      if (percent > 100)
+      {
+         percent = 100;
+      }
+      else if (percent < 1)
+      {
+         percent = 1;
+      }
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
+      if (activeEffects.containsKey(effectType))
+      {
+         O2Effect effect = activeEffects.get(effectType);
+
+         if (!effect.isPermanent())
+         {
+            effect.duration -= effect.duration * (percent / 100);
+         }
+      }
+
+      effectsData.updatePlayerActiveEffects(pid, activeEffects);
+   }
+
+   /**
+    * Age all effects on a player by a specified percent.
+    *
+    * @param pid     the id of the player
+    * @param percent the percent to age the effect
+    */
+   public void ageAllEffectsByPercent (UUID pid, int percent)
+   {
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
+      Collection<O2Effect> effects = activeEffects.values();
+
+      for (O2Effect effect : effects)
+      {
+         if (!effect.isPermanent())
+         {
+            ageEffectByPercent(pid, effect.effectType, percent);
+         }
+      }
    }
 
    /**

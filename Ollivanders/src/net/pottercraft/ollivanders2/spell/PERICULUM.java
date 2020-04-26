@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
+import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Player;
@@ -11,20 +12,22 @@ import java.util.ArrayList;
 /**
  * Shoots red burst fireworks in to the air.
  *
- * @see PyrotechniaSuper
  * @author lownes
  * @author Azami7
+ * @see Pyrotechnia
  */
-public final class PERICULUM extends PyrotechniaSuper
+public final class PERICULUM extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public PERICULUM ()
+   public PERICULUM()
    {
       super();
 
       spellType = O2SpellType.PERICULUM;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Conjures red burst fireworks in the air.";
    }
 
@@ -40,7 +43,9 @@ public final class PERICULUM extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PERICULUM;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.RED);

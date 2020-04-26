@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -61,6 +62,11 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
 
       spellType = O2StationarySpellType.ALIQUAM_FLOO;
       this.flooName = flooName;
+
+      if (Ollivanders2.debug)
+      {
+         p.getLogger().info("Creating stationary spell type " + spellType.name());
+      }
    }
 
    @Override
@@ -73,7 +79,14 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
       }
       if (countDown > 0)
       {
-         location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
+         World world = location.getWorld();
+         if (world == null)
+         {
+            kill();
+            return;
+         }
+
+         world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
 
          for (LivingEntity live : getCloseLivingEntities())
          {
@@ -83,6 +96,13 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
       }
       if (block.getType() == Material.FIRE)
       {
+         World world = location.getWorld();
+         if (world == null)
+         {
+            kill();
+            return;
+         }
+
          for (Item item : location.getWorld().getEntitiesByClass(Item.class))
          {
             ItemStack stack = item.getItemStack();
@@ -93,10 +113,11 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
                   if (stack.hasItemMeta())
                   {
                      ItemMeta meta = stack.getItemMeta();
-                     if (meta.hasLore())
+
+                     if (meta != null && meta.hasLore())
                      {
                         List<String> lore = meta.getLore();
-                        if (lore.contains("Glittery, silver powder"))
+                        if (lore != null && lore.contains("Glittery, silver powder"))
                         {
                            countDown += 20 * 60 * stack.getAmount();
                            item.remove();

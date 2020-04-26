@@ -89,7 +89,7 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
       }
       for (O2Spell sp : p.getProjectiles())
       {
-         if (sp.getBlock().equals(edLocation.getBlock()))
+         if (sp.getTargetBlock().equals(edLocation.getBlock()))
          {
             System.out.println("teleported projectile");
             sp.location = normLocation.clone();

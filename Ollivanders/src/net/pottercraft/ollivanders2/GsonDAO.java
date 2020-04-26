@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -306,7 +307,7 @@ public class GsonDAO implements GenericDAO
       try
       {
          BufferedWriter bWriter = new BufferedWriter(new OutputStreamWriter(
-               new FileOutputStream(saveFile), "UTF-8"));
+               new FileOutputStream(saveFile), StandardCharsets.UTF_8));
 
          bWriter.write(json);
          bWriter.flush();
@@ -363,7 +364,7 @@ public class GsonDAO implements GenericDAO
       try
       {
          BufferedReader bReader = new BufferedReader(new InputStreamReader(
-               new FileInputStream(saveFile), "UTF-8"));
+               new FileInputStream(saveFile), StandardCharsets.UTF_8));
 
          json = bReader.readLine();
 

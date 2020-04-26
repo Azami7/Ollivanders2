@@ -1,21 +1,20 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.bukkit.entity.LivingEntity;
+import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 
 /**
- * Pulls a living entity towards the caster.
+ * Pulls an item towards the caster.
  *
  * @version Ollivanders2
  * @author lownes
  * @author Azami7
  */
-public final class CARPE_RETRACTUM extends Charms
+public final class CARPE_RETRACTUM extends Knockback
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -25,13 +24,14 @@ public final class CARPE_RETRACTUM extends Charms
       super();
 
       spellType = O2SpellType.CARPE_RETRACTUM;
+      branch = O2MagicBranch.CHARMS;
 
       flavorText = new ArrayList<String>() {{
          add("\"...which is why the Carpe Retractum spell is useful. It allows you to seize and pull objects within your direct line of sight towards you...\" -Professor Flitwick");
          add("Seize and Pull Charm");
       }};
 
-      text = "Pulls a living entity towards you.";
+      text = "Pulls an item towards you.";
    }
 
    /**
@@ -44,24 +44,13 @@ public final class CARPE_RETRACTUM extends Charms
    public CARPE_RETRACTUM (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.CARPE_RETRACTUM;
-      setUsesModifier();
-   }
+      branch = O2MagicBranch.CHARMS;
 
-   @Override
-   public void checkEffect ()
-   {
-      move();
-      List<LivingEntity> living = getLivingEntities(1.5);
-      for (LivingEntity live : living)
-      {
-         if (live.getUniqueId() == player.getUniqueId())
-            continue;
+      minVelocity = 0.25;
+      maxVelocity = 3;
+      pull = true;
 
-         live.setVelocity(player.getEyeLocation().toVector().subtract(live.getLocation().toVector()).normalize().multiply(usesModifier / 10));
-         kill();
-         return;
-      }
+      initSpell();
    }
 }

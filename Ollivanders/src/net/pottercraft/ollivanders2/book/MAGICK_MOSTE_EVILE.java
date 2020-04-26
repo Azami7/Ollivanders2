@@ -27,6 +27,7 @@ public class MAGICK_MOSTE_EVILE extends O2Book
       spells.add(O2SpellType.AVADA_KEDAVRA);
       spells.add(O2SpellType.FLAGRANTE);
       spells.add(O2SpellType.LEGILIMENS);
+      spells.add(O2SpellType.SCUTO_CONTERAM);
       spells.add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
 
       closingPage = "\n\nOf the Horcrux, wickedest of magical inventions, we shall not speak nor give direction.";

@@ -37,7 +37,7 @@ public class ADVANCED_TRANSFIGURATION extends O2Book
       spells.add(O2SpellType.INCARNATIO_PORCILLI);
       spells.add(O2SpellType.INCARNATIO_URSUS);
       spells.add(O2SpellType.INCARNATIO_VACCULA);
-      spells.add(O2SpellType.GEMINO);
+      spells.add(O2SpellType.GEMINIO);
       spells.add(O2SpellType.REPARIFARGE);
       //spells.add(O2SpellType.HOMORPHUS);
    }

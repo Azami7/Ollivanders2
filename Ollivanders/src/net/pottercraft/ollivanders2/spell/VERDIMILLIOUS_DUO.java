@@ -11,16 +11,16 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 /**
  * Fancier version of VERDIMILLIOUS
  *
- * @see PyrotechniaSuper
- * @see VERDIMILLIOUS
  * @author Azami7
+ * @see Pyrotechnia
+ * @see VERDIMILLIOUS
  */
-public final class VERDIMILLIOUS_DUO extends PyrotechniaSuper
+public final class VERDIMILLIOUS_DUO extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VERDIMILLIOUS_DUO ()
+   public VERDIMILLIOUS_DUO()
    {
       super();
 
@@ -40,7 +40,7 @@ public final class VERDIMILLIOUS_DUO extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.VERDIMILLIOUS_DUO;
-      setUsesModifier();
+      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.GREEN);

@@ -13,11 +13,11 @@ import java.util.UUID;
  */
 public class SLOWNESS extends PotionEffectSuper
 {
-    int strength = 1;
-
     public SLOWNESS(Ollivanders2 plugin, Integer duration, UUID pid)
     {
         super(plugin, duration, pid);
+
+        strength = 1;
 
         effectType = O2EffectType.SLOWNESS;
         potionEffectType = PotionEffectType.SLOW;

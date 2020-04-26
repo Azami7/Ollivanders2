@@ -11,15 +11,15 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 /**
  * Shoots green fireworks in to the air.
  *
- * @see PyrotechniaSuper
  * @author Azami7
+ * @see Pyrotechnia
  */
-public final class VERDIMILLIOUS extends PyrotechniaSuper
+public final class VERDIMILLIOUS extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public VERDIMILLIOUS ()
+   public VERDIMILLIOUS()
    {
       super();
 
@@ -39,7 +39,7 @@ public final class VERDIMILLIOUS extends PyrotechniaSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.VERDIMILLIOUS;
-      setUsesModifier();
+      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.GREEN);

@@ -43,7 +43,9 @@ public class O2StationarySpells
    public void addStationarySpell (StationarySpellObj spell)
    {
       if (Ollivanders2.debug)
-         p.getLogger().info("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString());
+      {
+         p.getLogger().info("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString() + " with duration " + spell.duration + " and radius of " + spell.radius);
+      }
 
       if (spell != null)
          O2StationarySpells.add(spell);
@@ -101,6 +103,26 @@ public class O2StationarySpells
          }
       }
       return inside;
+   }
+
+   /**
+    * Check for a specific type of stationary spell at a location
+    *
+    * @param location the location to check
+    * @param stationarySpellType the stationary spell type to check for
+    * @return true if spell of that type exists at that location, false otherwise
+    */
+   public boolean checkLocationForSpell (Location location, O2StationarySpellType stationarySpellType)
+   {
+      List<StationarySpellObj> spellsAtLocation = getStationarySpellsAtLocation(location);
+
+      for (StationarySpellObj statSpell : spellsAtLocation)
+      {
+         if (statSpell.spellType == stationarySpellType)
+            return true;
+      }
+
+      return false;
    }
 
    /**
@@ -327,7 +349,7 @@ public class O2StationarySpells
    {
       StationarySpellObj statSpell;
 
-      Class spellClass = spellType.getClassName();
+      Class<?> spellClass = spellType.getClassName();
       try
       {
          statSpell = (StationarySpellObj)spellClass.getConstructor(Ollivanders2.class).newInstance(p);

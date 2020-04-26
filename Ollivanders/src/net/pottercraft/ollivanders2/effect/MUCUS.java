@@ -36,9 +36,13 @@ public class MUCUS extends O2Effect
       {
          Player target = p.getServer().getPlayer(targetID);
 
-         World world = target.getWorld();
-         Slime slime = (Slime) world.spawnEntity(target.getEyeLocation(), EntityType.SLIME);
-         slime.setSize(1);
+         if (target != null)
+         {
+            World world = target.getWorld();
+            Slime slime = (Slime) world.spawnEntity(target.getEyeLocation(), EntityType.SLIME);
+            slime.setSize(1);
+         } else
+            kill();
       }
    }
 }

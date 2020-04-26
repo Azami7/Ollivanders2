@@ -3,6 +3,13 @@ package net.pottercraft.ollivanders2.divination;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
+/**
+ * Ovomancy is a type of divination that involves cracking open eggs and observing which way the yolks fall.
+ * https://harrypotter.fandom.com/wiki/Ovomancy
+ *
+ * @author Azami7
+ * @since 2.2.9
+ */
 public class OVOMANCY extends O2Divination
 {
    public OVOMANCY (Ollivanders2 plugin, Player pro, Player tar, Integer exp)

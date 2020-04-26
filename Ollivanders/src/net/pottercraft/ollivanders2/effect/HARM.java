@@ -13,8 +13,6 @@ import java.util.UUID;
  */
 public class HARM extends PotionEffectSuper
 {
-   int strength = 1;
-
    public HARM (Ollivanders2 plugin, Integer duration, UUID pid)
    {
       super(plugin, duration, pid);
@@ -22,6 +20,8 @@ public class HARM extends PotionEffectSuper
       effectType = O2EffectType.HARM;
       potionEffectType = PotionEffectType.HARM;
       informousText = legilimensText = "feels unwell";
+
+      strength = 1;
 
       divinationText.add("shall be struck by a terrible affliction");
       divinationText.add("will come to harm");

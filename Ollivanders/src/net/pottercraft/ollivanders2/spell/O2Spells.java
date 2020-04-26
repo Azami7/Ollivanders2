@@ -51,7 +51,7 @@ public class O2Spells
    {
       O2Spell spell;
 
-      Class spellClass = spellType.getClassName();
+      Class<?> spellClass = spellType.getClassName();
 
       try
       {

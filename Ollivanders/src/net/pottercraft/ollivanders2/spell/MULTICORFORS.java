@@ -16,12 +16,12 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class MULTICORFORS extends Charms
+public final class MULTICORFORS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public MULTICORFORS ()
+   public MULTICORFORS()
    {
       super();
 
@@ -45,12 +45,12 @@ public final class MULTICORFORS extends Charms
       // this is a transfiguration spell in HP but does not use the Transfiguration superclass.
       branch = O2MagicBranch.TRANSFIGURATION;
       spellType = O2SpellType.MULTICORFORS;
-      setUsesModifier();
+
+      initSpell();
    }
 
-   public void checkEffect ()
+   protected void doCheckEffect ()
    {
-      move();
       for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live.getUniqueId() == player.getUniqueId())
@@ -71,9 +71,15 @@ public final class MULTICORFORS extends Charms
                Color newColor = Color.fromRGB(red, green, blue);
                meta.setColor(newColor);
                armor.setItemMeta(meta);
+
                kill();
             }
          }
+      }
+
+      if (hasHitTarget())
+      {
+         kill();
       }
    }
 }

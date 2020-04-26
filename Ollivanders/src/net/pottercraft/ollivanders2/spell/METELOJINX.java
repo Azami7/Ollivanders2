@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
+import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -22,6 +23,8 @@ public final class METELOJINX extends MetelojinxSuper
       super();
 
       spellType = O2SpellType.METELOJINX;
+      branch = O2MagicBranch.CHARMS;
+
       text = "Metelojinx will turn a sunny day into a storm.";
    }
 
@@ -37,7 +40,9 @@ public final class METELOJINX extends MetelojinxSuper
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.METELOJINX;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       storm = true;
    }

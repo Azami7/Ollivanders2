@@ -13,8 +13,6 @@ import java.util.UUID;
  */
 public class BLINDNESS extends PotionEffectSuper
 {
-   int strength = 1;
-
    public BLINDNESS (Ollivanders2 plugin, Integer duration, UUID pid)
    {
       super(plugin, duration, pid);
@@ -22,6 +20,8 @@ public class BLINDNESS extends PotionEffectSuper
       effectType = O2EffectType.BLINDNESS;
       potionEffectType = PotionEffectType.BLINDNESS;
       informousText = legilimensText = "cannot see";
+
+      strength = 1;
 
       divinationText.add("shall be cursed");
       divinationText.add("shall be afflicted in the mind");

@@ -66,14 +66,17 @@ public abstract class O2Effect
     * Constructor. If you change this method signature, be sure to update all reflection code that uses it.
     *
     * @param plugin a callback to the MC plugin
-    * @param duration the length this effect should remain
+    * @param durationInTicks the length this effect should remain
     * @param pid the player this effect acts on
     */
-   public O2Effect (Ollivanders2 plugin, Integer duration, UUID pid)
+   public O2Effect (Ollivanders2 plugin, Integer durationInTicks, UUID pid)
    {
       p = plugin;
 
-      this.duration = duration;
+      duration = durationInTicks;
+      if (duration < 0)
+         permanent = true;
+
       kill = false;
       targetID = pid;
 
@@ -87,6 +90,9 @@ public abstract class O2Effect
     */
    public void age (int i)
    {
+      if (permanent)
+         return;
+
       duration -= i;
       if (duration < 0)
       {
@@ -102,6 +108,9 @@ public abstract class O2Effect
    public void setPermanent (boolean perm)
    {
       permanent = perm;
+
+      if (permanent)
+         duration = -1;
    }
 
    /**
@@ -119,9 +128,7 @@ public abstract class O2Effect
     */
    public UUID getTargetID ()
    {
-      UUID pid = new UUID(targetID.getMostSignificantBits(), targetID.getLeastSignificantBits());
-
-      return pid;
+      return new UUID(targetID.getMostSignificantBits(), targetID.getLeastSignificantBits());
    }
 
    /**

@@ -61,13 +61,19 @@ public class LYCANTHROPY extends ShapeShiftSuper
    {
       Player target = p.getServer().getPlayer(targetID);
 
+      if (target == null)
+      {
+         kill();
+         return;
+      }
+
       long curTime = target.getWorld().getTime();
       if (!transformed)
       {
          // only need to check after sunset
          if (curTime > 13000)
          {
-            long day = target.getWorld().getFullTime()/24000;
+            long day = target.getWorld().getFullTime() / 24000;
             if ((day % 8) == 0)
             {
                // moonrise on a full moon day
@@ -124,11 +130,19 @@ public class LYCANTHROPY extends ShapeShiftSuper
    /**
     * Remove additional effects of Lycanthropy
     */
-   private void removeAdditionalEffect ()
+   private void removeAdditionalEffect()
    {
       for (O2EffectType effectType : additionalEffects)
       {
          Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, effectType);
       }
    }
+
+   /**
+    * Override setPermanent so that no code can inadvertently make lycanthropy effect age.
+    *
+    * @param perm true if this is permanent, false otherwise
+    */
+   @Override
+   public void setPermanent(boolean perm) { }
 }

@@ -78,11 +78,11 @@ public abstract class ShapeShiftSuper extends O2Effect
    {
       Player target = p.getServer().getPlayer(targetID);
 
-      if (form != null)
+      if (target != null && form != null)
       {
          if (Ollivanders2.debug)
          {
-            p.getLogger().info("transforming " + p.getServer().getPlayer(targetID).getName());
+            p.getLogger().info("transforming " + target.getName());
          }
 
          // disguisePlayer the player

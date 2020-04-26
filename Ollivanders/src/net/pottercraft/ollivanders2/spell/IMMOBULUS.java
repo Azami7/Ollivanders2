@@ -1,11 +1,9 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.bukkit.entity.LivingEntity;
+import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -13,22 +11,24 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 /**
  * Immobilizes a player for an amount of time depending on the player's spell level.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class IMMOBULUS extends Charms
+public final class IMMOBULUS extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public IMMOBULUS ()
+   public IMMOBULUS()
    {
       super();
 
       spellType = O2SpellType.IMMOBULUS;
+      branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Freezing Charm");
          add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");
          add("The Freezing Charm is a spell which immobilises living targets.");
@@ -49,22 +49,23 @@ public final class IMMOBULUS extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.IMMOBULUS;
-      setUsesModifier();
-   }
+      branch = O2MagicBranch.CHARMS;
 
-   public void checkEffect ()
-   {
-      move();
-      List<LivingEntity> entities = getLivingEntities(1.5);
-      for (LivingEntity entity : entities)
+      initSpell();
+
+      effectTypes.add(PotionEffectType.SLOW);
+      effectTypes.add(PotionEffectType.SLOW_FALLING);
+      strengthModifier = 10;
+      minDurationInSeconds = 10;
+
+      durationInSeconds = (int) usesModifier;
+      if (durationInSeconds < minDurationInSeconds)
       {
-         if (entity.getUniqueId() == player.getUniqueId())
-            continue;
-
-         int modifier = (int) usesModifier;
-         PotionEffect slow = new PotionEffect(PotionEffectType.SLOW, modifier * 20, 10);
-         entity.addPotionEffect(slow);
-         kill();
+         durationInSeconds = minDurationInSeconds;
+      }
+      else if (durationInSeconds > maxDurationInSeconds)
+      {
+         durationInSeconds = maxDurationInSeconds;
       }
    }
 }

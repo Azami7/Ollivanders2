@@ -1,9 +1,9 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.bukkit.entity.LivingEntity;
+import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -13,7 +13,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  *
  * @author lownes
  */
-public final class FLIPENDO extends Charms
+public final class FLIPENDO extends Knockback
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -23,6 +23,7 @@ public final class FLIPENDO extends Charms
       super();
 
       spellType = O2SpellType.FLIPENDO;
+      branch = O2MagicBranch.DARK_ARTS;
 
       flavorText = new ArrayList<String>() {{
          add("The Knockback Jinx");
@@ -43,26 +44,15 @@ public final class FLIPENDO extends Charms
    public FLIPENDO (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.FLIPENDO;
-      setUsesModifier();
-   }
+      branch = O2MagicBranch.DARK_ARTS;
 
-   public void checkEffect ()
-   {
-      move();
-      List<LivingEntity> living = this.getLivingEntities(1.5);
-      for (LivingEntity live : living)
-      {
-         if (live.getUniqueId() == player.getUniqueId())
-            continue;
+      initSpell();
 
-         if (live instanceof Player)
-         {
-            live.setVelocity(player.getLocation().getDirection().normalize().multiply(usesModifier / 10));
-            kill();
-            return;
-         }
-      }
+      strengthReducer = 10;
+
+      // world guard flags
+      worldGuardFlags.add(DefaultFlag.PVP);
+      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
    }
 }

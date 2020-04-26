@@ -67,16 +67,14 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       }
    }
 
-   @Override
    /**
     * If the player has not yet transformed, transform them.
     */
+   @Override
    protected void upkeep ()
    {
       if (!transformed && !kill)
       {
-         Player player = p.getServer().getPlayer(targetID);
-
          transform();
       }
    }
@@ -183,11 +181,18 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
 
          llamaWatcher.setColor(color);
-      }
-      else if (form == EntityType.COW || form == EntityType.DONKEY || form == EntityType.MULE || form == EntityType.SLIME || form == EntityType.POLAR_BEAR)
+      } else if (form == EntityType.COW || form == EntityType.DONKEY || form == EntityType.MULE || form == EntityType.SLIME || form == EntityType.POLAR_BEAR)
       {
-         AgeableWatcher ageableWatcher = (AgeableWatcher)watcher;
+         AgeableWatcher ageableWatcher = (AgeableWatcher) watcher;
          ageableWatcher.setBaby();
       }
    }
+
+   /**
+    * Override set permanent to ensure no code can inadvertently make the animagus effect non-permanent.
+    *
+    * @param perm true if this is permanent, false otherwise
+    */
+   @Override
+   public void setPermanent(boolean perm) { }
 }

@@ -54,7 +54,7 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion
       else
       {
          SLEEPING effect = new SLEEPING(p, 5, player.getUniqueId());
-         effect.setPermanent();
+         effect.setPermanent(true);
          Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
          player.sendMessage(Ollivanders2.chatColor + "You fall in to a powerful magic sleep.");

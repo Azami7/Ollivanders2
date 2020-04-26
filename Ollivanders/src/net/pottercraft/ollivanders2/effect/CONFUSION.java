@@ -13,8 +13,6 @@ import java.util.UUID;
  */
 public class CONFUSION extends PotionEffectSuper
 {
-   int strength = 1;
-
    public CONFUSION (Ollivanders2 plugin, Integer duration, UUID pid)
    {
       super(plugin, duration, pid);
@@ -22,6 +20,8 @@ public class CONFUSION extends PotionEffectSuper
       effectType = O2EffectType.CONFUSION;
       potionEffectType = PotionEffectType.CONFUSION;
       informousText = legilimensText = "feels confused";
+
+      strength = 1;
 
       divinationText.add("shall be cursed");
       divinationText.add("will be afflicted in the mind");

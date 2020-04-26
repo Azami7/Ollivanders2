@@ -74,19 +74,16 @@ public class SLEEPING extends O2Effect
    }
 
    /**
-    * Make this effect permanent.
-    */
-   public void setPermanent ()
-   {
-      permanent = true;
-   }
-
-   /**
     * Put the player to sleep.
     */
    private void playerSleep ()
    {
       Player target = p.getServer().getPlayer(targetID);
+      if (target == null)
+      {
+         kill();
+         return;
+      }
 
       // tilt player head down
       Location loc = target.getLocation();
@@ -109,6 +106,9 @@ public class SLEEPING extends O2Effect
       sleeping = false;
 
       Player target = p.getServer().getPlayer(targetID);
-      target.sendMessage(Ollivanders2.chatColor + "You awaken from a deep sleep.");
+      if (target != null)
+         target.sendMessage(Ollivanders2.chatColor + "You awaken from a deep sleep.");
+      else
+         kill();
    }
 }

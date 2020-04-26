@@ -112,7 +112,7 @@ public final class O2Books
     */
    private O2Book getO2BookByType (O2BookType bookType)
    {
-      Class bookClass = bookType.getClassName();
+      Class<?> bookClass = bookType.getClassName();
 
       O2Book book = null;
 

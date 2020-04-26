@@ -13,11 +13,11 @@ import java.util.UUID;
  */
 public class LUCK extends PotionEffectSuper
 {
-   int strength = 1;
-
    public LUCK (Ollivanders2 plugin, Integer duration, UUID pid)
    {
       super(plugin, duration, pid);
+
+      strength = 1;
 
       effectType = O2EffectType.LUCK;
       potionEffectType = PotionEffectType.LUCK;

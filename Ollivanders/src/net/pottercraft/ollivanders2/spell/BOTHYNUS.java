@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
 
+import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Player;
@@ -11,19 +12,20 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 /**
  * Shoots yellow star fireworks in to the air.
  *
- * @see PyrotechniaSuper
  * @author Azami7
+ * @see Pyrotechnia
  */
-public final class BOTHYNUS extends PyrotechniaSuper
+public final class BOTHYNUS extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public BOTHYNUS ()
+   public BOTHYNUS()
    {
       super();
 
       spellType = O2SpellType.BOTHYNUS;
+      branch = O2MagicBranch.CHARMS;
 
       text = "Creates one or more yellow star fireworks.";
    }
@@ -38,9 +40,10 @@ public final class BOTHYNUS extends PyrotechniaSuper
    public BOTHYNUS (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
       spellType = O2SpellType.BOTHYNUS;
-      setUsesModifier();
+      branch = O2MagicBranch.CHARMS;
+
+      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.YELLOW);

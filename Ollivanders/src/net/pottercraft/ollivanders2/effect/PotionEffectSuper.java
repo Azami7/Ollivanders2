@@ -32,11 +32,14 @@ public abstract class PotionEffectSuper extends O2Effect
    {
       Player target = p.getServer().getPlayer(targetID);
 
-      // base time is 2 minutes
-      int base_time = 2400;
-      int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 5) + 1;
+      if (target != null)
+      {
+         // base time is 2 minutes
+         int base_time = 2400;
+         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 5) + 1;
 
-      target.addPotionEffect(new PotionEffect(potionEffectType, base_time * rand, strength), true);
+         target.addPotionEffect(new PotionEffect(potionEffectType, base_time * rand, strength), true);
+      }
 
       kill();
    }
@@ -50,5 +53,4 @@ public abstract class PotionEffectSuper extends O2Effect
    {
       strength = s;
    }
-
 }

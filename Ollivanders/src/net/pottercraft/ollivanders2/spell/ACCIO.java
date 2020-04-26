@@ -1,9 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -16,7 +14,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  * @author lownes
  * @author Azami7
  */
-public final class ACCIO extends Charms
+public final class ACCIO extends Knockback
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -33,7 +31,7 @@ public final class ACCIO extends Charms
       }};
 
       text = "Can use used to pull an item towards you. The strength of the pull is determined by your experience. "
-            + "This cannot be used on living things.";
+            + "This can only be used on items.";
    }
 
    /**
@@ -48,19 +46,9 @@ public final class ACCIO extends Charms
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.ACCIO;
-      setUsesModifier();
-   }
+      pull = true;
+      strengthReducer = 10;
 
-   @Override
-   public void checkEffect ()
-   {
-      move();
-      List<Item> items = getItems(1);
-      for (Item item : items)
-      {
-         item.setVelocity(player.getEyeLocation().toVector().subtract(item.getLocation().toVector()).normalize().multiply(usesModifier / 10));
-         kill();
-         return;
-      }
+      initSpell();
    }
 }

@@ -74,13 +74,13 @@ public final class BookTexts
    {
       for (O2SpellType spellType : O2SpellType.values())
       {
-         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2API.common.libsDisguisesSpells.contains(spellType))
+         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType))
          {
             continue;
          }
 
          Teachable spell;
-         Class spellClass = spellType.getClassName();
+         Class<?> spellClass = spellType.getClassName();
 
          try
          {

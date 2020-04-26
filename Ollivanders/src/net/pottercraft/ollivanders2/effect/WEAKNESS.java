@@ -13,11 +13,11 @@ import java.util.UUID;
  */
 public class WEAKNESS extends PotionEffectSuper
 {
-    int strength = 1;
-
     public WEAKNESS(Ollivanders2 plugin, Integer duration, UUID pid)
     {
         super(plugin, duration, pid);
+
+        strength = 1;
 
         effectType = O2EffectType.WEAKNESS;
         potionEffectType = PotionEffectType.WEAKNESS;

@@ -15,5 +15,5 @@ public interface O2SplashPotion
     *
     * @param event the splash potion thrown event
     */
-   public void thrownEffect (PotionSplashEvent event);
+   void thrownEffect(PotionSplashEvent event);
 }

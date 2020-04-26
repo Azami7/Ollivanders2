@@ -3,6 +3,13 @@ package net.pottercraft.ollivanders2.divination;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
+/**
+ * Crystal-gazing was the art of looking into a crystal ball in order to try to gain insight into the future events.
+ * https://harrypotter.fandom.com/wiki/Crystal-gazing
+ *
+ * @author Azami7
+ * @since 2.2.9
+ */
 public class CRYSTAL_BALL extends O2Divination
 {
    public CRYSTAL_BALL (Ollivanders2 plugin, Player pro, Player tar, Integer exp)

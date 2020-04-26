@@ -26,7 +26,6 @@ public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book
       spells.add(O2SpellType.MUFFLIATO);
       spells.add(O2SpellType.ARANIA_EXUMAI);
       spells.add(O2SpellType.FIANTO_DURI);
-      spells.add(O2SpellType.SCUTO_CONTERAM);
       spells.add(O2SpellType.PRIOR_INCANTATO);
    }
 }
