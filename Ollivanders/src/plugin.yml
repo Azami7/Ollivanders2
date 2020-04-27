@@ -1,6 +1,6 @@
 name: Ollivanders2
 main: net.pottercraft.ollivanders2.Ollivanders2
-version: 2.3
+version: 2.3.1
 authors: [Azami7, autumnwoz]
 website: https://www.spigotmc.org/resources/ollivanders2.38992/
 softdepend: [WorldGuard, LibsDisguises]
