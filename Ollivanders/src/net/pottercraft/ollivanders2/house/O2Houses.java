@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.GsonDAO;
+import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
@@ -25,7 +26,8 @@ import org.bukkit.Server;
 public class O2Houses
 {
    private Ollivanders2 p;
-   private Map <UUID, O2HouseType> O2HouseMap = new HashMap<>();
+   private Ollivanders2Common common;
+   private Map<UUID, O2HouseType> O2HouseMap = new HashMap<>();
    private Map <O2HouseType, Team> O2HouseTeamMap = new HashMap<>();
 
    private Scoreboard scoreboard;
@@ -42,6 +44,7 @@ public class O2Houses
    public O2Houses (Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
 
       if (!Ollivanders2.useHouses)
          return;
@@ -205,6 +208,13 @@ public class O2Houses
 
       O2HouseMap.put(player.getUniqueId(), houseType);
       addPlayerToHouseTeam(player);
+
+      if (Ollivanders2.displayMessageOnSort)
+      {
+         String title = houseType.getChatColorCode() + player.getName();
+         String subtitle = houseType.getChatColorCode() + "let it be " + houseType.getName();
+         common.sendTitleMessage(title, subtitle, common.getAllOnlineSortedPlayers());
+      }
 
       return true;
    }

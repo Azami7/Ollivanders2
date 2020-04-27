@@ -32,6 +32,7 @@ deathExpLoss: false
 #
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#houses-and-years
 houses: false
+displayMessageOnSort: false
 gryffindorName: "Gryffindor"
 hufflepuffName: "Hufflepuff"
 ravenclawName: "Ravenclaw"

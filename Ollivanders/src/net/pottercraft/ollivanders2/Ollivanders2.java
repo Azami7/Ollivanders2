@@ -68,6 +68,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean enableDeathExpLoss;
    public static int divinationMaxDays = 4;
    public static boolean useHouses;
+   public static boolean displayMessageOnSort;
    public static boolean useYears;
    public static boolean debug;
    public static Material flooPowderMaterial;
@@ -334,6 +335,7 @@ public class Ollivanders2 extends JavaPlugin
       {
          getLogger().info("Enabling school houses.");
       }
+      displayMessageOnSort = getConfig().getBoolean("displayMessageOnSort");
 
       //
       // years
@@ -500,7 +502,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runOllivanders (CommandSender sender, Command cmd, String[] args)
    {
-      if (sender.isOp())
+      if (!sender.isOp())
       {
          return playerSummary(sender, (Player) sender);
       }

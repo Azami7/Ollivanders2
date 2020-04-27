@@ -1063,7 +1063,7 @@ public class Ollivanders2Common
     * @param spher array with indexes 0=inclination 1=azimuth
     * @return Vector
     */
-   public static Vector spherToVec (double[] spher, int radius)
+   public static Vector spherToVec(double[] spher, int radius)
    {
       double inc = spher[0];
       double azi = spher[1];
@@ -1072,5 +1072,33 @@ public class Ollivanders2Common
       double y = radius * Math.cos(inc);
 
       return new Vector(x, y, z);
+   }
+
+   /**
+    * Send a title message to all players.
+    *
+    * @param title
+    * @param subtitle
+    * @param players
+    */
+   public void sendTitleMessage(String title, String subtitle, ArrayList<Player> players)
+   {
+      for (Player player : players)
+      {
+         player.sendTitle(title, subtitle, 10, 70, 20);
+      }
+   }
+
+   public ArrayList<Player> getAllOnlineSortedPlayers()
+   {
+      ArrayList<Player> sortedPlayers = new ArrayList<>();
+
+      for (Player player : p.getServer().getOnlinePlayers())
+      {
+         if (Ollivanders2API.getHouses().isSorted(player))
+            sortedPlayers.add(player);
+      }
+
+      return sortedPlayers;
    }
 }
