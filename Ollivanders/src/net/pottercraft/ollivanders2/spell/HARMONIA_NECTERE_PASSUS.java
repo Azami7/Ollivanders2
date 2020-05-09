@@ -85,7 +85,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
 
          Block toBlock = toLoc.getBlock();
          Material toBlockType = toBlock.getType();
-         if (common.wallSigns.contains(toBlockType))
+         if (!common.wallSigns.contains(toBlockType))
          {
             if (Ollivanders2.debug)
                p.getLogger().info("Block at toLoc is not a sign block");
