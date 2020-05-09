@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 
+import com.google.gson.internal.$Gson$Preconditions;
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
@@ -97,8 +98,6 @@ public class Ollivanders2Common
       add(EntityType.SHULKER); // not large in size but complex
       add(EntityType.PANDA);
       add(EntityType.DOLPHIN);
-      add(EntityType.SNOWMAN);
-      add(EntityType.SKELETON_HORSE);
       add(EntityType.TRADER_LLAMA);
    }};
 
@@ -187,6 +186,38 @@ public class Ollivanders2Common
       add(Material.PURPLE_SHULKER_BOX);
       add(Material.RED_SHULKER_BOX);
       add(Material.YELLOW_SHULKER_BOX);
+   }};
+
+   public static final ArrayList<Material> wallSigns = new ArrayList<Material>()
+   {{
+      add(Material.ACACIA_WALL_SIGN);
+      add(Material.BIRCH_WALL_SIGN);
+      add(Material.DARK_OAK_WALL_SIGN);
+      add(Material.OAK_WALL_SIGN);
+      add(Material.SPRUCE_WALL_SIGN);
+   }};
+
+   public static final ArrayList<Material> standingSigns = new ArrayList<Material>()
+   {{
+      add(Material.ACACIA_SIGN);
+      add(Material.BIRCH_SIGN);
+      add(Material.DARK_OAK_SIGN);
+      add(Material.OAK_SIGN);
+      add(Material.SPRUCE_SIGN);
+   }};
+
+   public static final ArrayList<Material> signs = new ArrayList<Material>()
+   {{
+      add(Material.ACACIA_WALL_SIGN);
+      add(Material.BIRCH_WALL_SIGN);
+      add(Material.DARK_OAK_WALL_SIGN);
+      add(Material.OAK_WALL_SIGN);
+      add(Material.SPRUCE_WALL_SIGN);
+      add(Material.ACACIA_SIGN);
+      add(Material.BIRCH_SIGN);
+      add(Material.DARK_OAK_SIGN);
+      add(Material.OAK_SIGN);
+      add(Material.SPRUCE_SIGN);
    }};
 
    public enum TimeOfDay
@@ -1118,18 +1149,5 @@ public class Ollivanders2Common
       }
 
       return sortedPlayers;
-   }
-
-   /**
-    * Determine if a material is a sign. With 1.14 this became hard because there are signs per wood type.
-    *
-    * @param material the material to check
-    * @return true if it is a sign, false otherwise
-    */
-   public boolean materialIsASign(Material material)
-   {
-      return material == Material.ACACIA_WALL_SIGN || material == Material.ACACIA_SIGN || material == Material.BIRCH_SIGN || material == Material.BIRCH_WALL_SIGN
-            || material == Material.DARK_OAK_SIGN || material == Material.DARK_OAK_WALL_SIGN || material == Material.JUNGLE_SIGN || material == Material.JUNGLE_WALL_SIGN
-            || material == Material.OAK_SIGN || material == Material.OAK_WALL_SIGN || material == Material.SPRUCE_SIGN || material == Material.SPRUCE_WALL_SIGN;
    }
 }

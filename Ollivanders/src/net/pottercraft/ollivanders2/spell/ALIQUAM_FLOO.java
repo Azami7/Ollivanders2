@@ -87,7 +87,7 @@ public final class ALIQUAM_FLOO extends O2Spell
          Location statLocation = new Location(location.getWorld(), target.getX() + 0.5, target.getY() + 0.125, target.getZ() + 0.5);
 
          // find the sign above the fire
-         if (common.materialIsASign(target.getRelative(BlockFace.UP).getType()))
+         if (common.wallSigns.contains(target.getRelative(BlockFace.UP).getType()))
          {
             Sign sign = (Sign) target.getRelative(BlockFace.UP).getState();
             String flooName = sign.getLine(0).trim() + " " + sign.getLine(1).trim() + " " + sign.getLine(2).trim() + " " + sign.getLine(3).trim();
