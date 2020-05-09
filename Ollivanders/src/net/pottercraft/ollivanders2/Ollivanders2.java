@@ -71,6 +71,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean displayMessageOnSort;
    public static boolean useYears;
    public static boolean debug;
+   public static boolean overrideVersionCheck;
    public static Material flooPowderMaterial;
    public static Material broomstickMaterial;
    public static boolean enableWitchDrop;
@@ -81,7 +82,6 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
    public static Ollivanders2WorldGuard worldGuardO2;
-   public static int mcVersion = 13;
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -128,14 +128,15 @@ public class Ollivanders2 extends JavaPlugin
          this.saveDefaultConfig();
       }
 
-      mcVersionCheck();
-      if (mcVersion < 13)
-      {
-         Bukkit.getPluginManager().disablePlugin(this);
-      }
-
       // read configuration
       initConfig();
+
+      // check MC version
+      if (!mcVersionCheck())
+      {
+         Bukkit.getPluginManager().disablePlugin(this);
+         return;
+      }
 
       // set up scheduler
       OllivandersSchedule schedule = new OllivandersSchedule(this);
@@ -382,12 +383,17 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //
-      // debug
+      // debug and experimental
       //
       debug = getConfig().getBoolean("debug");
       if (debug)
       {
          getLogger().info("Enabling debug mode.");
+      }
+      overrideVersionCheck = getConfig().getBoolean("overrideVersionCheck");
+      if (overrideVersionCheck)
+      {
+         getLogger().info("Experimental - disabling version checks. This version of Ollivanders2 may not be compatible with you MC server api.");
       }
 
       //
@@ -1786,26 +1792,21 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Check to see what MC version is being run to determine what Ollivanders2 features are supported.
     */
-   private void mcVersionCheck ()
+   private boolean mcVersionCheck()
    {
+      if (overrideVersionCheck)
+         return true;
+
       String versionString = Bukkit.getBukkitVersion();
 
-      if (versionString.startsWith("1.12"))
+      if (versionString.startsWith("1.14") || versionString.startsWith("1.15") || versionString.startsWith("1.16"))
       {
-         mcVersion = 12;
+         return true;
       }
-      else if (versionString.startsWith("1.13"))
+      else // anything lower than 1.14 set to 0 because this version of the plugin cannot run on < 1.14
       {
-         mcVersion = 13;
-      }
-      else // anything lower than 1.12 set to 11 because there are no plugin features specific to versions before that
-      {
-         mcVersion = 11;
-      }
-
-      if (mcVersion < 13)
-      {
-         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.13. Use Ollivanders 2.2.9.* for Minecraft versions 1.12.2 and lower.");
+         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.14 or higher.");
+         return false;
       }
    }
 

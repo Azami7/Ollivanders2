@@ -39,6 +39,8 @@ public final class O2PlayerCommon
       animagusShapes.add(EntityType.RABBIT);
       animagusShapes.add(EntityType.MULE);
       animagusShapes.add(EntityType.DONKEY);
+      animagusShapes.add(EntityType.POLAR_BEAR);
+      animagusShapes.add(EntityType.LLAMA);
 
       if (Ollivanders2.useHostileMobAnimagi)
       {
@@ -52,12 +54,6 @@ public final class O2PlayerCommon
          animagusShapes.add(EntityType.WITCH);
          animagusShapes.add(EntityType.VINDICATOR);
          animagusShapes.add(EntityType.SHULKER);
-      }
-
-      if (Ollivanders2.mcVersion > 11)
-      {
-         animagusShapes.add(EntityType.POLAR_BEAR);
-         animagusShapes.add(EntityType.LLAMA);
       }
 
       return animagusShapes;

@@ -83,10 +83,10 @@ public abstract class EntityTransfiguration extends O2Spell
       branch = O2MagicBranch.TRANSFIGURATION;
 
       entityBlacklist.add(EntityType.AREA_EFFECT_CLOUD);
-      entityBlacklist.add(EntityType.COMPLEX_PART);
       entityBlacklist.add(EntityType.EXPERIENCE_ORB);
       entityBlacklist.add(EntityType.FALLING_BLOCK);
       entityBlacklist.add(EntityType.EXPERIENCE_ORB);
+      entityBlacklist.add(EntityType.THROWN_EXP_BOTTLE);
       entityBlacklist.add(EntityType.UNKNOWN);
 
       permanent = false;

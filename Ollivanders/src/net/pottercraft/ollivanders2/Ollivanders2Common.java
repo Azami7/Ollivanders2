@@ -67,6 +67,10 @@ public class Ollivanders2Common
       add(EntityType.CHICKEN);
       add(EntityType.RABBIT);
       add(EntityType.PARROT);
+      add(EntityType.COD);
+      add(EntityType.SALMON);
+      add(EntityType.TROPICAL_FISH);
+      add(EntityType.PUFFERFISH);
    }};
 
    public static final ArrayList<EntityType> mediumFriendlyAnimals = new ArrayList<EntityType>() {{
@@ -74,6 +78,9 @@ public class Ollivanders2Common
       add(EntityType.PIG);
       add(EntityType.OCELOT);
       add(EntityType.WOLF);
+      add(EntityType.CAT);
+      add(EntityType.FOX);
+      add(EntityType.TURTLE);
    }};
 
    public static final ArrayList<EntityType> largeFriendlyAnimals = new ArrayList<EntityType>() {{
@@ -88,6 +95,11 @@ public class Ollivanders2Common
       add(EntityType.POLAR_BEAR);
       add(EntityType.LLAMA);
       add(EntityType.SHULKER); // not large in size but complex
+      add(EntityType.PANDA);
+      add(EntityType.DOLPHIN);
+      add(EntityType.SNOWMAN);
+      add(EntityType.SKELETON_HORSE);
+      add(EntityType.TRADER_LLAMA);
    }};
 
    public static final ArrayList<EntityType> undeadEntities = new ArrayList<EntityType>()
@@ -104,6 +116,7 @@ public class Ollivanders2Common
       add(EntityType.ZOMBIE);
       add(EntityType.ZOMBIE_HORSE);
       add(EntityType.ZOMBIE_VILLAGER);
+      add(EntityType.GIANT);
    }};
 
    public static final ArrayList<O2SpellType> libsDisguisesSpells = new ArrayList<O2SpellType>() {{
@@ -1105,5 +1118,18 @@ public class Ollivanders2Common
       }
 
       return sortedPlayers;
+   }
+
+   /**
+    * Determine if a material is a sign. With 1.14 this became hard because there are signs per wood type.
+    *
+    * @param material the material to check
+    * @return true if it is a sign, false otherwise
+    */
+   public boolean materialIsASign(Material material)
+   {
+      return material == Material.ACACIA_WALL_SIGN || material == Material.ACACIA_SIGN || material == Material.BIRCH_SIGN || material == Material.BIRCH_WALL_SIGN
+            || material == Material.DARK_OAK_SIGN || material == Material.DARK_OAK_WALL_SIGN || material == Material.JUNGLE_SIGN || material == Material.JUNGLE_WALL_SIGN
+            || material == Material.OAK_SIGN || material == Material.OAK_WALL_SIGN || material == Material.SPRUCE_SIGN || material == Material.SPRUCE_WALL_SIGN;
    }
 }

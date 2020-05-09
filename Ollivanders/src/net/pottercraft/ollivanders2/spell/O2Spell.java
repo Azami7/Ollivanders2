@@ -83,6 +83,11 @@ public abstract class O2Spell implements Teachable
    Ollivanders2 p;
 
    /**
+    * Ollivanders common functions
+    */
+   Ollivanders2Common common;
+
+   /**
     * The number of times the player has previously cast this spell.
     */
    int spellUses;
@@ -176,6 +181,7 @@ public abstract class O2Spell implements Teachable
       location = player.getEyeLocation();
       this.player = player;
       p = plugin;
+      common = new Ollivanders2Common(p);
 
       vector = location.getDirection().normalize();
       location.add(vector);

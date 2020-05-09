@@ -39,17 +39,7 @@ import org.bukkit.Effect;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Damageable;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Parrot;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.ThrownPotion;
-import org.bukkit.entity.Wolf;
+import org.bukkit.entity.*;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -644,18 +634,9 @@ public class OllivandersListener implements Listener
                if (entity.getLocation().distance(sender.getLocation()) <= 10)
                {
                   Creature owl;
-                  if (Ollivanders2.mcVersion > 11 && entity instanceof Parrot)
+                  if (entity instanceof Parrot)
                   {
                      owl = (Parrot) entity;
-                  }
-                  else if (entity instanceof Ocelot)
-                  {
-                     owl = (Ocelot) entity;
-                     Ocelot o = (Ocelot)owl;
-                     if (!o.isTamed())
-                     {
-                        continue;
-                     }
                   }
                   else
                   {
@@ -673,61 +654,27 @@ public class OllivandersListener implements Listener
                            {
                               if (recipient.getWorld().getUID().equals(world.getUID()))
                               {
-                                 if (Ollivanders2.mcVersion > 11)
-                                 {
-                                    world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
-                                 }
-                                 else
-                                 {
-                                    world.playSound(owl.getLocation(), Sound.ENTITY_CAT_PURREOW, 1, 0);
-                                 }
+                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
+
                                  owl.teleport(recipient.getLocation());
                                  item.teleport(recipient.getLocation());
-                                 if (Ollivanders2.mcVersion > 11)
-                                 {
-                                    world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
-                                 }
-                                 else
-                                 {
-                                    world.playSound(owl.getLocation(), Sound.ENTITY_CAT_PURREOW, 1, 0);
-                                 }
+                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
                               }
                               else
                               {
-                                 if (Ollivanders2.mcVersion > 11)
-                                 {
-                                    world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                                 }
-                                 else
-                                 {
-                                    world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
-                                 }
+                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
                                  sender.sendMessage(Ollivanders2.chatColor + splited[2] + " is not in this world.");
                               }
                            }
                            else
                            {
-                              if (Ollivanders2.mcVersion > 11)
-                              {
-                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                              }
-                              else
-                              {
-                                 world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
-                              }
+                              world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
                               sender.sendMessage(Ollivanders2.chatColor + splited[2] + " is not online.");
                            }
                         }
                         else
                         {
-                           if (Ollivanders2.mcVersion > 11)
-                           {
-                              world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                           }
-                           else
-                           {
-                              world.playSound(owl.getLocation(), Sound.ENTITY_CAT_HISS, 1, 0);
-                           }
+                           world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
                            sender.sendMessage(Ollivanders2.chatColor + splited[2] + " is not online.");
                         }
                         return;

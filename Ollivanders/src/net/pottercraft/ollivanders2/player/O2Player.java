@@ -930,7 +930,7 @@ public class O2Player
          {
             animagusColor = Ollivanders2API.common.randomHorseColor().toString();
          }
-         else if (Ollivanders2.mcVersion > 11 && animagusForm == EntityType.LLAMA)
+         else if (animagusForm == EntityType.LLAMA)
          {
             animagusColor = Ollivanders2API.common.randomLlamaColor().toString();
          }

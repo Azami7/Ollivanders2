@@ -72,7 +72,7 @@ public enum O2ItemType
    SPIDER_EYE(Material.SPIDER_EYE, (short) 0, "Spider Eye", null),
    STANDARD_POTION_INGREDIENT(Material.SUGAR, (short) 0, "Standard Potion Ingredient", null),
    TAROT_CARDS(Material.PAPER, (short) 0, "Tarot Cards", null),
-   TEA_LEAVES(Material.CACTUS_GREEN, (short) 0, "Tea Leaves", null),
+   TEA_LEAVES(Material.GREEN_DYE, (short) 0, "Tea Leaves", null),
    UNICORN_HAIR(Material.STRING, (short) 0, "Unicorn Hair", null),
    UNICORN_HORN(Material.BLAZE_ROD, (short) 0, "Unicorn Horn", null),
    VALERIAN_SPRIGS(Material.VINE, (short) 0, "Valerian Sprigs", null),
