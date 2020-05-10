@@ -208,16 +208,8 @@ public class Ollivanders2Common
 
    public static final ArrayList<Material> signs = new ArrayList<Material>()
    {{
-      add(Material.ACACIA_WALL_SIGN);
-      add(Material.BIRCH_WALL_SIGN);
-      add(Material.DARK_OAK_WALL_SIGN);
-      add(Material.OAK_WALL_SIGN);
-      add(Material.SPRUCE_WALL_SIGN);
-      add(Material.ACACIA_SIGN);
-      add(Material.BIRCH_SIGN);
-      add(Material.DARK_OAK_SIGN);
-      add(Material.OAK_SIGN);
-      add(Material.SPRUCE_SIGN);
+      addAll(wallSigns);
+      addAll(standingSigns);
    }};
 
    public enum TimeOfDay
