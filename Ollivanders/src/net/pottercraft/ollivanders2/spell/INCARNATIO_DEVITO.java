@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 /**
  * Created by Azami7 on 6/28/17.
- * <p>
+ *
  * Turn target player in to a chicken.
  *
  * @author Azami7

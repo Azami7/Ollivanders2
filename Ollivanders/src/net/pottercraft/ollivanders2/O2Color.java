@@ -185,9 +185,22 @@ public enum O2Color
     *
     * @return the dyeable color
     */
-   public static O2Color getRandomPrimaryDyeableColor ()
+   public static O2Color getRandomPrimaryDyeableColor()
    {
-      int rand = Math.abs(Ollivanders2Common.random.nextInt() % primaryDyeableColors.length);
+      int seed = Math.abs(Ollivanders2Common.random.nextInt());
+
+      return getRandomPrimaryDyeableColor(seed);
+   }
+
+   /**
+    * Get a random primary dyeable color - red, orange, yellow, green, blue, purple
+    *
+    * @param seed the base value that the percentile check will use
+    * @return the dyeable color
+    */
+   public static O2Color getRandomPrimaryDyeableColor(int seed)
+   {
+      int rand = Math.abs(seed) % primaryDyeableColors.length;
 
       return primaryDyeableColors[rand];
    }
@@ -197,9 +210,22 @@ public enum O2Color
     *
     * @return the dyeable color
     */
-   public static O2Color getRandomDyeableColor ()
+   public static O2Color getRandomDyeableColor()
    {
-      int rand = Math.abs(Ollivanders2Common.random.nextInt() % dyeableColors.length);
+      int seed = Math.abs(Ollivanders2Common.random.nextInt());
+
+      return getRandomDyeableColor(seed);
+   }
+
+   /**
+    * Get a random dyeable color
+    *
+    * @param seed the base value that the percentile check will use
+    * @return the dyeable color
+    */
+   public static O2Color getRandomDyeableColor(int seed)
+   {
+      int rand = Math.abs(seed) % dyeableColors.length;
 
       return dyeableColors[rand];
    }

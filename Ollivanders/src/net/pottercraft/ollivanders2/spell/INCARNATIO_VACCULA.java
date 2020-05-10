@@ -51,7 +51,7 @@ public final class INCARNATIO_VACCULA extends PlayerDisguise
       calculateSuccessRate();
 
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
-      if (rand == 0)
+      if (rand == 0) // 1% chance
          targetType = EntityType.MUSHROOM_COW;
       else
          targetType = EntityType.COW;

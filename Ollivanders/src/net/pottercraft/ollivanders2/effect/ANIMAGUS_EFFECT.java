@@ -6,20 +6,32 @@ import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import me.libraryaddict.disguise.disguisetypes.watchers.AgeableWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.HorseWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.LlamaWatcher;
-import me.libraryaddict.disguise.disguisetypes.watchers.OcelotWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.RabbitWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.WolfWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.CatWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.PandaWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.PolarBearWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.CreeperWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.FoxWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.PigWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.SheepWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.SlimeWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.SpiderWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.ShulkerWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.TurtleWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.TraderLlamaWatcher;
 
+import net.pottercraft.ollivanders2.O2Color;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.player.O2Player;
 
 import org.bukkit.DyeColor;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Cat;
+import org.bukkit.entity.Fox;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.Panda;
 
 /**
  * Transforms an Animagus player in to their animal form.
@@ -85,49 +97,52 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
    @Override
    protected void customizeWatcher ()
    {
-      if (form == EntityType.OCELOT)
+      // in case the variant doesn't work, this can be used to fix the value at the end of this method
+      String correctedVariant = null;
+
+      if (watcher instanceof CatWatcher)
       {
-         OcelotWatcher ocelotWatcher = (OcelotWatcher)watcher;
-         Ocelot.Type type = Ocelot.Type.WILD_OCELOT;
-         ocelotWatcher.isAdult();
+         CatWatcher catWatcher = (CatWatcher) watcher;
+         Cat.Type color = Cat.Type.WHITE;
 
          try
          {
-            type = Ocelot.Type.valueOf(colorVariant);
+            color = Cat.Type.valueOf(colorVariant);
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Ocelot.Type " + colorVariant);
+            p.getLogger().warning("Failed to parse Cat.Type " + colorVariant);
             if (Ollivanders2.debug)
                e.printStackTrace();
+
+            correctedVariant = color.toString();
          }
 
-         ocelotWatcher.setType(type);
+         catWatcher.setType(color);
+         catWatcher.setCollarColor(O2Color.getRandomPrimaryDyeableColor().getDyeColor());
       }
-      else if (form == EntityType.RABBIT)
+      else if (watcher instanceof RabbitWatcher)
       {
-         RabbitWatcher rabbitWatcher = (RabbitWatcher)watcher;
-         RabbitType type = RabbitType.WHITE;
-         rabbitWatcher.isAdult();
+         RabbitType color = RabbitType.WHITE;
 
          try
          {
-            type = RabbitType.valueOf(colorVariant);
+            color = RabbitType.valueOf(colorVariant);
          }
          catch (Exception e)
          {
             p.getLogger().warning("Failed to parse Rabbit.Type " + colorVariant);
             if (Ollivanders2.debug)
                e.printStackTrace();
+
+            correctedVariant = color.toString();
          }
 
-         rabbitWatcher.setType(type);
+         ((RabbitWatcher) watcher).setType(color);
       }
-      else if (form == EntityType.WOLF)
+      else if (watcher instanceof WolfWatcher)
       {
-         WolfWatcher wolfWatcher = (WolfWatcher)watcher;
          DyeColor color = DyeColor.WHITE;
-         wolfWatcher.isAdult();
 
          try
          {
@@ -138,17 +153,16 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
             p.getLogger().warning("Failed to parse DyeColor " + colorVariant);
             if (Ollivanders2.debug)
                e.printStackTrace();
+
+            correctedVariant = color.toString();
          }
 
-         wolfWatcher.isTamed();
-         wolfWatcher.setCollarColor(color);
+         ((WolfWatcher) watcher).isTamed();
+         ((WolfWatcher) watcher).setCollarColor(color);
       }
-      else if (form == EntityType.HORSE)
+      else if (watcher instanceof HorseWatcher)
       {
-         HorseWatcher horseWatcher = (HorseWatcher)watcher;
-         horseWatcher.setStyle(Horse.Style.NONE);
          Horse.Color color = Horse.Color.WHITE;
-         horseWatcher.setBaby();
 
          try
          {
@@ -159,15 +173,16 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
             p.getLogger().warning("Failed to parse Horse.Color " + colorVariant);
             if (Ollivanders2.debug)
                e.printStackTrace();
+
+            correctedVariant = color.toString();
          }
 
-         horseWatcher.setColor(color);
+         ((HorseWatcher) watcher).setColor(color);
+         ((HorseWatcher) watcher).setStyle(Horse.Style.NONE);
       }
-      else if (form == EntityType.LLAMA)
+      else if (watcher instanceof LlamaWatcher || watcher instanceof TraderLlamaWatcher)
       {
-         LlamaWatcher llamaWatcher = (LlamaWatcher) watcher;
          Llama.Color color = Llama.Color.WHITE;
-         llamaWatcher.setBaby();
 
          try
          {
@@ -178,13 +193,113 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
             p.getLogger().warning("Failed to parse Llama.Color " + colorVariant);
             if (Ollivanders2.debug)
                e.printStackTrace();
+
+            correctedVariant = color.toString();
          }
 
-         llamaWatcher.setColor(color);
-      } else if (form == EntityType.COW || form == EntityType.DONKEY || form == EntityType.MULE || form == EntityType.SLIME || form == EntityType.POLAR_BEAR)
+         if (watcher instanceof LlamaWatcher)
+            ((LlamaWatcher) watcher).setColor(color);
+         else
+            ((TraderLlamaWatcher) watcher).setColor(color);
+      }
+      else if (watcher instanceof PandaWatcher)
       {
-         AgeableWatcher ageableWatcher = (AgeableWatcher) watcher;
-         ageableWatcher.setBaby();
+         ((PandaWatcher) watcher).setMainGene(Panda.Gene.NORMAL);
+         ((PandaWatcher) watcher).setSitting(false);
+      }
+      else if (watcher instanceof PolarBearWatcher)
+      {
+         ((PolarBearWatcher) watcher).setStanding(true);
+      }
+      else if (watcher instanceof CreeperWatcher)
+      {
+         ((CreeperWatcher) watcher).setIgnited(false);
+         ((CreeperWatcher) watcher).setPowered(false);
+      }
+      else if (watcher instanceof FoxWatcher)
+      {
+         Fox.Type color = Fox.Type.RED;
+
+         try
+         {
+            color = Fox.Type.valueOf(colorVariant);
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to parse Fox.Type " + colorVariant);
+            if (Ollivanders2.debug)
+               e.printStackTrace();
+
+            correctedVariant = color.toString();
+         }
+
+         ((FoxWatcher) watcher).setType(color);
+         ((FoxWatcher) watcher).setSitting(false);
+      }
+      else if (watcher instanceof PigWatcher)
+      {
+         ((PigWatcher) watcher).setSaddled(false);
+      }
+      else if (watcher instanceof SheepWatcher)
+      {
+         DyeColor color = DyeColor.WHITE;
+
+         try
+         {
+            color = DyeColor.valueOf(colorVariant);
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to parse DyeColor " + colorVariant);
+            if (Ollivanders2.debug)
+               e.printStackTrace();
+
+            correctedVariant = color.toString();
+         }
+
+         ((SheepWatcher) watcher).setColor(color);
+      }
+      else if (watcher instanceof SlimeWatcher)
+      {
+         ((SlimeWatcher) watcher).setSize(1);
+      }
+      else if (watcher instanceof SpiderWatcher)
+      {
+         ((SpiderWatcher) watcher).setClimbing(false);
+      }
+      else if (watcher instanceof ShulkerWatcher)
+      {
+         DyeColor color = DyeColor.WHITE;
+
+         try
+         {
+            color = DyeColor.valueOf(colorVariant);
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to parse DyeColor " + colorVariant);
+            if (Ollivanders2.debug)
+               e.printStackTrace();
+
+            correctedVariant = color.toString();
+         }
+
+         ((ShulkerWatcher) watcher).setColor(color);
+      }
+      else if (watcher instanceof TurtleWatcher)
+      {
+         ((TurtleWatcher) watcher).setEgg(false);
+      }
+
+      if (watcher instanceof AgeableWatcher)
+      {
+         ((AgeableWatcher) watcher).setAdult();
+      }
+
+      // fix player's animagus color variant if needed
+      if (correctedVariant != null)
+      {
+         Ollivanders2API.getPlayers().fixPlayerAnimagusColorVariant(targetID, correctedVariant);
       }
    }
 

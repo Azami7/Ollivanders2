@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 
-import com.google.gson.internal.$Gson$Preconditions;
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
@@ -20,19 +19,21 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Effect;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Cat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
-import org.bukkit.entity.Ocelot;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -363,29 +364,63 @@ public class Ollivanders2Common
    }
 
    /**
-    * Generate a random Ocelot type.
+    * Generate a random Cat type.
     *
-    * @return the Ocelot type
+    * @return the Cat type
     */
-   public Ocelot.Type randomOcelotType ()
+   public Cat.Type getRandomCatType()
    {
-      int rand = Math.abs(random.nextInt() % 4);
+      int seed = Math.abs(random.nextInt());
 
-      Ocelot.Type type;
+      return getRandomCatType(seed);
+   }
+
+   /**
+    * Generate a random Cat type.
+    *
+    * @param seed the base value that the percentile check will use
+    * @return the Cat type
+    */
+   public Cat.Type getRandomCatType(int seed)
+   {
+      int rand = Math.abs(seed) % 11;
+
+      Cat.Type type;
 
       switch (rand)
       {
+         case 0:
+            type = Cat.Type.ALL_BLACK;
+            break;
          case 1:
-            type = Ocelot.Type.BLACK_CAT;
+            type = Cat.Type.BLACK;
             break;
          case 2:
-            type = Ocelot.Type.RED_CAT;
+            type = Cat.Type.BRITISH_SHORTHAIR;
             break;
          case 3:
-            type = Ocelot.Type.SIAMESE_CAT;
+            type = Cat.Type.CALICO;
+            break;
+         case 4:
+            type = Cat.Type.JELLIE;
+            break;
+         case 5:
+            type = Cat.Type.PERSIAN;
+            break;
+         case 6:
+            type = Cat.Type.RAGDOLL;
+            break;
+         case 7:
+            type = Cat.Type.RED;
+            break;
+         case 8:
+            type = Cat.Type.SIAMESE;
+            break;
+         case 9:
+            type = Cat.Type.TABBY;
             break;
          default:
-            type = Ocelot.Type.WILD_OCELOT;
+            type = Cat.Type.WHITE;
             break;
       }
 
@@ -397,11 +432,24 @@ public class Ollivanders2Common
     *
     * @return the type color for the rabbit
     */
-   public RabbitType randomRabbitType ()
+   public RabbitType getRandomRabbitType()
+   {
+      int seed = Math.abs(random.nextInt());
+
+      return getRandomRabbitType(seed);
+   }
+
+   /**
+    * Get a random rabbit type. Odds are 1/60 to get a Killer Bunny.
+    *
+    * @param seed the base value that the percentile check will use
+    * @return the type color for the rabbit
+    */
+   public RabbitType getRandomRabbitType(int seed)
    {
       RabbitType type;
 
-      int rand = Math.abs(random.nextInt() % 61);
+      int rand = Math.abs(seed) % 61;
 
       if (rand < 10)
          type = RabbitType.BROWN;
@@ -426,24 +474,37 @@ public class Ollivanders2Common
     *
     * @return the horse style
     */
-   public Horse.Style randomHorseStyle ()
+   public Horse.Style getRandomHorseStyle()
+   {
+      int seed = Math.abs(random.nextInt());
+
+      return getRandomHorseStyle(seed);
+   }
+
+   /**
+    * Generate a random horse style.
+    *
+    * @param seed the base value that the percentile check will use
+    * @return the horse style
+    */
+   public Horse.Style getRandomHorseStyle(int seed)
    {
       Horse.Style style;
 
-      int rand = Math.abs(random.nextInt() % 20);
+      int rand = Math.abs(seed) % 20;
 
       switch (rand)
       {
-         case 1:
+         case 0:
             style = Horse.Style.WHITE;
             break;
-         case 2:
+         case 1:
             style = Horse.Style.WHITE_DOTS;
             break;
-         case 3:
+         case 2:
             style = Horse.Style.WHITEFIELD;
             break;
-         case 4:
+         case 3:
             style = Horse.Style.BLACK_DOTS;
             break;
          default:
@@ -459,30 +520,43 @@ public class Ollivanders2Common
     *
     * @return the color
     */
-   public Horse.Color randomHorseColor ()
+   public Horse.Color getRandomHorseColor()
+   {
+      int seed = Math.abs(random.nextInt());
+
+      return getRandomHorseColor(seed);
+   }
+
+   /**
+    * Generate a random horse color.
+    *
+    * @param seed the base value that the percentile check will use
+    * @return the color
+    */
+   public Horse.Color getRandomHorseColor(int seed)
    {
       Horse.Color color;
 
-      int rand = Math.abs(random.nextInt() % 7);
+      int rand = Math.abs(seed) % 7;
 
       switch (rand)
       {
-         case 1:
+         case 0:
             color = Horse.Color.BLACK;
             break;
-         case 2:
+         case 1:
             color = Horse.Color.BROWN;
             break;
-         case 3:
+         case 2:
             color = Horse.Color.CHESTNUT;
             break;
-         case 4:
+         case 3:
             color = Horse.Color.CREAMY;
             break;
-         case 5:
+         case 4:
             color = Horse.Color.DARK_BROWN;
             break;
-         case 6:
+         case 5:
             color = Horse.Color.GRAY;
             break;
          default:
@@ -498,21 +572,34 @@ public class Ollivanders2Common
     *
     * @return the color
     */
-   public Llama.Color randomLlamaColor ()
+   public Llama.Color getRandomLlamaColor()
+   {
+      int seed = Math.abs(random.nextInt());
+
+      return getRandomLlamaColor(seed);
+   }
+
+   /**
+    * Generate random llama color.
+    *
+    * @param seed the base value that the percentile check will use
+    * @return the color
+    */
+   public Llama.Color getRandomLlamaColor(int seed)
    {
       Llama.Color color;
 
-      int rand = Math.abs(random.nextInt() % 4);
+      int rand = Math.abs(seed) % 4;
 
       switch (rand)
       {
-         case 1:
+         case 0:
             color = Llama.Color.BROWN;
             break;
-         case 2:
+         case 1:
             color = Llama.Color.CREAMY;
             break;
-         case 3:
+         case 2:
             color = Llama.Color.GRAY;
             break;
          default:
@@ -524,13 +611,96 @@ public class Ollivanders2Common
    }
 
    /**
+    * Genenrate a random parrot color.
+    *
+    * @return the color
+    */
+   public Parrot.Variant getRandomParrotColor()
+   {
+      int seed = Math.abs(random.nextInt());
+
+      return getRandomParrotColor(seed);
+   }
+
+   /**
+    * Genenrate a random parrot color.
+    *
+    * @param seed the base value that the percentile check will use
+    * @return the color
+    */
+   public Parrot.Variant getRandomParrotColor(int seed)
+   {
+      Parrot.Variant variant;
+
+      int rand = Math.abs(seed) % 5;
+
+      switch (rand)
+      {
+         case 0:
+            variant = Parrot.Variant.CYAN;
+            break;
+         case 1:
+            variant = Parrot.Variant.GRAY;
+            break;
+         case 2:
+            variant = Parrot.Variant.BLUE;
+            break;
+         case 3:
+            variant = Parrot.Variant.GREEN;
+            break;
+         default:
+            variant = Parrot.Variant.RED;
+      }
+
+      return variant;
+   }
+
+   /**
+    * Generate a random natural sheep color
+    *
+    * @return the color
+    */
+   public DyeColor getRandomNaturalSheepColor()
+   {
+      int seed = Math.abs(random.nextInt());
+
+      return getRandomNaturalSheepColor(seed);
+   }
+
+   /**
+    * Generate a random natural sheep color
+    *
+    * @param seed the base value that the percentile check will use
+    * @return the color
+    */
+   public DyeColor getRandomNaturalSheepColor(int seed)
+   {
+      int rand = Math.abs(seed) % 100;
+
+      if (rand < 2) // 2% chance
+      {
+         return DyeColor.BLACK;
+      }
+      else if (rand < 22) // 20% chance
+      {
+         return DyeColor.BROWN;
+      }
+      else if (rand < 32) // 10% chance
+      {
+         return DyeColor.LIGHT_GRAY;
+      }
+      else
+         return DyeColor.WHITE;
+   }
+
+   /**
     * Gets all entities within a radius of a specific location
     *
     * @param location the location to search for entities from
-    * @param radius - radius within which to get entities
+    * @param radius   - radius within which to get entities
     * @return List of entities within the radius
     */
-   public Collection<Entity> getEntitiesInRadius (Location location, double radius)
+   public Collection<Entity> getEntitiesInRadius(Location location, double radius)
    {
       return getEntitiesInBounds(location, radius, radius, radius);
    }

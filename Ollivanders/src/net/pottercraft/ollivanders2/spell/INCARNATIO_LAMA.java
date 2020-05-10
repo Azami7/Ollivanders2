@@ -57,6 +57,6 @@ public final class INCARNATIO_LAMA extends PlayerDisguise
       watcher.setAdult();
 
       Ollivanders2Common common = new Ollivanders2Common(p);
-      watcher.setColor(common.randomLlamaColor());
+      watcher.setColor(common.getRandomLlamaColor());
    }
 }
