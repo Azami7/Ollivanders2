@@ -470,7 +470,7 @@ public class O2Player
     */
    public void setSpellRecentCastTime (O2SpellType spellType)
    {
-      String spellClass = "net.pottercraft.Ollivanders2.Spell." + spellType.toString();
+      String spellClass = "net.pottercraft.ollivanders2.spell." + spellType.toString();
 
       Constructor c;
       try
