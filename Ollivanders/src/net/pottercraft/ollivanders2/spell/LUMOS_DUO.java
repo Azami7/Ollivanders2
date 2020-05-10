@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
@@ -81,7 +81,7 @@ public final class LUMOS_DUO extends O2Spell
       projectilePassThrough.remove(Material.WATER);
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(Flags.BUILD);
    }
 
    @Override

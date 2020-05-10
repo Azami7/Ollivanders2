@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
@@ -65,7 +65,7 @@ public final class PACK extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.CHEST_ACCESS);
+      worldGuardFlags.add(Flags.CHEST_ACCESS);
 
       // remove chests from material blacklist
       for (Material chest : Ollivanders2Common.chests)

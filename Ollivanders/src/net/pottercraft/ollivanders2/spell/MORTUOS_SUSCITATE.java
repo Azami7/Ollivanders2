@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
@@ -59,7 +59,7 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
+      worldGuardFlags.add(Flags.MOB_SPAWNING);
 
       duration = ((int) usesModifier * Ollivanders2Common.ticksPerSecond * 2) + (Ollivanders2Common.ticksPerSecond * 30);
       if (duration > maxDuration)

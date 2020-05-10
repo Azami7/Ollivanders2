@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -43,7 +43,7 @@ public abstract class ColoroSuper extends O2Spell
       super(plugin, player, rightWand);
 
       // world-guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(Flags.BUILD);
    }
 
    /**

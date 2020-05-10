@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -110,7 +110,7 @@ public abstract class BlockTransfiguration extends O2Spell
       }
 
       // required worldGuard state flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(Flags.BUILD);
    }
 
    @Override

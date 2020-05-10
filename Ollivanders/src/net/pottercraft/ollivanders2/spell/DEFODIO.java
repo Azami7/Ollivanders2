@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
@@ -64,7 +64,7 @@ public final class DEFODIO extends O2Spell
       depth = (int) usesModifier;
 
       // world-guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(Flags.BUILD);
 
       // material black list
       materialBlackList.add(Material.WATER);

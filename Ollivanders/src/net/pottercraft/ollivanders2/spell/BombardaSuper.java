@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
 
 import org.bukkit.Location;
@@ -35,8 +35,8 @@ public abstract class BombardaSuper extends O2Spell
       super(plugin, player, rightWand);
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.TNT);
-      worldGuardFlags.add(DefaultFlag.OTHER_EXPLOSION);
+      worldGuardFlags.add(Flags.TNT);
+      worldGuardFlags.add(Flags.OTHER_EXPLOSION);
    }
 
    /**

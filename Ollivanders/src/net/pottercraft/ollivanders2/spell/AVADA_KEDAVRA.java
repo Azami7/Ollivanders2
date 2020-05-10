@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
@@ -53,8 +53,8 @@ public final class AVADA_KEDAVRA extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.PVP);
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      worldGuardFlags.add(Flags.PVP);
+      worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
 
       moveEffectData = Material.GREEN_WOOL;
    }

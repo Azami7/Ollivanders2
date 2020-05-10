@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.Effect;
@@ -54,10 +54,10 @@ public abstract class IncendioSuper extends O2Spell
          lifeTime = maxDuration;
 
       // world-guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
-      worldGuardFlags.add(DefaultFlag.LIGHTER);
-      worldGuardFlags.add(DefaultFlag.PVP);
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      worldGuardFlags.add(Flags.BUILD);
+      worldGuardFlags.add(Flags.LIGHTER);
+      worldGuardFlags.add(Flags.PVP);
+      worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
    }
 
    @Override

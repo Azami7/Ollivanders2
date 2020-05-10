@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.*;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
@@ -59,7 +59,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(Flags.BUILD);
    }
 
    @Override
