@@ -1142,20 +1142,12 @@ public class O2Player
       }
 
       animagusForm = EntityType.CAT;
-      Cat.Type color = Cat.Type.WHITE;
 
-      try
-      {
-         color = Cat.Type.valueOf(animagusColor);
-      }
-      catch (Exception e)
-      {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("O2Player.fix() - invalid Cat.Type " + animagusColor);
-         }
-      }
-
-      animagusColor = color.toString();
+      if (animagusColor.contains("BLACK"))
+         animagusColor = Cat.Type.ALL_BLACK.toString();
+      else if (animagusColor.contains("RED"))
+         animagusColor = Cat.Type.RED.toString();
+      else // siamese
+         animagusColor = Cat.Type.SIAMESE.toString();
    }
 }
