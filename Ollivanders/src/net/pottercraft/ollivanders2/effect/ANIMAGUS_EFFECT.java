@@ -209,7 +209,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       }
       else if (watcher instanceof PolarBearWatcher)
       {
-         ((PolarBearWatcher) watcher).setStanding(true);
+         ((PolarBearWatcher) watcher).setStanding(false);
       }
       else if (watcher instanceof CreeperWatcher)
       {

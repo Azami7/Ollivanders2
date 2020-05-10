@@ -1123,26 +1123,40 @@ public class O2Player
       // MC split Cat from Ocelot so now players that were actually Cats are not anymore
       if (animagusForm == EntityType.OCELOT)
       {
-         if (animagusColor != null)
+         fixOcelotAnimagus();
+      }
+   }
+
+   /**
+    * Fix where a player's animagus form is actually a Cat but is saved as Ocelot from pre-MC 1.14
+    */
+   private void fixOcelotAnimagus()
+   {
+      if (animagusForm != EntityType.OCELOT || animagusColor == null)
+         return;
+
+      if (animagusColor.contains("OCELOT"))
+      {
+         animagusForm = EntityType.OCELOT;
+         animagusColor = null;
+         return;
+      }
+
+      animagusForm = EntityType.CAT;
+      Cat.Type color = Cat.Type.WHITE;
+
+      try
+      {
+         color = Cat.Type.valueOf(animagusColor);
+      }
+      catch (Exception e)
+      {
+         if (Ollivanders2.debug)
          {
-            // they are actually a cat because we dont set this for wild Ocelots
-            animagusForm = EntityType.CAT;
-            Cat.Type color = Cat.Type.WHITE;
-
-            try
-            {
-               color = Cat.Type.valueOf(animagusColor);
-            }
-            catch (Exception e)
-            {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("O2Player.fix() - invalid Cat.Type " + animagusColor);
-               }
-            }
-
-            animagusColor = color.toString();
+            p.getLogger().info("O2Player.fix() - invalid Cat.Type " + animagusColor);
          }
       }
+
+      animagusColor = color.toString();
    }
 }

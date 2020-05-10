@@ -68,7 +68,7 @@ public class INCARNATIO_URSUS extends PlayerDisguise
 
       if (watcher instanceof PolarBearWatcher)
       {
-         ((PolarBearWatcher) watcher).setStanding(true);
+         ((PolarBearWatcher) watcher).setStanding(false);
       }
       else // Panda
       {
