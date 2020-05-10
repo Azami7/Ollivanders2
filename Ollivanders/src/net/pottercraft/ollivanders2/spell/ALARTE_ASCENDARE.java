@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
@@ -57,8 +57,8 @@ public final class ALARTE_ASCENDARE extends O2Spell
       branch = O2MagicBranch.CHARMS;
 
       // world guard
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
-      worldGuardFlags.add(DefaultFlag.PVP);
+      worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+      worldGuardFlags.add(Flags.PVP);
    }
 
    /**

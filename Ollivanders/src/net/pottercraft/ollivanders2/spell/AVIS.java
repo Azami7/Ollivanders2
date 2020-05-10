@@ -1,13 +1,12 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Parrot;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
 
 import java.util.ArrayList;
 
@@ -57,7 +56,7 @@ public final class AVIS extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
+      worldGuardFlags.add(Flags.MOB_SPAWNING);
    }
 
    @Override
@@ -85,19 +84,7 @@ public final class AVIS extends O2Spell
       {
          Parrot bird = (Parrot) location.getWorld().spawnEntity(location, EntityType.PARROT);
 
-         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 5);
-         Parrot.Variant variant;
-         if (rand == 0)
-            variant = Parrot.Variant.CYAN;
-         else if (rand == 1)
-            variant = Parrot.Variant.GRAY;
-         else if (rand == 2)
-            variant = Parrot.Variant.BLUE;
-         else if (rand == 3)
-            variant = Parrot.Variant.GREEN;
-         else
-            variant = Parrot.Variant.RED;
-         bird.setVariant(variant);
+         bird.setVariant(common.getRandomParrotColor());
 
          birdCount++;
       }

@@ -50,12 +50,12 @@ public final class EQUUSIFORS extends FriendlyMobDisguise
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
 
-      HorseWatcher watcher = (HorseWatcher)disguise.getWatcher();
+      HorseWatcher watcher = (HorseWatcher) disguise.getWatcher();
       watcher.setAdult();
 
       // randomize appearance
       Ollivanders2Common common = new Ollivanders2Common(p);
-      watcher.setStyle(common.randomHorseStyle());
-      watcher.setColor(common.randomHorseColor());
+      watcher.setStyle(common.getRandomHorseStyle());
+      watcher.setColor(common.getRandomHorseColor());
    }
 }

@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 
@@ -53,7 +53,7 @@ public final class REDUCTO extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.OTHER_EXPLOSION);
+      worldGuardFlags.add(Flags.OTHER_EXPLOSION);
    }
 
    @Override

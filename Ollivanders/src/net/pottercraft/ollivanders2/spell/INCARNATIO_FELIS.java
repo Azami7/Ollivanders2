@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import me.libraryaddict.disguise.disguisetypes.watchers.OcelotWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.CatWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
@@ -36,8 +36,8 @@ public final class INCARNATIO_FELIS extends PlayerDisguise
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
    public INCARNATIO_FELIS(Ollivanders2 plugin, Player player, Double rightWand)
@@ -50,15 +50,15 @@ public final class INCARNATIO_FELIS extends PlayerDisguise
       initSpell();
       calculateSuccessRate();
 
-      targetType = EntityType.OCELOT;
+      targetType = EntityType.CAT;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
 
-      OcelotWatcher watcher = (OcelotWatcher) disguise.getWatcher();
+      CatWatcher watcher = (CatWatcher) disguise.getWatcher();
       watcher.setAdult();
 
       Ollivanders2Common common = new Ollivanders2Common(p);
-      watcher.setType(common.randomOcelotType());
+      watcher.setType(common.getRandomCatType());
 
       int rand = Ollivanders2Common.random.nextInt() % 10;
       if (rand == 0)

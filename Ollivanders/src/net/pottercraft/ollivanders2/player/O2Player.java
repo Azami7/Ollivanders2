@@ -18,7 +18,9 @@ import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Cat;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Fox;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 
@@ -140,18 +142,21 @@ public class O2Player
     */
    private Year year = Year.YEAR_1;
 
+   private O2PlayerCommon o2PlayerCommon;
+
    /**
     * Constructor.
     *
-    * @param id the UUID of the player
-    * @param name the name of the player
+    * @param id     the UUID of the player
+    * @param name   the name of the player
     * @param plugin a reference to the plugin
     */
-   public O2Player (UUID id, String name, Ollivanders2 plugin)
+   public O2Player(UUID id, String name, Ollivanders2 plugin)
    {
       p = plugin;
       playerName = name;
       pid = id;
+      o2PlayerCommon = new O2PlayerCommon();
 
       // set destined wand
       initDestinedWand();
@@ -356,7 +361,10 @@ public class O2Player
     *
     * @return a map of all recent spells and the time they were cast.
     */
-   public Map<O2SpellType, Long> getRecentSpells () { return recentSpells; }
+   public Map<O2SpellType, Long> getRecentSpells()
+   {
+      return recentSpells;
+   }
 
    /**
     * Set the spell count for a spell. This will override the existing values for this spell and should
@@ -635,14 +643,20 @@ public class O2Player
     *
     * @return true if they are a muggle, false otherwise
     */
-   public boolean isMuggle () { return muggle; }
+   public boolean isMuggle()
+   {
+      return muggle;
+   }
 
    /**
     * Set if a player is a muggle.
     *
     * @param isMuggle true if the player is a muggle
     */
-   public void setMuggle (boolean isMuggle) { muggle = isMuggle; }
+   public void setMuggle(boolean isMuggle)
+   {
+      muggle = isMuggle;
+   }
 
    /**
     * Get the number of souls this player has collected.
@@ -693,10 +707,13 @@ public class O2Player
 
    /**
     * Set the year this player is in.
+    *
     * @param y The year to set them to
     */
-   public void setYear(Year y) {
-      if (year != null) {
+   public void setYear(Year y)
+   {
+      if (year != null)
+      {
          year = y;
       }
    }
@@ -904,41 +921,48 @@ public class O2Player
    {
       if (animagusForm == null)
       {
-         int form = 0;
-
-         ArrayList<EntityType> animagusShapes = O2PlayerCommon.getAnimagusShapes();
-         form = Math.abs(pid.hashCode() % animagusShapes.size());
-
-         animagusForm = animagusShapes.get(form);
-         if (Ollivanders2.debug)
-            p.getLogger().info(playerName + " is an animagus type " + animagusForm.toString());
+         animagusForm = o2PlayerCommon.getAnimagusForm(pid);
 
          // determine color variations for certain types
-         if (animagusForm == EntityType.OCELOT)
+         if (animagusForm == EntityType.CAT)
          {
-            animagusColor = Ollivanders2API.common.randomOcelotType().toString();
+            animagusColor = Ollivanders2API.common.getRandomCatType(pid.hashCode()).toString();
          }
-         else if(animagusForm == EntityType.RABBIT)
+         else if (animagusForm == EntityType.RABBIT)
          {
-            animagusColor = Ollivanders2API.common.randomRabbitType().toString();
+            animagusColor = Ollivanders2API.common.getRandomRabbitType(pid.hashCode()).toString();
          }
-         else if (animagusForm == EntityType.WOLF)
+         else if (animagusForm == EntityType.WOLF || animagusForm == EntityType.SHULKER)
          {
-            animagusColor = O2Color.getRandomPrimaryDyeableColor().getDyeColor().toString();
+            animagusColor = O2Color.getRandomPrimaryDyeableColor(pid.hashCode()).getDyeColor().toString();
          }
          else if (animagusForm == EntityType.HORSE)
          {
-            animagusColor = Ollivanders2API.common.randomHorseColor().toString();
+            animagusColor = Ollivanders2API.common.getRandomHorseColor(pid.hashCode()).toString();
          }
          else if (animagusForm == EntityType.LLAMA)
          {
-            animagusColor = Ollivanders2API.common.randomLlamaColor().toString();
+            animagusColor = Ollivanders2API.common.getRandomLlamaColor(pid.hashCode()).toString();
+         }
+         else if (animagusForm == EntityType.FOX)
+         {
+            if ((pid.hashCode() % 10) == 1)
+               animagusColor = Fox.Type.SNOW.toString();
+            else
+               animagusColor = Fox.Type.RED.toString();
+         }
+         else if (animagusForm == EntityType.SHEEP)
+         {
+            animagusColor = Ollivanders2API.common.getRandomNaturalSheepColor(pid.hashCode()).toString();
          }
 
          if (animagusColor != null && Ollivanders2.debug)
          {
             p.getLogger().info("Color variation " + animagusColor);
          }
+
+         if (Ollivanders2.debug)
+            p.getLogger().info(playerName + " is an animagus type " + animagusForm.toString());
       }
    }
 
@@ -949,9 +973,7 @@ public class O2Player
     */
    public void setAnimagusForm (EntityType type)
    {
-      ArrayList<EntityType> animagusShapes = O2PlayerCommon.getAnimagusShapes();
-
-      if (animagusShapes.contains(type))
+      if (o2PlayerCommon.isAllowedAnimagusForm(type))
       {
          animagusForm = type;
       }
@@ -964,7 +986,12 @@ public class O2Player
       }
    }
 
-   void setAnimagusColor (String color)
+   /**
+    * Set the player's animagus color
+    *
+    * @param color the color/type as a string
+    */
+   void setAnimagusColor(String color)
    {
       animagusColor = color;
    }
@@ -1072,7 +1099,7 @@ public class O2Player
    /**
     * Do player onDeath actions
     */
-   public void onDeath ()
+   public void onDeath()
    {
       if (Ollivanders2.enableDeathExpLoss)
       {
@@ -1083,5 +1110,44 @@ public class O2Player
       }
 
       setWandSpell(null);
+   }
+
+   /**
+    * Called after a player's data has been read from save to fix changes made to the plugin between versions.
+    */
+   protected void fix()
+   {
+      //
+      // animagus form was an ocelot
+      //
+      // MC split Cat from Ocelot so now players that were actually Cats are not anymore
+      if (animagusForm == EntityType.OCELOT)
+      {
+         fixOcelotAnimagus();
+      }
+   }
+
+   /**
+    * Fix where a player's animagus form is actually a Cat but is saved as Ocelot from pre-MC 1.14
+    */
+   private void fixOcelotAnimagus()
+   {
+      if (animagusForm != EntityType.OCELOT || animagusForm == null)
+         return;
+
+      if (animagusColor.contains("OCELOT"))
+      {
+         animagusColor = null;
+         return;
+      }
+
+      animagusForm = EntityType.CAT;
+
+      if (animagusColor.contains("BLACK"))
+         animagusColor = Cat.Type.ALL_BLACK.toString();
+      else if (animagusColor.contains("RED"))
+         animagusColor = Cat.Type.RED.toString();
+      else // siamese
+         animagusColor = Cat.Type.SIAMESE.toString();
    }
 }

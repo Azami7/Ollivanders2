@@ -1,15 +1,18 @@
 package net.pottercraft.ollivanders2;
 
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldguard.LocalPlayer;
+import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
+import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
-import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.RegionContainer;
+import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import com.sk89q.worldedit.Vector;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import static com.sk89q.worldguard.bukkit.BukkitUtil.toVector;
 
 /**
  * Handles all WorldGuard support for Ollivanders2.  If WorldGuard is not enabled on the server, all calls
@@ -32,6 +35,7 @@ public class Ollivanders2WorldGuard
    public Ollivanders2WorldGuard (Ollivanders2 o2plugin)
    {
       p = o2plugin;
+      worldGuard = null;
 
       Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
 
@@ -41,18 +45,20 @@ public class Ollivanders2WorldGuard
          {
             if (wg instanceof WorldGuardPlugin && wg.isEnabled())
             {
-               worldGuard = (WorldGuardPlugin) wg;
+               if (wg.getDescription().getVersion().startsWith("7"))
+               {
+                  worldGuard = (WorldGuardPlugin) wg;
+               }
             }
          }
          catch (Exception e)
          {
-            worldGuard = null;
+            p.getLogger().info("Failed to get WorldGuard plugin, WorldGuard features will be disabled.");
          }
       }
-      else
-      {
-         worldGuard = null;
-      }
+
+      if (worldGuard == null)
+         Ollivanders2.worldGuardEnabled = false;
    }
 
    /**
@@ -98,24 +104,31 @@ public class Ollivanders2WorldGuard
     */
    private ApplicableRegionSet getWGRegionSet (Location location)
    {
-      ApplicableRegionSet regionSet = null;
+      if (worldGuard == null)
+         return null;
 
-      if (worldGuard != null)
+      RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
+
+      if (regionContainer == null)
       {
          if (Ollivanders2.debug)
-            p.getLogger().info("Getting region manager...");
+            p.getLogger().info("Failed to get RegionContainer...");
 
-         RegionManager regionManager = worldGuard.getRegionManager(location.getWorld());
-
-         if (regionManager != null)
-         {
-            if (Ollivanders2.debug)
-               p.getLogger().info("Getting regions...");
-
-            Vector locPt = toVector(location);
-            regionSet = regionManager.getApplicableRegions(locPt);
-         }
+         return null;
       }
+
+      RegionQuery query = regionContainer.createQuery();
+      if (query == null)
+      {
+         if (Ollivanders2.debug)
+            p.getLogger().info("Failed to get RegionQuery...");
+
+         return null;
+      }
+
+      com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(location.getWorld());
+      com.sk89q.worldedit.util.Location weLocation = new com.sk89q.worldedit.util.Location(weWorld, location.getX(), location.getY(), location.getZ());
+      ApplicableRegionSet regionSet = query.getApplicableRegions(weLocation);
 
       return regionSet;
    }
@@ -148,12 +161,13 @@ public class Ollivanders2WorldGuard
    public boolean checkWGBuild (Player player, Location location)
    {
       if (worldGuard == null)
-      {
          return true;
-      }
-      else
-      {
-         return worldGuard.canBuild(player, location);
-      }
+
+      ApplicableRegionSet regionSet = getWGRegionSet(location);
+      if (regionSet == null)
+         return true;
+
+      LocalPlayer wgPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
+      return regionSet.testState(wgPlayer, Flags.BUILD);
    }
 }

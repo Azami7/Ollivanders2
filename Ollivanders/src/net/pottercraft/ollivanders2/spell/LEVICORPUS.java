@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -52,7 +52,7 @@ public final class LEVICORPUS extends AddO2Effect
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.PVP);
+      worldGuardFlags.add(Flags.PVP);
 
       effectsToAdd.add(O2EffectType.SUSPENSION);
 

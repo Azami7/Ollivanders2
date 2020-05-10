@@ -48,7 +48,7 @@ public class Ollivanders2API
    {
       players = new O2Players(p);
       players.loadO2Players();
-      playerCommon = new O2PlayerCommon(p);
+      playerCommon = new O2PlayerCommon();
    }
 
    static void savePlayers ()

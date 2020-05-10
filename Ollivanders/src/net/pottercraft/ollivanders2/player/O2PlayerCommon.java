@@ -2,9 +2,11 @@ package net.pottercraft.ollivanders2.player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -12,61 +14,57 @@ import org.bukkit.inventory.ItemStack;
 
 public final class O2PlayerCommon
 {
-   private Ollivanders2 p;
-
-   public O2PlayerCommon (Ollivanders2 plugin)
+   public O2PlayerCommon()
    {
-      p = plugin;
+
    }
+
+   private static ArrayList<EntityType> commonAnimagusShapes = new ArrayList<EntityType>()
+   {{
+      add(EntityType.COW);
+      add(EntityType.PIG);
+      add(EntityType.HORSE);
+      add(EntityType.SHEEP);
+      add(EntityType.RABBIT);
+      add(EntityType.MULE);
+      add(EntityType.DONKEY);
+      add(EntityType.CAT);
+      add(EntityType.WOLF);
+      add(EntityType.LLAMA);
+      add(EntityType.FOX);
+   }};
+
+   private static ArrayList<EntityType> rareAnimagusShapes = new ArrayList<EntityType>()
+   {{
+      add(EntityType.OCELOT);
+      add(EntityType.POLAR_BEAR);
+      add(EntityType.TRADER_LLAMA);
+      add(EntityType.PANDA);
+      add(EntityType.TURTLE);
+   }};
+
+   private static ArrayList<EntityType> hostileAnimagusShapes = new ArrayList<EntityType>()
+   {{
+      add(EntityType.SPIDER);
+      add(EntityType.SLIME);
+      add(EntityType.CAVE_SPIDER);
+      add(EntityType.CREEPER);
+      add(EntityType.SILVERFISH);
+      add(EntityType.SHULKER);
+   }};
 
    static String wandLoreConjunction = " and ";
 
    /**
-    * Get all possible animagus shapes
-    *
-    * @return a list of all possible EntityTypes for animagus form
-    */
-   static ArrayList<EntityType> getAnimagusShapes ()
-   {
-      ArrayList<EntityType> animagusShapes = new ArrayList<>();
-
-      animagusShapes.add(EntityType.OCELOT);
-      animagusShapes.add(EntityType.WOLF);
-      animagusShapes.add(EntityType.COW);
-      animagusShapes.add(EntityType.PIG);
-      animagusShapes.add(EntityType.HORSE);
-      animagusShapes.add(EntityType.SHEEP);
-      animagusShapes.add(EntityType.RABBIT);
-      animagusShapes.add(EntityType.MULE);
-      animagusShapes.add(EntityType.DONKEY);
-      animagusShapes.add(EntityType.POLAR_BEAR);
-      animagusShapes.add(EntityType.LLAMA);
-
-      if (Ollivanders2.useHostileMobAnimagi)
-      {
-         animagusShapes.add(EntityType.SPIDER);
-         animagusShapes.add(EntityType.SLIME);
-         animagusShapes.add(EntityType.CAVE_SPIDER);
-         animagusShapes.add(EntityType.CREEPER);
-         animagusShapes.add(EntityType.EVOKER);
-         animagusShapes.add(EntityType.HUSK);
-         animagusShapes.add(EntityType.SILVERFISH);
-         animagusShapes.add(EntityType.WITCH);
-         animagusShapes.add(EntityType.VINDICATOR);
-         animagusShapes.add(EntityType.SHULKER);
-      }
-
-      return animagusShapes;
-   }
-
-
-   /**
     * Take an integer and get the corresponding year
+    *
     * @param year The year; must be between 1 and 7
     * @return The corresponding year or null if invalid input
     */
-   public static Year intToYear(int year) {
-      switch (year) {
+   public static Year intToYear(int year)
+   {
+      switch (year)
+      {
          case 1:
             return Year.YEAR_1;
          case 2:
@@ -87,12 +85,60 @@ public final class O2PlayerCommon
    }
 
    /**
+    * Get the animagus form for this player
+    *
+    * @return a list of all possible EntityTypes for animagus form
+    */
+   public EntityType getAnimagusForm(UUID pid)
+   {
+      // 1% chance to get a rare form
+      int form = Math.abs(pid.hashCode() % 100);
+      if (form > 0)
+      {
+         form = Math.abs(pid.hashCode() % rareAnimagusShapes.size());
+         return rareAnimagusShapes.get(form);
+      }
+
+      // if using hostile mob animagi, 10% chance of getting a hostile mob form
+      form = Math.abs(pid.hashCode() % 25);
+      if (form > 24)
+      {
+         form = Math.abs(pid.hashCode() % hostileAnimagusShapes.size());
+         return hostileAnimagusShapes.get(form);
+      }
+
+      // equal chance for common forms
+      form = Math.abs(pid.hashCode() % commonAnimagusShapes.size());
+      return commonAnimagusShapes.get(form);
+   }
+
+   /**
+    * Determine if an EntityType is an allowed Animagus form.
+    *
+    * @param form the animagus form to check
+    * @return true if this is an allowed form, false otherwise
+    */
+   public boolean isAllowedAnimagusForm(EntityType form)
+   {
+      if (Ollivanders2.useHostileMobAnimagi)
+      {
+         if (hostileAnimagusShapes.contains(form))
+            return true;
+      }
+
+      if (rareAnimagusShapes.contains(form))
+         return true;
+
+      return commonAnimagusShapes.contains(form);
+   }
+
+   /**
     * Does the player hold a wand item in their primary hand?
     *
     * @param player player to check.
     * @return True if the player holds a wand. False if not or if player is null.
     */
-   public boolean holdsWand (Player player)
+   public boolean holdsWand(Player player)
    {
       return holdsWand(player, EquipmentSlot.HAND);
    }

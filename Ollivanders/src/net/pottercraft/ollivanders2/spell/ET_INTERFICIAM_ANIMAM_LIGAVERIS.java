@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
@@ -61,7 +61,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING); // needed because Fiendfyre requires it, otherwise horcruxes could get made in locations players couldn't kill them
+      worldGuardFlags.add(Flags.MOB_SPAWNING); // needed because Fiendfyre requires it, otherwise horcruxes could get made in locations players couldn't kill them
    }
 
    @Override

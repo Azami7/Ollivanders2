@@ -59,7 +59,7 @@ public final class INCARNATIO_EQUUS extends PlayerDisguise
       // randomize appearance
       Ollivanders2Common common = new Ollivanders2Common(p);
 
-      watcher.setStyle(common.randomHorseStyle());
-      watcher.setColor(common.randomHorseColor());
+      watcher.setStyle(common.getRandomHorseStyle());
+      watcher.setColor(common.getRandomHorseColor());
    }
 }

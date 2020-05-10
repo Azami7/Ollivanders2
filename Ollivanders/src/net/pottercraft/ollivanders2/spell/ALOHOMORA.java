@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -56,7 +56,7 @@ public final class ALOHOMORA extends O2Spell
       initSpell();
 
       // world guard
-      worldGuardFlags.add(DefaultFlag.INTERACT);
+      worldGuardFlags.add(Flags.INTERACT);
    }
 
    /**

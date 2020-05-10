@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2WorldGuard;
@@ -62,7 +62,7 @@ public final class APPARATE extends O2Spell
       initSpell();
 
       // world-guard flags
-      worldGuardFlags.add(DefaultFlag.EXIT_VIA_TELEPORT);
+      worldGuardFlags.add(Flags.EXIT_VIA_TELEPORT);
    }
 
    /**
@@ -135,7 +135,7 @@ public final class APPARATE extends O2Spell
       {
          Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
 
-         if (!wg.checkWGFlag(player, location, DefaultFlag.EXIT_VIA_TELEPORT))
+         if (!wg.checkWGFlag(player, location, Flags.EXIT_VIA_TELEPORT))
          {
             return false;
          }
@@ -163,7 +163,7 @@ public final class APPARATE extends O2Spell
       {
          Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
 
-         if (!wg.checkWGFlag(player, destination, DefaultFlag.ENTRY))
+         if (!wg.checkWGFlag(player, destination, Flags.ENTRY))
          {
             return false;
          }

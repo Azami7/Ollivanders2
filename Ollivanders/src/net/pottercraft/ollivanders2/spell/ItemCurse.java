@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
@@ -48,8 +48,8 @@ public abstract class ItemCurse extends O2Spell
       super(plugin, player, rightWand);
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
-      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+      worldGuardFlags.add(Flags.ITEM_PICKUP);
+      worldGuardFlags.add(Flags.ITEM_DROP);
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);

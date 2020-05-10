@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.Material;
 import org.bukkit.block.data.BlockData;
@@ -55,7 +55,7 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
+      worldGuardFlags.add(Flags.MOB_SPAWNING);
    }
 
    @Override
