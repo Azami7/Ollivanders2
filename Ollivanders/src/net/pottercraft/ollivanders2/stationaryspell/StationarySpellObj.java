@@ -21,6 +21,7 @@ import org.bukkit.entity.LivingEntity;
 public abstract class StationarySpellObj implements Serializable
 {
    Ollivanders2 p;
+   Ollivanders2Common common;
    public UUID playerUUID;
    protected O2StationarySpellType spellType;
    public Location location;
@@ -37,6 +38,8 @@ public abstract class StationarySpellObj implements Serializable
    public StationarySpellObj (Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
+
       duration = 10;
       radius = 1;
       active = false;

@@ -32,6 +32,7 @@ deathExpLoss: false
 #
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#houses-and-years
 houses: false
+displayMessageOnSort: false
 gryffindorName: "Gryffindor"
 hufflepuffName: "Hufflepuff"
 ravenclawName: "Ravenclaw"
@@ -58,11 +59,15 @@ witchDrop: false
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#divination
 divinationMaxDays: 4
 
-# Debug Mode
+# Experimental and Debug options
 #
 # Turns on debug output in your logs. This can also be toggled on and off in game by using the command
 # /olli debug
 debug: false
+#
+# Override version checks. This will force the plugin to load regardless of MC api version.
+# **IMPORTANT** Backup your plugins/Ollivanders2 directory before enabling this option - running unsupported versions may corrupt plugin data
+overrideVersionCheck: false
 
 #
 # Zones

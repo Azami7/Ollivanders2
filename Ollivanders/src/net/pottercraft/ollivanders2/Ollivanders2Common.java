@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 
+import com.google.gson.internal.$Gson$Preconditions;
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
@@ -67,6 +68,10 @@ public class Ollivanders2Common
       add(EntityType.CHICKEN);
       add(EntityType.RABBIT);
       add(EntityType.PARROT);
+      add(EntityType.COD);
+      add(EntityType.SALMON);
+      add(EntityType.TROPICAL_FISH);
+      add(EntityType.PUFFERFISH);
    }};
 
    public static final ArrayList<EntityType> mediumFriendlyAnimals = new ArrayList<EntityType>() {{
@@ -74,6 +79,9 @@ public class Ollivanders2Common
       add(EntityType.PIG);
       add(EntityType.OCELOT);
       add(EntityType.WOLF);
+      add(EntityType.CAT);
+      add(EntityType.FOX);
+      add(EntityType.TURTLE);
    }};
 
    public static final ArrayList<EntityType> largeFriendlyAnimals = new ArrayList<EntityType>() {{
@@ -88,6 +96,9 @@ public class Ollivanders2Common
       add(EntityType.POLAR_BEAR);
       add(EntityType.LLAMA);
       add(EntityType.SHULKER); // not large in size but complex
+      add(EntityType.PANDA);
+      add(EntityType.DOLPHIN);
+      add(EntityType.TRADER_LLAMA);
    }};
 
    public static final ArrayList<EntityType> undeadEntities = new ArrayList<EntityType>()
@@ -104,6 +115,7 @@ public class Ollivanders2Common
       add(EntityType.ZOMBIE);
       add(EntityType.ZOMBIE_HORSE);
       add(EntityType.ZOMBIE_VILLAGER);
+      add(EntityType.GIANT);
    }};
 
    public static final ArrayList<O2SpellType> libsDisguisesSpells = new ArrayList<O2SpellType>() {{
@@ -174,6 +186,30 @@ public class Ollivanders2Common
       add(Material.PURPLE_SHULKER_BOX);
       add(Material.RED_SHULKER_BOX);
       add(Material.YELLOW_SHULKER_BOX);
+   }};
+
+   public static final ArrayList<Material> wallSigns = new ArrayList<Material>()
+   {{
+      add(Material.ACACIA_WALL_SIGN);
+      add(Material.BIRCH_WALL_SIGN);
+      add(Material.DARK_OAK_WALL_SIGN);
+      add(Material.OAK_WALL_SIGN);
+      add(Material.SPRUCE_WALL_SIGN);
+   }};
+
+   public static final ArrayList<Material> standingSigns = new ArrayList<Material>()
+   {{
+      add(Material.ACACIA_SIGN);
+      add(Material.BIRCH_SIGN);
+      add(Material.DARK_OAK_SIGN);
+      add(Material.OAK_SIGN);
+      add(Material.SPRUCE_SIGN);
+   }};
+
+   public static final ArrayList<Material> signs = new ArrayList<Material>()
+   {{
+      addAll(wallSigns);
+      addAll(standingSigns);
    }};
 
    public enum TimeOfDay

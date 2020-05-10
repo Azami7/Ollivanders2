@@ -212,7 +212,7 @@ public class O2Houses
       if (Ollivanders2.displayMessageOnSort)
       {
          String title = houseType.getChatColorCode() + player.getName();
-         String subtitle = houseType.getChatColorCode() + "let it be " + houseType.getName();
+         String subtitle = houseType.getChatColorCode() + "better be " + houseType.getName();
          common.sendTitleMessage(title, subtitle, common.getAllOnlineSortedPlayers());
       }
 
