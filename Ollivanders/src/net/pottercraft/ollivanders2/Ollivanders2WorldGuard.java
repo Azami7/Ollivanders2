@@ -35,6 +35,7 @@ public class Ollivanders2WorldGuard
    public Ollivanders2WorldGuard (Ollivanders2 o2plugin)
    {
       p = o2plugin;
+      worldGuard = null;
 
       Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
 
@@ -44,18 +45,20 @@ public class Ollivanders2WorldGuard
          {
             if (wg instanceof WorldGuardPlugin && wg.isEnabled())
             {
-               worldGuard = (WorldGuardPlugin) wg;
+               if (wg.getDescription().getVersion().startsWith("7"))
+               {
+                  worldGuard = (WorldGuardPlugin) wg;
+               }
             }
          }
          catch (Exception e)
          {
-            worldGuard = null;
+            p.getLogger().info("Failed to get WorldGuard plugin, WorldGuard features will be disabled.");
          }
       }
-      else
-      {
-         worldGuard = null;
-      }
+
+      if (worldGuard == null)
+         Ollivanders2.worldGuardEnabled = false;
    }
 
    /**
