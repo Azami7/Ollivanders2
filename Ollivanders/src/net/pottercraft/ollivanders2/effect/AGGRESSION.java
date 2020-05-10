@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.effect;
 import java.util.Collection;
 import java.util.UUID;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 
@@ -103,11 +103,11 @@ public class AGGRESSION extends O2Effect
          // don't do damage if worldguard is protecting where the entity is
          if (Ollivanders2.worldGuardEnabled)
          {
-            if (toDamage instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(target, toDamage.getEyeLocation(), DefaultFlag.PVP))
+            if (toDamage instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(target, toDamage.getEyeLocation(), Flags.PVP))
             {
                return;
             }
-            else if (!(toDamage instanceof Monster) && !Ollivanders2.worldGuardO2.checkWGFlag(target, toDamage.getEyeLocation(), DefaultFlag.DAMAGE_ANIMALS))
+            else if (!(toDamage instanceof Monster) && !Ollivanders2.worldGuardO2.checkWGFlag(target, toDamage.getEyeLocation(), Flags.DAMAGE_ANIMALS))
             {
                return;
             }

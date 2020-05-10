@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
@@ -72,6 +72,6 @@ public class PYROSVESTIRAS extends BlockTransfiguration
       materialWhitelist.add(Material.FIRE);
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(Flags.BUILD);
    }
 }

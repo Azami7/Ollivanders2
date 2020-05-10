@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
@@ -80,9 +80,9 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
 
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
-      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
-      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+      worldGuardFlags.add(Flags.BUILD);
+      worldGuardFlags.add(Flags.ITEM_PICKUP);
+      worldGuardFlags.add(Flags.ITEM_DROP);
    }
 
    @Override

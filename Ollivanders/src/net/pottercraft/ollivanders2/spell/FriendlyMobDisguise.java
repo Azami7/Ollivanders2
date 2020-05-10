@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
@@ -35,7 +35,7 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
    {
       super(plugin, player, rightWand);
 
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
    }
 
    @Override

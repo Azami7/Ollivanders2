@@ -1,7 +1,5 @@
 package quidditch;
 
-import com.sk89q.worldedit.*;
-import com.sk89q.worldedit.blocks.BaseBlock;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import org.bukkit.Location;
@@ -12,8 +10,6 @@ import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
-
-import java.util.ArrayList;
 
 /**
  * @author autumnwoz
@@ -179,6 +175,7 @@ public class Arena {
      * Build the arena using WorldEdit
      */
     private void buildArena(){
+        /*
         double x = center.getX();
         double y = center.getY() - 1;
         double z = center.getZ();
@@ -215,7 +212,7 @@ public class Arena {
                 int i = 0;
                 for (CuboidRegion reg : areas) {
                     if (i % 2 == 0) {
-                        session.setBlocks(reg, new BaseBlock(35, 13));
+                        session.setBlocks(reg, new B(35, 13));
                     } else {
                         session.setBlocks(reg, new BaseBlock(2));
                     }
@@ -308,14 +305,21 @@ public class Arena {
         } else  if (size == Size.LARGE) {
             return;
         }
+
+         */
     }
 
-    private CuboidRegion createRegion(double x1, double y1, double z1, double x2, double y2, double z2, BukkitWorld world) {
+    private CuboidRegion createRegion(double x1, double y1, double z1, double x2, double y2, double z2, BukkitWorld world)
+    {
+        /*
         Vector v1 = new Vector(x1, y1, z1);
         Vector v2 = new Vector(x2, y2, z2);
         CuboidRegion region = new CuboidRegion(v1, v2);
         region.setWorld(world);
         return region;
+
+         */
+        return null;
     }
 
     /**

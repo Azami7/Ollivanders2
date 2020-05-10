@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -54,7 +54,7 @@ public final class OBLIVIATE extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.PVP);
+      worldGuardFlags.add(Flags.PVP);
    }
 
    @Override

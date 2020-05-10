@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -63,8 +63,8 @@ public final class ALIQUAM_FLOO extends O2Spell
       initSpell();
 
       // required worldGuard state flags
-      worldGuardFlags.add(DefaultFlag.INTERACT);
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      worldGuardFlags.add(Flags.INTERACT);
+      worldGuardFlags.add(Flags.BUILD);
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);

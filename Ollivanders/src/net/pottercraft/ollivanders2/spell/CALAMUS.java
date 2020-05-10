@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -50,7 +50,7 @@ public final class CALAMUS extends Transfiguration
       initSpell();
 
       // world guard
-      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+      worldGuardFlags.add(Flags.ITEM_DROP);
    }
 
    /**

@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.DefaultFlag;
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.SmallFireball;
@@ -55,7 +55,7 @@ public final class LACARNUM_INFLAMARI extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.LIGHTER);
+      worldGuardFlags.add(Flags.LIGHTER);
    }
 
    @Override
