@@ -1132,10 +1132,10 @@ public class O2Player
     */
    private void fixOcelotAnimagus()
    {
-      if (animagusForm != EntityType.OCELOT)
+      if (animagusForm != EntityType.OCELOT || animagusForm == null)
          return;
 
-      if (animagusColor != null && animagusColor.contains("OCELOT"))
+      if (animagusColor.contains("OCELOT"))
       {
          animagusColor = null;
          return;
