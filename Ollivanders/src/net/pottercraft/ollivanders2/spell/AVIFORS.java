@@ -5,9 +5,7 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.ParrotWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -60,27 +58,7 @@ public final class AVIFORS extends FriendlyMobDisguise
       disguise = new MobDisguise(disguiseType);
 
       ParrotWatcher watcher = (ParrotWatcher)disguise.getWatcher();
-      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 20);
-      if (rand > 18)
-      {
-         watcher.setVariant(Parrot.Variant.GRAY);
-      }
-      else if (rand > 14)
-      {
-         watcher.setVariant(Parrot.Variant.GREEN);
-      }
-      else if (rand > 11)
-      {
-         watcher.setVariant(Parrot.Variant.CYAN);
-      }
-      else if (rand > 6)
-      {
-         watcher.setVariant(Parrot.Variant.BLUE);
-      }
-      else
-      {
-         watcher.setVariant(Parrot.Variant.RED);
-      }
+      watcher.setVariant(common.getRandomParrotColor());
 
       watcher.setFlyingWithElytra(true);
    }

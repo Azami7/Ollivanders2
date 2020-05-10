@@ -2,10 +2,14 @@ package net.pottercraft.ollivanders2.spell;
 
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
+import me.libraryaddict.disguise.disguisetypes.watchers.AgeableWatcher;
+import me.libraryaddict.disguise.disguisetypes.watchers.PandaWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.PolarBearWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Panda;
 import org.bukkit.entity.Player;
 
 /**
@@ -46,12 +50,30 @@ public class INCARNATIO_URSUS extends PlayerDisguise
       initSpell();
       calculateSuccessRate();
 
-      targetType = EntityType.POLAR_BEAR;
+      int rand = Math.abs(Ollivanders2Common.random.nextInt() % 20);
+
+      if (rand < 1) // 5% chance
+      {
+         targetType = EntityType.PANDA;
+      }
+      else
+      {
+         targetType = EntityType.POLAR_BEAR;
+      }
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
 
-      PolarBearWatcher watcher = (PolarBearWatcher) disguise.getWatcher();
+      AgeableWatcher watcher = (AgeableWatcher) disguise.getWatcher();
       watcher.setAdult();
-      watcher.setStanding(true);
+
+      if (watcher instanceof PolarBearWatcher)
+      {
+         ((PolarBearWatcher) watcher).setStanding(false);
+      }
+      else // Panda
+      {
+         ((PandaWatcher) watcher).setMainGene(Panda.Gene.NORMAL);
+         ((PandaWatcher) watcher).setSitting(false);
+      }
    }
 }

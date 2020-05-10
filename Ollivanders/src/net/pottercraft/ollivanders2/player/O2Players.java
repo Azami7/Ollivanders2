@@ -550,6 +550,8 @@ public class O2Players
             }
          }
 
+         o2p.fix();
+
          deserializedMap.put(pid, o2p);
          recordCount++;
       }
@@ -597,5 +599,17 @@ public class O2Players
       Integer count = Ollivanders2API.common.integerFromString(value);
       if (count != null)
          o2p.setPotionCount(potionType, count);
+   }
+
+   /**
+    * Correct a player's animagus color form - for use when valueOf() on the current value fails
+    *
+    * @param pid              the player to correct
+    * @param correctedVariant the corrected value
+    */
+   public void fixPlayerAnimagusColorVariant(UUID pid, String correctedVariant)
+   {
+      O2Player player = getPlayer(pid);
+      player.setAnimagusColor(correctedVariant);
    }
 }

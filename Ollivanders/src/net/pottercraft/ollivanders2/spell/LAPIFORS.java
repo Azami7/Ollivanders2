@@ -60,6 +60,6 @@ public final class LAPIFORS extends FriendlyMobDisguise
       RabbitWatcher watcher = (RabbitWatcher)disguise.getWatcher();
       watcher.setAdult();
 
-      watcher.setType(Ollivanders2API.common.randomRabbitType());
+      watcher.setType(Ollivanders2API.common.getRandomRabbitType());
    }
 }
