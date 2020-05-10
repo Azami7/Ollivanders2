@@ -754,7 +754,7 @@ public class OllivandersListener implements Listener
       }
 
       //spells go here, using any of the three types of m
-      String spellClass = "net.pottercraft.Ollivanders2.Spell." + name.toString();
+      String spellClass = "net.pottercraft.ollivanders2.spell." + name.toString();
 
       Constructor c;
       try
