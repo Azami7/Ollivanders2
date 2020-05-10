@@ -71,7 +71,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
       Block fromBlock = getTargetBlock();
       Material blockType = fromBlock.getType();
 
-      if (common.wallSigns.contains(blockType))
+      if (common.signs.contains(blockType))
       {
          // determine the location of the other vanishing cabinet
          Location toLoc = getSignLocation(fromBlock);
@@ -85,7 +85,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
 
          Block toBlock = toLoc.getBlock();
          Material toBlockType = toBlock.getType();
-         if (!common.wallSigns.contains(toBlockType))
+         if (!common.signs.contains(toBlockType))
          {
             if (Ollivanders2.debug)
                p.getLogger().info("Block at toLoc is not a sign block");
