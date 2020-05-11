@@ -93,7 +93,7 @@ public final class O2PlayerCommon
    {
       // 1% chance to get a rare form
       int form = Math.abs(pid.hashCode() % 100);
-      if (form > 0)
+      if (form < 1)
       {
          form = Math.abs(pid.hashCode() % rareAnimagusShapes.size());
          return rareAnimagusShapes.get(form);
@@ -101,7 +101,7 @@ public final class O2PlayerCommon
 
       // if using hostile mob animagi, 10% chance of getting a hostile mob form
       form = Math.abs(pid.hashCode() % 25);
-      if (form > 24)
+      if (form < 26)
       {
          form = Math.abs(pid.hashCode() % hostileAnimagusShapes.size());
          return hostileAnimagusShapes.get(form);

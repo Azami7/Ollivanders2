@@ -14,6 +14,7 @@ import net.pottercraft.ollivanders2.spell.GEMINIO;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Creature;
@@ -54,6 +55,7 @@ class OllivandersSchedule implements Runnable
          Ollivanders2API.getStationarySpells().upkeep();
          Ollivanders2API.getProphecies().upkeep();
          broomSched();
+         teleportSched();
       }
       catch (Exception e)
       {
@@ -347,6 +349,46 @@ class OllivandersSchedule implements Runnable
                }
             }
          }
+      }
+   }
+
+   /**
+    * Handle all teleport events.
+    */
+   private void teleportSched()
+   {
+      Ollivanders2TeleportEvents.O2TeleportEvent[] teleportEvents = p.getTeleportEvents();
+
+      for (Ollivanders2TeleportEvents.O2TeleportEvent event : teleportEvents)
+      {
+         Player player = event.getPlayer();
+
+         if (Ollivanders2.debug)
+            p.getLogger().info("Teleporting " + player.getName());
+
+         Location currentLocation = event.getFromLocation();
+         Location destination = event.getToLocation();
+         destination.setPitch(currentLocation.getPitch());
+         destination.setYaw(currentLocation.getYaw());
+
+         try
+         {
+            player.teleport(destination);
+
+            if (event.isExplosionOnTeleport())
+            {
+               currentLocation.getWorld().createExplosion(currentLocation, 0);
+               destination.getWorld().createExplosion(destination, 0);
+            }
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to teleport player.");
+            if (Ollivanders2.debug)
+               e.printStackTrace();
+         }
+
+         p.removeTeleportEvent(event);
       }
    }
 
