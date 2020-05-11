@@ -213,19 +213,25 @@ public class OllivandersListener implements Listener
                      alis.add(dest);
                      if (dest.getFlooName().equals(chat.trim().toLowerCase()))
                      {
-                        destination = dest.location;
+                        /*
+                        estination = dest.location;
                         destination.setPitch(player.getLocation().getPitch());
                         destination.setYaw(player.getLocation().getYaw());
                         player.teleport(destination);
+                         */
+                        p.addTeleportEvent(player, player.getLocation(), dest.location);
                         return;
                      }
                   }
                }
                int randomIndex = (int) (alis.size() * Math.random());
+               /*
                destination = alis.get(randomIndex).location;
                destination.setPitch(player.getLocation().getPitch());
                destination.setYaw(player.getLocation().getYaw());
                player.teleport(destination);
+                */
+               p.addTeleportEvent(player, player.getLocation(), alis.get(randomIndex).location);
                return;
             }
          }
@@ -607,6 +613,7 @@ public class OllivandersListener implements Listener
          }
          if (canApparateIn)
          {
+            /*
             sender.getWorld().createExplosion(sender.getLocation(), 0);
             sender.teleport(to);
             sender.getWorld().createExplosion(sender.getLocation(), 0);
@@ -617,6 +624,8 @@ public class OllivandersListener implements Listener
                   e.teleport(to);
                }
             }
+             */
+            p.addTeleportEvent(sender, sender.getLocation(), to, true);
          }
       }
    }
@@ -1141,9 +1150,9 @@ public class OllivandersListener implements Listener
       List<StationarySpellObj> stationarys = Ollivanders2API.getStationarySpells().getActiveStationarySpells();
       if (event.getEntity() instanceof Player)
       {
-         Damageable plyr = (Damageable) event.getEntity();
+         Player player = (Player) event.getEntity();
          UUID pid = event.getEntity().getUniqueId();
-         if ((plyr.getHealth() - event.getDamage()) <= 0)
+         if ((player.getHealth() - event.getDamage()) <= 0)
          {
             for (StationarySpellObj stationary : stationarys)
             {
@@ -1151,7 +1160,8 @@ public class OllivandersListener implements Listener
                {
                   Location tp = stationary.location;
                   tp.setY(tp.getY() + 1);
-                  plyr.teleport(tp);
+                  //plyr.teleport(tp);
+                  p.addTeleportEvent(player, player.getLocation(), tp);
 
                   Collection<PotionEffect> potions = ((Player) event.getEntity()).getActivePotionEffects();
                   for (PotionEffect potion : potions)
@@ -1159,7 +1169,7 @@ public class OllivandersListener implements Listener
                      ((Player) event.getEntity()).removePotionEffect(potion.getType());
                   }
                   event.setCancelled(true);
-                  plyr.setHealth(((Player) plyr).getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH).getBaseValue());
+                  player.setHealth(player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH).getBaseValue());
                   Ollivanders2API.getStationarySpells().removeStationarySpell(stationary);
                   return;
                }
@@ -1473,10 +1483,12 @@ public class OllivandersListener implements Listener
                {
                   if (player.getLocation().distance(e.getLocation()) <= 2)
                   {
-                     e.teleport(to);
+                     //e.teleport(to);
+                     p.addTeleportEvent(player, player.getLocation(), to);
                   }
                }
-               player.teleport(to);
+               //player.teleport(to);
+               p.addTeleportEvent(player, player.getLocation(), to);
                lore.remove(lore.indexOf(s));
                meta.setLore(lore);
                item.getItemStack().setItemMeta(meta);

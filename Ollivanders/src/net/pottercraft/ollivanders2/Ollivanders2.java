@@ -54,8 +54,20 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Ollivanders2 extends JavaPlugin
 {
+   /**
+    * All active spell projectiles
+    */
    private List<O2Spell> projectiles = new ArrayList<>();
+
+   /**
+    * All blocks temporarily changed by spells
+    */
    private HashMap<Block, Material> tempBlocks = new HashMap<>();
+
+   /**
+    * All pending teleport events
+    */
+   private Ollivanders2TeleportEvents teleportEvents;
 
    // file config
    public static int chatDropoff = 15;
@@ -227,6 +239,9 @@ public class Ollivanders2 extends JavaPlugin
 
       // set up all plugin crafting recipes
       initRecipes();
+
+      // teleport events
+      teleportEvents = new Ollivanders2TeleportEvents(this);
 
       getLogger().info(this + " is now enabled!");
    }
@@ -1432,6 +1447,12 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
+      if (args[1].equals("list"))
+      {
+         player.sendMessage("\n" + listAllItems());
+         return true;
+      }
+
       String itemName = Ollivanders2API.common.stringArrayToString(Arrays.copyOfRange(args, 1, args.length));
       ItemStack item = Ollivanders2API.getItems().getItemStartsWith(itemName, 1);
 
@@ -1447,10 +1468,24 @@ public class Ollivanders2 extends JavaPlugin
       return true;
    }
 
+   private String listAllItems()
+   {
+      StringBuilder stringBuilder = new StringBuilder();
+
+      stringBuilder.append("Item list:\n");
+
+      for (String item : Ollivanders2API.getItems().getAllItems())
+      {
+         stringBuilder.append("   " + item + "\n");
+      }
+
+      return stringBuilder.toString();
+   }
+
    /**
     * Give a player a random wand.
     */
-   private boolean giveRandomWand (Player player)
+   private boolean giveRandomWand(Player player)
    {
       String wood = O2WandWoodType.getAllWoodsByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandWoodType.getAllWoodsByName().size()));
       String core = O2WandCoreType.getAllCoresByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandCoreType.getAllCoresByName().size()));
@@ -1503,19 +1538,39 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param spell the spell projectile
     */
-   public void remProjectile (O2Spell spell)
+   public void remProjectile(O2Spell spell)
    {
       projectiles.remove(spell);
+   }
+
+   public Ollivanders2TeleportEvents.O2TeleportEvent[] getTeleportEvents()
+   {
+      return teleportEvents.getTeleportEvents();
+   }
+
+   public void addTeleportEvent(Player p, Location from, Location to)
+   {
+      addTeleportEvent(p, from, to, false);
+   }
+
+   public void addTeleportEvent(Player p, Location from, Location to, boolean explosionOnTeleport)
+   {
+      teleportEvents.addTeleportEvent(p, from, to, explosionOnTeleport);
+   }
+
+   public void removeTeleportEvent(Ollivanders2TeleportEvents.O2TeleportEvent event)
+   {
+      teleportEvents.removeTeleportEvent(event);
    }
 
    /**
     * Get the spell use count for the player for this spell
     *
     * @param player the player to get the count for
-    * @param spell the spell to get the count for
+    * @param spell  the spell to get the count for
     * @return the spell count
     */
-   public int getSpellNum (Player player, O2SpellType spell)
+   public int getSpellNum(Player player, O2SpellType spell)
    {
       O2Player o2p = getO2Player(player);
 

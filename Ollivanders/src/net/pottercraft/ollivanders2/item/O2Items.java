@@ -4,7 +4,9 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 public class O2Items
 {
@@ -108,6 +110,9 @@ public class O2Items
    {
       O2ItemType itemType = getItemTypeByStartsWith(name);
 
+      if (itemType == null)
+         return null;
+
       return getItemByType(itemType, amount);
    }
 
@@ -167,12 +172,11 @@ public class O2Items
       {
          if (item.getName().toLowerCase().startsWith(name.trim().toLowerCase()))
          {
-            itemType = item.getType();
-            break;
+            return item.getType();
          }
       }
 
-      return itemType;
+      return null;
    }
 
    /**
@@ -181,7 +185,7 @@ public class O2Items
     * @param itemType the item type to get the material for
     * @return the material type if found, null otherwise
     */
-   public Material getItemMaterialByType (O2ItemType itemType)
+   public Material getItemMaterialByType(O2ItemType itemType)
    {
       if (itemType == null)
       {
@@ -189,5 +193,24 @@ public class O2Items
       }
 
       return O2ItemMap.get(itemType).getMaterialType();
+   }
+
+   /**
+    * Get the names of all items.
+    *
+    * @return an array of the item names
+    */
+   public ArrayList<String> getAllItems()
+   {
+      Set<O2ItemType> itemKeys = O2ItemMap.keySet();
+
+      ArrayList<String> itemNames = new ArrayList<>();
+
+      for (O2ItemType itemType : itemKeys)
+      {
+         itemNames.add(itemType.getName());
+      }
+
+      return itemNames;
    }
 }
