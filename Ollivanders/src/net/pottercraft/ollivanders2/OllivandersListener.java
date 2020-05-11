@@ -602,6 +602,20 @@ public class OllivandersListener implements Listener
          if (canApparateIn)
          {
             p.addTeleportEvent(sender, sender.getLocation(), to, true);
+
+            // also take nearby entities with them
+            for (Entity e : sender.getWorld().getEntities())
+            {
+               if (from.distance(e.getLocation()) <= 2)
+               {
+                  if (e instanceof Player)
+                  {
+                     p.addTeleportEvent((Player) e, e.getLocation(), to, true);
+                  }
+                  else
+                     e.teleport(to);
+               }
+            }
          }
       }
    }
