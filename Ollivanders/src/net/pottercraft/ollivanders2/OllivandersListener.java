@@ -213,24 +213,12 @@ public class OllivandersListener implements Listener
                      alis.add(dest);
                      if (dest.getFlooName().equals(chat.trim().toLowerCase()))
                      {
-                        /*
-                        estination = dest.location;
-                        destination.setPitch(player.getLocation().getPitch());
-                        destination.setYaw(player.getLocation().getYaw());
-                        player.teleport(destination);
-                         */
                         p.addTeleportEvent(player, player.getLocation(), dest.location);
                         return;
                      }
                   }
                }
                int randomIndex = (int) (alis.size() * Math.random());
-               /*
-               destination = alis.get(randomIndex).location;
-               destination.setPitch(player.getLocation().getPitch());
-               destination.setYaw(player.getLocation().getYaw());
-               player.teleport(destination);
-                */
                p.addTeleportEvent(player, player.getLocation(), alis.get(randomIndex).location);
                return;
             }
@@ -613,18 +601,6 @@ public class OllivandersListener implements Listener
          }
          if (canApparateIn)
          {
-            /*
-            sender.getWorld().createExplosion(sender.getLocation(), 0);
-            sender.teleport(to);
-            sender.getWorld().createExplosion(sender.getLocation(), 0);
-            for (Entity e : sender.getWorld().getEntities())
-            {
-               if (from.distance(e.getLocation()) <= 2)
-               {
-                  e.teleport(to);
-               }
-            }
-             */
             p.addTeleportEvent(sender, sender.getLocation(), to, true);
          }
       }
@@ -1160,7 +1136,6 @@ public class OllivandersListener implements Listener
                {
                   Location tp = stationary.location;
                   tp.setY(tp.getY() + 1);
-                  //plyr.teleport(tp);
                   p.addTeleportEvent(player, player.getLocation(), tp);
 
                   Collection<PotionEffect> potions = ((Player) event.getEntity()).getActivePotionEffects();
@@ -1483,11 +1458,9 @@ public class OllivandersListener implements Listener
                {
                   if (player.getLocation().distance(e.getLocation()) <= 2)
                   {
-                     //e.teleport(to);
                      p.addTeleportEvent(player, player.getLocation(), to);
                   }
                }
-               //player.teleport(to);
                p.addTeleportEvent(player, player.getLocation(), to);
                lore.remove(lore.indexOf(s));
                meta.setLore(lore);
