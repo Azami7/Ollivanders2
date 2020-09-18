@@ -102,7 +102,7 @@ public class Ollivanders2WorldGuard
     * @param location the locationto check
     * @return the set of regions for this location or null if there is no set.
     */
-   private ApplicableRegionSet getWGRegionSet (Location location)
+   public ApplicableRegionSet getWGRegionSet (Location location)
    {
       if (worldGuard == null)
          return null;
