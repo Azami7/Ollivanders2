@@ -12,7 +12,6 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.UUID;
 
-import com.google.gson.internal.$Gson$Preconditions;
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
@@ -212,6 +211,13 @@ public class Ollivanders2Common
    {{
       addAll(wallSigns);
       addAll(standingSigns);
+   }};
+
+   public static final ArrayList<Material> hotBlocks = new ArrayList<Material>()
+   {{
+      add(Material.LAVA);
+      add(Material.FIRE);
+      add(Material.CAMPFIRE);
    }};
 
    public enum TimeOfDay

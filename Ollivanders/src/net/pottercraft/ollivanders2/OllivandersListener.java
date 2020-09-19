@@ -1828,7 +1828,7 @@ public class OllivandersListener implements Listener
          p.getLogger().info("OllivandersListener:brewPotion: brewing potion");
 
       Block under = cauldron.getRelative(BlockFace.DOWN);
-      if (under.getType() == Material.FIRE || under.getType() == Material.LAVA)
+      if (Ollivanders2Common.hotBlocks.contains(under.getType()))
       {
          ItemStack potion = Ollivanders2API.getPotions().brewPotion(cauldron, player);
 
