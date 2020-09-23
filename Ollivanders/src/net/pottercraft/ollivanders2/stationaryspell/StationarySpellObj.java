@@ -12,6 +12,7 @@ import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Stationary spell object in Ollivanders2
@@ -55,7 +56,7 @@ public abstract class StationarySpellObj implements Serializable
     * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public StationarySpellObj (Ollivanders2 plugin, UUID playerID, Location loc, O2StationarySpellType type, Integer radius, Integer duration)
+   public StationarySpellObj(@NotNull Ollivanders2 plugin, @NotNull UUID playerID, @NotNull Location loc, @NotNull O2StationarySpellType type, @NotNull Integer radius, @NotNull Integer duration)
    {
       p = plugin;
 
@@ -66,37 +67,63 @@ public abstract class StationarySpellObj implements Serializable
       this.radius = radius;
    }
 
-   void setDuration (Integer d)
+   /**
+    * Set the duration of this stationary spell
+    *
+    * @param d the duration in game ticks
+    */
+   void setDuration(@NotNull Integer d)
    {
       duration = d;
    }
 
-   void setRadius (Integer r)
+   /**
+    * Set the radius of this stationary spell
+    *
+    * @param r the radius in blocks
+    */
+   void setRadius(@NotNull Integer r)
    {
       radius = r;
    }
 
-   void setLocation (Location l)
+   /**
+    * Set the center location of this stationary spell
+    *
+    * @param l the spell location
+    */
+   void setLocation(@NotNull Location l)
    {
       location = l;
    }
 
-   void setPlayerID (UUID pid)
+   /**
+    * Set the ID of the player who cast this spell
+    *
+    * @param pid the player ID
+    */
+   void setPlayerID(@NotNull UUID pid)
    {
       playerUUID = pid;
    }
 
-   public O2StationarySpellType getSpellType ()
+   /**
+    * Get the type of this stationary spell
+    *
+    * @return the spell type
+    */
+   @NotNull
+   public O2StationarySpellType getSpellType()
    {
       return spellType;
    }
 
-   void setSpellType (O2StationarySpellType t)
-   {
-      spellType = t;
-   }
-
-   void setActive (boolean a)
+   /**
+    * Set whether this stationary spell is active
+    *
+    * @param a true if the spell is active, false otherwise
+    */
+   void setActive(boolean a)
    {
       active = a;
    }
@@ -104,7 +131,7 @@ public abstract class StationarySpellObj implements Serializable
    /**
     * Ages the StationarySpellObj
     */
-   public void age ()
+   public void age()
    {
       age(1);
    }
@@ -156,11 +183,8 @@ public abstract class StationarySpellObj implements Serializable
     * @param loc - The location specified.
     * @return true if yes, false if no.
     */
-   public boolean isInside (Location loc)
+   public boolean isInside(@NotNull Location loc)
    {
-      if (location == null || loc == null)
-         return false;
-
       return Ollivanders2API.common.isInside(location, loc, radius);
    }
 
@@ -169,12 +193,10 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @return Block the projectile is inside
     */
+   @NotNull
    public Block getBlock ()
    {
-      if (location != null)
-         return location.getBlock();
-
-      return null;
+      return location.getBlock();
    }
 
    /**
@@ -182,6 +204,7 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @return List of living entities with an eye location within radius
     */
+   @NotNull
    public List<LivingEntity> getCloseLivingEntities ()
    {
       Collection<LivingEntity> entities = Ollivanders2API.common.getLivingEntitiesInRadius(location, radius);
@@ -215,6 +238,7 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @return the MC UUID of the player that cast the spell
     */
+   @NotNull
    public UUID getCasterID ()
    {
       return playerUUID;
