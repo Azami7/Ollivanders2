@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
+import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -40,6 +41,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Common functions and data
@@ -1090,13 +1092,22 @@ public class Ollivanders2Common
       return wands;
    }
 
+   /**
+    * Make an ItemStack of wands of a specific wood and core
+    *
+    * @param wood   the wand wood
+    * @param core   the wand core
+    * @param amount the number of wands to make
+    * @return an ItemStack of wands or null if an error
+    */
+   @Nullable
    public ItemStack makeWands(@NotNull String wood, @NotNull String core, int amount)
    {
       if (amount < 1)
          amount = 1;
 
       List<String> lore = new ArrayList<>();
-      ItemStack wand = new ItemStack(Ollivanders2.wandMaterial);
+      ItemStack wand = Ollivanders2API.getItems().getItemByType(O2ItemType.WAND, 1);
 
       lore.add(wood + " and " + core);
       ItemMeta meta = wand.getItemMeta();
@@ -1105,7 +1116,6 @@ public class Ollivanders2Common
          return null;
 
       meta.setLore(lore);
-      meta.setDisplayName("Wand");
       wand.setItemMeta(meta);
       wand.setAmount(amount);
 

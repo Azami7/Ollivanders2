@@ -1,10 +1,11 @@
 name: Ollivanders2
 main: net.pottercraft.ollivanders2.Ollivanders2
-version: 2.4
-authors: [Azami7, autumnwoz]
+version: 2.5
+authors: [ Azami7, autumnwoz ]
 website: https://www.spigotmc.org/resources/ollivanders2.38992/
-softdepend: [WorldGuard, LibsDisguises]
-api-version: 1.14
+softdepend: [ WorldGuard, LibsDisguises ]
+api-version: 1.15
+prefix: Ollivanders2
 commands:
   Ollivanders2:
     description: This is the main admin command for the Ollivanders2 plugin

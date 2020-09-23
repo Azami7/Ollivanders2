@@ -156,7 +156,7 @@ public class O2Player
       p = plugin;
       playerName = name;
       pid = id;
-      o2PlayerCommon = new O2PlayerCommon();
+      o2PlayerCommon = new O2PlayerCommon(plugin);
 
       // set destined wand
       initDestinedWand();

@@ -6,20 +6,25 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import org.bukkit.entity.Entity;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 public final class O2PlayerCommon
 {
-   public O2PlayerCommon()
-   {
+   JavaPlugin p;
 
+   public O2PlayerCommon(JavaPlugin plugin)
+   {
+      p = plugin;
    }
 
-   private static ArrayList<EntityType> commonAnimagusShapes = new ArrayList<EntityType>()
+   private static final ArrayList<EntityType> commonAnimagusShapes = new ArrayList<EntityType>()
    {{
       add(EntityType.COW);
       add(EntityType.PIG);
@@ -34,7 +39,7 @@ public final class O2PlayerCommon
       add(EntityType.FOX);
    }};
 
-   private static ArrayList<EntityType> rareAnimagusShapes = new ArrayList<EntityType>()
+   private static final ArrayList<EntityType> rareAnimagusShapes = new ArrayList<EntityType>()
    {{
       add(EntityType.OCELOT);
       add(EntityType.POLAR_BEAR);
@@ -43,7 +48,7 @@ public final class O2PlayerCommon
       add(EntityType.TURTLE);
    }};
 
-   private static ArrayList<EntityType> hostileAnimagusShapes = new ArrayList<EntityType>()
+   private static final ArrayList<EntityType> hostileAnimagusShapes = new ArrayList<EntityType>()
    {{
       add(EntityType.SPIDER);
       add(EntityType.SLIME);
@@ -100,8 +105,8 @@ public final class O2PlayerCommon
       }
 
       // if using hostile mob animagi, 10% chance of getting a hostile mob form
-      form = Math.abs(pid.hashCode() % 25);
-      if (form < 26)
+      form = Math.abs(pid.hashCode() % 10);
+      if (form < 1)
       {
          form = Math.abs(pid.hashCode() % hostileAnimagusShapes.size());
          return hostileAnimagusShapes.get(form);
@@ -168,8 +173,14 @@ public final class O2PlayerCommon
       else
          return false;
 
-      if (held == null)
+      if (held.getType() == Material.AIR)
+      {
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("holdsWand: player not holding an item");
+         }
          return false;
+      }
 
       return Ollivanders2API.common.isWand(held);
    }
@@ -245,16 +256,24 @@ public final class O2PlayerCommon
    /**
     * Checks what kind of wand a player holds. Returns a value based on the wand and it's relation to the player.
     *
-    * @since 2.2.7
     * @param player - the player to check
-    * @param item - the
+    * @param item   - the
     * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
     * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
     * 0.5 - The wand is the elder wand and it is allied to player.
+    * @assumes the item stack being checked is a wand
+    * @since 2.2.7
     */
-   private double doWandCheck (Player player, ItemStack item)
+   private double doWandCheck(@NotNull Player player, @NotNull ItemStack item)
    {
+      ItemMeta meta = item.getItemMeta();
+      if (meta == null)
+         return 2;
+
       List<String> lore = item.getItemMeta().getLore();
+      if (lore == null)
+         return 2;
+
       if (lore.get(0).equals("Blaze and Ender Pearl")) // elder wand
       {
          if (lore.size() == 2 && lore.get(1).equals(player.getUniqueId().toString()))
