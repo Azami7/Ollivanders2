@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -383,7 +382,7 @@ public class O2StationarySpells
       Class<?> spellClass = spellType.getClassName();
       try
       {
-         statSpell = (StationarySpellObj) spellClass.getConstructor(Ollivanders2.class).newInstance(p);
+         statSpell = (StationarySpellObj)spellClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception e)
       {
