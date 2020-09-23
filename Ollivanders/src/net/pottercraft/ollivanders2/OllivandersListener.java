@@ -140,8 +140,8 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          // do not allow the player to move if they are asleep or suspended
          event.setCancelled(true);
@@ -172,7 +172,7 @@ public class OllivandersListener implements Listener
       if (toLoc == null || toLoc.getWorld() == null || fromLoc.getWorld() == null)
          return;
 
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (spell.location.getWorld() == null)
             continue;
@@ -203,7 +203,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
       String chat = event.getMessage();
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof ALIQUAM_FLOO)
          {
@@ -222,7 +222,7 @@ public class OllivandersListener implements Listener
                aliquam.stopWorking();
                List<ALIQUAM_FLOO> alis = new ArrayList<>();
 
-               for (StationarySpellObj ali : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+               for (StationarySpellObj ali : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
                {
                   if (ali instanceof ALIQUAM_FLOO)
                   {
@@ -270,9 +270,9 @@ public class OllivandersListener implements Listener
 
       O2Effect effect = null;
       // muted speech has highest precedence
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.MUTED_SPEECH))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.MUTED_SPEECH))
       {
-         effect = Ollivanders2API.getPlayers().playerEffects.getEffect(sender.getUniqueId(), O2EffectType.MUTED_SPEECH);
+         effect = Ollivanders2API.getPlayers(p).playerEffects.getEffect(sender.getUniqueId(), O2EffectType.MUTED_SPEECH);
 
          if (effect != null)
          {
@@ -282,17 +282,17 @@ public class OllivandersListener implements Listener
       }
       else // speech replacement effects
       {
-         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.SLEEP_SPEECH))
+         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.SLEEP_SPEECH))
          {
-            effect = Ollivanders2API.getPlayers().playerEffects.getEffect(sender.getUniqueId(), O2EffectType.SLEEP_SPEECH);
+            effect = Ollivanders2API.getPlayers(p).playerEffects.getEffect(sender.getUniqueId(), O2EffectType.SLEEP_SPEECH);
          }
-         else if (Ollivanders2API.getPlayers().playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.LYCANTHROPY_SPEECH))
+         else if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.LYCANTHROPY_SPEECH))
          {
-            effect = Ollivanders2API.getPlayers().playerEffects.getEffect(sender.getUniqueId(), O2EffectType.LYCANTHROPY_SPEECH);
+            effect = Ollivanders2API.getPlayers(p).playerEffects.getEffect(sender.getUniqueId(), O2EffectType.LYCANTHROPY_SPEECH);
          }
-         else if (Ollivanders2API.getPlayers().playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.BABBLING))
+         else if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.BABBLING))
          {
-            effect = Ollivanders2API.getPlayers().playerEffects.getEffect(sender.getUniqueId(), O2EffectType.BABBLING);
+            effect = Ollivanders2API.getPlayers(p).playerEffects.getEffect(sender.getUniqueId(), O2EffectType.BABBLING);
          }
 
          if (effect != null)
@@ -310,7 +310,7 @@ public class OllivandersListener implements Listener
          //
          // Handle removing recipients from chat
          //
-         List<StationarySpellObj> muffliatos = Ollivanders2API.getStationarySpells().getActiveStationarySpellsAtLocationByType(sender.getLocation(), O2StationarySpellType.MUFFLIATO);
+         List<StationarySpellObj> muffliatos = Ollivanders2API.getStationarySpells(p).getActiveStationarySpellsAtLocationByType(sender.getLocation(), O2StationarySpellType.MUFFLIATO);
          updateRecipients(sender, spellType, event.getRecipients(), muffliatos);
 
          //
@@ -340,7 +340,7 @@ public class OllivandersListener implements Listener
       for (int i = 0; i < words.length; i++)
       {
          spellName.append(words[i]);
-         spellType = Ollivanders2API.getSpells().getSpellTypeByName(spellName.toString());
+         spellType = Ollivanders2API.getSpells(p).getSpellTypeByName(spellName.toString());
 
          if (spellType != null)
             break;
@@ -507,7 +507,7 @@ public class OllivandersListener implements Listener
             }
 
             boolean fastLearning = false;
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
+            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
             {
                fastLearning = true;
             }
@@ -537,7 +537,7 @@ public class OllivandersListener implements Listener
    {
       boolean canApparateOut = true;
 
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(sender.getLocation()))
          {
@@ -602,7 +602,7 @@ public class OllivandersListener implements Listener
          to.setX(newX);
          to.setZ(newZ);
          boolean canApparateIn = true;
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to))
             {
@@ -764,7 +764,7 @@ public class OllivandersListener implements Listener
     */
    private void castSpell(@NotNull Player player)
    {
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
       if (o2p == null)
       {
          if (Ollivanders2.debug)
@@ -860,8 +860,8 @@ public class OllivandersListener implements Listener
       {
          if (Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.OFF_HAND))
          {
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-                    || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
+            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+                    || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
             {
                event.setCancelled(true);
                return;
@@ -891,8 +891,8 @@ public class OllivandersListener implements Listener
          {
             p.getLogger().info("primaryHandInteractEvents: player holding a wand");
          }
-         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-                 || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
+         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+                 || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
          {
             event.setCancelled(true);
             return;
@@ -974,7 +974,7 @@ public class OllivandersListener implements Listener
       if (!Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.OFF_HAND))
          return;
 
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
       if (o2p == null)
          return;
 
@@ -1009,7 +1009,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
 
       if (o2p == null) // new player
       {
@@ -1025,7 +1025,7 @@ public class OllivandersListener implements Listener
          }
 
          // add player to their house team
-         Ollivanders2API.getHouses().addPlayerToHouseTeam(player);
+         Ollivanders2API.getHouses(p).addPlayerToHouseTeam(player);
 
          // do player join actions
          o2p.onJoin();
@@ -1083,7 +1083,7 @@ public class OllivandersListener implements Listener
     */
    private void playerQuit (Player player)
    {
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
       if (o2p == null)
          return;
 
@@ -1103,7 +1103,7 @@ public class OllivandersListener implements Listener
    {
       if (Ollivanders2.enableDeathExpLoss)
       {
-         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(event.getEntity().getUniqueId());
+         O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(event.getEntity().getUniqueId());
 
          if (o2p == null)
             return;
@@ -1140,10 +1140,10 @@ public class OllivandersListener implements Listener
             Wolf wolf = (Wolf) event.getDamager();
             if (wolf.isAngry())
             {
-               if (!Ollivanders2API.getPlayers().playerEffects.hasEffect(damaged.getUniqueId(), O2EffectType.LYCANTHROPY))
+               if (!Ollivanders2API.getPlayers(p).playerEffects.hasEffect(damaged.getUniqueId(), O2EffectType.LYCANTHROPY))
                {
                   LYCANTHROPY effect = new LYCANTHROPY(p, 100, damaged.getUniqueId());
-                  Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+                  Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
                }
             }
          }
@@ -1164,7 +1164,7 @@ public class OllivandersListener implements Listener
       }
 
       //Horcrux code
-      List<StationarySpellObj> stationarySpells = Ollivanders2API.getStationarySpells().getActiveStationarySpells();
+      List<StationarySpellObj> stationarySpells = Ollivanders2API.getStationarySpells(p).getActiveStationarySpells();
       if (event.getEntity() instanceof Player)
       {
          Player player = (Player) event.getEntity();
@@ -1190,7 +1190,7 @@ public class OllivandersListener implements Listener
                   if (playerHealth != null)
                   {
                      player.setHealth(playerHealth.getBaseValue());
-                     Ollivanders2API.getStationarySpells().removeStationarySpell(stationary);
+                     Ollivanders2API.getStationarySpells(p).removeStationarySpell(stationary);
                      return;
                   }
                }
@@ -1208,7 +1208,7 @@ public class OllivandersListener implements Listener
    private boolean checkSpongify(@NotNull EntityDamageEvent event)
    {
       Entity entity = event.getEntity();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (spell instanceof MOLLIARE && event.getCause() == DamageCause.FALL)
          {
@@ -1230,7 +1230,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloportusBlockPlaceEvent(BlockPlaceEvent event)
    {
-      if (Ollivanders2API.getStationarySpells().isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
+      if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
          {
@@ -1254,7 +1254,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloportusBlockBreakEvent(BlockBreakEvent event)
    {
-      if (Ollivanders2API.getStationarySpells().isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
+      if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
          {
@@ -1278,7 +1278,7 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onColloportusBlockPhysicsEvent(BlockPhysicsEvent event)
    {
-      if (Ollivanders2API.getStationarySpells().isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
+      if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          event.setCancelled(true);
       }
@@ -1297,7 +1297,7 @@ public class OllivandersListener implements Listener
          if (event.getClickedBlock() == null)
             return;
 
-         if (Ollivanders2API.getStationarySpells().isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getClickedBlock().getLocation()))
+         if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getClickedBlock().getLocation()))
          {
             if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
             {
@@ -1323,7 +1323,7 @@ public class OllivandersListener implements Listener
    public void onColloportusPistonExtend(BlockPistonExtendEvent event)
    {
       ArrayList<COLLOPORTUS> colloportusSpells = new ArrayList<>();
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof COLLOPORTUS)
          {
@@ -1357,7 +1357,7 @@ public class OllivandersListener implements Listener
    {
       if (event.isSticky())
       {
-         if (Ollivanders2API.getStationarySpells().isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
+         if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
          {
             event.setCancelled(true);
          }
@@ -1377,7 +1377,7 @@ public class OllivandersListener implements Listener
          return;
 
       Entity entity = event.getEntity();
-      if (Ollivanders2API.getStationarySpells().isInsideOf(O2StationarySpellType.COLLOPORTUS, loc))
+      if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, loc))
       {
          event.setCancelled(true);
          if (event.getEntityType() == EntityType.FALLING_BLOCK)
@@ -1415,7 +1415,7 @@ public class OllivandersListener implements Listener
 
       for (Block block : blockListCopy)
       {
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)
             {
@@ -1557,7 +1557,7 @@ public class OllivandersListener implements Listener
             BURNING burning = new BURNING(p, 0, entity.getUniqueId());
             burning.addDamage(FLAGRANTE.baseDamage * stackSize);
 
-            Ollivanders2API.getPlayers().playerEffects.addEffect(burning);
+            Ollivanders2API.getPlayers(p).playerEffects.addEffect(burning);
 
             if (Ollivanders2.debug)
                p.getLogger().info("Added flagrante curse to " + ((Player) entity).getDisplayName());
@@ -1592,16 +1592,16 @@ public class OllivandersListener implements Listener
          {
             UUID pid = player.getUniqueId();
 
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(pid, O2EffectType.BURNING))
+            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(pid, O2EffectType.BURNING))
             {
-               BURNING burning = (BURNING) Ollivanders2API.getPlayers().playerEffects.getEffect(pid, O2EffectType.BURNING);
+               BURNING burning = (BURNING) Ollivanders2API.getPlayers(p).playerEffects.getEffect(pid, O2EffectType.BURNING);
                burning.removeDamage(FLAGRANTE.baseDamage * stackSize);
 
-               Ollivanders2API.getPlayers().playerEffects.removeEffect(pid, O2EffectType.BURNING);
+               Ollivanders2API.getPlayers(p).playerEffects.removeEffect(pid, O2EffectType.BURNING);
 
                if (burning.getDamage() > 0)
                {
-                  Ollivanders2API.getPlayers().playerEffects.addEffect(burning);
+                  Ollivanders2API.getPlayers(p).playerEffects.addEffect(burning);
                }
             }
          }
@@ -1631,7 +1631,7 @@ public class OllivandersListener implements Listener
       }
       if (target != null)
       {
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (stat instanceof REPELLO_MUGGLETON)
             {
@@ -1683,7 +1683,7 @@ public class OllivandersListener implements Listener
          int wandType = Math.abs(Ollivanders2Common.random.nextInt() % 4);
          int coreType = Math.abs(Ollivanders2Common.random.nextInt() % 4);
 
-         ItemStack wand = Ollivanders2API.getItems().getItemByType(O2ItemType.WAND, 1);
+         ItemStack wand = Ollivanders2API.getItems(p).getItemByType(O2ItemType.WAND, 1);
 
          List<String> lore = new ArrayList<>();
          lore.add(O2WandWoodType.getAllWoodsByName().get(wandType) + " and " + O2WandCoreType.getAllCoresByName().get(coreType));
@@ -1693,7 +1693,6 @@ public class OllivandersListener implements Listener
             return;
 
          meta.setLore(lore);
-         meta.setDisplayName("Wand");
          wand.setItemMeta(meta);
          event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
       }
@@ -1725,7 +1724,7 @@ public class OllivandersListener implements Listener
 
          if (meta.hasLore())
          {
-            O2Potion potion = Ollivanders2API.getPotions().findPotionByItemMeta(meta);
+            O2Potion potion = Ollivanders2API.getPotions(p).findPotionByItemMeta(meta);
 
             if (potion != null)
             {
@@ -1898,7 +1897,7 @@ public class OllivandersListener implements Listener
       Block under = cauldron.getRelative(BlockFace.DOWN);
       if (Ollivanders2Common.hotBlocks.contains(under.getType()))
       {
-         ItemStack potion = Ollivanders2API.getPotions().brewPotion(cauldron, player);
+         ItemStack potion = Ollivanders2API.getPotions(p).brewPotion(cauldron, player);
 
          if (potion == null)
          {
@@ -1941,7 +1940,7 @@ public class OllivandersListener implements Listener
       if (meta == null)
          return;
 
-      O2Potion potion = Ollivanders2API.getPotions().findPotionByItemMeta(meta);
+      O2Potion potion = Ollivanders2API.getPotions(p).findPotionByItemMeta(meta);
 
       if (potion != null)
       {
@@ -1968,8 +1967,8 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          // cannot interact with anything while asleep or suspended
          event.setCancelled(true);
@@ -1986,7 +1985,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
       {
          // cannot sleep while awake effect is active
          event.setCancelled(true);
@@ -2003,9 +2002,9 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
-              || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-              || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+              || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+              || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
       }
@@ -2021,8 +2020,8 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE)
-            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE)
+            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
       }
@@ -2038,8 +2037,8 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE)
-            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE)
+            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
       }
@@ -2055,9 +2054,9 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
-            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-            || Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
+            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
+            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
       }
@@ -2082,7 +2081,7 @@ public class OllivandersListener implements Listener
       {
          Player player = (Player) entity;
 
-         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
          {
             event.setCancelled(true);
          }
@@ -2099,7 +2098,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
       }
@@ -2115,7 +2114,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
       }
@@ -2131,7 +2130,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
       }
@@ -2147,7 +2146,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          Action action = event.getAction();
 

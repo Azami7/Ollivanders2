@@ -206,7 +206,7 @@ public final class O2PlayerCommon
    {
       if (Ollivanders2API.common.isWand(stack))
       {
-         O2Player o2Player = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+         O2Player o2Player = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
 
          if (o2Player == null)
          {
