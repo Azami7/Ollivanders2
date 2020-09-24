@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Intermediate Transfiguration - an O.W.L level transfiguration book
@@ -17,7 +18,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class INTERMEDIATE_TRANSFIGURATION extends O2Book
 {
-   public INTERMEDIATE_TRANSFIGURATION (Ollivanders2 plugin)
+   public INTERMEDIATE_TRANSFIGURATION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

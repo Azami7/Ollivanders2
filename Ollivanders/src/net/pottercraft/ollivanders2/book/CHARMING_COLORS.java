@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Charming Colors - spells for changing colors
@@ -12,7 +13,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public final class CHARMING_COLORS extends O2Book
 {
-   public CHARMING_COLORS (Ollivanders2 plugin)
+   public CHARMING_COLORS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

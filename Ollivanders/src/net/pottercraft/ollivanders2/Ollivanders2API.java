@@ -9,7 +9,11 @@ import net.pottercraft.ollivanders2.player.O2Players;
 import net.pottercraft.ollivanders2.potion.O2Potions;
 import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells;
+import org.jetbrains.annotations.NotNull;
 
+/**
+ * API for allowing other plugins to interact with Ollivanders.
+ */
 public class Ollivanders2API
 {
    private static O2Houses houses;
@@ -51,27 +55,38 @@ public class Ollivanders2API
       playerCommon = new O2PlayerCommon(p);
    }
 
-   static void savePlayers ()
+   static void savePlayers()
    {
       players.saveO2Players();
    }
 
-   public static O2Players getPlayers ()
+   /**
+    * Get the player management object.
+    *
+    * @return the player management object
+    */
+   @NotNull
+   public static O2Players getPlayers()
    {
       return players;
    }
 
-   static void initBooks (Ollivanders2 p)
+   static void initBooks(Ollivanders2 p)
    {
       books = new O2Books(p);
    }
 
-   public static O2Books getBooks ()
+   /**
+    * Get he books managament object.
+    *
+    * @return the book management object
+    */
+   public static O2Books getBooks()
    {
       return books;
    }
 
-   static void initSpells (Ollivanders2 p)
+   static void initSpells(Ollivanders2 p)
    {
       spells = new O2Spells(p);
    }

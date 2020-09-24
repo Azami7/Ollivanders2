@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Extreme Incantations - Charms book for 2nd year.
@@ -12,7 +13,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class EXTREME_INCANTATIONS extends O2Book
 {
-   public EXTREME_INCANTATIONS (Ollivanders2 plugin)
+   public EXTREME_INCANTATIONS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

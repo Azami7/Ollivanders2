@@ -72,13 +72,13 @@ public final class OBLIVIATE extends O2Spell
             Player ply = (Player) entity;
             for (O2SpellType spellType : O2SpellType.values())
             {
-               int know = p.getSpellNum(ply, spellType);
+               int know = p.getSpellCount(ply, spellType);
                int to = know - i;
                if (to < 0)
                {
                   to = 0;
                }
-               p.setSpellNum(ply, spellType, to);
+               p.setSpellCount(ply, spellType, to);
             }
 
             kill();

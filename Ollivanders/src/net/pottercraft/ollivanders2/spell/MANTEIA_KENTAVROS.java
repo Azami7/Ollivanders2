@@ -59,7 +59,7 @@ public class MANTEIA_KENTAVROS extends Divination
    @Override
    protected void setUsesModifier ()
    {
-      usesModifier = p.getSpellNum(player, spellType) / 3;
+      usesModifier = p.getSpellCount(player, spellType) / 3;
 
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
       {

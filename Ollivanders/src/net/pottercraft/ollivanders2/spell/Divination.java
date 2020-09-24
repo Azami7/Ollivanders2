@@ -73,7 +73,7 @@ public abstract class Divination extends O2Spell
    @Override
    protected void setUsesModifier ()
    {
-      usesModifier = p.getSpellNum(player, spellType);
+      usesModifier = p.getSpellCount(player, spellType);
 
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
       {

@@ -511,10 +511,10 @@ public class OllivandersListener implements Listener
             {
                fastLearning = true;
             }
-            p.incSpellCount(player, spellType);
+            p.incrementSpellCount(player, spellType);
             if (fastLearning)
             {
-               p.incSpellCount(player, spellType);
+               p.incrementSpellCount(player, spellType);
             }
          }
       }
@@ -554,7 +554,7 @@ public class OllivandersListener implements Listener
       }
       if (canApparateOut)
       {
-         int uses = p.incSpellCount(sender, O2SpellType.APPARATE);
+         int uses = p.incrementSpellCount(sender, O2SpellType.APPARATE);
          Location from = sender.getLocation().clone();
          Location to;
          if (words.length == 4)

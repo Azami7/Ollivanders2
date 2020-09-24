@@ -90,7 +90,7 @@ class OllivandersSchedule implements Runnable
             proj.checkEffect();
             if (proj.isKilled())
             {
-               p.remProjectile(proj);
+               p.removeProjectile(proj);
             }
          }
       }

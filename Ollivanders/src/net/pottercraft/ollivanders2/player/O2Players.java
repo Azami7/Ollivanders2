@@ -14,6 +14,7 @@ import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * O2Players
@@ -129,6 +130,7 @@ public class O2Players
     *
     * @return a list of all known player MC UUIDs
     */
+   @NotNull
    public ArrayList<UUID> getPlayerIDs ()
    {
       ArrayList<UUID> ids = new ArrayList<>();
