@@ -3,6 +3,8 @@ package net.pottercraft.ollivanders2;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import net.pottercraft.ollivanders2.house.O2HouseType;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.BufferedReader;
@@ -19,13 +21,16 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+/**
+ * GSON data persistance layer
+ */
 public class GsonDAO implements GenericDAO
 {
-   private Gson gson;
-   private Ollivanders2 p;
+   final private Gson gson;
+   final private Ollivanders2 p;
 
-   private String saveDirectory = "plugins/Ollivanders2";
-   private String archiveDirectory = "plugins/Ollivanders2/archive";
+   private static final String saveDirectory = "plugins/Ollivanders2";
+   private static final String archiveDirectory = "plugins/Ollivanders2/archive";
    public static final String housesJSONFile = "O2Houses.txt";
    public static final String housePointsJSONFile = "O2HousePoints.txt";
    public static final String o2PlayerJSONFile = "O2Players.txt";
@@ -35,9 +40,9 @@ public class GsonDAO implements GenericDAO
    /**
     * Constructor
     *
-    * @param plugin
+    * @param plugin a reference to the plugin
     */
-   public GsonDAO (Ollivanders2 plugin)
+   public GsonDAO(@NotNull Ollivanders2 plugin)
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
       p = plugin;
@@ -49,10 +54,10 @@ public class GsonDAO implements GenericDAO
     * @param map a map of player and house data as strings
     */
    @Override
-   public void writeHouses (Map<UUID, O2HouseType> map)
+   public void writeHouses(@NotNull Map<UUID, O2HouseType> map)
    {
       // convert to something that can be properly serialized
-      Map <String, String> strMap = new HashMap<>();
+      Map<String, String> strMap = new HashMap<>();
       for (Entry<UUID, O2HouseType> e : map.entrySet())
       {
          strMap.put(e.getKey().toString(), e.getValue().toString());
@@ -68,9 +73,9 @@ public class GsonDAO implements GenericDAO
     * @param map a map of the O2House points data as strings
     */
    @Override
-   public void writeHousePoints (Map<O2HouseType, Integer> map)
+   public void writeHousePoints(@NotNull Map<O2HouseType, Integer> map)
    {
-      Map <String, String> strMap = new HashMap<>();
+      Map<String, String> strMap = new HashMap<>();
       for (Entry<O2HouseType, Integer> e : map.entrySet())
       {
          strMap.put(e.getKey().toString(), e.getValue().toString());
@@ -83,11 +88,11 @@ public class GsonDAO implements GenericDAO
    /**
     * Write save data serialized in to a hashmap of String, String pairs
     *
-    * @param map the map of saved data
+    * @param map      the map of saved data
     * @param filename the file to write to
     */
    @Override
-   public void writeSaveData (HashMap<String, String> map, String filename)
+   public void writeSaveData(@NotNull HashMap<String, String> map, @NotNull String filename)
    {
       String json = gson.toJson(map);
       writeJSON(json, filename);
@@ -99,7 +104,7 @@ public class GsonDAO implements GenericDAO
     * @param map a map of the player data as strings
     */
    @Override
-   public void writeSaveData (Map<String, Map<String, String>> map, String filename)
+   public void writeSaveData(@NotNull Map<String, Map<String, String>> map, @NotNull String filename)
    {
       String json = gson.toJson(map);
       writeJSON(json, filename);
@@ -111,7 +116,7 @@ public class GsonDAO implements GenericDAO
     * @param map a map of prophecy data as strings
     */
    @Override
-   public void writeSaveData (List<Map<String, String>> map, String filename)
+   public void writeSaveData(@NotNull List<Map<String, String>> map, @NotNull String filename)
    {
       String json = gson.toJson(map);
       writeJSON(json, filename);
@@ -122,7 +127,7 @@ public class GsonDAO implements GenericDAO
     *
     * @return a map of player UUIDs and their O2House
     */
-   @Override
+   @Override @Nullable
    public Map<UUID, O2HouseType> readHouses ()
    {
       String json = readJSON(housesJSONFile);
@@ -173,7 +178,7 @@ public class GsonDAO implements GenericDAO
     *
     * @return a map of O2Houses and their points
     */
-   @Override
+   @Override @Nullable
    public Map<O2HouseType, Integer> readHousePoints ()
    {
       String json = readJSON(housePointsJSONFile);
@@ -226,15 +231,16 @@ public class GsonDAO implements GenericDAO
     * @return a map of the player json data
     */
    @Override
-   public Map<String, Map<String, String>> readSavedDataMapStringMap (String filename)
+   @Nullable
+   public Map<String, Map<String, String>> readSavedDataMapStringMap(@NotNull String filename)
    {
       String json = readJSON(filename);
 
       if (json == null)
          return null;
 
-      Map <String, Map<String, String>> strMap = new HashMap<>();
-      strMap = (Map <String, Map<String, String>>) gson.fromJson(json, strMap.getClass());
+      Map<String, Map<String, String>> strMap = new HashMap<>();
+      strMap = (Map<String, Map<String, String>>) gson.fromJson(json, strMap.getClass());
 
       return strMap;
    }
@@ -245,15 +251,16 @@ public class GsonDAO implements GenericDAO
     * @return a list of the serialized stationary spells
     */
    @Override
-   public List<Map<String, String>> readSavedDataListMap (String filename)
+   @Nullable
+   public List<Map<String, String>> readSavedDataListMap(@NotNull String filename)
    {
       String json = readJSON(filename);
 
       if (json == null)
          return null;
 
-      List <Map<String, String>> strList = new ArrayList<>();
-      strList = (List <Map<String, String>>) gson.fromJson(json, strList.getClass());
+      List<Map<String, String>> strList = new ArrayList<>();
+      strList = (List<Map<String, String>>) gson.fromJson(json, strList.getClass());
 
       return strList;
    }
@@ -264,7 +271,7 @@ public class GsonDAO implements GenericDAO
     * @param json the json data to write
     * @param path the path to the json file
     */
-   private synchronized void writeJSON (String json, String path)
+   private synchronized void writeJSON(@NotNull String json, @NotNull String path)
    {
       // make sure directory exists
       String saveFile = saveDirectory + "/" + path;
@@ -274,7 +281,7 @@ public class GsonDAO implements GenericDAO
 
       try
       {
-         if(file.exists())
+         if (file.exists())
          {
             // if the file exists, we want to move it
             File archiveDir = new File(archiveDirectory);
@@ -307,7 +314,7 @@ public class GsonDAO implements GenericDAO
       try
       {
          BufferedWriter bWriter = new BufferedWriter(new OutputStreamWriter(
-               new FileOutputStream(saveFile), StandardCharsets.UTF_8));
+                 new FileOutputStream(saveFile), StandardCharsets.UTF_8));
 
          bWriter.write(json);
          bWriter.flush();
@@ -329,7 +336,7 @@ public class GsonDAO implements GenericDAO
     * @param path path to the json file
     * @return the json read or null if the file could not be read
     */
-   private String readJSON (String path)
+   private String readJSON(@NotNull String path)
    {
       String json = null;
       String saveFile = saveDirectory + "/" + path;
@@ -364,7 +371,7 @@ public class GsonDAO implements GenericDAO
       try
       {
          BufferedReader bReader = new BufferedReader(new InputStreamReader(
-               new FileInputStream(saveFile), StandardCharsets.UTF_8));
+                 new FileInputStream(saveFile), StandardCharsets.UTF_8));
 
          json = bReader.readLine();
 
@@ -372,7 +379,7 @@ public class GsonDAO implements GenericDAO
          String curLine;
          while ((curLine = bReader.readLine()) != null)
          {
-               json = json + curLine;
+            json = json + curLine;
          }
 
          bReader.close();
