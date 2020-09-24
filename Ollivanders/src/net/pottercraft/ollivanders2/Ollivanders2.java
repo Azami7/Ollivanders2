@@ -5,6 +5,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import java.io.File;
 import java.util.*;
 
+import net.pottercraft.ollivanders2.player.*;
 import org.jetbrains.annotations.Nullable;
 import quidditch.Arena;
 
@@ -12,10 +13,6 @@ import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.house.O2HouseType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
-import net.pottercraft.ollivanders2.player.O2Player;
-import net.pottercraft.ollivanders2.player.O2PlayerCommon;
-import net.pottercraft.ollivanders2.player.O2WandCoreType;
-import net.pottercraft.ollivanders2.player.O2WandWoodType;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.potion.O2Potions;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -58,12 +55,12 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * All active spell projectiles
     */
-   private List<O2Spell> projectiles = new ArrayList<>();
+   final private List<O2Spell> projectiles = new ArrayList<>();
 
    /**
     * All blocks temporarily changed by spells
     */
-   private HashMap<Block, Material> tempBlocks = new HashMap<>();
+   final private HashMap<Block, Material> tempBlocks = new HashMap<>();
 
    /**
     * All pending teleport events
@@ -474,16 +471,21 @@ public class Ollivanders2 extends JavaPlugin
    {
       //broomstick recipe
       ItemStack broomstick = Ollivanders2API.getItems().getItemByType(O2ItemType.BROOMSTICK, 1);
-      NamespacedKey recipeKey = new NamespacedKey(this, "broomstick");
-      ShapedRecipe bRecipe = new ShapedRecipe(recipeKey, broomstick);
-      bRecipe.shape("  S", " S ", "W  ");
-      bRecipe.setIngredient('S', Material.STICK);
-      bRecipe.setIngredient('W', Material.WHEAT);
+      if (broomstick != null)
+      {
+         ShapedRecipe bRecipe = new ShapedRecipe(new NamespacedKey(this, "broomstick"), broomstick);
+         bRecipe.shape("  S", " S ", "W  ");
+         bRecipe.setIngredient('S', Material.STICK);
+         bRecipe.setIngredient('W', Material.WHEAT);
+         getServer().addRecipe(bRecipe);
+      }
 
       //floo powder recipe
       ItemStack flooPowder = Ollivanders2API.getItems().getItemByType(O2ItemType.FLOO_POWDER, 8);
-      getServer().addRecipe(new FurnaceRecipe(new NamespacedKey(this, "floo_powder"), flooPowder, Material.ENDER_PEARL, 2, (5 * Ollivanders2Common.ticksPerSecond)));
-      getServer().addRecipe(bRecipe);
+      if (flooPowder != null)
+      {
+         getServer().addRecipe(new FurnaceRecipe(new NamespacedKey(this, "floo_powder"), flooPowder, Material.ENDER_PEARL, 2, (5 * Ollivanders2Common.ticksPerSecond)));
+      }
    }
 
    /**
@@ -964,15 +966,7 @@ public class Ollivanders2 extends JavaPlugin
       }
       else
       {
-         String curHouse = Ollivanders2API.getHouses().getHouse(player).getName();
-         if (curHouse == null)
-         {
-            sender.sendMessage(chatColor + "Oops, something went wrong with the sort.  If this persists, check your server logs.");
-         }
-         else
-         {
-            sender.sendMessage(chatColor + targetPlayer + " is already a member of " + Ollivanders2API.getHouses().getHouse(player).getName());
-         }
+         sender.sendMessage(chatColor + targetPlayer + " is already a member of " + Ollivanders2API.getHouses().getHouse(player).getName());
       }
 
       return true;
@@ -1256,10 +1250,10 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
       O2Player o2p = getO2Player(player);
-      int year;
+      int y;
       try
       {
-         year = Integer.parseInt(targetYear);
+         y = Integer.parseInt(targetYear);
       }
       catch (NumberFormatException e)
       {
@@ -1267,12 +1261,15 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      if (year < 1 || year > 7)
+      if (y < 1 || y > 7)
       {
          usageMessageYearSet(sender);
          return true;
       }
-      o2p.setYear(O2PlayerCommon.intToYear(year));
+      Year year = O2PlayerCommon.intToYear(y);
+      if (year != null)
+         o2p.setYear(year);
+
       return true;
    }
 
@@ -1299,10 +1296,13 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      int year = o2p.getYear().getIntValue() + yearChange;
-      if (year > 0 && year < 8)
+      int y = o2p.getYear().getIntValue() + yearChange;
+      if (y > 0 && y < 8)
       {
-         o2p.setYear(O2PlayerCommon.intToYear(year));
+         Year year = O2PlayerCommon.intToYear(y);
+
+         if (year != null)
+            o2p.setYear(year);
       }
       return true;
    }
@@ -2426,14 +2426,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    public Material getTempBlockOriginalMaterial (@NotNull Block block)
    {
-      if (tempBlocks.containsKey(block))
-      {
-         return tempBlocks.get(block);
-      }
-      else
-      {
-         return null;
-      }
+      return tempBlocks.getOrDefault(block, null);
    }
 
    /**
