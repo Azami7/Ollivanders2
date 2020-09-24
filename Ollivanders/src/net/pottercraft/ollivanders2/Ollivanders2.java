@@ -475,7 +475,7 @@ public class Ollivanders2 extends JavaPlugin
    private void initRecipes ()
    {
       //broomstick recipe
-      ItemStack broomstick = Ollivanders2API.getItems().getItemByType(O2ItemType.BROOMSTICK, 1);
+      ItemStack broomstick = Ollivanders2API.getItems(this).getItemByType(O2ItemType.BROOMSTICK, 1);
       if (broomstick != null)
       {
          ShapedRecipe bRecipe = new ShapedRecipe(new NamespacedKey(this, "broomstick"), broomstick);
@@ -486,7 +486,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //floo powder recipe
-      ItemStack flooPowder = Ollivanders2API.getItems().getItemByType(O2ItemType.FLOO_POWDER, 8);
+      ItemStack flooPowder = Ollivanders2API.getItems(this).getItemByType(O2ItemType.FLOO_POWDER, 8);
       if (flooPowder != null)
       {
          getServer().addRecipe(new FurnaceRecipe(new NamespacedKey(this, "floo_powder"), flooPowder, Material.ENDER_PEARL, 2, (5 * Ollivanders2Common.ticksPerSecond)));
@@ -663,9 +663,9 @@ public class Ollivanders2 extends JavaPlugin
       // sorted
       if (useHouses)
       {
-         if (Ollivanders2API.getHouses().isSorted(player))
+         if (Ollivanders2API.getHouses(this).isSorted(player))
          {
-            String house = Ollivanders2API.getHouses().getHouse(player).getName();
+            String house = Ollivanders2API.getHouses(this).getHouse(player).getName();
             summary.append("\nHouse: ").append(house).append("\n");
          }
          else
@@ -687,7 +687,7 @@ public class Ollivanders2 extends JavaPlugin
       // effects
       if (sender.isOp())
       {
-         List<O2EffectType> effects = Ollivanders2API.getPlayers().playerEffects.getEffects(o2p.getID());
+         List<O2EffectType> effects = Ollivanders2API.getPlayers(this).playerEffects.getEffects(o2p.getID());
          summary.append("\n\nAffected by:\n");
 
          if (effects == null || effects.isEmpty())
@@ -831,7 +831,7 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("reset"))
          {
-            return Ollivanders2API.getHouses().reset();
+            return Ollivanders2API.getHouses(this).reset();
          }
       }
 
@@ -872,10 +872,10 @@ public class Ollivanders2 extends JavaPlugin
       {
          String targetHouse = args[2];
 
-         O2HouseType house = Ollivanders2API.getHouses().getHouseType(targetHouse);
+         O2HouseType house = Ollivanders2API.getHouses(this).getHouseType(targetHouse);
          if (house != null)
          {
-            ArrayList<String> members = Ollivanders2API.getHouses().getHouseMembers(house);
+            ArrayList<String> members = Ollivanders2API.getHouses(this).getHouseMembers(house);
             StringBuilder memberStr = new StringBuilder();
 
             if (members.isEmpty())
@@ -897,7 +897,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       StringBuilder houseNames = new StringBuilder();
-      ArrayList<String> h = Ollivanders2API.getHouses().getAllHouseNames();
+      ArrayList<String> h = Ollivanders2API.getHouses(this).getAllHouseNames();
 
       for (String name : h)
       {
@@ -945,7 +945,7 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      O2HouseType house = Ollivanders2API.getHouses().getHouseType(targetHouse);
+      O2HouseType house = Ollivanders2API.getHouses(this).getHouseType(targetHouse);
 
       if (house == null)
       {
@@ -957,12 +957,12 @@ public class Ollivanders2 extends JavaPlugin
       boolean success;
       if (forcesort)
       {
-         Ollivanders2API.getHouses().forceSetHouse(player, house);
+         Ollivanders2API.getHouses(this).forceSetHouse(player, house);
          success = true;
       }
       else
       {
-         success = Ollivanders2API.getHouses().sort(player, house);
+         success = Ollivanders2API.getHouses(this).sort(player, house);
       }
 
       if (success)
@@ -971,7 +971,7 @@ public class Ollivanders2 extends JavaPlugin
       }
       else
       {
-         sender.sendMessage(chatColor + targetPlayer + " is already a member of " + Ollivanders2API.getHouses().getHouse(player).getName());
+         sender.sendMessage(chatColor + targetPlayer + " is already a member of " + Ollivanders2API.getHouses(this).getHouse(player).getName());
       }
 
       return true;
@@ -1009,7 +1009,7 @@ public class Ollivanders2 extends JavaPlugin
 
          if (option.equalsIgnoreCase("reset"))
          {
-            return Ollivanders2API.getHouses().resetHousePoints();
+            return Ollivanders2API.getHouses(this).resetHousePoints();
          }
 
          if (args.length > 4)
@@ -1022,7 +1022,7 @@ public class Ollivanders2 extends JavaPlugin
             O2HouseType houseType = null;
             try
             {
-               houseType = Ollivanders2API.getHouses().getHouseType(h);
+               houseType = Ollivanders2API.getHouses(this).getHouseType(h);
             }
             catch (Exception e)
             {
@@ -1060,15 +1060,15 @@ public class Ollivanders2 extends JavaPlugin
 
             if (option.equalsIgnoreCase("add"))
             {
-               return Ollivanders2API.getHouses().addHousePoints(houseType, value);
+               return Ollivanders2API.getHouses(this).addHousePoints(houseType, value);
             }
             else if (option.equalsIgnoreCase("subtract"))
             {
-               return Ollivanders2API.getHouses().subtractHousePoints(houseType, value);
+               return Ollivanders2API.getHouses(this).subtractHousePoints(houseType, value);
             }
             else if (option.equalsIgnoreCase("set"))
             {
-               return Ollivanders2API.getHouses().setHousePoints(houseType, value);
+               return Ollivanders2API.getHouses(this).setHousePoints(houseType, value);
             }
          }
       }
@@ -1338,9 +1338,9 @@ public class Ollivanders2 extends JavaPlugin
             return true;
          }
 
-         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(((Player) sender).getUniqueId(), effectType))
+         if (Ollivanders2API.getPlayers(this).playerEffects.hasEffect(((Player) sender).getUniqueId(), effectType))
          {
-            Ollivanders2API.getPlayers().playerEffects.removeEffect(((Player) sender).getUniqueId(), effectType);
+            Ollivanders2API.getPlayers(this).playerEffects.removeEffect(((Player) sender).getUniqueId(), effectType);
             sender.sendMessage(chatColor + "Removed " + effectName + " from " + sender + ".\n");
          }
          else
@@ -1361,7 +1361,7 @@ public class Ollivanders2 extends JavaPlugin
                return true;
             }
 
-            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers(this).playerEffects.addEffect(effect);
             sender.sendMessage(chatColor + "Added " + effectName + " to " + sender + ".\n");
          }
       }
@@ -1465,7 +1465,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       String itemName = Ollivanders2API.common.stringArrayToString(Arrays.copyOfRange(args, 1, args.length));
-      ItemStack item = Ollivanders2API.getItems().getItemStartsWith(itemName, 1);
+      ItemStack item = Ollivanders2API.getItems(this).getItemStartsWith(itemName, 1);
 
       if (item == null)
       {
@@ -1491,7 +1491,7 @@ public class Ollivanders2 extends JavaPlugin
 
       stringBuilder.append("Item list:\n");
 
-      for (String item : Ollivanders2API.getItems().getAllItems())
+      for (String item : Ollivanders2API.getItems(this).getAllItems())
       {
          stringBuilder.append("   ");
          stringBuilder.append(item);
@@ -1637,7 +1637,7 @@ public class Ollivanders2 extends JavaPlugin
 
       o2p.setSpellCount(spell, count);
 
-      Ollivanders2API.getPlayers().updatePlayer(pid, o2p);
+      Ollivanders2API.getPlayers(this).updatePlayer(pid, o2p);
    }
 
    /**
@@ -1654,7 +1654,7 @@ public class Ollivanders2 extends JavaPlugin
       O2Player o2p = getO2Player(player);
 
       o2p.incrementSpellCount(spell);
-      Ollivanders2API.getPlayers().updatePlayer(pid, o2p);
+      Ollivanders2API.getPlayers(this).updatePlayer(pid, o2p);
 
       return o2p.getSpellCount(spell);
    }
@@ -1672,7 +1672,7 @@ public class Ollivanders2 extends JavaPlugin
       O2Player o2p = getO2Player(player);
 
       o2p.incrementPotionCount(potionType);
-      Ollivanders2API.getPlayers().updatePlayer(pid, o2p);
+      Ollivanders2API.getPlayers(this).updatePlayer(pid, o2p);
    }
 
    /**
@@ -1684,13 +1684,13 @@ public class Ollivanders2 extends JavaPlugin
    public O2Player getO2Player(@NotNull Player player)
    {
       UUID pid = player.getUniqueId();
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(pid);
+      O2Player o2p = Ollivanders2API.getPlayers(this).getPlayer(pid);
 
       if (o2p == null)
       {
-         Ollivanders2API.getPlayers().addPlayer(pid, player.getDisplayName());
+         Ollivanders2API.getPlayers(this).addPlayer(pid, player.getDisplayName());
 
-         o2p = Ollivanders2API.getPlayers().getPlayer(pid);
+         o2p = Ollivanders2API.getPlayers(this).getPlayer(pid);
       }
 
       return o2p;
@@ -1706,7 +1706,7 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (!(player instanceof NPC))
       {
-         Ollivanders2API.getPlayers().updatePlayer(player.getUniqueId(), o2p);
+         Ollivanders2API.getPlayers(this).updatePlayer(player.getUniqueId(), o2p);
       }
    }
 
@@ -1718,7 +1718,7 @@ public class Ollivanders2 extends JavaPlugin
    @NotNull
    public ArrayList<UUID> getO2PlayerIDs()
    {
-      return Ollivanders2API.getPlayers().getPlayerIDs();
+      return Ollivanders2API.getPlayers(this).getPlayerIDs();
    }
 
    /**
@@ -1732,7 +1732,7 @@ public class Ollivanders2 extends JavaPlugin
    public boolean canCast(@NotNull Player player, @NotNull O2SpellType spell, boolean verbose)
    {
       // players cannot cast spells when in animagus form, except the spell to change form
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      if (Ollivanders2API.getPlayers(this).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
          {
@@ -1757,7 +1757,7 @@ public class Ollivanders2 extends JavaPlugin
          }
       }
 
-      O2Player p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+      O2Player p = Ollivanders2API.getPlayers(this).getPlayer(player.getUniqueId());
       if (p == null)
          return false;
 
@@ -1817,7 +1817,7 @@ public class Ollivanders2 extends JavaPlugin
                   allAllowed = true;
                } else
                {
-                  allowedSpells.add(Ollivanders2API.getSpells().getSpellTypeByName(spellString));
+                  allowedSpells.add(Ollivanders2API.getSpells(this).getSpellTypeByName(spellString));
                }
             }
             List<O2SpellType> disallowedSpells = new ArrayList<>();
@@ -1829,7 +1829,7 @@ public class Ollivanders2 extends JavaPlugin
                }
                else
                {
-                  disallowedSpells.add(Ollivanders2API.getSpells().getSpellTypeByName(spellString));
+                  disallowedSpells.add(Ollivanders2API.getSpells(this).getSpellTypeByName(spellString));
                }
             }
             if (type.equalsIgnoreCase("World"))
@@ -1962,7 +1962,7 @@ public class Ollivanders2 extends JavaPlugin
       List<ItemStack> bookStack = new ArrayList<>();
       if (args[1].equalsIgnoreCase("allbooks"))
       {
-         bookStack = Ollivanders2API.getBooks().getAllBooks();
+         bookStack = Ollivanders2API.getBooks(this).getAllBooks();
 
          if (bookStack.isEmpty())
          {
@@ -2040,7 +2040,7 @@ public class Ollivanders2 extends JavaPlugin
    {
       String title = Ollivanders2API.common.stringArrayToString(args);
 
-      ItemStack bookItem = Ollivanders2API.getBooks().getBookByTitle(title);
+      ItemStack bookItem = Ollivanders2API.getBooks(this).getBookByTitle(title);
 
       if (bookItem == null)
       {
@@ -2194,7 +2194,7 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      O2Potion potion = Ollivanders2API.getPotions().getPotionFromType(potionType);
+      O2Potion potion = Ollivanders2API.getPotions(this).getPotionFromType(potionType);
 
       if (potion == null)
          return true;
@@ -2229,7 +2229,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean listAllIngredients(@NotNull Player player)
    {
-      List<String> ingredientList = O2Potions.getAllIngredientNames();
+      List<String> ingredientList = O2Potions.getAllIngredientNames(this);
       StringBuilder displayString = new StringBuilder();
       displayString.append("Ingredients:");
 
@@ -2255,7 +2255,7 @@ public class Ollivanders2 extends JavaPlugin
       StringBuilder displayString = new StringBuilder();
       displayString.append("Potions:");
 
-      List<String> potionNames = Ollivanders2API.getPotions().getAllPotionNames();
+      List<String> potionNames = Ollivanders2API.getPotions(this).getAllPotionNames();
       for (String name : potionNames)
       {
          displayString.append("\n").append(name);
@@ -2277,7 +2277,7 @@ public class Ollivanders2 extends JavaPlugin
    private boolean giveItem(@NotNull Player player, @NotNull String name)
    {
       List<ItemStack> kit = new ArrayList<>();
-      ItemStack item = Ollivanders2API.getItems().getItemStartsWith(name, 1);
+      ItemStack item = Ollivanders2API.getItems(this).getItemStartsWith(name, 1);
 
       if (item != null)
       {
@@ -2301,7 +2301,7 @@ public class Ollivanders2 extends JavaPlugin
 
       List<ItemStack> kit = new ArrayList<>();
 
-      for (O2Potion potion : Ollivanders2API.getPotions().getAllPotions())
+      for (O2Potion potion : Ollivanders2API.getPotions(this).getAllPotions())
       {
          ItemStack brewedPotion = potion.brew(player, false);
 
@@ -2326,7 +2326,7 @@ public class Ollivanders2 extends JavaPlugin
       StringBuilder titleList = new StringBuilder();
       titleList.append("Book Titles:");
 
-      for (String bookTitle : Ollivanders2API.getBooks().getAllBookTitles())
+      for (String bookTitle : Ollivanders2API.getBooks(this).getAllBookTitles())
       {
          titleList.append("\n").append(bookTitle);
       }
@@ -2343,7 +2343,7 @@ public class Ollivanders2 extends JavaPlugin
    public boolean runProphecies (@NotNull CommandSender sender)
    {
       StringBuilder output = new StringBuilder();
-      List<String> prophecies = Ollivanders2API.getProphecies().getProphecies();
+      List<String> prophecies = Ollivanders2API.getProphecies(this).getProphecies();
 
       if (prophecies.size() > 0)
       {
