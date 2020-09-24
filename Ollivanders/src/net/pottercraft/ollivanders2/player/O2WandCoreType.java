@@ -1,31 +1,51 @@
 package net.pottercraft.ollivanders2.player;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * Wand cores
+ */
 public enum O2WandCoreType
 {
-   SPIDER_EYE (Material.SPIDER_EYE, "Spider Eye"),
-   BONE (Material.BONE, "Bone"),
-   ROTTEN_FLESH (Material.ROTTEN_FLESH, "Rotten Flesh"),
-   GUNPOWDER (Material.GUNPOWDER, "Gunpowder");
+   SPIDER_EYE(Material.SPIDER_EYE, "Spider Eye"),
+   BONE(Material.BONE, "Bone"),
+   ROTTEN_FLESH(Material.ROTTEN_FLESH, "Rotten Flesh"),
+   GUNPOWDER(Material.GUNPOWDER, "Gunpowder");
 
-   Material material;
-   String label;
+   final Material material;
+   final String label;
 
-   O2WandCoreType (Material m, String l)
+   O2WandCoreType(@NotNull Material m, @NotNull String l)
    {
       material = m;
       label = l;
    }
 
-   public Material getMaterial ()
+   /**
+    * Get the material for this type
+    *
+    * @return the material
+    */
+   @NotNull
+   public Material getMaterial()
    {
       return material;
    }
 
-   public String getLabel() { return label; }
+   /**
+    * Get the label for this type
+    *
+    * @return the label
+    */
+   @NotNull
+   public String getLabel()
+   {
+      return label;
+   }
 
    /**
     * Get the wand core type for this material.
@@ -33,7 +53,8 @@ public enum O2WandCoreType
     * @param m the material to check
     * @return the wand core type if found, null otherwise
     */
-   public static O2WandCoreType getWandCoreTypeByMaterial (Material m)
+   @Nullable
+   public static O2WandCoreType getWandCoreTypeByMaterial(@NotNull Material m)
    {
       for (O2WandCoreType coreType : O2WandCoreType.values())
       {
@@ -49,6 +70,7 @@ public enum O2WandCoreType
     *
     * @return the names of all wand cores as a list
     */
+   @NotNull
    public static ArrayList<String> getAllCoresByName()
    {
       ArrayList<String> cores = new ArrayList<>();
@@ -64,6 +86,7 @@ public enum O2WandCoreType
     *
     * @return the names of all wand cores as a list
     */
+   @NotNull
    public static ArrayList<Material> getAllCoresByMaterial()
    {
       ArrayList<Material> cores = new ArrayList<>();
