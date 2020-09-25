@@ -1332,9 +1332,9 @@ public class Ollivanders2Common
     * Translates vector to spherical coords
     *
     * @param vec - Vector to be translated
-    * @return Spherical coords in double array with
-    * indexes 0=inclination 1=azimuth
+    * @return Spherical coords in double array with indexes 0=inclination 1=azimuth
     */
+   @NotNull
    public static double[] vecToSpher(@NotNull Vector vec)
    {
       double inc = Math.acos(vec.getZ());
@@ -1352,7 +1352,8 @@ public class Ollivanders2Common
     * @param spher array with indexes 0=inclination 1=azimuth
     * @return Vector
     */
-   public static Vector spherToVec(double[] spher, int radius)
+   @NotNull
+   public static Vector spherToVec(@NotNull double[] spher, int radius)
    {
       double inc = spher[0];
       double azi = spher[1];

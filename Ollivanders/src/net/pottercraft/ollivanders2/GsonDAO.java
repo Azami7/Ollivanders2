@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import net.pottercraft.ollivanders2.house.O2HouseType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,12 +15,8 @@ import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.UUID;
 
 /**
  * GSON data persistance layer
@@ -134,8 +131,8 @@ public class GsonDAO implements GenericDAO
       if (json == null)
          return null;
 
-      Map<String, String> strMap = new HashMap<>();
-      strMap = (Map<String, String>) gson.fromJson(json, strMap.getClass());
+      Map<String, String> strMap = gson.fromJson(json, new TypeToken<HashMap<String, String>>(){}.getType());
+
 
       Map<UUID, O2HouseType> map = new HashMap<>();
       for (Entry <String, String> entry : strMap.entrySet())
@@ -185,8 +182,7 @@ public class GsonDAO implements GenericDAO
       if (json == null)
          return null;
 
-      Map<String, String> strMap = new HashMap<>();
-      strMap = (Map<String, String>) gson.fromJson(json, strMap.getClass());
+      Map<String, String> strMap =  gson.fromJson(json, new TypeToken<HashMap<String, String>>(){}.getType());
 
       Map<O2HouseType, Integer> map = new HashMap<>();
       for (Entry <String, String> entry : strMap.entrySet())
