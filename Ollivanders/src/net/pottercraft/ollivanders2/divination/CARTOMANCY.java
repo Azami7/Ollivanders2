@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.divination;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Cartomancy is the art of reading cards to gain insight into future events.
@@ -12,7 +13,7 @@ import org.bukkit.entity.Player;
  */
 public class CARTOMANCY extends O2Divination
 {
-   public CARTOMANCY (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
+   public CARTOMANCY(@NotNull Ollivanders2 plugin, @NotNull Player pro, @NotNull Player tar, int exp)
    {
       super(plugin, pro, tar, exp);
 

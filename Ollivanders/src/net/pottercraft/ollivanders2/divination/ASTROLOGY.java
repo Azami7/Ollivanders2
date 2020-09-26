@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.divination;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Astrology is the system of using the relative positions of celestial bodies (including the sun, moon, and planets) to try to predict future events or gain insight into personality, relationships, and health.
@@ -12,7 +13,7 @@ import org.bukkit.entity.Player;
  */
 public class ASTROLOGY extends O2Divination
 {
-   public ASTROLOGY (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
+   public ASTROLOGY(@NotNull Ollivanders2 plugin, @NotNull Player pro, @NotNull Player tar, int exp)
    {
       super(plugin, pro, tar, exp);
 

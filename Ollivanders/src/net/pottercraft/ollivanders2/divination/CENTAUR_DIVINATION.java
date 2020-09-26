@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.divination;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Divination is a branch of magic that involves attempting to foresee the future, or gather insights into past, present and future events.
@@ -12,7 +13,7 @@ import org.bukkit.entity.Player;
  */
 public class CENTAUR_DIVINATION extends O2Divination
 {
-   public CENTAUR_DIVINATION (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
+   public CENTAUR_DIVINATION(@NotNull Ollivanders2 plugin, @NotNull Player pro, @NotNull Player tar, int exp)
    {
       super(plugin, pro, tar, exp);
 
