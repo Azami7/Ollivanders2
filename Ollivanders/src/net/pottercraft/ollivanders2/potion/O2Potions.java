@@ -240,8 +240,6 @@ public class O2Potions
             if (meta == null)
                continue;
 
-            // For ingredients, lore and name are the same. We use lore instead of item name because this cannot be set by using an anvil - so players cannot "make"
-            // ingredients, they can only get real ones from the plugin.
             List<String> itemLore = meta.getLore();
             if (itemLore == null)
                continue;
@@ -250,6 +248,8 @@ public class O2Potions
             if (lore == null)
                continue;
 
+            // For ingredients, lore and name are the same. We use lore instead of item name because this cannot be set by using an anvil - so players cannot "make"
+            // ingredients, they can only get real ones from the plugin.
             O2ItemType ingredientType = Ollivanders2API.getItems(p).getTypeByDisplayName(lore);
 
             if (ingredientType == null || material != Ollivanders2API.getItems(p).getItemMaterialByType(ingredientType))
