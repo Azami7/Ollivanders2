@@ -6,6 +6,8 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -18,7 +20,7 @@ import java.util.UUID;
  */
 public abstract class O2Divination
 {
-   Ollivanders2 p;
+   final Ollivanders2 p;
 
    O2DivinationType divintationType = O2DivinationType.ASTROLOGY;
 
@@ -53,7 +55,15 @@ public abstract class O2Divination
       add(O2EffectType.WEALTH);
    }};
 
-   O2Divination (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
+   /**
+    * Constuctor
+    *
+    * @param plugin a referenc to the plugin
+    * @param pro    the player making the prophecy
+    * @param tar    the player the prophecy is about
+    * @param exp    the experience level of the prophet with this divination
+    */
+   O2Divination(@NotNull Ollivanders2 plugin, @NotNull Player pro, @NotNull Player tar, int exp)
    {
       p = plugin;
       target = tar;
@@ -177,7 +187,15 @@ public abstract class O2Divination
       Ollivanders2API.getProphecies().addProphecy(prophecy);
    }
 
-   private O2Effect getEffect (UUID targetID, O2EffectType effectType)
+   /**
+    * Get the effect of this divination.
+    *
+    * @param targetID   the ID of the target player for this effect
+    * @param effectType the type of effect
+    * @return the effect this prophecy causes
+    */
+   @Nullable
+   private O2Effect getEffect(@NotNull UUID targetID, @NotNull O2EffectType effectType)
    {
       Class<?> effectClass = effectType.getClassName();
       O2Effect effect;

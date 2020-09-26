@@ -3,6 +3,8 @@ package net.pottercraft.ollivanders2.divination;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,25 +20,25 @@ import java.util.UUID;
  */
 public class O2Prophecies
 {
-   private Ollivanders2 p;
+   final private Ollivanders2 p;
 
-   private ArrayList<O2Prophecy> activeProphecies = new ArrayList<>();
-   private ArrayList<O2Prophecy> offlineProphecies = new ArrayList<>();
+   final private ArrayList<O2Prophecy> activeProphecies = new ArrayList<>();
+   final private ArrayList<O2Prophecy> offlineProphecies = new ArrayList<>();
 
-   private String effectTypeLabel = "Effect_Type";
-   private String targetIDLabel = "Target_ID";
-   private String prophetIDLabel = "Prophet_ID";
-   private String timeLabel = "Time";
-   private String durationLabel = "Duration";
-   private String accuracyLabel = "Accuracy";
-   private String prophecyLabel = "Prophecy";
+   final static private String effectTypeLabel = "Effect_Type";
+   final static private String targetIDLabel = "Target_ID";
+   final static private String prophetIDLabel = "Prophet_ID";
+   final static private String timeLabel = "Time";
+   final static private String durationLabel = "Duration";
+   final static private String accuracyLabel = "Accuracy";
+   final static private String prophecyLabel = "Prophecy";
 
    /**
     * Constructor
     *
     * @param plugin a callback to the plugin
     */
-   public O2Prophecies (Ollivanders2 plugin)
+   public O2Prophecies(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -46,9 +48,9 @@ public class O2Prophecies
    /**
     * Add a prophecy
     *
-    * @param prophecy
+    * @param prophecy the prophecy to add
     */
-   public void addProphecy (O2Prophecy prophecy)
+   public void addProphecy(@NotNull O2Prophecy prophecy)
    {
       if (Ollivanders2.debug)
       {
@@ -61,9 +63,9 @@ public class O2Prophecies
    /**
     * Add a prophecy to the offline prophecies when the target user is offline
     *
-    * @param prophecy
+    * @param prophecy the prophecy to add
     */
-   void addOfflineProphecy (O2Prophecy prophecy)
+   void addOfflineProphecy(@NotNull O2Prophecy prophecy)
    {
       if (Ollivanders2.debug)
       {
@@ -79,7 +81,8 @@ public class O2Prophecies
     * @param pid the player
     * @return a prophecy if found, null otherwise
     */
-   public O2Prophecy getProphecyAboutPlayer (UUID pid)
+   @Nullable
+   public O2Prophecy getProphecyAboutPlayer(@NotNull UUID pid)
    {
       for (O2Prophecy prophecy : activeProphecies)
       {
@@ -97,6 +100,7 @@ public class O2Prophecies
     *
     * @return a list of all prophecies
     */
+   @NotNull
    public List<String> getProphecies ()
    {
       ArrayList<String> prophecies = new ArrayList<>();
@@ -120,7 +124,8 @@ public class O2Prophecies
     * @param pid the player
     * @return a prophecy if found, null otherwise
     */
-   public O2Prophecy getProphecyByPlayer (UUID pid)
+   @Nullable
+   public O2Prophecy getProphecyByPlayer(@NotNull UUID pid)
    {
       for (O2Prophecy prophecy : activeProphecies)
       {
@@ -207,6 +212,7 @@ public class O2Prophecies
     *
     * @return a list of all prophecies serialized to strings
     */
+   @NotNull
    private List<Map<String, String>> serializeProphecies ()
    {
       List<Map<String, String>> prophecies = new ArrayList<>();
@@ -242,7 +248,8 @@ public class O2Prophecies
     * @param prophecy the prophecy to serialize
     * @return the map of serialized prophecy data
     */
-   private Map<String, String> serializeProphecy (O2Prophecy prophecy)
+   @NotNull
+   private Map<String, String> serializeProphecy(@NotNull O2Prophecy prophecy)
    {
       Map<String, String> prophecyData = new HashMap<>();
 
@@ -259,13 +266,13 @@ public class O2Prophecies
       prophecyData.put(effectTypeLabel, prophecy.getEffect().toString());
 
       // duration
-      prophecyData.put(durationLabel, prophecy.getDuration().toString());
+      prophecyData.put(durationLabel, Integer.toString(prophecy.getDuration()));
 
       // accuracy
-      prophecyData.put(accuracyLabel, prophecy.getAccuracy().toString());
+      prophecyData.put(accuracyLabel, Integer.toString(prophecy.getAccuracy()));
 
       // time
-      prophecyData.put(timeLabel, prophecy.getTime().toString());
+      prophecyData.put(timeLabel, Long.toString(prophecy.getTime()));
 
       return prophecyData;
    }
@@ -276,7 +283,8 @@ public class O2Prophecies
     * @param prophecyData the serialized prophecy data
     * @return a prophecy if the data was read successfully, null otherwise
     */
-   private O2Prophecy deserializeProphecy (Map<String, String> prophecyData)
+   @Nullable
+   private O2Prophecy deserializeProphecy(@NotNull Map<String, String> prophecyData)
    {
       O2Prophecy prophecy = null;
 
@@ -356,7 +364,7 @@ public class O2Prophecies
     *
     * @param pid the ID of the player that joined
     */
-   public void onJoin (UUID pid)
+   public void onJoin(@NotNull UUID pid)
    {
       int count = 0;
 
@@ -385,7 +393,8 @@ public class O2Prophecies
     * @param targetID the player to get a prophecy about
     * @return the prophecy text if found, null otherwise
     */
-   public String getProphecy (UUID targetID)
+   @Nullable
+   public String getProphecy(@NotNull UUID targetID)
    {
       String prophecy = null;
 
