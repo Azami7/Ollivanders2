@@ -77,6 +77,7 @@ public enum O2ItemType
    UNICORN_HORN(Material.BLAZE_ROD, (short) 0, "Unicorn Horn", null),
    VALERIAN_SPRIGS(Material.VINE, (short) 0, "Valerian Sprigs", null),
    VALERIAN_ROOT(Material.GOLDEN_CARROT, (short) 0, "Valerian Root", null),
+   WAND(Material.STICK, (short) 0, "Wand", null),
    WOLFSBANE(Material.ALLIUM, (short) 0, "Wolfsbane", null);
 
    private Material material;
@@ -84,7 +85,7 @@ public enum O2ItemType
    private String lore;
    private short variant;
 
-   O2ItemType (Material m, short v, String n, String l)
+   O2ItemType(Material m, short v, String n, String l)
    {
       material = m;
       name = n;

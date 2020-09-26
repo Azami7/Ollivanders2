@@ -90,7 +90,6 @@ public class Ollivanders2 extends JavaPlugin
    private ConfigurationSection zoneConfig;
 
    // other config
-   public static Material wandMaterial = Material.STICK;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
    public static Ollivanders2WorldGuard worldGuardO2;
