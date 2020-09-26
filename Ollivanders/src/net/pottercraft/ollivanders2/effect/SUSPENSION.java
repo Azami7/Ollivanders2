@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Keeps a player hoisted 1.5 blocks into the air. This replaced the original LEVICORPUS effect.
@@ -21,16 +22,16 @@ public class SUSPENSION extends O2Effect
    boolean suspended = false;
    boolean canFly = false;
 
-   ArrayList<O2EffectType> additionalEffects = new ArrayList<>();
+   final ArrayList<O2EffectType> additionalEffects = new ArrayList<>();
 
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
+    * @param plugin   a callback to the MC plugin
     * @param duration the duration of the effect
-    * @param pid the ID of the player this effect acts on
+    * @param pid      the ID of the player this effect acts on
     */
-   public SUSPENSION (Ollivanders2 plugin, Integer duration, UUID pid)
+   public SUSPENSION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
 

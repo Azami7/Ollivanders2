@@ -12,6 +12,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Change the the form of a player in to another entity.
@@ -32,11 +33,11 @@ public abstract class ShapeShiftSuper extends O2Effect
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
+    * @param plugin   a callback to the MC plugin
     * @param duration the duration of the effect
-    * @param pid the player this effect acts on
+    * @param pid      the player this effect acts on
     */
-   public ShapeShiftSuper (Ollivanders2 plugin, Integer duration, UUID pid)
+   public ShapeShiftSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
    }
