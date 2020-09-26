@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The Wiggenweld Potion is a healing potion with the power to awaken a person from a magically-induced sleep, which
@@ -27,7 +28,7 @@ public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
     *
     * @param plugin a callback to the plugin
     */
-   public WIGGENWELD_POTION (Ollivanders2 plugin)
+   public WIGGENWELD_POTION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -60,16 +61,16 @@ public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
    }
 
    @Override
-   public void drink (O2Player o2p, Player player) { }
+   public void drink(@NotNull O2Player o2p, @NotNull Player player) { }
 
    @Override
-   public void thrownEffect (PotionSplashEvent event)
+   public void thrownEffect(@NotNull PotionSplashEvent event)
    {
       for (LivingEntity e : event.getAffectedEntities())
       {
          if (e instanceof Player)
          {
-            Player player = (Player)e;
+            Player player = (Player) e;
             Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.SLEEPING);
          }
       }

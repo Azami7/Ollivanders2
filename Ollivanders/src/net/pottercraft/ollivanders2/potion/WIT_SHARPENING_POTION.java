@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The Wit-Sharpening Potion is a potion which allows the drinker to think more clearly. Due to this, it acts a a
@@ -21,7 +22,7 @@ public final class WIT_SHARPENING_POTION extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public WIT_SHARPENING_POTION (Ollivanders2 plugin)
+   public WIT_SHARPENING_POTION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -41,7 +42,7 @@ public final class WIT_SHARPENING_POTION extends O2Potion
    }
 
    @Override
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       IMPROVED_BOOK_LEARNING effect = new IMPROVED_BOOK_LEARNING(p, duration, player.getUniqueId());
       Ollivanders2API.getPlayers().playerEffects.addEffect(effect);

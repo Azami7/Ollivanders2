@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The Antidote for Common Poisons is a potion which counteracts ordinary poisons, such as creature bites and stings.
@@ -22,7 +23,7 @@ public final class COMMON_ANTIDOTE_POTION extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public COMMON_ANTIDOTE_POTION (Ollivanders2 plugin)
+   public COMMON_ANTIDOTE_POTION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -40,7 +41,7 @@ public final class COMMON_ANTIDOTE_POTION extends O2Potion
    }
 
    @Override
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       if (player.hasPotionEffect(PotionEffectType.POISON))
       {
