@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The Draught of Living Death is an extremely powerful sleeping draught, sending the drinker into a deathlike slumber.
@@ -22,7 +23,7 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public DRAUGHT_OF_LIVING_DEATH (Ollivanders2 plugin)
+   public DRAUGHT_OF_LIVING_DEATH(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -45,7 +46,7 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion
    }
 
    @Override
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
       {

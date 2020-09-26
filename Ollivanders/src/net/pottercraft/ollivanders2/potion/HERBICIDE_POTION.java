@@ -11,6 +11,7 @@ import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Herbicide Potion (or simply Herbicide) is a potion that kills or damages creepers. It will also harm other
@@ -28,9 +29,9 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
     *
     * @param plugin a callback to the plugin
     */
-   public HERBICIDE_POTION (Ollivanders2 plugin)
+   public HERBICIDE_POTION(@NotNull Ollivanders2 plugin)
    {
-      super (plugin);
+      super(plugin);
 
       potionType = O2PotionType.HERBICIDE_POTION;
       potionLevel = PotionLevel.BEGINNER;
@@ -49,14 +50,14 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
       potionColor = Color.fromRGB(51, 102, 0);
    }
 
-   public void drink (O2Player o2p, Player player) { }
+   public void drink(@NotNull O2Player o2p, @NotNull Player player) { }
 
    /**
     * Reduce intensity of this potion if the affected entity is not a Creeper.
     *
     * @param event the splash potion thrown event
     */
-   public void thrownEffect (PotionSplashEvent event)
+   public void thrownEffect(@NotNull PotionSplashEvent event)
    {
       for (LivingEntity e : event.getAffectedEntities())
       {

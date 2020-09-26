@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.potion;
 
 import org.bukkit.event.entity.PotionSplashEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Adds functionality to O2Potions when they are splash potions.
@@ -15,5 +16,5 @@ public interface O2SplashPotion
     *
     * @param event the splash potion thrown event
     */
-   void thrownEffect(PotionSplashEvent event);
+   void thrownEffect(@NotNull PotionSplashEvent event);
 }

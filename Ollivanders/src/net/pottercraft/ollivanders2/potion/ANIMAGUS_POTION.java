@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Consumed after successfully casting the Animagus incantation, this will turn a player in to an Animagus.
@@ -21,7 +22,7 @@ public final class ANIMAGUS_POTION extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public ANIMAGUS_POTION (Ollivanders2 plugin)
+   public ANIMAGUS_POTION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -43,7 +44,7 @@ public final class ANIMAGUS_POTION extends O2Potion
    }
 
    @Override
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       if (!Ollivanders2.libsDisguisesEnabled)
       {

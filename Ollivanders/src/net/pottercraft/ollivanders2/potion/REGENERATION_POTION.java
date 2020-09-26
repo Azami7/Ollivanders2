@@ -7,6 +7,7 @@ import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The regeneration potion restores a player's experience after death if deathExpLoss is enabled.
@@ -20,7 +21,7 @@ public final class REGENERATION_POTION extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public REGENERATION_POTION (Ollivanders2 plugin)
+   public REGENERATION_POTION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -40,5 +41,5 @@ public final class REGENERATION_POTION extends O2Potion
       potionColor = Color.WHITE;
    }
 
-   public void drink (O2Player o2p, Player player) { }
+   public void drink(@NotNull O2Player o2p, @NotNull Player player) { }
 }
