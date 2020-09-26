@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * An effect is either a temporary or semi-permanent alteration of an O2Player. O2EffectType cannot
@@ -23,12 +24,12 @@ public abstract class O2Effect
    /**
     * The number of game ticks this effect lasts. 24000 ticks is one MC day and should be ~20 real minutes.
     */
-   public Integer duration;
+   public int duration;
 
    /**
     * A callback to the MC plugin
     */
-   protected Ollivanders2 p;
+   final protected Ollivanders2 p;
 
    /**
     * Whether this effect should be killed next upkeep.
@@ -65,11 +66,11 @@ public abstract class O2Effect
    /**
     * Constructor. If you change this method signature, be sure to update all reflection code that uses it.
     *
-    * @param plugin a callback to the MC plugin
+    * @param plugin          a callback to the MC plugin
     * @param durationInTicks the length this effect should remain
-    * @param pid the player this effect acts on
+    * @param pid             the player this effect acts on
     */
-   public O2Effect (Ollivanders2 plugin, Integer durationInTicks, UUID pid)
+   public O2Effect(@NotNull Ollivanders2 plugin, int durationInTicks, @NotNull UUID pid)
    {
       p = plugin;
 
@@ -126,6 +127,7 @@ public abstract class O2Effect
     *
     * @return the id of the player
     */
+   @NotNull
    public UUID getTargetID ()
    {
       return new UUID(targetID.getMostSignificantBits(), targetID.getLeastSignificantBits());
@@ -161,6 +163,7 @@ public abstract class O2Effect
     *
     * @return a random divination text for this effect
     */
+   @NotNull
    public String getDivinationText ()
    {
       if (divinationText.size() < 1)

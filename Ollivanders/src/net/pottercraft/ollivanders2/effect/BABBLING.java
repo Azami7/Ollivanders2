@@ -6,6 +6,7 @@ import java.util.UUID;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Causes a player to chat nonsense. Any Babbling effects must also be added to onPlayerChat in Ollivanders2Listener.
@@ -63,11 +64,11 @@ public class BABBLING extends O2Effect
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
+    * @param plugin   a callback to the MC plugin
     * @param duration the duration of the effect
-    * @param pid the ID of the player this effect acts on
+    * @param pid      the ID of the player this effect acts on
     */
-   public BABBLING (Ollivanders2 plugin, Integer duration, UUID pid)
+   public BABBLING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
 
@@ -121,7 +122,7 @@ public class BABBLING extends O2Effect
     *
     * @param event the player chat event
     */
-   public void doBabblingEffect (AsyncPlayerChatEvent event)
+   public void doBabblingEffect(@NotNull AsyncPlayerChatEvent event)
    {
       String message = event.getMessage();
       String newMessage = getNonsense();

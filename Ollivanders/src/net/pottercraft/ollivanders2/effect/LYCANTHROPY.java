@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Turns player into a werewolf during the full moon. Doesn't go away until death (if deathExpLoss is set to
@@ -23,11 +24,11 @@ public class LYCANTHROPY extends ShapeShiftSuper
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
+    * @param plugin   a callback to the MC plugin
     * @param duration the duration of the effect
-    * @param pid the ID of the player this effect acts on
+    * @param pid      the ID of the player this effect acts on
     */
-   public LYCANTHROPY (Ollivanders2 plugin, Integer duration, UUID pid)
+   public LYCANTHROPY(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
 

@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ import java.util.UUID;
  */
 public class IMMOBILIZE extends O2Effect
 {
-   public IMMOBILIZE (Ollivanders2 plugin, Integer duration, UUID pid)
+   public IMMOBILIZE(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
 
@@ -33,11 +34,5 @@ public class IMMOBILIZE extends O2Effect
    public void checkEffect ()
    {
       age(1);
-   }
-
-   @Override
-   public void kill ()
-   {
-      kill = true;
    }
 }

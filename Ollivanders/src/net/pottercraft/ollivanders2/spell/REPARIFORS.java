@@ -67,7 +67,7 @@ public class REPARIFORS extends O2Spell
             {
                int duration = player.getPotionEffect(PotionEffectType.POISON).getDuration();
                player.removePotionEffect(PotionEffectType.POISON);
-               player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (duration / 2), 1), true);
+               player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (duration / 2), 1));
 
                kill();
                return;
@@ -75,7 +75,7 @@ public class REPARIFORS extends O2Spell
 
             // do a minor heal
             int duration = (((int) usesModifier / 10) * Ollivanders2Common.ticksPerSecond) + (15 * Ollivanders2Common.ticksPerSecond);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, duration, 1), true);
+            player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, duration, 1));
 
             kill();
             return;

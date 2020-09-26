@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.effect;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Makes player's effective experience (level) in skills higher while active.
@@ -14,11 +15,11 @@ public class HIGHER_SKILL extends O2Effect
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
+    * @param plugin   a callback to the MC plugin
     * @param duration the duration of the effect
-    * @param pid the ID of the player this effect acts on
+    * @param pid      the ID of the player this effect acts on
     */
-   public HIGHER_SKILL (Ollivanders2 plugin, Integer duration, UUID pid)
+   public HIGHER_SKILL(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
 
