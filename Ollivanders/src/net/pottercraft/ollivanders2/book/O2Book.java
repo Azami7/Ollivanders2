@@ -65,7 +65,7 @@ public abstract class O2Book
     */
    String closingPage;
 
-   protected final Ollivanders2 p;
+   protected Ollivanders2 p;
 
    /**
     * No more than 11 spells + potions in a book or they won't fit on the table of contents.
