@@ -1690,7 +1690,6 @@ public class OllivandersListener implements Listener
             return;
          }
 
-         //TODO make this use wand item
          List<String> lore = new ArrayList<>();
          lore.add(O2WandWoodType.getAllWoodsByName().get(wandType) + " and " + O2WandCoreType.getAllCoresByName().get(coreType));
 
@@ -1699,7 +1698,6 @@ public class OllivandersListener implements Listener
             return;
 
          meta.setLore(lore);
-         meta.setDisplayName("Wand");
          wand.setItemMeta(meta);
          event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
       }
