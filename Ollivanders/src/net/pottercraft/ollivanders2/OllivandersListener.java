@@ -310,7 +310,7 @@ public class OllivandersListener implements Listener
          //
          // Handle removing recipients from chat
          //
-         ArrayList<StationarySpellObj> muffliatos = Ollivanders2API.getStationarySpells().getActiveStationarySpellsAtLocationByType(sender.getLocation(), O2StationarySpellType.MUFFLIATO);
+         List<StationarySpellObj> muffliatos = Ollivanders2API.getStationarySpells().getActiveStationarySpellsAtLocationByType(sender.getLocation(), O2StationarySpellType.MUFFLIATO);
          updateRecipients(sender, spellType, event.getRecipients(), muffliatos);
 
          //
@@ -376,7 +376,7 @@ public class OllivandersListener implements Listener
     * @param recipients the recipients for this chat
     * @param muffliatos all muffliato stationary spells
     */
-   private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients, ArrayList<StationarySpellObj> muffliatos)
+   private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients, List<StationarySpellObj> muffliatos)
    {
       // remove all recipients if this is not a "spoken" spell
       if (spellType == O2SpellType.APPARATE || Divination.divinationSpells.contains(spellType))
