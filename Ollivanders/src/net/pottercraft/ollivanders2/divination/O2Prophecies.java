@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.divination;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,7 +21,7 @@ import java.util.UUID;
  */
 public class O2Prophecies
 {
-   final private Ollivanders2 p;
+   final private JavaPlugin p;
 
    final private ArrayList<O2Prophecy> activeProphecies = new ArrayList<>();
    final private ArrayList<O2Prophecy> offlineProphecies = new ArrayList<>();
@@ -38,7 +39,7 @@ public class O2Prophecies
     *
     * @param plugin a callback to the plugin
     */
-   public O2Prophecies(@NotNull Ollivanders2 plugin)
+   public O2Prophecies(@NotNull JavaPlugin plugin)
    {
       p = plugin;
 

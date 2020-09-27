@@ -10,6 +10,7 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Teachable;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -55,14 +56,14 @@ public final class BookTexts
 
    private final Map<String, BookText> O2MagicTextMap = new HashMap<>();
 
-   private final Ollivanders2 p;
+   private final JavaPlugin p;
 
    /**
     * Constructor.
     *
     * @param plugin the MC plugin
     */
-   BookTexts(@NotNull Ollivanders2 plugin)
+   BookTexts(@NotNull JavaPlugin plugin)
    {
       p = plugin;
 

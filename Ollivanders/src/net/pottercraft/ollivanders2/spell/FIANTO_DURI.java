@@ -77,7 +77,7 @@ public final class FIANTO_DURI extends O2Spell
    {
       List<StationarySpellObj> inside = new ArrayList<>();
 
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          // if the stationary spell type is not in the blacklist for this spell
          // was cast by the caster of this spell

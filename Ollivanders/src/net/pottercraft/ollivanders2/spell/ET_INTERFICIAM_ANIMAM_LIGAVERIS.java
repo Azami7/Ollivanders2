@@ -73,7 +73,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
          return;
       }
 
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
       if (o2p == null)
       {
          kill();
@@ -93,7 +93,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
       {
          HORCRUX horcrux = new HORCRUX(p, player.getUniqueId(), location, O2StationarySpellType.HORCRUX, 5, 10);
          horcrux.flair(10);
-         Ollivanders2API.getStationarySpells().addStationarySpell(horcrux);
+         Ollivanders2API.getStationarySpells(p).addStationarySpell(horcrux);
          player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue() / 2.0);
          o2p.subtractSoul();
          player.damage(1.0);
@@ -109,7 +109,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
          //If they player couldn't survive making another horcrux then they are sent back to a previous horcrux
          else if ((futureHealth - 1) <= 0)
          {
-            List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells().getActiveStationarySpells();
+            List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells(p).getActiveStationarySpells();
             for (StationarySpellObj stationary : stationaries)
             {
                if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(player.getUniqueId()))
@@ -119,7 +119,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
                   player.teleport(tp);
                   player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue());
 
-                  Ollivanders2API.getStationarySpells().removeStationarySpell(stationary);
+                  Ollivanders2API.getStationarySpells(p).removeStationarySpell(stationary);
                   return;
                }
             }

@@ -86,7 +86,7 @@ public final class INFORMOUS extends O2Spell
 
       if (!gaveInfo)
       {
-         for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+         for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (spell.isInside(location))
             {
@@ -158,7 +158,7 @@ public final class INFORMOUS extends O2Spell
          player.sendMessage(Ollivanders2.chatColor + " has " + target.getExhaustion() + " exhaustion level.");
 
          // detectable effects
-         String infoText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithInformous(entity.getUniqueId());
+         String infoText = Ollivanders2API.getPlayers(p).playerEffects.detectEffectWithInformous(entity.getUniqueId());
          if (infoText != null)
          {
             player.sendMessage(Ollivanders2.chatColor + " " + infoText + ".");
@@ -173,9 +173,9 @@ public final class INFORMOUS extends O2Spell
          // house
          if (Ollivanders2.useHouses)
          {
-            if (Ollivanders2API.getHouses().isSorted(target))
+            if (Ollivanders2API.getHouses(p).isSorted(target))
             {
-               player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses().getHouse(target).getName() + ".");
+               player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses(p).getHouse(target).getName() + ".");
             }
             else
             {

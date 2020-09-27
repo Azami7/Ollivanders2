@@ -104,7 +104,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
             moving = false;
             double radius = usesModifier / 4;
             ArrayList<COLLOPORTUS> collos = new ArrayList<>();
-            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
             {
                if (stat instanceof COLLOPORTUS)
                {
