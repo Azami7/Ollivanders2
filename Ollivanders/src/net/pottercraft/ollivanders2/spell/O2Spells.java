@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
+import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
  */
 public class O2Spells
 {
-   private Ollivanders2 p;
+   private JavaPlugin p;
 
    private HashMap<String, O2SpellType> O2SpellMap = new HashMap<>();
 
@@ -28,7 +29,7 @@ public class O2Spells
     *
     * @param plugin a callback to the MC plugin
     */
-   public O2Spells (Ollivanders2 plugin)
+   public O2Spells (JavaPlugin plugin)
    {
       p = plugin;
 

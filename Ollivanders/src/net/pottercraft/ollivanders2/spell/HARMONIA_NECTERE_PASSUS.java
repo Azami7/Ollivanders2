@@ -102,7 +102,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
             return;
          }
 
-         for (StationarySpellObj statSpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+         for (StationarySpellObj statSpell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (statSpell instanceof net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS)
             {
@@ -120,8 +120,8 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
          harmoniaFrom.flair(20);
          harmoniaTo.flair(20);
 
-         Ollivanders2API.getStationarySpells().addStationarySpell(harmoniaFrom);
-         Ollivanders2API.getStationarySpells().addStationarySpell(harmoniaTo);
+         Ollivanders2API.getStationarySpells(p).addStationarySpell(harmoniaFrom);
+         Ollivanders2API.getStationarySpells(p).addStationarySpell(harmoniaTo);
       }
 
       kill();

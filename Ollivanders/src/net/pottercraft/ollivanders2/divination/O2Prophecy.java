@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -20,7 +21,7 @@ import java.util.UUID;
  */
 public class O2Prophecy
 {
-   final private Ollivanders2 p;
+   final private JavaPlugin p;
 
    /**
     * The effect that will happen to the player
@@ -72,7 +73,7 @@ public class O2Prophecy
     * @param d   the duration of the effect, 0 for permanent
     * @param a   the accuracy of this prophecy as a percent from 0 to 99, greater than 99 will be rounded down to 99
     */
-   O2Prophecy(@NotNull Ollivanders2 plugin, @NotNull O2EffectType e, @NotNull String m, @NotNull UUID tid, @NotNull UUID pid, long t, int d, int a)
+   O2Prophecy(@NotNull JavaPlugin plugin, @NotNull O2EffectType e, @NotNull String m, @NotNull UUID tid, @NotNull UUID pid, long t, int d, int a)
    {
       p = plugin;
       effectType = e;
@@ -170,7 +171,7 @@ public class O2Prophecy
       if (target == null)
       {
          // player is offline, stash this prophecy for when the player returns
-         Ollivanders2API.getProphecies().addOfflineProphecy(this);
+         Ollivanders2API.getProphecies(p).addOfflineProphecy(this);
          return;
       }
 
@@ -195,9 +196,9 @@ public class O2Prophecy
             }
 
             effect.setPermanent(false);
-            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
 
-            O2Player player = Ollivanders2API.getPlayers().getPlayer(prophetID);
+            O2Player player = Ollivanders2API.getPlayers(p).getPlayer(prophetID);
             if (player != null)
             {
                String playerName = player.getPlayerName();

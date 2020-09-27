@@ -42,7 +42,7 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
    public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       HIGHER_SKILL effect = new HIGHER_SKILL(p, duration, player.getUniqueId());
-      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel clarity of thought.");
    }

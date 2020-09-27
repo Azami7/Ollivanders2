@@ -72,7 +72,7 @@ public final class FIENDFYRE extends O2Spell
    protected void doCheckEffect ()
    {
       // check for stationary spells first to remove HORCRUX spells
-      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location);
+      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
 
       for (StationarySpellObj stationary : stationaries)
       {

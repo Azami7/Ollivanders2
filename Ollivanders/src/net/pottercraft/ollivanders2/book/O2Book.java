@@ -131,7 +131,7 @@ public abstract class O2Book
 
       for (String content : bookContents)
       {
-         String name = Ollivanders2API.getBooks().spellText.getName(content);
+         String name = Ollivanders2API.getBooks(p).spellText.getName(content);
          if (name == null)
          {
             p.getLogger().warning(this.title + " contains unknown spell or potion " + content);
@@ -141,8 +141,8 @@ public abstract class O2Book
          toc.append(name).append("\n");
 
          String text;
-         String mainText = Ollivanders2API.getBooks().spellText.getText(content);
-         String flavorText = Ollivanders2API.getBooks().spellText.getFlavorText(content);
+         String mainText = Ollivanders2API.getBooks(p).spellText.getText(content);
+         String flavorText = Ollivanders2API.getBooks(p).spellText.getFlavorText(content);
 
          if (flavorText == null)
          {

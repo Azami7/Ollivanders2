@@ -100,7 +100,7 @@ public final class ALIQUAM_FLOO extends O2Spell
             }
 
             // make sure there is not already an aliquam floo spell at this block
-            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
             {
                if (stat instanceof net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO)
                {
@@ -117,7 +117,7 @@ public final class ALIQUAM_FLOO extends O2Spell
 
             net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO aliquam = new net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO(p, player.getUniqueId(), statLocation, O2StationarySpellType.ALIQUAM_FLOO, 2, 10, flooName);
             aliquam.flair(20);
-            Ollivanders2API.getStationarySpells().addStationarySpell(aliquam);
+            Ollivanders2API.getStationarySpells(p).addStationarySpell(aliquam);
          }
       }
       else

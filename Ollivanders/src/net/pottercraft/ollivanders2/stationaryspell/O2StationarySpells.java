@@ -11,13 +11,14 @@ import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 public class O2StationarySpells
 {
    private List<StationarySpellObj> O2StationarySpells = new ArrayList<>();
-   final Ollivanders2 p;
+   final JavaPlugin p;
 
    private final String playerUUIDLabel = "Player_UUID";
    private final String spellLabel = "Name";
@@ -30,7 +31,7 @@ public class O2StationarySpells
     *
     * @param plugin a reference to the plugin
     */
-   public O2StationarySpells(@NotNull Ollivanders2 plugin)
+   public O2StationarySpells(@NotNull JavaPlugin plugin)
    {
       p = plugin;
 

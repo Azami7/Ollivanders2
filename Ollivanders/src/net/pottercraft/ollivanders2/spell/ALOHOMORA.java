@@ -67,7 +67,7 @@ public final class ALOHOMORA extends O2Spell
    {
       // check all the stationary spells in the location of the projectile for a Colloportus
       List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (spell instanceof COLLOPORTUS)
          {

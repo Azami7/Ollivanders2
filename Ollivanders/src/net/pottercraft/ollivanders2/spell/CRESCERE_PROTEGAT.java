@@ -67,7 +67,7 @@ public final class CRESCERE_PROTEGAT extends O2Spell
    {
       StationarySpellObj inside = null;
 
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          // if the stationary spell type is not in the blacklist for this spell
          // was cast by the caster of this spell

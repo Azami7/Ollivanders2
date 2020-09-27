@@ -99,7 +99,7 @@ public final class DEFODIO extends O2Spell
       Location curLoc = curBlock.getLocation();
 
       // stop the spell if we hit a colloportus stationary spell
-      if (Ollivanders2API.getStationarySpells().checkLocationForSpell(curLoc, O2StationarySpellType.COLLOPORTUS))
+      if (Ollivanders2API.getStationarySpells(p).checkLocationForSpell(curLoc, O2StationarySpellType.COLLOPORTUS))
       {
          kill();
          return;

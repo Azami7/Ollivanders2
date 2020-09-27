@@ -14,6 +14,7 @@ import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 
 import org.bukkit.entity.EntityType;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +39,7 @@ public class O2Players
    /**
     * The MC plugin callback
     */
-   private final Ollivanders2 p;
+   private final JavaPlugin p;
 
    /**
     * A count of the player records read at start. This can be used to prevent writing back out at server
@@ -71,7 +72,7 @@ public class O2Players
     *
     * @param plugin the MC plugin
     */
-   public O2Players(@NotNull Ollivanders2 plugin)
+   public O2Players(@NotNull JavaPlugin plugin)
    {
       p = plugin;
 
@@ -328,7 +329,7 @@ public class O2Players
          //
          // Effects
          //
-         Map<String, String> effects = Ollivanders2API.getPlayers().playerEffects.serializeEffects(pid);
+         Map<String, String> effects = Ollivanders2API.getPlayers(p).playerEffects.serializeEffects(pid);
          for (Entry<String, String> entry : effects.entrySet())
          {
             playerData.put(entry.getKey(), entry.getValue());

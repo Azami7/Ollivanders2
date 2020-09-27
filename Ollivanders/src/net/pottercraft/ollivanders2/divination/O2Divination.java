@@ -184,7 +184,7 @@ public abstract class O2Divination
 
       prophet.chat(finalMessage);
       O2Prophecy prophecy = new O2Prophecy(p, effectType, finalMessage, targetID, prophetID, ticks, duration, accuracy);
-      Ollivanders2API.getProphecies().addProphecy(prophecy);
+      Ollivanders2API.getProphecies(p).addProphecy(prophecy);
    }
 
    /**

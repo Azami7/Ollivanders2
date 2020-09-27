@@ -28,6 +28,7 @@ import org.bukkit.util.Vector;
 
 import net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Scheduler for Ollivanders2
@@ -36,12 +37,12 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
  */
 class OllivandersSchedule implements Runnable
 {
-   private Ollivanders2 p;
+   final private Ollivanders2 p;
    private int counter = 0;
-   private static Set<UUID> flying = new HashSet<>();
-   private Set<UUID> onBroom = new HashSet<>();
+   final private static Set<UUID> flying = new HashSet<>();
+   final private Set<UUID> onBroom = new HashSet<>();
 
-   OllivandersSchedule (Ollivanders2 plugin)
+   OllivandersSchedule (@NotNull Ollivanders2 plugin)
    {
       p = plugin;
    }
@@ -52,8 +53,8 @@ class OllivandersSchedule implements Runnable
       {
          projectileSched();
          oeffectSched();
-         Ollivanders2API.getStationarySpells().upkeep();
-         Ollivanders2API.getProphecies().upkeep();
+         Ollivanders2API.getStationarySpells(p).upkeep();
+         Ollivanders2API.getProphecies(p).upkeep();
          broomSched();
          teleportSched();
       }
@@ -113,7 +114,7 @@ class OllivandersSchedule implements Runnable
       {
          UUID pid = player.getUniqueId();
 
-         Ollivanders2API.getPlayers().playerEffects.upkeep(pid);
+         Ollivanders2API.getPlayers(p).playerEffects.upkeep(pid);
       }
    }
 
@@ -169,12 +170,26 @@ class OllivandersSchedule implements Runnable
     *
     * @param item - item with geminio curse on it
     * @return Duplicated itemstacks
+    * @assumes item stack being passed is a Geminio
     */
-   private ItemStack geminio (ItemStack item)
+   @NotNull
+   private ItemStack geminio (@NotNull ItemStack item)
    {
       int stackSize = item.getAmount();
       ItemMeta meta = item.getItemMeta();
+      if (meta == null)
+      {
+         p.getLogger().warning("Ollivanders2Schedule.geminio: item meta is null");
+         return item;
+      }
+
       List<String> lore = meta.getLore();
+      if (lore == null)
+      {
+         // this should not happen if the item stack being sent is a Geminio
+         return item;
+      }
+
       ArrayList<String> newLore = new ArrayList<>();
       for (String l : lore)
       {
@@ -208,7 +223,7 @@ class OllivandersSchedule implements Runnable
    private void invisPlayer ()
    {
       Set<REPELLO_MUGGLETON> repelloMuggletons = new HashSet<>();
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof REPELLO_MUGGLETON)
          {
@@ -224,27 +239,34 @@ class OllivandersSchedule implements Runnable
 
          boolean alreadyInvis = o2p.isInvisible();
          boolean alreadyInRepelloMuggleton = o2p.isInRepelloMuggleton();
-
          boolean hasCloak = hasCloak(player);
-         if (hasCloak) {
-            if (!alreadyInvis) {
+
+         if (hasCloak)
+         {
+            if (!alreadyInvis)
+            {
                o2p.setInvisible(true);
                player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
             }
          }
 
          boolean inRepelloMuggletons = false;
-         for (StationarySpellObj stat : repelloMuggletons) {
-            if (stat.isInside(player.getLocation())) {
+         for (StationarySpellObj stat : repelloMuggletons)
+         {
+            if (stat.isInside(player.getLocation()))
+            {
                inRepelloMuggletons = true;
-               if (!alreadyInRepelloMuggleton) {
+               if (!alreadyInRepelloMuggleton)
+               {
                   o2p.setInRepelloMuggleton(true);
                }
                break;
             }
          }
 
-         if (hasCloak || inRepelloMuggletons) {
+         //TODO check the logic on this, I am not sure it is right
+         if (hasCloak || inRepelloMuggletons)
+         {
             for (Player player2 : p.getServer().getOnlinePlayers()) {
                if (player2.isPermissionSet("Ollivanders2.BYPASS") && player2.hasPermission("Ollivanders2.BYPASS")) {
                   continue;
@@ -254,17 +276,21 @@ class OllivandersSchedule implements Runnable
                if (viewer == null)
                   continue;
 
-               if (hasCloak) {
+               if (hasCloak)
+               {
                   player2.hidePlayer(p, player);
                   System.out.println(player2.canSee(player));
-               } else if (viewer.isMuggle()) {
+               }
+               else if (viewer.isMuggle())
+               {
                   player2.hidePlayer(p, player);
                }
             }
-         } else if (!hasCloak && alreadyInvis) {
+         }
+         else if (!hasCloak && alreadyInvis) {
             for (Player player2 : p.getServer().getOnlinePlayers())
             {
-               O2Player viewer = Ollivanders2API.getPlayers().getPlayer(player2.getUniqueId());
+               O2Player viewer = Ollivanders2API.getPlayers(p).getPlayer(player2.getUniqueId());
                if (viewer == null)
                   continue;
 
@@ -274,7 +300,8 @@ class OllivandersSchedule implements Runnable
             }
             o2p.setInvisible(false);
             player.removePotionEffect(PotionEffectType.INVISIBILITY);
-         } else if (!inRepelloMuggletons && alreadyInRepelloMuggleton) {
+         }
+         else if (!inRepelloMuggletons && alreadyInRepelloMuggleton) {
             if (!hasCloak) {
                for (Player player2 : p.getServer().getOnlinePlayers()) {
                   player2.showPlayer(p, player);
@@ -304,7 +331,7 @@ class OllivandersSchedule implements Runnable
     * @param player - Player to be checked
     * @return - True if yes, false if no
     */
-   private boolean hasCloak (Player player)
+   private boolean hasCloak (@NotNull Player player)
    {
       ItemStack chestPlate = player.getInventory().getChestplate();
       if (chestPlate != null)
@@ -340,7 +367,7 @@ class OllivandersSchedule implements Runnable
             {
                if (player.getGameMode() == GameMode.SURVIVAL && (this.onBroom.contains(player.getUniqueId())))
                {
-                  if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FLYING))
+                  if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FLYING))
                   {
                      continue playerIter;
                   }
@@ -375,10 +402,19 @@ class OllivandersSchedule implements Runnable
          {
             player.teleport(destination);
 
-            if (event.isExplosionOnTeleport())
+            World curWorld = currentLocation.getWorld();
+            World destWorld = destination.getWorld();
+            if (curWorld == null || destWorld == null)
             {
-               currentLocation.getWorld().createExplosion(currentLocation, 0);
-               destination.getWorld().createExplosion(destination, 0);
+               p.getLogger().warning("OllvandersSchedule.teleportSched: world is null");
+            }
+            else
+            {
+               if (event.isExplosionOnTeleport())
+               {
+                  curWorld.createExplosion(currentLocation, 0);
+                  destWorld.createExplosion(destination, 0);
+               }
             }
          }
          catch (Exception e)
@@ -392,6 +428,7 @@ class OllivandersSchedule implements Runnable
       }
    }
 
+   @NotNull
    public static Set<UUID> getFlying()
    {
       return flying;
