@@ -24,6 +24,7 @@ import org.bukkit.entity.Fox;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -63,7 +64,7 @@ public class O2Player
    /**
     * The MC plugin callback
     */
-   private final Ollivanders2 p;
+   private final JavaPlugin p;
 
    /**
     * A map of all the spells a player knows and the cast count.
@@ -154,7 +155,7 @@ public class O2Player
     * @param name   the name of the player
     * @param plugin a reference to the plugin
     */
-   public O2Player(@NotNull UUID id, @NotNull String name, @NotNull Ollivanders2 plugin)
+   public O2Player(@NotNull UUID id, @NotNull String name, @NotNull JavaPlugin plugin)
    {
       p = plugin;
       playerName = name;
@@ -1079,8 +1080,8 @@ public class O2Player
     */
    public void onJoin ()
    {
-      Ollivanders2API.getPlayers().playerEffects.onJoin(pid);
-      Ollivanders2API.getProphecies().onJoin(pid);
+      Ollivanders2API.getPlayers(p).playerEffects.onJoin(pid);
+      Ollivanders2API.getProphecies(p).onJoin(pid);
    }
 
    /**
@@ -1096,7 +1097,7 @@ public class O2Player
 
       if (Ollivanders2.useHouses)
       {
-         O2HouseType houseType = Ollivanders2API.getHouses().getHouse(pid);
+         O2HouseType houseType = Ollivanders2API.getHouses(p).getHouse(pid);
          if (houseType != null)
          {
             message.append("\n").append(houseType.getName()).append(" is currently ").append(O2HouseType.getHousePlaceTxt(houseType)).append(".");
@@ -1105,7 +1106,7 @@ public class O2Player
 
       if (!foundWand)
          message.append("\nFind your destined wand to begin using magic.");
-      else if (Ollivanders2.useHouses && !Ollivanders2API.getHouses().isSorted(pid))
+      else if (Ollivanders2.useHouses && !Ollivanders2API.getHouses(p).isSorted(pid))
          message.append("\nGet sorted in to your school house to start earning house points.");
       else if (knownSpells.size() < 1 && Ollivanders2.bookLearning)
          message.append("\nFind a spell book to get started learning magic.");
@@ -1125,7 +1126,7 @@ public class O2Player
     */
    public void onQuit ()
    {
-      Ollivanders2API.getPlayers().playerEffects.onQuit(pid);
+      Ollivanders2API.getPlayers(p).playerEffects.onQuit(pid);
    }
 
    /**
@@ -1138,7 +1139,7 @@ public class O2Player
          resetSpellCount();
          resetPotionCount();
          resetSouls();
-         Ollivanders2API.getPlayers().playerEffects.onDeath(pid);
+         Ollivanders2API.getPlayers(p).playerEffects.onDeath(pid);
       }
 
       setWandSpell(null);

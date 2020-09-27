@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class O2Potions
 {
-   final private Ollivanders2 p;
+   final private JavaPlugin p;
 
    final private HashMap<String, O2PotionType> O2PotionMap = new HashMap<>();
 
@@ -102,7 +103,7 @@ public class O2Potions
     *
     * @param plugin a reference to the plugin
     */
-   public O2Potions(@NotNull Ollivanders2 plugin)
+   public O2Potions(@NotNull JavaPlugin plugin)
    {
       p = plugin;
 
@@ -239,6 +240,8 @@ public class O2Potions
             if (meta == null)
                continue;
 
+            // For ingredients, lore and name are the same. We use lore instead of item name because this cannot be set by using an anvil - so players cannot "make"
+            // ingredients, they can only get real ones from the plugin.
             List<String> itemLore = meta.getLore();
             if (itemLore == null)
                continue;
@@ -247,11 +250,9 @@ public class O2Potions
             if (lore == null)
                continue;
 
-            // For ingredients, lore and name are the same. We use lore instead of item name because this cannot be set by using an anvil - so players cannot "make"
-            // ingredients, they can only get real ones from the plugin.
-            O2ItemType ingredientType = Ollivanders2API.getItems().getTypeByDisplayName(lore);
+            O2ItemType ingredientType = Ollivanders2API.getItems(p).getTypeByDisplayName(lore);
 
-            if (ingredientType == null || material != Ollivanders2API.getItems().getItemMaterialByType(ingredientType))
+            if (ingredientType == null || material != Ollivanders2API.getItems(p).getItemMaterialByType(ingredientType))
                continue;
 
             Integer count = ((Item) e).getItemStack().getAmount();
@@ -280,6 +281,8 @@ public class O2Potions
       if (meta.hasLore())
       {
          List<String> lore = meta.getLore();
+
+         // we search on lore rather than item name so that players cannot use anvils to create potions
          if (lore == null)
             return null;
 
@@ -339,16 +342,17 @@ public class O2Potions
    /**
     * Get a list of the names of every potion ingredient.
     *
+    * @param p a reference to the plugin
     * @return a list of all potions ingredients
     */
    @NotNull
-   public static List<String> getAllIngredientNames ()
+   public static List<String> getAllIngredientNames (@NotNull JavaPlugin p)
    {
       ArrayList<String> ingredientList = new ArrayList<>();
 
       for (O2ItemType i : ingredients)
       {
-         ingredientList.add(Ollivanders2API.getItems().getItemDisplayNameByType(i));
+         ingredientList.add(Ollivanders2API.getItems(p).getItemDisplayNameByType(i));
       }
 
       return ingredientList;

@@ -73,7 +73,7 @@ public final class SCUTO_CONTERAM extends O2Spell
    @Override
    protected void doCheckEffect()
    {
-      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
+      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (stationarySpell instanceof ShieldSpell)
          {

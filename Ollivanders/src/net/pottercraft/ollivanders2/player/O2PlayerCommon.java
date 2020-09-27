@@ -282,6 +282,7 @@ public final class O2PlayerCommon
 
       List<String> lore = item.getItemMeta().getLore();
       if (lore == null)
+         // this should never happen if idWand() check was done first
          return 2;
 
       if (lore.get(0).equals("Blaze and Ender Pearl")) // elder wand

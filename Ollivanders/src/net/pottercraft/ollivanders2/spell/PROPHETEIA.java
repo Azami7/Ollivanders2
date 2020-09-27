@@ -70,7 +70,7 @@ public class PROPHETEIA extends O2Spell
 
          if (usesModifier > rand)
          {
-            String prophecy = Ollivanders2API.getProphecies().getProphecy(livingEntity.getUniqueId());
+            String prophecy = Ollivanders2API.getProphecies(p).getProphecy(livingEntity.getUniqueId());
 
             if (prophecy != null)
             {

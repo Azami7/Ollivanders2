@@ -61,7 +61,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       permanent = true;
 
 
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(pid);
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(pid);
       if (o2p == null)
       {
          p.getLogger().info("o2player cannot be found");
@@ -76,7 +76,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       if (form == null)
       {
          if (Ollivanders2.debug)
-            p.getLogger().info("Unable to get animagus form for " + Ollivanders2API.getPlayers().getPlayer(pid).getPlayerName());
+            p.getLogger().info("Unable to get animagus form for " + Ollivanders2API.getPlayers(p).getPlayer(pid).getPlayerName());
 
          kill();
       }
@@ -304,7 +304,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       // fix player's animagus color variant if needed
       if (correctedVariant != null)
       {
-         Ollivanders2API.getPlayers().fixPlayerAnimagusColorVariant(targetID, correctedVariant);
+         Ollivanders2API.getPlayers(p).fixPlayerAnimagusColorVariant(targetID, correctedVariant);
       }
    }
 

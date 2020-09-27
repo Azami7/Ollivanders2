@@ -69,7 +69,7 @@ public final class SILENCIO extends O2Spell
             int dur = (int) (usesModifier * 1200);
 
             MUTED_SPEECH effect = new MUTED_SPEECH(p, dur, player.getUniqueId());
-            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
 
             kill();
             return;

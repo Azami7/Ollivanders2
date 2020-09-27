@@ -69,7 +69,7 @@ public final class HORREAT_PROTEGAT extends O2Spell
          return;
 
       List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (spell.isInside(location) && spell.radius > (int) (10 / usesModifier))
          {

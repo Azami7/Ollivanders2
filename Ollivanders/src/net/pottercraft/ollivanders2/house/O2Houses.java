@@ -10,6 +10,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.*;
 import org.bukkit.Server;
 import org.jetbrains.annotations.NotNull;
@@ -23,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class O2Houses
 {
-   final private Ollivanders2 p;
+   final private JavaPlugin p;
    final private Ollivanders2Common common;
 
    private Map<UUID, O2HouseType> O2HouseMap = new HashMap<>();
@@ -40,7 +41,7 @@ public class O2Houses
     *
     * @param plugin the reference for the plugin
     */
-   public O2Houses(@NotNull Ollivanders2 plugin)
+   public O2Houses(@NotNull JavaPlugin plugin)
    {
       p = plugin;
       common = new Ollivanders2Common(p);

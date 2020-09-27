@@ -121,7 +121,7 @@ public final class DISSENDIUM extends O2Spell
 
       // check for colloportus spell locking this door
       Location targetLocation = target.getLocation();
-      List<StationarySpellObj> spellsAtLocation = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(targetLocation);
+      List<StationarySpellObj> spellsAtLocation = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(targetLocation);
 
       for (StationarySpellObj statSpell : spellsAtLocation)
       {

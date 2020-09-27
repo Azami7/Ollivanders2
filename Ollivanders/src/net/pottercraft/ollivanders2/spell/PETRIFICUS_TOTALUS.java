@@ -75,7 +75,7 @@ public class PETRIFICUS_TOTALUS extends O2Spell
 
             IMMOBILIZE immobilize = new IMMOBILIZE(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, live.getUniqueId());
 
-            Ollivanders2API.getPlayers().playerEffects.addEffect(immobilize);
+            Ollivanders2API.getPlayers(p).playerEffects.addEffect(immobilize);
 
             kill();
             return;

@@ -54,9 +54,9 @@ public class REPARIFORS extends O2Spell
             Player player = (Player) live;
 
             // if they are affected by immobilize, remove the effect
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE) && !(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)))
+            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE) && !(Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)))
             {
-               Ollivanders2API.getPlayers().playerEffects.ageEffectByPercent(player.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier / 20));
+               Ollivanders2API.getPlayers(p).playerEffects.ageEffectByPercent(player.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier / 20));
 
                kill();
                return;

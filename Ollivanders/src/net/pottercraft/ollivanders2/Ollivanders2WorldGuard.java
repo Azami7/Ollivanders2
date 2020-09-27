@@ -11,8 +11,11 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Handles all WorldGuard support for Ollivanders2.  If WorldGuard is not enabled on the server, all calls
@@ -25,14 +28,14 @@ import org.bukkit.plugin.Plugin;
 public class Ollivanders2WorldGuard
 {
    private WorldGuardPlugin worldGuard;
-   private Ollivanders2 p;
+   final private Ollivanders2 p;
 
    /**
     * Constructor.
     *
     * @link https://worldguard.enginehub.org/en/latest/developer/dependency/
     */
-   public Ollivanders2WorldGuard (Ollivanders2 o2plugin)
+   public Ollivanders2WorldGuard (@NotNull Ollivanders2 o2plugin)
    {
       p = o2plugin;
       worldGuard = null;
@@ -68,7 +71,7 @@ public class Ollivanders2WorldGuard
     * @param flag the state flag for this region
     * @return true if the player can take the action, false otherwise
     */
-   private boolean wgTestState (Player player, Location location, StateFlag flag)
+   private boolean wgTestState (@NotNull Player player, @NotNull Location location, @NotNull StateFlag flag)
    {
       if (worldGuard == null)
       {
@@ -79,13 +82,16 @@ public class Ollivanders2WorldGuard
       if (regionSet != null && !regionSet.getRegions().isEmpty())
       {
          StateFlag.State state = regionSet.queryState(worldGuard.wrapPlayer(player), flag);
+         if (state == null)
+         {
+            return true;
+         }
+
          if (Ollivanders2.debug)
             p.getLogger().info("State of " + flag.toString() + " for " + player.getDisplayName() + " is " + state.toString());
 
-         if (state == StateFlag.State.DENY)
-            return false;
-         else
-            return true;
+
+         return (state == StateFlag.State.DENY);
       }
       else
       {
@@ -102,9 +108,14 @@ public class Ollivanders2WorldGuard
     * @param location the locationto check
     * @return the set of regions for this location or null if there is no set.
     */
-   public ApplicableRegionSet getWGRegionSet (Location location)
+   @Nullable
+   public ApplicableRegionSet getWGRegionSet (@NotNull Location location)
    {
       if (worldGuard == null)
+         return null;
+
+      World world = location.getWorld();
+      if (world == null)
          return null;
 
       RegionContainer regionContainer = WorldGuard.getInstance().getPlatform().getRegionContainer();
@@ -126,11 +137,10 @@ public class Ollivanders2WorldGuard
          return null;
       }
 
-      com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(location.getWorld());
+      com.sk89q.worldedit.world.World weWorld = BukkitAdapter.adapt(world);
       com.sk89q.worldedit.util.Location weLocation = new com.sk89q.worldedit.util.Location(weWorld, location.getX(), location.getY(), location.getZ());
-      ApplicableRegionSet regionSet = query.getApplicableRegions(weLocation);
 
-      return regionSet;
+      return query.getApplicableRegions(weLocation);
    }
 
    /**
@@ -142,7 +152,7 @@ public class Ollivanders2WorldGuard
     * @param location the location to check (since it may not be where the player is)
     * @return true if the player has this permission at this location, false otherwise
     */
-   public boolean checkWGFlag (Player player, Location location, StateFlag flag)
+   public boolean checkWGFlag (@NotNull Player player, @NotNull Location location, @NotNull StateFlag flag)
    {
       return wgTestState(player, location, flag);
    }
@@ -158,7 +168,7 @@ public class Ollivanders2WorldGuard
     * @param location the location to check (since it may not be where the player is)
     * @return true if the player has permissions to build at their location, false otherwise
     */
-   public boolean checkWGBuild (Player player, Location location)
+   public boolean checkWGBuild (@NotNull Player player, @NotNull Location location)
    {
       if (worldGuard == null)
          return true;

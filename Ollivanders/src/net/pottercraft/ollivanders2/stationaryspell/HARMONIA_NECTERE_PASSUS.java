@@ -59,7 +59,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
    public void checkEffect ()
    {
       HARMONIA_NECTERE_PASSUS twinHarm = null;
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof HARMONIA_NECTERE_PASSUS
                && stat.location.getBlock().equals(twin.getBlock()))

@@ -136,7 +136,7 @@ public class OllivandersListener implements Listener
     * @param event the player move event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onPlayerMove (PlayerMoveEvent event)
+   public void onPlayerMove (@NotNull PlayerMoveEvent event)
    {
       Player player = event.getPlayer();
 
@@ -157,7 +157,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the player move event
     */
-   private void protegoTotalum (PlayerMoveEvent event)
+   private void protegoTotalum (@NotNull PlayerMoveEvent event)
    {
       if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
       {
@@ -199,7 +199,7 @@ public class OllivandersListener implements Listener
     * @param event the player chat event
     */
    @EventHandler(priority = EventPriority.LOW)
-   public void onFlooChat (AsyncPlayerChatEvent event)
+   public void onFlooChat (@NotNull AsyncPlayerChatEvent event)
    {
       Player player = event.getPlayer();
       String chat = event.getMessage();
@@ -249,7 +249,7 @@ public class OllivandersListener implements Listener
     * @param event the player chat event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onPlayerChat (AsyncPlayerChatEvent event)
+   public void onPlayerChat (@NotNull AsyncPlayerChatEvent event)
    {
       Player sender = event.getPlayer();
       String message = event.getMessage();
@@ -332,7 +332,7 @@ public class OllivandersListener implements Listener
     * @return a spell type if found, null otherwise
     */
    @Nullable
-   private O2SpellType parseSpell(String[] words)
+   private O2SpellType parseSpell(@NotNull String[] words)
    {
       StringBuilder spellName = new StringBuilder();
       O2SpellType spellType = null;
@@ -644,7 +644,7 @@ public class OllivandersListener implements Listener
     * @param event Chat event of type AsyncPlayerChatEvent
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void owlPost (AsyncPlayerChatEvent event)
+   public void owlPost (@NotNull AsyncPlayerChatEvent event)
    {
       Player sender = event.getPlayer();
       Server server = sender.getServer();
@@ -833,7 +833,7 @@ public class OllivandersListener implements Listener
     * @param event the player interact event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerInteract (PlayerInteractEvent event)
+   public void onPlayerInteract (@NotNull PlayerInteractEvent event)
    {
       Player player = event.getPlayer();
       Action action = event.getAction();
@@ -877,7 +877,7 @@ public class OllivandersListener implements Listener
     *
     * @param event the interact event
     */
-   private void primaryHandInteractEvents(PlayerInteractEvent event)
+   private void primaryHandInteractEvents (@NotNull PlayerInteractEvent event)
    {
       Player player = event.getPlayer();
       Action action = event.getAction();
@@ -963,7 +963,7 @@ public class OllivandersListener implements Listener
     * @param player the player rotating spells
     * @param action the player action
     */
-   private void rotateNonVerbalSpell(@NotNull Player player, @NotNull Action action)
+   private void rotateNonVerbalSpell (@NotNull Player player, @NotNull Action action)
    {
       if (!Ollivanders2.enableNonVerbalSpellCasting)
          return;
@@ -1005,7 +1005,7 @@ public class OllivandersListener implements Listener
     * @param event the player join event
     */
    @EventHandler(priority = EventPriority.NORMAL)
-   public void onPlayerJoin (PlayerJoinEvent event)
+   public void onPlayerJoin (@NotNull PlayerJoinEvent event)
    {
       Player player = event.getPlayer();
 
@@ -1060,7 +1060,7 @@ public class OllivandersListener implements Listener
     * @param event the quit event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onPlayerQuit (PlayerQuitEvent event)
+   public void onPlayerQuit (@NotNull PlayerQuitEvent event)
    {
       playerQuit(event.getPlayer());
    }
@@ -1071,7 +1071,7 @@ public class OllivandersListener implements Listener
     * @param event the kick event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onPlayerKick (PlayerKickEvent event)
+   public void onPlayerKick (@NotNull PlayerKickEvent event)
    {
       playerQuit(event.getPlayer());
    }
@@ -1081,7 +1081,7 @@ public class OllivandersListener implements Listener
     *
     * @param player the player
     */
-   private void playerQuit (Player player)
+   private void playerQuit (@NotNull Player player)
    {
       O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
       if (o2p == null)
@@ -1099,7 +1099,7 @@ public class OllivandersListener implements Listener
     * @param event the player death event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onPlayerDeath (PlayerDeathEvent event)
+   public void onPlayerDeath (@NotNull PlayerDeathEvent event)
    {
       if (Ollivanders2.enableDeathExpLoss)
       {
@@ -1121,7 +1121,7 @@ public class OllivandersListener implements Listener
     * @param event the entity damage event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onEntityDamage (EntityDamageByEntityEvent event)
+   public void onEntityDamage (@NotNull EntityDamageByEntityEvent event)
    {
       if (event.getEntity() instanceof Player)
       {
@@ -1156,7 +1156,7 @@ public class OllivandersListener implements Listener
     * @param event the player damage event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onPlayerDamage (EntityDamageEvent event)
+   public void onPlayerDamage (@NotNull EntityDamageEvent event)
    {
       if (checkSpongify(event))
       {
@@ -1228,7 +1228,7 @@ public class OllivandersListener implements Listener
     * @param event the block place event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusBlockPlaceEvent(BlockPlaceEvent event)
+   public void onColloportusBlockPlaceEvent (@NotNull BlockPlaceEvent event)
    {
       if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
@@ -1252,7 +1252,7 @@ public class OllivandersListener implements Listener
     * @param event the block break event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusBlockBreakEvent(BlockBreakEvent event)
+   public void onColloportusBlockBreakEvent (@NotNull BlockBreakEvent event)
    {
       if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
@@ -1276,7 +1276,7 @@ public class OllivandersListener implements Listener
     * @param event the block physics event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusBlockPhysicsEvent(BlockPhysicsEvent event)
+   public void onColloportusBlockPhysicsEvent (@NotNull BlockPhysicsEvent event)
    {
       if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
@@ -1290,7 +1290,7 @@ public class OllivandersListener implements Listener
     * @param event the player interact event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusPlayerInteract(PlayerInteractEvent event)
+   public void onColloportusPlayerInteract (@NotNull PlayerInteractEvent event)
    {
       if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
       {
@@ -1320,7 +1320,7 @@ public class OllivandersListener implements Listener
     * @param event the block piston extend event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusPistonExtend(BlockPistonExtendEvent event)
+   public void onColloportusPistonExtend (@NotNull BlockPistonExtendEvent event)
    {
       ArrayList<COLLOPORTUS> colloportusSpells = new ArrayList<>();
       for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
@@ -1353,7 +1353,7 @@ public class OllivandersListener implements Listener
     * @param event the block Piston Retract Event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusPistonRetract(BlockPistonRetractEvent event)
+   public void onColloportusPistonRetract (@NotNull BlockPistonRetractEvent event)
    {
       if (event.isSticky())
       {
@@ -1370,7 +1370,7 @@ public class OllivandersListener implements Listener
     * @param event the entity Change Block Event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusEntityChangeBlock(EntityChangeBlockEvent event)
+   public void onColloportusEntityChangeBlock (@NotNull EntityChangeBlockEvent event)
    {
       Location loc = event.getBlock().getLocation();
       if (loc.getWorld() == null)
@@ -1393,7 +1393,7 @@ public class OllivandersListener implements Listener
     * @param event the block break event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onTemporaryBlockBreak (BlockBreakEvent event)
+   public void onTemporaryBlockBreak (@NotNull BlockBreakEvent event)
    {
       Block block = event.getBlock();
 
@@ -1409,7 +1409,7 @@ public class OllivandersListener implements Listener
     * @param event the entity explode event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onExplosion(EntityExplodeEvent event)
+   public void onExplosion (@NotNull EntityExplodeEvent event)
    {
       List<Block> blockListCopy = new ArrayList<>(event.blockList());
 
@@ -1433,7 +1433,7 @@ public class OllivandersListener implements Listener
     *
     * @param player player holding a wand.
     */
-   private void allyWand(@NotNull Player player)
+   private void allyWand (@NotNull Player player)
    {
       ItemStack wand = player.getInventory().getItemInMainHand();
       ItemMeta wandMeta = wand.getItemMeta();
@@ -1457,7 +1457,7 @@ public class OllivandersListener implements Listener
     * @param event the entity explode event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void transfiguredEntityExplodeCancel(EntityExplodeEvent event)
+   public void transfiguredEntityExplodeCancel (@NotNull EntityExplodeEvent event)
    {
       for (O2Spell proj : p.getProjectiles())
       {
@@ -1478,7 +1478,7 @@ public class OllivandersListener implements Listener
     * @param event the player Pickup Item Event
     */
    @EventHandler(priority = EventPriority.NORMAL)
-   public void portkeyPickUp (EntityPickupItemEvent event)
+   public void portkeyPickUp (@NotNull EntityPickupItemEvent event)
    {
       Entity entity = event.getEntity();
       if (entity instanceof Player)
@@ -1533,7 +1533,7 @@ public class OllivandersListener implements Listener
     * @param event the item pickup event
     */
    @EventHandler(priority = EventPriority.NORMAL)
-   public void cursedItemPickUp(EntityPickupItemEvent event)
+   public void cursedItemPickUp (@NotNull EntityPickupItemEvent event)
    {
       Entity entity = event.getEntity();
       if (!(entity instanceof Player))
@@ -1571,7 +1571,7 @@ public class OllivandersListener implements Listener
     * @param event the item drop event
     */
    @EventHandler(priority = EventPriority.NORMAL)
-   public void cursedItemPickDrop(PlayerDropItemEvent event)
+   public void cursedItemPickDrop (@NotNull PlayerDropItemEvent event)
    {
       Player player = event.getPlayer();
       Item item = event.getItemDrop();
@@ -1619,7 +1619,7 @@ public class OllivandersListener implements Listener
     * @param event the Entity Target Event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void cloakPlayer(EntityTargetEvent event)
+   public void cloakPlayer (@NotNull EntityTargetEvent event)
    {
       Entity target = event.getTarget();
       if (target instanceof Player)
@@ -1653,7 +1653,7 @@ public class OllivandersListener implements Listener
     * @param event the Entity Target Event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void inferiTarget (EntityTargetEvent event)
+   public void inferiTarget (@NotNull EntityTargetEvent event)
    {
       Entity target = event.getTarget();
       Entity entity = event.getEntity();
@@ -1676,7 +1676,7 @@ public class OllivandersListener implements Listener
     * @param event the entity death event
     */
    @EventHandler(priority = EventPriority.NORMAL)
-   public void witchWandDrop (EntityDeathEvent event)
+   public void witchWandDrop (@NotNull EntityDeathEvent event)
    {
       if (event.getEntityType() == EntityType.WITCH && Ollivanders2.enableWitchDrop)
       {
@@ -1684,6 +1684,11 @@ public class OllivandersListener implements Listener
          int coreType = Math.abs(Ollivanders2Common.random.nextInt() % 4);
 
          ItemStack wand = Ollivanders2API.getItems(p).getItemByType(O2ItemType.WAND, 1);
+         if (wand == null)
+         {
+            p.getLogger().warning("OllivandersListener.witchWandDrop: wand is null");
+            return;
+         }
 
          List<String> lore = new ArrayList<>();
          lore.add(O2WandWoodType.getAllWoodsByName().get(wandType) + " and " + O2WandCoreType.getAllCoresByName().get(coreType));
@@ -1704,7 +1709,7 @@ public class OllivandersListener implements Listener
     * @param event the player item consume event
     */
    @EventHandler(priority = EventPriority.NORMAL)
-   public void onPlayerDrink (PlayerItemConsumeEvent event)
+   public void onPlayerDrink (@NotNull PlayerItemConsumeEvent event)
    {
       ItemStack item = event.getItem();
       if (item.getType() == Material.POTION)
@@ -1745,7 +1750,7 @@ public class OllivandersListener implements Listener
     * @param event the player interact event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void broomClick (PlayerInteractEvent event)
+   public void broomClick (@NotNull PlayerInteractEvent event)
    {
       Player player = event.getPlayer();
 
@@ -1771,7 +1776,7 @@ public class OllivandersListener implements Listener
     * @param event the player interact event
     */
    @EventHandler(priority = EventPriority.LOWEST)
-   public void onBookRead (PlayerInteractEvent event)
+   public void onBookRead (@NotNull PlayerInteractEvent event)
    {
       // only run this if bookLearning is enabled
       if (!Ollivanders2.bookLearning)
@@ -1794,6 +1799,8 @@ public class OllivandersListener implements Listener
                return;
 
             List<String> bookLore = heldItem.getItemMeta().getLore();
+            if (bookLore == null)
+               return;
 
             O2Books.readLore(bookLore, player, p);
          }
@@ -1806,7 +1813,7 @@ public class OllivandersListener implements Listener
     * @param event the player item held event
     */
    @EventHandler (priority = EventPriority.LOWEST)
-   public void onSpellJournalHold (PlayerItemHeldEvent event)
+   public void onSpellJournalHold (@NotNull PlayerItemHeldEvent event)
    {
       // only run this if spellJournal is enabled
       if (!Ollivanders2.useSpellJournal)
@@ -1842,7 +1849,7 @@ public class OllivandersListener implements Listener
     * @param event the player toggle sneak event
     */
    @EventHandler (priority = EventPriority.NORMAL)
-   public void onPotionBrewing (PlayerToggleSneakEvent event)
+   public void onPotionBrewing (@NotNull PlayerToggleSneakEvent event)
    {
       Player player = event.getPlayer();
 
@@ -1933,7 +1940,7 @@ public class OllivandersListener implements Listener
     * @param event the potion splash event
     */
    @EventHandler (priority = EventPriority.HIGH)
-   public void onSplashPotion(PotionSplashEvent event)
+   public void onSplashPotion (@NotNull PotionSplashEvent event)
    {
       ThrownPotion thrown = event.getEntity();
       ItemMeta meta = thrown.getItem().getItemMeta();
@@ -1963,7 +1970,7 @@ public class OllivandersListener implements Listener
     * @param event the player interact event
     */
    @EventHandler (priority = EventPriority.HIGHEST)
-   public void onAffectedInteract (PlayerInteractEvent event)
+   public void onAffectedInteract (@NotNull PlayerInteractEvent event)
    {
       Player player = event.getPlayer();
 
@@ -1981,7 +1988,7 @@ public class OllivandersListener implements Listener
     * @param event the player bed event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerSleep(PlayerBedEnterEvent event)
+   public void onPlayerSleep (@NotNull PlayerBedEnterEvent event)
    {
       Player player = event.getPlayer();
 
@@ -1998,7 +2005,7 @@ public class OllivandersListener implements Listener
     * @param event the flight toggle event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void playerFlightSuspension(PlayerToggleFlightEvent event)
+   public void playerFlightSuspension (@NotNull PlayerToggleFlightEvent event)
    {
       Player player = event.getPlayer();
 
@@ -2016,7 +2023,7 @@ public class OllivandersListener implements Listener
     * @param event the player toggle sneak event
     */
    @EventHandler (priority = EventPriority.HIGH)
-   public void playerSneakSuspension (PlayerToggleSneakEvent event)
+   public void playerSneakSuspension (@NotNull PlayerToggleSneakEvent event)
    {
       Player player = event.getPlayer();
 
@@ -2033,7 +2040,7 @@ public class OllivandersListener implements Listener
     * @param event the player toggle sprint event
     */
    @EventHandler (priority = EventPriority.HIGH)
-   public void playerSprintSuspension (PlayerToggleSprintEvent event)
+   public void playerSprintSuspension (@NotNull PlayerToggleSprintEvent event)
    {
       Player player = event.getPlayer();
 
@@ -2050,7 +2057,7 @@ public class OllivandersListener implements Listener
     * @param event the player velocity event
     */
    @EventHandler (priority = EventPriority.HIGH)
-   public void playerVelocitySuspension (PlayerVelocityEvent event)
+   public void playerVelocitySuspension (@NotNull PlayerVelocityEvent event)
    {
       Player player = event.getPlayer();
 
@@ -2074,7 +2081,7 @@ public class OllivandersListener implements Listener
     * @param event entity item pick up event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void animagusItemPickUp (EntityPickupItemEvent event)
+   public void animagusItemPickUp (@NotNull EntityPickupItemEvent event)
    {
       Entity entity = event.getEntity();
       if (entity instanceof Player)
@@ -2094,7 +2101,7 @@ public class OllivandersListener implements Listener
     * @param event item hold event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void animagusItemHeld (PlayerItemHeldEvent event)
+   public void animagusItemHeld (@NotNull PlayerItemHeldEvent event)
    {
       Player player = event.getPlayer();
 
@@ -2110,7 +2117,7 @@ public class OllivandersListener implements Listener
     * @param event item consume event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void animagusItemConsume (PlayerItemConsumeEvent event)
+   public void animagusItemConsume (@NotNull PlayerItemConsumeEvent event)
    {
       Player player = event.getPlayer();
 
@@ -2126,7 +2133,7 @@ public class OllivandersListener implements Listener
     * @param event drop event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void animagusItemDropEvent (PlayerDropItemEvent event)
+   public void animagusItemDropEvent (@NotNull PlayerDropItemEvent event)
    {
       Player player = event.getPlayer();
 
@@ -2142,7 +2149,7 @@ public class OllivandersListener implements Listener
     * @param event drop event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void animagusInteractEvent (PlayerInteractEvent event)
+   public void animagusInteractEvent (@NotNull PlayerInteractEvent event)
    {
       Player player = event.getPlayer();
 
@@ -2163,7 +2170,7 @@ public class OllivandersListener implements Listener
     * @param words the additional args to the spell
     * @return true if spell was successfully created, false otherwise
     */
-   private boolean divine (O2SpellType spellType, Player sender, String[] words)
+   private boolean divine (@NotNull O2SpellType spellType, @NotNull Player sender, @NotNull String[] words)
    {
       if (Ollivanders2.debug)
       {
