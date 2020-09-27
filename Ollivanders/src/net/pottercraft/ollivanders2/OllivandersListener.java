@@ -310,7 +310,7 @@ public class OllivandersListener implements Listener
          //
          // Handle removing recipients from chat
          //
-         ArrayList<StationarySpellObj> muffliatos = Ollivanders2API.getStationarySpells(p).getActiveStationarySpellsAtLocationByType(sender.getLocation(), O2StationarySpellType.MUFFLIATO);
+         List<StationarySpellObj> muffliatos = Ollivanders2API.getStationarySpells(p).getActiveStationarySpellsAtLocationByType(sender.getLocation(), O2StationarySpellType.MUFFLIATO);
          updateRecipients(sender, spellType, event.getRecipients(), muffliatos);
 
          //
@@ -376,7 +376,7 @@ public class OllivandersListener implements Listener
     * @param recipients the recipients for this chat
     * @param muffliatos all muffliato stationary spells
     */
-   private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients, @Nullable ArrayList<StationarySpellObj> muffliatos)
+   private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients, List<StationarySpellObj> muffliatos)
    {
       // remove all recipients if this is not a "spoken" spell
       if (spellType == O2SpellType.APPARATE || Divination.divinationSpells.contains(spellType))
@@ -1690,6 +1690,7 @@ public class OllivandersListener implements Listener
             return;
          }
 
+         //TODO make this use wand item
          List<String> lore = new ArrayList<>();
          lore.add(O2WandWoodType.getAllWoodsByName().get(wandType) + " and " + O2WandCoreType.getAllCoresByName().get(coreType));
 
@@ -1698,6 +1699,7 @@ public class OllivandersListener implements Listener
             return;
 
          meta.setLore(lore);
+         meta.setDisplayName("Wand");
          wand.setItemMeta(meta);
          event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
       }
