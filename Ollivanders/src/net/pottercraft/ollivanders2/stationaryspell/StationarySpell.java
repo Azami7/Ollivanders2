@@ -1,5 +1,7 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Map;
 
 /**
@@ -19,6 +21,7 @@ public interface StationarySpell
     *
     * @return a map of the serialized data
     */
+   @NotNull
    Map<String, String> serializeSpellData ();
 
    /**
@@ -26,5 +29,5 @@ public interface StationarySpell
     *
     * @param spellData the serialized spell data
     */
-   void deserializeSpellData (Map<String, String> spellData);
+   void deserializeSpellData(@NotNull Map<String, String> spellData);
 }

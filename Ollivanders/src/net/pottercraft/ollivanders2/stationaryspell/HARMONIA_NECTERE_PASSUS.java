@@ -1,9 +1,6 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
-import java.util.Map;
-import java.util.UUID;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -12,6 +9,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Checks for entities going into a vanishing cabinet
@@ -30,7 +28,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     *
     * @param plugin a callback to the MC plugin
     */
-   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin)
+   public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -40,16 +38,15 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
-    * @param pid the player who cast the spell
+    * @param plugin   a callback to the MC plugin
+    * @param pid      the player who cast the spell
     * @param location the center location of the spell
-    * @param type the type of this spell
-    * @param radius the radius for this spell
+    * @param type     the type of this spell
+    * @param radius   the radius for this spell
     * @param duration the duration of the spell
-    * @param twin the location of this cabinet's twin
+    * @param twin     the location of this cabinet's twin
     */
-   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
-                                   Integer duration, Location twin)
+   public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration, @NotNull Location twin)
    {
 
       super(plugin, pid, location, type, radius, duration);
@@ -100,17 +97,17 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     * @param feet - The block at the player's feet if the player is standing in the cabinet
     * @return - True if the cabinet is whole, false if not
     */
-   private boolean cabinetCheck (Block feet)
+   private boolean cabinetCheck(@NotNull Block feet)
    {
-      if (feet.getType() != Material.AIR && !common.wallSigns.contains(feet.getType()))
+      if (feet.getType() != Material.AIR && !Ollivanders2Common.wallSigns.contains(feet.getType()))
       {
          return false;
       }
 
       if (feet.getRelative(1, 0, 0).getType() == Material.AIR ||
-            feet.getRelative(-1, 0, 0).getType() == Material.AIR ||
-            feet.getRelative(0, 0, 1).getType() == Material.AIR ||
-            feet.getRelative(0, 0, -1).getType() == Material.AIR ||
+              feet.getRelative(-1, 0, 0).getType() == Material.AIR ||
+              feet.getRelative(0, 0, 1).getType() == Material.AIR ||
+              feet.getRelative(0, 0, -1).getType() == Material.AIR ||
             feet.getRelative(1, 1, 0).getType() == Material.AIR ||
             feet.getRelative(-1, 1, 0).getType() == Material.AIR ||
             feet.getRelative(0, 1, 1).getType() == Material.AIR ||
@@ -130,7 +127,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     *
     * @param entity the entity being transported
     */
-   private void teleport (Entity entity)
+   private void teleport(@NotNull Entity entity)
    {
       location.setPitch(entity.getLocation().getPitch());
       location.setYaw(entity.getLocation().getYaw());
@@ -144,11 +141,14 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     * @return a map of the serialized data
     */
    @Override
-   public Map<String, String> serializeSpellData ()
+   public Map<String, String> serializeSpellData()
    {
-      Ollivanders2Common o2c = new Ollivanders2Common(p);
+      Map<String, String> serializedLoc = common.serializeLocation(location, twinLabel);
 
-      return o2c.serializeLocation(location, twinLabel);
+      if (serializedLoc == null)
+         serializedLoc = new HashMap<>();
+
+      return serializedLoc;
    }
 
    /**
@@ -157,11 +157,9 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     * @param spellData a map of the saved spell data
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData)
+   public void deserializeSpellData(@NotNull Map<String, String> spellData)
    {
-      Ollivanders2Common o2c = new Ollivanders2Common(p);
-
-      Location loc = o2c.deserializeLocation(spellData, twinLabel);
+      Location loc = common.deserializeLocation(spellData, twinLabel);
 
       if (loc != null)
          twin = loc;
