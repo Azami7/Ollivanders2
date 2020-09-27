@@ -138,30 +138,6 @@ public class O2StationarySpells
    }
 
    /**
-    * Get all active stationary spells of a specific type at the location
-    *
-    * @param location  the location
-    * @param spellType the spell type
-    * @return a list of spells of that type found at the location
-    */
-   @NotNull
-   public List<StationarySpellObj> getActiveStationarySpellsAtLocationByType(@NotNull Location location, @NotNull O2StationarySpellType spellType)
-   {
-      List<StationarySpellObj> spells = getStationarySpellsAtLocation(location);
-      List<StationarySpellObj> found = new ArrayList<>();
-
-      for (StationarySpellObj spell : spells)
-      {
-         if (spell.getSpellType() == spellType && spell.active)
-         {
-            found.add(spell);
-         }
-      }
-
-      return found;
-   }
-
-   /**
     * Check for a specific type of stationary spell at a location
     *
     * @param location            the location to check
