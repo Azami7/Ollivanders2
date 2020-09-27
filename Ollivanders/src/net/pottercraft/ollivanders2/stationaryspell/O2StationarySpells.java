@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -121,10 +122,10 @@ public class O2StationarySpells
     * @return a list of spells of that type found at the location
     */
    @NotNull
-   public ArrayList<StationarySpellObj> getActiveStationarySpellsAtLocationByType(@NotNull Location location, @NotNull O2StationarySpellType spellType)
+   public List<StationarySpellObj> getActiveStationarySpellsAtLocationByType(@NotNull Location location, @NotNull O2StationarySpellType spellType)
    {
       List<StationarySpellObj> spells = getStationarySpellsAtLocation(location);
-      ArrayList<StationarySpellObj> found = new ArrayList<>();
+      List<StationarySpellObj> found = new ArrayList<>();
 
       for (StationarySpellObj spell : spells)
       {
