@@ -5,6 +5,7 @@ import java.util.List;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -59,7 +60,7 @@ public abstract class Pyrotechnia extends O2Spell
    @Override
    public void checkEffect ()
    {
-      if (!checkSpellAllowed())
+      if (!isSpellAllowed())
       {
          kill();
          return;
@@ -67,7 +68,15 @@ public abstract class Pyrotechnia extends O2Spell
 
       if (fireworkCount < maxFireworks)
       {
-         Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+         World world = location.getWorld();
+         if (world == null)
+         {
+            p.getLogger().warning("Pyrotechnia.checkEffect: world is null");
+            kill();
+            return;
+         }
+
+         Firework firework = (Firework) (world.spawnEntity(location, EntityType.FIREWORK));
 
          FireworkMeta meta = firework.getFireworkMeta();
          // make firework fly for 1 seconds

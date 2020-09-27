@@ -1,6 +1,8 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents allowable spells.
@@ -8,7 +10,6 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
  * @author Azami7
  * @version Ollivanders2
  */
-
 public enum O2SpellType
 {
    ACCIO(net.pottercraft.ollivanders2.spell.ACCIO.class),
@@ -172,14 +173,14 @@ public enum O2SpellType
    //end
    ;
 
-   Class<?> className;
+   final Class<?> className;
 
    /**
     * Constructor
     *
     * @param className the name of the spell class associated with this spell type
     */
-   O2SpellType(Class<?> className)
+   O2SpellType(@NotNull Class<?> className)
    {
       this.className = className;
    }
@@ -189,6 +190,7 @@ public enum O2SpellType
     *
     * @return the classname for this spell type
     */
+   @NotNull
    public Class<?> getClassName()
    {
       return className;
@@ -199,6 +201,7 @@ public enum O2SpellType
     *
     * @return the spell name for this spell type.
     */
+   @NotNull
    public String getSpellName ()
    {
       String spellTypeString = this.toString().toLowerCase();
@@ -212,7 +215,8 @@ public enum O2SpellType
     * @param spellString the name of the spell type, ex. "AQUA_ERUCTO"
     * @return the spell type
     */
-   public static O2SpellType spellTypeFromString (String spellString)
+   @Nullable
+   public static O2SpellType spellTypeFromString(@NotNull String spellString)
    {
       O2SpellType spellType = null;
 
@@ -220,7 +224,10 @@ public enum O2SpellType
       {
          spellType = O2SpellType.valueOf(spellString);
       }
-      catch (Exception e) { }
+      catch (Exception e)
+      {
+         // this is expected when spellString is not a valid spell
+      }
 
       return spellType;
    }

@@ -1,8 +1,9 @@
 package net.pottercraft.ollivanders2.house;
 
-import java.util.Map;
-import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
@@ -165,7 +166,7 @@ public class O2Houses
     * @return all house names.
     */
    @NotNull
-   public ArrayList<String> getAllHouseNames ()
+   public List<String> getAllHouseNames()
    {
       ArrayList<String> houseNames = new ArrayList<>();
 
@@ -183,19 +184,22 @@ public class O2Houses
    private void loadHouses()
    {
       GsonDAO gsonLayer = new GsonDAO(p);
-      Map <UUID, O2HouseType> houses = gsonLayer.readHouses();
+      Map<UUID, O2HouseType> houses = gsonLayer.readHouses();
       if (houses != null)
       {
          O2HouseMap = houses;
       }
 
       Map<O2HouseType, Integer> housePoints = gsonLayer.readHousePoints();
-      for (Entry<O2HouseType, Integer> e : housePoints.entrySet())
+      if (housePoints != null)
       {
-         O2HouseType houseType = e.getKey();
+         for (Entry<O2HouseType, Integer> e : housePoints.entrySet())
+         {
+            O2HouseType houseType = e.getKey();
 
-         houseType.setScore(e.getValue());
-         p.getLogger().info(e.getKey().getName() + " : " + e.getValue());
+            houseType.setScore(e.getValue());
+            p.getLogger().info(e.getKey().getName() + " : " + e.getValue());
+         }
       }
    }
 
@@ -340,7 +344,7 @@ public class O2Houses
     * @return the names of all members of the specified house.
     */
    @NotNull
-   public ArrayList<String> getHouseMembers(@NotNull O2HouseType houseType)
+   public List<String> getHouseMembers(@NotNull O2HouseType houseType)
    {
       ArrayList<String> houseMembers = new ArrayList<>();
       Server server = p.getServer();

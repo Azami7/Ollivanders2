@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
@@ -62,7 +63,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
       for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof HARMONIA_NECTERE_PASSUS
-               && stat.location.getBlock().equals(twin.getBlock()))
+                 && stat.location.getBlock().equals(twin.getBlock()))
          {
             twinHarm = (HARMONIA_NECTERE_PASSUS) stat;
          }
@@ -72,7 +73,16 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
          kill();
          return;
       }
-      for (Entity entity : location.getWorld().getEntities())
+
+      World world = location.getWorld();
+      if (world == null)
+      {
+         p.getLogger().warning("HARMONIA_NECTERE_PASSUS.checkEffect: world is null");
+         kill();
+         return;
+      }
+
+      for (Entity entity : world.getEntities())
       {
          if (teleported.contains(entity.getUniqueId()))
          {
@@ -104,22 +114,11 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
          return false;
       }
 
-      if (feet.getRelative(1, 0, 0).getType() == Material.AIR ||
-              feet.getRelative(-1, 0, 0).getType() == Material.AIR ||
-              feet.getRelative(0, 0, 1).getType() == Material.AIR ||
-              feet.getRelative(0, 0, -1).getType() == Material.AIR ||
-            feet.getRelative(1, 1, 0).getType() == Material.AIR ||
-            feet.getRelative(-1, 1, 0).getType() == Material.AIR ||
-            feet.getRelative(0, 1, 1).getType() == Material.AIR ||
-            feet.getRelative(0, 1, -1).getType() == Material.AIR ||
-            feet.getRelative(0, 2, 0).getType() == Material.AIR)
-      {
-         return false;
-      }
-      else
-      {
-         return true;
-      }
+      return (feet.getRelative(1, 0, 0).getType() == Material.AIR || feet.getRelative(-1, 0, 0).getType() == Material.AIR ||
+              feet.getRelative(0, 0, 1).getType() == Material.AIR || feet.getRelative(0, 0, -1).getType() == Material.AIR ||
+              feet.getRelative(1, 1, 0).getType() == Material.AIR || feet.getRelative(-1, 1, 0).getType() == Material.AIR ||
+              feet.getRelative(0, 1, 1).getType() == Material.AIR || feet.getRelative(0, 1, -1).getType() == Material.AIR ||
+              feet.getRelative(0, 2, 0).getType() == Material.AIR);
    }
 
    /**
@@ -141,6 +140,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
     * @return a map of the serialized data
     */
    @Override
+   @NotNull
    public Map<String, String> serializeSpellData()
    {
       Map<String, String> serializedLoc = common.serializeLocation(location, twinLabel);

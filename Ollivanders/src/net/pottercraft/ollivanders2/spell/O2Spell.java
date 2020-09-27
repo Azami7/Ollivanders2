@@ -16,6 +16,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
@@ -26,6 +27,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import com.sk89q.worldguard.protection.flags.StateFlag;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A cast spell.
@@ -45,7 +48,7 @@ public abstract class O2Spell implements Teachable
    /**
     * The most number of words a spell name can be.
     */
-   public static int max_spell_words = 3;
+   public static final int max_spell_words = 3;
 
    /**
     * The player who cast this spell.
@@ -131,7 +134,7 @@ public abstract class O2Spell implements Teachable
     * The cooldown for this spell. Spells take mental and physical energy for the caster and cannot be cast in rapid
     * succession.
     */
-   static final Long DEFAULT_COOLDOWN = new Long(1000);
+   static final long DEFAULT_COOLDOWN = 1000;
 
    /**
     * The branch of magic this spell is
@@ -141,7 +144,7 @@ public abstract class O2Spell implements Teachable
    /**
     * Flavor text for this spell in spellbooks, etc.  Optional.
     */
-   protected ArrayList<String> flavorText;
+   protected List<String> flavorText;
 
    /**
     * The description text for this spell in spell books.  Required or spell cannot be written in a book.
@@ -167,16 +170,17 @@ public abstract class O2Spell implements Teachable
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
     * text.
     */
-   public O2Spell () { }
+   public O2Spell() {
+   }
 
    /**
     * Constructor
     *
-    * @param plugin a callback to the O2 plugin
-    * @param player the player casting the spell
+    * @param plugin    a callback to the O2 plugin
+    * @param player    the player casting the spell
     * @param rightWand wand check for the player
     */
-   public O2Spell (Ollivanders2 plugin, Player player, Double rightWand)
+   public O2Spell(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       location = player.getEyeLocation();
       this.player = player;
@@ -188,12 +192,10 @@ public abstract class O2Spell implements Teachable
       this.rightWand = rightWand;
 
       // block types that cannot be affected by any spell
-      for (Material material : Ollivanders2Common.unbreakableMaterials)
-      {
-         materialBlackList.add(material);
-      }
+      materialBlackList.addAll(Ollivanders2Common.unbreakableMaterials);
 
-      // block types that all spell projectiles pass through
+
+      // block types that this spell's projectiles pass through
       projectilePassThrough.add(Material.AIR);
       projectilePassThrough.add(Material.CAVE_AIR);
       projectilePassThrough.add(Material.WATER);
@@ -217,17 +219,17 @@ public abstract class O2Spell implements Teachable
     * The spell-specific initialization based on usage, etc.. Must be overridden by each spell class that
     * has any initializations.
     */
-   void doInitSpell ()
+   void doInitSpell()
    {
    }
 
    /**
-    * Game tick update on this spell - must be overriden in child classes or the spell exits immediately.
+    * Game tick update on this spell - must be overridden in child classes or the spell exits immediately.
     */
    public void checkEffect ()
    {
       // check whether this spell can exist up until it hits a target
-      if (!hitTarget && !checkSpellAllowed())
+      if (!hitTarget && !isSpellAllowed())
       {
          kill();
          return;
@@ -256,7 +258,7 @@ public abstract class O2Spell implements Teachable
    /**
     * Moves the projectile forward, creating a particle effect
     */
-   public void move ()
+   public void move()
    {
       // if we've already targeted a block, do not move further
       // if this is somehow called when the spell is set to killed, do nothing
@@ -266,7 +268,15 @@ public abstract class O2Spell implements Teachable
       }
 
       location.add(vector);
-      location.getWorld().playEffect(location, moveEffect, moveEffectData);
+      World world = location.getWorld();
+      if (world == null)
+      {
+         p.getLogger().warning("O2Spell.move: world null");
+         kill();
+         return;
+      }
+
+      world.playEffect(location, moveEffect, moveEffectData);
 
       // if current block type is not a pass-through type, we have hit a target
       Material targetBlockType = location.getBlock().getType();
@@ -300,7 +310,7 @@ public abstract class O2Spell implements Teachable
       }
 
       // determine if this spell is allowed in this location per Ollivanders2 config and WorldGuard
-      if (!checkSpellAllowed())
+      if (!isSpellAllowed())
       {
          kill();
       }
@@ -322,7 +332,7 @@ public abstract class O2Spell implements Teachable
     *
     * @return true if the spell can exist here, false otherwise
     */
-   boolean checkSpellAllowed ()
+   boolean isSpellAllowed()
    {
       boolean isAllowed = true;
 
@@ -387,6 +397,7 @@ public abstract class O2Spell implements Teachable
     * @param radius - radius within which to get entities
     * @return List of entities within one block of projectile
     */
+   @NotNull
    List<Entity> getCloseEntities (double radius)
    {
       if (radius <= 0)
@@ -401,7 +412,7 @@ public abstract class O2Spell implements Teachable
          if (e instanceof LivingEntity)
          {
             if (((LivingEntity) e).getEyeLocation().distance(location) < radius || ((e instanceof EnderDragon
-                  || e instanceof Giant) && ((LivingEntity) e).getEyeLocation().distance(location) < (radius + 5)))
+                    || e instanceof Giant) && ((LivingEntity) e).getEyeLocation().distance(location) < (radius + 5)))
             {
                if (!e.equals(player))
                {
@@ -432,6 +443,7 @@ public abstract class O2Spell implements Teachable
     * @param radius - radius within which to get entities
     * @return List of item entities within one block of projectile
     */
+   @NotNull
    public List<Item> getItems (double radius)
    {
       List<Entity> entities = getCloseEntities(radius);
@@ -452,6 +464,7 @@ public abstract class O2Spell implements Teachable
     * @param radius - radius within which to get entities
     * @return List of LivingEntity within one block of projectile
     */
+   @NotNull
    public List<LivingEntity> getLivingEntities (double radius)
    {
       List<Entity> entities = getCloseEntities(radius);
@@ -495,6 +508,7 @@ public abstract class O2Spell implements Teachable
     *
     * @return the target block
     */
+   @Nullable
    public Block getTargetBlock ()
    {
       if (hitTarget)
@@ -557,25 +571,34 @@ public abstract class O2Spell implements Teachable
     *
     * @return true if the spell has hit a target, false otherwise
     */
-   public boolean hasHitTarget ()
+   public boolean hasHitTarget()
    {
       return hitTarget;
    }
 
    /**
-    * Return the cool-down time for this spell.
+    * @return the cool-down time for this spell in ticks
     */
-   public Long getCoolDown() {
+   public long getCoolDown()
+   {
       return DEFAULT_COOLDOWN;
    }
 
+   /**
+    * @return the book text for this spell
+    */
    @Override
-   public String getText ()
+   @NotNull
+   public String getText()
    {
       return text;
    }
 
+   /**
+    * @return the flavor text for this spell
+    */
    @Override
+   @Nullable
    public String getFlavorText()
    {
       if (flavorText == null || flavorText.size() < 1)
@@ -589,14 +612,22 @@ public abstract class O2Spell implements Teachable
       }
    }
 
+   /**
+    * @return the branch of magic for this spell
+    */
    @Override
-   public O2MagicBranch getMagicBranch ()
+   @NotNull
+   public O2MagicBranch getMagicBranch()
    {
       return branch;
    }
 
+   /**
+    * @return the name of the spell
+    */
    @Override
-   public String getName ()
+   @NotNull
+   public String getName()
    {
       return spellType.getSpellName();
    }

@@ -8,6 +8,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,11 +40,11 @@ public abstract class ItemCurse extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ItemCurse (Ollivanders2 plugin, Player player, Double rightWand)
+   public ItemCurse(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -100,10 +101,15 @@ public abstract class ItemCurse extends O2Spell
          // get item meta
          ItemStack stack = item.getItemStack().clone();
          int amount = stack.getAmount();
-         ItemMeta meta = newItemMeta(stack.getItemMeta());
-
-         if (meta == null)
+         ItemMeta stackMeta = stack.getItemMeta();
+         if (stackMeta == null)
+         {
+            p.getLogger().warning("ItemCurse.doCheckEffect: item meta is null");
+            kill();
             return;
+         }
+
+         ItemMeta meta = newItemMeta(stackMeta);
 
          // mark target hit
          stopProjectile();
@@ -116,7 +122,8 @@ public abstract class ItemCurse extends O2Spell
          if (amount > 1)
          {
             item.getItemStack().setAmount(amount - 1);
-         } else
+         }
+         else
          {
             item.remove();
          }
@@ -126,11 +133,14 @@ public abstract class ItemCurse extends O2Spell
       }
    }
 
-   private ItemMeta newItemMeta(ItemMeta itemMeta)
+   /**
+    * Create new ItemMeta that includes the curse.
+    *
+    * @param itemMeta the ItemMeta for the item to curse
+    * @return the new ItemMeta with curse data added
+    */
+   private ItemMeta newItemMeta(@NotNull ItemMeta itemMeta)
    {
-      if (itemMeta == null)
-         return null;
-
       List<String> itemLore;
 
       itemLore = itemMeta.getLore();

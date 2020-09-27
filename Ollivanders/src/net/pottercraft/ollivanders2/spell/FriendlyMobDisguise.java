@@ -4,6 +4,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Super class for transfiguring friendly mobs.
@@ -31,7 +32,7 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public FriendlyMobDisguise(Ollivanders2 plugin, Player player, Double rightWand)
+   public FriendlyMobDisguise(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -39,7 +40,7 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
    }
 
    @Override
-   void doInitSpell ()
+   void doInitSpell()
    {
       // whitelist of entities that can be targeted by this spell
       entityWhitelist.addAll(Ollivanders2Common.smallFriendlyAnimals);

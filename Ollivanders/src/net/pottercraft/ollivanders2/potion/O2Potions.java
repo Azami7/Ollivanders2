@@ -32,7 +32,7 @@ public class O2Potions
 {
    final private JavaPlugin p;
 
-   final private HashMap<String, O2PotionType> O2PotionMap = new HashMap<>();
+   final private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
 
    public static final List<O2ItemType> ingredients = new ArrayList<O2ItemType>()
    {{
@@ -313,7 +313,7 @@ public class O2Potions
 
       try
       {
-         potion = (O2Potion) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
+         potion = (O2Potion) potionClass.getConstructor(JavaPlugin.class).newInstance(p);
       }
       catch (Exception exception)
       {
@@ -356,5 +356,17 @@ public class O2Potions
       }
 
       return ingredientList;
+   }
+
+   /**
+    * Verify this potion type is loaded. A potion may not be loaded if it depends on something such as LibsDisguises and that
+    * dependency plugin does not exist.
+    *
+    * @param potionType the potion type to check
+    * @return true if this potion type is loaded, false otherwise
+    */
+   public boolean isLoaded(@NotNull O2PotionType potionType)
+   {
+      return O2PotionMap.containsValue(potionType);
    }
 }

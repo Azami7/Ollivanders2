@@ -23,8 +23,8 @@ public class O2Prophecies
 {
    final private JavaPlugin p;
 
-   final private ArrayList<O2Prophecy> activeProphecies = new ArrayList<>();
-   final private ArrayList<O2Prophecy> offlineProphecies = new ArrayList<>();
+   final private List<O2Prophecy> activeProphecies = new ArrayList<>();
+   final private List<O2Prophecy> offlineProphecies = new ArrayList<>();
 
    final static private String effectTypeLabel = "Effect_Type";
    final static private String targetIDLabel = "Target_ID";

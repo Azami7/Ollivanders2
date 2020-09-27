@@ -35,7 +35,7 @@ public final class O2PlayerCommon
       p = plugin;
    }
 
-   private static final ArrayList<EntityType> commonAnimagusShapes = new ArrayList<EntityType>()
+   private static final List<EntityType> commonAnimagusShapes = new ArrayList<EntityType>()
    {{
       add(EntityType.COW);
       add(EntityType.PIG);
@@ -50,7 +50,7 @@ public final class O2PlayerCommon
       add(EntityType.FOX);
    }};
 
-   private static final ArrayList<EntityType> rareAnimagusShapes = new ArrayList<EntityType>()
+   private static final List<EntityType> rareAnimagusShapes = new ArrayList<EntityType>()
    {{
       add(EntityType.OCELOT);
       add(EntityType.POLAR_BEAR);
@@ -59,7 +59,7 @@ public final class O2PlayerCommon
       add(EntityType.TURTLE);
    }};
 
-   private static final ArrayList<EntityType> hostileAnimagusShapes = new ArrayList<EntityType>()
+   private static final List<EntityType> hostileAnimagusShapes = new ArrayList<EntityType>()
    {{
       add(EntityType.SPIDER);
       add(EntityType.SLIME);

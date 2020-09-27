@@ -33,6 +33,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Scheduler for Ollivanders2
  *
+ * @author Azami7
  * @author lownes
  */
 class OllivandersSchedule implements Runnable
@@ -384,7 +385,7 @@ class OllivandersSchedule implements Runnable
     */
    private void teleportSched()
    {
-      Ollivanders2TeleportEvents.O2TeleportEvent[] teleportEvents = p.getTeleportEvents();
+      List<Ollivanders2TeleportEvents.O2TeleportEvent> teleportEvents = p.getTeleportEvents();
 
       for (Ollivanders2TeleportEvents.O2TeleportEvent event : teleportEvents)
       {

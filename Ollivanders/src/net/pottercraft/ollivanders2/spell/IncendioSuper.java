@@ -14,6 +14,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Sets fire to blocks or living entities for an amount of time depending on the player's spell level.
@@ -41,11 +42,11 @@ public abstract class IncendioSuper extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public IncendioSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public IncendioSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -76,6 +77,12 @@ public abstract class IncendioSuper extends O2Spell
       else
       {
          Block target = getTargetBlock();
+         if (target == null)
+         {
+            p.getLogger().warning("IncendioSuper.doCheckEffect: target block is null");
+            kill();
+            return;
+         }
 
          // blocks
          if (!strafe)
@@ -124,7 +131,7 @@ public abstract class IncendioSuper extends O2Spell
     *
     * @param block the block to change
     */
-   private void setBlockOnFire (Block block)
+   private void setBlockOnFire(@NotNull Block block)
    {
       Material type = block.getType();
       if (type == Material.AIR)
