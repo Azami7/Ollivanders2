@@ -1,6 +1,9 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
-import java.util.*;
+import java.util.Map;
+import java.util.UUID;
+import java.util.Set;
+import java.util.HashSet;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
