@@ -21,8 +21,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class StationarySpellObj implements Serializable
 {
-   Ollivanders2 p;
-   Ollivanders2Common common;
+   final Ollivanders2 p;
+   final Ollivanders2Common common;
    public UUID playerUUID;
    protected O2StationarySpellType spellType;
    public Location location;
@@ -36,7 +36,7 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @param plugin a callback to the MC plugin
     */
-   public StationarySpellObj (Ollivanders2 plugin)
+   public StationarySpellObj(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
       common = new Ollivanders2Common(p);
@@ -56,9 +56,10 @@ public abstract class StationarySpellObj implements Serializable
     * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public StationarySpellObj(@NotNull Ollivanders2 plugin, @NotNull UUID playerID, @NotNull Location loc, @NotNull O2StationarySpellType type, @NotNull Integer radius, @NotNull Integer duration)
+   public StationarySpellObj(@NotNull Ollivanders2 plugin, @NotNull UUID playerID, @NotNull Location loc, @NotNull O2StationarySpellType type, @NotNull int radius, @NotNull int duration)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
 
       location = loc;
       this.spellType = type;
@@ -72,8 +73,11 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @param d the duration in game ticks
     */
-   void setDuration(@NotNull Integer d)
+   void setDuration(int d)
    {
+      if (d < 0)
+         d = 0;
+
       duration = d;
    }
 
@@ -82,8 +86,11 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @param r the radius in blocks
     */
-   void setRadius(@NotNull Integer r)
+   void setRadius(int r)
    {
+      if (r < 0)
+         r = 0;
+
       radius = r;
    }
 

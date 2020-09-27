@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public class O2StationarySpells
 {
    private List<StationarySpellObj> O2StationarySpells = new ArrayList<>();
-   Ollivanders2 p;
+   final Ollivanders2 p;
 
    private final String playerUUIDLabel = "Player_UUID";
    private final String spellLabel = "Name";
@@ -264,9 +264,12 @@ public class O2StationarySpells
          // Location
          //
          Map<String, String> locData = Ollivanders2API.common.serializeLocation(spell.location, spellLocLabel);
-         for (Entry<String, String> e : locData.entrySet())
+         if (locData != null)
          {
-            spellData.put(e.getKey(), e.getValue());
+            for (Entry<String, String> e : locData.entrySet())
+            {
+               spellData.put(e.getKey(), e.getValue());
+            }
          }
 
          //

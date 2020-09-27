@@ -19,6 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.Effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Stays in the fireplace and makes the floo network work
@@ -37,7 +38,7 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
     *
     * @param plugin a callback to the MC plugin
     */
-   public ALIQUAM_FLOO (Ollivanders2 plugin)
+   public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -47,16 +48,15 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
-    * @param pid the player who cast the spell
+    * @param plugin   a callback to the MC plugin
+    * @param pid      the player who cast the spell
     * @param location the center location of the spell
-    * @param type the type of this spell
-    * @param radius the radius for this spell
+    * @param type     the type of this spell
+    * @param radius   the radius for this spell
     * @param duration the duration of the spell
     * @param flooName the name of this floo location
     */
-   public ALIQUAM_FLOO (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
-                        Integer duration, String flooName)
+   public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration, @NotNull String flooName)
    {
       super(plugin, pid, location, type, radius, duration);
 
@@ -90,7 +90,7 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
 
          for (LivingEntity live : getCloseLivingEntities())
          {
-            live.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 300, 0), true);
+            live.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 300, 0));
          }
          countDown--;
       }
@@ -159,6 +159,7 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
     * @return a map of the serialized data
     */
    @Override
+   @NotNull
    public Map<String, String> serializeSpellData ()
    {
       Map<String, String> spellData = new HashMap<>();
