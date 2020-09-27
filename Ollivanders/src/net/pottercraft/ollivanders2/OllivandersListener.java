@@ -1693,6 +1693,7 @@ public class OllivandersListener implements Listener
             return;
 
          meta.setLore(lore);
+         meta.setDisplayName("Wand");
          wand.setItemMeta(meta);
          event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
       }
