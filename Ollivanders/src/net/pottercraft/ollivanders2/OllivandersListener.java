@@ -120,6 +120,11 @@ public class OllivandersListener implements Listener
 
    private final Ollivanders2 p;
 
+   /**
+    * Constructor
+    *
+    * @param plugin reference to plugin
+    */
    OllivandersListener(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
@@ -298,7 +303,37 @@ public class OllivandersListener implements Listener
       // Parse to see if they were casting a spell
       //
       String[] words = message.split(" ");
+      O2SpellType spellType = parseSpell(words);
 
+      if (spellType != null)
+      {
+         //
+         // Handle removing recipients from chat
+         //
+         List<StationarySpellObj> muffliatos = Ollivanders2API.getStationarySpells().getActiveStationarySpellsAtLocationByType(sender.getLocation(), O2StationarySpellType.MUFFLIATO);
+         updateRecipients(sender, spellType, event.getRecipients(), muffliatos);
+
+         //
+         // Handle spell casting
+         //
+         doSpellCasting(sender, spellType, words);
+      }
+
+      if (Ollivanders2.debug)
+      {
+         p.getLogger().info("onPlayerChat: return");
+      }
+   }
+
+   /**
+    * Parse a spell from a chat
+    *
+    * @param words the words chatted by the player
+    * @return a spell type if found, null otherwise
+    */
+   @Nullable
+   private O2SpellType parseSpell(String[] words)
+   {
       StringBuilder spellName = new StringBuilder();
       O2SpellType spellType = null;
 
@@ -330,196 +365,165 @@ public class OllivandersListener implements Listener
          }
       }
 
-      //
-      // Handle stationary spells that affect chat
-      //
-      Set<Player> recipients = event.getRecipients();
-      List<StationarySpellObj> stationarySpells = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(sender.getLocation());
-      Set<StationarySpellObj> muffliatos = new HashSet<>();
-      for (StationarySpellObj stationary : stationarySpells)
-      {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("onPlayerChat: handling stationary spells");
-         }
+      return spellType;
+   }
 
-         if (stationary.getSpellType().equals(O2StationarySpellType.MUFFLIATO) && stationary.active)
-         {
-            muffliatos.add(stationary);
-         }
+   /**
+    * Handle updating chat recipients
+    *
+    * @param player     the player chatting
+    * @param spellType  the spell type chatted
+    * @param recipients the recipients for this chat
+    * @param muffliatos all muffliato stationary spells
+    */
+   private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients, List<StationarySpellObj> muffliatos)
+   {
+      // remove all recipients if this is not a "spoken" spell
+      if (spellType == O2SpellType.APPARATE || Divination.divinationSpells.contains(spellType))
+      {
+         recipients.clear();
+         return;
       }
 
-      //
-      // Handle removing recipients from chat
-      //
-      Set<Player> remRecipients = new HashSet<>();
-
-      // If player cast a spell, only show that chat to players within range
-      if (spellType != null)
+      // handle spell chat dropoff
+      Set<Player> temp = new HashSet<>(recipients);
+      for (Player recipient : temp)
       {
-         for (Player recipient : recipients)
+         Location location = player.getLocation();
+         if (!Ollivanders2API.common.isInside(location, recipient.getLocation(), Ollivanders2.chatDropoff))
          {
-            Location location = sender.getLocation();
-            if (!Ollivanders2API.common.isInside(location, recipient.getLocation(), Ollivanders2.chatDropoff))
+            try
             {
-               remRecipients.add(recipient);
+               recipients.remove(recipient);
+            }
+            catch (Exception e)
+            {
+               p.getLogger().warning("OllivandersListener.updateRecipient: exception removing recipient");
             }
          }
       }
 
       // If sender is in a MUFFLIATO, remove recipients not also in the MUFFLIATO radius
-      if (muffliatos.size() > 0)
+      if (muffliatos != null && muffliatos.size() > 0)
       {
          if (Ollivanders2.debug)
          {
-            p.getLogger().info("onPlayerChat: MUFFLIATO detected");
+            p.getLogger().info("OllivandersListener.updateRecipient: MUFFLIATO detected");
          }
 
-         for (Player recipient : recipients)
+         temp = new HashSet<>(recipients);
+         for (Player recipient : temp)
          {
             for (StationarySpellObj muffliato : muffliatos)
             {
-               Location recLoc = recipient.getLocation();
-               if (!muffliato.isInside(recLoc))
+               Location recipientLocation = recipient.getLocation();
+               if (!muffliato.isInside(recipientLocation))
                {
-                  remRecipients.add(recipient);
+                  recipients.remove(recipient);
                }
             }
          }
       }
+   }
 
-      for (Player remRec : remRecipients)
+   /**
+    * Handle when a player says a spell
+    *
+    * @param player    the player casting the spell
+    * @param spellType the spell cast
+    * @param words     the args for this spell, if relevant
+    */
+   private void doSpellCasting(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull String[] words)
+   {
+      if (p.canCast(player, spellType, true))
       {
-         if (Ollivanders2.debug)
+         if (Ollivanders2.bookLearning && p.getO2Player(player).getSpellCount(spellType) < 1)
          {
-            p.getLogger().info("onPlayerChat: update recipients");
+            // if bookLearning is set to true then spell count must be > 0 to cast this spell
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("onPlayerChat: bookLearning enforced");
+            }
+            player.sendMessage(Ollivanders2.chatColor + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
+
+            return;
          }
 
-         try
+         boolean castSuccess = true;
+
+         if (!Ollivanders2API.playerCommon.holdsWand(player))
          {
-            if (remRec.isPermissionSet("Ollivanders2.BYPASS"))
+            // if they are not holding their destined wand, casting success is reduced
+            if (Ollivanders2.debug)
             {
-               if (!remRec.hasPermission("Ollivanders2.BYPASS"))
+               p.getLogger().info("onPlayerChat: player not holding destined wand");
+            }
+
+            int uses = p.getO2Player(player).getSpellCount(spellType);
+            castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
+         }
+
+         // wandless spells
+         if (O2Spells.wandlessSpells.contains(spellType) || Divination.divinationSpells.contains(spellType))
+         {
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("onPlayerChat: allow wandless casting of " + spellType);
+            }
+            castSuccess = true;
+         }
+
+         if (castSuccess)
+         {
+            if (Ollivanders2.debug)
+            {
+               p.getLogger().info("onPlayerChat: begin casting " + spellType);
+            }
+
+            if (spellType == O2SpellType.APPARATE)
+            {
+               apparate(player, words);
+            }
+            else if (spellType == O2SpellType.PORTUS)
+            {
+               p.addProjectile(new PORTUS(p, player, 1.0, words));
+            }
+            else if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
+            {
+               p.addProjectile(new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, player, 1.0));
+            }
+            else if (Divination.divinationSpells.contains(spellType))
+            {
+               if (!divine(spellType, player, words))
                {
-                  recipients.remove(remRec);
+                  return;
                }
             }
             else
             {
-               recipients.remove(remRec);
-            }
-         }
-         catch (UnsupportedOperationException e)
-         {
-            p.getLogger().warning("Chat was unable to be removed due "
-                  + "to a unmodifiable set.");
-         }
-      }
-
-      //
-      // Handle spell casting
-      //
-      // If the spell is valid AND player is allowed to cast spells per server permissions
-      if (spellType != null && p.canCast(sender, spellType, true))
-      {
-         if (p.canCast(sender, spellType, true))
-         {
-            if (Ollivanders2.bookLearning && p.getO2Player(sender).getSpellCount(spellType) < 1)
-            {
-               // if bookLearning is set to true then spell count must be > 0 to cast this spell
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("onPlayerChat: bookLearning enforced");
-               }
-               sender.sendMessage(Ollivanders2.chatColor + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
-
-               return;
+               O2Player o2p = p.getO2Player(player);
+               o2p.setWandSpell(spellType);
+               p.setO2Player(player, o2p);
             }
 
-            boolean castSuccess = true;
-
-            if (!Ollivanders2API.playerCommon.holdsWand(sender))
+            boolean fastLearning = false;
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
             {
-               // if they are not holding their destined wand, casting success is reduced
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("onPlayerChat: player not holding destined wand");
-               }
-
-               int uses = p.getO2Player(sender).getSpellCount(spellType);
-               castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
+               fastLearning = true;
             }
-
-            // wandless spells
-            if (O2Spells.wandlessSpells.contains(spellType) || Divination.divinationSpells.contains(spellType))
+            p.incSpellCount(player, spellType);
+            if (fastLearning)
             {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("onPlayerChat: allow wandless casting of " + spellType);
-               }
-               castSuccess = true;
-            }
-
-            if (castSuccess)
-            {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("onPlayerChat: begin casting " + spellType);
-               }
-
-               if (spellType == O2SpellType.APPARATE)
-               {
-                  apparate(sender, words);
-                  event.setMessage("apparate");
-               }
-               else if (spellType == O2SpellType.PORTUS)
-               {
-                  p.addProjectile(new PORTUS(p, sender, 1.0, words));
-               }
-               else if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
-               {
-                  p.addProjectile(new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, sender, 1.0));
-               }
-               else if (Divination.divinationSpells.contains(spellType))
-               {
-                  if (!divine(spellType, sender, words))
-                  {
-                     return;
-                  }
-                  // remove original chat event since divination chats a prophecy
-                  event.setCancelled(true);
-               }
-               else
-               {
-                  O2Player o2p = p.getO2Player(sender);
-                  o2p.setWandSpell(spellType);
-                  p.setO2Player(sender, o2p);
-               }
-
-               boolean fastLearning = false;
-               if (Ollivanders2API.getPlayers().playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.FAST_LEARNING))
-               {
-                  fastLearning = true;
-               }
-               p.incSpellCount(sender, spellType);
-               if (fastLearning)
-               {
-                  p.incSpellCount(sender, spellType);
-               }
-            }
-         }
-         else
-         {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("Either no spell cast attempted or not allowed to cast");
+               p.incSpellCount(player, spellType);
             }
          }
       }
-
-      if (Ollivanders2.debug)
+      else
       {
-         p.getLogger().info("onPlayerChat: return");
+         if (Ollivanders2.debug)
+         {
+            p.getLogger().info("Either no spell cast attempted or not allowed to cast");
+         }
       }
    }
 
@@ -1689,6 +1693,7 @@ public class OllivandersListener implements Listener
             return;
 
          meta.setLore(lore);
+         meta.setDisplayName("Wand");
          wand.setItemMeta(meta);
          event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
       }

@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 public class O2StationarySpells
 {
@@ -26,9 +29,9 @@ public class O2StationarySpells
    /**
     * Constructor
     *
-    * @param plugin
+    * @param plugin a reference to the plugin
     */
-   public O2StationarySpells (Ollivanders2 plugin)
+   public O2StationarySpells(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -38,26 +41,25 @@ public class O2StationarySpells
    /**
     * Add a stationary spell
     *
-    * @param spell
+    * @param spell the stationary spell to add
     */
-   public void addStationarySpell (StationarySpellObj spell)
+   public void addStationarySpell(@NotNull StationarySpellObj spell)
    {
       if (Ollivanders2.debug)
       {
          p.getLogger().info("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString() + " with duration " + spell.duration + " and radius of " + spell.radius);
       }
 
-      if (spell != null)
-         O2StationarySpells.add(spell);
+      O2StationarySpells.add(spell);
    }
 
    /**
     * Remove a stationary spell. Since we do not want to lose track of a spell, we set kill to true and let
     * upkeep() clean it up.
     *
-    * @param spell
+    * @param spell the stationary spell to remove
     */
-   public void removeStationarySpell (StationarySpellObj spell)
+   public void removeStationarySpell(@NotNull StationarySpellObj spell)
    {
       if (Ollivanders2.debug)
          p.getLogger().info("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType().toString());
@@ -68,8 +70,9 @@ public class O2StationarySpells
    /**
     * Return a list of active stationary spells
     *
-    * @return
+    * @return a list of active stationary spells
     */
+   @NotNull
    public List<StationarySpellObj> getActiveStationarySpells ()
    {
       List<StationarySpellObj> active = new ArrayList<>();
@@ -89,11 +92,16 @@ public class O2StationarySpells
     * @param location - location to check
     * @return List of StationarySpellObj that the location is inside
     */
-   public List<StationarySpellObj> getStationarySpellsAtLocation (Location location)
+   @NotNull
+   public List<StationarySpellObj> getStationarySpellsAtLocation(@NotNull Location location)
    {
       List<StationarySpellObj> inside = new ArrayList<>();
+
       for (StationarySpellObj stationary : O2StationarySpells)
       {
+         if (stationary.location.getWorld() == null || location.getWorld() == null)
+            continue;
+
          if (stationary.location.getWorld().getUID().equals(location.getWorld().getUID()))
          {
             if (stationary.location.distance(location) < stationary.radius)
@@ -102,17 +110,42 @@ public class O2StationarySpells
             }
          }
       }
+
       return inside;
+   }
+
+   /**
+    * Get all active stationary spells of a specific type at the location
+    *
+    * @param location  the location
+    * @param spellType the spell type
+    * @return a list of spells of that type found at the location
+    */
+   @NotNull
+   public List<StationarySpellObj> getActiveStationarySpellsAtLocationByType(@NotNull Location location, @NotNull O2StationarySpellType spellType)
+   {
+      List<StationarySpellObj> spells = getStationarySpellsAtLocation(location);
+      List<StationarySpellObj> found = new ArrayList<>();
+
+      for (StationarySpellObj spell : spells)
+      {
+         if (spell.getSpellType() == spellType && spell.active)
+         {
+            found.add(spell);
+         }
+      }
+
+      return found;
    }
 
    /**
     * Check for a specific type of stationary spell at a location
     *
-    * @param location the location to check
+    * @param location            the location to check
     * @param stationarySpellType the stationary spell type to check for
     * @return true if spell of that type exists at that location, false otherwise
     */
-   public boolean checkLocationForSpell (Location location, O2StationarySpellType stationarySpellType)
+   public boolean checkLocationForSpell(@NotNull Location location, @NotNull O2StationarySpellType stationarySpellType)
    {
       List<StationarySpellObj> spellsAtLocation = getStationarySpellsAtLocation(location);
 
@@ -128,11 +161,11 @@ public class O2StationarySpells
    /**
     * Determine if the location is inside of a stationary spell area.
     *
-    * @param stationarySpell
-    * @param loc
-    * @return
+    * @param stationarySpell the stationary spell to check
+    * @param loc             the location to check
+    * @return true if the location is inside this stationary spell, false otherwise
     */
-   public boolean isInsideOf (O2StationarySpellType stationarySpell, Location loc)
+   public boolean isInsideOf(@NotNull O2StationarySpellType stationarySpell, @NotNull Location loc)
    {
       for (StationarySpellObj spell : O2StationarySpells)
       {
@@ -205,6 +238,7 @@ public class O2StationarySpells
     *
     * @return a map of the serialized stationary spell data
     */
+   @NotNull
    private List<Map<String, String>> serializeO2StationarySpells ()
    {
       List <Map<String, String>> serializedList = new ArrayList<>();
@@ -216,43 +250,41 @@ public class O2StationarySpells
       {
          Map<String, String> spellData = new HashMap<>();
 
-         /**
-          * Spell type
-          */
+         //
+         // Spell type
+         //
          spellData.put(spellLabel, spell.getSpellType().toString());
 
-         /**
-          * Player UUID
-          */
+         //
+         // Player UUID
+         //
          spellData.put(playerUUIDLabel, spell.playerUUID.toString());
 
-         /**
-          * Location
-          */
+         //
+         // Location
+         //
          Map<String, String> locData = Ollivanders2API.common.serializeLocation(spell.location, spellLocLabel);
          for (Entry<String, String> e : locData.entrySet())
          {
             spellData.put(e.getKey(), e.getValue());
          }
 
-         /**
-          * Duration
-          */
-         Integer duration = new Integer(spell.duration);
-         spellData.put(durationLabel, duration.toString());
+         //
+         // Duration
+         //
+         spellData.put(durationLabel, Integer.toString(spell.duration));
 
-         /**
-          * Radius
-          */
-         Integer radius = new Integer(spell.radius);
-         spellData.put(radiusLabel, radius.toString());
+         //
+         // Radius
+         //
+         spellData.put(radiusLabel, Integer.toString(spell.radius));
 
          serializedList.add(spellData);
 
          //
          // get spell-specific data
          //
-         Map <String, String> uniqueData = ((StationarySpell)spell).serializeSpellData();
+         Map<String, String> uniqueData = ((StationarySpell) spell).serializeSpellData();
          for (Entry<String, String> e : uniqueData.entrySet())
          {
             spellData.put(e.getKey(),e.getValue());
@@ -265,12 +297,10 @@ public class O2StationarySpells
    /**
     * Deserialize stationary spells
     */
-   private List<StationarySpellObj> deserializeO2StationarySpells (List<Map<String, String>> serializedSpells)
+   @NotNull
+   private List<StationarySpellObj> deserializeO2StationarySpells(@NotNull List<Map<String, String>> serializedSpells)
    {
       List<StationarySpellObj> statSpells = new ArrayList<>();
-
-      if (serializedSpells == null || serializedSpells.size() < 1)
-         return statSpells;
 
       for (Map<String, String> spellData : serializedSpells)
       {
@@ -345,14 +375,15 @@ public class O2StationarySpells
     * @param spellType the type of spell to create
     * @return the spell if it could be created, null otherwise
     */
-   public StationarySpellObj getStationarySpellByType (O2StationarySpellType spellType)
+   @Nullable
+   public StationarySpellObj getStationarySpellByType(@NotNull O2StationarySpellType spellType)
    {
       StationarySpellObj statSpell;
 
       Class<?> spellClass = spellType.getClassName();
       try
       {
-         statSpell = (StationarySpellObj)spellClass.getConstructor(Ollivanders2.class).newInstance(p);
+         statSpell = (StationarySpellObj) spellClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception e)
       {
