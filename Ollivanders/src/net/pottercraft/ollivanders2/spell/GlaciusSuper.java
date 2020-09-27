@@ -4,6 +4,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by Azami7 on 7/2/17.
@@ -15,53 +16,53 @@ import org.bukkit.entity.Player;
  */
 public abstract class GlaciusSuper extends BlockTransfiguration
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    */
-   public GlaciusSuper()
-   {
-      super();
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     */
+    public GlaciusSuper()
+    {
+        super();
 
-      branch = O2MagicBranch.CHARMS;
-   }
+        branch = O2MagicBranch.CHARMS;
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public GlaciusSuper (Ollivanders2 plugin, Player player, Double rightWand)
-   {
-      super(plugin, player, rightWand);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public GlaciusSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      branch = O2MagicBranch.CHARMS;
+        branch = O2MagicBranch.CHARMS;
 
-      initSpell();
+        initSpell();
 
-      if (usesModifier > 50)
-      {
-         radius = 5;
-      }
-      else if (usesModifier < 10)
-      {
-         radius = 1;
-      }
-      else
-      {
-         radius = (int) (usesModifier / 10);
-      }
-      permanent = false;
+        if (usesModifier > 50)
+        {
+            radius = 5;
+        }
+        else if (usesModifier < 10)
+        {
+            radius = 1;
+        }
+        else
+        {
+            radius = (int) (usesModifier / 10);
+        }
+        permanent = false;
 
-      transfigurationMap.put(Material.FIRE, Material.AIR);
-      transfigurationMap.put(Material.WATER, Material.ICE);
-      transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
-      transfigurationMap.put(Material.ICE, Material.PACKED_ICE);
+        transfigurationMap.put(Material.FIRE, Material.AIR);
+        transfigurationMap.put(Material.WATER, Material.ICE);
+        transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
+        transfigurationMap.put(Material.ICE, Material.PACKED_ICE);
 
-      materialWhitelist.add(Material.FIRE);
-      materialWhitelist.add(Material.WATER);
-      materialWhitelist.add(Material.LAVA);
-      materialWhitelist.add(Material.ICE);
-   }
+        materialWhitelist.add(Material.FIRE);
+        materialWhitelist.add(Material.WATER);
+        materialWhitelist.add(Material.LAVA);
+        materialWhitelist.add(Material.ICE);
+    }
 }

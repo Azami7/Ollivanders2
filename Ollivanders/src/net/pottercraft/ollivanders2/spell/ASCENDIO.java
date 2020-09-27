@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -22,57 +23,57 @@ public final class ASCENDIO extends O2Spell
     */
    public ASCENDIO()
    {
-      super();
+       super();
 
-      spellType = O2SpellType.ASCENDIO;
-      branch = O2MagicBranch.CHARMS;
+       spellType = O2SpellType.ASCENDIO;
+       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
-      {{
-         add("The Climbing Charm");
-         add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
-      }};
+       flavorText = new ArrayList<String>()
+       {{
+           add("The Climbing Charm");
+           add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
+       }};
 
-      text = "Propels the caster into the air.";
+       text = "Propels the caster into the air.";
    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public ASCENDIO (Ollivanders2 plugin, Player player, Double rightWand)
-   {
-      super(plugin, player, rightWand);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public ASCENDIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      spellType = O2SpellType.ASCENDIO;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.ASCENDIO;
+        branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-   }
+        initSpell();
+    }
 
-   /**
-    * Propel the caster into the air
-    */
-   @Override
-   public void checkEffect ()
-   {
-      if (!checkSpellAllowed())
-      {
-         kill();
-         return;
-      }
+    /**
+     * Propel the caster into the air
+     */
+    @Override
+    public void checkEffect()
+    {
+        if (!isSpellAllowed())
+        {
+            kill();
+            return;
+        }
 
-      double up = usesModifier * 0.25;
-      if (up > 2)
-      {
-         up = 2;
-      }
-      Vector vec = new Vector(0, up, 0);
-      player.setVelocity(player.getVelocity().add(vec));
+        double up = usesModifier * 0.25;
+        if (up > 2)
+        {
+            up = 2;
+        }
+        Vector vec = new Vector(0, up, 0);
+        player.setVelocity(player.getVelocity().add(vec));
 
-      kill();
-   }
+        kill();
+    }
 }

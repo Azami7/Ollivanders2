@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
 public class O2StationarySpells
 {
    private List<StationarySpellObj> O2StationarySpells = new ArrayList<>();
-   final JavaPlugin p;
+   JavaPlugin p;
 
    private final String playerUUIDLabel = "Player_UUID";
    private final String spellLabel = "Name";
@@ -386,7 +386,7 @@ public class O2StationarySpells
       Class<?> spellClass = spellType.getClassName();
       try
       {
-         statSpell = (StationarySpellObj)spellClass.getConstructor(Ollivanders2.class).newInstance(p);
+         statSpell = (StationarySpellObj)spellClass.getConstructor(JavaPlugin.class).newInstance(p);
       }
       catch (Exception e)
       {

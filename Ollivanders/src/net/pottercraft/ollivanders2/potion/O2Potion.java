@@ -100,7 +100,7 @@ public abstract class O2Potion implements Teachable
     */
    protected int duration = 3600;
 
-   final protected Ollivanders2 p;
+   protected Ollivanders2 p;
 
    /**
     * Constructor
@@ -350,10 +350,7 @@ public abstract class O2Potion implements Teachable
 
          int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) + 1;
 
-         if (successRate > rand)
-            canBrew = true;
-         else
-            canBrew = false;
+         canBrew = (successRate > rand);
       }
 
       return canBrew;
