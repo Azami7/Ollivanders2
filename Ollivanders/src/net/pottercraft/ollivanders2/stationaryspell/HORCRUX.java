@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Player will spawn here when killed, with all of their spell levels intact. Only fiendfyre can destroy it.
@@ -25,7 +26,7 @@ public class HORCRUX extends StationarySpellObj implements StationarySpell
     *
     * @param plugin a callback to the MC plugin
     */
-   public HORCRUX (Ollivanders2 plugin)
+   public HORCRUX(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -35,15 +36,14 @@ public class HORCRUX extends StationarySpellObj implements StationarySpell
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
-    * @param pid the player who cast the spell
+    * @param plugin   a callback to the MC plugin
+    * @param pid      the player who cast the spell
     * @param location the center location of the spell
-    * @param type the type of this spell
-    * @param radius the radius for this spell
+    * @param type     the type of this spell
+    * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public HORCRUX (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
-                   Integer duration)
+   public HORCRUX(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration)
    {
       super(plugin, pid, location, type, radius, duration);
 
@@ -82,6 +82,7 @@ public class HORCRUX extends StationarySpellObj implements StationarySpell
     * @return a map of the serialized data
     */
    @Override
+   @NotNull
    public Map<String, String> serializeSpellData ()
    {
       return new HashMap<>();
@@ -93,5 +94,5 @@ public class HORCRUX extends StationarySpellObj implements StationarySpell
     * @param spellData a map of the saved spell data
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData) { }
+   public void deserializeSpellData(@NotNull Map<String, String> spellData) { }
 }

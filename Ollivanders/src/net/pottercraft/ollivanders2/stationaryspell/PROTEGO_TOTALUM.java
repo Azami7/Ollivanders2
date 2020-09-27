@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell implements StationarySpell
     *
     * @param plugin a callback to the MC plugin
     */
-   public PROTEGO_TOTALUM (Ollivanders2 plugin)
+   public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -34,15 +35,14 @@ public class PROTEGO_TOTALUM extends ShieldSpell implements StationarySpell
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
-    * @param pid the player who cast the spell
+    * @param plugin   a callback to the MC plugin
+    * @param pid      the player who cast the spell
     * @param location the center location of the spell
-    * @param type the type of this spell
-    * @param radius the radius for this spell
+    * @param type     the type of this spell
+    * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public PROTEGO_TOTALUM (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
-                           Integer duration)
+   public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration)
    {
       super(plugin, pid, location, type, radius, duration);
 
@@ -90,6 +90,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell implements StationarySpell
     * @return a map of the serialized data
     */
    @Override
+   @NotNull
    public Map<String, String> serializeSpellData ()
    {
       return new HashMap<>();
@@ -101,5 +102,5 @@ public class PROTEGO_TOTALUM extends ShieldSpell implements StationarySpell
     * @param spellData a map of the saved spell data
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData) { }
+   public void deserializeSpellData(@NotNull Map<String, String> spellData) { }
 }
