@@ -18,24 +18,24 @@ import java.util.ArrayList;
  */
 public final class ASCENDIO extends O2Spell
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    */
-   public ASCENDIO()
-   {
-       super();
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     */
+    public ASCENDIO()
+    {
+        super();
 
-       spellType = O2SpellType.ASCENDIO;
-       branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.ASCENDIO;
+        branch = O2MagicBranch.CHARMS;
 
-       flavorText = new ArrayList<String>()
-       {{
-           add("The Climbing Charm");
-           add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
-       }};
+        flavorText = new ArrayList<String>()
+        {{
+            add("The Climbing Charm");
+            add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
+        }};
 
-       text = "Propels the caster into the air.";
-   }
+        text = "Propels the caster into the air.";
+    }
 
     /**
      * Constructor.

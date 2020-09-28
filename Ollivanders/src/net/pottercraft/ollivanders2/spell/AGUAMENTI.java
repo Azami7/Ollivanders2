@@ -6,6 +6,8 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -39,11 +41,11 @@ public final class AGUAMENTI extends BlockTransfiguration
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public AGUAMENTI (Ollivanders2 plugin, Player player, Double rightWand)
+   public AGUAMENTI(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.AGUAMENTI;
@@ -71,6 +73,7 @@ public final class AGUAMENTI extends BlockTransfiguration
     * @return the target block for aguamenti
     */
    @Override
+   @Nullable
    public Block getTargetBlock ()
    {
       if (hasHitTarget())

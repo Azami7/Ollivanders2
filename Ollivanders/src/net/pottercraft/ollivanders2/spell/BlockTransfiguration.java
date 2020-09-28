@@ -116,67 +116,67 @@ public abstract class BlockTransfiguration extends O2Spell
         worldGuardFlags.add(Flags.BUILD);
     }
 
-   @Override
-   void doInitSpell ()
-   {
-      // spell duration
-      int durationInSeconds = (int) usesModifier;
-      if (durationInSeconds < minDurationInSeconds)
-      {
-         durationInSeconds = minDurationInSeconds;
-      }
-      else if (durationInSeconds > maxDurationInSeconds)
-      {
-         durationInSeconds = maxDurationInSeconds;
-      }
+    @Override
+    void doInitSpell()
+    {
+        // spell duration
+        int durationInSeconds = (int) usesModifier;
+        if (durationInSeconds < minDurationInSeconds)
+        {
+            durationInSeconds = minDurationInSeconds;
+        }
+        else if (durationInSeconds > maxDurationInSeconds)
+        {
+            durationInSeconds = maxDurationInSeconds;
+        }
 
-      spellDuration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
-   }
+        spellDuration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
+    }
 
-   /**
-    * If we have hit a target, transform it if it is not transformed or change it back if it is already transformed and
-    * the duration is expired for a temporary spell.
-    */
-   @Override
-   protected void doCheckEffect ()
-   {
-      if (!hasHitTarget())
-         return;
+    /**
+     * If we have hit a target, transform it if it is not transformed or change it back if it is already transformed and
+     * the duration is expired for a temporary spell.
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        if (!hasHitTarget())
+            return;
 
-      // if the object has not transfigured, transfigure it
-      if (!isTransfigured)
-      {
-         Block target = getTargetBlock();
-         if (target != null)
-         {
-            transfigure(target);
-
-            if (!permanent)
+        // if the object has not transfigured, transfigure it
+        if (!isTransfigured)
+        {
+            Block target = getTargetBlock();
+            if (target != null)
             {
-               spellDuration = (int) (spellDuration * durationModifier);
+                transfigure(target);
+
+                if (!permanent)
+                {
+                    spellDuration = (int) (spellDuration * durationModifier);
+                }
+                else
+                {
+                    spellDuration = 0;
+                    kill();
+                }
+            }
+        }
+        // if the entity has transfigured, check time to change back
+        else
+        {
+            // check time to live on the spell
+            if (spellDuration <= 0)
+            {
+                // spell duration is up, kill the spell
+                kill();
             }
             else
             {
-               spellDuration = 0;
-               kill();
+                spellDuration--;
             }
-         }
-      }
-      // if the entity has transfigured, check time to change back
-      else
-      {
-         // check time to live on the spell
-         if (spellDuration <= 0)
-         {
-             // spell duration is up, kill the spell
-             kill();
-         }
-         else
-         {
-             spellDuration--;
-         }
-      }
-   }
+        }
+    }
 
     /**
      * Transfigure the target block or blocks. Will not change the block if it is on the materialBlacklist list or if the
@@ -254,19 +254,19 @@ public abstract class BlockTransfiguration extends O2Spell
         return canChange;
     }
 
-   @Override
-   public void revert ()
-   {
-      if (!permanent)
-      {
-          for (Block block : changedBlocks)
-          {
-              p.revertTempBlock(block);
-          }
+    @Override
+    public void revert()
+    {
+        if (!permanent)
+        {
+            for (Block block : changedBlocks)
+            {
+                p.revertTempBlock(block);
+            }
 
-          changedBlocks.clear();
-      }
-   }
+            changedBlocks.clear();
+        }
+    }
 
     @Override
     @NotNull

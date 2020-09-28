@@ -70,5 +70,5 @@ public abstract class BombardaSuper extends O2Spell
             world.createExplosion(backLoc.getX(), backLoc.getY(), backLoc.getZ(), (float) strength, false, true);
             kill();
         }
-   }
+    }
 }

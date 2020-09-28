@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Spell which will grab the targeted item and pull it toward you
@@ -31,17 +32,17 @@ public final class ACCIO extends Knockback
       }};
 
       text = "Can use used to pull an item towards you. The strength of the pull is determined by your experience. "
-            + "This can only be used on items.";
+              + "This can only be used on items.";
    }
 
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ACCIO (Ollivanders2 plugin, Player player, Double rightWand)
+   public ACCIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

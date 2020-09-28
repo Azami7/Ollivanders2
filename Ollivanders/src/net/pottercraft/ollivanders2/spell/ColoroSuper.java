@@ -91,5 +91,5 @@ public abstract class ColoroSuper extends O2Spell
 
             kill();
         }
-   }
+    }
 }

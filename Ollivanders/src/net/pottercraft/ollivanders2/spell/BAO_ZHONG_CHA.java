@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -46,7 +47,7 @@ public final class BAO_ZHONG_CHA extends Divination
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public BAO_ZHONG_CHA (Ollivanders2 plugin, Player player, Double rightWand)
+   public BAO_ZHONG_CHA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.BAO_ZHONG_CHA;
