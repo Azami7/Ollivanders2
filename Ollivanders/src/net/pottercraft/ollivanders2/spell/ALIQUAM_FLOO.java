@@ -4,6 +4,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
@@ -12,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -40,21 +42,21 @@ public final class ALIQUAM_FLOO extends O2Spell
       }};
 
       text = "Aliquam Floo will register a fireplace with the Floo Network. "
-            + "Place a sign above a fire with the unique name of the fireplace and cast this spell at the fire. "
-            + "Once your fireplace is registered, you can destroy the sign and even put out the fire, but you must not "
-            + "place a solid block where the fire was, or you will have to re-register your fireplace. "
-            + "People can use your fireplace via Floo powder, which is made by smelting ender pearl. "
-            + "Toss the powder into a registered fireplace, walk into the fire, and say the name of your destination.";
+              + "Place a sign above a fire with the unique name of the fireplace and cast this spell at the fire. "
+              + "Once your fireplace is registered, you can destroy the sign and even put out the fire, but you must not "
+              + "place a solid block where the fire was, or you will have to re-register your fireplace. "
+              + "People can use your fireplace via Floo powder, which is made by smelting ender pearl. "
+              + "Toss the powder into a registered fireplace, walk into the fire, and say the name of your destination.";
    }
 
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ALIQUAM_FLOO (Ollivanders2 plugin, Player player, Double rightWand)
+   public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.ALIQUAM_FLOO;
@@ -87,7 +89,7 @@ public final class ALIQUAM_FLOO extends O2Spell
          Location statLocation = new Location(location.getWorld(), target.getX() + 0.5, target.getY() + 0.125, target.getZ() + 0.5);
 
          // find the sign above the fire
-         if (common.wallSigns.contains(target.getRelative(BlockFace.UP).getType()))
+         if (Ollivanders2Common.wallSigns.contains(target.getRelative(BlockFace.UP).getType()))
          {
             Sign sign = (Sign) target.getRelative(BlockFace.UP).getState();
             String flooName = sign.getLine(0).trim() + " " + sign.getLine(1).trim() + " " + sign.getLine(2).trim() + " " + sign.getLine(3).trim();

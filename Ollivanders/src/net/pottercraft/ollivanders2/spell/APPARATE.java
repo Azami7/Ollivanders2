@@ -24,28 +24,28 @@ import java.util.ArrayList;
  */
 public final class APPARATE extends O2Spell
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    */
-   public APPARATE()
-   {
-       super();
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     */
+    public APPARATE()
+    {
+        super();
 
-       spellType = O2SpellType.APPARATE;
-       branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.APPARATE;
+        branch = O2MagicBranch.CHARMS;
 
-       flavorText = new ArrayList<String>()
-       {{
-           add("A magical means of transportation.");
-           add("Harry felt Dumbledore's arm twist away from him and re-doubled his grip: the next thing he knew everything went black; he was pressed very hard from all directions; he could not breathe, there were iron bands tightening around his chest; his eyeballs were being forced back into his head; his ear-drums were being pushed deeper into his skull.");
-           add("\"We just Apparated, didn't we sir?\"\n\"Yes, and quite successfully too, I might add. Most people vomit the first time.\" -Harry Potter and Albus Dumbledore");
-       }};
+        flavorText = new ArrayList<String>()
+        {{
+            add("A magical means of transportation.");
+            add("Harry felt Dumbledore's arm twist away from him and re-doubled his grip: the next thing he knew everything went black; he was pressed very hard from all directions; he could not breathe, there were iron bands tightening around his chest; his eyeballs were being forced back into his head; his ear-drums were being pushed deeper into his skull.");
+            add("\"We just Apparated, didn't we sir?\"\n\"Yes, and quite successfully too, I might add. Most people vomit the first time.\" -Harry Potter and Albus Dumbledore");
+        }};
 
-       text = "Apparition is a two sided spell. To apparate to a predetermined location, simply say apparate and list your x, y, and z coordinates. "
-               + "To apparate to the location of your cursor, within 140 meters, just say the word apparate. "
-               + "Your accuracy is determined by the distance traveled and your experience. "
-               + "If there are any entities close to you when you apparate, they will be taken with you as well by side-along apparition.";
-   }
+        text = "Apparition is a two sided spell. To apparate to a predetermined location, simply say apparate and list your x, y, and z coordinates. "
+                + "To apparate to the location of your cursor, within 140 meters, just say the word apparate. "
+                + "Your accuracy is determined by the distance traveled and your experience. "
+                + "If there are any entities close to you when you apparate, they will be taken with you as well by side-along apparition.";
+    }
 
     /**
      * Constructor.
@@ -115,36 +115,36 @@ public final class APPARATE extends O2Spell
                     }
                 }
 
-            // where the player actually ended up
-            Location resultingLocation = player.getLocation();
-            player.getWorld().createExplosion(resultingLocation.getX(), resultingLocation.getY(), resultingLocation.getZ(), 2, false, false);
-         }
-      }
+                // where the player actually ended up
+                Location resultingLocation = player.getLocation();
+                player.getWorld().createExplosion(resultingLocation.getX(), resultingLocation.getY(), resultingLocation.getZ(), 2, false, false);
+            }
+        }
 
-      kill();
-   }
+        kill();
+    }
 
-   /**
-    * Check to see if the player can apparate out of this location.
-    *
-    * @return true if the player can apparate, false otherwise
-    */
-   private boolean canApparateFrom ()
-   {
-       // check world guard permissions at location
-       if (Ollivanders2.worldGuardEnabled)
-       {
-           Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
+    /**
+     * Check to see if the player can apparate out of this location.
+     *
+     * @return true if the player can apparate, false otherwise
+     */
+    private boolean canApparateFrom()
+    {
+        // check world guard permissions at location
+        if (Ollivanders2.worldGuardEnabled)
+        {
+            Ollivanders2WorldGuard wg = new Ollivanders2WorldGuard(p);
 
-           if (!wg.checkWGFlag(player, location, Flags.EXIT_VIA_TELEPORT))
-           {
-               return false;
-           }
-       }
+            if (!wg.checkWGFlag(player, location, Flags.EXIT_VIA_TELEPORT))
+            {
+                return false;
+            }
+        }
 
-       // check for Nullum Evanescunt at location
-       return Ollivanders2API.getStationarySpells(p).checkLocationForSpell(player.getLocation(), O2StationarySpellType.NULLUM_EVANESCUNT);
-   }
+        // check for Nullum Evanescunt at location
+        return Ollivanders2API.getStationarySpells(p).checkLocationForSpell(player.getLocation(), O2StationarySpellType.NULLUM_EVANESCUNT);
+    }
 
     /**
      * Check to see if the player can apparate to the destination

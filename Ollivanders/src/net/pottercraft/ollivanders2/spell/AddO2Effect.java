@@ -175,5 +175,5 @@ public class AddO2Effect extends O2Spell
 
             Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
         }
-   }
+    }
 }
