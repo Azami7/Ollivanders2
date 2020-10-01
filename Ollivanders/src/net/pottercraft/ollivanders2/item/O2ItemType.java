@@ -1,6 +1,8 @@
 package net.pottercraft.ollivanders2.item;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * All custom special items in Ollivanders2
@@ -81,11 +83,19 @@ public enum O2ItemType
    WOLFSBANE(Material.ALLIUM, (short) 0, "Wolfsbane", null);
 
    private Material material;
-   private String name;
-   private String lore;
-   private short variant;
+   final private String name;
+   final private String lore;
+   final private short variant;
 
-   O2ItemType(Material m, short v, String n, String l)
+   /**
+    * Constructor
+    *
+    * @param m the material type
+    * @param v the variant information, this is 0 for most items but for things like potions it can control color
+    * @param n the name of the item
+    * @param l the lore for this item
+    */
+   O2ItemType(@NotNull Material m, short v, @NotNull String n, @Nullable String l)
    {
       material = m;
       name = n;
@@ -93,12 +103,20 @@ public enum O2ItemType
       lore = l;
    }
 
-   public String getName ()
+   /**
+    * @return the name of this item
+    */
+   @NotNull
+   public String getName()
    {
       return name;
    }
 
-   public String getLore ()
+   /**
+    * @return the lore for this item or its name if there is no lore
+    */
+   @NotNull
+   public String getLore()
    {
       if (lore == null)
       {
@@ -110,17 +128,29 @@ public enum O2ItemType
       }
    }
 
-   public short getVariant ()
+   /**
+    * @return the variant for this item
+    */
+   public short getVariant()
    {
       return variant;
    }
 
-   public Material getMaterial ()
+   /**
+    * @return the material type for this item
+    */
+   @NotNull
+   public Material getMaterial()
    {
       return material;
    }
 
-   public void setMaterial (Material m)
+   /**
+    * Set the material for this item
+    *
+    * @param m the material type
+    */
+   public void setMaterial(@NotNull Material m)
    {
       material = m;
    }
