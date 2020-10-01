@@ -19,9 +19,7 @@ import java.util.Map;
  */
 public class O2Spells
 {
-    final private JavaPlugin p;
-
-    private Ollivanders2Common common;
+    private final Ollivanders2Common common;
 
     final private Map<String, O2SpellType> O2SpellMap = new HashMap<>();
 
@@ -37,8 +35,7 @@ public class O2Spells
      */
     public O2Spells(@NotNull JavaPlugin plugin)
     {
-        p = plugin;
-        common = new Ollivanders2Common(p);
+        common = new Ollivanders2Common(plugin);
 
         for (O2SpellType spellType : O2SpellType.values())
         {

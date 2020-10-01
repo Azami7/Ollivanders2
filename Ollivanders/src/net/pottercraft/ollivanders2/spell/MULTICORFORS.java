@@ -9,6 +9,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * If an entity has leather armor on, then this changes it's color.
@@ -34,11 +35,11 @@ public final class MULTICORFORS extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public MULTICORFORS (Ollivanders2 plugin, Player player, Double rightWand)
+   public MULTICORFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -57,6 +58,13 @@ public final class MULTICORFORS extends O2Spell
             continue;
 
          EntityEquipment equipment = live.getEquipment();
+         if (equipment == null)
+         {
+            // they have no equipment
+            kill();
+            return;
+         }
+
          for (ItemStack armor : equipment.getArmorContents())
          {
             if (armor.getItemMeta() instanceof LeatherArmorMeta)

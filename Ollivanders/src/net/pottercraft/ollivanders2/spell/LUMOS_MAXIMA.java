@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
@@ -98,7 +99,15 @@ public final class LUMOS_MAXIMA extends O2Spell
             if (curBlock.getType() == Material.AIR)
             {
                curBlock.setType(Material.GLOWSTONE);
-               location.getWorld().playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
+
+               World world = location.getWorld();
+               if (world == null)
+               {
+                  common.printDebugMessage("LUMOS_MAXIMA.doCheckEffect: world is null", null, null, true);
+                  kill();
+                  return;
+               }
+               world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
 
                changedBlocks.add(curBlock);
                p.addTempBlock(curBlock, Material.AIR);

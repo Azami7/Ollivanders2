@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
@@ -10,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.block.Block;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -41,11 +43,11 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public PIERTOTUM_LOCOMOTOR (Ollivanders2 plugin, Player player, Double rightWand)
+   public PIERTOTUM_LOCOMOTOR(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -59,7 +61,7 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
       {
@@ -67,6 +69,13 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
       }
 
       Block target = getTargetBlock();
+      if (target == null)
+      {
+         common.printDebugMessage("PIERTOTUM_LOCOMOTOR.doCheckEffect: target block is null", null, null, true);
+         kill();
+         return;
+      }
+
       Material material = target.getType();
       BlockData targetBlockData = target.getBlockData();
 
@@ -83,7 +92,15 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
          }
 
          target.setType(Material.AIR);
-         FallingBlock falling = location.getWorld().spawnFallingBlock(location, targetBlockData);
+         World world = location.getWorld();
+         if (world == null)
+         {
+            common.printDebugMessage("PIERTOTUM_LOCOMOTOR.doCheckEffect: world is null", null, null, true);
+            kill();
+            return;
+         }
+
+         FallingBlock falling = world.spawnFallingBlock(location, targetBlockData);
          transfigureEntity(falling, entityType, null);
       }
 
