@@ -15,6 +15,7 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 
 import org.bukkit.entity.EntityType;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * O2Players
@@ -37,7 +38,7 @@ public class O2Players
    /**
     * The MC plugin callback
     */
-   private Ollivanders2 p;
+   private final Ollivanders2 p;
 
    /**
     * A count of the player records read at start. This can be used to prevent writing back out at server
@@ -70,7 +71,7 @@ public class O2Players
     *
     * @param plugin the MC plugin
     */
-   public O2Players (Ollivanders2 plugin)
+   public O2Players(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -80,14 +81,11 @@ public class O2Players
    /**
     * Add a new O2Player.
     *
-    * @param pid the UUID of this player
+    * @param pid  the UUID of this player
     * @param name the effectType of this player
     */
-   public void addPlayer (UUID pid, String name)
+   public void addPlayer(@NotNull UUID pid, @NotNull String name)
    {
-      if (pid == null || name == null)
-         return;
-
       O2Player o2p = new O2Player(pid, name, p);
 
       updatePlayer(pid, o2p);
@@ -99,13 +97,8 @@ public class O2Players
     * @param pid the UUID of this player
     * @param o2p the O2Player object for this player
     */
-   public synchronized void updatePlayer (UUID pid, O2Player o2p)
+   public synchronized void updatePlayer(@NotNull UUID pid, @NotNull O2Player o2p)
    {
-      if (o2p == null)
-      {
-         return;
-      }
-
       O2PlayerMap.put(pid, o2p);
    }
 
@@ -115,12 +108,18 @@ public class O2Players
     * @param pid the UUID of the player
     * @return the O2Player if found, null otherwise.
     */
-   public O2Player getPlayer (UUID pid)
+   @Nullable
+   public O2Player getPlayer(@NotNull UUID pid)
    {
       return O2PlayerMap.getOrDefault(pid, null);
    }
 
-   public void removePlayer (UUID pid)
+   /**
+    * Remove a player
+    *
+    * @param pid the id of the player to remove
+    */
+   public void removePlayer(@NotNull UUID pid)
    {
       O2PlayerMap.remove(pid);
    }
@@ -131,13 +130,9 @@ public class O2Players
     * @return a list of all known player MC UUIDs
     */
    @NotNull
-   public ArrayList<UUID> getPlayerIDs ()
+   public ArrayList<UUID> getPlayerIDs()
    {
-      ArrayList<UUID> ids = new ArrayList<>();
-
-      ids.addAll(O2PlayerMap.keySet());
-
-      return ids;
+      return new ArrayList<>(O2PlayerMap.keySet());
    }
 
    /**
@@ -206,9 +201,10 @@ public class O2Players
     * @param o2PlayerMap a map of all player MC UUIDs and corresponding O2Player object
     * @return all player data as a map of strings per player
     */
-   private Map <String, Map<String, String>> serializeO2Players (Map<UUID, O2Player> o2PlayerMap)
+   @Nullable
+   private Map<String, Map<String, String>> serializeO2Players(@NotNull Map<UUID, O2Player> o2PlayerMap)
    {
-      Map <String, Map<String, String>> serializedMap = new HashMap<>();
+      Map<String, Map<String, String>> serializedMap = new HashMap<>();
 
       if (Ollivanders2.debug)
          p.getLogger().info("Serializing O2Players...");
@@ -234,81 +230,78 @@ public class O2Players
 
          Map<String, String> playerData = new HashMap<>();
 
-         /**
-          * Name
-          */
+         //
+         // Name
+         //
          String pName = o2p.getPlayerName();
          playerData.put(nameLabel, pName);
 
-         /**
-          * Wand
-          */
+         //
+         // Wand
+         //
          playerData.put(woodLabel, o2p.getWandWood());
          playerData.put(coreLabel, o2p.getWandCore());
 
-         /**
-          * Souls
-          */
-         Integer souls = o2p.getSouls();
-         playerData.put(soulsLabel, souls.toString());
+         //
+         // Souls
+         //
+         int souls = o2p.getSouls();
+         playerData.put(soulsLabel, Integer.toString(souls));
 
-         /**
-          * Invisible
-          */
+         //
+         // Invisible
+         //
          if (o2p.isInvisible())
          {
-            Boolean invisible = true;
-            playerData.put(invisibleLabel, invisible.toString());
+            playerData.put(invisibleLabel, Boolean.toString(true));
          }
 
-         /**
-          * Muggleton
-          */
+         //
+         // Muggleton
+         //
          if (o2p.isInRepelloMuggleton())
          {
-            Boolean muggleton = true;
-            playerData.put(inMuggletonLabel, muggleton.toString());
+            playerData.put(inMuggletonLabel, Boolean.toString(true));
          }
 
-         /**
-          * Found Wand
-          */
+         //
+         // Found Wand
+         //
          if (o2p.foundWand())
          {
-            Boolean foundWand = true;
-            playerData.put(foundWandLabel, foundWand.toString());
+            playerData.put(foundWandLabel, Boolean.toString(true));
          }
 
-         /**
-          * Master Spell
-          */
+         //
+         // Master Spell
+         //
          O2SpellType spellType = o2p.getMasterSpell();
          if (spellType != null)
          {
             playerData.put(masterSpellLabel, spellType.toString());
          }
 
-         /**
-          * Last Spell
-          */
+         //
+         // Last Spell
+         //
          O2SpellType lastSpell = o2p.getLastSpell();
          if (lastSpell != null)
          {
             playerData.put(lastSpellLabel, lastSpell.toString());
          }
 
-         /**
-          * Prior Incantatum
-          */
+         //
+         // Prior Incantatum
+         //
          O2SpellType prior = o2p.getPriorIncantatem();
          if (prior != null)
          {
             playerData.put(priorIncantatumLabel, prior.toString());
          }
 
-         /**
-          * Animagus
-          */
+         //
+         // Animagus
+         //
          EntityType animagus = o2p.getAnimagusForm();
          if (animagus != null)
          {
@@ -318,52 +311,45 @@ public class O2Players
                playerData.put(animagusColorLabel, color);
          }
 
-         /**
-          * Muggle
-          */
+         //
+         // Muggle
+         //
          if (!o2p.isMuggle())
          {
-            Boolean muggle = false;
-            playerData.put(muggleLabel, muggle.toString());
+            playerData.put(muggleLabel, Boolean.toString(false));
          }
 
-         /**
-          * Year
-          */
+         //
+         // Year
+         //
          Integer year = o2p.getYear().getIntValue();
          playerData.put(yearLabel, year.toString());
 
-         /**
-          * Effects
-          */
+         //
+         // Effects
+         //
          Map<String, String> effects = Ollivanders2API.getPlayers().playerEffects.serializeEffects(pid);
          for (Entry<String, String> entry : effects.entrySet())
          {
             playerData.put(entry.getKey(), entry.getValue());
          }
 
-         /**
-          * Spell Experience
-          */
+         //
+         // Spell Experience
+         //
          Map<O2SpellType, Integer> knownSpells = o2p.getKnownSpells();
-         if (knownSpells != null)
+         for (Entry<O2SpellType, Integer> s : knownSpells.entrySet())
          {
-            for (Entry<O2SpellType, Integer> s : knownSpells.entrySet())
-            {
-               playerData.put(spellLabelPrefix + s.getKey().toString(), s.getValue().toString());
-            }
+            playerData.put(spellLabelPrefix + s.getKey().toString(), s.getValue().toString());
          }
 
-         /**
-          * Potion Experience
-          */
+         //
+         // Potion Experience
+         //
          Map<O2PotionType, Integer> knownPotions = o2p.getKnownPotions();
-         if (knownPotions != null)
+         for (Entry<O2PotionType, Integer> p : knownPotions.entrySet())
          {
-            for (Entry<O2PotionType, Integer> p : knownPotions.entrySet())
-            {
-               playerData.put(potionLabelPrefix + p.getKey().toString(), p.getValue().toString());
-            }
+            playerData.put(potionLabelPrefix + p.getKey().toString(), p.getValue().toString());
          }
 
          serializedMap.put(pid.toString(), playerData);
@@ -397,11 +383,12 @@ public class O2Players
     * @param map a map of player data as strings
     * @return the deserialized map of O2Players, null if map could not be deserialized
     */
-   private Map<UUID, O2Player> deserializeO2Players (Map <String, Map<String, String>> map)
+   @Nullable
+   private Map<UUID, O2Player> deserializeO2Players(@NotNull Map<String, Map<String, String>> map)
    {
       Map<UUID, O2Player> deserializedMap = new HashMap<>();
 
-      if (map == null || map.size() < 1)
+      if (map.size() < 1)
       {
          return null;
       }
@@ -525,10 +512,13 @@ public class O2Players
             }
             else if (label.equalsIgnoreCase(yearLabel))
             {
-               Integer year = Ollivanders2API.common.integerFromString(value);
-               if (year != null)
+               Integer y = Ollivanders2API.common.integerFromString(value);
+               if (y != null)
                {
-                  o2p.setYear(O2PlayerCommon.intToYear(year));
+                  Year year = O2PlayerCommon.intToYear(y);
+
+                  if (year != null)
+                     o2p.setYear(year);
                }
             }
             else if (label.startsWith(playerEffects.effectLabelPrefix))
@@ -564,15 +554,12 @@ public class O2Players
    /**
     * Deserialize a spell and set spell experience on the player.
     *
-    * @param o2p the player this spell count is for
+    * @param o2p   the player this spell count is for
     * @param label the serialized name of the spell
     * @param value the serialized count of spell experience
     */
-   private void deserializeSpell (O2Player o2p, String label, String value)
+   private void deserializeSpell(@NotNull O2Player o2p, @NotNull String label, @NotNull String value)
    {
-      if (o2p == null || label == null || value == null)
-         return;
-
       O2SpellType spellType = O2SpellType.spellTypeFromString(label);
       if (spellType == null)
          return;
@@ -585,15 +572,12 @@ public class O2Players
    /**
     * Deserialize a potion and set potion experience on the player.
     *
-    * @param o2p the player this potion count is for
+    * @param o2p   the player this potion count is for
     * @param label the serialized name of the potion
     * @param value the serialized count of potion experience
     */
-   private void deserializePotion (O2Player o2p, String label, String value)
+   private void deserializePotion(@NotNull O2Player o2p, @NotNull String label, @NotNull String value)
    {
-      if (o2p == null || label == null || value == null)
-         return;
-
       O2PotionType potionType = O2PotionType.potionTypeFromString(label);
       if (potionType == null)
          return;
@@ -609,9 +593,11 @@ public class O2Players
     * @param pid              the player to correct
     * @param correctedVariant the corrected value
     */
-   public void fixPlayerAnimagusColorVariant(UUID pid, String correctedVariant)
+   public void fixPlayerAnimagusColorVariant(@NotNull UUID pid, @NotNull String correctedVariant)
    {
       O2Player player = getPlayer(pid);
-      player.setAnimagusColor(correctedVariant);
+
+      if (player != null)
+         player.setAnimagusColor(correctedVariant);
    }
 }
