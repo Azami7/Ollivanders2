@@ -78,7 +78,7 @@ public abstract class ColoroSuper extends O2Spell
             Block target = getTargetBlock();
             if (target == null)
             {
-                p.getLogger().warning("ColoroSuper.doCheckEffect: target block is null");
+                common.printDebugMessage("ColoroSuper.doCheckEffect: target block is null", null, null, true);
                 kill();
                 return;
             }

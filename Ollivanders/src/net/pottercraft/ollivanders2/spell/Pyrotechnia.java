@@ -71,7 +71,7 @@ public abstract class Pyrotechnia extends O2Spell
          World world = location.getWorld();
          if (world == null)
          {
-            p.getLogger().warning("Pyrotechnia.checkEffect: world is null");
+            common.printDebugMessage("Pyrotechnia.checkEffect: world is null", null, null, true);
             kill();
             return;
          }

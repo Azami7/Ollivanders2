@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Shrinks a stationarySpellObject's radius. Only the player who created the stationarySpellObject can change it's size.
@@ -40,11 +41,11 @@ public final class HORREAT_PROTEGAT extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public HORREAT_PROTEGAT (Ollivanders2 plugin, Player player, Double rightWand)
+   public HORREAT_PROTEGAT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

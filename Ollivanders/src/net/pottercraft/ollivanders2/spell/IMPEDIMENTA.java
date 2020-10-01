@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Slows any living entity by an amount and time depending on the player's spell level.
@@ -39,11 +40,11 @@ public final class IMPEDIMENTA extends AddPotionEffect
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public IMPEDIMENTA (Ollivanders2 plugin, Player player, Double rightWand)
+   public IMPEDIMENTA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

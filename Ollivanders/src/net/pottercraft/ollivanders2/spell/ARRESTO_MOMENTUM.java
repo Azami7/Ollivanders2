@@ -100,17 +100,10 @@ public final class ARRESTO_MOMENTUM extends O2Spell
             if (entity.getUniqueId() == player.getUniqueId())
                continue;
 
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("current speed = " + entity.getVelocity().length());
-            }
-
+            common.printDebugMessage("current speed = " + entity.getVelocity().length(), null, null, false);
             entity.setVelocity(entity.getVelocity().multiply(multiplier));
 
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("new speed = " + entity.getVelocity().length());
-            }
+            common.printDebugMessage("new speed = " + entity.getVelocity().length(), null, null, false);
 
             kill();
             return;

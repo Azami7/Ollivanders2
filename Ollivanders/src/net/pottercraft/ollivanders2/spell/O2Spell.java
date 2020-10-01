@@ -271,7 +271,7 @@ public abstract class O2Spell implements Teachable
       World world = location.getWorld();
       if (world == null)
       {
-         p.getLogger().warning("O2Spell.move: world null");
+         common.printDebugMessage("O2Spell.move: world null", null, null, true);
          kill();
          return;
       }
@@ -372,17 +372,11 @@ public abstract class O2Spell implements Teachable
       // check every flag needed for this spell
       for (StateFlag flag : worldGuardFlags)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("checking WG flag " + flag.toString());
-         }
+         common.printDebugMessage("checking WG flag " + flag.toString(), null, null, false);
 
          if (!Ollivanders2.worldGuardO2.checkWGFlag(player, location, flag))
          {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag.toString());
-            }
+            common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag.toString(), null, null, false);
 
             return false;
          }

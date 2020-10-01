@@ -79,7 +79,7 @@ public final class CALAMUS extends Transfiguration
                World world = loc.getWorld();
                if (world == null)
                {
-                  p.getLogger().warning("CALAMUS.doCheckEffect: world is null");
+                  common.printDebugMessage("CALAMUS.doCheckEffect: world is null", null, null, true);
                   kill();
                   return;
                }

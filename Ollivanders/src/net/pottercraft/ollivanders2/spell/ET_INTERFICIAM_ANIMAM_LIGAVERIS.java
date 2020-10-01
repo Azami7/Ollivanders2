@@ -85,7 +85,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
       AttributeInstance healthAttribute = player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH);
       if (healthAttribute == null)
       {
-         p.getLogger().warning("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null");
+         common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, false);
          kill();
          return;
       }

@@ -79,7 +79,7 @@ public abstract class IncendioSuper extends O2Spell
          Block target = getTargetBlock();
          if (target == null)
          {
-            p.getLogger().warning("IncendioSuper.doCheckEffect: target block is null");
+            common.printDebugMessage("IncendioSuper.doCheckEffect: target block is null", null, null, true);
             kill();
             return;
          }

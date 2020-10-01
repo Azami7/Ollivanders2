@@ -95,11 +95,7 @@ public final class ALIQUAM_FLOO extends O2Spell
             String flooName = sign.getLine(0).trim() + " " + sign.getLine(1).trim() + " " + sign.getLine(2).trim() + " " + sign.getLine(3).trim();
             flooName = flooName.trim();
             flooName = flooName.toLowerCase();
-
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("Floo name on sign is " + flooName);
-            }
+            common.printDebugMessage("Floo name on sign is " + flooName, null, null, false);
 
             // make sure there is not already an aliquam floo spell at this block
             for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
@@ -128,11 +124,11 @@ public final class ALIQUAM_FLOO extends O2Spell
          {
             if (target != null)
             {
-               p.getLogger().info("target block was " + target.getType().toString());
+               common.printDebugMessage("target block was " + target.getType().toString(), null, null, false);
             }
             else
             {
-               p.getLogger().info("target block was null");
+               common.printDebugMessage("target block was null", null, null, false);
             }
          }
       }

@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,11 +52,11 @@ public final class DISSENDIUM extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public DISSENDIUM (Ollivanders2 plugin, Player player, Double rightWand)
+   public DISSENDIUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DISSENDIUM;
@@ -98,6 +99,12 @@ public final class DISSENDIUM extends O2Spell
       else
       {
          Block target = getTargetBlock();
+         if (target == null)
+         {
+            common.printDebugMessage("DISSENDIUM.doCheckEffect: target block is null", null, null, true);
+            kill();
+            return;
+         }
          BlockData targetBlockData = target.getBlockData();
 
          // if the target is a trap door, open it
@@ -115,9 +122,15 @@ public final class DISSENDIUM extends O2Spell
    /**
     * Opens the trapdoor at target block
     */
-   private void openTrapDoor ()
+   private void openTrapDoor()
    {
       Block target = getTargetBlock();
+      if (target == null)
+      {
+         common.printDebugMessage("DISSENDIUM.openTrapDoor: target block is null", null, null, true);
+         kill();
+         return;
+      }
 
       // check for colloportus spell locking this door
       Location targetLocation = target.getLocation();

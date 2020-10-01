@@ -87,7 +87,7 @@ public final class AVIS extends O2Spell
             World world = location.getWorld();
             if (world == null)
             {
-                p.getLogger().warning("AVIS.checkEffect: world is null");
+                common.printDebugMessage("AVIS.checkEffect: world is null", null, null, true);
                 kill();
                 return;
             }
