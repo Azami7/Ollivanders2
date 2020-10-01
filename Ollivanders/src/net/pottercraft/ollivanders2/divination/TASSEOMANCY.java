@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.divination;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Tasseomancy is the art of reading tea leaves to predict events in the future.
@@ -12,7 +13,7 @@ import org.bukkit.entity.Player;
  */
 public class TASSEOMANCY extends O2Divination
 {
-   public TASSEOMANCY (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
+   public TASSEOMANCY(@NotNull Ollivanders2 plugin, @NotNull Player pro, @NotNull Player tar, int exp)
    {
       super(plugin, pro, tar, exp);
 
