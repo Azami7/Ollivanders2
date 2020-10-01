@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Harmonious Connections
@@ -12,7 +13,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class HARMONIOUS_CONNECTIONS extends O2Book
 {
-   public HARMONIOUS_CONNECTIONS (Ollivanders2 plugin)
+   public HARMONIOUS_CONNECTIONS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -20,9 +21,9 @@ public class HARMONIOUS_CONNECTIONS extends O2Book
       title = "Harmonious Connections";
       author = "Unknown";
       openingPage = "Vanishing cabinets are an old but powerful form of magical transportation. "
-            + "Vanishing cabinets are made as twins and are used to connect to specific locations to each other."
-            + "\n\nVanishing cabinet construction is very precise and the cabinets will only work if the directions are followed exactly."
-            + "\n\nStep 1 - determine the XYZ coordinates for the cabinets. These must be in whole numbers."
+              + "Vanishing cabinets are made as twins and are used to connect to specific locations to each other."
+              + "\n\nVanishing cabinet construction is very precise and the cabinets will only work if the directions are followed exactly."
+              + "\n\nStep 1 - determine the XYZ coordinates for the cabinets. These must be in whole numbers."
             + "\n\nStep 2 - create a sign at each XYZ coordinate that contains the coordinates for the other cabinet."
             + "Write the world name on the first line, the X coordinate on the second, Y on the third, and Z on the fourth."
             + "\n\nStep 3 - place any type of solid block 2-blocks high on each side, in front, and in back of the sign - 4 blocks total."

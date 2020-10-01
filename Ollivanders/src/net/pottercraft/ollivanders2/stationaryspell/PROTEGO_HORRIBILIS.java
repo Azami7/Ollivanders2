@@ -69,7 +69,7 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell implements StationarySpell
             {
                if (location.distance(proj.location) > radius - 1)
                {
-                  p.remProjectile(proj);
+                  p.removeProjectile(proj);
                }
             }
          }

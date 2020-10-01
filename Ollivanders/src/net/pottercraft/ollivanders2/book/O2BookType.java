@@ -1,10 +1,12 @@
 package net.pottercraft.ollivanders2.book;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * All Ollivanders2 book types.
  *
- * @since 2.2.4
  * @author Azami7
+ * @since 2.2.4
  */
 public enum O2BookType
 {
@@ -57,14 +59,25 @@ public enum O2BookType
    WANDERINGS_WITH_WEREWOLVES(WANDERINGS_WITH_WEREWOLVES.class),
    YEAR_WITH_A_YETI(YEAR_WITH_A_YETI.class);
 
-   private Class className;
+   private final Class<?> className;
 
-   O2BookType (Class className)
+   /**
+    * Constructor
+    *
+    * @param className the name of the class this type represents
+    */
+   O2BookType(@NotNull Class<?> className)
    {
       this.className = className;
    }
 
-   public Class getClassName()
+   /**
+    * Get the class for this type
+    *
+    * @return the class name
+    */
+   @NotNull
+   public Class<?> getClassName()
    {
       return className;
    }

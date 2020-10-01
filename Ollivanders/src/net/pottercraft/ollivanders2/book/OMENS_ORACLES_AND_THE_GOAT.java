@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Omens, Oracles & the Goat was a book by the celebrated magical historian, Bathilda Bagshot, covering a historical overview of Divination practises.
@@ -13,7 +14,7 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
  */
 public class OMENS_ORACLES_AND_THE_GOAT extends O2Book
 {
-    public OMENS_ORACLES_AND_THE_GOAT (Ollivanders2 plugin)
+    public OMENS_ORACLES_AND_THE_GOAT(@NotNull Ollivanders2 plugin)
     {
         super(plugin);
 
@@ -22,6 +23,6 @@ public class OMENS_ORACLES_AND_THE_GOAT extends O2Book
         branch = O2MagicBranch.DIVINATION;
 
         spells.add(O2SpellType.OVOGNOSIS);
-       spells.add(O2SpellType.CARTOMANCIE);
+        spells.add(O2SpellType.CARTOMANCIE);
     }
 }

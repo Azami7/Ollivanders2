@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Basic Hexes for the Busy and Vexed
@@ -13,7 +14,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class BASIC_HEXES extends O2Book
 {
-   public BASIC_HEXES (Ollivanders2 plugin)
+   public BASIC_HEXES(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
