@@ -9,6 +9,8 @@ import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Teachable;
+import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The text and flavor text for all Ollivanders2 magic.  This can be used for writing books, creating lessons, or
@@ -19,45 +21,48 @@ import net.pottercraft.ollivanders2.Teachable;
  */
 public final class BookTexts
 {
-   private class BookText
+   private static class BookText
    {
       String name;
       String text;
       String flavorText;
 
-      BookText (String n, String t, String f)
+      BookText(@NotNull String n, @NotNull String t, @NotNull String f)
       {
          name = n;
          text = t;
          flavorText = f;
       }
 
+      @NotNull
       public String getName ()
       {
          return name;
       }
 
+      @NotNull
       public String getText ()
       {
          return text;
       }
 
+      @NotNull
       public String getFlavorText ()
       {
          return flavorText;
       }
    }
 
-   private Map <String, BookText> O2MagicTextMap = new HashMap<>();
+   private final Map<String, BookText> O2MagicTextMap = new HashMap<>();
 
-   private Ollivanders2 p;
+   private final Ollivanders2 p;
 
    /**
     * Constructor.
     *
     * @param plugin the MC plugin
     */
-   BookTexts (Ollivanders2 plugin)
+   BookTexts(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -122,7 +127,7 @@ public final class BookTexts
             continue;
          }
 
-         Class potionClass = potionType.getClassName();
+         Class<?> potionClass = potionType.getClassName();
          Teachable potion;
 
          try
@@ -159,7 +164,8 @@ public final class BookTexts
     * @param magic the name of the magic topic
     * @return the flavor text for that spell or null if it has none.
     */
-   String getFlavorText (String magic)
+   @Nullable
+   String getFlavorText(@NotNull String magic)
    {
       String flavorText = null;
 
@@ -175,7 +181,8 @@ public final class BookTexts
     * @param magic the name of the magic topic
     * @return the description text for this spell
     */
-   String getText (String magic)
+   @Nullable
+   String getText(@NotNull String magic)
    {
       String text = null;
 
@@ -191,7 +198,8 @@ public final class BookTexts
     * @param magic the name of the magic topic
     * @return the printable name for this magic
     */
-   public String getName (String magic)
+   @Nullable
+   public String getName(@NotNull String magic)
    {
       String name = null;
 

@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * 2nd Century Roman healing text.
@@ -12,7 +13,7 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
  */
 public class DE_MEDICINA_PRAECEPTA extends O2Book
 {
-   public DE_MEDICINA_PRAECEPTA (Ollivanders2 plugin)
+   public DE_MEDICINA_PRAECEPTA(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

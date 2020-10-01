@@ -480,7 +480,7 @@ public abstract class O2Spell implements Teachable
       // set up spell use modifier
       // the number of times the spell has been cast and then halved if the player is not using their
       // destined wand, doubled if they are using the elder wand
-      spellUses = p.getSpellNum(player, spellType);
+      spellUses = p.getSpellCount(player, spellType);
       usesModifier = spellUses / rightWand;
 
       // if the caster is affected by HIGHER_SKILL, double their usesModifier

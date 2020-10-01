@@ -1,31 +1,48 @@
 package net.pottercraft.ollivanders2.player;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * Wand wood types
+ */
 public enum O2WandWoodType
 {
-   SPRUCE (Material.SPRUCE_LOG, "Spruce"),
-   JUNGLE (Material.JUNGLE_LOG, "Jungle"),
-   BIRCH (Material.BIRCH_LOG, "Birch"),
-   OAK (Material.OAK_LOG, "Oak");
+   SPRUCE(Material.SPRUCE_LOG, "Spruce"),
+   JUNGLE(Material.JUNGLE_LOG, "Jungle"),
+   BIRCH(Material.BIRCH_LOG, "Birch"),
+   OAK(Material.OAK_LOG, "Oak");
 
-   Material material;
-   String label;
+   final Material material;
+   final String label;
 
-   O2WandWoodType (Material m, String l)
+   O2WandWoodType(@NotNull Material m, @NotNull String l)
    {
       material = m;
       label = l;
    }
 
-   public Material getMaterial ()
+   /**
+    * Get the material for this type
+    *
+    * @return the material
+    */
+   @NotNull
+   public Material getMaterial()
    {
       return material;
    }
 
-   public String getLabel ()
+   /**
+    * Get the label for this type
+    *
+    * @return the label
+    */
+   @NotNull
+   public String getLabel()
    {
       return label;
    }
@@ -36,7 +53,8 @@ public enum O2WandWoodType
     * @param m the material to check
     * @return the wand core type if found, null otherwise
     */
-   public static O2WandWoodType getWandWoodTypeByMaterial (Material m)
+   @Nullable
+   public static O2WandWoodType getWandWoodTypeByMaterial(@NotNull Material m)
    {
       for (O2WandWoodType woodType : O2WandWoodType.values())
       {
@@ -52,6 +70,7 @@ public enum O2WandWoodType
     *
     * @return the names of all wand woods as a list
     */
+   @NotNull
    public static ArrayList<String> getAllWoodsByName ()
    {
       ArrayList<String> woods = new ArrayList<>();

@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Confronting the Faceless - N.E.W.T level Defense Agaist the Dark Arts book
@@ -23,7 +24,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class CONFRONTING_THE_FACELESS extends O2Book
 {
-   public CONFRONTING_THE_FACELESS (Ollivanders2 plugin)
+   public CONFRONTING_THE_FACELESS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

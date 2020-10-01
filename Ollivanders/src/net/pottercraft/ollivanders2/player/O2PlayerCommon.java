@@ -14,12 +14,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+/**
+ * Player common functions.
+ *
+ * @author Azami7
+ */
 public final class O2PlayerCommon
 {
-   JavaPlugin p;
+   final JavaPlugin p;
 
-   public O2PlayerCommon(JavaPlugin plugin)
+   /**
+    * Constructor
+    *
+    * @param plugin a reference to the MC plugin using these common functions
+    */
+   public O2PlayerCommon(@NotNull JavaPlugin plugin)
    {
       p = plugin;
    }
@@ -58,7 +69,7 @@ public final class O2PlayerCommon
       add(EntityType.SHULKER);
    }};
 
-   static String wandLoreConjunction = " and ";
+   static final String wandLoreConjunction = " and ";
 
    /**
     * Take an integer and get the corresponding year
@@ -66,6 +77,7 @@ public final class O2PlayerCommon
     * @param year The year; must be between 1 and 7
     * @return The corresponding year or null if invalid input
     */
+   @Nullable
    public static Year intToYear(int year)
    {
       switch (year)
@@ -94,7 +106,8 @@ public final class O2PlayerCommon
     *
     * @return a list of all possible EntityTypes for animagus form
     */
-   public EntityType getAnimagusForm(UUID pid)
+   @NotNull
+   public EntityType getAnimagusForm(@NotNull UUID pid)
    {
       // 1% chance to get a rare form
       int form = Math.abs(pid.hashCode() % 100);
@@ -123,7 +136,7 @@ public final class O2PlayerCommon
     * @param form the animagus form to check
     * @return true if this is an allowed form, false otherwise
     */
-   public boolean isAllowedAnimagusForm(EntityType form)
+   public boolean isAllowedAnimagusForm(@NotNull EntityType form)
    {
       if (Ollivanders2.useHostileMobAnimagi)
       {
@@ -143,7 +156,7 @@ public final class O2PlayerCommon
     * @param player player to check.
     * @return True if the player holds a wand. False if not or if player is null.
     */
-   public boolean holdsWand(Player player)
+   public boolean holdsWand(@NotNull Player player)
    {
       return holdsWand(player, EquipmentSlot.HAND);
    }
@@ -151,16 +164,13 @@ public final class O2PlayerCommon
    /**
     * Does the player hold a wand item in their hand?
     *
-    * @since 2.2.7
     * @param player player to check.
-    * @param hand the equipment slot to check for this player
+    * @param hand   the equipment slot to check for this player
     * @return True if the player holds a wand. False if not or if player is null.
+    * @since 2.2.7
     */
-   public boolean holdsWand (Player player, EquipmentSlot hand)
+   public boolean holdsWand(@NotNull Player player, @NotNull EquipmentSlot hand)
    {
-      if (player == null || hand == null)
-         return false;
-
       ItemStack held;
       if (hand == EquipmentSlot.HAND)
       {
@@ -189,10 +199,10 @@ public final class O2PlayerCommon
     * Is this ItemStack the player's destined wand?
     *
     * @param player player to check the stack against.
-    * @param stack ItemStack to be checked
+    * @param stack  ItemStack to be checked
     * @return true if yes, false if no
     */
-   public boolean destinedWand (Player player, ItemStack stack)
+   public boolean destinedWand(@NotNull Player player, @NotNull ItemStack stack)
    {
       if (Ollivanders2API.common.isWand(stack))
       {
@@ -215,13 +225,13 @@ public final class O2PlayerCommon
     * Checks what kind of wand a player holds in their primary hand. Returns a value based on the
     * wand and it's relation to the player.
     *
-    * @assumes player not null, player holding a wand
     * @param player player being checked. The player must be holding a wand.
     * @return 2 - the wand is not player's type AND/OR is not allied to player.<p>
     * 1 - the wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
     * 0.5 - the wand is the elder wand and it is allied to player.
+    * @assumes player not null, player holding a wand
     */
-   public double wandCheck (Player player)
+   public double wandCheck(@NotNull Player player)
    {
       return wandCheck(player, EquipmentSlot.HAND);
    }
@@ -229,15 +239,15 @@ public final class O2PlayerCommon
    /**
     * Checks what kind of wand a player holds. Returns a value based on the wand and it's relation to the player.
     *
-    * @since 2.2.7
-    * @assumes player not null, player is holding a wand in the equipment slot passed in
     * @param player player being checked. The player must be holding a wand.
-    * @param hand the hand that is holding the wand to check.
+    * @param hand   the hand that is holding the wand to check.
     * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
     * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
     * 0.5 - The wand is the elder wand and it is allied to player.
+    * @assumes player not null, player is holding a wand in the equipment slot passed in
+    * @since 2.2.7
     */
-   public double wandCheck (Player player, EquipmentSlot hand)
+   public double wandCheck(@NotNull Player player, @NotNull EquipmentSlot hand)
    {
       ItemStack item;
 

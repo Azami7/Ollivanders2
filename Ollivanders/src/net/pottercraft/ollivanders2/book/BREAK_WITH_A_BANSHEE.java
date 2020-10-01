@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Break with a Banshee - 2nd year Defense Against the Dark Arts book
@@ -12,7 +13,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class BREAK_WITH_A_BANSHEE extends O2Book
 {
-   public BREAK_WITH_A_BANSHEE (Ollivanders2 plugin)
+   public BREAK_WITH_A_BANSHEE(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

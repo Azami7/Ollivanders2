@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Unfogging the Future - 3rd and 4th year Divination textbook
@@ -13,7 +14,7 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
  */
 public class UNFOGGING_THE_FUTURE extends O2Book
 {
-   public UNFOGGING_THE_FUTURE (Ollivanders2 plugin)
+   public UNFOGGING_THE_FUTURE(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

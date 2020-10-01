@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The Dark Forces: A Guide to Self-Protection - 1st year Defense Against the Dark Arts
@@ -15,7 +16,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class THE_DARK_FORCES extends O2Book
 {
-   public THE_DARK_FORCES (Ollivanders2 plugin)
+   public THE_DARK_FORCES(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

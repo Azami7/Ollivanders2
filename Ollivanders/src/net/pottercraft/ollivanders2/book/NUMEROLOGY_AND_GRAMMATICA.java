@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Numerology and Grammatica - Arithmancy text
@@ -12,7 +13,7 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
  */
 public class NUMEROLOGY_AND_GRAMMATICA extends O2Book
 {
-   public NUMEROLOGY_AND_GRAMMATICA (Ollivanders2 plugin)
+   public NUMEROLOGY_AND_GRAMMATICA(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

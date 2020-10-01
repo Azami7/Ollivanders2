@@ -4,6 +4,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The Healer's Helpmate
@@ -13,7 +14,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class THE_HEALERS_HELPMATE extends O2Book
 {
-   public THE_HEALERS_HELPMATE (Ollivanders2 plugin)
+   public THE_HEALERS_HELPMATE(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

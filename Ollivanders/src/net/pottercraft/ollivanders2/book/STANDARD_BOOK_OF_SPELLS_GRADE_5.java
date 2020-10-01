@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Standard Book of Spells Grade 5
@@ -16,7 +17,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_5 extends O2Book
 {
-   public STANDARD_BOOK_OF_SPELLS_GRADE_5 (Ollivanders2 plugin)
+   public STANDARD_BOOK_OF_SPELLS_GRADE_5(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

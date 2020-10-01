@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.item;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -106,6 +107,7 @@ public class O2Items
     * @param amount the amount of the item to get
     * @return an item stack of the item and amount, null if item not found
     */
+   @Nullable
    public ItemStack getItemStartsWith (String name, int amount)
    {
       O2ItemType itemType = getItemTypeByStartsWith(name);
