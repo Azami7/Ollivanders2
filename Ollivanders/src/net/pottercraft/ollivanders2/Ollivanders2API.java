@@ -9,6 +9,7 @@ import net.pottercraft.ollivanders2.player.O2Players;
 import net.pottercraft.ollivanders2.potion.O2Potions;
 import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -28,27 +29,31 @@ public class Ollivanders2API
    public static O2PlayerCommon playerCommon;
    public static Ollivanders2Common common;
 
-   static void init (Ollivanders2 p)
+   static void init (@NotNull JavaPlugin p)
    {
       common = new Ollivanders2Common(p);
    }
 
-   static void initHouses (Ollivanders2 p)
+   static void initHouses (@NotNull JavaPlugin p)
    {
       houses = new O2Houses(p);
    }
 
    static void saveHouses ()
    {
-      houses.saveHouses();
+      if (houses != null)
+         houses.saveHouses();
    }
 
-   public static O2Houses getHouses ()
+   public static O2Houses getHouses (@NotNull JavaPlugin p)
    {
+      if (houses == null)
+         initHouses(p);
+
       return houses;
    }
 
-   static void initPlayers (Ollivanders2 p)
+   static void initPlayers (@NotNull JavaPlugin p)
    {
       players = new O2Players(p);
       players.loadO2Players();
@@ -57,7 +62,8 @@ public class Ollivanders2API
 
    static void savePlayers()
    {
-      players.saveO2Players();
+      if (players != null)
+         players.saveO2Players();
    }
 
    /**
@@ -66,12 +72,15 @@ public class Ollivanders2API
     * @return the player management object
     */
    @NotNull
-   public static O2Players getPlayers()
+   public static O2Players getPlayers(@NotNull JavaPlugin p)
    {
+      if (players == null)
+         initPlayers(p);
+
       return players;
    }
 
-   static void initBooks(Ollivanders2 p)
+   static void initBooks (@NotNull JavaPlugin p)
    {
       books = new O2Books(p);
    }
@@ -81,68 +90,94 @@ public class Ollivanders2API
     *
     * @return the book management object
     */
-   public static O2Books getBooks()
+   @NotNull
+   public static O2Books getBooks(@NotNull JavaPlugin p)
    {
+      if (books == null)
+         initBooks(p);
+
       return books;
    }
 
-   static void initSpells(Ollivanders2 p)
+   static void initSpells(@NotNull JavaPlugin p)
    {
       spells = new O2Spells(p);
    }
 
-   public static O2Spells getSpells ()
+   @NotNull
+   public static O2Spells getSpells (@NotNull JavaPlugin p)
    {
+      if (spells == null)
+         initSpells(p);
+
       return spells;
    }
 
-   static void initPotions (Ollivanders2 p)
+   static void initPotions (JavaPlugin p)
    {
       potions = new O2Potions(p);
    }
 
-   public static O2Potions getPotions ()
+   @NotNull
+   public static O2Potions getPotions (@NotNull JavaPlugin p)
    {
+      if (potions == null)
+         initPotions(p);
+
       return potions;
    }
 
-   static void initStationarySpells (Ollivanders2 p)
+   static void initStationarySpells (JavaPlugin p)
    {
       stationarySpells = new O2StationarySpells(p);
    }
 
    static void saveStationarySpells ()
    {
-      stationarySpells.saveO2StationarySpells();
+      if (stationarySpells != null)
+         stationarySpells.saveO2StationarySpells();
    }
 
-   public static O2StationarySpells getStationarySpells ()
+   @NotNull
+   public static O2StationarySpells getStationarySpells (@NotNull JavaPlugin p)
    {
+      if (stationarySpells == null)
+         initStationarySpells(p);
+
       return stationarySpells;
    }
 
-   static void initProphecies (Ollivanders2 p)
+   static void initProphecies (JavaPlugin p)
    {
       prophecies = new O2Prophecies(p);
    }
 
    static void saveProphecies ()
    {
-      prophecies.saveProphecies();
+      if (prophecies != null)
+         prophecies.saveProphecies();
    }
 
-   public static O2Prophecies getProphecies ()
+   @NotNull
+   public static O2Prophecies getProphecies (@NotNull JavaPlugin p)
    {
+      if (prophecies == null)
+         initProphecies(p);
+
       return prophecies;
    }
 
-   public static void initItems (Ollivanders2 p)
+   public static void initItems (JavaPlugin p)
    {
       items = new O2Items(p);
    }
 
-   public static O2Items getItems ()
+   @NotNull
+   public static O2Items getItems (@NotNull JavaPlugin p)
    {
+      if (items == null)
+         initItems(p);
+
       return items;
    }
 }

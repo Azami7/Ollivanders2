@@ -75,7 +75,7 @@ public abstract class Divination extends O2Spell
    {
       usesModifier = p.getSpellCount(player, spellType);
 
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
       {
          usesModifier *= 2;
       }

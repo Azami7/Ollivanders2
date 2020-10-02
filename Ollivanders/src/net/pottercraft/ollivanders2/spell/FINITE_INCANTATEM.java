@@ -120,11 +120,11 @@ public final class FINITE_INCANTATEM extends O2Spell
             Player ply = (Player) live;
 
             // look for any effects on the player
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffects(ply.getUniqueId()))
+            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffects(ply.getUniqueId()))
             {
                if (usesModifier < 100)
                {
-                  Ollivanders2API.getPlayers().playerEffects.ageAllEffectsByPercent(ply.getUniqueId(), (int) (percent * 100));
+                  Ollivanders2API.getPlayers(p).playerEffects.ageAllEffectsByPercent(ply.getUniqueId(), (int) (percent * 100));
                }
 
                kill();

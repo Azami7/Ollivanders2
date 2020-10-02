@@ -11,6 +11,7 @@ import net.pottercraft.ollivanders2.spell.AVADA_KEDAVRA;
 import org.bukkit.Location;
 
 import net.pottercraft.ollivanders2.spell.O2Spell;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Destroys spell projectiles crossing the boundary.
@@ -24,7 +25,7 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell implements StationarySpell
     *
     * @param plugin a callback to the MC plugin
     */
-   public PROTEGO_HORRIBILIS (Ollivanders2 plugin)
+   public PROTEGO_HORRIBILIS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -34,14 +35,14 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell implements StationarySpell
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
-    * @param pid the player who cast the spell
+    * @param plugin   a callback to the MC plugin
+    * @param pid      the player who cast the spell
     * @param location the center location of the spell
-    * @param type the type of this spell
-    * @param radius the radius for this spell
+    * @param type     the type of this spell
+    * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public PROTEGO_HORRIBILIS (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius, Integer duration)
+   public PROTEGO_HORRIBILIS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration)
    {
       super(plugin, pid, location, type, radius, duration);
 
@@ -49,28 +50,26 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell implements StationarySpell
    }
 
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       age();
       List<O2Spell> projectiles = p.getProjectiles();
-      if (projectiles != null)
-      {
-         List<O2Spell> projectiles2 = new ArrayList<>(projectiles);
-         for (O2Spell proj : projectiles2)
-         {
-            // https://harrypotter.fandom.com/wiki/Shield_Charm
-            // "However, this shield isn't completely impenetrable, as it cannot block a Killing Curse."
-            if (proj instanceof AVADA_KEDAVRA)
-            {
-               continue;
-            }
 
-            if (isInside(proj.location))
+      List<O2Spell> projectiles2 = new ArrayList<>(projectiles);
+      for (O2Spell proj : projectiles2)
+      {
+         // https://harrypotter.fandom.com/wiki/Shield_Charm
+         // "However, this shield isn't completely impenetrable, as it cannot block a Killing Curse."
+         if (proj instanceof AVADA_KEDAVRA)
+         {
+            continue;
+         }
+
+         if (isInside(proj.location))
+         {
+            if (location.distance(proj.location) > radius - 1)
             {
-               if (location.distance(proj.location) > radius - 1)
-               {
-                  p.removeProjectile(proj);
-               }
+               p.removeProjectile(proj);
             }
          }
       }
@@ -82,6 +81,7 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell implements StationarySpell
     * @return a map of the serialized data
     */
    @Override
+   @NotNull
    public Map<String, String> serializeSpellData ()
    {
       return new HashMap<>();
@@ -93,5 +93,5 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell implements StationarySpell
     * @param spellData a map of the saved spell data
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData) { }
+   public void deserializeSpellData(@NotNull Map<String, String> spellData) { }
 }

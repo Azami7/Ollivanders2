@@ -206,7 +206,7 @@ public final class O2PlayerCommon
    {
       if (Ollivanders2API.common.isWand(stack))
       {
-         O2Player o2Player = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+         O2Player o2Player = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
 
          if (o2Player == null)
          {
@@ -282,6 +282,7 @@ public final class O2PlayerCommon
 
       List<String> lore = item.getItemMeta().getLore();
       if (lore == null)
+         // this should never happen if idWand() check was done first
          return 2;
 
       if (lore.get(0).equals("Blaze and Ender Pearl")) // elder wand

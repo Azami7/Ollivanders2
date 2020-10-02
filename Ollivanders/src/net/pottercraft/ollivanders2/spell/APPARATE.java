@@ -142,7 +142,7 @@ public final class APPARATE extends O2Spell
       }
 
       // check for Nullum Evanescunt at location
-      if (Ollivanders2API.getStationarySpells().checkLocationForSpell(player.getLocation(), O2StationarySpellType.NULLUM_EVANESCUNT))
+      if (Ollivanders2API.getStationarySpells(p).checkLocationForSpell(player.getLocation(), O2StationarySpellType.NULLUM_EVANESCUNT))
       {
          return false;
       }
@@ -170,7 +170,7 @@ public final class APPARATE extends O2Spell
       }
 
       // check for Nullum Apparebit at destination
-      if (Ollivanders2API.getStationarySpells().checkLocationForSpell(player.getLocation(), O2StationarySpellType.NULLUM_APPAREBIT))
+      if (Ollivanders2API.getStationarySpells(p).checkLocationForSpell(player.getLocation(), O2StationarySpellType.NULLUM_APPAREBIT))
       {
          return false;
       }

@@ -67,7 +67,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
    @Override
    protected void doCheckEffect ()
    {
-      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
+      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (stationarySpell.getCasterID() == player.getUniqueId())
          {
@@ -97,7 +97,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
    @Override
    protected void revert ()
    {
-      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
+      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (stationarySpell.getCasterID() == player.getUniqueId())
          {

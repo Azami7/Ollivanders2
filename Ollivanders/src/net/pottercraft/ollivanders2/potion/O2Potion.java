@@ -127,7 +127,7 @@ public abstract class O2Potion implements Teachable
       for (Entry<O2ItemType, Integer> e : ingredients.entrySet())
       {
          O2ItemType ingredientType = e.getKey();
-         String name = Ollivanders2API.getItems().getItemDisplayNameByType(ingredientType);
+         String name = Ollivanders2API.getItems(p).getItemDisplayNameByType(ingredientType);
 
          stringBuilder.append("\n").append(e.getValue().toString()).append(" ").append(name);
       }
@@ -284,7 +284,7 @@ public abstract class O2Potion implements Teachable
    {
       boolean canBrew = true;
 
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(brewer.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(brewer.getUniqueId());
       if (o2p == null)
          return false;
 

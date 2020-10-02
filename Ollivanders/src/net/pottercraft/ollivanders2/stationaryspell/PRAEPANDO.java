@@ -9,10 +9,12 @@ import java.util.HashMap;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Entity;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.spell.O2Spell;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Create a pocket of extra-dimensional space.
@@ -20,7 +22,7 @@ import net.pottercraft.ollivanders2.spell.O2Spell;
  */
 public class PRAEPANDO extends ExtraDimensional implements StationarySpell
 {
-   private Set<UUID> teleported = new HashSet<>();
+   final private Set<UUID> teleported = new HashSet<>();
 
    private final String radiusLabel = "Radius";
 
@@ -47,8 +49,7 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
     * @param duration the duration of the spell
     * @param dimenRadius the size of the extra-dimensional space
     */
-   public PRAEPANDO (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
-                     Integer duration, Integer dimenRadius)
+   public PRAEPANDO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration, int dimenRadius)
    {
       super(plugin, pid, location, type, radius, duration, dimenRadius);
 
@@ -61,14 +62,25 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
    {
       Location edLocation = getEDLoc().clone().add(0, 1.1, 0);
       Location normLocation = location;
-      edLocation.getWorld().playEffect(edLocation, Effect.MOBSPAWNER_FLAMES, 0);
-      normLocation.getWorld().playEffect(normLocation, Effect.MOBSPAWNER_FLAMES, 0);
-      for (Entity entity : normLocation.getWorld().getEntities())
+      World edWorld = edLocation.getWorld();
+      World normWorld = normLocation.getWorld();
+
+      if (edWorld == null || normWorld == null)
+      {
+         p.getLogger().warning("PRAEPENDO.checkEffect: world is null");
+         kill();
+         return;
+      }
+
+      edWorld.playEffect(edLocation, Effect.MOBSPAWNER_FLAMES, 0);
+      edWorld.playEffect(normLocation, Effect.MOBSPAWNER_FLAMES, 0);
+
+      for (Entity entity : normWorld.getEntities())
       {
          if (teleported.contains(entity.getUniqueId()))
          {
             if (entity.getLocation().distance(normLocation) > radius
-                  && !entity.getLocation().getBlock().equals(edLocation.getBlock()))
+                    && !entity.getLocation().getBlock().equals(edLocation.getBlock()))
             {
                teleported.remove(entity.getUniqueId());
             }
@@ -104,6 +116,7 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
     * @return a map of the serialized data
     */
    @Override
+   @NotNull
    public Map<String, String> serializeSpellData ()
    {
       Map<String, String> spellData = new HashMap<>();
@@ -119,7 +132,7 @@ public class PRAEPANDO extends ExtraDimensional implements StationarySpell
     * @param spellData a map of the saved spell data
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData)
+   public void deserializeSpellData(@NotNull Map<String, String> spellData)
    {
       for (Entry<String, String> e : spellData.entrySet())
       {

@@ -1,5 +1,7 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Ollivanders2 additions to the original Ollivanders StationarySpell interface.
  *
@@ -13,6 +15,7 @@ public interface O2StationarySpell extends StationarySpell
     *
     * @return the description text for this spell
     */
+   @NotNull
    String getText ();
 
    /**
@@ -21,5 +24,6 @@ public interface O2StationarySpell extends StationarySpell
     *
     * @return the flavor text for this spell.
     */
+   @NotNull
    String getFlavorText ();
 }

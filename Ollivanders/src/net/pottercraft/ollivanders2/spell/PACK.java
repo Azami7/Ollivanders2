@@ -91,7 +91,7 @@ public final class PACK extends O2Spell
       Block block = getTargetBlock();
       if (Ollivanders2Common.chests.contains(block.getType()))
       {
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)
             {

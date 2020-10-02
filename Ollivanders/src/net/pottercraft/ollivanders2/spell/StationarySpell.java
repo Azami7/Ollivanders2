@@ -111,7 +111,7 @@ public abstract class StationarySpell extends O2Spell
       if (stationarySpell != null)
       {
          stationarySpell.flair(flairSize);
-         Ollivanders2API.getStationarySpells().addStationarySpell(stationarySpell);
+         Ollivanders2API.getStationarySpells(p).addStationarySpell(stationarySpell);
       }
 
       kill();

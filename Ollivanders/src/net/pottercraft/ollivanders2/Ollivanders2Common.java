@@ -245,7 +245,7 @@ public class Ollivanders2Common
     *
     * @param plugin a reference to the plugin using this common
     */
-   public Ollivanders2Common(@NotNull JavaPlugin plugin)
+   public Ollivanders2Common (@NotNull JavaPlugin plugin)
    {
       p = plugin;
 
@@ -1148,7 +1148,7 @@ public class Ollivanders2Common
          amount = 1;
 
       List<String> lore = new ArrayList<>();
-      ItemStack wand = Ollivanders2API.getItems().getItemByType(O2ItemType.WAND, 1);
+      ItemStack wand = Ollivanders2API.getItems(p).getItemByType(O2ItemType.WAND, 1);
       if (wand == null)
          return null;
 
@@ -1391,7 +1391,7 @@ public class Ollivanders2Common
 
       for (Player player : p.getServer().getOnlinePlayers())
       {
-         if (Ollivanders2API.getHouses().isSorted(player))
+         if (Ollivanders2API.getHouses(p).isSorted(player))
             sortedPlayers.add(player);
       }
 

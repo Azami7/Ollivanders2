@@ -18,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -35,7 +36,7 @@ public final class O2Books
 {
    private final Map<String, O2BookType> O2BookMap = new HashMap<>();
 
-   private final Ollivanders2 p;
+   private final JavaPlugin p;
    BookTexts spellText;
 
    private ItemStack library;
@@ -75,7 +76,7 @@ public final class O2Books
     *
     * @param plugin the MC plugin
     */
-   public O2Books(@NotNull Ollivanders2 plugin)
+   public O2Books(@NotNull JavaPlugin plugin)
    {
       p = plugin;
 
@@ -206,14 +207,14 @@ public final class O2Books
          return;
       }
 
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
       if (o2p == null)
          return;
 
       for (String spell : bookLore)
       {
          // see if it is a spell
-         O2SpellType spellEnum = Ollivanders2API.getSpells().getSpellTypeByName(spell);
+         O2SpellType spellEnum = Ollivanders2API.getSpells(p).getSpellTypeByName(spell);
 
          if (spellEnum != null)
          {
@@ -225,7 +226,7 @@ public final class O2Books
                p.incrementSpellCount(player, spellEnum);
 
                // if they have the improved learning effect, increment it again
-               if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
+               if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
                {
                   p.incrementSpellCount(player, spellEnum);
                }
@@ -233,7 +234,7 @@ public final class O2Books
          }
          else // see if it is a potion
          {
-            O2PotionType potionEnum = Ollivanders2API.getPotions().getPotionTypeByName(spell);
+            O2PotionType potionEnum = Ollivanders2API.getPotions(p).getPotionTypeByName(spell);
 
             if (potionEnum != null)
             {
@@ -245,7 +246,7 @@ public final class O2Books
                   p.incrementPotionCount(player, potionEnum);
 
                   // if they have the improved learning effect, increment it again
-                  if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
+                  if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
                   {
                      p.incrementPotionCount(player, potionEnum);
                   }

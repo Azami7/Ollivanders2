@@ -60,7 +60,7 @@ public final class APARECIUM extends O2Spell
    @Override
    protected void doCheckEffect ()
    {
-      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location);
+      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
 
       if (stationaries.size() > 0)
       {

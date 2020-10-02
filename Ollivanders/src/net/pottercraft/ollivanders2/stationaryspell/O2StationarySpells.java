@@ -11,13 +11,14 @@ import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 public class O2StationarySpells
 {
    private List<StationarySpellObj> O2StationarySpells = new ArrayList<>();
-   Ollivanders2 p;
+   final JavaPlugin p;
 
    private final String playerUUIDLabel = "Player_UUID";
    private final String spellLabel = "Name";
@@ -30,7 +31,7 @@ public class O2StationarySpells
     *
     * @param plugin a reference to the plugin
     */
-   public O2StationarySpells(@NotNull Ollivanders2 plugin)
+   public O2StationarySpells(@NotNull JavaPlugin plugin)
    {
       p = plugin;
 
@@ -263,9 +264,12 @@ public class O2StationarySpells
          // Location
          //
          Map<String, String> locData = Ollivanders2API.common.serializeLocation(spell.location, spellLocLabel);
-         for (Entry<String, String> e : locData.entrySet())
+         if (locData != null)
          {
-            spellData.put(e.getKey(), e.getValue());
+            for (Entry<String, String> e : locData.entrySet())
+            {
+               spellData.put(e.getKey(), e.getValue());
+            }
          }
 
          //
@@ -382,7 +386,7 @@ public class O2StationarySpells
       Class<?> spellClass = spellType.getClassName();
       try
       {
-         statSpell = (StationarySpellObj) spellClass.getConstructor(Ollivanders2.class).newInstance(p);
+         statSpell = (StationarySpellObj)spellClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception e)
       {
