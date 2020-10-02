@@ -1,5 +1,7 @@
 package net.pottercraft.ollivanders2.effect;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * All effects
  *
@@ -44,14 +46,14 @@ public enum O2EffectType
    WEALTH (WEALTH.class),
    ;
 
-   private Class<?> className;
+   final private Class<?> className;
 
    /**
     * Enum constructor.
     *
     * @param className the name of the effect class this type represents.
     */
-   O2EffectType(Class<?> className)
+   O2EffectType(@NotNull Class<?> className)
    {
       this.className = className;
    }
@@ -61,6 +63,7 @@ public enum O2EffectType
     *
     * @return the effect class
     */
+   @NotNull
    public Class<?> getClassName()
    {
       return className;

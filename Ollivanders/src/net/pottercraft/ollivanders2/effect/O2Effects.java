@@ -2,6 +2,8 @@ package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -20,11 +22,11 @@ import java.util.concurrent.Semaphore;
  */
 public class O2Effects
 {
-   Ollivanders2 p;
+   final Ollivanders2 p;
 
-   static Semaphore semaphore = new Semaphore(1);
+   final static Semaphore semaphore = new Semaphore(1);
 
-   public final String effectLabelPrefix = "Effect_";
+   public static final String effectLabelPrefix = "Effect_";
 
    /**
     * Thread-safe storage class for the effect data on players.
@@ -34,12 +36,12 @@ public class O2Effects
       /**
        * A list of all active effects on all online players
        */
-      private Map<UUID, Map<O2EffectType, O2Effect>> activeEffects = new HashMap<>();
+      final private Map<UUID, Map<O2EffectType, O2Effect>> activeEffects = new HashMap<>();
 
       /**
        * A list of all saved effects for all offline players
        */
-      private Map<UUID, Map<O2EffectType, Integer>> savedEffects = new HashMap<>();
+      final private Map<UUID, Map<O2EffectType, Integer>> savedEffects = new HashMap<>();
 
       /**
        * Constructor
@@ -52,30 +54,28 @@ public class O2Effects
        * @param pid the id of the player
        * @return a map of all the effects on this player
        */
-      synchronized Map<O2EffectType, O2Effect> getPlayerActiveEffects (UUID pid)
+      @NotNull
+      synchronized Map<O2EffectType, O2Effect> getPlayerActiveEffects(@NotNull UUID pid)
       {
          Map<O2EffectType, O2Effect> effects = new HashMap<>();
 
-         if (pid != null)
+         try
          {
-            try
-            {
-               semaphore.acquire();
+            semaphore.acquire();
 
-               if (activeEffects.containsKey(pid))
-               {
-                  effects = new HashMap<>(activeEffects.get(pid));
-               }
-            }
-            catch (Exception e)
+            if (activeEffects.containsKey(pid))
             {
-               p.getLogger().warning("Failed to acquire mutex in getPlayerActiveEffects");
-               e.printStackTrace();
+               effects = new HashMap<>(activeEffects.get(pid));
             }
-            finally
-            {
-               semaphore.release();
-            }
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to acquire mutex in getPlayerActiveEffects");
+            e.printStackTrace();
+         }
+         finally
+         {
+            semaphore.release();
          }
 
          return effects;
@@ -84,37 +84,36 @@ public class O2Effects
       /**
        * Get an effect object for a player.
        *
-       * @param pid the id of the player
+       * @param pid        the id of the player
        * @param effectType the effect type to search for
        * @return the effect object if it was found
        */
-      synchronized O2Effect getActiveEffect (UUID pid, O2EffectType effectType)
+      @Nullable
+      synchronized O2Effect getActiveEffect(@NotNull UUID pid, @NotNull O2EffectType effectType)
       {
          O2Effect effect = null;
-         if (pid != null && effectType != null)
-         {
-            try
-            {
-               semaphore.acquire();
 
-               if (activeEffects.containsKey(pid))
+         try
+         {
+            semaphore.acquire();
+
+            if (activeEffects.containsKey(pid))
+            {
+               Map<O2EffectType, O2Effect> effects = activeEffects.get(pid);
+               if (effects.containsKey(effectType))
                {
-                  Map<O2EffectType, O2Effect> effects = activeEffects.get(pid);
-                  if (effects.containsKey(effectType))
-                  {
-                     effect = effects.get(effectType);
-                  }
+                  effect = effects.get(effectType);
                }
             }
-            catch (Exception e)
-            {
-               p.getLogger().warning("Failed to acquire mutex in getActiveEffect");
-               e.printStackTrace();
-            }
-            finally
-            {
-               semaphore.release();
-            }
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to acquire mutex in getActiveEffect");
+            e.printStackTrace();
+         }
+         finally
+         {
+            semaphore.release();
          }
 
          return effect;
@@ -126,30 +125,28 @@ public class O2Effects
        * @param pid the id of the player
        * @return a map of all the saved effects for this player
        */
-      synchronized Map<O2EffectType, Integer> getPlayerSavedEffects (UUID pid)
+      @NotNull
+      synchronized Map<O2EffectType, Integer> getPlayerSavedEffects(@NotNull UUID pid)
       {
          Map<O2EffectType, Integer> effects = new HashMap<>();
 
-         if (pid != null)
+         try
          {
-            try
-            {
-               semaphore.acquire();
+            semaphore.acquire();
 
-               if (savedEffects.containsKey(pid))
-               {
-                  effects = new HashMap<>(savedEffects.get(pid));
-               }
-            }
-            catch (Exception e)
+            if (savedEffects.containsKey(pid))
             {
-               p.getLogger().warning("Failed to acquire mutex in getPlayerSavedEffects");
-               e.printStackTrace();
+               effects = new HashMap<>(savedEffects.get(pid));
             }
-            finally
-            {
-               semaphore.release();
-            }
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to acquire mutex in getPlayerSavedEffects");
+            e.printStackTrace();
+         }
+         finally
+         {
+            semaphore.release();
          }
 
          return effects;
@@ -158,60 +155,54 @@ public class O2Effects
       /**
        * Update the map of saved effects for this player.
        *
-       * @param pid the id of the player
+       * @param pid     the id of the player
        * @param effects the map of effects and durations
        */
-      synchronized void updatePlayerSavedEffects (UUID pid, Map<O2EffectType, Integer> effects)
+      synchronized void updatePlayerSavedEffects(@NotNull UUID pid, @NotNull Map<O2EffectType, Integer> effects)
       {
-         if (pid != null && effects != null)
+         try
          {
-            try
-            {
-               semaphore.acquire();
+            semaphore.acquire();
 
-               savedEffects.remove(pid);
+            savedEffects.remove(pid);
 
-               savedEffects.put(pid, effects);
-            }
-            catch (Exception e)
-            {
-               p.getLogger().warning("Failed to acquire mutex in updatePlayerSavedEffects");
-               e.printStackTrace();
-            }
-            finally
-            {
-               semaphore.release();
-            }
+            savedEffects.put(pid, effects);
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to acquire mutex in updatePlayerSavedEffects");
+            e.printStackTrace();
+         }
+         finally
+         {
+            semaphore.release();
          }
       }
 
       /**
        * Update the map of saved effects for this player.
        *
-       * @param pid the id of the player
+       * @param pid     the id of the player
        * @param effects the map of effects and durations
        */
-      synchronized void updatePlayerActiveEffects (UUID pid, Map<O2EffectType, O2Effect> effects)
+      synchronized void updatePlayerActiveEffects(@NotNull UUID pid, @NotNull Map<O2EffectType, O2Effect> effects)
       {
-         if (pid != null && effects != null)
+         try
          {
-            try
-            {
-               semaphore.acquire();
+            semaphore.acquire();
 
-               activeEffects.remove(pid);
+            activeEffects.remove(pid);
 
-               activeEffects.put(pid, effects);
-            }
-            catch (Exception e)
-            {
-               p.getLogger().warning("Failed to acquire mutex in updatePlayerActiveEffects");
-               e.printStackTrace();
-            }
-            finally
-            {
-               semaphore.release();
-            }
+            activeEffects.put(pid, effects);
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to acquire mutex in updatePlayerActiveEffects");
+            e.printStackTrace();
+         }
+         finally
+         {
+            semaphore.release();
          }
       }
 
@@ -220,35 +211,32 @@ public class O2Effects
        *
        * @param pid the id of the player
        */
-      synchronized void resetEffects (UUID pid)
+      synchronized void resetEffects(@NotNull UUID pid)
       {
-         if (pid != null)
+         try
          {
-            try
-            {
-               semaphore.acquire();
+            semaphore.acquire();
 
-               if (activeEffects.containsKey(pid))
+            if (activeEffects.containsKey(pid))
+            {
+               Map<O2EffectType, O2Effect> playerEffects = activeEffects.get(pid);
+
+               for (O2Effect effect : playerEffects.values())
                {
-                  Map<O2EffectType, O2Effect> playerEffects = activeEffects.get(pid);
-
-                  for (O2Effect effect : playerEffects.values())
-                  {
-                     effect.kill();
-                  }
+                  effect.kill();
                }
+            }
 
-               savedEffects.remove(pid);
-            }
-            catch (Exception e)
-            {
-               p.getLogger().warning("Failed to acquire mutex in resetEffects");
-               e.printStackTrace();
-            }
-            finally
-            {
-               semaphore.release();
-            }
+            savedEffects.remove(pid);
+         }
+         catch (Exception e)
+         {
+            p.getLogger().warning("Failed to acquire mutex in resetEffects");
+            e.printStackTrace();
+         }
+         finally
+         {
+            semaphore.release();
          }
       }
    }
@@ -260,7 +248,7 @@ public class O2Effects
     *
     * @param plugin a callback to the plugin
     */
-   public O2Effects (Ollivanders2 plugin)
+   public O2Effects(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
    }
@@ -271,48 +259,26 @@ public class O2Effects
     * @param pid the id of the player
     * @return a list of the effects active on this player
     */
-   public List<O2EffectType> getEffects (UUID pid)
+   @NotNull
+   public List<O2EffectType> getEffects(@NotNull UUID pid)
    {
-      List<O2EffectType> effectedBy = new ArrayList<>();
+      Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
 
-      if (pid != null)
-      {
-         Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
-
-         if (playerEffects != null)
-         {
-            effectedBy.addAll(playerEffects.keySet());
-         }
-      }
-
-      return effectedBy;
+      return new ArrayList<>(playerEffects.keySet());
    }
 
    /**
     * Determines if this player is affected by this effect. Only checks active effects.
     *
-    * @param pid the id of the player
+    * @param pid        the id of the player
     * @param effectType the effect type to check for
     * @return true if they have this effect, false otherwise
     */
-   public boolean hasEffect (UUID pid, O2EffectType effectType)
+   public boolean hasEffect(@NotNull UUID pid, @NotNull O2EffectType effectType)
    {
-      boolean isAffected = false;
+      Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
 
-      if (pid != null)
-      {
-         Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
-
-         if (playerEffects != null)
-         {
-            if (playerEffects.containsKey(effectType))
-            {
-               isAffected = true;
-            }
-         }
-      }
-
-      return isAffected;
+      return playerEffects.containsKey(effectType);
    }
 
    /**
@@ -321,11 +287,8 @@ public class O2Effects
     * @param pid the id of the player
     * @return true if they have this effect, false otherwise
     */
-   public boolean hasEffects (UUID pid)
+   public boolean hasEffects(@NotNull UUID pid)
    {
-      if (pid == null)
-         return false;
-
       return !effectsData.getPlayerActiveEffects(pid).isEmpty();
    }
 
@@ -334,11 +297,8 @@ public class O2Effects
     *
     * @param pid the id of the player.
     */
-   public synchronized void onJoin (UUID pid)
+   public synchronized void onJoin(@NotNull UUID pid)
    {
-      if (pid == null)
-         return;
-
       Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
       Map<O2EffectType, O2Effect> activeEffects = new HashMap<>();
 
@@ -384,20 +344,14 @@ public class O2Effects
     *
     * @param pid the id of the player
     */
-   public synchronized void onQuit (UUID pid)
+   public synchronized void onQuit(@NotNull UUID pid)
    {
-      if (pid == null)
-         return;
-
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
       Map<O2EffectType, Integer> savedEffects = new HashMap<>();
 
-      if (activeEffects != null)
+      for (Entry<O2EffectType, O2Effect> entry : activeEffects.entrySet())
       {
-         for (Entry<O2EffectType, O2Effect> entry : activeEffects.entrySet())
-         {
-            savedEffects.put(entry.getKey(), entry.getValue().duration);
-         }
+         savedEffects.put(entry.getKey(), entry.getValue().duration);
       }
 
       effectsData.updatePlayerSavedEffects(pid, savedEffects);
@@ -408,11 +362,8 @@ public class O2Effects
     *
     * @param pid the id of the player
     */
-   public synchronized void onDeath (UUID pid)
+   public synchronized void onDeath(@NotNull UUID pid)
    {
-      if (pid == null)
-         return;
-
       effectsData.resetEffects(pid);
    }
 
@@ -422,17 +373,15 @@ public class O2Effects
     * @param pid the id of the player to serialize
     * @return a map of the effect type and duration serialized as strings
     */
-   public Map<String, String> serializeEffects (UUID pid)
+   @NotNull
+   public Map<String, String> serializeEffects(@NotNull UUID pid)
    {
-      Map <String, String> serialized = new HashMap<>();
+      Map<String, String> serialized = new HashMap<>();
 
-      if (pid != null)
+      Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
+      for (Entry<O2EffectType, Integer> entry : savedEffects.entrySet())
       {
-         Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
-         for (Entry<O2EffectType, Integer> entry : savedEffects.entrySet())
-         {
-            serialized.put(effectLabelPrefix + entry.getKey().toString(), entry.getValue().toString());
-         }
+         serialized.put(effectLabelPrefix + entry.getKey().toString(), entry.getValue().toString());
       }
 
       return serialized;
@@ -441,15 +390,12 @@ public class O2Effects
    /**
     * Deserialize saved effect from strings.
     *
-    * @param pid the id of the player this is saved for
-    * @param effectsString the effect string
+    * @param pid            the id of the player this is saved for
+    * @param effectsString  the effect string
     * @param durationString the duration string
     */
-   public void deserializeEffect (UUID pid, String effectsString, String durationString)
+   public void deserializeEffect(@NotNull UUID pid, @NotNull String effectsString, @NotNull String durationString)
    {
-      if (pid == null || effectsString == null || durationString == null)
-         return;
-
       Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
 
       String effectName = effectsString.replaceFirst(effectLabelPrefix, "");
@@ -476,19 +422,11 @@ public class O2Effects
     *
     * @param e the effect to add to this player
     */
-   public synchronized void addEffect (O2Effect e)
+   public synchronized void addEffect(@NotNull O2Effect e)
    {
-      if (e == null)
-         return;
-
       UUID pid = e.getTargetID();
 
       Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
-
-      if (playerEffects == null)
-      {
-         playerEffects = new HashMap<>();
-      }
 
       // do not allow multiple shape-shifting effects at the same time
       if (e instanceof ShapeShiftSuper)
@@ -524,18 +462,12 @@ public class O2Effects
    /**
     * Remove an effect from this player.
     *
-    * @param pid the id of the player
+    * @param pid        the id of the player
     * @param effectType the effect to remove from this player
     */
-   public synchronized void removeEffect (UUID pid, O2EffectType effectType)
+   public synchronized void removeEffect(@NotNull UUID pid, @NotNull O2EffectType effectType)
    {
-      if (pid == null || effectType == null)
-         return;
-
       Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
-
-      if(playerEffects == null)
-         return;
 
       O2Effect effect = playerEffects.get(effectType);
 
@@ -560,15 +492,12 @@ public class O2Effects
    /**
     * Get an effect for a player.
     *
-    * @param pid the id of the player
+    * @param pid        the id of the player
     * @param effectType the type of effect to get
     * @return the effect object if found, null otherwise
     */
-   public synchronized O2Effect getEffect (UUID pid, O2EffectType effectType)
+   public synchronized O2Effect getEffect(@NotNull UUID pid, @NotNull O2EffectType effectType)
    {
-      if (pid == null || effectType == null)
-         return null;
-
       return effectsData.getActiveEffect(pid, effectType);
    }
 
@@ -579,7 +508,7 @@ public class O2Effects
     *
     * @param pid the id of the player.
     */
-   public void upkeep (UUID pid)
+   public void upkeep(@NotNull UUID pid)
    {
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
 
@@ -597,10 +526,10 @@ public class O2Effects
    /**
     * Age all non-permanent spell effects by a specified amount.
     *
-    * @param pid the id of the player
+    * @param pid    the id of the player
     * @param amount the amount to age the effects by
     */
-   public void ageAllEffects (UUID pid, int amount)
+   public void ageAllEffects(@NotNull UUID pid, int amount)
    {
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
       Collection<O2Effect> effects = activeEffects.values();
@@ -619,11 +548,11 @@ public class O2Effects
    /**
     * Age a specific effect on a player by a specified amount.
     *
-    * @param pid the id of the player
+    * @param pid        the id of the player
     * @param effectType the effect to age
-    * @param amount the amount to age the effect
+    * @param amount     the amount to age the effect
     */
-   public void ageEffect (UUID pid, O2EffectType effectType, int amount)
+   public void ageEffect(@NotNull UUID pid, @NotNull O2EffectType effectType, int amount)
    {
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
 
@@ -643,7 +572,7 @@ public class O2Effects
     * @param effectType the effect to age
     * @param percent    the percent to age the effect
     */
-   public void ageEffectByPercent (UUID pid, O2EffectType effectType, int percent)
+   public void ageEffectByPercent(@NotNull UUID pid, @NotNull O2EffectType effectType, int percent)
    {
       if (percent > 100)
       {
@@ -674,7 +603,7 @@ public class O2Effects
     * @param pid     the id of the player
     * @param percent the percent to age the effect
     */
-   public void ageAllEffectsByPercent (UUID pid, int percent)
+   public void ageAllEffectsByPercent(@NotNull UUID pid, int percent)
    {
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
       Collection<O2Effect> effects = activeEffects.values();
@@ -694,7 +623,8 @@ public class O2Effects
     * @param pid the id of the player to check
     * @return text about detectable effect or null if none found.
     */
-   public String detectEffectWithInformous (UUID pid)
+   @Nullable
+   public String detectEffectWithInformous(@NotNull UUID pid)
    {
       p.getLogger().info("detecting effcts with Informous");
       String infoText = null;
@@ -724,7 +654,8 @@ public class O2Effects
     * @param pid the id of the player to check
     * @return text about detectable effect or null if none found.
     */
-   public String detectEffectWithLegilimens (UUID pid)
+   @Nullable
+   public String detectEffectWithLegilimens(@NotNull UUID pid)
    {
       String infoText = null;
 

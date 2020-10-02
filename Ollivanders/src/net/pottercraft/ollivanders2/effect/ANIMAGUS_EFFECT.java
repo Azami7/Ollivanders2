@@ -32,6 +32,7 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Panda;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Transforms an Animagus player in to their animal form.
@@ -46,11 +47,11 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
+    * @param plugin   a callback to the MC plugin
     * @param duration the duration of the effect
-    * @param pid the ID of the player this effect acts on
+    * @param pid      the ID of the player this effect acts on
     */
-   public ANIMAGUS_EFFECT (Ollivanders2 plugin, Integer duration, UUID pid)
+   public ANIMAGUS_EFFECT(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
 
@@ -74,7 +75,9 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
 
       if (form == null)
       {
-         p.getLogger().info("Unable to get animagus form for " + Ollivanders2API.getPlayers().getPlayer(pid).getPlayerName());
+         if (Ollivanders2.debug)
+            p.getLogger().info("Unable to get animagus form for " + Ollivanders2API.getPlayers().getPlayer(pid).getPlayerName());
+
          kill();
       }
    }
@@ -95,10 +98,12 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * Customize the animal form for the player based on their Animagus form.
     */
    @Override
-   protected void customizeWatcher ()
+   protected void customizeWatcher()
    {
       // in case the variant doesn't work, this can be used to fix the value at the end of this method
       String correctedVariant = null;
+      if (watcher == null)
+         return;
 
       if (watcher instanceof CatWatcher)
       {
