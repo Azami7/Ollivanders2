@@ -90,6 +90,7 @@ public enum O2ItemType
    final private String lore;
    final private short variant;
 
+<<<<<<< HEAD
    /**
     * Constructor
     *
@@ -99,6 +100,9 @@ public enum O2ItemType
     * @param l the lore for this item
     */
    O2ItemType(@NotNull Material m, short v, @NotNull String n, @Nullable String l)
+=======
+   O2ItemType(Material m, short v, String n, String l)
+>>>>>>> 314373d... 1.15.2
    {
       material = m;
       name = n;
