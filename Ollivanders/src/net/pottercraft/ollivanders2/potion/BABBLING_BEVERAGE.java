@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Babbling Beverage is a potion that caused the drinker to babble nonsense.
@@ -21,7 +22,7 @@ public class BABBLING_BEVERAGE extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public BABBLING_BEVERAGE (Ollivanders2 plugin)
+   public BABBLING_BEVERAGE(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -39,7 +40,7 @@ public class BABBLING_BEVERAGE extends O2Potion
       flavorText.add("\"Potter, when I want nonsense shouted at me I shall give you a Babbling Beverage.\" -Severus Snape");
    }
 
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       BABBLING effect = new BABBLING(p, duration, player.getUniqueId());
       Ollivanders2API.getPlayers().playerEffects.addEffect(effect);

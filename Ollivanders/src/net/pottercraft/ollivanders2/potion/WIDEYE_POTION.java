@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Wideye potion prevents the drinker from falling asleep.
@@ -21,7 +22,7 @@ public class WIDEYE_POTION extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public WIDEYE_POTION (Ollivanders2 plugin)
+   public WIDEYE_POTION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -39,7 +40,7 @@ public class WIDEYE_POTION extends O2Potion
    }
 
    @Override
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       AWAKE effect = new AWAKE(p, duration, player.getUniqueId());
       Ollivanders2API.getPlayers().playerEffects.addEffect(effect);

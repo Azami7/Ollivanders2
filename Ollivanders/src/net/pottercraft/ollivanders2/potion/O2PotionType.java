@@ -1,6 +1,8 @@
 package net.pottercraft.ollivanders2.potion;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Enum of all potions types.
@@ -29,14 +31,14 @@ public enum O2PotionType
    /**
     * The class of the potion this type creates
     */
-   Class className;
+   final Class<?> className;
 
    /**
     * Constructor.
     *
     * @param className the class for this potion type
     */
-   O2PotionType (Class className)
+   O2PotionType(@NotNull Class<?> className)
    {
       this.className = className;
    }
@@ -46,7 +48,8 @@ public enum O2PotionType
     *
     * @return the class name for this type of potion.
     */
-   public Class getClassName()
+   @NotNull
+   public Class<?> getClassName()
    {
       return className;
    }
@@ -56,6 +59,7 @@ public enum O2PotionType
     *
     * @return the spell name for this potion type.
     */
+   @NotNull
    public String getPotionName ()
    {
       String potionTypeString = this.toString().toLowerCase();
@@ -69,7 +73,8 @@ public enum O2PotionType
     * @param potionString the name of the spell type, ex. "AQUA_ERUCTO"
     * @return the potion type
     */
-   public static O2PotionType potionTypeFromString (String potionString)
+   @Nullable
+   public static O2PotionType potionTypeFromString(@NotNull String potionString)
    {
       O2PotionType potionType = null;
 
@@ -77,7 +82,10 @@ public enum O2PotionType
       {
          potionType = O2PotionType.valueOf(potionString);
       }
-      catch (Exception e) { }
+      catch (Exception e)
+      {
+         // we don't do anything, this will happen if they send an invalid potion name
+      }
 
       return potionType;
    }

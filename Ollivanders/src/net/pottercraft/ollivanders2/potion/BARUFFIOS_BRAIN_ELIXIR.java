@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * All spells cast are twice as powerful.
@@ -21,7 +22,7 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public BARUFFIOS_BRAIN_ELIXIR (Ollivanders2 plugin)
+   public BARUFFIOS_BRAIN_ELIXIR(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -38,7 +39,7 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
       potionColor = Color.fromRGB(255, 251, 222);
    }
 
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       HIGHER_SKILL effect = new HIGHER_SKILL(p, duration, player.getUniqueId());
       Ollivanders2API.getPlayers().playerEffects.addEffect(effect);

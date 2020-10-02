@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 import java.util.Set;
@@ -27,7 +28,7 @@ public final class FORGETFULLNESS_POTION extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public FORGETFULLNESS_POTION (Ollivanders2 plugin)
+   public FORGETFULLNESS_POTION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -45,7 +46,7 @@ public final class FORGETFULLNESS_POTION extends O2Potion
       potionColor = Color.fromRGB(195, 71, 0);
    }
 
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       int coinToss = Math.abs(Ollivanders2Common.random.nextInt() % 2);
 

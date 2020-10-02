@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Puts the drinker in to a deep but temporary sleep.
@@ -22,7 +23,7 @@ public class SLEEPING_DRAUGHT extends O2Potion
     *
     * @param plugin a callback to the MC plugin
     */
-   public SLEEPING_DRAUGHT (Ollivanders2 plugin)
+   public SLEEPING_DRAUGHT(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -45,7 +46,7 @@ public class SLEEPING_DRAUGHT extends O2Potion
    }
 
    @Override
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
       {
