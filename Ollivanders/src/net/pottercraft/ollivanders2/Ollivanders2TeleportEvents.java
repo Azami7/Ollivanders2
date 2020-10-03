@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * With MV 1.14, triggering PlayerTeleportEvents from other events is no longer thread-safe. Need to create a queue of teleport events like we use for
@@ -20,7 +21,7 @@ public class Ollivanders2TeleportEvents
    /**
     * The list of all queued teleport events
     */
-   final private ArrayList<O2TeleportEvent> teleportEvents = new ArrayList<>();
+   final private List<O2TeleportEvent> teleportEvents = new ArrayList<>();
 
    /**
     * A teleport event
@@ -117,9 +118,9 @@ public class Ollivanders2TeleportEvents
     * @return an array of the pending teleport events
     */
    @NotNull
-   public O2TeleportEvent[] getTeleportEvents()
+   public List<O2TeleportEvent> getTeleportEvents()
    {
-      return teleportEvents.toArray(new O2TeleportEvent[teleportEvents.size()]);
+      return new ArrayList<>(teleportEvents);
    }
 
    /**

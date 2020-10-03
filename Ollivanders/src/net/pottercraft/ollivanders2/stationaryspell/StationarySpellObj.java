@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class StationarySpellObj implements Serializable
 {
-   final Ollivanders2 p;
+   Ollivanders2 p;
    final Ollivanders2Common common;
    public UUID playerUUID;
    protected O2StationarySpellType spellType;
@@ -56,7 +56,7 @@ public abstract class StationarySpellObj implements Serializable
     * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public StationarySpellObj(@NotNull Ollivanders2 plugin, @NotNull UUID playerID, @NotNull Location loc, @NotNull O2StationarySpellType type, @NotNull int radius, @NotNull int duration)
+   public StationarySpellObj(@NotNull Ollivanders2 plugin, @NotNull UUID playerID, @NotNull Location loc, @NotNull O2StationarySpellType type, int radius, int duration)
    {
       p = plugin;
       common = new Ollivanders2Common(p);

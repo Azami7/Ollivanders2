@@ -9,6 +9,7 @@ import org.bukkit.entity.Sheep;
 
 import net.pottercraft.ollivanders2.O2Color;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -21,68 +22,74 @@ import java.util.List;
  */
 public abstract class ColoroSuper extends O2Spell
 {
-   O2Color color = O2Color.WHITE;
+    O2Color color = O2Color.WHITE;
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    */
-   ColoroSuper()
-   {
-      super();
-   }
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     */
+    ColoroSuper()
+    {
+        super();
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   ColoroSuper (Ollivanders2 plugin, Player player, Double rightWand)
-   {
-      super(plugin, player, rightWand);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    ColoroSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      // world-guard flags
-      worldGuardFlags.add(Flags.BUILD);
-   }
+        // world-guard flags
+        worldGuardFlags.add(Flags.BUILD);
+    }
 
-   /**
-    * Look for colorable entities or blocks, if one is found, change its color
-    */
-   @Override
-   protected void doCheckEffect ()
-   {
-      // first try to recolor any sheep in range
-      List<LivingEntity> entities = getLivingEntities(1.5);
+    /**
+     * Look for colorable entities or blocks, if one is found, change its color
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        // first try to recolor any sheep in range
+        List<LivingEntity> entities = getLivingEntities(1.5);
 
-      if (entities.size() > 0)
-      {
-         for (LivingEntity livingEntity : entities)
-         {
-            if (livingEntity instanceof Sheep)
+        if (entities.size() > 0)
+        {
+            for (LivingEntity livingEntity : entities)
             {
-               Sheep sheep = (Sheep)livingEntity;
-               sheep.setColor(color.getDyeColor());
+                if (livingEntity instanceof Sheep)
+                {
+                    Sheep sheep = (Sheep) livingEntity;
+                    sheep.setColor(color.getDyeColor());
 
-               kill();
-               return;
+                    kill();
+                    return;
+                }
             }
-         }
 
-         return;
-      }
+            return;
+        }
 
-      if (hasHitTarget())
-      {
-         Block target = getTargetBlock();
+        if (hasHitTarget())
+        {
+            Block target = getTargetBlock();
+            if (target == null)
+            {
+                p.getLogger().warning("ColoroSuper.doCheckEffect: target block is null");
+                kill();
+                return;
+            }
 
-         if (O2Color.isColorable(target.getType()))
-         {
-            Material newColor = O2Color.changeColor(target.getType(), color);
-            target.setType(newColor);
-         }
+            if (O2Color.isColorable(target.getType()))
+            {
+                Material newColor = O2Color.changeColor(target.getType(), color);
+                target.setType(newColor);
+            }
 
-         kill();
-      }
+            kill();
+        }
    }
 }

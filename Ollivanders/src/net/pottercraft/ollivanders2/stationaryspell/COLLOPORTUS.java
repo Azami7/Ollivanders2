@@ -75,5 +75,7 @@ public class COLLOPORTUS extends StationarySpellObj implements StationarySpell
     * @param spellData a map of the saved spell data
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData) { }
+   public void deserializeSpellData(@NotNull Map<String, String> spellData)
+   {
+   }
 }

@@ -36,12 +36,13 @@ public final class O2Books
 {
    private final Map<String, O2BookType> O2BookMap = new HashMap<>();
 
-   private final JavaPlugin p;
+   JavaPlugin p;
    BookTexts spellText;
 
    private ItemStack library;
 
-   public static final ArrayList<O2BookType> hogwartsReadingList = new ArrayList<O2BookType>() {{
+   public static final List<O2BookType> hogwartsReadingList = new ArrayList<O2BookType>()
+   {{
       add(O2BookType.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION);
       add(O2BookType.ACHIEVEMENTS_IN_CHARMING);
       add(O2BookType.ADVANCED_POTION_MAKING);
@@ -122,7 +123,7 @@ public final class O2Books
 
       try
       {
-         book = (O2Book) bookClass.getConstructor(Ollivanders2.class).newInstance(p);
+         book = (O2Book) bookClass.getConstructor(JavaPlugin.class).newInstance(p);
       }
       catch (Exception exception)
       {
@@ -176,7 +177,7 @@ public final class O2Books
     * @return a ArrayList of all O2Book objects.
     */
    @NotNull
-   public ArrayList<ItemStack> getAllBooks ()
+   public List<ItemStack> getAllBooks()
    {
       ArrayList<ItemStack> bookStack = new ArrayList<>();
 
@@ -319,7 +320,7 @@ public final class O2Books
     * @return a list of the titles for all loaded books
     */
    @NotNull
-   public ArrayList<String> getAllBookTitles()
+   public List<String> getAllBookTitles()
    {
       ArrayList<String> bookTitles = new ArrayList<>(O2BookMap.keySet());
       Collections.sort(bookTitles);

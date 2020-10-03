@@ -4,6 +4,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ public class POINT_ME extends O2Spell
 
       flavorText = new ArrayList<String>()
       {{
-         add("\"\'Point Me!\' he whispered again to his wand, and it spun around and pointed him to the right-hand one.\"");
+         add("\"'Point Me!' he whispered again to his wand, and it spun around and pointed him to the right-hand one.\"");
          add("The Four-Point Spell");
       }};
 
@@ -37,11 +38,11 @@ public class POINT_ME extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public POINT_ME (Ollivanders2 plugin, Player player, Double rightWand)
+   public POINT_ME(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -54,7 +55,7 @@ public class POINT_ME extends O2Spell
    @Override
    public void checkEffect ()
    {
-      if (!checkSpellAllowed())
+      if (!isSpellAllowed())
       {
          kill();
          return;

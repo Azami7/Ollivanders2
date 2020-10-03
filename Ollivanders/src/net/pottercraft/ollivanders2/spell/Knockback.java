@@ -4,6 +4,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,26 +30,28 @@ public abstract class Knockback extends O2Spell
    /**
     * Whitelist of entity types this spell works on.
     */
-   protected ArrayList<EntityType> entityWhitelist = new ArrayList<>();
+   protected List<EntityType> entityWhitelist = new ArrayList<>();
 
    /**
     * Blacklist of entity types this spell will not work on.
     */
-   protected ArrayList<EntityType> entityBlacklist = new ArrayList<>();
+   protected List<EntityType> entityBlacklist = new ArrayList<>();
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public Knockback () {}
+   public Knockback()
+   {
+   }
 
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public Knockback (Ollivanders2 plugin, Player player, Double rightWand)
+   public Knockback(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -59,7 +62,7 @@ public abstract class Knockback extends O2Spell
     * Looks for an entity near the radius of the spell projectile
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<Entity> entities = getCloseEntities(1.5);
 

@@ -3,7 +3,13 @@ package net.pottercraft.ollivanders2;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 import quidditch.Arena;
 
@@ -31,6 +37,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -64,7 +71,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * All blocks temporarily changed by spells
     */
-   final private HashMap<Block, Material> tempBlocks = new HashMap<>();
+   final private Map<Block, Material> tempBlocks = new HashMap<>();
 
    /**
     * All pending teleport events
@@ -680,7 +687,11 @@ public class Ollivanders2 extends JavaPlugin
       //animagus
       if (o2p.isAnimagus())
       {
-         summary.append("\nAnimagus Form: ").append(Ollivanders2API.common.enumRecode(o2p.getAnimagusForm().toString()));
+         EntityType animagusForm = o2p.getAnimagusForm();
+         if (animagusForm != null)
+         {
+            summary.append("\nAnimagus Form: ").append(Ollivanders2API.common.enumRecode(animagusForm.toString()));
+         }
       }
 
       // effects
@@ -689,10 +700,11 @@ public class Ollivanders2 extends JavaPlugin
          List<O2EffectType> effects = Ollivanders2API.getPlayers(this).playerEffects.getEffects(o2p.getID());
          summary.append("\n\nAffected by:\n");
 
-         if (effects == null || effects.isEmpty())
+         if (effects.isEmpty())
          {
             summary.append("Nothing");
-         } else
+         }
+         else
          {
             for (O2EffectType effectType : effects)
             {
@@ -712,13 +724,9 @@ public class Ollivanders2 extends JavaPlugin
 
          for (O2SpellType spellType : O2SpellType.values())
          {
-            if (knownSpells.containsKey(spellType))
+            if (knownSpells.containsKey(spellType) && Ollivanders2API.getSpells(this).isLoaded(spellType))
             {
-               String name = spellType.getSpellName();
-               if (name != null) // happens if a spell is not currently loaded, such as if a server removes LibsDisguises
-               {
-                  summary.append("\n* ").append(name).append(" ").append(knownSpells.get(spellType).toString());
-               }
+               summary.append("\n* ").append(spellType.getSpellName()).append(" ").append(knownSpells.get(spellType).toString());
             }
          }
       }
@@ -734,13 +742,9 @@ public class Ollivanders2 extends JavaPlugin
 
          for (O2PotionType potionType : O2PotionType.values())
          {
-            if (knownPotions.containsKey(potionType))
+            if (knownPotions.containsKey(potionType) && Ollivanders2API.getPotions(this).isLoaded(potionType))
             {
-               String name = potionType.getPotionName();
-               if (name != null) // happens if a spell is not currently loaded, such as if a server removes LibsDisguises
-               {
-                  summary.append("\n* ").append(name).append(" ").append(knownPotions.get(potionType).toString());
-               }
+               summary.append("\n* ").append(potionType.getPotionName()).append(" ").append(knownPotions.get(potionType).toString());
             }
          }
       }
@@ -770,11 +774,11 @@ public class Ollivanders2 extends JavaPlugin
               // + "\nquidd - creates a quidditch pitch"
               + "\nhouse - view and manage houses and house points"
               + "\nyear - view and manage player years"
-            + "\nsummary - gives a summary of wand type, house, year, and known spells"
-            + "\nreload - reload the Ollivanders2 configs"
-            + "\ndebug - toggles Ollivanders2 plugin debug output\n"
-            + "\n" + "To run a command, type '/ollivanders2 [command]'."
-            + "\nFor example, '/ollivanders2 wands");
+              + "\nsummary - gives a summary of wand type, house, year, and known spells"
+              + "\nreload - reload the Ollivanders2 configs"
+              + "\ndebug - toggles Ollivanders2 plugin debug output\n"
+              + "\n" + "To run a command, type '/ollivanders2 [command]'."
+              + "\nFor example, '/ollivanders2 wands");
    }
 
    /**
@@ -874,7 +878,7 @@ public class Ollivanders2 extends JavaPlugin
          O2HouseType house = Ollivanders2API.getHouses(this).getHouseType(targetHouse);
          if (house != null)
          {
-            ArrayList<String> members = Ollivanders2API.getHouses(this).getHouseMembers(house);
+            List<String> members = Ollivanders2API.getHouses(this).getHouseMembers(house);
             StringBuilder memberStr = new StringBuilder();
 
             if (members.isEmpty())
@@ -896,7 +900,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       StringBuilder houseNames = new StringBuilder();
-      ArrayList<String> h = Ollivanders2API.getHouses(this).getAllHouseNames();
+      List<String> h = Ollivanders2API.getHouses(this).getAllHouseNames();
 
       for (String name : h)
       {
@@ -904,9 +908,9 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       sender.sendMessage(chatColor
-            + "Ollivanders2 House are:\n" + houseNames.toString() + "\n"
-            + "\nTo see the members of a specific house, run the command /ollivanders2 house list [house]"
-            + "\nFor example, /ollivanders2 list Hufflepuff");
+              + "Ollivanders2 House are:\n" + houseNames.toString() + "\n"
+              + "\nTo see the members of a specific house, run the command /ollivanders2 house list [house]"
+              + "\nFor example, /ollivanders2 list Hufflepuff");
 
       return true;
    }
@@ -938,8 +942,8 @@ public class Ollivanders2 extends JavaPlugin
       if (player == null)
       {
          sender.sendMessage(chatColor
-               + "Unable to find a player named " + targetPlayer + " logged in to this server."
-               + "\nPlayers must be logged in to be sorted.");
+                 + "Unable to find a player named " + targetPlayer + " logged in to this server."
+                 + "\nPlayers must be logged in to be sorted.");
 
          return true;
       }
@@ -1568,7 +1572,7 @@ public class Ollivanders2 extends JavaPlugin
     * @return an array of teleport events
     */
    @NotNull
-   public Ollivanders2TeleportEvents.O2TeleportEvent[] getTeleportEvents()
+   public List<Ollivanders2TeleportEvents.O2TeleportEvent> getTeleportEvents()
    {
       return teleportEvents.getTeleportEvents();
    }
@@ -2210,10 +2214,10 @@ public class Ollivanders2 extends JavaPlugin
    private void usageMessagePotions (CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "Usage: /olli potions"
-            + "\ningredient list - lists all potions ingredients"
-            + "\ningredient <ingredient name> - give you the ingredient with this name, if it exists"
-            + "\nall - gives all Ollivanders2 potions, this may not fit in your inventory"
+              + "Usage: /olli potions"
+              + "\ningredient list - lists all potions ingredients"
+              + "\ningredient <ingredient name> - give you the ingredient with this name, if it exists"
+              + "\nall - gives all Ollivanders2 potions, this may not fit in your inventory"
               + "\n<potion name> - gives you the potion with this name, if it exists"
               + "\ngive <player> <potion name> - gives target player the potion with this name, if it exists\n"
               + "\nExample: /ollivanders2 potions wiggenweld potion"

@@ -59,7 +59,7 @@ public class Ollivanders2Common
 
    public static final int ticksPerSecond = 20;
 
-   public static final ArrayList<EntityType> smallFriendlyAnimals = new ArrayList<EntityType>()
+   public static final List<EntityType> smallFriendlyAnimals = new ArrayList<EntityType>()
    {{
       add(EntityType.BAT);
       add(EntityType.CHICKEN);
@@ -71,7 +71,8 @@ public class Ollivanders2Common
       add(EntityType.PUFFERFISH);
    }};
 
-   public static final ArrayList<EntityType> mediumFriendlyAnimals = new ArrayList<EntityType>() {{
+   public static final List<EntityType> mediumFriendlyAnimals = new ArrayList<EntityType>()
+   {{
       add(EntityType.SHEEP);
       add(EntityType.PIG);
       add(EntityType.OCELOT);
@@ -81,7 +82,8 @@ public class Ollivanders2Common
       add(EntityType.TURTLE);
    }};
 
-   public static final ArrayList<EntityType> largeFriendlyAnimals = new ArrayList<EntityType>() {{
+   public static final List<EntityType> largeFriendlyAnimals = new ArrayList<EntityType>()
+   {{
       add(EntityType.COW);
       add(EntityType.DONKEY);
       add(EntityType.HORSE);
@@ -98,7 +100,7 @@ public class Ollivanders2Common
       add(EntityType.TRADER_LLAMA);
    }};
 
-   public static final ArrayList<EntityType> undeadEntities = new ArrayList<EntityType>()
+   public static final List<EntityType> undeadEntities = new ArrayList<EntityType>()
    {{
       add(EntityType.DROWNED);
       add(EntityType.HUSK);
@@ -115,7 +117,8 @@ public class Ollivanders2Common
       add(EntityType.GIANT);
    }};
 
-   public static final ArrayList<O2SpellType> libsDisguisesSpells = new ArrayList<O2SpellType>() {{
+   public static final List<O2SpellType> libsDisguisesSpells = new ArrayList<O2SpellType>()
+   {{
       add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       add(O2SpellType.AVIFORS);
       add(O2SpellType.DRACONIFORS);
@@ -135,11 +138,13 @@ public class Ollivanders2Common
       add(O2SpellType.VERA_VERTO);
    }};
 
-   public static final ArrayList<O2PotionType> libDisguisesPotions = new ArrayList<O2PotionType>() {{
+   public static final List<O2PotionType> libDisguisesPotions = new ArrayList<O2PotionType>()
+   {{
       add(O2PotionType.ANIMAGUS_POTION);
    }};
 
-   public static final ArrayList<Material> unbreakableMaterials = new ArrayList<Material>() {{
+   public static final List<Material> unbreakableMaterials = new ArrayList<Material>()
+   {{
       add(Material.BARRIER);
       add(Material.BEDROCK);
       add(Material.ENDER_CHEST);
@@ -162,7 +167,7 @@ public class Ollivanders2Common
       add(Material.YELLOW_SHULKER_BOX);
    }};
 
-   public static final ArrayList<Material> chests = new ArrayList<Material>()
+   public static final List<Material> chests = new ArrayList<Material>()
    {{
       add(Material.CHEST);
       add(Material.ENDER_CHEST);
@@ -185,7 +190,7 @@ public class Ollivanders2Common
       add(Material.YELLOW_SHULKER_BOX);
    }};
 
-   public static final ArrayList<Material> wallSigns = new ArrayList<Material>()
+   public static final List<Material> wallSigns = new ArrayList<Material>()
    {{
       add(Material.ACACIA_WALL_SIGN);
       add(Material.BIRCH_WALL_SIGN);
@@ -194,7 +199,7 @@ public class Ollivanders2Common
       add(Material.SPRUCE_WALL_SIGN);
    }};
 
-   public static final ArrayList<Material> standingSigns = new ArrayList<Material>()
+   public static final List<Material> standingSigns = new ArrayList<Material>()
    {{
       add(Material.ACACIA_SIGN);
       add(Material.BIRCH_SIGN);
@@ -203,13 +208,13 @@ public class Ollivanders2Common
       add(Material.SPRUCE_SIGN);
    }};
 
-   public static final ArrayList<Material> signs = new ArrayList<Material>()
+   public static final List<Material> signs = new ArrayList<Material>()
    {{
       addAll(wallSigns);
       addAll(standingSigns);
    }};
 
-   public static final ArrayList<Material> hotBlocks = new ArrayList<Material>()
+   public static final List<Material> hotBlocks = new ArrayList<Material>()
    {{
       add(Material.LAVA);
       add(Material.FIRE);
@@ -854,7 +859,7 @@ public class Ollivanders2Common
          sb.append(s.substring(0, 1).toUpperCase());
          if (s.length() > 1)
          {
-            sb.append(s.substring(1, s.length()).toLowerCase());
+            sb.append(s.substring(1).toLowerCase());
          }
          sb.append(" ");
       }
@@ -990,14 +995,7 @@ public class Ollivanders2Common
             if (lore == null)
                return false;
 
-            if (lore.get(0).split(" and ").length == 2)
-            {
-               return true;
-            }
-            else
-            {
-               return false;
-            }
+            return (lore.get(0).split(" and ").length == 2);
          }
          else
          {
@@ -1118,7 +1116,7 @@ public class Ollivanders2Common
     * @return a list of all the wands
     */
    @NotNull
-   public ArrayList<ItemStack> getAllWands()
+   public List<ItemStack> getAllWands()
    {
       ArrayList<ItemStack> wands = new ArrayList<>();
 
@@ -1290,15 +1288,8 @@ public class Ollivanders2Common
    {
       Material material = block.getType();
 
-      if (material == Material.OAK_LOG || material == Material.BIRCH_LOG || material == Material.ACACIA_LOG
-              || material == Material.DARK_OAK_LOG || material == Material.JUNGLE_LOG || material == Material.SPRUCE_LOG)
-      {
-         return true;
-      }
-      else
-      {
-         return false;
-      }
+      return (material == Material.OAK_LOG || material == Material.BIRCH_LOG || material == Material.ACACIA_LOG
+              || material == Material.DARK_OAK_LOG || material == Material.JUNGLE_LOG || material == Material.SPRUCE_LOG);
    }
 
    /**
@@ -1371,7 +1362,7 @@ public class Ollivanders2Common
     * @param subtitle the subtitle
     * @param players  message recipients
     */
-   public void sendTitleMessage (@NotNull String title, @Nullable String subtitle, @NotNull ArrayList<Player> players)
+   public void sendTitleMessage(@NotNull String title, @Nullable String subtitle, @NotNull List<Player> players)
    {
       for (Player player : players)
       {
@@ -1385,7 +1376,7 @@ public class Ollivanders2Common
     * @return the list of sorted online players
     */
    @NotNull
-   public ArrayList<Player> getAllOnlineSortedPlayers()
+   public List<Player> getAllOnlineSortedPlayers()
    {
       ArrayList<Player> sortedPlayers = new ArrayList<>();
 
