@@ -10,9 +10,11 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Turns all blocks in a radius into fallingBlock entities
@@ -48,11 +50,11 @@ public final class DEPRIMO extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public DEPRIMO (Ollivanders2 plugin, Player player, Double rightWand)
+   public DEPRIMO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DEPRIMO;
@@ -98,10 +100,7 @@ public final class DEPRIMO extends O2Spell
 
       for (Block block : nearbyBlocks)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("block type is " + block.getType().toString());
-         }
+         common.printDebugMessage("block type is " + block.getType().toString(), null, null, false);
 
          if (materialBlackList.contains(block.getType()))
          {
@@ -110,9 +109,17 @@ public final class DEPRIMO extends O2Spell
 
          Location blockLocation = block.getLocation();
          BlockData blockData = block.getBlockData();
-         block.setType(Material.AIR);
 
-         blockLocation.getWorld().spawnFallingBlock(blockLocation, blockData);
+         World world = blockLocation.getWorld();
+         if (world == null)
+         {
+            common.printDebugMessage("DEPRIMO.doCheckEffect: world is null", null, null, true);
+            kill();
+            return;
+         }
+
+         block.setType(Material.AIR);
+         world.spawnFallingBlock(blockLocation, blockData);
       }
 
       kill();

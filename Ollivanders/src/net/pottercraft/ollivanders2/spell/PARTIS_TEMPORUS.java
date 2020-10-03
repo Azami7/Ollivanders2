@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
 public final class PARTIS_TEMPORUS extends O2Spell
 {
    private int duration;
-   private static int minDurationInSeconds = 15;
+   private final static int minDurationInSeconds = 15;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -42,11 +43,11 @@ public final class PARTIS_TEMPORUS extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public PARTIS_TEMPORUS (Ollivanders2 plugin, Player player, Double rightWand)
+   public PARTIS_TEMPORUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

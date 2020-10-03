@@ -89,7 +89,7 @@ public abstract class Divination extends O2Spell
      *
      * @param t the target player
      */
-    public void setTarget(Player t)
+    public void setTarget(@NotNull Player t)
     {
         if (player != null)
         {
@@ -152,8 +152,7 @@ public abstract class Divination extends O2Spell
         }
         catch (Exception e)
         {
-            p.getLogger().warning("Exception creating divination");
-            e.printStackTrace();
+            common.printDebugMessage("Exception creating divination", e, null, true);
             kill();
             return;
         }

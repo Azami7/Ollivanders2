@@ -9,6 +9,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The Revealing Charm. Causes any stationary spell objects to flair with an intensity equal to your level.
@@ -41,11 +42,11 @@ public final class APARECIUM extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public APARECIUM (Ollivanders2 plugin, Player player, Double rightWand)
+   public APARECIUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.APARECIUM;
@@ -64,11 +65,7 @@ public final class APARECIUM extends O2Spell
 
       if (stationaries.size() > 0)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("Found " + stationaries.size() + " stationary spells");
-         }
-
+         common.printDebugMessage("Found " + stationaries.size() + " stationary spells", null, null, false);
          stationaries.get(0).flair(10);
 
          kill();

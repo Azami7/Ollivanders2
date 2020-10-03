@@ -9,9 +9,11 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.CropState;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.material.Crops;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Herbivicus causes crops in a radius to grow.
@@ -45,11 +47,11 @@ public final class HERBIVICUS extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public HERBIVICUS (Ollivanders2 plugin, Player player, Double rightWand)
+   public HERBIVICUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -86,18 +88,17 @@ public final class HERBIVICUS extends O2Spell
       {
          BlockData blockData = block.getBlockData();
 
-         if (blockData instanceof Crops)
+         if (blockData instanceof Ageable)
          {
-            CropState cropState = ((Crops) blockData).getState();
-            int currentState = stateList.indexOf(cropState);
-            int newState = currentState + 1;
-            if (newState > 7)
+            int cropState = ((Ageable) blockData).getAge();
+
+            int newCropState = cropState + 1;
+            if (newCropState > 7)
             {
-               newState = 7;
+               newCropState = 7;
             }
 
-            cropState = stateList.get(newState);
-            ((Crops) blockData).setState(cropState);
+            ((Ageable) blockData).setAge(newCropState);
             block.setBlockData(blockData);
          }
       }

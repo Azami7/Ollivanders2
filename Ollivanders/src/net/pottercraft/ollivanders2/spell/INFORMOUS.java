@@ -18,6 +18,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Gives information on LivingEntity (health) and StationarySpellObj (duration)
@@ -49,11 +50,11 @@ public final class INFORMOUS extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public INFORMOUS (Ollivanders2 plugin, Player player, Double rightWand)
+   public INFORMOUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -105,6 +106,12 @@ public final class INFORMOUS extends O2Spell
          {
             String weather;
             World world = playerLocation.getWorld();
+            if (world == null)
+            {
+               common.printDebugMessage("INFORMOUS.doCheckEffect: world is null", null, null, true);
+               kill();
+               return;
+            }
 
             boolean thunder = world.isThundering();
 
@@ -135,7 +142,7 @@ public final class INFORMOUS extends O2Spell
     *
     * @param entity the entity
     */
-   private void entityInfo (LivingEntity entity)
+   private void entityInfo(@NotNull LivingEntity entity)
    {
       String entityName;
 
@@ -190,7 +197,7 @@ public final class INFORMOUS extends O2Spell
     *
     * @param spell the stationary spell
     */
-   private void stationarySpellInfo (StationarySpellObj spell)
+   private void stationarySpellInfo(@NotNull StationarySpellObj spell)
    {
       if (spell instanceof COLLOPORTUS)
       {
@@ -204,7 +211,15 @@ public final class INFORMOUS extends O2Spell
       }
       else if (spell instanceof HORCRUX)
       {
-         player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of player " + Bukkit.getPlayer(spell.getCasterID()).getName() + " of radius " + spell.radius);
+         Player caster = Bukkit.getPlayer(spell.getCasterID());
+         String casterString;
+
+         if (caster != null)
+            casterString = " of player " + caster.getName();
+         else
+            casterString = " cast by persons unknown ";
+
+         player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + casterString + " of radius " + spell.radius);
       }
       else if (spell instanceof ALIQUAM_FLOO)
       {

@@ -61,11 +61,11 @@ public abstract class Transfiguration extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public Transfiguration (Ollivanders2 plugin, Player player, Double rightWand)
+   public Transfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -186,7 +186,12 @@ public abstract class Transfiguration extends O2Spell
                }
                if (fromEType.equals(EntityType.FALLING_BLOCK))
                {
-                  return e.getWorld().spawnFallingBlock(e.getLocation(), fromStack.getData().clone());
+                  if (fromStack.getData() != null)
+                  {
+                     return e.getWorld().spawnFallingBlock(e.getLocation(), fromStack.getData().clone());
+                  }
+                  else
+                     return null;
                }
                else
                {
@@ -261,7 +266,7 @@ public abstract class Transfiguration extends O2Spell
          percent = 1;
       }
 
-      double reduction = spellDuration * (percent / 100);
+      double reduction = spellDuration * ((double) percent / 100);
 
       spellDuration = spellDuration - (int) reduction;
    }

@@ -5,7 +5,9 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -39,11 +41,11 @@ public final class REDUCTO extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public REDUCTO (Ollivanders2 plugin, Player player, Double rightWand)
+   public REDUCTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -57,7 +59,7 @@ public final class REDUCTO extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
       {
@@ -65,6 +67,13 @@ public final class REDUCTO extends O2Spell
       }
 
       Location backLoc = location.clone().subtract(vector);
-      backLoc.getWorld().createExplosion(backLoc, (float) (usesModifier * 0.4));
+      World world = backLoc.getWorld();
+      if (world == null)
+      {
+         common.printDebugMessage("REDUCTO.doCheckEffect: world is null", null, null, true);
+         kill();
+         return;
+      }
+      world.createExplosion(backLoc, (float) (usesModifier * 0.4));
    }
 }

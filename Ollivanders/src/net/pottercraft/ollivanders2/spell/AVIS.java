@@ -19,28 +19,28 @@ import java.util.ArrayList;
  */
 public final class AVIS extends O2Spell
 {
-   private int birdCount = 0;
-   private int maxBirds = 2;
+    private int birdCount = 0;
+    private int maxBirds = 2;
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    */
-   public AVIS()
-   {
-       super();
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     */
+    public AVIS()
+    {
+        super();
 
-       spellType = O2SpellType.AVIS;
-       branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.AVIS;
+        branch = O2MagicBranch.CHARMS;
 
-       flavorText = new ArrayList<String>()
-       {{
-           add("The Bird-Conjuring Charm");
-           add("Most of the class had already left, although several twittering yellow birds were still zooming around the room, all of Hermione's creation; nobody else had succeeded in conjuring so much as a feather from thin air.");
-           add("\"Oh, hello, Harry ... I was just practicing.\" -Hermione Granger conjuring small golden birds just before sending them to attack Ron");
-       }};
+        flavorText = new ArrayList<String>()
+        {{
+            add("The Bird-Conjuring Charm");
+            add("Most of the class had already left, although several twittering yellow birds were still zooming around the room, all of Hermione's creation; nobody else had succeeded in conjuring so much as a feather from thin air.");
+            add("\"Oh, hello, Harry ... I was just practicing.\" -Hermione Granger conjuring small golden birds just before sending them to attack Ron");
+        }};
 
-       text = "Causes one or more birds to fly out of the tip of your wand.";
-   }
+        text = "Causes one or more birds to fly out of the tip of your wand.";
+    }
 
     /**
      * Constructor.
@@ -87,7 +87,7 @@ public final class AVIS extends O2Spell
             World world = location.getWorld();
             if (world == null)
             {
-                p.getLogger().warning("AVIS.checkEffect: world is null");
+                common.printDebugMessage("AVIS.checkEffect: world is null", null, null, true);
                 kill();
                 return;
             }

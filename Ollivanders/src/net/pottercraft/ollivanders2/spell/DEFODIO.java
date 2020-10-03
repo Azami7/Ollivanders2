@@ -13,6 +13,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Mines a line of blocks of length depending on the player's level in this spell.
@@ -49,11 +50,11 @@ public final class DEFODIO extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public DEFODIO (Ollivanders2 plugin, Player player, Double rightWand)
+   public DEFODIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DEFODIO;
@@ -82,12 +83,18 @@ public final class DEFODIO extends O2Spell
     * Break a row of blocks
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
 
       curBlock = getTargetBlock();
+      if (curBlock == null)
+      {
+         common.printDebugMessage("DEFODIO.doCheckEffect: target block is null", null, null, true);
+         kill();
+         return;
+      }
 
       // stop the spell if we hit a blacklisted block type or when the max depth is reached
       if (materialBlackList.contains(curBlock.getType()) || depth <= 0)

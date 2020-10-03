@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by Azami7 on 6/28/17.
@@ -35,11 +36,11 @@ public final class INCARNATIO_LAMA extends PlayerDisguise
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public INCARNATIO_LAMA(Ollivanders2 plugin, Player player, O2SpellType type, Double rightWand)
+   public INCARNATIO_LAMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

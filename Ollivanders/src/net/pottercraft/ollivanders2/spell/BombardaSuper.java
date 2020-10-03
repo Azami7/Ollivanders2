@@ -62,7 +62,7 @@ public abstract class BombardaSuper extends O2Spell
             World world = backLoc.getWorld();
             if (world == null)
             {
-                p.getLogger().warning("BombardaSuper.doCheckEffect: world is null");
+                common.printDebugMessage("BombardaSuper.doCheckEffect: world is null", null, null, true);
                 kill();
                 return;
             }
@@ -70,5 +70,5 @@ public abstract class BombardaSuper extends O2Spell
             world.createExplosion(backLoc.getX(), backLoc.getY(), backLoc.getZ(), (float) strength, false, true);
             kill();
         }
-   }
+    }
 }

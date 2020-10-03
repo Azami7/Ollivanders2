@@ -1388,4 +1388,33 @@ public class Ollivanders2Common
 
       return sortedPlayers;
    }
+
+   /**
+    * Print debug messages to the server log.
+    *
+    * @param message   the debug message
+    * @param e         the exception, if applicable
+    * @param r         the runtime exception, if applicable
+    * @param isWarning true if this should be at WARNING level, false if it should be INFO level
+    */
+   public void printDebugMessage(@NotNull String message, @Nullable Exception e, @Nullable RuntimeException r, boolean isWarning)
+   {
+      if (!Ollivanders2.debug)
+         return;
+
+      if (isWarning)
+      {
+         p.getLogger().warning(message);
+
+         if (e != null)
+            e.printStackTrace();
+
+         if (r != null)
+            r.printStackTrace();
+      }
+      else
+      {
+         p.getLogger().info(message);
+      }
+   }
 }

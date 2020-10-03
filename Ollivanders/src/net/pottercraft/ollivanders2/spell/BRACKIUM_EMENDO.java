@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Healing spell that can be used to mend broken bones.  Can also be used to remove bones and can be used defensively
@@ -50,11 +51,11 @@ public final class BRACKIUM_EMENDO extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public BRACKIUM_EMENDO (Ollivanders2 plugin, Player player, Double rightWand)
+   public BRACKIUM_EMENDO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -115,10 +116,7 @@ public final class BRACKIUM_EMENDO extends O2Spell
                PotionEffect effect = new PotionEffect(PotionEffectType.HEAL, durationInTicks, 1);
                entity.addPotionEffect(effect);
 
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("Adding heal potion effect to " + entity.getName() + " for " + durationInTicks + " game ticks.");
-               }
+               common.printDebugMessage("Adding heal potion effect to " + entity.getName() + " for " + durationInTicks + " game ticks.", null, null, false);
 
                kill();
                break;
