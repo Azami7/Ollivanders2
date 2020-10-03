@@ -17,7 +17,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @version Ollivanders2
  */
-public final class NOX extends RemovePotionEffect
+public final class NOX extends RemovePotionEffectInRadius
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.

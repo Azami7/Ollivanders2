@@ -5,7 +5,9 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Remove the effects of a potion in the radius of the caster.
+ * Remove a potion effect for all entities in a radius of the caster
+ *
+ * @author Azami7
  */
 public class RemovePotionEffectInRadius extends RemovePotionEffect
 {
