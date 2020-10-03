@@ -4,7 +4,9 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
 
 /**
+ * Remove a potion effect for all entities in a radius of the caster
  *
+ * @author Azami7
  */
 public class RemovePotionEffectInRadius extends RemovePotionEffect
 {
