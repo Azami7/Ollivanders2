@@ -100,8 +100,8 @@ public final class O2PlayerCommon
       }
 
       // if using hostile mob animagi, 10% chance of getting a hostile mob form
-      form = Math.abs(pid.hashCode() % 25);
-      if (form < 26)
+      form = Math.abs(pid.hashCode() % 10);
+      if (form < 1)
       {
          form = Math.abs(pid.hashCode() % hostileAnimagusShapes.size());
          return hostileAnimagusShapes.get(form);

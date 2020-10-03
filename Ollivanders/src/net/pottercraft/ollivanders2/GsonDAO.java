@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 import net.pottercraft.ollivanders2.house.O2HouseType;
 
 import java.io.File;
@@ -129,8 +130,7 @@ public class GsonDAO implements GenericDAO
       if (json == null)
          return null;
 
-      Map<String, String> strMap = new HashMap<>();
-      strMap = (Map<String, String>) gson.fromJson(json, strMap.getClass());
+      Map<String, String> strMap = gson.fromJson(json, new TypeToken<HashMap<String, String>>(){}.getType());
 
       Map<UUID, O2HouseType> map = new HashMap<>();
       for (Entry <String, String> entry : strMap.entrySet())

@@ -104,7 +104,7 @@ public abstract class RemovePotionEffect extends O2Spell
    {
       for (PotionEffectType effectType : potionEffectTypes)
       {
-         player.removePotionEffect(effectType);
+         target.removePotionEffect(effectType);
       }
    }
 }
