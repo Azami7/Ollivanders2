@@ -68,21 +68,16 @@ public abstract class EntityDisguise extends EntityTransfiguration
    @Override
    protected boolean canTransfigure(@NotNull Entity e)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("canTransfigure: " + e.getType().toString());
+      common.printDebugMessage("canTransfigure: " + e.getType().toString(), null, null, false);
 
       if (!Ollivanders2.libsDisguisesEnabled)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("LibsDisguises not enabled.");
-
+         common.printDebugMessage("LibsDisguises not enabled.", null, null, false);
          return false;
       }
       else if (!targetTypeCheck(e))
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Target entity type cannot be transfigured.");
-
+         common.printDebugMessage("Target entity type cannot be transfigured.", null, null, false);
          return false;
       }
 

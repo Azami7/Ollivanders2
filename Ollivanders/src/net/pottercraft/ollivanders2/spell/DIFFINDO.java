@@ -12,6 +12,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Drops random items from a player's inventory. Also cuts down trees.
@@ -44,11 +45,11 @@ public final class DIFFINDO extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public DIFFINDO (Ollivanders2 plugin, Player player, Double rightWand)
+   public DIFFINDO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.DIFFINDO;
@@ -84,12 +85,9 @@ public final class DIFFINDO extends O2Spell
                ArrayList<ItemStack> remStack = new ArrayList<>();
                for (ItemStack stack : inv.getContents())
                {
-                  if (stack != null)
+                  if (Math.random() * usesModifier > 1)
                   {
-                     if (Math.random() * usesModifier > 1)
-                     {
-                        remStack.add(stack);
-                     }
+                     remStack.add(stack);
                   }
                }
                for (ItemStack rem : remStack)
@@ -108,6 +106,12 @@ public final class DIFFINDO extends O2Spell
       if (hasHitTarget())
       {
          Block target = getTargetBlock();
+         if (target == null)
+         {
+            common.printDebugMessage("DIFFINDO.doCheckEffect: target block is null", null, null, false);
+            kill();
+            return;
+         }
 
          if (Ollivanders2API.common.isNaturalLog(target))
          {

@@ -13,6 +13,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Shoots one or more fireworks in to the air.
@@ -47,7 +48,7 @@ public abstract class Pyrotechnia extends O2Spell
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public Pyrotechnia(Ollivanders2 plugin, Player player, Double rightWand)
+   public Pyrotechnia(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       fireworkCount = 0;
@@ -71,7 +72,7 @@ public abstract class Pyrotechnia extends O2Spell
          World world = location.getWorld();
          if (world == null)
          {
-            p.getLogger().warning("Pyrotechnia.checkEffect: world is null");
+            common.printDebugMessage("Pyrotechnia.checkEffect: world is null", null, null, true);
             kill();
             return;
          }

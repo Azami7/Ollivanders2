@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Enchants a flying broomstick.
@@ -31,20 +32,20 @@ public final class VOLATUS extends O2Spell
       branch = O2MagicBranch.CHARMS;
 
       text = "Volatus is used to enchant a broomstick for flight. "
-            + "To make a magical broomstick, you must first craft a broomstick.  This recipe requires two sticks and a wheat. "
-            + "Place the first stick in the upper-right corner, the next stick in the center, and the wheat in the lower-left. "
-            + "Once you have a broomstick, place it in the ground in front of you and cast the spell Volatus at it. "
-            + "Your experience with this spell determines how fast the broomstick can go.";
+              + "To make a magical broomstick, you must first craft a broomstick.  This recipe requires two sticks and a wheat. "
+              + "Place the first stick in the upper-right corner, the next stick in the center, and the wheat in the lower-left. "
+              + "Once you have a broomstick, place it in the ground in front of you and cast the spell Volatus at it. "
+              + "Your experience with this spell determines how fast the broomstick can go.";
    }
 
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public VOLATUS (Ollivanders2 plugin, Player player, Double rightWand)
+   public VOLATUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -83,20 +84,20 @@ public final class VOLATUS extends O2Spell
     * @param item - Item in question.
     * @return True if yes.
     */
-   public boolean isBroom (ItemStack item)
+   public boolean isBroom(@NotNull ItemStack item)
    {
       if (item.getType() == Ollivanders2.broomstickMaterial)
       {
          ItemMeta meta = item.getItemMeta();
-         if (meta.hasLore())
+
+         if (meta != null && meta.hasLore())
          {
             List<String> lore = meta.getLore();
-            if (lore.contains("Flying vehicle used by magical folk"))
-            {
-               return true;
-            }
+
+            return (lore != null && lore.contains("Flying vehicle used by magical folk"));
          }
       }
+
       return false;
    }
 }

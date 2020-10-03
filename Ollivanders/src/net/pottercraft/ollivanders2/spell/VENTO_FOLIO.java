@@ -123,8 +123,7 @@ public final class VENTO_FOLIO extends O2Spell
          FLYING effect = new FLYING(p, duration, player.getUniqueId());
          Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
 
-         if (Ollivanders2.debug)
-            p.getLogger().info("Adding effect ");
+         common.printDebugMessage("VENTO_FOLIO: Adding effect ", null, null, false);
       }
 
       kill();

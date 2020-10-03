@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Places a geminio affect on the item.
@@ -44,7 +45,7 @@ public final class GEMINIO extends ItemCurse
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public GEMINIO(Ollivanders2 plugin, Player player, Double rightWand)
+   public GEMINIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.GEMINIO;

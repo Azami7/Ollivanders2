@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Zombie;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -45,11 +46,11 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public MORTUOS_SUSCITATE (Ollivanders2 plugin, Player player, Double rightWand)
+   public MORTUOS_SUSCITATE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -78,6 +79,12 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
             if (item.getItemStack().getType() == Material.ROTTEN_FLESH)
             {
                Zombie inferi = (Zombie) transfigureEntity(item, EntityType.ZOMBIE, null);
+               if (inferi == null)
+               {
+                  common.printDebugMessage("MORTUOS_SUSCITATE.doCheckEffect: inferi is null", null, null, true);
+                  kill();
+                  return;
+               }
 
                inferi.setCustomName("Inferius");
             }

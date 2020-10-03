@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
-import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -20,7 +19,7 @@ import java.util.Map;
  */
 public class O2Spells
 {
-    final private JavaPlugin p;
+    private final Ollivanders2Common common;
 
     final private Map<String, O2SpellType> O2SpellMap = new HashMap<>();
 
@@ -36,7 +35,7 @@ public class O2Spells
      */
     public O2Spells(@NotNull JavaPlugin plugin)
     {
-        p = plugin;
+        common = new Ollivanders2Common(plugin);
 
         for (O2SpellType spellType : O2SpellType.values())
         {
@@ -66,10 +65,7 @@ public class O2Spells
         }
         catch (Exception exception)
         {
-            p.getLogger().info("Exception trying to create new instance of " + spellType.toString());
-            if (Ollivanders2.debug)
-                exception.printStackTrace();
-
+            common.printDebugMessage("Exception trying to create new instance of " + spellType.toString(), exception, null, true);
             return null;
         }
 

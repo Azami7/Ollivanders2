@@ -90,11 +90,7 @@ public final class ALARTE_ASCENDARE extends O2Spell
             if (living.getUniqueId() == player.getUniqueId())
                continue;
 
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("targeting entity " + living.getName());
-            }
-
+            common.printDebugMessage("targeting entity " + living.getName(), null, null, false);
             living.setVelocity(living.getVelocity().add(vec));
 
             kill();
@@ -111,11 +107,7 @@ public final class ALARTE_ASCENDARE extends O2Spell
       {
          Item item = items.get(0);
 
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("targeting item " + item.getName());
-         }
-
+         common.printDebugMessage("targeting item " + item.getName(), null, null, false);
          item.setVelocity(item.getVelocity().add(vec));
 
          kill();

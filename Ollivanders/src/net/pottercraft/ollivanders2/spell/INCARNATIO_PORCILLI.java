@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by Azami7 on 6/28/17.
@@ -36,11 +37,11 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguise
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public INCARNATIO_PORCILLI(Ollivanders2 plugin, Player player, Double rightWand)
+   public INCARNATIO_PORCILLI(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -58,6 +59,7 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguise
       watcher.setAdult();
 
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
+
       if (rand == 0)
          watcher.setSaddled(true);
       else

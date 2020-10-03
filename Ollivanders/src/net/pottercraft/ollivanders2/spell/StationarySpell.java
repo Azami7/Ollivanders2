@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Parent class for all spells that create a stationary spell.
@@ -79,7 +80,7 @@ public abstract class StationarySpell extends O2Spell
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public StationarySpell(Ollivanders2 plugin, Player player, Double rightWand)
+   public StationarySpell(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       branch = O2MagicBranch.CHARMS;

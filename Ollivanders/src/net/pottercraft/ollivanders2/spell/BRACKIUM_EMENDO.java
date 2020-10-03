@@ -116,10 +116,7 @@ public final class BRACKIUM_EMENDO extends O2Spell
                PotionEffect effect = new PotionEffect(PotionEffectType.HEAL, durationInTicks, 1);
                entity.addPotionEffect(effect);
 
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("Adding heal potion effect to " + entity.getName() + " for " + durationInTicks + " game ticks.");
-               }
+               common.printDebugMessage("Adding heal potion effect to " + entity.getName() + " for " + durationInTicks + " game ticks.", null, null, false);
 
                kill();
                break;

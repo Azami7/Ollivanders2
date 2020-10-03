@@ -162,11 +162,7 @@ public class AddO2Effect extends O2Spell
             }
             catch (Exception e)
             {
-                if (Ollivanders2.debug)
-                {
-                    p.getLogger().info("Failed to create class for " + effectType.toString());
-                    e.printStackTrace();
-                }
+                common.printDebugMessage("Failed to create class for " + effectType.toString(), e, null, true);
                 continue;
             }
 

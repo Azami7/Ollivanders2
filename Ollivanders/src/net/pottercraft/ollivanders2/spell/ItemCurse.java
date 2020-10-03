@@ -104,7 +104,7 @@ public abstract class ItemCurse extends O2Spell
          ItemMeta stackMeta = stack.getItemMeta();
          if (stackMeta == null)
          {
-            p.getLogger().warning("ItemCurse.doCheckEffect: item meta is null");
+            common.printDebugMessage("ItemCurse.doCheckEffect: item meta is null", null, null, true);
             kill();
             return;
          }

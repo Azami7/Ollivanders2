@@ -7,10 +7,13 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Disarms an entity of it's held item, flinging the item in the direction of the caster with force determined by the spell level.
@@ -49,11 +52,11 @@ public final class EXPELLIARMUS extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public EXPELLIARMUS (Ollivanders2 plugin, Player player, Double rightWand)
+   public EXPELLIARMUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.EXPELLIARMUS;
@@ -95,13 +98,21 @@ public final class EXPELLIARMUS extends O2Spell
                continue;
 
             // is entity holding something
-            ItemStack held = entity.getEquipment().getItemInMainHand();
+            EntityEquipment entityEquipment = entity.getEquipment();
+            if (entityEquipment == null)
+            {
+               // they do not have any equipment
+               kill();
+               return;
+            }
+
+            ItemStack held = entityEquipment.getItemInMainHand();
             boolean offHand = false;
 
             if (held.getType() == Material.AIR)
             {
                // try the other hand
-               held = entity.getEquipment().getItemInOffHand();
+               held = entityEquipment.getItemInOffHand();
 
                // this entity is not holding something
                if (held.getType() == Material.AIR)
@@ -115,9 +126,9 @@ public final class EXPELLIARMUS extends O2Spell
 
             // remove the item in the player's hand
             if (offHand)
-               entity.getEquipment().setItemInOffHand(null);
+               entityEquipment.setItemInOffHand(null);
             else
-               entity.getEquipment().setItemInMainHand(null);
+               entityEquipment.setItemInMainHand(null);
 
             // drop the item the player held
             Item item = entity.getWorld().dropItem(entity.getEyeLocation(), itemInHand);

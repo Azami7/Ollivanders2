@@ -9,6 +9,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Reparifors is a healing spell that reverts minor magically-induced ailments, such as paralysis and poisoning.
@@ -19,6 +20,9 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class REPARIFORS extends O2Spell
 {
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    */
    public REPARIFORS()
    {
       super();
@@ -29,7 +33,14 @@ public class REPARIFORS extends O2Spell
       text = "A healing spell for minor ailments such as paralysis or poisoning.";
    }
 
-   public REPARIFORS (Ollivanders2 plugin, Player player, Double rightWand)
+   /**
+    * Constructor.
+    *
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
+    * @param rightWand which wand the player was using
+    */
+   public REPARIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -51,23 +62,27 @@ public class REPARIFORS extends O2Spell
 
          if (live instanceof Player)
          {
-            Player player = (Player) live;
+            Player target = (Player) live;
 
             // if they are affected by immobilize, remove the effect
-            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE) && !(Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)))
+            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(target.getUniqueId(), O2EffectType.IMMOBILIZE) && !(Ollivanders2API.getPlayers(p).playerEffects.hasEffect(target.getUniqueId(), O2EffectType.SUSPENSION)))
             {
-               Ollivanders2API.getPlayers(p).playerEffects.ageEffectByPercent(player.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier / 20));
+               Ollivanders2API.getPlayers(p).playerEffects.ageEffectByPercent(target.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier / 20));
 
                kill();
                return;
             }
 
             // reduce duration of poison by half
-            if (player.hasPotionEffect(PotionEffectType.POISON))
+            if (target.hasPotionEffect(PotionEffectType.POISON))
             {
-               int duration = player.getPotionEffect(PotionEffectType.POISON).getDuration();
-               player.removePotionEffect(PotionEffectType.POISON);
-               player.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (duration / 2), 1));
+               PotionEffect potionEffect = target.getPotionEffect(PotionEffectType.POISON);
+               if (potionEffect != null)
+               {
+                  int duration = potionEffect.getDuration();
+                  target.removePotionEffect(PotionEffectType.POISON);
+                  target.addPotionEffect(new PotionEffect(PotionEffectType.POISON, (duration / 2), 1));
+               }
 
                kill();
                return;
@@ -75,7 +90,7 @@ public class REPARIFORS extends O2Spell
 
             // do a minor heal
             int duration = (((int) usesModifier / 10) * Ollivanders2Common.ticksPerSecond) + (15 * Ollivanders2Common.ticksPerSecond);
-            player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, duration, 1));
+            target.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, duration, 1));
 
             kill();
             return;

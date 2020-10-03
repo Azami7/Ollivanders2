@@ -42,7 +42,7 @@ public abstract class MetelojinxSuper extends O2Spell
          World world = location.getWorld();
          if (world == null)
          {
-            p.getLogger().warning("MetelojinxSuper.doCheckEffect: world is null");
+            common.printDebugMessage("MetelojinxSuper.doCheckEffect: world is null", null, null, true);
             kill();
             return;
          }

@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Throws another player away from the caster. Twice as powerful as depulso.
@@ -37,11 +38,11 @@ public final class FLIPENDO extends Knockback
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public FLIPENDO (Ollivanders2 plugin, Player player, Double rightWand)
+   public FLIPENDO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FLIPENDO;

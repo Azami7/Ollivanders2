@@ -163,8 +163,7 @@ public abstract class EntityTransfiguration extends O2Spell
       }
       else
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Failed success check.");
+         common.printDebugMessage("Failed success check.", null, null, false);
       }
    }
 
@@ -204,25 +203,19 @@ public abstract class EntityTransfiguration extends O2Spell
 
       if (eType == targetType) // do not change if this entity is already the target type
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Target entity is same type as spell type.");
-
+         common.printDebugMessage("Target entity is same type as spell type.", null, null, false);
          check = false;
       }
       else if (entityBlacklist.contains(eType)) // do not change if this entity is in the blacklist
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("EntityType is on the blacklist.");
-
+         common.printDebugMessage("EntityType is on the blacklist.", null, null, false);
          check = false;
       }
       else if (!entityWhitelist.isEmpty()) // do not change if the whitelist exists and this entity is not in it
       {
          if (!entityWhitelist.contains(eType))
          {
-            if (Ollivanders2.debug)
-               p.getLogger().info("EntityType is not on the whitelist.");
-
+            common.printDebugMessage("EntityType is not on the whitelist.", null, null, false);
             check = false;
          }
       }

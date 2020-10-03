@@ -65,11 +65,7 @@ public final class APARECIUM extends O2Spell
 
       if (stationaries.size() > 0)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("Found " + stationaries.size() + " stationary spells");
-         }
-
+         common.printDebugMessage("Found " + stationaries.size() + " stationary spells", null, null, false);
          stationaries.get(0).flair(10);
 
          kill();
