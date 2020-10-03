@@ -122,9 +122,9 @@ public class ReduceO2Effect extends O2Spell
             if (effectBlacklist.contains(effectType))
                 continue;
 
-            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), effectType))
+            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(target.getUniqueId(), effectType))
             {
-                Ollivanders2API.getPlayers(p).playerEffects.ageEffect(player.getUniqueId(), effectType, (int) (usesModifier * 2400));
+                Ollivanders2API.getPlayers(p).playerEffects.ageEffect(target.getUniqueId(), effectType, (int) (usesModifier * 2400));
             }
         }
     }

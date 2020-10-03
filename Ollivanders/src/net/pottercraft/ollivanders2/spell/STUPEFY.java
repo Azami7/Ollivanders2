@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Blinds and slows the target entity for a duration depending on the spell's level.
@@ -38,11 +39,11 @@ public final class STUPEFY extends AddPotionEffect
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public STUPEFY (Ollivanders2 plugin, Player player, Double rightWand)
+   public STUPEFY(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

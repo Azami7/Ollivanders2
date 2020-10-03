@@ -11,6 +11,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Creates a line of glowstone that goes away after a time.
@@ -20,10 +21,10 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public final class LUMOS_DUO extends O2Spell
 {
-   private List<Block> line = new ArrayList<>();
+   private final List<Block> line = new ArrayList<>();
 
    private int lineLength = 0;
-   private int maxLineLength = 5;
+   private static final int maxLineLength = 5;
 
    /**
     * If this is not permanent, how long it should last. Default is 15 seconds.
@@ -60,11 +61,11 @@ public final class LUMOS_DUO extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public LUMOS_DUO (Ollivanders2 plugin, Player player, Double rightWand)
+   public LUMOS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -103,6 +104,8 @@ public final class LUMOS_DUO extends O2Spell
                curBlock.setType(Material.GLOWSTONE);
                line.add(curBlock);
                p.addTempBlock(curBlock, Material.AIR);
+
+               lineLength++;
             }
             else
             {

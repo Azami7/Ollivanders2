@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,7 @@ import java.util.ArrayList;
  */
 public class PETRIFICUS_TOTALUS extends O2Spell
 {
-   private static int maxDurationInSeconds = 300;
+   private final static int maxDurationInSeconds = 300;
 
    public PETRIFICUS_TOTALUS()
    {
@@ -45,7 +46,7 @@ public class PETRIFICUS_TOTALUS extends O2Spell
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public PETRIFICUS_TOTALUS (Ollivanders2 plugin, Player player, Double rightWand)
+   public PETRIFICUS_TOTALUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

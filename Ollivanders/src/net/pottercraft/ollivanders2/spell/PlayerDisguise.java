@@ -48,9 +48,7 @@ public abstract class PlayerDisguise extends EntityDisguise
         if (usesModifier < 10)
             successRate = 10;
         else if (usesModifier < 100)
-        {
             successRate = (int) usesModifier;
-        }
         else
             successRate = 100;
     }
