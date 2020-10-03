@@ -16,7 +16,7 @@ import java.util.ArrayList;
  * @author Azami7
  * @version Ollivanders2
  */
-public final class NOX extends RemovePotionEffect
+public final class NOX extends RemovePotionEffectInRadius
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -28,7 +28,7 @@ public final class NOX extends RemovePotionEffect
       spellType = O2SpellType.NOX;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Wand-Extinguishing Charm");
          add("With difficulty he dragged it over himself, murmured, 'Nox,' extinguishing his wand light, and continued on his hands and knees, as silently as possible, all his senses straining, expecting every second to be discovered, to hear a cold clear voice, see a flash of green light.");
