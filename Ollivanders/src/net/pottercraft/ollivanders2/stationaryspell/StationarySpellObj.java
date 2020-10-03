@@ -63,13 +63,29 @@ public abstract class StationarySpellObj implements Serializable
       this.radius = radius;
    }
 
-   void setDuration (Integer d)
+   /**
+    * Set the duration of this stationary spell
+    *
+    * @param d the duration in game ticks
+    */
+   void setDuration(int d)
    {
+      if (d < 0)
+         d = 0;
+
       duration = d;
    }
 
-   void setRadius (Integer r)
+   /**
+    * Set the radius of this stationary spell
+    *
+    * @param r the radius in blocks
+    */
+   void setRadius(int r)
    {
+      if (r < 0)
+         r = 0;
+
       radius = r;
    }
 

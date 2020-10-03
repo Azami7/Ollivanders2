@@ -100,6 +100,9 @@ public abstract class O2Book
          return;
 
       BookMeta bookMeta = (BookMeta)bookItem.getItemMeta();
+      if (bookMeta == null)
+         return;
+
       bookMeta.setAuthor(author);
       bookMeta.setTitle(shortTitle);
 

@@ -157,8 +157,11 @@ public enum O2HouseType
     * Set the score for this house. Should only be done from within the House package.
     * @param s the score to set
     */
-   void setScore (Integer s)
+   void setScore(int s)
    {
+      if (s < 0)
+         s = 0;
+
       score = s;
    }
 }
