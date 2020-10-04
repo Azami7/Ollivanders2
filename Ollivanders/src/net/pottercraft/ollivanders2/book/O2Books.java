@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.pottercraft.ollivanders2.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
@@ -19,6 +20,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.ScoreboardManager;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,12 +38,14 @@ public final class O2Books
 {
    private final Map<String, O2BookType> O2BookMap = new HashMap<>();
 
-   JavaPlugin p;
+   Ollivanders2 p;
+   Ollivanders2Common common;
+
    BookTexts spellText;
 
    private ItemStack library;
 
-   public static final List<O2BookType> hogwartsReadingList = new ArrayList<O2BookType>()
+   public static final List<O2BookType> hogwartsReadingList = new ArrayList<>()
    {{
       add(O2BookType.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION);
       add(O2BookType.ACHIEVEMENTS_IN_CHARMING);
@@ -77,9 +81,10 @@ public final class O2Books
     *
     * @param plugin the MC plugin
     */
-   public O2Books(@NotNull JavaPlugin plugin)
+   public O2Books(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(plugin);
 
       spellText = new BookTexts(plugin);
 
@@ -88,7 +93,7 @@ public final class O2Books
 
       library = null;
 
-      p.getLogger().info("Created Ollivanders2 books.");
+      common.printLogMessage("Created Ollivanders2 books.", null, null, false);
    }
 
    /**
@@ -96,7 +101,8 @@ public final class O2Books
     */
    private void addBooks ()
    {
-      p.getLogger().info("Adding all books...");
+      common.printDebugMessage("Adding all books...", null, null, false);
+
       for (O2BookType bookType : O2BookType.values())
       {
          O2Book book = getO2BookByType(bookType);
@@ -123,13 +129,11 @@ public final class O2Books
 
       try
       {
-         book = (O2Book) bookClass.getConstructor(JavaPlugin.class).newInstance(p);
+         book = (O2Book) bookClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
-      catch (Exception exception)
+      catch (Exception e)
       {
-         p.getLogger().info("Exception trying to create new instance of " + bookType);
-         if (Ollivanders2.debug)
-            exception.printStackTrace();
+         common.printDebugMessage("Exception trying to create new instance of " + bookType, e, null, true);
       }
 
       return book;

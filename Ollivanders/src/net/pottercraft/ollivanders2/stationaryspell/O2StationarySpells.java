@@ -10,6 +10,7 @@ import java.util.UUID;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.Nullable;
@@ -18,7 +19,8 @@ import org.jetbrains.annotations.NotNull;
 public class O2StationarySpells
 {
    private List<StationarySpellObj> O2StationarySpells = new ArrayList<>();
-   JavaPlugin p;
+   Ollivanders2 p;
+   Ollivanders2Common common;
 
    private final String playerUUIDLabel = "Player_UUID";
    private final String spellLabel = "Name";
@@ -31,9 +33,10 @@ public class O2StationarySpells
     *
     * @param plugin a reference to the plugin
     */
-   public O2StationarySpells(@NotNull JavaPlugin plugin)
+   public O2StationarySpells(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(plugin);
 
       loadO2StationarySpells();
    }
@@ -45,11 +48,7 @@ public class O2StationarySpells
     */
    public void addStationarySpell(@NotNull StationarySpellObj spell)
    {
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString() + " with duration " + spell.duration + " and radius of " + spell.radius);
-      }
-
+      common.printDebugMessage("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString() + " with duration " + spell.duration + " and radius of " + spell.radius, null, null, false);
       O2StationarySpells.add(spell);
    }
 
@@ -61,9 +60,7 @@ public class O2StationarySpells
     */
    public void removeStationarySpell(@NotNull StationarySpellObj spell)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType().toString());
-
+      common.printDebugMessage("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType().toString(), null, null, false);
       spell.kill();
    }
 
@@ -195,8 +192,7 @@ public class O2StationarySpells
 
          if (spell.kill)
          {
-            if (Ollivanders2.debug)
-               p.getLogger().info("O2StationarySpells.upkeep: removing " + spell.getSpellType().toString());
+            common.printDebugMessage("O2StationarySpells.upkeep: removing " + spell.getSpellType().toString(), null, null, false);
 
             O2StationarySpells.remove(spell);
          }
@@ -224,11 +220,11 @@ public class O2StationarySpells
 
       if (serializedSpells == null)
       {
-         p.getLogger().warning("Did not find stationary.bin");
+         common.printLogMessage("Unable to load saved stationary spells.", null, null, false);
       }
       else
       {
-         p.getLogger().info("Reading saved stationary spells");
+         common.printLogMessage("Reading saved stationary spells", null, null, false);
          O2StationarySpells = deserializeO2StationarySpells(serializedSpells);
       }
    }
@@ -243,8 +239,7 @@ public class O2StationarySpells
    {
       List <Map<String, String>> serializedList = new ArrayList<>();
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("Serializing O2StationarySpells...");
+      common.printDebugMessage("Serializing O2StationarySpells...", null, null, false);
 
       for (StationarySpellObj spell : O2StationarySpells)
       {
@@ -386,14 +381,11 @@ public class O2StationarySpells
       Class<?> spellClass = spellType.getClassName();
       try
       {
-         statSpell = (StationarySpellObj)spellClass.getConstructor(JavaPlugin.class).newInstance(p);
+         statSpell = (StationarySpellObj)spellClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception e)
       {
-         p.getLogger().info("Exception trying to create new instance of " + spellType.toString());
-         if (Ollivanders2.debug)
-            e.printStackTrace();
-
+         common.printDebugMessage("Exception trying to create new instance of " + spellType.toString(), e, null, true);
          return null;
       }
 

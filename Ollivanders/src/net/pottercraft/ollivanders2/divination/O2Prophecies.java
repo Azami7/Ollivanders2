@@ -21,7 +21,7 @@ import java.util.UUID;
  */
 public class O2Prophecies
 {
-   final private JavaPlugin p;
+   final private Ollivanders2 p;
 
    final private List<O2Prophecy> activeProphecies = new ArrayList<>();
    final private List<O2Prophecy> offlineProphecies = new ArrayList<>();
@@ -39,7 +39,7 @@ public class O2Prophecies
     *
     * @param plugin a callback to the plugin
     */
-   public O2Prophecies(@NotNull JavaPlugin plugin)
+   public O2Prophecies(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 

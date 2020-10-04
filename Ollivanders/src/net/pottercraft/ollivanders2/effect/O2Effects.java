@@ -2,6 +2,8 @@ package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.Ollivanders2Common;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,7 +25,8 @@ import java.util.concurrent.Semaphore;
  */
 public class O2Effects
 {
-   final JavaPlugin p;
+   final Ollivanders2 p;
+   final Ollivanders2Common common;
 
    final static Semaphore semaphore = new Semaphore(1);
 
@@ -71,8 +74,7 @@ public class O2Effects
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to acquire mutex in getPlayerActiveEffects");
-            e.printStackTrace();
+            common.printDebugMessage("O2Effects.getPlayerActiveEffects: failed to acquire mutex in getPlayerActiveEffects", e, null, true);
          }
          finally
          {
@@ -109,8 +111,7 @@ public class O2Effects
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to acquire mutex in getActiveEffect");
-            e.printStackTrace();
+            common.printDebugMessage("O2Effects.getActiveEffect: failed to acquire mutex in getActiveEffect", e, null, true);
          }
          finally
          {
@@ -142,8 +143,7 @@ public class O2Effects
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to acquire mutex in getPlayerSavedEffects");
-            e.printStackTrace();
+            common.printDebugMessage("O2Effects.getPlayerSavedEffects: failed to acquire mutex in getPlayerSavedEffects", e, null, true);
          }
          finally
          {
@@ -171,8 +171,7 @@ public class O2Effects
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to acquire mutex in updatePlayerSavedEffects");
-            e.printStackTrace();
+            common.printDebugMessage("O2Effects.updatePlayerSavedEffects: failed to acquire mutex in updatePlayerSavedEffects", e, null, true);
          }
          finally
          {
@@ -198,8 +197,7 @@ public class O2Effects
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to acquire mutex in updatePlayerActiveEffects");
-            e.printStackTrace();
+            common.printDebugMessage("O2Effects.updatePlayerActiveEffects: failed to acquire mutex in updatePlayerActiveEffects", e, null, true);
          }
          finally
          {
@@ -232,8 +230,7 @@ public class O2Effects
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to acquire mutex in resetEffects");
-            e.printStackTrace();
+            common.printDebugMessage("O2Effects.resetEffects: failed to acquire mutex in resetEffects", e, null, true);
          }
          finally
          {
@@ -249,9 +246,10 @@ public class O2Effects
     *
     * @param plugin a callback to the plugin
     */
-   public O2Effects(@NotNull JavaPlugin plugin)
+   public O2Effects(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(plugin);
    }
 
    /**
@@ -306,35 +304,36 @@ public class O2Effects
       if (savedEffects.size() < 1)
          return;
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("Applying effects for " + p.getServer().getPlayer(pid).getDisplayName());
+      Player player = p.getServer().getPlayer(pid);
+      if (player == null)
+      {
+         common.printDebugMessage("O2Effects.onJoin: player is null", null, null, true);
+         return;
+      }
+
+      common.printDebugMessage("Applying effects for " + player.getDisplayName(), null, null, false);
 
       for (Entry<O2EffectType, Integer> entry : savedEffects.entrySet())
       {
          O2EffectType effectType = entry.getKey();
-         Integer duration = entry.getValue();
+         int duration = entry.getValue();
 
          Class<?> effectClass = effectType.getClassName();
 
          O2Effect effect;
          try
          {
-            effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, duration, pid);
+            effect = (O2Effect)effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration, pid);
          }
          catch (Exception e)
          {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("Failed to create class for " + effectType.toString());
-               e.printStackTrace();
-            }
+            common.printDebugMessage("O2Effects.onJoin: failed to create class for " + effectType.toString(), e, null, true);
+
             continue;
          }
 
          activeEffects.put(effectType, effect);
-
-         if (Ollivanders2.debug)
-            p.getLogger().info("   added " + effectType.toString());
+         common.printDebugMessage("   added " + effectType.toString(), null, null, false);
       }
 
       effectsData.updatePlayerActiveEffects(pid, activeEffects);
@@ -455,9 +454,7 @@ public class O2Effects
       }
 
       effectsData.updatePlayerActiveEffects(pid, playerEffects);
-
-      if (Ollivanders2.debug)
-         p.getLogger().info("Added effect " + e.effectType.toString() + " to " + p.getServer().getPlayer(pid).getDisplayName());
+      common.printDebugMessage("Added effect " + e.effectType.toString() + " to " + pid.toString(), null, null, false);
    }
 
    /**
@@ -479,15 +476,11 @@ public class O2Effects
       }
       else
       {
-         p.getLogger().warning("Effect to remove is null.");
+         common.printDebugMessage("O2Effects.removeEffect: effect to remove is null.", null, null, false);
       }
 
       effectsData.updatePlayerActiveEffects(pid, playerEffects);
-
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("Removed effect " + effectType.toString() + " from " + p.getServer().getPlayer(pid).getDisplayName());
-      }
+      common.printDebugMessage("Removed effect " + effectType.toString() + " from " + pid.toString(), null, null, false);
    }
 
    /**
@@ -627,17 +620,18 @@ public class O2Effects
    @Nullable
    public String detectEffectWithInformous(@NotNull UUID pid)
    {
-      p.getLogger().info("detecting effcts with Informous");
+      common.printDebugMessage("O2Effects.detectEffectWithInformous: detecting effcts with Informous", null, null, false);
       String infoText = null;
 
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
       Collection<O2Effect> effects = activeEffects.values();
 
-      p.getLogger().info("found " + activeEffects.keySet().size() + " active effects");
+      common.printDebugMessage("O2Effects.detectEffectWithInformous: found " + activeEffects.keySet().size() + " active effects", null, null, false);
 
       for (O2Effect effect : effects)
       {
-         p.getLogger().info("checking effect " + effect.effectType.toString());
+         common.printDebugMessage("O2Effects.detectEffectWithInformous: checking effect " + effect.effectType.toString(), null, null, false);
+
          if (effect.informousText != null)
          {
             infoText = effect.informousText;

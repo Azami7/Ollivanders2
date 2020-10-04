@@ -39,7 +39,7 @@ public class O2Players
    /**
     * The MC plugin callback
     */
-   private final JavaPlugin p;
+   private final Ollivanders2 p;
 
    /**
     * A count of the player records read at start. This can be used to prevent writing back out at server
@@ -72,7 +72,7 @@ public class O2Players
     *
     * @param plugin the MC plugin
     */
-   public O2Players(@NotNull JavaPlugin plugin)
+   public O2Players(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -522,7 +522,7 @@ public class O2Players
                      o2p.setYear(year);
                }
             }
-            else if (label.startsWith(playerEffects.effectLabelPrefix))
+            else if (label.startsWith(O2Effects.effectLabelPrefix))
             {
                playerEffects.deserializeEffect(pid, label, value);
             }

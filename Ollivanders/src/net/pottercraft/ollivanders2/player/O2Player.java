@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.Ollivanders2Common;
 import net.pottercraft.ollivanders2.house.O2HouseType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -64,7 +65,12 @@ public class O2Player
    /**
     * The MC plugin callback
     */
-   private final JavaPlugin p;
+   private final Ollivanders2 p;
+
+   /**
+    * Common functions for Ollivanders2
+    */
+   private final Ollivanders2Common common;
 
    /**
     * A map of all the spells a player knows and the cast count.
@@ -155,12 +161,13 @@ public class O2Player
     * @param name   the name of the player
     * @param plugin a reference to the plugin
     */
-   public O2Player(@NotNull UUID id, @NotNull String name, @NotNull JavaPlugin plugin)
+   public O2Player(@NotNull UUID id, @NotNull String name, @NotNull Ollivanders2 plugin)
    {
       p = plugin;
       playerName = name;
       pid = id;
       o2PlayerCommon = new O2PlayerCommon(plugin);
+      common = new Ollivanders2Common(plugin);
 
       // set destined wand
       initDestinedWand();
@@ -609,13 +616,12 @@ public class O2Player
     */
    public void setWandSpell(@Nullable O2SpellType spell)
    {
-      if (Ollivanders2.debug)
-      {
-         if (spell == null)
-            p.getLogger().info("Setting wand spell to null");
-         else
-            p.getLogger().info("Setting wand spell to " + spell.toString());
-      }
+      String spellName;
+      if (spell == null)
+         spellName = "null";
+      else
+         spellName = spell.getSpellName();
+      common.printDebugMessage("O2Player.setWandSpell: setting wand spell to " + spellName, null, null, false);
 
       wandSpell = spell;
    }

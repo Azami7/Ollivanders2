@@ -59,7 +59,7 @@ public class Ollivanders2Common
 
    public static final int ticksPerSecond = 20;
 
-   public static final List<EntityType> smallFriendlyAnimals = new ArrayList<EntityType>()
+   public static final List<EntityType> smallFriendlyAnimals = new ArrayList<>()
    {{
       add(EntityType.BAT);
       add(EntityType.CHICKEN);
@@ -71,7 +71,7 @@ public class Ollivanders2Common
       add(EntityType.PUFFERFISH);
    }};
 
-   public static final List<EntityType> mediumFriendlyAnimals = new ArrayList<EntityType>()
+   public static final List<EntityType> mediumFriendlyAnimals = new ArrayList<>()
    {{
       add(EntityType.SHEEP);
       add(EntityType.PIG);
@@ -82,7 +82,7 @@ public class Ollivanders2Common
       add(EntityType.TURTLE);
    }};
 
-   public static final List<EntityType> largeFriendlyAnimals = new ArrayList<EntityType>()
+   public static final List<EntityType> largeFriendlyAnimals = new ArrayList<>()
    {{
       add(EntityType.COW);
       add(EntityType.DONKEY);
@@ -100,7 +100,7 @@ public class Ollivanders2Common
       add(EntityType.TRADER_LLAMA);
    }};
 
-   public static final List<EntityType> undeadEntities = new ArrayList<EntityType>()
+   public static final List<EntityType> undeadEntities = new ArrayList<>()
    {{
       add(EntityType.DROWNED);
       add(EntityType.HUSK);
@@ -117,7 +117,7 @@ public class Ollivanders2Common
       add(EntityType.GIANT);
    }};
 
-   public static final List<O2SpellType> libsDisguisesSpells = new ArrayList<O2SpellType>()
+   public static final List<O2SpellType> libsDisguisesSpells = new ArrayList<>()
    {{
       add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       add(O2SpellType.AVIFORS);
@@ -138,12 +138,12 @@ public class Ollivanders2Common
       add(O2SpellType.VERA_VERTO);
    }};
 
-   public static final List<O2PotionType> libDisguisesPotions = new ArrayList<O2PotionType>()
+   public static final List<O2PotionType> libDisguisesPotions = new ArrayList<>()
    {{
       add(O2PotionType.ANIMAGUS_POTION);
    }};
 
-   public static final List<Material> unbreakableMaterials = new ArrayList<Material>()
+   public static final List<Material> unbreakableMaterials = new ArrayList<>()
    {{
       add(Material.BARRIER);
       add(Material.BEDROCK);
@@ -167,7 +167,7 @@ public class Ollivanders2Common
       add(Material.YELLOW_SHULKER_BOX);
    }};
 
-   public static final List<Material> chests = new ArrayList<Material>()
+   public static final List<Material> chests = new ArrayList<>()
    {{
       add(Material.CHEST);
       add(Material.ENDER_CHEST);
@@ -190,7 +190,7 @@ public class Ollivanders2Common
       add(Material.YELLOW_SHULKER_BOX);
    }};
 
-   public static final List<Material> wallSigns = new ArrayList<Material>()
+   public static final List<Material> wallSigns = new ArrayList<>()
    {{
       add(Material.ACACIA_WALL_SIGN);
       add(Material.BIRCH_WALL_SIGN);
@@ -199,7 +199,7 @@ public class Ollivanders2Common
       add(Material.SPRUCE_WALL_SIGN);
    }};
 
-   public static final List<Material> standingSigns = new ArrayList<Material>()
+   public static final List<Material> standingSigns = new ArrayList<>()
    {{
       add(Material.ACACIA_SIGN);
       add(Material.BIRCH_SIGN);
@@ -208,13 +208,13 @@ public class Ollivanders2Common
       add(Material.SPRUCE_SIGN);
    }};
 
-   public static final List<Material> signs = new ArrayList<Material>()
+   public static final List<Material> signs = new ArrayList<>()
    {{
       addAll(wallSigns);
       addAll(standingSigns);
    }};
 
-   public static final List<Material> hotBlocks = new ArrayList<Material>()
+   public static final List<Material> hotBlocks = new ArrayList<>()
    {{
       add(Material.LAVA);
       add(Material.FIRE);
@@ -243,14 +243,14 @@ public class Ollivanders2Common
 
    public final static Random random = new Random();
 
-   final private JavaPlugin p;
+   final private Ollivanders2 p;
 
    /**
     * Constructor
     *
     * @param plugin a reference to the plugin using this common
     */
-   public Ollivanders2Common (@NotNull JavaPlugin plugin)
+   public Ollivanders2Common (@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -1402,6 +1402,19 @@ public class Ollivanders2Common
       if (!Ollivanders2.debug)
          return;
 
+      printLogMessage(message, e, r, isWarning);
+   }
+
+   /**
+    * Print debug messages to the server log.
+    *
+    * @param message   the debug message
+    * @param e         the exception, if applicable
+    * @param r         the runtime exception, if applicable
+    * @param isWarning true if this should be at WARNING level, false if it should be INFO level
+    */
+   public void printLogMessage(@NotNull String message, @Nullable Exception e, @Nullable RuntimeException r, boolean isWarning)
+   {
       if (isWarning)
       {
          p.getLogger().warning(message);

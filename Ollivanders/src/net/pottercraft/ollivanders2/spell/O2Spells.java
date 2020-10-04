@@ -23,7 +23,7 @@ public class O2Spells
 
     final private Map<String, O2SpellType> O2SpellMap = new HashMap<>();
 
-    public static final List<O2SpellType> wandlessSpells = new ArrayList<O2SpellType>()
+    public static final List<O2SpellType> wandlessSpells = new ArrayList<>()
     {{
         add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
     }};
@@ -33,7 +33,7 @@ public class O2Spells
      *
      * @param plugin a callback to the MC plugin
      */
-    public O2Spells(@NotNull JavaPlugin plugin)
+    public O2Spells(@NotNull Ollivanders2 plugin)
     {
         common = new Ollivanders2Common(plugin);
 

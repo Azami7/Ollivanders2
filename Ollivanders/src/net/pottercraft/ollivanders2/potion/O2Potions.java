@@ -30,11 +30,11 @@ import org.jetbrains.annotations.Nullable;
  */
 public class O2Potions
 {
-   final private JavaPlugin p;
+   final private Ollivanders2 p;
 
    final private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
 
-   public static final List<O2ItemType> ingredients = new ArrayList<O2ItemType>()
+   public static final List<O2ItemType> ingredients = new ArrayList<>()
    {{
       add(O2ItemType.ACONITE);
       add(O2ItemType.ARMADILLO_BILE);
@@ -103,7 +103,7 @@ public class O2Potions
     *
     * @param plugin a reference to the plugin
     */
-   public O2Potions(@NotNull JavaPlugin plugin)
+   public O2Potions(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -313,7 +313,7 @@ public class O2Potions
 
       try
       {
-         potion = (O2Potion) potionClass.getConstructor(JavaPlugin.class).newInstance(p);
+         potion = (O2Potion) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception exception)
       {
@@ -346,7 +346,7 @@ public class O2Potions
     * @return a list of all potions ingredients
     */
    @NotNull
-   public static List<String> getAllIngredientNames (@NotNull JavaPlugin p)
+   public static List<String> getAllIngredientNames (@NotNull Ollivanders2 p)
    {
       ArrayList<String> ingredientList = new ArrayList<>();
 

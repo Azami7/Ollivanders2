@@ -35,7 +35,7 @@ public abstract class Divination extends O2Spell
     Material facingBlock = null;
     String facingBlockString = "";
 
-    public static final List<O2SpellType> divinationSpells = new ArrayList<O2SpellType>()
+    public static final List<O2SpellType> divinationSpells = new ArrayList<>()
     {{
         add(O2SpellType.ASTROLOGIA);
         add(O2SpellType.BAO_ZHONG_CHA);
@@ -148,7 +148,7 @@ public abstract class Divination extends O2Spell
 
         try
         {
-            divination = (O2Divination) divinationClass.getConstructor(Ollivanders2.class, Player.class, Player.class, Integer.class).newInstance(p, player, target, experience);
+            divination = (O2Divination) divinationClass.getConstructor(Ollivanders2.class, Player.class, Player.class, int.class).newInstance(p, player, target, experience);
         }
         catch (Exception e)
         {

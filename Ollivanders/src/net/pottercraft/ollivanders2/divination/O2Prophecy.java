@@ -21,7 +21,7 @@ import java.util.UUID;
  */
 public class O2Prophecy
 {
-   final private JavaPlugin p;
+   final private Ollivanders2 p;
 
    /**
     * The effect that will happen to the player
@@ -73,7 +73,7 @@ public class O2Prophecy
     * @param d   the duration of the effect, 0 for permanent
     * @param a   the accuracy of this prophecy as a percent from 0 to 99, greater than 99 will be rounded down to 99
     */
-   O2Prophecy(@NotNull JavaPlugin plugin, @NotNull O2EffectType e, @NotNull String m, @NotNull UUID tid, @NotNull UUID pid, long t, int d, int a)
+   O2Prophecy(@NotNull Ollivanders2 plugin, @NotNull O2EffectType e, @NotNull String m, @NotNull UUID tid, @NotNull UUID pid, long t, int d, int a)
    {
       p = plugin;
       effectType = e;
@@ -186,7 +186,7 @@ public class O2Prophecy
 
             try
             {
-               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, duration, targetID);
+               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration, targetID);
             }
             catch (Exception e)
             {
