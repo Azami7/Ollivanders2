@@ -33,7 +33,7 @@ public class O2Spells
      *
      * @param plugin a callback to the MC plugin
      */
-    public O2Spells(@NotNull JavaPlugin plugin)
+    public O2Spells(@NotNull Ollivanders2 plugin)
     {
         common = new Ollivanders2Common(plugin);
 

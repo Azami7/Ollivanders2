@@ -30,7 +30,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class O2Potions
 {
-   final private JavaPlugin p;
+   final private Ollivanders2 p;
 
    final private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
 
@@ -103,7 +103,7 @@ public class O2Potions
     *
     * @param plugin a reference to the plugin
     */
-   public O2Potions(@NotNull JavaPlugin plugin)
+   public O2Potions(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -346,7 +346,7 @@ public class O2Potions
     * @return a list of all potions ingredients
     */
    @NotNull
-   public static List<String> getAllIngredientNames (@NotNull JavaPlugin p)
+   public static List<String> getAllIngredientNames (@NotNull Ollivanders2 p)
    {
       ArrayList<String> ingredientList = new ArrayList<>();
 

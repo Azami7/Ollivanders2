@@ -105,7 +105,7 @@ public class Ollivanders2Common
       add(EntityType.DROWNED);
       add(EntityType.HUSK);
       add(EntityType.PHANTOM);
-      add(EntityType.PIG_ZOMBIE);
+      add(EntityType.ZOMBIFIED_PIGLIN);
       add(EntityType.SKELETON);
       add(EntityType.SKELETON_HORSE);
       add(EntityType.STRAY);
@@ -243,14 +243,14 @@ public class Ollivanders2Common
 
    public final static Random random = new Random();
 
-   final private JavaPlugin p;
+   final private Ollivanders2 p;
 
    /**
     * Constructor
     *
     * @param plugin a reference to the plugin using this common
     */
-   public Ollivanders2Common (@NotNull JavaPlugin plugin)
+   public Ollivanders2Common (@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 

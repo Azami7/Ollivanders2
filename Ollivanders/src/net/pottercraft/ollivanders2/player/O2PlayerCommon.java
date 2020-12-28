@@ -23,14 +23,14 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class O2PlayerCommon
 {
-   final JavaPlugin p;
+   final Ollivanders2 p;
 
    /**
     * Constructor
     *
     * @param plugin a reference to the MC plugin using these common functions
     */
-   public O2PlayerCommon(@NotNull JavaPlugin plugin)
+   public O2PlayerCommon(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
    }

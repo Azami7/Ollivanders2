@@ -64,7 +64,7 @@ public class O2Player
    /**
     * The MC plugin callback
     */
-   private final JavaPlugin p;
+   private final Ollivanders2 p;
 
    /**
     * A map of all the spells a player knows and the cast count.
@@ -155,7 +155,7 @@ public class O2Player
     * @param name   the name of the player
     * @param plugin a reference to the plugin
     */
-   public O2Player(@NotNull UUID id, @NotNull String name, @NotNull JavaPlugin plugin)
+   public O2Player(@NotNull UUID id, @NotNull String name, @NotNull Ollivanders2 plugin)
    {
       p = plugin;
       playerName = name;

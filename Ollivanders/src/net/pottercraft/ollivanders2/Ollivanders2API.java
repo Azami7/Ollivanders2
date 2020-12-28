@@ -29,12 +29,12 @@ public class Ollivanders2API
    public static O2PlayerCommon playerCommon;
    public static Ollivanders2Common common;
 
-   static void init (@NotNull JavaPlugin p)
+   static void init (@NotNull Ollivanders2 p)
    {
       common = new Ollivanders2Common(p);
    }
 
-   static void initHouses (@NotNull JavaPlugin p)
+   static void initHouses (@NotNull Ollivanders2 p)
    {
       houses = new O2Houses(p);
    }
@@ -45,7 +45,7 @@ public class Ollivanders2API
          houses.saveHouses();
    }
 
-   public static O2Houses getHouses (@NotNull JavaPlugin p)
+   public static O2Houses getHouses (@NotNull Ollivanders2 p)
    {
       if (houses == null)
          initHouses(p);
@@ -53,7 +53,7 @@ public class Ollivanders2API
       return houses;
    }
 
-   static void initPlayers (@NotNull JavaPlugin p)
+   static void initPlayers (@NotNull Ollivanders2 p)
    {
       players = new O2Players(p);
       players.loadO2Players();
@@ -72,7 +72,7 @@ public class Ollivanders2API
     * @return the player management object
     */
    @NotNull
-   public static O2Players getPlayers(@NotNull JavaPlugin p)
+   public static O2Players getPlayers(@NotNull Ollivanders2 p)
    {
       if (players == null)
          initPlayers(p);
@@ -80,7 +80,7 @@ public class Ollivanders2API
       return players;
    }
 
-   static void initBooks (@NotNull JavaPlugin p)
+   static void initBooks (@NotNull Ollivanders2 p)
    {
       books = new O2Books(p);
    }
@@ -91,7 +91,7 @@ public class Ollivanders2API
     * @return the book management object
     */
    @NotNull
-   public static O2Books getBooks(@NotNull JavaPlugin p)
+   public static O2Books getBooks(@NotNull Ollivanders2 p)
    {
       if (books == null)
          initBooks(p);
@@ -99,13 +99,13 @@ public class Ollivanders2API
       return books;
    }
 
-   static void initSpells(@NotNull JavaPlugin p)
+   static void initSpells(@NotNull Ollivanders2 p)
    {
       spells = new O2Spells(p);
    }
 
    @NotNull
-   public static O2Spells getSpells (@NotNull JavaPlugin p)
+   public static O2Spells getSpells (@NotNull Ollivanders2 p)
    {
       if (spells == null)
          initSpells(p);
@@ -113,13 +113,13 @@ public class Ollivanders2API
       return spells;
    }
 
-   static void initPotions (JavaPlugin p)
+   static void initPotions (Ollivanders2 p)
    {
       potions = new O2Potions(p);
    }
 
    @NotNull
-   public static O2Potions getPotions (@NotNull JavaPlugin p)
+   public static O2Potions getPotions (@NotNull Ollivanders2 p)
    {
       if (potions == null)
          initPotions(p);
@@ -127,7 +127,7 @@ public class Ollivanders2API
       return potions;
    }
 
-   static void initStationarySpells (JavaPlugin p)
+   static void initStationarySpells (Ollivanders2 p)
    {
       stationarySpells = new O2StationarySpells(p);
    }
@@ -139,7 +139,7 @@ public class Ollivanders2API
    }
 
    @NotNull
-   public static O2StationarySpells getStationarySpells (@NotNull JavaPlugin p)
+   public static O2StationarySpells getStationarySpells (@NotNull Ollivanders2 p)
    {
       if (stationarySpells == null)
          initStationarySpells(p);
@@ -147,7 +147,7 @@ public class Ollivanders2API
       return stationarySpells;
    }
 
-   static void initProphecies (JavaPlugin p)
+   static void initProphecies (Ollivanders2 p)
    {
       prophecies = new O2Prophecies(p);
    }
@@ -159,7 +159,7 @@ public class Ollivanders2API
    }
 
    @NotNull
-   public static O2Prophecies getProphecies (@NotNull JavaPlugin p)
+   public static O2Prophecies getProphecies (@NotNull Ollivanders2 p)
    {
       if (prophecies == null)
          initProphecies(p);
@@ -167,13 +167,13 @@ public class Ollivanders2API
       return prophecies;
    }
 
-   public static void initItems (JavaPlugin p)
+   public static void initItems (Ollivanders2 p)
    {
       items = new O2Items(p);
    }
 
    @NotNull
-   public static O2Items getItems (@NotNull JavaPlugin p)
+   public static O2Items getItems (@NotNull Ollivanders2 p)
    {
       if (items == null)
          initItems(p);
