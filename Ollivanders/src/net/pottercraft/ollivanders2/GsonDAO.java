@@ -125,7 +125,8 @@ public class GsonDAO implements GenericDAO
     *
     * @return a map of player UUIDs and their O2House
     */
-   @Override @Nullable
+   @Override
+   @Nullable
    public Map<UUID, O2HouseType> readHouses ()
    {
       String json = readJSON(housesJSONFile);
@@ -176,7 +177,8 @@ public class GsonDAO implements GenericDAO
     *
     * @return a map of O2Houses and their points
     */
-   @Override @Nullable
+   @Override
+   @Nullable
    public Map<O2HouseType, Integer> readHousePoints ()
    {
       String json = readJSON(housePointsJSONFile);
