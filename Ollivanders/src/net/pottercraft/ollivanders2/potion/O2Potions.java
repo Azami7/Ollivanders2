@@ -19,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -313,7 +312,7 @@ public class O2Potions
 
       try
       {
-         potion = (O2Potion) potionClass.getConstructor(JavaPlugin.class).newInstance(p);
+         potion = (O2Potion) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception exception)
       {

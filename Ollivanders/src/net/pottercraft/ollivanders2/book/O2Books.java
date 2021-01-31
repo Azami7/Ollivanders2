@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,7 +35,7 @@ public final class O2Books
 {
    private final Map<String, O2BookType> O2BookMap = new HashMap<>();
 
-   JavaPlugin p;
+   Ollivanders2 p;
    BookTexts spellText;
 
    private ItemStack library;
@@ -77,7 +76,7 @@ public final class O2Books
     *
     * @param plugin the MC plugin
     */
-   public O2Books(@NotNull JavaPlugin plugin)
+   public O2Books(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -123,7 +122,7 @@ public final class O2Books
 
       try
       {
-         book = (O2Book) bookClass.getConstructor(JavaPlugin.class).newInstance(p);
+         book = (O2Book) bookClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception exception)
       {

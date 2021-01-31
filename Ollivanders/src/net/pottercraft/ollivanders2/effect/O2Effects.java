@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +22,7 @@ import java.util.concurrent.Semaphore;
  */
 public class O2Effects
 {
-   final JavaPlugin p;
+   final Ollivanders2 p;
 
    final static Semaphore semaphore = new Semaphore(1);
 
@@ -249,7 +248,7 @@ public class O2Effects
     *
     * @param plugin a callback to the plugin
     */
-   public O2Effects(@NotNull JavaPlugin plugin)
+   public O2Effects(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
    }
