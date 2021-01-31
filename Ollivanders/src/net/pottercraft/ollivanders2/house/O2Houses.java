@@ -16,6 +16,9 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.Server;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 
 /**
  * "While you are here, your house will be something like your family within Hogwarts.  You will have classes with the
@@ -41,7 +44,7 @@ public class O2Houses
     *
     * @param plugin the callback for the plugin
     */
-   public O2Houses (Ollivanders2 plugin)
+   public O2Houses (@NotNull Ollivanders2 plugin)
    {
       p = plugin;
       common = new Ollivanders2Common(p);
@@ -110,6 +113,7 @@ public class O2Houses
     * @param name the name of the house
     * @return the house type or null if the name is not valid.
     */
+   @Nullable
    public O2HouseType getHouseType(String name)
    {
       if (name == null)
@@ -141,6 +145,7 @@ public class O2Houses
     *
     * @return all house names.
     */
+   @NotNull
    public ArrayList<String> getAllHouseNames ()
    {
       ArrayList<String> houseNames = new ArrayList<>();
@@ -166,12 +171,15 @@ public class O2Houses
       }
 
       Map<O2HouseType, Integer> housePoints = gsonLayer.readHousePoints();
-      for (Entry<O2HouseType, Integer> e : housePoints.entrySet())
+      if (housePoints != null)
       {
-         O2HouseType houseType = e.getKey();
+         for (Entry<O2HouseType, Integer> e : housePoints.entrySet())
+         {
+            O2HouseType houseType = e.getKey();
 
-         houseType.setScore(e.getValue());
-         p.getLogger().info(e.getKey().getName() + " : " + e.getValue());
+            houseType.setScore(e.getValue());
+            p.getLogger().info(e.getKey().getName() + " : " + e.getValue());
+         }
       }
    }
 

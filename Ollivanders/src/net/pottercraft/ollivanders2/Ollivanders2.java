@@ -830,7 +830,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param args   the arguments for the command, if any
     * @return true if no error occurred
     */
-   private boolean runListHouse(CommandSender sender, String[] args)
+   private boolean runListHouse(@NotNull CommandSender sender, @NotNull String[] args)
    {
       // list houses
       if (debug)
