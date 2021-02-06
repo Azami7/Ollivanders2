@@ -25,7 +25,7 @@ public abstract class O2Divination
    O2DivinationType divintationType = O2DivinationType.ASTROLOGY;
 
    int maxAccuracy = 10;
-   int maxDurationDays = 4;
+   int maxDurationDays = Ollivanders2.divinationMaxDays;
 
    Player target;
    Player prophet;
@@ -33,7 +33,7 @@ public abstract class O2Divination
 
    ArrayList<String> prophecyPrefix = new ArrayList<>();
 
-   static final ArrayList<O2EffectType> divinationEffects = new ArrayList<O2EffectType>()
+   static final ArrayList<O2EffectType> divinationEffects = new ArrayList<>()
    {{
       add(O2EffectType.AGGRESSION);
       add(O2EffectType.BABBLING);
@@ -71,7 +71,6 @@ public abstract class O2Divination
       experience = exp;
 
       prophecyPrefix.add("The portents and omens say that");
-      maxDurationDays = Ollivanders2.divinationMaxDays;
    }
 
    /**
@@ -202,7 +201,7 @@ public abstract class O2Divination
 
       try
       {
-         effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, 1, targetID);
+         effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, 1, targetID);
       }
       catch (Exception e)
       {

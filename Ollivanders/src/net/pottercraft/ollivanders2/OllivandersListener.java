@@ -120,6 +120,8 @@ public class OllivandersListener implements Listener
 
    private final Ollivanders2 p;
 
+   private final Ollivanders2Common common;
+
    /**
     * Constructor
     *
@@ -128,6 +130,7 @@ public class OllivandersListener implements Listener
    OllivandersListener(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(plugin);
    }
 
    /**
@@ -722,6 +725,8 @@ public class OllivandersListener implements Listener
    @Nullable
    private O2Spell createSpellProjectile(@NotNull Player player, @NotNull O2SpellType name, double wandC)
    {
+      common.printDebugMessage("OllivandersListener.createSpellProjectile: enter", null, null, false);
+
       if (Ollivanders2Common.libsDisguisesSpells.contains(name) && !Ollivanders2.libsDisguisesEnabled)
       {
          return null;
@@ -737,7 +742,7 @@ public class OllivandersListener implements Listener
       }
       catch (Exception e)
       {
-         e.printStackTrace();
+         common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell constructor", e, null, true);
          return null;
       }
 
@@ -749,7 +754,7 @@ public class OllivandersListener implements Listener
       }
       catch (Exception e)
       {
-         e.printStackTrace();
+         common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell", e, null, true);
          return null;
       }
 
@@ -818,10 +823,7 @@ public class OllivandersListener implements Listener
             o2p.setPriorIncantatem(spellType);
          }
 
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("OllivandersListener:castSpell: allow cast spell");
-         }
+         common.printDebugMessage("OllivandersListener:castSpell: " + player.getName() + " cast " + castSpell.getName(), null, null, false);
 
          o2p.setWandSpell(null);
       }
