@@ -1355,7 +1355,7 @@ public class Ollivanders2 extends JavaPlugin
 
             try
             {
-               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(this, 1200, ((Player) sender).getUniqueId());
+               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(this, 1200, ((Player) sender).getUniqueId());
             }
             catch (Exception e)
             {

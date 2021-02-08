@@ -158,7 +158,7 @@ public class AddO2Effect extends O2Spell
             O2Effect effect;
             try
             {
-                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, duration * strengthModifier, target.getUniqueId());
+                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration * strengthModifier, target.getUniqueId());
             }
             catch (Exception e)
             {

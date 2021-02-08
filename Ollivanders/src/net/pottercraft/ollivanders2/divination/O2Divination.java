@@ -202,7 +202,7 @@ public abstract class O2Divination
 
       try
       {
-         effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, 1, targetID);
+         effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, 1, targetID);
       }
       catch (Exception e)
       {
