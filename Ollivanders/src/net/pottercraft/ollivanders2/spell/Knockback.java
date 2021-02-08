@@ -51,8 +51,6 @@ public abstract class Knockback extends O2Spell
    public Knockback (Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
-
-      initSpell();
    }
 
    /**

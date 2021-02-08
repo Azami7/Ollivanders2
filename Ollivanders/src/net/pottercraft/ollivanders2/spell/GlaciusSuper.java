@@ -38,7 +38,21 @@ public abstract class GlaciusSuper extends BlockTransfiguration
 
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
+      transfigurationMap.put(Material.FIRE, Material.AIR);
+      transfigurationMap.put(Material.WATER, Material.ICE);
+      transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
+      transfigurationMap.put(Material.ICE, Material.PACKED_ICE);
+
+      materialWhitelist.add(Material.FIRE);
+      materialWhitelist.add(Material.WATER);
+      materialWhitelist.add(Material.LAVA);
+      materialWhitelist.add(Material.ICE);
+   }
+
+   @Override
+   public void initSpell()
+   {
+      super.initSpell();
 
       if (usesModifier > 50)
       {
@@ -53,15 +67,5 @@ public abstract class GlaciusSuper extends BlockTransfiguration
          radius = (int) (usesModifier / 10);
       }
       permanent = false;
-
-      transfigurationMap.put(Material.FIRE, Material.AIR);
-      transfigurationMap.put(Material.WATER, Material.ICE);
-      transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
-      transfigurationMap.put(Material.ICE, Material.PACKED_ICE);
-
-      materialWhitelist.add(Material.FIRE);
-      materialWhitelist.add(Material.WATER);
-      materialWhitelist.add(Material.LAVA);
-      materialWhitelist.add(Material.ICE);
    }
 }

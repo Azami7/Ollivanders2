@@ -96,6 +96,8 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
@@ -292,38 +294,8 @@ public class OllivandersListener implements Listener
       //
       // Parse to see if they were casting a spell
       //
+      O2SpellType spellType = parseSpell(message);
       String[] words = message.split(" ");
-
-      StringBuilder spellName = new StringBuilder();
-      O2SpellType spellType = null;
-
-      for (int i = 0; i < words.length; i++)
-      {
-         spellName.append(words[i]);
-         spellType = Ollivanders2API.getSpells().getSpellTypeByName(spellName.toString());
-
-         if (spellType != null)
-            break;
-
-         if (i == O2Spell.max_spell_words)
-         {
-            break;
-         }
-
-         spellName.append(" ");
-      }
-
-      if (Ollivanders2.debug)
-      {
-         if (spellType != null)
-         {
-            p.getLogger().info("Spell is " + spellType);
-         }
-         else
-         {
-            p.getLogger().info("No spell found");
-         }
-      }
 
       //
       // Handle stationary spells that affect chat
@@ -516,6 +488,59 @@ public class OllivandersListener implements Listener
       {
          p.getLogger().info("onPlayerChat: return");
       }
+   }
+
+   /**
+    * Parse a spell from a chat
+    *
+    * @param message the words chatted by the player
+    * @return a spell type if found, null otherwise
+    */
+   @Nullable
+   private O2SpellType parseSpell(@NotNull String message)
+   {
+      O2SpellType spellType;
+
+      // first try all the words as one spell name
+      spellType = Ollivanders2API.getSpells().getSpellTypeByName(message);
+
+      if (spellType != null)
+      {
+         return spellType;
+      }
+
+      String[] words = message.split(" ");
+
+      StringBuilder spellName = new StringBuilder();
+      for (int i = 0; i < words.length; i++)
+      {
+         spellName.append(words[i]);
+         spellType = Ollivanders2API.getSpells().getSpellTypeByName(spellName.toString());
+
+         if (spellType != null)
+            break;
+
+         if (i == O2Spell.max_spell_words)
+         {
+            break;
+         }
+
+         spellName.append(" ");
+      }
+
+      if (Ollivanders2.debug)
+      {
+         if (spellType != null)
+         {
+            p.getLogger().info("Spell is " + spellType);
+         }
+         else
+         {
+            p.getLogger().info("No spell found");
+         }
+      }
+
+      return spellType;
    }
 
    /**
