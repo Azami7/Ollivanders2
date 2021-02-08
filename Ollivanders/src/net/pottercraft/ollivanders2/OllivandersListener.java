@@ -305,8 +305,7 @@ public class OllivandersListener implements Listener
       //
       // Parse to see if they were casting a spell
       //
-      String[] words = message.split(" ");
-      O2SpellType spellType = parseSpell(words);
+      O2SpellType spellType = parseSpell(message);
 
       if (spellType != null)
       {
@@ -319,7 +318,7 @@ public class OllivandersListener implements Listener
          //
          // Handle spell casting
          //
-         doSpellCasting(sender, spellType, words);
+         doSpellCasting(sender, spellType, message.split(" "));
       }
 
       if (Ollivanders2.debug)
@@ -331,15 +330,25 @@ public class OllivandersListener implements Listener
    /**
     * Parse a spell from a chat
     *
-    * @param words the words chatted by the player
+    * @param message the words chatted by the player
     * @return a spell type if found, null otherwise
     */
    @Nullable
-   private O2SpellType parseSpell(@NotNull String[] words)
+   private O2SpellType parseSpell(@NotNull String message)
    {
-      StringBuilder spellName = new StringBuilder();
-      O2SpellType spellType = null;
+      O2SpellType spellType;
 
+      // first try all the words as one spell name
+      spellType = Ollivanders2API.getSpells(p).getSpellTypeByName(message);
+
+      if (spellType != null)
+      {
+         return spellType;
+      }
+
+      String[] words = message.split(" ");
+
+      StringBuilder spellName = new StringBuilder();
       for (int i = 0; i < words.length; i++)
       {
          spellName.append(words[i]);
