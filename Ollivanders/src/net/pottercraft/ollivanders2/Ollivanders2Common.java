@@ -38,7 +38,6 @@ import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -105,7 +104,7 @@ public class Ollivanders2Common
       add(EntityType.DROWNED);
       add(EntityType.HUSK);
       add(EntityType.PHANTOM);
-      add(EntityType.PIG_ZOMBIE);
+      add(EntityType.ZOMBIFIED_PIGLIN);
       add(EntityType.SKELETON);
       add(EntityType.SKELETON_HORSE);
       add(EntityType.STRAY);
