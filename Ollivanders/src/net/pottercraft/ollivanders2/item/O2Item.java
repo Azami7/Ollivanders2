@@ -7,7 +7,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,7 +22,7 @@ public class O2Item
    /**
     * Reference to the plugin
     */
-   final protected JavaPlugin p;
+   final protected Ollivanders2 p;
 
    /**
     * The type this item is
@@ -36,7 +35,7 @@ public class O2Item
     * @param plugin reference to the plugin
     * @param type   the type this item is
     */
-   public O2Item(@NotNull JavaPlugin plugin, @NotNull O2ItemType type)
+   public O2Item(@NotNull Ollivanders2 plugin, @NotNull O2ItemType type)
    {
       p = plugin;
       itemType = type;

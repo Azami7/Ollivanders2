@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.item;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,7 +17,7 @@ import java.util.Set;
  */
 public class O2Items
 {
-   final private JavaPlugin p;
+   final private Ollivanders2 p;
 
    final private HashMap<O2ItemType, O2Item> O2ItemMap = new HashMap<>();
 
@@ -27,7 +26,7 @@ public class O2Items
     *
     * @param plugin a reference to the plugin
     */
-   public O2Items(@NotNull JavaPlugin plugin)
+   public O2Items(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 

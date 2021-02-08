@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.house;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -11,7 +10,6 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
@@ -30,16 +28,16 @@ import org.jetbrains.annotations.Nullable;
  */
 public class O2Houses
 {
-   private Ollivanders2 p;
-   private Ollivanders2Common common;
+   private final Ollivanders2 p;
+   private final Ollivanders2Common common;
    private Map<UUID, O2HouseType> O2HouseMap = new HashMap<>();
-   private Map <O2HouseType, Team> O2HouseTeamMap = new HashMap<>();
+   private final Map <O2HouseType, Team> O2HouseTeamMap = new HashMap<>();
 
    private Scoreboard scoreboard;
-   private String objectiveName = "o2_hpoints";
-   private String objectiveDisplayName = "House Points";
+   private final String objectiveName = "o2_hpoints";
+   private final String objectiveDisplayName = "House Points";
 
-   private DisplaySlot scoreboardSlot = DisplaySlot.SIDEBAR;
+   private final DisplaySlot scoreboardSlot = DisplaySlot.SIDEBAR;
 
    /**
     * Constructor.
@@ -116,7 +114,7 @@ public class O2Houses
     * @return the house type or null if the name is not valid.
     */
    @Nullable
-   public O2HouseType getHouseType(String name)
+   public O2HouseType getHouseType (@Nullable String name)
    {
       if (name == null)
       {
@@ -210,7 +208,7 @@ public class O2Houses
     * @param houseType the house to sort them in to
     * @return true if the player is successfully sorted, false otherwise.
     */
-   public boolean sort (Player player, O2HouseType houseType)
+   public boolean sort (@NotNull Player player, @NotNull O2HouseType houseType)
    {
       //make sure player is not already sorted
       if (isSorted(player))
@@ -234,7 +232,7 @@ public class O2Houses
     *
     * @param player the player to unsort
     */
-   public void unsort (Player player)
+   public void unsort (@NotNull Player player)
    {
       if (isSorted(player))
       {
@@ -251,7 +249,7 @@ public class O2Houses
     * @param player the player to check
     * @return true if the player has been sorted, false otherwise.
     */
-   public boolean isSorted (Player player)
+   public boolean isSorted (@NotNull Player player)
    {
       return isSorted(player.getUniqueId());
    }
@@ -262,7 +260,7 @@ public class O2Houses
     * @param pid the uuid of the player to check
     * @return true if the player has been sorted, false otherwise.
     */
-   public boolean isSorted (UUID pid)
+   public boolean isSorted (@NotNull UUID pid)
    {
       return O2HouseMap.containsKey(pid);
    }
@@ -274,7 +272,7 @@ public class O2Houses
     * @param player the player to sort
     * @param houseType the house to add them to
     */
-   public void forceSetHouse(Player player, O2HouseType houseType)
+   public void forceSetHouse(@NotNull Player player, @NotNull O2HouseType houseType)
    {
       unsort(player);
       sort(player, houseType);
@@ -286,7 +284,7 @@ public class O2Houses
     * @param player the player to get the house for
     * @return the House the player is sorted in to, null otherwise.
     */
-   public O2HouseType getHouse (Player player)
+   public O2HouseType getHouse (@NotNull Player player)
    {
       return getHouse(player.getUniqueId());
    }
@@ -297,7 +295,7 @@ public class O2Houses
     * @param pid the uuid of the player to search for
     * @return the House the player is sorted in to, null otherwise.
     */
-   public O2HouseType getHouse (UUID pid)
+   public O2HouseType getHouse (@NotNull UUID pid)
    {
       O2HouseType houseType = null;
 
@@ -324,7 +322,8 @@ public class O2Houses
     * @param houseType the house to get the members of
     * @return the names of all members of the specified house.
     */
-   public ArrayList<String> getHouseMembers (O2HouseType houseType)
+   @NotNull
+   public ArrayList<String> getHouseMembers (@NotNull O2HouseType houseType)
    {
       ArrayList<String> houseMembers = new ArrayList<>();
       Server server = p.getServer();
@@ -349,7 +348,7 @@ public class O2Houses
     * @param points the point value to set for this house
     * @return true if the operation was successful, false if house was not found
     */
-   public synchronized boolean setHousePoints (O2HouseType houseType, int points)
+   public synchronized boolean setHousePoints (@NotNull O2HouseType houseType, int points)
    {
       houseType.setScore(points);
 
@@ -386,7 +385,7 @@ public class O2Houses
     * @param points the amount of points to add
     * @return true if the operation was successful, false if house was not found
     */
-   public boolean addHousePoints (O2HouseType houseType, int points)
+   public boolean addHousePoints (@NotNull O2HouseType houseType, int points)
    {
       int pts = points + houseType.getScore();
 
@@ -400,7 +399,7 @@ public class O2Houses
     * @param points the amount of points to subtract, if this is greater than the total points, points will be set to 0
     * @return true if the operation was successful, false if house was not found
     */
-   public boolean subtractHousePoints (O2HouseType houseType, int points)
+   public boolean subtractHousePoints (@NotNull O2HouseType houseType, int points)
    {
       int pts = 0;
 

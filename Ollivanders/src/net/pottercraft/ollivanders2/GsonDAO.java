@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import net.pottercraft.ollivanders2.house.O2HouseType;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -25,7 +24,7 @@ import java.util.Map.Entry;
 public class GsonDAO implements GenericDAO
 {
    final private Gson gson;
-   final private JavaPlugin p;
+   final private Ollivanders2 p;
 
    private static final String saveDirectory = "plugins/Ollivanders2";
    private static final String archiveDirectory = "plugins/Ollivanders2/archive";
@@ -40,7 +39,7 @@ public class GsonDAO implements GenericDAO
     *
     * @param plugin a reference to the plugin
     */
-   public GsonDAO(@NotNull JavaPlugin plugin)
+   public GsonDAO(@NotNull Ollivanders2 plugin)
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
       p = plugin;
