@@ -33,7 +33,7 @@ public abstract class PotionEffectSuper extends O2Effect
    }
 
    /**
-    * Age this effect each game tick.
+    * Do the effect immediately on the target and kill.
     */
    @Override
    public void checkEffect()
