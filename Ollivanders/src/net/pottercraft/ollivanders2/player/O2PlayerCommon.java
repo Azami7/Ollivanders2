@@ -60,6 +60,7 @@ public final class O2PlayerCommon
       add(EntityType.TRADER_LLAMA);
       add(EntityType.PANDA);
       add(EntityType.TURTLE);
+      add(EntityType.IRON_GOLEM);
    }};
 
    private static final List<EntityType> hostileAnimagusShapes = new ArrayList<>()
@@ -70,6 +71,9 @@ public final class O2PlayerCommon
       add(EntityType.CREEPER);
       add(EntityType.SILVERFISH);
       add(EntityType.SHULKER);
+      add(EntityType.HOGLIN);
+      add(EntityType.PIGLIN);
+      add(EntityType.STRIDER);
    }};
 
    static final String wandLoreConjunction = " and ";
