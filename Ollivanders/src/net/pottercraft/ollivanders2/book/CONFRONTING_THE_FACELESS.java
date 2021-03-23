@@ -28,9 +28,7 @@ public class CONFRONTING_THE_FACELESS extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Confronting the Faceless";
-      author = "Unknown";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.CONFRONTING_THE_FACELESS;
 
       spells.add(O2SpellType.MORTUOS_SUSCITATE);
       spells.add(O2SpellType.OPPUGNO);

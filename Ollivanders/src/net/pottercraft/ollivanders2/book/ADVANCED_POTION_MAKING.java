@@ -21,9 +21,7 @@ public class ADVANCED_POTION_MAKING extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Advanced Potion Making";
-      author = "Libatius Borage";
-      branch = O2MagicBranch.POTIONS;
+      bookType = O2BookType.ADVANCED_POTION_MAKING;
 
       potions.add(O2PotionType.MEMORY_POTION);
       potions.add(O2PotionType.WIGGENWELD_POTION);

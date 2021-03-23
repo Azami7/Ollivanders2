@@ -17,9 +17,8 @@ public class HARMONIOUS_CONNECTIONS extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Harmonious Connections";
-      title = "Harmonious Connections";
-      author = "Unknown";
+      bookType = O2BookType.HARMONIOUS_CONNECTIONS;
+
       openingPage = "Vanishing cabinets are an old but powerful form of magical transportation. "
               + "Vanishing cabinets are made as twins and are used to connect to specific locations to each other."
               + "\n\nVanishing cabinet construction is very precise and the cabinets will only work if the directions are followed exactly."
@@ -31,8 +30,6 @@ public class HARMONIOUS_CONNECTIONS extends O2Book
             + "\n\nStep 5 - construct the other cabinet following steps 3 and 4."
             + "\n\nStep 6 - cast the vanishing cabinet repair spell, Harmonia Nectere Passus, at either of the two signs."
             + "\n\nYou can now walk in to the cabinet and appear in the other.  Objects placed in the cabinet will also be transported.";
-
-      branch = O2MagicBranch.CHARMS;
 
       spells.add(O2SpellType.HARMONIA_NECTERE_PASSUS);
    }

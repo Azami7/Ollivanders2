@@ -21,9 +21,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Standard Book of Spells Grade 4";
-      author = "Miranda Goshawk";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_4;
 
       spells.add(O2SpellType.AVIFORS);
       spells.add(O2SpellType.ACCIO);

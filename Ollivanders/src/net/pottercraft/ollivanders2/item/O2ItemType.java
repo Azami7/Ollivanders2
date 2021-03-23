@@ -62,6 +62,7 @@ public enum O2ItemType
    MINT_SPRIG(Material.MELON_STEM, (short) 0, "Mint Sprig", null),
    MISTLETOE_BERRIES(Material.NETHER_WART, (short) 0, "Mistletoe Berries", null),
    MOONDEW_DROP(Material.GHAST_TEAR, (short) 0, "Moondew Drop", null),
+   PEWTER_CAULDRON (Material.CAULDRON, (short) 0, "Pewter Cauldron", null),
    PLAYING_CARDS(Material.PAPER, (short) 0, "Playing Cards", null),
    POISONOUS_POTATO(Material.POISONOUS_POTATO, (short) 0, "Poisonous Potato", null),
    POWDERED_ASHPODEL_ROOT(Material.ORANGE_DYE, (short) 0, "Powedered Root of Asphodel", null),

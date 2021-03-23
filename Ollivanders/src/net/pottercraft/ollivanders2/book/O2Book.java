@@ -33,22 +33,7 @@ public abstract class O2Book
    /**
     * The book author
     */
-   protected String author;
-
-   /**
-    * The full book title
-    */
-   protected String title;
-
-   /**
-    * The book title for item lore, cannot be more than 32 characters or it will appear blank.
-    */
-   protected String shortTitle;
-
-   /**
-    * The branch of magic this book covers
-    */
-   protected O2MagicBranch branch;
+   protected O2BookType bookType;
 
    /**
     * The book item object.
@@ -78,9 +63,7 @@ public abstract class O2Book
     */
    public O2Book(@NotNull Ollivanders2 plugin)
    {
-      author = "Unknown";
-      title = "Untitled";
-      shortTitle = "Untitled";
+      bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1;
 
       openingPage = "";
       closingPage = "";
@@ -105,11 +88,11 @@ public abstract class O2Book
       if (bookMeta == null)
          return;
 
-      bookMeta.setAuthor(author);
-      bookMeta.setTitle(shortTitle);
+      bookMeta.setAuthor(bookType.author);
+      bookMeta.setTitle(bookType.shortTitle);
 
       //write title page
-      String titlePage = title + "\n\nby " + author;
+      String titlePage = bookType.title + "\n\nby " + bookType.author;
       bookMeta.addPage(titlePage);
 
       StringBuilder toc = new StringBuilder();
@@ -134,7 +117,7 @@ public abstract class O2Book
          String name = Ollivanders2API.getBooks(p).spellText.getName(content);
          if (name == null)
          {
-            p.getLogger().warning(this.title + " contains unknown spell or potion " + content);
+            p.getLogger().warning(bookType.title + " contains unknown spell or potion " + content);
             continue;
          }
 
@@ -344,7 +327,7 @@ public abstract class O2Book
    @NotNull
    public String getTitle ()
    {
-      return title;
+      return bookType.title;
    }
 
    /**
@@ -355,7 +338,7 @@ public abstract class O2Book
    @NotNull
    public String getShortTitle ()
    {
-      return shortTitle;
+      return bookType.shortTitle;
    }
 
    /**
@@ -366,7 +349,7 @@ public abstract class O2Book
    @NotNull
    public String getAuthor ()
    {
-      return author;
+      return bookType.author;
    }
 
    /**
@@ -377,6 +360,6 @@ public abstract class O2Book
    @NotNull
    public O2MagicBranch getBranch ()
    {
-      return branch;
+      return bookType.branch;
    }
 }

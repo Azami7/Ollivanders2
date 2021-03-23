@@ -20,9 +20,7 @@ public class YEAR_WITH_A_YETI extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Year with a Yeti";
-      author = "Gilderoy Lockhart";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.YEAR_WITH_A_YETI;
 
       spells.add(O2SpellType.ARANIA_EXUMAI);
       spells.add(O2SpellType.OBLIVIATE);
