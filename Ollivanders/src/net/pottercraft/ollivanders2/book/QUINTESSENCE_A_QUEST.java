@@ -17,10 +17,7 @@ public class QUINTESSENCE_A_QUEST extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Quintessence";
-      title = "Quintessence: A Quest";
-      author = "Unknown";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.QUINTESSENCE_A_QUEST;
 
       spells.add(O2SpellType.PROTEGO_TOTALUM);
       spells.add(O2SpellType.PROTEGO_HORRIBILIS);

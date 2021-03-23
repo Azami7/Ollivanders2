@@ -19,9 +19,7 @@ public class POTION_OPUSCULE extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Potion Opuscule";
-      author = "Arsenius Jigger";
-      branch = O2MagicBranch.POTIONS;
+      bookType = O2BookType.POTION_OPUSCULE;
 
       potions.add(O2PotionType.ANIMAGUS_POTION);
       potions.add(O2PotionType.BABBLING_BEVERAGE);

@@ -17,9 +17,7 @@ public class TRAVELS_WITH_TROLLS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Traveling with Trolls";
-      author = "Gilderoy Lockhart";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.TRAVELS_WITH_TROLLS;
 
       spells.add(O2SpellType.VERDIMILLIOUS_DUO);
       spells.add(O2SpellType.OBLIVIATE);

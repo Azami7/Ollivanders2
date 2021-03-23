@@ -127,7 +127,7 @@ public class Ollivanders2API
       return spells;
    }
 
-   static void initPotions (Ollivanders2 p)
+   static void initPotions (@NotNull Ollivanders2 p)
    {
       potions = new O2Potions(p);
    }
@@ -147,7 +147,7 @@ public class Ollivanders2API
       return potions;
    }
 
-   static void initStationarySpells (Ollivanders2 p)
+   static void initStationarySpells (@NotNull Ollivanders2 p)
    {
       stationarySpells = new O2StationarySpells(p);
    }
@@ -173,7 +173,7 @@ public class Ollivanders2API
       return stationarySpells;
    }
 
-   static void initProphecies (Ollivanders2 p)
+   static void initProphecies (@NotNull Ollivanders2 p)
    {
       prophecies = new O2Prophecies(p);
    }
@@ -199,7 +199,7 @@ public class Ollivanders2API
       return prophecies;
    }
 
-   public static void initItems (Ollivanders2 p)
+   public static void initItems (@NotNull Ollivanders2 p)
    {
       items = new O2Items(p);
    }

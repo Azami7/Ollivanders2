@@ -963,6 +963,7 @@ public class OllivandersListener implements Listener
                location.setY(location.getY() + 1.6);
                player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
                player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+               p.getO2Player(player).setFoundWand(true);
             }
          }
       }
@@ -1044,23 +1045,6 @@ public class OllivandersListener implements Listener
 
       // re-add them to player list (in case they have changed from above actions)
       p.setO2Player(player, o2p);
-
-      // show log in message
-      if (Ollivanders2.showLogInMessage)
-      {
-         StringBuilder message = new StringBuilder();
-
-         if (player.hasPlayedBefore())
-         {
-            message.append("Welcome back, ").append(player.getName()).append("\n").append(o2p.getLogInMessage());
-         }
-         else
-         {
-            message.append("You're a wizard, ").append(player.getName());
-         }
-
-         player.sendMessage(Ollivanders2.chatColor + message.toString());
-      }
 
       p.getLogger().info("Player " + player.getName() + " joined.");
    }

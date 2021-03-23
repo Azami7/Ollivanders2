@@ -17,9 +17,7 @@ public class ACHIEVEMENTS_IN_CHARMING extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Achievements in Charming";
-      author = "Unknown";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.ACHIEVEMENTS_IN_CHARMING;
 
       spells.add(O2SpellType.LUMOS);
       spells.add(O2SpellType.WINGARDIUM_LEVIOSA);

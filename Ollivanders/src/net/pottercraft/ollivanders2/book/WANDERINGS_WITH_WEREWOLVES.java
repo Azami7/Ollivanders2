@@ -19,9 +19,7 @@ public class WANDERINGS_WITH_WEREWOLVES extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Wanderings with Werewolves";
-      author = "Gilderoy Lockhart";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.WANDERINGS_WITH_WEREWOLVES;
 
       spells.add(O2SpellType.CONFUNDUS_DUO);
       spells.add(O2SpellType.OBLIVIATE);

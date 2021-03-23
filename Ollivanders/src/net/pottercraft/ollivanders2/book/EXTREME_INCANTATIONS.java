@@ -17,9 +17,7 @@ public class EXTREME_INCANTATIONS extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Extreme Incantations";
-      author = "Violeta Stitch";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.EXTREME_INCANTATIONS;
 
       spells.add(O2SpellType.LUMOS_DUO);
       spells.add(O2SpellType.BOMBARDA);

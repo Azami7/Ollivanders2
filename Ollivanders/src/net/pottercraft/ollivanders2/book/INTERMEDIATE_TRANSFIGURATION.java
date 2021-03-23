@@ -22,9 +22,7 @@ public class INTERMEDIATE_TRANSFIGURATION extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Intermediate Transfiguration";
-      author = "Unknown";
-      branch = O2MagicBranch.TRANSFIGURATION;
+      bookType = O2BookType.INTERMEDIATE_TRANSFIGURATION;
 
       spells.add(O2SpellType.DRACONIFORS);
       spells.add(O2SpellType.DUCKLIFORS);

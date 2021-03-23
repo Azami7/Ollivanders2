@@ -20,9 +20,7 @@ public class BOOK_OF_POTIONS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Book Of Potions";
-      author = "Zygmunt Budge";
-      branch = O2MagicBranch.POTIONS;
+      // bookType = O2BookType.BOOK_OF_POTIONS;
 
       openingPage = "You, young potioneer, hold in your hands my masterpiece. With it, my place in history is assured. -Zygmunt Budge";
 

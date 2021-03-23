@@ -17,9 +17,7 @@ public class DE_MEDICINA_PRAECEPTA extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "De Medicina Praecepta";
-      author = "Quintus Serenus Sammonicus";
-      branch = O2MagicBranch.HEALING;
+      bookType = O2BookType.DE_MEDICINA_PRAECEPTA;
 
       openingPage = "Phoebus, protect this health-giving song, which I composed and let this manifest favour be an attendant to the art you discovered.";
 

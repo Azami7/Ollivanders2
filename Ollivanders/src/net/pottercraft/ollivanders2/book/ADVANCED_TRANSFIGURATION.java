@@ -25,10 +25,7 @@ public class ADVANCED_TRANSFIGURATION extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Advanced Transfiguration";
-      title = "A Guide to Advanced Transfiguration";
-      author = "Unknown";
-      branch = O2MagicBranch.TRANSFIGURATION;
+      bookType = O2BookType.ADVANCED_TRANSFIGURATION;
 
       spells.add(O2SpellType.INCARNATIO_DEVITO);
       spells.add(O2SpellType.INCARNATIO_EQUUS);

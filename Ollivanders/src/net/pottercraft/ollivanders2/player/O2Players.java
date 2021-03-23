@@ -463,7 +463,7 @@ public class O2Players
                Boolean foundWand = Ollivanders2API.common.booleanFromString(value);
                if (foundWand != null)
                {
-                  o2p.setFoundWand(foundWand);
+                  o2p.initFoundWand(foundWand);
                }
             }
             else if (label.equalsIgnoreCase(masterSpellLabel))

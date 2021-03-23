@@ -17,9 +17,7 @@ public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Practical Defensive Magic Volume One";
-      author = "Unknown";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.PRACTICAL_DEFENSIVE_MAGIC;
 
       spells.add(O2SpellType.EXPELLIARMUS);
       spells.add(O2SpellType.PROTEGO);
