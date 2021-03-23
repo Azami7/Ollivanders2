@@ -18,9 +18,7 @@ public class CURSES_AND_COUNTERCURSES extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Curses and Counter-Curses";
-      author = "Professor Vindictus Viridian";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.CURSES_AND_COUNTERCURSES;
 
       openingPage = "Bewitch your friends and befuddle your enemies with the latest revenges: Hair loss, Jelly-Legs, Tongue-Tying, and much, much more.";
 

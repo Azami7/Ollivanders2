@@ -17,10 +17,7 @@ public class MODERN_MAGICAL_TRANSPORTATION extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Magical Transportation";
-      title = "Modern Magical Transportation";
-      author = "Azami7";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.MODERN_MAGICAL_TRANSPORTATION;
 
       openingPage = "Understanding magical transportation is important for every witch and wizard.  In this book we will learn three primary means of transport - Brooms, Floo Powder, and Portkeys.";
 

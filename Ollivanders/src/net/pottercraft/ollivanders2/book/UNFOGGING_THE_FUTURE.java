@@ -18,9 +18,7 @@ public class UNFOGGING_THE_FUTURE extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Unfogging the Future";
-      author = "Cassandra Vablatsky";
-      branch = O2MagicBranch.DIVINATION;
+      bookType = O2BookType.UNFOGGING_THE_FUTURE;
 
       spells.add(O2SpellType.ASTROLOGIA);
       // Palmistry

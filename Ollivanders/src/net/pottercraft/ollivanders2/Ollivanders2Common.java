@@ -1429,4 +1429,43 @@ public class Ollivanders2Common
          p.getLogger().info(message);
       }
    }
+
+   /**
+    * Does the item stack match the described item
+    *
+    * @param itemStack the item stack to check
+    * @param material the target material
+    * @param name the target item name
+    * @param lore the target item lore, match is checked on the 0th index lore string
+    * @param amount the amount of the item, < 1 to ignore the amount
+    * @return true if the item stack matches, false otherwise
+    */
+   public boolean matchesItem (@NotNull ItemStack itemStack, @NotNull Material material, @NotNull String name, @NotNull String lore, int amount)
+   {
+      // check amount
+      if (itemStack.getAmount() < 1 || (amount > 0 && (itemStack.getAmount() != amount)))
+         return false;
+
+      // check material
+      if (itemStack.getType() != material)
+         return false;
+
+      // check name and lore
+      ItemMeta meta = itemStack.getItemMeta();
+      if (meta == null)
+         return false;
+
+      String itemName = meta.getDisplayName();
+      if (!itemName.equalsIgnoreCase(name))
+         return false;
+
+      List<String> itemLore = meta.getLore();
+      if (itemLore == null || itemLore.size() < 1)
+         return false;
+
+      if (!itemLore.get(0).equalsIgnoreCase(lore))
+         return false;
+
+      return true;
+   }
 }

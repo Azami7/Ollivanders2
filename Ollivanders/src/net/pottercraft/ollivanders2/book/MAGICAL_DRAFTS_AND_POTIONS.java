@@ -17,9 +17,7 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Magical Drafts and Potions";
-      author = "Arsenius Jigger";
-      branch = O2MagicBranch.POTIONS;
+      bookType = O2BookType.MAGICAL_DRAFTS_AND_POTIONS;
 
       potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
       potions.add(O2PotionType.WIT_SHARPENING_POTION);

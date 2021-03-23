@@ -15,9 +15,6 @@ public class FANTASTIC_BEASTS extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Fantastic Beasts";
-      title = "Fantastic Beasts and Where to Find Them";
-      author = "Newt Scamander";
-      branch = O2MagicBranch.CARE_OF_MAGICAL_CREATURES;
+      // bookType = O2BookType.FANTASTIC_BEASTS;
    }
 }

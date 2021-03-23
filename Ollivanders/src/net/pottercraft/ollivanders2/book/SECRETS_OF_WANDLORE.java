@@ -17,9 +17,7 @@ public final class SECRETS_OF_WANDLORE extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Secrets of Wandlore";
-      author = "Geraint Ollivander";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.SECRETS_OF_WANDLORE;
 
       openingPage = "Wandlore is an ancient, complex, and mysterious branch of magic dealing with the history, abilities, and actions of wands, quasi-sentient magical tools used by wizards and witches to cast spells.";
 

@@ -17,10 +17,7 @@ public final class ADVANCED_FIREWORKS extends O2Book
    {
       super(plugin);
 
-      title = "Advanced Fireworks for Fun and Profit";
-      shortTitle = "Advanced Fireworks";
-      author = "George Weasley";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.ADVANCED_FIREWORKS;
 
       spells.add(O2SpellType.BOTHYNUS_DUO);
       spells.add(O2SpellType.COMETES_DUO);

@@ -20,10 +20,7 @@ public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book
    {
       super(plugin);
 
-      title = "A Beginner's Guide to Transfiguration";
-      shortTitle = "Beginners Transfiguration";
-      author = "Emeric Switch";
-      branch = O2MagicBranch.TRANSFIGURATION;
+      bookType = O2BookType.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION;
 
       spells.add(O2SpellType.DURO);
       spells.add(O2SpellType.FATUUS_AURUM);
