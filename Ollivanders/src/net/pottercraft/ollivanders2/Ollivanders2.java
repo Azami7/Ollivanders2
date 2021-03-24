@@ -635,7 +635,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param sender the player who issued the command
     * @return true if no error occurred
     */
-   private boolean playerSummary(@NotNull CommandSender sender, @NotNull Player player)
+   public boolean playerSummary(@NotNull CommandSender sender, @NotNull Player player)
    {
       if (debug)
          getLogger().info("Running playerSummary");
@@ -649,7 +649,7 @@ public class Ollivanders2 extends JavaPlugin
 
       StringBuilder summary = new StringBuilder();
 
-      summary.append("Ollivanders2 player summary:\n\n");
+      summary.append("Player summary:\n\n");
 
       // wand type
       if (o2p.foundWand())

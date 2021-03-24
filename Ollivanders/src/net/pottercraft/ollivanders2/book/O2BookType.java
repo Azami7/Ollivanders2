@@ -110,4 +110,14 @@ public enum O2BookType
    {
       return className;
    }
+
+   /**
+    * Return the short title for a book. This is the display name title for the book item.
+    *
+    * @return the short title of the book
+    */
+   public String getShortTitle ()
+   {
+      return shortTitle;
+   }
 }

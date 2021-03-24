@@ -19,7 +19,7 @@ public final class OllivandersPlayerFoundWandEvent extends PlayerEvent
      *
      * @param player the player who found their wand
      */
-    public OllivandersPlayerFoundWandEvent (Player player)
+    public OllivandersPlayerFoundWandEvent (@NotNull Player player)
     {
         super(player);
     }
