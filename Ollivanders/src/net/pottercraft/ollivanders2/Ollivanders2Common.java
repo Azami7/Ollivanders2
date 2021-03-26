@@ -1459,12 +1459,16 @@ public class Ollivanders2Common
       if (!itemName.equalsIgnoreCase(name))
          return false;
 
-      List<String> itemLore = meta.getLore();
-      if (itemLore == null || itemLore.size() < 1)
-         return false;
+      // don't check lore on written books
+      if (material != Material.WRITTEN_BOOK)
+      {
+         List<String> itemLore = meta.getLore();
+         if (itemLore == null || itemLore.size() < 1)
+            return false;
 
-      if (!itemLore.get(0).equalsIgnoreCase(lore))
-         return false;
+         if (!itemLore.get(0).equalsIgnoreCase(lore))
+            return false;
+      }
 
       return true;
    }
