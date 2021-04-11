@@ -14,6 +14,7 @@ import java.util.UUID;
 
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
+import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -367,13 +368,16 @@ public class Ollivanders2Common
    {
       double distance;
 
+      if (sourceLocation.getWorld() != checkLocation.getWorld())
+         return false;
+
       try
       {
          distance = checkLocation.distance(sourceLocation);
       }
       catch (Exception e)
       {
-         // this call can generate java.lang.IllegalArgumentException: Cannot measure distance between world_nether and world
+         e.printStackTrace();
          return false;
       }
 
@@ -1149,7 +1153,7 @@ public class Ollivanders2Common
       if (wand == null)
          return null;
 
-      lore.add(wood + " and " + core);
+      lore.add(wood + O2PlayerCommon.wandLoreConjunction + core);
       ItemMeta meta = wand.getItemMeta();
 
       if (meta == null)

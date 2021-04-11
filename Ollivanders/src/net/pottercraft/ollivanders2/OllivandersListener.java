@@ -10,6 +10,7 @@ import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
+import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
 import net.pottercraft.ollivanders2.spell.Divination;
 import net.pottercraft.ollivanders2.spell.FLAGRANTE;
 import net.pottercraft.ollivanders2.spell.O2Spell;
@@ -97,6 +98,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import org.bukkit.potion.PotionEffect;
 
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -964,6 +966,20 @@ public class OllivandersListener implements Listener
                player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
                player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                p.getO2Player(player).setFoundWand(true);
+            }
+            else
+            {
+               new BukkitRunnable()
+               {
+                  @Override
+                  public void run()
+                  {
+                     OllivandersPlayerNotDestinedWandEvent wandEvent = new OllivandersPlayerNotDestinedWandEvent(player);
+
+                     p.getServer().getPluginManager().callEvent(wandEvent);
+                     common.printDebugMessage("Fired OllivandersPlayerNotDestinedWandEvent",null,null,false);
+                  }
+               }.runTaskLater(p, 3);
             }
          }
       }

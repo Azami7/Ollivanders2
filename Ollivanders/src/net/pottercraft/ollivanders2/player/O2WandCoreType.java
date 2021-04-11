@@ -1,10 +1,13 @@
 package net.pottercraft.ollivanders2.player;
 
+import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2Common;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Wand cores
@@ -95,5 +98,20 @@ public enum O2WandCoreType
          cores.add(coreType.getMaterial());
 
       return cores;
+   }
+
+   /**
+    * Get a random wand core by name
+    *
+    * @return a random wand core name
+    */
+   @NotNull
+   public static String getRandomCoreByName()
+   {
+      int rand = Ollivanders2Common.random.nextInt();
+      List<String> cores = getAllCoresByName();
+
+      int index = Math.abs(rand % cores.size());
+      return cores.get(index);
    }
 }

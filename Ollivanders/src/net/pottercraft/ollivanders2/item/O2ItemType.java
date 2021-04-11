@@ -51,7 +51,7 @@ public enum O2ItemType
    INVISIBILITY_CLOAK(Material.CHAINMAIL_CHESTPLATE, (short) 0, "Cloak of Invisibility", "Silvery Transparent Cloak"),
    JOBBERKNOLL_FEATHER(Material.FEATHER, (short) 0, "Jobberknoll Feather", null),
    KNOTGRASS(Material.TALL_GRASS, (short) 0, "Knotgrass", null),
-   KNUT(Material.NETHER_BRICK, (short) 0, "Knut", null),
+   KNUT(Material.NETHERITE_INGOT, (short) 0, "Knut", null),
    LACEWING_FLIES(Material.PUMPKIN_SEEDS, (short) 0, "Lacewing Flies", null),
    LAVENDER_SPRIG(Material.LILAC, (short) 0, "Lavender Sprig", null),
    LEECHES(Material.INK_SAC, (short) 0, "Leeches", null),

@@ -231,11 +231,11 @@ public class O2Player
     *
     * @return the wand lore for the players destined wand
     */
-   @Nullable
+   @NotNull
    public String getDestinedWandLore()
    {
-      if (wandWood == null)
-         return null;
+      if (wandWood == null || wandCore == null)
+         initDestinedWand();
 
       return wandWood + O2PlayerCommon.wandLoreConjunction + wandCore;
    }
@@ -245,9 +245,12 @@ public class O2Player
     *
     * @return the player's destined wand wood type
     */
-   @Nullable
+   @NotNull
    public String getWandWood ()
    {
+      if (wandWood == null)
+         initDestinedWand();
+
       return wandWood;
    }
 
@@ -256,9 +259,12 @@ public class O2Player
     *
     * @return the player's destined wand core type
     */
-   @Nullable
+   @NotNull
    public String getWandCore ()
    {
+      if (wandCore == null)
+         initDestinedWand();
+
       return wandCore;
    }
 
