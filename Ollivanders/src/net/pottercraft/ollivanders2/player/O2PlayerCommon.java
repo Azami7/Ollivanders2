@@ -76,7 +76,7 @@ public final class O2PlayerCommon
       add(EntityType.STRIDER);
    }};
 
-   static final String wandLoreConjunction = " and ";
+   public static final String wandLoreConjunction = " and ";
 
    /**
     * Take an integer and get the corresponding year
