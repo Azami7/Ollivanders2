@@ -32,7 +32,7 @@ public final class REPARO extends O2Spell
       spellType = O2SpellType.REPARO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<>()
+      flavorText = new ArrayList<String>()
       {{
          add("The Mending Charm");
          add("Mr. Weasley took Harry's glasses, gave them a tap of his wand and returned them, good as new.");
@@ -69,7 +69,6 @@ public final class REPARO extends O2Spell
    protected void doCheckEffect ()
    {
       List<Item> items = getItems(1.5);
-
       for (Item item : items)
       {
          ItemStack stack = item.getItemStack();
@@ -78,21 +77,15 @@ public final class REPARO extends O2Spell
          if (itemMeta instanceof Damageable)
          {
             int damage = ((Damageable) itemMeta).getDamage();
-
-            damage = damage - (int)usesModifier;
-
+            damage -= usesModifier * usesModifier;
             if (damage < 0)
             {
                damage = 0;
             }
 
             ((Damageable) itemMeta).setDamage(damage);
-            stack.setItemMeta(itemMeta);
-
             item.setItemStack(stack);
             kill();
-
-            break;
          }
       }
 
