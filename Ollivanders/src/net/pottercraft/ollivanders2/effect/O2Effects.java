@@ -552,7 +552,7 @@ public class O2Effects
       if (activeEffects.containsKey(effectType))
       {
          O2Effect effect = activeEffects.get(effectType);
-         effect.duration -= amount;
+         effect.duration = effect.duration - amount;
       }
 
       effectsData.updatePlayerActiveEffects(pid, activeEffects);
@@ -583,7 +583,7 @@ public class O2Effects
 
          if (!effect.isPermanent())
          {
-            effect.duration -= effect.duration * (percent / 100);
+            effect.duration = effect.duration - (effect.duration * (percent / 100));
          }
       }
 

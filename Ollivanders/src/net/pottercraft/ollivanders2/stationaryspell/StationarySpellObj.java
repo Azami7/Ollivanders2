@@ -150,7 +150,7 @@ public abstract class StationarySpellObj implements Serializable
     */
    public void age (int i)
    {
-      duration -= i;
+      duration = duration - i;
 
       if (duration <= 0)
          kill();
