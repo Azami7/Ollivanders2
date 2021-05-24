@@ -68,7 +68,8 @@ public final class TERGEO extends BlockTransfiguration
       materialWhitelist.add(Material.WATER);
 
       // world guard flags
-      worldGuardFlags.add(Flags.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.BUILD);
 
       // pass-through
       projectilePassThrough.remove(Material.WATER);
