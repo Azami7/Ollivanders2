@@ -94,7 +94,7 @@ public abstract class O2Effect
       if (permanent)
          return;
 
-      duration = duration - i;
+      duration -= i;
       if (duration < 0)
       {
          kill();

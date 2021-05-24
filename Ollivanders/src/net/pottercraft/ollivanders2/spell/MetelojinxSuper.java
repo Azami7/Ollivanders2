@@ -55,8 +55,7 @@ public abstract class MetelojinxSuper extends O2Spell
          }
          else // storm and hasStorm() are not the same
          {
-            duration = duration - (int)(usesModifier * 1200);
-
+            duration -= usesModifier * 1200;
             if (duration < 0)
             {
                duration = -duration;
