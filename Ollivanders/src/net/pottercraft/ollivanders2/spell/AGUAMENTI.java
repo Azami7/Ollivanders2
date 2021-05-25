@@ -62,7 +62,8 @@ public final class AGUAMENTI extends BlockTransfiguration
       materialWhitelist.add(Material.AIR);
 
       // world-guard flags
-      worldGuardFlags.add(Flags.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.BUILD);
 
       initSpell();
    }

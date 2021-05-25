@@ -54,8 +54,11 @@ public final class AVADA_KEDAVRA extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.PVP);
-      worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.PVP);
+         worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+      }
 
       moveEffectData = Material.GREEN_WOOL;
    }

@@ -44,7 +44,8 @@ public abstract class ColoroSuper extends O2Spell
         super(plugin, player, rightWand);
 
         // world-guard flags
-        worldGuardFlags.add(Flags.BUILD);
+        if (Ollivanders2.worldGuardEnabled)
+           worldGuardFlags.add(Flags.BUILD);
     }
 
     /**

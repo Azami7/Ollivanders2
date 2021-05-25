@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by Azami7 on 7/2/17.
- * <p>
+ *
  * Glacius will cause a great cold to descend in a radius from it's impact point which freezes blocks. The radius and
  * duration of the freeze depend on your experience.
  *

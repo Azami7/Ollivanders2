@@ -86,7 +86,9 @@ public abstract class StationarySpell extends O2Spell
       branch = O2MagicBranch.CHARMS;
 
       // world guard flags
-      worldGuardFlags.add(Flags.BUILD);
+      // world guard flags
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.BUILD);
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);

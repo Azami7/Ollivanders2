@@ -45,7 +45,8 @@ public final class FINESTRA extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.BUILD);
    }
 
    /**
