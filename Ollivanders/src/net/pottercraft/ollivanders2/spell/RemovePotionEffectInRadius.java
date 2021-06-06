@@ -55,10 +55,9 @@ public class RemovePotionEffectInRadius extends RemovePotionEffect
       if (targetSelf)
       {
          removePotionEffects(player);
-      } else
-      {
-         affectRadius(radius, true);
       }
+
+      affectRadius(radius, true);
 
       kill();
    }

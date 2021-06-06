@@ -81,7 +81,8 @@ public final class LUMOS_DUO extends O2Spell
       projectilePassThrough.remove(Material.WATER);
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
    @Override

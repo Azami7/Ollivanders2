@@ -54,7 +54,8 @@ public final class DELETRIUS extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
    }
 
    /**

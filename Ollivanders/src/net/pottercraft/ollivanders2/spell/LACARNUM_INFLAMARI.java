@@ -55,7 +55,8 @@ public final class LACARNUM_INFLAMARI extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.LIGHTER);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.LIGHTER);
    }
 
    @Override

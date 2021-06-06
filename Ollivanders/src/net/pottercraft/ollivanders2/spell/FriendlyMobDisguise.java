@@ -35,7 +35,8 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
    {
       super(plugin, player, rightWand);
 
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
    }
 
    @Override

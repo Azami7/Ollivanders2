@@ -50,7 +50,8 @@ public final class CALAMUS extends Transfiguration
       initSpell();
 
       // world guard
-      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.ITEM_DROP);
    }
 
    /**

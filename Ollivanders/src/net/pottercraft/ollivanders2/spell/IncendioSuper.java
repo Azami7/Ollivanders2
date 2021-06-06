@@ -54,10 +54,13 @@ public abstract class IncendioSuper extends O2Spell
          lifeTime = maxDuration;
 
       // world-guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
-      worldGuardFlags.add(DefaultFlag.LIGHTER);
-      worldGuardFlags.add(DefaultFlag.PVP);
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(DefaultFlag.BUILD);
+         worldGuardFlags.add(DefaultFlag.LIGHTER);
+         worldGuardFlags.add(DefaultFlag.PVP);
+         worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      }
    }
 
    @Override

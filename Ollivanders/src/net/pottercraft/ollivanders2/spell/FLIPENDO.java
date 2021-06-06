@@ -52,7 +52,10 @@ public final class FLIPENDO extends Knockback
       strengthReducer = 10;
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.PVP);
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(DefaultFlag.PVP);
+         worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      }
    }
 }

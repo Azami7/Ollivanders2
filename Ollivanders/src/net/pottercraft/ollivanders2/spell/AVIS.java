@@ -57,7 +57,8 @@ public final class AVIS extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
    }
 
    @Override

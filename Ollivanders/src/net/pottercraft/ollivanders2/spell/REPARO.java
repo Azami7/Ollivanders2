@@ -57,8 +57,11 @@ public final class REPARO extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
-      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+         worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
+      }
    }
 
    @Override

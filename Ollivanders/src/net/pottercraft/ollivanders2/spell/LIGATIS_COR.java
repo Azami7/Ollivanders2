@@ -57,8 +57,11 @@ public final class LIGATIS_COR extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
-      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
+         worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+      }
    }
 
    @Override

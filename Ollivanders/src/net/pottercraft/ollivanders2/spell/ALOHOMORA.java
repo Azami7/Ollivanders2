@@ -56,7 +56,8 @@ public final class ALOHOMORA extends O2Spell
       initSpell();
 
       // world guard
-      worldGuardFlags.add(DefaultFlag.INTERACT);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.INTERACT);
    }
 
    /**

@@ -104,8 +104,11 @@ public final class PORTUS extends O2Spell
    protected void doInitSpell()
    {
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
-      worldGuardFlags.add(DefaultFlag.INTERACT);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(DefaultFlag.BUILD);
+         worldGuardFlags.add(DefaultFlag.INTERACT);
+      }
    }
 
    @Override

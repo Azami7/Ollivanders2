@@ -35,8 +35,11 @@ public abstract class BombardaSuper extends O2Spell
       super(plugin, player, rightWand);
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.TNT);
-      worldGuardFlags.add(DefaultFlag.OTHER_EXPLOSION);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(DefaultFlag.TNT);
+         worldGuardFlags.add(DefaultFlag.OTHER_EXPLOSION);
+      }
    }
 
    /**

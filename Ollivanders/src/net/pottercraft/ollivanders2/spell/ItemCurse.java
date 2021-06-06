@@ -48,8 +48,11 @@ public abstract class ItemCurse extends O2Spell
       super(plugin, player, rightWand);
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
-      worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(DefaultFlag.ITEM_PICKUP);
+         worldGuardFlags.add(DefaultFlag.ITEM_DROP);
+      }
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);

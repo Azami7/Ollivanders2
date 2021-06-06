@@ -57,7 +57,8 @@ public final class FRANGE_LIGNEA extends O2Spell
       materialBlackList.add(Material.WATER);
 
       // world-guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.BUILD);
    }
 
    /**

@@ -63,8 +63,11 @@ public final class ALIQUAM_FLOO extends O2Spell
       initSpell();
 
       // required worldGuard state flags
-      worldGuardFlags.add(DefaultFlag.INTERACT);
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(DefaultFlag.INTERACT);
+         worldGuardFlags.add(DefaultFlag.BUILD);
+      }
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);

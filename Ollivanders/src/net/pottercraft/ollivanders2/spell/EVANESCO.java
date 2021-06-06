@@ -53,8 +53,11 @@ public final class EVANESCO extends Transfiguration
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.USE);
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(DefaultFlag.USE);
+         worldGuardFlags.add(DefaultFlag.BUILD);
+      }
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);

@@ -62,7 +62,8 @@ public final class APPARATE extends O2Spell
       initSpell();
 
       // world-guard flags
-      worldGuardFlags.add(DefaultFlag.EXIT_VIA_TELEPORT);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.EXIT_VIA_TELEPORT);
    }
 
    /**

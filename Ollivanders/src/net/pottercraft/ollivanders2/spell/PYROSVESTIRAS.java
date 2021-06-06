@@ -72,6 +72,7 @@ public class PYROSVESTIRAS extends BlockTransfiguration
       materialWhitelist.add(Material.FIRE);
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.BUILD);
    }
 }

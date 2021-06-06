@@ -60,8 +60,11 @@ public final class ENGORGIO extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
-      worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
+         worldGuardFlags.add(DefaultFlag.DAMAGE_ANIMALS);
+      }
    }
 
    /**

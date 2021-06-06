@@ -55,7 +55,8 @@ public final class PIERTOTUM_LOCOMOTOR extends Transfiguration
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.MOB_SPAWNING);
    }
 
    @Override

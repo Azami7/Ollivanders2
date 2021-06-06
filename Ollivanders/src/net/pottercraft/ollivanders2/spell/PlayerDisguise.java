@@ -35,7 +35,8 @@ public abstract class PlayerDisguise extends EntityDisguise
       entityWhitelist.add(EntityType.PLAYER);
 
       // world guard flags
-      worldGuardFlags.add(DefaultFlag.PVP);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(DefaultFlag.PVP);
    }
 
    /**
