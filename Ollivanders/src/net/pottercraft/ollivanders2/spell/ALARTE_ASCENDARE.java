@@ -57,8 +57,11 @@ public final class ALARTE_ASCENDARE extends O2Spell
       branch = O2MagicBranch.CHARMS;
 
       // world guard
-      worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
-      worldGuardFlags.add(Flags.PVP);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+         worldGuardFlags.add(Flags.PVP);
+      }
    }
 
    /**

@@ -82,7 +82,8 @@ public final class LUMOS_MAXIMA extends O2Spell
       projectilePassThrough.remove(Material.WATER);
 
       // world guard flags
-      worldGuardFlags.add(Flags.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.BUILD);
    }
 
    @Override

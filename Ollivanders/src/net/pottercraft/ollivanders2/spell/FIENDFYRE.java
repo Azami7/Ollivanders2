@@ -62,7 +62,8 @@ public final class FIENDFYRE extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.MOB_SPAWNING);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.MOB_SPAWNING);
    }
 
    /**

@@ -69,7 +69,8 @@ public final class DISSENDIUM extends O2Spell
       isOpen = false;
 
       // world guard flags
-      worldGuardFlags.add(Flags.USE);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.USE);
    }
 
    /**

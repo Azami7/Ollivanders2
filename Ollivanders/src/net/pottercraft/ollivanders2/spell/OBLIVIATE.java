@@ -54,7 +54,8 @@ public final class OBLIVIATE extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.PVP);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.PVP);
    }
 
    @Override

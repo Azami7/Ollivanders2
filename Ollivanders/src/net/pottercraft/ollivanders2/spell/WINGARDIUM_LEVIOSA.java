@@ -80,9 +80,12 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
 
 
       // world guard flags
-      worldGuardFlags.add(Flags.BUILD);
-      worldGuardFlags.add(Flags.ITEM_PICKUP);
-      worldGuardFlags.add(Flags.ITEM_DROP);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.BUILD);
+         worldGuardFlags.add(Flags.ITEM_PICKUP);
+         worldGuardFlags.add(Flags.ITEM_DROP);
+      }
    }
 
    @Override

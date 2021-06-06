@@ -60,8 +60,11 @@ public final class OPPUGNO extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.PVP);
-      worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.PVP);
+         worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+      }
 
       damage = usesModifier / 20;
       if (damage < minDamage)

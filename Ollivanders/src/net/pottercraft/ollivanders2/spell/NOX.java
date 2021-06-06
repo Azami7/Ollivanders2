@@ -50,6 +50,7 @@ public final class NOX extends RemovePotionEffectInRadius
 
       spellType = O2SpellType.NOX;
       branch = O2MagicBranch.CHARMS;
+      targetSelf = true;
 
       initSpell();
 

@@ -53,7 +53,8 @@ public final class REDUCTO extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.OTHER_EXPLOSION);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.OTHER_EXPLOSION);
    }
 
    @Override

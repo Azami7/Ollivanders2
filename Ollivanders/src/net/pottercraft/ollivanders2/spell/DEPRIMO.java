@@ -70,7 +70,8 @@ public final class DEPRIMO extends O2Spell
       }
 
       // world guard flags
-      worldGuardFlags.add(Flags.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.BUILD);
 
       initSpell();
    }

@@ -52,7 +52,8 @@ public final class LEVICORPUS extends AddO2Effect
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.PVP);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.PVP);
 
       effectsToAdd.add(O2EffectType.SUSPENSION);
 

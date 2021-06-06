@@ -55,9 +55,12 @@ public final class DIFFINDO extends O2Spell
       branch = O2MagicBranch.CHARMS;
 
       // world guard flags
-      worldGuardFlags.add(Flags.PVP);
-      worldGuardFlags.add(Flags.BUILD);
-      worldGuardFlags.add(Flags.ITEM_DROP);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.PVP);
+         worldGuardFlags.add(Flags.BUILD);
+         worldGuardFlags.add(Flags.ITEM_DROP);
+      }
 
       initSpell();
    }

@@ -52,7 +52,8 @@ public final class PRAEPANDO extends StationarySpell
       centerOnCaster = true;
 
       // world guard flags
-      worldGuardFlags.add(Flags.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.BUILD);
    }
 
    @Override
