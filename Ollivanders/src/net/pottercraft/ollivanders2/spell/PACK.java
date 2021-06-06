@@ -66,7 +66,8 @@ public final class PACK extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.CHEST_ACCESS);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.CHEST_ACCESS);
 
       // remove chests from material blacklist
       for (Material chest : Ollivanders2Common.chests)

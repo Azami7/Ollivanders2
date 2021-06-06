@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Remove potion effects from a target.
+ * Projectile spell to remove potion effects from a target.
  *
  * @author Azami7
  */

@@ -62,7 +62,8 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
       initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.MOB_SPAWNING); // needed because Fiendfyre requires it, otherwise horcruxes could get made in locations players couldn't kill them
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.MOB_SPAWNING); // needed because Fiendfyre requires it, otherwise horcruxes could get made in locations players couldn't kill them
    }
 
    @Override
