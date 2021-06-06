@@ -65,7 +65,8 @@ public final class DEFODIO extends O2Spell
       depth = (int) usesModifier;
 
       // world-guard flags
-      worldGuardFlags.add(Flags.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.BUILD);
 
       // material black list
       materialBlackList.add(Material.WATER);

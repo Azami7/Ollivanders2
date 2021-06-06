@@ -113,7 +113,8 @@ public abstract class BlockTransfiguration extends O2Spell
         }
 
         // required worldGuard state flags
-        worldGuardFlags.add(Flags.BUILD);
+        if (Ollivanders2.worldGuardEnabled)
+           worldGuardFlags.add(Flags.BUILD);
     }
 
     @Override
