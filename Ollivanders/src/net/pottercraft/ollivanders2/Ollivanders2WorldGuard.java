@@ -91,7 +91,7 @@ public class Ollivanders2WorldGuard
             p.getLogger().info("State of " + flag.toString() + " for " + player.getDisplayName() + " is " + state.toString());
 
 
-         return (state == StateFlag.State.DENY);
+         return (state != StateFlag.State.DENY);
       }
       else
       {

@@ -11,6 +11,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.spell.APPARATE;
+import org.bukkit.World;
 import quidditch.Arena;
 
 import net.pottercraft.ollivanders2.effect.O2Effect;
@@ -87,6 +89,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean useSpellJournal;
    public static boolean useHostileMobAnimagi;
    public static boolean enableDeathExpLoss;
+   public static boolean apparateLocations;
    public static int divinationMaxDays = 4;
    public static boolean useHouses;
    public static boolean displayMessageOnSort;
@@ -340,6 +343,13 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //
+      // apparate locations, when true apparate will only work to named locations, not by coordinates
+      //
+      apparateLocations = getConfig().getBoolean("apparateLocations");
+      if (apparateLocations)
+         getLogger().info("Enabling apparate locations - apparation by coordinates disabled.");
+
+      //
       // divinationMaxDays
       //
       if (getConfig().isSet("divinationMaxDays"))
@@ -514,7 +524,8 @@ public class Ollivanders2 extends JavaPlugin
       if (cmd.getName().equalsIgnoreCase("Ollivanders2") || cmd.getName().equalsIgnoreCase("Olli"))
       {
          return runOllivanders(sender, args);
-      } else if (cmd.getName().equalsIgnoreCase("Quidd"))
+      }
+      else if (cmd.getName().equalsIgnoreCase("Quidd"))
       {
          if (sender.isOp())
          {
@@ -559,14 +570,14 @@ public class Ollivanders2 extends JavaPlugin
                Player target = getServer().getPlayer(args[1]);
                if (target != null)
                   return giveRandomWand(target);
+               else
+                  usageMessageWand(sender);
             }
          }
          else if (subCommand.equalsIgnoreCase("reload"))
             return runReloadConfigs(sender);
          else if (subCommand.equalsIgnoreCase("items") || subCommand.equalsIgnoreCase("item"))
-         {
             return runItems((Player) sender, args);
-         }
          else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
             return runHouse(sender, args);
          else if (subCommand.equalsIgnoreCase("debug"))
@@ -607,21 +618,15 @@ public class Ollivanders2 extends JavaPlugin
             }
          }
          else if (subCommand.equalsIgnoreCase("potions") || subCommand.equalsIgnoreCase("potion"))
-         {
             return runPotions(sender, args);
-         }
          else if (subCommand.equalsIgnoreCase("year") || subCommand.equalsIgnoreCase("years"))
-         {
             return runYear(sender, args);
-         }
          else if (subCommand.equalsIgnoreCase("effect") || subCommand.equalsIgnoreCase("effects"))
-         {
             return runEffect(sender, args);
-         }
          else if (subCommand.equalsIgnoreCase("prophecy") || subCommand.equalsIgnoreCase("prophecies"))
-         {
             return runProphecies(sender);
-         }
+         else if (subCommand.equalsIgnoreCase("apparate") || subCommand.equalsIgnoreCase("apparateLoc"))
+            return runApparateLocation(sender, args);
       }
 
       usageMessageOllivanders(sender);
@@ -768,13 +773,17 @@ public class Ollivanders2 extends JavaPlugin
       sender.sendMessage(chatColor
               + "You are running Ollivanders2 version " + this.getDescription().getVersion() + "\n"
               + "\nOllivanders2 commands:"
-              + "\nwands - gives a complete set of wands"
-              + "\nbooks - gives a complete set of spell books"
-              + "\nitems - gives a complete set of items"
+              + "\nwands - wand commands"
+              + "\nbooks - books commands"
+              + "\nitems - item commands"
+              + "\npotions - potions commands"
               // + "\nquidd - creates a quidditch pitch"
-              + "\nhouse - view and manage houses and house points"
-              + "\nyear - view and manage player years"
+              + "\nhouse - house commands"
+              + "\nyear - year commands"
+              + "\neffect - effects commands"
+              + "\nprophecy - list all active prophecies"
               + "\nsummary - gives a summary of wand type, house, year, and known spells"
+              + "\napparateLoc - apparation location commands"
               + "\nreload - reload the Ollivanders2 configs"
               + "\ndebug - toggles Ollivanders2 plugin debug output\n"
               + "\n" + "To run a command, type '/ollivanders2 [command]'."
@@ -1370,10 +1379,21 @@ public class Ollivanders2 extends JavaPlugin
       }
       else
       {
-         sender.sendMessage(chatColor + "Not enough arguments to /olli effect.\n");
+         usageMessageEffect(sender);
       }
 
       return true;
+   }
+
+   /**
+    * Usage message for Effect subcommands.
+    *
+    * @param sender the player that issued the command
+    */
+   private void usageMessageEffect(@NotNull CommandSender sender)
+   {
+      sender.sendMessage(chatColor
+              + "/ollivanders2 effect effect_name player_name - toggles the named effect on the player");
    }
 
    /**
@@ -1483,6 +1503,19 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
+    * Usage message for Item subcommands.
+    *
+    * @param sender the player that issued the command
+    */
+   private void usageMessageItem(@NotNull CommandSender sender)
+   {
+      sender.sendMessage(chatColor
+              + "Options to '/ollivanders2 house':"
+              + "\nlist - lists all items"
+              + "\nitem_name - gives the specified item");
+   }
+
+   /**
     * Build a list of all O2Items
     *
     * @return the list of items
@@ -1533,6 +1566,18 @@ public class Ollivanders2 extends JavaPlugin
       Ollivanders2API.common.givePlayerKit(player, kit);
 
       return true;
+   }
+
+   /**
+    * Usage message for Wand subcommands.
+    *
+    * @param sender the player that issued the command
+    */
+   private void usageMessageWand(@NotNull CommandSender sender)
+   {
+      sender.sendMessage(chatColor
+              + "/ollivanders2 wand - gives you one of every wand"
+              + "\n/ollivanders2 wand player_name - gives named player a random wand");
    }
 
    /**
@@ -2211,10 +2256,15 @@ public class Ollivanders2 extends JavaPlugin
       return true;
    }
 
+   /**
+    * Usage message for potion subcommands
+    *
+    * @param sender the command sender
+    */
    private void usageMessagePotions (CommandSender sender)
    {
       sender.sendMessage(chatColor
-              + "Usage: /olli potions"
+              + "Usage: /ollivanders2 potions"
               + "\ningredient list - lists all potions ingredients"
               + "\ningredient <ingredient name> - give you the ingredient with this name, if it exists"
               + "\nall - gives all Ollivanders2 potions, this may not fit in your inventory"
@@ -2365,6 +2415,123 @@ public class Ollivanders2 extends JavaPlugin
       sender.sendMessage(chatColor + output.toString());
 
       return true;
+   }
+
+   /**
+    * Run the apparate location subcommand
+    *
+    * @param sender the command sender
+    * @param args
+    * @return
+    */
+   public boolean runApparateLocation (@NotNull CommandSender sender, @NotNull String[] args)
+   {
+      if (!apparateLocations)
+      {
+         sender.sendMessage(chatColor
+                 + "Apprate locations are not currently enabled for your server."
+                 + "\nTo enable apparate locations, update the Ollivanders2 config.yml setting to true and restart your server."
+                 // TODO update wiki and uncomment
+                 //+ "\nFor help, see our documentation at ..."
+         );
+
+         return true;
+      }
+
+      if (args.length >= 2)
+      {
+         String subCommand = args[1];
+
+         if (subCommand.equalsIgnoreCase("list"))
+         {
+            APPARATE.listApparateLocations((Player)sender);
+            return true;
+         }
+         else if (subCommand.equalsIgnoreCase("add") || subCommand.equalsIgnoreCase("update"))
+         {
+            if (args.length < 6)
+            {
+               usageMessageApparateLocation(sender);
+               return true;
+            }
+
+            String locationName = args[2];
+
+            if (subCommand.equalsIgnoreCase("add") && APPARATE.doesLocationExist(locationName))
+            {
+               sender.sendMessage(chatColor + "An apparate location with that name already exists. If you want to update the location coordinates, use /ollivanders2 apparateLoc update.");
+               return true;
+            }
+            else if (subCommand.equalsIgnoreCase("update") && !APPARATE.doesLocationExist(locationName))
+            {
+               sender.sendMessage(chatColor + "An apparate location with that name does not exist. If you want to add a location coordinates, use /ollivanders2 apparateLoc add.");
+               return true;
+            }
+
+            String xCoord = args[3];
+            String yCoord = args[4];
+            String zCoord = args[5];
+            double x;
+            double y;
+            double z;
+            try
+            {
+               x = Double.parseDouble(xCoord);
+               y = Double.parseDouble(yCoord);
+               z = Double.parseDouble(zCoord);
+            }
+            catch (Exception e)
+            {
+               sender.sendMessage(chatColor + "Invalid coordinates for location.");
+               usageMessageApparateLocation(sender);
+               return true;
+            }
+
+            World world = ((Player) sender).getWorld();
+
+            APPARATE.addLocation(locationName, world, x, y, z);
+
+            sender.sendMessage(chatColor + "Apparate location " + locationName + " set. \nTo list all locations, use /ollivanders2 apparateLoc list.");
+            return true;
+         }
+         else if (subCommand.equalsIgnoreCase("remove"))
+         {
+            if (args.length < 3)
+            {
+               usageMessageApparateLocation(sender);
+               return true;
+            }
+
+            String locationName = args[2];
+
+            if (!APPARATE.removeLocation(locationName))
+            {
+               sender.sendMessage(chatColor + "Unable to remove location. Check name spelling and try again.\nTo list all locations, use /ollivanders2 apparateLoc list.");
+            }
+
+            return true;
+         }
+      }
+
+      usageMessageApparateLocation(sender);
+      return true;
+   }
+
+   /**
+    * Usage message for apparate location subcommands
+    *
+    * @param sender the command sender
+    */
+   private void usageMessageApparateLocation (CommandSender sender)
+   {
+      sender.sendMessage(chatColor
+              + "Usage: /ollivanders2 apparateLoc"
+              + "\nlist - lists all apparate locations"
+              + "\nadd <location name> <x> <y> <z> - adds an apparate location"
+              + "\nupdate <location name> <x> <y> <z> - updates named location to new coordinates"
+              + "\nremove <location name> - removes the specified apparate location"
+              + "\nExample: /ollivanders2 apparateLoc add hogsmeade 200 70 350"
+              + "\nExample: /ollivanders2 remove hogsmeade");
    }
 
    /**
