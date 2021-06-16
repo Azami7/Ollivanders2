@@ -83,6 +83,7 @@ public class Ollivanders2 extends JavaPlugin
    public static ChatColor chatColor;
    public static boolean showLogInMessage;
    public static boolean bookLearning;
+   public static boolean maxSpellLevel;
    public static boolean enableNonVerbalSpellCasting;
    public static boolean useSpellJournal;
    public static boolean useHostileMobAnimagi;
@@ -311,6 +312,21 @@ public class Ollivanders2 extends JavaPlugin
       if (bookLearning)
       {
          getLogger().info("Enabling book learning.");
+      }
+
+      //
+      // maxSpells, can only be enabled when bookLearning is off.
+      //
+      if (!bookLearning)
+      {
+         maxSpellLevel = getConfig().getBoolean("maxSpellLevel");
+      }
+      else
+         maxSpellLevel = false;
+
+      if (maxSpellLevel)
+      {
+         getLogger().info("Max spell level on.");
       }
 
       //
