@@ -98,6 +98,8 @@ public class Ollivanders2 extends JavaPlugin
    public static Material broomstickMaterial;
    public static boolean enableWitchDrop;
    private ConfigurationSection zoneConfig;
+   public static boolean hourlyBackup;
+   public static boolean archivePreviousBackup;
 
    // other config
    public static boolean worldGuardEnabled = false;
@@ -118,6 +120,16 @@ public class Ollivanders2 extends JavaPlugin
 
       revertAllTempBlocks();
 
+      savePluginData();
+
+      getLogger().info(this + " is now disabled!");
+   }
+
+   /**
+    * Save plugin data to disk
+    */
+   public void savePluginData ()
+   {
       Ollivanders2API.saveStationarySpells();
       Ollivanders2API.saveProphecies();
       if (useHouses)
@@ -125,8 +137,6 @@ public class Ollivanders2 extends JavaPlugin
          Ollivanders2API.saveHouses();
       }
       Ollivanders2API.savePlayers();
-
-      getLogger().info(this + " is now disabled!");
    }
 
    /**
@@ -429,6 +439,7 @@ public class Ollivanders2 extends JavaPlugin
       {
          getLogger().info("Enabling debug mode.");
       }
+
       overrideVersionCheck = getConfig().getBoolean("overrideVersionCheck");
       if (overrideVersionCheck)
       {
@@ -439,6 +450,17 @@ public class Ollivanders2 extends JavaPlugin
       // Zones
       //
       zoneConfig = getConfig().getConfigurationSection("zones");
+
+      //
+      // Save options
+      //
+      hourlyBackup = getConfig().getBoolean("hourlyBackup");
+      if (hourlyBackup)
+         getLogger().info("Enabling hourly backups.");
+
+      archivePreviousBackup = getConfig().getBoolean("archivePreviousBackup");
+      if (archivePreviousBackup)
+         getLogger().info("Enabling backup archiving.");
    }
 
    /**

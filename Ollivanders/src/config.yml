@@ -59,6 +59,14 @@ witchDrop: false
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#divination
 divinationMaxDays: 4
 
+# Save options
+#
+# Whether the plugin should save data hourly in addition to saving data on disable. Recommended
+hourlyBackup: true
+#
+# Whether the plugin should archive previous saves before writing data. Recommended
+archivePreviousBackup: true
+
 # Experimental and Debug options
 #
 # Turns on debug output in your logs. This can also be toggled on and off in game by using the command
