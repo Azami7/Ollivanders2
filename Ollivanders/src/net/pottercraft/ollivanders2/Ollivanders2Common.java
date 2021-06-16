@@ -58,6 +58,8 @@ public class Ollivanders2Common
    private static final String locationZLabel = "Z-Value";
 
    public static final int ticksPerSecond = 20;
+   public static final int ticksPerMinute = ticksPerSecond * 60;
+   public static final int ticksPerHour = ticksPerMinute * 60;
 
    public static final List<EntityType> smallFriendlyAnimals = new ArrayList<>()
    {{

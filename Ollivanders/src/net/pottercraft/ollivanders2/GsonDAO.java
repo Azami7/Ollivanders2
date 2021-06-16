@@ -25,6 +25,7 @@ public class GsonDAO implements GenericDAO
 {
    final private Gson gson;
    final private Ollivanders2 p;
+   final private Ollivanders2Common common;
 
    private static final String saveDirectory = "plugins/Ollivanders2";
    private static final String archiveDirectory = "plugins/Ollivanders2/archive";
@@ -43,6 +44,8 @@ public class GsonDAO implements GenericDAO
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
       p = plugin;
+
+      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -158,10 +161,7 @@ public class GsonDAO implements GenericDAO
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to convert house " + house);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to convert house " + house, e, null, true);
             continue;
          }
 
@@ -204,10 +204,7 @@ public class GsonDAO implements GenericDAO
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to convert house " + house);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to convert house " + house, e, null, true);
             continue;
          }
 
@@ -271,7 +268,6 @@ public class GsonDAO implements GenericDAO
     */
    private synchronized void writeJSON(@NotNull String json, @NotNull String path)
    {
-      // make sure directory exists
       String saveFile = saveDirectory + "/" + path;
 
       File file = new File(saveFile);
@@ -279,33 +275,41 @@ public class GsonDAO implements GenericDAO
 
       try
       {
+         // if the file exists and archiving is turned on, we want to move it, otherwise delete it so we can write a new one
          if (file.exists())
          {
-            // if the file exists, we want to move it
-            File archiveDir = new File(archiveDirectory);
-            archiveDir.mkdirs();
-            String archiveFile = archiveDirectory + "/" + path + "-" + Ollivanders2API.common.getCurrentTimestamp();
+            try
+            {
+               if (Ollivanders2.archivePreviousBackup)
+               {
+                  File archiveDir = new File(archiveDirectory);
+                  archiveDir.mkdirs();
+                  String archiveFile = archiveDirectory + "/" + path + "-" + Ollivanders2API.common.getCurrentTimestamp();
 
-            File prev = new File(archiveFile);
-            file.renameTo(prev);
+                  File prev = new File(archiveFile);
+                  file.renameTo(prev);
+               }
+               else
+                  file.delete();
+            }
+            catch (Exception e)
+            {
+               common.printDebugMessage("Exception archiving or deleting existing save file.", e, null, true);
+            }
          }
 
          // create the directory and file
-         dir.mkdirs();
+         if (!dir.exists())
+            dir.mkdirs();
+
          if (!file.createNewFile())
          {
-            p.getLogger().warning("Unable to create save file " + saveFile);
-            return;
+            common.printDebugMessage("Unable to create save file " + saveFile, null, null, true);
          }
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Error creating save file " + saveFile);
-         if (Ollivanders2.debug)
-         {
-            e.printStackTrace();
-         }
-
+         common.printDebugMessage("Error creating save file " + saveFile, e, null, true);
          return;
       }
 
@@ -320,11 +324,7 @@ public class GsonDAO implements GenericDAO
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Unable to write save file " + saveFile);
-         if (Ollivanders2.debug)
-         {
-            e.printStackTrace();
-         }
+         common.printDebugMessage("Unable to write save file " + saveFile, e, null, true);
       }
    }
 
@@ -346,23 +346,18 @@ public class GsonDAO implements GenericDAO
       {
          if (!file.exists())
          {
-            p.getLogger().info("Save file " + saveFile + " not found, skipping.");
-            return null;
+            common.printDebugMessage("Save file " + saveFile + " not found, skipping.", null, null, false);
          }
 
          if (!file.canRead())
          {
-            p.getLogger().warning("No permissions to read " + saveFile + ". Skipping.");
+            common.printDebugMessage("No permissions to read " + saveFile + ". Skipping.", null, null, true);
             return null;
          }
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Error trying to read " + saveFile + ". Skipping.");
-         if (Ollivanders2.debug)
-         {
-            e.printStackTrace();
-         }
+         common.printDebugMessage("Error trying to read " + saveFile + ". Skipping.", e, null, true);
          return null;
       }
 
@@ -385,11 +380,7 @@ public class GsonDAO implements GenericDAO
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Error trying to read " + saveFile + ". Skipping.");
-         if (Ollivanders2.debug)
-         {
-            e.printStackTrace();
-         }
+         common.printDebugMessage("Error trying to read " + saveFile + ". Skipping.", e, null, true);
       }
 
       return json;
