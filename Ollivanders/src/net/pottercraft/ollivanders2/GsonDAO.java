@@ -286,7 +286,6 @@ public class GsonDAO implements GenericDAO
     */
    private synchronized void writeJSON(@NotNull String json, @NotNull String path)
    {
-      // make sure directory exists
       String saveFile = saveDirectory + "/" + path;
 
       File file = new File(saveFile);
@@ -294,19 +293,36 @@ public class GsonDAO implements GenericDAO
 
       try
       {
+         // if the file exists and archiving is turned on, we want to move it, otherwise delete it so we can write a new one
          if (file.exists())
          {
-            // if the file exists, we want to move it
-            File archiveDir = new File(archiveDirectory);
-            archiveDir.mkdirs();
-            String archiveFile = archiveDirectory + "/" + path + "-" + Ollivanders2API.common.getCurrentTimestamp();
+            try
+            {
+               if (Ollivanders2.archivePreviousBackup)
+               {
+                  File archiveDir = new File(archiveDirectory);
+                  archiveDir.mkdirs();
+                  String archiveFile = archiveDirectory + "/" + path + "-" + Ollivanders2API.common.getCurrentTimestamp();
 
-            File prev = new File(archiveFile);
-            file.renameTo(prev);
+                  File prev = new File(archiveFile);
+                  file.renameTo(prev);
+               }
+               else
+                  file.delete();
+            }
+            catch (Exception e)
+            {
+               if (Ollivanders2.debug)
+               {
+                  e.printStackTrace();
+               }
+            }
          }
 
          // create the directory and file
-         dir.mkdirs();
+         if (!dir.exists())
+            dir.mkdirs();
+
          if (!file.createNewFile())
          {
             return;

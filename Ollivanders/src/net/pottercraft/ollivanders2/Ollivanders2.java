@@ -85,6 +85,7 @@ public class Ollivanders2 extends JavaPlugin
    public static ChatColor chatColor;
    public static boolean showLogInMessage;
    public static boolean bookLearning;
+   public static boolean maxSpellLevel;
    public static boolean enableNonVerbalSpellCasting;
    public static boolean useSpellJournal;
    public static boolean useHostileMobAnimagi;
@@ -100,6 +101,8 @@ public class Ollivanders2 extends JavaPlugin
    public static Material broomstickMaterial;
    public static boolean enableWitchDrop;
    private ConfigurationSection zoneConfig;
+   public static boolean hourlyBackup;
+   public static boolean archivePreviousBackup;
 
    // other config
    public static boolean worldGuardEnabled = false;
@@ -120,6 +123,16 @@ public class Ollivanders2 extends JavaPlugin
 
       revertAllTempBlocks();
 
+      savePluginData();
+
+      getLogger().info(this + " is now disabled!");
+   }
+
+   /**
+    * Save plugin data to disk
+    */
+   public void savePluginData ()
+   {
       Ollivanders2API.saveStationarySpells();
       Ollivanders2API.saveProphecies();
       if (useHouses)
@@ -128,8 +141,6 @@ public class Ollivanders2 extends JavaPlugin
       }
       Ollivanders2API.savePlayers();
       APPARATE.saveApparateLocations();
-
-      getLogger().info(this + " is now disabled!");
    }
 
    /**
@@ -308,6 +319,21 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //
+      // maxSpells, can only be enabled when bookLearning is off.
+      //
+      if (!bookLearning)
+      {
+         maxSpellLevel = getConfig().getBoolean("maxSpellLevel");
+      }
+      else
+         maxSpellLevel = false;
+
+      if (maxSpellLevel)
+      {
+         getLogger().info("Max spell level on.");
+      }
+
+      //
       // nonVerbalSpellCasting
       //
       enableNonVerbalSpellCasting = getConfig().getBoolean("nonVerbalSpellCasting");
@@ -424,6 +450,7 @@ public class Ollivanders2 extends JavaPlugin
       {
          getLogger().info("Enabling debug mode.");
       }
+
       overrideVersionCheck = getConfig().getBoolean("overrideVersionCheck");
       if (overrideVersionCheck)
       {
@@ -434,6 +461,17 @@ public class Ollivanders2 extends JavaPlugin
       // Zones
       //
       zoneConfig = getConfig().getConfigurationSection("zones");
+
+      //
+      // Save options
+      //
+      hourlyBackup = getConfig().getBoolean("hourlyBackup");
+      if (hourlyBackup)
+         getLogger().info("Enabling hourly backups.");
+
+      archivePreviousBackup = getConfig().getBoolean("archivePreviousBackup");
+      if (archivePreviousBackup)
+         getLogger().info("Enabling backup archiving.");
    }
 
    /**
@@ -1946,13 +1984,13 @@ public class Ollivanders2 extends JavaPlugin
 
       String versionString = Bukkit.getBukkitVersion();
 
-      if (versionString.startsWith("1.14") || versionString.startsWith("1.15") || versionString.startsWith("1.16"))
+      if (versionString.startsWith("1.16") || versionString.startsWith("1.17"))
       {
          return true;
       }
       else // anything lower than 1.14 set to 0 because this version of the plugin cannot run on < 1.14
       {
-         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.14 or higher.");
+         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.16 or higher.");
          return false;
       }
    }

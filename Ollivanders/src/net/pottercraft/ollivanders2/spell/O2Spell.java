@@ -499,7 +499,15 @@ public abstract class O2Spell implements Teachable
       // set up spell use modifier
       // the number of times the spell has been cast and then halved if the player is not using their
       // destined wand, doubled if they are using the elder wand
-      spellUses = p.getSpellCount(player, spellType);
+      if (Ollivanders2.maxSpellLevel)
+      {
+         spellUses = 200;
+      }
+      else
+      {
+         spellUses = p.getSpellCount(player, spellType);
+      }
+
       if (isWandless)
          usesModifier = spellUses;
       else
