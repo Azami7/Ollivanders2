@@ -148,7 +148,7 @@ public class O2Players
          return;
       }
 
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       gsonLayer.writeSaveData(serializedMap, GsonDAO.o2PlayerJSONFile);
    }
 
@@ -157,7 +157,7 @@ public class O2Players
     */
    public void loadO2Players ()
    {
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
 
       // load players from the save file, if it exists
       Map<String, Map<String, String>> serializedMap = gsonLayer.readSavedDataMapStringMap(GsonDAO.o2PlayerJSONFile);

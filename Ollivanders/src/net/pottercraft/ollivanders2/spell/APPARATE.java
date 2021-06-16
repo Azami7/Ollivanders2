@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
+import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2WorldGuard;
@@ -27,6 +28,13 @@ import java.util.Map;
  */
 public final class APPARATE extends O2Spell
 {
+    /*
+    static
+    {
+        APPARATE.loadApparateLocations();
+    }
+     */
+
     /**
      * Apparate locations
      */
@@ -339,5 +347,17 @@ public final class APPARATE extends O2Spell
     public Location getLocationByName (@NotNull String name)
     {
         return apparateLocations.get(name.toLowerCase());
+    }
+
+    /**
+     * Load saved data for this spell
+     */
+    public static void saveApparateLocations ()
+    {
+        if (Ollivanders2.apparateLocations)
+        {
+            GsonDAO gsonLayer = new GsonDAO();
+            gsonLayer.writeApparateData(apparateLocations);
+        }
     }
 }

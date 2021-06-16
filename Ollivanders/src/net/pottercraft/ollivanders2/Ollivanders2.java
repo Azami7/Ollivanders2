@@ -127,6 +127,7 @@ public class Ollivanders2 extends JavaPlugin
          Ollivanders2API.saveHouses();
       }
       Ollivanders2API.savePlayers();
+      APPARATE.saveApparateLocations();
 
       getLogger().info(this + " is now disabled!");
    }

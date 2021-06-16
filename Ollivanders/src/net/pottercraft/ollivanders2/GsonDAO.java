@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import net.pottercraft.ollivanders2.house.O2HouseType;
+import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,25 +25,22 @@ import java.util.Map.Entry;
 public class GsonDAO implements GenericDAO
 {
    final private Gson gson;
-   final private Ollivanders2 p;
 
    private static final String saveDirectory = "plugins/Ollivanders2";
    private static final String archiveDirectory = "plugins/Ollivanders2/archive";
    public static final String housesJSONFile = "O2Houses.txt";
    public static final String housePointsJSONFile = "O2HousePoints.txt";
+   public static final String apparateLocationsJSONFile = "O2ApparateLocations.txt";
    public static final String o2PlayerJSONFile = "O2Players.txt";
    public static final String o2StationarySpellsJSONFile = "O2StationarySpells.txt";
    public static final String o2PropheciesJSONFile = "O2Prophecies.txt";
 
    /**
     * Constructor
-    *
-    * @param plugin a reference to the plugin
     */
-   public GsonDAO(@NotNull Ollivanders2 plugin)
+   public GsonDAO()
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
-      p = plugin;
    }
 
    /**
@@ -80,6 +78,25 @@ public class GsonDAO implements GenericDAO
 
       String json = gson.toJson(strMap);
       writeJSON(json, housePointsJSONFile);
+   }
+
+   /**
+    * Save the apparate locations
+    *
+    * @param locations the map of location names to Locations
+    */
+   public void writeApparateData(@NotNull HashMap<String, Location> locations)
+   {
+      Map<String, String []> serializedLocations = new HashMap<>();
+      for (Entry<String, Location> entry : locations.entrySet())
+      {
+         Location location = entry.getValue();
+         String[] locationAsArray = {location.getWorld().getName(), String.valueOf(location.getX()), String.valueOf(location.getY()), String.valueOf(location.getZ())};
+         serializedLocations.put(entry.getKey(), locationAsArray);
+      }
+
+      String json = gson.toJson(serializedLocations);
+      writeJSON(json, apparateLocationsJSONFile);
    }
 
    /**
@@ -158,7 +175,6 @@ public class GsonDAO implements GenericDAO
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to convert house " + house);
             if (Ollivanders2.debug)
                e.printStackTrace();
 
@@ -204,7 +220,6 @@ public class GsonDAO implements GenericDAO
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to convert house " + house);
             if (Ollivanders2.debug)
                e.printStackTrace();
 
@@ -294,13 +309,11 @@ public class GsonDAO implements GenericDAO
          dir.mkdirs();
          if (!file.createNewFile())
          {
-            p.getLogger().warning("Unable to create save file " + saveFile);
             return;
          }
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Error creating save file " + saveFile);
          if (Ollivanders2.debug)
          {
             e.printStackTrace();
@@ -320,7 +333,6 @@ public class GsonDAO implements GenericDAO
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Unable to write save file " + saveFile);
          if (Ollivanders2.debug)
          {
             e.printStackTrace();
@@ -346,19 +358,16 @@ public class GsonDAO implements GenericDAO
       {
          if (!file.exists())
          {
-            p.getLogger().info("Save file " + saveFile + " not found, skipping.");
             return null;
          }
 
          if (!file.canRead())
          {
-            p.getLogger().warning("No permissions to read " + saveFile + ". Skipping.");
             return null;
          }
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Error trying to read " + saveFile + ". Skipping.");
          if (Ollivanders2.debug)
          {
             e.printStackTrace();
@@ -381,11 +390,9 @@ public class GsonDAO implements GenericDAO
          }
 
          bReader.close();
-         p.getLogger().info("Loaded save file " + saveFile);
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Error trying to read " + saveFile + ". Skipping.");
          if (Ollivanders2.debug)
          {
             e.printStackTrace();
