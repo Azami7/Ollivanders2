@@ -1938,13 +1938,13 @@ public class Ollivanders2 extends JavaPlugin
 
       String versionString = Bukkit.getBukkitVersion();
 
-      if (versionString.startsWith("1.14") || versionString.startsWith("1.15") || versionString.startsWith("1.16"))
+      if (versionString.startsWith("1.16") || versionString.startsWith("1.17"))
       {
          return true;
       }
       else // anything lower than 1.14 set to 0 because this version of the plugin cannot run on < 1.14
       {
-         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.14 or higher.");
+         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.16 or higher.");
          return false;
       }
    }

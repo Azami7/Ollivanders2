@@ -1,6 +1,6 @@
 name: Ollivanders2
 main: net.pottercraft.ollivanders2.Ollivanders2
-version: 2.6.2
+version: 2.6.3
 authors: [ Azami7, autumnwoz ]
 website: https://www.spigotmc.org/resources/ollivanders2.38992/
 softdepend: [ WorldGuard, LibsDisguises ]
@@ -10,10 +10,6 @@ commands:
   Ollivanders2:
     description: This is the main admin command for the Ollivanders2 plugin
     usage: Example usage /Ollivanders2
-
-  Quidd:
-    description: This command creates a Quidditch arena.
-    usage: Example usage /Quidd Hogwarts
 
   Olli:
     description: This is a shortened-form version of the main plugin command
