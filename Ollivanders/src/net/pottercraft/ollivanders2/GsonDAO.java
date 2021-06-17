@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 import net.pottercraft.ollivanders2.house.O2HouseType;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -236,6 +238,70 @@ public class GsonDAO implements GenericDAO
       }
 
       return map;
+   }
+
+   /**
+    * Read the apparate locations
+    *
+    * @return a map of apparate locations or null if load failed
+    */
+   @Nullable
+   public HashMap<String, Location> readApparateLocation ()
+   {
+      String json = readJSON(apparateLocationsJSONFile);
+      if (json == null)
+      {
+         return null;
+      }
+
+      Map<String, String []> serializedLocations = new HashMap<>();
+      serializedLocations = gson.fromJson(json, new TypeToken<Map<String, String []>>(){}.getType());
+
+      HashMap<String, Location> locations = new HashMap<>();
+      for (Entry<String, String[]> entry : serializedLocations.entrySet())
+      {
+         // get location name
+         String locationName = entry.getKey();
+         if (locationName == null || locationName.length() < 1)
+         {
+            continue;
+         }
+
+         if (entry.getValue().length != 4)
+         {
+            continue;
+         }
+
+         // get world
+         String worldName = entry.getValue()[0];
+         World world = Bukkit.getServer().getWorld(worldName);
+         if (world == null)
+         {
+            continue;
+         }
+
+         String xCoordStr = entry.getValue()[1];
+         String yCoordStr = entry.getValue()[2];
+         String zCoordStr = entry.getValue()[3];
+         double xCoord;
+         double yCoord;
+         double zCoord;
+
+         try
+         {
+            xCoord = Double.parseDouble(xCoordStr);
+            yCoord = Double.parseDouble(yCoordStr);
+            zCoord = Double.parseDouble(zCoordStr);
+         }
+         catch (Exception e)
+         {
+            continue;
+         }
+
+         locations.put(locationName, new Location(world, xCoord, yCoord, zCoord));
+      }
+
+      return locations;
    }
 
    /**

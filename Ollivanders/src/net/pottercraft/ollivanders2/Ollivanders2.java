@@ -2543,10 +2543,8 @@ public class Ollivanders2 extends JavaPlugin
 
             String locationName = args[2];
 
-            if (!APPARATE.removeLocation(locationName))
-            {
-               sender.sendMessage(chatColor + "Unable to remove location. Check name spelling and try again.\nTo list all locations, use /ollivanders2 apparateLoc list.");
-            }
+            APPARATE.removeLocation(locationName);
+            sender.sendMessage(chatColor + "Removed apparate location " + locationName);
 
             return true;
          }

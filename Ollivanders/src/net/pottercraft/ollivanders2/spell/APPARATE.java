@@ -28,17 +28,10 @@ import java.util.Map;
  */
 public final class APPARATE extends O2Spell
 {
-    /*
-    static
-    {
-        APPARATE.loadApparateLocations();
-    }
-     */
-
     /**
      * Apparate locations
      */
-    private final static HashMap<String, Location> apparateLocations = new HashMap<>();
+    private static HashMap<String, Location> apparateLocations = new HashMap<>();
 
     /**
      * The arguments to the apparate spell
@@ -319,12 +312,9 @@ public final class APPARATE extends O2Spell
      * @param name the name of the location to remove
      * @return true if successfully removed, false otherwise
      */
-    public static boolean removeLocation (@NotNull String name)
+    public static void removeLocation (@NotNull String name)
     {
-        if (apparateLocations.remove(name.toLowerCase()) == null)
-            return false;
-
-        return true;
+        apparateLocations.remove(name.toLowerCase());
     }
 
     /**
@@ -350,14 +340,44 @@ public final class APPARATE extends O2Spell
     }
 
     /**
-     * Load saved data for this spell
+     * Return a map of all apparate locations
+     *
+     * @return a map of all apparate locations
+     */
+    @NotNull
+    public static Map<String, Location> getAllApparateLocations ()
+    {
+        return new HashMap<String, Location>(apparateLocations);
+    }
+
+    /**
+     * Save all apparate locations
      */
     public static void saveApparateLocations ()
     {
-        if (Ollivanders2.apparateLocations)
-        {
-            GsonDAO gsonLayer = new GsonDAO();
-            gsonLayer.writeApparateData(apparateLocations);
-        }
+        if (!Ollivanders2.apparateLocations)
+            return;
+
+        GsonDAO gsonLayer = new GsonDAO();
+        gsonLayer.writeApparateData(apparateLocations);
+    }
+
+    /**
+     * Load all saved apparate locations
+     *
+     * @param p a callback to the plugin
+     */
+    public static void loadApparateLocations (Ollivanders2 p)
+    {
+        if (!Ollivanders2.apparateLocations)
+            return;
+
+        GsonDAO gsonLayer = new GsonDAO();
+        HashMap<String, Location> loadedLoactions = gsonLayer.readApparateLocation();
+
+        if (loadedLoactions != null)
+            apparateLocations = loadedLoactions;
+
+        p.getLogger().info("Loaded " + apparateLocations.size() + " apparate locations.");
     }
 }
