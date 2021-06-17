@@ -246,9 +246,6 @@ class OllivandersSchedule implements Runnable
          if (l.contains(GEMINIO.geminio))
          {
             String[] loreParts = l.split(" ");
-            if (loreParts.length != 2)
-               common.printDebugMessage("Geminio item with malformed lore \"" + l + "\"", null, null, false);
-
             int magnitude = Integer.parseInt(loreParts[1]);
             if (magnitude > 1)
             {
