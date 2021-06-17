@@ -246,6 +246,15 @@ class OllivandersSchedule implements Runnable
          if (l.contains(GEMINIO.geminio))
          {
             String[] loreParts = l.split(" ");
+            if (loreParts.length != 2)
+            {
+               common.printDebugMessage("Geminio item with malformed lore \"" + l + "\"", null, null, false);
+
+               // clear out the lore on this item so this doesn't happen every schedule tick
+               newLore = new ArrayList<>();
+               break;
+            }
+
             int magnitude = Integer.parseInt(loreParts[1]);
             if (magnitude > 1)
             {
@@ -259,6 +268,7 @@ class OllivandersSchedule implements Runnable
             newLore.add(l);
          }
       }
+
       meta.setLore(newLore);
       item.setItemMeta(meta);
       item.setAmount(stackSize);
