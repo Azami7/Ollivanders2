@@ -255,7 +255,21 @@ class OllivandersSchedule implements Runnable
                break;
             }
 
-            int magnitude = Integer.parseInt(loreParts[1]);
+            int magnitude;
+
+            try
+            {
+               magnitude = Integer.parseInt(loreParts[1]);
+            }
+            catch (Exception e)
+            {
+               common.printDebugMessage("Geminio item with malformed lore \"" + l + "\"", null, null, false);
+
+               // clear out the lore on this item so this doesn't happen every schedule tick
+               newLore = new ArrayList<>();
+               break;
+            }
+
             if (magnitude > 1)
             {
                magnitude--;
