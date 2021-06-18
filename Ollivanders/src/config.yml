@@ -88,7 +88,7 @@ zones:
     allowed-spells:
       - 
     disallowed-spells:
-      - 
+      -
   default-cuboid:
     type: Cuboid
     world: world
