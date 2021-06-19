@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

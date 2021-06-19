@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.jetbrains.annotations.NotNull;
 
 /**

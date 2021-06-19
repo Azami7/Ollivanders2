@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.Teachable;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -79,6 +79,11 @@ public abstract class O2Spell implements Teachable
     * Whether the effects of this spell should be permanent
     */
    protected boolean permanent = false;
+
+   /**
+    * Is this a wandless spell
+    */
+   boolean isWandless = false;
 
    /**
     * The callback to the MC plugin
@@ -344,7 +349,7 @@ public abstract class O2Spell implements Teachable
       boolean isAllowed = true;
 
       // determine if this spell is allowed in this location per Ollivanders2 config
-      if (!p.isSpellTypeAllowed(location, spellType))
+      if (!Ollivanders2API.getSpells(p).isSpellTypeAllowed(location, spellType))
       {
          kill();
          isAllowed = false;
@@ -494,8 +499,19 @@ public abstract class O2Spell implements Teachable
       // set up spell use modifier
       // the number of times the spell has been cast and then halved if the player is not using their
       // destined wand, doubled if they are using the elder wand
-      spellUses = p.getSpellCount(player, spellType);
-      usesModifier = spellUses / rightWand;
+      if (Ollivanders2.maxSpellLevel)
+      {
+         spellUses = 200;
+      }
+      else
+      {
+         spellUses = p.getSpellCount(player, spellType);
+      }
+
+      if (isWandless)
+         usesModifier = spellUses;
+      else
+         usesModifier = spellUses / rightWand;
 
       // if the caster is affected by HIGHER_SKILL, double their usesModifier
       if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))

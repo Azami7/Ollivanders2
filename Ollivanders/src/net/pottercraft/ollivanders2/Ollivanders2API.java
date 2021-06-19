@@ -1,12 +1,14 @@
 package net.pottercraft.ollivanders2;
 
 import net.pottercraft.ollivanders2.book.O2Books;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.divination.O2Prophecies;
 import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.item.O2Items;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2Players;
 import net.pottercraft.ollivanders2.potion.O2Potions;
+import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells;
 import org.jetbrains.annotations.NotNull;
@@ -129,6 +131,9 @@ public class Ollivanders2API
       {
          spells = new O2Spells(p);
       }
+
+      // load any spell static data
+      APPARATE.loadApparateLocations(p);
    }
 
    /**

@@ -29,7 +29,7 @@ public final class REDUCTO extends O2Spell
       spellType = O2SpellType.REDUCTO;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Reductor Curse");
          add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
@@ -72,9 +72,12 @@ public final class REDUCTO extends O2Spell
       if (world == null)
       {
          common.printDebugMessage("REDUCTO.doCheckEffect: world is null", null, null, true);
-         kill();
-         return;
       }
-      world.createExplosion(backLoc, (float) (usesModifier * 0.4));
+      else
+      {
+         world.createExplosion(backLoc, (float) (usesModifier * 0.4));
+      }
+
+      kill();
    }
 }
