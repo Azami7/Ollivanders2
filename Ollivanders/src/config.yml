@@ -81,30 +81,39 @@ overrideVersionCheck: false
 # Zones
 #
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#zones
-zones:
+#
+# zones:
+#  global:
+#    allowed-spells:
+#      -
+#    disallowed-spells:
+#      - AVADA_KEDAVRA
+#  example-wg-region:
+#    type: World_Guard
+#    allowed-spells:
+#      - LUMOS
+#      - NOX
+#      - INFORMOUS
+#    disallowed-spells:
+#      -
+#  example-world:
+#    type: World
+#    world: nether
+#    allowed-spells:
+#      -
+#    disallowed-spells:
+#      - APPARATE
+#  example-cuboid:
+#    type: Cuboid
+#    world: world
+#    area: 100 0 300 400 100 700
+#    allowed-spells:
+#      -
+#    disallowed-spells:
+#      - VOLATUS
+ zones:
   global:
     allowed-spells:
       -
     disallowed-spells:
       -
-  example-wg-region:
-    type: World_Guard
-    allowed-spells:
-      -
-    disallowed-spells:
-      -
-  example-world:
-    type: World
-    world: world
-    allowed-spells:
-      - 
-    disallowed-spells:
-      -
-  example-cuboid:
-    type: Cuboid
-    world: world
-    area: 0 0 0 0 0 0
-    allowed-spells:
-      - 
-    disallowed-spells:
-      - 
