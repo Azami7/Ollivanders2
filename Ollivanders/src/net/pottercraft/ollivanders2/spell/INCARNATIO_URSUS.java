@@ -7,7 +7,7 @@ import me.libraryaddict.disguise.disguisetypes.watchers.PandaWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.PolarBearWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Panda;
 import org.bukkit.entity.Player;

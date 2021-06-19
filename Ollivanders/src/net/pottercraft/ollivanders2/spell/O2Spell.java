@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.Teachable;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -349,7 +349,7 @@ public abstract class O2Spell implements Teachable
       boolean isAllowed = true;
 
       // determine if this spell is allowed in this location per Ollivanders2 config
-      if (!p.isSpellTypeAllowed(location, spellType))
+      if (!Ollivanders2API.getSpells(p).isSpellTypeAllowed(location, spellType))
       {
          kill();
          isAllowed = false;

@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2;
 
 import net.pottercraft.ollivanders2.book.O2Books;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.divination.O2Prophecies;
 import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.item.O2Items;
