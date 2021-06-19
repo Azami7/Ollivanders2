@@ -26,6 +26,7 @@ nonVerbalSpellCasting: false
 spellJournal: true
 hostileMobAnimagi: false
 deathExpLoss: false
+apparateLocations: false
 maxSpellLevel: false
 
 # Houses

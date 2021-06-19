@@ -12,6 +12,7 @@ import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
+import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.Divination;
 import net.pottercraft.ollivanders2.spell.FLAGRANTE;
 import net.pottercraft.ollivanders2.spell.O2Spell;
@@ -455,10 +456,7 @@ public class OllivandersListener implements Listener
          if (Ollivanders2.bookLearning && p.getO2Player(player).getSpellCount(spellType) < 1)
          {
             // if bookLearning is set to true then spell count must be > 0 to cast this spell
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: bookLearning enforced");
-            }
+            common.printDebugMessage("doSpellCasting: bookLearning enforced", null, null, false);
             player.sendMessage(Ollivanders2.chatColor + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
 
             return;
@@ -469,10 +467,7 @@ public class OllivandersListener implements Listener
          if (!Ollivanders2API.playerCommon.holdsWand(player))
          {
             // if they are not holding their destined wand, casting success is reduced
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: player not holding destined wand");
-            }
+            common.printDebugMessage("doSpellCasting: player not holding destined wand", null, null, false);
 
             int uses = p.getO2Player(player).getSpellCount(spellType);
             castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
@@ -481,23 +476,17 @@ public class OllivandersListener implements Listener
          // wandless spells
          if (O2Spells.wandlessSpells.contains(spellType) || Divination.divinationSpells.contains(spellType))
          {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: allow wandless casting of " + spellType);
-            }
+            common.printDebugMessage("doSpellCasting: allow wandless casting of " + spellType, null, null, false);
             castSuccess = true;
          }
 
          if (castSuccess)
          {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: begin casting " + spellType);
-            }
+            common.printDebugMessage("doSpellCasting: begin casting " + spellType, null, null, false);
 
             if (spellType == O2SpellType.APPARATE)
             {
-               apparate(player, words);
+               p.addProjectile(new APPARATE(p, player, 1.0, words));
             }
             else if (spellType == O2SpellType.PORTUS)
             {
@@ -535,121 +524,7 @@ public class OllivandersListener implements Listener
       }
       else
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("Either no spell cast attempted or not allowed to cast");
-         }
-      }
-   }
-
-   /**
-    * Teleports sender to either specified location or to eye target location. Respects anti-apparition and anti-disapparition spells.
-    *
-    * @param sender Player apparating
-    * @param words  Typed in words
-    */
-   private void apparate(@NotNull Player sender, @NotNull String[] words)
-   {
-      boolean canApparateOut = true;
-
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-      {
-         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(sender.getLocation()))
-         {
-            stat.flair(10);
-            canApparateOut = false;
-         }
-      }
-      if (sender.isPermissionSet("Ollivanders2.BYPASS"))
-      {
-         if (sender.hasPermission("Ollivanders2.BYPASS"))
-         {
-            canApparateOut = true;
-         }
-      }
-      if (canApparateOut)
-      {
-         int uses = p.incrementSpellCount(sender, O2SpellType.APPARATE);
-         Location from = sender.getLocation().clone();
-         Location to;
-         if (words.length == 4)
-         {
-            try
-            {
-               to = new Location(sender.getWorld(),
-                     Double.parseDouble(words[1]),
-                     Double.parseDouble(words[2]),
-                     Double.parseDouble(words[3]));
-            }
-            catch (NumberFormatException e)
-            {
-               to = sender.getLocation().clone();
-            }
-         }
-         else
-         {
-            Location eyeLocation = sender.getEyeLocation();
-            Material inMat = eyeLocation.getBlock().getType();
-            int distance = 0;
-            while ((inMat == Material.AIR || inMat == Material.FIRE || inMat == Material.WATER || inMat == Material.LAVA) && distance < 160)
-            {
-               eyeLocation = eyeLocation.add(eyeLocation.getDirection());
-               distance++;
-               inMat = eyeLocation.getBlock().getType();
-            }
-            to = eyeLocation.subtract(eyeLocation.getDirection()).clone();
-         }
-         to.setPitch(from.getPitch());
-         to.setYaw(from.getYaw());
-         double distance = from.distance(to);
-         double radius;
-
-         if (Ollivanders2API.playerCommon.holdsWand(sender))
-         {
-            radius = 1 / Math.sqrt(uses) * distance * 0.1 * Ollivanders2API.playerCommon.wandCheck(sender);
-         }
-         else
-         {
-            radius = 1 / Math.sqrt(uses) * distance * 0.01;
-         }
-         double newX = to.getX() - (radius / 2) + (radius * Math.random());
-         double newZ = to.getZ() - (radius / 2) + (radius * Math.random());
-         to.setX(newX);
-         to.setZ(newZ);
-         boolean canApparateIn = true;
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-         {
-            if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to))
-            {
-               stat.flair(10);
-               canApparateIn = false;
-            }
-         }
-         if (sender.isPermissionSet("Ollivanders2.BYPASS"))
-         {
-            if (sender.hasPermission("Ollivanders2.BYPASS"))
-            {
-               canApparateIn = true;
-            }
-         }
-         if (canApparateIn)
-         {
-            p.addTeleportEvent(sender, sender.getLocation(), to, true);
-
-            // also take nearby entities with them
-            for (Entity e : sender.getWorld().getEntities())
-            {
-               if (from.distance(e.getLocation()) <= 2)
-               {
-                  if (e instanceof Player)
-                  {
-                     p.addTeleportEvent((Player) e, e.getLocation(), to, true);
-                  }
-                  else
-                     e.teleport(to);
-               }
-            }
-         }
+         common.printDebugMessage("doSpellCasting: Either no spell cast attempted or not allowed to cast", null, null, false);
       }
    }
 

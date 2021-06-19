@@ -163,7 +163,7 @@ public class O2Houses
     */
    private void loadHouses()
    {
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       Map <UUID, O2HouseType> houses = gsonLayer.readHouses();
       if (houses != null)
       {
@@ -189,7 +189,7 @@ public class O2Houses
    public void saveHouses()
    {
       // write house data out as JSON
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       gsonLayer.writeHouses(O2HouseMap);
 
       Map <O2HouseType, Integer> housePoints = new HashMap<>();
