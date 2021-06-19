@@ -82,14 +82,25 @@ overrideVersionCheck: false
 #
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#zones
 zones:
-  default-world:
+  global:
+    allowed-spells:
+      -
+    disallowed-spells:
+      -
+  example-wg-region:
+    type: World_Guard
+    allowed-spells:
+      -
+    disallowed-spells:
+      -
+  example-world:
     type: World
     world: world
     allowed-spells:
       - 
     disallowed-spells:
       -
-  default-cuboid:
+  example-cuboid:
     type: Cuboid
     world: world
     area: 0 0 0 0 0 0
