@@ -1,4 +1,4 @@
-package net.pottercraft.ollivanders2;
+package net.pottercraft.ollivanders2.common;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,6 +13,8 @@ import java.util.Random;
 import java.util.UUID;
 
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
+import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;

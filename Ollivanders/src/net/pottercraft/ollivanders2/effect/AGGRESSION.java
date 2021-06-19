@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;

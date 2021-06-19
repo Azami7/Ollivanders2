@@ -8,7 +8,7 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.GsonDAO;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
@@ -163,7 +163,7 @@ public class O2Houses
     */
    private void loadHouses()
    {
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       Map <UUID, O2HouseType> houses = gsonLayer.readHouses();
       if (houses != null)
       {
@@ -189,7 +189,7 @@ public class O2Houses
    public void saveHouses()
    {
       // write house data out as JSON
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       gsonLayer.writeHouses(O2HouseMap);
 
       Map <O2HouseType, Integer> housePoints = new HashMap<>();

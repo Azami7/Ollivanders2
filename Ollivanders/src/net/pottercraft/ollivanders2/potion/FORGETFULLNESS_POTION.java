@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.potion;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;

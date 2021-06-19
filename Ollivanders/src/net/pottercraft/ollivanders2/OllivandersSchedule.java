@@ -8,6 +8,7 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.spell.GEMINIO;
@@ -425,7 +426,7 @@ class OllivandersSchedule implements Runnable
       {
          for (Player player : world.getPlayers())
          {
-            if (Ollivanders2API.common.isBroom(player.getInventory().getItemInMainHand()) && p.isSpellTypeAllowed(player.getLocation(), O2SpellType.VOLATUS))
+            if (Ollivanders2API.common.isBroom(player.getInventory().getItemInMainHand()) && Ollivanders2API.getSpells(p).isSpellTypeAllowed(player.getLocation(), O2SpellType.VOLATUS))
             {
                player.setAllowFlight(true);
                player.setFlying(true);

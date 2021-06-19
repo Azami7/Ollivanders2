@@ -3,7 +3,11 @@ package net.pottercraft.ollivanders2;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.house.O2HouseType;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -24,28 +28,22 @@ import java.util.Map.Entry;
 public class GsonDAO implements GenericDAO
 {
    final private Gson gson;
-   final private Ollivanders2 p;
-   final private Ollivanders2Common common;
 
    private static final String saveDirectory = "plugins/Ollivanders2";
    private static final String archiveDirectory = "plugins/Ollivanders2/archive";
    public static final String housesJSONFile = "O2Houses.txt";
    public static final String housePointsJSONFile = "O2HousePoints.txt";
+   public static final String apparateLocationsJSONFile = "O2ApparateLocations.txt";
    public static final String o2PlayerJSONFile = "O2Players.txt";
    public static final String o2StationarySpellsJSONFile = "O2StationarySpells.txt";
    public static final String o2PropheciesJSONFile = "O2Prophecies.txt";
 
    /**
     * Constructor
-    *
-    * @param plugin a reference to the plugin
     */
-   public GsonDAO(@NotNull Ollivanders2 plugin)
+   public GsonDAO()
    {
       gson = new GsonBuilder().setPrettyPrinting().create();
-      p = plugin;
-
-      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -83,6 +81,25 @@ public class GsonDAO implements GenericDAO
 
       String json = gson.toJson(strMap);
       writeJSON(json, housePointsJSONFile);
+   }
+
+   /**
+    * Save the apparate locations
+    *
+    * @param locations the map of location names to Locations
+    */
+   public void writeApparateData(@NotNull HashMap<String, Location> locations)
+   {
+      Map<String, String []> serializedLocations = new HashMap<>();
+      for (Entry<String, Location> entry : locations.entrySet())
+      {
+         Location location = entry.getValue();
+         String[] locationAsArray = {location.getWorld().getName(), String.valueOf(location.getX()), String.valueOf(location.getY()), String.valueOf(location.getZ())};
+         serializedLocations.put(entry.getKey(), locationAsArray);
+      }
+
+      String json = gson.toJson(serializedLocations);
+      writeJSON(json, apparateLocationsJSONFile);
    }
 
    /**
@@ -161,7 +178,9 @@ public class GsonDAO implements GenericDAO
          }
          catch (Exception e)
          {
-            common.printDebugMessage("Failed to convert house " + house, e, null, true);
+            if (Ollivanders2.debug)
+               e.printStackTrace();
+
             continue;
          }
 
@@ -204,7 +223,9 @@ public class GsonDAO implements GenericDAO
          }
          catch (Exception e)
          {
-            common.printDebugMessage("Failed to convert house " + house, e, null, true);
+            if (Ollivanders2.debug)
+               e.printStackTrace();
+
             continue;
          }
 
@@ -218,6 +239,70 @@ public class GsonDAO implements GenericDAO
       }
 
       return map;
+   }
+
+   /**
+    * Read the apparate locations
+    *
+    * @return a map of apparate locations or null if load failed
+    */
+   @Nullable
+   public HashMap<String, Location> readApparateLocation ()
+   {
+      String json = readJSON(apparateLocationsJSONFile);
+      if (json == null)
+      {
+         return null;
+      }
+
+      Map<String, String []> serializedLocations = new HashMap<>();
+      serializedLocations = gson.fromJson(json, new TypeToken<Map<String, String []>>(){}.getType());
+
+      HashMap<String, Location> locations = new HashMap<>();
+      for (Entry<String, String[]> entry : serializedLocations.entrySet())
+      {
+         // get location name
+         String locationName = entry.getKey();
+         if (locationName == null || locationName.length() < 1)
+         {
+            continue;
+         }
+
+         if (entry.getValue().length != 4)
+         {
+            continue;
+         }
+
+         // get world
+         String worldName = entry.getValue()[0];
+         World world = Bukkit.getServer().getWorld(worldName);
+         if (world == null)
+         {
+            continue;
+         }
+
+         String xCoordStr = entry.getValue()[1];
+         String yCoordStr = entry.getValue()[2];
+         String zCoordStr = entry.getValue()[3];
+         double xCoord;
+         double yCoord;
+         double zCoord;
+
+         try
+         {
+            xCoord = Double.parseDouble(xCoordStr);
+            yCoord = Double.parseDouble(yCoordStr);
+            zCoord = Double.parseDouble(zCoordStr);
+         }
+         catch (Exception e)
+         {
+            continue;
+         }
+
+         locations.put(locationName, new Location(world, xCoord, yCoord, zCoord));
+      }
+
+      return locations;
    }
 
    /**
@@ -294,7 +379,10 @@ public class GsonDAO implements GenericDAO
             }
             catch (Exception e)
             {
-               common.printDebugMessage("Exception archiving or deleting existing save file.", e, null, true);
+               if (Ollivanders2.debug)
+               {
+                  e.printStackTrace();
+               }
             }
          }
 
@@ -304,12 +392,16 @@ public class GsonDAO implements GenericDAO
 
          if (!file.createNewFile())
          {
-            common.printDebugMessage("Unable to create save file " + saveFile, null, null, true);
+            return;
          }
       }
       catch (Exception e)
       {
-         common.printDebugMessage("Error creating save file " + saveFile, e, null, true);
+         if (Ollivanders2.debug)
+         {
+            e.printStackTrace();
+         }
+
          return;
       }
 
@@ -324,7 +416,10 @@ public class GsonDAO implements GenericDAO
       }
       catch (Exception e)
       {
-         common.printDebugMessage("Unable to write save file " + saveFile, e, null, true);
+         if (Ollivanders2.debug)
+         {
+            e.printStackTrace();
+         }
       }
    }
 
@@ -346,18 +441,20 @@ public class GsonDAO implements GenericDAO
       {
          if (!file.exists())
          {
-            common.printDebugMessage("Save file " + saveFile + " not found, skipping.", null, null, false);
+            return null;
          }
 
          if (!file.canRead())
          {
-            common.printDebugMessage("No permissions to read " + saveFile + ". Skipping.", null, null, true);
             return null;
          }
       }
       catch (Exception e)
       {
-         common.printDebugMessage("Error trying to read " + saveFile + ". Skipping.", e, null, true);
+         if (Ollivanders2.debug)
+         {
+            e.printStackTrace();
+         }
          return null;
       }
 
@@ -376,11 +473,13 @@ public class GsonDAO implements GenericDAO
          }
 
          bReader.close();
-         p.getLogger().info("Loaded save file " + saveFile);
       }
       catch (Exception e)
       {
-         common.printDebugMessage("Error trying to read " + saveFile + ". Skipping.", e, null, true);
+         if (Ollivanders2.debug)
+         {
+            e.printStackTrace();
+         }
       }
 
       return json;
