@@ -1814,122 +1814,12 @@ public class Ollivanders2 extends JavaPlugin
          return false;
       }
 
-      boolean cast = isSpellTypeAllowed(player.getLocation(), spell);
+      boolean cast = Ollivanders2API.getSpells(this).isSpellTypeAllowed(player.getLocation(), spell);
 
       if (!cast && verbose)
       {
          spellCannotBeCastMessage(player);
       }
-      return cast;
-   }
-
-   /**
-    * Determine if this spell can exist here based on zone config
-    *
-    * @param loc   the location the spell was cast
-    * @param spell the spell to check
-    * @return true if the spell can exist, false otherwise
-    */
-   public boolean isSpellTypeAllowed(@NotNull Location loc, @NotNull O2SpellType spell)
-   {
-      if (zoneConfig == null)
-      {
-         getLogger().info("isSpellTypeAllowed: no zone config");
-         return true;
-      }
-
-      boolean cast = true;
-      double x = loc.getX();
-      double y = loc.getY();
-      double z = loc.getZ();
-
-      for (String zone : zoneConfig.getKeys(false))
-      {
-         String prefix = zone + ".";
-         String type = zoneConfig.getString(prefix + "type");
-         String world = zoneConfig.getString(prefix + "world");
-         String areaString = zoneConfig.getString(prefix + "area");
-
-         if (type == null || world == null || areaString == null)
-            return true;
-
-         boolean allAllowed = false;
-         boolean allDisallowed = false;
-         List<O2SpellType> allowedSpells = new ArrayList<>();
-         for (String spellString : zoneConfig.getStringList(prefix + "allowed-spells"))
-         {
-            if (spellString.equalsIgnoreCase("ALL"))
-            {
-               allAllowed = true;
-            } else
-            {
-               allowedSpells.add(Ollivanders2API.getSpells(this).getSpellTypeByName(spellString));
-            }
-         }
-         List<O2SpellType> disallowedSpells = new ArrayList<>();
-         for (String spellString : zoneConfig.getStringList(prefix + "disallowed-spells"))
-         {
-            if (spellString.equalsIgnoreCase("ALL"))
-            {
-               allDisallowed = true;
-            }
-            else
-            {
-               disallowedSpells.add(Ollivanders2API.getSpells(this).getSpellTypeByName(spellString));
-            }
-         }
-         if (type.equalsIgnoreCase("World"))
-         {
-            if (loc.getWorld() != null && loc.getWorld().getName().equals(world))
-            {
-               if (allowedSpells.contains(spell) || allAllowed)
-               {
-                  return true;
-               }
-               if (disallowedSpells.contains(spell) || allDisallowed)
-               {
-                  cast = false;
-               }
-            }
-         }
-         if (type.equalsIgnoreCase("Cuboid"))
-         {
-            String[] areaStringList = areaString.split(" ");
-            List<Integer> area = new ArrayList<>();
-            for (String a : areaStringList)
-            {
-               area.add(Integer.parseInt(a));
-            }
-            if (area.size() < 6)
-            {
-               for (int i = 0; i < 6; i++)
-               {
-                  area.set(i, 0);
-               }
-            }
-            if (loc.getWorld() != null && loc.getWorld().getName().equals(world))
-            {
-               if ((area.get(0) < x) && (x < area.get(3)))
-               {
-                  if ((area.get(1) < y) && (y < area.get(4)))
-                  {
-                     if ((area.get(2) < z) && (z < area.get(5)))
-                     {
-                        if (allowedSpells.contains(spell) || allAllowed)
-                        {
-                           return true;
-                        }
-                        if (disallowedSpells.contains(spell) || allDisallowed)
-                        {
-                           cast = false;
-                        }
-                     }
-                  }
-               }
-            }
-         }
-      }
-
       return cast;
    }
 

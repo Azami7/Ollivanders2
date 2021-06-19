@@ -402,7 +402,7 @@ class OllivandersSchedule implements Runnable
       {
          for (Player player : world.getPlayers())
          {
-            if (Ollivanders2API.common.isBroom(player.getInventory().getItemInMainHand()) && p.isSpellTypeAllowed(player.getLocation(), O2SpellType.VOLATUS))
+            if (Ollivanders2API.common.isBroom(player.getInventory().getItemInMainHand()) && Ollivanders2API.getSpells(p).isSpellTypeAllowed(player.getLocation(), O2SpellType.VOLATUS))
             {
                player.setAllowFlight(true);
                player.setFlying(true);

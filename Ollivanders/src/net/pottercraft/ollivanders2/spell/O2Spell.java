@@ -344,7 +344,7 @@ public abstract class O2Spell implements Teachable
       boolean isAllowed = true;
 
       // determine if this spell is allowed in this location per Ollivanders2 config
-      if (!p.isSpellTypeAllowed(location, spellType))
+      if (!Ollivanders2API.getSpells(p).isSpellTypeAllowed(location, spellType))
       {
          kill();
          isAllowed = false;

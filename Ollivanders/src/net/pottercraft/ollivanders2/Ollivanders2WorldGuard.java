@@ -199,7 +199,9 @@ public class Ollivanders2WorldGuard
       for (ProtectedRegion region : regionSet.getRegions())
       {
          if (region.getId().equalsIgnoreCase(regionName))
+         {
             return true;
+         }
       }
 
       return false;

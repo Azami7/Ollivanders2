@@ -33,12 +33,12 @@ public class Cuboid
 
         if (area.length == 6)
         {
-            int x1 = area[0];
-            int y1 = area[1];
-            int z1 = area[2];
-            int x2 = area[3];
-            int y2 = area[4];
-            int z2 = area[5];
+            x1 = area[0];
+            y1 = area[1];
+            z1 = area[2];
+            x2 = area[3];
+            y2 = area[4];
+            z2 = area[5];
         }
     }
 
@@ -48,13 +48,16 @@ public class Cuboid
      * @param location the location to check
      * @return true if inside, false otherwise
      */
-    public boolean isInside (@NotNull Location location)
+    public boolean isInside (@NotNull Location location, Ollivanders2Common common)
     {
         World world = location.getWorld();
         if (world == null)
+        {
+            common.printDebugMessage("Cuboid.isInside: World is null", null, null, true);
             return false;
+        }
 
-        return isInside(world.getName(), (int)(location.getY()), (int)(location.getX()), (int)(location.getZ()));
+        return isInside(world.getName(), (int)(location.getX()), (int)(location.getY()), (int)(location.getZ()), common);
     }
 
     /**
@@ -66,32 +69,42 @@ public class Cuboid
      * @param z the z-coordinate
      * @return true if inside, false otherwise
      */
-    public boolean isInside (String world, int x, int y, int z)
+    public boolean isInside (String world, int x, int y, int z, Ollivanders2Common common)
     {
         if (!worldName.equalsIgnoreCase(world))
-            return false;
-
-        if ((x1 > x2 && x < x1 && x > x2) || (x1 < x2 && x > x1 && x < x2))
         {
-            if ((y1 > y2 && y < y1 && y > y2) || (y1 < y2 && y > y1 && y < y2))
+            return false;
+        }
+
+        if ((x1 > x2 && x <= x1 && x >= x2) || (x1 < x2 && x >= x1 && x <= x2))
+        {
+            if ((y1 > y2 && y <= y1 && y >= y2) || (y1 < y2 && y >= y1 && y <= y2))
             {
-                if ((z1 > z2 && z < z1 && z > z2) || (z1 < z2 && x > z1 && z < z2))
+                if ((z1 > z2 && z <= z1 && z >= z2) || (z1 < z2 && x >= z1 && z <= z2))
+                {
                     return true;
+                }
                 else
+                {
                     return false;
+                }
             }
             else
+            {
                 return false;
+            }
         }
         else
+        {
             return false;
+        }
     }
 
     /**
      * Parse a cuboid area from a string
      *
-     * @param areaString
-     * @return an int array of 2 x, y, z coordinate or null if parse failed
+     * @param areaString a string of two x, y, z coordinates in the format "0 0 0 0 0 0"
+     * @return an int array of two x, y, z coordinates or null if parse failed
      */
     @Nullable
     public static int[] parseArea (@NotNull String areaString)

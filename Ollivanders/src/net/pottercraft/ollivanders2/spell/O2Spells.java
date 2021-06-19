@@ -4,6 +4,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.common.Cuboid;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -61,7 +62,13 @@ public class O2Spells
 
     private final static String allowedList = "allowed-spells";
     private final static String disallowList = "disallowed-spells";
+    private final static String globalZoneName = "global";
+    private final static String none = "NONE";
+    private final static String all = "ALL";
 
+    /**
+     * Type of spell zones that can be defined
+     */
     private enum SpellZoneType
     {
         CUBOID,
@@ -70,13 +77,14 @@ public class O2Spells
     }
 
     /**
-     * A zone that spells can be explicitly allowed and disallowed
+     * A zone that spells can be explicitly allowed and disallowed for
      */
     private class SpellZone
     {
         String zoneName;
         SpellZoneType zoneType;
         final Cuboid cuboid;
+        String zoneWorldName;
 
         ArrayList<O2SpellType> disallowedSpells;
         ArrayList<O2SpellType> allowedSpells;
@@ -95,45 +103,18 @@ public class O2Spells
         {
             zoneName = name;
             zoneType = type;
+            zoneWorldName = world;
 
             if (type == SpellZoneType.CUBOID)
-                cuboid = new Cuboid(world, area);
+                cuboid = new Cuboid(zoneWorldName, area);
             else
             {
                 int[] emptyArea = {0, 0, 0, 0, 0, 0};
-                cuboid = new Cuboid(world, emptyArea);
+                cuboid = new Cuboid(zoneWorldName, emptyArea);
             }
 
             disallowedSpells = disallowed;
             allowedSpells = allowed;
-        }
-
-        /**
-         * Is the spell allowed in this zone
-         *
-         * @param spellType the spell to check
-         * @return true if allowed, false otherwise
-         */
-        public boolean isAllowed (@NotNull O2SpellType spellType, @NotNull Location location)
-        {
-            // is this a world guard zone and the location is in a WG rehion with this name
-            // OR this is a cuboid area and the location is inside the cuboid
-            if ((zoneType == SpellZoneType.WORLD && location.getWorld().getName().equalsIgnoreCase(zoneName))
-                    || (zoneType == SpellZoneType.WORLD_GUARD && !Ollivanders2.worldGuardO2.isLocationInRegionByName(zoneName, location))
-                    || (zoneType == SpellZoneType.CUBOID) && !cuboid.isInside(location))
-            {
-                common.printDebugMessage("O2Spells.isAllowed: location is not in zone " + zoneName, null, null, false);
-                return false;
-            }
-
-            common.printDebugMessage("O2Spells.isAllowed: location is in zone " + zoneName, null, null, false);
-
-            // check allowed list
-            if (allowedSpells.size() > 0)
-                return allowedSpells.contains(spellType);
-
-            // check disallowed list
-            return !(disallowedSpells.contains(spellType));
         }
     }
 
@@ -221,46 +202,18 @@ public class O2Spells
 
         for (String zone : zoneConfig.getKeys(false))
         {
-            if (zone.equalsIgnoreCase("global"))
+            if (zone.equalsIgnoreCase(globalZoneName))
             {
-                loadGlobalZoneConfig(p);
+                common.printDebugMessage("Loading global zone config:", null, null, false);
+
+                globalAllowedSpells = getSpellsForZone(globalZoneName, allowedList);
+                globalDisallowedSpells = getSpellsForZone(globalZoneName, disallowList);
             }
             else
             {
+                common.printDebugMessage("Loading zone config for " + zone + ":", null, null, false);
+
                 loadZoneConfig(zone, p);
-            }
-        }
-    }
-
-    /**
-     * Load global zone spell allow/disallow lists
-     *
-     * @param p a callback to the plugin
-     */
-    private void loadGlobalZoneConfig (@NotNull Ollivanders2 p)
-    {
-        String global = "global";
-
-        // check allowed first since globalAllowedSpells has precedence over globalDisallowedSpells
-        globalAllowedSpells = getSpellsForZone(global, allowedList);
-        if (globalAllowedSpells.size() > 0)
-        {
-            p.getLogger().info("Setting globally allowed spells: ");
-            for (O2SpellType spellType : globalAllowedSpells)
-            {
-                p.getLogger().info("  - " + spellType.toString());
-            }
-
-            return;
-        }
-
-        globalDisallowedSpells = getSpellsForZone(global, disallowList);
-        if (globalDisallowedSpells.size() > 0)
-        {
-            p.getLogger().info("Setting globally disallowed spells: ");
-            for (O2SpellType spellType : globalDisallowedSpells)
-            {
-                p.getLogger().info("  - " + spellType.toString());
             }
         }
     }
@@ -284,6 +237,7 @@ public class O2Spells
         }
         catch (Exception e)
         {
+            common.printDebugMessage("O2Spells.loadZoneConfig: zone " + zoneName + " has invalid type " + typeString, null, null, true);
             return;
         }
 
@@ -294,7 +248,7 @@ public class O2Spells
 
             if (world == null || world.length() < 1)
             {
-                common.printDebugMessage("O2Spells.loadZoneConfig: world or cuboid zone " + zoneName + " with no world name set, ignored.", null, null, false);
+                common.printDebugMessage("O2Spells.loadZoneConfig: world or cuboid zone " + zoneName + " with no world name set, ignored.", null, null, true);
                 return;
             }
         }
@@ -307,13 +261,16 @@ public class O2Spells
 
             if (areaString == null || areaString.length() < 1)
             {
-                common.printDebugMessage("O2Spells.loadZoneConfig: cuboid zone " + zoneName + " with no area coordinates set, ignored", null, null, false);
+                common.printDebugMessage("O2Spells.loadZoneConfig: cuboid zone " + zoneName + " with no area coordinates set, ignored", null, null, true);
                 return;
             }
 
             area = Cuboid.parseArea(areaString);
             if (area == null)
+            {
+                common.printDebugMessage("O2Spells.loadZoneConfig: zone " + zoneName + " has invalid area " + areaString, null, null, true);
                 return;
+            }
         }
 
         ArrayList<O2SpellType> allowed = getSpellsForZone(zoneName, allowedList);
@@ -336,11 +293,15 @@ public class O2Spells
     {
         ArrayList<O2SpellType> spellList = new ArrayList<>();
 
+        common.printDebugMessage(list + ":", null, null, false);
+
         for (String spell : zoneConfig.getStringList(zoneName + "." + list))
         {
             O2SpellType spellType = O2SpellType.spellTypeFromString(spell.toUpperCase());
             if (spellType != null && isLoaded(spellType))
             {
+                common.printDebugMessage(" - " + spellType.toString(), null, null, false);
+
                 spellList.add(spellType);
             }
         }
@@ -351,36 +312,158 @@ public class O2Spells
     /**
      * Check if a spell is allowed based on zone config
      *
-     * @param spellType the spell type to check
      * @param location the location of the spell
+     * @param spellType the spell type to check
      * @return true if spell is allowed, false otherwise
      */
-    public boolean checkSpellZoneConfig (@NotNull O2SpellType spellType, @NotNull Location location)
+    public boolean isSpellTypeAllowed (@NotNull Location location, @NotNull O2SpellType spellType)
     {
         if (!isLoaded(spellType))
             return false;
 
+        // first check global allow lists
+        if (globalAllowedSpells.size() > 0)
+        {
+            if (globalAllowedSpells.contains(spellType))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
+        // check world permissions
+        for (SpellZone zone : spellZones)
+        {
+            if (zone.zoneType != SpellZoneType.WORLD)
+                continue;
+
+            World world = location.getWorld();
+            if (world == null)
+            {
+                common.printDebugMessage("O2Spells.isSpellTypeAllowed: null world on spell location", null, null, true);
+                return false;
+            }
+
+            if (world.getName().equalsIgnoreCase(zone.zoneWorldName) && zone.allowedSpells.size() > 0)
+            {
+                if (zone.allowedSpells.contains(spellType))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        // check world guard zone permissions
+        for (SpellZone zone : spellZones)
+        {
+            if (zone.zoneType != SpellZoneType.WORLD_GUARD)
+                continue;
+
+            if (Ollivanders2.worldGuardO2.isLocationInRegionByName(zone.zoneName, location) && zone.allowedSpells.size() > 0)
+            {
+                if (zone.allowedSpells.contains(spellType))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        // check cuboid zone permissions
+        for (SpellZone zone : spellZones)
+        {
+            if (zone.zoneType != SpellZoneType.CUBOID)
+                continue;
+
+            if (zone.cuboid.isInside(location, common) && zone.allowedSpells.size() > 0)
+            {
+                if (zone.allowedSpells.contains(spellType))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        if (isExplicitlyDisallowed(location, spellType))
+        {
+            return false;
+        }
 
         return true;
     }
 
     /**
-     * Check if a spell is allowed based on zone config
+     * Determine if this spell is explicitly disallowed
      *
-     * @param spellname the name of the spell
-     * @param location the location of the spell
-     * @return true if spell is allowed, false otherwise
+     * @param location the location to check
+     * @param spellType the spell type
+     * @return true if the spell is explicitly disallowed at this location, false otherwise
      */
-    public boolean checkSpellZoneConfig (@NotNull String spellname, @NotNull Location location)
+    private boolean isExplicitlyDisallowed (@NotNull Location location, @NotNull O2SpellType spellType)
     {
-        O2SpellType spellType = O2SpellType.spellTypeFromString(spellname);
-
-        if (spellType != null)
+        // first check global disallow lists
+        if (globalDisallowedSpells.contains(spellType))
         {
-            return checkSpellZoneConfig(spellType, location);
-        }
-        else
             return true;
+        }
+
+        // check world permissions
+        for (SpellZone zone : spellZones)
+        {
+            if (zone.zoneType != SpellZoneType.WORLD)
+                continue;
+
+            World world = location.getWorld();
+            if (world == null)
+            {
+                common.printDebugMessage("O2Spells.isSpellTypeAllowed: null world on spell location", null, null, true);
+                return true;
+            }
+
+            if (world.getName().equalsIgnoreCase(zone.zoneWorldName) && zone.disallowedSpells.contains(spellType))
+            {
+                return true;
+            }
+        }
+
+        // check world guard zone permissions
+        for (SpellZone zone : spellZones)
+        {
+            if (zone.zoneType != SpellZoneType.WORLD_GUARD)
+                continue;
+
+            if (Ollivanders2.worldGuardO2.isLocationInRegionByName(zone.zoneName, location) && zone.disallowedSpells.contains(spellType))
+            {
+                return true;
+            }
+        }
+
+        // check cuboid zone permissions
+        for (SpellZone zone : spellZones)
+        {
+            if (zone.zoneType != SpellZoneType.CUBOID)
+                continue;
+
+            if (zone.cuboid.isInside(location, common) && zone.disallowedSpells.contains(spellType))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
