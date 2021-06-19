@@ -1,7 +1,9 @@
 package net.pottercraft.ollivanders2.common;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An Area Cuboid
@@ -10,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Cuboid
 {
+    String worldName;
+
     int x1 = 0;
     int y1 = 0;
     int z1 = 0;
@@ -20,10 +24,13 @@ public class Cuboid
     /**
      * Constructor
      *
+     * @param world the name of the world this cuboid is in
      * @param area two opposite corner points of the Cuboid
      */
-    public Cuboid (@NotNull int[] area)
+    public Cuboid (@NotNull String world, @NotNull int[] area)
     {
+        worldName = world;
+
         if (area.length == 6)
         {
             int x1 = area[0];
@@ -43,19 +50,27 @@ public class Cuboid
      */
     public boolean isInside (@NotNull Location location)
     {
-        return isInside((int)(location.getY()), (int)(location.getX()), (int)(location.getZ()));
+        World world = location.getWorld();
+        if (world == null)
+            return false;
+
+        return isInside(world.getName(), (int)(location.getY()), (int)(location.getX()), (int)(location.getZ()));
     }
 
     /**
-     * Is the location inside this Cuboid
+     * Is the location point inside this Cuboid
      *
+     * @param world the name of the world this point is in
      * @param x the x-coordinate
      * @param y the y-coordinate
      * @param z the z-coordinate
      * @return true if inside, false otherwise
      */
-    public boolean isInside (int x, int y, int z)
+    public boolean isInside (String world, int x, int y, int z)
     {
+        if (!worldName.equalsIgnoreCase(world))
+            return false;
+
         if ((x1 > x2 && x < x1 && x > x2) || (x1 < x2 && x > x1 && x < x2))
         {
             if ((y1 > y2 && y < y1 && y > y2) || (y1 < y2 && y > y1 && y < y2))
@@ -70,6 +85,41 @@ public class Cuboid
         }
         else
             return false;
+    }
+
+    /**
+     * Parse a cuboid area from a string
+     *
+     * @param areaString
+     * @return an int array of 2 x, y, z coordinate or null if parse failed
+     */
+    @Nullable
+    public static int[] parseArea (@NotNull String areaString)
+    {
+        if (!areaString.contains(" "))
+            return null;
+
+        String[] splits = areaString.split(" ");
+        if (splits.length != 6)
+            return null;
+
+        int[] area = new int[6];
+
+        try
+        {
+            area[0] = Integer.parseInt(splits[0]);
+            area[1] = Integer.parseInt(splits[1]);
+            area[2] = Integer.parseInt(splits[2]);
+            area[3] = Integer.parseInt(splits[3]);
+            area[4] = Integer.parseInt(splits[4]);
+            area[5] = Integer.parseInt(splits[5]);
+        }
+        catch (Exception e)
+        {
+            return null;
+        }
+
+        return area;
     }
 }
 

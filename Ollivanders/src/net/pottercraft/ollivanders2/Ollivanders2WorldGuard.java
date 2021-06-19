@@ -7,6 +7,7 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Bukkit;
@@ -179,5 +180,28 @@ public class Ollivanders2WorldGuard
 
       LocalPlayer wgPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
       return regionSet.testState(wgPlayer, Flags.BUILD);
+   }
+
+   /**
+    * Determine if a location is in a region by name
+    *
+    * @param regionName the name of the region to check
+    * @param location the location to check
+    * @return true if it is inside a region with this name, false otherwise
+    */
+   public boolean isLocationInRegionByName(String regionName, Location location)
+   {
+      ApplicableRegionSet regionSet = getWGRegionSet(location);
+
+      if (regionSet == null || regionSet.size() < 1)
+         return false;
+
+      for (ProtectedRegion region : regionSet.getRegions())
+      {
+         if (region.getId().equalsIgnoreCase(regionName))
+            return true;
+      }
+
+      return false;
    }
 }
