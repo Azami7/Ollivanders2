@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2;
 
 import net.pottercraft.ollivanders2.book.O2Books;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.BURNING;
 import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.BABBLING;

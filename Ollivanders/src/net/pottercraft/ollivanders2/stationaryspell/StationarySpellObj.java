@@ -8,7 +8,7 @@ import java.util.Collection;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;

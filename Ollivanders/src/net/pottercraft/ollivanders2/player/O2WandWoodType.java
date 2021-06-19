@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.player;
 
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
