@@ -176,7 +176,7 @@ public class O2Prophecies
    {
       List<Map<String, String>> prophecies = serializeProphecies();
 
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       gsonLayer.writeSaveData(prophecies, GsonDAO.o2PropheciesJSONFile);
    }
 
@@ -185,7 +185,7 @@ public class O2Prophecies
     */
    private void loadProphecies ()
    {
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       List<Map<String, String>> prophecies = gsonLayer.readSavedDataListMap(GsonDAO.o2PropheciesJSONFile);
 
       if (prophecies == null)

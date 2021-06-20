@@ -1,12 +1,14 @@
 package net.pottercraft.ollivanders2;
 
 import net.pottercraft.ollivanders2.book.O2Books;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.divination.O2Prophecies;
 import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.item.O2Items;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2Players;
 import net.pottercraft.ollivanders2.potion.O2Potions;
+import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells;
 import org.jetbrains.annotations.NotNull;
@@ -24,18 +26,25 @@ public class Ollivanders2API
    private static O2StationarySpells stationarySpells;
    private static O2Prophecies prophecies;
    private static O2Items items;
+   private static Ollivanders2OwlPost owlPost;
 
    public static O2PlayerCommon playerCommon;
    public static Ollivanders2Common common;
 
    static void init (@NotNull Ollivanders2 p)
    {
-      common = new Ollivanders2Common(p);
+      if (common == null)
+      {
+         common = new Ollivanders2Common(p);
+      }
    }
 
    static void initHouses (@NotNull Ollivanders2 p)
    {
-      houses = new O2Houses(p);
+      if (houses == null)
+      {
+         houses = new O2Houses(p);
+      }
    }
 
    static void saveHouses ()
@@ -61,9 +70,16 @@ public class Ollivanders2API
 
    static void initPlayers (@NotNull Ollivanders2 p)
    {
-      players = new O2Players(p);
-      players.loadO2Players();
-      playerCommon = new O2PlayerCommon(p);
+      if (players == null)
+      {
+         players = new O2Players(p);
+         players.loadO2Players();
+      }
+
+      if (playerCommon == null)
+      {
+         playerCommon = new O2PlayerCommon(p);
+      }
    }
 
    static void savePlayers()
@@ -89,7 +105,10 @@ public class Ollivanders2API
 
    static void initBooks (@NotNull Ollivanders2 p)
    {
-      books = new O2Books(p);
+      if (books == null)
+      {
+         books = new O2Books(p);
+      }
    }
 
    /**
@@ -109,7 +128,13 @@ public class Ollivanders2API
 
    static void initSpells(@NotNull Ollivanders2 p)
    {
-      spells = new O2Spells(p);
+      if (spells == null)
+      {
+         spells = new O2Spells(p);
+      }
+
+      // load any spell static data
+      APPARATE.loadApparateLocations(p);
    }
 
    /**
@@ -127,9 +152,12 @@ public class Ollivanders2API
       return spells;
    }
 
-   static void initPotions (Ollivanders2 p)
+   static void initPotions (@NotNull Ollivanders2 p)
    {
-      potions = new O2Potions(p);
+      if (potions == null)
+      {
+         potions = new O2Potions(p);
+      }
    }
 
    /**
@@ -147,9 +175,12 @@ public class Ollivanders2API
       return potions;
    }
 
-   static void initStationarySpells (Ollivanders2 p)
+   static void initStationarySpells (@NotNull Ollivanders2 p)
    {
-      stationarySpells = new O2StationarySpells(p);
+      if (stationarySpells == null)
+      {
+         stationarySpells = new O2StationarySpells(p);
+      }
    }
 
    static void saveStationarySpells ()
@@ -173,9 +204,12 @@ public class Ollivanders2API
       return stationarySpells;
    }
 
-   static void initProphecies (Ollivanders2 p)
+   static void initProphecies (@NotNull Ollivanders2 p)
    {
-      prophecies = new O2Prophecies(p);
+      if (prophecies == null)
+      {
+         prophecies = new O2Prophecies(p);
+      }
    }
 
    static void saveProphecies ()
@@ -199,9 +233,12 @@ public class Ollivanders2API
       return prophecies;
    }
 
-   public static void initItems (Ollivanders2 p)
+   public static void initItems (@NotNull Ollivanders2 p)
    {
-      items = new O2Items(p);
+      if (items == null)
+      {
+         items = new O2Items(p);
+      }
    }
 
    /**
@@ -217,5 +254,33 @@ public class Ollivanders2API
          initItems(p);
 
       return items;
+   }
+
+   /**
+    * Set up owl post
+    *
+    * @param p a callback to the plugin
+    */
+   public static void initOwlPost (@NotNull Ollivanders2 p)
+   {
+      if (owlPost == null)
+      {
+         owlPost = new Ollivanders2OwlPost(p);
+      }
+   }
+
+   /**
+    * Get the owl post management object
+    *
+    * @param p a callback to the plugin
+    * @return the owlPost management object
+    */
+   @NotNull
+   public static Ollivanders2OwlPost getOwlPost (@NotNull Ollivanders2 p)
+   {
+      if (owlPost == null)
+         initOwlPost(p);
+
+      return owlPost;
    }
 }

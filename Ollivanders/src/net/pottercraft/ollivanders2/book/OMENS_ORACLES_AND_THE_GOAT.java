@@ -18,9 +18,7 @@ public class OMENS_ORACLES_AND_THE_GOAT extends O2Book
     {
         super(plugin);
 
-        shortTitle = title = "Omens, Oracles & the Goat";
-        author = "Bathilda Bagshot";
-        branch = O2MagicBranch.DIVINATION;
+        bookType = O2BookType.OMENS_ORACLES_AND_THE_GOAT;
 
         spells.add(O2SpellType.OVOGNOSIS);
         spells.add(O2SpellType.CARTOMANCIE);

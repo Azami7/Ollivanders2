@@ -1,10 +1,12 @@
 package net.pottercraft.ollivanders2.player;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Wand wood types
@@ -79,5 +81,20 @@ public enum O2WandWoodType
          woods.add(woodType.getLabel());
 
       return woods;
+   }
+
+   /**
+    * Get a random wand wood by name
+    *
+    * @return a random wand wood name
+    */
+   @NotNull
+   public static String getRandomWoodByName()
+   {
+      int rand = Ollivanders2Common.random.nextInt();
+      List<String> woods = getAllWoodsByName();
+
+      int index = Math.abs(rand % woods.size());
+      return woods.get(index);
    }
 }

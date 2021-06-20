@@ -17,9 +17,7 @@ public class NUMEROLOGY_AND_GRAMMATICA extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Numerology and Grammatica";
-      author = "Unknown";
-      branch = O2MagicBranch.ARITHMANCY;
+      bookType = O2BookType.NUMEROLOGY_AND_GRAMMATICA;
 
       openingPage = "The study of Arithmancy is not for the weak of mind. With work and dedication, one can learn the secrets of the Universe by understanding the language of numbers.";
 

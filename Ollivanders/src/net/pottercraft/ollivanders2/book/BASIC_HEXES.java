@@ -18,10 +18,7 @@ public class BASIC_HEXES extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Basic Hexes";
-      title = "Basic Hexes for the Busy and Vexed";
-      author = "Unknown";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.BASIC_HEXES;
 
       spells.add(O2SpellType.MUCUS_AD_NAUSEAM);
       spells.add(O2SpellType.IMPEDIMENTA);

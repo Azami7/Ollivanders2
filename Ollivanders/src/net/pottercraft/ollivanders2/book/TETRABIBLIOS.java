@@ -18,9 +18,7 @@ public class TETRABIBLIOS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Tetrabilios";
-      author = "Ptolemy";
-      branch = O2MagicBranch.DIVINATION;
+      bookType = O2BookType.TETRABIBLIOS;
 
       spells.add(O2SpellType.ASTROLOGIA);
       spells.add(O2SpellType.PROPHETEIA);

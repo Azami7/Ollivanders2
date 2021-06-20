@@ -11,10 +11,6 @@ commands:
     description: This is the main admin command for the Ollivanders2 plugin
     usage: Example usage /Ollivanders2
 
-  Quidd:
-    description: This command creates a Quidditch arena.
-    usage: Example usage /Quidd Hogwarts
-
   Olli:
     description: This is a shortened-form version of the main plugin command
     usage: Example usage /Olli

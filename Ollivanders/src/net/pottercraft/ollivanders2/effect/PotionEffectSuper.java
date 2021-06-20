@@ -1,7 +1,7 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -33,7 +33,7 @@ public abstract class PotionEffectSuper extends O2Effect
    }
 
    /**
-    * Age this effect each game tick.
+    * Do the effect immediately on the target and kill.
     */
    @Override
    public void checkEffect()

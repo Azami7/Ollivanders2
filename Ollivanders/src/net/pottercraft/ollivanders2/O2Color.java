@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;

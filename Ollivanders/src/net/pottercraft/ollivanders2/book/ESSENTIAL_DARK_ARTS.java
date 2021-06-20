@@ -17,10 +17,7 @@ public class ESSENTIAL_DARK_ARTS extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Essential Dark Arts Defence";
-      title = "The Essential Defence Against the Dark Arts";
-      author = "Arsenius Jigger";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.ESSENTIAL_DARK_ARTS;
 
       spells.add(O2SpellType.CARPE_RETRACTUM);
       spells.add(O2SpellType.GLACIUS);

@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -552,7 +552,7 @@ public class O2Effects
       if (activeEffects.containsKey(effectType))
       {
          O2Effect effect = activeEffects.get(effectType);
-         effect.duration -= amount;
+         effect.duration = effect.duration - amount;
       }
 
       effectsData.updatePlayerActiveEffects(pid, activeEffects);
@@ -583,7 +583,7 @@ public class O2Effects
 
          if (!effect.isPermanent())
          {
-            effect.duration -= effect.duration * (percent / 100);
+            effect.duration = effect.duration - (effect.duration * (percent / 100));
          }
       }
 

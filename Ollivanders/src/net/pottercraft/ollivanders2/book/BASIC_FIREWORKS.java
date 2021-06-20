@@ -17,9 +17,7 @@ public final class BASIC_FIREWORKS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Basic Fireworks";
-      author = "George Weasley";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.BASIC_FIREWORKS;
 
       spells.add(O2SpellType.BOTHYNUS);
       spells.add(O2SpellType.COMETES);

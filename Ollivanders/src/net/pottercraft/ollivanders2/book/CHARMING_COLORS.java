@@ -17,9 +17,7 @@ public final class CHARMING_COLORS extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Charming Colors";
-      author = "Nymphadora Tonks";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.CHARMING_COLORS;
 
       openingPage = "\"Mere color, unspoiled by meaning, and unallied with definite form, can speak to the soul in a thousand different ways.\"";
 

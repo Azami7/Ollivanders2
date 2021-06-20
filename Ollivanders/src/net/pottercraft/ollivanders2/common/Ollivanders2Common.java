@@ -1,4 +1,4 @@
-package net.pottercraft.ollivanders2;
+package net.pottercraft.ollivanders2.common;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,7 +13,10 @@ import java.util.Random;
 import java.util.UUID;
 
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
+import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.O2ItemType;
+import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -57,6 +60,8 @@ public class Ollivanders2Common
    private static final String locationZLabel = "Z-Value";
 
    public static final int ticksPerSecond = 20;
+   public static final int ticksPerMinute = ticksPerSecond * 60;
+   public static final int ticksPerHour = ticksPerMinute * 60;
 
    public static final List<EntityType> smallFriendlyAnimals = new ArrayList<>()
    {{
@@ -104,7 +109,7 @@ public class Ollivanders2Common
       add(EntityType.DROWNED);
       add(EntityType.HUSK);
       add(EntityType.PHANTOM);
-      add(EntityType.PIG_ZOMBIE);
+      add(EntityType.ZOMBIFIED_PIGLIN);
       add(EntityType.SKELETON);
       add(EntityType.SKELETON_HORSE);
       add(EntityType.STRAY);
@@ -367,13 +372,16 @@ public class Ollivanders2Common
    {
       double distance;
 
+      if (sourceLocation.getWorld() != checkLocation.getWorld())
+         return false;
+
       try
       {
          distance = checkLocation.distance(sourceLocation);
       }
       catch (Exception e)
       {
-         // this call can generate java.lang.IllegalArgumentException: Cannot measure distance between world_nether and world
+         e.printStackTrace();
          return false;
       }
 
@@ -1149,7 +1157,7 @@ public class Ollivanders2Common
       if (wand == null)
          return null;
 
-      lore.add(wood + " and " + core);
+      lore.add(wood + O2PlayerCommon.wandLoreConjunction + core);
       ItemMeta meta = wand.getItemMeta();
 
       if (meta == null)
@@ -1428,5 +1436,48 @@ public class Ollivanders2Common
       {
          p.getLogger().info(message);
       }
+   }
+
+   /**
+    * Does the item stack match the described item
+    *
+    * @param itemStack the item stack to check
+    * @param material the target material
+    * @param name the target item name
+    * @param lore the target item lore, match is checked on the 0th index lore string
+    * @param amount the amount of the item, < 1 to ignore the amount
+    * @return true if the item stack matches, false otherwise
+    */
+   public boolean matchesItem (@NotNull ItemStack itemStack, @NotNull Material material, @NotNull String name, @NotNull String lore, int amount)
+   {
+      // check amount
+      if (itemStack.getAmount() < 1 || (amount > 0 && (itemStack.getAmount() != amount)))
+         return false;
+
+      // check material
+      if (itemStack.getType() != material)
+         return false;
+
+      // check name and lore
+      ItemMeta meta = itemStack.getItemMeta();
+      if (meta == null)
+         return false;
+
+      String itemName = meta.getDisplayName();
+      if (!itemName.equalsIgnoreCase(name))
+         return false;
+
+      // don't check lore on written books
+      if (material != Material.WRITTEN_BOOK)
+      {
+         List<String> itemLore = meta.getLore();
+         if (itemLore == null || itemLore.size() < 1)
+            return false;
+
+         if (!itemLore.get(0).equalsIgnoreCase(lore))
+            return false;
+      }
+
+      return true;
    }
 }

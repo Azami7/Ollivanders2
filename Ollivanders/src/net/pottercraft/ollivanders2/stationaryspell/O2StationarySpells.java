@@ -10,7 +10,7 @@ import java.util.UUID;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
@@ -205,7 +205,7 @@ public class O2StationarySpells
    {
       List <Map<String, String>> serializedList = serializeO2StationarySpells();
 
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       gsonLayer.writeSaveData(serializedList, GsonDAO.o2StationarySpellsJSONFile);
    }
 
@@ -214,7 +214,7 @@ public class O2StationarySpells
     */
    void loadO2StationarySpells ()
    {
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       List<Map<String, String>> serializedSpells = gsonLayer.readSavedDataListMap(GsonDAO.o2StationarySpellsJSONFile);
 
       if (serializedSpells == null)

@@ -9,11 +9,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import net.pottercraft.ollivanders2.Ollivanders2Common;
-import net.pottercraft.ollivanders2.house.O2HouseType;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.O2Color;
+import net.pottercraft.ollivanders2.player.events.OllivandersPlayerFoundWandEvent;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
@@ -211,7 +211,7 @@ public class O2Player
 
          if (wandWood.equalsIgnoreCase(comps[0]) && wandCore.equalsIgnoreCase(comps[1]))
          {
-            foundWand = true;
+            setFoundWand(true);
             isMuggle = false;
             return true;
          }
@@ -231,11 +231,11 @@ public class O2Player
     *
     * @return the wand lore for the players destined wand
     */
-   @Nullable
+   @NotNull
    public String getDestinedWandLore()
    {
-      if (wandWood == null)
-         return null;
+      if (wandWood == null || wandCore == null)
+         initDestinedWand();
 
       return wandWood + O2PlayerCommon.wandLoreConjunction + wandCore;
    }
@@ -245,9 +245,12 @@ public class O2Player
     *
     * @return the player's destined wand wood type
     */
-   @Nullable
+   @NotNull
    public String getWandWood ()
    {
+      if (wandWood == null)
+         initDestinedWand();
+
       return wandWood;
    }
 
@@ -256,9 +259,12 @@ public class O2Player
     *
     * @return the player's destined wand core type
     */
-   @Nullable
+   @NotNull
    public String getWandCore ()
    {
+      if (wandCore == null)
+         initDestinedWand();
+
       return wandCore;
    }
 
@@ -752,12 +758,30 @@ public class O2Player
    }
 
    /**
+    * Initializer for the foundWand class variable for loading the player object.
+    *
+    * @param b the value to set for foundWand
+    */
+   protected void initFoundWand (boolean b)
+   {
+      foundWand = b;
+   }
+
+   /**
     * Set whether the player has found their destined wand before.
     *
     * @param b set whether the player has found their destined wand
     */
    public void setFoundWand (boolean b)
    {
+      if (foundWand != true && b == true)
+      {
+         OllivandersPlayerFoundWandEvent event = new OllivandersPlayerFoundWandEvent(p.getServer().getPlayer(pid));
+
+         p.getServer().getPluginManager().callEvent(event);
+         common.printDebugMessage("Fired PlayerFoundWandEvent", null, null, false);
+      }
+
       foundWand = b;
    }
 
@@ -1087,43 +1111,6 @@ public class O2Player
    {
       Ollivanders2API.getPlayers(p).playerEffects.onJoin(pid);
       Ollivanders2API.getProphecies(p).onJoin(pid);
-   }
-
-   /**
-    * Show log in message
-    */
-   @NotNull
-   public String getLogInMessage ()
-   {
-      p.getLogger().info("creating log in message");
-
-      // check to see what they have done so far to let them know next steps
-      StringBuilder message = new StringBuilder();
-
-      if (Ollivanders2.useHouses)
-      {
-         O2HouseType houseType = Ollivanders2API.getHouses(p).getHouse(pid);
-         if (houseType != null)
-         {
-            message.append("\n").append(houseType.getName()).append(" is currently ").append(O2HouseType.getHousePlaceTxt(houseType)).append(".");
-         }
-      }
-
-      if (!foundWand)
-         message.append("\nFind your destined wand to begin using magic.");
-      else if (Ollivanders2.useHouses && !Ollivanders2API.getHouses(p).isSorted(pid))
-         message.append("\nGet sorted in to your school house to start earning house points.");
-      else if (knownSpells.size() < 1 && Ollivanders2.bookLearning)
-         message.append("\nFind a spell book to get started learning magic.");
-      else if (knownSpells.size() < 1)
-         message.append("\nTry casting a spell by saying the incantation and waving your wand.");
-      else if (knownPotions.size() < 1 && Ollivanders2.bookLearning)
-         message.append("\nFind a potions book and a water-filled cauldron to get started brewing potions.");
-      else if (knownPotions.size() < 1)
-         message.append("\nTry brewing a potion by using a water-filled cauldron and the potion ingredients.");
-
-      p.getLogger().info(message.toString());
-      return message.toString();
    }
 
    /**

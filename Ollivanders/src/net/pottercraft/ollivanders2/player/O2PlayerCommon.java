@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -60,6 +60,7 @@ public final class O2PlayerCommon
       add(EntityType.TRADER_LLAMA);
       add(EntityType.PANDA);
       add(EntityType.TURTLE);
+      add(EntityType.IRON_GOLEM);
    }};
 
    private static final List<EntityType> hostileAnimagusShapes = new ArrayList<>()
@@ -70,9 +71,12 @@ public final class O2PlayerCommon
       add(EntityType.CREEPER);
       add(EntityType.SILVERFISH);
       add(EntityType.SHULKER);
+      add(EntityType.HOGLIN);
+      add(EntityType.PIGLIN);
+      add(EntityType.STRIDER);
    }};
 
-   static final String wandLoreConjunction = " and ";
+   public static final String wandLoreConjunction = " and ";
 
    /**
     * Take an integer and get the corresponding year

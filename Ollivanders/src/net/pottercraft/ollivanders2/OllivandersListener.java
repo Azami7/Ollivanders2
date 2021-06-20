@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2;
 
 import net.pottercraft.ollivanders2.book.O2Books;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.BURNING;
 import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.BABBLING;
@@ -10,6 +11,8 @@ import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
+import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
+import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.Divination;
 import net.pottercraft.ollivanders2.spell.FLAGRANTE;
 import net.pottercraft.ollivanders2.spell.O2Spell;
@@ -97,6 +100,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import org.bukkit.potion.PotionEffect;
 
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -452,10 +456,7 @@ public class OllivandersListener implements Listener
          if (Ollivanders2.bookLearning && p.getO2Player(player).getSpellCount(spellType) < 1)
          {
             // if bookLearning is set to true then spell count must be > 0 to cast this spell
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: bookLearning enforced");
-            }
+            common.printDebugMessage("doSpellCasting: bookLearning enforced", null, null, false);
             player.sendMessage(Ollivanders2.chatColor + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
 
             return;
@@ -466,10 +467,7 @@ public class OllivandersListener implements Listener
          if (!Ollivanders2API.playerCommon.holdsWand(player))
          {
             // if they are not holding their destined wand, casting success is reduced
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: player not holding destined wand");
-            }
+            common.printDebugMessage("doSpellCasting: player not holding destined wand", null, null, false);
 
             int uses = p.getO2Player(player).getSpellCount(spellType);
             castSuccess = Math.random() < (1.0 - (100.0 / (uses + 101.0)));
@@ -478,23 +476,17 @@ public class OllivandersListener implements Listener
          // wandless spells
          if (O2Spells.wandlessSpells.contains(spellType) || Divination.divinationSpells.contains(spellType))
          {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: allow wandless casting of " + spellType);
-            }
+            common.printDebugMessage("doSpellCasting: allow wandless casting of " + spellType, null, null, false);
             castSuccess = true;
          }
 
          if (castSuccess)
          {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("onPlayerChat: begin casting " + spellType);
-            }
+            common.printDebugMessage("doSpellCasting: begin casting " + spellType, null, null, false);
 
             if (spellType == O2SpellType.APPARATE)
             {
-               apparate(player, words);
+               p.addProjectile(new APPARATE(p, player, 1.0, words));
             }
             else if (spellType == O2SpellType.PORTUS)
             {
@@ -532,121 +524,7 @@ public class OllivandersListener implements Listener
       }
       else
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("Either no spell cast attempted or not allowed to cast");
-         }
-      }
-   }
-
-   /**
-    * Teleports sender to either specified location or to eye target location. Respects anti-apparition and anti-disapparition spells.
-    *
-    * @param sender Player apparating
-    * @param words  Typed in words
-    */
-   private void apparate(@NotNull Player sender, @NotNull String[] words)
-   {
-      boolean canApparateOut = true;
-
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-      {
-         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(sender.getLocation()))
-         {
-            stat.flair(10);
-            canApparateOut = false;
-         }
-      }
-      if (sender.isPermissionSet("Ollivanders2.BYPASS"))
-      {
-         if (sender.hasPermission("Ollivanders2.BYPASS"))
-         {
-            canApparateOut = true;
-         }
-      }
-      if (canApparateOut)
-      {
-         int uses = p.incrementSpellCount(sender, O2SpellType.APPARATE);
-         Location from = sender.getLocation().clone();
-         Location to;
-         if (words.length == 4)
-         {
-            try
-            {
-               to = new Location(sender.getWorld(),
-                     Double.parseDouble(words[1]),
-                     Double.parseDouble(words[2]),
-                     Double.parseDouble(words[3]));
-            }
-            catch (NumberFormatException e)
-            {
-               to = sender.getLocation().clone();
-            }
-         }
-         else
-         {
-            Location eyeLocation = sender.getEyeLocation();
-            Material inMat = eyeLocation.getBlock().getType();
-            int distance = 0;
-            while ((inMat == Material.AIR || inMat == Material.FIRE || inMat == Material.WATER || inMat == Material.LAVA) && distance < 160)
-            {
-               eyeLocation = eyeLocation.add(eyeLocation.getDirection());
-               distance++;
-               inMat = eyeLocation.getBlock().getType();
-            }
-            to = eyeLocation.subtract(eyeLocation.getDirection()).clone();
-         }
-         to.setPitch(from.getPitch());
-         to.setYaw(from.getYaw());
-         double distance = from.distance(to);
-         double radius;
-
-         if (Ollivanders2API.playerCommon.holdsWand(sender))
-         {
-            radius = 1 / Math.sqrt(uses) * distance * 0.1 * Ollivanders2API.playerCommon.wandCheck(sender);
-         }
-         else
-         {
-            radius = 1 / Math.sqrt(uses) * distance * 0.01;
-         }
-         double newX = to.getX() - (radius / 2) + (radius * Math.random());
-         double newZ = to.getZ() - (radius / 2) + (radius * Math.random());
-         to.setX(newX);
-         to.setZ(newZ);
-         boolean canApparateIn = true;
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-         {
-            if (stat instanceof NULLUM_APPAREBIT && stat.isInside(to))
-            {
-               stat.flair(10);
-               canApparateIn = false;
-            }
-         }
-         if (sender.isPermissionSet("Ollivanders2.BYPASS"))
-         {
-            if (sender.hasPermission("Ollivanders2.BYPASS"))
-            {
-               canApparateIn = true;
-            }
-         }
-         if (canApparateIn)
-         {
-            p.addTeleportEvent(sender, sender.getLocation(), to, true);
-
-            // also take nearby entities with them
-            for (Entity e : sender.getWorld().getEntities())
-            {
-               if (from.distance(e.getLocation()) <= 2)
-               {
-                  if (e instanceof Player)
-                  {
-                     p.addTeleportEvent((Player) e, e.getLocation(), to, true);
-                  }
-                  else
-                     e.teleport(to);
-               }
-            }
-         }
+         common.printDebugMessage("doSpellCasting: Either no spell cast attempted or not allowed to cast", null, null, false);
       }
    }
 
@@ -658,70 +536,19 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGH)
    public void owlPost (@NotNull AsyncPlayerChatEvent event)
    {
-      Player sender = event.getPlayer();
-      Server server = sender.getServer();
-      World world = sender.getWorld();
       String message = event.getMessage();
-      String[] splitString = message.split("\\s+", 3);
-      if (splitString.length == 3)
+
+      if (!message.toLowerCase().startsWith(Ollivanders2OwlPost.deliveryKeyword.toLowerCase()))
+         return;
+
+      new BukkitRunnable()
       {
-         if (splitString[0].equalsIgnoreCase("deliver") && splitString[1].equalsIgnoreCase("to"))
+         @Override
+         public void run()
          {
-            for (Entity entity : world.getEntities())
-            {
-               if (entity.getLocation().distance(sender.getLocation()) <= 10)
-               {
-                  Creature owl;
-                  if (entity instanceof Parrot)
-                  {
-                     owl = (Parrot) entity;
-                  }
-                  else
-                  {
-                     continue;
-                  }
-
-                  for (Entity item : world.getEntities())
-                  {
-                     if (item instanceof Item && item.getLocation().distance(owl.getLocation()) <= 2)
-                     {
-                        Player recipient = server.getPlayer(splitString[2]);
-                        if (recipient != null)
-                        {
-                           if (recipient.isOnline())
-                           {
-                              if (recipient.getWorld().getUID().equals(world.getUID()))
-                              {
-                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
-
-                                 owl.teleport(recipient.getLocation());
-                                 item.teleport(recipient.getLocation());
-                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
-                              }
-                              else
-                              {
-                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                                 sender.sendMessage(Ollivanders2.chatColor + splitString[2] + " is not in this world.");
-                              }
-                           }
-                           else
-                           {
-                              world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                              sender.sendMessage(Ollivanders2.chatColor + splitString[2] + " is not online.");
-                           }
-                        }
-                        else
-                        {
-                           world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                           sender.sendMessage(Ollivanders2.chatColor + splitString[2] + " is not online.");
-                        }
-                        return;
-                     }
-                  }
-               }
-            }
+            Ollivanders2API.getOwlPost(p).processOwlPostRequest(event.getPlayer(), message);
          }
-      }
+      }.runTaskLater(p, 3);
    }
 
    /**
@@ -963,6 +790,21 @@ public class OllivandersListener implements Listener
                location.setY(location.getY() + 1.6);
                player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
                player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
+               p.getO2Player(player).setFoundWand(true);
+            }
+            else
+            {
+               new BukkitRunnable()
+               {
+                  @Override
+                  public void run()
+                  {
+                     OllivandersPlayerNotDestinedWandEvent wandEvent = new OllivandersPlayerNotDestinedWandEvent(player);
+
+                     p.getServer().getPluginManager().callEvent(wandEvent);
+                     common.printDebugMessage("Fired OllivandersPlayerNotDestinedWandEvent",null,null,false);
+                  }
+               }.runTaskLater(p, 3);
             }
          }
       }
@@ -1044,23 +886,6 @@ public class OllivandersListener implements Listener
 
       // re-add them to player list (in case they have changed from above actions)
       p.setO2Player(player, o2p);
-
-      // show log in message
-      if (Ollivanders2.showLogInMessage)
-      {
-         StringBuilder message = new StringBuilder();
-
-         if (player.hasPlayedBefore())
-         {
-            message.append("Welcome back, ").append(player.getName()).append("\n").append(o2p.getLogInMessage());
-         }
-         else
-         {
-            message.append("You're a wizard, ").append(player.getName());
-         }
-
-         player.sendMessage(Ollivanders2.chatColor + message.toString());
-      }
 
       p.getLogger().info("Player " + player.getName() + " joined.");
    }

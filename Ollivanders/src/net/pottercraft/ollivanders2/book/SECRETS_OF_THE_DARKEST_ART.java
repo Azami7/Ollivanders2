@@ -17,10 +17,7 @@ public class SECRETS_OF_THE_DARKEST_ART extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Darkest Art";
-      title = "Secrets of the Darkest Art";
-      author = "Owle Bullock";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.SECRETS_OF_THE_DARKEST_ART;
 
       spells.add(O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS);
       spells.add(O2SpellType.VENTO_FOLIO);

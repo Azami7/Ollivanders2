@@ -8,6 +8,7 @@ import java.util.ListIterator;
 import java.util.Set;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.spell.GEMINIO;
@@ -38,18 +39,53 @@ import org.jetbrains.annotations.NotNull;
  */
 class OllivandersSchedule implements Runnable
 {
+   /**
+    * A callback to the plugin
+    */
    final private Ollivanders2 p;
-   private int counter = 0;
+
+   /**
+    * Counts game ticks
+    */
+   private int scheduleTimer = 0;
+
+   /**
+    * Reset the counter after this many ticks to prevent it growing unbounded
+    */
+   private final static int timerReset = 86400 * Ollivanders2Common.ticksPerSecond;
+
+   /**
+    * A list of players flying on brooms
+    */
    final private static Set<UUID> flying = new HashSet<>();
+
+   /**
+    * A list of players on brooms
+    */
    final private Set<UUID> onBroom = new HashSet<>();
 
+   /**
+    * Common functions
+    */
+   final private Ollivanders2Common common;
+
+   /**
+    * Constructor
+    *
+    * @param plugin a callback to the plugin
+    */
    OllivandersSchedule (@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
    }
 
+   /**
+    * Primary plugin thread
+    */
    public void run ()
    {
+      // run every tick
       try
       {
          projectileSched();
@@ -58,23 +94,38 @@ class OllivandersSchedule implements Runnable
          Ollivanders2API.getProphecies(p).upkeep();
          broomSched();
          teleportSched();
+         Ollivanders2API.getOwlPost(p).upkeep();
       }
       catch (Exception e)
       {
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         common.printDebugMessage("Exceoption running scheduled tasks.", e, null, true);
       }
 
-      if (counter % Ollivanders2Common.ticksPerSecond == 0)
+      // run item curse schedule once a second
+      if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 0)
       {
          itemCurseSched();
       }
-      if (counter % Ollivanders2Common.ticksPerSecond == 1)
+
+      // run invis player every second, offset from itemCurse schedule
+      if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 1)
       {
          invisPlayer();
       }
 
-      counter = (counter + 1) % Ollivanders2Common.ticksPerSecond;
+      // back up plugin data hourly
+      if (Ollivanders2.hourlyBackup && scheduleTimer % Ollivanders2Common.ticksPerHour == 0)
+      {
+         common.printDebugMessage("Saving plugin data...", null, null, false);
+
+         p.savePluginData();
+      }
+
+      // Reset the timer so it does not grow unbounded, use >= just in case a tick gets missed somehow
+      if (scheduleTimer >= timerReset)
+         scheduleTimer = 1;
+      else
+         scheduleTimer = scheduleTimer + 1;
    }
 
    /**
@@ -180,7 +231,7 @@ class OllivandersSchedule implements Runnable
       ItemMeta meta = item.getItemMeta();
       if (meta == null)
       {
-         p.getLogger().warning("Ollivanders2Schedule.geminio: item meta is null");
+         common.printDebugMessage("Ollivanders2Schedule.geminio: item meta is null", null, null, true);
          return item;
       }
 
@@ -197,7 +248,30 @@ class OllivandersSchedule implements Runnable
          if (l.contains(GEMINIO.geminio))
          {
             String[] loreParts = l.split(" ");
-            int magnitude = Integer.parseInt(loreParts[1]);
+            if (loreParts.length != 2)
+            {
+               common.printDebugMessage("Geminio item with malformed lore \"" + l + "\"", null, null, false);
+
+               // clear out the lore on this item so this doesn't happen every schedule tick
+               newLore = new ArrayList<>();
+               break;
+            }
+
+            int magnitude;
+
+            try
+            {
+               magnitude = Integer.parseInt(loreParts[1]);
+            }
+            catch (Exception e)
+            {
+               common.printDebugMessage("Geminio item with malformed lore \"" + l + "\"", null, null, false);
+
+               // clear out the lore on this item so this doesn't happen every schedule tick
+               newLore = new ArrayList<>();
+               break;
+            }
+
             if (magnitude > 1)
             {
                magnitude--;
@@ -210,6 +284,7 @@ class OllivandersSchedule implements Runnable
             newLore.add(l);
          }
       }
+
       meta.setLore(newLore);
       item.setItemMeta(meta);
       item.setAmount(stackSize);
@@ -352,7 +427,7 @@ class OllivandersSchedule implements Runnable
       {
          for (Player player : world.getPlayers())
          {
-            if (Ollivanders2API.common.isBroom(player.getInventory().getItemInMainHand()) && p.isSpellTypeAllowed(player.getLocation(), O2SpellType.VOLATUS))
+            if (Ollivanders2API.common.isBroom(player.getInventory().getItemInMainHand()) && Ollivanders2API.getSpells(p).isSpellTypeAllowed(player.getLocation(), O2SpellType.VOLATUS))
             {
                player.setAllowFlight(true);
                player.setFlying(true);
@@ -391,8 +466,7 @@ class OllivandersSchedule implements Runnable
       {
          Player player = event.getPlayer();
 
-         if (Ollivanders2.debug)
-            p.getLogger().info("Teleporting " + player.getName());
+         common.printDebugMessage("Teleporting " + player.getName(), null, null, false);
 
          Location currentLocation = event.getFromLocation();
          Location destination = event.getToLocation();
@@ -407,7 +481,7 @@ class OllivandersSchedule implements Runnable
             World destWorld = destination.getWorld();
             if (curWorld == null || destWorld == null)
             {
-               p.getLogger().warning("OllvandersSchedule.teleportSched: world is null");
+               common.printDebugMessage("OllvandersSchedule.teleportSched: world is null", null, null, true);
             }
             else
             {
@@ -420,9 +494,7 @@ class OllivandersSchedule implements Runnable
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to teleport player.");
-            if (Ollivanders2.debug)
-               e.printStackTrace();
+            common.printDebugMessage("Failed to teleport player.", e, null, true);
          }
 
          p.removeTeleportEvent(event);
