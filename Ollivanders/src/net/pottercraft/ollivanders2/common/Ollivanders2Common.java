@@ -109,7 +109,7 @@ public class Ollivanders2Common
       add(EntityType.DROWNED);
       add(EntityType.HUSK);
       add(EntityType.PHANTOM);
-      add(EntityType.ZOMBIFIED_PIGLIN);
+      add(EntityType.PIG_ZOMBIE);
       add(EntityType.SKELETON);
       add(EntityType.SKELETON_HORSE);
       add(EntityType.STRAY);

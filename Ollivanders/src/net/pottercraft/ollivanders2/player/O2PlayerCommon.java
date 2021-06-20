@@ -71,9 +71,6 @@ public final class O2PlayerCommon
       add(EntityType.CREEPER);
       add(EntityType.SILVERFISH);
       add(EntityType.SHULKER);
-      add(EntityType.HOGLIN);
-      add(EntityType.PIGLIN);
-      add(EntityType.STRIDER);
    }};
 
    public static final String wandLoreConjunction = " and ";
