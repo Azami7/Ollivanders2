@@ -94,6 +94,7 @@ class OllivandersSchedule implements Runnable
          Ollivanders2API.getProphecies(p).upkeep();
          broomSched();
          teleportSched();
+         Ollivanders2API.getOwlPost(p).upkeep();
       }
       catch (Exception e)
       {

@@ -112,7 +112,7 @@ overrideVersionCheck: false
 #      -
 #    disallowed-spells:
 #      - VOLATUS
- zones:
+zones:
   global:
     allowed-spells:
       -
