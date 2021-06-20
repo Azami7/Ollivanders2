@@ -1890,7 +1890,7 @@ public class Ollivanders2 extends JavaPlugin
 
       String versionString = Bukkit.getBukkitVersion();
 
-      if (versionString.startsWith("1.16") || versionString.startsWith("1.17"))
+      if (versionString.startsWith("1.15") || versionString.startsWith("1.16") || versionString.startsWith("1.17"))
       {
          return true;
       }
