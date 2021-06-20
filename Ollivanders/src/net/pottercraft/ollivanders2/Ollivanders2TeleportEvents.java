@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * With MV 1.14, triggering PlayerTeleportEvents from other events is no longer thread-safe. Need to create a queue of teleport events like we use for
+ * With MC 1.14, triggering PlayerTeleportEvents from other events is no longer thread-safe. Need to create a queue of teleport events like we use for
  * things like spell projectiles and effects.
  *
  * @author Azami7

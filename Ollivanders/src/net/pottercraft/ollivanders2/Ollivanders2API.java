@@ -26,6 +26,7 @@ public class Ollivanders2API
    private static O2StationarySpells stationarySpells;
    private static O2Prophecies prophecies;
    private static O2Items items;
+   private static Ollivanders2OwlPost owlPost;
 
    public static O2PlayerCommon playerCommon;
    public static Ollivanders2Common common;
@@ -253,5 +254,33 @@ public class Ollivanders2API
          initItems(p);
 
       return items;
+   }
+
+   /**
+    * Set up owl post
+    *
+    * @param p a callback to the plugin
+    */
+   public static void initOwlPost (@NotNull Ollivanders2 p)
+   {
+      if (owlPost == null)
+      {
+         owlPost = new Ollivanders2OwlPost(p);
+      }
+   }
+
+   /**
+    * Get the owl post management object
+    *
+    * @param p a callback to the plugin
+    * @return the owlPost management object
+    */
+   @NotNull
+   public static Ollivanders2OwlPost getOwlPost (@NotNull Ollivanders2 p)
+   {
+      if (owlPost == null)
+         initOwlPost(p);
+
+      return owlPost;
    }
 }

@@ -536,70 +536,19 @@ public class OllivandersListener implements Listener
    @EventHandler(priority = EventPriority.HIGH)
    public void owlPost (@NotNull AsyncPlayerChatEvent event)
    {
-      Player sender = event.getPlayer();
-      Server server = sender.getServer();
-      World world = sender.getWorld();
       String message = event.getMessage();
-      String[] splitString = message.split("\\s+", 3);
-      if (splitString.length == 3)
+
+      if (!message.toLowerCase().startsWith(Ollivanders2OwlPost.deliveryKeyword.toLowerCase()))
+         return;
+
+      new BukkitRunnable()
       {
-         if (splitString[0].equalsIgnoreCase("deliver") && splitString[1].equalsIgnoreCase("to"))
+         @Override
+         public void run()
          {
-            for (Entity entity : world.getEntities())
-            {
-               if (entity.getLocation().distance(sender.getLocation()) <= 10)
-               {
-                  Creature owl;
-                  if (entity instanceof Parrot)
-                  {
-                     owl = (Parrot) entity;
-                  }
-                  else
-                  {
-                     continue;
-                  }
-
-                  for (Entity item : world.getEntities())
-                  {
-                     if (item instanceof Item && item.getLocation().distance(owl.getLocation()) <= 2)
-                     {
-                        Player recipient = server.getPlayer(splitString[2]);
-                        if (recipient != null)
-                        {
-                           if (recipient.isOnline())
-                           {
-                              if (recipient.getWorld().getUID().equals(world.getUID()))
-                              {
-                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
-
-                                 owl.teleport(recipient.getLocation());
-                                 item.teleport(recipient.getLocation());
-                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_AMBIENT, 1, 0);
-                              }
-                              else
-                              {
-                                 world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                                 sender.sendMessage(Ollivanders2.chatColor + splitString[2] + " is not in this world.");
-                              }
-                           }
-                           else
-                           {
-                              world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                              sender.sendMessage(Ollivanders2.chatColor + splitString[2] + " is not online.");
-                           }
-                        }
-                        else
-                        {
-                           world.playSound(owl.getLocation(), Sound.ENTITY_PARROT_HURT, 1, 0);
-                           sender.sendMessage(Ollivanders2.chatColor + splitString[2] + " is not online.");
-                        }
-                        return;
-                     }
-                  }
-               }
-            }
+            Ollivanders2API.getOwlPost(p).processOwlPostRequest(event.getPlayer(), message);
          }
-      }
+      }.runTaskLater(p, 3);
    }
 
    /**

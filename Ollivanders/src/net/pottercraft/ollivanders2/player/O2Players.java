@@ -103,7 +103,7 @@ public class O2Players
    }
 
    /**
-    * Get an O2Player.
+    * Get an O2Player by UUID
     *
     * @param pid the UUID of the player
     * @return the O2Player if found, null otherwise.
@@ -112,6 +112,24 @@ public class O2Players
    public O2Player getPlayer(@NotNull UUID pid)
    {
       return O2PlayerMap.getOrDefault(pid, null);
+   }
+
+   /**
+    * Get an O2Player by name. This is inefficient compared to by UUID and should only be used when UUID is not available.
+    *
+    * @param playerName the name of the player
+    * @return the O2Player if found, null otherwise.
+    */
+   @Nullable
+   public O2Player getPlayer(@NotNull String playerName)
+   {
+      for (Entry<UUID, O2Player> entry : O2PlayerMap.entrySet())
+      {
+         if (entry.getValue().getPlayerName().equalsIgnoreCase(playerName))
+            return entry.getValue();
+      }
+
+      return null;
    }
 
    /**

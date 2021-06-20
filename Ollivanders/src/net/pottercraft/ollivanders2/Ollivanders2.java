@@ -261,6 +261,17 @@ public class Ollivanders2 extends JavaPlugin
          e.printStackTrace();
       }
 
+      // set up owl post
+      try
+      {
+         Ollivanders2API.initOwlPost(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up owl post.");
+         e.printStackTrace();
+      }
+
       // set up all plugin crafting recipes
       initRecipes();
 
