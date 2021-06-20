@@ -12,6 +12,7 @@ import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Repairs an itemstack you aim it at.
@@ -31,7 +32,7 @@ public final class REPARO extends O2Spell
       spellType = O2SpellType.REPARO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Mending Charm");
          add("Mr. Weasley took Harry's glasses, gave them a tap of his wand and returned them, good as new.");
@@ -44,11 +45,11 @@ public final class REPARO extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public REPARO (Ollivanders2 plugin, Player player, Double rightWand)
+   public REPARO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -68,6 +69,7 @@ public final class REPARO extends O2Spell
    protected void doCheckEffect ()
    {
       List<Item> items = getItems(1.5);
+
       for (Item item : items)
       {
          ItemStack stack = item.getItemStack();
@@ -76,15 +78,21 @@ public final class REPARO extends O2Spell
          if (itemMeta instanceof Damageable)
          {
             int damage = ((Damageable) itemMeta).getDamage();
-            damage -= usesModifier * usesModifier;
+
+            damage = damage - (int)usesModifier;
+
             if (damage < 0)
             {
                damage = 0;
             }
 
             ((Damageable) itemMeta).setDamage(damage);
+            stack.setItemMeta(itemMeta);
+
             item.setItemStack(stack);
             kill();
+
+            break;
          }
       }
 

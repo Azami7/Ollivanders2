@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -15,6 +15,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The super class for transfiguration projectile spells.
@@ -59,11 +61,11 @@ public abstract class Transfiguration extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public Transfiguration (Ollivanders2 plugin, Player player, Double rightWand)
+   public Transfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -80,43 +82,52 @@ public abstract class Transfiguration extends O2Spell
     * @param toStack - If transfiguring into an item, the itemstack to transfigure into
     * @return - The resulting entity.
     */
-   public Entity transfigureEntity (Entity entity, EntityType toType, ItemStack toStack)
+   @Nullable
+   public Entity transfigureEntity(@NotNull Entity entity, @Nullable EntityType toType, @Nullable ItemStack toStack)
    {
-      Location loc = location;
-      if (entity != null)
+      fromEType = entity.getType();
+      if (fromEType == EntityType.DROPPED_ITEM)
       {
-         fromEType = entity.getType();
-         if (fromEType == EntityType.DROPPED_ITEM)
+         fromStack = ((Item) entity).getItemStack();
+      }
+      if (fromEType == EntityType.FALLING_BLOCK)
+      {
+         fromStack = new ItemStack(((FallingBlock) entity).getBlockData().getMaterial());
+      }
+
+      //TODO revist this logic because I am not sure I follow what it is doing. I think it is trying to remove any existing transfigurations on the entity.
+      for (O2Spell spell : p.getProjectiles())
+      {
+         if (spell instanceof Transfiguration)
          {
-            fromStack = ((Item) entity).getItemStack();
-         }
-         if (fromEType == EntityType.FALLING_BLOCK)
-         {
-            fromStack = new ItemStack(((FallingBlock) entity).getMaterial());
-         }
-         loc = entity.getLocation();
-         for (O2Spell spell : p.getProjectiles())
-         {
-            if (spell instanceof Transfiguration)
+            Transfiguration trans = (Transfiguration) spell;
+            if (trans.getToID() == entity.getUniqueId())
             {
-               Transfiguration trans = (Transfiguration) spell;
-               if (trans.getToID() == entity.getUniqueId())
+               trans.kill();
+               Entity transEntity = trans.endTransfigure();
+               if (transEntity == null)
                {
-                  trans.kill();
-                  return transfigureEntity(trans.endTransfigure(), toType, toStack);
+                  return entity;
                }
+
+               return transfigureEntity(transEntity, toType, toStack);
             }
          }
-         entity.remove();
       }
+
+      entity.remove();
+
       hasTransfigured = true;
       Entity newEntity = null;
-      if (toType == EntityType.DROPPED_ITEM)
+      Location loc = entity.getLocation();
+
+      if (toType == EntityType.DROPPED_ITEM && toStack != null)
       {
          newEntity = player.getWorld().dropItemNaturally(loc, toStack);
       }
       else if (toType == null)
       {
+         // do not do anything
       }
       else
       {
@@ -147,6 +158,7 @@ public abstract class Transfiguration extends O2Spell
     *
     * @return The newly spawned Entity. Null if no entity was spawned from the ending of the transfiguration.
     */
+   @Nullable
    public Entity endTransfigure ()
    {
       kill();
@@ -161,10 +173,7 @@ public abstract class Transfiguration extends O2Spell
                {
                   for (ItemStack stack : ((InventoryHolder) e).getInventory().getContents())
                   {
-                     if (stack != null)
-                     {
-                        e.getWorld().dropItemNaturally(e.getLocation(), stack);
-                     }
+                     e.getWorld().dropItemNaturally(e.getLocation(), stack);
                   }
                }
                if (fromEType == null)
@@ -177,7 +186,12 @@ public abstract class Transfiguration extends O2Spell
                }
                if (fromEType.equals(EntityType.FALLING_BLOCK))
                {
-                  return e.getWorld().spawnFallingBlock(e.getLocation(), fromStack.getData().clone());
+                  if (fromStack.getData() != null)
+                  {
+                     return e.getWorld().spawnFallingBlock(e.getLocation(), fromStack.getData().clone());
+                  }
+                  else
+                     return null;
                }
                else
                {
@@ -188,13 +202,21 @@ public abstract class Transfiguration extends O2Spell
       }
       if (toID == nullUUID)
       {
-         if (fromEType.equals(EntityType.DROPPED_ITEM))
+         World world = location.getWorld();
+         if (world == null)
          {
-            return location.getWorld().dropItemNaturally(location, fromStack);
+            return null;
          }
          else
          {
-            return location.getWorld().spawnEntity(location, fromEType);
+            if (fromEType.equals(EntityType.DROPPED_ITEM))
+            {
+               return world.dropItemNaturally(location, fromStack);
+            }
+            else
+            {
+               return world.spawnEntity(location, fromEType);
+            }
          }
       }
       else
@@ -244,7 +266,7 @@ public abstract class Transfiguration extends O2Spell
          percent = 1;
       }
 
-      double reduction = spellDuration * (percent / 100);
+      double reduction = spellDuration * ((double) percent / 100);
 
       spellDuration = spellDuration - (int) reduction;
    }

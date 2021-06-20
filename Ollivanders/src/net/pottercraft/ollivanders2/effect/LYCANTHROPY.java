@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Turns player into a werewolf during the full moon. Doesn't go away until death (if deathExpLoss is set to
@@ -23,11 +24,11 @@ public class LYCANTHROPY extends ShapeShiftSuper
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
+    * @param plugin   a callback to the MC plugin
     * @param duration the duration of the effect
-    * @param pid the ID of the player this effect acts on
+    * @param pid      the ID of the player this effect acts on
     */
-   public LYCANTHROPY (Ollivanders2 plugin, Integer duration, UUID pid)
+   public LYCANTHROPY(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
 
@@ -119,11 +120,11 @@ public class LYCANTHROPY extends ShapeShiftSuper
    {
       AGGRESSION aggression = new AGGRESSION(p, 5, targetID);
       aggression.setAggressionLevel(10);
-      Ollivanders2API.getPlayers().playerEffects.addEffect(aggression);
+      Ollivanders2API.getPlayers(p).playerEffects.addEffect(aggression);
       additionalEffects.add(O2EffectType.AGGRESSION);
 
       LYCANTHROPY_SPEECH speech = new LYCANTHROPY_SPEECH(p, 5, targetID);
-      Ollivanders2API.getPlayers().playerEffects.addEffect(speech);
+      Ollivanders2API.getPlayers(p).playerEffects.addEffect(speech);
       additionalEffects.add(O2EffectType.LYCANTHROPY_SPEECH);
    }
 
@@ -134,7 +135,7 @@ public class LYCANTHROPY extends ShapeShiftSuper
    {
       for (O2EffectType effectType : additionalEffects)
       {
-         Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, effectType);
+         Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, effectType);
       }
    }
 

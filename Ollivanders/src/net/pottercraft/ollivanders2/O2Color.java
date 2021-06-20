@@ -1,10 +1,16 @@
 package net.pottercraft.ollivanders2;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
+/**
+ * Ollivanders2 colors - because MC doesn't handle colors consistently
+ */
 public enum O2Color
 {
    AQUA(Color.AQUA, ChatColor.AQUA, "§b", DyeColor.LIGHT_BLUE),
@@ -35,13 +41,22 @@ public enum O2Color
    SILVER(Color.SILVER, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY),
    TEAL(Color.TEAL, ChatColor.DARK_AQUA, "§3", DyeColor.CYAN),
    WHITE(Color.WHITE, ChatColor.WHITE, "§f", DyeColor.WHITE),
-   YELLOW(Color.YELLOW, ChatColor.YELLOW, "§e", DyeColor.YELLOW),;
+   YELLOW(Color.YELLOW, ChatColor.YELLOW, "§e", DyeColor.YELLOW),
+   ;
 
    final static O2Color[] primaryDyeableColors = new O2Color[]{RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
    final static O2Color[] dyeableColors = new O2Color[]{BLACK, BLUE, BROWN, CYAN, GRAY, GREEN, LIGHT_BLUE, LIGHT_GRAY, LIME, MAGENTA, ORANGE, PINK, PURPLE, RED, WHITE, YELLOW};
    final static O2Color[] bukkitColors = new O2Color[]{AQUA, BLACK, BLUE, FUCHSIA, GRAY, GREEN, LIME, MAROON, NAVY, OLIVE, ORANGE, PURPLE, RED, SILVER, TEAL, WHITE};
 
-   O2Color (Color color, ChatColor chat, String chatCode, DyeColor dye)
+   /**
+    * Constructor
+    *
+    * @param color    the Color for this type
+    * @param chat     the chat color for this type
+    * @param chatCode the chat code to make this type
+    * @param dye      the dye for this type
+    */
+   O2Color(@NotNull Color color, @NotNull ChatColor chat, @NotNull String chatCode, @NotNull DyeColor dye)
    {
       bukkitColor = color;
       chatColor = chat;
@@ -49,32 +64,52 @@ public enum O2Color
       dyeColor = dye;
    }
 
-   Color bukkitColor;
-   ChatColor chatColor;
-   String chatColorCode;
-   DyeColor dyeColor;
+   final Color bukkitColor;
+   final ChatColor chatColor;
+   final String chatColorCode;
+   final DyeColor dyeColor;
 
-   public Color getBukkitColor ()
+   /**
+    * @return the Color for this type
+    */
+   @NotNull
+   public Color getBukkitColor()
    {
       return bukkitColor;
    }
 
-   public ChatColor getChatColor ()
+   /**
+    * @return the ChatColor for this type
+    */
+   @NotNull
+   public ChatColor getChatColor()
    {
       return chatColor;
    }
 
-   public String getChatColorCode ()
+   /**
+    * @return the chat code for this type
+    */
+   @NotNull
+   public String getChatColorCode()
    {
       return chatColorCode;
    }
 
-   public DyeColor getDyeColor ()
+   /**
+    * @return the dye color for this type
+    */
+   @NotNull
+   public DyeColor getDyeColor()
    {
       return dyeColor;
    }
 
-   public Material getWoolMaterial ()
+   /**
+    * @return the wool material for this type
+    */
+   @NotNull
+   public Material getWoolMaterial()
    {
       Material material = getColoredMaterial("WOOL");
 
@@ -86,7 +121,11 @@ public enum O2Color
       return material;
    }
 
-   public Material getCarpetMaterial ()
+   /**
+    * @return the carpet material for this type
+    */
+   @NotNull
+   public Material getCarpetMaterial()
    {
       Material material = getColoredMaterial("CARPET");
 
@@ -98,7 +137,11 @@ public enum O2Color
       return material;
    }
 
-   public Material getConcreteMaterial ()
+   /**
+    * @return the concrete material for this type
+    */
+   @NotNull
+   public Material getConcreteMaterial()
    {
       Material material = getColoredMaterial("CONCRETE");
 
@@ -110,7 +153,11 @@ public enum O2Color
       return material;
    }
 
-   public Material getConcretePowderMaterial ()
+   /**
+    * @return the concrete powder material for this type
+    */
+   @NotNull
+   public Material getConcretePowderMaterial()
    {
       Material material = getColoredMaterial("CONCRETE_POWDER");
 
@@ -122,7 +169,11 @@ public enum O2Color
       return material;
    }
 
-   public Material getShulkerBoxMaterial ()
+   /**
+    * @return the shulker box for this type
+    */
+   @NotNull
+   public Material getShulkerBoxMaterial()
    {
       Material material = getColoredMaterial("SHULKER_BOX");
 
@@ -134,7 +185,11 @@ public enum O2Color
       return material;
    }
 
-   public Material getStainedGlassMaterial ()
+   /**
+    * @return the stained glass for this type
+    */
+   @NotNull
+   public Material getStainedGlassMaterial()
    {
       Material material = getColoredMaterial("STAINED_GLASS");
 
@@ -146,7 +201,14 @@ public enum O2Color
       return material;
    }
 
-   public Material getColoredMaterial (String materialBaseName)
+   /**
+    * Get the colored material for this base material for this type
+    *
+    * @param materialBaseName the base material
+    * @return the colored material type or null if not found
+    */
+   @Nullable
+   public Material getColoredMaterial(String materialBaseName)
    {
       String materialName = dyeColor.toString() + "_" + materialBaseName;
 
@@ -168,6 +230,7 @@ public enum O2Color
     * @param number a number between 0-15, numbers outside of this range will be set to WHITE
     * @return the bukkit color associated with this number
     */
+   @NotNull
    public static O2Color getBukkitColorByNumber (int number)
    {
       if (number >= bukkitColors.length || number < 0)
@@ -185,6 +248,7 @@ public enum O2Color
     *
     * @return the dyeable color
     */
+   @NotNull
    public static O2Color getRandomPrimaryDyeableColor()
    {
       int seed = Math.abs(Ollivanders2Common.random.nextInt());
@@ -198,6 +262,7 @@ public enum O2Color
     * @param seed the base value that the percentile check will use
     * @return the dyeable color
     */
+   @NotNull
    public static O2Color getRandomPrimaryDyeableColor(int seed)
    {
       int rand = Math.abs(seed) % primaryDyeableColors.length;
@@ -210,6 +275,7 @@ public enum O2Color
     *
     * @return the dyeable color
     */
+   @NotNull
    public static O2Color getRandomDyeableColor()
    {
       int seed = Math.abs(Ollivanders2Common.random.nextInt());
@@ -223,6 +289,7 @@ public enum O2Color
     * @param seed the base value that the percentile check will use
     * @return the dyeable color
     */
+   @NotNull
    public static O2Color getRandomDyeableColor(int seed)
    {
       int rand = Math.abs(seed) % dyeableColors.length;
@@ -236,14 +303,14 @@ public enum O2Color
     * @param material the material to check
     * @return true if it is colorable, false if it is not
     */
-   public static boolean isColorable (Material material)
+   public static boolean isColorable(@NotNull Material material)
    {
       // determine if a material is colorable
       String materialName = material.toString();
 
       if (materialName.endsWith("_WOOL") || materialName.endsWith("_CARPET") || materialName.endsWith("_CONCRETE")
-            || materialName.endsWith("_CONCRETE_POWDER") || materialName.endsWith("_SHULKER_BOX")
-            || materialName.endsWith("_STAINED_GLASS"))
+              || materialName.endsWith("_CONCRETE_POWDER") || materialName.endsWith("_SHULKER_BOX")
+              || materialName.endsWith("_STAINED_GLASS"))
       {
          return true;
       }
@@ -258,7 +325,7 @@ public enum O2Color
     * @param color    the color to change the material to
     * @return a material that is the new color or the original material if the material was not colorable
     */
-   public static Material changeColor (Material material, O2Color color)
+   public static Material changeColor(@NotNull Material material, @NotNull O2Color color)
    {
       String materialName = material.toString();
       Material newColor = material;

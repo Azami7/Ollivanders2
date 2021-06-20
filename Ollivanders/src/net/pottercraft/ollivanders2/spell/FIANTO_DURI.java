@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Lengthens the duration of shield spells.
@@ -55,11 +56,11 @@ public final class FIANTO_DURI extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public FIANTO_DURI (Ollivanders2 plugin, Player player, Double rightWand)
+   public FIANTO_DURI(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -77,7 +78,7 @@ public final class FIANTO_DURI extends O2Spell
    {
       List<StationarySpellObj> inside = new ArrayList<>();
 
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          // if the stationary spell type is not in the blacklist for this spell
          // was cast by the caster of this spell

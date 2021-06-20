@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Create a pocket of extra-dimensional space.
@@ -33,11 +34,11 @@ public final class PRAEPANDO extends StationarySpell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public PRAEPANDO (Ollivanders2 plugin, Player player, Double rightWand)
+   public PRAEPANDO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

@@ -5,6 +5,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The Cure for Boils (also known as simply Boil Cure) is a potion which cures boils, even those produced by the Pimple Jinx.
@@ -19,7 +20,7 @@ public class CURE_FOR_BOILS extends O2Potion
     *
     * @param plugin the callback to the MC plugin
     */
-   public CURE_FOR_BOILS (Ollivanders2 plugin)
+   public CURE_FOR_BOILS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 

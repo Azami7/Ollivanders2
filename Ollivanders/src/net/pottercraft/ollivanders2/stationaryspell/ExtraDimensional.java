@@ -8,11 +8,13 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Spells that create extra dimensions of space.
@@ -27,7 +29,7 @@ public abstract class ExtraDimensional extends StationarySpellObj
     *
     * @param plugin a callback to the MC plugin
     */
-   public ExtraDimensional (Ollivanders2 plugin)
+   public ExtraDimensional(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
    }
@@ -35,14 +37,14 @@ public abstract class ExtraDimensional extends StationarySpellObj
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
-    * @param pid the player who cast the spell
+    * @param plugin   a callback to the MC plugin
+    * @param pid      the player who cast the spell
     * @param location the center location of the spell
-    * @param type the type of this spell
-    * @param radius the radius for this spell
+    * @param type     the type of this spell
+    * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public ExtraDimensional (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius, Integer duration, Integer dimenRadius)
+   public ExtraDimensional(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration, int dimenRadius)
    {
       super(plugin, pid, location, type, radius, duration);
       this.dimenRadius = dimenRadius;
@@ -84,7 +86,14 @@ public abstract class ExtraDimensional extends StationarySpellObj
       loc.getBlock().setType(Material.BEDROCK);
    }
 
-   private Set<Block> getBlocksInCube (Location loc)
+   /**
+    * Get the blocks in the radius of the location
+    *
+    * @param loc the location
+    * @return the set of blocks
+    */
+   @NotNull
+   private Set<Block> getBlocksInCube(@NotNull Location loc)
    {
       Block center = loc.getBlock();
       int blockRadius = dimenRadius + 1;
@@ -111,9 +120,16 @@ public abstract class ExtraDimensional extends StationarySpellObj
       {
          if (block.getType() != Material.BEDROCK)
          {
+            World world = location.getWorld();
+            if (world == null)
+            {
+               p.getLogger().warning("ExtraDimensional.kill: world is null");
+               return;
+            }
+
             for (ItemStack stack : block.getDrops())
             {
-               location.getWorld().dropItem(location, stack);
+               world.dropItem(location, stack);
             }
             BlockState state = block.getState();
             if (state instanceof InventoryHolder)
@@ -122,14 +138,22 @@ public abstract class ExtraDimensional extends StationarySpellObj
                {
                   if (stack != null)
                   {
-                     location.getWorld().dropItem(location, stack);
+                     world.dropItem(location, stack);
                   }
                }
             }
             block.setType(Material.AIR);
          }
       }
-      for (Entity entity : edLoc.getWorld().getEntities())
+
+      World edWorld = edLoc.getWorld();
+      if (edWorld == null)
+      {
+         p.getLogger().warning("ExtraDimensional.kill: world is null");
+         return;
+      }
+
+      for (Entity entity : edWorld.getEntities())
       {
          if (entity.getLocation().distance(edLoc) < dimenRadius)
          {
@@ -145,5 +169,4 @@ public abstract class ExtraDimensional extends StationarySpellObj
    {
       return edLoc;
    }
-
 }

@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -9,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Grows a Stationary Spell's radius. Only the player who created the Stationary Spell can change it's radius.
@@ -22,7 +24,7 @@ public final class CRESCERE_PROTEGAT extends O2Spell
    /**
     * Stationary spell types that cannot be targeted by this spell.
     */
-   ArrayList<O2StationarySpellType> spellBlacklist = new ArrayList<O2StationarySpellType>()
+   List<O2StationarySpellType> spellBlacklist = new ArrayList<O2StationarySpellType>()
    {{
       add(O2StationarySpellType.COLLOPORTUS);
       add(O2StationarySpellType.HORCRUX);
@@ -46,11 +48,11 @@ public final class CRESCERE_PROTEGAT extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public CRESCERE_PROTEGAT (Ollivanders2 plugin, Player player, Double rightWand)
+   public CRESCERE_PROTEGAT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.CRESCERE_PROTEGAT;
@@ -67,13 +69,13 @@ public final class CRESCERE_PROTEGAT extends O2Spell
    {
       StationarySpellObj inside = null;
 
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          // if the stationary spell type is not in the blacklist for this spell
          // was cast by the caster of this spell
          // and is inside the radius of this spell, then target it
          if (!spellBlacklist.contains(spell.getSpellType()) && spell.getCasterID().equals(player.getUniqueId())
-               && spell.isInside(location) && spell.radius < (int) usesModifier)
+                 && spell.isInside(location) && spell.radius < (int) usesModifier)
          {
             inside = spell;
 

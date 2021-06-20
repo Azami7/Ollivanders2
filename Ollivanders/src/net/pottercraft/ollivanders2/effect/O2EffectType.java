@@ -1,9 +1,10 @@
 package net.pottercraft.ollivanders2.effect;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * All effects
  *
- * @author lownes
  * @author Azami7
  * @version Ollivanders2
  */
@@ -13,13 +14,16 @@ public enum O2EffectType
    ANIMAGUS_EFFECT(ANIMAGUS_EFFECT.class),
    ANIMAGUS_INCANTATION(ANIMAGUS_INCANTATION.class),
    AWAKE(AWAKE.class),
+   AWAKE_ANTIDOTE_LESSER(AWAKE_ANTIDOTE_LESSER.class),
    BABBLING(BABBLING.class),
+   BABBLING_ANTIDOTE_LESSER (BABBLING_ANTIDOTE_LESSER.class),
    BLINDNESS(BLINDNESS.class),
    BURNING(BURNING.class),
    CONFUSION(CONFUSION.class),
    FAST_LEARNING(FAST_LEARNING.class),
    FLYING(FLYING.class),
    HARM(HARM.class),
+   HARM_ANTIDOTE_LESSER(HARM_ANTIDOTE_LESSER.class),
    HEAL(HEAL.class),
    HEALTH_BOOST(HEALTH_BOOST.class),
    HUNGER(HUNGER.class),
@@ -34,24 +38,29 @@ public enum O2EffectType
    MUTED_SPEECH(MUTED_SPEECH.class),
    NIGHT_VISION(NIGHT_VISION.class),
    POISON(POISON.class),
+   POISON_ANTIDOTE_LESSER(POISON_ANTIDOTE_LESSER.class),
    SLEEP_SPEECH(SLEEP_SPEECH.class),
    SLEEPING(SLEEPING.class),
+   SPEED(SPEED.class),
+   SPEED_SPEEDIER(SPEED_SPEEDIER.class),
+   SPEED_SPEEDIEST(SPEED_SPEEDIEST.class),
    SLOWNESS (SLOWNESS.class),
    SUSPENSION (SUSPENSION.class),
    UNLUCK (UNLUCK.class),
+   UNLUCK_ANTIDOTE_LESSER (UNLUCK_ANTIDOTE_LESSER.class),
    WATER_BREATHING(WATER_BREATHING.class),
    WEAKNESS (WEAKNESS.class),
    WEALTH (WEALTH.class),
    ;
 
-   private Class<?> className;
+   final private Class<?> className;
 
    /**
     * Enum constructor.
     *
     * @param className the name of the effect class this type represents.
     */
-   O2EffectType(Class<?> className)
+   O2EffectType(@NotNull Class<?> className)
    {
       this.className = className;
    }
@@ -61,6 +70,7 @@ public enum O2EffectType
     *
     * @return the effect class
     */
+   @NotNull
    public Class<?> getClassName()
    {
       return className;

@@ -8,10 +8,11 @@ import java.util.Collection;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Stationary spell object in Ollivanders2
@@ -21,7 +22,7 @@ import org.bukkit.entity.LivingEntity;
 public abstract class StationarySpellObj implements Serializable
 {
    Ollivanders2 p;
-   Ollivanders2Common common;
+   final Ollivanders2Common common;
    public UUID playerUUID;
    protected O2StationarySpellType spellType;
    public Location location;
@@ -35,7 +36,7 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @param plugin a callback to the MC plugin
     */
-   public StationarySpellObj (Ollivanders2 plugin)
+   public StationarySpellObj(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
       common = new Ollivanders2Common(p);
@@ -55,9 +56,10 @@ public abstract class StationarySpellObj implements Serializable
     * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public StationarySpellObj (Ollivanders2 plugin, UUID playerID, Location loc, O2StationarySpellType type, Integer radius, Integer duration)
+   public StationarySpellObj(@NotNull Ollivanders2 plugin, @NotNull UUID playerID, @NotNull Location loc, @NotNull O2StationarySpellType type, int radius, int duration)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
 
       location = loc;
       this.spellType = type;
@@ -92,27 +94,43 @@ public abstract class StationarySpellObj implements Serializable
       radius = r;
    }
 
-   void setLocation (Location l)
+   /**
+    * Set the center location of this stationary spell
+    *
+    * @param l the spell location
+    */
+   void setLocation(@NotNull Location l)
    {
       location = l;
    }
 
-   void setPlayerID (UUID pid)
+   /**
+    * Set the ID of the player who cast this spell
+    *
+    * @param pid the player ID
+    */
+   void setPlayerID(@NotNull UUID pid)
    {
       playerUUID = pid;
    }
 
-   public O2StationarySpellType getSpellType ()
+   /**
+    * Get the type of this stationary spell
+    *
+    * @return the spell type
+    */
+   @NotNull
+   public O2StationarySpellType getSpellType()
    {
       return spellType;
    }
 
-   void setSpellType (O2StationarySpellType t)
-   {
-      spellType = t;
-   }
-
-   void setActive (boolean a)
+   /**
+    * Set whether this stationary spell is active
+    *
+    * @param a true if the spell is active, false otherwise
+    */
+   void setActive(boolean a)
    {
       active = a;
    }
@@ -120,7 +138,7 @@ public abstract class StationarySpellObj implements Serializable
    /**
     * Ages the StationarySpellObj
     */
-   public void age ()
+   public void age()
    {
       age(1);
    }
@@ -132,7 +150,7 @@ public abstract class StationarySpellObj implements Serializable
     */
    public void age (int i)
    {
-      duration -= i;
+      duration = duration - i;
 
       if (duration <= 0)
          kill();
@@ -172,11 +190,8 @@ public abstract class StationarySpellObj implements Serializable
     * @param loc - The location specified.
     * @return true if yes, false if no.
     */
-   public boolean isInside (Location loc)
+   public boolean isInside(@NotNull Location loc)
    {
-      if (location == null || loc == null)
-         return false;
-
       return Ollivanders2API.common.isInside(location, loc, radius);
    }
 
@@ -185,12 +200,10 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @return Block the projectile is inside
     */
+   @NotNull
    public Block getBlock ()
    {
-      if (location != null)
-         return location.getBlock();
-
-      return null;
+      return location.getBlock();
    }
 
    /**
@@ -198,6 +211,7 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @return List of living entities with an eye location within radius
     */
+   @NotNull
    public List<LivingEntity> getCloseLivingEntities ()
    {
       Collection<LivingEntity> entities = Ollivanders2API.common.getLivingEntitiesInRadius(location, radius);
@@ -231,6 +245,7 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @return the MC UUID of the player that cast the spell
     */
+   @NotNull
    public UUID getCasterID ()
    {
       return playerUUID;

@@ -5,13 +5,15 @@ import java.util.List;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Shoots one or more fireworks in to the air.
@@ -46,7 +48,7 @@ public abstract class Pyrotechnia extends O2Spell
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public Pyrotechnia(Ollivanders2 plugin, Player player, Double rightWand)
+   public Pyrotechnia(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       fireworkCount = 0;
@@ -59,7 +61,7 @@ public abstract class Pyrotechnia extends O2Spell
    @Override
    public void checkEffect ()
    {
-      if (!checkSpellAllowed())
+      if (!isSpellAllowed())
       {
          kill();
          return;
@@ -67,7 +69,15 @@ public abstract class Pyrotechnia extends O2Spell
 
       if (fireworkCount < maxFireworks)
       {
-         Firework firework = (Firework) location.getWorld().spawnEntity(location, EntityType.FIREWORK);
+         World world = location.getWorld();
+         if (world == null)
+         {
+            common.printDebugMessage("Pyrotechnia.checkEffect: world is null", null, null, true);
+            kill();
+            return;
+         }
+
+         Firework firework = (Firework) (world.spawnEntity(location, EntityType.FIREWORK));
 
          FireworkMeta meta = firework.getFireworkMeta();
          // make firework fly for 1 seconds

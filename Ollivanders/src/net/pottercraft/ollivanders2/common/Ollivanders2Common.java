@@ -1,4 +1,4 @@
-package net.pottercraft.ollivanders2;
+package net.pottercraft.ollivanders2.common;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -13,6 +13,10 @@ import java.util.Random;
 import java.util.UUID;
 
 import me.libraryaddict.disguise.disguisetypes.RabbitType;
+import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.item.O2ItemType;
+import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -37,34 +41,30 @@ import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Common functions and data
  *
- * @since 2.2.6
  * @author Azami7
+ * @since 2.2.6
  */
 
 public class Ollivanders2Common
 {
-   private final String locationWorldLabel = "World";
-   private final String locationXLabel = "X-Value";
-   private final String locationYLabel = "Y-Value";
-   private final String locationZLabel = "Z-Value";
-
-   public static final String galleon = "Galleon";
-   public static final Material galleonMaterial = Material.GOLD_INGOT;
-   public static final String sickle = "Sickle";
-   public static final Material sickleMaterial = Material.IRON_INGOT;
-   public static final String knut = "Knut";
-   public static final Material knutMaterial = Material.NETHER_BRICK;
+   private static final String locationWorldLabel = "World";
+   private static final String locationXLabel = "X-Value";
+   private static final String locationYLabel = "Y-Value";
+   private static final String locationZLabel = "Z-Value";
 
    public static final int ticksPerSecond = 20;
+   public static final int ticksPerMinute = ticksPerSecond * 60;
+   public static final int ticksPerHour = ticksPerMinute * 60;
 
-   public static final ArrayList<EntityType> smallFriendlyAnimals = new ArrayList<EntityType>() {{
+   public static final List<EntityType> smallFriendlyAnimals = new ArrayList<>()
+   {{
       add(EntityType.BAT);
       add(EntityType.CHICKEN);
       add(EntityType.RABBIT);
@@ -75,7 +75,8 @@ public class Ollivanders2Common
       add(EntityType.PUFFERFISH);
    }};
 
-   public static final ArrayList<EntityType> mediumFriendlyAnimals = new ArrayList<EntityType>() {{
+   public static final List<EntityType> mediumFriendlyAnimals = new ArrayList<>()
+   {{
       add(EntityType.SHEEP);
       add(EntityType.PIG);
       add(EntityType.OCELOT);
@@ -85,7 +86,8 @@ public class Ollivanders2Common
       add(EntityType.TURTLE);
    }};
 
-   public static final ArrayList<EntityType> largeFriendlyAnimals = new ArrayList<EntityType>() {{
+   public static final List<EntityType> largeFriendlyAnimals = new ArrayList<>()
+   {{
       add(EntityType.COW);
       add(EntityType.DONKEY);
       add(EntityType.HORSE);
@@ -102,7 +104,7 @@ public class Ollivanders2Common
       add(EntityType.TRADER_LLAMA);
    }};
 
-   public static final ArrayList<EntityType> undeadEntities = new ArrayList<EntityType>()
+   public static final List<EntityType> undeadEntities = new ArrayList<>()
    {{
       add(EntityType.DROWNED);
       add(EntityType.HUSK);
@@ -119,7 +121,8 @@ public class Ollivanders2Common
       add(EntityType.GIANT);
    }};
 
-   public static final ArrayList<O2SpellType> libsDisguisesSpells = new ArrayList<O2SpellType>() {{
+   public static final List<O2SpellType> libsDisguisesSpells = new ArrayList<>()
+   {{
       add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       add(O2SpellType.AVIFORS);
       add(O2SpellType.DRACONIFORS);
@@ -139,11 +142,13 @@ public class Ollivanders2Common
       add(O2SpellType.VERA_VERTO);
    }};
 
-   public static final ArrayList<O2PotionType> libDisguisesPotions = new ArrayList<O2PotionType>() {{
+   public static final List<O2PotionType> libDisguisesPotions = new ArrayList<>()
+   {{
       add(O2PotionType.ANIMAGUS_POTION);
    }};
 
-   public static final ArrayList<Material> unbreakableMaterials = new ArrayList<Material>() {{
+   public static final List<Material> unbreakableMaterials = new ArrayList<>()
+   {{
       add(Material.BARRIER);
       add(Material.BEDROCK);
       add(Material.ENDER_CHEST);
@@ -166,7 +171,7 @@ public class Ollivanders2Common
       add(Material.YELLOW_SHULKER_BOX);
    }};
 
-   public static final ArrayList<Material> chests = new ArrayList<Material>()
+   public static final List<Material> chests = new ArrayList<>()
    {{
       add(Material.CHEST);
       add(Material.ENDER_CHEST);
@@ -189,7 +194,7 @@ public class Ollivanders2Common
       add(Material.YELLOW_SHULKER_BOX);
    }};
 
-   public static final ArrayList<Material> wallSigns = new ArrayList<Material>()
+   public static final List<Material> wallSigns = new ArrayList<>()
    {{
       add(Material.ACACIA_WALL_SIGN);
       add(Material.BIRCH_WALL_SIGN);
@@ -198,7 +203,7 @@ public class Ollivanders2Common
       add(Material.SPRUCE_WALL_SIGN);
    }};
 
-   public static final ArrayList<Material> standingSigns = new ArrayList<Material>()
+   public static final List<Material> standingSigns = new ArrayList<>()
    {{
       add(Material.ACACIA_SIGN);
       add(Material.BIRCH_SIGN);
@@ -207,13 +212,13 @@ public class Ollivanders2Common
       add(Material.SPRUCE_SIGN);
    }};
 
-   public static final ArrayList<Material> signs = new ArrayList<Material>()
+   public static final List<Material> signs = new ArrayList<>()
    {{
       addAll(wallSigns);
       addAll(standingSigns);
    }};
 
-   public static final ArrayList<Material> hotBlocks = new ArrayList<Material>()
+   public static final List<Material> hotBlocks = new ArrayList<>()
    {{
       add(Material.LAVA);
       add(Material.FIRE);
@@ -227,24 +232,29 @@ public class Ollivanders2Common
       MIDDAY(6000),
       SUNSET(12000);
 
-      private int gameTick;
+      final private int gameTick;
 
       TimeOfDay(int tick)
       {
          gameTick = tick;
       }
 
-      public int getTick ()
+      public int getTick()
       {
          return gameTick;
       }
    }
 
-   public static Random random = new Random();
+   public final static Random random = new Random();
 
-   private JavaPlugin p;
+   final private Ollivanders2 p;
 
-   public Ollivanders2Common (JavaPlugin plugin)
+   /**
+    * Constructor
+    *
+    * @param plugin a reference to the plugin using this common
+    */
+   public Ollivanders2Common (@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -257,7 +267,8 @@ public class Ollivanders2Common
     * @param uuid the UUID as a string
     * @return the UUID or null if an exception occurred.
     */
-   public UUID uuidFromString (String uuid)
+   @Nullable
+   public UUID uuidFromString(@NotNull String uuid)
    {
       UUID pid = null;
 
@@ -281,7 +292,8 @@ public class Ollivanders2Common
     * @param intString the integer as a string
     * @return the Integer or null if an exception occurred
     */
-   public Integer integerFromString (String intString)
+   @Nullable
+   public Integer integerFromString(@NotNull String intString)
    {
       Integer i = null;
 
@@ -305,7 +317,8 @@ public class Ollivanders2Common
     * @param boolString the boolean as a string
     * @return the Boolean or null if an exception occurred
     */
-   public Boolean booleanFromString (String boolString)
+   @Nullable
+   public Boolean booleanFromString(@NotNull String boolString)
    {
       Boolean b = null;
 
@@ -329,7 +342,8 @@ public class Ollivanders2Common
     * @param entityTypeString the entity type as a string
     * @return the EntityType or null if an exception occurred
     */
-   public EntityType entityTypeFromString (String entityTypeString)
+   @Nullable
+   public EntityType entityTypeFromString(@NotNull String entityTypeString)
    {
       EntityType entityType = null;
 
@@ -348,14 +362,18 @@ public class Ollivanders2Common
 
    /**
     * Determine if a location is within a radius of another location
+    *
     * @param sourceLocation the source location
-    * @param checkLocation the location to check
-    * @param radius the radius from the source location
+    * @param checkLocation  the location to check
+    * @param radius         the radius from the source location
     * @return true if checkLocation is in the radius of sourceLocation
     */
-   public boolean isInside (Location sourceLocation, Location checkLocation, int radius)
+   public boolean isInside(@NotNull Location sourceLocation, @NotNull Location checkLocation, int radius)
    {
       double distance;
+
+      if (sourceLocation.getWorld() != checkLocation.getWorld())
+         return false;
 
       try
       {
@@ -363,7 +381,7 @@ public class Ollivanders2Common
       }
       catch (Exception e)
       {
-         // this call can generate java.lang.IllegalArgumentException: Cannot measure distance between world_nether and world
+         e.printStackTrace();
          return false;
       }
 
@@ -375,6 +393,7 @@ public class Ollivanders2Common
     *
     * @return the Cat type
     */
+   @NotNull
    public Cat.Type getRandomCatType()
    {
       int seed = Math.abs(random.nextInt());
@@ -388,6 +407,7 @@ public class Ollivanders2Common
     * @param seed the base value that the percentile check will use
     * @return the Cat type
     */
+   @NotNull
    public Cat.Type getRandomCatType(int seed)
    {
       int rand = Math.abs(seed) % 11;
@@ -439,6 +459,7 @@ public class Ollivanders2Common
     *
     * @return the type color for the rabbit
     */
+   @NotNull
    public RabbitType getRandomRabbitType()
    {
       int seed = Math.abs(random.nextInt());
@@ -452,6 +473,7 @@ public class Ollivanders2Common
     * @param seed the base value that the percentile check will use
     * @return the type color for the rabbit
     */
+   @NotNull
    public RabbitType getRandomRabbitType(int seed)
    {
       RabbitType type;
@@ -481,6 +503,7 @@ public class Ollivanders2Common
     *
     * @return the horse style
     */
+   @NotNull
    public Horse.Style getRandomHorseStyle()
    {
       int seed = Math.abs(random.nextInt());
@@ -494,6 +517,7 @@ public class Ollivanders2Common
     * @param seed the base value that the percentile check will use
     * @return the horse style
     */
+   @NotNull
    public Horse.Style getRandomHorseStyle(int seed)
    {
       Horse.Style style;
@@ -527,6 +551,7 @@ public class Ollivanders2Common
     *
     * @return the color
     */
+   @NotNull
    public Horse.Color getRandomHorseColor()
    {
       int seed = Math.abs(random.nextInt());
@@ -540,6 +565,7 @@ public class Ollivanders2Common
     * @param seed the base value that the percentile check will use
     * @return the color
     */
+   @NotNull
    public Horse.Color getRandomHorseColor(int seed)
    {
       Horse.Color color;
@@ -579,6 +605,7 @@ public class Ollivanders2Common
     *
     * @return the color
     */
+   @NotNull
    public Llama.Color getRandomLlamaColor()
    {
       int seed = Math.abs(random.nextInt());
@@ -592,6 +619,7 @@ public class Ollivanders2Common
     * @param seed the base value that the percentile check will use
     * @return the color
     */
+   @NotNull
    public Llama.Color getRandomLlamaColor(int seed)
    {
       Llama.Color color;
@@ -622,6 +650,7 @@ public class Ollivanders2Common
     *
     * @return the color
     */
+   @NotNull
    public Parrot.Variant getRandomParrotColor()
    {
       int seed = Math.abs(random.nextInt());
@@ -635,6 +664,7 @@ public class Ollivanders2Common
     * @param seed the base value that the percentile check will use
     * @return the color
     */
+   @NotNull
    public Parrot.Variant getRandomParrotColor(int seed)
    {
       Parrot.Variant variant;
@@ -667,6 +697,7 @@ public class Ollivanders2Common
     *
     * @return the color
     */
+   @NotNull
    public DyeColor getRandomNaturalSheepColor()
    {
       int seed = Math.abs(random.nextInt());
@@ -680,6 +711,7 @@ public class Ollivanders2Common
     * @param seed the base value that the percentile check will use
     * @return the color
     */
+   @NotNull
    public DyeColor getRandomNaturalSheepColor(int seed)
    {
       int rand = Math.abs(seed) % 100;
@@ -707,7 +739,8 @@ public class Ollivanders2Common
     * @param radius   - radius within which to get entities
     * @return List of entities within the radius
     */
-   public Collection<Entity> getEntitiesInRadius(Location location, double radius)
+   @NotNull
+   public Collection<Entity> getEntitiesInRadius(@NotNull Location location, double radius)
    {
       return getEntitiesInBounds(location, radius, radius, radius);
    }
@@ -716,10 +749,11 @@ public class Ollivanders2Common
     * Gets all living entities within a radius of a specific location
     *
     * @param location the location to search for entities from
-    * @param radius - radius within which to get entities
+    * @param radius   - radius within which to get entities
     * @return List of living entities within the radius
     */
-   public List<LivingEntity> getLivingEntitiesInRadius (Location location, double radius)
+   @NotNull
+   public List<LivingEntity> getLivingEntitiesInRadius(@NotNull Location location, double radius)
    {
       Collection<Entity> entities = getEntitiesInRadius(location, radius);
       List<LivingEntity> close = new ArrayList<>();
@@ -728,7 +762,7 @@ public class Ollivanders2Common
       {
          if (e instanceof LivingEntity)
          {
-            close.add(((LivingEntity)e));
+            close.add(((LivingEntity) e));
          }
       }
 
@@ -738,12 +772,13 @@ public class Ollivanders2Common
    /**
     * Gets all of a specific entity type within a radius of a specific location
     *
-    * @param location - the location to search for entities from
-    * @param radius - radius within which to get entities
+    * @param location   - the location to search for entities from
+    * @param radius     - radius within which to get entities
     * @param entityType - the type of entity to look for
     * @return List of entities of the specified type within the radius
     */
-   public List<Entity> getTypedCloseEntities (Location location, double radius, EntityType entityType)
+   @NotNull
+   public List<Entity> getTypedCloseEntities(@NotNull Location location, double radius, @NotNull EntityType entityType)
    {
       Collection<Entity> entities = getEntitiesInRadius(location, radius);
       List<Entity> close = new ArrayList<>();
@@ -765,7 +800,8 @@ public class Ollivanders2Common
     * @param radius - The radius of the block list
     * @return List of blocks that are within radius of the location.
     */
-   public List<Block> getBlocksInRadius (Location loc, double radius)
+   @NotNull
+   public List<Block> getBlocksInRadius(@NotNull Location loc, double radius)
    {
       Block center = loc.getBlock();
       int blockRadius = (int) (radius + 1);
@@ -797,7 +833,8 @@ public class Ollivanders2Common
     * @param s the enum as a string
     * @return string such that it is the lowercase version of the spell minus underscores
     */
-   public String enumRecode (String s)
+   @NotNull
+   public String enumRecode(@NotNull String s)
    {
       String nameLow = s.toLowerCase();
       String[] words = nameLow.split("_");
@@ -819,7 +856,8 @@ public class Ollivanders2Common
     * @param str - String to convert.
     * @return String with correct formatting.
     */
-   public String firstLetterCapitalize (String str)
+   @NotNull
+   public String firstLetterCapitalize(@NotNull String str)
    {
       StringBuilder sb = new StringBuilder();
       String[] wordList = str.split(" ");
@@ -828,7 +866,7 @@ public class Ollivanders2Common
          sb.append(s.substring(0, 1).toUpperCase());
          if (s.length() > 1)
          {
-            sb.append(s.substring(1, s.length()).toLowerCase());
+            sb.append(s.substring(1).toLowerCase());
          }
          sb.append(" ");
       }
@@ -841,13 +879,20 @@ public class Ollivanders2Common
     * @param held Item stack to check
     * @return True if held is an invisibility cloak
     */
-   public boolean isInvisibilityCloak (ItemStack held)
+   public boolean isInvisibilityCloak(@NotNull ItemStack held)
    {
       if (held.getType() == Material.CHAINMAIL_CHESTPLATE)
       {
+         ItemMeta meta = held.getItemMeta();
+         if (meta == null)
+            return false;
+
          if (held.getItemMeta().hasLore())
          {
             List<String> lore = held.getItemMeta().getLore();
+            if (lore == null)
+               return false;
+
             if (lore.get(0).equals("Silvery Transparent Cloak"))
             {
                return true;
@@ -860,30 +905,30 @@ public class Ollivanders2Common
    /**
     * Serialize an Location for saving.
     *
-    * @param location the Location to serialize
+    * @param location    the Location to serialize
     * @param labelPrefix the prefix for the label string, assumes not empty or null
     * @return a map of the serialized OLocation data
     */
-   public Map<String, String> serializeLocation (Location location, String labelPrefix)
+   @Nullable
+   public Map<String, String> serializeLocation(@NotNull Location location, @NotNull String labelPrefix)
    {
       Map<String, String> locData = new HashMap<>();
 
       //
       // Location world
       //
+      if (location.getWorld() == null)
+      {
+         p.getLogger().warning("serializeLocation: location world is null");
+         return null;
+      }
       locData.put(labelPrefix + "_" + locationWorldLabel, location.getWorld().getName());
 
       //
       //Location x, y, z
-
-      Double x = location.getX();
-      locData.put(labelPrefix + "_" + locationXLabel, x.toString());
-
-      Double y = location.getY();
-      locData.put(labelPrefix + "_" + locationYLabel, y.toString());
-
-      Double z = location.getZ();
-      locData.put(labelPrefix + "_" + locationZLabel, z.toString());
+      locData.put(labelPrefix + "_" + locationXLabel, Double.toString(location.getX()));
+      locData.put(labelPrefix + "_" + locationYLabel, Double.toString(location.getY()));
+      locData.put(labelPrefix + "_" + locationZLabel, Double.toString(location.getZ()));
 
       return locData;
    }
@@ -893,7 +938,8 @@ public class Ollivanders2Common
     *
     * @return the location if the data was successfully read, null otherwise
     */
-   public Location deserializeLocation (Map<String, String> locData, String labelPrefix)
+   @Nullable
+   public Location deserializeLocation(@NotNull Map<String, String> locData, @NotNull String labelPrefix)
    {
       double x = 0.0;
       double y = 0.0;
@@ -942,29 +988,21 @@ public class Ollivanders2Common
     * @param stack stack to be checked
     * @return true if yes, false if no
     */
-   public boolean isWand (ItemStack stack)
+   public boolean isWand(@NotNull ItemStack stack)
    {
-      if (stack != null)
+      if (stack.getType() == O2ItemType.WAND.getMaterial() || stack.getType() == O2ItemType.ELDER_WAND.getMaterial())
       {
-         if (stack.getType() == Material.STICK || stack.getType() == Material.BLAZE_ROD)
-         {
-            if (stack.getItemMeta().hasLore())
-            {
-               List<String> lore = stack.getItemMeta().getLore();
+         ItemMeta meta = stack.getItemMeta();
+         if (meta == null)
+            return false;
 
-               if (lore.get(0).split(" and ").length == 2)
-               {
-                  return true;
-               }
-               else
-               {
-                  return false;
-               }
-            }
-            else
-            {
+         if (stack.getItemMeta().hasLore())
+         {
+            List<String> lore = stack.getItemMeta().getLore();
+            if (lore == null)
                return false;
-            }
+
+            return (lore.get(0).split(" and ").length == 2);
          }
          else
          {
@@ -983,20 +1021,23 @@ public class Ollivanders2Common
     * @param item item in question
     * @return True if yes
     */
-   public boolean isBroom (ItemStack item)
+   public boolean isBroom(@NotNull ItemStack item)
    {
-      if (item.getType() == Ollivanders2.broomstickMaterial)
+      if (item.getType() == O2ItemType.BROOMSTICK.getMaterial())
       {
          if (item.containsEnchantment(Enchantment.PROTECTION_FALL))
          {
             ItemMeta meta = item.getItemMeta();
+            if (meta == null)
+               return false;
+
             if (meta.hasLore())
             {
                List<String> lore = meta.getLore();
-               if (lore.contains("Flying vehicle used by magical folk"))
-               {
-                  return true;
-               }
+               if (lore == null)
+                  return false;
+
+               return lore.contains(O2ItemType.BROOMSTICK.getLore());
             }
          }
       }
@@ -1008,7 +1049,8 @@ public class Ollivanders2Common
     *
     * @return List of item entities within radius of projectile
     */
-   public List<Item> getItemsInBounds (Location location, double x, double y, double z)
+   @NotNull
+   public List<Item> getItemsInBounds(@NotNull Location location, double x, double y, double z)
    {
       Collection<Entity> entities = getEntitiesInBounds(location, x, y, z);
 
@@ -1027,14 +1069,17 @@ public class Ollivanders2Common
     * Get all the entities with a bounding box of a specific location.
     *
     * @param location the location to check from
-    * @param x the distance +/- on the x-plane
-    * @param y the distance +/- on the y-plane
-    * @param z the distance +/- on the z-plane
+    * @param x        the distance +/- on the x-plane
+    * @param y        the distance +/- on the y-plane
+    * @param z        the distance +/- on the z-plane
     * @return a Collection of all entities within the bounding box.
     */
-   public Collection<Entity> getEntitiesInBounds (Location location, double x, double y, double z)
+   @NotNull
+   public Collection<Entity> getEntitiesInBounds(@NotNull Location location, double x, double y, double z)
    {
       World world = location.getWorld();
+      if (world == null)
+         return new ArrayList<>();
 
       return world.getNearbyEntities(location, x, y, z);
    }
@@ -1045,7 +1090,8 @@ public class Ollivanders2Common
     * @param strArray the array to convert
     * @return the array as a single string
     */
-   public String stringArrayToString (String[] strArray)
+   @NotNull
+   public String stringArrayToString(@NotNull String[] strArray)
    {
       StringBuilder newString = new StringBuilder();
 
@@ -1062,6 +1108,7 @@ public class Ollivanders2Common
     *
     * @return timestamp in the format 2018-09-30-12-15-30
     */
+   @NotNull
    public String getCurrentTimestamp ()
    {
       DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
@@ -1075,7 +1122,8 @@ public class Ollivanders2Common
     *
     * @return a list of all the wands
     */
-   public ArrayList<ItemStack> getAllWands()
+   @NotNull
+   public List<ItemStack> getAllWands()
    {
       ArrayList<ItemStack> wands = new ArrayList<>();
 
@@ -1090,22 +1138,32 @@ public class Ollivanders2Common
       return wands;
    }
 
+   /**
+    * Make an ItemStack of wands of a specific wood and core
+    *
+    * @param wood   the wand wood
+    * @param core   the wand core
+    * @param amount the number of wands to make
+    * @return an ItemStack of wands or null if an error
+    */
+   @Nullable
    public ItemStack makeWands(@NotNull String wood, @NotNull String core, int amount)
    {
       if (amount < 1)
          amount = 1;
 
       List<String> lore = new ArrayList<>();
-      ItemStack wand = new ItemStack(Ollivanders2.wandMaterial);
+      ItemStack wand = Ollivanders2API.getItems(p).getItemByType(O2ItemType.WAND, 1);
+      if (wand == null)
+         return null;
 
-      lore.add(wood + " and " + core);
+      lore.add(wood + O2PlayerCommon.wandLoreConjunction + core);
       ItemMeta meta = wand.getItemMeta();
 
       if (meta == null)
          return null;
 
       meta.setLore(lore);
-      meta.setDisplayName("Wand");
       wand.setItemMeta(meta);
       wand.setAmount(amount);
 
@@ -1118,7 +1176,7 @@ public class Ollivanders2Common
     * @param player the player to check
     * @return the cauldron if a player is facing one, null otherwise
     */
-   public Block playerFacingBlockType (Player player, Material blockType)
+   public Block playerFacingBlockType(@NotNull Player player, @NotNull Material blockType)
    {
       List<Block> blocksInFront = player.getLineOfSight(null, 3);
       Block target = null;
@@ -1141,16 +1199,23 @@ public class Ollivanders2Common
     * @param amount the number of galleons to create
     * @return the item stack of galleons
     */
-   public ItemStack getGalleon (int amount)
+   @NotNull
+   public ItemStack getGalleon(int amount)
    {
-      ItemStack gal = new ItemStack(galleonMaterial);
-      ItemMeta meta = gal.getItemMeta();
+      ItemStack galleon = new ItemStack(O2ItemType.GALLEON.getMaterial());
+      ItemMeta meta = galleon.getItemMeta();
 
-      meta.setDisplayName(galleon);
-      gal.setItemMeta(meta);
-      gal.setAmount(amount);
+      if (meta == null)
+      {
+         p.getLogger().warning("getGalleon: item meta is null");
+         return galleon;
+      }
 
-      return gal;
+      meta.setDisplayName(O2ItemType.GALLEON.getName());
+      galleon.setItemMeta(meta);
+      galleon.setAmount(amount);
+
+      return galleon;
    }
 
    /**
@@ -1159,16 +1224,23 @@ public class Ollivanders2Common
     * @param amount the number of sickles to create
     * @return the item stack of sickles
     */
-   public ItemStack getSickle (int amount)
+   @NotNull
+   public ItemStack getSickle(int amount)
    {
-      ItemStack sic = new ItemStack(sickleMaterial);
-      ItemMeta meta = sic.getItemMeta();
+      ItemStack sickle = new ItemStack(O2ItemType.SICKLE.getMaterial());
+      ItemMeta meta = sickle.getItemMeta();
 
-      meta.setDisplayName(sickle);
-      sic.setItemMeta(meta);
-      sic.setAmount(amount);
+      if (meta == null)
+      {
+         p.getLogger().warning("getSickle: item meta is null");
+         return sickle;
+      }
 
-      return sic;
+      meta.setDisplayName(O2ItemType.SICKLE.getName());
+      sickle.setItemMeta(meta);
+      sickle.setAmount(amount);
+
+      return sickle;
    }
 
    /**
@@ -1177,16 +1249,23 @@ public class Ollivanders2Common
     * @param amount the number of knuts to create
     * @return the item stack of knuts
     */
-   public ItemStack getKnut (int amount)
+   @NotNull
+   public ItemStack getKnut(int amount)
    {
-      ItemStack knu = new ItemStack(knutMaterial);
-      ItemMeta meta = knu.getItemMeta();
+      ItemStack knut = new ItemStack(O2ItemType.KNUT.getMaterial());
+      ItemMeta meta = knut.getItemMeta();
 
-      meta.setDisplayName(knut);
-      knu.setItemMeta(meta);
-      knu.setAmount(amount);
+      if (meta == null)
+      {
+         p.getLogger().warning("getKnut: item meta is null");
+         return knut;
+      }
 
-      return knu;
+      meta.setDisplayName(O2ItemType.KNUT.getName());
+      knut.setItemMeta(meta);
+      knut.setAmount(amount);
+
+      return knut;
    }
 
    /**
@@ -1195,7 +1274,7 @@ public class Ollivanders2Common
     * @param player the player to give the items to
     * @param kit    the items to give
     */
-   public void givePlayerKit (Player player, List<ItemStack> kit)
+   public void givePlayerKit(@NotNull Player player, @NotNull List<ItemStack> kit)
    {
       Location loc = player.getEyeLocation();
       ItemStack[] kitArray = kit.toArray(new ItemStack[kit.size()]);
@@ -1212,19 +1291,12 @@ public class Ollivanders2Common
     * @param block the block to check
     * @return true if it is a natural log, false otherwise
     */
-   public boolean isNaturalLog (Block block)
+   public boolean isNaturalLog(@NotNull Block block)
    {
       Material material = block.getType();
 
-      if (material == Material.OAK_LOG || material == Material.BIRCH_LOG || material == Material.ACACIA_LOG
-            || material == Material.DARK_OAK_LOG || material == Material.JUNGLE_LOG || material == Material.SPRUCE_LOG)
-      {
-         return true;
-      }
-      else
-      {
-         return false;
-      }
+      return (material == Material.OAK_LOG || material == Material.BIRCH_LOG || material == Material.ACACIA_LOG
+              || material == Material.DARK_OAK_LOG || material == Material.JUNGLE_LOG || material == Material.SPRUCE_LOG);
    }
 
    /**
@@ -1233,7 +1305,7 @@ public class Ollivanders2Common
     *
     * @param intensity - Intensity of the flair. If greater than 10, is reduced to 10.
     */
-   public static void flair (Location location, int radius, double intensity)
+   public static void flair(@NotNull Location location, int radius, double intensity)
    {
       if (intensity > 10)
       {
@@ -1247,7 +1319,9 @@ public class Ollivanders2Common
             spher[0] = inc;
             spher[1] = azi;
             Location effectLocation = location.clone().add(spherToVec(spher, radius));
-            effectLocation.getWorld().playEffect(effectLocation, Effect.SMOKE, 4);
+
+            if (effectLocation.getWorld() != null)
+               effectLocation.getWorld().playEffect(effectLocation, Effect.SMOKE, 4);
          }
       }
    }
@@ -1256,10 +1330,10 @@ public class Ollivanders2Common
     * Translates vector to spherical coords
     *
     * @param vec - Vector to be translated
-    * @return Spherical coords in double array with
-    * indexes 0=inclination 1=azimuth
+    * @return Spherical coords in double array with indexes 0=inclination 1=azimuth
     */
-   public static double[] vecToSpher (Vector vec)
+   @NotNull
+   public static double[] vecToSpher(@NotNull Vector vec)
    {
       double inc = Math.acos(vec.getZ());
       double azi = Math.atan2(vec.getY(), vec.getX());
@@ -1276,7 +1350,8 @@ public class Ollivanders2Common
     * @param spher array with indexes 0=inclination 1=azimuth
     * @return Vector
     */
-   public static Vector spherToVec(double[] spher, int radius)
+   @NotNull
+   public static Vector spherToVec(@NotNull double[] spher, int radius)
    {
       double inc = spher[0];
       double azi = spher[1];
@@ -1290,11 +1365,11 @@ public class Ollivanders2Common
    /**
     * Send a title message to all players.
     *
-    * @param title
-    * @param subtitle
-    * @param players
+    * @param title    the title message
+    * @param subtitle the subtitle
+    * @param players  message recipients
     */
-   public void sendTitleMessage(String title, String subtitle, ArrayList<Player> players)
+   public void sendTitleMessage(@NotNull String title, @Nullable String subtitle, @NotNull List<Player> players)
    {
       for (Player player : players)
       {
@@ -1307,16 +1382,102 @@ public class Ollivanders2Common
     *
     * @return the list of sorted online players
     */
-   public ArrayList<Player> getAllOnlineSortedPlayers()
+   @NotNull
+   public List<Player> getAllOnlineSortedPlayers()
    {
       ArrayList<Player> sortedPlayers = new ArrayList<>();
 
       for (Player player : p.getServer().getOnlinePlayers())
       {
-         if (Ollivanders2API.getHouses().isSorted(player))
+         if (Ollivanders2API.getHouses(p).isSorted(player))
             sortedPlayers.add(player);
       }
 
       return sortedPlayers;
+   }
+
+   /**
+    * Print debug messages to the server log.
+    *
+    * @param message   the debug message
+    * @param e         the exception, if applicable
+    * @param r         the runtime exception, if applicable
+    * @param isWarning true if this should be at WARNING level, false if it should be INFO level
+    */
+   public void printDebugMessage(@NotNull String message, @Nullable Exception e, @Nullable RuntimeException r, boolean isWarning)
+   {
+      if (!Ollivanders2.debug)
+         return;
+
+      printLogMessage(message, e, r, isWarning);
+   }
+
+   /**
+    * Print debug messages to the server log.
+    *
+    * @param message   the debug message
+    * @param e         the exception, if applicable
+    * @param r         the runtime exception, if applicable
+    * @param isWarning true if this should be at WARNING level, false if it should be INFO level
+    */
+   public void printLogMessage(@NotNull String message, @Nullable Exception e, @Nullable RuntimeException r, boolean isWarning)
+   {
+      if (isWarning)
+      {
+         p.getLogger().warning(message);
+
+         if (e != null)
+            e.printStackTrace();
+
+         if (r != null)
+            r.printStackTrace();
+      }
+      else
+      {
+         p.getLogger().info(message);
+      }
+   }
+
+   /**
+    * Does the item stack match the described item
+    *
+    * @param itemStack the item stack to check
+    * @param material the target material
+    * @param name the target item name
+    * @param lore the target item lore, match is checked on the 0th index lore string
+    * @param amount the amount of the item, < 1 to ignore the amount
+    * @return true if the item stack matches, false otherwise
+    */
+   public boolean matchesItem (@NotNull ItemStack itemStack, @NotNull Material material, @NotNull String name, @NotNull String lore, int amount)
+   {
+      // check amount
+      if (itemStack.getAmount() < 1 || (amount > 0 && (itemStack.getAmount() != amount)))
+         return false;
+
+      // check material
+      if (itemStack.getType() != material)
+         return false;
+
+      // check name and lore
+      ItemMeta meta = itemStack.getItemMeta();
+      if (meta == null)
+         return false;
+
+      String itemName = meta.getDisplayName();
+      if (!itemName.equalsIgnoreCase(name))
+         return false;
+
+      // don't check lore on written books
+      if (material != Material.WRITTEN_BOOK)
+      {
+         List<String> itemLore = meta.getLore();
+         if (itemLore == null || itemLore.size() < 1)
+            return false;
+
+         if (!itemLore.get(0).equalsIgnoreCase(lore))
+            return false;
+      }
+
+      return true;
    }
 }

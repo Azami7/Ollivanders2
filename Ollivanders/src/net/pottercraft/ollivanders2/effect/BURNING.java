@@ -1,11 +1,11 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -24,7 +24,7 @@ public class BURNING extends O2Effect
     * @param duration the duration of the effect
     * @param pid      the player this effect acts on
     */
-   public BURNING(Ollivanders2 plugin, Integer duration, UUID pid)
+   public BURNING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
 
@@ -36,24 +36,26 @@ public class BURNING extends O2Effect
       divinationText.add("will be consumed by fire");
       divinationText.add("will burn from within");
 
-      damage = duration / 100;
+      damage = (double) duration / 100;
    }
 
    @Override
    public void checkEffect()
    {
       Player target = p.getServer().getPlayer(targetID);
-      World world = target.getWorld();
-      if (world != null)
-      {
-         long curTime = target.getWorld().getFullTime();
 
-         if (((curTime % (Ollivanders2Common.ticksPerSecond * damageFrequencyInSeconds)) == 0))
-         {
-            doDamage();
-         }
-      } else
+      if (target == null)
+      {
          kill();
+         return;
+      }
+
+      long curTime = target.getWorld().getFullTime();
+
+      if (((curTime % (Ollivanders2Common.ticksPerSecond * damageFrequencyInSeconds)) == 0))
+      {
+         doDamage();
+      }
    }
 
    private void doDamage()
@@ -68,7 +70,8 @@ public class BURNING extends O2Effect
 
          target.getWorld().playEffect(target.getLocation(), Effect.SMOKE, 4);
          target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_HURT_ON_FIRE, 1, 0);
-      } else
+      }
+      else
          kill();
    }
 

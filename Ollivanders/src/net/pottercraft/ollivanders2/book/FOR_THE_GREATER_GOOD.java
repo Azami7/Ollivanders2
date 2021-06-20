@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Non-cannon book written by Gellert Grindelwald that is the only location of Morsmordre appears, which makes it
@@ -13,13 +14,11 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
  */
 public class FOR_THE_GREATER_GOOD extends O2Book
 {
-   public FOR_THE_GREATER_GOOD (Ollivanders2 plugin)
+   public FOR_THE_GREATER_GOOD(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
-      shortTitle = title = "For The Greater Good";
-      author = "Gellert Grindelwald";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.FOR_THE_GREATER_GOOD;
 
       openingPage = "We've lived in the shadows for far too long, scuttling like rats in the gutter, forced to hide lest we be discovered, forced to conceal our true nature. I refuse to bow down any longer.";
 

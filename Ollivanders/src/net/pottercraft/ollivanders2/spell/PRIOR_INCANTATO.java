@@ -3,12 +3,13 @@ package net.pottercraft.ollivanders2.spell;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,9 @@ import java.util.List;
  */
 public class PRIOR_INCANTATO extends O2Spell
 {
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    */
    public PRIOR_INCANTATO()
    {
       super();
@@ -38,7 +42,14 @@ public class PRIOR_INCANTATO extends O2Spell
       text = "Force a player's wand to reveal the last spell cast. Your success depends on your experience with this spell.";
    }
 
-   public PRIOR_INCANTATO (Ollivanders2 plugin, Player player, Double rightWand)
+   /**
+    * Constructor.
+    *
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
+    * @param rightWand which wand the player was using
+    */
+   public PRIOR_INCANTATO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -87,7 +98,7 @@ public class PRIOR_INCANTATO extends O2Spell
     *
     * @param target the target player
     */
-   private void doPriorIncanto (Player target)
+   private void doPriorIncanto(@NotNull Player target)
    {
       O2Player o2p = p.getO2Player(target);
 

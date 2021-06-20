@@ -1,5 +1,8 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /**
  * Represents allowable stationary spells.
  */
@@ -20,19 +23,32 @@ public enum O2StationarySpellType
    PROTEGO_TOTALUM(net.pottercraft.ollivanders2.stationaryspell.PROTEGO_TOTALUM.class),
    REPELLO_MUGGLETON(net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON.class);
 
-   private final Class className;
+   private final Class<?> className;
 
-   O2StationarySpellType(Class className)
+   /**
+    * Constructor
+    *
+    * @param className the class this type represents
+    */
+   O2StationarySpellType(@NotNull Class<?> className)
    {
       this.className = className;
    }
 
-   public Class getClassName()
+   @NotNull
+   public Class<?> getClassName()
    {
       return className;
    }
 
-   public static O2StationarySpellType getStationarySpellTypeFromString (String name)
+   /**
+    * Get the spell by name
+    *
+    * @param name the name of the spell
+    * @return the spell type or null if not found
+    */
+   @Nullable
+   public static O2StationarySpellType getStationarySpellTypeFromString(@NotNull String name)
    {
       O2StationarySpellType spellType = null;
 
@@ -40,7 +56,10 @@ public enum O2StationarySpellType
       {
          spellType = O2StationarySpellType.valueOf(name);
       }
-      catch (Exception e) { }
+      catch (Exception e)
+      {
+         // do nothing, this is expected if they send a string that is not a valid spell
+      }
 
       return spellType;
    }

@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Creates an Anti-apparition spell object.
@@ -31,11 +32,11 @@ public final class NULLUM_APPAREBIT extends StationarySpell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public NULLUM_APPAREBIT (Ollivanders2 plugin, Player player, Double rightWand)
+   public NULLUM_APPAREBIT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

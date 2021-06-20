@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.*;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Bukkit;
@@ -11,6 +12,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -35,8 +37,8 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
       {{
          add("He stares at the monolith before him, lifts his wand and begins to chant eerily. The surface of the cabinet glimmers, atremble in the ambient light. Almost alive. Then he stops. Looking back, his eyes haunted, he slips away. Light plays within the cabinet. Movement. Shadows flicker within, coalesce.");
          add("\" ...we forced him head-first into that Vanishing Cabinet on the first floor.\"\n" +
-               "\"But you'll get into terrible trouble!\"\n" +
-               "\"Not until Montague reappears, and that could take weeks, I dunno where we sent him...\" -Fred Weasley and Hermione Granger");
+                 "\"But you'll get into terrible trouble!\"\n" +
+                 "\"Not until Montague reappears, and that could take weeks, I dunno where we sent him...\" -Fred Weasley and Hermione Granger");
       }};
 
       text = "Harmonia Nectere Passus will create a pair of vanishing cabinets if the cabinets on both ends are configured correctly.";
@@ -45,11 +47,11 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public HARMONIA_NECTERE_PASSUS (Ollivanders2 plugin, Player player, Double rightWand)
+   public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -64,51 +66,52 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
 
       Block fromBlock = getTargetBlock();
+      if (fromBlock == null)
+      {
+         common.printDebugMessage("HARMONIA_NECTERE_PASSU.doCheckEffect: from block is null", null, null, true);
+         kill();
+         return;
+      }
+
       Material blockType = fromBlock.getType();
 
-      if (common.signs.contains(blockType))
+      if (Ollivanders2Common.signs.contains(blockType))
       {
          // determine the location of the other vanishing cabinet
          Location toLoc = getSignLocation(fromBlock);
          if (toLoc == null)
          {
-            if (Ollivanders2.debug)
-               p.getLogger().info("Unable to get toLoc from sign.");
-
+            common.printDebugMessage("Unable to get toLoc from sign.", null, null, false);
             return;
          }
 
          Block toBlock = toLoc.getBlock();
          Material toBlockType = toBlock.getType();
-         if (!common.signs.contains(toBlockType))
+         if (!Ollivanders2Common.signs.contains(toBlockType))
          {
-            if (Ollivanders2.debug)
-               p.getLogger().info("Block at toLoc is not a sign block");
-
+            common.printDebugMessage("Block at toLoc is not a sign block", null, null, false);
             return;
          }
 
          Location fromLoc = getSignLocation(toBlock);
          if (fromLoc == null)
          {
-            if (Ollivanders2.debug)
-               p.getLogger().info("Unable to get fromLoc from sign.");
-
+            common.printDebugMessage("Unable to get fromLoc from sign.", null, null, false);
             return;
          }
 
-         for (StationarySpellObj statSpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+         for (StationarySpellObj statSpell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (statSpell instanceof net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS)
             {
                net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS harmonia
-                     = (net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS) statSpell;
+                       = (net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS) statSpell;
                if (harmonia.getBlock().equals(fromLoc.getBlock()) || harmonia.getBlock().equals(toLoc.getBlock()))
                {
                   return;
@@ -121,8 +124,8 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
          harmoniaFrom.flair(20);
          harmoniaTo.flair(20);
 
-         Ollivanders2API.getStationarySpells().addStationarySpell(harmoniaFrom);
-         Ollivanders2API.getStationarySpells().addStationarySpell(harmoniaTo);
+         Ollivanders2API.getStationarySpells(p).addStationarySpell(harmoniaFrom);
+         Ollivanders2API.getStationarySpells(p).addStationarySpell(harmoniaTo);
       }
 
       kill();
@@ -161,10 +164,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
          }
          catch (NumberFormatException e)
          {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().warning("Unable to parse coordinates from sign.");
-            }
+            common.printDebugMessage("Unable to parse coordinates from sign.", null, null, false);
             return null;
          }
 

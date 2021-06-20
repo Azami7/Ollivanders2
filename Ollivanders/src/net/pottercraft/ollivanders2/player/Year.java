@@ -1,12 +1,15 @@
 package net.pottercraft.ollivanders2.player;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Represents the year this player is in school.
  *
  * @author autumnwoz
  * @since 2.2.7
  */
-public enum Year {
+public enum Year
+{
    YEAR_1(1, "1st"),
    YEAR_2(2, "2nd"),
    YEAR_3(3, "3rd"),
@@ -15,10 +18,16 @@ public enum Year {
    YEAR_6(6, "6th"),
    YEAR_7(7, "7th");
 
-   Integer intValue;
-   String displayText;
+   final Integer intValue;
+   final String displayText;
 
-   Year (int value, String text)
+   /**
+    * Constructor
+    *
+    * @param value the int value of the year
+    * @param text  the string for this year
+    */
+   Year(int value, @NotNull String text)
    {
       intValue = value;
       displayText = text;
@@ -29,6 +38,7 @@ public enum Year {
     *
     * @return the int value 1-7
     */
+   @NotNull
    public Integer getIntValue ()
    {
       return intValue;
@@ -39,6 +49,7 @@ public enum Year {
     *
     * @return
     */
+   @NotNull
    public String getDisplayText ()
    {
       return displayText;

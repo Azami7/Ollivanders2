@@ -5,12 +5,13 @@ import java.util.UUID;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This effect causes the player to impulsively harm those nearby and causes them to provoke attacks by
@@ -29,11 +30,11 @@ public class AGGRESSION extends O2Effect
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
+    * @param plugin   a callback to the MC plugin
     * @param duration the duration of the effect
-    * @param pid the ID of the player this effect acts on
+    * @param pid      the ID of the player this effect acts on
     */
-   public AGGRESSION (Ollivanders2 plugin, Integer duration, UUID pid)
+   public AGGRESSION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
 
@@ -83,11 +84,11 @@ public class AGGRESSION extends O2Effect
     *
     * @param nearby a collection of nearby entities
     */
-   private void damageRandomEntity (Collection<LivingEntity> nearby)
+   private void damageRandomEntity(@NotNull Collection<LivingEntity> nearby)
    {
       Player target = p.getServer().getPlayer(targetID);
 
-      if (nearby != null && !nearby.isEmpty())
+      if (!nearby.isEmpty())
       {
          int rand = Math.abs(Ollivanders2Common.random.nextInt());
          LivingEntity[] nArray = nearby.toArray(new LivingEntity[nearby.size()]);
@@ -126,11 +127,11 @@ public class AGGRESSION extends O2Effect
     *
     * @param nearby collection of nearby living entities
     */
-   private void provoke (Collection<LivingEntity> nearby)
+   private void provoke(@NotNull Collection<LivingEntity> nearby)
    {
       Player target = p.getServer().getPlayer(targetID);
 
-      if (nearby != null && !nearby.isEmpty())
+      if (!nearby.isEmpty())
       {
          for (LivingEntity entity : nearby)
          {
@@ -166,5 +167,5 @@ public class AGGRESSION extends O2Effect
     * @param perm true if this is permanent, false otherwise
     */
    @Override
-   public void setPermanent(boolean perm) { }
+   public void setPermanent (boolean perm) { }
 }

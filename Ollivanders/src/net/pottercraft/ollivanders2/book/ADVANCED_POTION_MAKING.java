@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.potion.*;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Advanced Potion-Making is a book written by Libatius Borage. As the title implies this book contains advanced recipes
@@ -16,13 +17,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class ADVANCED_POTION_MAKING extends O2Book
 {
-   public ADVANCED_POTION_MAKING (Ollivanders2 plugin)
+   public ADVANCED_POTION_MAKING(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
-      title = shortTitle = "Advanced Potion Making";
-      author = "Libatius Borage";
-      branch = O2MagicBranch.POTIONS;
+      bookType = O2BookType.ADVANCED_POTION_MAKING;
 
       potions.add(O2PotionType.MEMORY_POTION);
       potions.add(O2PotionType.WIGGENWELD_POTION);

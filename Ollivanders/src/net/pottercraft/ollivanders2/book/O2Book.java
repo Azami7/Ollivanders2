@@ -9,8 +9,10 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -31,22 +33,7 @@ public abstract class O2Book
    /**
     * The book author
     */
-   protected String author;
-
-   /**
-    * The full book title
-    */
-   protected String title;
-
-   /**
-    * The book title for item lore, cannot be more than 32 characters or it will appear blank.
-    */
-   protected String shortTitle;
-
-   /**
-    * The branch of magic this book covers
-    */
-   protected O2MagicBranch branch;
+   protected O2BookType bookType;
 
    /**
     * The book item object.
@@ -74,11 +61,9 @@ public abstract class O2Book
    /**
     * Constructor
     */
-   public O2Book (Ollivanders2 plugin)
+   public O2Book(@NotNull Ollivanders2 plugin)
    {
-      author = "Unknown";
-      title = "Untitled";
-      shortTitle = "Untitled";
+      bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1;
 
       openingPage = "";
       closingPage = "";
@@ -99,15 +84,15 @@ public abstract class O2Book
       if (bookItem == null)
          return;
 
-      BookMeta bookMeta = (BookMeta)bookItem.getItemMeta();
+      BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
       if (bookMeta == null)
          return;
 
-      bookMeta.setAuthor(author);
-      bookMeta.setTitle(shortTitle);
+      bookMeta.setAuthor(bookType.author);
+      bookMeta.setTitle(bookType.shortTitle);
 
       //write title page
-      String titlePage = title + "\n\nby " + author;
+      String titlePage = bookType.title + "\n\nby " + bookType.author;
       bookMeta.addPage(titlePage);
 
       StringBuilder toc = new StringBuilder();
@@ -129,18 +114,18 @@ public abstract class O2Book
 
       for (String content : bookContents)
       {
-         String name = Ollivanders2API.getBooks().spellText.getName(content);
+         String name = Ollivanders2API.getBooks(p).spellText.getName(content);
          if (name == null)
          {
-            p.getLogger().warning(this.title + " contains unknown spell or potion " + content);
+            p.getLogger().warning(bookType.title + " contains unknown spell or potion " + content);
             continue;
          }
 
          toc.append(name).append("\n");
 
          String text;
-         String mainText = Ollivanders2API.getBooks().spellText.getText(content);
-         String flavorText = Ollivanders2API.getBooks().spellText.getFlavorText(content);
+         String mainText = Ollivanders2API.getBooks(p).spellText.getText(content);
+         String flavorText = Ollivanders2API.getBooks(p).spellText.getFlavorText(content);
 
          if (flavorText == null)
          {
@@ -187,7 +172,8 @@ public abstract class O2Book
     * @param text the text for this spell
     * @return a list of the spell pages
     */
-   private ArrayList<String> createPages (String text)
+   @NotNull
+   private ArrayList<String> createPages(@NotNull String text)
    {
       //get the words in a spell text
       ArrayList<String> words = getWords(text);
@@ -202,15 +188,13 @@ public abstract class O2Book
     * @param text the book text for this spell
     * @return a list of the words in a text.
     */
-   private ArrayList<String> getWords (String text)
+   @NotNull
+   private ArrayList<String> getWords(@NotNull String text)
    {
       ArrayList<String> words = new ArrayList<>();
       String[] splits = text.split(" ");
 
-      for (String s : splits)
-      {
-         words.add(s);
-      }
+      Collections.addAll(words, splits);
 
       return words;
    }
@@ -230,7 +214,8 @@ public abstract class O2Book
     * @param words an array of all the words in the book
     * @return a list of book pages
     */
-   private ArrayList<String> makePages (ArrayList<String> words)
+   @NotNull
+   private ArrayList<String> makePages(@NotNull ArrayList<String> words)
    {
       ArrayList<String> pages = new ArrayList<>();
 
@@ -297,6 +282,7 @@ public abstract class O2Book
     *
     * @return a String list of lore
     */
+   @NotNull
    private List<String> getBookLore ()
    {
       List<String> lore = new ArrayList<>();
@@ -321,6 +307,7 @@ public abstract class O2Book
     *
     * @return the book item
     */
+   @NotNull
    public ItemStack getBookItem()
    {
       if (bookItem == null)
@@ -337,9 +324,10 @@ public abstract class O2Book
     *
     * @return title
     */
+   @NotNull
    public String getTitle ()
    {
-      return title;
+      return bookType.title;
    }
 
    /**
@@ -347,9 +335,10 @@ public abstract class O2Book
     *
     * @return short title for this book
     */
+   @NotNull
    public String getShortTitle ()
    {
-      return shortTitle;
+      return bookType.shortTitle;
    }
 
    /**
@@ -357,9 +346,10 @@ public abstract class O2Book
     *
     * @return author
     */
+   @NotNull
    public String getAuthor ()
    {
-      return author;
+      return bookType.author;
    }
 
    /**
@@ -367,8 +357,9 @@ public abstract class O2Book
     *
     * @return branch
     */
+   @NotNull
    public O2MagicBranch getBranch ()
    {
-      return branch;
+      return bookType.branch;
    }
 }

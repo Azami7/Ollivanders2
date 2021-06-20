@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Creates a port key.
@@ -60,11 +61,11 @@ public final class PORTUS extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public PORTUS (Ollivanders2 plugin, Player player, Double rightWand, String[] wordsArray)
+   public PORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand, @NotNull String[] wordsArray)
    {
       super(plugin, player, rightWand);
 
@@ -79,11 +80,11 @@ public final class PORTUS extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public PORTUS (Ollivanders2 plugin, Player player, Double rightWand)
+   public PORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -175,14 +176,14 @@ public final class PORTUS extends O2Spell
       }
    }
 
-   private boolean checkPermissions(Location fromLoc, Location toLoc)
+   private boolean checkPermissions(@NotNull Location fromLoc, @NotNull Location toLoc)
    {
       // can you apparate out of this location?
       boolean canApparateOut = true;
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(fromLoc)
-               && !stat.getCasterID().equals(player.getUniqueId()))
+                 && !stat.getCasterID().equals(player.getUniqueId()))
          {
             stat.flair(10);
             canApparateOut = false;
@@ -201,7 +202,7 @@ public final class PORTUS extends O2Spell
          return false;
 
       boolean canApparateIn = true;
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof NULLUM_APPAREBIT && stat.isInside(toLoc) && !stat.getCasterID().equals(player.getUniqueId()))
          {

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.Material;
 import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -33,11 +34,11 @@ public abstract class GaleatiSuper extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public GaleatiSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public GaleatiSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
    }
@@ -57,8 +58,15 @@ public abstract class GaleatiSuper extends O2Spell
             if (live.getUniqueId() == player.getUniqueId())
                continue;
 
-            EntityEquipment ee = live.getEquipment();
-            ItemStack helmet = ee.getHelmet();
+            EntityEquipment entityEquipment = live.getEquipment();
+            if (entityEquipment == null)
+            {
+               // they have no equipment
+               kill();
+               return;
+            }
+
+            ItemStack helmet = entityEquipment.getHelmet();
             if (helmet != null)
             {
                if (helmet.getType() != Material.AIR)
@@ -66,7 +74,7 @@ public abstract class GaleatiSuper extends O2Spell
                   live.getWorld().dropItem(live.getEyeLocation(), helmet);
                }
             }
-            ee.setHelmet(new ItemStack(materialType, 1));
+            entityEquipment.setHelmet(new ItemStack(materialType, 1));
             kill();
             return;
          }

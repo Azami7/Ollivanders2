@@ -6,7 +6,7 @@ import java.util.List;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.World;
@@ -14,6 +14,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Spawns magma cubes, blazes, and ghasts
@@ -48,11 +49,11 @@ public final class FIENDFYRE extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public FIENDFYRE (Ollivanders2 plugin, Player player, Double rightWand)
+   public FIENDFYRE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -73,7 +74,7 @@ public final class FIENDFYRE extends O2Spell
    protected void doCheckEffect ()
    {
       // check for stationary spells first to remove HORCRUX spells
-      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location);
+      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
 
       for (StationarySpellObj stationary : stationaries)
       {
@@ -98,9 +99,15 @@ public final class FIENDFYRE extends O2Spell
    /**
     * Spawn magmacubes, blazes, and ghasts according to usesModifier
     */
-   private void spawnCreatures ()
+   private void spawnCreatures()
    {
       World world = location.getWorld();
+      if (world == null)
+      {
+         common.printDebugMessage("FIENDFYE.spawnCreatues: world is null", null, null, true);
+         kill();
+         return;
+      }
 
       int numCreatures = (int) usesModifier / 10;
       if (numCreatures < minCreatures)
@@ -112,10 +119,7 @@ public final class FIENDFYRE extends O2Spell
          numCreatures = maxCreatures;
       }
 
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("spawning " + numCreatures + " fiendfyre creatures...");
-      }
+      common.printDebugMessage("spawning " + numCreatures + " fiendfyre creatures...", null, null, false);
 
       if (usesModifier > 100)
       {

@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Curses and Counter-Curses
@@ -13,13 +14,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class CURSES_AND_COUNTERCURSES extends O2Book
 {
-   public CURSES_AND_COUNTERCURSES (Ollivanders2 plugin)
+   public CURSES_AND_COUNTERCURSES(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
-      title = shortTitle = "Curses and Counter-Curses";
-      author = "Professor Vindictus Viridian";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.CURSES_AND_COUNTERCURSES;
 
       openingPage = "Bewitch your friends and befuddle your enemies with the latest revenges: Hair loss, Jelly-Legs, Tongue-Tying, and much, much more.";
 

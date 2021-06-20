@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Makes an anti-disapparition spell. Players can't apparate out of it.
@@ -30,11 +31,11 @@ public final class NULLUM_EVANESCUNT extends StationarySpell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public NULLUM_EVANESCUNT (Ollivanders2 plugin, Player player, Double rightWand)
+   public NULLUM_EVANESCUNT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

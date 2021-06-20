@@ -9,7 +9,7 @@ import java.util.Map.Entry;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Teachable;
@@ -22,6 +22,8 @@ import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Ollivander2 magical potion.
@@ -45,7 +47,7 @@ public abstract class O2Potion implements Teachable
       NEWT (3),
       EXPERT (4);
 
-      int successModifier;
+      final int successModifier;
 
       PotionLevel (int mod)
       {
@@ -105,7 +107,7 @@ public abstract class O2Potion implements Teachable
     *
     * @param plugin a callback to the plugin
     */
-   public O2Potion (Ollivanders2 plugin)
+   public O2Potion(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
       potionType = O2PotionType.BABBLING_BEVERAGE;
@@ -116,19 +118,21 @@ public abstract class O2Potion implements Teachable
     *
     * @return the recipe text for this ingredient
     */
+   @NotNull
    protected String getIngredientsText ()
    {
-      String s = "\n\nIngredients:";
+      StringBuilder stringBuilder = new StringBuilder();
+      stringBuilder.append("\n\nIngredients:");
 
       for (Entry<O2ItemType, Integer> e : ingredients.entrySet())
       {
          O2ItemType ingredientType = e.getKey();
-         String name = Ollivanders2API.getItems().getItemDisplayNameByType(ingredientType);
+         String name = Ollivanders2API.getItems(p).getItemDisplayNameByType(ingredientType);
 
-         s = s + "\n" + e.getValue().toString() + " " + name;
+         stringBuilder.append("\n").append(e.getValue().toString()).append(" ").append(name);
       }
 
-      return s;
+      return stringBuilder.toString();
    }
 
    /**
@@ -136,6 +140,7 @@ public abstract class O2Potion implements Teachable
     *
     * @return the type of potion
     */
+   @NotNull
    public O2PotionType getPotionType ()
    {
       return potionType;
@@ -146,6 +151,7 @@ public abstract class O2Potion implements Teachable
     *
     * @return the name of the potion
     */
+   @NotNull
    public String getName ()
    {
       return potionType.getPotionName();
@@ -156,6 +162,7 @@ public abstract class O2Potion implements Teachable
     *
     * @return a Map of the ingredients for this potion
     */
+   @NotNull
    Map<O2ItemType, Integer> getIngredients ()
    {
       return ingredients;
@@ -167,6 +174,7 @@ public abstract class O2Potion implements Teachable
     *
     * @return the description text for this potion
     */
+   @NotNull
    public String getText ()
    {
       return text + getIngredientsText();
@@ -178,6 +186,7 @@ public abstract class O2Potion implements Teachable
     *
     * @return the flavor text for this potion.
     */
+   @Nullable
    public String getFlavorText()
    {
       if (flavorText.size() < 1)
@@ -191,6 +200,7 @@ public abstract class O2Potion implements Teachable
       }
    }
 
+   @NotNull
    public O2MagicBranch getMagicBranch ()
    {
       return O2MagicBranch.POTIONS;
@@ -202,7 +212,7 @@ public abstract class O2Potion implements Teachable
     * @param cauldronIngredients the ingredients found in the cauldron
     * @return true if the ingredient list matches this potion recipe exactly, false otherwise
     */
-   public boolean checkRecipe (Map<O2ItemType, Integer> cauldronIngredients)
+   public boolean checkRecipe(@NotNull Map<O2ItemType, Integer> cauldronIngredients)
    {
       // are there the right number of ingredients?
       if (ingredients.size() != cauldronIngredients.size())
@@ -236,13 +246,19 @@ public abstract class O2Potion implements Teachable
     *
     * @return an ItemStack with a single bottle of this potion
     */
-   public ItemStack brew (Player brewer, boolean checkCanBrew)
+   @NotNull
+   public ItemStack brew(@NotNull Player brewer, boolean checkCanBrew)
    {
       if (checkCanBrew && !canBrew(brewer))
          return brewBadPotion();
 
       ItemStack potion = new ItemStack(potionMaterialType);
-      PotionMeta meta = (PotionMeta)potion.getItemMeta();
+      PotionMeta meta = (PotionMeta) potion.getItemMeta();
+      if (meta == null)
+      {
+         p.getLogger().warning("O2Potion.brew: item meta is null");
+         return brewBadPotion();
+      }
 
       meta.setDisplayName(potionType.getPotionName());
       meta.setLore(Arrays.asList(potionType.getPotionName()));
@@ -264,15 +280,15 @@ public abstract class O2Potion implements Teachable
     * @param brewer the player brewing the potion
     * @return true if the player will be successful, false otherwise.
     */
-   private boolean canBrew (Player brewer)
+   private boolean canBrew(@NotNull Player brewer)
    {
       boolean canBrew = true;
 
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(brewer.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(brewer.getUniqueId());
       if (o2p == null)
          return false;
 
-      Integer potionCount = o2p.getPotionCount(potionType);
+      int potionCount = o2p.getPotionCount(potionType);
 
       // do not allow them to brew if book learning is on and they do not know this potion
       if (Ollivanders2.bookLearning && (potionCount < 1))
@@ -334,10 +350,7 @@ public abstract class O2Potion implements Teachable
 
          int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) + 1;
 
-         if (successRate > rand)
-            canBrew = true;
-         else
-            canBrew = false;
+         canBrew = (successRate > rand);
       }
 
       return canBrew;
@@ -348,10 +361,14 @@ public abstract class O2Potion implements Teachable
     *
     * @return a random bad potion
     */
-   public static ItemStack brewBadPotion ()
+   @NotNull
+   public static ItemStack brewBadPotion()
    {
       ItemStack potion = new ItemStack(Material.POTION);
-      PotionMeta meta = (PotionMeta)potion.getItemMeta();
+      PotionMeta meta = (PotionMeta) potion.getItemMeta();
+
+      if (meta == null)
+         return potion;
 
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 10);
       String name = "Watery Potion";
@@ -426,5 +443,5 @@ public abstract class O2Potion implements Teachable
       return potion;
    }
 
-   public void drink (O2Player o2p, Player player) { }
+   public void drink(@NotNull O2Player o2p, @NotNull Player player) { }
 }

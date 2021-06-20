@@ -9,10 +9,12 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Bursts a log into a stack of coreless wands, whose number depends on the player's spell level.
@@ -41,11 +43,11 @@ public final class FRANGE_LIGNEA extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public FRANGE_LIGNEA (Ollivanders2 plugin, Player player, Double rightWand)
+   public FRANGE_LIGNEA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FRANGE_LIGNEA;
@@ -65,20 +67,34 @@ public final class FRANGE_LIGNEA extends O2Spell
     * Break a natural log in to sticks
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
 
-      Block block = getTargetBlock();
+      Block target = getTargetBlock();
+      if (target == null)
+      {
+         common.printDebugMessage("FRANGE_LIGNEA.doCheckEffect: target block is null", null, null, false);
+         kill();
+         return;
+      }
 
-      if (Ollivanders2API.common.isNaturalLog(block))
+      if (Ollivanders2API.common.isNaturalLog(target))
       {
          // break the log in to the correct wand core type
-         String woodType = Ollivanders2API.common.enumRecode(block.getType().toString()).split("_")[0];
+         String woodType = Ollivanders2API.common.enumRecode(target.getType().toString()).split("_")[0];
          woodType = Ollivanders2API.common.firstLetterCapitalize(woodType);
 
-         block.getLocation().getWorld().createExplosion(block.getLocation(), 0);
+         World world = target.getLocation().getWorld();
+         if (world == null)
+         {
+            common.printDebugMessage("FRANGE_LIGNEA.doCheckEffect: world is null", null, null, true);
+            kill();
+            return;
+         }
+
+         target.getLocation().getWorld().createExplosion(target.getLocation(), 0);
          int number = (int) (usesModifier * 0.8);
 
          // make a stack of sticks
@@ -86,6 +102,12 @@ public final class FRANGE_LIGNEA extends O2Spell
          {
             ItemStack stickStack = new ItemStack(Material.STICK, number);
             ItemMeta stickMeta = stickStack.getItemMeta();
+            if (stickMeta == null)
+            {
+               common.printDebugMessage("FRANGE_LIGNEA.doCheckEffect: stickMeta is null", null, null, true);
+               kill();
+               return;
+            }
 
             stickMeta.setDisplayName(corelessWandLabel);
             List<String> lore = new ArrayList<>();
@@ -93,10 +115,10 @@ public final class FRANGE_LIGNEA extends O2Spell
             stickMeta.setLore(lore);
             stickStack.setItemMeta(stickMeta);
 
-            player.getWorld().dropItemNaturally(block.getLocation(), stickStack);
+            player.getWorld().dropItemNaturally(target.getLocation(), stickStack);
          }
 
-         block.setType(Material.AIR);
+         target.setType(Material.AIR);
          kill();
       }
    }

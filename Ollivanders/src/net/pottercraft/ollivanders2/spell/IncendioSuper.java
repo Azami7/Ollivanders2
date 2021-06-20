@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -14,6 +14,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Sets fire to blocks or living entities for an amount of time depending on the player's spell level.
@@ -41,11 +42,11 @@ public abstract class IncendioSuper extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public IncendioSuper (Ollivanders2 plugin, Player player, Double rightWand)
+   public IncendioSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -79,6 +80,12 @@ public abstract class IncendioSuper extends O2Spell
       else
       {
          Block target = getTargetBlock();
+         if (target == null)
+         {
+            common.printDebugMessage("IncendioSuper.doCheckEffect: target block is null", null, null, true);
+            kill();
+            return;
+         }
 
          // blocks
          if (!strafe)
@@ -127,7 +134,7 @@ public abstract class IncendioSuper extends O2Spell
     *
     * @param block the block to change
     */
-   private void setBlockOnFire (Block block)
+   private void setBlockOnFire(@NotNull Block block)
    {
       Material type = block.getType();
       if (type == Material.AIR)

@@ -14,6 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Reduces any spell effects on an item or player.
@@ -50,11 +51,11 @@ public final class FINITE_INCANTATEM extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public FINITE_INCANTATEM (Ollivanders2 plugin, Player player, Double rightWand)
+   public FINITE_INCANTATEM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FINITE_INCANTATEM;
@@ -110,21 +111,18 @@ public final class FINITE_INCANTATEM extends O2Spell
             continue;
          }
 
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("finite incantatem targeting " + live.getName());
-         }
+         common.printDebugMessage("finite incantatem targeting " + live.getName(), null, null, false);
 
          if (live instanceof Player)
          {
             Player ply = (Player) live;
 
             // look for any effects on the player
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffects(ply.getUniqueId()))
+            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffects(ply.getUniqueId()))
             {
                if (usesModifier < 100)
                {
-                  Ollivanders2API.getPlayers().playerEffects.ageAllEffectsByPercent(ply.getUniqueId(), (int) (percent * 100));
+                  Ollivanders2API.getPlayers(p).playerEffects.ageAllEffectsByPercent(ply.getUniqueId(), (int) (percent * 100));
                }
 
                kill();
@@ -175,10 +173,7 @@ public final class FINITE_INCANTATEM extends O2Spell
          if (meta == null)
             continue;
 
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("finite incantatem targeting " + item.getName());
-         }
+         common.printDebugMessage("finite incantatem targeting " + item.getName(), null, null, false);
 
          if (meta.hasLore())
          {
@@ -212,19 +207,13 @@ public final class FINITE_INCANTATEM extends O2Spell
          String[] loreParts = loreLine.split(" ");
          String curseName = loreParts[0];
 
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("item meta line starts with " + curseName);
-         }
+         common.printDebugMessage("item meta line starts with " + curseName, null, null, false);
 
          if (curseName.equals(GEMINIO.geminio))
          {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("item has " + curseName + " curse");
-            }
+            common.printDebugMessage("item has " + curseName + " curse", null, null, false);
 
-            int curMagnitude = 0;
+            int curMagnitude;
 
             try
             {
@@ -240,20 +229,19 @@ public final class FINITE_INCANTATEM extends O2Spell
                double difference = curMagnitude * percent;
                int newMagnitude = curMagnitude - (int) difference;
 
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("reducing magnitude by " + percent + "%, " + difference + ", from " + curMagnitude + " to " + newMagnitude);
-               }
+               common.printDebugMessage("reducing magnitude by " + percent + "%, " + difference + ", from " + curMagnitude + " to " + newMagnitude, null, null, false);
 
                if (percent < 100)
                {
                   newLore.add(loreParts[0] + " " + newMagnitude);
                }
             }
-         } else if (curseName.equals(FLAGRANTE.flagrante))
+         }
+         else if (curseName.equals(FLAGRANTE.flagrante))
          {
             // special case for flagrante, do nothing which will just remove the effect entirely
-         } else
+         }
+         else
          {
             newLore.add(loreLine);
          }

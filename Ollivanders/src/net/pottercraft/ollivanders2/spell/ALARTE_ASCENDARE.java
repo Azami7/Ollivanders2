@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,7 @@ public final class ALARTE_ASCENDARE extends O2Spell
       {{
          add("The Winged-Ascent Charm");
          add("He brandished his wand at the snake and there was a loud bang; the snake, instead of vanishing, "
-               + "flew ten feet into the air and fell back to the floor with a loud smack.");
+                 + "flew ten feet into the air and fell back to the floor with a loud smack.");
       }};
 
       text = "Shoots target entity in to the air.";
@@ -43,11 +44,11 @@ public final class ALARTE_ASCENDARE extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ALARTE_ASCENDARE (Ollivanders2 plugin, Player player, Double rightWand)
+   public ALARTE_ASCENDARE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -92,11 +93,7 @@ public final class ALARTE_ASCENDARE extends O2Spell
             if (living.getUniqueId() == player.getUniqueId())
                continue;
 
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("targeting entity " + living.getName());
-            }
-
+            common.printDebugMessage("targeting entity " + living.getName(), null, null, false);
             living.setVelocity(living.getVelocity().add(vec));
 
             kill();
@@ -113,11 +110,7 @@ public final class ALARTE_ASCENDARE extends O2Spell
       {
          Item item = items.get(0);
 
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("targeting item " + item.getName());
-         }
-
+         common.printDebugMessage("targeting item " + item.getName(), null, null, false);
          item.setVelocity(item.getVelocity().add(vec));
 
          kill();

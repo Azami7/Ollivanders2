@@ -7,6 +7,7 @@ import org.bukkit.FireworkEffect.Type;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Shoots green fireworks in to the air.
@@ -30,11 +31,11 @@ public final class VERDIMILLIOUS extends Pyrotechnia
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public VERDIMILLIOUS (Ollivanders2 plugin, Player player, Double rightWand)
+   public VERDIMILLIOUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

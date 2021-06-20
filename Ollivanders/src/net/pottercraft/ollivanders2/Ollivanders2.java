@@ -3,8 +3,17 @@ package net.pottercraft.ollivanders2;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
+import net.pottercraft.ollivanders2.spell.APPARATE;
+import org.bukkit.World;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import quidditch.Arena;
 
 import net.pottercraft.ollivanders2.effect.O2Effect;
@@ -15,6 +24,7 @@ import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
+import net.pottercraft.ollivanders2.player.Year;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.potion.O2Potions;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -30,6 +40,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -42,6 +53,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Ollivanders2 plugin object
@@ -57,12 +69,12 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * All active spell projectiles
     */
-   private List<O2Spell> projectiles = new ArrayList<>();
+   final private List<O2Spell> projectiles = new ArrayList<>();
 
    /**
     * All blocks temporarily changed by spells
     */
-   private HashMap<Block, Material> tempBlocks = new HashMap<>();
+   final private Map<Block, Material> tempBlocks = new HashMap<>();
 
    /**
     * All pending teleport events
@@ -74,10 +86,12 @@ public class Ollivanders2 extends JavaPlugin
    public static ChatColor chatColor;
    public static boolean showLogInMessage;
    public static boolean bookLearning;
+   public static boolean maxSpellLevel;
    public static boolean enableNonVerbalSpellCasting;
    public static boolean useSpellJournal;
    public static boolean useHostileMobAnimagi;
    public static boolean enableDeathExpLoss;
+   public static boolean apparateLocations;
    public static int divinationMaxDays = 4;
    public static boolean useHouses;
    public static boolean displayMessageOnSort;
@@ -88,9 +102,10 @@ public class Ollivanders2 extends JavaPlugin
    public static Material broomstickMaterial;
    public static boolean enableWitchDrop;
    private ConfigurationSection zoneConfig;
+   public static boolean hourlyBackup;
+   public static boolean archivePreviousBackup;
 
    // other config
-   public static Material wandMaterial = Material.STICK;
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
    public static Ollivanders2WorldGuard worldGuardO2;
@@ -109,6 +124,16 @@ public class Ollivanders2 extends JavaPlugin
 
       revertAllTempBlocks();
 
+      savePluginData();
+
+      getLogger().info(this + " is now disabled!");
+   }
+
+   /**
+    * Save plugin data to disk
+    */
+   public void savePluginData ()
+   {
       Ollivanders2API.saveStationarySpells();
       Ollivanders2API.saveProphecies();
       if (useHouses)
@@ -116,8 +141,7 @@ public class Ollivanders2 extends JavaPlugin
          Ollivanders2API.saveHouses();
       }
       Ollivanders2API.savePlayers();
-
-      getLogger().info(this + " is now disabled!");
+      APPARATE.saveApparateLocations();
    }
 
    /**
@@ -237,6 +261,17 @@ public class Ollivanders2 extends JavaPlugin
          e.printStackTrace();
       }
 
+      // set up owl post
+      try
+      {
+         Ollivanders2API.initOwlPost(this);
+      }
+      catch (Exception e)
+      {
+         getLogger().warning("Failure setting up owl post.");
+         e.printStackTrace();
+      }
+
       // set up all plugin crafting recipes
       initRecipes();
 
@@ -296,6 +331,21 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //
+      // maxSpells, can only be enabled when bookLearning is off.
+      //
+      if (!bookLearning)
+      {
+         maxSpellLevel = getConfig().getBoolean("maxSpellLevel");
+      }
+      else
+         maxSpellLevel = false;
+
+      if (maxSpellLevel)
+      {
+         getLogger().info("Max spell level on.");
+      }
+
+      //
       // nonVerbalSpellCasting
       //
       enableNonVerbalSpellCasting = getConfig().getBoolean("nonVerbalSpellCasting");
@@ -330,6 +380,13 @@ public class Ollivanders2 extends JavaPlugin
       {
          getLogger().info("Enabling death experience loss.");
       }
+
+      //
+      // apparate locations, when true apparate will only work to named locations, not by coordinates
+      //
+      apparateLocations = getConfig().getBoolean("apparateLocations");
+      if (apparateLocations)
+         getLogger().info("Enabling apparate locations - apparation by coordinates disabled.");
 
       //
       // divinationMaxDays
@@ -405,6 +462,7 @@ public class Ollivanders2 extends JavaPlugin
       {
          getLogger().info("Enabling debug mode.");
       }
+
       overrideVersionCheck = getConfig().getBoolean("overrideVersionCheck");
       if (overrideVersionCheck)
       {
@@ -415,6 +473,17 @@ public class Ollivanders2 extends JavaPlugin
       // Zones
       //
       zoneConfig = getConfig().getConfigurationSection("zones");
+
+      //
+      // Save options
+      //
+      hourlyBackup = getConfig().getBoolean("hourlyBackup");
+      if (hourlyBackup)
+         getLogger().info("Enabling hourly backups.");
+
+      archivePreviousBackup = getConfig().getBoolean("archivePreviousBackup");
+      if (archivePreviousBackup)
+         getLogger().info("Enabling backup archiving.");
    }
 
    /**
@@ -473,17 +542,22 @@ public class Ollivanders2 extends JavaPlugin
    private void initRecipes ()
    {
       //broomstick recipe
-      ItemStack broomstick = Ollivanders2API.getItems().getItemByType(O2ItemType.BROOMSTICK, 1);
-      NamespacedKey recipeKey = new NamespacedKey(this, "broomstick");
-      ShapedRecipe bRecipe = new ShapedRecipe(recipeKey, broomstick);
-      bRecipe.shape("  S", " S ", "W  ");
-      bRecipe.setIngredient('S', Material.STICK);
-      bRecipe.setIngredient('W', Material.WHEAT);
+      ItemStack broomstick = Ollivanders2API.getItems(this).getItemByType(O2ItemType.BROOMSTICK, 1);
+      if (broomstick != null)
+      {
+         ShapedRecipe bRecipe = new ShapedRecipe(new NamespacedKey(this, "broomstick"), broomstick);
+         bRecipe.shape("  S", " S ", "W  ");
+         bRecipe.setIngredient('S', Material.STICK);
+         bRecipe.setIngredient('W', Material.WHEAT);
+         getServer().addRecipe(bRecipe);
+      }
 
       //floo powder recipe
-      ItemStack flooPowder = Ollivanders2API.getItems().getItemByType(O2ItemType.FLOO_POWDER, 8);
-      getServer().addRecipe(new FurnaceRecipe(new NamespacedKey(this, "floo_powder"), flooPowder, Material.ENDER_PEARL, 2, (5 * Ollivanders2Common.ticksPerSecond)));
-      getServer().addRecipe(bRecipe);
+      ItemStack flooPowder = Ollivanders2API.getItems(this).getItemByType(O2ItemType.FLOO_POWDER, 8);
+      if (flooPowder != null)
+      {
+         getServer().addRecipe(new FurnaceRecipe(new NamespacedKey(this, "floo_powder"), flooPowder, Material.ENDER_PEARL, 2, (5 * Ollivanders2Common.ticksPerSecond)));
+      }
    }
 
    /**
@@ -500,8 +574,9 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (cmd.getName().equalsIgnoreCase("Ollivanders2") || cmd.getName().equalsIgnoreCase("Olli"))
       {
-         return runOllivanders(sender, cmd, args);
-      } else if (cmd.getName().equalsIgnoreCase("Quidd"))
+         return runOllivanders(sender, args);
+      }
+      else if (cmd.getName().equalsIgnoreCase("Quidd"))
       {
          if (sender.isOp())
          {
@@ -517,11 +592,10 @@ public class Ollivanders2 extends JavaPlugin
     * The main Ollivanders2 command.
     *
     * @param sender the player who issued the command
-    * @param cmd the command the player issued
-    * @param args the arguments for the command, if any
+    * @param args   the arguments for the command, if any
     * @return true if the /ollivanders command worked, false otherwise
     */
-   private boolean runOllivanders (CommandSender sender, Command cmd, String[] args)
+   private boolean runOllivanders(@NotNull CommandSender sender, @NotNull String[] args)
    {
       if (!sender.isOp())
       {
@@ -545,15 +619,16 @@ public class Ollivanders2 extends JavaPlugin
             else
             {
                Player target = getServer().getPlayer(args[1]);
-               return giveRandomWand(target);
+               if (target != null)
+                  return giveRandomWand(target);
+               else
+                  usageMessageWand(sender);
             }
          }
          else if (subCommand.equalsIgnoreCase("reload"))
             return runReloadConfigs(sender);
          else if (subCommand.equalsIgnoreCase("items") || subCommand.equalsIgnoreCase("item"))
-         {
             return runItems((Player) sender, args);
-         }
          else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
             return runHouse(sender, args);
          else if (subCommand.equalsIgnoreCase("debug"))
@@ -567,7 +642,8 @@ public class Ollivanders2 extends JavaPlugin
             else
             {
                Player target = getServer().getPlayer(args[1]);
-               return giveFlooPowder(target);
+               if (target != null)
+                  return giveFlooPowder(target);
             }
          }
          else if (subCommand.equalsIgnoreCase("books") || subCommand.equalsIgnoreCase("book"))
@@ -583,25 +659,25 @@ public class Ollivanders2 extends JavaPlugin
             else
             {
                Player target = getServer().getPlayer(args[1]);
-               return playerSummary(sender, target);
+               if (target != null)
+                  return playerSummary(sender, target);
+               else
+               {
+                  usageMessageOllivanders(sender);
+                  return true;
+               }
             }
          }
          else if (subCommand.equalsIgnoreCase("potions") || subCommand.equalsIgnoreCase("potion"))
-         {
             return runPotions(sender, args);
-         }
          else if (subCommand.equalsIgnoreCase("year") || subCommand.equalsIgnoreCase("years"))
-         {
             return runYear(sender, args);
-         }
          else if (subCommand.equalsIgnoreCase("effect") || subCommand.equalsIgnoreCase("effects"))
-         {
             return runEffect(sender, args);
-         }
          else if (subCommand.equalsIgnoreCase("prophecy") || subCommand.equalsIgnoreCase("prophecies"))
-         {
-            return runProphecies(sender, args);
-         }
+            return runProphecies(sender);
+         else if (subCommand.equalsIgnoreCase("apparate") || subCommand.equalsIgnoreCase("apparateLoc"))
+            return runApparateLocation(sender, args);
       }
 
       usageMessageOllivanders(sender);
@@ -615,11 +691,8 @@ public class Ollivanders2 extends JavaPlugin
     * @param sender the player who issued the command
     * @return true if no error occurred
     */
-   private boolean playerSummary (CommandSender sender, Player player)
+   public boolean playerSummary(@NotNull CommandSender sender, @NotNull Player player)
    {
-      if (player == null)
-         return true;
-
       if (debug)
          getLogger().info("Running playerSummary");
 
@@ -632,7 +705,7 @@ public class Ollivanders2 extends JavaPlugin
 
       StringBuilder summary = new StringBuilder();
 
-      summary.append("Ollivanders2 player summary:\n\n");
+      summary.append("Player summary:\n\n");
 
       // wand type
       if (o2p.foundWand())
@@ -652,9 +725,9 @@ public class Ollivanders2 extends JavaPlugin
       // sorted
       if (useHouses)
       {
-         if (Ollivanders2API.getHouses().isSorted(player))
+         if (Ollivanders2API.getHouses(this).isSorted(player))
          {
-            String house = Ollivanders2API.getHouses().getHouse(player).getName();
+            String house = Ollivanders2API.getHouses(this).getHouse(player).getName();
             summary.append("\nHouse: ").append(house).append("\n");
          }
          else
@@ -670,19 +743,24 @@ public class Ollivanders2 extends JavaPlugin
       //animagus
       if (o2p.isAnimagus())
       {
-         summary.append("\nAnimagus Form: ").append(Ollivanders2API.common.enumRecode(o2p.getAnimagusForm().toString()));
+         EntityType animagusForm = o2p.getAnimagusForm();
+         if (animagusForm != null)
+         {
+            summary.append("\nAnimagus Form: ").append(Ollivanders2API.common.enumRecode(animagusForm.toString()));
+         }
       }
 
       // effects
       if (sender.isOp())
       {
-         List<O2EffectType> effects = Ollivanders2API.getPlayers().playerEffects.getEffects(o2p.getID());
+         List<O2EffectType> effects = Ollivanders2API.getPlayers(this).playerEffects.getEffects(o2p.getID());
          summary.append("\n\nAffected by:\n");
 
-         if (effects == null || effects.isEmpty())
+         if (effects.isEmpty())
          {
             summary.append("Nothing");
-         } else
+         }
+         else
          {
             for (O2EffectType effectType : effects)
             {
@@ -702,13 +780,9 @@ public class Ollivanders2 extends JavaPlugin
 
          for (O2SpellType spellType : O2SpellType.values())
          {
-            if (knownSpells.containsKey(spellType))
+            if (knownSpells.containsKey(spellType) && Ollivanders2API.getSpells(this).isLoaded(spellType))
             {
-               String name = spellType.getSpellName();
-               if (name != null) // happens if a spell is not currently loaded, such as if a server removes LibsDisguises
-               {
-                  summary.append("\n* ").append(name).append(" ").append(knownSpells.get(spellType).toString());
-               }
+               summary.append("\n* ").append(spellType.getSpellName()).append(" ").append(knownSpells.get(spellType).toString());
             }
          }
       }
@@ -724,13 +798,9 @@ public class Ollivanders2 extends JavaPlugin
 
          for (O2PotionType potionType : O2PotionType.values())
          {
-            if (knownPotions.containsKey(potionType))
+            if (knownPotions.containsKey(potionType) && Ollivanders2API.getPotions(this).isLoaded(potionType))
             {
-               String name = potionType.getPotionName();
-               if (name != null) // happens if a spell is not currently loaded, such as if a server removes LibsDisguises
-               {
-                  summary.append("\n* ").append(name).append(" ").append(knownPotions.get(potionType).toString());
-               }
+               summary.append("\n* ").append(potionType.getPotionName()).append(" ").append(knownPotions.get(potionType).toString());
             }
          }
       }
@@ -749,39 +819,43 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param sender the command sender
     */
-   private void usageMessageOllivanders (CommandSender sender)
+   private void usageMessageOllivanders(@NotNull CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "You are running Ollivanders2 version " + this.getDescription().getVersion() + "\n"
-            + "\nOllivanders2 commands:"
-            + "\nwands - gives a complete set of wands"
-            + "\nbooks - gives a complete set of spell books"
-            + "\nitems - gives a complete set of items"
-            // + "\nquidd - creates a quidditch pitch"
-            + "\nhouse - view and manage houses and house points"
-            + "\nyear - view and manage player years"
-            + "\nsummary - gives a summary of wand type, house, year, and known spells"
-            + "\nreload - reload the Ollivanders2 configs"
-            + "\ndebug - toggles Ollivanders2 plugin debug output\n"
-            + "\n" + "To run a command, type '/ollivanders2 [command]'."
-            + "\nFor example, '/ollivanders2 wands");
+              + "You are running Ollivanders2 version " + this.getDescription().getVersion() + "\n"
+              + "\nOllivanders2 commands:"
+              + "\nwands - wand commands"
+              + "\nbooks - books commands"
+              + "\nitems - item commands"
+              + "\npotions - potions commands"
+              // + "\nquidd - creates a quidditch pitch"
+              + "\nhouse - house commands"
+              + "\nyear - year commands"
+              + "\neffect - effects commands"
+              + "\nprophecy - list all active prophecies"
+              + "\nsummary - gives a summary of wand type, house, year, and known spells"
+              + "\napparateLoc - apparation location commands"
+              + "\nreload - reload the Ollivanders2 configs"
+              + "\ndebug - toggles Ollivanders2 plugin debug output\n"
+              + "\n" + "To run a command, type '/ollivanders2 [command]'."
+              + "\nFor example, '/ollivanders2 wands");
    }
 
    /**
     * The house subCommand for managing everything related to houses.
     *
     * @param sender the player that issued the command
-    * @param args the arguments to the command, if any
+    * @param args   the arguments to the command, if any
     * @return true if no error occurred
     */
-   private boolean runHouse (CommandSender sender, String[] args)
+   private boolean runHouse(@NotNull CommandSender sender, @NotNull String[] args)
    {
       if (!useHouses)
       {
          sender.sendMessage(chatColor
-               + "House are not currently enabled for your server."
-               + "\nTo enable houses, update the Ollivanders2 config.yml setting to true and restart your server."
-               + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
+                 + "House are not currently enabled for your server."
+                 + "\nTo enable houses, update the Ollivanders2 config.yml setting to true and restart your server."
+                 + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
 
          return true;
       }
@@ -820,7 +894,7 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("reset"))
          {
-            return Ollivanders2API.getHouses().reset();
+            return Ollivanders2API.getHouses(this).reset();
          }
       }
 
@@ -834,14 +908,14 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param sender the command sender
     */
-   private void usageMessageHouse (CommandSender sender)
+   private void usageMessageHouse(@NotNull CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "Usage: /ollivanders2 house points [option]"
-            + "\n\nOptions to '/ollivanders2 house':"
-            + "\nlist - lists Ollivanders2 houses and house membership"
-            + "\nsort - sort a player in to a house"
-            + "\npoints - manage house points");
+              + "Usage: /ollivanders2 house points [option]"
+              + "\n\nOptions to '/ollivanders2 house':"
+              + "\nlist - lists Ollivanders2 houses and house membership"
+              + "\nsort - sort a player in to a house"
+              + "\npoints - manage house points");
    }
 
    /**
@@ -861,10 +935,10 @@ public class Ollivanders2 extends JavaPlugin
       {
          String targetHouse = args[2];
 
-         O2HouseType house = Ollivanders2API.getHouses().getHouseType(targetHouse);
+         O2HouseType house = Ollivanders2API.getHouses(this).getHouseType(targetHouse);
          if (house != null)
          {
-            ArrayList<String> members = Ollivanders2API.getHouses().getHouseMembers(house);
+            List<String> members = Ollivanders2API.getHouses(this).getHouseMembers(house);
             StringBuilder memberStr = new StringBuilder();
 
             if (members.isEmpty())
@@ -886,7 +960,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       StringBuilder houseNames = new StringBuilder();
-      ArrayList<String> h = Ollivanders2API.getHouses().getAllHouseNames();
+      List<String> h = Ollivanders2API.getHouses(this).getAllHouseNames();
 
       for (String name : h)
       {
@@ -894,9 +968,9 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       sender.sendMessage(chatColor
-            + "Ollivanders2 House are:\n" + houseNames.toString() + "\n"
-            + "\nTo see the members of a specific house, run the command /ollivanders2 house list [house]"
-            + "\nFor example, /ollivanders2 list Hufflepuff");
+              + "Ollivanders2 House are:\n" + houseNames.toString() + "\n"
+              + "\nTo see the members of a specific house, run the command /ollivanders2 house list [house]"
+              + "\nFor example, /ollivanders2 list Hufflepuff");
 
       return true;
    }
@@ -913,12 +987,12 @@ public class Ollivanders2 extends JavaPlugin
     * @param forcesort should the sort happen even if the player is already sorted
     * @return true unless an error occurred
     */
-   private boolean runSort (CommandSender sender, String targetPlayer, String targetHouse, boolean forcesort)
+   private boolean runSort(@NotNull CommandSender sender, @NotNull String targetPlayer, @NotNull String targetHouse, boolean forcesort)
    {
       if (debug)
          getLogger().info("Running house sort");
 
-      if (targetPlayer == null || targetPlayer.length() < 1 || targetHouse == null || targetHouse.length() < 1)
+      if (targetPlayer.length() < 1 || targetHouse.length() < 1)
       {
          usageMessageHouseSort(sender);
          return (true);
@@ -928,13 +1002,13 @@ public class Ollivanders2 extends JavaPlugin
       if (player == null)
       {
          sender.sendMessage(chatColor
-               + "Unable to find a player named " + targetPlayer + " logged in to this server."
-               + "\nPlayers must be logged in to be sorted.");
+                 + "Unable to find a player named " + targetPlayer + " logged in to this server."
+                 + "\nPlayers must be logged in to be sorted.");
 
          return true;
       }
 
-      O2HouseType house = Ollivanders2API.getHouses().getHouseType(targetHouse);
+      O2HouseType house = Ollivanders2API.getHouses(this).getHouseType(targetHouse);
 
       if (house == null)
       {
@@ -946,12 +1020,12 @@ public class Ollivanders2 extends JavaPlugin
       boolean success;
       if (forcesort)
       {
-         Ollivanders2API.getHouses().forceSetHouse(player, house);
+         Ollivanders2API.getHouses(this).forceSetHouse(player, house);
          success = true;
       }
       else
       {
-         success = Ollivanders2API.getHouses().sort(player, house);
+         success = Ollivanders2API.getHouses(this).sort(player, house);
       }
 
       if (success)
@@ -960,15 +1034,7 @@ public class Ollivanders2 extends JavaPlugin
       }
       else
       {
-         String curHouse = Ollivanders2API.getHouses().getHouse(player).getName();
-         if (curHouse == null)
-         {
-            sender.sendMessage(chatColor + "Oops, something went wrong with the sort.  If this persists, check your server logs.");
-         }
-         else
-         {
-            sender.sendMessage(chatColor + targetPlayer + " is already a member of " + Ollivanders2API.getHouses().getHouse(player).getName());
-         }
+         sender.sendMessage(chatColor + targetPlayer + " is already a member of " + Ollivanders2API.getHouses(this).getHouse(player).getName());
       }
 
       return true;
@@ -976,23 +1042,24 @@ public class Ollivanders2 extends JavaPlugin
 
    /**
     * Usage message for /ollivanders house sort
+    *
     * @param sender the player that issued the command
     */
-   private void usageMessageHouseSort (CommandSender sender)
+   private void usageMessageHouseSort(@NotNull CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "Usage: /ollivanders2 house sort [player] [house]"
-            + "\nFor example '/ollivanders2 house sort Harry Gryffindor");
+              + "Usage: /ollivanders2 house sort [player] [house]"
+              + "\nFor example '/ollivanders2 house sort Harry Gryffindor");
    }
 
    /**
     * Manage house points.
     *
     * @param sender the player that issued the command
-    * @param args the arguments for the command, if any
+    * @param args   the arguments for the command, if any
     * @return true unless an error occurs
     */
-   private boolean runHousePoints (CommandSender sender, String[] args)
+   private boolean runHousePoints(@NotNull CommandSender sender, @NotNull String[] args)
    {
       if (debug)
          getLogger().info("Running house points");
@@ -1005,7 +1072,7 @@ public class Ollivanders2 extends JavaPlugin
 
          if (option.equalsIgnoreCase("reset"))
          {
-            return Ollivanders2API.getHouses().resetHousePoints();
+            return Ollivanders2API.getHouses(this).resetHousePoints();
          }
 
          if (args.length > 4)
@@ -1018,7 +1085,7 @@ public class Ollivanders2 extends JavaPlugin
             O2HouseType houseType = null;
             try
             {
-               houseType = Ollivanders2API.getHouses().getHouseType(h);
+               houseType = Ollivanders2API.getHouses(this).getHouseType(h);
             }
             catch (Exception e)
             {
@@ -1056,15 +1123,15 @@ public class Ollivanders2 extends JavaPlugin
 
             if (option.equalsIgnoreCase("add"))
             {
-               return Ollivanders2API.getHouses().addHousePoints(houseType, value);
+               return Ollivanders2API.getHouses(this).addHousePoints(houseType, value);
             }
             else if (option.equalsIgnoreCase("subtract"))
             {
-               return Ollivanders2API.getHouses().subtractHousePoints(houseType, value);
+               return Ollivanders2API.getHouses(this).subtractHousePoints(houseType, value);
             }
             else if (option.equalsIgnoreCase("set"))
             {
-               return Ollivanders2API.getHouses().setHousePoints(houseType, value);
+               return Ollivanders2API.getHouses(this).setHousePoints(houseType, value);
             }
          }
       }
@@ -1079,35 +1146,35 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param sender the player that issued the command
     */
-   private void usageMessageHousePoints (CommandSender sender)
+   private void usageMessageHousePoints(@NotNull CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "Usage: /ollivanders2 house points [option] [house] [value]"
-            + "\n\nOptions to '/ollivanders2 house points':"
-            + "\nadd - increase points for a house by specific value"
-            + "\nsubtract - decrease points for a house by specified value"
-            + "\nset - set the points for a house to specified value"
-            + "\nreset - reset all house points to 0"
-            + "\n\nExample: /ollivanders2 house points add Slytherin 5"
-            + "\nExample: /ollivanders2 house points reset");
+              + "Usage: /ollivanders2 house points [option] [house] [value]"
+              + "\n\nOptions to '/ollivanders2 house points':"
+              + "\nadd - increase points for a house by specific value"
+              + "\nsubtract - decrease points for a house by specified value"
+              + "\nset - set the points for a house to specified value"
+              + "\nreset - reset all house points to 0"
+              + "\n\nExample: /ollivanders2 house points add Slytherin 5"
+              + "\nExample: /ollivanders2 house points reset");
    }
 
    /**
     * The year subCommand for managing everything related to years.
     *
     * @param sender the player that issued the command
-    * @param args the arguments for the command, if any
+    * @param args   the arguments for the command, if any
     * @return true unless an error occurred
     */
 
-   private boolean runYear (CommandSender sender, String[] args)
+   private boolean runYear(@NotNull CommandSender sender, @NotNull String[] args)
    {
       if (!useYears)
       {
          sender.sendMessage(chatColor
-               + "Years are not currently enabled for your server."
-               + "\nTo enable years, update the Ollivanders2 config.yml setting to true and restart your server."
-               + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
+                 + "Years are not currently enabled for your server."
+                 + "\nTo enable years, update the Ollivanders2 config.yml setting to true and restart your server."
+                 + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
 
          return true;
       }
@@ -1146,7 +1213,8 @@ public class Ollivanders2 extends JavaPlugin
             }
 
             return runYearChange(sender, args[2], -1);
-         } else if (args.length == 2)
+         }
+         else if (args.length == 2)
          {
             String p = args[1];
             if (p.length() < 1)
@@ -1181,12 +1249,12 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param sender the player that issued the command
     */
-   private void usageMessageYearSet (CommandSender sender)
+   private void usageMessageYearSet(@NotNull CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "Usage: /ollivanders2 year set [player] [year]"
-            + "\nyear - must be a number between 1 and 7"
-            + "\nExample: /ollivanders2 year set Harry 5");
+              + "Usage: /ollivanders2 year set [player] [year]"
+              + "\nyear - must be a number between 1 and 7"
+              + "\nExample: /ollivanders2 year set Harry 5");
    }
 
    /**
@@ -1194,11 +1262,11 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param sender the player that issued the command
     */
-   private void usageMessageYearPromote (CommandSender sender)
+   private void usageMessageYearPromote(@NotNull CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "Usage: /ollivanders2 year promote [player]"
-            + "\nExample: /ollivanders2 year promote Harry");
+              + "Usage: /ollivanders2 year promote [player]"
+              + "\nExample: /ollivanders2 year promote Harry");
    }
 
    /**
@@ -1206,11 +1274,11 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param sender the player that issued the command
     */
-   private void usageMessageYearDemote (CommandSender sender)
+   private void usageMessageYearDemote(@NotNull CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "Usage: /ollivanders2 year demote [player]"
-            + "\nExample: /ollivanders2 year demote Harry");
+              + "Usage: /ollivanders2 year demote [player]"
+              + "\nExample: /ollivanders2 year demote Harry");
    }
 
    /**
@@ -1218,27 +1286,27 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param sender the player that issued the command
     */
-   private void usageMessageYear (CommandSender sender)
+   private void usageMessageYear(@NotNull CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "Year commands: "
-            + "\nset - sets a player's year, years must be between 1 and 7"
-            + "\npromote - increases a player's year by 1 year"
-            + "\ndemote - decreases a player's year by 1 year"
-            + "\n<player> - tells you the year or a player\n");
+              + "Year commands: "
+              + "\nset - sets a player's year, years must be between 1 and 7"
+              + "\npromote - increases a player's year by 1 year"
+              + "\ndemote - decreases a player's year by 1 year"
+              + "\n<player> - tells you the year or a player\n");
    }
 
    /**
     * Run the command to set a player's year
     *
-    * @param sender the player that issued the command
+    * @param sender       the player that issued the command
     * @param targetPlayer the player to set the year for
-    * @param targetYear the year to set for the player
+    * @param targetYear   the year to set for the player
     * @return true unless an error occurred
     */
-   private boolean runYearSet (CommandSender sender, String targetPlayer, String targetYear)
+   private boolean runYearSet(@NotNull CommandSender sender, @NotNull String targetPlayer, @NotNull String targetYear)
    {
-      if (targetPlayer == null || targetPlayer.length() < 1 || targetYear == null || targetYear.length() < 1)
+      if (targetPlayer.length() < 1 || targetYear.length() < 1)
       {
          usageMessageYearSet(sender);
          return true;
@@ -1250,10 +1318,10 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
       O2Player o2p = getO2Player(player);
-      int year;
+      int y;
       try
       {
-         year = Integer.parseInt(targetYear);
+         y = Integer.parseInt(targetYear);
       }
       catch (NumberFormatException e)
       {
@@ -1261,24 +1329,27 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      if (year < 1 || year > 7)
+      if (y < 1 || y > 7)
       {
          usageMessageYearSet(sender);
          return true;
       }
-      o2p.setYear(O2PlayerCommon.intToYear(year));
+      Year year = O2PlayerCommon.intToYear(y);
+      if (year != null)
+         o2p.setYear(year);
+
       return true;
    }
 
    /**
     * Run promote and demote year commands
     *
-    * @param sender the player that issued the command
+    * @param sender       the player that issued the command
     * @param targetPlayer the player to promote or demote
-    * @param yearChange the year to change the player to
+    * @param yearChange   the year to change the player to
     * @return true unless an error occurred
     */
-   private boolean runYearChange (CommandSender sender, String targetPlayer, int yearChange)
+   private boolean runYearChange(@NotNull CommandSender sender, @NotNull String targetPlayer, int yearChange)
    {
       Player player = getServer().getPlayer(targetPlayer);
       if (player == null)
@@ -1293,10 +1364,13 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      int year = o2p.getYear().getIntValue() + yearChange;
-      if (year > 0 && year < 8)
+      int y = o2p.getYear().getIntValue() + yearChange;
+      if (y > 0 && y < 8)
       {
-         o2p.setYear(O2PlayerCommon.intToYear(year));
+         Year year = O2PlayerCommon.intToYear(y);
+
+         if (year != null)
+            o2p.setYear(year);
       }
       return true;
    }
@@ -1305,15 +1379,15 @@ public class Ollivanders2 extends JavaPlugin
     * The effects command, this is for testing purposes only and is not listed in the usage message.
     *
     * @param sender the player that issued the command
-    * @param args the arguments for the command, if any
+    * @param args   the arguments for the command, if any
     * @return true unless an error occurred
     */
-   private boolean runEffect (CommandSender sender, String[] args)
+   private boolean runEffect(@NotNull CommandSender sender, @NotNull String[] args)
    {
       // olli effect <effect>
       if (args.length >= 2)
       {
-         String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
+         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
          String effectName = Ollivanders2API.common.stringArrayToString(subArgs).toUpperCase();
 
          O2EffectType effectType;
@@ -1327,9 +1401,9 @@ public class Ollivanders2 extends JavaPlugin
             return true;
          }
 
-         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(((Player) sender).getUniqueId(), effectType))
+         if (Ollivanders2API.getPlayers(this).playerEffects.hasEffect(((Player) sender).getUniqueId(), effectType))
          {
-            Ollivanders2API.getPlayers().playerEffects.removeEffect(((Player) sender).getUniqueId(), effectType);
+            Ollivanders2API.getPlayers(this).playerEffects.removeEffect(((Player) sender).getUniqueId(), effectType);
             sender.sendMessage(chatColor + "Removed " + effectName + " from " + sender + ".\n");
          }
          else
@@ -1341,7 +1415,7 @@ public class Ollivanders2 extends JavaPlugin
 
             try
             {
-               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(this, 1200, ((Player) sender).getUniqueId());
+               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(this, 1200, ((Player) sender).getUniqueId());
             }
             catch (Exception e)
             {
@@ -1350,26 +1424,37 @@ public class Ollivanders2 extends JavaPlugin
                return true;
             }
 
-            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers(this).playerEffects.addEffect(effect);
             sender.sendMessage(chatColor + "Added " + effectName + " to " + sender + ".\n");
          }
       }
       else
       {
-         sender.sendMessage(chatColor + "Not enough arguments to /olli effect.\n");
+         usageMessageEffect(sender);
       }
 
       return true;
    }
 
    /**
+    * Usage message for Effect subcommands.
+    *
+    * @param sender the player that issued the command
+    */
+   private void usageMessageEffect(@NotNull CommandSender sender)
+   {
+      sender.sendMessage(chatColor
+              + "/ollivanders2 effect effect_name player_name - toggles the named effect on the player");
+   }
+
+   /**
     * The quidditch setup command.
     *
     * @param sender the player that issued the command
-    * @param args the arguments for the command, if any
+    * @param args   the arguments for the command, if any
     * @return true unless an error occurred
     */
-   private boolean runQuidd (CommandSender sender, String[] args)
+   private boolean runQuidd(@NotNull CommandSender sender, @NotNull String[] args)
    {
       if (args.length >= 1)
       {
@@ -1398,7 +1483,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param sender the player that issued the command
     * @return true unless and error occurred
     */
-   private boolean toggleDebug(CommandSender sender)
+   private boolean toggleDebug(@NotNull CommandSender sender)
    {
       debug = !debug;
 
@@ -1422,7 +1507,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param sender the player that issued the command
     * @return true unless an error occurred
     */
-   private boolean runReloadConfigs(CommandSender sender)
+   private boolean runReloadConfigs(@NotNull CommandSender sender)
    {
       reloadConfig();
       initConfig();
@@ -1437,7 +1522,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param player the player to give item to
     * @return true unless an error occurred
     */
-   private boolean runItems (Player player, String[] args)
+   private boolean runItems(@NotNull Player player, @NotNull String[] args)
    {
       List<ItemStack> kit = new ArrayList<>();
 
@@ -1454,7 +1539,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       String itemName = Ollivanders2API.common.stringArrayToString(Arrays.copyOfRange(args, 1, args.length));
-      ItemStack item = Ollivanders2API.getItems().getItemStartsWith(itemName, 1);
+      ItemStack item = Ollivanders2API.getItems(this).getItemStartsWith(itemName, 1);
 
       if (item == null)
       {
@@ -1468,15 +1553,36 @@ public class Ollivanders2 extends JavaPlugin
       return true;
    }
 
+   /**
+    * Usage message for Item subcommands.
+    *
+    * @param sender the player that issued the command
+    */
+   private void usageMessageItem(@NotNull CommandSender sender)
+   {
+      sender.sendMessage(chatColor
+              + "Options to '/ollivanders2 house':"
+              + "\nlist - lists all items"
+              + "\nitem_name - gives the specified item");
+   }
+
+   /**
+    * Build a list of all O2Items
+    *
+    * @return the list of items
+    */
+   @NotNull
    private String listAllItems()
    {
       StringBuilder stringBuilder = new StringBuilder();
 
       stringBuilder.append("Item list:\n");
 
-      for (String item : Ollivanders2API.getItems().getAllItems())
+      for (String item : Ollivanders2API.getItems(this).getAllItems())
       {
-         stringBuilder.append("   " + item + "\n");
+         stringBuilder.append("   ");
+         stringBuilder.append(item);
+         stringBuilder.append("\n");
       }
 
       return stringBuilder.toString();
@@ -1485,7 +1591,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Give a player a random wand.
     */
-   private boolean giveRandomWand(Player player)
+   private boolean giveRandomWand(@NotNull Player player)
    {
       String wood = O2WandWoodType.getAllWoodsByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandWoodType.getAllWoodsByName().size()));
       String core = O2WandCoreType.getAllCoresByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandCoreType.getAllCoresByName().size()));
@@ -1504,7 +1610,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param player the player to give the wands to
     * @return true unless an error occurred
     */
-   private boolean okitWands (Player player)
+   private boolean okitWands(@NotNull Player player)
    {
       List<ItemStack> kit = Ollivanders2API.common.getAllWands();
 
@@ -1514,11 +1620,24 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
+    * Usage message for Wand subcommands.
+    *
+    * @param sender the player that issued the command
+    */
+   private void usageMessageWand(@NotNull CommandSender sender)
+   {
+      sender.sendMessage(chatColor
+              + "/ollivanders2 wand - gives you one of every wand"
+              + "\n/ollivanders2 wand player_name - gives named player a random wand");
+   }
+
+   /**
     * Get all the active spell projectiles
     *
     * @return a list of all active spell projectiles
     */
-   public List<O2Spell> getProjectiles ()
+   @NotNull
+   public List<O2Spell> getProjectiles()
    {
       return projectiles;
    }
@@ -1528,7 +1647,7 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param spell the spell projectile
     */
-   public void addProjectile (O2Spell spell)
+   public void addProjectile(@NotNull O2Spell spell)
    {
       projectiles.add(spell);
    }
@@ -1538,27 +1657,53 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param spell the spell projectile
     */
-   public void remProjectile(O2Spell spell)
+   public void removeProjectile(@NotNull O2Spell spell)
    {
       projectiles.remove(spell);
    }
 
-   public Ollivanders2TeleportEvents.O2TeleportEvent[] getTeleportEvents()
+   /**
+    * Get all pending teleport events.
+    *
+    * @return an array of teleport events
+    */
+   @NotNull
+   public List<Ollivanders2TeleportEvents.O2TeleportEvent> getTeleportEvents()
    {
       return teleportEvents.getTeleportEvents();
    }
 
-   public void addTeleportEvent(Player p, Location from, Location to)
+   /**
+    * Add a teleport event to the queue
+    *
+    * @param p    the player to teleport
+    * @param from player's original location
+    * @param to   teleport destination
+    */
+   public void addTeleportEvent(@NotNull Player p, @NotNull Location from, @NotNull Location to)
    {
       addTeleportEvent(p, from, to, false);
    }
 
-   public void addTeleportEvent(Player p, Location from, Location to, boolean explosionOnTeleport)
+   /**
+    * Add a teleport event with an explosion effect
+    *
+    * @param p                   the player to teleport
+    * @param from                player's original location
+    * @param to                  teleport destination
+    * @param explosionOnTeleport whether or not to do an explosion effect
+    */
+   public void addTeleportEvent(@NotNull Player p, @NotNull Location from, @NotNull Location to, boolean explosionOnTeleport)
    {
       teleportEvents.addTeleportEvent(p, from, to, explosionOnTeleport);
    }
 
-   public void removeTeleportEvent(Ollivanders2TeleportEvents.O2TeleportEvent event)
+   /**
+    * Remove a teleport event.
+    *
+    * @param event the event to remove
+    */
+   public void removeTeleportEvent(@NotNull Ollivanders2TeleportEvents.O2TeleportEvent event)
    {
       teleportEvents.removeTeleportEvent(event);
    }
@@ -1570,7 +1715,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param spell  the spell to get the count for
     * @return the spell count
     */
-   public int getSpellNum(Player player, O2SpellType spell)
+   public int getSpellCount(@NotNull Player player, @NotNull O2SpellType spell)
    {
       O2Player o2p = getO2Player(player);
 
@@ -1581,34 +1726,34 @@ public class Ollivanders2 extends JavaPlugin
     * Set the spell use count for a player.
     *
     * @param player the player to set the spell count for
-    * @param spell the spell to set the count for
-    * @param count the count to set
+    * @param spell  the spell to set the count for
+    * @param count  the count to set
     */
-   public void setSpellNum (Player player, O2SpellType spell, int count)
+   public void setSpellCount(@NotNull Player player, @NotNull O2SpellType spell, int count)
    {
       UUID pid = player.getUniqueId();
       O2Player o2p = getO2Player(player);
 
       o2p.setSpellCount(spell, count);
 
-      Ollivanders2API.getPlayers().updatePlayer(pid, o2p);
+      Ollivanders2API.getPlayers(this).updatePlayer(pid, o2p);
    }
 
    /**
     * Increment the spell use count for a player.
     *
     * @param player the player to increment the count for
-    * @param spell the spell to increment
+    * @param spell  the spell to increment
     * @return the incremented use count for this player for this spell
     */
-   public int incSpellCount (Player player, O2SpellType spell)
+   public int incrementSpellCount(@NotNull Player player, @NotNull O2SpellType spell)
    {
       //returns the incremented spell count
       UUID pid = player.getUniqueId();
       O2Player o2p = getO2Player(player);
 
       o2p.incrementSpellCount(spell);
-      Ollivanders2API.getPlayers().updatePlayer(pid, o2p);
+      Ollivanders2API.getPlayers(this).updatePlayer(pid, o2p);
 
       return o2p.getSpellCount(spell);
    }
@@ -1616,17 +1761,17 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Increment the potion use count for a player.
     *
-    * @param player the player to increment the count for
+    * @param player     the player to increment the count for
     * @param potionType the potion to increment
     */
-   public void incPotionCount (Player player, O2PotionType potionType)
+   public void incrementPotionCount(@NotNull Player player, @NotNull O2PotionType potionType)
    {
       //returns the incremented potion count
       UUID pid = player.getUniqueId();
       O2Player o2p = getO2Player(player);
 
       o2p.incrementPotionCount(potionType);
-      Ollivanders2API.getPlayers().updatePlayer(pid, o2p);
+      Ollivanders2API.getPlayers(this).updatePlayer(pid, o2p);
    }
 
    /**
@@ -1635,32 +1780,32 @@ public class Ollivanders2 extends JavaPlugin
     * @param player the player to get
     * @return O2Player object for this player
     */
-   public O2Player getO2Player (Player player)
+   public O2Player getO2Player(@NotNull Player player)
    {
       UUID pid = player.getUniqueId();
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(pid);
+      O2Player o2p = Ollivanders2API.getPlayers(this).getPlayer(pid);
 
       if (o2p == null)
       {
-         Ollivanders2API.getPlayers().addPlayer(pid, player.getDisplayName());
+         Ollivanders2API.getPlayers(this).addPlayer(pid, player.getDisplayName());
 
-         o2p = Ollivanders2API.getPlayers().getPlayer(pid);
+         o2p = Ollivanders2API.getPlayers(this).getPlayer(pid);
       }
 
       return o2p;
    }
 
    /**
-    * Sets the player's OPlayer by their playername
+    * Sets the player's OPlayer by their player name
     *
     * @param player      the player
     * @param o2p the OPlayer associated with the player
     */
-   public void setO2Player (Player player, O2Player o2p)
+   public void setO2Player (@NotNull Player player, @NotNull O2Player o2p)
    {
       if (!(player instanceof NPC))
       {
-         Ollivanders2API.getPlayers().updatePlayer(player.getUniqueId(), o2p);
+         Ollivanders2API.getPlayers(this).updatePlayer(player.getUniqueId(), o2p);
       }
    }
 
@@ -1669,29 +1814,24 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @return a list of all player MC UUIDs
     */
-   public ArrayList<UUID> getO2PlayerIDs ()
+   @NotNull
+   public ArrayList<UUID> getO2PlayerIDs()
    {
-      return Ollivanders2API.getPlayers().getPlayerIDs();
+      return Ollivanders2API.getPlayers(this).getPlayerIDs();
    }
 
    /**
     * Can this player cast this spell?
     *
-    * @param player Player to check
-    * @param spell Spell to check
+    * @param player  Player to check
+    * @param spell   Spell to check
     * @param verbose Whether or not to inform the player of why they cannot cast a spell
     * @return True if the player can cast this spell, false if not
     */
-   public boolean canCast (Player player, O2SpellType spell, boolean verbose)
+   public boolean canCast(@NotNull Player player, @NotNull O2SpellType spell, boolean verbose)
    {
-      if (spell == null)
-      {
-         getLogger().info("canCast called for null spell");
-         return false;
-      }
-
       // players cannot cast spells when in animagus form, except the spell to change form
-      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+      if (Ollivanders2API.getPlayers(this).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
          {
@@ -1716,7 +1856,7 @@ public class Ollivanders2 extends JavaPlugin
          }
       }
 
-      O2Player p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+      O2Player p = Ollivanders2API.getPlayers(this).getPlayer(player.getUniqueId());
       if (p == null)
          return false;
 
@@ -1731,115 +1871,11 @@ public class Ollivanders2 extends JavaPlugin
          return false;
       }
 
-      boolean cast = isSpellTypeAllowed(player.getLocation(), spell);
+      boolean cast = Ollivanders2API.getSpells(this).isSpellTypeAllowed(player.getLocation(), spell);
 
       if (!cast && verbose)
       {
          spellCannotBeCastMessage(player);
-      }
-      return cast;
-   }
-
-   /**
-    * Determine if this spell can exist here
-    *
-    * @param loc the location of the spell
-    * @param spell the spell to check
-    * @return true if the spell can exist, false otherwise
-    */
-   public boolean isSpellTypeAllowed (Location loc, O2SpellType spell)
-   {
-      if (loc == null)
-         return false;
-
-      boolean cast = true;
-      double x = loc.getX();
-      double y = loc.getY();
-      double z = loc.getZ();
-      if (zoneConfig != null)
-      {
-         for (String zone : zoneConfig.getKeys(false))
-         {
-            String prefix = zone + ".";
-            String type = zoneConfig.getString(prefix + "type");
-            String world = zoneConfig.getString(prefix + "world");
-            String areaString = zoneConfig.getString(prefix + "area");
-
-            boolean allAllowed = false;
-            boolean allDisallowed = false;
-            List<O2SpellType> allowedSpells = new ArrayList<>();
-            for (String spellString : zoneConfig.getStringList(prefix + "allowed-spells"))
-            {
-               if (spellString.equalsIgnoreCase("ALL"))
-               {
-                  allAllowed = true;
-               } else
-               {
-                  allowedSpells.add(Ollivanders2API.getSpells().getSpellTypeByName(spellString));
-               }
-            }
-            List<O2SpellType> disallowedSpells = new ArrayList<>();
-            for (String spellString : zoneConfig.getStringList(prefix + "disallowed-spells"))
-            {
-               if (spellString.equalsIgnoreCase("ALL"))
-               {
-                  allDisallowed = true;
-               } else
-               {
-                  disallowedSpells.add(Ollivanders2API.getSpells().getSpellTypeByName(spellString));
-               }
-            }
-            if (type != null && type.equalsIgnoreCase("World"))
-            {
-               if (loc.getWorld().getName().equals(world))
-               {
-                  if (allowedSpells.contains(spell) || allAllowed)
-                  {
-                     return true;
-                  }
-                  if (disallowedSpells.contains(spell) || allDisallowed)
-                  {
-                     cast = false;
-                  }
-               }
-            }
-            if (type != null && type.equalsIgnoreCase("Cuboid"))
-            {
-               List<String> areaStringList = Arrays.asList(areaString.split(" "));
-               List<Integer> area = new ArrayList<>();
-               for (String a : areaStringList)
-               {
-                  area.add(Integer.parseInt(a));
-               }
-               if (area.size() < 6)
-               {
-                  for (int i = 0; i < 6; i++)
-                  {
-                     area.set(i, 0);
-                  }
-               }
-               if (loc.getWorld().getName().equals(world))
-               {
-                  if ((area.get(0) < x) && (x < area.get(3)))
-                  {
-                     if ((area.get(1) < y) && (y < area.get(4)))
-                     {
-                        if ((area.get(2) < z) && (z < area.get(5)))
-                        {
-                           if (allowedSpells.contains(spell) || allAllowed)
-                           {
-                              return true;
-                           }
-                           if (disallowedSpells.contains(spell) || allDisallowed)
-                           {
-                              cast = false;
-                           }
-                        }
-                     }
-                  }
-               }
-            }
-         }
       }
       return cast;
    }
@@ -1854,13 +1890,13 @@ public class Ollivanders2 extends JavaPlugin
 
       String versionString = Bukkit.getBukkitVersion();
 
-      if (versionString.startsWith("1.14") || versionString.startsWith("1.15") || versionString.startsWith("1.16"))
+      if (versionString.startsWith("1.16") || versionString.startsWith("1.17"))
       {
          return true;
       }
       else // anything lower than 1.14 set to 0 because this version of the plugin cannot run on < 1.14
       {
-         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.14 or higher.");
+         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.16 or higher.");
          return false;
       }
    }
@@ -1872,7 +1908,7 @@ public class Ollivanders2 extends JavaPlugin
     * @return true if successful, false otherwise
     * @since 2.2.4
     */
-   private boolean giveFlooPowder(Player player)
+   private boolean giveFlooPowder(@NotNull Player player)
    {
       ItemStack flooPowder = new ItemStack(Ollivanders2.flooPowderMaterial);
       List<String> lore = new ArrayList<>();
@@ -1905,7 +1941,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param args the arguments to the book command
     * @return true if successful, false otherwise
     */
-   private boolean runBooks (CommandSender sender, String[] args)
+   private boolean runBooks (@NotNull CommandSender sender, @NotNull String[] args)
    {
       Player targetPlayer = (Player) sender;
 
@@ -1919,7 +1955,7 @@ public class Ollivanders2 extends JavaPlugin
       List<ItemStack> bookStack = new ArrayList<>();
       if (args[1].equalsIgnoreCase("allbooks"))
       {
-         bookStack = Ollivanders2API.getBooks().getAllBooks();
+         bookStack = Ollivanders2API.getBooks(this).getAllBooks();
 
          if (bookStack.isEmpty())
          {
@@ -1987,15 +2023,17 @@ public class Ollivanders2 extends JavaPlugin
 
    /**
     * Get the book
-    * @param args the arguments for the book command
+    *
+    * @param args   the arguments for the book command
     * @param sender the player that issued the command
     * @return true unless an error occurred
     */
-   private ItemStack getBookFromArgs (String[] args, CommandSender sender)
+   @Nullable
+   private ItemStack getBookFromArgs(@NotNull String[] args, @NotNull CommandSender sender)
    {
       String title = Ollivanders2API.common.stringArrayToString(args);
 
-      ItemStack bookItem = Ollivanders2API.getBooks().getBookByTitle(title);
+      ItemStack bookItem = Ollivanders2API.getBooks(this).getBookByTitle(title);
 
       if (bookItem == null)
       {
@@ -2009,18 +2047,18 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Usage message for book subcommands.
     *
-    * @since 2.2.4
     * @param sender the player that issued the command
+    * @since 2.2.4
     */
-   private void usageMessageBooks (CommandSender sender)
+   private void usageMessageBooks(@NotNull CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "Usage: /olli books"
-            + "\nlist - gives a book that lists all available books"
-            + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
-            + "\n<book title> - gives you the book with this title, if it exists"
-            + "\ngive <player> <book title> - gives target player the book with this title, if it exists\n"
-            + "\nExample: /ollivanders2 book standard book of spells grade 1");
+              + "Usage: /olli books"
+              + "\nlist - gives a book that lists all available books"
+              + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
+              + "\n<book title> - gives you the book with this title, if it exists"
+              + "\ngive <player> <book title> - gives target player the book with this title, if it exists\n"
+              + "\nExample: /ollivanders2 book standard book of spells grade 1");
    }
 
    /**
@@ -2030,7 +2068,7 @@ public class Ollivanders2 extends JavaPlugin
     * @since 2.2.5
     * @param player the player that cast the spell
     */
-   public void spellCannotBeCastMessage (Player player)
+   public void spellCannotBeCastMessage(@NotNull Player player)
    {
       player.sendMessage(chatColor + "A powerful protective magic prevents you from casting this spell here.");
    }
@@ -2042,7 +2080,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param player the player that cast the spell
     * @since 2.3
     */
-   public void spellFailedMessage (Player player)
+   public void spellFailedMessage(@NotNull Player player)
    {
       player.sendMessage(chatColor + "A powerful protective magic blocks your spell.");
    }
@@ -2054,7 +2092,7 @@ public class Ollivanders2 extends JavaPlugin
     * @since 2.2.5
     * @param player the player to send the cooldown message to
     */
-   public void spellCoolDownMessage (Player player)
+   public void spellCoolDownMessage(@NotNull Player player)
    {
       player.sendMessage(chatColor + "You are too tired to cast this spell right now.");
    }
@@ -2066,7 +2104,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param args   args to the command
     * @return true
     */
-   public boolean runPotions (CommandSender sender, String[] args)
+   public boolean runPotions (@NotNull CommandSender sender, @NotNull String[] args)
    {
       if (args.length > 1)
       {
@@ -2090,11 +2128,11 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("list"))
          {
-            return listAllPotions((Player)sender);
+            return listAllPotions((Player) sender);
          }
          else if (subCommand.equalsIgnoreCase("all"))
          {
-            return giveAllPotions((Player)sender);
+            return giveAllPotions((Player) sender);
          }
          else if (subCommand.equalsIgnoreCase("give"))
          {
@@ -2102,14 +2140,18 @@ public class Ollivanders2 extends JavaPlugin
             {
                // potions give fred memory potion
                Player targetPlayer = getServer().getPlayer(args[2]);
-               String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
-               return givePotion(sender, targetPlayer, Ollivanders2API.common.stringArrayToString(subArgs));
+
+               if (targetPlayer != null)
+               {
+                  String[] subArgs = Arrays.copyOfRange(args, 3, args.length);
+                  return givePotion(sender, targetPlayer, Ollivanders2API.common.stringArrayToString(subArgs));
+               }
             }
          }
          else
          {
             // potions memory potion
-            String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
+            String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
             return givePotion(sender, (Player) sender, Ollivanders2API.common.stringArrayToString(subArgs));
          }
       }
@@ -2121,10 +2163,10 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Give a specific potion to a player.
     *
-    * @param player the player to give the potion to
+    * @param player     the player to give the potion to
     * @param potionName the potion to give the player
     */
-   public boolean givePotion (CommandSender sender, Player player, String potionName)
+   public boolean givePotion(@NotNull CommandSender sender, @NotNull Player player, @NotNull String potionName)
    {
       O2PotionType potionType = null;
 
@@ -2145,7 +2187,7 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      O2Potion potion = Ollivanders2API.getPotions().getPotionFromType(potionType);
+      O2Potion potion = Ollivanders2API.getPotions(this).getPotionFromType(potionType);
 
       if (potion == null)
          return true;
@@ -2159,17 +2201,22 @@ public class Ollivanders2 extends JavaPlugin
       return true;
    }
 
+   /**
+    * Usage message for potion subcommands
+    *
+    * @param sender the command sender
+    */
    private void usageMessagePotions (CommandSender sender)
    {
       sender.sendMessage(chatColor
-            + "Usage: /olli potions"
-            + "\ningredient list - lists all potions ingredients"
-            + "\ningredient <ingredient name> - give you the ingredient with this name, if it exists"
-            + "\nall - gives all Ollivanders2 potions, this may not fit in your inventory"
-            + "\n<potion name> - gives you the potion with this name, if it exists"
-            + "\ngive <player> <potion name> - gives target player the potion with this name, if it exists\n"
-            + "\nExample: /ollivanders2 potions wiggenweld potion"
-            + "\nExample: /ollivanders2 potions ingredient list");
+              + "Usage: /ollivanders2 potions"
+              + "\ningredient list - lists all potions ingredients"
+              + "\ningredient <ingredient name> - give you the ingredient with this name, if it exists"
+              + "\nall - gives all Ollivanders2 potions, this may not fit in your inventory"
+              + "\n<potion name> - gives you the potion with this name, if it exists"
+              + "\ngive <player> <potion name> - gives target player the potion with this name, if it exists\n"
+              + "\nExample: /ollivanders2 potions wiggenweld potion"
+              + "\nExample: /ollivanders2 potions ingredient list");
    }
 
    /**
@@ -2178,9 +2225,9 @@ public class Ollivanders2 extends JavaPlugin
     * @param player the player to display the list to
     * @return true
     */
-   private boolean listAllIngredients (Player player)
+   private boolean listAllIngredients(@NotNull Player player)
    {
-      List<String> ingredientList = O2Potions.getAllIngredientNames();
+      List<String> ingredientList = O2Potions.getAllIngredientNames(this);
       StringBuilder displayString = new StringBuilder();
       displayString.append("Ingredients:");
 
@@ -2201,12 +2248,12 @@ public class Ollivanders2 extends JavaPlugin
     * @param player the player to display the list to
     * @return true
     */
-   private boolean listAllPotions (Player player)
+   private boolean listAllPotions(@NotNull Player player)
    {
       StringBuilder displayString = new StringBuilder();
       displayString.append("Potions:");
 
-      List<String> potionNames = Ollivanders2API.getPotions().getAllPotionNames();
+      List<String> potionNames = Ollivanders2API.getPotions(this).getAllPotionNames();
       for (String name : potionNames)
       {
          displayString.append("\n").append(name);
@@ -2225,10 +2272,10 @@ public class Ollivanders2 extends JavaPlugin
     * @param name the name of the ingredient
     * @return true
     */
-   private boolean giveItem (Player player, String name)
+   private boolean giveItem(@NotNull Player player, @NotNull String name)
    {
       List<ItemStack> kit = new ArrayList<>();
-      ItemStack item = Ollivanders2API.getItems().getItemStartsWith(name, 1);
+      ItemStack item = Ollivanders2API.getItems(this).getItemStartsWith(name, 1);
 
       if (item != null)
       {
@@ -2245,14 +2292,14 @@ public class Ollivanders2 extends JavaPlugin
     * @param player the player to give the potions to
     * @return true unless an error occurred
     */
-   private boolean giveAllPotions (Player player)
+   private boolean giveAllPotions (@NotNull Player player)
    {
       if (debug)
          getLogger().info("Running givePotions...");
 
       List<ItemStack> kit = new ArrayList<>();
 
-      for (O2Potion potion : Ollivanders2API.getPotions().getAllPotions())
+      for (O2Potion potion : Ollivanders2API.getPotions(this).getAllPotions())
       {
          ItemStack brewedPotion = potion.brew(player, false);
 
@@ -2272,12 +2319,12 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param player the player to display the list to
     */
-   public void listAllBooks (Player player)
+   public void listAllBooks(@NotNull Player player)
    {
       StringBuilder titleList = new StringBuilder();
       titleList.append("Book Titles:");
 
-      for (String bookTitle : Ollivanders2API.getBooks().getAllBookTitles())
+      for (String bookTitle : Ollivanders2API.getBooks(this).getAllBookTitles())
       {
          titleList.append("\n").append(bookTitle);
       }
@@ -2289,13 +2336,12 @@ public class Ollivanders2 extends JavaPlugin
     * Prophecies sub-command
     *
     * @param sender the command sender
-    * @param args   the command args
     * @return true unless an error occurred
     */
-   public boolean runProphecies (CommandSender sender, String[] args)
+   public boolean runProphecies (@NotNull CommandSender sender)
    {
       StringBuilder output = new StringBuilder();
-      List<String> prophecies = Ollivanders2API.getProphecies().getProphecies();
+      List<String> prophecies = Ollivanders2API.getProphecies(this).getProphecies();
 
       if (prophecies.size() > 0)
       {
@@ -2317,34 +2363,129 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
+    * Run the apparate location subcommand
+    *
+    * @param sender the command sender
+    * @param args
+    * @return
+    */
+   public boolean runApparateLocation (@NotNull CommandSender sender, @NotNull String[] args)
+   {
+      if (!apparateLocations)
+      {
+         sender.sendMessage(chatColor
+                 + "Apprate locations are not currently enabled for your server."
+                 + "\nTo enable apparate locations, update the Ollivanders2 config.yml setting to true and restart your server."
+                 // TODO update wiki and uncomment
+                 //+ "\nFor help, see our documentation at ..."
+         );
+
+         return true;
+      }
+
+      if (args.length >= 2)
+      {
+         String subCommand = args[1];
+
+         if (subCommand.equalsIgnoreCase("list"))
+         {
+            APPARATE.listApparateLocations((Player)sender);
+            return true;
+         }
+         else if (subCommand.equalsIgnoreCase("add") || subCommand.equalsIgnoreCase("update"))
+         {
+            if (args.length < 6)
+            {
+               usageMessageApparateLocation(sender);
+               return true;
+            }
+
+            String locationName = args[2];
+
+            if (subCommand.equalsIgnoreCase("add") && APPARATE.doesLocationExist(locationName))
+            {
+               sender.sendMessage(chatColor + "An apparate location with that name already exists. If you want to update the location coordinates, use /ollivanders2 apparateLoc update.");
+               return true;
+            }
+            else if (subCommand.equalsIgnoreCase("update") && !APPARATE.doesLocationExist(locationName))
+            {
+               sender.sendMessage(chatColor + "An apparate location with that name does not exist. If you want to add a location coordinates, use /ollivanders2 apparateLoc add.");
+               return true;
+            }
+
+            String xCoord = args[3];
+            String yCoord = args[4];
+            String zCoord = args[5];
+            double x;
+            double y;
+            double z;
+            try
+            {
+               x = Double.parseDouble(xCoord);
+               y = Double.parseDouble(yCoord);
+               z = Double.parseDouble(zCoord);
+            }
+            catch (Exception e)
+            {
+               sender.sendMessage(chatColor + "Invalid coordinates for location.");
+               usageMessageApparateLocation(sender);
+               return true;
+            }
+
+            World world = ((Player) sender).getWorld();
+
+            APPARATE.addLocation(locationName, world, x, y, z);
+
+            sender.sendMessage(chatColor + "Apparate location " + locationName + " set. \nTo list all locations, use /ollivanders2 apparateLoc list.");
+            return true;
+         }
+         else if (subCommand.equalsIgnoreCase("remove"))
+         {
+            if (args.length < 3)
+            {
+               usageMessageApparateLocation(sender);
+               return true;
+            }
+
+            String locationName = args[2];
+
+            APPARATE.removeLocation(locationName);
+            sender.sendMessage(chatColor + "Removed apparate location " + locationName);
+
+            return true;
+         }
+      }
+
+      usageMessageApparateLocation(sender);
+      return true;
+   }
+
+   /**
+    * Usage message for apparate location subcommands
+    *
+    * @param sender the command sender
+    */
+   private void usageMessageApparateLocation (CommandSender sender)
+   {
+      sender.sendMessage(chatColor
+              + "Usage: /ollivanders2 apparateLoc"
+              + "\nlist - lists all apparate locations"
+              + "\nadd <location name> <x> <y> <z> - adds an apparate location"
+              + "\nupdate <location name> <x> <y> <z> - updates named location to new coordinates"
+              + "\nremove <location name> - removes the specified apparate location"
+              + "\nExample: /ollivanders2 apparateLoc add hogsmeade 200 70 350"
+              + "\nExample: /ollivanders2 remove hogsmeade");
+   }
+
+   /**
     * Add a temporary block. A temp block is a block that has been temporarily changed to a different type.
     *
     * @param block            the block to add
     * @param originalMaterial the original material of this block
-    * @return true if the block was added to the list, false if the block is already in the list or if a null param was passed
     */
-   public boolean addTempBlock (Block block, Material originalMaterial)
+   public void addTempBlock(@NotNull Block block, @NotNull Material originalMaterial)
    {
-      if (block == null || originalMaterial == null)
-      {
-         return false;
-      }
-
-      if (tempBlocks.containsKey(block))
-      {
-         if (tempBlocks.get(block) == originalMaterial)
-         {
-            return true;
-         }
-         else
-         {
-            return false;
-         }
-      }
-
       tempBlocks.put(block, originalMaterial);
-
-      return true;
    }
 
    /**
@@ -2352,7 +2493,7 @@ public class Ollivanders2 extends JavaPlugin
     *
     * @param block the block to remove
     */
-   public void revertTempBlock (Block block)
+   public void revertTempBlock(@NotNull Block block)
    {
       if (tempBlocks.containsKey(block))
       {
@@ -2362,7 +2503,12 @@ public class Ollivanders2 extends JavaPlugin
       }
    }
 
-   private void revertBlockType (Block block)
+   /**
+    * Revert a temporarily changed block back to its original type.
+    *
+    * @param block the changed block
+    */
+   private void revertBlockType(@NotNull Block block)
    {
       if (tempBlocks.containsKey(block))
       {
@@ -2385,7 +2531,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param block the block to check
     * @return true if it is a temp block, false otherwise
     */
-   public boolean isTempBlock (Block block)
+   public boolean isTempBlock(@NotNull Block block)
    {
       return tempBlocks.containsKey(block);
    }
@@ -2396,16 +2542,9 @@ public class Ollivanders2 extends JavaPlugin
     * @param block the temp block
     * @return the material, if found, null otherwise
     */
-   public Material getTempBlockOriginalMaterial (Block block)
+   public Material getTempBlockOriginalMaterial (@NotNull Block block)
    {
-      if (tempBlocks.containsKey(block))
-      {
-         return tempBlocks.get(block);
-      }
-      else
-      {
-         return null;
-      }
+      return tempBlocks.getOrDefault(block, null);
    }
 
    /**

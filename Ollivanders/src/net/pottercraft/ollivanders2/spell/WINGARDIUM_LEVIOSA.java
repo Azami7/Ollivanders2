@@ -20,6 +20,7 @@ import org.bukkit.util.Vector;
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Moves a group of blocks.
@@ -50,7 +51,8 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
       branch = O2MagicBranch.CHARMS;
       spellType = O2SpellType.WINGARDIUM_LEVIOSA;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<String>()
+      {{
          add("The Levitation Charm");
          add("You're saying it wrong ...It's Wing-gar-dium Levi-o-sa, make the 'gar' nice and long.\" -Hermione Granger");
          add("The Levitation Charm is one of the first spells learnt by any young witch or wizard.  With the charm a witch or wizard can make things fly with the flick of a wand.");
@@ -62,11 +64,11 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public WINGARDIUM_LEVIOSA (Ollivanders2 plugin, Player player, Double rightWand)
+   public WINGARDIUM_LEVIOSA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -91,7 +93,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
    @Override
    public void checkEffect ()
    {
-      if (!checkSpellAllowed())
+      if (!isSpellAllowed())
       {
          kill();
          return;
@@ -107,7 +109,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
             moving = false;
             double radius = usesModifier / 4;
             ArrayList<COLLOPORTUS> collos = new ArrayList<>();
-            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
             {
                if (stat instanceof COLLOPORTUS)
                {
@@ -211,7 +213,8 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
     * @param block - Block to get the center location of.
     * @return Location at the center of the block.
     */
-   private Location centerOfBlock (Block block)
+   @NotNull
+   private Location centerOfBlock(@NotNull Block block)
    {
       Location newLoc = block.getLocation().clone();
       newLoc.setX(newLoc.getX() + 0.5);

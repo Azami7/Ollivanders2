@@ -6,6 +6,7 @@ import me.libraryaddict.disguise.disguisetypes.TargetedDisguise;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Super class for all disguise-based transfigurations
@@ -33,7 +34,7 @@ public abstract class EntityDisguise extends EntityTransfiguration
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public EntityDisguise(Ollivanders2 plugin, Player player, Double rightWand)
+   public EntityDisguise(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
    }
@@ -44,7 +45,7 @@ public abstract class EntityDisguise extends EntityTransfiguration
     * @param entity the entity to transfigure
     */
    @Override
-   protected void transfigureEntity (Entity entity)
+   protected void transfigureEntity(@NotNull Entity entity)
    {
       DisguiseAPI.disguiseToAll(entity, disguise);
 
@@ -65,23 +66,18 @@ public abstract class EntityDisguise extends EntityTransfiguration
     * @return true if it can be changed
     */
    @Override
-   protected boolean canTransfigure (Entity e)
+   protected boolean canTransfigure(@NotNull Entity e)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("canTransfigure: " + e.getType().toString());
+      common.printDebugMessage("canTransfigure: " + e.getType().toString(), null, null, false);
 
       if (!Ollivanders2.libsDisguisesEnabled)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("LibsDisguises not enabled.");
-
+         common.printDebugMessage("LibsDisguises not enabled.", null, null, false);
          return false;
       }
       else if (!targetTypeCheck(e))
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Target entity type cannot be transfigured.");
-
+         common.printDebugMessage("Target entity type cannot be transfigured.", null, null, false);
          return false;
       }
 

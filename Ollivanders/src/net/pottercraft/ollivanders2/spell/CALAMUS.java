@@ -6,11 +6,13 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Turns sticks in to arrows. Created by Azami7 on 6/29/17. Imported from iarepandemonium/Ollivanders.
@@ -37,11 +39,11 @@ public final class CALAMUS extends Transfiguration
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public CALAMUS(Ollivanders2 plugin, Player player, Double rightWand)
+   public CALAMUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.CALAMUS;
@@ -74,7 +76,16 @@ public final class CALAMUS extends Transfiguration
                Location loc = item.getLocation();
                ItemStack drop = new ItemStack(Material.ARROW);
                drop.setAmount(amount);
-               loc.getWorld().dropItem(loc, drop);
+
+               World world = loc.getWorld();
+               if (world == null)
+               {
+                  common.printDebugMessage("CALAMUS.doCheckEffect: world is null", null, null, true);
+                  kill();
+                  return;
+               }
+
+               world.dropItem(loc, drop);
                item.remove();
 
                break;

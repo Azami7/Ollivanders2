@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Shield spell
@@ -26,7 +27,7 @@ public class PROTEGO extends ShieldSpell implements StationarySpell
     *
     * @param plugin a callback to the MC plugin
     */
-   public PROTEGO (Ollivanders2 plugin)
+   public PROTEGO(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -36,15 +37,14 @@ public class PROTEGO extends ShieldSpell implements StationarySpell
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
-    * @param pid the player who cast the spell
+    * @param plugin   a callback to the MC plugin
+    * @param pid      the player who cast the spell
     * @param location the center location of the spell
-    * @param type the type of this spell
-    * @param radius the radius for this spell
+    * @param type     the type of this spell
+    * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public PROTEGO (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
-                   Integer duration)
+   public PROTEGO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration)
    {
       super(plugin, pid, location, type, radius, duration);
 
@@ -69,21 +69,19 @@ public class PROTEGO extends ShieldSpell implements StationarySpell
          flair(1);
 
          List<O2Spell> projectiles = p.getProjectiles();
-         if (projectiles != null)
+
+         for (O2Spell proj : projectiles)
          {
-            for (O2Spell proj : projectiles)
+            if (isInside(proj.location))
             {
-               if (isInside(proj.location))
+               if (location.distance(proj.location) > radius - 1)
                {
-                  if (location.distance(proj.location) > radius - 1)
-                  {
-                     Vector N = proj.location.toVector().subtract(location.toVector()).normalize();
-                     double b = p.getSpellNum(ply, O2SpellType.PROTEGO) / rightWand / 10.0;
-                     b += 1;
-                     Vector V = proj.vector.clone();
-                     proj.vector = N.multiply((V.dot(N))).multiply(-2).add(V).multiply(b);
-                     flair(10);
-                  }
+                  Vector N = proj.location.toVector().subtract(location.toVector()).normalize();
+                  double b = p.getSpellCount(ply, O2SpellType.PROTEGO) / rightWand / 10.0;
+                  b += 1;
+                  Vector V = proj.vector.clone();
+                  proj.vector = N.multiply((V.dot(N))).multiply(-2).add(V).multiply(b);
+                  flair(10);
                }
             }
          }
@@ -96,6 +94,7 @@ public class PROTEGO extends ShieldSpell implements StationarySpell
     * @return a map of the serialized data
     */
    @Override
+   @NotNull
    public Map<String, String> serializeSpellData ()
    {
       return new HashMap<>();
@@ -107,5 +106,5 @@ public class PROTEGO extends ShieldSpell implements StationarySpell
     * @param spellData a map of the saved spell data
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData) { }
+   public void deserializeSpellData(@NotNull Map<String, String> spellData) { }
 }

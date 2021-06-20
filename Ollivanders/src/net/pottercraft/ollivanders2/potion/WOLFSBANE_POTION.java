@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Relieve the symptoms of Lycanthropy
@@ -21,7 +22,7 @@ public final class WOLFSBANE_POTION extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public WOLFSBANE_POTION (Ollivanders2 plugin)
+   public WOLFSBANE_POTION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -42,10 +43,10 @@ public final class WOLFSBANE_POTION extends O2Potion
    }
 
    @Override
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       LYCANTHROPY_RELIEF effect = new LYCANTHROPY_RELIEF(p, duration, player.getUniqueId());
-      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel a sense of relief.");
    }

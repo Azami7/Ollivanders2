@@ -9,7 +9,7 @@ import java.util.List;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -19,6 +19,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Manages all Ollivanders2 potions.
@@ -27,11 +29,11 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 public class O2Potions
 {
-   private Ollivanders2 p;
+   final private Ollivanders2 p;
 
-   private HashMap <String, O2PotionType> O2PotionMap = new HashMap<>();
+   final private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
 
-   public static final List<O2ItemType> ingredients = new ArrayList<O2ItemType>()
+   public static final List<O2ItemType> ingredients = new ArrayList<>()
    {{
       add(O2ItemType.ACONITE);
       add(O2ItemType.ARMADILLO_BILE);
@@ -95,7 +97,12 @@ public class O2Potions
       add(O2ItemType.WOLFSBANE);
    }};
 
-   public O2Potions (Ollivanders2 plugin)
+   /**
+    * Constructor
+    *
+    * @param plugin a reference to the plugin
+    */
+   public O2Potions(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
 
@@ -113,6 +120,7 @@ public class O2Potions
     *
     * @return a Collection of 1 of each O2Potion
     */
+   @NotNull
    public Collection<O2Potion> getAllPotions ()
    {
       Collection<O2Potion> potions = new ArrayList<>();
@@ -140,6 +148,7 @@ public class O2Potions
     *
     * @return the list of active potion names
     */
+   @NotNull
    public List<String> getAllPotionNames ()
    {
       ArrayList<String> potionNames = new ArrayList<>();
@@ -156,10 +165,11 @@ public class O2Potions
     * Brew a potion in a cauldron.
     *
     * @param cauldron the cauldron with the potion ingredients
-    * @param brewer the player brewing this potion
+    * @param brewer   the player brewing this potion
     * @return the brewed potion if the recipe matches a known potion, null otherwise
     */
-   public ItemStack brewPotion (Block cauldron, Player brewer)
+   @Nullable
+   public ItemStack brewPotion(@NotNull Block cauldron, @NotNull Player brewer)
    {
       // make sure the block passed to us is a cauldron
       if (cauldron.getType() != Material.CAULDRON)
@@ -193,7 +203,8 @@ public class O2Potions
     * @param ingredientsInCauldron the ingredients in this cauldron
     * @return the matching potion if found, null otherwise
     */
-   private O2Potion matchPotion (Map<O2ItemType, Integer> ingredientsInCauldron)
+   @Nullable
+   private O2Potion matchPotion(@NotNull Map<O2ItemType, Integer> ingredientsInCauldron)
    {
       // compare ingredients in the cauldron to the recipe for each potion
       for (O2PotionType potionType : O2PotionType.values())
@@ -213,7 +224,8 @@ public class O2Potions
     * @param cauldron the brewing cauldron
     * @return a Map of the ingredients and count of each ingredient
     */
-   private Map<O2ItemType, Integer> getIngredientsInCauldron (Block cauldron)
+   @NotNull
+   private Map<O2ItemType, Integer> getIngredientsInCauldron(@NotNull Block cauldron)
    {
       Map<O2ItemType, Integer> ingredientsInCauldron = new HashMap<>();
       Location location = cauldron.getLocation();
@@ -223,11 +235,23 @@ public class O2Potions
          if (e instanceof Item)
          {
             Material material = ((Item) e).getItemStack().getType();
-            String lore = ((Item)e).getItemStack().getItemMeta().getLore().get(0);
+            ItemMeta meta = ((Item) e).getItemStack().getItemMeta();
+            if (meta == null)
+               continue;
 
-            O2ItemType ingredientType = Ollivanders2API.getItems().getTypeByDisplayName(lore);
+            List<String> itemLore = meta.getLore();
+            if (itemLore == null)
+               continue;
 
-            if (ingredientType == null || material != Ollivanders2API.getItems().getItemMaterialByType(ingredientType))
+            String lore = itemLore.get(0);
+            if (lore == null)
+               continue;
+
+            // For ingredients, lore and name are the same. We use lore instead of item name because this cannot be set by using an anvil - so players cannot "make"
+            // ingredients, they can only get real ones from the plugin.
+            O2ItemType ingredientType = Ollivanders2API.getItems(p).getTypeByDisplayName(lore);
+
+            if (ingredientType == null || material != Ollivanders2API.getItems(p).getItemMaterialByType(ingredientType))
                continue;
 
             Integer count = ((Item) e).getItemStack().getAmount();
@@ -250,15 +274,22 @@ public class O2Potions
     * @param meta the metadata for this item
     * @return the O2Potion, if one was found, null otherwise
     */
-   public O2Potion findPotionByItemMeta (ItemMeta meta)
+   @Nullable
+   public O2Potion findPotionByItemMeta(@NotNull ItemMeta meta)
    {
       if (meta.hasLore())
       {
-         for (String lore : meta.getLore())
+         List<String> lore = meta.getLore();
+
+         // we search on lore rather than item name so that players cannot use anvils to create potions
+         if (lore == null)
+            return null;
+
+         for (String l : lore)
          {
-            if (O2PotionMap.containsKey(lore.toLowerCase()))
+            if (O2PotionMap.containsKey(l.toLowerCase()))
             {
-               return getPotionFromType(O2PotionMap.get(lore.toLowerCase()));
+               return getPotionFromType(O2PotionMap.get(l.toLowerCase()));
             }
          }
       }
@@ -272,7 +303,8 @@ public class O2Potions
     * @param potionType the type of potion to get
     * @return the O2Potion object, if it could be created, or null otherwise
     */
-   public O2Potion getPotionFromType (O2PotionType potionType)
+   @Nullable
+   public O2Potion getPotionFromType(@NotNull O2PotionType potionType)
    {
       O2Potion potion;
 
@@ -280,7 +312,7 @@ public class O2Potions
 
       try
       {
-         potion = (O2Potion)potionClass.getConstructor(Ollivanders2.class).newInstance(p);
+         potion = (O2Potion) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception exception)
       {
@@ -300,28 +332,40 @@ public class O2Potions
     * @param name the name of the potion
     * @return the type if found, null otherwise
     */
-   public O2PotionType getPotionTypeByName (String name)
+   @Nullable
+   public O2PotionType getPotionTypeByName(@NotNull String name)
    {
-      if (O2PotionMap.containsKey(name.toLowerCase()))
-         return O2PotionMap.get(name.toLowerCase());
-      else
-         return null;
+      return O2PotionMap.getOrDefault(name.toLowerCase(), null);
    }
 
    /**
     * Get a list of the names of every potion ingredient.
     *
+    * @param p a reference to the plugin
     * @return a list of all potions ingredients
     */
-   public static List<String> getAllIngredientNames ()
+   @NotNull
+   public static List<String> getAllIngredientNames (@NotNull Ollivanders2 p)
    {
       ArrayList<String> ingredientList = new ArrayList<>();
 
       for (O2ItemType i : ingredients)
       {
-         ingredientList.add(Ollivanders2API.getItems().getItemDisplayNameByType(i));
+         ingredientList.add(Ollivanders2API.getItems(p).getItemDisplayNameByType(i));
       }
 
       return ingredientList;
+   }
+
+   /**
+    * Verify this potion type is loaded. A potion may not be loaded if it depends on something such as LibsDisguises and that
+    * dependency plugin does not exist.
+    *
+    * @param potionType the potion type to check
+    * @return true if this potion type is loaded, false otherwise
+    */
+   public boolean isLoaded(@NotNull O2PotionType potionType)
+   {
+      return O2PotionMap.containsValue(potionType);
    }
 }

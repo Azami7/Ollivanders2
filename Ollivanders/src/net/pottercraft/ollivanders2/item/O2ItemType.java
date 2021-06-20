@@ -1,6 +1,8 @@
 package net.pottercraft.ollivanders2.item;
 
 import org.bukkit.Material;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * All custom special items in Ollivanders2
@@ -35,6 +37,7 @@ public enum O2ItemType
    FLOO_POWDER(Material.REDSTONE, (short) 0, "Floo Powder", "Glittery, silver powder"),
    FULGURITE(Material.GLOWSTONE_DUST, (short) 0, "Fulgurite", null),
    GALANTHUS_NIVALIS(Material.AZURE_BLUET, (short) 0, "Galanthus Nivalis", null),
+   GALLEON(Material.GOLD_INGOT, (short) 0, "Galleon", null),
    GINGER_ROOT(Material.BEETROOT, (short) 0, "Ginger Root", null),
    GROUND_DRAGON_HORN(Material.GLOWSTONE_DUST, (short) 0, "Ground Dragon Horn", null),
    GROUND_PORCUPINE_QUILLS(Material.GRAY_DYE, (short) 0, "Ground Porcupine Quills", null),
@@ -48,6 +51,7 @@ public enum O2ItemType
    INVISIBILITY_CLOAK(Material.CHAINMAIL_CHESTPLATE, (short) 0, "Cloak of Invisibility", "Silvery Transparent Cloak"),
    JOBBERKNOLL_FEATHER(Material.FEATHER, (short) 0, "Jobberknoll Feather", null),
    KNOTGRASS(Material.TALL_GRASS, (short) 0, "Knotgrass", null),
+   KNUT(Material.NETHER_BRICK, (short) 0, "Knut", null),
    LACEWING_FLIES(Material.PUMPKIN_SEEDS, (short) 0, "Lacewing Flies", null),
    LAVENDER_SPRIG(Material.LILAC, (short) 0, "Lavender Sprig", null),
    LEECHES(Material.INK_SAC, (short) 0, "Leeches", null),
@@ -58,6 +62,7 @@ public enum O2ItemType
    MINT_SPRIG(Material.MELON_STEM, (short) 0, "Mint Sprig", null),
    MISTLETOE_BERRIES(Material.NETHER_WART, (short) 0, "Mistletoe Berries", null),
    MOONDEW_DROP(Material.GHAST_TEAR, (short) 0, "Moondew Drop", null),
+   PEWTER_CAULDRON (Material.CAULDRON, (short) 0, "Pewter Cauldron", null),
    PLAYING_CARDS(Material.PAPER, (short) 0, "Playing Cards", null),
    POISONOUS_POTATO(Material.POISONOUS_POTATO, (short) 0, "Poisonous Potato", null),
    POWDERED_ASHPODEL_ROOT(Material.ORANGE_DYE, (short) 0, "Powedered Root of Asphodel", null),
@@ -66,6 +71,7 @@ public enum O2ItemType
    RUNESPOOR_EGG(Material.EGG, (short) 0, "Runespoor Egg", null),
    SALAMANDER_BLOOD(Material.POTION, (short) 7, "Salamander Blood", null),
    SALAMANDER_FIRE(Material.BLAZE_POWDER, (short) 0, "Salamander Fire", null),
+   SICKLE(Material.IRON_INGOT, (short) 0, "Sickle", null),
    SLOTH_BRAIN(Material.FERMENTED_SPIDER_EYE, (short) 0, "Sloth Brain", null),
    SLOTH_BRAIN_MUCUS(Material.POTION, (short) 4, "Sloth Brain Mucus", null),
    SOPOPHORUS_BEAN_JUICE(Material.POTION, (short) 13, "Sopophorus Bean Juice", null),
@@ -77,14 +83,23 @@ public enum O2ItemType
    UNICORN_HORN(Material.BLAZE_ROD, (short) 0, "Unicorn Horn", null),
    VALERIAN_SPRIGS(Material.VINE, (short) 0, "Valerian Sprigs", null),
    VALERIAN_ROOT(Material.GOLDEN_CARROT, (short) 0, "Valerian Root", null),
+   WAND(Material.STICK, (short) 0, "Wand", null),
    WOLFSBANE(Material.ALLIUM, (short) 0, "Wolfsbane", null);
 
    private Material material;
-   private String name;
-   private String lore;
-   private short variant;
+   final private String name;
+   final private String lore;
+   final private short variant;
 
-   O2ItemType (Material m, short v, String n, String l)
+   /**
+    * Constructor
+    *
+    * @param m the material type
+    * @param v the variant information, this is 0 for most items but for things like potions it can control color
+    * @param n the name of the item
+    * @param l the lore for this item
+    */
+   O2ItemType(@NotNull Material m, short v, @NotNull String n, @Nullable String l)
    {
       material = m;
       name = n;
@@ -92,12 +107,20 @@ public enum O2ItemType
       lore = l;
    }
 
-   public String getName ()
+   /**
+    * @return the name of this item
+    */
+   @NotNull
+   public String getName()
    {
       return name;
    }
 
-   public String getLore ()
+   /**
+    * @return the lore for this item or its name if there is no lore
+    */
+   @NotNull
+   public String getLore()
    {
       if (lore == null)
       {
@@ -109,17 +132,29 @@ public enum O2ItemType
       }
    }
 
-   public short getVariant ()
+   /**
+    * @return the variant for this item
+    */
+   public short getVariant()
    {
       return variant;
    }
 
-   public Material getMaterial ()
+   /**
+    * @return the material type for this item
+    */
+   @NotNull
+   public Material getMaterial()
    {
       return material;
    }
 
-   public void setMaterial (Material m)
+   /**
+    * Set the material for this item
+    *
+    * @param m the material type
+    */
+   public void setMaterial(@NotNull Material m)
    {
       material = m;
    }

@@ -4,11 +4,12 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Reparifors is a healing spell that reverts minor magically-induced ailments, such as paralysis and poisoning.
@@ -19,6 +20,9 @@ import org.bukkit.potion.PotionEffectType;
  */
 public class REPARIFORS extends O2Spell
 {
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    */
    public REPARIFORS()
    {
       super();
@@ -29,7 +33,14 @@ public class REPARIFORS extends O2Spell
       text = "A healing spell for minor ailments such as paralysis or poisoning.";
    }
 
-   public REPARIFORS (Ollivanders2 plugin, Player player, Double rightWand)
+   /**
+    * Constructor.
+    *
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
+    * @param rightWand which wand the player was using
+    */
+   public REPARIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -54,9 +65,9 @@ public class REPARIFORS extends O2Spell
             Player target = (Player) live;
 
             // if they are affected by immobilize, remove the effect
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), O2EffectType.IMMOBILIZE) && !(Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), O2EffectType.SUSPENSION)))
+            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(target.getUniqueId(), O2EffectType.IMMOBILIZE) && !(Ollivanders2API.getPlayers(p).playerEffects.hasEffect(target.getUniqueId(), O2EffectType.SUSPENSION)))
             {
-               Ollivanders2API.getPlayers().playerEffects.ageEffectByPercent(target.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier / 20));
+               Ollivanders2API.getPlayers(p).playerEffects.ageEffectByPercent(target.getUniqueId(), O2EffectType.IMMOBILIZE, (int) (usesModifier / 20));
 
                kill();
                return;

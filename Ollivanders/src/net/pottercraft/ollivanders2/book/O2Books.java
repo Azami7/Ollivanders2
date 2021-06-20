@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
@@ -18,6 +19,8 @@ import org.bukkit.inventory.ItemStack;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.inventory.meta.BookMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Ollivanders2 O2BookType
@@ -31,14 +34,17 @@ import org.bukkit.inventory.meta.BookMeta;
  */
 public final class O2Books
 {
-   private Map <String, O2BookType> O2BookMap = new HashMap<>();
+   private final Map<String, O2BookType> O2BookMap = new HashMap<>();
 
-   private Ollivanders2 p;
+   Ollivanders2 p;
+   Ollivanders2Common common;
+
    BookTexts spellText;
 
    private ItemStack library;
 
-   public static final ArrayList<O2BookType> hogwartsReadingList = new ArrayList<O2BookType>() {{
+   public static final List<O2BookType> hogwartsReadingList = new ArrayList<>()
+   {{
       add(O2BookType.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION);
       add(O2BookType.ACHIEVEMENTS_IN_CHARMING);
       add(O2BookType.ADVANCED_POTION_MAKING);
@@ -73,9 +79,10 @@ public final class O2Books
     *
     * @param plugin the MC plugin
     */
-   public O2Books (Ollivanders2 plugin)
+   public O2Books(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(plugin);
 
       spellText = new BookTexts(plugin);
 
@@ -84,7 +91,7 @@ public final class O2Books
 
       library = null;
 
-      p.getLogger().info("Created Ollivanders2 books.");
+      common.printLogMessage("Created Ollivanders2 books.", null, null, false);
    }
 
    /**
@@ -92,7 +99,8 @@ public final class O2Books
     */
    private void addBooks ()
    {
-      p.getLogger().info("Adding all books...");
+      common.printDebugMessage("Adding all books...", null, null, false);
+
       for (O2BookType bookType : O2BookType.values())
       {
          O2Book book = getO2BookByType(bookType);
@@ -110,7 +118,8 @@ public final class O2Books
     * @param bookType the book to be returned
     * @return the BookItem if found bookType was found, null otherwise.
     */
-   private O2Book getO2BookByType (O2BookType bookType)
+   @Nullable
+   private O2Book getO2BookByType(@NotNull O2BookType bookType)
    {
       Class<?> bookClass = bookType.getClassName();
 
@@ -118,13 +127,11 @@ public final class O2Books
 
       try
       {
-         book = (O2Book)bookClass.getConstructor(Ollivanders2.class).newInstance(p);
+         book = (O2Book) bookClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
-      catch (Exception exception)
+      catch (Exception e)
       {
-         p.getLogger().info("Exception trying to create new instance of " + bookType);
-         if (Ollivanders2.debug)
-            exception.printStackTrace();
+         common.printDebugMessage("Exception trying to create new instance of " + bookType, e, null, true);
       }
 
       return book;
@@ -136,7 +143,8 @@ public final class O2Books
     * @param title the title of the book
     * @return a book item version of this book if it exists, null otherwise.
     */
-   public ItemStack getBookByTitle (String title)
+   @Nullable
+   public ItemStack getBookByTitle(@NotNull String title)
    {
       String searchFor = title.toLowerCase();
       O2BookType match = null;
@@ -159,7 +167,10 @@ public final class O2Books
 
       O2Book o2book = getO2BookByType(match);
 
-      return o2book.getBookItem();
+      if (o2book != null)
+         return o2book.getBookItem();
+
+      return null;
    }
 
    /**
@@ -167,7 +178,8 @@ public final class O2Books
     *
     * @return a ArrayList of all O2Book objects.
     */
-   public ArrayList<ItemStack> getAllBooks ()
+   @NotNull
+   public List<ItemStack> getAllBooks()
    {
       ArrayList<ItemStack> bookStack = new ArrayList<>();
 
@@ -188,24 +200,24 @@ public final class O2Books
     * If bookLearning is enabled, read the lore for a book and learn all spells not yet known.
     *
     * @param bookLore the lore from a book
-    * @param player the player reading the book
-    * @param p the callback to the MC plugin
+    * @param player   the player reading the book
+    * @param p        the callback to the MC plugin
     */
-   public static void readLore (List<String> bookLore, Player player, Ollivanders2 p)
+   public static void readLore(@NotNull List<String> bookLore, @NotNull Player player, @NotNull Ollivanders2 p)
    {
-      if (bookLore == null || player == null || !Ollivanders2.bookLearning)
+      if (!Ollivanders2.bookLearning)
       {
          return;
       }
 
-      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
       if (o2p == null)
          return;
 
       for (String spell : bookLore)
       {
          // see if it is a spell
-         O2SpellType spellEnum = Ollivanders2API.getSpells().getSpellTypeByName(spell);
+         O2SpellType spellEnum = Ollivanders2API.getSpells(p).getSpellTypeByName(spell);
 
          if (spellEnum != null)
          {
@@ -214,18 +226,18 @@ public final class O2Books
             // if spell count is less than 25, learn this spell
             if (spellLevel < 25)
             {
-               p.incSpellCount(player, spellEnum);
+               p.incrementSpellCount(player, spellEnum);
 
                // if they have the improved learning effect, increment it again
-               if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
+               if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
                {
-                  p.incSpellCount(player, spellEnum);
+                  p.incrementSpellCount(player, spellEnum);
                }
             }
          }
          else // see if it is a potion
          {
-            O2PotionType potionEnum = Ollivanders2API.getPotions().getPotionTypeByName(spell);
+            O2PotionType potionEnum = Ollivanders2API.getPotions(p).getPotionTypeByName(spell);
 
             if (potionEnum != null)
             {
@@ -234,12 +246,12 @@ public final class O2Books
                // if potion count < 10, learn this potion
                if (potionCount < 10)
                {
-                  p.incPotionCount(player, potionEnum);
+                  p.incrementPotionCount(player, potionEnum);
 
                   // if they have the improved learning effect, increment it again
-                  if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
+                  if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
                   {
-                     p.incPotionCount(player, potionEnum);
+                     p.incrementPotionCount(player, potionEnum);
                   }
                }
             }
@@ -252,7 +264,8 @@ public final class O2Books
     *
     * @return a BookItem that lists all O2 books.
     */
-   public ItemStack getReadingList ()
+   @Nullable
+   public ItemStack getReadingList()
    {
       if (library != null)
       {
@@ -262,7 +275,10 @@ public final class O2Books
 
       // being lazy, only do this when someone requests it the first time
       library = new ItemStack(Material.WRITTEN_BOOK, 1);
-      BookMeta bookMeta = (BookMeta)library.getItemMeta();
+      BookMeta bookMeta = (BookMeta) library.getItemMeta();
+
+      if (bookMeta == null)
+         return null;
 
       bookMeta.setAuthor("Madam Pince");
       bookMeta.setTitle("Hogwarts Reading List");
@@ -277,23 +293,24 @@ public final class O2Books
 
       Collections.sort(bookTitles);
 
-      String page = "";
+      StringBuilder page = new StringBuilder();
       int lines = 0;
 
       for (String s : bookTitles)
       {
          if (page.length() > 220 || lines >= 7)
          {
-            page = page + "\n(cont.)";
-            bookMeta.addPage(page);
-            page = new String();
+            page.append("\n(cont.)");
+            bookMeta.addPage(page.toString());
+            page = new StringBuilder();
             lines = 0;
          }
 
-         page = page + "\n" + s;
+         page.append("\n");
+         page.append(s);
          lines++;
       }
-      bookMeta.addPage(page);
+      bookMeta.addPage(page.toString());
       library.setItemMeta(bookMeta);
 
       return library;
@@ -304,11 +321,10 @@ public final class O2Books
     *
     * @return a list of the titles for all loaded books
     */
-   public ArrayList<String> getAllBookTitles ()
+   @NotNull
+   public List<String> getAllBookTitles()
    {
-      ArrayList<String> bookTitles = new ArrayList<>();
-
-      bookTitles.addAll(O2BookMap.keySet());
+      ArrayList<String> bookTitles = new ArrayList<>(O2BookMap.keySet());
       Collections.sort(bookTitles);
 
       return bookTitles;

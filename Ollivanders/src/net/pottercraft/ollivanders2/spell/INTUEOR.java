@@ -5,6 +5,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -13,7 +14,6 @@ import java.util.ArrayList;
  * https://harrypotter.fandom.com/wiki/Crystal-gazing
  *
  * @author Azami7
- * @since
  */
 public class INTUEOR extends Divination
 {
@@ -47,7 +47,7 @@ public class INTUEOR extends Divination
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public INTUEOR (Ollivanders2 plugin, Player player, Double rightWand)
+   public INTUEOR(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

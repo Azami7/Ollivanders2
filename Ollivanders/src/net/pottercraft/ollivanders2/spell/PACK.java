@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -15,6 +15,7 @@ import org.bukkit.inventory.Inventory;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -27,7 +28,7 @@ import java.util.ArrayList;
 public final class PACK extends O2Spell
 {
    private int radius;
-   private static int maxRadius = 20;
+   private final static int maxRadius = 20;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -51,11 +52,11 @@ public final class PACK extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public PACK (Ollivanders2 plugin, Player player, Double rightWand)
+   public PACK(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -82,7 +83,7 @@ public final class PACK extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
       {
@@ -90,9 +91,16 @@ public final class PACK extends O2Spell
       }
 
       Block block = getTargetBlock();
+      if (block == null)
+      {
+         common.printDebugMessage("PACK.doCheckEffect: target block is null", null, null, true);
+         kill();
+         return;
+      }
+
       if (Ollivanders2Common.chests.contains(block.getType()))
       {
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
+         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)
             {

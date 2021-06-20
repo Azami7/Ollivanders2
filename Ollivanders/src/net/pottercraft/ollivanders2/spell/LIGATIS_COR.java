@@ -8,7 +8,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,6 +17,8 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * If a coreless wand is near enough a core material, makes a wand of the wand wood type and core type. Itemstack amount
@@ -43,11 +45,11 @@ public final class LIGATIS_COR extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public LIGATIS_COR (Ollivanders2 plugin, Player player, Double rightWand)
+   public LIGATIS_COR(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -72,11 +74,19 @@ public final class LIGATIS_COR extends O2Spell
       for (Item item : items)
       {
          ItemMeta meta = item.getItemStack().getItemMeta();
+         if (meta == null)
+         {
+            common.printDebugMessage("LIGATIS_COR.doCheckEffect: item meta is null", null, null, true);
+            kill();
+            return;
+         }
 
          // look for any coreless wands by item meta
          if (meta.hasLore())
          {
             List<String> lore = meta.getLore();
+            if (lore == null)
+               continue;
 
             for (String l : lore)
             {
@@ -86,9 +96,11 @@ public final class LIGATIS_COR extends O2Spell
 
                   // create the wand
                   ItemStack wand = createWand(item);
-
-                  // spawn in to the world
-                  item.getWorld().dropItem(loc, wand);
+                  if (wand != null)
+                  {
+                     // spawn in to the world
+                     item.getWorld().dropItem(loc, wand);
+                  }
 
                   kill();
                   return;
@@ -108,14 +120,13 @@ public final class LIGATIS_COR extends O2Spell
    /**
     * Create the wand from the material and core.
     *
-    * @param corelessWand
-    * @return
+    * @param corelessWand a coreless wand
+    * @return a wand if a nerby core material is found, null otherwise
     */
-   private ItemStack createWand(Item corelessWand)
+   @Nullable
+   private ItemStack createWand(@NotNull Item corelessWand)
    {
       ItemStack wand = null;
-
-      ItemMeta meta = corelessWand.getItemStack().getItemMeta();
 
       // pick a random wood type
       ArrayList<String> woodTypes = O2WandCoreType.getAllCoresByName();
@@ -133,13 +144,17 @@ public final class LIGATIS_COR extends O2Spell
 
             if (O2WandCoreType.getAllCoresByMaterial().contains(coreMaterial))
             {
-               String core = O2WandCoreType.getWandCoreTypeByMaterial(coreMaterial).getLabel();
+               O2WandCoreType coreType = O2WandCoreType.getWandCoreTypeByMaterial(coreMaterial);
+               if (coreType == null)
+                  continue;
 
-               Ollivanders2API.common.makeWands(wood, core, 1);
+               wand = Ollivanders2API.common.makeWands(wood, coreType.getLabel(), 1);
 
                // use up the wand materials
                corelessWand.remove();
                coreItem.remove();
+
+               break;
             }
          }
       }

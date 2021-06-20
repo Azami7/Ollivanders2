@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Charming Colors - spells for changing colors
@@ -12,13 +13,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public final class CHARMING_COLORS extends O2Book
 {
-   public CHARMING_COLORS (Ollivanders2 plugin)
+   public CHARMING_COLORS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
-      shortTitle = title = "Charming Colors";
-      author = "Nymphadora Tonks";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.CHARMING_COLORS;
 
       openingPage = "\"Mere color, unspoiled by meaning, and unallied with definite form, can speak to the soul in a thousand different ways.\"";
 

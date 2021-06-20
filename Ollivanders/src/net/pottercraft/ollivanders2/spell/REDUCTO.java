@@ -5,7 +5,9 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -27,7 +29,7 @@ public final class REDUCTO extends O2Spell
       spellType = O2SpellType.REDUCTO;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Reductor Curse");
          add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
@@ -39,11 +41,11 @@ public final class REDUCTO extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public REDUCTO (Ollivanders2 plugin, Player player, Double rightWand)
+   public REDUCTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -58,7 +60,7 @@ public final class REDUCTO extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
       {
@@ -66,6 +68,16 @@ public final class REDUCTO extends O2Spell
       }
 
       Location backLoc = location.clone().subtract(vector);
-      backLoc.getWorld().createExplosion(backLoc, (float) (usesModifier * 0.4));
+      World world = backLoc.getWorld();
+      if (world == null)
+      {
+         common.printDebugMessage("REDUCTO.doCheckEffect: world is null", null, null, true);
+      }
+      else
+      {
+         world.createExplosion(backLoc, (float) (usesModifier * 0.4));
+      }
+
+      kill();
    }
 }

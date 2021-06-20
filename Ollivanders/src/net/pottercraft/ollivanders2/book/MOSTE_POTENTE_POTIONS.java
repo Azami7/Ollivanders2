@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.potion.*;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Moste Potente Potions is a book by Phineas Bourne that gives instructions on how to brew advanced potions.
@@ -14,13 +15,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class MOSTE_POTENTE_POTIONS extends O2Book
 {
-   public MOSTE_POTENTE_POTIONS (Ollivanders2 plugin)
+   public MOSTE_POTENTE_POTIONS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
-      title = shortTitle = "Moste Potente Potions";
-      author = "Phineas Bourne";
-      branch = O2MagicBranch.POTIONS;
+      bookType = O2BookType.MOSTE_POTENTE_POTIONS;
 
       potions.add(O2PotionType.BARUFFIOS_BRAIN_ELIXIR);
       potions.add(O2PotionType.WOLFSBANE_POTION);

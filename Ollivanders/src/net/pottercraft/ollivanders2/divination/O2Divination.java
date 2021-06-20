@@ -4,8 +4,10 @@ import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.UUID;
@@ -18,12 +20,12 @@ import java.util.UUID;
  */
 public abstract class O2Divination
 {
-   Ollivanders2 p;
+   final Ollivanders2 p;
 
    O2DivinationType divintationType = O2DivinationType.ASTROLOGY;
 
    int maxAccuracy = 10;
-   int maxDurationDays = 4;
+   int maxDurationDays = Ollivanders2.divinationMaxDays;
 
    Player target;
    Player prophet;
@@ -31,7 +33,7 @@ public abstract class O2Divination
 
    ArrayList<String> prophecyPrefix = new ArrayList<>();
 
-   static final ArrayList<O2EffectType> divinationEffects = new ArrayList<O2EffectType>()
+   static final ArrayList<O2EffectType> divinationEffects = new ArrayList<>()
    {{
       add(O2EffectType.AGGRESSION);
       add(O2EffectType.BABBLING);
@@ -53,7 +55,15 @@ public abstract class O2Divination
       add(O2EffectType.WEALTH);
    }};
 
-   O2Divination (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
+   /**
+    * Constuctor
+    *
+    * @param plugin a referenc to the plugin
+    * @param pro    the player making the prophecy
+    * @param tar    the player the prophecy is about
+    * @param exp    the experience level of the prophet with this divination
+    */
+   O2Divination(@NotNull Ollivanders2 plugin, @NotNull Player pro, @NotNull Player tar, int exp)
    {
       p = plugin;
       target = tar;
@@ -61,7 +71,6 @@ public abstract class O2Divination
       experience = exp;
 
       prophecyPrefix.add("The portents and omens say that");
-      maxDurationDays = Ollivanders2.divinationMaxDays;
    }
 
    /**
@@ -174,17 +183,25 @@ public abstract class O2Divination
 
       prophet.chat(finalMessage);
       O2Prophecy prophecy = new O2Prophecy(p, effectType, finalMessage, targetID, prophetID, ticks, duration, accuracy);
-      Ollivanders2API.getProphecies().addProphecy(prophecy);
+      Ollivanders2API.getProphecies(p).addProphecy(prophecy);
    }
 
-   private O2Effect getEffect (UUID targetID, O2EffectType effectType)
+   /**
+    * Get the effect of this divination.
+    *
+    * @param targetID   the ID of the target player for this effect
+    * @param effectType the type of effect
+    * @return the effect this prophecy causes
+    */
+   @Nullable
+   private O2Effect getEffect(@NotNull UUID targetID, @NotNull O2EffectType effectType)
    {
       Class<?> effectClass = effectType.getClassName();
       O2Effect effect;
 
       try
       {
-         effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, 1, targetID);
+         effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, 1, targetID);
       }
       catch (Exception e)
       {

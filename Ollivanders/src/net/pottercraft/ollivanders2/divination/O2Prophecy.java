@@ -4,8 +4,10 @@ import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -18,7 +20,7 @@ import java.util.UUID;
  */
 public class O2Prophecy
 {
-   private Ollivanders2 p;
+   final private Ollivanders2 p;
 
    /**
     * The effect that will happen to the player
@@ -38,17 +40,17 @@ public class O2Prophecy
    /**
     * The time until the prophecy will come to pass, in game ticks - one game tick is 1/20 of a second
     */
-   private Long time;
+   private long time;
 
    /**
     * The duration, in game ticks, for this prophecy
     */
-   private Integer duration;
+   private int duration;
 
    /**
     * The percent accuracy of this prophecy
     */
-   private Integer accuracy;
+   private int accuracy;
 
    /**
     * The message of this prophecy
@@ -70,7 +72,7 @@ public class O2Prophecy
     * @param d   the duration of the effect, 0 for permanent
     * @param a   the accuracy of this prophecy as a percent from 0 to 99, greater than 99 will be rounded down to 99
     */
-   O2Prophecy (Ollivanders2 plugin, O2EffectType e, String m, UUID tid, UUID pid, long t, int d, int a)
+   O2Prophecy(@NotNull Ollivanders2 plugin, @NotNull O2EffectType e, @NotNull String m, @NotNull UUID tid, @NotNull UUID pid, long t, int d, int a)
    {
       p = plugin;
       effectType = e;
@@ -94,27 +96,30 @@ public class O2Prophecy
       }
    }
 
+   @NotNull
    public O2EffectType getEffect ()
    {
       return effectType;
    }
 
+   @NotNull
    public UUID getTargetID ()
    {
       return targetID;
    }
 
+   @NotNull
    UUID getProphetID ()
    {
       return prophetID;
    }
 
-   public Long getTime ()
+   public long getTime()
    {
       return time;
    }
 
-   public Integer getDuration ()
+   public int getDuration()
    {
       return duration;
    }
@@ -124,7 +129,7 @@ public class O2Prophecy
       return prophecyMessage;
    }
 
-   Integer getAccuracy ()
+   int getAccuracy()
    {
       return accuracy;
    }
@@ -134,17 +139,20 @@ public class O2Prophecy
       return kill;
    }
 
-   public void age ()
+   public void age()
    {
       time--;
    }
 
-   public void kill ()
+   public void kill()
    {
       kill = true;
    }
 
-   void fulfill ()
+   /**
+    * Execute this prophecy.
+    */
+   void fulfill()
    {
       if (Ollivanders2.debug)
       {
@@ -162,7 +170,7 @@ public class O2Prophecy
       if (target == null)
       {
          // player is offline, stash this prophecy for when the player returns
-         Ollivanders2API.getProphecies().addOfflineProphecy(this);
+         Ollivanders2API.getProphecies(p).addOfflineProphecy(this);
          return;
       }
 
@@ -177,7 +185,7 @@ public class O2Prophecy
 
             try
             {
-               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, duration, targetID);
+               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration, targetID);
             }
             catch (Exception e)
             {
@@ -187,9 +195,14 @@ public class O2Prophecy
             }
 
             effect.setPermanent(false);
-            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
 
-            p.getServer().broadcastMessage(Ollivanders2.chatColor + "And so came to pass the prophecy of " + Ollivanders2API.getPlayers().getPlayer(prophetID).getPlayerName() + ", \"" + prophecyMessage + "\"");
+            O2Player player = Ollivanders2API.getPlayers(p).getPlayer(prophetID);
+            if (player != null)
+            {
+               String playerName = player.getPlayerName();
+               p.getServer().broadcastMessage(Ollivanders2.chatColor + "And so came to pass the prophecy of " + playerName + ", \"" + prophecyMessage + "\"");
+            }
          }
          else
          {

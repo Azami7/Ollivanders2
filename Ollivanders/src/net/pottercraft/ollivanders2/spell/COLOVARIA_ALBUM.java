@@ -5,6 +5,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Target sheep or colored block turns white.
@@ -30,11 +31,11 @@ public final class COLOVARIA_ALBUM extends ColoroSuper
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public COLOVARIA_ALBUM (Ollivanders2 plugin, Player player, Double rightWand)
+   public COLOVARIA_ALBUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.COLOVARIA_ALBUM;

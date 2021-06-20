@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -12,7 +13,7 @@ public abstract class ShieldSpell extends StationarySpellObj
     *
     * @param plugin a callback to the MC plugin
     */
-   public ShieldSpell (Ollivanders2 plugin)
+   public ShieldSpell(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
    }
@@ -27,7 +28,7 @@ public abstract class ShieldSpell extends StationarySpellObj
     * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public ShieldSpell (Ollivanders2 plugin, UUID playerID, Location loc, O2StationarySpellType type, Integer radius, Integer duration)
+   public ShieldSpell(@NotNull Ollivanders2 plugin, @NotNull UUID playerID, @NotNull Location loc, @NotNull O2StationarySpellType type, int radius, int duration)
    {
       super(plugin, playerID, loc, type, radius, duration);
    }

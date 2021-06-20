@@ -2,11 +2,12 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +77,7 @@ public abstract class EntityTransfiguration extends O2Spell
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public EntityTransfiguration(Ollivanders2 plugin, Player player, Double rightWand)
+   public EntityTransfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -141,7 +142,7 @@ public abstract class EntityTransfiguration extends O2Spell
     *
     * @param entity the entity to transfigure
     */
-   protected void transfigure (Entity entity)
+   protected void transfigure(@NotNull Entity entity)
    {
       if (isTransfigured || !canTransfigure(entity))
       {
@@ -162,8 +163,7 @@ public abstract class EntityTransfiguration extends O2Spell
       }
       else
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Failed success check.");
+         common.printDebugMessage("Failed success check.", null, null, false);
       }
    }
 
@@ -174,7 +174,7 @@ public abstract class EntityTransfiguration extends O2Spell
     * @param e the entity to check
     * @return true if the entity can be transfigured, false otherwise.
     */
-   protected boolean canTransfigure (Entity e)
+   protected boolean canTransfigure(@NotNull Entity e)
    {
       return false;
    }
@@ -184,7 +184,7 @@ public abstract class EntityTransfiguration extends O2Spell
     *
     * @param entity the entity to transfigure
     */
-   protected void transfigureEntity (Entity entity)
+   protected void transfigureEntity(@NotNull Entity entity)
    {
    }
 
@@ -194,7 +194,7 @@ public abstract class EntityTransfiguration extends O2Spell
     * @param e the entity to check
     * @return true if the entity can be changed, false otherwise.
     */
-   protected boolean targetTypeCheck (Entity e)
+   protected boolean targetTypeCheck(@NotNull Entity e)
    {
       // get entity type
       EntityType eType = e.getType();
@@ -203,25 +203,19 @@ public abstract class EntityTransfiguration extends O2Spell
 
       if (eType == targetType) // do not change if this entity is already the target type
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Target entity is same type as spell type.");
-
+         common.printDebugMessage("Target entity is same type as spell type.", null, null, false);
          check = false;
       }
       else if (entityBlacklist.contains(eType)) // do not change if this entity is in the blacklist
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("EntityType is on the blacklist.");
-
+         common.printDebugMessage("EntityType is on the blacklist.", null, null, false);
          check = false;
       }
       else if (!entityWhitelist.isEmpty()) // do not change if the whitelist exists and this entity is not in it
       {
          if (!entityWhitelist.contains(eType))
          {
-            if (Ollivanders2.debug)
-               p.getLogger().info("EntityType is not on the whitelist.");
-
+            common.printDebugMessage("EntityType is not on the whitelist.", null, null, false);
             check = false;
          }
       }

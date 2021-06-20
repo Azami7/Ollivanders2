@@ -9,10 +9,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import net.pottercraft.ollivanders2.house.O2HouseType;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.O2Color;
+import net.pottercraft.ollivanders2.player.events.OllivandersPlayerFoundWandEvent;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
@@ -23,6 +24,9 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Ollivanders2 player
@@ -50,32 +54,37 @@ public class O2Player
    /**
     * Player display name
     */
-   private String playerName = null;
+   private String playerName;
 
    /**
     * Player minecraft UUID, this is their primary identifier in Ollivanders2
     */
-   private UUID pid = null;
+   private final UUID pid;
 
    /**
     * The MC plugin callback
     */
-   private Ollivanders2 p = null;
+   private final Ollivanders2 p;
+
+   /**
+    * Common functions for Ollivanders2
+    */
+   private final Ollivanders2Common common;
 
    /**
     * A map of all the spells a player knows and the cast count.
     */
-   private Map<O2SpellType, Integer> knownSpells = new HashMap<>();
+   private final Map<O2SpellType, Integer> knownSpells = new HashMap<>();
 
    /**
     * A map of all the potions a player knows and the brew count.
     */
-   private Map<O2PotionType, Integer> knownPotions = new HashMap<>();
+   private final Map<O2PotionType, Integer> knownPotions = new HashMap<>();
 
    /**
     * A map of the recent spells a player has cast and their cast timestamp
     */
-   private Map<O2SpellType, Long> recentSpells = new HashMap<>();
+   private final Map<O2SpellType, Long> recentSpells = new HashMap<>();
 
    /**
     * The spell loaded into the wand for casting with left click
@@ -100,7 +109,7 @@ public class O2Player
    /**
     * The list of mastered spells - spells with > 100 cast count
     */
-   private ArrayList<O2SpellType> masteredSpells = new ArrayList<>();
+   private final ArrayList<O2SpellType> masteredSpells = new ArrayList<>();
 
    /**
     * The number of souls this user has collected
@@ -110,7 +119,7 @@ public class O2Player
    /**
     * Whether the player is currently invisible
     */
-   private boolean invisible = false;
+   private boolean isInvisible = false;
 
    /**
     * Whether the player is in a Repello Muggleton area
@@ -135,14 +144,14 @@ public class O2Player
    /**
     * Whether the player is a Muggle.
     */
-   private boolean muggle = true;
+   private boolean isMuggle = true;
 
    /**
     * The player's year in school
     */
    private Year year = Year.YEAR_1;
 
-   private O2PlayerCommon o2PlayerCommon;
+   private final O2PlayerCommon o2PlayerCommon;
 
    /**
     * Constructor.
@@ -151,12 +160,13 @@ public class O2Player
     * @param name   the name of the player
     * @param plugin a reference to the plugin
     */
-   public O2Player(UUID id, String name, Ollivanders2 plugin)
+   public O2Player(@NotNull UUID id, @NotNull String name, @NotNull Ollivanders2 plugin)
    {
       p = plugin;
       playerName = name;
       pid = id;
-      o2PlayerCommon = new O2PlayerCommon();
+      o2PlayerCommon = new O2PlayerCommon(plugin);
+      common = new Ollivanders2Common(plugin);
 
       // set destined wand
       initDestinedWand();
@@ -182,20 +192,27 @@ public class O2Player
     * @param stack the wand to check
     * @return true if is a wand and it matches, false otherwise
     */
-   public boolean isDestinedWand (ItemStack stack)
+   public boolean isDestinedWand(@NotNull ItemStack stack)
    {
       if (wandWood == null || wandCore == null)
          return false;
 
       if (Ollivanders2API.common.isWand(stack))
       {
+         ItemMeta meta = stack.getItemMeta();
+         if (meta == null)
+            return false;
+
          List<String> lore = stack.getItemMeta().getLore();
+         if (lore == null)
+            return false;
+
          String[] comps = lore.get(0).split(O2PlayerCommon.wandLoreConjunction);
 
          if (wandWood.equalsIgnoreCase(comps[0]) && wandCore.equalsIgnoreCase(comps[1]))
          {
-            foundWand = true;
-            muggle = false;
+            setFoundWand(true);
+            isMuggle = false;
             return true;
          }
          else
@@ -214,8 +231,12 @@ public class O2Player
     *
     * @return the wand lore for the players destined wand
     */
-   public String getDestinedWandLore ()
+   @NotNull
+   public String getDestinedWandLore()
    {
+      if (wandWood == null || wandCore == null)
+         initDestinedWand();
+
       return wandWood + O2PlayerCommon.wandLoreConjunction + wandCore;
    }
 
@@ -224,8 +245,12 @@ public class O2Player
     *
     * @return the player's destined wand wood type
     */
+   @NotNull
    public String getWandWood ()
    {
+      if (wandWood == null)
+         initDestinedWand();
+
       return wandWood;
    }
 
@@ -234,8 +259,12 @@ public class O2Player
     *
     * @return the player's destined wand core type
     */
+   @NotNull
    public String getWandCore ()
    {
+      if (wandCore == null)
+         initDestinedWand();
+
       return wandCore;
    }
 
@@ -244,7 +273,7 @@ public class O2Player
     *
     * @param wood sets the destined wand wood type
     */
-   public void setWandWood (String wood)
+   public void setWandWood(@NotNull String wood)
    {
       if (O2WandWoodType.getAllWoodsByName().contains(wood))
       {
@@ -257,7 +286,7 @@ public class O2Player
     *
     * @param core set the destined wand core type
     */
-   public void setWandCore (String core)
+   public void setWandCore(@NotNull String core)
    {
       if (O2WandCoreType.getAllCoresByName().contains(core))
       {
@@ -272,6 +301,7 @@ public class O2Player
     *
     * @return the player's name
     */
+   @NotNull
    public String getPlayerName ()
    {
       return playerName;
@@ -282,7 +312,7 @@ public class O2Player
     *
     * @param name the name to set for this player
     */
-   public void setPlayerName (String name)
+   public void setPlayerName(@NotNull String name)
    {
       playerName = name;
    }
@@ -293,7 +323,7 @@ public class O2Player
     * @param spell the spell to get a count for
     * @return the number of times a player has cast this spell
     */
-   public int getSpellCount (O2SpellType spell)
+   public int getSpellCount(@NotNull O2SpellType spell)
    {
       int count = 0;
 
@@ -311,7 +341,7 @@ public class O2Player
     * @param potionType the spell to get a count for
     * @return the number of times a player has cast this spell
     */
-   public int getPotionCount (O2PotionType potionType)
+   public int getPotionCount(@NotNull O2PotionType potionType)
    {
       int count = 0;
 
@@ -329,7 +359,8 @@ public class O2Player
     * @param spellType the spell to get a count for
     * @return the number of times a player has cast this spell
     */
-   public Long getSpellLastCastTime (O2SpellType spellType)
+   @NotNull
+   public Long getSpellLastCastTime(@NotNull O2SpellType spellType)
    {
       Long count = (long) 0;
 
@@ -346,12 +377,19 @@ public class O2Player
     *
     * @return a map of all the known spells and the spell count for each.
     */
-   public Map<O2SpellType, Integer> getKnownSpells ()
+   @NotNull
+   public Map<O2SpellType, Integer> getKnownSpells()
    {
       return knownSpells;
    }
 
-   public Map<O2PotionType, Integer> getKnownPotions ()
+   /**
+    * Get the list of known potions for this player.
+    *
+    * @return a map of all the known potions and potion breww count for each.
+    */
+   @NotNull
+   public Map<O2PotionType, Integer> getKnownPotions()
    {
       return knownPotions;
    }
@@ -361,6 +399,7 @@ public class O2Player
     *
     * @return a map of all recent spells and the time they were cast.
     */
+   @NotNull
    public Map<O2SpellType, Long> getRecentSpells()
    {
       return recentSpells;
@@ -373,7 +412,7 @@ public class O2Player
     * @param spell the spell to set the count for
     * @param count the count to set
     */
-   public void setSpellCount (O2SpellType spell, int count)
+   public void setSpellCount(@NotNull O2SpellType spell, int count)
    {
       if (count >= 1)
       {
@@ -381,8 +420,7 @@ public class O2Player
       }
       else
       {
-         if (knownSpells.containsKey(spell))
-            knownSpells.remove(spell);
+         knownSpells.remove(spell);
       }
 
       // remove spell from mastered list if level is less than 100
@@ -402,12 +440,9 @@ public class O2Player
     *
     * @param spell the spell they most recently cast
     */
-   void setLastSpell (O2SpellType spell)
+   void setLastSpell (@NotNull O2SpellType spell)
    {
-      if (spell != null)
-      {
-         lastSpell = spell;
-      }
+      lastSpell = spell;
    }
 
    /**
@@ -415,7 +450,8 @@ public class O2Player
     *
     * @return the last spell cast
     */
-   public O2SpellType getLastSpell ()
+   @Nullable
+   public O2SpellType getLastSpell()
    {
       return lastSpell;
    }
@@ -425,12 +461,9 @@ public class O2Player
     *
     * @param spell the spell they most recently cast
     */
-   public void setPriorIncantatem (O2SpellType spell)
+   public void setPriorIncantatem (@NotNull O2SpellType spell)
    {
-      if (spell != null)
-      {
-         priorIncantatem = spell;
-      }
+      priorIncantatem = spell;
    }
 
    /**
@@ -438,7 +471,8 @@ public class O2Player
     *
     * @return the last spell cast by this player with a wand
     */
-   public O2SpellType getPriorIncantatem ()
+   @Nullable
+   public O2SpellType getPriorIncantatem()
    {
       return priorIncantatem;
    }
@@ -448,9 +482,9 @@ public class O2Player
     * not be used when increment is intended.
     *
     * @param potionType the potion to set the count for
-    * @param count the count to set
+    * @param count      the count to set
     */
-   public void setPotionCount (O2PotionType potionType, int count)
+   public void setPotionCount(@NotNull O2PotionType potionType, int count)
    {
       if (count >= 1)
       {
@@ -458,8 +492,7 @@ public class O2Player
       }
       else
       {
-         if (knownPotions.containsKey(potionType))
-            knownPotions.remove(potionType);
+         knownPotions.remove(potionType);
       }
    }
 
@@ -468,11 +501,11 @@ public class O2Player
     *
     * @param spellType the spell to set the time for
     */
-   public void setSpellRecentCastTime (O2SpellType spellType)
+   public void setSpellRecentCastTime(@NotNull O2SpellType spellType)
    {
       String spellClass = "net.pottercraft.ollivanders2.spell." + spellType.toString();
 
-      Constructor c;
+      Constructor<?> c;
       try
       {
          c = Class.forName(spellClass).getConstructor();
@@ -497,7 +530,7 @@ public class O2Player
     *
     * @param spell the mastered spell
     */
-   public void setMasterSpell (O2SpellType spell)
+   public void setMasterSpell(@NotNull O2SpellType spell)
    {
       masterSpell = spell;
    }
@@ -507,7 +540,7 @@ public class O2Player
     *
     * @param spellType the spell to increment
     */
-   public void incrementSpellCount (O2SpellType spellType)
+   public void incrementSpellCount(@NotNull O2SpellType spellType)
    {
       if (Ollivanders2.debug)
          p.getLogger().info("Incrementing spell count for " + spellType.toString());
@@ -533,7 +566,7 @@ public class O2Player
     *
     * @param potionType the potion to increment
     */
-   public void incrementPotionCount (O2PotionType potionType)
+   public void incrementPotionCount(@NotNull O2PotionType potionType)
    {
       if (Ollivanders2.debug)
          p.getLogger().info("Incrementing potion count for " + potionType.toString());
@@ -572,6 +605,7 @@ public class O2Player
     *
     * @return the loaded spell
     */
+   @Nullable
    public O2SpellType getWandSpell ()
    {
       if (wandSpell == null && masterSpell != null && Ollivanders2.enableNonVerbalSpellCasting)
@@ -585,15 +619,14 @@ public class O2Player
     *
     * @param spell the spell to load
     */
-   public void setWandSpell (O2SpellType spell)
+   public void setWandSpell(@Nullable O2SpellType spell)
    {
-      if (Ollivanders2.debug)
-      {
-         if (spell == null)
-            p.getLogger().info("Setting wand spell to null");
-         else
-            p.getLogger().info("Setting wand spell to " + spell.toString());
-      }
+      String spellName;
+      if (spell == null)
+         spellName = "null";
+      else
+         spellName = spell.getSpellName();
+      common.printDebugMessage("O2Player.setWandSpell: setting wand spell to " + spellName, null, null, false);
 
       wandSpell = spell;
    }
@@ -605,7 +638,7 @@ public class O2Player
     */
    public boolean isInvisible ()
    {
-      return invisible;
+      return isInvisible;
    }
 
    /**
@@ -615,7 +648,7 @@ public class O2Player
     */
    public void setInvisible(boolean isInvisible)
    {
-      invisible = isInvisible;
+      this.isInvisible = isInvisible;
    }
 
    /**
@@ -645,7 +678,7 @@ public class O2Player
     */
    public boolean isMuggle()
    {
-      return muggle;
+      return isMuggle;
    }
 
    /**
@@ -655,7 +688,7 @@ public class O2Player
     */
    public void setMuggle(boolean isMuggle)
    {
-      muggle = isMuggle;
+      this.isMuggle = isMuggle;
    }
 
    /**
@@ -701,7 +734,8 @@ public class O2Player
     * Get the year this player is in.
     * @return The year the player is in
     */
-   public Year getYear() {
+   public Year getYear()
+   {
       return year;
    }
 
@@ -710,12 +744,9 @@ public class O2Player
     *
     * @param y The year to set them to
     */
-   public void setYear(Year y)
+   public void setYear(@NotNull Year y)
    {
-      if (year != null)
-      {
-         year = y;
-      }
+      year = y;
    }
 
    /**
@@ -727,12 +758,30 @@ public class O2Player
    }
 
    /**
+    * Initializer for the foundWand class variable for loading the player object.
+    *
+    * @param b the value to set for foundWand
+    */
+   protected void initFoundWand (boolean b)
+   {
+      foundWand = b;
+   }
+
+   /**
     * Set whether the player has found their destined wand before.
     *
     * @param b set whether the player has found their destined wand
     */
    public void setFoundWand (boolean b)
    {
+      if (foundWand != true && b == true)
+      {
+         OllivandersPlayerFoundWandEvent event = new OllivandersPlayerFoundWandEvent(p.getServer().getPlayer(pid));
+
+         p.getServer().getPluginManager().callEvent(event);
+         common.printDebugMessage("Fired PlayerFoundWandEvent", null, null, false);
+      }
+
       foundWand = b;
    }
 
@@ -751,18 +800,26 @@ public class O2Player
     *
     * @return the player's spell journal
     */
-   public ItemStack getSpellJournal ()
+   @Nullable
+   public ItemStack getSpellJournal()
    {
       ItemStack spellJournal = new ItemStack(Material.WRITTEN_BOOK, 1);
 
-      BookMeta bookMeta = (BookMeta)spellJournal.getItemMeta();
+      BookMeta bookMeta = (BookMeta) spellJournal.getItemMeta();
+
+      if (bookMeta == null)
+      {
+         p.getLogger().warning("getSpellJournal book meta is null");
+         return null;
+      }
+
       bookMeta.setAuthor(playerName);
       bookMeta.setTitle("Spell Journal");
 
       StringBuilder content = new StringBuilder();
       content.append("Spell Journal\n\n");
       int lineCount = 2;
-      for (Entry <O2SpellType, Integer> e : knownSpells.entrySet())
+      for (Entry<O2SpellType, Integer> e : knownSpells.entrySet())
       {
          // if we have done 14 lines, make a new page
          if (lineCount == 14)
@@ -805,7 +862,7 @@ public class O2Player
     *
     * @param spell the spell to add
     */
-   private void addMasteredSpell (O2SpellType spell)
+   private void addMasteredSpell(@NotNull O2SpellType spell)
    {
       if (spell != O2SpellType.AVADA_KEDAVRA)
       {
@@ -827,7 +884,7 @@ public class O2Player
     *
     * @param spell the spell to remove
     */
-   private void removeMasteredSpell (O2SpellType spell)
+   private void removeMasteredSpell(@NotNull O2SpellType spell)
    {
       if (masteredSpells.contains(spell))
       {
@@ -909,6 +966,7 @@ public class O2Player
     *
     * @return the wand's master spell
     */
+   @Nullable
    public O2SpellType getMasterSpell ()
    {
       return masterSpell;
@@ -971,7 +1029,7 @@ public class O2Player
     *
     * @param type the player's Animagus form.
     */
-   public void setAnimagusForm (EntityType type)
+   public void setAnimagusForm(@NotNull EntityType type)
    {
       if (o2PlayerCommon.isAllowedAnimagusForm(type))
       {
@@ -991,7 +1049,7 @@ public class O2Player
     *
     * @param color the color/type as a string
     */
-   void setAnimagusColor(String color)
+   void setAnimagusColor (@NotNull String color)
    {
       animagusColor = color;
    }
@@ -1001,6 +1059,7 @@ public class O2Player
     *
     * @return the player's Animagus form or null if they are not an Animagus
     */
+   @Nullable
    public EntityType getAnimagusForm ()
    {
       return animagusForm;
@@ -1011,6 +1070,7 @@ public class O2Player
     *
     * @return the color variation or null if not applicable
     */
+   @Nullable
    public String getAnimagusColor ()
    {
       // in case color was set when player has no animagus form
@@ -1025,7 +1085,7 @@ public class O2Player
     *
     * @return true if they have an Animagus form, false otherwise
     */
-   public boolean isAnimagus ()
+   public boolean isAnimagus()
    {
       if (animagusForm != null)
          return true;
@@ -1036,8 +1096,9 @@ public class O2Player
    /**
     * Get the player's UUID
     *
-    * @return
+    * @return the UUID of the player this O2Player represents
     */
+   @NotNull
    public UUID getID ()
    {
       return pid;
@@ -1048,44 +1109,8 @@ public class O2Player
     */
    public void onJoin ()
    {
-      Ollivanders2API.getPlayers().playerEffects.onJoin(pid);
-      Ollivanders2API.getProphecies().onJoin(pid);
-   }
-
-   /**
-    * Show log in message
-    */
-   public String getLogInMessage ()
-   {
-      p.getLogger().info("creating log in message");
-
-      // check to see what they have done so far to let them know next steps
-      StringBuilder message = new StringBuilder();
-
-      if (Ollivanders2.useHouses)
-      {
-         O2HouseType houseType = Ollivanders2API.getHouses().getHouse(pid);
-         if (houseType != null)
-         {
-            message.append("\n").append(houseType.getName()).append(" is currently ").append(O2HouseType.getHousePlaceTxt(houseType)).append(".");
-         }
-      }
-
-      if (!foundWand)
-         message.append("\nFind your destined wand to begin using magic.");
-      else if (Ollivanders2.useHouses && !Ollivanders2API.getHouses().isSorted(pid))
-         message.append("\nGet sorted in to your school house to start earning house points.");
-      else if (knownSpells.size() < 1 && Ollivanders2.bookLearning)
-         message.append("\nFind a spell book to get started learning magic.");
-      else if (knownSpells.size() < 1)
-         message.append("\nTry casting a spell by saying the incantation and waving your wand.");
-      else if (knownPotions.size() < 1 && Ollivanders2.bookLearning)
-         message.append("\nFind a potions book and a water-filled cauldron to get started brewing potions.");
-      else if (knownPotions.size() < 1)
-         message.append("\nTry brewing a potion by using a water-filled cauldron and the potion ingredients.");
-
-      p.getLogger().info(message.toString());
-      return message.toString();
+      Ollivanders2API.getPlayers(p).playerEffects.onJoin(pid);
+      Ollivanders2API.getProphecies(p).onJoin(pid);
    }
 
    /**
@@ -1093,7 +1118,7 @@ public class O2Player
     */
    public void onQuit ()
    {
-      Ollivanders2API.getPlayers().playerEffects.onQuit(pid);
+      Ollivanders2API.getPlayers(p).playerEffects.onQuit(pid);
    }
 
    /**
@@ -1106,7 +1131,7 @@ public class O2Player
          resetSpellCount();
          resetPotionCount();
          resetSouls();
-         Ollivanders2API.getPlayers().playerEffects.onDeath(pid);
+         Ollivanders2API.getPlayers(p).playerEffects.onDeath(pid);
       }
 
       setWandSpell(null);

@@ -2,10 +2,11 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.effect.FLYING;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -45,11 +46,11 @@ public final class VENTO_FOLIO extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public VENTO_FOLIO (Ollivanders2 plugin, Player player, Double rightWand)
+   public VENTO_FOLIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -86,7 +87,7 @@ public final class VENTO_FOLIO extends O2Spell
    @Override
    public void checkEffect()
    {
-      if (!checkSpellAllowed())
+      if (!isSpellAllowed())
       {
          kill();
          return;
@@ -95,20 +96,23 @@ public final class VENTO_FOLIO extends O2Spell
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
       int duration;
 
-      int uses = (int)(usesModifier * 100);
+      int uses = (int) (usesModifier * 100);
       if (uses >= 100)
       {
          // > 30 seconds
          duration = uses + 300;
-      } else if (uses >= 50)
+      }
+      else if (uses >= 50)
       {
          // 30 seconds
          duration = 300;
-      } else if (uses >= 10)
+      }
+      else if (uses >= 10)
       {
          // 10 seconds
          duration = 200;
-      } else // < 10
+      }
+      else // < 10
       {
          // 5 seconds
          duration = 100;
@@ -117,10 +121,9 @@ public final class VENTO_FOLIO extends O2Spell
       if (rand < successRate)
       {
          FLYING effect = new FLYING(p, duration, player.getUniqueId());
-         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+         Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
 
-         if (Ollivanders2.debug)
-            p.getLogger().info("Adding effect ");
+         common.printDebugMessage("VENTO_FOLIO: Adding effect ", null, null, false);
       }
 
       kill();

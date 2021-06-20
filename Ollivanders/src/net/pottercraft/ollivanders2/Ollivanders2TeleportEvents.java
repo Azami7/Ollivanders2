@@ -2,12 +2,13 @@ package net.pottercraft.ollivanders2;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
 /**
- * With MV 1.14, triggering PlayerTeleportEvents from other events is no longer thread-safe. Need to create a queue of teleport events like we use for
+ * With MC 1.14, triggering PlayerTeleportEvents from other events is no longer thread-safe. Need to create a queue of teleport events like we use for
  * things like spell projectiles and effects.
  *
  * @author Azami7
@@ -15,32 +16,32 @@ import java.util.Arrays;
  */
 public class Ollivanders2TeleportEvents
 {
-   private Ollivanders2 p;
+   final private Ollivanders2 p;
 
    /**
     * The list of all queued teleport events
     */
-   private ArrayList<O2TeleportEvent> teleportEvents = new ArrayList<>();
+   final private List<O2TeleportEvent> teleportEvents = new ArrayList<>();
 
    /**
     * A teleport event
     */
-   public class O2TeleportEvent
+   static public class O2TeleportEvent
    {
       /**
        * The player to teleport
        */
-      private Player player;
+      final private Player player;
 
       /**
        * The location they are teleporting from
        */
-      private Location fromLocation;
+      final private Location fromLocation;
 
       /**
        * The location they are teleporting to
        */
-      private Location toLocation;
+      final private Location toLocation;
 
       /**
        * Create explosion effect on teleport
@@ -54,7 +55,7 @@ public class Ollivanders2TeleportEvents
        * @param from the location they are teleporting from
        * @param to   the location they are teleporting to
        */
-      O2TeleportEvent(Player p, Location from, Location to)
+      O2TeleportEvent (@NotNull Player p, @NotNull Location from, @NotNull Location to)
       {
          player = p;
          fromLocation = from;
@@ -68,7 +69,7 @@ public class Ollivanders2TeleportEvents
        * @param to        the location they are teleporting to
        * @param explosion should this teleport create an explosion effect when it happens
        */
-      O2TeleportEvent(Player p, Location from, Location to, boolean explosion)
+      O2TeleportEvent (@NotNull Player p, @NotNull Location from, @NotNull Location to, boolean explosion)
       {
          player = p;
          fromLocation = from;
@@ -77,16 +78,19 @@ public class Ollivanders2TeleportEvents
          explosionOnTeleport = explosion;
       }
 
+      @NotNull
       public Player getPlayer()
       {
          return player;
       }
 
+      @NotNull
       public Location getToLocation()
       {
          return toLocation;
       }
 
+      @NotNull
       public Location getFromLocation()
       {
          return fromLocation;
@@ -103,7 +107,7 @@ public class Ollivanders2TeleportEvents
     *
     * @param plugin a callback to the MC plugin
     */
-   public Ollivanders2TeleportEvents(Ollivanders2 plugin)
+   public Ollivanders2TeleportEvents (@NotNull Ollivanders2 plugin)
    {
       p = plugin;
    }
@@ -113,9 +117,10 @@ public class Ollivanders2TeleportEvents
     *
     * @return an array of the pending teleport events
     */
-   public O2TeleportEvent[] getTeleportEvents()
+   @NotNull
+   public List<O2TeleportEvent> getTeleportEvents()
    {
-      return teleportEvents.toArray(new O2TeleportEvent[teleportEvents.size()]);
+      return new ArrayList<>(teleportEvents);
    }
 
    /**
@@ -125,7 +130,7 @@ public class Ollivanders2TeleportEvents
     * @param from   the location they are teleporting from
     * @param to     the location they are teleporting to
     */
-   public void addTeleportEvent(Player player, Location from, Location to)
+   public void addTeleportEvent (@NotNull Player player, @NotNull Location from, @NotNull Location to)
    {
       addTeleportEvent(player, from, to, false);
    }
@@ -138,7 +143,7 @@ public class Ollivanders2TeleportEvents
     * @param to                  the location they are teleporting to
     * @param explosionOnTeleport should there be an explosion effect on teleport
     */
-   public void addTeleportEvent(Player player, Location from, Location to, boolean explosionOnTeleport)
+   public void addTeleportEvent (@NotNull Player player, @NotNull Location from, @NotNull Location to, boolean explosionOnTeleport)
    {
       O2TeleportEvent teleportEvent = new O2TeleportEvent(player, from, to, explosionOnTeleport);
 
@@ -153,7 +158,7 @@ public class Ollivanders2TeleportEvents
     *
     * @param event the teleport event to remove
     */
-   public void removeTeleportEvent(O2TeleportEvent event)
+   public void removeTeleportEvent (@NotNull O2TeleportEvent event)
    {
       if (teleportEvents.contains(event))
       {

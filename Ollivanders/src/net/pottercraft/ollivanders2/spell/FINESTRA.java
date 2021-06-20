@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Breaks glass.
@@ -31,11 +32,11 @@ public final class FINESTRA extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public FINESTRA (Ollivanders2 plugin, Player player, Double rightWand)
+   public FINESTRA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.FINESTRA;
@@ -52,10 +53,18 @@ public final class FINESTRA extends O2Spell
     * Break glass blocks
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
+
+      Block target = getTargetBlock();
+      if (target == null)
+      {
+         common.printDebugMessage("FINESTRA.doCheckEffect: target block is null", null, null, false);
+         kill();
+         return;
+      }
 
       if (isGlass(getTargetBlock()))
       {
@@ -81,29 +90,17 @@ public final class FINESTRA extends O2Spell
    {
       Material blockType = block.getType();
 
-      if (blockType == Material.GLASS || blockType == Material.GLASS_PANE
-            || blockType == Material.BLACK_STAINED_GLASS || blockType == Material.BLACK_STAINED_GLASS_PANE
-            || blockType == Material.GRAY_STAINED_GLASS || blockType == Material.GRAY_STAINED_GLASS_PANE
-            || blockType == Material.BLUE_STAINED_GLASS || blockType == Material.BLUE_STAINED_GLASS_PANE
-            || blockType == Material.BROWN_STAINED_GLASS || blockType == Material.BROWN_STAINED_GLASS_PANE
-            || blockType == Material.CYAN_STAINED_GLASS || blockType == Material.CYAN_STAINED_GLASS_PANE
-            || blockType == Material.GREEN_STAINED_GLASS || blockType == Material.GREEN_STAINED_GLASS_PANE
-            || blockType == Material.LIGHT_BLUE_STAINED_GLASS || blockType == Material.LIGHT_BLUE_STAINED_GLASS_PANE
-            || blockType == Material.RED_STAINED_GLASS || blockType == Material.RED_STAINED_GLASS_PANE
-            || blockType == Material.YELLOW_STAINED_GLASS || blockType == Material.YELLOW_STAINED_GLASS_PANE
-            || blockType == Material.LIME_STAINED_GLASS || blockType == Material.LIME_STAINED_GLASS_PANE
-            || blockType == Material.ORANGE_STAINED_GLASS || blockType == Material.ORANGE_STAINED_GLASS_PANE
-            || blockType == Material.LIGHT_GRAY_STAINED_GLASS || blockType == Material.LIGHT_GRAY_STAINED_GLASS_PANE
-            || blockType == Material.MAGENTA_STAINED_GLASS || blockType == Material.MAGENTA_STAINED_GLASS_PANE
-            || blockType == Material.PURPLE_STAINED_GLASS || blockType == Material.PURPLE_STAINED_GLASS_PANE
-            || blockType == Material.WHITE_STAINED_GLASS || blockType == Material.WHITE_STAINED_GLASS_PANE
-            || blockType == Material.PINK_STAINED_GLASS || blockType == Material.PINK_STAINED_GLASS_PANE)
-      {
-         return true;
-      }
-      else
-      {
-         return false;
-      }
+      return (blockType == Material.GLASS || blockType == Material.GLASS_PANE || blockType == Material.BLACK_STAINED_GLASS
+              || blockType == Material.BLACK_STAINED_GLASS_PANE || blockType == Material.GRAY_STAINED_GLASS || blockType == Material.GRAY_STAINED_GLASS_PANE
+              || blockType == Material.BLUE_STAINED_GLASS || blockType == Material.BLUE_STAINED_GLASS_PANE || blockType == Material.BROWN_STAINED_GLASS
+              || blockType == Material.BROWN_STAINED_GLASS_PANE || blockType == Material.CYAN_STAINED_GLASS || blockType == Material.CYAN_STAINED_GLASS_PANE
+              || blockType == Material.GREEN_STAINED_GLASS || blockType == Material.GREEN_STAINED_GLASS_PANE || blockType == Material.LIGHT_BLUE_STAINED_GLASS
+              || blockType == Material.LIGHT_BLUE_STAINED_GLASS_PANE || blockType == Material.RED_STAINED_GLASS || blockType == Material.RED_STAINED_GLASS_PANE
+              || blockType == Material.YELLOW_STAINED_GLASS || blockType == Material.YELLOW_STAINED_GLASS_PANE || blockType == Material.LIME_STAINED_GLASS
+              || blockType == Material.LIME_STAINED_GLASS_PANE || blockType == Material.ORANGE_STAINED_GLASS || blockType == Material.ORANGE_STAINED_GLASS_PANE
+              || blockType == Material.LIGHT_GRAY_STAINED_GLASS || blockType == Material.LIGHT_GRAY_STAINED_GLASS_PANE || blockType == Material.MAGENTA_STAINED_GLASS
+              || blockType == Material.MAGENTA_STAINED_GLASS_PANE || blockType == Material.PURPLE_STAINED_GLASS || blockType == Material.PURPLE_STAINED_GLASS_PANE
+              || blockType == Material.WHITE_STAINED_GLASS || blockType == Material.WHITE_STAINED_GLASS_PANE || blockType == Material.PINK_STAINED_GLASS
+              || blockType == Material.PINK_STAINED_GLASS_PANE);
    }
 }

@@ -5,11 +5,12 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
@@ -43,11 +44,11 @@ public final class LEGILIMENS extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public LEGILIMENS (Ollivanders2 plugin, Player player, Double rightWand)
+   public LEGILIMENS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -80,20 +81,19 @@ public final class LEGILIMENS extends O2Spell
             // 33% of the time if the caster and target have the same legilimens level
             // 10% of the time if the caster's legilimens level is less than the target
             if (((usesModifier > targetExperience) && (randGreater < 4)) // success on 3, 2, 1, 0
-                  || ((usesModifier == targetExperience) && (randEqual > 0)) // success on 1, 2
-                  || ((usesModifier < targetExperience) && (randLess < 1))) // success on 0
+                    || ((usesModifier == targetExperience) && (randEqual > 0)) // success on 1, 2
+                    || ((usesModifier < targetExperience) && (randLess < 1))) // success on 0
             {
-               if (Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+               if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
                {
-                  p.getLogger().info("Legilimens: target is in animagus form");
-                  p.getLogger().info("Uses modifier = " + usesModifier);
+                  common.printDebugMessage("Legilimens: target is in animagus form", null, null, false);
+                  common.printDebugMessage("Uses modifier = " + usesModifier, null, null, false);
 
                   // when in animagus form, only someone who has mastered legilimens can mind read a person
                   if (usesModifier >= 10)
                   {
                      int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100);
 
-                     p.getLogger().info("rand = " + rand);
                      // 10% chance to detect animagus
                      if (rand < 90)
                      {
@@ -152,7 +152,7 @@ public final class LEGILIMENS extends O2Spell
          StringBuilder message = new StringBuilder();
          message.append(Ollivanders2.chatColor);
 
-         if (Ollivanders2API.getHouses().isSorted(target))
+         if (Ollivanders2API.getHouses(p).isSorted(target))
          {
             message.append(" is a ");
 
@@ -161,7 +161,7 @@ public final class LEGILIMENS extends O2Spell
                message.append(o2p.getYear().getDisplayText()).append(" year ");
             }
 
-            message.append(Ollivanders2API.getHouses().getHouse(target).getName()).append(".");
+            message.append(Ollivanders2API.getHouses(p).getHouse(target).getName()).append(".");
          }
          else
          {
@@ -220,7 +220,7 @@ public final class LEGILIMENS extends O2Spell
                // 40% chance detect effects
                if (rand >= 40)
                {
-                  String legilText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithLegilimens(o2p.getID());
+                  String legilText = Ollivanders2API.getPlayers(p).playerEffects.detectEffectWithLegilimens(o2p.getID());
                   if (legilText != null)
                   {
                      player.sendMessage(Ollivanders2.chatColor + " " + legilText + ".");

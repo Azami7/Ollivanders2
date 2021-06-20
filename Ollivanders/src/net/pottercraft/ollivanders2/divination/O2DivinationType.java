@@ -1,5 +1,7 @@
 package net.pottercraft.ollivanders2.divination;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * All divination methods
  *
@@ -27,14 +29,15 @@ public enum O2DivinationType
    //XYLOMANCY,
    ;
 
-   private Class className;
+   final private Class<?> className;
 
-   O2DivinationType(Class c)
+   O2DivinationType(@NotNull Class<?> c)
    {
       className = c;
    }
 
-   public Class getClassName ()
+   @NotNull
+   public Class<?> getClassName()
    {
       return className;
    }

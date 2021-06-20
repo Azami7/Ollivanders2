@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Doubles spell experience gained when casting spells.
@@ -21,7 +22,7 @@ public final class MEMORY_POTION extends O2Potion
     *
     * @param plugin a callback to the plugin
     */
-   public MEMORY_POTION (Ollivanders2 plugin)
+   public MEMORY_POTION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -38,10 +39,10 @@ public final class MEMORY_POTION extends O2Potion
       potionColor = Color.fromRGB(255, 128, 0);
    }
 
-   public void drink (O2Player o2p, Player player)
+   public void drink(@NotNull O2Player o2p, @NotNull Player player)
    {
       FAST_LEARNING effect = new FAST_LEARNING(p, duration, player.getUniqueId());
-      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel more alert.");
    }

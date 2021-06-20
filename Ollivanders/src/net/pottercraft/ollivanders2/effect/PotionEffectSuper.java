@@ -1,10 +1,11 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
@@ -19,16 +20,23 @@ public abstract class PotionEffectSuper extends O2Effect
    int strength = 1;
    PotionEffectType potionEffectType = PotionEffectType.GLOWING;
 
-   public PotionEffectSuper (Ollivanders2 plugin, Integer duration, UUID pid)
+   /**
+    * Constructor
+    *
+    * @param plugin   a reference to the plugin
+    * @param duration the duration of this effect
+    * @param pid      the ID of the affected player
+    */
+   public PotionEffectSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
    }
 
    /**
-    * Age this effect each game tick.
+    * Do the effect immediately on the target and kill.
     */
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       Player target = p.getServer().getPlayer(targetID);
 
@@ -38,7 +46,7 @@ public abstract class PotionEffectSuper extends O2Effect
          int base_time = 2400;
          int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 5) + 1;
 
-         target.addPotionEffect(new PotionEffect(potionEffectType, base_time * rand, strength), true);
+         target.addPotionEffect(new PotionEffect(potionEffectType, base_time * rand, strength));
       }
 
       kill();

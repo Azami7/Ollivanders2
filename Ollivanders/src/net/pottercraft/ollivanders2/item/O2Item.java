@@ -7,22 +7,48 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
+/**
+ * Items for Ollivanders
+ *
+ * @author Azami7
+ */
 public class O2Item
 {
-   protected Ollivanders2 p;
+   /**
+    * Reference to the plugin
+    */
+   final protected Ollivanders2 p;
 
-   private O2ItemType itemType;
+   /**
+    * The type this item is
+    */
+   final private O2ItemType itemType;
 
-   public O2Item (Ollivanders2 plugin, O2ItemType type)
+   /**
+    * Constructor
+    *
+    * @param plugin reference to the plugin
+    * @param type   the type this item is
+    */
+   public O2Item(@NotNull Ollivanders2 plugin, @NotNull O2ItemType type)
    {
       p = plugin;
       itemType = type;
    }
 
-   public ItemStack getItem (int amount)
+   /**
+    * Get an ItemStack of this item type
+    *
+    * @param amount the amount of items in the stack
+    * @return an ItemStack of this item
+    */
+   @Nullable
+   public ItemStack getItem(int amount)
    {
       Material materialType = itemType.getMaterial();
       short variant = itemType.getVariant();
@@ -35,34 +61,49 @@ public class O2Item
          p.getLogger().info("Getting item " + name);
       }
 
-      ItemStack ingredient = new ItemStack(materialType, amount, variant);
+      ItemStack o2Item = new ItemStack(materialType, amount);
 
-      ItemMeta meta = ingredient.getItemMeta();
+      ItemMeta meta = o2Item.getItemMeta();
+      if (meta == null)
+         return null;
+
       meta.setLore(lore);
       meta.setDisplayName(name);
 
       if (materialType == Material.POTION)
       {
          meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-         ((PotionMeta) meta).setColor(O2Color.getBukkitColorByNumber((int) variant).getBukkitColor());
+         ((PotionMeta) meta).setColor(O2Color.getBukkitColorByNumber(variant).getBukkitColor());
       }
 
-      ingredient.setItemMeta(meta);
+      o2Item.setItemMeta(meta);
 
-      return ingredient;
+      return o2Item;
    }
 
-   public O2ItemType getType ()
+   /**
+    * @return the O2ItemType
+    */
+   @NotNull
+   public O2ItemType getType()
    {
       return itemType;
    }
 
-   public String getName ()
+   /**
+    * @return the item name
+    */
+   @NotNull
+   public String getName()
    {
       return itemType.getName();
    }
 
-   public Material getMaterialType ()
+   /**
+    * @return the material type
+    */
+   @NotNull
+   public Material getMaterialType()
    {
       return itemType.getMaterial();
    }

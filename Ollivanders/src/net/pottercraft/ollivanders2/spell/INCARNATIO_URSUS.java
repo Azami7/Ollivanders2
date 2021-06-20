@@ -7,10 +7,11 @@ import me.libraryaddict.disguise.disguisetypes.watchers.PandaWatcher;
 import me.libraryaddict.disguise.disguisetypes.watchers.PolarBearWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Panda;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Turns target player in to a polar bear.
@@ -36,11 +37,11 @@ public class INCARNATIO_URSUS extends PlayerDisguise
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public INCARNATIO_URSUS (Ollivanders2 plugin, Player player, Double rightWand)
+   public INCARNATIO_URSUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

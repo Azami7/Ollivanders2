@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A Guide to Advanced Transfiguration - N.E.W.T level Transfiguration book
@@ -20,14 +21,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class ADVANCED_TRANSFIGURATION extends O2Book
 {
-   public ADVANCED_TRANSFIGURATION (Ollivanders2 plugin)
+   public ADVANCED_TRANSFIGURATION(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
-      shortTitle = "Advanced Transfiguration";
-      title = "A Guide to Advanced Transfiguration";
-      author = "Unknown";
-      branch = O2MagicBranch.TRANSFIGURATION;
+      bookType = O2BookType.ADVANCED_TRANSFIGURATION;
 
       spells.add(O2SpellType.INCARNATIO_DEVITO);
       spells.add(O2SpellType.INCARNATIO_EQUUS);

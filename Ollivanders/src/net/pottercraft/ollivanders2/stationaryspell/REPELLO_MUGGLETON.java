@@ -2,12 +2,13 @@ package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class REPELLO_MUGGLETON extends ShieldSpell implements StationarySpell
     *
     * @param plugin a callback to the MC plugin
     */
-   public REPELLO_MUGGLETON (Ollivanders2 plugin)
+   public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
@@ -36,15 +37,14 @@ public class REPELLO_MUGGLETON extends ShieldSpell implements StationarySpell
    /**
     * Constructor
     *
-    * @param plugin a callback to the MC plugin
-    * @param pid the player who cast the spell
+    * @param plugin   a callback to the MC plugin
+    * @param pid      the player who cast the spell
     * @param location the center location of the spell
-    * @param type the type of this spell
-    * @param radius the radius for this spell
+    * @param type     the type of this spell
+    * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public REPELLO_MUGGLETON (Ollivanders2 plugin, UUID pid, Location location, O2StationarySpellType type, Integer radius,
-                             Integer duration)
+   public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration)
    {
       super(plugin, pid, location, type, radius, duration);
 
@@ -104,6 +104,7 @@ public class REPELLO_MUGGLETON extends ShieldSpell implements StationarySpell
     * @return a map of the serialized data
     */
    @Override
+   @NotNull
    public Map<String, String> serializeSpellData ()
    {
       return new HashMap<>();
@@ -115,5 +116,5 @@ public class REPELLO_MUGGLETON extends ShieldSpell implements StationarySpell
     * @param spellData a map of the saved spell data
     */
    @Override
-   public void deserializeSpellData (Map<String, String> spellData) { }
+   public void deserializeSpellData(@NotNull Map<String, String> spellData) { }
 }

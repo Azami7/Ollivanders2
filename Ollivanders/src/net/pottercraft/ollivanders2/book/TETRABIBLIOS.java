@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Hellenistic astrology book that became the basis for all western astrology, added as a "rare" book for
@@ -13,13 +14,11 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
  */
 public class TETRABIBLIOS extends O2Book
 {
-   public TETRABIBLIOS (Ollivanders2 plugin)
+   public TETRABIBLIOS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
-      title = shortTitle = "Tetrabilios";
-      author = "Ptolemy";
-      branch = O2MagicBranch.DIVINATION;
+      bookType = O2BookType.TETRABIBLIOS;
 
       spells.add(O2SpellType.ASTROLOGIA);
       spells.add(O2SpellType.PROPHETEIA);

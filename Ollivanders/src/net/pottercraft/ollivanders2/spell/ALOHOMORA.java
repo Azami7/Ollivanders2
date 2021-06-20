@@ -11,6 +11,7 @@ import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * The unlocking spell.
@@ -43,11 +44,11 @@ public final class ALOHOMORA extends O2Spell
    /**
     * Constructor.
     *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
+    * @param plugin    a callback to the MC plugin
+    * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ALOHOMORA (Ollivanders2 plugin, Player player, Double rightWand)
+   public ALOHOMORA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.ALOHOMORA;
@@ -68,7 +69,7 @@ public final class ALOHOMORA extends O2Spell
    {
       // check all the stationary spells in the location of the projectile for a Colloportus
       List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
+      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (spell instanceof COLLOPORTUS)
          {

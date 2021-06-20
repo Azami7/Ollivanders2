@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.divination;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Crystal-gazing was the art of looking into a crystal ball in order to try to gain insight into the future events.
@@ -12,7 +13,7 @@ import org.bukkit.entity.Player;
  */
 public class CRYSTAL_BALL extends O2Divination
 {
-   public CRYSTAL_BALL (Ollivanders2 plugin, Player pro, Player tar, Integer exp)
+   public CRYSTAL_BALL(@NotNull Ollivanders2 plugin, @NotNull Player pro, @NotNull Player tar, int exp)
    {
       super(plugin, pro, tar, exp);
 

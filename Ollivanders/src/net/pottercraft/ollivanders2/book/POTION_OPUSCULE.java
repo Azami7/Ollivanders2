@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.potion.*;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Potion Opuscule is an elementary book on potions by Jigger.
@@ -14,13 +15,11 @@ import net.pottercraft.ollivanders2.potion.*;
  */
 public class POTION_OPUSCULE extends O2Book
 {
-   public POTION_OPUSCULE (Ollivanders2 plugin)
+   public POTION_OPUSCULE(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
-      title = shortTitle = "Potion Opuscule";
-      author = "Arsenius Jigger";
-      branch = O2MagicBranch.POTIONS;
+      bookType = O2BookType.POTION_OPUSCULE;
 
       potions.add(O2PotionType.ANIMAGUS_POTION);
       potions.add(O2PotionType.BABBLING_BEVERAGE);

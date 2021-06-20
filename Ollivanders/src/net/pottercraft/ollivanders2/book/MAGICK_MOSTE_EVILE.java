@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Magick Moste Evile - O2Book of Dark Magic written in the Middle Ages
@@ -15,13 +16,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class MAGICK_MOSTE_EVILE extends O2Book
 {
-   public MAGICK_MOSTE_EVILE (Ollivanders2 plugin)
+   public MAGICK_MOSTE_EVILE(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
-      shortTitle = title = "Magick Moste Evile";
-      author = "Godelot";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.MAGICK_MOSTE_EVILE;
 
       spells.add(O2SpellType.FIENDFYRE);
       spells.add(O2SpellType.AVADA_KEDAVRA);

@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Practical Defensive Magic - sent to Harry by Sirius and Lupin in his 5th year
@@ -12,13 +13,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
  */
 public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book
 {
-   public PRACTICAL_DEFENSIVE_MAGIC (Ollivanders2 plugin)
+   public PRACTICAL_DEFENSIVE_MAGIC(@NotNull Ollivanders2 plugin)
    {
       super(plugin);
 
-      title = shortTitle = "Practical Defensive Magic Volume One";
-      author = "Unknown";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.PRACTICAL_DEFENSIVE_MAGIC;
 
       spells.add(O2SpellType.EXPELLIARMUS);
       spells.add(O2SpellType.PROTEGO);
