@@ -92,7 +92,8 @@ public class SLEEPING extends O2Effect
       target.teleport(newLoc);
 
       // add sleep speech
-      SLEEP_SPEECH effect = new SLEEP_SPEECH(p, 5, targetID);
+      SLEEP_SPEECH effect = new SLEEP_SPEECH(p, -1, targetID);
+
       Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
 
       sleeping = true;

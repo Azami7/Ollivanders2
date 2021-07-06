@@ -26,6 +26,8 @@ public abstract class O2Effect
     */
    public int duration;
 
+   private int minDuration = 5 * Ollivanders2Common.ticksPerSecond;
+
    /**
     * A callback to the MC plugin
     */
@@ -77,6 +79,9 @@ public abstract class O2Effect
       duration = durationInTicks;
       if (duration < 0)
          permanent = true;
+
+      if (!permanent && duration < minDuration)
+         duration = minDuration;
 
       kill = false;
       targetID = pid;
