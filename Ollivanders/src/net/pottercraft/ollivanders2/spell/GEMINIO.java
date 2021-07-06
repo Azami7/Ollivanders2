@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import java.util.ArrayList;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.item.ItemEnchantmentType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @version Ollivanders2
  */
-public final class GEMINIO extends ItemCurse
+public final class GEMINIO extends ItemEnchant
 {
    public static final String geminio = "Geminio";
 
@@ -29,7 +30,7 @@ public final class GEMINIO extends ItemCurse
       spellType = O2SpellType.GEMINIO;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Hermione screamed in pain, and Harry turned his wand on her in time to see a jewelled goblet tumbling from her grip. But as it fell, it split, became a shower of goblets, so that a second later, with a great clatter, the floor was covered in identical cups rolling in every direction, the original impossible to discern amongst them.");
          add("The Doubling Curse");
@@ -50,8 +51,8 @@ public final class GEMINIO extends ItemCurse
       super(plugin, player, rightWand);
       spellType = O2SpellType.GEMINIO;
       branch = O2MagicBranch.DARK_ARTS;
+      enchantmentType = ItemEnchantmentType.GEMINIO;
 
-      curseLabel = GEMINIO.geminio;
       strength = 0.25;
 
       initSpell();

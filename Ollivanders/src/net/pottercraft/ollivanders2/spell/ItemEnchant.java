@@ -3,6 +3,8 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.item.EnchantedItems;
+import net.pottercraft.ollivanders2.item.ItemEnchantmentType;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -19,9 +21,9 @@ import java.util.List;
  * @author Azami7
  * @since 2.3
  */
-public abstract class ItemCurse extends O2Spell
+public abstract class ItemEnchant extends O2Spell
 {
-   protected String curseLabel;
+   protected ItemEnchantmentType enchantmentType;
 
    final int minMagnitude = 1;
    final int maxMagnitude = 100;
@@ -32,7 +34,7 @@ public abstract class ItemCurse extends O2Spell
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     */
-   public ItemCurse()
+   public ItemEnchant()
    {
       super();
    }
@@ -44,7 +46,7 @@ public abstract class ItemCurse extends O2Spell
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ItemCurse(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+   public ItemEnchant(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -57,9 +59,6 @@ public abstract class ItemCurse extends O2Spell
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
-
-      // set to an empty string to protect against NPEs
-      curseLabel = "";
    }
 
    @Override
@@ -89,7 +88,27 @@ public abstract class ItemCurse extends O2Spell
       }
 
       List<Item> items = getItems(1.5);
+      for (Item item : items)
+      {
+         // if this is a wand, skip it - wands are already enchanted
+         if (Ollivanders2API.common.isWand(item.getItemStack()))
+         {
+            continue;
+         }
 
+         // if this item is already enchanted, skip it
+         if (EnchantedItems.isEnchanted(item))
+         {
+            continue;
+         }
+
+         // we found an item, kill the spell projectile
+         kill();
+
+
+      }
+
+      /*
       if (items.size() > 0)
       {
          Item item = items.get(0);
@@ -134,6 +153,8 @@ public abstract class ItemCurse extends O2Spell
          // drop cursed item
          item.getWorld().dropItem(item.getLocation(), stack);
       }
+
+       */
    }
 
    /**
@@ -152,7 +173,7 @@ public abstract class ItemCurse extends O2Spell
       {
          for (int i = 0; i < itemLore.size(); i++)
          {
-            if (itemLore.get(i).contains(curseLabel))
+            if (itemLore.get(i).contains(enchantmentLabel))
             {
                String[] loreParts = itemLore.get(i).split(" ");
                int curMagnitude = Integer.parseInt(loreParts[1]);
@@ -161,7 +182,7 @@ public abstract class ItemCurse extends O2Spell
                   magnitude = curMagnitude;
                }
 
-               itemLore.set(i, curseLabel + " " + magnitude);
+               itemLore.set(i, enchantmentLabel + " " + magnitude);
             }
          }
       }
@@ -170,7 +191,7 @@ public abstract class ItemCurse extends O2Spell
          itemLore = new ArrayList<>();
 
       if (itemLore.size() < 1)
-         itemLore.add(curseLabel + " " + magnitude);
+         itemLore.add(enchantmentLabel + " " + magnitude);
 
       itemMeta.setLore(itemLore);
 
