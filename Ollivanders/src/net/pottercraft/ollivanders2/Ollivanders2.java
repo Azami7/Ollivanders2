@@ -1962,8 +1962,6 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runBooks (@NotNull CommandSender sender, @NotNull String[] args)
    {
-      //Player targetPlayer = (Player) sender;
-
       if (args.length < 2)
       {
          usageMessageBooks(sender);
@@ -1981,8 +1979,6 @@ public class Ollivanders2 extends JavaPlugin
 
             return true;
          }
-
-
       }
       else if (args[1].equalsIgnoreCase("list"))
       {
@@ -2023,26 +2019,30 @@ public class Ollivanders2 extends JavaPlugin
          }
 
          bookStack.add(bookItem);
-      }
-      else
-      {
-         String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
-         ItemStack bookItem = getBookFromArgs(subArgs, sender);
-         if (bookItem == null)
-         {
-            return true;
-         }
 
-         bookStack.add(bookItem);
-      }
-
-      if (sender instanceof Player)
-      {
-         Ollivanders2API.common.givePlayerKit((Player)sender, bookStack);
+         Ollivanders2API.common.givePlayerKit(targetPlayer, bookStack);
          return true;
       }
       else
-         return false;
+      {
+         if (sender instanceof Player)
+         {
+            String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+            ItemStack bookItem = getBookFromArgs(subArgs, sender);
+            if (bookItem == null)
+            {
+               return true;
+            }
+
+            bookStack.add(bookItem);
+
+            Ollivanders2API.common.givePlayerKit((Player)sender, bookStack);
+            return true;
+         }
+      }
+
+      usageMessageBooks(sender);
+      return true;
    }
 
    /**
