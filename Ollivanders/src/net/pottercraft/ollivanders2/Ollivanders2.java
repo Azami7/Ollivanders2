@@ -599,7 +599,12 @@ public class Ollivanders2 extends JavaPlugin
    {
       if (!sender.isOp())
       {
-         return playerSummary(sender, (Player) sender);
+         if (sender instanceof Player)
+         {
+            return playerSummary(sender, (Player) sender);
+         }
+         else
+            return false;
       }
 
       // parse args
@@ -614,9 +619,9 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("wands") || subCommand.equalsIgnoreCase("wand"))
          {
-            if (args.length == 1)
+            if (args.length == 1 && sender instanceof Player)
                return okitWands((Player) sender);
-            else
+            else if (args.length > 1)
             {
                Player target = getServer().getPlayer(args[1]);
                if (target != null)
@@ -624,27 +629,36 @@ public class Ollivanders2 extends JavaPlugin
                else
                   usageMessageWand(sender);
             }
+            else
+               return false;
          }
          else if (subCommand.equalsIgnoreCase("reload"))
             return runReloadConfigs(sender);
          else if (subCommand.equalsIgnoreCase("items") || subCommand.equalsIgnoreCase("item"))
-            return runItems((Player) sender, args);
+         {
+            if (sender instanceof Player)
+               return runItems((Player) sender, args);
+            else
+               return false;
+         }
          else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
             return runHouse(sender, args);
          else if (subCommand.equalsIgnoreCase("debug"))
             return toggleDebug(sender);
          else if (subCommand.equalsIgnoreCase("floo"))
          {
-            if (args.length == 1)
+            if (args.length == 1 && sender instanceof Player)
             {
                return giveFlooPowder((Player) sender);
             }
-            else
+            else if (args.length > 1)
             {
                Player target = getServer().getPlayer(args[1]);
                if (target != null)
                   return giveFlooPowder(target);
             }
+            else
+               return false;
          }
          else if (subCommand.equalsIgnoreCase("books") || subCommand.equalsIgnoreCase("book"))
          {
@@ -652,11 +666,11 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("summary"))
          {
-            if (args.length == 1)
+            if (args.length == 1 && sender instanceof Player)
             {
                return playerSummary(sender, (Player) sender);
             }
-            else
+            else if (args.length > 1)
             {
                Player target = getServer().getPlayer(args[1]);
                if (target != null)
@@ -667,6 +681,8 @@ public class Ollivanders2 extends JavaPlugin
                   return true;
                }
             }
+            else
+               return false;
          }
          else if (subCommand.equalsIgnoreCase("potions") || subCommand.equalsIgnoreCase("potion"))
             return runPotions(sender, args);
@@ -1384,6 +1400,9 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runEffect(@NotNull CommandSender sender, @NotNull String[] args)
    {
+      if (!(sender instanceof Player))
+         return false;
+
       // olli effect <effect>
       if (args.length >= 2)
       {
@@ -1943,14 +1962,11 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runBooks (@NotNull CommandSender sender, @NotNull String[] args)
    {
-      Player targetPlayer = (Player) sender;
-
       if (args.length < 2)
       {
          usageMessageBooks(sender);
          return true;
       }
-
 
       List<ItemStack> bookStack = new ArrayList<>();
       if (args[1].equalsIgnoreCase("allbooks"))
@@ -1967,7 +1983,7 @@ public class Ollivanders2 extends JavaPlugin
       else if (args[1].equalsIgnoreCase("list"))
       {
          // olli books list
-         listAllBooks(targetPlayer);
+         listAllBooks(sender);
          return true;
       }
       else if (args[1].equalsIgnoreCase("give"))
@@ -1980,7 +1996,7 @@ public class Ollivanders2 extends JavaPlugin
 
          //next arg is the target player
          String targetName = args[2];
-         targetPlayer = getServer().getPlayer(targetName);
+         Player targetPlayer = getServer().getPlayer(targetName);
          if (targetPlayer == null)
          {
             sender.sendMessage(chatColor + "Did not find player \"" + targetName + "\".\n");
@@ -2003,21 +2019,29 @@ public class Ollivanders2 extends JavaPlugin
          }
 
          bookStack.add(bookItem);
+
+         Ollivanders2API.common.givePlayerKit(targetPlayer, bookStack);
+         return true;
       }
       else
       {
-         String [] subArgs = Arrays.copyOfRange(args, 1, args.length);
-         ItemStack bookItem = getBookFromArgs(subArgs, sender);
-         if (bookItem == null)
+         if (sender instanceof Player)
          {
+            String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+            ItemStack bookItem = getBookFromArgs(subArgs, sender);
+            if (bookItem == null)
+            {
+               return true;
+            }
+
+            bookStack.add(bookItem);
+
+            Ollivanders2API.common.givePlayerKit((Player)sender, bookStack);
             return true;
          }
-
-         bookStack.add(bookItem);
       }
 
-      Ollivanders2API.common.givePlayerKit(targetPlayer, bookStack);
-
+      usageMessageBooks(sender);
       return true;
    }
 
@@ -2116,43 +2140,60 @@ public class Ollivanders2 extends JavaPlugin
             {
                if (args[2].equalsIgnoreCase("list"))
                {
-                  return listAllIngredients((Player)sender);
+                  return listAllIngredients(sender);
                }
-               else
+               else if (sender instanceof Player)
                {
                   // potion ingredient mandrake leaf
                   String [] subArgs = Arrays.copyOfRange(args, 2, args.length);
                   return giveItem((Player) sender, Ollivanders2API.common.stringArrayToString(subArgs));
                }
+               else
+                  return false;
             }
          }
          else if (subCommand.equalsIgnoreCase("list"))
          {
-            return listAllPotions((Player) sender);
+            return listAllPotions(sender);
          }
          else if (subCommand.equalsIgnoreCase("all"))
          {
-            return giveAllPotions((Player) sender);
+            if (sender instanceof Player)
+            {
+               return giveAllPotions((Player) sender);
+            }
+            else
+               return false;
          }
          else if (subCommand.equalsIgnoreCase("give"))
          {
-            if (args.length > 3)
+            if (sender instanceof Player)
             {
-               // potions give fred memory potion
-               Player targetPlayer = getServer().getPlayer(args[2]);
-
-               if (targetPlayer != null)
+               if (args.length > 3)
                {
-                  String[] subArgs = Arrays.copyOfRange(args, 3, args.length);
-                  return givePotion(sender, targetPlayer, Ollivanders2API.common.stringArrayToString(subArgs));
+                  // potions give fred memory potion
+                  Player targetPlayer = getServer().getPlayer(args[2]);
+
+                  if (targetPlayer != null)
+                  {
+                     String[] subArgs = Arrays.copyOfRange(args, 3, args.length);
+                     return givePotion((Player) sender, targetPlayer, Ollivanders2API.common.stringArrayToString(subArgs));
+                  }
                }
             }
+            else
+               return false;
          }
          else
          {
-            // potions memory potion
-            String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-            return givePotion(sender, (Player) sender, Ollivanders2API.common.stringArrayToString(subArgs));
+            if (sender instanceof Player)
+            {
+               // potions memory potion
+               String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+               return givePotion((Player)sender, (Player) sender, Ollivanders2API.common.stringArrayToString(subArgs));
+            }
+            else
+               return false;
          }
       }
 
@@ -2166,7 +2207,7 @@ public class Ollivanders2 extends JavaPlugin
     * @param player     the player to give the potion to
     * @param potionName the potion to give the player
     */
-   public boolean givePotion(@NotNull CommandSender sender, @NotNull Player player, @NotNull String potionName)
+   public boolean givePotion(@NotNull Player sender, @NotNull Player player, @NotNull String potionName)
    {
       O2PotionType potionType = null;
 
@@ -2192,7 +2233,7 @@ public class Ollivanders2 extends JavaPlugin
       if (potion == null)
          return true;
 
-      ItemStack brewedPotion = potion.brew((Player)sender, false);
+      ItemStack brewedPotion = potion.brew(sender, false);
       List<ItemStack> kit = new ArrayList<>();
       kit.add(brewedPotion);
 
@@ -2222,10 +2263,10 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * List all the potions ingredients
     *
-    * @param player the player to display the list to
+    * @param sender the player to display the list to
     * @return true
     */
-   private boolean listAllIngredients(@NotNull Player player)
+   private boolean listAllIngredients(@NotNull CommandSender sender)
    {
       List<String> ingredientList = O2Potions.getAllIngredientNames(this);
       StringBuilder displayString = new StringBuilder();
@@ -2237,7 +2278,7 @@ public class Ollivanders2 extends JavaPlugin
       }
       displayString.append("\n");
 
-      player.sendMessage(chatColor + displayString.toString());
+      sender.sendMessage(chatColor + displayString.toString());
 
       return true;
    }
@@ -2245,10 +2286,10 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Lists all the potions active in the game.
     *
-    * @param player the player to display the list to
+    * @param sender the player to display the list to
     * @return true
     */
-   private boolean listAllPotions(@NotNull Player player)
+   private boolean listAllPotions(@NotNull CommandSender sender)
    {
       StringBuilder displayString = new StringBuilder();
       displayString.append("Potions:");
@@ -2260,7 +2301,7 @@ public class Ollivanders2 extends JavaPlugin
       }
       displayString.append("\n");
 
-      player.sendMessage(chatColor + displayString.toString());
+      sender.sendMessage(chatColor + displayString.toString());
 
       return true;
    }
@@ -2317,9 +2358,9 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * Show a list of all Ollivanders2 books
     *
-    * @param player the player to display the list to
+    * @param sender the player to display the list to
     */
-   public void listAllBooks(@NotNull Player player)
+   public void listAllBooks(@NotNull CommandSender sender)
    {
       StringBuilder titleList = new StringBuilder();
       titleList.append("Book Titles:");
@@ -2329,7 +2370,7 @@ public class Ollivanders2 extends JavaPlugin
          titleList.append("\n").append(bookTitle);
       }
 
-      player.sendMessage(chatColor + titleList.toString());
+      sender.sendMessage(chatColor + titleList.toString());
    }
 
    /**
@@ -2371,6 +2412,9 @@ public class Ollivanders2 extends JavaPlugin
     */
    public boolean runApparateLocation (@NotNull CommandSender sender, @NotNull String[] args)
    {
+      if (!(sender instanceof Player))
+         return false;
+
       if (!apparateLocations)
       {
          sender.sendMessage(chatColor
