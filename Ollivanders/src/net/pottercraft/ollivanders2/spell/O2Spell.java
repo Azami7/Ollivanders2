@@ -501,23 +501,25 @@ public abstract class O2Spell implements Teachable
       // destined wand, doubled if they are using the elder wand
       if (Ollivanders2.maxSpellLevel)
       {
-         spellUses = 200;
+         usesModifier = 200;
       }
       else
       {
          spellUses = p.getSpellCount(player, spellType);
+
+         if (isWandless)
+            usesModifier = spellUses;
+         else
+            usesModifier = spellUses / rightWand;
+
+         // if the caster is affected by HIGHER_SKILL, double their usesModifier
+         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+         {
+            usesModifier *= 2;
+         }
       }
 
-      if (isWandless)
-         usesModifier = spellUses;
-      else
-         usesModifier = spellUses / rightWand;
-
-      // if the caster is affected by HIGHER_SKILL, double their usesModifier
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
-      {
-         usesModifier *= 2;
-      }
+      common.printDebugMessage("usesModifier = " + usesModifier, null, null, false);
    }
 
    /**

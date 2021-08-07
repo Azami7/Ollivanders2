@@ -30,7 +30,7 @@ public final class FLAGRANTE extends ItemEnchant
       spellType = O2SpellType.FLAGRANTE;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("Burning Curse");
          add("They have added Geminio and Flagrante curses! Everything you touch will burn and multiply, but the copies are worthless.");
       }};

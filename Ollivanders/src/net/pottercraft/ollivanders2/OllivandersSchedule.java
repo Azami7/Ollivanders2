@@ -102,10 +102,12 @@ class OllivandersSchedule implements Runnable
       }
 
       // run item curse schedule once a second
+      /*
       if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 0)
       {
          itemCurseSched();
       }
+       */
 
       // run invis player every second, offset from itemCurse schedule
       if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 1)

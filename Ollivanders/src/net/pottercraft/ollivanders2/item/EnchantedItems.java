@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.item;
 
 import io.netty.resolver.dns.BiDnsQueryLifecycleObserver;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Server;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -34,6 +35,8 @@ public class EnchantedItems implements Listener
 {
     Ollivanders2 p;
 
+    private Ollivanders2Common common;
+
     static HashMap<UUID, ItemStack> enchantedItems = new HashMap<>();
 
     class EnchantedItem
@@ -43,7 +46,7 @@ public class EnchantedItems implements Listener
         int duration;
         UUID itemID;
 
-        EnchantedItem (UUID id, ItemEnchantmentType type, boolean permanent, int duration)
+        EnchantedItem (@NotNull UUID id, @NotNull ItemEnchantmentType type, boolean permanent, int duration)
         {
             itemID = id;
             enchantmentType = type;
@@ -57,9 +60,10 @@ public class EnchantedItems implements Listener
      *
      * @param plugin a callback to the plugin
      */
-    public EnchantedItems(Ollivanders2 plugin)
+    public EnchantedItems (@NotNull Ollivanders2 plugin)
     {
         p = plugin;
+        common = new Ollivanders2Common(p);
     }
 
     /**
@@ -67,9 +71,11 @@ public class EnchantedItems implements Listener
      *
      * @param item the the enchanted item
      */
-    public static void addEnchantedItem (Item item)
+    public void addEnchantedItem (@NotNull Item item)
     {
         enchantedItems.put(item.getUniqueId(), item.getItemStack());
+
+        common.printDebugMessage("Added enchanted item " + item.getName(), null, null, false);
     }
 
     /**
@@ -77,7 +83,7 @@ public class EnchantedItems implements Listener
      *
      * @param itemId the ID of the enchanted item
      */
-    public static void removeEnchantedItem (UUID itemId)
+    public void removeEnchantedItem (@NotNull UUID itemId)
     {
         enchantedItems.remove(itemId);
     }
@@ -87,7 +93,7 @@ public class EnchantedItems implements Listener
      *
      * @param itemStack the itemstack of the enchanted item
      */
-    public static void removeEnchantedItem (ItemStack itemStack)
+    public void removeEnchantedItem (@NotNull ItemStack itemStack)
     {
         if (enchantedItems.values().contains(itemStack))
         {
@@ -109,7 +115,7 @@ public class EnchantedItems implements Listener
      * @param item the item to check
      * @return true if it is an enchanted item, false otherwise
      */
-    public static boolean isEnchanted (Item item)
+    public boolean isEnchanted (@NotNull Item item)
     {
         UUID itemID = item.getUniqueId();
 
