@@ -6,10 +6,15 @@ public enum ItemEnchantmentType
     GEMINIO ("geminio"),
     ;
 
-    String name;
+    final String name;
 
     ItemEnchantmentType (String label)
     {
         name = label;
+    }
+
+    public String getName ()
+    {
+        return name;
     }
 }

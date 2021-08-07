@@ -12,11 +12,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Place a curse on a item.
+ * Place an enchantment on a item.
  *
  * @author Azami7
  * @since 2.3
@@ -25,8 +26,8 @@ public abstract class ItemEnchant extends O2Spell
 {
    protected ItemEnchantmentType enchantmentType;
 
-   final int minMagnitude = 1;
-   final int maxMagnitude = 100;
+   int minMagnitude = 1;
+   int maxMagnitude = 100;
 
    double strength = 1;
    int magnitude;
@@ -46,7 +47,7 @@ public abstract class ItemEnchant extends O2Spell
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ItemEnchant(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+   public ItemEnchant (@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -69,10 +70,13 @@ public abstract class ItemEnchant extends O2Spell
       if (magnitude < minMagnitude)
       {
          magnitude = minMagnitude;
-      } else if (magnitude > maxMagnitude)
+      }
+      else if (magnitude > maxMagnitude)
       {
          magnitude = maxMagnitude;
       }
+
+      common.printDebugMessage("Magnitude for enchantment = " + magnitude, null, null, false);
    }
 
    /**
@@ -97,72 +101,67 @@ public abstract class ItemEnchant extends O2Spell
          }
 
          // if this item is already enchanted, skip it
-         if (EnchantedItems.isEnchanted(item))
+         if (Ollivanders2API.getItems(p).enchantedItems.isEnchanted(item))
          {
             continue;
          }
 
-         // we found an item, kill the spell projectile
+         Item enchantedItem = enchantItem(item);
+         if (enchantedItem != null)
+         {
+            Ollivanders2API.getItems(p).enchantedItems.addEnchantedItem(enchantedItem);
+         }
+
+         stopProjectile();
          kill();
 
-
+         break;
       }
+   }
 
-      /*
-      if (items.size() > 0)
+   @Nullable
+   private Item enchantItem (@NotNull Item item)
+   {
+      common.printDebugMessage("Enchanting item " + item.getName(), null, null, false);
+
+      // clone the item stack
+      ItemStack enchantedItemStack = item.getItemStack().clone();
+
+      // get item meta
+      ItemMeta stackMeta = enchantedItemStack.getItemMeta();
+      if (stackMeta == null)
       {
-         Item item = items.get(0);
-
-         // if this is a wand, skip
-         if (Ollivanders2API.common.isWand(item.getItemStack()))
-         {
-            stopProjectile();
-            return;
-         }
-
-         // get item meta
-         ItemStack stack = item.getItemStack().clone();
-         int amount = stack.getAmount();
-         ItemMeta stackMeta = stack.getItemMeta();
-         if (stackMeta == null)
-         {
-            common.printDebugMessage("ItemCurse.doCheckEffect: item meta is null", null, null, true);
-            kill();
-            return;
-         }
-
-         ItemMeta meta = newItemMeta(stackMeta);
-
-         // mark target hit
-         stopProjectile();
-
-         // create new stack
-         stack.setItemMeta(meta);
-         stack.setAmount(1);
-
-         // update original itemStack
-         if (amount > 1)
-         {
-            item.getItemStack().setAmount(amount - 1);
-         }
-         else
-         {
-            item.remove();
-         }
-
-         // drop cursed item
-         item.getWorld().dropItem(item.getLocation(), stack);
+         common.printDebugMessage("ItemCurse.doCheckEffect: item meta is null", null, null, true);
+         kill();
+         return null;
       }
 
-       */
+      // create new item stack of the 1 enchanted item
+      ItemMeta enchantedMeta = newItemMeta(stackMeta);
+      enchantedItemStack.setItemMeta(enchantedMeta);
+      enchantedItemStack.setAmount(1);
+
+      // update original itemStack to remove 1 item, if it had more than one, or remove the original item if there is only 1
+      if (item.getItemStack().getAmount() > 1)
+      {
+         item.getItemStack().setAmount(item.getItemStack().getAmount() - 1);
+      }
+      else
+      {
+         item.remove();
+      }
+
+      // drop enchanted item in World
+      return item.getWorld().dropItem(item.getLocation(), enchantedItemStack);
    }
 
    /**
-    * Create new ItemMeta that includes the curse.
+    * Create new ItemMeta that includes the enchantment.
     *
-    * @param itemMeta the ItemMeta for the item to curse
-    * @return the new ItemMeta with curse data added
+    * @param itemMeta the ItemMeta for the item to enchany
+    * @return the new ItemMeta with enchantment data added
     */
+   @Nullable
    private ItemMeta newItemMeta(@NotNull ItemMeta itemMeta)
    {
       List<String> itemLore;
@@ -173,7 +172,7 @@ public abstract class ItemEnchant extends O2Spell
       {
          for (int i = 0; i < itemLore.size(); i++)
          {
-            if (itemLore.get(i).contains(enchantmentLabel))
+            if (itemLore.get(i).contains(enchantmentType.getName()))
             {
                String[] loreParts = itemLore.get(i).split(" ");
                int curMagnitude = Integer.parseInt(loreParts[1]);
@@ -182,7 +181,7 @@ public abstract class ItemEnchant extends O2Spell
                   magnitude = curMagnitude;
                }
 
-               itemLore.set(i, enchantmentLabel + " " + magnitude);
+               itemLore.set(i, enchantmentType.getName() + " " + magnitude);
             }
          }
       }
@@ -191,10 +190,21 @@ public abstract class ItemEnchant extends O2Spell
          itemLore = new ArrayList<>();
 
       if (itemLore.size() < 1)
-         itemLore.add(enchantmentLabel + " " + magnitude);
+         itemLore.add(enchantmentType.getName() + " " + magnitude);
 
       itemMeta.setLore(itemLore);
 
       return itemMeta;
+   }
+
+   /**
+    * Do the enchantment effect for an enchanted item
+    *
+    * @param target 
+    * @param item
+    */
+   public static void doEnchantment (Player target, Item item)
+   {
+
    }
 }

@@ -46,14 +46,17 @@ public final class GEMINIO extends ItemEnchant
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public GEMINIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+   public GEMINIO (@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.GEMINIO;
       branch = O2MagicBranch.DARK_ARTS;
       enchantmentType = ItemEnchantmentType.GEMINIO;
 
+      // magnitude = (int) ((usesModifier / 4) * strength)
       strength = 0.25;
+      // spell experience of 200 would result in a natural magnitude of 12.5
+      maxMagnitude = 10; // 2^10
 
       initSpell();
    }

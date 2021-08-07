@@ -22,7 +22,7 @@ public class O2Items
 
    final private HashMap<O2ItemType, O2Item> O2ItemMap = new HashMap<>();
 
-   private EnchantedItems itemEnchanements;
+   public EnchantedItems enchantedItems;
 
    private Ollivanders2Common common;
 
@@ -38,8 +38,8 @@ public class O2Items
 
       initItems();
 
-      itemEnchanements = new EnchantedItems(p);
-      p.getServer().getPluginManager().registerEvents(itemEnchanements, p);
+      enchantedItems = new EnchantedItems(p);
+      p.getServer().getPluginManager().registerEvents(enchantedItems, p);
    }
 
    /**
