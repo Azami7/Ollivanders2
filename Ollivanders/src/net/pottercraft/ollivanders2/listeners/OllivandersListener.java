@@ -1,5 +1,9 @@
-package net.pottercraft.ollivanders2;
+package net.pottercraft.ollivanders2.listeners;
 
+import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.Ollivanders2OwlPost;
+import net.pottercraft.ollivanders2.OllivandersSchedule;
 import net.pottercraft.ollivanders2.book.O2Books;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.BURNING;
@@ -26,8 +30,6 @@ import net.pottercraft.ollivanders2.potion.O2Potion;
 import net.pottercraft.ollivanders2.potion.O2SplashPotion;
 import net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO;
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
-import net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT;
-import net.pottercraft.ollivanders2.stationaryspell.NULLUM_EVANESCUNT;
 import net.pottercraft.ollivanders2.stationaryspell.PROTEGO_TOTALUM;
 import net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON;
 import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
@@ -37,7 +39,6 @@ import net.pottercraft.ollivanders2.stationaryspell.MOLLIARE;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.Effect;
@@ -46,12 +47,10 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Wolf;
@@ -121,20 +120,31 @@ import java.util.UUID;
  */
 public class OllivandersListener implements Listener
 {
-
    private final Ollivanders2 p;
-
    private final Ollivanders2Common common;
+
+   private final ArrayList<Listener> listeners = new ArrayList<>();
 
    /**
     * Constructor
     *
     * @param plugin reference to plugin
     */
-   OllivandersListener(@NotNull Ollivanders2 plugin)
+   public OllivandersListener(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
       common = new Ollivanders2Common(plugin);
+   }
+
+   /**
+    * Register all listeners on enable
+    */
+   public void onEnable ()
+   {
+      for (Listener listener : listeners)
+      {
+         p.getServer().getPluginManager().registerEvents(listener, p);
+      }
    }
 
    /**

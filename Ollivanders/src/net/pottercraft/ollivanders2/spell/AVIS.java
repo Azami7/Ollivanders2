@@ -104,4 +104,7 @@ public final class AVIS extends O2Spell
             kill();
         }
     }
+
+    @Override
+    protected void doCheckEffect() { }
 }

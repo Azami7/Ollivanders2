@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @author lownes
  */
-class OllivandersSchedule implements Runnable
+public class OllivandersSchedule implements Runnable
 {
    /**
     * A callback to the plugin

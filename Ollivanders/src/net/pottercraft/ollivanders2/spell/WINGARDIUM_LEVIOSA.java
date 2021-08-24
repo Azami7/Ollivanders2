@@ -222,4 +222,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
       newLoc.setZ(newLoc.getZ() + 0.5);
       return newLoc;
    }
+
+   @Override
+   protected void doCheckEffect() { }
 }
