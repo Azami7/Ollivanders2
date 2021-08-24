@@ -1,9 +1,9 @@
-package net.pottercraft.ollivanders2.item;
+package net.pottercraft.ollivanders2.item.enchantment;
 
-import io.netty.resolver.dns.BiDnsQueryLifecycleObserver;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import org.bukkit.Server;
+import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,18 +11,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerItemBreakEvent;
-import org.bukkit.event.player.PlayerItemDamageEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerItemMendEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -37,21 +30,17 @@ public class EnchantedItems implements Listener
 
     private Ollivanders2Common common;
 
-    static HashMap<UUID, ItemStack> enchantedItems = new HashMap<>();
+    static HashMap<UUID, EnchantedItem> enchantedItems = new HashMap<>();
 
-    class EnchantedItem
+    private class EnchantedItem
     {
-        ItemEnchantmentType enchantmentType;
-        boolean permanent = false;
-        int duration;
-        UUID itemID;
+        ItemStack item;
+        Enchantment enchantment;
 
-        EnchantedItem (@NotNull UUID id, @NotNull ItemEnchantmentType type, boolean permanent, int duration)
+        EnchantedItem (@NotNull ItemStack i, @NotNull Enchantment e)
         {
-            itemID = id;
-            enchantmentType = type;
-            this.permanent = permanent;
-            this.duration = duration;
+            item = i;
+            enchantment = e;
         }
     }
 
@@ -69,13 +58,32 @@ public class EnchantedItems implements Listener
     /**
      * Add enchanted item
      *
-     * @param item the the enchanted item
+     * @param item the enchanted item
+     * @param enchantmentType the type of enchantment
+     * @param magnitude the magnitude of enchantment
      */
-    public void addEnchantedItem (@NotNull Item item)
+    public void addEnchantedItem (@NotNull Item item, @NotNull ItemEnchantmentType enchantmentType, int magnitude)
     {
-        enchantedItems.put(item.getUniqueId(), item.getItemStack());
+        Enchantment enchantment = null;
+        Class<?> enchantmentClass = enchantmentType.getClassName();
 
-        common.printDebugMessage("Added enchanted item " + item.getName(), null, null, false);
+        try
+        {
+            enchantment = (Enchantment)enchantmentClass.getConstructor(Ollivanders2.class, int.class).newInstance(p, magnitude);
+        }
+        catch (Exception e)
+        {
+            common.printDebugMessage("Failed to get enchantment class", e, null, true);
+        }
+
+        if (enchantment == null)
+            return;
+
+        if (!enchantedItems.containsKey(item.getUniqueId()))
+        {
+            enchantedItems.put(item.getUniqueId(), new EnchantedItem(item.getItemStack(), enchantment));
+            common.printDebugMessage("Added enchanted item " + item.getName() + " of type " + enchantment.enchantmentType.getName(), null, null, false);
+        }
     }
 
     /**
@@ -100,10 +108,9 @@ public class EnchantedItems implements Listener
             Set<UUID> keys = enchantedItems.keySet();
             for (UUID key : keys)
             {
-                if (enchantedItems.get(key) == itemStack)
+                if (enchantedItems.get(key).item == itemStack)
                 {
                     enchantedItems.remove(key);
-                    return;
                 }
             }
         }
@@ -120,6 +127,23 @@ public class EnchantedItems implements Listener
         UUID itemID = item.getUniqueId();
 
         return enchantedItems.containsKey(itemID);
+    }
+
+    /**
+     * Get the enchantment for an item.
+     *
+     * @param itemID the ID of the enchanted item
+     * @return the enchantment on this item
+     */
+    @Nullable
+    public Enchantment getEnchantment (UUID itemID)
+    {
+        if (enchantedItems.containsKey(itemID))
+        {
+            return enchantedItems.get(itemID).enchantment;
+        }
+
+        return null;
     }
 
     /**
@@ -151,7 +175,18 @@ public class EnchantedItems implements Listener
         if (!enchantedItems.containsKey(item.getUniqueId()))
             return;
 
-
+        Entity entity = event.getEntity();
+        if (entity instanceof Player)
+        {
+            new BukkitRunnable()
+            {
+                @Override
+                public void run()
+                {
+                    enchantedItems.get(item.getUniqueId()).enchantment.doItemPickup(item.getItemStack(), (Player) entity);
+                }
+            }.runTaskLater(p, Ollivanders2Common.ticksPerSecond * 5);
+        }
     }
 
     /**
@@ -159,6 +194,7 @@ public class EnchantedItems implements Listener
      *
      * @param event
      */
+    /*
     @EventHandler(priority = EventPriority.NORMAL)
     public void itemDrop (@NotNull PlayerDropItemEvent event)
     {
@@ -168,53 +204,70 @@ public class EnchantedItems implements Listener
             return;
     }
 
+     */
+
     /**
      * Handle when an enchanted item is held.
      *
      * @param event
      */
+    /*
     @EventHandler(priority = EventPriority.NORMAL)
     public void itemHeld (@NotNull PlayerItemHeldEvent event)
     {
     }
+
+     */
 
     /**
      * Handle when an enchanted item broken.
      *
      * @param event
      */
+    /*
     @EventHandler(priority = EventPriority.LOWEST)
     public void itemBreak (@NotNull PlayerItemBreakEvent event)
     {
     }
+
+     */
 
     /**
      * Handle when an enchanted item damaged.
      *
      * @param event
      */
+    /*
     @EventHandler(priority = EventPriority.NORMAL)
     public void itemDamage (@NotNull PlayerItemDamageEvent event)
     {
     }
+
+     */
 
     /**
      * Handle when an enchanted item broken.
      *
      * @param event
      */
+    /*
     @EventHandler(priority = EventPriority.NORMAL)
     public void itemMend (@NotNull PlayerItemMendEvent event)
     {
     }
+
+     */
 
     /**
      * Handle when an enchanted item is moved from one hand to another.
      *
      * @param event
      */
+    /*
     @EventHandler(priority = EventPriority.NORMAL)
     public void itemSwapHands (@NotNull PlayerSwapHandItemsEvent event)
     {
     }
+
+     */
 }
