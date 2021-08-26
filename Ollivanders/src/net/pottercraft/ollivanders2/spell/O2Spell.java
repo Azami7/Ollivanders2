@@ -542,9 +542,7 @@ public abstract class O2Spell implements Teachable
     * The spell-specific actions taken for each check effect. This must be overridden by each spell or the spell
     * will do nothing.
     */
-   protected void doCheckEffect ()
-   {
-   }
+   abstract protected void doCheckEffect ();
 
    /**
     * This kills the spell.

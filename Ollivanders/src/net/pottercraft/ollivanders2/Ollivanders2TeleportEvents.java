@@ -151,6 +151,8 @@ public class Ollivanders2TeleportEvents
          p.getLogger().info("Created teleport event: " + player.getName() + " from " + from.toString() + " to " + to.toString());
 
       teleportEvents.add(teleportEvent);
+
+      to.getChunk().load();
    }
 
    /**

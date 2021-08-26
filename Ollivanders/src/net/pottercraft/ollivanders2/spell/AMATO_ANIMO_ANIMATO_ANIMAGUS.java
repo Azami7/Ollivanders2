@@ -187,4 +187,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
             usesModifier *= 2;
         }
     }
+
+    @Override
+    protected void doCheckEffect() { }
 }

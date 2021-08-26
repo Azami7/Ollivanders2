@@ -12,12 +12,12 @@ import java.util.Objects;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.effect.O2Effects;
+import net.pottercraft.ollivanders2.listeners.OllivandersListener;
 import net.pottercraft.ollivanders2.spell.APPARATE;
 import org.bukkit.World;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import quidditch.Arena;
 
-import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.house.O2HouseType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
@@ -169,8 +169,9 @@ public class Ollivanders2 extends JavaPlugin
       Ollivanders2API.init(this);
 
       // set up event listeners
-      Listener playerListener = new OllivandersListener(this);
-      getServer().getPluginManager().registerEvents(playerListener, this);
+      OllivandersListener ollivandersListener = new OllivandersListener(this);
+      ollivandersListener.onEnable();
+      getServer().getPluginManager().registerEvents(ollivandersListener, this);
 
       // check for plugin data directory and config
       if (new File(pluginDir).mkdirs())

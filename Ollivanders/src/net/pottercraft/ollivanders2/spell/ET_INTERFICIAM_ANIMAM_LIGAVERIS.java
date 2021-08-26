@@ -139,4 +139,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
 
       kill();
    }
+
+   @Override
+   protected void doCheckEffect() { }
 }

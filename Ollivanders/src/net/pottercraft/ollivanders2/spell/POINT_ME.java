@@ -67,4 +67,7 @@ public class POINT_ME extends O2Spell
 
       kill();
    }
+
+   @Override
+   protected void doCheckEffect() { }
 }
