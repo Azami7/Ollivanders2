@@ -76,4 +76,7 @@ public final class ASCENDIO extends O2Spell
 
         kill();
     }
+
+    @Override
+    protected void doCheckEffect() { }
 }

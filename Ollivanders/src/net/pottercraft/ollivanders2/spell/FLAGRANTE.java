@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import java.util.ArrayList;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -11,13 +12,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Places a flagrante affect on the item.
  *
- * @author lownes
  * @author Azami7
  */
-public final class FLAGRANTE extends ItemCurse
+public final class FLAGRANTE extends ItemEnchant
 {
    public static final String flagrante = "Flagrante";
-   public static final double baseDamage = 3.0;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -29,7 +28,7 @@ public final class FLAGRANTE extends ItemCurse
       spellType = O2SpellType.FLAGRANTE;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("Burning Curse");
          add("They have added Geminio and Flagrante curses! Everything you touch will burn and multiply, but the copies are worthless.");
       }};
@@ -49,8 +48,7 @@ public final class FLAGRANTE extends ItemCurse
       super(plugin, player, rightWand);
       spellType = O2SpellType.FLAGRANTE;
       branch = O2MagicBranch.DARK_ARTS;
-
-      curseLabel = FLAGRANTE.flagrante;
+      enchantmentType = ItemEnchantmentType.FLAGRANTE;
 
       initSpell();
    }

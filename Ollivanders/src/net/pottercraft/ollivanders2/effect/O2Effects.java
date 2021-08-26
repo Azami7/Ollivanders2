@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.effect;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -666,5 +667,109 @@ public class O2Effects
       }
 
       return infoText;
+   }
+
+   /**
+    * The effects command for ops management of effects
+    *
+    * @param sender the player that issued the command
+    * @param args   the arguments for the command, if any
+    * @param p callback to the Ollivanders plugin
+    * @return true unless an error occurred
+    */
+   public static boolean runCommand (@NotNull CommandSender sender, @NotNull String[] args, @NotNull Ollivanders2 p)
+   {
+      if (!(sender instanceof Player))
+         return false;
+
+      if (args.length < 2 || args.length > 3)
+         return commandUsage(sender);
+
+      String effectName = args[1].toUpperCase();
+
+      O2EffectType effectType;
+      try
+      {
+         effectType = O2EffectType.valueOf(effectName);
+      }
+      catch (Exception e)
+      {
+         sender.sendMessage(Ollivanders2.chatColor + "No effect named " + effectName + ".\n");
+         return true;
+      }
+
+      Player targetPlayer;
+      if (args.length == 3)
+      {
+         String playerName = args[2];
+         targetPlayer = p.getServer().getPlayer(playerName);
+         if (targetPlayer == null)
+         {
+            sender.sendMessage(Ollivanders2.chatColor + "Unable to find player " + playerName + ".\n");
+            return true;
+         }
+      }
+      else if (sender instanceof Player)
+      {
+         targetPlayer = (Player) sender;
+      }
+      else
+         return false;
+
+      toggleEffect(sender, targetPlayer, effectType, p);
+
+      return true;
+   }
+
+   /**
+    * Toggle an effect on a player.
+    *
+    * @param sender the player that issued the command
+    * @param player the target player
+    * @param effectType the effect type
+    * @param p a callback to the plugin
+    */
+   private static void toggleEffect (@NotNull CommandSender sender, @NotNull Player player, @NotNull O2EffectType effectType, @NotNull Ollivanders2 p)
+   {
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), effectType))
+      {
+         Ollivanders2API.getPlayers(p).playerEffects.removeEffect(player.getUniqueId(), effectType);
+         sender.sendMessage(Ollivanders2.chatColor + "Removed " + effectType.toString() + " from " + player.getName() + ".\n");
+      }
+      else
+      {
+         Class<?> effectClass = effectType.getClassName();
+         p.getLogger().info("Trying to add effect " + effectType.toString());
+
+         O2Effect effect;
+
+         try
+         {
+            effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, 1200, player.getUniqueId());
+         }
+         catch (Exception e)
+         {
+            sender.sendMessage(Ollivanders2.chatColor + "Failed to add effect " + effectType.toString() + " to " + player.getName() + ".\n");
+            e.printStackTrace();
+            return;
+         }
+
+         Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+         sender.sendMessage(Ollivanders2.chatColor + "Added " + effectType.toString() + " to " + player.getName() + ".\n");
+      }
+   }
+
+   /**
+    * Usage message for Effect subcommands.
+    *
+    * @param sender the player that issued the command
+    */
+   public static boolean commandUsage(@NotNull CommandSender sender)
+   {
+      sender.sendMessage(Ollivanders2.chatColor
+              + "/ollivanders2 effect effect_name - toggles the named effect on the command sender" + "\n"
+              + "/ollivanders2 effect effect_name player_name - toggles the named effect on the player");
+
+      return true;
    }
 }

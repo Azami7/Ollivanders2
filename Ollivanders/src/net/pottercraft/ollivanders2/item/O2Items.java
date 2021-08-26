@@ -1,6 +1,8 @@
 package net.pottercraft.ollivanders2.item;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.item.enchantment.EnchantedItems;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -21,6 +23,10 @@ public class O2Items
 
    final private HashMap<O2ItemType, O2Item> O2ItemMap = new HashMap<>();
 
+   public EnchantedItems enchantedItems;
+
+   private Ollivanders2Common common;
+
    /**
     * Constructor
     *
@@ -29,8 +35,12 @@ public class O2Items
    public O2Items(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
 
       initItems();
+
+      enchantedItems = new EnchantedItems(p);
+      p.getServer().getPluginManager().registerEvents(enchantedItems, p);
    }
 
    /**
@@ -170,10 +180,7 @@ public class O2Items
       }
       catch (Exception e)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("No item type " + itemTypeString + " found.");
-         }
+         common.printDebugMessage("No item type " + itemTypeString + " found.", null, null, false);
       }
 
       return itemType;

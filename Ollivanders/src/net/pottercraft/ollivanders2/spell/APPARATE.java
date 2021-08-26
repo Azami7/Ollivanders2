@@ -5,14 +5,18 @@ import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2WorldGuard;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.spell.events.ApparateEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,6 +41,9 @@ public final class APPARATE extends O2Spell
      * The arguments to the apparate spell
      */
     private final String[] wordsArray;
+    private String namedLocation = "unset";
+    private Location destination;
+    private ApparateEvent apparateEvent;
 
     /**
      * Max distance to apparate for line of sight apparating
@@ -99,7 +106,27 @@ public final class APPARATE extends O2Spell
             return;
         }
 
-        Location destination = getDestination();
+        boolean destinationParsed = false;
+        destination = getDestination();
+
+        if (destination != null)
+        {
+            destinationParsed = true;
+        }
+        else
+        {
+            if (Ollivanders2.apparateLocations)
+            {
+                player.sendMessage(Ollivanders2.chatColor + "That location does not exist.");
+                kill();
+                return;
+            }
+            else
+            {
+                destination = getLineOfSightLocation();
+            }
+        }
+
         if (!canApparateTo(destination))
         {
             p.spellFailedMessage(player);
@@ -115,23 +142,37 @@ public final class APPARATE extends O2Spell
             return;
         }
 
-        p.addTeleportEvent(player, player.getLocation(), destination, true);
-
-        // also take nearby players with them
-        for (Entity e : player.getWorld().getEntities())
+        if (Ollivanders2.apparateLocations && destinationParsed)
         {
-            if (source.distance(e.getLocation()) <= 2)
-            {
-                if (e instanceof Player)
-                {
-                    p.addTeleportEvent((Player) e, e.getLocation(), destination, true);
-                }
-                else
-                    e.teleport(destination);
-            }
+            apparateEvent = new OllivandersApparateByNameEvent(player, destination, namedLocation);
+        }
+        else
+        {
+            apparateEvent = new OllivandersApparateByCoordinatesEvent(player, destination);
         }
 
+        p.getServer().getPluginManager().callEvent(apparateEvent);
+
+        // check to see if the event was canceled
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                doApparate();
+            }
+        }.runTaskLater(p, Ollivanders2Common.ticksPerSecond * 2);
+
         kill();
+    }
+
+    private void doApparate()
+    {
+        if (!apparateEvent.isCancelled())
+        {
+            p.getServer().getLogger().info("adding teleport event");
+            p.addTeleportEvent(player, player.getLocation(), destination, true);
+        }
     }
 
     /**
@@ -139,7 +180,7 @@ public final class APPARATE extends O2Spell
      *
      * @return the destination or null if
      */
-    @NotNull
+    @Nullable
     private Location getDestination ()
     {
         Location destination = null;
@@ -148,7 +189,8 @@ public final class APPARATE extends O2Spell
         {
             if (wordsArray.length == 2)
             {
-                destination = getLocationByName(wordsArray[1]);
+                namedLocation = wordsArray[1];
+                destination = getLocationByName(namedLocation);
             }
         }
         else
@@ -172,9 +214,6 @@ public final class APPARATE extends O2Spell
                 catch (Exception e) { }
             }
         }
-
-        if (destination == null)
-            destination = getLineOfSightLocation();
 
         return destination;
     }
@@ -351,6 +390,14 @@ public final class APPARATE extends O2Spell
     }
 
     /**
+     * Clears all apparate locations
+     */
+    public static void clearApparateLocations ()
+    {
+        apparateLocations = new HashMap<>();
+    }
+
+    /**
      * Save all apparate locations
      */
     public static void saveApparateLocations ()
@@ -380,4 +427,7 @@ public final class APPARATE extends O2Spell
 
         p.getLogger().info("Loaded " + apparateLocations.size() + " apparate locations.");
     }
+
+    @Override
+    protected void doCheckEffect() { }
 }

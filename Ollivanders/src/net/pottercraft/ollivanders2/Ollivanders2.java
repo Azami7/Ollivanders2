@@ -11,12 +11,13 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.effect.O2Effects;
+import net.pottercraft.ollivanders2.listeners.OllivandersListener;
 import net.pottercraft.ollivanders2.spell.APPARATE;
 import org.bukkit.World;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import quidditch.Arena;
 
-import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.house.O2HouseType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
@@ -110,6 +111,8 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean libsDisguisesEnabled = false;
    public static Ollivanders2WorldGuard worldGuardO2;
 
+   private static final String pluginDir = "plugins/Ollivanders2/";
+
    /**
     * onDisable runs when the Minecraft server is shutting down.
     *
@@ -123,7 +126,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       revertAllTempBlocks();
-
+      savePluginConfig();
       savePluginData();
 
       getLogger().info(this + " is now disabled!");
@@ -144,6 +147,18 @@ public class Ollivanders2 extends JavaPlugin
       APPARATE.saveApparateLocations();
    }
 
+   private void savePluginConfig ()
+   {
+      if (new File(pluginDir + "/config.yml").exists())
+      {
+         saveConfig();
+      }
+      else
+      {
+         saveDefaultConfig();
+      }
+   }
+
    /**
     * onEnable runs when the Minecraft server is starting up.
     *
@@ -154,14 +169,14 @@ public class Ollivanders2 extends JavaPlugin
       Ollivanders2API.init(this);
 
       // set up event listeners
-      Listener playerListener = new OllivandersListener(this);
-      getServer().getPluginManager().registerEvents(playerListener, this);
+      OllivandersListener ollivandersListener = new OllivandersListener(this);
+      ollivandersListener.onEnable();
+      getServer().getPluginManager().registerEvents(ollivandersListener, this);
 
-      // check for plugin data directory
-      if (new File("plugins/Ollivanders2/").mkdirs())
+      // check for plugin data directory and config
+      if (new File(pluginDir).mkdirs())
       {
          getLogger().info("Creating directory for Ollivanders2");
-         this.saveDefaultConfig();
       }
 
       // read configuration
@@ -689,7 +704,8 @@ public class Ollivanders2 extends JavaPlugin
          else if (subCommand.equalsIgnoreCase("year") || subCommand.equalsIgnoreCase("years"))
             return runYear(sender, args);
          else if (subCommand.equalsIgnoreCase("effect") || subCommand.equalsIgnoreCase("effects"))
-            return runEffect(sender, args);
+            //return runEffect(sender, args);
+            return O2Effects.runCommand(sender, args, this);
          else if (subCommand.equalsIgnoreCase("prophecy") || subCommand.equalsIgnoreCase("prophecies"))
             return runProphecies(sender);
          else if (subCommand.equalsIgnoreCase("apparate") || subCommand.equalsIgnoreCase("apparateLoc"))
@@ -1389,81 +1405,6 @@ public class Ollivanders2 extends JavaPlugin
             o2p.setYear(year);
       }
       return true;
-   }
-
-   /**
-    * The effects command, this is for testing purposes only and is not listed in the usage message.
-    *
-    * @param sender the player that issued the command
-    * @param args   the arguments for the command, if any
-    * @return true unless an error occurred
-    */
-   private boolean runEffect(@NotNull CommandSender sender, @NotNull String[] args)
-   {
-      if (!(sender instanceof Player))
-         return false;
-
-      // olli effect <effect>
-      if (args.length >= 2)
-      {
-         String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-         String effectName = Ollivanders2API.common.stringArrayToString(subArgs).toUpperCase();
-
-         O2EffectType effectType;
-         try
-         {
-            effectType = O2EffectType.valueOf(effectName);
-         }
-         catch (Exception e)
-         {
-            sender.sendMessage(chatColor + "No effect named " + effectName + ".\n");
-            return true;
-         }
-
-         if (Ollivanders2API.getPlayers(this).playerEffects.hasEffect(((Player) sender).getUniqueId(), effectType))
-         {
-            Ollivanders2API.getPlayers(this).playerEffects.removeEffect(((Player) sender).getUniqueId(), effectType);
-            sender.sendMessage(chatColor + "Removed " + effectName + " from " + sender + ".\n");
-         }
-         else
-         {
-            Class<?> effectClass = effectType.getClassName();
-            getLogger().info("Trying to add effect " + effectClass);
-
-            O2Effect effect;
-
-            try
-            {
-               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(this, 1200, ((Player) sender).getUniqueId());
-            }
-            catch (Exception e)
-            {
-               sender.sendMessage(chatColor + "Failed to add effect " + effectName + " to " + sender + ".\n");
-               e.printStackTrace();
-               return true;
-            }
-
-            Ollivanders2API.getPlayers(this).playerEffects.addEffect(effect);
-            sender.sendMessage(chatColor + "Added " + effectName + " to " + sender + ".\n");
-         }
-      }
-      else
-      {
-         usageMessageEffect(sender);
-      }
-
-      return true;
-   }
-
-   /**
-    * Usage message for Effect subcommands.
-    *
-    * @param sender the player that issued the command
-    */
-   private void usageMessageEffect(@NotNull CommandSender sender)
-   {
-      sender.sendMessage(chatColor
-              + "/ollivanders2 effect effect_name player_name - toggles the named effect on the player");
    }
 
    /**
