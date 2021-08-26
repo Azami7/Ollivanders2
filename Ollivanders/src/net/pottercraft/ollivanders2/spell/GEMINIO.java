@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import java.util.ArrayList;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.item.ItemEnchantmentType;
+import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Places a geminio affect on the item.
  *
- * @author lownes
  * @author Azami7
  * @version Ollivanders2
  */

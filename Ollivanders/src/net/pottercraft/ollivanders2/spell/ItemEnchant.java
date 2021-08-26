@@ -3,17 +3,13 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.item.EnchantedItems;
-import net.pottercraft.ollivanders2.item.ItemEnchantmentType;
+import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,12 +20,29 @@ import java.util.List;
  */
 public abstract class ItemEnchant extends O2Spell
 {
+   /**
+    * The type of enchantment
+    */
    protected ItemEnchantmentType enchantmentType;
 
+   /**
+    * Minimum magnitude
+    */
    int minMagnitude = 1;
+
+   /**
+    * Maximum magnitude
+    */
    int maxMagnitude = 100;
 
+   /**
+    * Strength multiplier for this enchantment
+    */
    double strength = 1;
+
+   /**
+    * Magnitude of this enchantment - this is the final value used to determine the enchantment effect
+    */
    int magnitude;
 
    /**
@@ -62,6 +75,9 @@ public abstract class ItemEnchant extends O2Spell
       projectilePassThrough.remove(Material.WATER);
    }
 
+   /**
+    * Initialize spell data
+    */
    @Override
    void doInitSpell ()
    {
@@ -107,10 +123,7 @@ public abstract class ItemEnchant extends O2Spell
          }
 
          Item enchantedItem = enchantItem(item);
-         if (enchantedItem != null)
-         {
-            Ollivanders2API.getItems(p).enchantedItems.addEnchantedItem(enchantedItem);
-         }
+         Ollivanders2API.getItems(p).enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude);
 
          stopProjectile();
          kill();
@@ -119,26 +132,18 @@ public abstract class ItemEnchant extends O2Spell
       }
    }
 
-   @Nullable
+   /**
+    * Enchant the item.
+    *
+    * @param item the item to enchant
+    * @return the enchanted item
+    */
+   @NotNull
    private Item enchantItem (@NotNull Item item)
    {
-      common.printDebugMessage("Enchanting item " + item.getName(), null, null, false);
-
       // clone the item stack
       ItemStack enchantedItemStack = item.getItemStack().clone();
 
-      // get item meta
-      ItemMeta stackMeta = enchantedItemStack.getItemMeta();
-      if (stackMeta == null)
-      {
-         common.printDebugMessage("ItemCurse.doCheckEffect: item meta is null", null, null, true);
-         kill();
-         return null;
-      }
-
-      // create new item stack of the 1 enchanted item
-      ItemMeta enchantedMeta = newItemMeta(stackMeta);
-      enchantedItemStack.setItemMeta(enchantedMeta);
       enchantedItemStack.setAmount(1);
 
       // update original itemStack to remove 1 item, if it had more than one, or remove the original item if there is only 1
@@ -153,58 +158,5 @@ public abstract class ItemEnchant extends O2Spell
 
       // drop enchanted item in World
       return item.getWorld().dropItem(item.getLocation(), enchantedItemStack);
-   }
-
-   /**
-    * Create new ItemMeta that includes the enchantment.
-    *
-    * @param itemMeta the ItemMeta for the item to enchany
-    * @return the new ItemMeta with enchantment data added
-    */
-   @Nullable
-   private ItemMeta newItemMeta(@NotNull ItemMeta itemMeta)
-   {
-      List<String> itemLore;
-
-      itemLore = itemMeta.getLore();
-
-      if (itemLore != null)
-      {
-         for (int i = 0; i < itemLore.size(); i++)
-         {
-            if (itemLore.get(i).contains(enchantmentType.getName()))
-            {
-               String[] loreParts = itemLore.get(i).split(" ");
-               int curMagnitude = Integer.parseInt(loreParts[1]);
-               if (magnitude < curMagnitude)
-               {
-                  magnitude = curMagnitude;
-               }
-
-               itemLore.set(i, enchantmentType.getName() + " " + magnitude);
-            }
-         }
-      }
-
-      if (itemLore == null)
-         itemLore = new ArrayList<>();
-
-      if (itemLore.size() < 1)
-         itemLore.add(enchantmentType.getName() + " " + magnitude);
-
-      itemMeta.setLore(itemLore);
-
-      return itemMeta;
-   }
-
-   /**
-    * Do the enchantment effect for an enchanted item
-    *
-    * @param target 
-    * @param item
-    */
-   public static void doEnchantment (Player target, Item item)
-   {
-
    }
 }

@@ -120,4 +120,14 @@ public enum O2BookType
    {
       return shortTitle;
    }
+
+   /**
+    * Return the author for a book. This is the display name title for the book item.
+    *
+    * @return the author of the book
+    */
+   public String getAuthor ()
+   {
+      return author;
+   }
 }

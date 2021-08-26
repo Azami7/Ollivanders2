@@ -154,4 +154,7 @@ public abstract class Pyrotechnia extends O2Spell
       if (maxFireworks < 1)
          maxFireworks = 1;
    }
+
+   @Override
+   protected void doCheckEffect() { }
 }

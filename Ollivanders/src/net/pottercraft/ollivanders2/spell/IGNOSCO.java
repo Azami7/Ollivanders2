@@ -7,4 +7,6 @@ package net.pottercraft.ollivanders2.spell;
  */
 public class IGNOSCO extends O2Spell
 {
+    @Override
+    protected void doCheckEffect() { }
 }
