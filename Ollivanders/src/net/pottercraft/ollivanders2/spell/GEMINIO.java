@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Places a geminio affect on the item.
  *
- * @author lownes
  * @author Azami7
  * @version Ollivanders2
  */

@@ -8,11 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,12 +20,29 @@ import java.util.List;
  */
 public abstract class ItemEnchant extends O2Spell
 {
+   /**
+    * The type of enchantment
+    */
    protected ItemEnchantmentType enchantmentType;
 
+   /**
+    * Minimum magnitude
+    */
    int minMagnitude = 1;
+
+   /**
+    * Maximum magnitude
+    */
    int maxMagnitude = 100;
 
+   /**
+    * Strength multiplier for this enchantment
+    */
    double strength = 1;
+
+   /**
+    * Magnitude of this enchantment - this is the final value used to determine the enchantment effect
+    */
    int magnitude;
 
    /**
@@ -61,6 +75,9 @@ public abstract class ItemEnchant extends O2Spell
       projectilePassThrough.remove(Material.WATER);
    }
 
+   /**
+    * Initialize spell data
+    */
    @Override
    void doInitSpell ()
    {
@@ -115,6 +132,12 @@ public abstract class ItemEnchant extends O2Spell
       }
    }
 
+   /**
+    * Enchant the item.
+    *
+    * @param item the item to enchant
+    * @return the enchanted item
+    */
    @NotNull
    private Item enchantItem (@NotNull Item item)
    {

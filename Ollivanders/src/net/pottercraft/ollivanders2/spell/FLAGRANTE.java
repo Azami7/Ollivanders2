@@ -12,13 +12,11 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Places a flagrante affect on the item.
  *
- * @author lownes
  * @author Azami7
  */
 public final class FLAGRANTE extends ItemEnchant
 {
    public static final String flagrante = "Flagrante";
-   public static final double baseDamage = 3.0;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.

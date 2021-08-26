@@ -6,7 +6,6 @@ import net.pottercraft.ollivanders2.Ollivanders2OwlPost;
 import net.pottercraft.ollivanders2.OllivandersSchedule;
 import net.pottercraft.ollivanders2.book.O2Books;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.effect.BURNING;
 import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.BABBLING;
 import net.pottercraft.ollivanders2.effect.LYCANTHROPY;
@@ -18,7 +17,6 @@ import net.pottercraft.ollivanders2.player.O2WandWoodType;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
 import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.Divination;
-import net.pottercraft.ollivanders2.spell.FLAGRANTE;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.spell.Transfiguration;
@@ -1371,90 +1369,6 @@ public class OllivandersListener implements Listener
             }
          }
       }
-   }
-
-   /**
-    * Handle picking up a cursed item
-    *
-    * @param event the item pickup event
-    */
-   @EventHandler(priority = EventPriority.NORMAL)
-   public void cursedItemPickUp (@NotNull EntityPickupItemEvent event)
-   {
-      Entity entity = event.getEntity();
-      if (!(entity instanceof Player))
-         return;
-
-      Item item = event.getItem();
-      ItemMeta meta = item.getItemStack().getItemMeta();
-      if (meta == null || !meta.hasLore())
-         return;
-
-      int stackSize = item.getItemStack().getAmount();
-
-      List<String> itemLore = meta.getLore();
-      if (itemLore == null)
-         return;
-
-      for (String lore : itemLore)
-      {
-         if (lore.startsWith(FLAGRANTE.flagrante))
-         {
-            BURNING burning = new BURNING(p, 0, entity.getUniqueId());
-            burning.addDamage(FLAGRANTE.baseDamage * stackSize);
-
-            Ollivanders2API.getPlayers(p).playerEffects.addEffect(burning);
-
-            if (Ollivanders2.debug)
-               p.getLogger().info("Added flagrante curse to " + ((Player) entity).getDisplayName());
-         }
-      }
-   }
-
-   /**
-    * Handle dropping a cursed item
-    *
-    * @param event the item drop event
-    */
-   @EventHandler(priority = EventPriority.NORMAL)
-   public void cursedItemPickDrop (@NotNull PlayerDropItemEvent event)
-   {
-      Player player = event.getPlayer();
-      Item item = event.getItemDrop();
-
-      ItemMeta meta = item.getItemStack().getItemMeta();
-      if (meta == null || !meta.hasLore())
-         return;
-
-      int stackSize = item.getItemStack().getAmount();
-
-      List<String> itemLore = meta.getLore();
-      if (itemLore == null)
-         return;
-
-      for (String lore : itemLore)
-      {
-         if (lore.startsWith(FLAGRANTE.flagrante))
-         {
-            UUID pid = player.getUniqueId();
-
-            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(pid, O2EffectType.BURNING))
-            {
-               BURNING burning = (BURNING) Ollivanders2API.getPlayers(p).playerEffects.getEffect(pid, O2EffectType.BURNING);
-               burning.removeDamage(FLAGRANTE.baseDamage * stackSize);
-
-               Ollivanders2API.getPlayers(p).playerEffects.removeEffect(pid, O2EffectType.BURNING);
-
-               if (burning.getDamage() > 0)
-               {
-                  Ollivanders2API.getPlayers(p).playerEffects.addEffect(burning);
-               }
-            }
-         }
-      }
-
-      if (Ollivanders2.debug)
-         p.getLogger().info("Removed flagrante curse on " + player.getDisplayName());
    }
 
    /**
