@@ -6,7 +6,7 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -68,7 +68,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
    @Override
    protected void doCheckEffect ()
    {
-      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
+      for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (stationarySpell.getCasterID() == player.getUniqueId())
          {
@@ -98,7 +98,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
    @Override
    protected void revert ()
    {
-      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
+      for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (stationarySpell.getCasterID() == player.getUniqueId())
          {

@@ -6,7 +6,7 @@ import net.pottercraft.ollivanders2.stationaryspell.ShieldSpell;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -74,7 +74,7 @@ public final class SCUTO_CONTERAM extends O2Spell
    @Override
    protected void doCheckEffect()
    {
-      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
+      for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (stationarySpell instanceof ShieldSpell)
          {

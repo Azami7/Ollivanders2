@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -69,8 +69,8 @@ public final class HORREAT_PROTEGAT extends O2Spell
       if (!hasHitTarget())
          return;
 
-      List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      List<O2StationarySpell> inside = new ArrayList<>();
+      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (spell.isInside(location) && spell.radius > (int) (10 / usesModifier))
          {
@@ -84,7 +84,7 @@ public final class HORREAT_PROTEGAT extends O2Spell
       {
          limit = 1;
       }
-      for (StationarySpellObj spell : inside)
+      for (O2StationarySpell spell : inside)
       {
          if (spell.radius > limit && spell.getCasterID().equals(player.getUniqueId()))
          {

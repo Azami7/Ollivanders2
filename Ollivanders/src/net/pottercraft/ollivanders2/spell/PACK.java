@@ -14,7 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public final class PACK extends O2Spell
 
       if (Ollivanders2Common.chests.contains(block.getType()))
       {
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+         for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)
             {

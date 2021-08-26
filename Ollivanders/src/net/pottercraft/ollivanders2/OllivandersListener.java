@@ -26,18 +26,15 @@ import net.pottercraft.ollivanders2.potion.O2Potion;
 import net.pottercraft.ollivanders2.potion.O2SplashPotion;
 import net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO;
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
-import net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT;
-import net.pottercraft.ollivanders2.stationaryspell.NULLUM_EVANESCUNT;
 import net.pottercraft.ollivanders2.stationaryspell.PROTEGO_TOTALUM;
 import net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import net.pottercraft.ollivanders2.stationaryspell.MOLLIARE;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.Effect;
@@ -46,12 +43,10 @@ import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
-import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.entity.Wolf;
@@ -179,7 +174,7 @@ public class OllivandersListener implements Listener
       if (toLoc == null || toLoc.getWorld() == null || fromLoc.getWorld() == null)
          return;
 
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (spell.location.getWorld() == null)
             continue;
@@ -210,7 +205,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
       String chat = event.getMessage();
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof ALIQUAM_FLOO)
          {
@@ -229,7 +224,7 @@ public class OllivandersListener implements Listener
                aliquam.stopWorking();
                List<ALIQUAM_FLOO> alis = new ArrayList<>();
 
-               for (StationarySpellObj ali : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+               for (O2StationarySpell ali : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
                {
                   if (ali instanceof ALIQUAM_FLOO)
                   {
@@ -316,7 +311,7 @@ public class OllivandersListener implements Listener
          //
          // Handle removing recipients from chat
          //
-         List<StationarySpellObj> muffliatos = Ollivanders2API.getStationarySpells(p).getActiveStationarySpellsAtLocationByType(sender.getLocation(), O2StationarySpellType.MUFFLIATO);
+         List<O2StationarySpell> muffliatos = Ollivanders2API.getStationarySpells(p).getActiveStationarySpellsAtLocationByType(sender.getLocation(), O2StationarySpellType.MUFFLIATO);
          updateRecipients(sender, spellType, event.getRecipients(), muffliatos);
 
          //
@@ -392,7 +387,7 @@ public class OllivandersListener implements Listener
     * @param recipients the recipients for this chat
     * @param muffliatos all muffliato stationary spells
     */
-   private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients, List<StationarySpellObj> muffliatos)
+   private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients, List<O2StationarySpell> muffliatos)
    {
       // remove all recipients if this is not a "spoken" spell
       if (spellType == O2SpellType.APPARATE || Divination.divinationSpells.contains(spellType))
@@ -430,7 +425,7 @@ public class OllivandersListener implements Listener
          temp = new HashSet<>(recipients);
          for (Player recipient : temp)
          {
-            for (StationarySpellObj muffliato : muffliatos)
+            for (O2StationarySpell muffliato : muffliatos)
             {
                Location recipientLocation = recipient.getLocation();
                if (!muffliato.isInside(recipientLocation))
@@ -1000,14 +995,14 @@ public class OllivandersListener implements Listener
       }
 
       //Horcrux code
-      List<StationarySpellObj> stationarySpells = Ollivanders2API.getStationarySpells(p).getActiveStationarySpells();
+      List<O2StationarySpell> stationarySpells = Ollivanders2API.getStationarySpells(p).getActiveStationarySpells();
       if (event.getEntity() instanceof Player)
       {
          Player player = (Player) event.getEntity();
          UUID pid = event.getEntity().getUniqueId();
          if ((player.getHealth() - event.getDamage()) <= 0)
          {
-            for (StationarySpellObj stationary : stationarySpells)
+            for (O2StationarySpell stationary : stationarySpells)
             {
                if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(pid))
                {
@@ -1044,7 +1039,7 @@ public class OllivandersListener implements Listener
    private boolean checkSpongify(@NotNull EntityDamageEvent event)
    {
       Entity entity = event.getEntity();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (spell instanceof MOLLIARE && event.getCause() == DamageCause.FALL)
          {
@@ -1159,7 +1154,7 @@ public class OllivandersListener implements Listener
    public void onColloportusPistonExtend (@NotNull BlockPistonExtendEvent event)
    {
       ArrayList<COLLOPORTUS> colloportusSpells = new ArrayList<>();
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof COLLOPORTUS)
          {
@@ -1251,7 +1246,7 @@ public class OllivandersListener implements Listener
 
       for (Block block : blockListCopy)
       {
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+         for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (stat instanceof COLLOPORTUS)
             {
@@ -1467,7 +1462,7 @@ public class OllivandersListener implements Listener
       }
       if (target != null)
       {
-         for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+         for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (stat instanceof REPELLO_MUGGLETON)
             {

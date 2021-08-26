@@ -6,7 +6,7 @@ import java.util.List;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.attribute.AttributeInstance;
@@ -118,8 +118,8 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
       else
       {
          //If they player couldn't survive making another horcrux then they are sent back to a previous horcrux
-         List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells(p).getActiveStationarySpells();
-         for (StationarySpellObj stationary : stationaries)
+         List<O2StationarySpell> stationaries = Ollivanders2API.getStationarySpells(p).getActiveStationarySpells();
+         for (O2StationarySpell stationary : stationaries)
          {
             if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(player.getUniqueId()))
             {

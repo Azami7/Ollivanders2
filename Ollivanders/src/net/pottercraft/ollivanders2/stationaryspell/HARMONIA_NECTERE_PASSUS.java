@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author lownes
  */
-public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements StationarySpell
+public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
 {
    private Location twin;
    private Set<UUID> teleported = new HashSet<>();
@@ -60,7 +60,7 @@ public class HARMONIA_NECTERE_PASSUS extends StationarySpellObj implements Stati
    public void checkEffect ()
    {
       HARMONIA_NECTERE_PASSUS twinHarm = null;
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof HARMONIA_NECTERE_PASSUS
                  && stat.location.getBlock().equals(twin.getBlock()))

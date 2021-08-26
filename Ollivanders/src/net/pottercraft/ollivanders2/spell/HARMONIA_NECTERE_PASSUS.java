@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.*;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -106,7 +106,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
             return;
          }
 
-         for (StationarySpellObj statSpell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+         for (O2StationarySpell statSpell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (statSpell instanceof net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS)
             {

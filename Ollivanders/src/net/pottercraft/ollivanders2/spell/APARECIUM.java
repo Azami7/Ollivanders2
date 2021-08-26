@@ -8,7 +8,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -61,7 +61,7 @@ public final class APARECIUM extends O2Spell
    @Override
    protected void doCheckEffect ()
    {
-      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
+      List<O2StationarySpell> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
 
       if (stationaries.size() > 0)
       {

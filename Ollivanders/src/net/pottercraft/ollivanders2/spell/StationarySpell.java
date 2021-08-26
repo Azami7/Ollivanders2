@@ -5,7 +5,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -109,7 +109,7 @@ public abstract class StationarySpell extends O2Spell
 
       radius = baseRadius * radiusModifier;
 
-      StationarySpellObj stationarySpell = createStationarySpell();
+      O2StationarySpell stationarySpell = createStationarySpell();
 
       if (stationarySpell != null)
       {
@@ -125,7 +125,7 @@ public abstract class StationarySpell extends O2Spell
     *
     * @return the stationary spell or null if one is not created.
     */
-   protected StationarySpellObj createStationarySpell()
+   protected O2StationarySpell createStationarySpell()
    {
       return null;
    }

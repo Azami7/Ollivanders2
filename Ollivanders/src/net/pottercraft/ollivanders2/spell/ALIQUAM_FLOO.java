@@ -5,7 +5,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -101,7 +101,7 @@ public final class ALIQUAM_FLOO extends O2Spell
             common.printDebugMessage("Floo name on sign is " + flooName, null, null, false);
 
             // make sure there is not already an aliquam floo spell at this block
-            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+            for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
             {
                if (stat instanceof net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO)
                {

@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author lownes
  */
-public class HORCRUX extends StationarySpellObj implements StationarySpell
+public class HORCRUX extends O2StationarySpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.

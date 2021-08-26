@@ -1,7 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -53,7 +53,7 @@ public final class NULLUM_EVANESCUNT extends StationarySpell
    }
 
    @Override
-   protected StationarySpellObj createStationarySpell ()
+   protected O2StationarySpell createStationarySpell ()
    {
       return new net.pottercraft.ollivanders2.stationaryspell.NULLUM_EVANESCUNT(p, player.getUniqueId(), location, O2StationarySpellType.NULLUM_EVANESCUNT, radius, duration);
    }

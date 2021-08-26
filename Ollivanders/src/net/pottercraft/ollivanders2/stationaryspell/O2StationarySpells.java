@@ -17,7 +17,7 @@ import org.jetbrains.annotations.NotNull;
 
 public class O2StationarySpells
 {
-   private List<StationarySpellObj> O2StationarySpells = new ArrayList<>();
+   private List<O2StationarySpell> O2StationarySpells = new ArrayList<>();
    Ollivanders2 p;
    Ollivanders2Common common;
 
@@ -45,7 +45,7 @@ public class O2StationarySpells
     *
     * @param spell the stationary spell to add
     */
-   public void addStationarySpell(@NotNull StationarySpellObj spell)
+   public void addStationarySpell(@NotNull O2StationarySpell spell)
    {
       common.printDebugMessage("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString() + " with duration " + spell.duration + " and radius of " + spell.radius, null, null, false);
       O2StationarySpells.add(spell);
@@ -57,7 +57,7 @@ public class O2StationarySpells
     *
     * @param spell the stationary spell to remove
     */
-   public void removeStationarySpell(@NotNull StationarySpellObj spell)
+   public void removeStationarySpell(@NotNull O2StationarySpell spell)
    {
       common.printDebugMessage("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType().toString(), null, null, false);
       spell.kill();
@@ -69,11 +69,11 @@ public class O2StationarySpells
     * @return a list of active stationary spells
     */
    @NotNull
-   public List<StationarySpellObj> getActiveStationarySpells ()
+   public List<O2StationarySpell> getActiveStationarySpells ()
    {
-      List<StationarySpellObj> active = new ArrayList<>();
+      List<O2StationarySpell> active = new ArrayList<>();
 
-      for (StationarySpellObj spell : O2StationarySpells)
+      for (O2StationarySpell spell : O2StationarySpells)
       {
          if (!spell.kill && spell.active)
             active.add(spell);
@@ -89,11 +89,11 @@ public class O2StationarySpells
     * @return List of StationarySpellObj that the location is inside
     */
    @NotNull
-   public List<StationarySpellObj> getStationarySpellsAtLocation(@NotNull Location location)
+   public List<O2StationarySpell> getStationarySpellsAtLocation(@NotNull Location location)
    {
-      List<StationarySpellObj> inside = new ArrayList<>();
+      List<O2StationarySpell> inside = new ArrayList<>();
 
-      for (StationarySpellObj stationary : O2StationarySpells)
+      for (O2StationarySpell stationary : O2StationarySpells)
       {
          if (stationary.location.getWorld() == null || location.getWorld() == null)
             continue;
@@ -118,12 +118,12 @@ public class O2StationarySpells
     * @return a list of spells of that type found at the location
     */
    @NotNull
-   public List<StationarySpellObj> getActiveStationarySpellsAtLocationByType(@NotNull Location location, @NotNull O2StationarySpellType spellType)
+   public List<O2StationarySpell> getActiveStationarySpellsAtLocationByType(@NotNull Location location, @NotNull O2StationarySpellType spellType)
    {
-      List<StationarySpellObj> spells = getStationarySpellsAtLocation(location);
-      List<StationarySpellObj> found = new ArrayList<>();
+      List<O2StationarySpell> spells = getStationarySpellsAtLocation(location);
+      List<O2StationarySpell> found = new ArrayList<>();
 
-      for (StationarySpellObj spell : spells)
+      for (O2StationarySpell spell : spells)
       {
          if (spell.getSpellType() == spellType && spell.active)
          {
@@ -143,9 +143,9 @@ public class O2StationarySpells
     */
    public boolean checkLocationForSpell(@NotNull Location location, @NotNull O2StationarySpellType stationarySpellType)
    {
-      List<StationarySpellObj> spellsAtLocation = getStationarySpellsAtLocation(location);
+      List<O2StationarySpell> spellsAtLocation = getStationarySpellsAtLocation(location);
 
-      for (StationarySpellObj statSpell : spellsAtLocation)
+      for (O2StationarySpell statSpell : spellsAtLocation)
       {
          if (statSpell.spellType == stationarySpellType)
             return true;
@@ -163,7 +163,7 @@ public class O2StationarySpells
     */
    public boolean isInsideOf(@NotNull O2StationarySpellType stationarySpell, @NotNull Location loc)
    {
-      for (StationarySpellObj spell : O2StationarySpells)
+      for (O2StationarySpell spell : O2StationarySpells)
       {
          if (spell.getSpellType() == stationarySpell)
          {
@@ -183,17 +183,17 @@ public class O2StationarySpells
     */
    public void upkeep ()
    {
-      List<StationarySpellObj> s = new ArrayList<>(O2StationarySpells);
+      List<O2StationarySpell> s = new ArrayList<>(O2StationarySpells);
 
-      for (StationarySpellObj spell : s)
+      for (O2StationarySpell statSpell : s)
       {
-         ((StationarySpell)spell).checkEffect();
+         statSpell.checkEffect();
 
-         if (spell.kill)
+         if (statSpell.kill)
          {
-            common.printDebugMessage("O2StationarySpells.upkeep: removing " + spell.getSpellType().toString(), null, null, false);
+            common.printDebugMessage("O2StationarySpells.upkeep: removing " + statSpell.getSpellType().toString(), null, null, false);
 
-            O2StationarySpells.remove(spell);
+            O2StationarySpells.remove(statSpell);
          }
       }
    }
@@ -240,7 +240,7 @@ public class O2StationarySpells
 
       common.printDebugMessage("Serializing O2StationarySpells...", null, null, false);
 
-      for (StationarySpellObj spell : O2StationarySpells)
+      for (O2StationarySpell spell : O2StationarySpells)
       {
          Map<String, String> spellData = new HashMap<>();
 
@@ -281,7 +281,7 @@ public class O2StationarySpells
          //
          // get spell-specific data
          //
-         Map<String, String> uniqueData = ((StationarySpell) spell).serializeSpellData();
+         Map<String, String> uniqueData = spell.serializeSpellData();
          for (Entry<String, String> e : uniqueData.entrySet())
          {
             spellData.put(e.getKey(),e.getValue());
@@ -295,9 +295,9 @@ public class O2StationarySpells
     * Deserialize stationary spells
     */
    @NotNull
-   private List<StationarySpellObj> deserializeO2StationarySpells(@NotNull List<Map<String, String>> serializedSpells)
+   private List<O2StationarySpell> deserializeO2StationarySpells(@NotNull List<Map<String, String>> serializedSpells)
    {
-      List<StationarySpellObj> statSpells = new ArrayList<>();
+      List<O2StationarySpell> statSpells = new ArrayList<>();
 
       for (Map<String, String> spellData : serializedSpells)
       {
@@ -311,7 +311,7 @@ public class O2StationarySpells
          if (spellType == null)
             continue;
 
-         StationarySpellObj statSpell = getStationarySpellByType(spellType);
+         O2StationarySpell statSpell = getStationarySpellByType(spellType);
          if (statSpell == null)
             continue;
 
@@ -356,7 +356,7 @@ public class O2StationarySpells
          //
          // spell unique data
          //
-         ((StationarySpell)statSpell).deserializeSpellData(spellData);
+         statSpell.deserializeSpellData(spellData);
 
          statSpell.setActive(true);
          statSpells.add(statSpell);
@@ -373,14 +373,14 @@ public class O2StationarySpells
     * @return the spell if it could be created, null otherwise
     */
    @Nullable
-   public StationarySpellObj getStationarySpellByType(@NotNull O2StationarySpellType spellType)
+   public O2StationarySpell getStationarySpellByType(@NotNull O2StationarySpellType spellType)
    {
-      StationarySpellObj statSpell;
+      O2StationarySpell statSpell;
 
       Class<?> spellClass = spellType.getClassName();
       try
       {
-         statSpell = (StationarySpellObj)spellClass.getConstructor(Ollivanders2.class).newInstance(p);
+         statSpell = (O2StationarySpell)spellClass.getConstructor(Ollivanders2.class).newInstance(p);
       }
       catch (Exception e)
       {

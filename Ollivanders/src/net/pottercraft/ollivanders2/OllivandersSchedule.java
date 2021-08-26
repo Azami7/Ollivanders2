@@ -13,7 +13,7 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.spell.GEMINIO;
 import net.pottercraft.ollivanders2.spell.O2Spell;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -299,7 +299,7 @@ class OllivandersSchedule implements Runnable
    private void invisPlayer ()
    {
       Set<REPELLO_MUGGLETON> repelloMuggletons = new HashSet<>();
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof REPELLO_MUGGLETON)
          {
@@ -327,7 +327,7 @@ class OllivandersSchedule implements Runnable
          }
 
          boolean inRepelloMuggletons = false;
-         for (StationarySpellObj stat : repelloMuggletons)
+         for (O2StationarySpell stat : repelloMuggletons)
          {
             if (stat.isInside(player.getLocation()))
             {

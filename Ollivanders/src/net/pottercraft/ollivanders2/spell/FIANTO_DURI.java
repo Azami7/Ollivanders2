@@ -9,7 +9,7 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -76,9 +76,9 @@ public final class FIANTO_DURI extends O2Spell
    @Override
    protected void doCheckEffect ()
    {
-      List<StationarySpellObj> inside = new ArrayList<>();
+      List<O2StationarySpell> inside = new ArrayList<>();
 
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          // if the stationary spell type is not in the blacklist for this spell
          // was cast by the caster of this spell
@@ -96,7 +96,7 @@ public final class FIANTO_DURI extends O2Spell
       {
          int addedAmount = (int) ((usesModifier * 1200) / inside.size());
 
-         for (StationarySpellObj spell : inside)
+         for (O2StationarySpell spell : inside)
          {
             spell.duration += addedAmount;
             spell.flair(10);

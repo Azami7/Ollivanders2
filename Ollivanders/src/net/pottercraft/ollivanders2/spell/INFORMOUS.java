@@ -17,7 +17,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -87,7 +87,7 @@ public final class INFORMOUS extends O2Spell
 
       if (!gaveInfo)
       {
-         for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+         for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (spell.isInside(location))
             {
@@ -197,7 +197,7 @@ public final class INFORMOUS extends O2Spell
     *
     * @param spell the stationary spell
     */
-   private void stationarySpellInfo(@NotNull StationarySpellObj spell)
+   private void stationarySpellInfo(@NotNull O2StationarySpell spell)
    {
       if (spell instanceof COLLOPORTUS)
       {
