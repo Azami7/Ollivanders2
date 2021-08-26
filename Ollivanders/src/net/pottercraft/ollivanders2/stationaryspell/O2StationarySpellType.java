@@ -16,7 +16,6 @@ public enum O2StationarySpellType
    MUFFLIATO(net.pottercraft.ollivanders2.stationaryspell.MUFFLIATO.class),
    NULLUM_APPAREBIT(net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT.class),
    NULLUM_EVANESCUNT(net.pottercraft.ollivanders2.stationaryspell.NULLUM_EVANESCUNT.class),
-   PRAEPANDO(net.pottercraft.ollivanders2.stationaryspell.PRAEPANDO.class),
    PROTEGO(net.pottercraft.ollivanders2.stationaryspell.PROTEGO.class),
    PROTEGO_HORRIBILIS(net.pottercraft.ollivanders2.stationaryspell.PROTEGO_HORRIBILIS.class),
    PROTEGO_MAXIMA(net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.class),
