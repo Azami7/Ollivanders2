@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
@@ -48,6 +49,12 @@ public final class COLLOPORTUS extends StationarySpell
       super(plugin, player, rightWand);
       spellType = O2SpellType.COLLOPORTUS;
       branch = O2MagicBranch.CHARMS;
+
+      // world guard flags
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.BUILD);
+      }
 
       initSpell();
 

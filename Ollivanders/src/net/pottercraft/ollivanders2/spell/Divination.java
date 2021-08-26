@@ -177,4 +177,7 @@ public abstract class Divination extends O2Spell
         player.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
         kill();
     }
+
+    @Override
+    protected void doCheckEffect() {}
 }

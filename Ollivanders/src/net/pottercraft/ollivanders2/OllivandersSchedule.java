@@ -37,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @author lownes
  */
-class OllivandersSchedule implements Runnable
+public class OllivandersSchedule implements Runnable
 {
    /**
     * A callback to the plugin
@@ -102,10 +102,12 @@ class OllivandersSchedule implements Runnable
       }
 
       // run item curse schedule once a second
+      /*
       if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 0)
       {
          itemCurseSched();
       }
+       */
 
       // run invis player every second, offset from itemCurse schedule
       if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 1)
