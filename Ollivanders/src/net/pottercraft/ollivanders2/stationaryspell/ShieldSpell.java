@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public abstract class ShieldSpell extends StationarySpellObj
+public abstract class ShieldSpell extends O2StationarySpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.

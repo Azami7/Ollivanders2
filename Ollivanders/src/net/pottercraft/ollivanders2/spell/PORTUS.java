@@ -16,7 +16,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -180,7 +180,7 @@ public final class PORTUS extends O2Spell
    {
       // can you apparate out of this location?
       boolean canApparateOut = true;
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(fromLoc)
                  && !stat.getCasterID().equals(player.getUniqueId()))
@@ -202,7 +202,7 @@ public final class PORTUS extends O2Spell
          return false;
 
       boolean canApparateIn = true;
-      for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (stat instanceof NULLUM_APPAREBIT && stat.isInside(toLoc) && !stat.getCasterID().equals(player.getUniqueId()))
          {

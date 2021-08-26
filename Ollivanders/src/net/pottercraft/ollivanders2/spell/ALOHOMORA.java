@@ -10,7 +10,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -68,8 +68,8 @@ public final class ALOHOMORA extends O2Spell
    protected void doCheckEffect ()
    {
       // check all the stationary spells in the location of the projectile for a Colloportus
-      List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
+      List<O2StationarySpell> inside = new ArrayList<>();
+      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (spell instanceof COLLOPORTUS)
          {
@@ -80,7 +80,7 @@ public final class ALOHOMORA extends O2Spell
       // remove the colloportus spells found
       if (inside.size() > 0)
       {
-         for (StationarySpellObj spell : inside)
+         for (O2StationarySpell spell : inside)
          {
             spell.kill();
             spell.flair(10);

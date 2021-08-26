@@ -7,7 +7,7 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -74,9 +74,9 @@ public final class FIENDFYRE extends O2Spell
    protected void doCheckEffect ()
    {
       // check for stationary spells first to remove HORCRUX spells
-      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
+      List<O2StationarySpell> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
 
-      for (StationarySpellObj stationary : stationaries)
+      for (O2StationarySpell stationary : stationaries)
       {
          if (stationary.getSpellType().equals(O2StationarySpellType.HORCRUX))
          {

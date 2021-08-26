@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.stationaryspell;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.Collection;
 
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author lownes
  */
-public abstract class StationarySpellObj implements Serializable
+public abstract class O2StationarySpell implements Serializable
 {
    Ollivanders2 p;
    final Ollivanders2Common common;
@@ -36,7 +37,7 @@ public abstract class StationarySpellObj implements Serializable
     *
     * @param plugin a callback to the MC plugin
     */
-   public StationarySpellObj(@NotNull Ollivanders2 plugin)
+   public O2StationarySpell(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
       common = new Ollivanders2Common(p);
@@ -56,7 +57,7 @@ public abstract class StationarySpellObj implements Serializable
     * @param radius   the radius for this spell
     * @param duration the duration of the spell
     */
-   public StationarySpellObj(@NotNull Ollivanders2 plugin, @NotNull UUID playerID, @NotNull Location loc, @NotNull O2StationarySpellType type, int radius, int duration)
+   public O2StationarySpell(@NotNull Ollivanders2 plugin, @NotNull UUID playerID, @NotNull Location loc, @NotNull O2StationarySpellType type, int radius, int duration)
    {
       p = plugin;
       common = new Ollivanders2Common(p);
@@ -250,4 +251,24 @@ public abstract class StationarySpellObj implements Serializable
    {
       return playerUUID;
    }
+
+   /**
+    * This is the stationary spell's effect. age() must be called in this if you want the spell to age and die eventually.
+    */
+   abstract void checkEffect ();
+
+   /**
+    * Serialize all data specific to this spell so it can be saved.
+    *
+    * @return a map of the serialized data
+    */
+   @NotNull
+   abstract Map<String, String> serializeSpellData ();
+
+   /**
+    * Deserialize the data for this spell and load the data to this spell.
+    *
+    * @param spellData the serialized spell data
+    */
+   abstract void deserializeSpellData(@NotNull Map<String, String> spellData);
 }

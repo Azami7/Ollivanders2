@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author lownes
  */
-public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
+public class ALIQUAM_FLOO extends O2StationarySpell
 {
    private String flooName;
    private int countDown = 0;

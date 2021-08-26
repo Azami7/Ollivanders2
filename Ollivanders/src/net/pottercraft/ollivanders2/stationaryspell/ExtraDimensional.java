@@ -19,7 +19,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Spells that create extra dimensions of space.
  */
-public abstract class ExtraDimensional extends StationarySpellObj
+public abstract class ExtraDimensional extends O2StationarySpell
 {
    int dimenRadius;
    private Location edLoc;

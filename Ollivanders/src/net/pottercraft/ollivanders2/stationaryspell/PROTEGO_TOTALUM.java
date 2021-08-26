@@ -18,7 +18,7 @@ import java.util.UUID;
  *
  * @author lownes
  */
-public class PROTEGO_TOTALUM extends ShieldSpell implements StationarySpell
+public class PROTEGO_TOTALUM extends ShieldSpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.

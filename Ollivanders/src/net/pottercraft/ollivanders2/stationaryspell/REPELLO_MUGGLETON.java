@@ -20,7 +20,7 @@ import java.util.UUID;
  *
  * @author lownes
  */
-public class REPELLO_MUGGLETON extends ShieldSpell implements StationarySpell
+public class REPELLO_MUGGLETON extends ShieldSpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.

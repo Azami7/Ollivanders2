@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  * Create a pocket of extra-dimensional space.
  *
  */
-public class PRAEPANDO extends ExtraDimensional implements StationarySpell
+public class PRAEPANDO extends ExtraDimensional
 {
    final private Set<UUID> teleported = new HashSet<>();
 

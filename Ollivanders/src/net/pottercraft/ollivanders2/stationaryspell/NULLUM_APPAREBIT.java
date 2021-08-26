@@ -14,7 +14,7 @@ import java.util.UUID;
  *
  * @author lownes
  */
-public class NULLUM_APPAREBIT extends StationarySpellObj implements StationarySpell
+public class NULLUM_APPAREBIT extends O2StationarySpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.

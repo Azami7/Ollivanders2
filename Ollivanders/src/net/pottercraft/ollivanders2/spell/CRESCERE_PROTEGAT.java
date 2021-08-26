@@ -9,7 +9,7 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -67,9 +67,9 @@ public final class CRESCERE_PROTEGAT extends O2Spell
    @Override
    protected void doCheckEffect ()
    {
-      StationarySpellObj inside = null;
+      O2StationarySpell inside = null;
 
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          // if the stationary spell type is not in the blacklist for this spell
          // was cast by the caster of this spell

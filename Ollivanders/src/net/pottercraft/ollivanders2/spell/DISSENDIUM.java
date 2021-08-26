@@ -6,7 +6,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -135,9 +135,9 @@ public final class DISSENDIUM extends O2Spell
 
       // check for colloportus spell locking this door
       Location targetLocation = target.getLocation();
-      List<StationarySpellObj> spellsAtLocation = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(targetLocation);
+      List<O2StationarySpell> spellsAtLocation = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(targetLocation);
 
-      for (StationarySpellObj statSpell : spellsAtLocation)
+      for (O2StationarySpell statSpell : spellsAtLocation)
       {
          if (statSpell instanceof COLLOPORTUS)
          {

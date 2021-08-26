@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
@@ -58,7 +58,7 @@ public final class PRAEPANDO extends StationarySpell
    }
 
    @Override
-   protected StationarySpellObj createStationarySpell ()
+   protected O2StationarySpell createStationarySpell ()
    {
       return new net.pottercraft.ollivanders2.stationaryspell.PRAEPANDO(p, player.getUniqueId(), location, O2StationarySpellType.PRAEPANDO, 1, duration, radius);
    }

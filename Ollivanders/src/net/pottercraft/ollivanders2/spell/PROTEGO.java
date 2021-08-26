@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
@@ -62,7 +62,7 @@ public final class PROTEGO extends StationarySpell
    }
 
    @Override
-   protected StationarySpellObj createStationarySpell ()
+   protected O2StationarySpell createStationarySpell ()
    {
       // protego has a limited duration, ensure duration is not set too high
       if (duration > (3 * Ollivanders2Common.ticksPerSecond))

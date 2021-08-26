@@ -19,7 +19,7 @@ import org.bukkit.util.Vector;
 
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -109,7 +109,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
             moving = false;
             double radius = usesModifier / 4;
             ArrayList<COLLOPORTUS> collos = new ArrayList<>();
-            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+            for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
             {
                if (stat instanceof COLLOPORTUS)
                {
