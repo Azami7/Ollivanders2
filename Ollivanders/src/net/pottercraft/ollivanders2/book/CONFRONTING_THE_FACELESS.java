@@ -35,7 +35,6 @@ public class CONFRONTING_THE_FACELESS extends O2Book
       spells.add(O2SpellType.REDUCTO);
       spells.add(O2SpellType.LEGILIMENS);
       spells.add(O2SpellType.FLAGRANTE);
-      spells.add(O2SpellType.PRAEPANDO);
       //spells.add(O2SpellType.CRUCIO);
       //spells.add(O2SpellType.IMPERIO);
       //spells.add(O2SpellType.EXPECTO_PATRONUM);
