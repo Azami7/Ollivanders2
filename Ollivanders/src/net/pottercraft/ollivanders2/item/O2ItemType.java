@@ -20,7 +20,7 @@ public enum O2ItemType
    BOOM_BERRY_JUICE(Material.POTION, (short) 11, "Boom Berry Juice", null),
    BOOMSLANG_SKIN(Material.ROTTEN_FLESH, (short) 0, "Boomslang Skin", null),
    BONE(Material.BONE, (short) 0, "Bone", null),
-   BROOMSTICK(Material.STICK, (short) 0, "Broomstick", "Flying vehicle used by magical folk"),
+   BROOMSTICK(Material.STICK, (short) 0, "Broomstick", null),
    CHIZPURFLE_FANGS(Material.PUMPKIN_SEEDS, (short) 0, "Chizpurfle Fangs", null),
    CRUSHED_FIRE_SEEDS(Material.REDSTONE, (short) 0, "Crushed Fire Seeds", null),
    DEATHS_HEAD_MOTH_CHRYSALIS(Material.COAL, (short) 0, "Death's Head Moth Chrysalis", null),
@@ -157,5 +157,22 @@ public enum O2ItemType
    public void setMaterial(@NotNull Material m)
    {
       material = m;
+   }
+
+   /**
+    * Return the type by name
+    * @param itemName the name of the item
+    * @return the type if found, null otherwise
+    */
+   @Nullable
+   public static O2ItemType getTypeByName (@NotNull String itemName)
+   {
+      for (O2ItemType itemType : O2ItemType.values())
+      {
+         if (itemType.name.equalsIgnoreCase(itemName))
+            return itemType;
+      }
+
+      return null;
    }
 }

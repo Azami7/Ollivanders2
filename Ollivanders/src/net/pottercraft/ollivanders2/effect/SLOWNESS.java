@@ -29,4 +29,10 @@ public class SLOWNESS extends PotionEffectSuper
         divinationText.add("will be struck by a terrible affliction");
         divinationText.add("will suffer a mental breakdown");
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

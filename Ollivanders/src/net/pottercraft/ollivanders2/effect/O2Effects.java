@@ -472,6 +472,9 @@ public class O2Effects
       if (effect != null)
       {
          effect.kill();
+
+         playerEffects.get(effectType).doRemove();
+
          playerEffects.remove(effectType);
       }
       else

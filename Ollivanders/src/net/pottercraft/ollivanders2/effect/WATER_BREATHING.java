@@ -28,4 +28,10 @@ public class WATER_BREATHING extends PotionEffectSuper
       divinationText.add("will feel fishy");
       divinationText.add("will no longer fear water");
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

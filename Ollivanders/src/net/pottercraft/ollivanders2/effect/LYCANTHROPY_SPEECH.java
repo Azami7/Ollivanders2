@@ -38,4 +38,10 @@ public class LYCANTHROPY_SPEECH extends BABBLING
       permanent = true;
       maxWords = 3;
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

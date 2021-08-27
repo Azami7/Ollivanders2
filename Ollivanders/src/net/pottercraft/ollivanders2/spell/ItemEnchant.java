@@ -3,6 +3,8 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.item.O2Item;
+import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
@@ -10,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,6 +27,11 @@ public abstract class ItemEnchant extends O2Spell
     * The type of enchantment
     */
    protected ItemEnchantmentType enchantmentType;
+
+   /**
+    * The list of item types that this can enchant, if limited. When empty, all item types can be enchanted
+    */
+   protected ArrayList<O2ItemType> itemTypeAllowlist = new ArrayList<>();
 
    /**
     * Minimum magnitude
@@ -114,6 +122,14 @@ public abstract class ItemEnchant extends O2Spell
          if (Ollivanders2API.common.isWand(item.getItemStack()))
          {
             continue;
+         }
+
+         // if this enchantment has a whitelist, check it
+         if (itemTypeAllowlist.size() > 0)
+         {
+            O2ItemType itemType = O2Item.getItemType(item.getItemStack());
+            if (itemType == null || !(itemTypeAllowlist.contains(itemType)))
+               continue;
          }
 
          // if this item is already enchanted, skip it
