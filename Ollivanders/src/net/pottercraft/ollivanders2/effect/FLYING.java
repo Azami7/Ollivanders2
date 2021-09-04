@@ -10,10 +10,12 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Grants player flight
  *
- * @author lownes
+ * @author azami7
  */
 public class FLYING extends O2Effect
 {
+   boolean doSmokeEffect = true;
+
    /**
     * Constructor
     *
@@ -21,7 +23,7 @@ public class FLYING extends O2Effect
     * @param duration the duration of the effect
     * @param pid      the ID of the player this effect acts on
     */
-   public FLYING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
+   public FLYING (@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
    {
       super(plugin, duration, pid);
 
@@ -42,12 +44,32 @@ public class FLYING extends O2Effect
          if (duration > 1)
          {
             target.setAllowFlight(true);
-            target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
-         } else
+            if (doSmokeEffect)
+               target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
+         }
+         else
          {
             target.setAllowFlight(false);
          }
-      } else
+      }
+      else
          kill();
+   }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove ()
+   {
+      Player player = p.getServer().getPlayer(targetID);
+      if (player != null)
+      {
+         if (!player.isOp())
+         {
+            player.setAllowFlight(false);
+            player.setFlying(false);
+         }
+      }
    }
 }

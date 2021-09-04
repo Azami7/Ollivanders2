@@ -28,4 +28,10 @@ public class WEAKNESS extends PotionEffectSuper
         divinationText.add("will be cursed by weakness");
         divinationText.add("will be struck by a terrible affliction");
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

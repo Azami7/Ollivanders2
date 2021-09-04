@@ -105,4 +105,10 @@ public class BURNING extends O2Effect
     */
    @Override
    public void setPermanent(boolean perm) { }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

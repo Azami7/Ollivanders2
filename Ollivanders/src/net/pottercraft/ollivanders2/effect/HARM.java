@@ -29,4 +29,10 @@ public class HARM extends PotionEffectSuper
       divinationText.add("shall be cursed");
       divinationText.add("will be develop a terrible illness");
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

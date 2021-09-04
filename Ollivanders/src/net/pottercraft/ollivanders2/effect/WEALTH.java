@@ -90,4 +90,10 @@ public class WEALTH extends O2Effect
    {
       strength = s;
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

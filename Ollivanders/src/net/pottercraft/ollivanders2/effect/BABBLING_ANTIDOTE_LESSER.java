@@ -27,4 +27,10 @@ public class BABBLING_ANTIDOTE_LESSER extends O2EffectAntidoteSuper
         o2EffectType = O2EffectType.BABBLING;
         strength = 0.25;
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

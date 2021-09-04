@@ -28,4 +28,10 @@ public class HARM_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper
         potionEffectType = PotionEffectType.HARM;
         strength = 0.25;
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

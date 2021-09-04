@@ -9,7 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Flagrante Curse causes objects to emit searing heat when touched.
@@ -34,10 +36,11 @@ public class FLAGRANTE extends Enchantment
      *
      * @param plugin a callback to the plugin
      * @param mag the magnitude of this enchantment
+     * @param itemLore the optional lore for this enchantment
      */
-    public FLAGRANTE (@NotNull Ollivanders2 plugin, int mag)
+    public FLAGRANTE (@NotNull Ollivanders2 plugin, int mag, @Nullable String itemLore)
     {
-        super(plugin, mag);
+        super(plugin, mag, itemLore);
         enchantmentType = ItemEnchantmentType.GEMINIO;
     }
 
@@ -90,4 +93,11 @@ public class FLAGRANTE extends Enchantment
     {
         event.setCancelled(true);
     }
+
+    /**
+     * Handle item held events
+     *
+     * @param event the item drop event
+     */
+    public void doItemHeld (@NotNull PlayerItemHeldEvent event) { }
 }

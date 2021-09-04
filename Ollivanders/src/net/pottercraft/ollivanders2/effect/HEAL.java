@@ -28,4 +28,10 @@ public class HEAL extends PotionEffectSuper
         divinationText.add("will be blessed by fortune");
         divinationText.add("shall be blessed");
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

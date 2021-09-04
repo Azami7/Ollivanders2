@@ -29,4 +29,10 @@ public class HEALTH_BOOST extends PotionEffectSuper
         divinationText.add("shall be blessed");
         divinationText.add("will rise to become more powerful");
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

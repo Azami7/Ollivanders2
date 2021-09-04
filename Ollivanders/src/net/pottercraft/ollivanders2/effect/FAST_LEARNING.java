@@ -35,4 +35,10 @@ public class FAST_LEARNING extends O2Effect
    {
       age(1);
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

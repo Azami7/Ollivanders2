@@ -63,17 +63,6 @@ public class SLEEPING extends O2Effect
       }
    }
 
-   @Override
-   public void kill ()
-   {
-      if (sleeping)
-      {
-         playerWake();
-      }
-
-      kill = true;
-   }
-
    /**
     * Put the player to sleep.
     */
@@ -100,17 +89,19 @@ public class SLEEPING extends O2Effect
    }
 
    /**
-    * Wake the player up.
+    * Do any cleanup related to removing this effect from the player
     */
-   private void playerWake ()
+   @Override
+   public void doRemove ()
    {
-      Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
-      sleeping = false;
+      if (sleeping)
+      {
+         Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
+         sleeping = false;
 
-      Player target = p.getServer().getPlayer(targetID);
-      if (target != null)
-         target.sendMessage(Ollivanders2.chatColor + "You awaken from a deep sleep.");
-      else
-         kill();
+         Player target = p.getServer().getPlayer(targetID);
+         if (target != null)
+            target.sendMessage(Ollivanders2.chatColor + "You awaken from a deep sleep.");
+      }
    }
 }

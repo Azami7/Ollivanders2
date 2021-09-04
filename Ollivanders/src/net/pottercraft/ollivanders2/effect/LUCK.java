@@ -29,4 +29,10 @@ public class LUCK extends PotionEffectSuper
       divinationText.add("shall find success in everything they do");
       divinationText.add("will become infallible");
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

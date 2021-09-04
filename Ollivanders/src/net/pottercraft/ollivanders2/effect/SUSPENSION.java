@@ -52,15 +52,6 @@ public class SUSPENSION extends O2Effect
       }
    }
 
-   @Override
-   public void kill ()
-   {
-      release();
-      removeAdditionalEffect();
-
-      kill = true;
-   }
-
    /**
     * Suspend the player in the air.
     */
@@ -137,5 +128,15 @@ public class SUSPENSION extends O2Effect
       {
          Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, effectType);
       }
+   }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove ()
+   {
+      release();
+      removeAdditionalEffect();
    }
 }
