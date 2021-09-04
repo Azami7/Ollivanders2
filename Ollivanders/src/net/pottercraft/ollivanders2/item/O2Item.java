@@ -3,10 +3,13 @@ package net.pottercraft.ollivanders2.item;
 import net.pottercraft.ollivanders2.O2Color;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,6 +33,11 @@ public class O2Item
    final private O2ItemType itemType;
 
    /**
+    * Namespace key for NTB flags
+    */
+   NamespacedKey o2ItemTypeKey;
+
+   /**
     * Constructor
     *
     * @param plugin reference to the plugin
@@ -39,6 +47,8 @@ public class O2Item
    {
       p = plugin;
       itemType = type;
+
+      o2ItemTypeKey = new NamespacedKey(p, "o2enchantment_id");
    }
 
    /**
@@ -48,7 +58,7 @@ public class O2Item
     * @return an ItemStack of this item
     */
    @Nullable
-   public ItemStack getItem(int amount)
+   public ItemStack getItem (int amount)
    {
       Material materialType = itemType.getMaterial();
       short variant = itemType.getVariant();
@@ -76,6 +86,9 @@ public class O2Item
          ((PotionMeta) meta).setColor(O2Color.getBukkitColorByNumber(variant).getBukkitColor());
       }
 
+      PersistentDataContainer container = meta.getPersistentDataContainer();
+      container.set(o2ItemTypeKey, PersistentDataType.STRING, name);
+
       o2Item.setItemMeta(meta);
 
       return o2Item;
@@ -85,7 +98,7 @@ public class O2Item
     * @return the O2ItemType
     */
    @NotNull
-   public O2ItemType getType()
+   public O2ItemType getType ()
    {
       return itemType;
    }
@@ -94,7 +107,7 @@ public class O2Item
     * @return the item name
     */
    @NotNull
-   public String getName()
+   public String getName ()
    {
       return itemType.getName();
    }
@@ -103,8 +116,24 @@ public class O2Item
     * @return the material type
     */
    @NotNull
-   public Material getMaterialType()
+   public Material getMaterialType ()
    {
       return itemType.getMaterial();
+   }
+
+   /**
+    * Get the item type for this item stack
+    *
+    * @param itemStack the item stack to check
+    * @return the O2ItemType, if it is one, or null otherwise
+    */
+   @Nullable
+   static public O2ItemType getItemType (@NotNull ItemStack itemStack)
+   {
+      ItemMeta meta = itemStack.getItemMeta();
+      if (meta == null)
+         return null;
+
+      return O2ItemType.getTypeByName(meta.getDisplayName());
    }
 }

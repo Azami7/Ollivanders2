@@ -4,12 +4,14 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -17,7 +19,9 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Enchantment effect on items
@@ -82,11 +86,24 @@ public class EnchantedItems implements Listener
         container.set(enchantmentID, PersistentDataType.STRING, eid);
         container.set(enchantmentMagnitude, PersistentDataType.INTEGER, magnitude);
         container.set(enchantmentType, PersistentDataType.STRING, eType.toString());
+
         item.getItemStack().setItemMeta(itemMeta);
 
         Enchantment enchantment = getEnchantment(item.getItemStack());
         if (enchantment == null)
             return;
+
+        if (enchantment.lore != null)
+        {
+            List<String> lore = itemMeta.getLore();
+            if (lore == null)
+            {
+                lore = new ArrayList<>();
+            }
+            lore.add(enchantment.lore);
+            itemMeta.setLore(lore);
+            item.getItemStack().setItemMeta(itemMeta);
+        }
 
         // store these in a hashmap for faster access later
         enchantedItems.put(eid, enchantment);
@@ -100,7 +117,7 @@ public class EnchantedItems implements Listener
      * @param item the item to check
      * @return true if the item stack has the NBT tag, false otherwise
      */
-    public boolean isEnchanted (Item item)
+    public boolean isEnchanted (@NotNull Item item)
     {
         return isEnchanted(item.getItemStack());
     }
@@ -111,7 +128,7 @@ public class EnchantedItems implements Listener
      * @param itemStack the item to check
      * @return true if the item stack has the NBT tag, false otherwise
      */
-    public boolean isEnchanted (ItemStack itemStack)
+    public boolean isEnchanted (@NotNull ItemStack itemStack)
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null)
@@ -251,7 +268,7 @@ public class EnchantedItems implements Listener
 
         try
         {
-            enchantment = (Enchantment)enchantmentClass.getConstructor(Ollivanders2.class, int.class).newInstance(p, magnitude);
+            enchantment = (Enchantment)enchantmentClass.getConstructor(Ollivanders2.class, int.class, String.class).newInstance(p, magnitude, enchantmentType.getLore());
         }
         catch (Exception e)
         {
@@ -331,15 +348,45 @@ public class EnchantedItems implements Listener
     /**
      * Handle when an enchanted item is held.
      *
-     * @param event
+     * @param event the player item held event
      */
-    /*
     @EventHandler(priority = EventPriority.LOWEST)
-    public void itemHeld (@NotNull PlayerItemHeldEvent event)
+    public void onItemHeld (@NotNull PlayerItemHeldEvent event)
     {
-    }
+        p.getLogger().info("player item held event");
 
-     */
+        Player player = event.getPlayer();
+
+        // check newly held item
+        ItemStack heldItem = player.getInventory().getItem(event.getNewSlot());
+
+        if (heldItem != null && isEnchanted(heldItem))
+        {
+            p.getLogger().info("held enchanted item");
+        }
+        else
+        {
+            // check previously held item
+            heldItem = player.getInventory().getItem(event.getPreviousSlot());
+            if (heldItem != null && isEnchanted(heldItem))
+            {
+                if (isEnchanted(heldItem))
+                   p.getLogger().info("stopped holding enchanted item");
+            }
+            else
+            {
+                p.getLogger().info("neither held nor previous item is enchanted");
+                return;
+            }
+        }
+
+        Enchantment enchantment = getEnchantment(heldItem);
+        if (enchantment == null)
+            return;
+
+        p.getLogger().info("item held event");
+        enchantment.doItemHeld(event);
+    }
 
     /**
      * Handle when an enchanted item broken.

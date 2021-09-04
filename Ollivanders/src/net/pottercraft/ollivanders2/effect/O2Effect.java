@@ -141,7 +141,12 @@ public abstract class O2Effect
    /**
     * This is the effect's action. age() must be called in this if you want the effect to age and die eventually.
     */
-   public void checkEffect () { }
+   abstract public void checkEffect ();
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   abstract public void doRemove ();
 
    /**
     * Is this effect permanent.

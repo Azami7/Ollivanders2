@@ -29,4 +29,10 @@ public class BLINDNESS extends PotionEffectSuper
       divinationText.add("will become unable to see");
       divinationText.add("will be struck by a terrible affliction");
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

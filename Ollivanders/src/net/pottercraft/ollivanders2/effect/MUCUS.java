@@ -46,4 +46,10 @@ public class MUCUS extends O2Effect
             kill();
       }
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

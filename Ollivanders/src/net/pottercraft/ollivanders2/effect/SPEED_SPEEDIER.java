@@ -21,4 +21,10 @@ public class SPEED_SPEEDIER extends PotionEffectSuper
         divinationText.add("will make haste");
         divinationText.add("will wear the boots of Mercury");
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

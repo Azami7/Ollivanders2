@@ -7,8 +7,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Geminio Curse is used to curse an object into multiplying repeatedly when touched.
@@ -23,10 +25,11 @@ public class GEMINIO extends Enchantment
      *
      * @param plugin a callback to the plugin
      * @param mag the magnitude of this enchantment
+     * @param itemLore the optional lore for this enchantment
      */
-    public GEMINIO (@NotNull Ollivanders2 plugin, int mag)
+    public GEMINIO (@NotNull Ollivanders2 plugin, int mag, @Nullable String itemLore)
     {
-        super(plugin, mag);
+        super(plugin, mag, itemLore);
         enchantmentType = ItemEnchantmentType.GEMINIO;
     }
 
@@ -72,4 +75,11 @@ public class GEMINIO extends Enchantment
     {
         event.setCancelled(true);
     }
+
+    /**
+     * Handle item held events
+     *
+     * @param event the item drop event
+     */
+    public void doItemHeld (@NotNull PlayerItemHeldEvent event) { }
 }
