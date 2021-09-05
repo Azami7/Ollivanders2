@@ -22,6 +22,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -734,6 +735,7 @@ public class O2Player
     * Get the year this player is in.
     * @return The year the player is in
     */
+   @NotNull
    public Year getYear()
    {
       return year;
@@ -774,9 +776,13 @@ public class O2Player
     */
    public void setFoundWand (boolean b)
    {
-      if (foundWand != true && b == true)
+      if (foundWand && b)
       {
-         OllivandersPlayerFoundWandEvent event = new OllivandersPlayerFoundWandEvent(p.getServer().getPlayer(pid));
+         Player player = p.getServer().getPlayer(pid);
+         if (player == null)
+            return;
+
+         OllivandersPlayerFoundWandEvent event = new OllivandersPlayerFoundWandEvent(player);
 
          p.getServer().getPluginManager().callEvent(event);
          common.printDebugMessage("Fired PlayerFoundWandEvent", null, null, false);

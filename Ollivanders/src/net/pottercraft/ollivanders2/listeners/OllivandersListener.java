@@ -1560,9 +1560,9 @@ public class OllivandersListener implements Listener
 
             List<String> bookLore = heldItem.getItemMeta().getLore();
             if (bookLore == null)
-               return;
-
-            O2Books.readLore(bookLore, player, p);
+               O2Books.readNBT(meta, player, p);
+            else
+               O2Books.readLore(bookLore, player, p);
          }
       }
    }

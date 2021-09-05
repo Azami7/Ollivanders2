@@ -5,20 +5,20 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.player.O2Player;
-import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -130,7 +130,19 @@ public final class O2Books
       if (match == null)
          return null;
 
-      O2Book o2book = getO2BookByType(match);
+      return getBookByType(match);
+   }
+
+   /**
+    * Get a book item of this book.
+    *
+    * @param bookType the type of book
+    * @return a book item version of this book
+    */
+   @Nullable
+   public ItemStack getBookByType(@NotNull O2BookType bookType)
+   {
+      O2Book o2book = getO2BookByType(bookType);
 
       if (o2book != null)
          return o2book.getBookItem();
@@ -162,6 +174,155 @@ public final class O2Books
    }
 
    /**
+    * Read the NBT tags for a magic book
+    * @param itemMeta the item meta
+    * @param player the player reading the book
+    * @param p a callback to the plugin
+    */
+   public static void readNBT (@NotNull ItemMeta itemMeta, @NotNull Player player, @NotNull Ollivanders2 p)
+   {
+      if (!Ollivanders2.bookLearning)
+         return;
+
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      if (o2p == null)
+         return;
+
+      PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+      // read spells
+      if (container.has(O2Book.o2BookSpellsKey, PersistentDataType.STRING))
+      {
+         String spells = container.get(O2Book.o2BookSpellsKey, PersistentDataType.STRING);
+         if (spells != null)
+         {
+            for (O2SpellType spellType : parseSpells(spells))
+            {
+               incrementSpell(o2p, spellType, p);
+            }
+         }
+      }
+
+      // read potions
+      if (container.has(O2Book.o2BookPotionsKey, PersistentDataType.STRING))
+      {
+         String potions = container.get(O2Book.o2BookPotionsKey, PersistentDataType.STRING);
+         if (potions != null)
+         {
+            for (O2PotionType potionType : parsePotions(potions))
+            {
+               incrementPotion(o2p, potionType, p);
+            }
+         }
+      }
+   }
+
+   /**
+    * Parse the spell types from a space-separated list of spell types.
+    *
+    * @param spellList the space-separated list
+    * @return the spells found in the list
+    */
+   @NotNull
+   private static ArrayList<O2SpellType> parseSpells (@NotNull String spellList)
+   {
+      ArrayList<O2SpellType> spells = new ArrayList<>();
+
+      for (String s : spellList.split(" "))
+      {
+         O2SpellType spellType;
+         try
+         {
+            spellType = O2SpellType.valueOf(s);
+         }
+         catch (Exception e)
+         {
+            continue;
+         }
+
+         spells.add(spellType);
+      }
+
+      return spells;
+   }
+
+   /**
+    * Increment the experience level of a spell for a player
+    *
+    * @param o2p the player
+    * @param spellType the spell
+    * @param p a callback to the plugin
+    */
+   private static void incrementSpell (@NotNull O2Player o2p, @NotNull O2SpellType spellType, @NotNull Ollivanders2 p)
+   {
+      int spellLevel = o2p.getSpellCount(spellType);
+
+      // if spell count is less than 25, learn this spell
+      if (spellLevel < 25)
+      {
+         o2p.incrementSpellCount(spellType);
+
+         // if they have the improved learning effect, increment it again
+         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
+         {
+            o2p.incrementSpellCount(spellType);
+         }
+      }
+   }
+
+   /**
+    * Parse the potion types from a space-separated list of potion types.
+    *
+    * @param potionList the space-separated list
+    * @return the potions found in the list
+    */
+   @NotNull
+   private static ArrayList<O2PotionType> parsePotions (@NotNull String potionList)
+   {
+      ArrayList<O2PotionType> potions = new ArrayList<>();
+
+      for (String s : potionList.split(" "))
+      {
+         O2PotionType potionType;
+         try
+         {
+            potionType = O2PotionType.valueOf(s);
+         }
+         catch (Exception e)
+         {
+            continue;
+         }
+
+         potions.add(potionType);
+      }
+
+      return potions;
+   }
+
+   /**
+    * Increment the experience level of a potion for a player
+    *
+    * @param o2p the player
+    * @param potionType the spell
+    * @param p a callback to the plugin
+    */
+   private static void incrementPotion (@NotNull O2Player o2p, @NotNull O2PotionType potionType, @NotNull Ollivanders2 p)
+   {
+      int potionLevel = o2p.getPotionCount(potionType);
+
+      // if spell count is less than 25, learn this spell
+      if (potionLevel < 25)
+      {
+         o2p.incrementPotionCount(potionType);
+
+         // if they have the improved learning effect, increment it again
+         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
+         {
+            o2p.incrementPotionCount(potionType);
+         }
+      }
+   }
+
+   /**
     * If bookLearning is enabled, read the lore for a book and learn all spells not yet known.
     *
     * @param bookLore the lore from a book
@@ -186,19 +347,7 @@ public final class O2Books
 
          if (spellEnum != null)
          {
-            int spellLevel = o2p.getSpellCount(spellEnum);
-
-            // if spell count is less than 25, learn this spell
-            if (spellLevel < 25)
-            {
-               p.incrementSpellCount(player, spellEnum);
-
-               // if they have the improved learning effect, increment it again
-               if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
-               {
-                  p.incrementSpellCount(player, spellEnum);
-               }
-            }
+            incrementSpell (o2p, spellEnum, p);
          }
          else // see if it is a potion
          {
@@ -206,19 +355,7 @@ public final class O2Books
 
             if (potionEnum != null)
             {
-               int potionCount = o2p.getPotionCount(potionEnum);
-
-               // if potion count < 10, learn this potion
-               if (potionCount < 10)
-               {
-                  p.incrementPotionCount(player, potionEnum);
-
-                  // if they have the improved learning effect, increment it again
-                  if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
-                  {
-                     p.incrementPotionCount(player, potionEnum);
-                  }
-               }
+               incrementPotion(o2p, potionEnum, p);
             }
          }
       }
