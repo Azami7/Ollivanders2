@@ -35,6 +35,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
    List<Location> locList = new ArrayList<>();
    boolean moving = true;
    double length = 0;
+   int maxRadius = 5;
 
    /**
     * If the blocks should be converted to fallingBlocks after the end of the spell.
@@ -107,7 +108,10 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
          if (type != Material.AIR && type != Material.WATER && type != Material.LAVA)
          {
             moving = false;
-            double radius = usesModifier / 4;
+            double radius = usesModifier / 20;
+            if (radius > maxRadius)
+               radius = maxRadius;
+
             ArrayList<COLLOPORTUS> collos = new ArrayList<>();
             for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
             {
