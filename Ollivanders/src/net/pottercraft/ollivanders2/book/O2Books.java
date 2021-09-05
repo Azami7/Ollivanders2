@@ -41,39 +41,6 @@ public final class O2Books
 
    BookTexts spellText;
 
-   private ItemStack library;
-
-   public static final List<O2BookType> hogwartsReadingList = new ArrayList<>()
-   {{
-      add(O2BookType.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION);
-      add(O2BookType.ACHIEVEMENTS_IN_CHARMING);
-      add(O2BookType.ADVANCED_POTION_MAKING);
-      add(O2BookType.ADVANCED_TRANSFIGURATION);
-      add(O2BookType.BREAK_WITH_A_BANSHEE);
-      add(O2BookType.CONFRONTING_THE_FACELESS);
-      add(O2BookType.ESSENTIAL_DARK_ARTS);
-      add(O2BookType.EXTREME_INCANTATIONS);
-      add(O2BookType.GADDING_WITH_GHOULS);
-      add(O2BookType.HOLIDAYS_WITH_HAGS);
-      add(O2BookType.INTERMEDIATE_TRANSFIGURATION);
-      add(O2BookType.MAGICAL_DRAFTS_AND_POTIONS);
-      add(O2BookType.NUMEROLOGY_AND_GRAMMATICA);
-      add(O2BookType.QUINTESSENCE_A_QUEST);
-      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1);
-      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_2);
-      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_3);
-      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_4);
-      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_5);
-      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_6);
-      add(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_7);
-      add(O2BookType.THE_DARK_FORCES);
-      add(O2BookType.TRAVELS_WITH_TROLLS);
-      add(O2BookType.UNFOGGING_THE_FUTURE);
-      add(O2BookType.VOYAGES_WITH_VAMPIRES);
-      add(O2BookType.WANDERINGS_WITH_WEREWOLVES);
-      add(O2BookType.YEAR_WITH_A_YETI);
-   }};
-
    /**
     * Constructor
     *
@@ -88,8 +55,6 @@ public final class O2Books
 
       // add all books
       addBooks();
-
-      library = null;
 
       common.printLogMessage("Created Ollivanders2 books.", null, null, false);
    }
@@ -260,63 +225,6 @@ public final class O2Books
    }
 
    /**
-    * Gets a book that lists all the available books.
-    *
-    * @return a BookItem that lists all O2 books.
-    */
-   @Nullable
-   public ItemStack getReadingList()
-   {
-      if (library != null)
-      {
-         // we already created this list, return it
-         return library;
-      }
-
-      // being lazy, only do this when someone requests it the first time
-      library = new ItemStack(Material.WRITTEN_BOOK, 1);
-      BookMeta bookMeta = (BookMeta) library.getItemMeta();
-
-      if (bookMeta == null)
-         return null;
-
-      bookMeta.setAuthor("Madam Pince");
-      bookMeta.setTitle("Hogwarts Reading List");
-
-      ArrayList<String> bookTitles = new ArrayList<>();
-
-      for (Entry<String, O2BookType> e : O2BookMap.entrySet())
-      {
-         if (hogwartsReadingList.contains(e.getValue()))
-            bookTitles.add(e.getKey());
-      }
-
-      Collections.sort(bookTitles);
-
-      StringBuilder page = new StringBuilder();
-      int lines = 0;
-
-      for (String s : bookTitles)
-      {
-         if (page.length() > 220 || lines >= 7)
-         {
-            page.append("\n(cont.)");
-            bookMeta.addPage(page.toString());
-            page = new StringBuilder();
-            lines = 0;
-         }
-
-         page.append("\n");
-         page.append(s);
-         lines++;
-      }
-      bookMeta.addPage(page.toString());
-      library.setItemMeta(bookMeta);
-
-      return library;
-   }
-
-   /**
     * Get all of the titles for all loaded O2 books
     *
     * @return a list of the titles for all loaded books
@@ -328,5 +236,16 @@ public final class O2Books
       Collections.sort(bookTitles);
 
       return bookTitles;
+   }
+
+   /**
+    * Get all loaded books.
+    *
+    * @return the map of loaded book types and titles
+    */
+   @NotNull
+   public Map<String, O2BookType> getLoadedBooks ()
+   {
+      return new HashMap<>(O2BookMap);
    }
 }
