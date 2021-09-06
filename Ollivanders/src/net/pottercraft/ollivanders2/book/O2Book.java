@@ -55,9 +55,9 @@ public abstract class O2Book
    /**
     * Namespace keys for NBT tags
     */
-   static NamespacedKey o2BookTypeKey;
-   static NamespacedKey o2BookSpellsKey;
-   static NamespacedKey o2BookPotionsKey;
+   public static NamespacedKey o2BookTypeKey;
+   public static NamespacedKey o2BookSpellsKey;
+   public static NamespacedKey o2BookPotionsKey;
 
    /**
     * Callback to the plugin
@@ -86,6 +86,10 @@ public abstract class O2Book
       spells = new ArrayList<>();
       potions = new ArrayList<>();
       p = plugin;
+
+      o2BookTypeKey = new NamespacedKey(p, "O2BookType");
+      o2BookSpellsKey = new NamespacedKey(p, "O2SpellTypes");;
+      o2BookPotionsKey = new NamespacedKey(p, "O2PotionTypes");;
    }
 
    /**

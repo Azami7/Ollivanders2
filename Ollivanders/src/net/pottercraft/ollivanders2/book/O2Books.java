@@ -11,7 +11,13 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -32,7 +38,7 @@ import org.jetbrains.annotations.Nullable;
  * @since 2.2.4
  * @author Azami7
  */
-public final class O2Books
+public final class O2Books implements Listener
 {
    private final Map<String, O2BookType> O2BookMap = new HashMap<>();
 
@@ -55,8 +61,46 @@ public final class O2Books
 
       // add all books
       addBooks();
+      p.getServer().getPluginManager().registerEvents(this, p);
 
       common.printLogMessage("Created Ollivanders2 books.", null, null, false);
+   }
+
+   /**
+    * Process book read events when bookLearning is enabled.
+    *
+    * @param event the player interact event
+    */
+   @EventHandler(priority = EventPriority.LOWEST)
+   public void onBookRead (@NotNull PlayerInteractEvent event)
+   {
+      // only run this if bookLearning is enabled
+      if (!Ollivanders2.bookLearning)
+         return;
+
+      Action action = event.getAction();
+      if (action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
+      {
+         Player player = event.getPlayer();
+
+         ItemStack heldItem = player.getInventory().getItemInMainHand();
+         if (heldItem.getType() == Material.WRITTEN_BOOK)
+         {
+            if (Ollivanders2.debug)
+               p.getLogger().info(player.getDisplayName() + " reading a book and book learning is enabled.");
+
+            // reading a book, if it is a spell book we want to let the player "learn" the spell.
+            ItemMeta meta = heldItem.getItemMeta();
+            if (meta == null)
+               return;
+
+            List<String> bookLore = heldItem.getItemMeta().getLore();
+            if (bookLore == null)
+               readNBT(meta, player, p);
+            else
+               readLore(bookLore, player, p);
+         }
+      }
    }
 
    /**
@@ -112,20 +156,7 @@ public final class O2Books
    public ItemStack getBookByTitle(@NotNull String title)
    {
       String searchFor = title.toLowerCase();
-      O2BookType match = null;
-
-      // Iterate through all keys rather than a direct lookup so that we can:
-      // - allow case insensitive lookup
-      // - allow partial match for lazy typing
-      for (String key : O2BookMap.keySet())
-      {
-         String bookTitle = key.toLowerCase();
-
-         if (bookTitle.startsWith(searchFor))
-         {
-            match = O2BookMap.get(key);
-         }
-      }
+      O2BookType match = getBookTypeByTitle(title);
 
       if (match == null)
          return null;
@@ -148,6 +179,37 @@ public final class O2Books
          return o2book.getBookItem();
 
       return null;
+   }
+
+   /**
+    * Get a book type by book title
+    *
+    * @param title the book title to search for
+    * @return the book type, if found, null otherwise
+    */
+   @Nullable
+   public O2BookType getBookTypeByTitle (String title)
+   {
+      if (title.length() < 1)
+         return null;
+
+      String searchFor = title.toLowerCase();
+      O2BookType match = null;
+
+      // Iterate through all keys rather than a direct lookup so that we can:
+      // - allow case insensitive lookup
+      // - allow partial match for lazy typing
+      for (String key : O2BookMap.keySet())
+      {
+         String bookTitle = key.toLowerCase();
+
+         if (bookTitle.startsWith(searchFor))
+         {
+            match = O2BookMap.get(key);
+         }
+      }
+
+      return match;
    }
 
    /**

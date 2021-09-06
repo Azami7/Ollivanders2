@@ -284,6 +284,7 @@ public class O2Houses
     * @param player the player to get the house for
     * @return the House the player is sorted in to, null otherwise.
     */
+   @Nullable
    public O2HouseType getHouse (@NotNull Player player)
    {
       return getHouse(player.getUniqueId());
@@ -295,6 +296,7 @@ public class O2Houses
     * @param pid the uuid of the player to search for
     * @return the House the player is sorted in to, null otherwise.
     */
+   @Nullable
    public O2HouseType getHouse (@NotNull UUID pid)
    {
       O2HouseType houseType = null;

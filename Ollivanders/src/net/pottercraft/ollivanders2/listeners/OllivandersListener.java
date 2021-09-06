@@ -1531,43 +1531,6 @@ public class OllivandersListener implements Listener
    }
 
    /**
-    * Process book read events when bookLearning is enabled.
-    *
-    * @param event the player interact event
-    */
-   @EventHandler(priority = EventPriority.LOWEST)
-   public void onBookRead (@NotNull PlayerInteractEvent event)
-   {
-      // only run this if bookLearning is enabled
-      if (!Ollivanders2.bookLearning)
-         return;
-
-      Action action = event.getAction();
-      if (action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
-      {
-         Player player = event.getPlayer();
-
-         ItemStack heldItem = player.getInventory().getItemInMainHand();
-         if (heldItem.getType() == Material.WRITTEN_BOOK)
-         {
-            if (Ollivanders2.debug)
-               p.getLogger().info(player.getDisplayName() + " reading a book and book learning is enabled.");
-
-            // reading a book, if it is a spell book we want to let the player "learn" the spell.
-            ItemMeta meta = heldItem.getItemMeta();
-            if (meta == null)
-               return;
-
-            List<String> bookLore = heldItem.getItemMeta().getLore();
-            if (bookLore == null)
-               O2Books.readNBT(meta, player, p);
-            else
-               O2Books.readLore(bookLore, player, p);
-         }
-      }
-   }
-
-   /**
     * When a user holds their spell journal, replace it with an updated version of the book.
     *
     * @param event the player item held event
