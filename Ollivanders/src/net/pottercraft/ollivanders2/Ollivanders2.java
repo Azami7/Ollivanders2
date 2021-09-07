@@ -593,7 +593,7 @@ public class Ollivanders2 extends JavaPlugin
       }
       else if (cmd.getName().equalsIgnoreCase("Quidd"))
       {
-         if (sender.isOp())
+         if (sender.hasPermission("Ollivanders2.admin"))
          {
             return true;
          }
@@ -612,7 +612,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runOllivanders(@NotNull CommandSender sender, @NotNull String[] args)
    {
-      if (!sender.isOp())
+      if (!sender.hasPermission("Ollivanders2.admin"))
       {
          if (sender instanceof Player)
          {
@@ -783,7 +783,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // effects
-      if (sender.isOp())
+      if (sender.hasPermission("Ollivanders2.admin"))
       {
          List<O2EffectType> effects = Ollivanders2API.getPlayers(this).playerEffects.getEffects(o2p.getID());
          summary.append("\n\nAffected by:\n");

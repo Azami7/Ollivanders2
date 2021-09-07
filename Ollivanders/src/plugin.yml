@@ -1,6 +1,6 @@
 name: Ollivanders2
 main: net.pottercraft.ollivanders2.Ollivanders2
-version: 2.6.5
+version: 2.6.6
 authors: [ Azami7, autumnwoz ]
 website: https://www.spigotmc.org/resources/ollivanders2.38992/
 softdepend: [ WorldGuard, LibsDisguises ]
@@ -10,7 +10,18 @@ commands:
   Ollivanders2:
     description: This is the main admin command for the Ollivanders2 plugin
     usage: Example usage /Ollivanders2
-
+    permission:
   Olli:
     description: This is a shortened-form version of the main plugin command
     usage: Example usage /Olli
+
+permissions:
+  Ollivanders2.*:
+    default: op
+    description: Give players every permission
+  Ollivanders2.admin:
+    default: op
+    description: Main admin permission node
+  Ollivanders2.bypass:
+    default: op
+    description: Bypass restrictions & effects of certain spells

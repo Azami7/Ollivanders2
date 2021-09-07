@@ -295,6 +295,13 @@ public final class APPARATE extends O2Spell
             return false;
         }
 
+        // check if x or z coordinates exceed max set in configuration
+        if ((destination.getX() >= p.getConfig().getInt("maxApparateDistance")) || (destination.getZ() >= p.getConfig().getInt("maxApparateDistance")))
+        {
+            common.printDebugMessage("Player is unable to teleport that far", null, null, false);
+            return false;
+        }
+
         return true;
     }
 
