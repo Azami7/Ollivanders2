@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.book;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -12,6 +13,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -446,5 +448,158 @@ public final class O2Books implements Listener
    public Map<String, O2BookType> getLoadedBooks ()
    {
       return new HashMap<>(O2BookMap);
+   }
+
+   /**
+    * Run the books subcommands
+    *
+    * @since 2.2.4
+    * @param sender the player that issued the command
+    * @param args the arguments to the book command
+    * @return true if successful, false otherwise
+    */
+   public boolean runCommand (@NotNull CommandSender sender, @NotNull String[] args)
+   {
+      if (args.length < 2)
+      {
+         usageMessageBooks(sender);
+         return true;
+      }
+      List<ItemStack> bookStack = new ArrayList<>();
+      if (args[1].equalsIgnoreCase("allbooks"))
+      {
+         bookStack = getAllBooks();
+
+         if (bookStack.isEmpty())
+         {
+            sender.sendMessage(Ollivanders2.chatColor + "There are no Ollivanders2 books.");
+
+            return true;
+         }
+
+         Ollivanders2API.common.givePlayerKit((Player)sender, bookStack);
+         return true;
+      }
+      else if (args[1].equalsIgnoreCase("list"))
+      {
+         // olli books list
+         listAllBooks(sender);
+         return true;
+      }
+      else if (args[1].equalsIgnoreCase("give"))
+      {
+         // olli books give <player> <book name>
+         if (args.length < 4)
+         {
+            usageMessageBooks(sender);
+         }
+
+         //next arg is the target player
+         String targetName = args[2];
+         Player targetPlayer = p.getServer().getPlayer(targetName);
+         if (targetPlayer == null)
+         {
+            sender.sendMessage(Ollivanders2.chatColor + "Did not find player \"" + targetName + "\".\n");
+
+            return true;
+         }
+         else
+         {
+            common.printDebugMessage("player to give book to is " + targetName, null, null, false);
+         }
+
+         // args after "book give <player>" are book name
+         String [] subArgs = Arrays.copyOfRange(args, 3, args.length);
+         ItemStack bookItem = getBookFromArgs(subArgs, sender);
+
+         if (bookItem == null)
+         {
+            return true;
+         }
+
+         bookStack.add(bookItem);
+
+         Ollivanders2API.common.givePlayerKit(targetPlayer, bookStack);
+         return true;
+      }
+      else
+      {
+         if (sender instanceof Player)
+         {
+            String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
+            ItemStack bookItem = getBookFromArgs(subArgs, sender);
+            if (bookItem == null)
+            {
+               sender.sendMessage(Ollivanders2.chatColor + "Unable to find that book. Are you sure you spelled the title correctly?");
+               return true;
+            }
+
+            bookStack.add(bookItem);
+
+            Ollivanders2API.common.givePlayerKit((Player)sender, bookStack);
+            return true;
+         }
+      }
+
+      usageMessageBooks(sender);
+      return true;
+   }
+
+   /**
+    * Get the book
+    *
+    * @param args   the arguments for the book command
+    * @param sender the player that issued the command
+    * @return true unless an error occurred
+    */
+   @Nullable
+   private ItemStack getBookFromArgs(@NotNull String[] args, @NotNull CommandSender sender)
+   {
+      String title = Ollivanders2API.common.stringArrayToString(args);
+
+      ItemStack bookItem = getBookByTitle(title);
+
+      if (bookItem == null)
+      {
+         sender.sendMessage(Ollivanders2.chatColor + "No book named \"" + title + "\".\n");
+         usageMessageBooks(sender);
+      }
+
+      return bookItem;
+   }
+
+   /**
+    * Usage message for book subcommands.
+    *
+    * @param sender the player that issued the command
+    * @since 2.2.4
+    */
+   private void usageMessageBooks(@NotNull CommandSender sender)
+   {
+      sender.sendMessage(Ollivanders2.chatColor
+              + "Usage: /olli books"
+              + "\nlist - gives a book that lists all available books"
+              + "\nallbooks - gives all Ollivanders2 books, this may not fit in your inventory"
+              + "\n<book title> - gives you the book with this title, if it exists"
+              + "\ngive <player> <book title> - gives target player the book with this title, if it exists\n"
+              + "\nExample: /ollivanders2 book standard book of spells grade 1");
+   }
+
+   /**
+    * Show a list of all Ollivanders2 books
+    *
+    * @param sender the player to display the list to
+    */
+   public void listAllBooks(@NotNull CommandSender sender)
+   {
+      StringBuilder titleList = new StringBuilder();
+      titleList.append("Book Titles:");
+
+      for (String bookTitle : getAllBookTitles())
+      {
+         titleList.append("\n").append(bookTitle);
+      }
+
+      sender.sendMessage(Ollivanders2.chatColor + titleList.toString());
    }
 }
