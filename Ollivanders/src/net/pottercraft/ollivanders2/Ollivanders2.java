@@ -2063,6 +2063,17 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
+    * When a player is unable to apparate because their location exceeds the maximum set in the config.
+    *
+    * @param player the player that cast the spell
+    * @since 2.6.5
+    */
+   public void apparateTooFar(@NotNull Player player)
+   {
+      player.sendMessage(chatColor + "Your magic is not powerful enough to apparate that far.");
+   }
+
+   /**
     * Potions subcommand
     *
     * @param sender the command sender
