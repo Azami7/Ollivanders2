@@ -88,6 +88,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean showLogInMessage;
    public static boolean bookLearning;
    public static boolean maxSpellLevel;
+   public static int maxApparateDistance;
    public static boolean enableNonVerbalSpellCasting;
    public static boolean useSpellJournal;
    public static boolean useHostileMobAnimagi;
@@ -358,6 +359,17 @@ public class Ollivanders2 extends JavaPlugin
       if (maxSpellLevel)
       {
          getLogger().info("Max spell level on.");
+      }
+      //
+      // maxApparateDistance
+      //
+      if(getConfig().isSet("maxApparateDistance"))
+      {
+         maxApparateDistance = getConfig().getInt("maxApparateDistance");
+      }
+      if(maxApparateDistance <= 0)
+      {
+         maxApparateDistance = 100000;
       }
 
       //
