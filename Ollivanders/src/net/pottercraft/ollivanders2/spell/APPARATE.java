@@ -136,7 +136,7 @@ public final class APPARATE extends O2Spell
 
         if (!exceedsMaxDistance(destination))
         {
-            p.apparateTooFar(player);
+            player.sendMessage(Ollivanders2.chatColor + "Your magic is not powerful enough to apparate that far.");
             kill();
             return;
         }
