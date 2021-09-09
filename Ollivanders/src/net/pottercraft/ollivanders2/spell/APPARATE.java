@@ -302,13 +302,6 @@ public final class APPARATE extends O2Spell
             return false;
         }
 
-        // check if x or z coordinates exceed max set in configuration
-        if ((destination.getX() >= p.getConfig().getInt("maxApparateDistance")) || (destination.getZ() >= p.getConfig().getInt("maxApparateDistance")))
-        {
-            common.printDebugMessage("Player is unable to teleport that far", null, null, false);
-            return false;
-        }
-
         return true;
     }
 
@@ -321,7 +314,7 @@ public final class APPARATE extends O2Spell
     private boolean exceedsMaxDistance(@NotNull Location destination)
     {
         // check if x or z coordinates exceed max set in configuration
-        if ((destination.getX() >= p.getConfig().getInt("maxApparateDistance")) || (destination.getZ() >= p.getConfig().getInt("maxApparateDistance")))
+        if ((destination.getX() >= Ollivanders2.maxApparateDistance) || (destination.getZ() >= Ollivanders2.maxApparateDistance))
         {
             common.printDebugMessage("Player is unable to teleport that far", null, null, false);
             return false;
