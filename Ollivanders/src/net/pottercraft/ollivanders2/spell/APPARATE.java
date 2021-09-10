@@ -65,7 +65,7 @@ public final class APPARATE extends O2Spell
         spellType = O2SpellType.APPARATE;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<String>()
+        flavorText = new ArrayList<>()
         {{
             add("A magical means of transportation.");
             add("Harry felt Dumbledore's arm twist away from him and re-doubled his grip: the next thing he knew everything went black; he was pressed very hard from all directions; he could not breathe, there were iron bands tightening around his chest; his eyeballs were being forced back into his head; his ear-drums were being pushed deeper into his skull.");
