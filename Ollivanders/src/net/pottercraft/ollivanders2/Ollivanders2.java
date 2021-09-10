@@ -397,13 +397,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //
-      // apparate distance, when set, will limit apparate distance in the X and Z directions
-      //
-      APPARATE.maxApparateDistance = getConfig().getInt("maxApparateDistance");
-      getLogger().info("Enabling maximum apparate distance of " + APPARATE.maxApparateDistance + ".");
-
-      //
-      // aparate max distance
+      // apparate locations, when true apparate will only work to named locations, not by coordinates
       //
       apparateLocations = getConfig().getBoolean("apparateLocations");
       if (apparateLocations)
