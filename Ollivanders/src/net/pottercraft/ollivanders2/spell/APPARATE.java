@@ -33,6 +33,11 @@ import java.util.Map;
 public final class APPARATE extends O2Spell
 {
     /**
+     * The maximum apparate distance, value of 0 or less means no limit
+     */
+    public static int maxApparateDistance = 0;
+
+    /**
      * Apparate locations
      */
     private static HashMap<String, Location> apparateLocations = new HashMap<>();
@@ -110,9 +115,7 @@ public final class APPARATE extends O2Spell
         destination = getDestination();
 
         if (destination != null)
-        {
             destinationParsed = true;
-        }
         else
         {
             if (Ollivanders2.apparateLocations)
@@ -122,11 +125,10 @@ public final class APPARATE extends O2Spell
                 return;
             }
             else
-            {
                 destination = getLineOfSightLocation();
-            }
         }
 
+        // are they allowed to apparate to that location?
         if (!canApparateTo(destination))
         {
             p.spellFailedMessage(player);
@@ -134,6 +136,7 @@ public final class APPARATE extends O2Spell
             return;
         }
 
+        // are they allowed to apparate from this location?
         Location source = player.getLocation();
         if (!canApparateFrom(source))
         {
@@ -142,14 +145,18 @@ public final class APPARATE extends O2Spell
             return;
         }
 
+        // does this exceed the max apparate distance?
+        if (exceedsMaxDistance(source, destination))
+        {
+            player.sendMessage(Ollivanders2.chatColor + "Your magic is not powerful enough to apparate that far.");
+            kill();
+            return;
+        }
+
         if (Ollivanders2.apparateLocations && destinationParsed)
-        {
             apparateEvent = new OllivandersApparateByNameEvent(player, destination, namedLocation);
-        }
         else
-        {
             apparateEvent = new OllivandersApparateByCoordinatesEvent(player, destination);
-        }
 
         p.getServer().getPluginManager().callEvent(apparateEvent);
 
@@ -178,7 +185,7 @@ public final class APPARATE extends O2Spell
     /**
      * Get the apparate destination.
      *
-     * @return the destination or null if
+     * @return the destination or null if no destination specified
      */
     @Nullable
     private Location getDestination ()
@@ -296,6 +303,29 @@ public final class APPARATE extends O2Spell
         }
 
         return true;
+    }
+
+    /**
+     * Determine if the distance a player is trying to apparate exceeds the max apparate distance in the X or Z coordinates.
+     *
+     * @param fromLoc the location they are apparating from
+     * @param toLoc the location they are apparating to
+     * @return true if the locations are less than maxApparateDistance apart, false otherwise
+     */
+    private boolean exceedsMaxDistance (@NotNull Location fromLoc, @NotNull Location toLoc)
+    {
+        // value less 1 means there is no limit
+        if (maxApparateDistance < 1)
+            return false;
+
+        // ensure the player is not trying to go more than maxApparateDistance blocks in the x and z directions
+        if (Math.abs(fromLoc.getX() - toLoc.getX()) > maxApparateDistance)
+            return true;
+
+        if (Math.abs(fromLoc.getZ() - toLoc.getZ()) > maxApparateDistance)
+            return true;
+
+        return false;
     }
 
     /**
