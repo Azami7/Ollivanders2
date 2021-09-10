@@ -18,14 +18,14 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_1 extends O2Book
 
       bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1;
 
-      spells.add(O2SpellType.COLLOPORTUS);
-      spells.add(O2SpellType.ALOHOMORA);
       spells.add(O2SpellType.LUMOS);
       spells.add(O2SpellType.NOX);
+      spells.add(O2SpellType.ALOHOMORA);
+      spells.add(O2SpellType.COLLOPORTUS);
       spells.add(O2SpellType.REPARO);
       spells.add(O2SpellType.DIFFINDO);
-      spells.add(O2SpellType.WINGARDIUM_LEVIOSA);
       spells.add(O2SpellType.INCENDIO);
+      spells.add(O2SpellType.WINGARDIUM_LEVIOSA);
       //9
       //10
       //11

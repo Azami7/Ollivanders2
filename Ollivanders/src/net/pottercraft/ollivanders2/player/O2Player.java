@@ -543,8 +543,7 @@ public class O2Player
     */
    public void incrementSpellCount(@NotNull O2SpellType spellType)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("Incrementing spell count for " + spellType.toString());
+      common.printDebugMessage("Incrementing spell count for " + spellType.toString(), null, null, false);
 
       if (knownSpells.containsKey(spellType))
       {

@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.pottercraft.ollivanders2.book.events.OllivandersBookLearningPotionEvent;
+import net.pottercraft.ollivanders2.book.events.OllivandersBookLearningSpellEvent;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -24,17 +26,19 @@ import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.player.O2Player;
+import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Ollivanders2 O2BookType
  *
- * These books will work with the new implementation of bookLearning.  Every Ollivanders2 spell must be in an
- * O2Book (or some other book with lore set up correctly) or players will not be able to learn them when bookLearning
+ * These books will work with the new implementation of bookLearning.  Every Ollivanders2 spell must be a
+ * WrittenBook with lore or NBT set up correctly or players will not be able to learn them when bookLearning
  * is enabled.
  *
  * @since 2.2.4
@@ -88,21 +92,42 @@ public final class O2Books implements Listener
          ItemStack heldItem = player.getInventory().getItemInMainHand();
          if (heldItem.getType() == Material.WRITTEN_BOOK)
          {
-            if (Ollivanders2.debug)
-               p.getLogger().info(player.getDisplayName() + " reading a book and book learning is enabled.");
-
-            // reading a book, if it is a spell book we want to let the player "learn" the spell.
-            ItemMeta meta = heldItem.getItemMeta();
-            if (meta == null)
-               return;
-
-            List<String> bookLore = heldItem.getItemMeta().getLore();
-            if (bookLore == null)
-               readNBT(meta, player, p);
-            else
-               readLore(bookLore, player, p);
+            new BukkitRunnable()
+            {
+               @Override
+               public void run()
+               {
+                  if (! event.isCancelled())
+                  {
+                     readBook(player, heldItem);
+                  }
+               }
+            }.runTaskLater(p, Ollivanders2Common.ticksPerSecond * 2);
          }
       }
+   }
+
+   /**
+    * Read a book.
+    *
+    * @param player the player reading the book
+    * @param book the book being read
+    */
+   private void readBook (@NotNull Player player, @NotNull ItemStack book)
+   {
+      common.printDebugMessage(player.getDisplayName() + " reading a book and book learning is enabled.", null, null, false);
+
+      // reading a book, if it is a spell book we want to let the player "learn" the spell.
+      ItemMeta meta = book.getItemMeta();
+      if (meta == null)
+         return;
+
+      List<String> bookLore = book.getItemMeta().getLore();
+
+      if (bookLore == null)
+         readNBT(meta, player);
+      else
+         readLore(bookLore, player);
    }
 
    /**
@@ -239,17 +264,13 @@ public final class O2Books implements Listener
 
    /**
     * Read the NBT tags for a magic book
+    *
     * @param itemMeta the item meta
     * @param player the player reading the book
-    * @param p a callback to the plugin
     */
-   public static void readNBT (@NotNull ItemMeta itemMeta, @NotNull Player player, @NotNull Ollivanders2 p)
+   public void readNBT (@NotNull ItemMeta itemMeta, @NotNull Player player)
    {
       if (!Ollivanders2.bookLearning)
-         return;
-
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
-      if (o2p == null)
          return;
 
       PersistentDataContainer container = itemMeta.getPersistentDataContainer();
@@ -261,7 +282,7 @@ public final class O2Books implements Listener
          {
             for (O2SpellType spellType : parseSpells(spells))
             {
-               incrementSpell(o2p, spellType, p);
+               doBookLearningSpell(player, spellType);
             }
          }
       }
@@ -274,10 +295,68 @@ public final class O2Books implements Listener
          {
             for (O2PotionType potionType : parsePotions(potions))
             {
-               incrementPotion(o2p, potionType, p);
+               doBookLearningPotion(player, potionType);
             }
          }
       }
+   }
+
+   /**
+    * Do book learning for a spell
+    *
+    * @param player the player doing the book learning
+    * @param spellType the spell to learn
+    */
+   private void doBookLearningSpell (@NotNull Player player, @NotNull O2SpellType spellType)
+   {
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      if (o2p == null)
+         return;
+
+      OllivandersBookLearningSpellEvent event = new OllivandersBookLearningSpellEvent(player, spellType);
+      p.getServer().getPluginManager().callEvent(event);
+
+      // check to see if the event was canceled
+      new BukkitRunnable()
+      {
+         @Override
+         public void run()
+         {
+            if (!(event.isCancelled()))
+            {
+               incrementSpell(o2p, spellType, p);
+            }
+         }
+      }.runTaskLater(p, Ollivanders2Common.ticksPerSecond * 2);
+   }
+
+   /**
+    * Do book learning for a potion
+    *
+    * @param player the player learning the potion
+    * @param potionType the potion to learn
+    */
+   private void doBookLearningPotion (@NotNull Player player, @NotNull O2PotionType potionType)
+   {
+      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      if (o2p == null)
+         return;
+
+      OllivandersBookLearningPotionEvent event = new OllivandersBookLearningPotionEvent(player, potionType);
+      p.getServer().getPluginManager().callEvent(event);
+
+      // check to see if the event was canceled
+      new BukkitRunnable()
+      {
+         @Override
+         public void run()
+         {
+            if (!(event.isCancelled()))
+            {
+               incrementPotion(o2p, potionType, p);
+            }
+         }
+      }.runTaskLater(p, Ollivanders2Common.ticksPerSecond * 2);
    }
 
    /**
@@ -391,9 +470,8 @@ public final class O2Books implements Listener
     *
     * @param bookLore the lore from a book
     * @param player   the player reading the book
-    * @param p        the callback to the MC plugin
     */
-   public static void readLore(@NotNull List<String> bookLore, @NotNull Player player, @NotNull Ollivanders2 p)
+   public void readLore (@NotNull List<String> bookLore, @NotNull Player player)
    {
       if (!Ollivanders2.bookLearning)
       {
@@ -407,19 +485,19 @@ public final class O2Books implements Listener
       for (String spell : bookLore)
       {
          // see if it is a spell
-         O2SpellType spellEnum = Ollivanders2API.getSpells(p).getSpellTypeByName(spell);
+         O2SpellType spellType = Ollivanders2API.getSpells(p).getSpellTypeByName(spell);
 
-         if (spellEnum != null)
+         if (spellType != null)
          {
-            incrementSpell (o2p, spellEnum, p);
+            doBookLearningSpell(player, spellType);
          }
          else // see if it is a potion
          {
-            O2PotionType potionEnum = Ollivanders2API.getPotions(p).getPotionTypeByName(spell);
+            O2PotionType potionType = Ollivanders2API.getPotions(p).getPotionTypeByName(spell);
 
-            if (potionEnum != null)
+            if (potionType != null)
             {
-               incrementPotion(o2p, potionEnum, p);
+               doBookLearningPotion(player, potionType);
             }
          }
       }
@@ -601,5 +679,47 @@ public final class O2Books implements Listener
       }
 
       sender.sendMessage(Ollivanders2.chatColor + titleList.toString());
+   }
+
+   /**
+    * Is this book a specific O2Book?
+    *
+    * @param book the book item to check
+    * @param bookType the type to match
+    * @return true if the book matches, false otherwise
+    */
+   public static boolean matchesO2Book (@NotNull ItemStack book, @NotNull O2BookType bookType)
+   {
+      if (book.getType() != Material.WRITTEN_BOOK)
+         return false;
+
+      ItemMeta bookMeta = book.getItemMeta();
+      if (bookMeta == null)
+         return false;
+
+      // new books use NBT, which is better for preventing players making fake books
+      PersistentDataContainer container = bookMeta.getPersistentDataContainer();
+      if (container.has(O2Book.o2BookTypeKey, PersistentDataType.STRING))
+      {
+         String bookTypeString = container.get(O2Book.o2BookTypeKey, PersistentDataType.STRING);
+         if (bookTypeString == null)
+            return false;
+
+         return bookTypeString.equalsIgnoreCase(bookType.toString());
+      }
+
+      // they dont have the NBT tag, fall back to checking title and author
+      String title = ((BookMeta)bookMeta).getTitle();
+      if (title == null)
+         return false;
+
+      if (!(title.equalsIgnoreCase(bookType.getTitle())))
+         return false;
+
+      String author = ((BookMeta)bookMeta).getAuthor();
+      if (author == null)
+         return false;
+
+      return author.equalsIgnoreCase(bookType.getAuthor());
    }
 }
