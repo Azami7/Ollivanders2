@@ -91,7 +91,7 @@ public enum O2BookType
     *
     * @param className the name of the class this type represents
     */
-   O2BookType(@NotNull Class<?> className, String title, String shortTitle, String author, O2MagicBranch branch)
+   O2BookType(@NotNull Class<?> className, @NotNull String title, @NotNull String shortTitle, @NotNull String author, @NotNull O2MagicBranch branch)
    {
       this.className = className;
       this.title = title;
@@ -119,6 +119,16 @@ public enum O2BookType
    public String getShortTitle ()
    {
       return shortTitle;
+   }
+
+   /**
+    * Return the title for a book. This is the display name title for the book item.
+    *
+    * @return the title of the book
+    */
+   public String getTitle ()
+   {
+      return title;
    }
 
    /**

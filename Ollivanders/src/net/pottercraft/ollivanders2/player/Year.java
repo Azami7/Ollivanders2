@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.player;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents the year this player is in school.
@@ -53,5 +54,23 @@ public enum Year
    public String getDisplayText ()
    {
       return displayText;
+   }
+
+   /**
+    * Get the year that has the corresponding value
+    *
+    * @param value the value to get
+    * @return the Year if exists, null otherwise
+    */
+   @Nullable
+   public static Year getYearByValue (int value)
+   {
+      for (Year year : Year.values())
+      {
+         if (year.getIntValue() == value)
+            return year;
+      }
+
+      return null;
    }
 }
