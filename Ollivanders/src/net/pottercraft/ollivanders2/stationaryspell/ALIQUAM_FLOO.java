@@ -63,10 +63,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
       spellType = O2StationarySpellType.ALIQUAM_FLOO;
       this.flooName = flooName;
 
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("Creating stationary spell type " + spellType.name());
-      }
+      common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
    }
 
    @Override

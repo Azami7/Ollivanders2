@@ -1,5 +1,7 @@
 package net.pottercraft.ollivanders2;
 
+import net.minecraft.server.v1_16_R3.ICommandListener;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -17,6 +19,7 @@ import java.util.List;
 public class Ollivanders2TeleportEvents
 {
    final private Ollivanders2 p;
+   private Ollivanders2Common common;
 
    /**
     * The list of all queued teleport events
@@ -110,6 +113,7 @@ public class Ollivanders2TeleportEvents
    public Ollivanders2TeleportEvents (@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -147,9 +151,7 @@ public class Ollivanders2TeleportEvents
    {
       O2TeleportEvent teleportEvent = new O2TeleportEvent(player, from, to, explosionOnTeleport);
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("Created teleport event: " + player.getName() + " from " + from.toString() + " to " + to.toString());
-
+      common.printDebugMessage("Created teleport event: " + player.getName() + " from " + from.toString() + " to " + to.toString(), null, null, true);
       teleportEvents.add(teleportEvent);
 
       to.getChunk().load();
@@ -164,16 +166,12 @@ public class Ollivanders2TeleportEvents
    {
       if (teleportEvents.contains(event))
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Removing teleport event for " + event.getPlayer().getName());
+         common.printDebugMessage("Removing teleport event for " + event.getPlayer().getName(), null, null, false);
          teleportEvents.remove(event);
       }
       else
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("Unable to remove teleport event, not found.");
-         }
+         common.printDebugMessage("Unable to remove teleport event, not found.", null, null, false);
       }
    }
 }

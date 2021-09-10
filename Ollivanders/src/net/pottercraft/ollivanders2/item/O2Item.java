@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.item;
 
 import net.pottercraft.ollivanders2.O2Color;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
@@ -66,10 +67,8 @@ public class O2Item
       ArrayList<String> lore = new ArrayList<>();
       lore.add(itemType.getLore());
 
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("Getting item " + name);
-      }
+      Ollivanders2Common common = new Ollivanders2Common(p);
+      common.printDebugMessage("Getting item " + name, null, null, false);
 
       ItemStack o2Item = new ItemStack(materialType, amount);
 

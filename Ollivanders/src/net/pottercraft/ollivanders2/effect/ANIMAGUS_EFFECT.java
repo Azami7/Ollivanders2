@@ -63,8 +63,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(pid);
       if (o2p == null)
       {
-         p.getLogger().info("o2player cannot be found");
-
+         common.printDebugMessage("o2player cannot be found", null, null, false);
          kill();
          return;
       }
@@ -74,9 +73,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
 
       if (form == null)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Unable to get animagus form for " + Ollivanders2API.getPlayers(p).getPlayer(pid).getPlayerName());
-
+         common.printDebugMessage("Unable to get animagus form for " + Ollivanders2API.getPlayers(p).getPlayer(pid).getPlayerName(), null, null, false);
          kill();
       }
    }
@@ -115,10 +112,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Cat.Type " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse Cat.Type " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -135,10 +129,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Rabbit.Type " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse Rabbit.Type " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -154,10 +145,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse DyeColor " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -174,10 +162,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Horse.Color " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse Horse.Color " + colorVariant, null, null, false);
             correctedVariant = color.toString();
          }
 
@@ -194,10 +179,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Llama.Color " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse Llama.Color " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -230,10 +212,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Fox.Type " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse Fox.Type " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -254,10 +233,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse DyeColor " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -281,10 +257,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse DyeColor " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 

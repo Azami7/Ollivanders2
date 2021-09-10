@@ -81,8 +81,7 @@ public final class FORGETFULLNESS_POTION extends O2Potion
          }
       }
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("Forgetfullness Potion: " + player.getDisplayName() + " lost " + memLoss + " experience  with " + lostSpell);
+      common.printDebugMessage("Forgetfullness Potion: " + player.getDisplayName() + " lost " + memLoss + " experience  with " + lostSpell, null, null, false);
 
       player.sendMessage(Ollivanders2.chatColor + "It feels like you've forgotten something.");
    }
