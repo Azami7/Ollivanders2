@@ -97,10 +97,7 @@ public final class O2Books implements Listener
                @Override
                public void run()
                {
-                  if (! event.isCancelled())
-                  {
-                     readBook(player, heldItem);
-                  }
+                  readBook(player, heldItem);
                }
             }.runTaskLater(p, Ollivanders2Common.ticksPerSecond * 2);
          }

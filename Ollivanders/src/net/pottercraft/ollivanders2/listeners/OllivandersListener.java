@@ -160,6 +160,7 @@ public class OllivandersListener implements Listener
       {
          // do not allow the player to move if they are asleep or suspended
          event.setCancelled(true);
+         common.printDebugMessage("onPlayerMove: cancelling PlayerMoveEvent", null, null, false);
       }
       else
       {
@@ -203,6 +204,7 @@ public class OllivandersListener implements Listener
             {
                event.setCancelled(true);
                spell.flair(10);
+               common.printDebugMessage("protegoTotalum: cancelling PlayerMoveEvent", null, null, false);
             }
          }
       }
@@ -286,6 +288,7 @@ public class OllivandersListener implements Listener
          if (effect != null)
          {
             event.setCancelled(true);
+            common.printDebugMessage("onPlayerChat: cancelling AsyncPlayerChatEvent", null, null, false);
             return;
          }
       }
@@ -684,6 +687,7 @@ public class OllivandersListener implements Listener
                     || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
             {
                event.setCancelled(true);
+               common.printDebugMessage("onPlayerInteract: cancelling PlayerInteractEvent", null, null, false);
                return;
             }
 
@@ -712,6 +716,7 @@ public class OllivandersListener implements Listener
                  || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
          {
             event.setCancelled(true);
+            common.printDebugMessage("primaryHandInteractEvents: cancelling PlayerInteractEvent", null, null, false);
             return;
          }
 
@@ -981,6 +986,7 @@ public class OllivandersListener implements Listener
                      ((Player) event.getEntity()).removePotionEffect(potion.getType());
                   }
                   event.setCancelled(true);
+                  common.printDebugMessage("onPlayerDamage: cancelling EntityDamageEvent", null, null, false);
 
                   AttributeInstance playerHealth = player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH);
                   if (playerHealth != null)
@@ -1011,6 +1017,7 @@ public class OllivandersListener implements Listener
             if (spell.isInside(entity.getLocation()))
             {
                event.setCancelled(true);
+               common.printDebugMessage("checkSpongify: cancelling EntityDamageEvent", null, null, false);
                return true;
             }
          }
@@ -1057,11 +1064,13 @@ public class OllivandersListener implements Listener
             if (!event.getPlayer().hasPermission("Ollivanders2.BYPASS"))
             {
                event.setCancelled(true);
+               common.printDebugMessage("onColloportusBlockBreakEvent: cancelling BlockBreakEvent", null, null, false);
             }
          }
          else
          {
             event.setCancelled(true);
+            common.printDebugMessage("onColloportusBlockBreakEvent: cancelling BlockBreakEvent", null, null, false);
          }
       }
    }
@@ -1077,6 +1086,7 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          event.setCancelled(true);
+         common.printDebugMessage("onColloportusBlockPhysicsEvent: cancelling BlockPhysicsEvent", null, null, false);
       }
    }
 
@@ -1100,11 +1110,13 @@ public class OllivandersListener implements Listener
                if (!event.getPlayer().hasPermission("Ollivanders2.BYPASS"))
                {
                   event.setCancelled(true);
+                  common.printDebugMessage("onColloportusPlayerInteract: cancelling PlayerInteractEvent", null, null, false);
                }
             }
             else
             {
                event.setCancelled(true);
+               common.printDebugMessage("onColloportusPlayerInteract: cancelling PlayerInteractEvent", null, null, false);
             }
          }
       }
@@ -1137,6 +1149,7 @@ public class OllivandersListener implements Listener
             if (colloportus.isInside(newBlock.getLocation()) || colloportus.isInside(block.getLocation()))
             {
                event.setCancelled(true);
+               common.printDebugMessage("onColloportusPistonExtend: cancelling BlockPistonExtendEvent", null, null, false);
                return;
             }
          }
@@ -1156,6 +1169,7 @@ public class OllivandersListener implements Listener
          if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
          {
             event.setCancelled(true);
+            common.printDebugMessage("onColloportusPistonRetract: cancelling BlockPistonRetractEvent", null, null, false);
          }
       }
    }
@@ -1176,6 +1190,7 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, loc))
       {
          event.setCancelled(true);
+         common.printDebugMessage("onColloportusEntityChangeBlock: cancelling EntityChangeBlockEvent", null, null, false);
          if (event.getEntityType() == EntityType.FALLING_BLOCK)
          {
             loc.getWorld().dropItemNaturally(loc, new ItemStack(((FallingBlock) entity).getBlockData().getMaterial()));
@@ -1263,6 +1278,7 @@ public class OllivandersListener implements Listener
             if (trans.getToID() == event.getEntity().getUniqueId())
             {
                event.setCancelled(true);
+               common.printDebugMessage("transfiguredEntityExplodeCancel: cancelling EntityExplodeEvent", null, null, false);
             }
          }
       }
@@ -1339,6 +1355,7 @@ public class OllivandersListener implements Listener
          if (p.getO2Player((Player) target).isInvisible())
          {
             event.setCancelled(true);
+            common.printDebugMessage("cloakPlayer: cancelling EntityTargetEvent", null, null, false);
          }
       }
       if (target != null)
@@ -1352,6 +1369,7 @@ public class OllivandersListener implements Listener
                   if (!stat.isInside(event.getEntity().getLocation()))
                   {
                      event.setCancelled(true);
+                     common.printDebugMessage("cloakPlayer: cancelling EntityTargetEvent", null, null, false);
                   }
                }
             }
@@ -1377,6 +1395,7 @@ public class OllivandersListener implements Listener
             if (trans.getToID() == entity.getUniqueId() && trans.player == target)
             {
                event.setCancelled(true);
+               common.printDebugMessage("inferiTarget: cancelling EntityTargetEvent", null, null, false);
             }
          }
       }
@@ -1646,6 +1665,7 @@ public class OllivandersListener implements Listener
       {
          // cannot interact with anything while asleep or suspended
          event.setCancelled(true);
+         common.printDebugMessage("onAffectedInteract: cancelling PlayerInteractEvent", null, null, false);
       }
    }
 
@@ -1663,6 +1683,7 @@ public class OllivandersListener implements Listener
       {
          // cannot sleep while awake effect is active
          event.setCancelled(true);
+         common.printDebugMessage("onPlayerSleep: cancelling PlayerBedEnterEvent", null, null, false);
       }
    }
 
@@ -1681,6 +1702,7 @@ public class OllivandersListener implements Listener
               || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
+         common.printDebugMessage("playerFlightSuspension: cancelling PlayerToggleFlightEvent", null, null, false);
       }
    }
 
@@ -1715,6 +1737,7 @@ public class OllivandersListener implements Listener
             || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
+         common.printDebugMessage("playerSprintSuspension: cancelling PlayerToggleSprintEvent", null, null, false);
       }
    }
 
@@ -1733,6 +1756,7 @@ public class OllivandersListener implements Listener
             || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
+         common.printDebugMessage("playerVelocitySuspension: cancelling PlayerVelocityEvent", null, null, false);
       }
    }
 
@@ -1758,6 +1782,7 @@ public class OllivandersListener implements Listener
          if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
          {
             event.setCancelled(true);
+            common.printDebugMessage("animagusItemPickUp: cancelling EntityPickupItemEvent", null, null, false);
          }
       }
    }
@@ -1775,6 +1800,7 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
+         common.printDebugMessage("animagusItemHeld: cancelling PlayerItemHeldEvent", null, null, false);
       }
    }
 
@@ -1791,6 +1817,7 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
+         common.printDebugMessage("animagusItemConsume: cancelling PlayerItemConsumeEvent", null, null, false);
       }
    }
 
@@ -1807,6 +1834,7 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
+         common.printDebugMessage("animagusItemDropEvent: cancelling PlayerDropItemEvent", null, null, false);
       }
    }
 
@@ -1827,6 +1855,7 @@ public class OllivandersListener implements Listener
          if (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)
          {
             event.setCancelled(true);
+            common.printDebugMessage("animagusInteractEvent: cancelling PlayerInteractEvent", null, null, false);
          }
       }
    }
