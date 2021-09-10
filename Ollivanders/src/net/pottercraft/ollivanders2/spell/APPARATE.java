@@ -314,7 +314,6 @@ public final class APPARATE extends O2Spell
      */
     private boolean exceedsMaxDistance (@NotNull Location fromLoc, @NotNull Location toLoc)
     {
-        p.getServer().getLogger().info("checking max apparate distance " + maxApparateDistance);
         // value less 1 means there is no limit
         if (maxApparateDistance < 1)
             return false;
