@@ -542,8 +542,7 @@ public class O2Player
     */
    public void incrementSpellCount(@NotNull O2SpellType spellType)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("Incrementing spell count for " + spellType.toString());
+      common.printDebugMessage("Incrementing spell count for " + spellType.toString(), null, null, false);
 
       if (knownSpells.containsKey(spellType))
       {
@@ -568,8 +567,7 @@ public class O2Player
     */
    public void incrementPotionCount(@NotNull O2PotionType potionType)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("Incrementing potion count for " + potionType.toString());
+      common.printDebugMessage("Incrementing potion count for " + potionType.toString(), null, null, false);
 
       if (knownPotions.containsKey(potionType))
       {
@@ -809,7 +807,7 @@ public class O2Player
 
       if (bookMeta == null)
       {
-         p.getLogger().warning("getSpellJournal book meta is null");
+         common.printDebugMessage("getSpellJournal book meta is null", null, null, false);
          return null;
       }
 
@@ -1014,13 +1012,12 @@ public class O2Player
             animagusColor = Ollivanders2API.common.getRandomNaturalSheepColor(pid.hashCode()).toString();
          }
 
-         if (animagusColor != null && Ollivanders2.debug)
+         if (animagusColor != null)
          {
-            p.getLogger().info("Color variation " + animagusColor);
+            common.printDebugMessage("Color variation " + animagusColor, null, null, false);
          }
 
-         if (Ollivanders2.debug)
-            p.getLogger().info(playerName + " is an animagus type " + animagusForm.toString());
+         common.printDebugMessage(playerName + " is an animagus type " + animagusForm.toString(), null, null, false);
       }
    }
 

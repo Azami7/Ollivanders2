@@ -278,9 +278,7 @@ public class Ollivanders2Common
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Failed to parse uuid " + uuid);
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         printDebugMessage("Failed to parse uuid " + uuid, e, null, true);
       }
 
       return pid;
@@ -303,9 +301,7 @@ public class Ollivanders2Common
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Failed to parse integer " + intString);
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         printDebugMessage("Failed to parse integer " + intString, e, null, true);
       }
 
       return i;
@@ -328,9 +324,7 @@ public class Ollivanders2Common
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Failed to parse boolean " + boolString);
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         printDebugMessage("Failed to parse boolean " + boolString, e, null, true);
       }
 
       return b;
@@ -353,9 +347,7 @@ public class Ollivanders2Common
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Failed to parse EntityType " + entityTypeString);
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         printDebugMessage("Failed to parse EntityType " + entityTypeString, e, null, true);
       }
       return entityType;
    }
@@ -919,7 +911,7 @@ public class Ollivanders2Common
       //
       if (location.getWorld() == null)
       {
-         p.getLogger().warning("serializeLocation: location world is null");
+         printDebugMessage("serializeLocation: location world is null", null, null, false);
          return null;
       }
       locData.put(labelPrefix + "_" + locationWorldLabel, location.getWorld().getName());
@@ -969,10 +961,7 @@ public class Ollivanders2Common
          }
          catch (Exception exception)
          {
-            p.getLogger().info("Unable to deserialize location");
-            if (Ollivanders2.debug)
-               exception.printStackTrace();
-
+            printDebugMessage("Unable to deserialize location", exception, null, true);
             return null;
          }
       }
@@ -1207,7 +1196,7 @@ public class Ollivanders2Common
 
       if (meta == null)
       {
-         p.getLogger().warning("getGalleon: item meta is null");
+         printDebugMessage("getGalleon: item meta is null", null, null, false);
          return galleon;
       }
 
@@ -1232,7 +1221,7 @@ public class Ollivanders2Common
 
       if (meta == null)
       {
-         p.getLogger().warning("getSickle: item meta is null");
+         printDebugMessage("getSickle: item meta is null", null, null, false);
          return sickle;
       }
 
@@ -1257,7 +1246,7 @@ public class Ollivanders2Common
 
       if (meta == null)
       {
-         p.getLogger().warning("getKnut: item meta is null");
+         printDebugMessage("getKnut: item meta is null", null, null, false);
          return knut;
       }
 

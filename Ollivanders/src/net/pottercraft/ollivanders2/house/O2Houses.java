@@ -118,18 +118,12 @@ public class O2Houses
    {
       if (name == null)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("getHouseType: null house passed in");
-         }
-
+         common.printDebugMessage("getHouseType: null house passed in", null, null, false);
          return null;
       }
 
       name = name.trim();
-
-      if (Ollivanders2.debug)
-         p.getLogger().info("getHouseType: getting type for " + name);
+      common.printDebugMessage("getHouseType: getting type for " + name, null, null, false);
 
       for (O2HouseType houseType : O2HouseType.values())
       {
@@ -307,9 +301,7 @@ public class O2Houses
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failure retrieving player from O2HouseMap.");
-            if (Ollivanders2.debug)
-               e.printStackTrace();
+            common.printDebugMessage("Failure retrieving player from O2HouseMap.", e, null, false);
          }
       }
 
@@ -419,7 +411,7 @@ public class O2Houses
       if (!Ollivanders2.useHouses)
       {
          // do not allow if houses is not enabled
-         p.getLogger().warning("Attempted to create scoreboard when houses is not enabled.");
+         common.printDebugMessage("Attempted to create scoreboard when houses is not enabled.", null, null, false);
          return;
       }
 
@@ -429,7 +421,7 @@ public class O2Houses
 
       scoreboard = p.getServer().getScoreboardManager().getMainScoreboard();
 
-      p.getLogger().info("Created scoreboard...");
+      common.printDebugMessage("Created scoreboard...", null, null, false);
 
       // if there was a previous house points objective, remove it
       Objective objective = scoreboard.getObjective(objectiveName);
@@ -437,7 +429,7 @@ public class O2Houses
       if (objective != null)
       {
          objective.unregister();
-         p.getLogger().info("Unregistered previous house points objective...");
+         common.printDebugMessage("Unregistered previous house points objective...", null, null, false);
       }
 
       // if there is another objective on the slot we want, remove it
@@ -445,14 +437,14 @@ public class O2Houses
       if (objective != null)
       {
          objective.unregister();
-         p.getLogger().info("Unregistered previous scoreboard objective...");
+         common.printDebugMessage("Unregistered previous scoreboard objective...", null, null, false);
       }
 
       scoreboard.registerNewObjective(objectiveName, "dummy", "House Points");
       objective = scoreboard.getObjective(objectiveName);
       if (objective == null)
       {
-         p.getLogger().warning("createScoreboard: Failed to create scoreboard objective");
+         common.printDebugMessage("createScoreboard: Failed to create scoreboard objective", null, null, false);
          return;
       }
 
@@ -482,14 +474,10 @@ public class O2Houses
       if (team == null)
       {
          team = scoreboard.registerNewTeam(houseName);
-         if (Ollivanders2.debug)
-            p.getLogger().info("Added team " + houseName + " to scoreboard.");
+         common.printDebugMessage("Added team " + houseName + " to scoreboard.", null, null, false);
       }
       else
-      {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Team " + houseName + " already registered.");
-      }
+         common.printDebugMessage("Team " + houseName + " already registered.", null, null, false);
 
       team.setColor(houseType.getChatColorCode());
       team.setAllowFriendlyFire(true);
@@ -507,7 +495,7 @@ public class O2Houses
    {
       if (!Ollivanders2.useHouses)
       {
-         p.getLogger().warning("Tried to update scoreboard when houses are not enabled.");
+         common.printDebugMessage("Tried to update scoreboard when houses are not enabled.", null, null, false);
          return false;
       }
 
@@ -527,8 +515,7 @@ public class O2Houses
          return true;
       }
 
-      p.getLogger().warning("updateScoreboard: house points objective not found.");
-
+      common.printDebugMessage("updateScoreboard: house points objective not found.", null, null, false);
       return false;
    }
 
@@ -555,9 +542,7 @@ public class O2Houses
       }
       catch (Exception e)
       {
-         p.getLogger().warning("updateScoreboardScore: failed to update score for " + houseType.getName());
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         common.printDebugMessage("updateScoreboardScore: failed to update score for " + houseType.getName(), e, null, false);
       }
    }
 
@@ -570,7 +555,7 @@ public class O2Houses
    {
       if (!Ollivanders2.useHouses)
       {
-         p.getLogger().warning("Tried to hide scoreboard when houses are not enabled.");
+         common.printDebugMessage("Tried to hide scoreboard when houses are not enabled.", null, null, false);
          return false;
       }
 
@@ -591,7 +576,7 @@ public class O2Houses
    {
       if (!Ollivanders2.useHouses)
       {
-         p.getLogger().warning("Tried to show scoreboard when houses are not enabled.");
+         common.printDebugMessage("Tried to show scoreboard when houses are not enabled.", null, null, false);
          return;
       }
 
@@ -616,10 +601,7 @@ public class O2Houses
 
       if (team == null)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("Team " + houseType + " does not exist.");
-         }
+         common.printDebugMessage("Team " + houseType + " does not exist.", null, null, false);
          return;
       }
 

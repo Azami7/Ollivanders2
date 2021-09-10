@@ -87,13 +87,11 @@ public class VOLATUS extends Enchantment
         // do they have a broom in either hand?
         if (isHoldingBroom(player))
         {
-            p.getLogger().info("player is holding a broom");
             BROOM_FLYING effect = new BROOM_FLYING(p, 5, player.getUniqueId());
             Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
         }
         else
         {
-            p.getLogger().info("player is not holding a broom");
             Ollivanders2API.getPlayers(p).playerEffects.removeEffect(player.getUniqueId(), O2EffectType.FLYING);
         }
     }
@@ -111,10 +109,8 @@ public class VOLATUS extends Enchantment
 
         if (eTypeStr != null)
         {
-            p.getLogger().info("primary hand eTypeStr = " + eTypeStr);
             if (eTypeStr.equalsIgnoreCase(enchantmentType.toString()))
             {
-                p.getLogger().info("broom in main hand");
                 return true;
             }
         }
@@ -124,16 +120,12 @@ public class VOLATUS extends Enchantment
 
         if (eTypeStr != null)
         {
-            p.getLogger().info("secondary hand eTypeStr = " + eTypeStr);
-
             if (eTypeStr.equalsIgnoreCase(enchantmentType.toString()))
             {
-                p.getLogger().info("broom in off hand");
                 return true;
             }
         }
 
-        p.getLogger().info("not holding a broom");
         return false;
     }
 

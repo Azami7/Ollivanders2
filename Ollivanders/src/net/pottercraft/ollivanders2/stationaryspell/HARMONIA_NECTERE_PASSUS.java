@@ -77,7 +77,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
       World world = location.getWorld();
       if (world == null)
       {
-         p.getLogger().warning("HARMONIA_NECTERE_PASSUS.checkEffect: world is null");
+         common.printDebugMessage("HARMONIA_NECTERE_PASSUS.checkEffect: world is null", null, null, false);
          kill();
          return;
       }

@@ -31,6 +31,8 @@ public class O2Potions
 {
    final private Ollivanders2 p;
 
+   private Ollivanders2Common common;
+
    final private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
 
    public static final List<O2ItemType> ingredients = new ArrayList<>()
@@ -113,6 +115,8 @@ public class O2Potions
 
          O2PotionMap.put(potionType.getPotionName().toLowerCase(), potionType);
       }
+
+      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -256,10 +260,7 @@ public class O2Potions
 
             Integer count = ((Item) e).getItemStack().getAmount();
 
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("Found " + count + " of ingredient " + ingredientType.toString());
-            }
+            common.printDebugMessage("Found " + count + " of ingredient " + ingredientType.toString(), null, null, false);
 
             ingredientsInCauldron.put(ingredientType, count);
          }
@@ -316,9 +317,7 @@ public class O2Potions
       }
       catch (Exception exception)
       {
-         p.getLogger().info("Exception trying to create new instance of " + potionType.toString());
-         if (Ollivanders2.debug)
-            exception.printStackTrace();
+         common.printDebugMessage("Exception trying to create new instance of " + potionType.toString(), exception, null, true);
 
          return null;
       }
