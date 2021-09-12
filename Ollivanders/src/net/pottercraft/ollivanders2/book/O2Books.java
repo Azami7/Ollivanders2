@@ -468,6 +468,7 @@ public final class O2Books implements Listener
     * @param bookLore the lore from a book
     * @param player   the player reading the book
     */
+   @Deprecated
    public void readLore (@NotNull List<String> bookLore, @NotNull Player player)
    {
       if (!Ollivanders2.bookLearning)

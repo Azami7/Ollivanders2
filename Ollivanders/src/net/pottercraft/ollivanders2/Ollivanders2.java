@@ -102,7 +102,6 @@ public class Ollivanders2 extends JavaPlugin
    public static Material flooPowderMaterial;
    public static Material broomstickMaterial;
    public static boolean enableWitchDrop;
-   private ConfigurationSection zoneConfig;
    public static boolean hourlyBackup;
    public static boolean archivePreviousBackup;
 
@@ -147,13 +146,12 @@ public class Ollivanders2 extends JavaPlugin
       APPARATE.saveApparateLocations();
    }
 
+   /**
+    * Save plugin config
+    */
    private void savePluginConfig ()
    {
-      if (new File(pluginDir + "/config.yml").exists())
-      {
-         saveConfig();
-      }
-      else
+      if (!(new File(pluginDir + "/config.yml").exists()))
       {
          saveDefaultConfig();
       }
@@ -483,11 +481,6 @@ public class Ollivanders2 extends JavaPlugin
       {
          getLogger().info("Experimental - disabling version checks. This version of Ollivanders2 may not be compatible with you MC server api.");
       }
-
-      //
-      // Zones
-      //
-      zoneConfig = getConfig().getConfigurationSection("zones");
 
       //
       // Save options
