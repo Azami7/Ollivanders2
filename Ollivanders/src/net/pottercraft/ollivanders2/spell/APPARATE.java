@@ -134,13 +134,6 @@ public final class APPARATE extends O2Spell
             return;
         }
 
-        if (!exceedsMaxDistance(destination))
-        {
-            p.apparateTooFar(player);
-            kill();
-            return;
-        }
-
         Location source = player.getLocation();
         if (!canApparateFrom(source))
         {
