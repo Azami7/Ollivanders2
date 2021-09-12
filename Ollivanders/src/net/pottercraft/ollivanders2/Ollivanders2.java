@@ -88,6 +88,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean showLogInMessage;
    public static boolean bookLearning;
    public static boolean maxSpellLevel;
+   public static int maxApparateDistance;
    public static boolean enableNonVerbalSpellCasting;
    public static boolean useSpellJournal;
    public static boolean useHostileMobAnimagi;
@@ -358,6 +359,17 @@ public class Ollivanders2 extends JavaPlugin
       if (maxSpellLevel)
       {
          getLogger().info("Max spell level on.");
+      }
+      //
+      // maxApparateDistance
+      //
+      if(getConfig().isSet("maxApparateDistance"))
+      {
+         maxApparateDistance = getConfig().getInt("maxApparateDistance");
+      }
+      if(maxApparateDistance <= 0)
+      {
+         maxApparateDistance = 100000;
       }
 
       //
@@ -2060,17 +2072,6 @@ public class Ollivanders2 extends JavaPlugin
    public void spellCoolDownMessage(@NotNull Player player)
    {
       player.sendMessage(chatColor + "You are too tired to cast this spell right now.");
-   }
-
-   /**
-    * When a player is unable to apparate because their location exceeds the maximum set in the config.
-    *
-    * @param player the player that cast the spell
-    * @since 2.6.5
-    */
-   public void apparateTooFar(@NotNull Player player)
-   {
-      player.sendMessage(chatColor + "Your magic is not powerful enough to apparate that far.");
    }
 
    /**
