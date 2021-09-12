@@ -3,17 +3,20 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Super class for all Ollivanders2 books.
@@ -50,6 +53,16 @@ public abstract class O2Book
     */
    String closingPage;
 
+   /**
+    * Namespace keys for NBT tags
+    */
+   public static NamespacedKey o2BookTypeKey;
+   public static NamespacedKey o2BookSpellsKey;
+   public static NamespacedKey o2BookPotionsKey;
+
+   /**
+    * Callback to the plugin
+    */
    protected Ollivanders2 p;
 
    /**
@@ -74,6 +87,10 @@ public abstract class O2Book
       spells = new ArrayList<>();
       potions = new ArrayList<>();
       p = plugin;
+
+      o2BookTypeKey = new NamespacedKey(p, "O2BookType");
+      o2BookSpellsKey = new NamespacedKey(p, "O2SpellTypes");;
+      o2BookPotionsKey = new NamespacedKey(p, "O2PotionTypes");;
    }
 
    /**
@@ -81,6 +98,8 @@ public abstract class O2Book
     */
    private void writeSpellBookMeta ()
    {
+      Ollivanders2Common common = new Ollivanders2Common(p);
+
       if (bookItem == null)
          return;
 
@@ -117,7 +136,7 @@ public abstract class O2Book
          String name = Ollivanders2API.getBooks(p).spellText.getName(content);
          if (name == null)
          {
-            p.getLogger().warning(bookType.title + " contains unknown spell or potion " + content);
+            common.printDebugMessage(bookType.title + " contains unknown spell or potion " + content, null, null, false);
             continue;
          }
 
@@ -157,10 +176,24 @@ public abstract class O2Book
       if (closingPage.length() > 0)
          bookMeta.addPage(closingPage);
 
-      // add lore
-      List<String> lore = getBookLore();
+      // add NBT tags
+      StringBuilder spellsTag = new StringBuilder();
+      for (O2SpellType spellType : spells)
+      {
+         spellsTag.append(spellType.toString()).append(" ");
+      }
 
-      bookMeta.setLore(lore);
+      StringBuilder potionsTag = new StringBuilder();
+      for (O2PotionType potionType : potions)
+      {
+         potionsTag.append(potionType.toString()).append(" ");
+      }
+
+      PersistentDataContainer container = bookMeta.getPersistentDataContainer();
+      container.set(o2BookTypeKey, PersistentDataType.STRING, bookType.toString());
+      container.set(o2BookSpellsKey, PersistentDataType.STRING, spellsTag.toString().trim());
+      container.set(o2BookPotionsKey, PersistentDataType.STRING, potionsTag.toString().trim());
+
       bookMeta.setGeneration(BookMeta.Generation.ORIGINAL);
 
       bookItem.setItemMeta(bookMeta);
@@ -274,32 +307,6 @@ public abstract class O2Book
       }
 
       return pages;
-   }
-
-   /**
-    * Create the lore for this book. This will contain the name of each spell and is used by bookLearning
-    * to know what spells are in this book.
-    *
-    * @return a String list of lore
-    */
-   @NotNull
-   private List<String> getBookLore ()
-   {
-      List<String> lore = new ArrayList<>();
-
-      for (O2SpellType spellType : spells)
-      {
-         String s = spellType.getSpellName();
-         lore.add(s);
-      }
-
-      for (O2PotionType potionType : potions)
-      {
-         String s = potionType.getPotionName();
-         lore.add(s);
-      }
-
-      return lore;
    }
 
    /**

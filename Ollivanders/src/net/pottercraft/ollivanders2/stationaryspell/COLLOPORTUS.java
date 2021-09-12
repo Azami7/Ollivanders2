@@ -50,9 +50,7 @@ public class COLLOPORTUS extends O2StationarySpell
       // Colloportus duration can only be decreased by an alohomora spell
       if (duration < 1)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Colloportus stationary: kill spell");
-
+         common.printDebugMessage("Colloportus stationary: kill spell", null, null, false);
          kill();
       }
    }

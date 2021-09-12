@@ -297,7 +297,6 @@ public class EnchantedItems implements Listener
         if (enchantment == null)
             return;
 
-        p.getLogger().info("item despawn event");
         enchantment.doItemDespawn(event);
     }
 
@@ -319,7 +318,6 @@ public class EnchantedItems implements Listener
         if (enchantment == null)
             return;
 
-        p.getLogger().info("item pickup event");
         enchantment.doItemPickup(event);
     }
 
@@ -341,7 +339,6 @@ public class EnchantedItems implements Listener
         if (enchantment == null)
             return;
 
-        p.getLogger().info("item drop event");
         enchantment.doItemDrop(event);
     }
 
@@ -353,38 +350,24 @@ public class EnchantedItems implements Listener
     @EventHandler(priority = EventPriority.LOWEST)
     public void onItemHeld (@NotNull PlayerItemHeldEvent event)
     {
-        p.getLogger().info("player item held event");
-
         Player player = event.getPlayer();
 
         // check newly held item
         ItemStack heldItem = player.getInventory().getItem(event.getNewSlot());
 
-        if (heldItem != null && isEnchanted(heldItem))
-        {
-            p.getLogger().info("held enchanted item");
-        }
-        else
+        if (heldItem == null || !isEnchanted(heldItem))
         {
             // check previously held item
             heldItem = player.getInventory().getItem(event.getPreviousSlot());
-            if (heldItem != null && isEnchanted(heldItem))
-            {
-                if (isEnchanted(heldItem))
-                   p.getLogger().info("stopped holding enchanted item");
-            }
-            else
-            {
-                p.getLogger().info("neither held nor previous item is enchanted");
+
+            if (heldItem == null || !isEnchanted(heldItem))
                 return;
-            }
         }
 
         Enchantment enchantment = getEnchantment(heldItem);
         if (enchantment == null)
             return;
 
-        p.getLogger().info("item held event");
         enchantment.doItemHeld(event);
     }
 

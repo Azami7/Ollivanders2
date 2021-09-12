@@ -65,6 +65,8 @@ public abstract class O2Effect
     */
    protected ArrayList<String> divinationText = new ArrayList<>();
 
+   Ollivanders2Common common;
+
    /**
     * Constructor. If you change this method signature, be sure to update all reflection code that uses it.
     *
@@ -75,6 +77,7 @@ public abstract class O2Effect
    public O2Effect(@NotNull Ollivanders2 plugin, int durationInTicks, @NotNull UUID pid)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
 
       duration = durationInTicks;
       if (duration < 0)

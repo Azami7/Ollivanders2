@@ -410,7 +410,7 @@ public class O2Effects
          }
          catch (Exception e)
          {
-            p.getLogger().info("Failed to deserialize effect " + effectName);
+            common.printDebugMessage("Failed to deserialize effect " + effectName, null, null, false);
          }
       }
 
@@ -638,7 +638,6 @@ public class O2Effects
          if (effect.informousText != null)
          {
             infoText = effect.informousText;
-            p.getLogger().info(effect.informousText);
             break;
          }
       }
@@ -742,7 +741,9 @@ public class O2Effects
       else
       {
          Class<?> effectClass = effectType.getClassName();
-         p.getLogger().info("Trying to add effect " + effectType.toString());
+
+         if (Ollivanders2.debug)
+            p.getLogger().info("Trying to add effect " + effectType.toString());
 
          O2Effect effect;
 

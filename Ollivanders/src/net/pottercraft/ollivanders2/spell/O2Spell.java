@@ -216,7 +216,7 @@ public abstract class O2Spell implements Teachable
    {
       if (spellType == null)
       {
-         p.getLogger().warning("O2Spell.initSpell() spell type is null, this probably means initSpell was called in an abstract class.");
+         common.printDebugMessage("O2Spell.initSpell() spell type is null, this probably means initSpell was called in an abstract class.", null, null, true);
          kill();
          return;
       }

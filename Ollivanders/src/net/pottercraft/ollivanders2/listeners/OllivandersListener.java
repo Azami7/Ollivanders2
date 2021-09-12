@@ -160,6 +160,7 @@ public class OllivandersListener implements Listener
       {
          // do not allow the player to move if they are asleep or suspended
          event.setCancelled(true);
+         common.printDebugMessage("onPlayerMove: cancelling PlayerMoveEvent", null, null, false);
       }
       else
       {
@@ -203,6 +204,7 @@ public class OllivandersListener implements Listener
             {
                event.setCancelled(true);
                spell.flair(10);
+               common.printDebugMessage("protegoTotalum: cancelling PlayerMoveEvent", null, null, false);
             }
          }
       }
@@ -269,19 +271,13 @@ public class OllivandersListener implements Listener
       Player sender = event.getPlayer();
       String message = event.getMessage();
 
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("onPlayerChat: message = " + message);
-      }
+      common.printDebugMessage("onPlayerChat: message = " + message, null, null, false);
 
       //
       // Handle player spells that effect the chat.  Need to do this first since they may affect the chat
       // message itself, which would change later chat effects.
       //
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("onPlayerChat: Handling player effects");
-      }
+      common.printDebugMessage("onPlayerChat: Handling player effects", null, null, false);
 
       O2Effect effect = null;
       // muted speech has highest precedence
@@ -292,6 +288,7 @@ public class OllivandersListener implements Listener
          if (effect != null)
          {
             event.setCancelled(true);
+            common.printDebugMessage("onPlayerChat: cancelling AsyncPlayerChatEvent", null, null, false);
             return;
          }
       }
@@ -333,10 +330,7 @@ public class OllivandersListener implements Listener
          doSpellCasting(sender, spellType, message.split(" "));
       }
 
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("onPlayerChat: return");
-      }
+      common.printDebugMessage("onPlayerChat: return", null, null, false);
    }
 
    /**
@@ -377,16 +371,13 @@ public class OllivandersListener implements Listener
          spellName.append(" ");
       }
 
-      if (Ollivanders2.debug)
+      if (spellType != null)
       {
-         if (spellType != null)
-         {
-            p.getLogger().info("Spell is " + spellType);
-         }
-         else
-         {
-            p.getLogger().info("No spell found");
-         }
+         common.printDebugMessage("Spell is " + spellType, null, null, false);
+      }
+      else
+      {
+         common.printDebugMessage("No spell found", null, null, false);
       }
 
       return spellType;
@@ -422,7 +413,7 @@ public class OllivandersListener implements Listener
             }
             catch (Exception e)
             {
-               p.getLogger().warning("OllivandersListener.updateRecipient: exception removing recipient");
+               common.printDebugMessage("OllivandersListener.updateRecipient: exception removing recipient", e, null, true);
             }
          }
       }
@@ -430,10 +421,7 @@ public class OllivandersListener implements Listener
       // If sender is in a MUFFLIATO, remove recipients not also in the MUFFLIATO radius
       if (muffliatos != null && muffliatos.size() > 0)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("OllivandersListener.updateRecipient: MUFFLIATO detected");
-         }
+         common.printDebugMessage("OllivandersListener.updateRecipient: MUFFLIATO detected", null, null, false);
 
          temp = new HashSet<>(recipients);
          for (Player recipient : temp)
@@ -616,9 +604,7 @@ public class OllivandersListener implements Listener
       O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
       if (o2p == null)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Unable to find o2player casting spell.");
-
+         common.printDebugMessage("Unable to find o2player casting spell.", null, null, false);
          return;
       }
 
@@ -638,18 +624,13 @@ public class OllivandersListener implements Listener
          boolean playerHoldsWand = Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.HAND);
          if (playerHoldsWand)
          {
-            if (Ollivanders2.debug)
-               p.getLogger().info("OllivandersListener:castSpell: player holds a wand in their primary hand");
-
+            common.printDebugMessage("OllivandersListener:castSpell: player holds a wand in their primary hand", null, null, false);
             wandCheck = Ollivanders2API.playerCommon.wandCheck(player, EquipmentSlot.HAND);
             allyWand(player);
          }
          else
          {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("OllivandersListener:castSpell: player does not hold a wand in their primary hand");
-            }
+            common.printDebugMessage("OllivandersListener:castSpell: player does not hold a wand in their primary hand", null, null, false);
             return;
          }
 
@@ -684,18 +665,14 @@ public class OllivandersListener implements Listener
       Player player = event.getPlayer();
       Action action = event.getAction();
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("onPlayerInteract: enter");
+      common.printDebugMessage("onPlayerInteract: enter", null, null, false);
 
       //
       // A right or left click of the primary hand
       //
       if ((event.getHand() == EquipmentSlot.HAND))
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("onPlayerInteract: primary hand right or left click");
-         }
+         common.printDebugMessage("onPlayerInteract: primary hand right or left click", null, null, false);
          primaryHandInteractEvents(event);
       }
 
@@ -710,6 +687,7 @@ public class OllivandersListener implements Listener
                     || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
             {
                event.setCancelled(true);
+               common.printDebugMessage("onPlayerInteract: cancelling PlayerInteractEvent", null, null, false);
                return;
             }
 
@@ -733,14 +711,12 @@ public class OllivandersListener implements Listener
       //
       if ((Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("primaryHandInteractEvents: player holding a wand");
-         }
+         common.printDebugMessage("primaryHandInteractEvents: player holding a wand", null, null, false);
          if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
                  || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
          {
             event.setCancelled(true);
+            common.printDebugMessage("primaryHandInteractEvents: cancelling PlayerInteractEvent", null, null, false);
             return;
          }
 
@@ -749,11 +725,7 @@ public class OllivandersListener implements Listener
          //
          if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
          {
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("primaryHandInteractEvents: left click action");
-            }
-
+            common.printDebugMessage("primaryHandInteractEvents: left click action", null, null, false);
             castSpell(player);
          }
 
@@ -769,27 +741,17 @@ public class OllivandersListener implements Listener
                return;
             }
 
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("primaryHandInteractEvents: right click action");
-            }
+            common.printDebugMessage("primaryHandInteractEvents: right click action", null, null, false);
 
             Block cauldron = (Ollivanders2API.common.playerFacingBlockType(player, Material.CAULDRON));
             if ((cauldron != null) && (player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE))
             {
-               if (Ollivanders2.debug)
-               {
-                  p.getLogger().info("primaryHandInteractEvents: brewing potion");
-               }
-
+               common.printDebugMessage("primaryHandInteractEvents: brewing potion", null, null, false);
                brewPotion(player, cauldron);
                return;
             }
 
-            if (Ollivanders2.debug)
-            {
-               p.getLogger().info("primaryHandInteractEvents: waving wand");
-            }
+            common.printDebugMessage("primaryHandInteractEvents: waving wand", null, null, false);
 
             // play a sound and visual effect when they right-click their destined wand with no spell
             if (Ollivanders2API.playerCommon.wandCheck(player, EquipmentSlot.HAND) < 2)
@@ -829,8 +791,7 @@ public class OllivandersListener implements Listener
       if (!Ollivanders2.enableNonVerbalSpellCasting)
          return;
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("Rotating mastered spells for non-verbal casting.");
+      common.printDebugMessage("Rotating mastered spells for non-verbal casting.", null, null, false);
 
       if (!Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.OFF_HAND))
          return;
@@ -894,8 +855,6 @@ public class OllivandersListener implements Listener
 
       // re-add them to player list (in case they have changed from above actions)
       p.setO2Player(player, o2p);
-
-      p.getLogger().info("Player " + player.getName() + " joined.");
    }
 
    /**
@@ -933,8 +892,6 @@ public class OllivandersListener implements Listener
 
       // do player quit actions
       o2p.onQuit();
-
-      p.getLogger().info("Player " + player.getName() + " left.");
    }
 
    /**
@@ -1029,6 +986,7 @@ public class OllivandersListener implements Listener
                      ((Player) event.getEntity()).removePotionEffect(potion.getType());
                   }
                   event.setCancelled(true);
+                  common.printDebugMessage("onPlayerDamage: cancelling EntityDamageEvent", null, null, false);
 
                   AttributeInstance playerHealth = player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH);
                   if (playerHealth != null)
@@ -1059,6 +1017,7 @@ public class OllivandersListener implements Listener
             if (spell.isInside(entity.getLocation()))
             {
                event.setCancelled(true);
+               common.printDebugMessage("checkSpongify: cancelling EntityDamageEvent", null, null, false);
                return true;
             }
          }
@@ -1105,11 +1064,13 @@ public class OllivandersListener implements Listener
             if (!event.getPlayer().hasPermission("Ollivanders2.BYPASS"))
             {
                event.setCancelled(true);
+               common.printDebugMessage("onColloportusBlockBreakEvent: cancelling BlockBreakEvent", null, null, false);
             }
          }
          else
          {
             event.setCancelled(true);
+            common.printDebugMessage("onColloportusBlockBreakEvent: cancelling BlockBreakEvent", null, null, false);
          }
       }
    }
@@ -1125,6 +1086,7 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
       {
          event.setCancelled(true);
+         common.printDebugMessage("onColloportusBlockPhysicsEvent: cancelling BlockPhysicsEvent", null, null, false);
       }
    }
 
@@ -1148,11 +1110,13 @@ public class OllivandersListener implements Listener
                if (!event.getPlayer().hasPermission("Ollivanders2.BYPASS"))
                {
                   event.setCancelled(true);
+                  common.printDebugMessage("onColloportusPlayerInteract: cancelling PlayerInteractEvent", null, null, false);
                }
             }
             else
             {
                event.setCancelled(true);
+               common.printDebugMessage("onColloportusPlayerInteract: cancelling PlayerInteractEvent", null, null, false);
             }
          }
       }
@@ -1185,6 +1149,7 @@ public class OllivandersListener implements Listener
             if (colloportus.isInside(newBlock.getLocation()) || colloportus.isInside(block.getLocation()))
             {
                event.setCancelled(true);
+               common.printDebugMessage("onColloportusPistonExtend: cancelling BlockPistonExtendEvent", null, null, false);
                return;
             }
          }
@@ -1204,6 +1169,7 @@ public class OllivandersListener implements Listener
          if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
          {
             event.setCancelled(true);
+            common.printDebugMessage("onColloportusPistonRetract: cancelling BlockPistonRetractEvent", null, null, false);
          }
       }
    }
@@ -1224,6 +1190,7 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, loc))
       {
          event.setCancelled(true);
+         common.printDebugMessage("onColloportusEntityChangeBlock: cancelling EntityChangeBlockEvent", null, null, false);
          if (event.getEntityType() == EntityType.FALLING_BLOCK)
          {
             loc.getWorld().dropItemNaturally(loc, new ItemStack(((FallingBlock) entity).getBlockData().getMaterial()));
@@ -1311,6 +1278,7 @@ public class OllivandersListener implements Listener
             if (trans.getToID() == event.getEntity().getUniqueId())
             {
                event.setCancelled(true);
+               common.printDebugMessage("transfiguredEntityExplodeCancel: cancelling EntityExplodeEvent", null, null, false);
             }
          }
       }
@@ -1387,6 +1355,7 @@ public class OllivandersListener implements Listener
          if (p.getO2Player((Player) target).isInvisible())
          {
             event.setCancelled(true);
+            common.printDebugMessage("cloakPlayer: cancelling EntityTargetEvent", null, null, false);
          }
       }
       if (target != null)
@@ -1400,6 +1369,7 @@ public class OllivandersListener implements Listener
                   if (!stat.isInside(event.getEntity().getLocation()))
                   {
                      event.setCancelled(true);
+                     common.printDebugMessage("cloakPlayer: cancelling EntityTargetEvent", null, null, false);
                   }
                }
             }
@@ -1425,6 +1395,7 @@ public class OllivandersListener implements Listener
             if (trans.getToID() == entity.getUniqueId() && trans.player == target)
             {
                event.setCancelled(true);
+               common.printDebugMessage("inferiTarget: cancelling EntityTargetEvent", null, null, false);
             }
          }
       }
@@ -1446,7 +1417,7 @@ public class OllivandersListener implements Listener
          ItemStack wand = Ollivanders2API.getItems(p).getItemByType(O2ItemType.WAND, 1);
          if (wand == null)
          {
-            p.getLogger().warning("OllivandersListener.witchWandDrop: wand is null");
+            common.printDebugMessage("OllivandersListener.witchWandDrop: wand is null", null, null, false);
             return;
          }
 
@@ -1475,11 +1446,7 @@ public class OllivandersListener implements Listener
       if (item.getType() == Material.POTION)
       {
          Player player = event.getPlayer();
-
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info(player.getDisplayName() + " drank a potion.");
-         }
+         common.printDebugMessage(player.getDisplayName() + " drank a potion.", null, null, false);
 
          O2Player o2p = p.getO2Player(player);
 
@@ -1526,43 +1493,6 @@ public class OllivandersListener implements Listener
          else
          {
             flying.add(playerUid);
-         }
-      }
-   }
-
-   /**
-    * Process book read events when bookLearning is enabled.
-    *
-    * @param event the player interact event
-    */
-   @EventHandler(priority = EventPriority.LOWEST)
-   public void onBookRead (@NotNull PlayerInteractEvent event)
-   {
-      // only run this if bookLearning is enabled
-      if (!Ollivanders2.bookLearning)
-         return;
-
-      Action action = event.getAction();
-      if (action == Action.RIGHT_CLICK_BLOCK || action == Action.RIGHT_CLICK_AIR)
-      {
-         Player player = event.getPlayer();
-
-         ItemStack heldItem = player.getInventory().getItemInMainHand();
-         if (heldItem.getType() == Material.WRITTEN_BOOK)
-         {
-            if (Ollivanders2.debug)
-               p.getLogger().info(player.getDisplayName() + " reading a book and book learning is enabled.");
-
-            // reading a book, if it is a spell book we want to let the player "learn" the spell.
-            ItemMeta meta = heldItem.getItemMeta();
-            if (meta == null)
-               return;
-
-            List<String> bookLore = heldItem.getItemMeta().getLore();
-            if (bookLore == null)
-               return;
-
-            O2Books.readLore(bookLore, player, p);
          }
       }
    }
@@ -1658,8 +1588,7 @@ public class OllivandersListener implements Listener
     */
    private void brewPotion(@NotNull Player player, @NotNull Block cauldron)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("OllivandersListener:brewPotion: brewing potion");
+      common.printDebugMessage("OllivandersListener:brewPotion: brewing potion", null, null, false);
 
       Block under = cauldron.getRelative(BlockFace.DOWN);
       if (Ollivanders2Common.hotBlocks.contains(under.getType()))
@@ -1687,10 +1616,7 @@ public class OllivandersListener implements Listener
       }
       else
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("Cauldron is not over a hot block");
-         }
+         common.printDebugMessage("Cauldron is not over a hot block", null, null, false);
       }
    }
 
@@ -1739,6 +1665,7 @@ public class OllivandersListener implements Listener
       {
          // cannot interact with anything while asleep or suspended
          event.setCancelled(true);
+         common.printDebugMessage("onAffectedInteract: cancelling PlayerInteractEvent", null, null, false);
       }
    }
 
@@ -1756,6 +1683,7 @@ public class OllivandersListener implements Listener
       {
          // cannot sleep while awake effect is active
          event.setCancelled(true);
+         common.printDebugMessage("onPlayerSleep: cancelling PlayerBedEnterEvent", null, null, false);
       }
    }
 
@@ -1774,6 +1702,7 @@ public class OllivandersListener implements Listener
               || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
+         common.printDebugMessage("playerFlightSuspension: cancelling PlayerToggleFlightEvent", null, null, false);
       }
    }
 
@@ -1808,6 +1737,7 @@ public class OllivandersListener implements Listener
             || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
       {
          event.setCancelled(true);
+         common.printDebugMessage("playerSprintSuspension: cancelling PlayerToggleSprintEvent", null, null, false);
       }
    }
 
@@ -1826,6 +1756,7 @@ public class OllivandersListener implements Listener
             || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
       {
          event.setCancelled(true);
+         common.printDebugMessage("playerVelocitySuspension: cancelling PlayerVelocityEvent", null, null, false);
       }
    }
 
@@ -1851,6 +1782,7 @@ public class OllivandersListener implements Listener
          if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
          {
             event.setCancelled(true);
+            common.printDebugMessage("animagusItemPickUp: cancelling EntityPickupItemEvent", null, null, false);
          }
       }
    }
@@ -1868,6 +1800,7 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
+         common.printDebugMessage("animagusItemHeld: cancelling PlayerItemHeldEvent", null, null, false);
       }
    }
 
@@ -1884,6 +1817,7 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
+         common.printDebugMessage("animagusItemConsume: cancelling PlayerItemConsumeEvent", null, null, false);
       }
    }
 
@@ -1900,6 +1834,7 @@ public class OllivandersListener implements Listener
       if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
       {
          event.setCancelled(true);
+         common.printDebugMessage("animagusItemDropEvent: cancelling PlayerDropItemEvent", null, null, false);
       }
    }
 
@@ -1920,6 +1855,7 @@ public class OllivandersListener implements Listener
          if (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)
          {
             event.setCancelled(true);
+            common.printDebugMessage("animagusInteractEvent: cancelling PlayerInteractEvent", null, null, false);
          }
       }
    }
@@ -1932,10 +1868,7 @@ public class OllivandersListener implements Listener
     */
    private boolean divine (@NotNull O2SpellType spellType, @NotNull Player sender, @NotNull String[] words)
    {
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("Casting divination spell");
-      }
+      common.printDebugMessage("Casting divination spell", null, null, false);
 
       // parse the words for the target player's name
       if (words.length < 2)

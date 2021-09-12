@@ -120,9 +120,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell
          }
          catch (Exception exception)
          {
-            p.getLogger().info("Unable to read Protego Maxima damage");
-            if (Ollivanders2.debug)
-               exception.printStackTrace();
+            common.printDebugMessage("Unable to read Protego Maxima damage", exception, null, false);
          }
       }
    }

@@ -22,6 +22,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -542,8 +543,7 @@ public class O2Player
     */
    public void incrementSpellCount(@NotNull O2SpellType spellType)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("Incrementing spell count for " + spellType.toString());
+      common.printDebugMessage("Incrementing spell count for " + spellType.toString(), null, null, false);
 
       if (knownSpells.containsKey(spellType))
       {
@@ -568,8 +568,7 @@ public class O2Player
     */
    public void incrementPotionCount(@NotNull O2PotionType potionType)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("Incrementing potion count for " + potionType.toString());
+      common.printDebugMessage("Incrementing potion count for " + potionType.toString(), null, null, false);
 
       if (knownPotions.containsKey(potionType))
       {
@@ -734,6 +733,7 @@ public class O2Player
     * Get the year this player is in.
     * @return The year the player is in
     */
+   @NotNull
    public Year getYear()
    {
       return year;
@@ -774,9 +774,13 @@ public class O2Player
     */
    public void setFoundWand (boolean b)
    {
-      if (foundWand != true && b == true)
+      if (foundWand && b)
       {
-         OllivandersPlayerFoundWandEvent event = new OllivandersPlayerFoundWandEvent(p.getServer().getPlayer(pid));
+         Player player = p.getServer().getPlayer(pid);
+         if (player == null)
+            return;
+
+         OllivandersPlayerFoundWandEvent event = new OllivandersPlayerFoundWandEvent(player);
 
          p.getServer().getPluginManager().callEvent(event);
          common.printDebugMessage("Fired PlayerFoundWandEvent", null, null, false);
@@ -809,7 +813,7 @@ public class O2Player
 
       if (bookMeta == null)
       {
-         p.getLogger().warning("getSpellJournal book meta is null");
+         common.printDebugMessage("getSpellJournal book meta is null", null, null, false);
          return null;
       }
 
@@ -1014,13 +1018,12 @@ public class O2Player
             animagusColor = Ollivanders2API.common.getRandomNaturalSheepColor(pid.hashCode()).toString();
          }
 
-         if (animagusColor != null && Ollivanders2.debug)
+         if (animagusColor != null)
          {
-            p.getLogger().info("Color variation " + animagusColor);
+            common.printDebugMessage("Color variation " + animagusColor, null, null, false);
          }
 
-         if (Ollivanders2.debug)
-            p.getLogger().info(playerName + " is an animagus type " + animagusForm.toString());
+         common.printDebugMessage(playerName + " is an animagus type " + animagusForm.toString(), null, null, false);
       }
    }
 

@@ -21,6 +21,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BookTexts
 {
+   Ollivanders2Common common;
+
    private static class BookText
    {
       String name;
@@ -66,6 +68,7 @@ public final class BookTexts
    BookTexts(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
 
       // add all spells' texts
       addSpells();
@@ -94,9 +97,7 @@ public final class BookTexts
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Exception trying to add book text for " + spellType.toString());
-            e.printStackTrace();
-
+            common.printDebugMessage("Exception trying to add book text for " + spellType.toString(), e, null, true);
             continue;
          }
 
@@ -105,7 +106,7 @@ public final class BookTexts
 
          if (text == null)
          {
-            p.getLogger().warning("No book text for " + spellType.toString());
+            common.printDebugMessage("No book text for " + spellType.toString(), null, null, false);
             continue;
          }
 
@@ -137,9 +138,7 @@ public final class BookTexts
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Exception trying to add book text for " + potionType.toString());
-            e.printStackTrace();
-
+            common.printDebugMessage("Exception trying to add book text for " + potionType.toString(), e, null, true);
             continue;
          }
 
@@ -148,7 +147,7 @@ public final class BookTexts
 
          if (text == null)
          {
-            p.getLogger().warning("No book text for " + potionType.toString());
+            common.printDebugMessage("No book text for " + potionType.toString(), null, null, false);
             continue;
          }
 

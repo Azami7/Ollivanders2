@@ -6,6 +6,7 @@ import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.ArrayList;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2Effects;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -39,6 +40,11 @@ public class O2Players
     * The MC plugin callback
     */
    private final Ollivanders2 p;
+
+   /**
+    * Common functions
+    */
+   private final Ollivanders2Common common;
 
    /**
     * A count of the player records read at start. This can be used to prevent writing back out at server
@@ -76,6 +82,7 @@ public class O2Players
       p = plugin;
 
       playerEffects = new O2Effects(p);
+      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -224,8 +231,7 @@ public class O2Players
    {
       Map<String, Map<String, String>> serializedMap = new HashMap<>();
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("Serializing O2Players...");
+      common.printDebugMessage("Serializing O2Players...", null, null, false);
 
       if (recordCount != 0)
       {

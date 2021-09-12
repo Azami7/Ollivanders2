@@ -40,6 +40,8 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class O2Potion implements Teachable
 {
+   Ollivanders2Common common;
+
    enum PotionLevel
    {
       BEGINNER (1),
@@ -111,6 +113,7 @@ public abstract class O2Potion implements Teachable
    {
       p = plugin;
       potionType = O2PotionType.BABBLING_BEVERAGE;
+      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -256,7 +259,7 @@ public abstract class O2Potion implements Teachable
       PotionMeta meta = (PotionMeta) potion.getItemMeta();
       if (meta == null)
       {
-         p.getLogger().warning("O2Potion.brew: item meta is null");
+         common.printDebugMessage("O2Potion.brew: item meta is null", null, null, true);
          return brewBadPotion();
       }
 
