@@ -28,7 +28,6 @@ hostileMobAnimagi: false
 deathExpLoss: false
 apparateLocations: false
 maxSpellLevel: false
-maxApparateDistance: 100000
 
 # Houses
 #
