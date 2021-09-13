@@ -684,6 +684,9 @@ public class O2Effects
       if (!(sender instanceof Player))
          return false;
 
+      if (!sender.hasPermission("Ollivanders2.admin"))
+         return false;
+
       if (args.length < 2 || args.length > 3)
          return commandUsage(sender);
 
@@ -711,12 +714,8 @@ public class O2Effects
             return true;
          }
       }
-      else if (sender instanceof Player)
-      {
-         targetPlayer = (Player) sender;
-      }
       else
-         return false;
+         targetPlayer = (Player) sender;
 
       toggleEffect(sender, targetPlayer, effectType, p);
 
