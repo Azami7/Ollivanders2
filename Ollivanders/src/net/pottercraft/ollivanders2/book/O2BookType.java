@@ -41,7 +41,7 @@ public enum O2BookType
    NUMEROLOGY_AND_GRAMMATICA (NUMEROLOGY_AND_GRAMMATICA.class, "Numerology and Grammatica", "Numerology and Grammatica", "Unknown", O2MagicBranch.ARITHMANCY),
    OMENS_ORACLES_AND_THE_GOAT (OMENS_ORACLES_AND_THE_GOAT.class, "Omens, Oracles & the Goat", "Omens, Oracles & the Goat", "Bathilda Bagshot", O2MagicBranch.DIVINATION),
    POTION_OPUSCULE (POTION_OPUSCULE.class, "Potion Opuscule", "Potion Opuscule", "Arsenius Jigger", O2MagicBranch.POTIONS),
-   PRACTICAL_DEFENSIVE_MAGIC (PRACTICAL_DEFENSIVE_MAGIC.class, "Practical Defensive Magic Volume One", "Practical Defensive Magic Volume One", "Unknown", O2MagicBranch.DARK_ARTS),
+   PRACTICAL_DEFENSIVE_MAGIC (PRACTICAL_DEFENSIVE_MAGIC.class, "Practical Defensive Magic Volume One", "Practical Defensive Magic 1", "Unknown", O2MagicBranch.DARK_ARTS),
    QUINTESSENCE_A_QUEST (QUINTESSENCE_A_QUEST.class, "Quintessence: A Quest", "Quintessence", "Unknown", O2MagicBranch.CHARMS),
    SECRETS_OF_THE_DARKEST_ART (SECRETS_OF_THE_DARKEST_ART.class, "Secrets of the Darkest Art", "Darkest Art", "Owle Bullock", O2MagicBranch.DARK_ARTS),
    SECRETS_OF_WANDLORE (SECRETS_OF_WANDLORE.class, "Secrets of Wandlore", "Secrets of Wandlore", "Geraint Ollivander", O2MagicBranch.CHARMS),
@@ -95,7 +95,12 @@ public enum O2BookType
    {
       this.className = className;
       this.title = title;
-      this.shortTitle = shortTitle;
+
+      if (shortTitle.length() > 32)
+         this.shortTitle = shortTitle.substring(0, 31);
+      else
+         this.shortTitle = shortTitle;
+
       this.author = author;
       this.branch = branch;
    }
