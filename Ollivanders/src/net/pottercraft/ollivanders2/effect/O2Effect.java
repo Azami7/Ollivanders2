@@ -5,6 +5,19 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -26,6 +39,9 @@ public abstract class O2Effect
     */
    public int duration;
 
+   /**
+    * The minimum duration for this effect
+    */
    private int minDuration = 5 * Ollivanders2Common.ticksPerSecond;
 
    /**
@@ -65,6 +81,9 @@ public abstract class O2Effect
     */
    protected ArrayList<String> divinationText = new ArrayList<>();
 
+   /**
+    * Common functions
+    */
    Ollivanders2Common common;
 
    /**
@@ -189,4 +208,95 @@ public abstract class O2Effect
          return divinationText.get(rand);
       }
    }
+
+   /**
+    * Do any on damage effects
+    *
+    * @param event the event
+    */
+   public abstract void doOnDamage (@NotNull EntityDamageByEntityEvent event);
+
+   /**
+    * Do any on player interact effects
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerInteract (@NotNull PlayerInteractEvent event);
+
+   /**
+    * Do any on player player chat effects
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerChat (@NotNull AsyncPlayerChatEvent event);
+
+   /**
+    * Do any effects when player sleeps
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerSleep (@NotNull PlayerBedEnterEvent event);
+
+   /**
+    * Do any effects when player toggles flight
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerToggleFlight (@NotNull PlayerToggleFlightEvent event);
+
+   /**
+    * Do any effects when player toggles sneaking
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerToggleSneak (@NotNull PlayerToggleSneakEvent event);
+
+   /**
+    * Do any effects when player toggles sneaking
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerToggleSprint (@NotNull PlayerToggleSprintEvent event);
+
+   /**
+    * Do any effects when player velocity changes
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerVelocityEvent (@NotNull PlayerVelocityEvent event);
+
+   /**
+    * Do any effects when player picks up an item
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerPickupItemEvent (@NotNull EntityPickupItemEvent event);
+
+   /**
+    * Do any effects when player holds an item
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerItemHeldEvent (@NotNull PlayerItemHeldEvent event);
+
+   /**
+    * Do any effects when player consumes an item
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerItemConsumeEvent (@NotNull PlayerItemConsumeEvent event);
+
+   /**
+    * Do any effects when player drops an item
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerDropItemEvent (@NotNull PlayerDropItemEvent event);
+
+   /**
+    * Do any effects when player drops an item
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event);
 }

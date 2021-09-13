@@ -4,11 +4,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2OwlPost;
 import net.pottercraft.ollivanders2.OllivandersSchedule;
-import net.pottercraft.ollivanders2.book.O2Books;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.effect.O2Effect;
-import net.pottercraft.ollivanders2.effect.BABBLING;
-import net.pottercraft.ollivanders2.effect.LYCANTHROPY;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
@@ -51,7 +47,6 @@ import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
-import org.bukkit.entity.Wolf;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -76,8 +71,6 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
 
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -85,11 +78,8 @@ import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
-import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -152,28 +142,6 @@ public class OllivandersListener implements Listener
     */
    @EventHandler(priority = EventPriority.HIGHEST)
    public void onPlayerMove (@NotNull PlayerMoveEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
-      {
-         // do not allow the player to move if they are asleep or suspended
-         event.setCancelled(true);
-         common.printDebugMessage("onPlayerMove: cancelling PlayerMoveEvent", null, null, false);
-      }
-      else
-      {
-         protegoTotalum(event);
-      }
-   }
-
-   /**
-    * Doesn't let players cross a protego totalum
-    *
-    * @param event the player move event
-    */
-   private void protegoTotalum (@NotNull PlayerMoveEvent event)
    {
       if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
       {
@@ -272,44 +240,6 @@ public class OllivandersListener implements Listener
       String message = event.getMessage();
 
       common.printDebugMessage("onPlayerChat: message = " + message, null, null, false);
-
-      //
-      // Handle player spells that effect the chat.  Need to do this first since they may affect the chat
-      // message itself, which would change later chat effects.
-      //
-      common.printDebugMessage("onPlayerChat: Handling player effects", null, null, false);
-
-      O2Effect effect = null;
-      // muted speech has highest precedence
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.MUTED_SPEECH))
-      {
-         effect = Ollivanders2API.getPlayers(p).playerEffects.getEffect(sender.getUniqueId(), O2EffectType.MUTED_SPEECH);
-
-         if (effect != null)
-         {
-            event.setCancelled(true);
-            common.printDebugMessage("onPlayerChat: cancelling AsyncPlayerChatEvent", null, null, false);
-            return;
-         }
-      }
-      else // speech replacement effects
-      {
-         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.SLEEP_SPEECH))
-         {
-            effect = Ollivanders2API.getPlayers(p).playerEffects.getEffect(sender.getUniqueId(), O2EffectType.SLEEP_SPEECH);
-         }
-         else if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.LYCANTHROPY_SPEECH))
-         {
-            effect = Ollivanders2API.getPlayers(p).playerEffects.getEffect(sender.getUniqueId(), O2EffectType.LYCANTHROPY_SPEECH);
-         }
-         else if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(sender.getUniqueId(), O2EffectType.BABBLING))
-         {
-            effect = Ollivanders2API.getPlayers(p).playerEffects.getEffect(sender.getUniqueId(), O2EffectType.BABBLING);
-         }
-
-         if (effect != null)
-            ((BABBLING)effect).doBabblingEffect(event);
-      }
 
       //
       // Parse to see if they were casting a spell
@@ -673,7 +603,16 @@ public class OllivandersListener implements Listener
       if ((event.getHand() == EquipmentSlot.HAND))
       {
          common.printDebugMessage("onPlayerInteract: primary hand right or left click", null, null, false);
-         primaryHandInteractEvents(event);
+
+         new BukkitRunnable()
+         {
+            @Override
+            public void run()
+            {
+               if (!event.isCancelled())
+                  primaryHandInteractEvents(event);
+            }
+         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
       }
 
       //
@@ -683,14 +622,6 @@ public class OllivandersListener implements Listener
       {
          if (Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.OFF_HAND))
          {
-            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-                    || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION))
-            {
-               event.setCancelled(true);
-               common.printDebugMessage("onPlayerInteract: cancelling PlayerInteractEvent", null, null, false);
-               return;
-            }
-
             rotateNonVerbalSpell(player, action);
          }
       }
@@ -712,13 +643,6 @@ public class OllivandersListener implements Listener
       if ((Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
       {
          common.printDebugMessage("primaryHandInteractEvents: player holding a wand", null, null, false);
-         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-                 || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
-         {
-            event.setCancelled(true);
-            common.printDebugMessage("primaryHandInteractEvents: cancelling PlayerInteractEvent", null, null, false);
-            return;
-         }
 
          //
          // A left click of the primary hand is used to cast a spell
@@ -764,17 +688,8 @@ public class OllivandersListener implements Listener
             }
             else
             {
-               new BukkitRunnable()
-               {
-                  @Override
-                  public void run()
-                  {
-                     OllivandersPlayerNotDestinedWandEvent wandEvent = new OllivandersPlayerNotDestinedWandEvent(player);
-
-                     p.getServer().getPluginManager().callEvent(wandEvent);
-                     common.printDebugMessage("Fired OllivandersPlayerNotDestinedWandEvent",null,null,false);
-                  }
-               }.runTaskLater(p, 3);
+               OllivandersPlayerNotDestinedWandEvent wandEvent = new OllivandersPlayerNotDestinedWandEvent(player);
+               p.getServer().getPluginManager().callEvent(wandEvent);
             }
          }
       }
@@ -934,18 +849,6 @@ public class OllivandersListener implements Listener
             if (damaged.getHealth() - event.getDamage() <= 0)
             {
                p.getO2Player(attacker).addSoul();
-            }
-         }
-         if (event.getDamager() instanceof Wolf)
-         {
-            Wolf wolf = (Wolf) event.getDamager();
-            if (wolf.isAngry())
-            {
-               if (!Ollivanders2API.getPlayers(p).playerEffects.hasEffect(damaged.getUniqueId(), O2EffectType.LYCANTHROPY))
-               {
-                  LYCANTHROPY effect = new LYCANTHROPY(p, 100, damaged.getUniqueId());
-                  Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
-               }
             }
          }
       }
@@ -1640,222 +1543,6 @@ public class OllivandersListener implements Listener
          if (potion instanceof O2SplashPotion)
          {
             ((O2SplashPotion)potion).thrownEffect(event);
-         }
-      }
-   }
-
-   //****************************************************************************
-   //
-   // Immobilization, Suspension, and Sleep Effect Events
-   //
-   //****************************************************************************
-
-   /**
-    * Handle player interact events when they are affected by an effect that alters interacts.
-    *
-    * @param event the player interact event
-    */
-   @EventHandler (priority = EventPriority.HIGHEST)
-   public void onAffectedInteract (@NotNull PlayerInteractEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
-      {
-         // cannot interact with anything while asleep or suspended
-         event.setCancelled(true);
-         common.printDebugMessage("onAffectedInteract: cancelling PlayerInteractEvent", null, null, false);
-      }
-   }
-
-   /**
-    * Do not allow a player to sleep if they have the awake effect
-    *
-    * @param event the player bed event
-    */
-   @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerSleep (@NotNull PlayerBedEnterEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
-      {
-         // cannot sleep while awake effect is active
-         event.setCancelled(true);
-         common.printDebugMessage("onPlayerSleep: cancelling PlayerBedEnterEvent", null, null, false);
-      }
-   }
-
-   /**
-    * Do not allow a player to toggle flight while sleeping or immobilized
-    *
-    * @param event the flight toggle event
-    */
-   @EventHandler(priority = EventPriority.HIGH)
-   public void playerFlightSuspension (@NotNull PlayerToggleFlightEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
-              || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-              || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("playerFlightSuspension: cancelling PlayerToggleFlightEvent", null, null, false);
-      }
-   }
-
-   /**
-    * Do not allow player to toggle sneak while sleeping or immobilized
-    *
-    * @param event the player toggle sneak event
-    */
-   @EventHandler (priority = EventPriority.HIGH)
-   public void playerSneakSuspension (@NotNull PlayerToggleSneakEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE)
-            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
-      {
-         event.setCancelled(true);
-      }
-   }
-
-   /**
-    * Do not allow player to toggle running while sleeping or immobilized
-    *
-    * @param event the player toggle sprint event
-    */
-   @EventHandler (priority = EventPriority.HIGH)
-   public void playerSprintSuspension (@NotNull PlayerToggleSprintEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE)
-            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("playerSprintSuspension: cancelling PlayerToggleSprintEvent", null, null, false);
-      }
-   }
-
-   /**
-    * Do not allow player to change velocity when sleeping or immobilized
-    *
-    * @param event the player velocity event
-    */
-   @EventHandler (priority = EventPriority.HIGH)
-   public void playerVelocitySuspension (@NotNull PlayerVelocityEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SUSPENSION)
-            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.SLEEPING)
-            || Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.IMMOBILIZE))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("playerVelocitySuspension: cancelling PlayerVelocityEvent", null, null, false);
-      }
-   }
-
-   //****************************************************************************
-   //
-   // Animagus Events
-   //
-   //****************************************************************************
-
-   /**
-    * Do not allow animagus to pick up items while in animal form
-    *
-    * @param event entity item pick up event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void animagusItemPickUp (@NotNull EntityPickupItemEvent event)
-   {
-      Entity entity = event.getEntity();
-      if (entity instanceof Player)
-      {
-         Player player = (Player) entity;
-
-         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
-         {
-            event.setCancelled(true);
-            common.printDebugMessage("animagusItemPickUp: cancelling EntityPickupItemEvent", null, null, false);
-         }
-      }
-   }
-
-   /**
-    * Do not allow animagus to hold items while in animal form
-    *
-    * @param event item hold event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void animagusItemHeld (@NotNull PlayerItemHeldEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("animagusItemHeld: cancelling PlayerItemHeldEvent", null, null, false);
-      }
-   }
-
-   /**
-    * Do not allow animagus to consume items while in animal form
-    *
-    * @param event item consume event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void animagusItemConsume (@NotNull PlayerItemConsumeEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("animagusItemConsume: cancelling PlayerItemConsumeEvent", null, null, false);
-      }
-   }
-
-   /**
-    * Do not allow animagus to drop items while in animal form
-    *
-    * @param event drop event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void animagusItemDropEvent (@NotNull PlayerDropItemEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("animagusItemDropEvent: cancelling PlayerDropItemEvent", null, null, false);
-      }
-   }
-
-   /**
-    * Do not allow animagus to click blocks while in animal form
-    *
-    * @param event drop event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void animagusInteractEvent (@NotNull PlayerInteractEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
-      {
-         Action action = event.getAction();
-
-         if (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)
-         {
-            event.setCancelled(true);
-            common.printDebugMessage("animagusInteractEvent: cancelling PlayerInteractEvent", null, null, false);
          }
       }
    }

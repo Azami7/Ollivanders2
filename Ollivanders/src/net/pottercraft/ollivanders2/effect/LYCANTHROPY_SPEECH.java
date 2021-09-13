@@ -27,7 +27,7 @@ public class LYCANTHROPY_SPEECH extends BABBLING
 
       effectType = O2EffectType.LYCANTHROPY_SPEECH;
 
-      dictionary = new ArrayList<String>()
+      dictionary = new ArrayList<>()
       {{
          add("§oHOOOOOOWLLLLLL");
          add("§obark bark bark bark");

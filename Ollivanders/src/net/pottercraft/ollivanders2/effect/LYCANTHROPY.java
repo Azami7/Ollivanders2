@@ -5,9 +5,25 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -152,4 +168,144 @@ public class LYCANTHROPY extends ShapeShiftSuper
     */
    @Override
    public void doRemove () { }
+
+   /**
+    * Do any on damage effects
+    */
+   @Override
+   public void doOnDamage (@NotNull EntityDamageByEntityEvent event)
+   {
+      if (!O2EffectType.LYCANTHROPY.isEnabled())
+         return;
+
+      if (event.getDamager() instanceof Wolf)
+      {
+         Wolf wolf = (Wolf) event.getDamager();
+         Player damaged = p.getServer().getPlayer(targetID);
+         if (damaged == null)
+         {
+            common.printDebugMessage("Null player in Lycanthropy.doOnDamage", null, null, true);
+            return;
+         }
+
+         if (wolf.isAngry())
+         {
+            new BukkitRunnable()
+            {
+               @Override
+               public void run()
+               {
+                  if (!event.isCancelled())
+                     infectPlayer(damaged);
+               }
+            }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+         }
+      }
+   }
+
+   /**
+    * Infect this player with Lycanthropy
+    *
+    * @param player the player to infect
+    */
+   private void infectPlayer (Player player)
+   {
+      if (!Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.LYCANTHROPY))
+      {
+         LYCANTHROPY effect = new LYCANTHROPY(p, 100, player.getUniqueId());
+         Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+      }
+   }
+
+   /**
+    * Do any on player interact effects
+    */
+   @Override
+   public void doOnPlayerInteract (@NotNull PlayerInteractEvent event) {}
+
+   /**
+    * Do any on player player chat effects
+    */
+   @Override
+   public void doOnPlayerChat (@NotNull AsyncPlayerChatEvent event) {}
+
+   /**
+    * Do any effects when player sleeps
+    *
+    * @param event the player bed enter event
+    */
+   @Override
+   public void doOnPlayerSleep (@NotNull PlayerBedEnterEvent event) {}
+
+   /**
+    * Do any effects when player toggles flight
+    *
+    * @param event the player toggle flight event
+    */
+   @Override
+   public void doOnPlayerToggleFlight (@NotNull PlayerToggleFlightEvent event) {}
+
+   /**
+    * Do any effects when player toggles sneaking
+    *
+    * @param event the event
+    */
+   @Override
+   public void doOnPlayerToggleSneak (@NotNull PlayerToggleSneakEvent event) {}
+
+   /**
+    * Do any effects when player toggles sneaking
+    *
+    * @param event the event
+    */
+   @Override
+   public void doOnPlayerToggleSprint (@NotNull PlayerToggleSprintEvent event) {}
+
+   /**
+    * Do any effects when player velocity changes
+    *
+    * @param event the event
+    */
+   @Override
+   public void doOnPlayerVelocityEvent (@NotNull PlayerVelocityEvent event) {}
+
+   /**
+    * Do any effects when player picks up an item
+    *
+    * @param event the event
+    */
+   @Override
+   public void doOnPlayerPickupItemEvent (@NotNull EntityPickupItemEvent event) {}
+
+   /**
+    * Do any effects when player holds an item
+    *
+    * @param event the event
+    */
+   @Override
+   public void doOnPlayerItemHeldEvent (@NotNull PlayerItemHeldEvent event) {}
+
+   /**
+    * Do any effects when player consumes an item
+    *
+    * @param event the event
+    */
+   @Override
+   public void doOnPlayerItemConsumeEvent (@NotNull PlayerItemConsumeEvent event) {}
+
+   /**
+    * Do any effects when player drops an item
+    *
+    * @param event the event
+    */
+   @Override
+   public void doOnPlayerDropItemEvent (@NotNull PlayerDropItemEvent event) {}
+
+   /**
+    * Do any effects when player drops an item
+    *
+    * @param event the event
+    */
+   @Override
+   public void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event) {}
 }

@@ -27,7 +27,7 @@ public class SLEEP_SPEECH extends BABBLING
 
       effectType = O2EffectType.SLEEP_SPEECH;
 
-      dictionary = new ArrayList<String>()
+      dictionary = new ArrayList<>()
       {{
          add("§ozzzzzzzz");
          add("§osnore");
