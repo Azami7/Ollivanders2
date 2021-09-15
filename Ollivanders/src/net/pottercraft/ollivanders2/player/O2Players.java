@@ -185,7 +185,7 @@ public class O2Players
    /**
     * Load players from save file
     */
-   public void loadO2Players ()
+   public void loadO2Players()
    {
       GsonDAO gsonLayer = new GsonDAO();
 
@@ -636,7 +636,7 @@ public class O2Players
     * @param sender the command sender
     * @param args the args for the command
     */
-   public boolean runSummary (@NotNull CommandSender sender, @NotNull String[] args)
+   public boolean runSummary(@NotNull CommandSender sender, @NotNull String[] args)
    {
       if ((sender.hasPermission("Ollivanders2.admin") || (args.length == 1 && sender instanceof Player)))
       {
@@ -662,7 +662,7 @@ public class O2Players
       return true;
    }
 
-   private boolean usageSummary (CommandSender sender)
+   private boolean usageSummary(CommandSender sender)
    {
       if (sender.hasPermission("Ollivanders2.admin"))
          usageSummaryAdmin(sender);
@@ -672,14 +672,14 @@ public class O2Players
       return true;
    }
 
-   private void usageSummaryPlayer (CommandSender sender)
+   private void usageSummaryPlayer(CommandSender sender)
    {
       sender.sendMessage(Ollivanders2.chatColor
               + "\nUsage:"
               + "\n/olli summary - gives a summary of wand type, house, year, and known spells\n");
    }
 
-   private void usageSummaryAdmin (CommandSender sender)
+   private void usageSummaryAdmin(CommandSender sender)
    {
       sender.sendMessage(Ollivanders2.chatColor
               + "\nUsage:"
