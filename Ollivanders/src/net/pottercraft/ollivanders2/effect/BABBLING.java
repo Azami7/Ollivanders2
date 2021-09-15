@@ -141,7 +141,7 @@ public class BABBLING extends O2Effect
     * @param event the player chat event
     */
    @Override
-   public void doOnPlayerChat(@NotNull AsyncPlayerChatEvent event)
+   public void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
    {
       String message = event.getMessage();
       String newMessage = getNonsense();
@@ -157,7 +157,7 @@ public class BABBLING extends O2Effect
     * @param event the event
     */
    @Override
-   public void doOnDamage (@NotNull EntityDamageByEntityEvent event) {}
+   public void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {}
 
    /**
     * Do any on player interact effects
@@ -165,7 +165,7 @@ public class BABBLING extends O2Effect
     * @param event the event
     */
    @Override
-   public void doOnPlayerInteract (@NotNull PlayerInteractEvent event) {}
+   public void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {}
 
    /**
     * Do any effects when player sleeps
@@ -173,7 +173,7 @@ public class BABBLING extends O2Effect
     * @param event the event
     */
    @Override
-   public void doOnPlayerSleep (@NotNull PlayerBedEnterEvent event) {}
+   public void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event) {}
 
    /**
     * Do any effects when player toggles flight
@@ -181,7 +181,7 @@ public class BABBLING extends O2Effect
     * @param event the event
     */
    @Override
-   public void doOnPlayerToggleFlight (@NotNull PlayerToggleFlightEvent event) {}
+   public void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event) {}
 
    /**
     * Do any effects when player toggles sneaking
@@ -189,7 +189,7 @@ public class BABBLING extends O2Effect
     * @param event the event
     */
    @Override
-   public void doOnPlayerToggleSneak (@NotNull PlayerToggleSneakEvent event) {}
+   public void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {}
 
    /**
     * Do any effects when player toggles sneaking
@@ -197,7 +197,7 @@ public class BABBLING extends O2Effect
     * @param event the event
     */
    @Override
-   public void doOnPlayerToggleSprint (@NotNull PlayerToggleSprintEvent event) {}
+   public void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event) {}
 
    /**
     * Do any effects when player velocity changes

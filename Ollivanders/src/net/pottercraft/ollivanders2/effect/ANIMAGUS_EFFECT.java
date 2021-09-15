@@ -33,19 +33,12 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Panda;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -312,7 +305,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * Do any on player interact effects
     */
    @Override
-   public void doOnPlayerInteract (@NotNull PlayerInteractEvent event)
+   public void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
    {
       Action action = event.getAction();
 
@@ -329,7 +322,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * @param event the player toggle flight event
     */
    @Override
-   public void doOnPlayerToggleFlight (@NotNull PlayerToggleFlightEvent event)
+   public void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
    {
       if (event.isFlying())
       {
@@ -386,60 +379,4 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       event.setCancelled(true);
       common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerDropItemEvent", null, null, false);
    }
-
-   /**
-    * Do any on damage effects
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnDamage (@NotNull EntityDamageByEntityEvent event) {}
-
-   /**
-    * Do any on player player chat effects
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerChat (@NotNull AsyncPlayerChatEvent event) {}
-
-   /**
-    * Do any effects when player sleeps
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerSleep (@NotNull PlayerBedEnterEvent event) {}
-
-   /**
-    * Do any effects when player toggles sneaking
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerToggleSneak (@NotNull PlayerToggleSneakEvent event) {}
-
-   /**
-    * Do any effects when player toggles sneaking
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerToggleSprint (@NotNull PlayerToggleSprintEvent event) {}
-
-   /**
-    * Do any effects when player velocity changes
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerVelocityEvent (@NotNull PlayerVelocityEvent event) {}
-
-   /**
-    * Do any effects when player drops an item
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event) {}
 }

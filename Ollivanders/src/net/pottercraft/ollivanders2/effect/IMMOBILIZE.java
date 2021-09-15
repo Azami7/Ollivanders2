@@ -1,14 +1,7 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -56,34 +49,14 @@ public class IMMOBILIZE extends O2Effect
    public void doRemove () { }
 
    /**
-    * Do any on damage effects
-    */
-   @Override
-   public void doOnDamage (@NotNull EntityDamageByEntityEvent event) {}
-
-   /**
     * Do any on player interact effects
     */
    @Override
-   public void doOnPlayerInteract (@NotNull PlayerInteractEvent event)
+   public void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("IMMOBILIZE: cancelling PlayerInteractEvent", null, null, false);
    }
-
-   /**
-    * Do any on player player chat effects
-    */
-   @Override
-   public void doOnPlayerChat (@NotNull AsyncPlayerChatEvent event) {}
-
-   /**
-    * Do any effects when player sleeps
-    *
-    * @param event the player bed enter event
-    */
-   @Override
-   public void doOnPlayerSleep (@NotNull PlayerBedEnterEvent event) {}
 
    /**
     * Do any effects when player toggles flight
@@ -91,7 +64,7 @@ public class IMMOBILIZE extends O2Effect
     * @param event the player toggle flight event
     */
    @Override
-   public void doOnPlayerToggleFlight (@NotNull PlayerToggleFlightEvent event)
+   public void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleFlightEvent", null, null, false);
@@ -103,7 +76,7 @@ public class IMMOBILIZE extends O2Effect
     * @param event the player toggle sneak event
     */
    @Override
-   public void doOnPlayerToggleSneak (@NotNull PlayerToggleSneakEvent event)
+   public void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleSneakEvent", null, null, false);
@@ -115,7 +88,7 @@ public class IMMOBILIZE extends O2Effect
     * @param event the player toggle sneak event
     */
    @Override
-   public void doOnPlayerToggleSprint (@NotNull PlayerToggleSprintEvent event)
+   public void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleSprintEvent", null, null, false);
@@ -133,30 +106,6 @@ public class IMMOBILIZE extends O2Effect
    }
 
    /**
-    * Do any effects when player picks up an item
-    *
-    * @param event the entity item pickup event
-    */
-   @Override
-   public void doOnPlayerPickupItemEvent (@NotNull EntityPickupItemEvent event) { }
-
-   /**
-    * Do any effects when player holds an item
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerItemHeldEvent (@NotNull PlayerItemHeldEvent event) { }
-
-   /**
-    * Do any effects when player consumes an item
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerItemConsumeEvent (@NotNull PlayerItemConsumeEvent event) { }
-
-   /**
     * Do any effects when player drops an item
     *
     * @param event the event
@@ -167,12 +116,4 @@ public class IMMOBILIZE extends O2Effect
       event.setCancelled(true);
       common.printDebugMessage("IMMBOLIZE: cancelling PlayerMoveEvent", null, null, false);
    }
-
-   /**
-    * Do any effects when player drops an item
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerDropItemEvent (@NotNull PlayerDropItemEvent event) {}
 }

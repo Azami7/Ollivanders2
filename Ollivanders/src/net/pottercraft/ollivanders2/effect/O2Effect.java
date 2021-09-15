@@ -214,89 +214,89 @@ public abstract class O2Effect
     *
     * @param event the event
     */
-   public abstract void doOnDamage (@NotNull EntityDamageByEntityEvent event);
+   public void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {}
 
    /**
     * Do any on player interact effects
     *
     * @param event the event
     */
-   public abstract void doOnPlayerInteract (@NotNull PlayerInteractEvent event);
+   public void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {}
 
    /**
     * Do any on player player chat effects
     *
     * @param event the event
     */
-   public abstract void doOnPlayerChat (@NotNull AsyncPlayerChatEvent event);
+   public void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {}
 
    /**
     * Do any effects when player sleeps
     *
     * @param event the event
     */
-   public abstract void doOnPlayerSleep (@NotNull PlayerBedEnterEvent event);
+   public void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event) {}
 
    /**
     * Do any effects when player toggles flight
     *
     * @param event the event
     */
-   public abstract void doOnPlayerToggleFlight (@NotNull PlayerToggleFlightEvent event);
+   public void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event) {}
 
    /**
     * Do any effects when player toggles sneaking
     *
     * @param event the event
     */
-   public abstract void doOnPlayerToggleSneak (@NotNull PlayerToggleSneakEvent event);
+   public void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {}
 
    /**
     * Do any effects when player toggles sneaking
     *
     * @param event the event
     */
-   public abstract void doOnPlayerToggleSprint (@NotNull PlayerToggleSprintEvent event);
+   public void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event) {}
 
    /**
     * Do any effects when player velocity changes
     *
     * @param event the event
     */
-   public abstract void doOnPlayerVelocityEvent (@NotNull PlayerVelocityEvent event);
+   public void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event) {}
 
    /**
     * Do any effects when player picks up an item
     *
     * @param event the event
     */
-   public abstract void doOnPlayerPickupItemEvent (@NotNull EntityPickupItemEvent event);
+   public void doOnPlayerPickupItemEvent(@NotNull EntityPickupItemEvent event) {}
 
    /**
     * Do any effects when player holds an item
     *
     * @param event the event
     */
-   public abstract void doOnPlayerItemHeldEvent (@NotNull PlayerItemHeldEvent event);
+   public void doOnPlayerItemHeldEvent(@NotNull PlayerItemHeldEvent event) {}
 
    /**
     * Do any effects when player consumes an item
     *
     * @param event the event
     */
-   public abstract void doOnPlayerItemConsumeEvent (@NotNull PlayerItemConsumeEvent event);
+   public void doOnPlayerItemConsumeEvent(@NotNull PlayerItemConsumeEvent event) {}
 
    /**
     * Do any effects when player drops an item
     *
     * @param event the event
     */
-   public abstract void doOnPlayerDropItemEvent (@NotNull PlayerDropItemEvent event);
+   public void doOnPlayerDropItemEvent(@NotNull PlayerDropItemEvent event) {}
 
    /**
     * Do any effects when player drops an item
     *
     * @param event the event
     */
-   public abstract void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event);
+   public void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {}
 }

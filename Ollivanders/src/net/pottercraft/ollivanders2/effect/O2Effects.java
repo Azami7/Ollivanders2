@@ -302,7 +302,7 @@ public class O2Effects implements Listener
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(entity.getUniqueId());
       for (O2Effect effect : activeEffects.values())
       {
-         effect.doOnDamage(event);
+         effect.doOnEntityDamageByEntityEvent(event);
       }
    }
 
@@ -319,7 +319,7 @@ public class O2Effects implements Listener
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
       for (O2Effect effect : activeEffects.values())
       {
-         effect.doOnPlayerInteract(event);
+         effect.doOnPlayerInteractEvent(event);
       }
    }
 
@@ -336,7 +336,7 @@ public class O2Effects implements Listener
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
       for (O2Effect effect : activeEffects.values())
       {
-         effect.doOnPlayerChat(event);
+         effect.doOnAsyncPlayerChatEvent(event);
       }
    }
 
@@ -353,7 +353,7 @@ public class O2Effects implements Listener
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
       for (O2Effect effect : activeEffects.values())
       {
-         effect.doOnPlayerSleep(event);
+         effect.doOnPlayerBedEnterEvent(event);
       }
    }
 
@@ -370,7 +370,7 @@ public class O2Effects implements Listener
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
       for (O2Effect effect : activeEffects.values())
       {
-         effect.doOnPlayerToggleFlight(event);
+         effect.doOnPlayerToggleFlightEvent(event);
       }
    }
 
@@ -387,7 +387,7 @@ public class O2Effects implements Listener
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
       for (O2Effect effect : activeEffects.values())
       {
-         effect.doOnPlayerToggleSneak(event);
+         effect.doOnPlayerToggleSneakEvent(event);
       }
    }
 
@@ -404,7 +404,7 @@ public class O2Effects implements Listener
       Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
       for (O2Effect effect : activeEffects.values())
       {
-         effect.doOnPlayerToggleSprint(event);
+         effect.doOnPlayerToggleSprintEvent(event);
       }
    }
 
