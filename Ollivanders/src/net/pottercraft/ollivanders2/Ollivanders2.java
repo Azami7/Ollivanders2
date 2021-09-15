@@ -22,10 +22,8 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.house.O2HouseType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
-import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
-import net.pottercraft.ollivanders2.player.Year;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.potion.O2Potions;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -44,7 +42,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -54,7 +51,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Ollivanders2 plugin object
@@ -586,7 +582,7 @@ public class Ollivanders2 extends JavaPlugin
       }
       else if (cmd.getName().equalsIgnoreCase("Quidd"))
       {
-         if (sender.isOp())
+         if (sender.hasPermission("Ollivanders2.admin"))
          {
             return true;
          }
@@ -605,7 +601,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runOllivanders(@NotNull CommandSender sender, @NotNull String[] args)
    {
-      if (!sender.isOp())
+      if (!sender.hasPermission("Ollivanders2.admin"))
       {
          if (sender instanceof Player)
          {
@@ -668,36 +664,28 @@ public class Ollivanders2 extends JavaPlugin
             else
                return false;
          }
+         //
+         // Books
+         //
          else if (subCommand.equalsIgnoreCase("books") || subCommand.equalsIgnoreCase("book"))
          {
             return Ollivanders2API.getBooks(this).runCommand(sender, args);
          }
+         //
+         // Player related commands
+         //
          else if (subCommand.equalsIgnoreCase("summary"))
-         {
-            if (args.length == 1 && sender instanceof Player)
-            {
-               return playerSummary(sender, (Player) sender);
-            }
-            else if (args.length > 1)
-            {
-               Player target = getServer().getPlayer(args[1]);
-               if (target != null)
-                  return playerSummary(sender, target);
-               else
-               {
-                  usageMessageOllivanders(sender);
-                  return true;
-               }
-            }
-            else
-               return false;
-         }
+            return Ollivanders2API.getPlayers(this).runSummary(sender, args);
+         else if (subCommand.equalsIgnoreCase("year") || subCommand.equalsIgnoreCase("years"))
+            return Ollivanders2API.getPlayers(this).runYear(sender, args);
+         else if (subCommand.equalsIgnoreCase("animagus"))
+            return Ollivanders2API.getPlayers(this).runAnimagus(sender, args);
+         //
+         // Potions
+         //
          else if (subCommand.equalsIgnoreCase("potions") || subCommand.equalsIgnoreCase("potion"))
             return runPotions(sender, args);
-         else if (subCommand.equalsIgnoreCase("year") || subCommand.equalsIgnoreCase("years"))
-            return runYear(sender, args);
          else if (subCommand.equalsIgnoreCase("effect") || subCommand.equalsIgnoreCase("effects"))
-            //return runEffect(sender, args);
             return O2Effects.runCommand(sender, args, this);
          else if (subCommand.equalsIgnoreCase("prophecy") || subCommand.equalsIgnoreCase("prophecies"))
             return runProphecies(sender);
@@ -776,7 +764,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // effects
-      if (sender.isOp())
+      if (sender.hasPermission("Ollivanders2.admin"))
       {
          List<O2EffectType> effects = Ollivanders2API.getPlayers(this).playerEffects.getEffects(o2p.getID());
          summary.append("\n\nAffected by:\n");
@@ -860,10 +848,11 @@ public class Ollivanders2 extends JavaPlugin
               + "\nprophecy - list all active prophecies"
               + "\nsummary - gives a summary of wand type, house, year, and known spells"
               + "\napparateLoc - apparation location commands"
+              + "\nanimagus - make a player an animagus"
               + "\nreload - reload the Ollivanders2 configs"
               + "\ndebug - toggles Ollivanders2 plugin debug output\n"
               + "\n" + "To run a command, type '/ollivanders2 [command]'."
-              + "\nFor example, '/ollivanders2 wands");
+              + "\nFor example, '/ollivanders2 wands\n");
    }
 
    /**
@@ -1182,222 +1171,6 @@ public class Ollivanders2 extends JavaPlugin
               + "\nreset - reset all house points to 0"
               + "\n\nExample: /ollivanders2 house points add Slytherin 5"
               + "\nExample: /ollivanders2 house points reset");
-   }
-
-   /**
-    * The year subCommand for managing everything related to years.
-    *
-    * @param sender the player that issued the command
-    * @param args   the arguments for the command, if any
-    * @return true unless an error occurred
-    */
-
-   private boolean runYear(@NotNull CommandSender sender, @NotNull String[] args)
-   {
-      if (!useYears)
-      {
-         sender.sendMessage(chatColor
-                 + "Years are not currently enabled for your server."
-                 + "\nTo enable years, update the Ollivanders2 config.yml setting to true and restart your server."
-                 + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
-
-         return true;
-      }
-
-      // parse args
-      if (args.length >= 2)
-      {
-         String subCommand = args[1];
-
-         if (subCommand.equalsIgnoreCase("set"))
-         {
-            if (args.length < 4)
-            {
-               usageMessageYearSet(sender);
-               return true;
-            }
-
-            return runYearSet(sender, args[2], args[3]);
-         }
-         else if (subCommand.equalsIgnoreCase("promote"))
-         {
-            if (args.length < 3)
-            {
-               usageMessageYearPromote (sender);
-               return true;
-            }
-
-            return runYearChange(sender, args[2], 1);
-         }
-         else if (subCommand.equalsIgnoreCase("demote"))
-         {
-            if (args.length < 3)
-            {
-               usageMessageYearDemote(sender);
-               return true;
-            }
-
-            return runYearChange(sender, args[2], -1);
-         }
-         else if (args.length == 2)
-         {
-            String p = args[1];
-            if (p.length() < 1)
-            {
-               usageMessageHouseSort(sender);
-               return true;
-            }
-            Player player = getServer().getPlayer(p);
-            if (player == null)
-            {
-               sender.sendMessage(chatColor + "Unable to find a player named " + p + ".\n");
-               return true;
-            }
-
-            O2Player o2p = getO2Player(player);
-            if (o2p != null)
-               sender.sendMessage(chatColor + "Player " + p + " is in year " + o2p.getYear().getIntValue());
-            else
-               sender.sendMessage(chatColor + "Unable to find player.");
-
-            return true;
-         }
-      }
-
-      usageMessageYear(sender);
-
-      return true;
-   }
-
-   /**
-    * Display the usage message for /ollivanders2 year set
-    *
-    * @param sender the player that issued the command
-    */
-   private void usageMessageYearSet(@NotNull CommandSender sender)
-   {
-      sender.sendMessage(chatColor
-              + "Usage: /ollivanders2 year set [player] [year]"
-              + "\nyear - must be a number between 1 and 7"
-              + "\nExample: /ollivanders2 year set Harry 5");
-   }
-
-   /**
-    * Display the usage message for /ollivanders2 year promote
-    *
-    * @param sender the player that issued the command
-    */
-   private void usageMessageYearPromote(@NotNull CommandSender sender)
-   {
-      sender.sendMessage(chatColor
-              + "Usage: /ollivanders2 year promote [player]"
-              + "\nExample: /ollivanders2 year promote Harry");
-   }
-
-   /**
-    * Display the usage message for /ollivanders2 year demote
-    *
-    * @param sender the player that issued the command
-    */
-   private void usageMessageYearDemote(@NotNull CommandSender sender)
-   {
-      sender.sendMessage(chatColor
-              + "Usage: /ollivanders2 year demote [player]"
-              + "\nExample: /ollivanders2 year demote Harry");
-   }
-
-   /**
-    * Usage message for Year subcommands.
-    *
-    * @param sender the player that issued the command
-    */
-   private void usageMessageYear(@NotNull CommandSender sender)
-   {
-      sender.sendMessage(chatColor
-              + "Year commands: "
-              + "\nset - sets a player's year, years must be between 1 and 7"
-              + "\npromote - increases a player's year by 1 year"
-              + "\ndemote - decreases a player's year by 1 year"
-              + "\n<player> - tells you the year or a player\n");
-   }
-
-   /**
-    * Run the command to set a player's year
-    *
-    * @param sender       the player that issued the command
-    * @param targetPlayer the player to set the year for
-    * @param targetYear   the year to set for the player
-    * @return true unless an error occurred
-    */
-   private boolean runYearSet(@NotNull CommandSender sender, @NotNull String targetPlayer, @NotNull String targetYear)
-   {
-      if (targetPlayer.length() < 1 || targetYear.length() < 1)
-      {
-         usageMessageYearSet(sender);
-         return true;
-      }
-      Player player = getServer().getPlayer(targetPlayer);
-      if (player == null)
-      {
-         sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
-         return true;
-      }
-      O2Player o2p = getO2Player(player);
-      int y;
-      try
-      {
-         y = Integer.parseInt(targetYear);
-      }
-      catch (NumberFormatException e)
-      {
-         usageMessageYearSet(sender);
-         return true;
-      }
-
-      if (y < 1 || y > 7)
-      {
-         usageMessageYearSet(sender);
-         return true;
-      }
-      Year year = O2PlayerCommon.intToYear(y);
-      if (year != null)
-         o2p.setYear(year);
-
-      return true;
-   }
-
-   /**
-    * Run promote and demote year commands
-    *
-    * @param sender       the player that issued the command
-    * @param targetPlayer the player to promote or demote
-    * @param yearChange   the year to change the player to
-    * @return true unless an error occurred
-    */
-   private boolean runYearChange(@NotNull CommandSender sender, @NotNull String targetPlayer, int yearChange)
-   {
-      Player player = getServer().getPlayer(targetPlayer);
-      if (player == null)
-      {
-         sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
-         return true;
-      }
-      O2Player o2p = getO2Player(player);
-      if (o2p == null)
-      {
-         sender.sendMessage(chatColor + "Unable to find player.");
-         return true;
-      }
-
-      int y = o2p.getYear().getIntValue() + yearChange;
-      if (y > 0 && y < 8)
-      {
-         Year year = O2PlayerCommon.intToYear(y);
-
-         if (year != null)
-            o2p.setYear(year);
-      }
-      return true;
    }
 
    /**
