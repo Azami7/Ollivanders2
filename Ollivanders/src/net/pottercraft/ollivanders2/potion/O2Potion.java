@@ -285,7 +285,11 @@ public abstract class O2Potion implements Teachable
     */
    private boolean canBrew(@NotNull Player brewer)
    {
-      boolean canBrew = true;
+      // When maxSpellLevel is on, potions are always successful
+      if (Ollivanders2.maxSpellLevel)
+         return true;
+
+      boolean canBrew;
 
       O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(brewer.getUniqueId());
       if (o2p == null)
@@ -301,19 +305,6 @@ public abstract class O2Potion implements Teachable
       }
       else
       {
-         // first check player year versus potion difficulty
-         int year = o2p.getYear().getIntValue();
-
-         int yearModifier = 1; // year 1
-         if (year == 2) // year 2
-            yearModifier = 2;
-         else if (year == 3 || year == 4) // years 3-4
-            yearModifier = 3;
-         else if (year > 4 && year < 7) // years 5-7, OWL
-            yearModifier = 4;
-         else //year == 7, NEWT
-            yearModifier = 5;
-
          int successRate = 0;
          // If Years is enabled:
          // success rate = ((potion count * year modifier * 2) / potion success modifier) - potion success modifier
@@ -331,6 +322,18 @@ public abstract class O2Potion implements Teachable
          //
          if (Ollivanders2.useYears)
          {
+            int year = o2p.getYear().getIntValue();
+
+            int yearModifier = 1; // year 1
+            if (year == 2) // year 2
+               yearModifier = 2;
+            else if (year == 3 || year == 4) // years 3-4
+               yearModifier = 3;
+            else if (year > 4 && year < 7) // years 5-7, OWL
+               yearModifier = 4;
+            else //year == 7, NEWT
+               yearModifier = 5;
+
             successRate = ((potionCount * yearModifier * 2) / potionLevel.successModifier) - potionLevel.successModifier;
          }
          // If Years is not enabled:
