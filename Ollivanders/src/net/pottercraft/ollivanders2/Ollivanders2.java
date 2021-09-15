@@ -44,7 +44,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
@@ -54,7 +53,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Ollivanders2 plugin object
@@ -170,7 +168,6 @@ public class Ollivanders2 extends JavaPlugin
 
       // set up event listeners
       OllivandersListener ollivandersListener = new OllivandersListener(this);
-      ollivandersListener.onEnable();
       getServer().getPluginManager().registerEvents(ollivandersListener, this);
 
       // check for plugin data directory and config

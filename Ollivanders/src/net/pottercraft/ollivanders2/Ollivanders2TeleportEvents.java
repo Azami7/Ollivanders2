@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2;
 
-import net.minecraft.server.v1_16_R3.ICommandListener;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

@@ -10,15 +10,31 @@ import java.util.Collection;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityBreakDoorEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Stationary spell object in Ollivanders2
  *
  * @author lownes
+ * @author Azami7
  */
 public abstract class O2StationarySpell implements Serializable
 {
@@ -271,4 +287,109 @@ public abstract class O2StationarySpell implements Serializable
     * @param spellData the serialized spell data
     */
    abstract void deserializeSpellData(@NotNull Map<String, String> spellData);
+
+   /**
+    * Handle players moving
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event);
+
+   /**
+    * Handle creatures from spawning
+    *
+    * @param event the event
+    */
+   public abstract void doOnCreatureSpawnEvent (@NotNull CreatureSpawnEvent event);
+
+   /**
+    * Handle entities spawning
+    *
+    * @param event the event
+    */
+   public abstract void doOnEntityTargetEvent (@NotNull EntityTargetEvent event);
+
+   /**
+    * Handle player chat
+    *
+    * @param event the event
+    */
+   public abstract void doOnAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event);
+
+   /**
+    * Handle block break event
+    *
+    * @param event the event
+    */
+   public abstract void doOnBlockBreakEvent (@NotNull BlockBreakEvent event);
+
+   /**
+    * Handle break door event
+    *
+    * @param event the event
+    */
+   public abstract void doOnEntityBreakDoorEvent (@NotNull EntityBreakDoorEvent event);
+
+   /**
+    * Handle entity change block event
+    *
+    * @param event the event
+    */
+   public abstract void doOnEntityChangeBlockEvent (@NotNull EntityChangeBlockEvent event);
+
+   /**
+    * Handle entity interact event
+    *
+    * @param event the event
+    */
+   public abstract void doOnEntityInteractEvent (@NotNull EntityInteractEvent event);
+
+   /**
+    * Handle player interact event
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerInteractEvent (@NotNull PlayerInteractEvent event);
+
+   /**
+    * Handle entity damage
+    *
+    * @param event the event
+    */
+   public abstract void doOnEntityDamageEvent (@NotNull EntityDamageEvent event);
+
+   /**
+    * Handle apparate by name event
+    *
+    * @param event the event
+    */
+   public abstract void doOnOllivandersApparateByNameEvent (@NotNull OllivandersApparateByNameEvent event);
+
+   /**
+    * Handle apparate by coord event
+    *
+    * @param event the event
+    */
+   public abstract void doOnOllivandersApparateByCoordinatesEvent (@NotNull OllivandersApparateByCoordinatesEvent event);
+
+   /**
+    * Handle entity teleport event
+    *
+    * @param event the event
+    */
+   public abstract void doOnEntityTeleportEvent (@NotNull EntityTeleportEvent event);
+
+   /**
+    * Handle player teleport event
+    *
+    * @param event the event
+    */
+   public abstract void doOnPlayerTeleportEvent (@NotNull PlayerTeleportEvent event);
+
+   /**
+    * Handle entity combust by block events
+    *
+    * @param event the event
+    */
+   public abstract void doOnEntityCombustEvent(@NotNull EntityCombustEvent event);
 }

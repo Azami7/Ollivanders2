@@ -11,11 +11,34 @@ import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import org.bukkit.Location;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityBreakDoorEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
+import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.EntityTeleportEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
-public class O2StationarySpells
+/**
+ * Manager for all stationary spells
+ *
+ * @author Azami7
+ */
+public class O2StationarySpells implements Listener
 {
    private List<O2StationarySpell> O2StationarySpells = new ArrayList<>();
    Ollivanders2 p;
@@ -38,6 +61,217 @@ public class O2StationarySpells
       common = new Ollivanders2Common(plugin);
 
       loadO2StationarySpells();
+      p.getServer().getPluginManager().registerEvents(this, p);
+   }
+
+   /**
+    * Handle when players move
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onPlayerMove (@NotNull PlayerMoveEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnPlayerMoveEvent(event);
+      }
+   }
+
+   /**
+    * Handle when creatures spawn
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onCreatureSpawnEvent (@NotNull CreatureSpawnEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnCreatureSpawnEvent(event);
+      }
+   }
+
+   /**
+    * Handle when entities target
+    *
+    * @param event the pevent
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityTargetEvent (@NotNull EntityTargetEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnEntityTargetEvent(event);
+      }
+   }
+
+   /**
+    * Handle when players chat
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnAsyncPlayerChatEvent(event);
+      }
+   }
+
+   /**
+    * Handle block break event
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onBlockBreakEvent (@NotNull BlockBreakEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnBlockBreakEvent(event);
+      }
+   }
+
+   /**
+    * Handle entity break door event
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityBreakDoorEvent (@NotNull EntityBreakDoorEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnEntityBreakDoorEvent(event);
+      }
+   }
+
+   /**
+    * Handle entity break door event
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityChangeBlockEvent (@NotNull EntityChangeBlockEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnEntityChangeBlockEvent(event);
+      }
+   }
+
+   /**
+    * Handle entity interact event
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityInteractEvent (@NotNull EntityInteractEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnEntityInteractEvent(event);
+      }
+   }
+
+   /**
+    * Handle entity damage
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityDamageEvent (@NotNull EntityDamageEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnEntityDamageEvent(event);
+      }
+   }
+
+   /**
+    * Handle entity damage event
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onPlayerInteractEvent (@NotNull PlayerInteractEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnPlayerInteractEvent(event);
+      }
+   }
+
+   /**
+    * Handle apparate by name event
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onOllivandersApparateByNameEvent (@NotNull OllivandersApparateByNameEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnOllivandersApparateByNameEvent(event);
+      }
+   }
+
+   /**
+    * Handle apparate by coordinate event
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onOllivandersApparateByCoordinatesEvent (@NotNull OllivandersApparateByCoordinatesEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnOllivandersApparateByCoordinatesEvent(event);
+      }
+   }
+
+   /**
+    * Handle entity teleport events
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityTeleportEvent (@NotNull EntityTeleportEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnEntityTeleportEvent(event);
+      }
+   }
+
+   /**
+    * Handle player teleport events
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onPlayerTeleportEvent (@NotNull PlayerTeleportEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnPlayerTeleportEvent(event);
+      }
+   }
+
+   /**
+    * Handle entity combust by block events
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityCombustEvent (@NotNull EntityCombustEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnEntityCombustEvent(event);
+      }
    }
 
    /**
@@ -85,25 +319,19 @@ public class O2StationarySpells
    /**
     * Checks if the location is within one or more stationary spell objects, regardless of whether or not they are active.
     *
-    * @param location - location to check
+    * @param targetLoc - location to check
     * @return List of StationarySpellObj that the location is inside
     */
    @NotNull
-   public List<O2StationarySpell> getStationarySpellsAtLocation(@NotNull Location location)
+   public List<O2StationarySpell> getStationarySpellsAtLocation(@NotNull Location targetLoc)
    {
       List<O2StationarySpell> inside = new ArrayList<>();
 
       for (O2StationarySpell stationary : O2StationarySpells)
       {
-         if (stationary.location.getWorld() == null || location.getWorld() == null)
-            continue;
-
-         if (stationary.location.getWorld().getUID().equals(location.getWorld().getUID()))
+         if (stationary.isInside(targetLoc))
          {
-            if (stationary.location.distance(location) < stationary.radius)
-            {
-               inside.add(stationary);
-            }
+            inside.add(stationary);
          }
       }
 

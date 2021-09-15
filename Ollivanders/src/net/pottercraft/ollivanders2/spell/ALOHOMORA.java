@@ -32,7 +32,7 @@ public final class ALOHOMORA extends O2Spell
       spellType = O2SpellType.ALOHOMORA;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("There are many ways to pass through locked doors in the magical world.  When you wish to enter or depart discreetly, however, the Unlocking Charm is your best friend.");
          add("The Unlocking Charm");
@@ -69,10 +69,19 @@ public final class ALOHOMORA extends O2Spell
    {
       // check all the stationary spells in the location of the projectile for a Colloportus
       List<O2StationarySpell> inside = new ArrayList<>();
-      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
+      List<O2StationarySpell> stationarySpellsAtLocation = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
+
+      if (stationarySpellsAtLocation.size() < 1)
+      {
+         common.printDebugMessage("No stationary spells found at location", null, null, false);
+         return;
+      }
+
+      for (O2StationarySpell spell : stationarySpellsAtLocation)
       {
          if (spell instanceof COLLOPORTUS)
          {
+            common.printDebugMessage("Found a COLLOPORTUS spell", null, null, false);
             inside.add(spell);
          }
       }

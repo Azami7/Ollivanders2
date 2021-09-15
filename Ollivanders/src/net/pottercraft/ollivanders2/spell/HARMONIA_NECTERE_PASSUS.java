@@ -65,70 +65,82 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
          worldGuardFlags.add(Flags.BUILD);
    }
 
+   /**
+    * Specific logic for targeting the vanishing cabinet sign
+    */
    @Override
    protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
 
+      kill();
+
       Block fromBlock = getTargetBlock();
       if (fromBlock == null)
       {
-         common.printDebugMessage("HARMONIA_NECTERE_PASSU.doCheckEffect: from block is null", null, null, true);
-         kill();
+         common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: from block is null", null, null, true);
          return;
       }
 
       Material blockType = fromBlock.getType();
-
-      if (Ollivanders2Common.signs.contains(blockType))
+      if (!Ollivanders2Common.signs.contains(blockType))
       {
-         // determine the location of the other vanishing cabinet
-         Location toLoc = getSignLocation(fromBlock);
-         if (toLoc == null)
-         {
-            common.printDebugMessage("Unable to get toLoc from sign.", null, null, false);
-            return;
-         }
-
-         Block toBlock = toLoc.getBlock();
-         Material toBlockType = toBlock.getType();
-         if (!Ollivanders2Common.signs.contains(toBlockType))
-         {
-            common.printDebugMessage("Block at toLoc is not a sign block", null, null, false);
-            return;
-         }
-
-         Location fromLoc = getSignLocation(toBlock);
-         if (fromLoc == null)
-         {
-            common.printDebugMessage("Unable to get fromLoc from sign.", null, null, false);
-            return;
-         }
-
-         for (O2StationarySpell statSpell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-         {
-            if (statSpell instanceof net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS)
-            {
-               net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS harmonia
-                       = (net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS) statSpell;
-               if (harmonia.getBlock().equals(fromLoc.getBlock()) || harmonia.getBlock().equals(toLoc.getBlock()))
-               {
-                  return;
-               }
-            }
-         }
-         net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS harmoniaFrom = new net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS(p, player.getUniqueId(), fromLoc, O2StationarySpellType.HARMONIA_NECTERE_PASSUS, 1, 10, toLoc);
-         net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS harmoniaTo = new net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS(p, player.getUniqueId(), toLoc, O2StationarySpellType.HARMONIA_NECTERE_PASSUS, 1, 10, fromLoc);
-
-         harmoniaFrom.flair(20);
-         harmoniaTo.flair(20);
-
-         Ollivanders2API.getStationarySpells(p).addStationarySpell(harmoniaFrom);
-         Ollivanders2API.getStationarySpells(p).addStationarySpell(harmoniaTo);
+         common.printDebugMessage("Block is not a sign", null, null, false);
+         return;
       }
 
-      kill();
+      // determine the location of the other vanishing cabinet
+      Location toLoc = getSignLocation(fromBlock);
+      if (toLoc == null)
+      {
+         common.printDebugMessage("Unable to get toLoc from sign.", null, null, false);
+         return;
+      }
+
+      Block toBlock = toLoc.getBlock();
+      Material toBlockType = toBlock.getType();
+      if (!Ollivanders2Common.signs.contains(toBlockType))
+      {
+         common.printDebugMessage("Block at toLoc is not a sign block", null, null, false);
+         return;
+      }
+
+      Location fromLoc = getSignLocation(toBlock);
+      if (fromLoc == null)
+      {
+         common.printDebugMessage("Unable to get fromLoc from sign.", null, null, false);
+         return;
+      }
+
+      if (common.locationEquals(toLoc, fromLoc))
+      {
+         common.printDebugMessage("Vanishing cabinet to and from locations are the same", null, null, false);
+         player.sendMessage(Ollivanders2.chatColor + "To and from locations on vanishing cabinet signs are the same.");
+         return;
+      }
+
+      for (O2StationarySpell statSpell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      {
+         if (statSpell instanceof net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS)
+         {
+            net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS harmonia = (net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS) statSpell;
+            if (harmonia.getBlock().equals(fromLoc.getBlock()) || harmonia.getBlock().equals(toLoc.getBlock()))
+            {
+               player.sendMessage(Ollivanders2.chatColor + "There is already a vanishing cabinet here.");
+               return;
+            }
+         }
+      }
+
+      net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS harmoniaFrom = new net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS(p, player.getUniqueId(), fromLoc, O2StationarySpellType.HARMONIA_NECTERE_PASSUS, 1, 10, toLoc);
+      net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS harmoniaTo = new net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS(p, player.getUniqueId(), toLoc, O2StationarySpellType.HARMONIA_NECTERE_PASSUS, 1, 10, fromLoc);
+
+      harmoniaFrom.flair(20);
+      harmoniaTo.flair(20);
+
+      Ollivanders2API.getStationarySpells(p).addStationarySpell(harmoniaFrom);
+      Ollivanders2API.getStationarySpells(p).addStationarySpell(harmoniaTo);
    }
 
    /**

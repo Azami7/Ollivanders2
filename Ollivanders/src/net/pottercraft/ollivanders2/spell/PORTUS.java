@@ -6,17 +6,12 @@ import java.util.List;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT;
-import net.pottercraft.ollivanders2.stationaryspell.NULLUM_EVANESCUNT;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -39,7 +34,7 @@ public final class PORTUS extends O2Spell
       spellType = O2SpellType.PORTUS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("For a moment the kettle trembled, glowing with an odd blue light; then it quivered to rest, as solidly black as ever.");
          add("Almost any inanimate object can be turned into a Portkey. Once bewitched, the object will transport anyone who grasps it to a pre-arranged destination.");
@@ -120,11 +115,6 @@ public final class PORTUS extends O2Spell
 
       for (Item item : getItems(1.5))
       {
-         if (!checkPermissions(item.getLocation(), toLoc))
-         {
-            continue;
-         }
-
          // update item meta
          ItemMeta meta = item.getItemStack().getItemMeta();
 
@@ -174,51 +164,5 @@ public final class PORTUS extends O2Spell
       {
          toLoc = player.getLocation().clone();
       }
-   }
-
-   private boolean checkPermissions(@NotNull Location fromLoc, @NotNull Location toLoc)
-   {
-      // can you apparate out of this location?
-      boolean canApparateOut = true;
-      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-      {
-         if (stat instanceof NULLUM_EVANESCUNT && stat.isInside(fromLoc)
-                 && !stat.getCasterID().equals(player.getUniqueId()))
-         {
-            stat.flair(10);
-            canApparateOut = false;
-            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
-         }
-      }
-      if (player.isPermissionSet("Ollivanders2.BYPASS"))
-      {
-         if (player.hasPermission("Ollivanders2.BYPASS"))
-         {
-            canApparateOut = true;
-         }
-      }
-
-      if (!canApparateOut)
-         return false;
-
-      boolean canApparateIn = true;
-      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-      {
-         if (stat instanceof NULLUM_APPAREBIT && stat.isInside(toLoc) && !stat.getCasterID().equals(player.getUniqueId()))
-         {
-            stat.flair(10);
-            canApparateIn = false;
-            player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
-         }
-      }
-      if (player.isPermissionSet("Ollivanders2.BYPASS"))
-      {
-         if (player.hasPermission("Ollivanders2.BYPASS"))
-         {
-            canApparateIn = true;
-         }
-      }
-
-      return canApparateIn;
    }
 }

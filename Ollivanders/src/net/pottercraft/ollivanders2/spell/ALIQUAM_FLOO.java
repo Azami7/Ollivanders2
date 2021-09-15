@@ -36,7 +36,7 @@ public final class ALIQUAM_FLOO extends O2Spell
       spellType = O2SpellType.ALIQUAM_FLOO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"In use for centuries, the Floo Network, while somewhat uncomfortable, has many advantages. Firstly, unlike broomsticks, the Network can be used without fear of breaking the International Statute of Secrecy. Secondly, unlike Apparition, there is little to no danger of serious injury. Thirdly, it can be used to transport children, the elderly and the infirm.\"");
       }};
@@ -87,7 +87,7 @@ public final class ALIQUAM_FLOO extends O2Spell
 
       Block target = getTargetBlock();
 
-      if (target != null && target.getType() == Material.FIRE)
+      if (target != null && (target.getType() == Material.FIRE || target.getType() == Material.CAMPFIRE))
       {
          Location statLocation = new Location(location.getWorld(), target.getX() + 0.5, target.getY() + 0.125, target.getZ() + 0.5);
 

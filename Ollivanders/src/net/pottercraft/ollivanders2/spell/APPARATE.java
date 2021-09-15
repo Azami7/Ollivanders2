@@ -3,19 +3,18 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2WorldGuard;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.ApparateEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
+
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -265,13 +264,6 @@ public final class APPARATE extends O2Spell
             }
         }
 
-        // check for Nullum Apparebit at destination
-        if (Ollivanders2API.getStationarySpells(p).checkLocationForSpell(player.getLocation(), O2StationarySpellType.NULLUM_EVANESCUNT))
-        {
-            common.printDebugMessage("Nullum Evanescunt at source blocks teleport.", null, null, false);
-            return false;
-        }
-
         return true;
     }
 
@@ -293,13 +285,6 @@ public final class APPARATE extends O2Spell
                 common.printDebugMessage("Player does not have ENTRY permissions to destination", null, null, false);
                 return false;
             }
-        }
-
-        // check for Nullum Apparebit at destination
-        if (Ollivanders2API.getStationarySpells(p).checkLocationForSpell(player.getLocation(), O2StationarySpellType.NULLUM_APPAREBIT))
-        {
-            common.printDebugMessage("Nullum Apparebit at destination blocks teleport.", null, null, false);
-            return false;
         }
 
         return true;
