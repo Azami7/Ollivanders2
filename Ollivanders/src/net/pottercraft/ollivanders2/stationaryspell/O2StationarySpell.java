@@ -293,103 +293,103 @@ public abstract class O2StationarySpell implements Serializable
     *
     * @param event the event
     */
-   public abstract void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event);
+   void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event) {}
 
    /**
     * Handle creatures from spawning
     *
     * @param event the event
     */
-   public abstract void doOnCreatureSpawnEvent (@NotNull CreatureSpawnEvent event);
+   void doOnCreatureSpawnEvent (@NotNull CreatureSpawnEvent event) {}
 
    /**
     * Handle entities spawning
     *
     * @param event the event
     */
-   public abstract void doOnEntityTargetEvent (@NotNull EntityTargetEvent event);
+   void doOnEntityTargetEvent (@NotNull EntityTargetEvent event) {}
 
    /**
     * Handle player chat
     *
     * @param event the event
     */
-   public abstract void doOnAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event);
+   void doOnAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event) {}
 
    /**
     * Handle block break event
     *
     * @param event the event
     */
-   public abstract void doOnBlockBreakEvent (@NotNull BlockBreakEvent event);
+   void doOnBlockBreakEvent (@NotNull BlockBreakEvent event) {}
 
    /**
     * Handle break door event
     *
     * @param event the event
     */
-   public abstract void doOnEntityBreakDoorEvent (@NotNull EntityBreakDoorEvent event);
+   void doOnEntityBreakDoorEvent (@NotNull EntityBreakDoorEvent event) {}
 
    /**
     * Handle entity change block event
     *
     * @param event the event
     */
-   public abstract void doOnEntityChangeBlockEvent (@NotNull EntityChangeBlockEvent event);
+   void doOnEntityChangeBlockEvent (@NotNull EntityChangeBlockEvent event) {}
 
    /**
     * Handle entity interact event
     *
     * @param event the event
     */
-   public abstract void doOnEntityInteractEvent (@NotNull EntityInteractEvent event);
+   void doOnEntityInteractEvent (@NotNull EntityInteractEvent event) {}
 
    /**
     * Handle player interact event
     *
     * @param event the event
     */
-   public abstract void doOnPlayerInteractEvent (@NotNull PlayerInteractEvent event);
+   void doOnPlayerInteractEvent (@NotNull PlayerInteractEvent event) {}
 
    /**
     * Handle entity damage
     *
     * @param event the event
     */
-   public abstract void doOnEntityDamageEvent (@NotNull EntityDamageEvent event);
+   void doOnEntityDamageEvent (@NotNull EntityDamageEvent event) {}
 
    /**
     * Handle apparate by name event
     *
     * @param event the event
     */
-   public abstract void doOnOllivandersApparateByNameEvent (@NotNull OllivandersApparateByNameEvent event);
+   void doOnOllivandersApparateByNameEvent (@NotNull OllivandersApparateByNameEvent event) {}
 
    /**
     * Handle apparate by coord event
     *
     * @param event the event
     */
-   public abstract void doOnOllivandersApparateByCoordinatesEvent (@NotNull OllivandersApparateByCoordinatesEvent event);
+   void doOnOllivandersApparateByCoordinatesEvent (@NotNull OllivandersApparateByCoordinatesEvent event) {}
 
    /**
     * Handle entity teleport event
     *
     * @param event the event
     */
-   public abstract void doOnEntityTeleportEvent (@NotNull EntityTeleportEvent event);
+   void doOnEntityTeleportEvent (@NotNull EntityTeleportEvent event) {}
 
    /**
     * Handle player teleport event
     *
     * @param event the event
     */
-   public abstract void doOnPlayerTeleportEvent (@NotNull PlayerTeleportEvent event);
+   void doOnPlayerTeleportEvent (@NotNull PlayerTeleportEvent event) {}
 
    /**
     * Handle entity combust by block events
     *
     * @param event the event
     */
-   public abstract void doOnEntityCombustEvent(@NotNull EntityCombustEvent event);
+   void doOnEntityCombustEvent(@NotNull EntityCombustEvent event) {}
 }

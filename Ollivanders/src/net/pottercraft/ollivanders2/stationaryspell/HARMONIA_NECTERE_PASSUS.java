@@ -3,26 +3,12 @@ package net.pottercraft.ollivanders2.stationaryspell;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
-import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityBreakDoorEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityCombustEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityInteractEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.EntityTeleportEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -213,7 +199,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
     * @param event the event
     */
    @Override
-   public void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event)
+   void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event)
    {
       Player player = event.getPlayer();
       // make sure player is not already using this vanishing cabinet
@@ -255,116 +241,4 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
          }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
       }
    }
-
-   /**
-    * Handle creatures from spawning
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnCreatureSpawnEvent (@NotNull CreatureSpawnEvent event) {}
-
-   /**
-    * Handle entities spawning
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityTargetEvent (@NotNull EntityTargetEvent event) {}
-
-   /**
-    * Handle player chat
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event) {}
-
-   /**
-    * Handle block break event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnBlockBreakEvent (@NotNull BlockBreakEvent event) {}
-
-   /**
-    * Handle break door event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityBreakDoorEvent (@NotNull EntityBreakDoorEvent event) {}
-
-   /**
-    * Handle entity change block event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityChangeBlockEvent (@NotNull EntityChangeBlockEvent event) {}
-
-   /**
-    * Handle entity interact event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityInteractEvent (@NotNull EntityInteractEvent event) {}
-
-   /**
-    * Handle player interact event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerInteractEvent (@NotNull PlayerInteractEvent event) {}
-
-   /**
-    * Handle entity damage event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityDamageEvent (@NotNull EntityDamageEvent event) {}
-
-   /**
-    * Handle apparate by name event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnOllivandersApparateByNameEvent (@NotNull OllivandersApparateByNameEvent event) {}
-
-   /**
-    * Handle apparate by coord event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnOllivandersApparateByCoordinatesEvent (@NotNull OllivandersApparateByCoordinatesEvent event) {}
-
-   /**
-    * Handle entity teleport event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityTeleportEvent (@NotNull EntityTeleportEvent event) {}
-
-   /**
-    * Handle player teleport event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerTeleportEvent (@NotNull PlayerTeleportEvent event) {}
-
-   /**
-    * Handle entity combust by block events
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityCombustEvent(@NotNull EntityCombustEvent event) {}
 }

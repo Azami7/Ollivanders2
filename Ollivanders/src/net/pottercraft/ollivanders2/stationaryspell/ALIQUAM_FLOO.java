@@ -9,8 +9,6 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
-import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -19,19 +17,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.entity.CreatureSpawnEvent;
-import org.bukkit.event.entity.EntityBreakDoorEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityInteractEvent;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -220,7 +208,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     * @param event the event
     */
    @Override
-   public void doOnAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event)
+   void doOnAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event)
    {
       Player player = event.getPlayer();
       String chat = event.getMessage();
@@ -288,7 +276,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     * @param event the event
     */
    @Override
-   public void doOnEntityCombustEvent(@NotNull EntityCombustEvent event)
+   void doOnEntityCombustEvent(@NotNull EntityCombustEvent event)
    {
       Entity entity = event.getEntity();
       Location entityLocation = entity.getLocation();
@@ -306,7 +294,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     * @param event the event
     */
    @Override
-   public void doOnEntityDamageEvent (@NotNull EntityDamageEvent event)
+   void doOnEntityDamageEvent (@NotNull EntityDamageEvent event)
    {
       Entity entity = event.getEntity();
       Location entityLocation = entity.getLocation();
@@ -317,100 +305,4 @@ public class ALIQUAM_FLOO extends O2StationarySpell
          common.printDebugMessage("ALIQUAM_FLOO: canceled EntityDamageEvent", null, null, false);
       }
    }
-
-   /**
-    * Handle players moving
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event) {}
-
-   /**
-    * Handle creatures from spawning
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnCreatureSpawnEvent (@NotNull CreatureSpawnEvent event) {}
-
-   /**
-    * Handle entities spawning
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityTargetEvent (@NotNull EntityTargetEvent event) {}
-
-   /**
-    * Handle block break event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnBlockBreakEvent (@NotNull BlockBreakEvent event) {}
-
-   /**
-    * Handle break door event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityBreakDoorEvent (@NotNull EntityBreakDoorEvent event) {}
-
-   /**
-    * Handle entity change block event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityChangeBlockEvent (@NotNull EntityChangeBlockEvent event) {}
-
-   /**
-    * Handle entity interact event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityInteractEvent (@NotNull EntityInteractEvent event) {}
-
-   /**
-    * Handle player interact event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerInteractEvent (@NotNull PlayerInteractEvent event) {}
-
-   /**
-    * Handle apparate by name event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnOllivandersApparateByNameEvent (@NotNull OllivandersApparateByNameEvent event) {}
-
-   /**
-    * Handle apparate by coord event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnOllivandersApparateByCoordinatesEvent (@NotNull OllivandersApparateByCoordinatesEvent event) {}
-
-   /**
-    * Handle entity teleport event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityTeleportEvent (@NotNull EntityTeleportEvent event) {}
-
-   /**
-    * Handle player teleport event
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerTeleportEvent (@NotNull PlayerTeleportEvent event) {}
 }
