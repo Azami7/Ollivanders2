@@ -706,12 +706,12 @@ public final class O2Books implements Listener
          return bookTypeString.equalsIgnoreCase(bookType.toString());
       }
 
-      // they dont have the NBT tag, fall back to checking title and author
+      // they don't have the NBT tag, fall back to checking title and author
       String title = ((BookMeta)bookMeta).getTitle();
       if (title == null)
          return false;
 
-      if (!(title.equalsIgnoreCase(bookType.getTitle())))
+      if (!(title.equalsIgnoreCase(bookType.getShortTitle())))
          return false;
 
       String author = ((BookMeta)bookMeta).getAuthor();
