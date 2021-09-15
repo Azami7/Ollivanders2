@@ -5,19 +5,7 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerBedEnterEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
-import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
-import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.event.player.PlayerToggleSprintEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -150,100 +138,4 @@ public class BABBLING extends O2Effect
 
       common.printDebugMessage("Changed " + event.getPlayer().getDisplayName() + "'s chat from \"" + message + "\" to \"" + newMessage + "\"", null, null, false);
    }
-
-   /**
-    * Do any on damage effects
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {}
-
-   /**
-    * Do any on player interact effects
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {}
-
-   /**
-    * Do any effects when player sleeps
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event) {}
-
-   /**
-    * Do any effects when player toggles flight
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event) {}
-
-   /**
-    * Do any effects when player toggles sneaking
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {}
-
-   /**
-    * Do any effects when player toggles sneaking
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event) {}
-
-   /**
-    * Do any effects when player velocity changes
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerVelocityEvent (@NotNull PlayerVelocityEvent event) {}
-
-   /**
-    * Do any effects when player picks up an item
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerPickupItemEvent (@NotNull EntityPickupItemEvent event) {}
-
-   /**
-    * Do any effects when player holds an item
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerItemHeldEvent (@NotNull PlayerItemHeldEvent event) {}
-
-   /**
-    * Do any effects when player consumes an item
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerItemConsumeEvent (@NotNull PlayerItemConsumeEvent event) {}
-
-   /**
-    * Do any effects when player drops an item
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerDropItemEvent (@NotNull PlayerDropItemEvent event) {}
-
-   /**
-    * Do any effects when player drops an item
-    *
-    * @param event the event
-    */
-   @Override
-   public void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event) {}
 }
