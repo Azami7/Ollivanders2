@@ -116,7 +116,7 @@ public abstract class O2Effect
     *
     * @param i the amount to age this effect
     */
-   public void age (int i)
+   public void age(int i)
    {
       if (permanent)
          return;
@@ -133,7 +133,7 @@ public abstract class O2Effect
     *
     * @param perm true if this is permanent, false otherwise
     */
-   public void setPermanent (boolean perm)
+   public void setPermanent(boolean perm)
    {
       permanent = perm;
 
@@ -144,7 +144,7 @@ public abstract class O2Effect
    /**
     * This kills the effect.
     */
-   public void kill ()
+   public void kill()
    {
       kill = true;
    }
@@ -155,7 +155,7 @@ public abstract class O2Effect
     * @return the id of the player
     */
    @NotNull
-   public UUID getTargetID ()
+   public UUID getTargetID()
    {
       return new UUID(targetID.getMostSignificantBits(), targetID.getLeastSignificantBits());
    }
@@ -163,19 +163,19 @@ public abstract class O2Effect
    /**
     * This is the effect's action. age() must be called in this if you want the effect to age and die eventually.
     */
-   abstract public void checkEffect ();
+   abstract public void checkEffect();
 
    /**
     * Do any cleanup related to removing this effect from the player
     */
-   abstract public void doRemove ();
+   abstract public void doRemove();
 
    /**
     * Is this effect permanent.
     *
     * @return true if the effect is permanent, false if it is not
     */
-   public boolean isPermanent ()
+   public boolean isPermanent()
    {
       return permanent;
    }
@@ -185,7 +185,7 @@ public abstract class O2Effect
     *
     * @return true if it is killed, false otherwise
     */
-   public boolean isKilled ()
+   public boolean isKilled()
    {
       return kill;
    }
@@ -196,7 +196,7 @@ public abstract class O2Effect
     * @return a random divination text for this effect
     */
    @NotNull
-   public String getDivinationText ()
+   public String getDivinationText()
    {
       if (divinationText.size() < 1)
       {
@@ -214,89 +214,89 @@ public abstract class O2Effect
     *
     * @param event the event
     */
-   public void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {}
+   void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {}
 
    /**
     * Do any on player interact effects
     *
     * @param event the event
     */
-   public void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {}
+   void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {}
 
    /**
     * Do any on player player chat effects
     *
     * @param event the event
     */
-   public void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {}
+   void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {}
 
    /**
     * Do any effects when player sleeps
     *
     * @param event the event
     */
-   public void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event) {}
+   void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event) {}
 
    /**
     * Do any effects when player toggles flight
     *
     * @param event the event
     */
-   public void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event) {}
+   void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event) {}
 
    /**
     * Do any effects when player toggles sneaking
     *
     * @param event the event
     */
-   public void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {}
+   void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {}
 
    /**
     * Do any effects when player toggles sneaking
     *
     * @param event the event
     */
-   public void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event) {}
+   void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event) {}
 
    /**
     * Do any effects when player velocity changes
     *
     * @param event the event
     */
-   public void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event) {}
+   void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event) {}
 
    /**
     * Do any effects when player picks up an item
     *
     * @param event the event
     */
-   public void doOnPlayerPickupItemEvent(@NotNull EntityPickupItemEvent event) {}
+   void doOnPlayerPickupItemEvent(@NotNull EntityPickupItemEvent event) {}
 
    /**
     * Do any effects when player holds an item
     *
     * @param event the event
     */
-   public void doOnPlayerItemHeldEvent(@NotNull PlayerItemHeldEvent event) {}
+   void doOnPlayerItemHeldEvent(@NotNull PlayerItemHeldEvent event) {}
 
    /**
     * Do any effects when player consumes an item
     *
     * @param event the event
     */
-   public void doOnPlayerItemConsumeEvent(@NotNull PlayerItemConsumeEvent event) {}
+   void doOnPlayerItemConsumeEvent(@NotNull PlayerItemConsumeEvent event) {}
 
    /**
     * Do any effects when player drops an item
     *
     * @param event the event
     */
-   public void doOnPlayerDropItemEvent(@NotNull PlayerDropItemEvent event) {}
+   void doOnPlayerDropItemEvent(@NotNull PlayerDropItemEvent event) {}
 
    /**
     * Do any effects when player drops an item
     *
     * @param event the event
     */
-   public void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {}
+   void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {}
 }

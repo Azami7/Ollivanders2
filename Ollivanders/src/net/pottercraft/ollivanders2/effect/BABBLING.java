@@ -85,7 +85,7 @@ public class BABBLING extends O2Effect
     * Age this effect each game tick.
     */
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!permanent)
       {
@@ -98,7 +98,7 @@ public class BABBLING extends O2Effect
     *
     * @return a string of nonsense words from 1-5 words in length
     */
-   private String getNonsense ()
+   private String getNonsense()
    {
       StringBuilder nonsense = new StringBuilder();
 
@@ -121,7 +121,7 @@ public class BABBLING extends O2Effect
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove () { }
+   public void doRemove() {}
 
    /**
     * Change a player's chat to babbling nonsense.
@@ -129,7 +129,7 @@ public class BABBLING extends O2Effect
     * @param event the player chat event
     */
    @Override
-   public void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
+   void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
    {
       String message = event.getMessage();
       String newMessage = getNonsense();

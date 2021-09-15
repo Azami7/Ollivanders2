@@ -48,7 +48,7 @@ public class LYCANTHROPY extends ShapeShiftSuper
     * Transfigure the player back to human form and kill this effect.
     */
    @Override
-   public void kill ()
+   public void kill()
    {
       restore();
       removeAdditionalEffect();
@@ -62,7 +62,7 @@ public class LYCANTHROPY extends ShapeShiftSuper
     * See https://minecraft.gamepedia.com/Moon
     */
    @Override
-   protected void upkeep ()
+   protected void upkeep()
    {
       Player target = p.getServer().getPlayer(targetID);
 
@@ -120,7 +120,7 @@ public class LYCANTHROPY extends ShapeShiftSuper
    /**
     * Add additional effects of lycanthropy such as aggression and speaking like a wolf
     */
-   private void addAdditionalEffects ()
+   private void addAdditionalEffects()
    {
       AGGRESSION aggression = new AGGRESSION(p, 5, targetID);
       aggression.setAggressionLevel(10);
@@ -155,13 +155,13 @@ public class LYCANTHROPY extends ShapeShiftSuper
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove () { }
+   public void doRemove() { }
 
    /**
     * Do any on damage effects
     */
    @Override
-   public void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event)
+   void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event)
    {
       if (!O2EffectType.LYCANTHROPY.isEnabled())
          return;
@@ -196,7 +196,7 @@ public class LYCANTHROPY extends ShapeShiftSuper
     *
     * @param player the player to infect
     */
-   private void infectPlayer (Player player)
+   private void infectPlayer(Player player)
    {
       if (!Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.LYCANTHROPY))
       {

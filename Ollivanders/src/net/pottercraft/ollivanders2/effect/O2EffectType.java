@@ -82,7 +82,7 @@ public enum O2EffectType
     *
     * @return
     */
-   public boolean isEnabled ()
+   public boolean isEnabled()
    {
       return enabled;
    }
@@ -93,7 +93,7 @@ public enum O2EffectType
     * @param enabled
     * @return
     */
-   public void setEnabled (boolean enabled)
+   public void setEnabled(boolean enabled)
    {
       this.enabled = enabled;
    }

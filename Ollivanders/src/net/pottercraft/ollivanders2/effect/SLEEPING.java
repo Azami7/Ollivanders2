@@ -43,7 +43,7 @@ public class SLEEPING extends O2Effect
    }
 
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!sleeping)
       {
@@ -66,7 +66,7 @@ public class SLEEPING extends O2Effect
    /**
     * Put the player to sleep.
     */
-   private void playerSleep ()
+   private void playerSleep()
    {
       Player target = p.getServer().getPlayer(targetID);
       if (target == null)
@@ -95,7 +95,7 @@ public class SLEEPING extends O2Effect
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove ()
+   public void doRemove()
    {
       if (sleeping)
       {

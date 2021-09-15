@@ -43,5 +43,5 @@ public class LYCANTHROPY_SPEECH extends BABBLING
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove () { }
+   public void doRemove() {}
 }

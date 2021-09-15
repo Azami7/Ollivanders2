@@ -37,7 +37,7 @@ public class IMMOBILIZE extends O2Effect
     * Age this effect by 1, move the player up 1.5 blocks off the ground if they are not already suspended.
     */
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       age(1);
    }
@@ -46,13 +46,13 @@ public class IMMOBILIZE extends O2Effect
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove () { }
+   public void doRemove() { }
 
    /**
     * Do any on player interact effects
     */
    @Override
-   public void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
+   void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("IMMOBILIZE: cancelling PlayerInteractEvent", null, null, false);
@@ -64,7 +64,7 @@ public class IMMOBILIZE extends O2Effect
     * @param event the player toggle flight event
     */
    @Override
-   public void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
+   void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleFlightEvent", null, null, false);
@@ -76,7 +76,7 @@ public class IMMOBILIZE extends O2Effect
     * @param event the player toggle sneak event
     */
    @Override
-   public void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event)
+   void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleSneakEvent", null, null, false);
@@ -88,7 +88,7 @@ public class IMMOBILIZE extends O2Effect
     * @param event the player toggle sneak event
     */
    @Override
-   public void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event)
+   void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("IMMBOLIZE: cancelling PlayerToggleSprintEvent", null, null, false);
@@ -99,7 +99,7 @@ public class IMMOBILIZE extends O2Effect
     *
     * @param event the player velocity event
     */
-   public void doOnPlayerVelocityEvent (@NotNull PlayerVelocityEvent event)
+   void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("IMMBOLIZE: cancelling PlayerVelocityEvent", null, null, false);
@@ -111,7 +111,7 @@ public class IMMOBILIZE extends O2Effect
     * @param event the event
     */
    @Override
-   public void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event)
+   void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("IMMBOLIZE: cancelling PlayerMoveEvent", null, null, false);

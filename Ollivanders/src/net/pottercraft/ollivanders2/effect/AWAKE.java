@@ -33,7 +33,7 @@ public class AWAKE extends O2Effect
     * Age this effect each game tick.
     */
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       age(1);
    }
@@ -42,7 +42,7 @@ public class AWAKE extends O2Effect
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove () { }
+   public void doRemove() {}
 
    /**
     * Do any effects when player sleeps
@@ -50,7 +50,7 @@ public class AWAKE extends O2Effect
     * @param event the player bed enter event
     */
    @Override
-   public void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event)
+   void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("AWAKE: cancelling PlayerBedEnterEvent", null, null, false);

@@ -89,7 +89,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * If the player has not yet transformed, transform them.
     */
    @Override
-   protected void upkeep ()
+   protected void upkeep()
    {
       if (!transformed && !kill)
       {
@@ -299,13 +299,13 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove () { }
+   public void doRemove() {}
 
    /**
     * Do any on player interact effects
     */
    @Override
-   public void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
+   void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
    {
       Action action = event.getAction();
 
@@ -322,7 +322,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * @param event the player toggle flight event
     */
    @Override
-   public void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
+   void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
    {
       if (event.isFlying())
       {
@@ -337,7 +337,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * @param event the entity item pickup event
     */
    @Override
-   public void doOnPlayerPickupItemEvent (@NotNull EntityPickupItemEvent event)
+   void doOnPlayerPickupItemEvent (@NotNull EntityPickupItemEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("ANIMAGUS_EFFECT: cancelling cancelling EntityPickupItemEvent", null, null, false);
@@ -349,7 +349,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * @param event the event
     */
    @Override
-   public void doOnPlayerItemHeldEvent (@NotNull PlayerItemHeldEvent event)
+   void doOnPlayerItemHeldEvent (@NotNull PlayerItemHeldEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemHeldEvent", null, null, false);
@@ -362,7 +362,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * @param event the event
     */
    @Override
-   public void doOnPlayerItemConsumeEvent (@NotNull PlayerItemConsumeEvent event)
+   void doOnPlayerItemConsumeEvent (@NotNull PlayerItemConsumeEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemConsumeEvent", null, null, false);
@@ -374,7 +374,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * @param event the event
     */
    @Override
-   public void doOnPlayerDropItemEvent (@NotNull PlayerDropItemEvent event)
+   void doOnPlayerDropItemEvent (@NotNull PlayerDropItemEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerDropItemEvent", null, null, false);

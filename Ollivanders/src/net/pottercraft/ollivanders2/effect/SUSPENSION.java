@@ -43,7 +43,7 @@ public class SUSPENSION extends O2Effect
     * Age this effect by 1, move the player up 1.5 blocks off the ground if they are not already suspended.
     */
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       age(1);
 
@@ -56,7 +56,7 @@ public class SUSPENSION extends O2Effect
    /**
     * Suspend the player in the air.
     */
-   private void suspend ()
+   private void suspend()
    {
       Player target = p.getServer().getPlayer(targetID);
       if (target == null)
@@ -87,7 +87,7 @@ public class SUSPENSION extends O2Effect
    /**
     * Add additional effects for suspension such as immobilizing them.
     */
-   private void addAdditionalEffects ()
+   private void addAdditionalEffects()
    {
       // add an immbolize effect with a duration slightly longer than this one so they cannot
       // move while suspended
@@ -99,7 +99,7 @@ public class SUSPENSION extends O2Effect
    /**
     * Release player from the suspension and return to original location
     */
-   private void release ()
+   private void release()
    {
       Player target = p.getServer().getPlayer(targetID);
       if (target == null)
@@ -123,7 +123,7 @@ public class SUSPENSION extends O2Effect
    /**
     * Remove additional effects of Suspension
     */
-   private void removeAdditionalEffect ()
+   private void removeAdditionalEffect()
    {
       for (O2EffectType effectType : additionalEffects)
       {
@@ -135,7 +135,7 @@ public class SUSPENSION extends O2Effect
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove ()
+   public void doRemove()
    {
       release();
       removeAdditionalEffect();
@@ -146,7 +146,7 @@ public class SUSPENSION extends O2Effect
     *
     * @param event the player velocity event
     */
-   public void doOnPlayerVelocityEvent (@NotNull PlayerVelocityEvent event)
+   void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event)
    {
       event.setCancelled(true);
       common.printDebugMessage("SUSPENSION: cancelling PlayerVelocityEvent", null, null, false);

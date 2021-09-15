@@ -67,7 +67,7 @@ public class O2Effects implements Listener
       /**
        * Constructor
        */
-      EffectsData () { }
+      EffectsData() {}
 
       /**
        * Get a copy of the effects active on this player.
@@ -293,7 +293,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onEntityDamageByEntityEvent (@NotNull EntityDamageByEntityEvent event)
+   public void onEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event)
    {
       Entity entity = event.getEntity();
       if (!(entity instanceof Player))
@@ -312,7 +312,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler (priority = EventPriority.HIGHEST)
-   public void onPlayerInteractEvent (@NotNull PlayerInteractEvent event)
+   public void onPlayerInteractEvent(@NotNull PlayerInteractEvent event)
    {
       Player player = event.getPlayer();
 
@@ -329,7 +329,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event)
+   public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
    {
       Player player = event.getPlayer();
 
@@ -346,7 +346,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerBedEnterEvent (@NotNull PlayerBedEnterEvent event)
+   public void onPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event)
    {
       Player player = event.getPlayer();
 
@@ -363,7 +363,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerToggleFlightEvent (@NotNull PlayerToggleFlightEvent event)
+   public void onPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
    {
       Player player = event.getPlayer();
 
@@ -380,7 +380,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerToggleSleepEvent (@NotNull PlayerToggleSneakEvent event)
+   public void onPlayerToggleSleepEvent(@NotNull PlayerToggleSneakEvent event)
    {
       Player player = event.getPlayer();
 
@@ -397,7 +397,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerToggleSprintEvent (@NotNull PlayerToggleSprintEvent event)
+   public void onPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event)
    {
       Player player = event.getPlayer();
 
@@ -414,7 +414,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerVelocityEvent (@NotNull PlayerVelocityEvent event)
+   public void onPlayerVelocityEvent(@NotNull PlayerVelocityEvent event)
    {
       Player player = event.getPlayer();
 
@@ -431,7 +431,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGHEST)
-   public void onEntityPickupItemEvent (@NotNull EntityPickupItemEvent event)
+   public void onEntityPickupItemEvent(@NotNull EntityPickupItemEvent event)
    {
       Entity entity = event.getEntity();
       if (!(entity instanceof Player))
@@ -450,7 +450,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerItemHeldEvent (@NotNull PlayerItemHeldEvent event)
+   public void onPlayerItemHeldEvent(@NotNull PlayerItemHeldEvent event)
    {
       Player player = event.getPlayer();
 
@@ -467,7 +467,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerItemConsumeEvent (@NotNull PlayerItemConsumeEvent event)
+   public void onPlayerItemConsumeEvent(@NotNull PlayerItemConsumeEvent event)
    {
       Player player = event.getPlayer();
 
@@ -484,7 +484,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerDropItemEvent (@NotNull PlayerDropItemEvent event)
+   public void onPlayerDropItemEvent(@NotNull PlayerDropItemEvent event)
    {
       Player player = event.getPlayer();
 
@@ -501,7 +501,7 @@ public class O2Effects implements Listener
     * @param event the event
     */
    @EventHandler(priority = EventPriority.HIGH)
-   public void onPlayerMoveEvent (@NotNull PlayerMoveEvent event)
+   public void onPlayerMoveEvent(@NotNull PlayerMoveEvent event)
    {
       Player player = event.getPlayer();
 
@@ -945,7 +945,7 @@ public class O2Effects implements Listener
     * @param p callback to the Ollivanders plugin
     * @return true unless an error occurred
     */
-   public static boolean runCommand (@NotNull CommandSender sender, @NotNull String[] args, @NotNull Ollivanders2 p)
+   public static boolean runCommand(@NotNull CommandSender sender, @NotNull String[] args, @NotNull Ollivanders2 p)
    {
       if (!(sender instanceof Player))
          return false;
@@ -997,7 +997,7 @@ public class O2Effects implements Listener
     * @param effectType the effect type
     * @param p a callback to the plugin
     */
-   private static void toggleEffect (@NotNull CommandSender sender, @NotNull Player player, @NotNull O2EffectType effectType, @NotNull Ollivanders2 p)
+   private static void toggleEffect(@NotNull CommandSender sender, @NotNull Player player, @NotNull O2EffectType effectType, @NotNull Ollivanders2 p)
    {
       if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), effectType))
       {
