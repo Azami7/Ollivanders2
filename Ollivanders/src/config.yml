@@ -53,8 +53,9 @@ years: false
 #
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#magical-items
 flooPowder: REDSTONE
-broomstick: STICK
 witchDrop: false
+enableBrooms: true
+broomstick: STICK
 
 # Divination
 #

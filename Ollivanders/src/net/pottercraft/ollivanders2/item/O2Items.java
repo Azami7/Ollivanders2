@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.item;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.enchantment.EnchantedItems;
+import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -70,9 +71,18 @@ public class O2Items
          return null;
       }
 
-      O2Item item = O2ItemMap.get(itemType);
+      O2Item o2item = O2ItemMap.get(itemType);
+      ItemStack itemStack = o2item.getItem(amount);
 
-      return item.getItem(amount);
+      // does this item need an enchantment on it?
+      ItemEnchantmentType enchantment = itemType.getItemEnchantment();
+      if (itemStack != null && enchantment != null)
+      {
+         String eid = common.getCurrentTimestamp() + " " + itemType.getName() + " " + enchantment.getName();
+         enchantedItems.addEnchantedItem(itemStack, enchantment, 1, eid);
+      }
+
+      return itemStack;
    }
 
    /**

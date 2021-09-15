@@ -53,6 +53,11 @@ public class EnchantedItems implements Listener
     HashMap<String, Enchantment> enchantedItems = new HashMap<>();
 
     /**
+     * Enchantment related config
+     */
+    public static boolean enableBrooms;
+
+    /**
      * Constructor
      *
      * @param plugin a callback to the plugin
@@ -65,6 +70,20 @@ public class EnchantedItems implements Listener
         enchantmentType = new NamespacedKey(p, "o2enchantment_name");
         enchantmentMagnitude = new NamespacedKey(p, "o2enchantment_magnitude");
         enchantmentID = new NamespacedKey(p, "o2enchantment_id");
+
+        initEnchantments();
+    }
+
+    private void initEnchantments()
+    {
+        //
+        // brooms
+        //
+        enableBrooms = p.getConfig().getBoolean("enableBrooms");
+        if (enableBrooms)
+        {
+            p.getLogger().info("Enabling brooms.");
+        }
     }
 
     /**
@@ -82,14 +101,31 @@ public class EnchantedItems implements Listener
 
         String eid = item.getUniqueId().toString();
 
+        addEnchantedItem(item.getItemStack(), eType, magnitude, eid);
+    }
+
+    /**
+     * Add enchanted item
+     *
+     * @param itemStack the enchanted item
+     * @param eType the type of enchantment
+     * @param magnitude the magnitude of enchantment
+     * @param eid the uniqueID for this enchantment
+     */
+    public void addEnchantedItem (@NotNull ItemStack itemStack, @NotNull ItemEnchantmentType eType, int magnitude, @NotNull String eid)
+    {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null)
+            return;
+
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
         container.set(enchantmentID, PersistentDataType.STRING, eid);
         container.set(enchantmentMagnitude, PersistentDataType.INTEGER, magnitude);
         container.set(enchantmentType, PersistentDataType.STRING, eType.toString());
 
-        item.getItemStack().setItemMeta(itemMeta);
+        itemStack.setItemMeta(itemMeta);
 
-        Enchantment enchantment = getEnchantment(item.getItemStack());
+        Enchantment enchantment = getEnchantment(itemStack);
         if (enchantment == null)
             return;
 
@@ -102,13 +138,13 @@ public class EnchantedItems implements Listener
             }
             lore.add(enchantment.lore);
             itemMeta.setLore(lore);
-            item.getItemStack().setItemMeta(itemMeta);
+            itemStack.setItemMeta(itemMeta);
         }
 
         // store these in a hashmap for faster access later
         enchantedItems.put(eid, enchantment);
 
-        common.printDebugMessage("Added enchanted item " + item.getName() + " of type " + eType.getName(), null, null, false);
+        common.printDebugMessage("Added enchanted item " + itemMeta.getDisplayName() + " of type " + eType.getName(), null, null, false);
     }
 
     /**
