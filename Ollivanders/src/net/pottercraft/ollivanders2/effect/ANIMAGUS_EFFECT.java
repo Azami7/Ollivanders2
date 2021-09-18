@@ -32,6 +32,13 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Panda;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -82,7 +89,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * If the player has not yet transformed, transform them.
     */
    @Override
-   protected void upkeep ()
+   protected void upkeep()
    {
       if (!transformed && !kill)
       {
@@ -292,5 +299,84 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove () { }
+   public void doRemove() {}
+
+   /**
+    * Do any on player interact effects
+    */
+   @Override
+   void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
+   {
+      Action action = event.getAction();
+
+      if (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerInteractEvent", null, null, false);
+      }
+   }
+
+   /**
+    * Cows, cats, and dogs can't fly - no flight-enabled mobs can be transformed in to
+    *
+    * @param event the player toggle flight event
+    */
+   @Override
+   void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
+   {
+      if (event.isFlying())
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerToggleFlightEvent", null, null, false);
+      }
+   }
+
+   /**
+    * Do any effects when player picks up an item
+    *
+    * @param event the entity item pickup event
+    */
+   @Override
+   void doOnPlayerPickupItemEvent (@NotNull EntityPickupItemEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("ANIMAGUS_EFFECT: cancelling cancelling EntityPickupItemEvent", null, null, false);
+   }
+
+   /**
+    * Do any effects when player holds an item
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnPlayerItemHeldEvent (@NotNull PlayerItemHeldEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemHeldEvent", null, null, false);
+
+   }
+
+   /**
+    * Do any effects when player consumes an item
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnPlayerItemConsumeEvent (@NotNull PlayerItemConsumeEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemConsumeEvent", null, null, false);
+   }
+
+   /**
+    * Do any effects when player drop an item
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnPlayerDropItemEvent (@NotNull PlayerDropItemEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerDropItemEvent", null, null, false);
+   }
 }

@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -32,7 +33,7 @@ public class AWAKE extends O2Effect
     * Age this effect each game tick.
     */
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       age(1);
    }
@@ -41,5 +42,18 @@ public class AWAKE extends O2Effect
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove () { }
+   public void doRemove() {}
+
+   /**
+    * Do any effects when player sleeps
+    *
+    * @param event the player bed enter event
+    */
+   @Override
+   void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("AWAKE: cancelling PlayerBedEnterEvent", null, null, false);
+
+   }
 }

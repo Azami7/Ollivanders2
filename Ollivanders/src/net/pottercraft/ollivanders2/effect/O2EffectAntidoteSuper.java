@@ -2,8 +2,6 @@ package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -26,7 +24,7 @@ public abstract class O2EffectAntidoteSuper extends O2Effect
      * @param plugin a reference to the plugin for logging
      * @param pid the target player
      */
-    public O2EffectAntidoteSuper (@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
+    public O2EffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
     {
         // hard-code duration because these are instant effects
         super(plugin, duration, pid);
