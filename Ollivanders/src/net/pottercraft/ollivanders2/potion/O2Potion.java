@@ -12,7 +12,6 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.Teachable;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
@@ -38,7 +37,7 @@ import org.jetbrains.annotations.Nullable;
  * @author Azami7
  * @since 2.2.7
  */
-public abstract class O2Potion implements Teachable
+public abstract class O2Potion
 {
    Ollivanders2Common common;
 

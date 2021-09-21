@@ -22,10 +22,12 @@ public final class COMETES extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public COMETES()
+   public COMETES(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.COMETES;
       branch = O2MagicBranch.CHARMS;

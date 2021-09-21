@@ -18,15 +18,17 @@ public final class LUMOS extends AddPotionEffectInRadius
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LUMOS()
+   public LUMOS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.LUMOS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("If in any doubt about your abilities you would do better to buy yourself a magic lantern.");
          add("The Wand-Lighting Charm");

@@ -23,15 +23,17 @@ public final class ARRESTO_MOMENTUM extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ARRESTO_MOMENTUM()
+   public ARRESTO_MOMENTUM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ARRESTO_MOMENTUM;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("An incantation for slowing velocity.");
          add("\"Dumbledore ...ran onto the field as you fell, waved his wand, and you sort of slowed down before you hit the ground.\" - Hermione Granger");
@@ -58,7 +60,7 @@ public final class ARRESTO_MOMENTUM extends O2Spell
    }
 
    @Override
-   void doInitSpell ()
+   void doInitSpell()
    {
       if (usesModifier > 100)
       {
@@ -86,7 +88,7 @@ public final class ARRESTO_MOMENTUM extends O2Spell
     * Checks for entities or items in a radius around the projectile and slows their velocity, if found
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       double modifier = usesModifier;
 

@@ -31,10 +31,12 @@ public final class LIGATIS_COR extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LIGATIS_COR()
+   public LIGATIS_COR(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.LIGATIS_COR;
       branch = O2MagicBranch.CHARMS;
@@ -67,7 +69,7 @@ public final class LIGATIS_COR extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<Item> items = super.getItems(1.5);
 

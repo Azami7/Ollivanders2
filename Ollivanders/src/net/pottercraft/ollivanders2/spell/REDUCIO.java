@@ -17,15 +17,17 @@ public final class REDUCIO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public REDUCIO()
+   public REDUCIO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.REDUCIO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Shrinking Charm");
          add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink. You will be learning both charms together, so that you can always undo an over-enthusiastic cast. There is thus no excuse for having accidentally shrunk your homework down to microscopic size or for allowing a giant toad to rampage through your school’s flower gardens.");
@@ -52,7 +54,7 @@ public final class REDUCIO extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       for (LivingEntity live : getLivingEntities(usesModifier))
       {

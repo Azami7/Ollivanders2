@@ -28,15 +28,17 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ET_INTERFICIAM_ANIMAM_LIGAVERIS()
+   public ET_INTERFICIAM_ANIMAM_LIGAVERIS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Tamper with the deepest mysteries — the source of life, the essence of self — only if prepared for consequences of the most extreme and dangerous kind.");
       }};
@@ -67,7 +69,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
    }
 
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!isSpellAllowed())
       {

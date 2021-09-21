@@ -20,15 +20,17 @@ public final class BOMBARDA_MAXIMA extends BombardaSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public BOMBARDA_MAXIMA ()
+   public BOMBARDA_MAXIMA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.BOMBARDA_MAXIMA;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("A more powerful explosion incantation.");
          add("\"Come on, let’s get destroying... Confringo? Stupefy? Bombarda? Which would you use?\" -Albus Potter");
       }};

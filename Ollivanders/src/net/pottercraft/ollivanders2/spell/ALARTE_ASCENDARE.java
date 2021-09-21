@@ -24,14 +24,16 @@ public final class ALARTE_ASCENDARE extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ALARTE_ASCENDARE()
+   public ALARTE_ASCENDARE(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
       spellType = O2SpellType.ALARTE_ASCENDARE;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Winged-Ascent Charm");
          add("He brandished his wand at the snake and there was a loud bang; the snake, instead of vanishing, "
@@ -69,7 +71,7 @@ public final class ALARTE_ASCENDARE extends O2Spell
     * Search for entities or items at the projectile's current location
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       double up = usesModifier / 20;
       if (up < 1)

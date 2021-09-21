@@ -21,15 +21,17 @@ public final class PROTEGO extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PROTEGO()
+   public PROTEGO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PROTEGO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"I don't remember telling you to use a Shield Charm... but there is no doubt that it was effective...\" -Severus Snape");
          add("The Shield Charm");
@@ -62,7 +64,7 @@ public final class PROTEGO extends StationarySpell
    }
 
    @Override
-   protected O2StationarySpell createStationarySpell ()
+   protected O2StationarySpell createStationarySpell()
    {
       // protego has a limited duration, ensure duration is not set too high
       if (duration > (3 * Ollivanders2Common.ticksPerSecond))

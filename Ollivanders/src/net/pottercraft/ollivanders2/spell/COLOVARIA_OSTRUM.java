@@ -16,10 +16,12 @@ public final class COLOVARIA_OSTRUM extends ColoroSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public COLOVARIA_OSTRUM ()
+   public COLOVARIA_OSTRUM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.COLOVARIA_OSTRUM;
       branch = O2MagicBranch.CHARMS;

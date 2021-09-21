@@ -20,15 +20,17 @@ public final class IMMOBULUS extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public IMMOBULUS()
+   public IMMOBULUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.IMMOBULUS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Freezing Charm");
          add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");

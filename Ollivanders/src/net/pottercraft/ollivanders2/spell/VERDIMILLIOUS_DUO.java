@@ -20,10 +20,12 @@ public final class VERDIMILLIOUS_DUO extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public VERDIMILLIOUS_DUO()
+   public VERDIMILLIOUS_DUO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.VERDIMILLIOUS_DUO;
       text = "Conjures large green ball fireworks with trails.";

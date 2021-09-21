@@ -26,15 +26,17 @@ public final class LUMOS_SOLEM extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LUMOS_SOLEM ()
+   public LUMOS_SOLEM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.LUMOS_SOLEM;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("Light of the Sun");
       }};
 
@@ -73,7 +75,7 @@ public final class LUMOS_SOLEM extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<LivingEntity> entities = getLivingEntities(1.5);
 

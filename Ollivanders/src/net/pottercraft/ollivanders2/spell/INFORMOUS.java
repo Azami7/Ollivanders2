@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO;
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS;
@@ -31,15 +32,17 @@ public final class INFORMOUS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INFORMOUS()
+   public INFORMOUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INFORMOUS;
       branch = O2MagicBranch.ARITHMANCY;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Basic Arithmancy");
       }};
@@ -68,7 +71,7 @@ public final class INFORMOUS extends O2Spell
     * Give information about an entity, stationary spells at the target, or the weather at the player's location.
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
@@ -178,11 +181,11 @@ public final class INFORMOUS extends O2Spell
             player.sendMessage(Ollivanders2.chatColor + " cannot see you.");
 
          // house
-         if (Ollivanders2.useHouses)
+         if (O2Houses.useHouses)
          {
-            if (Ollivanders2API.getHouses(p).isSorted(target))
+            if (Ollivanders2API.getHouses().isSorted(target))
             {
-               player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses(p).getHouse(target).getName() + ".");
+               player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses().getHouse(target).getName() + ".");
             }
             else
             {

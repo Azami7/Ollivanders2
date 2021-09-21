@@ -15,10 +15,12 @@ public abstract class ItemStackTransfiguration extends BlockTransfiguration
 {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public ItemStackTransfiguration()
+    public ItemStackTransfiguration(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**

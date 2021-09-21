@@ -16,10 +16,12 @@ public final class COLOVARIA_CAERULUS extends ColoroSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public COLOVARIA_CAERULUS ()
+   public COLOVARIA_CAERULUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.COLOVARIA_CAERULUS;
       branch = O2MagicBranch.CHARMS;

@@ -23,15 +23,17 @@ public class SNUFFLIFORS extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public SNUFFLIFORS()
+   public SNUFFLIFORS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.SNUFFLIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"You're going to have a lot of fun with the Snufflifors Spell, Hermione! It's particularly useful at turning books into bats! How cool is that?\" -Fred Weasley");
       }};

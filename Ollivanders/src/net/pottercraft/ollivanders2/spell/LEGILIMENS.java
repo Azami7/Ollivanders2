@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -24,15 +25,17 @@ public final class LEGILIMENS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LEGILIMENS()
+   public LEGILIMENS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.LEGILIMENS;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"The mind is not a book, to be opened at will and examined at leisure. Thoughts are not etched on the inside of skulls, to be perused by any invader. The mind is a complex and many-layered thing, Potter. Or at least most minds are... It is true, however, that those who have mastered Legilimency are able, under certain conditions, to delve into the minds of their victims and to interpret their findings correctly.\" -Severus Snape");
          add("The Legilimency Spell");
@@ -59,7 +62,7 @@ public final class LEGILIMENS extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       for (LivingEntity live : getLivingEntities(1.5))
       {
@@ -130,7 +133,7 @@ public final class LEGILIMENS extends O2Spell
     *
     * @param target the player to mind read
     */
-   private void readMind (Player target)
+   private void readMind(Player target)
    {
       O2Player o2p = p.getO2Player(target);
 
@@ -147,12 +150,12 @@ public final class LEGILIMENS extends O2Spell
       }
 
       // detect house and year
-      if (Ollivanders2.useHouses)
+      if (O2Houses.useHouses)
       {
          StringBuilder message = new StringBuilder();
          message.append(Ollivanders2.chatColor);
 
-         if (Ollivanders2API.getHouses(p).isSorted(target))
+         if (Ollivanders2API.getHouses().isSorted(target))
          {
             message.append(" is a ");
 
@@ -161,7 +164,7 @@ public final class LEGILIMENS extends O2Spell
                message.append(o2p.getYear().getDisplayText()).append(" year ");
             }
 
-            message.append(Ollivanders2API.getHouses(p).getHouse(target).getName()).append(".");
+            message.append(Ollivanders2API.getHouses().getHouse(target).getName()).append(".");
          }
          else
          {

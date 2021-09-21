@@ -23,10 +23,12 @@ public class AddPotionEffectInRadius extends AddPotionEffect
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public AddPotionEffectInRadius()
+    public AddPotionEffectInRadius(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**

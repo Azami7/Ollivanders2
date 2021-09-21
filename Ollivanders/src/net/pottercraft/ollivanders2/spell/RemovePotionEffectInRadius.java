@@ -23,10 +23,12 @@ public class RemovePotionEffectInRadius extends RemovePotionEffect
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public RemovePotionEffectInRadius()
+    public RemovePotionEffectInRadius(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**

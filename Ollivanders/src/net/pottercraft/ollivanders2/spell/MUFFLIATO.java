@@ -22,15 +22,17 @@ public final class MUFFLIATO extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public MUFFLIATO()
+   public MUFFLIATO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.MUFFLIATO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add(" [...] perhaps most useful of all, Muffliato, a spell that filled the ears of anyone nearby with an unidentifiable buzzing, so that lengthy conversations could be held in class without being overheard.");
       }};
@@ -62,7 +64,7 @@ public final class MUFFLIATO extends StationarySpell
    }
 
    @Override
-   protected O2StationarySpell createStationarySpell ()
+   protected O2StationarySpell createStationarySpell()
    {
       return new net.pottercraft.ollivanders2.stationaryspell.MUFFLIATO(p, player.getUniqueId(), location, O2StationarySpellType.MUFFLIATO, radius, duration);
    }

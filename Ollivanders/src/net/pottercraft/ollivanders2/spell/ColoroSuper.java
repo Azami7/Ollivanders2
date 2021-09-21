@@ -26,10 +26,12 @@ public abstract class ColoroSuper extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    ColoroSuper()
+    ColoroSuper(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**

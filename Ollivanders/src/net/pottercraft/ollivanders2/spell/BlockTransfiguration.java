@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * The super class for transfiguration of objects.  Not for use on players or entities.
@@ -84,10 +83,12 @@ public abstract class BlockTransfiguration extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public BlockTransfiguration()
+    public BlockTransfiguration(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         branch = O2MagicBranch.TRANSFIGURATION;
     }
@@ -267,34 +268,5 @@ public abstract class BlockTransfiguration extends O2Spell
 
             changedBlocks.clear();
         }
-    }
-
-    @Override
-    @NotNull
-    public String getText()
-    {
-        return text;
-    }
-
-    @Override
-    @Nullable
-    public String getFlavorText()
-    {
-        if (flavorText.size() < 1)
-        {
-            return null;
-        }
-        else
-        {
-            int index = Math.abs(Ollivanders2Common.random.nextInt() % flavorText.size());
-            return flavorText.get(index);
-        }
-    }
-
-    @Override
-    @NotNull
-    public O2MagicBranch getMagicBranch()
-    {
-        return branch;
     }
 }

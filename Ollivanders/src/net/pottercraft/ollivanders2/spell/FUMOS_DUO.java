@@ -20,15 +20,17 @@ public final class FUMOS_DUO extends FumosSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FUMOS_DUO ()
+   public FUMOS_DUO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.FUMOS_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("A Stronger Smoke-Screen Spell");
       }};
 

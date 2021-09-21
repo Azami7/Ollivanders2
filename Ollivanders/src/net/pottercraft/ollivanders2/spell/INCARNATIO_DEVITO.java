@@ -21,10 +21,12 @@ public final class INCARNATIO_DEVITO extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_DEVITO()
+   public INCARNATIO_DEVITO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_DEVITO;
       branch = O2MagicBranch.TRANSFIGURATION;

@@ -47,11 +47,13 @@ public abstract class O2Book
     * No more than 256 characters
     */
    String openingPage;
+   final static String openingPageLabel = "_openingPage";
 
    /**
     * No more than 256 characters
     */
    String closingPage;
+   final static String closingPageLabel = "_closingPage";
 
    /**
     * Namespace keys for NBT tags
@@ -96,7 +98,7 @@ public abstract class O2Book
    /**
     * Write all the metadata for this book.
     */
-   private void writeSpellBookMeta ()
+   private void writeSpellBookMeta()
    {
       Ollivanders2Common common = new Ollivanders2Common(p);
 
@@ -107,11 +109,15 @@ public abstract class O2Book
       if (bookMeta == null)
          return;
 
-      bookMeta.setAuthor(bookType.author);
-      bookMeta.setTitle(bookType.shortTitle);
+      String shortTitle = bookType.getShortTitle(p);
+      String title = bookType.getTitle(p);
+      String author = bookType.getAuthor();
+
+      bookMeta.setAuthor(bookType.getAuthor());
+      bookMeta.setTitle(shortTitle);
 
       //write title page
-      String titlePage = bookType.title + "\n\nby " + bookType.author;
+      String titlePage = title + "\n\nby " + author;
       bookMeta.addPage(titlePage);
 
       StringBuilder toc = new StringBuilder();
@@ -133,18 +139,18 @@ public abstract class O2Book
 
       for (String content : bookContents)
       {
-         String name = Ollivanders2API.getBooks(p).spellText.getName(content);
+         String name = Ollivanders2API.getBooks().spellText.getName(content);
          if (name == null)
          {
-            common.printDebugMessage(bookType.title + " contains unknown spell or potion " + content, null, null, false);
+            common.printDebugMessage(title + " contains unknown spell or potion " + content, null, null, false);
             continue;
          }
 
          toc.append(name).append("\n");
 
          String text;
-         String mainText = Ollivanders2API.getBooks(p).spellText.getText(content);
-         String flavorText = Ollivanders2API.getBooks(p).spellText.getFlavorText(content);
+         String mainText = Ollivanders2API.getBooks().spellText.getText(content);
+         String flavorText = Ollivanders2API.getBooks().spellText.getFlavorText(content);
 
          if (flavorText == null)
          {
@@ -163,6 +169,12 @@ public abstract class O2Book
       bookMeta.addPage(toc.toString());
 
       // add opening page
+      if (Ollivanders2.useTranslations && p.getConfig().isSet(bookType.toString() + openingPageLabel))
+      {
+         String s = p.getConfig().getString(bookType.toString() + openingPageLabel);
+         if (s != null && s.length() > 0)
+            openingPage = s;
+      }
       if (openingPage.length() > 0)
          bookMeta.addPage(openingPage);
 
@@ -173,6 +185,12 @@ public abstract class O2Book
       }
 
       // add closing page
+      if (Ollivanders2.useTranslations && p.getConfig().isSet(bookType.toString() + closingPageLabel))
+      {
+         String s = p.getConfig().getString(bookType.toString() + closingPageLabel);
+         if (s != null && s.length() > 0)
+            closingPage = s;
+      }
       if (closingPage.length() > 0)
          bookMeta.addPage(closingPage);
 
@@ -332,9 +350,9 @@ public abstract class O2Book
     * @return title
     */
    @NotNull
-   public String getTitle ()
+   public String getTitle()
    {
-      return bookType.title;
+      return bookType.getTitle(p);
    }
 
    /**
@@ -343,9 +361,9 @@ public abstract class O2Book
     * @return short title for this book
     */
    @NotNull
-   public String getShortTitle ()
+   public String getShortTitle()
    {
-      return bookType.shortTitle;
+      return bookType.getShortTitle(p);
    }
 
    /**
@@ -354,9 +372,9 @@ public abstract class O2Book
     * @return author
     */
    @NotNull
-   public String getAuthor ()
+   public String getAuthor()
    {
-      return bookType.author;
+      return bookType.getAuthor();
    }
 
    /**
@@ -365,8 +383,8 @@ public abstract class O2Book
     * @return branch
     */
    @NotNull
-   public O2MagicBranch getBranch ()
+   public O2MagicBranch getBranch()
    {
-      return bookType.branch;
+      return bookType.getBranch();
    }
 }

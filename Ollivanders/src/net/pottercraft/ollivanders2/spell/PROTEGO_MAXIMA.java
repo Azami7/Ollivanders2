@@ -22,15 +22,17 @@ public final class PROTEGO_MAXIMA extends StationarySpell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PROTEGO_MAXIMA()
+   public PROTEGO_MAXIMA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PROTEGO_MAXIMA;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" -Filius Flitwick");
          add("A Stronger Shield Charm");
@@ -65,7 +67,7 @@ public final class PROTEGO_MAXIMA extends StationarySpell
    }
 
    @Override
-   protected O2StationarySpell createStationarySpell ()
+   protected O2StationarySpell createStationarySpell()
    {
       return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO_MAXIMA, radius, duration, damage);
    }

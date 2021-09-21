@@ -16,10 +16,12 @@ public abstract class PlayerDisguise extends EntityDisguise
 {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public PlayerDisguise()
+    public PlayerDisguise(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**

@@ -21,15 +21,17 @@ public final class SILENCIO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public SILENCIO()
+   public SILENCIO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.SILENCIO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The raven continued to open and close its sharp beak, but no sound came out.");
          add("The Silencing Charm");
@@ -56,7 +58,7 @@ public final class SILENCIO extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<LivingEntity> living = getLivingEntities(1.5);
       for (LivingEntity live : living)

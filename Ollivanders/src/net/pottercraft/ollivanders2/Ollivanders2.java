@@ -11,9 +11,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.book.O2Books;
 import net.pottercraft.ollivanders2.effect.O2Effects;
+import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.listeners.OllivandersListener;
 import net.pottercraft.ollivanders2.spell.APPARATE;
+import net.pottercraft.ollivanders2.spell.O2Spells;
 import org.bukkit.World;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import quidditch.Arena;
@@ -47,7 +50,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.command.Command;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -78,6 +80,26 @@ public class Ollivanders2 extends JavaPlugin
     */
    private Ollivanders2TeleportEvents teleportEvents;
 
+   /**
+    * Spells
+    */
+   static O2Spells spells;
+
+   /**
+    * Potions
+    */
+   static O2Potions potions;
+
+   /**
+    * Books
+    */
+   static O2Books books;
+
+   /**
+    * Houses
+    */
+   static O2Houses houses;
+
    // file config
    public static int chatDropoff = 15;
    public static ChatColor chatColor;
@@ -90,8 +112,6 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean enableDeathExpLoss;
    public static boolean apparateLocations;
    public static int divinationMaxDays = 4;
-   public static boolean useHouses;
-   public static boolean displayMessageOnSort;
    public static boolean useYears;
    public static boolean debug;
    public static boolean overrideVersionCheck;
@@ -100,13 +120,14 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean enableWitchDrop;
    public static boolean hourlyBackup;
    public static boolean archivePreviousBackup;
+   public static boolean useTranslations;
 
    // other config
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
    public static Ollivanders2WorldGuard worldGuardO2;
 
-   private static final String pluginDir = "plugins/Ollivanders2/";
+   public static final String pluginDir = "plugins/Ollivanders2/";
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -134,10 +155,9 @@ public class Ollivanders2 extends JavaPlugin
    {
       Ollivanders2API.saveStationarySpells();
       Ollivanders2API.saveProphecies();
-      if (useHouses)
-      {
-         Ollivanders2API.saveHouses();
-      }
+
+      houses.saveHouses();
+
       Ollivanders2API.savePlayers();
       APPARATE.saveApparateLocations();
    }
@@ -147,7 +167,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private void savePluginConfig ()
    {
-      if (!(new File(pluginDir + "/config.yml").exists()))
+      if (!(new File(pluginDir + "config.yml").exists()))
       {
          saveDefaultConfig();
       }
@@ -160,6 +180,11 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void onEnable ()
    {
+      spells = new O2Spells(this);
+      potions = new O2Potions(this);
+      books = new O2Books(this);
+      houses = new O2Houses(this);
+
       Ollivanders2API.init(this);
 
       // set up event listeners
@@ -202,15 +227,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // set up houses
-      try
-      {
-         Ollivanders2API.initHouses(this);
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Failure setting up houses.");
-         e.printStackTrace();
-      }
+      houses.onEnable();
 
       // set up items
       try
@@ -223,41 +240,17 @@ public class Ollivanders2 extends JavaPlugin
          e.printStackTrace();
       }
 
-      // set up potions
-      try
-      {
-         Ollivanders2API.initPotions(this);
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Failure setting up potions.");
-         e.printStackTrace();
-      }
-
-      // set up spells
-      try
-      {
-         Ollivanders2API.initSpells(this);
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Failure setting up spells.");
-         e.printStackTrace();
-      }
-
       // set up stationary spells
       Ollivanders2API.initStationarySpells(this);
 
-      // create books
-      try
-      {
-         Ollivanders2API.initBooks(this);
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Failure setting up books.");
-         e.printStackTrace();
-      }
+      // spells
+      spells.onEnable();
+
+      // potions
+      potions.onEnable();
+
+      // books
+      books.onEnable();
 
       // set up prophecies
       try
@@ -410,16 +403,6 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //
-      // houses
-      //
-      useHouses = getConfig().getBoolean("houses");
-      if (useHouses)
-      {
-         getLogger().info("Enabling school houses.");
-      }
-      displayMessageOnSort = getConfig().getBoolean("displayMessageOnSort");
-
-      //
       // years
       //
       useYears = getConfig().getBoolean("years");
@@ -488,6 +471,13 @@ public class Ollivanders2 extends JavaPlugin
       archivePreviousBackup = getConfig().getBoolean("archivePreviousBackup");
       if (archivePreviousBackup)
          getLogger().info("Enabling backup archiving.");
+
+      //
+      // Translations
+      //
+      useTranslations = getConfig().getBoolean("useTranslations");
+      if (useTranslations)
+         getLogger().info("Enabling string translations.");
    }
 
    /**
@@ -669,7 +659,7 @@ public class Ollivanders2 extends JavaPlugin
          //
          else if (subCommand.equalsIgnoreCase("books") || subCommand.equalsIgnoreCase("book"))
          {
-            return Ollivanders2API.getBooks(this).runCommand(sender, args);
+            return books.runCommand(sender, args);
          }
          //
          // Player related commands
@@ -736,11 +726,11 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // sorted
-      if (useHouses)
+      if (O2Houses.useHouses)
       {
-         if (Ollivanders2API.getHouses(this).isSorted(player))
+         if (houses.isSorted(player))
          {
-            String house = Ollivanders2API.getHouses(this).getHouse(player).getName();
+            String house = houses.getHouse(player).getName();
             summary.append("\nHouse: ").append(house).append("\n");
          }
          else
@@ -793,7 +783,7 @@ public class Ollivanders2 extends JavaPlugin
 
          for (O2SpellType spellType : O2SpellType.values())
          {
-            if (knownSpells.containsKey(spellType) && Ollivanders2API.getSpells(this).isLoaded(spellType))
+            if (knownSpells.containsKey(spellType) && spells.isLoaded(spellType))
             {
                summary.append("\n* ").append(spellType.getSpellName()).append(" ").append(knownSpells.get(spellType).toString());
             }
@@ -811,7 +801,7 @@ public class Ollivanders2 extends JavaPlugin
 
          for (O2PotionType potionType : O2PotionType.values())
          {
-            if (knownPotions.containsKey(potionType) && Ollivanders2API.getPotions(this).isLoaded(potionType))
+            if (knownPotions.containsKey(potionType) && potions.isLoaded(potionType))
             {
                summary.append("\n* ").append(potionType.getPotionName()).append(" ").append(knownPotions.get(potionType).toString());
             }
@@ -864,7 +854,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runHouse(@NotNull CommandSender sender, @NotNull String[] args)
    {
-      if (!useHouses)
+      if (O2Houses.useHouses)
       {
          sender.sendMessage(chatColor
                  + "House are not currently enabled for your server."
@@ -908,7 +898,7 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("reset"))
          {
-            return Ollivanders2API.getHouses(this).reset();
+            return houses.reset();
          }
       }
 
@@ -949,10 +939,10 @@ public class Ollivanders2 extends JavaPlugin
       {
          String targetHouse = args[2];
 
-         O2HouseType house = Ollivanders2API.getHouses(this).getHouseType(targetHouse);
+         O2HouseType house = houses.getHouseType(targetHouse);
          if (house != null)
          {
-            List<String> members = Ollivanders2API.getHouses(this).getHouseMembers(house);
+            List<String> members = houses.getHouseMembers(house);
             StringBuilder memberStr = new StringBuilder();
 
             if (members.isEmpty())
@@ -974,7 +964,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       StringBuilder houseNames = new StringBuilder();
-      List<String> h = Ollivanders2API.getHouses(this).getAllHouseNames();
+      List<String> h = houses.getAllHouseNames();
 
       for (String name : h)
       {
@@ -1022,7 +1012,7 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      O2HouseType house = Ollivanders2API.getHouses(this).getHouseType(targetHouse);
+      O2HouseType house = houses.getHouseType(targetHouse);
 
       if (house == null)
       {
@@ -1034,12 +1024,12 @@ public class Ollivanders2 extends JavaPlugin
       boolean success;
       if (forcesort)
       {
-         Ollivanders2API.getHouses(this).forceSetHouse(player, house);
+         houses.forceSetHouse(player, house);
          success = true;
       }
       else
       {
-         success = Ollivanders2API.getHouses(this).sort(player, house);
+         success = houses.sort(player, house);
       }
 
       if (success)
@@ -1048,7 +1038,7 @@ public class Ollivanders2 extends JavaPlugin
       }
       else
       {
-         sender.sendMessage(chatColor + targetPlayer + " is already a member of " + Ollivanders2API.getHouses(this).getHouse(player).getName());
+         sender.sendMessage(chatColor + targetPlayer + " is already a member of " + houses.getHouse(player).getName());
       }
 
       return true;
@@ -1086,7 +1076,7 @@ public class Ollivanders2 extends JavaPlugin
 
          if (option.equalsIgnoreCase("reset"))
          {
-            return Ollivanders2API.getHouses(this).resetHousePoints();
+            return houses.resetHousePoints();
          }
 
          if (args.length > 4)
@@ -1099,7 +1089,7 @@ public class Ollivanders2 extends JavaPlugin
             O2HouseType houseType = null;
             try
             {
-               houseType = Ollivanders2API.getHouses(this).getHouseType(h);
+               houseType = houses.getHouseType(h);
             }
             catch (Exception e)
             {
@@ -1137,15 +1127,15 @@ public class Ollivanders2 extends JavaPlugin
 
             if (option.equalsIgnoreCase("add"))
             {
-               return Ollivanders2API.getHouses(this).addHousePoints(houseType, value);
+               return houses.addHousePoints(houseType, value);
             }
             else if (option.equalsIgnoreCase("subtract"))
             {
-               return Ollivanders2API.getHouses(this).subtractHousePoints(houseType, value);
+               return houses.subtractHousePoints(houseType, value);
             }
             else if (option.equalsIgnoreCase("set"))
             {
-               return Ollivanders2API.getHouses(this).setHousePoints(houseType, value);
+               return houses.setHousePoints(houseType, value);
             }
          }
       }
@@ -1597,7 +1587,7 @@ public class Ollivanders2 extends JavaPlugin
          return false;
       }
 
-      boolean cast = Ollivanders2API.getSpells(this).isSpellTypeAllowed(player.getLocation(), spell);
+      boolean cast = spells.isSpellTypeAllowed(player.getLocation(), spell);
 
       if (!cast && verbose)
       {
@@ -1802,7 +1792,7 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      O2Potion potion = Ollivanders2API.getPotions(this).getPotionFromType(potionType);
+      O2Potion potion = potions.getPotionFromType(potionType);
 
       if (potion == null)
          return true;
@@ -1868,7 +1858,7 @@ public class Ollivanders2 extends JavaPlugin
       StringBuilder displayString = new StringBuilder();
       displayString.append("Potions:");
 
-      List<String> potionNames = Ollivanders2API.getPotions(this).getAllPotionNames();
+      List<String> potionNames = potions.getAllPotionNames();
       for (String name : potionNames)
       {
          displayString.append("\n").append(name);
@@ -1914,7 +1904,7 @@ public class Ollivanders2 extends JavaPlugin
 
       List<ItemStack> kit = new ArrayList<>();
 
-      for (O2Potion potion : Ollivanders2API.getPotions(this).getAllPotions())
+      for (O2Potion potion : potions.getAllPotions())
       {
          ItemStack brewedPotion = potion.brew(player, false);
 

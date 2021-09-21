@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.book;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -53,13 +54,14 @@ public enum O2BookType
    STANDARD_BOOK_OF_SPELLS_GRADE_6 (STANDARD_BOOK_OF_SPELLS_GRADE_6.class, "Standard Book of Spells Grade 6", "Standard Book of Spells Grade 6", "Miranda Goshawk", O2MagicBranch.CHARMS),
    STANDARD_BOOK_OF_SPELLS_GRADE_7 (STANDARD_BOOK_OF_SPELLS_GRADE_7.class, "Standard Book of Spells Grade 7", "Standard Book of Spells Grade 7", "Miranda Goshawk", O2MagicBranch.CHARMS),
    TETRABIBLIOS (TETRABIBLIOS.class, "Tetrabilios", "Tetrabilios", "Ptolemy", O2MagicBranch.DIVINATION),
-   THE_DARK_FORCES (THE_DARK_FORCES.class, "The Dark Forces: A Guide to Self-Protection", "Quentin Trimble", "The Dark Forces", O2MagicBranch.DARK_ARTS),
+   THE_DARK_FORCES (THE_DARK_FORCES.class, "The Dark Forces: A Guide to Self-Protection", "The Dark Forces", "Quentin Trimble", O2MagicBranch.DARK_ARTS),
    THE_HEALERS_HELPMATE (THE_HEALERS_HELPMATE.class, "The Healer's Helpmate", "The Healers Helpmate", "H. Pollingtonious", O2MagicBranch.HEALING),
    TRAVELS_WITH_TROLLS (TRAVELS_WITH_TROLLS.class, "Traveling with Trolls", "Traveling with Trolls", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
    UNFOGGING_THE_FUTURE (UNFOGGING_THE_FUTURE.class, "Unfogging the Future", "Unfogging the Future", "Cassandra Vablatsky", O2MagicBranch.DIVINATION),
    VOYAGES_WITH_VAMPIRES (VOYAGES_WITH_VAMPIRES.class, "Voyages with Vampires", "Voyages with Vampires", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
    WANDERINGS_WITH_WEREWOLVES (WANDERINGS_WITH_WEREWOLVES.class, "Wanderings with Werewolves", "Wanderings with Werewolves", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
-   YEAR_WITH_A_YETI (YEAR_WITH_A_YETI.class, "Year with a Yeti", "Year with a Yeti", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS);
+   YEAR_WITH_A_YETI (YEAR_WITH_A_YETI.class, "Year with a Yeti", "Year with a Yeti", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
+   ;
 
    /**
     * The implementing class for the book contents
@@ -69,22 +71,24 @@ public enum O2BookType
    /**
     * The book author
     */
-   protected final String author;
+   private final String author;
 
    /**
     * The full book title
     */
-   protected final String title;
+   private String title;
+   final static String titleLabel = "_title";
 
    /**
     * The book title for item lore, cannot be more than 32 characters or it will appear blank.
     */
-   protected final String shortTitle;
+   private String shortTitle;
+   final static String shortTitleLabel = "_shortTitle";
 
    /**
     * The branch of magic this book covers
     */
-   protected final O2MagicBranch branch;
+   private final O2MagicBranch branch;
 
    /**
     * Constructor
@@ -119,20 +123,41 @@ public enum O2BookType
    /**
     * Return the short title for a book. This is the display name title for the book item.
     *
+    * @param p the Ollivanders2 plugin
     * @return the short title of the book
     */
-   public String getShortTitle ()
+   public String getShortTitle(@NotNull Ollivanders2 p)
    {
+      // first check to see if it has been set with config
+      if (Ollivanders2.useTranslations && p.getConfig().isSet(this.toString() + shortTitleLabel))
+      {
+         String s = p.getConfig().getString(this.toString() + shortTitleLabel);
+         if (s != null && s.length() > 0)
+            return s;
+      }
+
       return shortTitle;
    }
 
    /**
     * Return the title for a book. This is the display name title for the book item.
     *
+    * @param p the Ollivanders2 plugin
     * @return the title of the book
     */
-   public String getTitle ()
+   public String getTitle(@NotNull Ollivanders2 p)
    {
+      // first check to see if it has been set with config
+      String identifier = this.toString() + titleLabel;
+
+      if (Ollivanders2.useTranslations && p.getConfig().isSet(identifier))
+      {
+         String t = p.getConfig().getString(identifier);
+
+         if (t != null && t.length() > 0)
+            return t;
+      }
+
       return title;
    }
 
@@ -141,8 +166,15 @@ public enum O2BookType
     *
     * @return the author of the book
     */
-   public String getAuthor ()
+   public String getAuthor()
    {
       return author;
    }
+
+   /**
+    * Return the branch of magic this book is.
+    *
+    * @return the branch of magic for this book
+    */
+   public O2MagicBranch getBranch() { return branch; }
 }

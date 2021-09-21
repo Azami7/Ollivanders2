@@ -19,15 +19,17 @@ public final class INCENDIO_DUO extends IncendioSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCENDIO_DUO ()
+   public INCENDIO_DUO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCENDIO_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("A Stronger Fire-Making Charm");
       }};
 

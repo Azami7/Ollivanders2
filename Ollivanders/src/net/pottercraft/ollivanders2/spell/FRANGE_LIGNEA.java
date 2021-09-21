@@ -29,10 +29,12 @@ public final class FRANGE_LIGNEA extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FRANGE_LIGNEA()
+   public FRANGE_LIGNEA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.FRANGE_LIGNEA;
       branch = O2MagicBranch.CHARMS;

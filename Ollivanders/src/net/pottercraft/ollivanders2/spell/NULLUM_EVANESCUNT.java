@@ -17,10 +17,12 @@ public final class NULLUM_EVANESCUNT extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public NULLUM_EVANESCUNT()
+   public NULLUM_EVANESCUNT(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.NULLUM_EVANESCUNT;
       branch = O2MagicBranch.CHARMS;
@@ -53,7 +55,7 @@ public final class NULLUM_EVANESCUNT extends StationarySpell
    }
 
    @Override
-   protected O2StationarySpell createStationarySpell ()
+   protected O2StationarySpell createStationarySpell()
    {
       return new net.pottercraft.ollivanders2.stationaryspell.NULLUM_EVANESCUNT(p, player.getUniqueId(), location, O2StationarySpellType.NULLUM_EVANESCUNT, radius, duration);
    }

@@ -65,10 +65,12 @@ public abstract class StationarySpell extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public StationarySpell()
+   public StationarySpell(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.CHARMS;
    }
@@ -95,7 +97,7 @@ public abstract class StationarySpell extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!centerOnCaster && !hasHitTarget())
       {

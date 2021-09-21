@@ -29,15 +29,17 @@ public final class FINITE_INCANTATEM extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FINITE_INCANTATEM()
+   public FINITE_INCANTATEM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.FINITE_INCANTATEM;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"He pointed his wand at the rampart, cried, \"Finite!\" and it steadied.\"");
          add("\"Try Finite Incantatem, that should stop the rain if it’s a hex or curse.\"  -Hermione Granger");
@@ -102,7 +104,7 @@ public final class FINITE_INCANTATEM extends O2Spell
    /**
     * Finite Incantatem on entities.
     */
-   private void finiteIncantatemEntities ()
+   private void finiteIncantatemEntities()
    {
       for (LivingEntity live : getLivingEntities(1.5))
       {
@@ -157,7 +159,7 @@ public final class FINITE_INCANTATEM extends O2Spell
    /**
     * Finite Incantatem on items.
     */
-   private void finiteIncantatemItems ()
+   private void finiteIncantatemItems()
    {
       if (hasHitTarget())
       {

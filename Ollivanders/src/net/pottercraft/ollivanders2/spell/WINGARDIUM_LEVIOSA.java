@@ -44,15 +44,17 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public WINGARDIUM_LEVIOSA ()
+   public WINGARDIUM_LEVIOSA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.CHARMS;
       spellType = O2SpellType.WINGARDIUM_LEVIOSA;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Levitation Charm");
          add("You're saying it wrong ...It's Wing-gar-dium Levi-o-sa, make the 'gar' nice and long.\" -Hermione Granger");
@@ -92,7 +94,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
    }
 
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!isSpellAllowed())
       {

@@ -28,10 +28,12 @@ public final class ALIQUAM_FLOO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ALIQUAM_FLOO()
+   public ALIQUAM_FLOO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ALIQUAM_FLOO;
       branch = O2MagicBranch.CHARMS;
@@ -45,7 +47,7 @@ public final class ALIQUAM_FLOO extends O2Spell
               + "Place a sign above a fire with the unique name of the fireplace and cast this spell at the fire. "
               + "Once your fireplace is registered, you can destroy the sign and even put out the fire, but you must not "
               + "place a solid block where the fire was, or you will have to re-register your fireplace. "
-              + "People can use your fireplace via Floo powder, which is made by smelting ender pearl. "
+              + "People can use your fireplace via Floo powder. "
               + "Toss the powder into a registered fireplace, walk into the fire, and say the name of your destination.";
    }
 
@@ -80,7 +82,7 @@ public final class ALIQUAM_FLOO extends O2Spell
     * Creates an aliquam floo stationary spell at this location if it is a fire with a sign over it.
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;

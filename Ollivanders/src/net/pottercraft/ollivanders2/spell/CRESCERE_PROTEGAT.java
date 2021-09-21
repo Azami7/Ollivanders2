@@ -24,7 +24,7 @@ public final class CRESCERE_PROTEGAT extends O2Spell
    /**
     * Stationary spell types that cannot be targeted by this spell.
     */
-   List<O2StationarySpellType> spellBlacklist = new ArrayList<O2StationarySpellType>()
+   List<O2StationarySpellType> spellBlacklist = new ArrayList<>()
    {{
       add(O2StationarySpellType.COLLOPORTUS);
       add(O2StationarySpellType.HORCRUX);
@@ -34,10 +34,12 @@ public final class CRESCERE_PROTEGAT extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public CRESCERE_PROTEGAT ()
+   public CRESCERE_PROTEGAT(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.CRESCERE_PROTEGAT;
       branch = O2MagicBranch.CHARMS;
@@ -65,7 +67,7 @@ public final class CRESCERE_PROTEGAT extends O2Spell
     * Look for stationary spells at the projectile's target location and increase its radius
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       O2StationarySpell inside = null;
 

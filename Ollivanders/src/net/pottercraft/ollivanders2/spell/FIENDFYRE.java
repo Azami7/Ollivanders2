@@ -30,14 +30,16 @@ public final class FIENDFYRE extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FIENDFYRE()
+   public FIENDFYRE(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
       spellType = O2SpellType.FIENDFYRE;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("It was not normal fire; Crabbe had used a curse of which Harry had no knowledge: As they turned a corner the flames chased them as though they were alive, sentient, intent upon killing them. ");
          add("Bewitched Flame Curse");
@@ -71,7 +73,7 @@ public final class FIENDFYRE extends O2Spell
     * Check projectile location for HORCRUX spell and kill it, otherwise spawn fire entities
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       // check for stationary spells first to remove HORCRUX spells
       List<O2StationarySpell> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);

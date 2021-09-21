@@ -21,10 +21,12 @@ public final class GEMINIO extends ItemEnchant
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public GEMINIO()
+   public GEMINIO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.GEMINIO;
       branch = O2MagicBranch.DARK_ARTS;
@@ -45,7 +47,7 @@ public final class GEMINIO extends ItemEnchant
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public GEMINIO (@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+   public GEMINIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
       spellType = O2SpellType.GEMINIO;

@@ -23,6 +23,11 @@ import java.util.Map;
 public class O2Spells
 {
     /**
+     * Callback to the plugin
+     */
+    private Ollivanders2 p;
+
+    /**
      * Common functions
      */
     private final Ollivanders2Common common;
@@ -30,7 +35,7 @@ public class O2Spells
     /**
      * List of loaded spells
      */
-    final private Map<String, O2SpellType> O2SpellMap = new HashMap<>();
+    final static private Map<String, O2SpellType> O2SpellMap = new HashMap<>();
 
     /**
      * Wandless spells
@@ -99,7 +104,7 @@ public class O2Spells
          * @param allowed a list of allowed spells, if set, this will take precedence over a disallow list
          * @param disallowed a list of disallowed spells
          */
-        SpellZone (@NotNull String name, @NotNull String world, @NotNull O2Spells.SpellZoneType type, int[] area, @NotNull ArrayList<O2SpellType> allowed, @NotNull ArrayList<O2SpellType> disallowed)
+        SpellZone(@NotNull String name, @NotNull String world, @NotNull O2Spells.SpellZoneType type, int[] area, @NotNull ArrayList<O2SpellType> allowed, @NotNull ArrayList<O2SpellType> disallowed)
         {
             zoneName = name;
             zoneType = type;
@@ -125,8 +130,19 @@ public class O2Spells
      */
     public O2Spells(@NotNull Ollivanders2 plugin)
     {
+        p = plugin;
         common = new Ollivanders2Common(plugin);
+    }
 
+    /**
+     * Load spell data on plugin start
+     */
+    public void onEnable()
+    {
+        // load the zone config
+        loadZoneConfig(p);
+
+        // load enabled spells
         for (O2SpellType spellType : O2SpellType.values())
         {
             if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType))
@@ -135,7 +151,18 @@ public class O2Spells
             O2SpellMap.put(spellType.getSpellName().toLowerCase(), spellType);
         }
 
-        loadZoneConfig(plugin);
+        // load any spell static data
+        APPARATE.loadApparateLocations(p);
+    }
+
+    /**
+     * Get all loaded spells
+     *
+     * @return a list of all loaded spell types
+     */
+    public static List<O2SpellType> getAllSpellTypes()
+    {
+        return new ArrayList<>(O2SpellMap.values());
     }
 
     /**
@@ -193,7 +220,7 @@ public class O2Spells
      *
      * @param p a callback to the plugin
      */
-    public void loadZoneConfig (@NotNull Ollivanders2 p)
+    public void loadZoneConfig(@NotNull Ollivanders2 p)
     {
         zoneConfig = p.getConfig().getConfigurationSection("zones");
 
@@ -224,7 +251,7 @@ public class O2Spells
      * @param zoneName the name of the zone
      * @param p a callback to the plugin
      */
-    private void loadZoneConfig (@NotNull String zoneName, @NotNull Ollivanders2 p)
+    private void loadZoneConfig(@NotNull String zoneName, @NotNull Ollivanders2 p)
     {
         String typeString = zoneConfig.getString(zoneName + "." + "type");
         if (typeString == null || typeString.length() < 1)
@@ -289,7 +316,7 @@ public class O2Spells
      * @return the spells for that zone list
      */
     @NotNull
-    private ArrayList<O2SpellType> getSpellsForZone (@NotNull String zoneName, @NotNull String list)
+    private ArrayList<O2SpellType> getSpellsForZone(@NotNull String zoneName, @NotNull String list)
     {
         ArrayList<O2SpellType> spellList = new ArrayList<>();
 
@@ -316,7 +343,7 @@ public class O2Spells
      * @param spellType the spell type to check
      * @return true if spell is allowed, false otherwise
      */
-    public boolean isSpellTypeAllowed (@NotNull Location location, @NotNull O2SpellType spellType)
+    public boolean isSpellTypeAllowed(@NotNull Location location, @NotNull O2SpellType spellType)
     {
         if (!isLoaded(spellType))
             return false;
@@ -413,7 +440,7 @@ public class O2Spells
      * @param spellType the spell type
      * @return true if the spell is explicitly disallowed at this location, false otherwise
      */
-    private boolean isExplicitlyDisallowed (@NotNull Location location, @NotNull O2SpellType spellType)
+    private boolean isExplicitlyDisallowed(@NotNull Location location, @NotNull O2SpellType spellType)
     {
         // first check global disallow lists
         if (globalDisallowedSpells.contains(spellType))

@@ -25,16 +25,19 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public HARMONIA_NECTERE_PASSUS()
+   public HARMONIA_NECTERE_PASSUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.HARMONIA_NECTERE_PASSUS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
+         add("The Vanishing Cabinet Charm");
          add("He stares at the monolith before him, lifts his wand and begins to chant eerily. The surface of the cabinet glimmers, atremble in the ambient light. Almost alive. Then he stops. Looking back, his eyes haunted, he slips away. Light plays within the cabinet. Movement. Shadows flicker within, coalesce.");
          add("\" ...we forced him head-first into that Vanishing Cabinet on the first floor.\"\n" +
                  "\"But you'll get into terrible trouble!\"\n" +
@@ -137,7 +140,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
     * @param block the sign to check
     * @return the location or null if one could not be created
     */
-   private Location getSignLocation (Block block)
+   private Location getSignLocation(Block block)
    {
       Location location = null;
 

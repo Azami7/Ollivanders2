@@ -17,10 +17,12 @@ public abstract class ConfundusSuper extends AddPotionEffect
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    ConfundusSuper()
+    ConfundusSuper(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**

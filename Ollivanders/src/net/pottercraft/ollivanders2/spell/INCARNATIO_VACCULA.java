@@ -23,10 +23,12 @@ public final class INCARNATIO_VACCULA extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_VACCULA()
+   public INCARNATIO_VACCULA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_VACCULA;
       branch = O2MagicBranch.TRANSFIGURATION;

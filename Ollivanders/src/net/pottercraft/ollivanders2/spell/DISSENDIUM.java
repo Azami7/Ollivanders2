@@ -32,15 +32,17 @@ public final class DISSENDIUM extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public DISSENDIUM()
+   public DISSENDIUM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.DISSENDIUM;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Opening Charm");
          add("At once, the statue's hump opened wide enough to admit a fairly thin person.");
@@ -79,7 +81,7 @@ public final class DISSENDIUM extends O2Spell
     * duration of the spell is reached.
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
@@ -165,7 +167,7 @@ public final class DISSENDIUM extends O2Spell
    /**
     * Close the trap door
     */
-   private void closeTrapDoor ()
+   private void closeTrapDoor()
    {
       if (!isOpen)
       {

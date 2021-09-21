@@ -16,9 +16,13 @@ public final class COLOVARIA_VERMICULO extends ColoroSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public COLOVARIA_VERMICULO ()
+   public COLOVARIA_VERMICULO(Ollivanders2 plugin)
    {
+      super(plugin);
+
       spellType = O2SpellType.COLOVARIA_VERMICULO;
       branch = O2MagicBranch.CHARMS;
 

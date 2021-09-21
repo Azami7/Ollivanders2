@@ -275,7 +275,7 @@ public class OllivandersListener implements Listener
       O2SpellType spellType;
 
       // first try all the words as one spell name
-      spellType = Ollivanders2API.getSpells(p).getSpellTypeByName(message);
+      spellType = Ollivanders2API.getSpells().getSpellTypeByName(message);
 
       if (spellType != null)
       {
@@ -288,7 +288,7 @@ public class OllivandersListener implements Listener
       for (int i = 0; i < words.length; i++)
       {
          spellName.append(words[i]);
-         spellType = Ollivanders2API.getSpells(p).getSpellTypeByName(spellName.toString());
+         spellType = Ollivanders2API.getSpells().getSpellTypeByName(spellName.toString());
 
          if (spellType != null)
             break;
@@ -762,7 +762,7 @@ public class OllivandersListener implements Listener
          }
 
          // add player to their house team
-         Ollivanders2API.getHouses(p).addPlayerToHouseTeam(player);
+         Ollivanders2API.getHouses().addPlayerToHouseTeam(player);
 
          // do player join actions
          o2p.onJoin();
@@ -1359,7 +1359,7 @@ public class OllivandersListener implements Listener
 
          if (meta.hasLore())
          {
-            O2Potion potion = Ollivanders2API.getPotions(p).findPotionByItemMeta(meta);
+            O2Potion potion = Ollivanders2API.getPotions().findPotionByItemMeta(meta);
 
             if (potion != null)
             {
@@ -1496,7 +1496,7 @@ public class OllivandersListener implements Listener
       Block under = cauldron.getRelative(BlockFace.DOWN);
       if (Ollivanders2Common.hotBlocks.contains(under.getType()))
       {
-         ItemStack potion = Ollivanders2API.getPotions(p).brewPotion(cauldron, player);
+         ItemStack potion = Ollivanders2API.getPotions().brewPotion(cauldron, player);
 
          if (potion == null)
          {
@@ -1536,7 +1536,7 @@ public class OllivandersListener implements Listener
       if (meta == null)
          return;
 
-      O2Potion potion = Ollivanders2API.getPotions(p).findPotionByItemMeta(meta);
+      O2Potion potion = Ollivanders2API.getPotions().findPotionByItemMeta(meta);
 
       if (potion != null)
       {

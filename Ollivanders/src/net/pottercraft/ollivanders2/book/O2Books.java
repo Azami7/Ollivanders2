@@ -65,11 +65,18 @@ public final class O2Books implements Listener
 
       spellText = new BookTexts(plugin);
 
-      // add all books
-      addBooks();
       p.getServer().getPluginManager().registerEvents(this, p);
 
       common.printLogMessage("Created Ollivanders2 books.", null, null, false);
+   }
+
+   public void onEnable ()
+   {
+      // add all books
+      addBooks();
+
+      // add all spell texts for quick book item creation
+      spellText.onEnable();
    }
 
    /**
@@ -140,6 +147,8 @@ public final class O2Books implements Listener
 
          if (book != null)
          {
+            p.getLogger().info("  " + book.getTitle());
+
             O2BookMap.put(book.getTitle(), bookType);
          }
       }
@@ -483,7 +492,7 @@ public final class O2Books implements Listener
       for (String spell : bookLore)
       {
          // see if it is a spell
-         O2SpellType spellType = Ollivanders2API.getSpells(p).getSpellTypeByName(spell);
+         O2SpellType spellType = Ollivanders2API.getSpells().getSpellTypeByName(spell);
 
          if (spellType != null)
          {
@@ -491,7 +500,7 @@ public final class O2Books implements Listener
          }
          else // see if it is a potion
          {
-            O2PotionType potionType = Ollivanders2API.getPotions(p).getPotionTypeByName(spell);
+            O2PotionType potionType = Ollivanders2API.getPotions().getPotionTypeByName(spell);
 
             if (potionType != null)
             {
@@ -684,9 +693,10 @@ public final class O2Books implements Listener
     *
     * @param book the book item to check
     * @param bookType the type to match
+    * @param p Ollivanders2 plugin
     * @return true if the book matches, false otherwise
     */
-   public static boolean matchesO2Book (@NotNull ItemStack book, @NotNull O2BookType bookType)
+   public static boolean matchesO2Book (@NotNull ItemStack book, @NotNull O2BookType bookType, @NotNull Ollivanders2 p)
    {
       if (book.getType() != Material.WRITTEN_BOOK)
          return false;
@@ -711,7 +721,7 @@ public final class O2Books implements Listener
       if (title == null)
          return false;
 
-      if (!(title.equalsIgnoreCase(bookType.getShortTitle())))
+      if (!(title.equalsIgnoreCase(bookType.getShortTitle(p))))
          return false;
 
       String author = ((BookMeta)bookMeta).getAuthor();

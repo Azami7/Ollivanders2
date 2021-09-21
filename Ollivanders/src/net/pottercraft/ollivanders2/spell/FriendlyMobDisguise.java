@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.listeners.OllivandersListener;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,10 +20,12 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FriendlyMobDisguise()
+   public FriendlyMobDisguise(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
    }
 
    /**
