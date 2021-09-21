@@ -49,6 +49,9 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell
       spellType = O2StationarySpellType.PROTEGO_HORRIBILIS;
    }
 
+   /**
+    * Upkeep
+    */
    @Override
    public void checkEffect()
    {

@@ -1,7 +1,5 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
-import java.util.*;
-
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
@@ -9,20 +7,29 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Checks for entities going into a vanishing cabinet
  *
  * @author lownes
+ * @author Azami7
  */
 public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
 {
-   private Location twin;
-   private Set<UUID> teleported = new HashSet<>();
-
+   private Location twinCabinetLocation;
    private final String twinLabel = "Twin";
+
+   HashMap<Player, Integer> inUseBy = new HashMap<>();
+   int useCooldown = Ollivanders2Common.ticksPerSecond * 30;
 
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -49,31 +56,18 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
     */
    public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration, @NotNull Location twin)
    {
-
       super(plugin, pid, location, type, radius, duration);
 
       spellType = O2StationarySpellType.HARMONIA_NECTERE_PASSUS;
-      this.twin = twin;
+      this.twinCabinetLocation = twin;
    }
 
+   /**
+    * Upkeep, disable the spell if the twin is broken
+    */
    @Override
    public void checkEffect ()
    {
-      HARMONIA_NECTERE_PASSUS twinHarm = null;
-      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-      {
-         if (stat instanceof HARMONIA_NECTERE_PASSUS
-                 && stat.location.getBlock().equals(twin.getBlock()))
-         {
-            twinHarm = (HARMONIA_NECTERE_PASSUS) stat;
-         }
-      }
-      if (twinHarm == null || !cabinetCheck(location.getBlock()))
-      {
-         kill();
-         return;
-      }
-
       World world = location.getWorld();
       if (world == null)
       {
@@ -82,23 +76,72 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
          return;
       }
 
-      for (Entity entity : world.getEntities())
+      HARMONIA_NECTERE_PASSUS twinCabinet = getTwin();
+
+      if (twinCabinet == null)
       {
-         if (teleported.contains(entity.getUniqueId()))
-         {
-            if (!entity.getLocation().getBlock().equals(location.getBlock()))
-            {
-               teleported.remove(entity.getUniqueId());
-            }
-         }
+         p.getLogger().warning("Harmonia stationary: twin cabinet null");
+         kill();
+         return;
+      }
+
+      if (!cabinetCheck(location.getBlock()))
+      {
+         p.getLogger().warning("Harmonia stationary: twin cabinet malformed");
+         kill();
+         twinCabinet.kill();
+         return;
+      }
+
+      // upkeep on inUseBy
+      HashMap<Player, Integer> temp = new HashMap<>(inUseBy);
+
+      for (Map.Entry<Player, Integer> entry : temp.entrySet())
+      {
+         Player player = entry.getKey();
+         Integer cooldown = entry.getValue();
+
+         if (common.locationEquals(player.getLocation(), location))
+            continue;
+
+         if (cooldown < 0)
+            inUseBy.remove(player);
          else
+            inUseBy.put(player, cooldown - 1);
+      }
+   }
+
+   /**
+    * Get the twin for this cabinet.
+    *
+    * @return the twin if found, null otherwise
+    */
+   @Nullable
+   public HARMONIA_NECTERE_PASSUS getTwin ()
+   {
+      for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      {
+         if (stationarySpell instanceof HARMONIA_NECTERE_PASSUS && common.locationEquals(stationarySpell.location, twinCabinetLocation))
          {
-            if (entity.getLocation().getBlock().equals(location.getBlock()))
-            {
-               twinHarm.teleport(entity);
-            }
+            return (HARMONIA_NECTERE_PASSUS)stationarySpell;
          }
       }
+
+      return null;
+   }
+
+   /**
+    * Is this cabinet in use by the player
+    *
+    * @param player the player to check
+    * @return true if this player is using this cabinet, false otherwise
+    */
+   public boolean isUsing (Player player)
+   {
+      if (inUseBy.containsKey(player))
+         return true;
+
+      return false;
    }
 
    /**
@@ -109,29 +152,14 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
     */
    private boolean cabinetCheck(@NotNull Block feet)
    {
-      if (feet.getType() != Material.AIR && !Ollivanders2Common.wallSigns.contains(feet.getType()))
-      {
+      if (feet.getType() != Material.AIR && !Ollivanders2Common.signs.contains(feet.getType()))
          return false;
-      }
 
-      return (feet.getRelative(1, 0, 0).getType() == Material.AIR || feet.getRelative(-1, 0, 0).getType() == Material.AIR ||
-              feet.getRelative(0, 0, 1).getType() == Material.AIR || feet.getRelative(0, 0, -1).getType() == Material.AIR ||
-              feet.getRelative(1, 1, 0).getType() == Material.AIR || feet.getRelative(-1, 1, 0).getType() == Material.AIR ||
-              feet.getRelative(0, 1, 1).getType() == Material.AIR || feet.getRelative(0, 1, -1).getType() == Material.AIR ||
-              feet.getRelative(0, 2, 0).getType() == Material.AIR);
-   }
-
-   /**
-    * Send the entity to the twin cabinet.
-    *
-    * @param entity the entity being transported
-    */
-   private void teleport(@NotNull Entity entity)
-   {
-      location.setPitch(entity.getLocation().getPitch());
-      location.setYaw(entity.getLocation().getYaw());
-      entity.teleport(location);
-      teleported.add(entity.getUniqueId());
+      return (feet.getRelative(1, 0, 0).getType() != Material.AIR && feet.getRelative(1, 1, 0).getType() != Material.AIR
+              && feet.getRelative(-1, 0, 0).getType() != Material.AIR && feet.getRelative(-1, 1, 0).getType() != Material.AIR
+              && feet.getRelative(0, 0, 1).getType() != Material.AIR && feet.getRelative(0, 1, 1).getType() != Material.AIR
+              && feet.getRelative(0, 0, -1).getType() != Material.AIR && feet.getRelative(0, 1, -1).getType() != Material.AIR
+              && feet.getRelative(0, 1, 0).getType() == Material.AIR && feet.getRelative(0, 2, 0).getType() != Material.AIR);
    }
 
    /**
@@ -162,6 +190,55 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
       Location loc = common.deserializeLocation(spellData, twinLabel);
 
       if (loc != null)
-         twin = loc;
+         twinCabinetLocation = loc;
+   }
+
+   /**
+    * When the player moves in to the vanishing cabinet, teleport them to the twin
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event)
+   {
+      Player player = event.getPlayer();
+      // make sure player is not already using this vanishing cabinet
+      if (isUsing(player))
+         return;
+
+      Location toLoc = event.getTo();
+      Location fromLoc = event.getFrom();
+
+      // make sure they actually moved locations, not turned head, etc
+      if (toLoc == null || common.locationEquals(toLoc, fromLoc))
+         return;
+
+      HARMONIA_NECTERE_PASSUS twin = getTwin();
+      if (twin == null)
+      {
+         kill();
+         return;
+      }
+
+      // make sure they do not have a use cooldown on the twin or we'll just teleport them right back as soon as they arrive and trigger a move event
+      if (twin.isUsing(player))
+         return;
+
+      if (isInside(toLoc))
+      {
+         inUseBy.put(player, useCooldown);
+
+         new BukkitRunnable()
+         {
+            @Override
+            public void run()
+            {
+               if (!event.isCancelled())
+               {
+                  p.addTeleportEvent(player, player.getLocation(), twinCabinetLocation, true);
+               }
+            }
+         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+      }
    }
 }

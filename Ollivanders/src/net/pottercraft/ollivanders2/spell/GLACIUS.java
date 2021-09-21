@@ -18,15 +18,17 @@ public final class GLACIUS extends GlaciusSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public GLACIUS ()
+   public GLACIUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.GLACIUS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("A charm that conjures a blast of freezing cold air from the end of the wand.");
          add("The Freezing Charm");
       }};

@@ -20,15 +20,17 @@ public class PROPHETEIA extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PROPHETEIA()
+   public PROPHETEIA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.DIVINATION;
       spellType = O2SpellType.PROPHETEIA;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"But when Sybill Trelawney spoke, it was not in her usual ethereal, mystic voice, but in the hard, hoarse tones Harry had heard her use once before.\"");
       }};
@@ -53,7 +55,7 @@ public class PROPHETEIA extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       for (LivingEntity livingEntity : getLivingEntities(1.5))
       {

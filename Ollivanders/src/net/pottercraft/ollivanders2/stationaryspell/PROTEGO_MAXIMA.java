@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.stationaryspell;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -55,6 +54,9 @@ public class PROTEGO_MAXIMA extends ShieldSpell
       this.damage = damage;
    }
 
+   /**
+    * Upkeep
+    */
    @Override
    public void checkEffect ()
    {
@@ -64,17 +66,6 @@ public class PROTEGO_MAXIMA extends ShieldSpell
 
       for (LivingEntity e : nearbyEntities)
       {
-         if (e instanceof Player)
-         {
-            Player ply = (Player) e;
-            if (ply.isPermissionSet("Ollivanders2.BYPASS"))
-            {
-               if (ply.hasPermission("Ollivanders2.BYPASS"))
-               {
-                  continue;
-               }
-            }
-         }
          double distance = e.getLocation().distance(location);
          if (distance > radius - 0.5 && distance < radius + 0.5)
          {

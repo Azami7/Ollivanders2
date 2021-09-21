@@ -24,7 +24,7 @@ public final class FIANTO_DURI extends O2Spell
    /**
     * Shield spells that can be targeted by this spell.
     */
-   private ArrayList<O2StationarySpellType> shieldSpells = new ArrayList<O2StationarySpellType>()
+   private ArrayList<O2StationarySpellType> shieldSpells = new ArrayList<>()
    {{
       add(O2StationarySpellType.PROTEGO);
       add(O2StationarySpellType.PROTEGO_HORRIBILIS);
@@ -38,14 +38,16 @@ public final class FIANTO_DURI extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FIANTO_DURI ()
+   public FIANTO_DURI(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
       spellType = O2SpellType.FIANTO_DURI;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" - Filius Flitwick");
          add("");
       }};
@@ -74,7 +76,7 @@ public final class FIANTO_DURI extends O2Spell
     * Look for any shield spells in the projectile location and increase their duration
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<O2StationarySpell> inside = new ArrayList<>();
 

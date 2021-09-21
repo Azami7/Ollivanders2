@@ -19,10 +19,12 @@ public abstract class FumosSuper extends AddPotionEffectInRadius
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public FumosSuper()
+    public FumosSuper(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**

@@ -30,6 +30,10 @@ public class O2Houses
 {
    private final Ollivanders2 p;
    private final Ollivanders2Common common;
+
+   public static boolean useHouses = false;
+   public static boolean displayMessageOnSort = false;
+
    private Map<UUID, O2HouseType> O2HouseMap = new HashMap<>();
    private final Map <O2HouseType, Team> O2HouseTeamMap = new HashMap<>();
 
@@ -48,8 +52,24 @@ public class O2Houses
    {
       p = plugin;
       common = new Ollivanders2Common(p);
+   }
 
-      if (!Ollivanders2.useHouses)
+   /**
+    * Set up houses on enable
+    */
+   public void onEnable ()
+   {
+      //
+      // houses
+      //
+      useHouses = p.getConfig().getBoolean("houses");
+      if (useHouses)
+      {
+         p.getLogger().info("Enabling school houses.");
+      }
+      displayMessageOnSort = p.getConfig().getBoolean("displayMessageOnSort");
+
+      if (!useHouses)
          return;
 
       readHouseConfig();
@@ -68,32 +88,65 @@ public class O2Houses
       //
       // house names
       //
+      String s;
       if (p.getConfig().isSet("gryffindorName"))
-         O2HouseType.GRYFFINDOR.setName(p.getConfig().getString("gryffindorName"));
+      {
+         s = p.getConfig().getString("gryffindorName");
+         if (s != null && s.length() > 0)
+            O2HouseType.GRYFFINDOR.setName(s);
+      }
 
       if (p.getConfig().isSet("hufflepuffName"))
-         O2HouseType.HUFFLEPUFF.setName(p.getConfig().getString("hufflepuffName"));
+      {
+         s = p.getConfig().getString("hufflepuffName");
+         if (s != null && s.length() > 0)
+            O2HouseType.HUFFLEPUFF.setName(s);
+      }
 
       if (p.getConfig().isSet("ravenclawName"))
-         O2HouseType.RAVENCLAW.setName(p.getConfig().getString("ravenclawName"));
+      {
+         s = p.getConfig().getString("ravenclawName");
+         if (s != null && s.length() > 0)
+            O2HouseType.RAVENCLAW.setName(s);
+      }
 
       if (p.getConfig().isSet("slytherinName"))
-         O2HouseType.SLYTHERIN.setName(p.getConfig().getString("slytherinName"));
+      {
+         s = p.getConfig().getString("slytherinName");
+         if (s != null && s.length() > 0)
+            O2HouseType.SLYTHERIN.setName(s);
+      }
 
       //
       // house colors
       //
       if (p.getConfig().isSet("gryffindorColor"))
-         O2HouseType.GRYFFINDOR.setColor(p.getConfig().getString("gryffindorColor"));
+      {
+         s = p.getConfig().getString("gryffindorColor");
+         if (s != null && s.length() > 0)
+            O2HouseType.GRYFFINDOR.setColor(s);
+      }
 
       if (p.getConfig().isSet("hufflepuffColor"))
-         O2HouseType.HUFFLEPUFF.setColor(p.getConfig().getString("hufflepuffColor"));
+      {
+         s = p.getConfig().getString("hufflepuffColor");
+         if (s != null && s.length() > 0)
+            O2HouseType.HUFFLEPUFF.setColor(s);
+      }
 
       if (p.getConfig().isSet("ravenclawColor"))
-         O2HouseType.RAVENCLAW.setColor(p.getConfig().getString("ravenclawColor"));
+      {
+         s = p.getConfig().getString("ravenclawColor");
+         if (s != null && s.length() > 0)
+            O2HouseType.RAVENCLAW.setColor(s);
+      }
 
       if (p.getConfig().isSet("slytherinColor"))
-         O2HouseType.SLYTHERIN.setColor(p.getConfig().getString("slytherinColor"));
+      {
+         s = p.getConfig().getString("slytherinColor");
+         if (s != null && s.length() > 0)
+            O2HouseType.SLYTHERIN.setColor(s);
+      }
    }
 
    /**
@@ -182,6 +235,9 @@ public class O2Houses
     */
    public void saveHouses()
    {
+      if (!useHouses)
+         return;
+
       // write house data out as JSON
       GsonDAO gsonLayer = new GsonDAO();
       gsonLayer.writeHouses(O2HouseMap);
@@ -211,7 +267,7 @@ public class O2Houses
       O2HouseMap.put(player.getUniqueId(), houseType);
       addPlayerToHouseTeam(player);
 
-      if (Ollivanders2.displayMessageOnSort)
+      if (displayMessageOnSort)
       {
          String title = houseType.getChatColorCode() + player.getName();
          String subtitle = houseType.getChatColorCode() + "better be " + houseType.getName();
@@ -410,7 +466,7 @@ public class O2Houses
     */
    private void createScoreboard ()
    {
-      if (!Ollivanders2.useHouses)
+      if (useHouses)
       {
          // do not allow if houses is not enabled
          common.printDebugMessage("Attempted to create scoreboard when houses is not enabled.", null, null, false);
@@ -495,7 +551,7 @@ public class O2Houses
     */
    private synchronized boolean updateScoreboard ()
    {
-      if (!Ollivanders2.useHouses)
+      if (useHouses)
       {
          common.printDebugMessage("Tried to update scoreboard when houses are not enabled.", null, null, false);
          return false;
@@ -555,7 +611,7 @@ public class O2Houses
     */
    private boolean hideScoreboard()
    {
-      if (!Ollivanders2.useHouses)
+      if (useHouses)
       {
          common.printDebugMessage("Tried to hide scoreboard when houses are not enabled.", null, null, false);
          return false;
@@ -576,7 +632,7 @@ public class O2Houses
     */
    private void showScoreboard ()
    {
-      if (!Ollivanders2.useHouses)
+      if (useHouses)
       {
          common.printDebugMessage("Tried to show scoreboard when houses are not enabled.", null, null, false);
          return;

@@ -33,7 +33,7 @@ public class O2Potions
 
    private Ollivanders2Common common;
 
-   final private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
+   final static private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
 
    public static final List<O2ItemType> ingredients = new ArrayList<>()
    {{
@@ -108,6 +108,14 @@ public class O2Potions
    {
       p = plugin;
 
+      common = new Ollivanders2Common(p);
+   }
+
+   /**
+    * Load all potions on plugin start
+    */
+   public void onEnable()
+   {
       for (O2PotionType potionType : O2PotionType.values())
       {
          if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potionType))
@@ -115,8 +123,16 @@ public class O2Potions
 
          O2PotionMap.put(potionType.getPotionName().toLowerCase(), potionType);
       }
+   }
 
-      common = new Ollivanders2Common(p);
+   /**
+    * Get all potions loaded
+    *
+    * @return a list of all potion types loaded
+    */
+   public static List<O2PotionType> getAllPotionTypes ()
+   {
+      return new ArrayList<>(O2PotionMap.values());
    }
 
    /**

@@ -23,10 +23,12 @@ public final class INCARNATIO_FELIS extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_FELIS()
+   public INCARNATIO_FELIS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_FELIS;
       branch = O2MagicBranch.TRANSFIGURATION;

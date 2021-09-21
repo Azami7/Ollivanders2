@@ -9,7 +9,6 @@ import java.util.Collection;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.Teachable;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 
@@ -37,7 +36,7 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author Azami7
  */
-public abstract class O2Spell implements Teachable
+public abstract class O2Spell
 {
    /**
     * Max spell lifetime in gameticks, 12000 = 10 minutes, this is used to ensure a code bug doesn't create never-ending
@@ -88,7 +87,7 @@ public abstract class O2Spell implements Teachable
    /**
     * The callback to the MC plugin
     */
-   Ollivanders2 p;
+   final Ollivanders2 p;
 
    /**
     * Ollivanders common functions
@@ -150,11 +149,13 @@ public abstract class O2Spell implements Teachable
     * Flavor text for this spell in spellbooks, etc.  Optional.
     */
    protected List<String> flavorText;
+   final static String flavorTextConfigLabel = "_flavorText";
 
    /**
     * The description text for this spell in spell books.  Required or spell cannot be written in a book.
     */
    protected String text;
+   final static String textConfigLabel = "_Text";
 
    /**
     * A list of block types that cannot be affected by this spell
@@ -175,7 +176,9 @@ public abstract class O2Spell implements Teachable
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
     * text.
     */
-   public O2Spell() {
+   public O2Spell(Ollivanders2 plugin)
+   {
+      p = plugin;
    }
 
    /**
@@ -212,7 +215,7 @@ public abstract class O2Spell implements Teachable
     * constants. This must be called by each spell constructor since usage is based on the specific class
     * type and cannot be determined in the super-class constructors.
     */
-   void initSpell ()
+   void initSpell()
    {
       if (spellType == null)
       {
@@ -238,7 +241,7 @@ public abstract class O2Spell implements Teachable
    /**
     * Game tick update on this spell - must be overridden in child classes or the spell exits immediately.
     */
-   public void checkEffect ()
+   public void checkEffect()
    {
       // check whether this spell can exist up until it hits a target
       if (!hitTarget && !isSpellAllowed())
@@ -311,7 +314,7 @@ public abstract class O2Spell implements Teachable
     * If the block is on the blacklist or the spell cannot be cast in this location, kills the spell
     * Otherwise, targets the block
     */
-   private void targetBlock ()
+   private void targetBlock()
    {
       Block target = location.getBlock();
 
@@ -349,7 +352,7 @@ public abstract class O2Spell implements Teachable
       boolean isAllowed = true;
 
       // determine if this spell is allowed in this location per Ollivanders2 config
-      if (!Ollivanders2API.getSpells(p).isSpellTypeAllowed(location, spellType))
+      if (!Ollivanders2API.getSpells().isSpellTypeAllowed(location, spellType))
       {
          kill();
          isAllowed = false;
@@ -374,7 +377,7 @@ public abstract class O2Spell implements Teachable
     *
     * @return true if the spell can be cast, false otherwise
     */
-   private boolean checkWorldGuard ()
+   private boolean checkWorldGuard()
    {
       if (!Ollivanders2.worldGuardEnabled)
       {
@@ -404,7 +407,7 @@ public abstract class O2Spell implements Teachable
     * @return List of entities within one block of projectile
     */
    @NotNull
-   List<Entity> getCloseEntities (double radius)
+   List<Entity> getCloseEntities(double radius)
    {
       if (radius <= 0)
          radius = 1.0;
@@ -450,7 +453,7 @@ public abstract class O2Spell implements Teachable
     * @return List of item entities within one block of projectile
     */
    @NotNull
-   public List<Item> getItems (double radius)
+   public List<Item> getItems(double radius)
    {
       List<Entity> entities = getCloseEntities(radius);
       List<Item> items = new ArrayList<>();
@@ -471,7 +474,7 @@ public abstract class O2Spell implements Teachable
     * @return List of LivingEntity within one block of projectile
     */
    @NotNull
-   public List<LivingEntity> getLivingEntities (double radius)
+   public List<LivingEntity> getLivingEntities(double radius)
    {
       List<Entity> entities = getCloseEntities(radius);
       List<LivingEntity> living = new ArrayList<>();
@@ -494,7 +497,7 @@ public abstract class O2Spell implements Teachable
    /**
     * Sets the uses modifier that takes into account spell uses and wand type. Returns 10.0 if the uses are 100 and the right wand is held.
     */
-   protected void setUsesModifier ()
+   protected void setUsesModifier()
    {
       // set up spell use modifier
       // the number of times the spell has been cast and then halved if the player is not using their
@@ -528,7 +531,7 @@ public abstract class O2Spell implements Teachable
     * @return the target block
     */
    @Nullable
-   public Block getTargetBlock ()
+   public Block getTargetBlock()
    {
       if (hitTarget)
       {
@@ -542,12 +545,12 @@ public abstract class O2Spell implements Teachable
     * The spell-specific actions taken for each check effect. This must be overridden by each spell or the spell
     * will do nothing.
     */
-   abstract protected void doCheckEffect ();
+   abstract protected void doCheckEffect();
 
    /**
     * This kills the spell.
     */
-   public void kill ()
+   public void kill()
    {
       stopProjectile();
 
@@ -561,7 +564,7 @@ public abstract class O2Spell implements Teachable
     * Reverts any changes made to blocks if the effects are temporary. This must be overridden by each spell that has
     * a revert action.
     */
-   protected void revert ()
+   protected void revert()
    {
    }
 
@@ -570,7 +573,7 @@ public abstract class O2Spell implements Teachable
     *
     * @return true if the spell has been terminated, false otherwise
     */
-   public boolean isKilled ()
+   public boolean isKilled()
    {
       return kill;
    }
@@ -578,7 +581,7 @@ public abstract class O2Spell implements Teachable
    /**
     * Stops the spell projectile from moving further
     */
-   void stopProjectile ()
+   void stopProjectile()
    {
       hitTarget = true;
    }
@@ -604,24 +607,36 @@ public abstract class O2Spell implements Teachable
    /**
     * @return the book text for this spell
     */
-   @Override
    @NotNull
    public String getText()
    {
+      // first check to see if it has been set with config
+      if (p.getConfig().isSet(spellType.toString() + textConfigLabel))
+      {
+         String t = p.getConfig().getString(spellType.toString() + textConfigLabel);
+         if (t != null && t.length() > 0)
+            return t;
+      }
+
       return text;
    }
 
    /**
     * @return the flavor text for this spell
     */
-   @Override
    @Nullable
    public String getFlavorText()
    {
-      if (flavorText == null || flavorText.size() < 1)
+      // first check to see if it has been set with config
+      if (p.getConfig().isSet(spellType.toString() + flavorTextConfigLabel))
       {
-         return null;
+         String f = p.getConfig().getString(spellType.toString() + flavorTextConfigLabel);
+         if (f != null && f.length() > 0)
+            return f;
       }
+
+      if (flavorText == null || flavorText.size() < 1)
+         return null;
       else
       {
          int index = Math.abs(Ollivanders2Common.random.nextInt() % flavorText.size());
@@ -632,7 +647,6 @@ public abstract class O2Spell implements Teachable
    /**
     * @return the branch of magic for this spell
     */
-   @Override
    @NotNull
    public O2MagicBranch getMagicBranch()
    {
@@ -642,7 +656,6 @@ public abstract class O2Spell implements Teachable
    /**
     * @return the name of the spell
     */
-   @Override
    @NotNull
    public String getName()
    {

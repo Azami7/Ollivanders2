@@ -20,16 +20,18 @@ public final class FLAGRANTE extends ItemEnchant
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FLAGRANTE ()
+   public FLAGRANTE(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.FLAGRANTE;
       branch = O2MagicBranch.DARK_ARTS;
 
       flavorText = new ArrayList<>() {{
-         add("Burning Curse");
+         add("The Burning Curse");
          add("They have added Geminio and Flagrante curses! Everything you touch will burn and multiply, but the copies are worthless.");
       }};
 

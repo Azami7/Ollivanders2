@@ -10,7 +10,9 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.util.Vector;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -18,7 +20,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Shield spell
- *
  */
 public class PROTEGO extends ShieldSpell
 {
@@ -51,6 +52,10 @@ public class PROTEGO extends ShieldSpell
       spellType = O2StationarySpellType.PROTEGO;
    }
 
+   /**
+    * Upkeep
+    */
+   @Override
    public void checkEffect ()
    {
       age();
@@ -85,6 +90,24 @@ public class PROTEGO extends ShieldSpell
                }
             }
          }
+      }
+   }
+
+   /**
+    * Handle entity combust by block events
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnEntityCombustEvent(@NotNull EntityCombustEvent event)
+   {
+      Entity entity = event.getEntity();
+      Location entityLocation = entity.getLocation();
+
+      if (isInside(entityLocation))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("PROTEGO: canceled PlayerInteractEvent", null, null, false);
       }
    }
 

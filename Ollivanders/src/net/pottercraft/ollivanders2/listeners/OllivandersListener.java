@@ -22,13 +22,6 @@ import net.pottercraft.ollivanders2.spell.PORTUS;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.potion.O2Potion;
 import net.pottercraft.ollivanders2.potion.O2SplashPotion;
-import net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO;
-import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
-import net.pottercraft.ollivanders2.stationaryspell.PROTEGO_TOTALUM;
-import net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
-import net.pottercraft.ollivanders2.stationaryspell.MOLLIARE;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -37,13 +30,11 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.Effect;
 
-import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
@@ -54,14 +45,7 @@ import org.bukkit.event.Listener;
 
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.BlockPistonExtendEvent;
-import org.bukkit.event.block.BlockPistonRetractEvent;
 
-import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -76,7 +60,6 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 
@@ -85,8 +68,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import org.bukkit.potion.PotionEffect;
-
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -94,7 +75,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -111,8 +91,6 @@ public class OllivandersListener implements Listener
    private final Ollivanders2 p;
    private final Ollivanders2Common common;
 
-   private final ArrayList<Listener> listeners = new ArrayList<>();
-
    /**
     * Constructor
     *
@@ -122,110 +100,6 @@ public class OllivandersListener implements Listener
    {
       p = plugin;
       common = new Ollivanders2Common(plugin);
-   }
-
-   /**
-    * Register all listeners on enable
-    */
-   public void onEnable ()
-   {
-      for (Listener listener : listeners)
-      {
-         p.getServer().getPluginManager().registerEvents(listener, p);
-      }
-   }
-
-   /**
-    * Fires on player move
-    *
-    * @param event the player move event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void onPlayerMove (@NotNull PlayerMoveEvent event)
-   {
-      if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
-      {
-         if (event.getPlayer().hasPermission("Ollivanders2.BYPASS"))
-         {
-            return;
-         }
-      }
-      Location toLoc = event.getTo();
-      Location fromLoc = event.getFrom();
-
-      if (toLoc == null || toLoc.getWorld() == null || fromLoc.getWorld() == null)
-         return;
-
-      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-      {
-         if (spell.location.getWorld() == null)
-            continue;
-
-         if (spell instanceof PROTEGO_TOTALUM &&
-                 toLoc.getWorld().getUID().equals(spell.location.getWorld().getUID()) &&
-                 fromLoc.getWorld().getUID().equals(spell.location.getWorld().getUID()))
-         {
-            int radius = spell.radius;
-            Location spellLoc = spell.location;
-            if (((fromLoc.distance(spellLoc) < radius - 0.5 && toLoc.distance(spellLoc) > radius - 0.5)
-                    || (toLoc.distance(spellLoc) < radius + 0.5 && fromLoc.distance(spellLoc) > radius + 0.5)))
-            {
-               event.setCancelled(true);
-               spell.flair(10);
-               common.printDebugMessage("protegoTotalum: cancelling PlayerMoveEvent", null, null, false);
-            }
-         }
-      }
-   }
-
-   /**
-    * Checks if a player is inside an active floo fireplace and is saying a destination
-    *
-    * @param event the player chat event
-    */
-   @EventHandler(priority = EventPriority.LOW)
-   public void onFlooChat (@NotNull AsyncPlayerChatEvent event)
-   {
-      Player player = event.getPlayer();
-      String chat = event.getMessage();
-      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-      {
-         if (stat instanceof ALIQUAM_FLOO)
-         {
-            ALIQUAM_FLOO aliquam = (ALIQUAM_FLOO) stat;
-            if (player.getLocation().getBlock().equals(aliquam.getBlock()) && aliquam.isWorking())
-            {
-               //Floo network
-               if (player.isPermissionSet("Ollivanders2.Floo"))
-               {
-                  if (!player.hasPermission("Ollivanders2.Floo"))
-                  {
-                     player.sendMessage(Ollivanders2.chatColor + "You do not have permission to use the Floo Network.");
-                     return;
-                  }
-               }
-               aliquam.stopWorking();
-               List<ALIQUAM_FLOO> alis = new ArrayList<>();
-
-               for (O2StationarySpell ali : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-               {
-                  if (ali instanceof ALIQUAM_FLOO)
-                  {
-                     ALIQUAM_FLOO dest = (ALIQUAM_FLOO) ali;
-                     alis.add(dest);
-                     if (dest.getFlooName().equals(chat.trim().toLowerCase()))
-                     {
-                        p.addTeleportEvent(player, player.getLocation(), dest.location);
-                        return;
-                     }
-                  }
-               }
-               int randomIndex = (int) (alis.size() * Math.random());
-               p.addTeleportEvent(player, player.getLocation(), alis.get(randomIndex).location);
-               return;
-            }
-         }
-      }
    }
 
    /**
@@ -251,8 +125,7 @@ public class OllivandersListener implements Listener
          //
          // Handle removing recipients from chat
          //
-         List<O2StationarySpell> muffliatos = Ollivanders2API.getStationarySpells(p).getActiveStationarySpellsAtLocationByType(sender.getLocation(), O2StationarySpellType.MUFFLIATO);
-         updateRecipients(sender, spellType, event.getRecipients(), muffliatos);
+         updateRecipients(sender, spellType, event.getRecipients());
 
          //
          // Handle spell casting
@@ -275,7 +148,7 @@ public class OllivandersListener implements Listener
       O2SpellType spellType;
 
       // first try all the words as one spell name
-      spellType = Ollivanders2API.getSpells(p).getSpellTypeByName(message);
+      spellType = Ollivanders2API.getSpells().getSpellTypeByName(message);
 
       if (spellType != null)
       {
@@ -288,7 +161,7 @@ public class OllivandersListener implements Listener
       for (int i = 0; i < words.length; i++)
       {
          spellName.append(words[i]);
-         spellType = Ollivanders2API.getSpells(p).getSpellTypeByName(spellName.toString());
+         spellType = Ollivanders2API.getSpells().getSpellTypeByName(spellName.toString());
 
          if (spellType != null)
             break;
@@ -319,9 +192,8 @@ public class OllivandersListener implements Listener
     * @param player     the player chatting
     * @param spellType  the spell type chatted
     * @param recipients the recipients for this chat
-    * @param muffliatos all muffliato stationary spells
     */
-   private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients, List<O2StationarySpell> muffliatos)
+   private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients)
    {
       // remove all recipients if this is not a "spoken" spell
       if (spellType == O2SpellType.APPARATE || Divination.divinationSpells.contains(spellType))
@@ -344,25 +216,6 @@ public class OllivandersListener implements Listener
             catch (Exception e)
             {
                common.printDebugMessage("OllivandersListener.updateRecipient: exception removing recipient", e, null, true);
-            }
-         }
-      }
-
-      // If sender is in a MUFFLIATO, remove recipients not also in the MUFFLIATO radius
-      if (muffliatos != null && muffliatos.size() > 0)
-      {
-         common.printDebugMessage("OllivandersListener.updateRecipient: MUFFLIATO detected", null, null, false);
-
-         temp = new HashSet<>(recipients);
-         for (Player recipient : temp)
-         {
-            for (O2StationarySpell muffliato : muffliatos)
-            {
-               Location recipientLocation = recipient.getLocation();
-               if (!muffliato.isInside(recipientLocation))
-               {
-                  recipients.remove(recipient);
-               }
             }
          }
       }
@@ -762,7 +615,7 @@ public class OllivandersListener implements Listener
          }
 
          // add player to their house team
-         Ollivanders2API.getHouses(p).addPlayerToHouseTeam(player);
+         Ollivanders2API.getHouses().addPlayerToHouseTeam(player);
 
          // do player join actions
          o2p.onJoin();
@@ -855,253 +708,6 @@ public class OllivandersListener implements Listener
    }
 
    /**
-    * Handles when players receive damage.
-    *
-    * @param event the player damage event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void onPlayerDamage (@NotNull EntityDamageEvent event)
-   {
-      if (checkSpongify(event))
-      {
-         return;
-      }
-
-      //Horcrux code
-      List<O2StationarySpell> stationarySpells = Ollivanders2API.getStationarySpells(p).getActiveStationarySpells();
-      if (event.getEntity() instanceof Player)
-      {
-         Player player = (Player) event.getEntity();
-         UUID pid = event.getEntity().getUniqueId();
-         if ((player.getHealth() - event.getDamage()) <= 0)
-         {
-            for (O2StationarySpell stationary : stationarySpells)
-            {
-               if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(pid))
-               {
-                  Location tp = stationary.location;
-                  tp.setY(tp.getY() + 1);
-                  p.addTeleportEvent(player, player.getLocation(), tp);
-
-                  Collection<PotionEffect> potions = ((Player) event.getEntity()).getActivePotionEffects();
-                  for (PotionEffect potion : potions)
-                  {
-                     ((Player) event.getEntity()).removePotionEffect(potion.getType());
-                  }
-                  event.setCancelled(true);
-                  common.printDebugMessage("onPlayerDamage: cancelling EntityDamageEvent", null, null, false);
-
-                  AttributeInstance playerHealth = player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH);
-                  if (playerHealth != null)
-                  {
-                     player.setHealth(playerHealth.getBaseValue());
-                     Ollivanders2API.getStationarySpells(p).removeStationarySpell(stationary);
-                     return;
-                  }
-               }
-            }
-         }
-      }
-   }
-
-   /**
-    * Checks to see if the entity was within a spongify stationary spell object. If so, cancels the damage event
-    *
-    * @param event the Entity  Damage Event
-    * @return true if the entity was within spongify
-    */
-   private boolean checkSpongify(@NotNull EntityDamageEvent event)
-   {
-      Entity entity = event.getEntity();
-      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-      {
-         if (spell instanceof MOLLIARE && event.getCause() == DamageCause.FALL)
-         {
-            if (spell.isInside(entity.getLocation()))
-            {
-               event.setCancelled(true);
-               common.printDebugMessage("checkSpongify: cancelling EntityDamageEvent", null, null, false);
-               return true;
-            }
-         }
-      }
-      return false;
-   }
-
-   /**
-    * Cancels any block place event inside of a colloportus object
-    *
-    * @param event the block place event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusBlockPlaceEvent (@NotNull BlockPlaceEvent event)
-   {
-      if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
-      {
-         if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
-         {
-            if (!event.getPlayer().hasPermission("Ollivanders2.BYPASS"))
-            {
-               event.getBlock().breakNaturally();
-            }
-         }
-         else
-         {
-            event.getBlock().breakNaturally();
-         }
-      }
-   }
-
-   /**
-    * Cancels any block break event inside of a colloportus object
-    *
-    * @param event the block break event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusBlockBreakEvent (@NotNull BlockBreakEvent event)
-   {
-      if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
-      {
-         if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
-         {
-            if (!event.getPlayer().hasPermission("Ollivanders2.BYPASS"))
-            {
-               event.setCancelled(true);
-               common.printDebugMessage("onColloportusBlockBreakEvent: cancelling BlockBreakEvent", null, null, false);
-            }
-         }
-         else
-         {
-            event.setCancelled(true);
-            common.printDebugMessage("onColloportusBlockBreakEvent: cancelling BlockBreakEvent", null, null, false);
-         }
-      }
-   }
-
-   /**
-    * Cancels any block physics event inside of a colloportus object
-    *
-    * @param event the block physics event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusBlockPhysicsEvent (@NotNull BlockPhysicsEvent event)
-   {
-      if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("onColloportusBlockPhysicsEvent: cancelling BlockPhysicsEvent", null, null, false);
-      }
-   }
-
-   /**
-    * Cancels any block interact event inside a colloportus object
-    *
-    * @param event the player interact event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusPlayerInteract (@NotNull PlayerInteractEvent event)
-   {
-      if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK)
-      {
-         if (event.getClickedBlock() == null)
-            return;
-
-         if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getClickedBlock().getLocation()))
-         {
-            if (event.getPlayer().isPermissionSet("Ollivanders2.BYPASS"))
-            {
-               if (!event.getPlayer().hasPermission("Ollivanders2.BYPASS"))
-               {
-                  event.setCancelled(true);
-                  common.printDebugMessage("onColloportusPlayerInteract: cancelling PlayerInteractEvent", null, null, false);
-               }
-            }
-            else
-            {
-               event.setCancelled(true);
-               common.printDebugMessage("onColloportusPlayerInteract: cancelling PlayerInteractEvent", null, null, false);
-            }
-         }
-      }
-   }
-
-   /**
-    * Cancels any piston extend event inside a colloportus
-    *
-    * @param event the block piston extend event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusPistonExtend (@NotNull BlockPistonExtendEvent event)
-   {
-      ArrayList<COLLOPORTUS> colloportusSpells = new ArrayList<>();
-      for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-      {
-         if (stat instanceof COLLOPORTUS)
-         {
-            colloportusSpells.add((COLLOPORTUS) stat);
-         }
-      }
-
-      List<Block> blocks = event.getBlocks();
-      BlockFace direction = event.getDirection();
-      for (Block block : blocks)
-      {
-         Block newBlock = block.getRelative(direction.getModX(), direction.getModY(), direction.getModZ());
-         for (COLLOPORTUS colloportus : colloportusSpells)
-         {
-            if (colloportus.isInside(newBlock.getLocation()) || colloportus.isInside(block.getLocation()))
-            {
-               event.setCancelled(true);
-               common.printDebugMessage("onColloportusPistonExtend: cancelling BlockPistonExtendEvent", null, null, false);
-               return;
-            }
-         }
-      }
-   }
-
-   /**
-    * Cancels any piston retract event inside of a colloportus
-    *
-    * @param event the block Piston Retract Event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusPistonRetract (@NotNull BlockPistonRetractEvent event)
-   {
-      if (event.isSticky())
-      {
-         if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, event.getBlock().getLocation()))
-         {
-            event.setCancelled(true);
-            common.printDebugMessage("onColloportusPistonRetract: cancelling BlockPistonRetractEvent", null, null, false);
-         }
-      }
-   }
-
-   /**
-    * Cancels any block change by an entity inside of a colloportus
-    *
-    * @param event the entity Change Block Event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void onColloportusEntityChangeBlock (@NotNull EntityChangeBlockEvent event)
-   {
-      Location loc = event.getBlock().getLocation();
-      if (loc.getWorld() == null)
-         return;
-
-      Entity entity = event.getEntity();
-      if (Ollivanders2API.getStationarySpells(p).isInsideOf(O2StationarySpellType.COLLOPORTUS, loc))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("onColloportusEntityChangeBlock: cancelling EntityChangeBlockEvent", null, null, false);
-         if (event.getEntityType() == EntityType.FALLING_BLOCK)
-         {
-            loc.getWorld().dropItemNaturally(loc, new ItemStack(((FallingBlock) entity).getBlockData().getMaterial()));
-         }
-      }
-   }
-
-   /**
     * If a block is broken that is temporary, prevent it from dropping anything.
     *
     * @param event the block break event
@@ -1114,31 +720,6 @@ public class OllivandersListener implements Listener
       if (p.isTempBlock(block))
       {
          event.setDropItems(false);
-      }
-   }
-
-   /**
-    * If a block is inside colloportus, then don't blow it up.
-    *
-    * @param event the entity explode event
-    */
-   @EventHandler(priority = EventPriority.HIGH)
-   public void onExplosion (@NotNull EntityExplodeEvent event)
-   {
-      List<Block> blockListCopy = new ArrayList<>(event.blockList());
-
-      for (Block block : blockListCopy)
-      {
-         for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-         {
-            if (stat instanceof COLLOPORTUS)
-            {
-               if (stat.isInside(block.getLocation()))
-               {
-                  event.blockList().remove(block);
-               }
-            }
-         }
       }
    }
 
@@ -1261,23 +842,6 @@ public class OllivandersListener implements Listener
             common.printDebugMessage("cloakPlayer: cancelling EntityTargetEvent", null, null, false);
          }
       }
-      if (target != null)
-      {
-         for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-         {
-            if (stat instanceof REPELLO_MUGGLETON)
-            {
-               if (stat.isInside(target.getLocation()))
-               {
-                  if (!stat.isInside(event.getEntity().getLocation()))
-                  {
-                     event.setCancelled(true);
-                     common.printDebugMessage("cloakPlayer: cancelling EntityTargetEvent", null, null, false);
-                  }
-               }
-            }
-         }
-      }
    }
 
    /**
@@ -1359,7 +923,7 @@ public class OllivandersListener implements Listener
 
          if (meta.hasLore())
          {
-            O2Potion potion = Ollivanders2API.getPotions(p).findPotionByItemMeta(meta);
+            O2Potion potion = Ollivanders2API.getPotions().findPotionByItemMeta(meta);
 
             if (potion != null)
             {
@@ -1496,7 +1060,7 @@ public class OllivandersListener implements Listener
       Block under = cauldron.getRelative(BlockFace.DOWN);
       if (Ollivanders2Common.hotBlocks.contains(under.getType()))
       {
-         ItemStack potion = Ollivanders2API.getPotions(p).brewPotion(cauldron, player);
+         ItemStack potion = Ollivanders2API.getPotions().brewPotion(cauldron, player);
 
          if (potion == null)
          {
@@ -1536,7 +1100,7 @@ public class OllivandersListener implements Listener
       if (meta == null)
          return;
 
-      O2Potion potion = Ollivanders2API.getPotions(p).findPotionByItemMeta(meta);
+      O2Potion potion = Ollivanders2API.getPotions().findPotionByItemMeta(meta);
 
       if (potion != null)
       {

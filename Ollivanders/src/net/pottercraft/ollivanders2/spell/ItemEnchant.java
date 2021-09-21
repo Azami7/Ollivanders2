@@ -55,10 +55,12 @@ public abstract class ItemEnchant extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ItemEnchant()
+   public ItemEnchant(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
    }
 
    /**
@@ -68,7 +70,7 @@ public abstract class ItemEnchant extends O2Spell
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public ItemEnchant (@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+   public ItemEnchant(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -87,7 +89,7 @@ public abstract class ItemEnchant extends O2Spell
     * Initialize spell data
     */
    @Override
-   void doInitSpell ()
+   void doInitSpell()
    {
       magnitude = (int) ((usesModifier / 4) * strength);
 
@@ -107,7 +109,7 @@ public abstract class ItemEnchant extends O2Spell
     * Add the curse effect to an item stack in the projectile's location
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (hasHitTarget())
       {
@@ -155,7 +157,7 @@ public abstract class ItemEnchant extends O2Spell
     * @return the enchanted item
     */
    @NotNull
-   private Item enchantItem (@NotNull Item item)
+   private Item enchantItem(@NotNull Item item)
    {
       // clone the item stack
       ItemStack enchantedItemStack = item.getItemStack().clone();

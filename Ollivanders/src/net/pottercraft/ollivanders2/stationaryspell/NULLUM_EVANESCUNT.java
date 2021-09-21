@@ -1,7 +1,16 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
 import org.bukkit.Location;
+import org.bukkit.Sound;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityTeleportEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -9,9 +18,10 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Anti-disapparition spell. Players can't apparate out of it.
+ * Nullum evanescunt creates a stationary spell which will not allow apparition out of it.
  *
  * @author lownes
+ * @author Azami7
  */
 public class NULLUM_EVANESCUNT extends O2StationarySpell
 {
@@ -44,10 +54,127 @@ public class NULLUM_EVANESCUNT extends O2StationarySpell
       spellType = O2StationarySpellType.NULLUM_EVANESCUNT;
    }
 
+   /**
+    * Upkeep
+    */
    @Override
    public void checkEffect ()
    {
       age();
+   }
+
+   /**
+    * Prevent player apparating to this location
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnOllivandersApparateByNameEvent (@NotNull OllivandersApparateByNameEvent event)
+   {
+      Player player = event.getPlayer();
+      Location playerLocation = player.getLocation();
+
+      if (isInside(playerLocation))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("NULLUM_EVANESCUNT: canceled OllivandersApparateByNameEvent", null, null, false);
+      }
+
+      new BukkitRunnable()
+      {
+         @Override
+         public void run()
+         {
+            if (event.isCancelled())
+               playerFeedback(player);
+         }
+      }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+   }
+
+   /**
+    * Prevent player apparating to this location
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnOllivandersApparateByCoordinatesEvent (@NotNull OllivandersApparateByCoordinatesEvent event)
+   {
+      Player player = event.getPlayer();
+      Location playerLocation = player.getLocation();
+
+      if (isInside(playerLocation))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("NULLUM_EVANESCUNT: canceled OllivandersApparateByCoordinatesEvent", null, null, false);
+      }
+
+      new BukkitRunnable()
+      {
+         @Override
+         public void run()
+         {
+            if (event.isCancelled())
+               playerFeedback(player);
+         }
+      }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+   }
+
+   /**
+    * Prevent entity teleporting to this location
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnEntityTeleportEvent (@NotNull EntityTeleportEvent event)
+   {
+      Entity entity = event.getEntity();
+      Location entityLocation = entity.getLocation();
+
+      if (isInside(entityLocation))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("NULLUM_EVANESCUNT: canceled EntityTeleportEvent", null, null, false);
+      }
+   }
+
+   /**
+    * Prevent player teleporting to this location
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnPlayerTeleportEvent (@NotNull PlayerTeleportEvent event)
+   {
+      Player player = event.getPlayer();
+      Location playerLocation = player.getLocation();
+
+      if (isInside(playerLocation))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("NULLUM_EVANESCUNT: canceled PlayerTeleportEvent", null, null, false);
+      }
+
+      new BukkitRunnable()
+      {
+         @Override
+         public void run()
+         {
+            if (event.isCancelled())
+               playerFeedback(player);
+         }
+      }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+   }
+
+   /**
+    * Feedback to the player when they try to apparate.
+    *
+    * @param player the player
+    */
+   private void playerFeedback (@NotNull Player player)
+   {
+      player.sendMessage(Ollivanders2.chatColor + "A powerful magic protects this place.");
+      player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+      flair(5);
    }
 
    /**

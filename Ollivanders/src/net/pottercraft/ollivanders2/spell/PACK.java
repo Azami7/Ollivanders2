@@ -32,15 +32,17 @@ public final class PACK extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PACK()
+   public PACK(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PACK;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Books, clothes, telescope and scales all soared into the air and flew pell-mell into the trunk.");
          add("The Packing Charm");

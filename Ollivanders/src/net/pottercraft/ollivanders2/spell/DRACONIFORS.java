@@ -21,15 +21,17 @@ public final class DRACONIFORS extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public DRACONIFORS()
+   public DRACONIFORS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.DRACONIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Draconifors Transfiguration");
          add("\"It was great! Now I can turn anything into dragons!\" -Hermione Granger");

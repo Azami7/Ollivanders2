@@ -18,10 +18,12 @@ public final class NULLUM_APPAREBIT extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public NULLUM_APPAREBIT()
+   public NULLUM_APPAREBIT(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.NULLUM_APPAREBIT;
       branch = O2MagicBranch.CHARMS;
@@ -54,7 +56,7 @@ public final class NULLUM_APPAREBIT extends StationarySpell
    }
 
    @Override
-   protected O2StationarySpell createStationarySpell ()
+   protected O2StationarySpell createStationarySpell()
    {
       return new net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT(p, player.getUniqueId(), location, O2StationarySpellType.NULLUM_APPAREBIT, radius, duration);
    }

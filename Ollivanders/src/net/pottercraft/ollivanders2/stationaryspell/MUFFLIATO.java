@@ -3,16 +3,21 @@ package net.pottercraft.ollivanders2.stationaryspell;
 import org.bukkit.Location;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 /**
  * Only players within this can hear other conversation from other players within. Duration depending on spell's level.
  *
  * @author lownes
+ * @author Azami7
  */
 public class MUFFLIATO extends ShieldSpell
 {
@@ -45,9 +50,35 @@ public class MUFFLIATO extends ShieldSpell
       spellType = O2StationarySpellType.MUFFLIATO;
    }
 
+   /**
+    * Upkeep
+    */
+   @Override
    public void checkEffect ()
    {
       age();
+   }
+
+   /**
+    * Handle player chat
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event)
+   {
+      Player speaker = event.getPlayer();
+
+      if (!isInside(speaker.getLocation()))
+         return;
+
+      Set<Player> recipients = new HashSet<>(event.getRecipients());
+
+      for (Player player : recipients)
+      {
+         if (!isInside(player.getLocation()))
+            event.getRecipients().remove(player);
+      }
    }
 
    /**

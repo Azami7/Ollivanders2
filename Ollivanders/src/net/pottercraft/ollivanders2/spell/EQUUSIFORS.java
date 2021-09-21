@@ -21,10 +21,12 @@ public final class EQUUSIFORS extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public EQUUSIFORS()
+   public EQUUSIFORS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.EQUUSIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;

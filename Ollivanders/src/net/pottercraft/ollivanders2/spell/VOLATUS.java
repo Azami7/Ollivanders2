@@ -19,10 +19,12 @@ public final class VOLATUS extends ItemEnchant
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public VOLATUS()
+   public VOLATUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.VOLATUS;
       branch = O2MagicBranch.CHARMS;
@@ -45,7 +47,7 @@ public final class VOLATUS extends ItemEnchant
     * @param player    the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public VOLATUS (@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+   public VOLATUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
 

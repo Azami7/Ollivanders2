@@ -22,10 +22,12 @@ public class REPARIFORS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public REPARIFORS()
+   public REPARIFORS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.REPARIFORS;
       branch = O2MagicBranch.CHARMS;
@@ -51,7 +53,7 @@ public class REPARIFORS extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       for (LivingEntity live : getLivingEntities(1.5))
       {

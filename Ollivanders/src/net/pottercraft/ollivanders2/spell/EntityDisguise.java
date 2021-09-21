@@ -21,10 +21,12 @@ public abstract class EntityDisguise extends EntityTransfiguration
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public EntityDisguise()
+   public EntityDisguise(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
    }
 
    /**

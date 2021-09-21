@@ -28,6 +28,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Cat;
@@ -41,6 +42,7 @@ import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -201,6 +203,8 @@ public class Ollivanders2Common
       add(Material.DARK_OAK_WALL_SIGN);
       add(Material.OAK_WALL_SIGN);
       add(Material.SPRUCE_WALL_SIGN);
+      add(Material.CRIMSON_WALL_SIGN);
+      add(Material.WARPED_WALL_SIGN);
    }};
 
    public static final List<Material> standingSigns = new ArrayList<>()
@@ -210,12 +214,40 @@ public class Ollivanders2Common
       add(Material.DARK_OAK_SIGN);
       add(Material.OAK_SIGN);
       add(Material.SPRUCE_SIGN);
+      add(Material.CRIMSON_SIGN);
+      add(Material.WARPED_SIGN);
    }};
 
    public static final List<Material> signs = new ArrayList<>()
    {{
       addAll(wallSigns);
       addAll(standingSigns);
+   }};
+
+   public static final List<Material> doors = new ArrayList<>()
+   {{
+      add(Material.ACACIA_DOOR);
+      add(Material.BIRCH_DOOR);
+      add(Material.CRIMSON_DOOR);
+      add(Material.DARK_OAK_DOOR);
+      add(Material.IRON_DOOR);
+      add(Material.JUNGLE_DOOR);
+      add(Material.OAK_DOOR);
+      add(Material.SPRUCE_DOOR);
+      add(Material.WARPED_DOOR);
+   }};
+
+   public static final List<Material> trapdoors = new ArrayList<>()
+   {{
+      add(Material.ACACIA_TRAPDOOR);
+      add(Material.BIRCH_TRAPDOOR);
+      add(Material.CRIMSON_TRAPDOOR);
+      add(Material.DARK_OAK_TRAPDOOR);
+      add(Material.IRON_TRAPDOOR);
+      add(Material.JUNGLE_TRAPDOOR);
+      add(Material.OAK_TRAPDOOR);
+      add(Material.SPRUCE_TRAPDOOR);
+      add(Material.WARPED_TRAPDOOR);
    }};
 
    public static final List<Material> hotBlocks = new ArrayList<>()
@@ -1378,7 +1410,7 @@ public class Ollivanders2Common
 
       for (Player player : p.getServer().getOnlinePlayers())
       {
-         if (Ollivanders2API.getHouses(p).isSorted(player))
+         if (Ollivanders2API.getHouses().isSorted(player))
             sortedPlayers.add(player);
       }
 
@@ -1468,5 +1500,40 @@ public class Ollivanders2Common
       }
 
       return true;
+   }
+
+   /**
+    * Are two locations the same?
+    *
+    * @param loc1 location 1
+    * @param loc2 location 2
+    * @return true if they are the same, false otherwise
+    */
+   public boolean locationEquals (@NotNull Location loc1, @NotNull Location loc2)
+   {
+      return (loc1.getWorld() == loc2.getWorld() && loc1.getX() == loc2.getX() && loc1.getY() == loc2.getY() && loc1.getZ() == loc2.getZ());
+   }
+
+   /**
+    * Restore a player to full health
+    *
+    * @param player the player to restore
+    */
+   public void restoreFullHealth (@NotNull Player player)
+   {
+      // remove O2Effecs
+      Ollivanders2API.getPlayers(p).playerEffects.onDeath(player.getUniqueId());
+
+      // remove other potion effects
+      Collection<PotionEffect> potions = player.getActivePotionEffects();
+      for (PotionEffect potion : potions)
+      {
+         player.removePotionEffect(potion.getType());
+      }
+
+      // reset health to max
+      AttributeInstance playerHealthMax = player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH);
+      if (playerHealthMax != null)
+         player.setHealth(playerHealthMax.getBaseValue());
    }
 }

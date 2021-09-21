@@ -26,15 +26,17 @@ public final class VENTO_FOLIO extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public VENTO_FOLIO()
+   public VENTO_FOLIO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.VENTO_FOLIO;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"And then Harry saw him. Voldemort was flying like smoke on the wind, without broomstick or thestral to hold him, his snake-like face gleaming out of the blackness, his white fingers raising his wand again —\"");
          add("\"Remus, he can -\"\n\"Fly, I saw him too, he came after Hagrid and me.\" -Kingsley Shacklebolt and Harry Potter");
@@ -64,7 +66,7 @@ public final class VENTO_FOLIO extends O2Spell
    /**
     * Set the successRate for this spell.
     */
-   private void setSuccessRate ()
+   private void setSuccessRate()
    {
       // set success rate based on their experience
       int uses = (int)(usesModifier * 10);

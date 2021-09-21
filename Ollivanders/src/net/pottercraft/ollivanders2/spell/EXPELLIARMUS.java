@@ -29,15 +29,17 @@ public final class EXPELLIARMUS extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public EXPELLIARMUS()
+   public EXPELLIARMUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.EXPELLIARMUS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Disarming Charm");
          add("They made the most of the last few hours in which they were allowed to do magic before the holidays... and practised disarming each other by magic. Harry was getting very good at it.");
@@ -86,7 +88,7 @@ public final class EXPELLIARMUS extends O2Spell
     * Look for entities in the projectile location and disarm them if they are holding something
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<LivingEntity> livingEntities = getLivingEntities(1.5);
 

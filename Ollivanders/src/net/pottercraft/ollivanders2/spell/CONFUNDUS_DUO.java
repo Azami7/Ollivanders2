@@ -19,20 +19,22 @@ public final class CONFUNDUS_DUO extends ConfundusSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public CONFUNDUS_DUO ()
+   public CONFUNDUS_DUO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.CONFUNDUS_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("The Confundus Charm");
          add("The guard was confused. He stared down at the thin, golden Probe and then at his companion, who said in a slightly dazed voice, 'Yeah, you've just checked them, Marius.'");
       }};
 
-      text = "Confundus Duo is a stronger variation of the Confundus Charm.  Effects are twice as strong and last twice as long as Confundo.";
+      text = "Confundus Duo is a stronger variation of the Confundus Charm. Effects are twice as strong and last twice as long as Confundo.";
 
    }
 

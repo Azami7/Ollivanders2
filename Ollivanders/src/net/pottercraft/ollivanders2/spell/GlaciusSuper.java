@@ -18,10 +18,12 @@ public abstract class GlaciusSuper extends BlockTransfiguration
 {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public GlaciusSuper()
+    public GlaciusSuper(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         branch = O2MagicBranch.CHARMS;
     }

@@ -14,6 +14,7 @@ import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.house.O2HouseType;
+import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 
@@ -896,13 +897,13 @@ public class O2Players
       }
 
       // sorted
-      if (Ollivanders2.useHouses)
+      if (O2Houses.useHouses)
       {
          summary.append("\nHouse: ");
          String house = null;
-         if (Ollivanders2API.getHouses(p).isSorted(player))
+         if (Ollivanders2API.getHouses().isSorted(player))
          {
-            O2HouseType houseType = Ollivanders2API.getHouses(p).getHouse(player);
+            O2HouseType houseType = Ollivanders2API.getHouses().getHouse(player);
             if (houseType != null)
                house = houseType.getName();
          }
@@ -959,7 +960,7 @@ public class O2Players
 
          for (O2SpellType spellType : O2SpellType.values())
          {
-            if (knownSpells.containsKey(spellType) && Ollivanders2API.getSpells(p).isLoaded(spellType))
+            if (knownSpells.containsKey(spellType) && Ollivanders2API.getSpells().isLoaded(spellType))
             {
                summary.append("\n* ").append(spellType.getSpellName()).append(" ").append(knownSpells.get(spellType).toString());
             }
@@ -980,7 +981,7 @@ public class O2Players
 
          for (O2PotionType potionType : O2PotionType.values())
          {
-            if (knownPotions.containsKey(potionType) && Ollivanders2API.getPotions(p).isLoaded(potionType))
+            if (knownPotions.containsKey(potionType) && Ollivanders2API.getPotions().isLoaded(potionType))
             {
                summary.append("\n* ").append(potionType.getPotionName()).append(" ").append(knownPotions.get(potionType).toString());
             }

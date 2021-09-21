@@ -22,15 +22,17 @@ public final class HORREAT_PROTEGAT extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public HORREAT_PROTEGAT()
+   public HORREAT_PROTEGAT(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.HORREAT_PROTEGAT;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Spell-Reduction Charm");
       }};
@@ -64,7 +66,7 @@ public final class HORREAT_PROTEGAT extends O2Spell
     * Reduce the radius of any stationary spells within a radius of the target, if they were cast by this player
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;

@@ -20,15 +20,17 @@ public class PYROSVESTIRAS extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PYROSVESTIRAS()
+   public PYROSVESTIRAS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.CHARMS;
       spellType = O2SpellType.PYROSVESTIRAS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("A charm that extinguishes fires. Most commonly employed by Dragonologists.");
          add("The Extinguishing Charm");
       }};
