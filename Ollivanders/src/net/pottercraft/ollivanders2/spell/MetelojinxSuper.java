@@ -16,10 +16,12 @@ public abstract class MetelojinxSuper extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public MetelojinxSuper()
+   public MetelojinxSuper(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
    }
 
    /**
@@ -35,7 +37,7 @@ public abstract class MetelojinxSuper extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (location.getY() > 256)
       {

@@ -19,16 +19,18 @@ public final class ASTROLOGIA extends Divination
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ASTROLOGIA ()
+   public ASTROLOGIA (Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ASTROLOGIA;
       divinationType = O2DivinationType.ASTROLOGY;
       branch = O2MagicBranch.DIVINATION;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"Professor Trelawney did astrology with us! Mars causes accidents and burns and things like that, and when it makes an angle to Saturn, like now, that means people need to be extra careful when handling hot things.\" -Parvati Patil");
          add("\"My dears, it is time for use to consider the stars.\" -Sybill Trelawny");

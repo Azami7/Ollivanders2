@@ -23,10 +23,12 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_PORCILLI()
+   public INCARNATIO_PORCILLI(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_PORCILLI;
       branch = O2MagicBranch.TRANSFIGURATION;

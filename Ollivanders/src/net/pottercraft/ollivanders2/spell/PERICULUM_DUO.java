@@ -17,10 +17,12 @@ public final class PERICULUM_DUO extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PERICULUM_DUO()
+   public PERICULUM_DUO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PERICULUM_DUO;
       branch = O2MagicBranch.CHARMS;

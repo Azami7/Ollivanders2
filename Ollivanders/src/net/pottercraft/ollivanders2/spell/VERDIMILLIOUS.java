@@ -19,10 +19,12 @@ public final class VERDIMILLIOUS extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public VERDIMILLIOUS()
+   public VERDIMILLIOUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.VERDIMILLIOUS;
       text = "Conjures large green ball fireworks in the air.";

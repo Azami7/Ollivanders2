@@ -20,15 +20,17 @@ public final class MOLLIARE extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public MOLLIARE()
+   public MOLLIARE(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.MOLLIARE;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Cushioning Charm.");
          add("Harry felt himself glide back toward the ground as though weightless, landing painlessly on the rocky passage floor.");
@@ -61,7 +63,7 @@ public final class MOLLIARE extends StationarySpell
    }
 
    @Override
-   protected O2StationarySpell createStationarySpell ()
+   protected O2StationarySpell createStationarySpell()
    {
       return new net.pottercraft.ollivanders2.stationaryspell.MOLLIARE(p, player.getUniqueId(), location, O2StationarySpellType.MOLLIARE, radius, duration);
    }

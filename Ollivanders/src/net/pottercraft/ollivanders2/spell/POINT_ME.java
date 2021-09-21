@@ -18,15 +18,17 @@ public class POINT_ME extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public POINT_ME()
+   public POINT_ME(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.POINT_ME;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"'Point Me!' he whispered again to his wand, and it spun around and pointed him to the right-hand one.\"");
          add("The Four-Point Spell");
@@ -53,7 +55,7 @@ public class POINT_ME extends O2Spell
    }
 
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!isSpellAllowed())
       {

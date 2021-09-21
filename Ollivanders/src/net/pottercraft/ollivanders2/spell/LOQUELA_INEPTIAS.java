@@ -19,15 +19,17 @@ public class LOQUELA_INEPTIAS extends AddO2Effect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LOQUELA_INEPTIAS()
+   public LOQUELA_INEPTIAS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.LOQUELA_INEPTIAS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"He usually picked Harry to help him with these reconstructions; so far, Harry had been forced to play a simple Transylvanian villager whom Lockhart had cured of a Babbling Curse, a yeti with a head cold, and a vampire who had been unable to eat anything except lettuce since Lockhart had dealt with him.\"");
          add("The Babbling Curse");

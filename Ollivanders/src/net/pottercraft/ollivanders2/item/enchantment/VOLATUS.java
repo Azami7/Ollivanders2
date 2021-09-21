@@ -65,6 +65,9 @@ public class VOLATUS extends Enchantment
      */
     public void doItemHeld (@NotNull PlayerItemHeldEvent event)
     {
+        if (!EnchantedItems.enableBrooms)
+            return;
+
         Player player = event.getPlayer();
 
         new BukkitRunnable()
@@ -84,6 +87,9 @@ public class VOLATUS extends Enchantment
      */
     void checkBroomStatus (Player player)
     {
+        if (!EnchantedItems.enableBrooms)
+            return;
+
         // do they have a broom in either hand?
         if (isHoldingBroom(player))
         {
@@ -128,5 +134,4 @@ public class VOLATUS extends Enchantment
 
         return false;
     }
-
 }

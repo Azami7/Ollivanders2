@@ -20,9 +20,14 @@ public abstract class BombardaSuper extends O2Spell
 
     double strengthMultiplier = 0.25;
 
-    BombardaSuper()
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    BombardaSuper(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**

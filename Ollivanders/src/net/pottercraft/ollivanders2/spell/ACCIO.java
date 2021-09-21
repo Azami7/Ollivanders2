@@ -19,14 +19,16 @@ public final class ACCIO extends Knockback
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ACCIO ()
+   public ACCIO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ACCIO;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("\"Accio Firebolt!\" -Harry Potter");
          add("The Summoning Charm");
       }};

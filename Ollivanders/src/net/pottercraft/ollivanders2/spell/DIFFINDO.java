@@ -24,15 +24,17 @@ public final class DIFFINDO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public DIFFINDO()
+   public DIFFINDO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.DIFFINDO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Severing Charm");
          add("With the Severing Charm, cutting or tearing objects is a simple matter of wand control.");
@@ -70,7 +72,7 @@ public final class DIFFINDO extends O2Spell
     * Split a log or a player's inventory
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       // first check for players
       List<LivingEntity> livingEntities = getLivingEntities(1.5);

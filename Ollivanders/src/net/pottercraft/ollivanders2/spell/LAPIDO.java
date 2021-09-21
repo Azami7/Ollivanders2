@@ -21,15 +21,17 @@ public final class LAPIDO extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LAPIDO()
+   public LAPIDO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.LAPIDO;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Cobblestone to Stone Spell");
       }};

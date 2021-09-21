@@ -29,10 +29,12 @@ public final class SCUTO_CONTERAM extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public SCUTO_CONTERAM ()
+   public SCUTO_CONTERAM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.SCUTO_CONTERAM;
       branch = O2MagicBranch.CHARMS;

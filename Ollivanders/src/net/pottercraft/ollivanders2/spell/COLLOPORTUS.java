@@ -25,10 +25,12 @@ public final class COLLOPORTUS extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public COLLOPORTUS()
+   public COLLOPORTUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.COLLOPORTUS;
       branch = O2MagicBranch.CHARMS;
@@ -100,7 +102,7 @@ public final class COLLOPORTUS extends StationarySpell
 
    @Override
    @NotNull
-   protected O2StationarySpell createStationarySpell ()
+   protected O2StationarySpell createStationarySpell()
    {
       return new net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS(p, player.getUniqueId(), location, O2StationarySpellType.COLLOPORTUS, radius, duration);
    }

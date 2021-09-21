@@ -26,10 +26,12 @@ public final class PORTUS extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PORTUS()
+   public PORTUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PORTUS;
       branch = O2MagicBranch.CHARMS;

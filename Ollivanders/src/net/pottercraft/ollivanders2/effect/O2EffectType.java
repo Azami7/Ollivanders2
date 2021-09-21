@@ -54,6 +54,7 @@ public enum O2EffectType
    ;
 
    final private Class<?> className;
+   boolean enabled = true;
 
    /**
     * Enum constructor.
@@ -74,5 +75,26 @@ public enum O2EffectType
    public Class<?> getClassName()
    {
       return className;
+   }
+
+   /**
+    * Is this effect currently enabled
+    *
+    * @return
+    */
+   public boolean isEnabled()
+   {
+      return enabled;
+   }
+
+   /**
+    * Set whether this effect is currently enabled
+    *
+    * @param enabled
+    * @return
+    */
+   public void setEnabled(boolean enabled)
+   {
+      this.enabled = enabled;
    }
 }

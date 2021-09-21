@@ -24,15 +24,17 @@ public final class AVIS extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public AVIS()
+    public AVIS(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         spellType = O2SpellType.AVIS;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<String>()
+        flavorText = new ArrayList<>()
         {{
             add("The Bird-Conjuring Charm");
             add("Most of the class had already left, although several twittering yellow birds were still zooming around the room, all of Hermione's creation; nobody else had succeeded in conjuring so much as a feather from thin air.");
@@ -106,5 +108,5 @@ public final class AVIS extends O2Spell
     }
 
     @Override
-    protected void doCheckEffect() { }
+    protected void doCheckEffect() {}
 }

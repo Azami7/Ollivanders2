@@ -65,7 +65,7 @@ public class FLYING extends O2Effect
       Player player = p.getServer().getPlayer(targetID);
       if (player != null)
       {
-         if (!player.isOp())
+         if (!player.hasPermission("Ollivanders2.admin"))
          {
             player.setAllowFlight(false);
             player.setFlying(false);

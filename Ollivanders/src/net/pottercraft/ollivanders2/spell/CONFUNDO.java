@@ -18,15 +18,17 @@ public final class CONFUNDO extends ConfundusSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public CONFUNDO ()
+   public CONFUNDO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.CONFUNDO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("The Confundus Charm");
          add("\"Look who's talking. Confunded anyone lately?\" -Harry Potter");
       }};

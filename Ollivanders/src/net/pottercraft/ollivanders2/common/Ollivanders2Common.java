@@ -1410,7 +1410,7 @@ public class Ollivanders2Common
 
       for (Player player : p.getServer().getOnlinePlayers())
       {
-         if (Ollivanders2API.getHouses(p).isSorted(player))
+         if (Ollivanders2API.getHouses().isSorted(player))
             sortedPlayers.add(player);
       }
 

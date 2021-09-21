@@ -5,9 +5,13 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Wolf;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -44,7 +48,7 @@ public class LYCANTHROPY extends ShapeShiftSuper
     * Transfigure the player back to human form and kill this effect.
     */
    @Override
-   public void kill ()
+   public void kill()
    {
       restore();
       removeAdditionalEffect();
@@ -58,7 +62,7 @@ public class LYCANTHROPY extends ShapeShiftSuper
     * See https://minecraft.gamepedia.com/Moon
     */
    @Override
-   protected void upkeep ()
+   protected void upkeep()
    {
       Player target = p.getServer().getPlayer(targetID);
 
@@ -116,7 +120,7 @@ public class LYCANTHROPY extends ShapeShiftSuper
    /**
     * Add additional effects of lycanthropy such as aggression and speaking like a wolf
     */
-   private void addAdditionalEffects ()
+   private void addAdditionalEffects()
    {
       AGGRESSION aggression = new AGGRESSION(p, 5, targetID);
       aggression.setAggressionLevel(10);
@@ -151,5 +155,53 @@ public class LYCANTHROPY extends ShapeShiftSuper
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove () { }
+   public void doRemove() { }
+
+   /**
+    * Do any on damage effects
+    */
+   @Override
+   void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event)
+   {
+      if (!O2EffectType.LYCANTHROPY.isEnabled())
+         return;
+
+      if (event.getDamager() instanceof Wolf)
+      {
+         Wolf wolf = (Wolf) event.getDamager();
+         Player damaged = p.getServer().getPlayer(targetID);
+         if (damaged == null)
+         {
+            common.printDebugMessage("Null player in Lycanthropy.doOnDamage", null, null, true);
+            return;
+         }
+
+         if (wolf.isAngry())
+         {
+            new BukkitRunnable()
+            {
+               @Override
+               public void run()
+               {
+                  if (!event.isCancelled())
+                     infectPlayer(damaged);
+               }
+            }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+         }
+      }
+   }
+
+   /**
+    * Infect this player with Lycanthropy
+    *
+    * @param player the player to infect
+    */
+   private void infectPlayer(Player player)
+   {
+      if (!Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.LYCANTHROPY))
+      {
+         LYCANTHROPY effect = new LYCANTHROPY(p, 100, player.getUniqueId());
+         Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+      }
+   }
 }

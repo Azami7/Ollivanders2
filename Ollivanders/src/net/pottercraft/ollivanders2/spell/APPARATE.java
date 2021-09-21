@@ -56,10 +56,12 @@ public final class APPARATE extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public APPARATE()
+    public APPARATE(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         spellType = O2SpellType.APPARATE;
         branch = O2MagicBranch.CHARMS;
@@ -71,10 +73,18 @@ public final class APPARATE extends O2Spell
             add("\"We just Apparated, didn't we sir?\"\n\"Yes, and quite successfully too, I might add. Most people vomit the first time.\" -Harry Potter and Albus Dumbledore");
         }};
 
-        text = "Apparition is a two sided spell. To apparate to a predetermined location, simply say apparate and list your x, y, and z coordinates. "
-                + "To apparate to the location of your cursor, within 140 meters, just say the word apparate. "
-                + "Your accuracy is determined by the distance traveled and your experience. "
-                + "If there are any entities close to you when you apparate, they will be taken with you as well by side-along apparition.";
+        if (Ollivanders2.apparateLocations)
+        {
+            text = "To apparate to a predetermined location, simply say apparate and list your x, y, and z coordinates. "
+                    + "To apparate to the location of your cursor, within 140 meters, just say the word apparate. "
+                    + "Your accuracy is determined by the distance traveled and your experience.";
+        }
+        else
+        {
+            text = "To apparate to a predetermined location, simply say apparate and the name of the place you wish to apparate to. "
+                    + "To apparate to the location of your cursor, within 140 meters, just say the word apparate. "
+                    + "Your accuracy is determined by the distance traveled and your experience.";
+        }
 
         wordsArray = null;
     }
@@ -187,7 +197,7 @@ public final class APPARATE extends O2Spell
      * @return the destination or null if no destination specified
      */
     @Nullable
-    private Location getDestination ()
+    private Location getDestination()
     {
         Location destination = null;
 
@@ -217,7 +227,7 @@ public final class APPARATE extends O2Spell
                     z = Double.parseDouble(zCoord);
                     destination = new Location(player.getWorld(), x, y, z);
                 }
-                catch (Exception e) { }
+                catch (Exception e) {}
             }
         }
 
@@ -230,7 +240,7 @@ public final class APPARATE extends O2Spell
      * @return a line of sight location up to max blocks
      */
     @NotNull
-    private Location getLineOfSightLocation ()
+    private Location getLineOfSightLocation()
     {
         Location currentLocation = player.getEyeLocation();
         Material material = currentLocation.getBlock().getType();
@@ -297,7 +307,7 @@ public final class APPARATE extends O2Spell
      * @param toLoc the location they are apparating to
      * @return true if the locations are less than maxApparateDistance apart, false otherwise
      */
-    private boolean exceedsMaxDistance (@NotNull Location fromLoc, @NotNull Location toLoc)
+    private boolean exceedsMaxDistance(@NotNull Location fromLoc, @NotNull Location toLoc)
     {
         // value less 1 means there is no limit
         if (maxApparateDistance < 1)
@@ -318,7 +328,7 @@ public final class APPARATE extends O2Spell
      *
      * @param player player to display the list to
      */
-    public static void listApparateLocations (@NotNull Player player)
+    public static void listApparateLocations(@NotNull Player player)
     {
         if (apparateLocations.size() < 1)
         {
@@ -351,7 +361,7 @@ public final class APPARATE extends O2Spell
      * @param z z-coord
      * @return true if successfully added, false otherwise
      */
-    public static boolean addLocation (@NotNull String name, @NotNull World world, double x, double y, double z)
+    public static boolean addLocation(@NotNull String name, @NotNull World world, double x, double y, double z)
     {
         Location location = new Location(world, x, y, z);
 
@@ -366,7 +376,7 @@ public final class APPARATE extends O2Spell
      * @param name the name of the location to remove
      * @return true if successfully removed, false otherwise
      */
-    public static void removeLocation (@NotNull String name)
+    public static void removeLocation(@NotNull String name)
     {
         apparateLocations.remove(name.toLowerCase());
     }
@@ -377,7 +387,7 @@ public final class APPARATE extends O2Spell
      * @param name the location name
      * @return true if it exists in the list, false otherwise
      */
-    public static boolean doesLocationExist (@NotNull String name)
+    public static boolean doesLocationExist(@NotNull String name)
     {
         return apparateLocations.containsKey(name.toLowerCase());
     }
@@ -388,7 +398,7 @@ public final class APPARATE extends O2Spell
      * @return the location if found, null otherwise
      */
     @Nullable
-    public Location getLocationByName (@NotNull String name)
+    public Location getLocationByName(@NotNull String name)
     {
         return apparateLocations.get(name.toLowerCase());
     }
@@ -399,15 +409,15 @@ public final class APPARATE extends O2Spell
      * @return a map of all apparate locations
      */
     @NotNull
-    public static Map<String, Location> getAllApparateLocations ()
+    public static Map<String, Location> getAllApparateLocations()
     {
-        return new HashMap<String, Location>(apparateLocations);
+        return new HashMap<>(apparateLocations);
     }
 
     /**
      * Clears all apparate locations
      */
-    public static void clearApparateLocations ()
+    public static void clearApparateLocations()
     {
         apparateLocations = new HashMap<>();
     }
@@ -415,7 +425,7 @@ public final class APPARATE extends O2Spell
     /**
      * Save all apparate locations
      */
-    public static void saveApparateLocations ()
+    public static void saveApparateLocations()
     {
         if (!Ollivanders2.apparateLocations)
             return;
@@ -429,7 +439,7 @@ public final class APPARATE extends O2Spell
      *
      * @param p a callback to the plugin
      */
-    public static void loadApparateLocations (Ollivanders2 p)
+    public static void loadApparateLocations(Ollivanders2 p)
     {
         if (!Ollivanders2.apparateLocations)
             return;
@@ -444,5 +454,5 @@ public final class APPARATE extends O2Spell
     }
 
     @Override
-    protected void doCheckEffect() { }
+    protected void doCheckEffect() {}
 }

@@ -19,10 +19,12 @@ public final class REPARIFARGE extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public REPARIFARGE()
+   public REPARIFARGE(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.REPARIFARGE;
       branch = O2MagicBranch.TRANSFIGURATION;
@@ -53,7 +55,7 @@ public final class REPARIFARGE extends O2Spell
    }
 
    @Override
-   public void doCheckEffect ()
+   public void doCheckEffect()
    {
       for (Entity entity : getCloseEntities(1.5))
       {

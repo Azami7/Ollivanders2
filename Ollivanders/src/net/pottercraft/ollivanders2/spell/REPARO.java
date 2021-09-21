@@ -24,10 +24,12 @@ public final class REPARO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public REPARO()
+   public REPARO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.REPARO;
       branch = O2MagicBranch.CHARMS;
@@ -66,7 +68,7 @@ public final class REPARO extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<Item> items = getItems(1.5);
 

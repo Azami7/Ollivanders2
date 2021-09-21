@@ -28,15 +28,17 @@ public final class ENGORGIO extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ENGORGIO()
+   public ENGORGIO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ENGORGIO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Engorgement Charm");
          add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink.");
@@ -72,7 +74,7 @@ public final class ENGORGIO extends O2Spell
     * Look for entities within the projectile range and grow them, if possible
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<LivingEntity> livingEntities = getLivingEntities(1.5);
 

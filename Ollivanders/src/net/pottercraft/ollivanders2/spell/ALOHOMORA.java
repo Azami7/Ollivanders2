@@ -24,10 +24,12 @@ public final class ALOHOMORA extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ALOHOMORA()
+   public ALOHOMORA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ALOHOMORA;
       branch = O2MagicBranch.CHARMS;
@@ -65,7 +67,7 @@ public final class ALOHOMORA extends O2Spell
     * Checks for colloportus stationary spells and ages them, if found
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       // check all the stationary spells in the location of the projectile for a Colloportus
       List<O2StationarySpell> inside = new ArrayList<>();

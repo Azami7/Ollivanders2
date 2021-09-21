@@ -29,7 +29,6 @@ public class GsonDAO implements GenericDAO
 {
    final private Gson gson;
 
-   private static final String saveDirectory = "plugins/Ollivanders2";
    private static final String archiveDirectory = "plugins/Ollivanders2/archive";
    public static final String housesJSONFile = "O2Houses.txt";
    public static final String housePointsJSONFile = "O2HousePoints.txt";
@@ -353,10 +352,10 @@ public class GsonDAO implements GenericDAO
     */
    private synchronized void writeJSON(@NotNull String json, @NotNull String path)
    {
-      String saveFile = saveDirectory + "/" + path;
+      String saveFile = Ollivanders2.pluginDir + path;
 
       File file = new File(saveFile);
-      File dir = new File(saveDirectory);
+      File dir = new File(Ollivanders2.pluginDir);
 
       try
       {
@@ -432,7 +431,7 @@ public class GsonDAO implements GenericDAO
    private String readJSON(@NotNull String path)
    {
       String json = null;
-      String saveFile = saveDirectory + "/" + path;
+      String saveFile = Ollivanders2.pluginDir + path;
 
       File file = new File(saveFile);
 

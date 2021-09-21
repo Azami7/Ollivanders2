@@ -22,10 +22,12 @@ public final class INCARNATIO_LAMA extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_LAMA()
+   public INCARNATIO_LAMA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_LAMA;
       branch = O2MagicBranch.TRANSFIGURATION;

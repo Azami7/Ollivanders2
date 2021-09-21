@@ -22,16 +22,18 @@ public final class AGUAMENTI extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public AGUAMENTI()
+   public AGUAMENTI(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.AGUAMENTI;
       branch = O2MagicBranch.CHARMS;
 
       text = "Aguamenti will cause water to erupt against the surface you cast it on.";
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Water-Making Spell conjures clean, drinkable water from the end of the wand.");
          add("The Water-Making Spell");
@@ -75,7 +77,7 @@ public final class AGUAMENTI extends BlockTransfiguration
     */
    @Override
    @Nullable
-   public Block getTargetBlock ()
+   public Block getTargetBlock()
    {
       if (hasHitTarget())
       {

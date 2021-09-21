@@ -25,10 +25,12 @@ public final class INCARNATIO_LUPI extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_LUPI()
+   public INCARNATIO_LUPI(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_LUPI;
       branch = O2MagicBranch.TRANSFIGURATION;

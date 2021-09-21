@@ -31,15 +31,17 @@ public final class LUMOS_MAXIMA extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LUMOS_MAXIMA ()
+   public LUMOS_MAXIMA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.LUMOS_MAXIMA;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("\"Light your wands, can’t you? And hurry, we have little time!\" -Griphook");
       }};
 
@@ -53,7 +55,7 @@ public final class LUMOS_MAXIMA extends O2Spell
     * @param player the player who cast this spell
     * @param rightWand which wand the player was using
     */
-   public LUMOS_MAXIMA (Ollivanders2 plugin, Player player, Double rightWand)
+   public LUMOS_MAXIMA(Ollivanders2 plugin, Player player, Double rightWand)
    {
       super(plugin, player, rightWand);
 
@@ -88,7 +90,7 @@ public final class LUMOS_MAXIMA extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
       {
@@ -132,7 +134,7 @@ public final class LUMOS_MAXIMA extends O2Spell
    }
 
    @Override
-   public void revert ()
+   public void revert()
    {
       for (Block block : changedBlocks)
       {

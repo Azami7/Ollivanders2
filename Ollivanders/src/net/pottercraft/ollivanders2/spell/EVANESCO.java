@@ -22,15 +22,17 @@ public final class EVANESCO extends Transfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public EVANESCO ()
+   public EVANESCO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.EVANESCO;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("The Vanishing Spell");
          add("The contents of Harry’s potion vanished; he was left standing foolishly beside an empty cauldron.");
       }};
@@ -65,7 +67,7 @@ public final class EVANESCO extends Transfiguration
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasTransfigured())
       {

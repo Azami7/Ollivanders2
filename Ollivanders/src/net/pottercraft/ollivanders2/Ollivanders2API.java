@@ -18,11 +18,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Ollivanders2API
 {
-   private static O2Houses houses;
    private static O2Players players;
-   private static O2Books books;
-   private static O2Spells spells;
-   private static O2Potions potions;
    private static O2StationarySpells stationarySpells;
    private static O2Prophecies prophecies;
    private static O2Items items;
@@ -39,33 +35,15 @@ public class Ollivanders2API
       }
    }
 
-   static void initHouses (@NotNull Ollivanders2 p)
-   {
-      if (houses == null)
-      {
-         houses = new O2Houses(p);
-      }
-   }
-
-   static void saveHouses ()
-   {
-      if (houses != null)
-         houses.saveHouses();
-   }
-
    /**
     * Get the house management object
     *
-    * @param p a reference to the Ollivanders2 plugin
     * @return houses management object
     */
    @NotNull
-   public static O2Houses getHouses (@NotNull Ollivanders2 p)
+   public static O2Houses getHouses ()
    {
-      if (houses == null)
-         initHouses(p);
-
-      return houses;
+      return Ollivanders2.houses;
    }
 
    static void initPlayers (@NotNull Ollivanders2 p)
@@ -103,76 +81,37 @@ public class Ollivanders2API
       return players;
    }
 
-   static void initBooks (@NotNull Ollivanders2 p)
-   {
-      if (books == null)
-      {
-         books = new O2Books(p);
-      }
-   }
-
    /**
     * Get the books management object.
     *
-    * @param p a reference to the Ollivanders2 plugin
     * @return the book management object
     */
    @NotNull
-   public static O2Books getBooks(@NotNull Ollivanders2 p)
+   public static O2Books getBooks()
    {
-      if (books == null)
-         initBooks(p);
-
-      return books;
-   }
-
-   static void initSpells(@NotNull Ollivanders2 p)
-   {
-      if (spells == null)
-      {
-         spells = new O2Spells(p);
-      }
-
-      // load any spell static data
-      APPARATE.loadApparateLocations(p);
+      return Ollivanders2.books;
    }
 
    /**
     * Get the spells management object.
     *
-    * @param p a reference to the Ollivanders2 plugin
     * @return the spells management object
     */
    @NotNull
-   public static O2Spells getSpells (@NotNull Ollivanders2 p)
+   public static O2Spells getSpells ()
    {
-      if (spells == null)
-         initSpells(p);
-
-      return spells;
-   }
-
-   static void initPotions (@NotNull Ollivanders2 p)
-   {
-      if (potions == null)
-      {
-         potions = new O2Potions(p);
-      }
+      return Ollivanders2.spells;
    }
 
    /**
     * Get the potions management object.
     *
-    * @param p a reference to the Ollivanders2 plugin
     * @return the potions management object
     */
    @NotNull
-   public static O2Potions getPotions (@NotNull Ollivanders2 p)
+   public static O2Potions getPotions ()
    {
-      if (potions == null)
-         initPotions(p);
-
-      return potions;
+      return Ollivanders2.potions;
    }
 
    static void initStationarySpells (@NotNull Ollivanders2 p)

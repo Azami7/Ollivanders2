@@ -20,10 +20,12 @@ public final class PORFYRO_ASTERI_DUO extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PORFYRO_ASTERI_DUO()
+   public PORFYRO_ASTERI_DUO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PORFYRO_ASTERI_DUO;
       branch = O2MagicBranch.CHARMS;

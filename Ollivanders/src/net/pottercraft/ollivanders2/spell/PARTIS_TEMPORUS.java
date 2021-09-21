@@ -24,15 +24,17 @@ public final class PARTIS_TEMPORUS extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PARTIS_TEMPORUS()
+   public PARTIS_TEMPORUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PARTIS_TEMPORUS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Parting Charm");
       }};
@@ -66,7 +68,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
@@ -96,7 +98,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
    }
 
    @Override
-   protected void revert ()
+   protected void revert()
    {
       for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {

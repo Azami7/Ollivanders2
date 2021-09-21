@@ -50,10 +50,12 @@ public abstract class Transfiguration extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public Transfiguration ()
+   public Transfiguration(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.TRANSFIGURATION;
    }
@@ -159,7 +161,7 @@ public abstract class Transfiguration extends O2Spell
     * @return The newly spawned Entity. Null if no entity was spawned from the ending of the transfiguration.
     */
    @Nullable
-   public Entity endTransfigure ()
+   public Entity endTransfigure()
    {
       kill();
       for (World w : p.getServer().getWorlds())
@@ -230,7 +232,7 @@ public abstract class Transfiguration extends O2Spell
     *
     * @return If the transfiguration has taken place
     */
-   public boolean hasTransfigured ()
+   public boolean hasTransfigured()
    {
       return hasTransfigured;
    }
@@ -240,7 +242,7 @@ public abstract class Transfiguration extends O2Spell
     *
     * @return the toID
     */
-   public UUID getToID ()
+   public UUID getToID()
    {
       return toID;
    }
@@ -250,7 +252,7 @@ public abstract class Transfiguration extends O2Spell
     *
     * @param percent the percent to reduce this transfiguration duration
     */
-   public void reparifarge (int percent)
+   public void reparifarge(int percent)
    {
       if (permanent)
       {

@@ -19,10 +19,12 @@ public final class DUCKLIFORS extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public DUCKLIFORS()
+   public DUCKLIFORS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.DUCKLIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;

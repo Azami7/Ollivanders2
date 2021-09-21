@@ -11,9 +11,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.book.O2Books;
 import net.pottercraft.ollivanders2.effect.O2Effects;
+import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.listeners.OllivandersListener;
 import net.pottercraft.ollivanders2.spell.APPARATE;
+import net.pottercraft.ollivanders2.spell.O2Spells;
 import org.bukkit.World;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import quidditch.Arena;
@@ -22,10 +25,8 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.house.O2HouseType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
-import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2WandCoreType;
 import net.pottercraft.ollivanders2.player.O2WandWoodType;
-import net.pottercraft.ollivanders2.player.Year;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.potion.O2Potions;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -49,7 +50,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.command.Command;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
@@ -80,6 +80,26 @@ public class Ollivanders2 extends JavaPlugin
     */
    private Ollivanders2TeleportEvents teleportEvents;
 
+   /**
+    * Spells
+    */
+   static O2Spells spells;
+
+   /**
+    * Potions
+    */
+   static O2Potions potions;
+
+   /**
+    * Books
+    */
+   static O2Books books;
+
+   /**
+    * Houses
+    */
+   static O2Houses houses;
+
    // file config
    public static int chatDropoff = 15;
    public static ChatColor chatColor;
@@ -92,24 +112,22 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean enableDeathExpLoss;
    public static boolean apparateLocations;
    public static int divinationMaxDays = 4;
-   public static boolean useHouses;
-   public static boolean displayMessageOnSort;
    public static boolean useYears;
    public static boolean debug;
    public static boolean overrideVersionCheck;
    public static Material flooPowderMaterial;
    public static Material broomstickMaterial;
    public static boolean enableWitchDrop;
-   private ConfigurationSection zoneConfig;
    public static boolean hourlyBackup;
    public static boolean archivePreviousBackup;
+   public static boolean useTranslations;
 
    // other config
    public static boolean worldGuardEnabled = false;
    public static boolean libsDisguisesEnabled = false;
    public static Ollivanders2WorldGuard worldGuardO2;
 
-   private static final String pluginDir = "plugins/Ollivanders2/";
+   public static final String pluginDir = "plugins/Ollivanders2/";
 
    /**
     * onDisable runs when the Minecraft server is shutting down.
@@ -137,21 +155,19 @@ public class Ollivanders2 extends JavaPlugin
    {
       Ollivanders2API.saveStationarySpells();
       Ollivanders2API.saveProphecies();
-      if (useHouses)
-      {
-         Ollivanders2API.saveHouses();
-      }
+
+      houses.saveHouses();
+
       Ollivanders2API.savePlayers();
       APPARATE.saveApparateLocations();
    }
 
+   /**
+    * Save plugin config
+    */
    private void savePluginConfig ()
    {
-      if (new File(pluginDir + "/config.yml").exists())
-      {
-         saveConfig();
-      }
-      else
+      if (!(new File(pluginDir + "config.yml").exists()))
       {
          saveDefaultConfig();
       }
@@ -164,6 +180,11 @@ public class Ollivanders2 extends JavaPlugin
     */
    public void onEnable ()
    {
+      spells = new O2Spells(this);
+      potions = new O2Potions(this);
+      books = new O2Books(this);
+      houses = new O2Houses(this);
+
       Ollivanders2API.init(this);
 
       // set up event listeners
@@ -205,15 +226,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // set up houses
-      try
-      {
-         Ollivanders2API.initHouses(this);
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Failure setting up houses.");
-         e.printStackTrace();
-      }
+      houses.onEnable();
 
       // set up items
       try
@@ -226,41 +239,17 @@ public class Ollivanders2 extends JavaPlugin
          e.printStackTrace();
       }
 
-      // set up potions
-      try
-      {
-         Ollivanders2API.initPotions(this);
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Failure setting up potions.");
-         e.printStackTrace();
-      }
-
-      // set up spells
-      try
-      {
-         Ollivanders2API.initSpells(this);
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Failure setting up spells.");
-         e.printStackTrace();
-      }
-
       // set up stationary spells
       Ollivanders2API.initStationarySpells(this);
 
-      // create books
-      try
-      {
-         Ollivanders2API.initBooks(this);
-      }
-      catch (Exception e)
-      {
-         getLogger().warning("Failure setting up books.");
-         e.printStackTrace();
-      }
+      // spells
+      spells.onEnable();
+
+      // potions
+      potions.onEnable();
+
+      // books
+      books.onEnable();
 
       // set up prophecies
       try
@@ -413,16 +402,6 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //
-      // houses
-      //
-      useHouses = getConfig().getBoolean("houses");
-      if (useHouses)
-      {
-         getLogger().info("Enabling school houses.");
-      }
-      displayMessageOnSort = getConfig().getBoolean("displayMessageOnSort");
-
-      //
       // years
       //
       useYears = getConfig().getBoolean("years");
@@ -482,11 +461,6 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       //
-      // Zones
-      //
-      zoneConfig = getConfig().getConfigurationSection("zones");
-
-      //
       // Save options
       //
       hourlyBackup = getConfig().getBoolean("hourlyBackup");
@@ -496,6 +470,13 @@ public class Ollivanders2 extends JavaPlugin
       archivePreviousBackup = getConfig().getBoolean("archivePreviousBackup");
       if (archivePreviousBackup)
          getLogger().info("Enabling backup archiving.");
+
+      //
+      // Translations
+      //
+      useTranslations = getConfig().getBoolean("useTranslations");
+      if (useTranslations)
+         getLogger().info("Enabling string translations.");
    }
 
    /**
@@ -590,7 +571,7 @@ public class Ollivanders2 extends JavaPlugin
       }
       else if (cmd.getName().equalsIgnoreCase("Quidd"))
       {
-         if (sender.isOp())
+         if (sender.hasPermission("Ollivanders2.admin"))
          {
             return true;
          }
@@ -609,7 +590,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runOllivanders(@NotNull CommandSender sender, @NotNull String[] args)
    {
-      if (!sender.isOp())
+      if (!sender.hasPermission("Ollivanders2.admin"))
       {
          if (sender instanceof Player)
          {
@@ -672,36 +653,28 @@ public class Ollivanders2 extends JavaPlugin
             else
                return false;
          }
+         //
+         // Books
+         //
          else if (subCommand.equalsIgnoreCase("books") || subCommand.equalsIgnoreCase("book"))
          {
-            return Ollivanders2API.getBooks(this).runCommand(sender, args);
+            return books.runCommand(sender, args);
          }
+         //
+         // Player related commands
+         //
          else if (subCommand.equalsIgnoreCase("summary"))
-         {
-            if (args.length == 1 && sender instanceof Player)
-            {
-               return playerSummary(sender, (Player) sender);
-            }
-            else if (args.length > 1)
-            {
-               Player target = getServer().getPlayer(args[1]);
-               if (target != null)
-                  return playerSummary(sender, target);
-               else
-               {
-                  usageMessageOllivanders(sender);
-                  return true;
-               }
-            }
-            else
-               return false;
-         }
+            return Ollivanders2API.getPlayers(this).runSummary(sender, args);
+         else if (subCommand.equalsIgnoreCase("year") || subCommand.equalsIgnoreCase("years"))
+            return Ollivanders2API.getPlayers(this).runYear(sender, args);
+         else if (subCommand.equalsIgnoreCase("animagus"))
+            return Ollivanders2API.getPlayers(this).runAnimagus(sender, args);
+         //
+         // Potions
+         //
          else if (subCommand.equalsIgnoreCase("potions") || subCommand.equalsIgnoreCase("potion"))
             return runPotions(sender, args);
-         else if (subCommand.equalsIgnoreCase("year") || subCommand.equalsIgnoreCase("years"))
-            return runYear(sender, args);
          else if (subCommand.equalsIgnoreCase("effect") || subCommand.equalsIgnoreCase("effects"))
-            //return runEffect(sender, args);
             return O2Effects.runCommand(sender, args, this);
          else if (subCommand.equalsIgnoreCase("prophecy") || subCommand.equalsIgnoreCase("prophecies"))
             return runProphecies(sender);
@@ -752,11 +725,11 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // sorted
-      if (useHouses)
+      if (O2Houses.useHouses)
       {
-         if (Ollivanders2API.getHouses(this).isSorted(player))
+         if (houses.isSorted(player))
          {
-            String house = Ollivanders2API.getHouses(this).getHouse(player).getName();
+            String house = houses.getHouse(player).getName();
             summary.append("\nHouse: ").append(house).append("\n");
          }
          else
@@ -780,7 +753,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       // effects
-      if (sender.isOp())
+      if (sender.hasPermission("Ollivanders2.admin"))
       {
          List<O2EffectType> effects = Ollivanders2API.getPlayers(this).playerEffects.getEffects(o2p.getID());
          summary.append("\n\nAffected by:\n");
@@ -809,7 +782,7 @@ public class Ollivanders2 extends JavaPlugin
 
          for (O2SpellType spellType : O2SpellType.values())
          {
-            if (knownSpells.containsKey(spellType) && Ollivanders2API.getSpells(this).isLoaded(spellType))
+            if (knownSpells.containsKey(spellType) && spells.isLoaded(spellType))
             {
                summary.append("\n* ").append(spellType.getSpellName()).append(" ").append(knownSpells.get(spellType).toString());
             }
@@ -827,7 +800,7 @@ public class Ollivanders2 extends JavaPlugin
 
          for (O2PotionType potionType : O2PotionType.values())
          {
-            if (knownPotions.containsKey(potionType) && Ollivanders2API.getPotions(this).isLoaded(potionType))
+            if (knownPotions.containsKey(potionType) && potions.isLoaded(potionType))
             {
                summary.append("\n* ").append(potionType.getPotionName()).append(" ").append(knownPotions.get(potionType).toString());
             }
@@ -864,10 +837,11 @@ public class Ollivanders2 extends JavaPlugin
               + "\nprophecy - list all active prophecies"
               + "\nsummary - gives a summary of wand type, house, year, and known spells"
               + "\napparateLoc - apparation location commands"
+              + "\nanimagus - make a player an animagus"
               + "\nreload - reload the Ollivanders2 configs"
               + "\ndebug - toggles Ollivanders2 plugin debug output\n"
               + "\n" + "To run a command, type '/ollivanders2 [command]'."
-              + "\nFor example, '/ollivanders2 wands");
+              + "\nFor example, '/ollivanders2 wands\n");
    }
 
    /**
@@ -879,7 +853,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runHouse(@NotNull CommandSender sender, @NotNull String[] args)
    {
-      if (!useHouses)
+      if (O2Houses.useHouses)
       {
          sender.sendMessage(chatColor
                  + "House are not currently enabled for your server."
@@ -923,7 +897,7 @@ public class Ollivanders2 extends JavaPlugin
          }
          else if (subCommand.equalsIgnoreCase("reset"))
          {
-            return Ollivanders2API.getHouses(this).reset();
+            return houses.reset();
          }
       }
 
@@ -964,10 +938,10 @@ public class Ollivanders2 extends JavaPlugin
       {
          String targetHouse = args[2];
 
-         O2HouseType house = Ollivanders2API.getHouses(this).getHouseType(targetHouse);
+         O2HouseType house = houses.getHouseType(targetHouse);
          if (house != null)
          {
-            List<String> members = Ollivanders2API.getHouses(this).getHouseMembers(house);
+            List<String> members = houses.getHouseMembers(house);
             StringBuilder memberStr = new StringBuilder();
 
             if (members.isEmpty())
@@ -989,7 +963,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       StringBuilder houseNames = new StringBuilder();
-      List<String> h = Ollivanders2API.getHouses(this).getAllHouseNames();
+      List<String> h = houses.getAllHouseNames();
 
       for (String name : h)
       {
@@ -1037,7 +1011,7 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      O2HouseType house = Ollivanders2API.getHouses(this).getHouseType(targetHouse);
+      O2HouseType house = houses.getHouseType(targetHouse);
 
       if (house == null)
       {
@@ -1049,12 +1023,12 @@ public class Ollivanders2 extends JavaPlugin
       boolean success;
       if (forcesort)
       {
-         Ollivanders2API.getHouses(this).forceSetHouse(player, house);
+         houses.forceSetHouse(player, house);
          success = true;
       }
       else
       {
-         success = Ollivanders2API.getHouses(this).sort(player, house);
+         success = houses.sort(player, house);
       }
 
       if (success)
@@ -1063,7 +1037,7 @@ public class Ollivanders2 extends JavaPlugin
       }
       else
       {
-         sender.sendMessage(chatColor + targetPlayer + " is already a member of " + Ollivanders2API.getHouses(this).getHouse(player).getName());
+         sender.sendMessage(chatColor + targetPlayer + " is already a member of " + houses.getHouse(player).getName());
       }
 
       return true;
@@ -1101,7 +1075,7 @@ public class Ollivanders2 extends JavaPlugin
 
          if (option.equalsIgnoreCase("reset"))
          {
-            return Ollivanders2API.getHouses(this).resetHousePoints();
+            return houses.resetHousePoints();
          }
 
          if (args.length > 4)
@@ -1114,7 +1088,7 @@ public class Ollivanders2 extends JavaPlugin
             O2HouseType houseType = null;
             try
             {
-               houseType = Ollivanders2API.getHouses(this).getHouseType(h);
+               houseType = houses.getHouseType(h);
             }
             catch (Exception e)
             {
@@ -1152,15 +1126,15 @@ public class Ollivanders2 extends JavaPlugin
 
             if (option.equalsIgnoreCase("add"))
             {
-               return Ollivanders2API.getHouses(this).addHousePoints(houseType, value);
+               return houses.addHousePoints(houseType, value);
             }
             else if (option.equalsIgnoreCase("subtract"))
             {
-               return Ollivanders2API.getHouses(this).subtractHousePoints(houseType, value);
+               return houses.subtractHousePoints(houseType, value);
             }
             else if (option.equalsIgnoreCase("set"))
             {
-               return Ollivanders2API.getHouses(this).setHousePoints(houseType, value);
+               return houses.setHousePoints(houseType, value);
             }
          }
       }
@@ -1186,222 +1160,6 @@ public class Ollivanders2 extends JavaPlugin
               + "\nreset - reset all house points to 0"
               + "\n\nExample: /ollivanders2 house points add Slytherin 5"
               + "\nExample: /ollivanders2 house points reset");
-   }
-
-   /**
-    * The year subCommand for managing everything related to years.
-    *
-    * @param sender the player that issued the command
-    * @param args   the arguments for the command, if any
-    * @return true unless an error occurred
-    */
-
-   private boolean runYear(@NotNull CommandSender sender, @NotNull String[] args)
-   {
-      if (!useYears)
-      {
-         sender.sendMessage(chatColor
-                 + "Years are not currently enabled for your server."
-                 + "\nTo enable years, update the Ollivanders2 config.yml setting to true and restart your server."
-                 + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
-
-         return true;
-      }
-
-      // parse args
-      if (args.length >= 2)
-      {
-         String subCommand = args[1];
-
-         if (subCommand.equalsIgnoreCase("set"))
-         {
-            if (args.length < 4)
-            {
-               usageMessageYearSet(sender);
-               return true;
-            }
-
-            return runYearSet(sender, args[2], args[3]);
-         }
-         else if (subCommand.equalsIgnoreCase("promote"))
-         {
-            if (args.length < 3)
-            {
-               usageMessageYearPromote (sender);
-               return true;
-            }
-
-            return runYearChange(sender, args[2], 1);
-         }
-         else if (subCommand.equalsIgnoreCase("demote"))
-         {
-            if (args.length < 3)
-            {
-               usageMessageYearDemote(sender);
-               return true;
-            }
-
-            return runYearChange(sender, args[2], -1);
-         }
-         else if (args.length == 2)
-         {
-            String p = args[1];
-            if (p.length() < 1)
-            {
-               usageMessageHouseSort(sender);
-               return true;
-            }
-            Player player = getServer().getPlayer(p);
-            if (player == null)
-            {
-               sender.sendMessage(chatColor + "Unable to find a player named " + p + ".\n");
-               return true;
-            }
-
-            O2Player o2p = getO2Player(player);
-            if (o2p != null)
-               sender.sendMessage(chatColor + "Player " + p + " is in year " + o2p.getYear().getIntValue());
-            else
-               sender.sendMessage(chatColor + "Unable to find player.");
-
-            return true;
-         }
-      }
-
-      usageMessageYear(sender);
-
-      return true;
-   }
-
-   /**
-    * Display the usage message for /ollivanders2 year set
-    *
-    * @param sender the player that issued the command
-    */
-   private void usageMessageYearSet(@NotNull CommandSender sender)
-   {
-      sender.sendMessage(chatColor
-              + "Usage: /ollivanders2 year set [player] [year]"
-              + "\nyear - must be a number between 1 and 7"
-              + "\nExample: /ollivanders2 year set Harry 5");
-   }
-
-   /**
-    * Display the usage message for /ollivanders2 year promote
-    *
-    * @param sender the player that issued the command
-    */
-   private void usageMessageYearPromote(@NotNull CommandSender sender)
-   {
-      sender.sendMessage(chatColor
-              + "Usage: /ollivanders2 year promote [player]"
-              + "\nExample: /ollivanders2 year promote Harry");
-   }
-
-   /**
-    * Display the usage message for /ollivanders2 year demote
-    *
-    * @param sender the player that issued the command
-    */
-   private void usageMessageYearDemote(@NotNull CommandSender sender)
-   {
-      sender.sendMessage(chatColor
-              + "Usage: /ollivanders2 year demote [player]"
-              + "\nExample: /ollivanders2 year demote Harry");
-   }
-
-   /**
-    * Usage message for Year subcommands.
-    *
-    * @param sender the player that issued the command
-    */
-   private void usageMessageYear(@NotNull CommandSender sender)
-   {
-      sender.sendMessage(chatColor
-              + "Year commands: "
-              + "\nset - sets a player's year, years must be between 1 and 7"
-              + "\npromote - increases a player's year by 1 year"
-              + "\ndemote - decreases a player's year by 1 year"
-              + "\n<player> - tells you the year or a player\n");
-   }
-
-   /**
-    * Run the command to set a player's year
-    *
-    * @param sender       the player that issued the command
-    * @param targetPlayer the player to set the year for
-    * @param targetYear   the year to set for the player
-    * @return true unless an error occurred
-    */
-   private boolean runYearSet(@NotNull CommandSender sender, @NotNull String targetPlayer, @NotNull String targetYear)
-   {
-      if (targetPlayer.length() < 1 || targetYear.length() < 1)
-      {
-         usageMessageYearSet(sender);
-         return true;
-      }
-      Player player = getServer().getPlayer(targetPlayer);
-      if (player == null)
-      {
-         sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
-         return true;
-      }
-      O2Player o2p = getO2Player(player);
-      int y;
-      try
-      {
-         y = Integer.parseInt(targetYear);
-      }
-      catch (NumberFormatException e)
-      {
-         usageMessageYearSet(sender);
-         return true;
-      }
-
-      if (y < 1 || y > 7)
-      {
-         usageMessageYearSet(sender);
-         return true;
-      }
-      Year year = O2PlayerCommon.intToYear(y);
-      if (year != null)
-         o2p.setYear(year);
-
-      return true;
-   }
-
-   /**
-    * Run promote and demote year commands
-    *
-    * @param sender       the player that issued the command
-    * @param targetPlayer the player to promote or demote
-    * @param yearChange   the year to change the player to
-    * @return true unless an error occurred
-    */
-   private boolean runYearChange(@NotNull CommandSender sender, @NotNull String targetPlayer, int yearChange)
-   {
-      Player player = getServer().getPlayer(targetPlayer);
-      if (player == null)
-      {
-         sender.sendMessage(chatColor + "Unable to find a player named " + targetPlayer + ".\n");
-         return true;
-      }
-      O2Player o2p = getO2Player(player);
-      if (o2p == null)
-      {
-         sender.sendMessage(chatColor + "Unable to find player.");
-         return true;
-      }
-
-      int y = o2p.getYear().getIntValue() + yearChange;
-      if (y > 0 && y < 8)
-      {
-         Year year = O2PlayerCommon.intToYear(y);
-
-         if (year != null)
-            o2p.setYear(year);
-      }
-      return true;
    }
 
    /**
@@ -1828,7 +1586,7 @@ public class Ollivanders2 extends JavaPlugin
          return false;
       }
 
-      boolean cast = Ollivanders2API.getSpells(this).isSpellTypeAllowed(player.getLocation(), spell);
+      boolean cast = spells.isSpellTypeAllowed(player.getLocation(), spell);
 
       if (!cast && verbose)
       {
@@ -2033,7 +1791,7 @@ public class Ollivanders2 extends JavaPlugin
          return true;
       }
 
-      O2Potion potion = Ollivanders2API.getPotions(this).getPotionFromType(potionType);
+      O2Potion potion = potions.getPotionFromType(potionType);
 
       if (potion == null)
          return true;
@@ -2099,7 +1857,7 @@ public class Ollivanders2 extends JavaPlugin
       StringBuilder displayString = new StringBuilder();
       displayString.append("Potions:");
 
-      List<String> potionNames = Ollivanders2API.getPotions(this).getAllPotionNames();
+      List<String> potionNames = potions.getAllPotionNames();
       for (String name : potionNames)
       {
          displayString.append("\n").append(name);
@@ -2145,7 +1903,7 @@ public class Ollivanders2 extends JavaPlugin
 
       List<ItemStack> kit = new ArrayList<>();
 
-      for (O2Potion potion : Ollivanders2API.getPotions(this).getAllPotions())
+      for (O2Potion potion : potions.getAllPotions())
       {
          ItemStack brewedPotion = potion.brew(player, false);
 

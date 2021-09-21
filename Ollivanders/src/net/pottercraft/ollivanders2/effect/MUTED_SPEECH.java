@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.effect;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class MUTED_SPEECH extends O2Effect
@@ -30,7 +31,7 @@ public class MUTED_SPEECH extends O2Effect
    /**
     * Age the effect by 1 every game tick.
     */
-   public void checkEffect ()
+   public void checkEffect()
    {
       age(1);
    }
@@ -39,5 +40,15 @@ public class MUTED_SPEECH extends O2Effect
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove () { }
+   public void doRemove() {}
+
+   /**
+    * Do any on player player chat effects
+    */
+   @Override
+   void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("MUTED_SPEECH: cancelling AsyncPlayerChatEvent", null, null, false);
+   }
 }

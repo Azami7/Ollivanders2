@@ -43,7 +43,7 @@ public class SLEEPING extends O2Effect
    }
 
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!sleeping)
       {
@@ -66,7 +66,7 @@ public class SLEEPING extends O2Effect
    /**
     * Put the player to sleep.
     */
-   private void playerSleep ()
+   private void playerSleep()
    {
       Player target = p.getServer().getPlayer(targetID);
       if (target == null)
@@ -83,6 +83,9 @@ public class SLEEPING extends O2Effect
       // add sleep speech
       SLEEP_SPEECH effect = new SLEEP_SPEECH(p, -1, targetID);
 
+      // immobilize them
+      IMMOBILIZE immEffect = new IMMOBILIZE(p, -1, targetID);
+
       Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
 
       sleeping = true;
@@ -92,11 +95,12 @@ public class SLEEPING extends O2Effect
     * Do any cleanup related to removing this effect from the player
     */
    @Override
-   public void doRemove ()
+   public void doRemove()
    {
       if (sleeping)
       {
          Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
+         Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, O2EffectType.IMMOBILIZE);
          sleeping = false;
 
          Player target = p.getServer().getPlayer(targetID);

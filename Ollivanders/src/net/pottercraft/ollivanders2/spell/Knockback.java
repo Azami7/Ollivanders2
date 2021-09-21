@@ -39,9 +39,12 @@ public abstract class Knockback extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public Knockback()
+   public Knockback(Ollivanders2 plugin)
    {
+      super(plugin);
    }
 
    /**

@@ -28,15 +28,17 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public MORTUOS_SUSCITATE ()
+   public MORTUOS_SUSCITATE(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.MORTUOS_SUSCITATE;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("They are corpses, dead bodies that have been bewitched to do a Dark wizard's bidding. Inferi have not been seen for a long time, however, not since Voldemort was last powerful... He killed enough people to make an army of them, of course.");
       }};
 
@@ -71,7 +73,7 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasTransfigured())
       {
@@ -108,7 +110,7 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
    }
 
    @Override
-   protected void revert ()
+   protected void revert()
    {
       endTransfigure();
    }
