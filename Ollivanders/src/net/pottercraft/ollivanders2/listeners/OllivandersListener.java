@@ -264,40 +264,20 @@ public class OllivandersListener implements Listener
             common.printDebugMessage("doSpellCasting: begin casting " + spellType, null, null, false);
 
             if (spellType == O2SpellType.APPARATE)
-            {
-               p.addProjectile(new APPARATE(p, player, 1.0, words));
-            }
+               addSpellProjectile(player, new APPARATE(p, player, 1.0, words));
             else if (spellType == O2SpellType.PORTUS)
-            {
-               p.addProjectile(new PORTUS(p, player, 1.0, words));
-            }
+               addSpellProjectile(player, new PORTUS(p, player, 1.0, words));
             else if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
-            {
-               p.addProjectile(new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, player, 1.0));
-            }
+               addSpellProjectile(player, new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, player, 1.0));
             else if (Divination.divinationSpells.contains(spellType))
             {
                if (!divine(spellType, player, words))
-               {
                   return;
-               }
             }
             else
             {
                O2Player o2p = p.getO2Player(player);
                o2p.setWandSpell(spellType);
-               p.setO2Player(player, o2p);
-            }
-
-            boolean fastLearning = false;
-            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
-            {
-               fastLearning = true;
-            }
-            p.incrementSpellCount(player, spellType);
-            if (fastLearning)
-            {
-               p.incrementSpellCount(player, spellType);
             }
          }
       }
@@ -305,6 +285,22 @@ public class OllivandersListener implements Listener
       {
          common.printDebugMessage("doSpellCasting: Either no spell cast attempted or not allowed to cast", null, null, false);
       }
+   }
+
+   /**
+    * Add the spell and increment cast count
+    *
+    * @param player the player who cast the spell
+    * @param spell the spell cast
+    */
+   private void addSpellProjectile (@NotNull Player player, @NotNull O2Spell spell)
+   {
+      p.addProjectile(spell);
+
+      p.incrementSpellCount(player, spell.spellType);
+
+      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
+         p.incrementSpellCount(player, spell.spellType);
    }
 
    /**
@@ -423,7 +419,7 @@ public class OllivandersListener implements Listener
             return;
          }
 
-         p.addProjectile(castSpell);
+         addSpellProjectile(player, castSpell);
 
          o2p.setSpellRecentCastTime(spellType);
          if (!nonverbal)
@@ -462,11 +458,36 @@ public class OllivandersListener implements Listener
             @Override
             public void run()
             {
-               if (!event.isCancelled())
+               //if (!event.isCancelled())
                   primaryHandInteractEvents(event);
             }
-         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+         }.runTaskLater(p, (int)(Ollivanders2Common.ticksPerSecond * 0.25));
       }
+      else
+      {
+         common.printDebugMessage("onPlayerInteract: secondary hand action", null, null, false);
+
+         new BukkitRunnable()
+         {
+            @Override
+            public void run()
+            {
+               //if (!event.isCancelled())
+                  secondaryHandInteractEvents(event);
+            }
+         }.runTaskLater(p, (int)(Ollivanders2Common.ticksPerSecond * 0.25));
+      }
+   }
+
+   /**
+    * Handle secondardy hand interact events.
+    *
+    * @param event the event
+    */
+   private void secondaryHandInteractEvents (@NotNull PlayerInteractEvent event)
+   {
+      Player player = event.getPlayer();
+      Action action = event.getAction();
 
       //
       // A right or left click that is not their primary hand
@@ -915,8 +936,6 @@ public class OllivandersListener implements Listener
          Player player = event.getPlayer();
          common.printDebugMessage(player.getDisplayName() + " drank a potion.", null, null, false);
 
-         O2Player o2p = p.getO2Player(player);
-
          ItemMeta meta = item.getItemMeta();
          if (meta == null)
             return;
@@ -932,7 +951,7 @@ public class OllivandersListener implements Listener
                   return;
                }
 
-               potion.drink(o2p, player);
+               potion.drink(player);
             }
          }
       }
@@ -1146,7 +1165,7 @@ public class OllivandersListener implements Listener
       }
 
       ((Divination) spell).setTarget(target);
-      p.addProjectile(spell);
+      addSpellProjectile(sender, spell);
 
       return true;
    }

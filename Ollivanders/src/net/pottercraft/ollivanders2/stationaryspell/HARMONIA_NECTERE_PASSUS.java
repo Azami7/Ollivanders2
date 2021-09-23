@@ -80,14 +80,14 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
 
       if (twinCabinet == null)
       {
-         p.getLogger().warning("Harmonia stationary: twin cabinet null");
+         common.printDebugMessage("Harmonia stationary: twin cabinet null", null, null, true);
          kill();
          return;
       }
 
       if (!cabinetCheck(location.getBlock()))
       {
-         p.getLogger().warning("Harmonia stationary: twin cabinet malformed");
+         common.printDebugMessage("Harmonia stationary: twin cabinet malformed", null, null, true);
          kill();
          twinCabinet.kill();
          return;

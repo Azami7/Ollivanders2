@@ -277,6 +277,29 @@ public class Ollivanders2Common
       }
    }
 
+   /**
+    * The level of magic a spell or potion is
+    */
+   public enum MagicLevel
+   {
+      BEGINNER (1),
+      OWL (2),
+      NEWT (3),
+      EXPERT (4);
+
+      final int successModifier;
+
+      MagicLevel (int mod)
+      {
+         successModifier = mod;
+      }
+
+      public int getSuccessModifier()
+      {
+         return successModifier;
+      }
+   }
+
    public final static Random random = new Random();
 
    final private Ollivanders2 p;

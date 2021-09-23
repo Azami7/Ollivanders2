@@ -32,7 +32,6 @@ public class INTERMEDIATE_TRANSFIGURATION extends O2Book
       spells.add(O2SpellType.DELETRIUS);
       spells.add(O2SpellType.HERBIFORS);
       spells.add(O2SpellType.LAPIFORS);
-      spells.add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       //spell 11
    }
 }

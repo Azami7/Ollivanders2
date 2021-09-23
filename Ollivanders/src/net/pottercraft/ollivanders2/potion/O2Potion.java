@@ -39,32 +39,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public abstract class O2Potion
 {
+   Ollivanders2 p;
    Ollivanders2Common common;
-
-   enum PotionLevel
-   {
-      BEGINNER (1),
-      OWL (2),
-      NEWT (3),
-      EXPERT (4);
-
-      final int successModifier;
-
-      PotionLevel (int mod)
-      {
-         successModifier = mod;
-      }
-   }
 
    /**
     * The type this potion is.
     */
    protected O2PotionType potionType;
-
-   /**
-    * The difficulty level of this potion.
-    */
-   PotionLevel potionLevel = PotionLevel.BEGINNER;
 
    /**
     * The ingredients list for this potion.
@@ -89,7 +70,7 @@ public abstract class O2Potion
    /**
     * The PotionEffect for this potion
     */
-   PotionEffect effect = null;
+   PotionEffect minecraftPotionEffect = null;
 
    /**
     * The type of potion this is
@@ -100,8 +81,6 @@ public abstract class O2Potion
     * The duration for this potion
     */
    protected int duration = 3600;
-
-   protected Ollivanders2 p;
 
    /**
     * Constructor
@@ -121,7 +100,7 @@ public abstract class O2Potion
     * @return the recipe text for this ingredient
     */
    @NotNull
-   protected String getIngredientsText ()
+   protected String getIngredientsText()
    {
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.append("\n\nIngredients:");
@@ -143,7 +122,7 @@ public abstract class O2Potion
     * @return the type of potion
     */
    @NotNull
-   public O2PotionType getPotionType ()
+   public O2PotionType getPotionType()
    {
       return potionType;
    }
@@ -154,7 +133,7 @@ public abstract class O2Potion
     * @return the name of the potion
     */
    @NotNull
-   public String getName ()
+   public String getName()
    {
       return potionType.getPotionName();
    }
@@ -165,7 +144,7 @@ public abstract class O2Potion
     * @return a Map of the ingredients for this potion
     */
    @NotNull
-   Map<O2ItemType, Integer> getIngredients ()
+   Map<O2ItemType, Integer> getIngredients()
    {
       return ingredients;
    }
@@ -202,10 +181,26 @@ public abstract class O2Potion
       }
    }
 
+   /**
+    * Get the branch of magic for this potion
+    *
+    * @return the branch of magic for this potion
+    */
    @NotNull
-   public O2MagicBranch getMagicBranch ()
+   public O2MagicBranch getMagicBranch()
    {
       return O2MagicBranch.POTIONS;
+   }
+
+   /**
+    * Get get the level of magic for this potion
+    *
+    * @return the level of magic for this potion
+    */
+   @NotNull
+   public Ollivanders2Common.MagicLevel getLevel()
+   {
+      return potionType.getLevel();
    }
 
    /**
@@ -265,8 +260,8 @@ public abstract class O2Potion
       meta.setDisplayName(potionType.getPotionName());
       meta.setLore(Arrays.asList(potionType.getPotionName()));
       meta.setColor(potionColor);
-      if (effect != null)
-         meta.addCustomEffect(effect, true);
+      if (minecraftPotionEffect != null)
+         meta.addCustomEffect(minecraftPotionEffect, true);
 
       meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
@@ -326,14 +321,14 @@ public abstract class O2Potion
             int yearModifier = 1; // year 1
             if (year == 2) // year 2
                yearModifier = 2;
-            else if (year == 3 || year == 4) // years 3-4
+            else if (year == 3) // years 3
                yearModifier = 3;
-            else if (year > 4 && year < 7) // years 5-7, OWL
+            else if (year >= 4 && year <= 5) // years 4-5, OWL
                yearModifier = 4;
-            else //year == 7, NEWT
+            else //year 6-7 NEWT
                yearModifier = 5;
 
-            successRate = ((potionCount * yearModifier * 2) / potionLevel.successModifier) - potionLevel.successModifier;
+            successRate = ((potionCount * yearModifier * 2) / potionType.getLevel().getSuccessModifier()) - potionType.getLevel().getSuccessModifier();
          }
          // If Years is not enabled:
          // success rate = ((potion count * 10) / (potion success modifier) - potions success modifier
@@ -342,7 +337,7 @@ public abstract class O2Potion
          // BEGINNER potion has a success modifier of 1, player has potion count of 10, player is a 7th year
          // = 99% success rate
          //
-         // EXPERT potion has a success modifier of 4, player has a potion count of 10, player is a 6th year
+         // EXPERT potion has a success modifier of 4, player has a potion count of 10, player is a 5th year
          // = 21% success rate
          //
          // OWL potion has a success modifier of 2, player has a potion count of 2, player is a 1st year
@@ -350,7 +345,7 @@ public abstract class O2Potion
          //
          else
          {
-            successRate = ((potionCount * 10) / potionLevel.successModifier) - potionLevel.successModifier;
+            successRate = ((potionCount * 10) / potionType.getLevel().getSuccessModifier()) - potionType.getLevel().getSuccessModifier();
          }
 
          int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) + 1;
@@ -448,5 +443,10 @@ public abstract class O2Potion
       return potion;
    }
 
-   public void drink(@NotNull O2Player o2p, @NotNull Player player) { }
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
+   public abstract void drink(@NotNull Player player);
 }

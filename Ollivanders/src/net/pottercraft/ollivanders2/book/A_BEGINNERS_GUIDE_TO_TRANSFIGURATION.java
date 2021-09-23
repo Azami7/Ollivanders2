@@ -28,5 +28,6 @@ public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book
       spells.add(O2SpellType.MULTICORFORS);
       spells.add(O2SpellType.VERA_VERTO);
       spells.add(O2SpellType.SNUFFLIFORS);
+      spells.add(O2SpellType.LAPIDO);
    }
 }

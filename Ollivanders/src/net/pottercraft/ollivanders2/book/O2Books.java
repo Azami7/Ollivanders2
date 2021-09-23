@@ -146,11 +146,7 @@ public final class O2Books implements Listener
          O2Book book = getO2BookByType(bookType);
 
          if (book != null)
-         {
-            p.getLogger().info("  " + book.getTitle());
-
             O2BookMap.put(book.getTitle(), bookType);
-         }
       }
    }
 

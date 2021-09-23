@@ -27,7 +27,6 @@ public class WIDEYE_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.WIDEYE_POTION;
-      potionLevel = PotionLevel.BEGINNER;
 
       ingredients.put(O2ItemType.GROUND_SNAKE_FANGS, 3);
       ingredients.put(O2ItemType.BILLYWIG_STING_SLIME, 6);
@@ -39,8 +38,13 @@ public class WIDEYE_POTION extends O2Potion
       potionColor = Color.fromRGB(13, 55, 13);
    }
 
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
    @Override
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   public void drink(@NotNull Player player)
    {
       AWAKE effect = new AWAKE(p, duration, player.getUniqueId());
       Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);

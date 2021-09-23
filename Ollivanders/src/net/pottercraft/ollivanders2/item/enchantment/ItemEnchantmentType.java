@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.item.enchantment;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,25 +11,30 @@ import org.jetbrains.annotations.Nullable;
  */
 public enum ItemEnchantmentType
 {
-    FLAGRANTE ("flagrante", FLAGRANTE.class, null),
-    GEMINIO ("geminio", GEMINIO.class, null),
-    VOLATUS ("volatus", VOLATUS.class, "Flying vehicle used by magical folk"),
+    FLAGRANTE ("flagrante", FLAGRANTE.class, null, Ollivanders2Common.MagicLevel.EXPERT),
+    GEMINIO ("geminio", GEMINIO.class, null, Ollivanders2Common.MagicLevel.EXPERT),
+    VOLATUS ("volatus", VOLATUS.class, "Flying vehicle used by magical folk", Ollivanders2Common.MagicLevel.EXPERT),
     ;
 
     /**
      * The name of this enchantment for display purposes
      */
-    final String name;
+    private final String name;
 
     /**
      * The class, for reflection
      */
-    final Class<?> className;
+    private final Class<?> className;
 
     /**
      * Optional lore to add to the enchanted item
      */
-    final String lore;
+    private final String lore;
+
+    /**
+     * The level of this enchantment, for use with counter-spells
+     */
+    private final Ollivanders2Common.MagicLevel level;
 
     /**
      * Constructor.
@@ -36,12 +42,14 @@ public enum ItemEnchantmentType
      * @param displayName the name for this enchantment
      * @param cName the class for the enchantment
      * @param itemLore the lore for the enchanted item, can be null
+     * @param level the level of this enchantment
      */
-    ItemEnchantmentType (@NotNull String displayName, @NotNull Class<?> cName, @Nullable String itemLore)
+    ItemEnchantmentType(@NotNull String displayName, @NotNull Class<?> cName, @Nullable String itemLore, @NotNull Ollivanders2Common.MagicLevel level)
     {
         name = displayName;
         className = cName;
         lore = itemLore;
+        this.level = level;
     }
 
     /**
@@ -50,7 +58,7 @@ public enum ItemEnchantmentType
      * @return the display name
      */
     @NotNull
-    public String getName ()
+    public String getName()
     {
         return name;
     }
@@ -72,8 +80,19 @@ public enum ItemEnchantmentType
      * @return the lore
      */
     @Nullable
-    public String getLore ()
+    public String getLore()
     {
         return lore;
+    }
+
+    /**
+     * Get the level of this enchantment
+     *
+     * @return the level of this enchantment
+     */
+    @NotNull
+    public Ollivanders2Common.MagicLevel getLevel()
+    {
+        return level;
     }
 }
