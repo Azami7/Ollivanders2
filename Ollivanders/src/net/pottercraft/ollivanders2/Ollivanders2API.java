@@ -8,7 +8,6 @@ import net.pottercraft.ollivanders2.item.O2Items;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2Players;
 import net.pottercraft.ollivanders2.potion.O2Potions;
-import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells;
 import org.jetbrains.annotations.NotNull;
