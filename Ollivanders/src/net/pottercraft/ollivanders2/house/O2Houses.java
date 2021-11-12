@@ -63,14 +63,13 @@ public class O2Houses
       // houses
       //
       useHouses = p.getConfig().getBoolean("houses");
-      if (useHouses)
-      {
-         p.getLogger().info("Enabling school houses.");
-      }
-      displayMessageOnSort = p.getConfig().getBoolean("displayMessageOnSort");
 
-      if (!useHouses)
+      if (useHouses)
+         p.getLogger().info("Enabling school houses.");
+      else
          return;
+
+      displayMessageOnSort = p.getConfig().getBoolean("displayMessageOnSort");
 
       readHouseConfig();
       createScoreboard();
@@ -466,7 +465,7 @@ public class O2Houses
     */
    private void createScoreboard ()
    {
-      if (useHouses)
+      if (!useHouses)
       {
          // do not allow if houses is not enabled
          common.printDebugMessage("Attempted to create scoreboard when houses is not enabled.", null, null, false);
@@ -551,7 +550,7 @@ public class O2Houses
     */
    private synchronized boolean updateScoreboard ()
    {
-      if (useHouses)
+      if (!useHouses)
       {
          common.printDebugMessage("Tried to update scoreboard when houses are not enabled.", null, null, false);
          return false;
@@ -611,7 +610,7 @@ public class O2Houses
     */
    private boolean hideScoreboard()
    {
-      if (useHouses)
+      if (!useHouses)
       {
          common.printDebugMessage("Tried to hide scoreboard when houses are not enabled.", null, null, false);
          return false;
@@ -632,7 +631,7 @@ public class O2Houses
     */
    private void showScoreboard ()
    {
-      if (useHouses)
+      if (!useHouses)
       {
          common.printDebugMessage("Tried to show scoreboard when houses are not enabled.", null, null, false);
          return;
