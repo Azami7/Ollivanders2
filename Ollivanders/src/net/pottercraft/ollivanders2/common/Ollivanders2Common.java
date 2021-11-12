@@ -16,9 +16,6 @@ import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.O2ItemType;
-import net.pottercraft.ollivanders2.player.O2PlayerCommon;
-import net.pottercraft.ollivanders2.player.O2WandCoreType;
-import net.pottercraft.ollivanders2.player.O2WandWoodType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 
@@ -30,7 +27,6 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -921,35 +917,6 @@ public class Ollivanders2Common
    }
 
    /**
-    * Determine if this is the Cloak of Invisibility.
-    *
-    * @param held Item stack to check
-    * @return True if held is an invisibility cloak
-    */
-   public boolean isInvisibilityCloak(@NotNull ItemStack held)
-   {
-      if (held.getType() == Material.CHAINMAIL_CHESTPLATE)
-      {
-         ItemMeta meta = held.getItemMeta();
-         if (meta == null)
-            return false;
-
-         if (held.getItemMeta().hasLore())
-         {
-            List<String> lore = held.getItemMeta().getLore();
-            if (lore == null)
-               return false;
-
-            if (lore.get(0).equals("Silvery Transparent Cloak"))
-            {
-               return true;
-            }
-         }
-      }
-      return false;
-   }
-
-   /**
     * Serialize an Location for saving.
     *
     * @param location    the Location to serialize
@@ -1027,68 +994,6 @@ public class Ollivanders2Common
    }
 
    /**
-    * Is this item stack a wand?
-    *
-    * @param stack stack to be checked
-    * @return true if yes, false if no
-    */
-   public boolean isWand(@NotNull ItemStack stack)
-   {
-      if (stack.getType() == O2ItemType.WAND.getMaterial() || stack.getType() == O2ItemType.ELDER_WAND.getMaterial())
-      {
-         ItemMeta meta = stack.getItemMeta();
-         if (meta == null)
-            return false;
-
-         if (stack.getItemMeta().hasLore())
-         {
-            List<String> lore = stack.getItemMeta().getLore();
-            if (lore == null)
-               return false;
-
-            return (lore.get(0).split(" and ").length == 2);
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /**
-    * Finds out if an item is a broom.
-    *
-    * @param item item in question
-    * @return True if yes
-    */
-   public boolean isBroom(@NotNull ItemStack item)
-   {
-      if (item.getType() == O2ItemType.BROOMSTICK.getMaterial())
-      {
-         if (item.containsEnchantment(Enchantment.PROTECTION_FALL))
-         {
-            ItemMeta meta = item.getItemMeta();
-            if (meta == null)
-               return false;
-
-            if (meta.hasLore())
-            {
-               List<String> lore = meta.getLore();
-               if (lore == null)
-                  return false;
-
-               return lore.contains(O2ItemType.BROOMSTICK.getLore());
-            }
-         }
-      }
-      return false;
-   }
-
-   /**
     * Gets item entities within radius of the projectile
     *
     * @return List of item entities within radius of projectile
@@ -1159,59 +1064,6 @@ public class Ollivanders2Common
       Date date = new Date();
 
       return dateFormat.format(date);
-   }
-
-   /**
-    * Get all the wands in the game.
-    *
-    * @return a list of all the wands
-    */
-   @NotNull
-   public List<ItemStack> getAllWands()
-   {
-      ArrayList<ItemStack> wands = new ArrayList<>();
-
-      for (String wood : O2WandWoodType.getAllWoodsByName())
-      {
-         for (String core : O2WandCoreType.getAllCoresByName())
-         {
-            wands.add(makeWands(wood, core, 1));
-         }
-      }
-
-      return wands;
-   }
-
-   /**
-    * Make an ItemStack of wands of a specific wood and core
-    *
-    * @param wood   the wand wood
-    * @param core   the wand core
-    * @param amount the number of wands to make
-    * @return an ItemStack of wands or null if an error
-    */
-   @Nullable
-   public ItemStack makeWands(@NotNull String wood, @NotNull String core, int amount)
-   {
-      if (amount < 1)
-         amount = 1;
-
-      List<String> lore = new ArrayList<>();
-      ItemStack wand = Ollivanders2API.getItems(p).getItemByType(O2ItemType.WAND, 1);
-      if (wand == null)
-         return null;
-
-      lore.add(wood + O2PlayerCommon.wandLoreConjunction + core);
-      ItemMeta meta = wand.getItemMeta();
-
-      if (meta == null)
-         return null;
-
-      meta.setLore(lore);
-      wand.setItemMeta(meta);
-      wand.setAmount(amount);
-
-      return wand;
    }
 
    /**
@@ -1483,49 +1335,6 @@ public class Ollivanders2Common
    }
 
    /**
-    * Does the item stack match the described item
-    *
-    * @param itemStack the item stack to check
-    * @param material the target material
-    * @param name the target item name
-    * @param lore the target item lore, match is checked on the 0th index lore string
-    * @param amount the amount of the item, < 1 to ignore the amount
-    * @return true if the item stack matches, false otherwise
-    */
-   public boolean matchesItem (@NotNull ItemStack itemStack, @NotNull Material material, @NotNull String name, @NotNull String lore, int amount)
-   {
-      // check amount
-      if (itemStack.getAmount() < 1 || (amount > 0 && (itemStack.getAmount() != amount)))
-         return false;
-
-      // check material
-      if (itemStack.getType() != material)
-         return false;
-
-      // check name and lore
-      ItemMeta meta = itemStack.getItemMeta();
-      if (meta == null)
-         return false;
-
-      String itemName = meta.getDisplayName();
-      if (!itemName.equalsIgnoreCase(name))
-         return false;
-
-      // don't check lore on written books
-      if (material != Material.WRITTEN_BOOK)
-      {
-         List<String> itemLore = meta.getLore();
-         if (itemLore == null || itemLore.size() < 1)
-            return false;
-
-         if (!itemLore.get(0).equalsIgnoreCase(lore))
-            return false;
-      }
-
-      return true;
-   }
-
-   /**
     * Are two locations the same?
     *
     * @param loc1 location 1
@@ -1545,7 +1354,7 @@ public class Ollivanders2Common
    public void restoreFullHealth (@NotNull Player player)
    {
       // remove O2Effecs
-      Ollivanders2API.getPlayers(p).playerEffects.onDeath(player.getUniqueId());
+      Ollivanders2API.getPlayers().playerEffects.onDeath(player.getUniqueId());
 
       // remove other potion effects
       Collection<PotionEffect> potions = player.getActivePotionEffects();
@@ -1558,5 +1367,80 @@ public class Ollivanders2Common
       AttributeInstance playerHealthMax = player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH);
       if (playerHealthMax != null)
          player.setHealth(playerHealthMax.getBaseValue());
+   }
+
+   /**
+    * Gets item entities within radius of the projectile
+    *
+    * @param radius - radius within which to get entities
+    * @return List of item entities within one block of projectile
+    */
+   @NotNull
+   public List<Item> getItems(@NotNull Location location, double radius)
+   {
+      return getItemsInBounds(location, radius, radius, radius);
+   }
+
+   /**
+    * Get an item by material
+    *
+    * @param material the material to look for
+    * @param radius the radius to look in
+    * @return an item if found, null otherwise
+    */
+   @Nullable
+   public Item getNearbyItemByMaterial(@NotNull Location location, @NotNull Material material, double radius)
+   {
+      List<Item> items = getItems(location, radius);
+
+      for (Item item : items)
+      {
+         if (item.getItemStack().getType() == material)
+            return item;
+      }
+
+      return null;
+   }
+
+   /**
+    * Get an item by material
+    *
+    * @param materials the list of materials to look for
+    * @param radius the radius to look in
+    * @return an item if found, null otherwise
+    */
+   @Nullable
+   public Item getNearbyItemByMaterialList(@NotNull Location location, @NotNull ArrayList<Material> materials, double radius)
+   {
+      List<Item> items = getItems(location, radius);
+
+      for (Item item : items)
+      {
+         if (materials.contains(item.getItemStack().getType()))
+            return item;
+      }
+
+      return null;
+   }
+
+   /**
+    * Get nearby items by O2ItemType
+    *
+    * @param itemType the item type to get
+    * @param radius the radius to look in
+    * @return the item if found, null otherwise
+    */
+   @Nullable
+   public Item getNearbyItemByType(@NotNull Location location, @NotNull O2ItemType itemType, double radius)
+   {
+      List<Item> items = getItems(location, radius);
+
+      for (Item item : items)
+      {
+         if (itemType.isItemThisType(item))
+            return item;
+      }
+
+      return null;
    }
 }

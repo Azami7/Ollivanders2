@@ -187,7 +187,7 @@ public final class APPARATE extends O2Spell
         if (!apparateEvent.isCancelled())
         {
             p.getServer().getLogger().info("adding teleport event");
-            p.addTeleportEvent(player, player.getLocation(), destination, true);
+            p.addTeleportEvent(player, destination, true);
         }
     }
 

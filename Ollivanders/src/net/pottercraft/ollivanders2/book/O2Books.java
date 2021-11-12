@@ -130,6 +130,7 @@ public final class O2Books implements Listener
 
       if (bookLore == null)
          readNBT(meta, player);
+      // TODO remove this when we remove lore-based items in the next major rev
       else
          readLore(bookLore, player);
    }
@@ -311,7 +312,7 @@ public final class O2Books implements Listener
     */
    private void doBookLearningSpell (@NotNull Player player, @NotNull O2SpellType spellType)
    {
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
          return;
 
@@ -340,7 +341,7 @@ public final class O2Books implements Listener
     */
    private void doBookLearningPotion (@NotNull Player player, @NotNull O2PotionType potionType)
    {
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
          return;
 
@@ -407,7 +408,7 @@ public final class O2Books implements Listener
          o2p.incrementSpellCount(spellType);
 
          // if they have the improved learning effect, increment it again
-         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
+         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
          {
             o2p.incrementSpellCount(spellType);
          }
@@ -460,7 +461,7 @@ public final class O2Books implements Listener
          o2p.incrementPotionCount(potionType);
 
          // if they have the improved learning effect, increment it again
-         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
+         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.IMPROVED_BOOK_LEARNING))
          {
             o2p.incrementPotionCount(potionType);
          }
@@ -481,7 +482,7 @@ public final class O2Books implements Listener
          return;
       }
 
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
          return;
 

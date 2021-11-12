@@ -87,7 +87,7 @@ public final class LEGILIMENS extends O2Spell
                     || ((usesModifier == targetExperience) && (randEqual > 0)) // success on 1, 2
                     || ((usesModifier < targetExperience) && (randLess < 1))) // success on 0
             {
-               if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
+               if (Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
                {
                   common.printDebugMessage("Legilimens: target is in animagus form", null, null, false);
                   common.printDebugMessage("Uses modifier = " + usesModifier, null, null, false);
@@ -181,7 +181,7 @@ public final class LEGILIMENS extends O2Spell
       {
          if (o2p.foundWand())
          {
-            player.sendMessage(Ollivanders2.chatColor + " uses a " + o2p.getWandWood() + " and " + o2p.getWandCore() + " wand.");
+            player.sendMessage(Ollivanders2.chatColor + " uses a " + o2p.getDestinedWandWood() + " and " + o2p.getDestinedWandCore() + " wand.");
          }
          else
          {
@@ -223,7 +223,7 @@ public final class LEGILIMENS extends O2Spell
                // 40% chance detect effects
                if (rand >= 40)
                {
-                  String legilText = Ollivanders2API.getPlayers(p).playerEffects.detectEffectWithLegilimens(o2p.getID());
+                  String legilText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithLegilimens(o2p.getID());
                   if (legilText != null)
                   {
                      player.sendMessage(Ollivanders2.chatColor + " " + legilText + ".");

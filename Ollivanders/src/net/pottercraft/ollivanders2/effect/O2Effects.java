@@ -308,10 +308,9 @@ public class O2Effects implements Listener
       common = new Ollivanders2Common(plugin);
 
       p.getServer().getPluginManager().registerEvents(this, p);
-      initEffects();
    }
 
-   private void initEffects()
+   public void onEnable()
    {
       //
       // lycanthropy
@@ -1034,9 +1033,9 @@ public class O2Effects implements Listener
     */
    private static void toggleEffect(@NotNull CommandSender sender, @NotNull Player player, @NotNull O2EffectType effectType, @NotNull Ollivanders2 p)
    {
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), effectType))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), effectType))
       {
-         Ollivanders2API.getPlayers(p).playerEffects.removeEffect(player.getUniqueId(), effectType);
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), effectType);
          sender.sendMessage(Ollivanders2.chatColor + "Removed " + effectType.toString() + " from " + player.getName() + ".\n");
       }
       else
@@ -1061,7 +1060,7 @@ public class O2Effects implements Listener
 
          if (effect.effectType.isEnabled())
          {
-            Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
             sender.sendMessage(Ollivanders2.chatColor + "Added " + effectType.toString() + " to " + player.getName() + ".\n");
          }
          else

@@ -123,12 +123,12 @@ public final class FINITE_INCANTATEM extends O2Spell
             Player target = (Player)live;
 
             // look for any effects on the player
-            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffects(target.getUniqueId()))
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffects(target.getUniqueId()))
             {
-               for (O2EffectType effectType : Ollivanders2API.getPlayers(p).playerEffects.getEffects(target.getUniqueId()))
+               for (O2EffectType effectType : Ollivanders2API.getPlayers().playerEffects.getEffects(target.getUniqueId()))
                {
                   if (effectType.getLevel().ordinal() <= spellType.getLevel().ordinal())
-                     Ollivanders2API.getPlayers(p).playerEffects.removeEffect(target.getUniqueId(), effectType);
+                     Ollivanders2API.getPlayers().playerEffects.removeEffect(target.getUniqueId(), effectType);
 
                   effectsTargeted = effectsTargeted + 1;
                   if (effectsTargeted >= maxTargets)
@@ -171,12 +171,12 @@ public final class FINITE_INCANTATEM extends O2Spell
    {
       for (Item item : getItems(1.5))
       {
-         if (Ollivanders2API.getItems(p).enchantedItems.isEnchanted(item))
+         if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item))
          {
-            ItemEnchantmentType enchantmentType = Ollivanders2API.getItems(p).enchantedItems.getEnchantmentType(item.getItemStack());
+            ItemEnchantmentType enchantmentType = Ollivanders2API.getItems().enchantedItems.getEnchantmentType(item.getItemStack());
 
             if (enchantmentType.getLevel().ordinal() <= spellType.getLevel().ordinal())
-               Ollivanders2API.getItems(p).enchantedItems.removeEnchantment(item);
+               Ollivanders2API.getItems().enchantedItems.removeEnchantment(item);
          }
 
          kill();

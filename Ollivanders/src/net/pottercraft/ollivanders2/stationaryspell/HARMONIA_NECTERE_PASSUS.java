@@ -235,7 +235,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
             {
                if (!event.isCancelled())
                {
-                  p.addTeleportEvent(player, player.getLocation(), twinCabinetLocation, true);
+                  p.addTeleportEvent(player, twinCabinetLocation, true);
                }
             }
          }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);

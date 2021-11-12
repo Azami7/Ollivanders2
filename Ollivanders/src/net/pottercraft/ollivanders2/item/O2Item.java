@@ -34,11 +34,6 @@ public class O2Item
    final private O2ItemType itemType;
 
    /**
-    * Namespace key for NTB flags
-    */
-   NamespacedKey o2ItemTypeKey;
-
-   /**
     * Constructor
     *
     * @param plugin reference to the plugin
@@ -48,8 +43,6 @@ public class O2Item
    {
       p = plugin;
       itemType = type;
-
-      o2ItemTypeKey = new NamespacedKey(p, "o2enchantment_id");
    }
 
    /**
@@ -61,36 +54,10 @@ public class O2Item
    @Nullable
    public ItemStack getItem (int amount)
    {
-      Material materialType = itemType.getMaterial();
-      short variant = itemType.getVariant();
-      String name = itemType.getName();
-      ArrayList<String> lore = new ArrayList<>();
-      lore.add(itemType.getLore());
-
       Ollivanders2Common common = new Ollivanders2Common(p);
-      common.printDebugMessage("Getting item " + name, null, null, false);
+      common.printDebugMessage("Getting item " + itemType.getName(), null, null, false);
 
-      ItemStack o2Item = new ItemStack(materialType, amount);
-
-      ItemMeta meta = o2Item.getItemMeta();
-      if (meta == null)
-         return null;
-
-      meta.setLore(lore);
-      meta.setDisplayName(name);
-
-      if (materialType == Material.POTION)
-      {
-         meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-         ((PotionMeta) meta).setColor(O2Color.getBukkitColorByNumber(variant).getBukkitColor());
-      }
-
-      PersistentDataContainer container = meta.getPersistentDataContainer();
-      container.set(o2ItemTypeKey, PersistentDataType.STRING, name);
-
-      o2Item.setItemMeta(meta);
-
-      return o2Item;
+      return itemType.getItem(amount);
    }
 
    /**

@@ -1,4 +1,4 @@
-package net.pottercraft.ollivanders2.player;
+package net.pottercraft.ollivanders2.item.wand;
 
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
@@ -18,8 +18,8 @@ public enum O2WandCoreType
    ROTTEN_FLESH(Material.ROTTEN_FLESH, "Rotten Flesh"),
    GUNPOWDER(Material.GUNPOWDER, "Gunpowder");
 
-   final Material material;
-   final String label;
+   private final Material material;
+   private final String label;
 
    O2WandCoreType(@NotNull Material m, @NotNull String l)
    {

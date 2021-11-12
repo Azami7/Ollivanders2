@@ -1,4 +1,4 @@
-package net.pottercraft.ollivanders2.player;
+package net.pottercraft.ollivanders2.item.wand;
 
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
@@ -18,8 +18,8 @@ public enum O2WandWoodType
    BIRCH(Material.BIRCH_LOG, "Birch"),
    OAK(Material.OAK_LOG, "Oak");
 
-   final Material material;
-   final String label;
+   private final Material material;
+   private final String label;
 
    O2WandWoodType(@NotNull Material m, @NotNull String l)
    {

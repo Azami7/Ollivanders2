@@ -36,16 +36,16 @@ public abstract class O2EffectAntidoteSuper extends O2Effect
     @Override
     public void checkEffect()
     {
-        if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(targetID, o2EffectType))
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, o2EffectType))
         {
             if (strength < 1)
             {
                 int percent = (int)(strength * 100);
-                Ollivanders2API.getPlayers(p).playerEffects.ageEffectByPercent(targetID, o2EffectType, percent);
+                Ollivanders2API.getPlayers().playerEffects.ageEffectByPercent(targetID, o2EffectType, percent);
             }
             else
             {
-                Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, o2EffectType);
+                Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, o2EffectType);
             }
         }
 

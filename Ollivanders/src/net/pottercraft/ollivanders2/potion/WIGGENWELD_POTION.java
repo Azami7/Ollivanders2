@@ -78,7 +78,7 @@ public class WIGGENWELD_POTION extends O2SplashPotion
          if (e instanceof Player)
          {
             Player player = (Player) e;
-            Ollivanders2API.getPlayers(p).playerEffects.removeEffect(player.getUniqueId(), O2EffectType.SLEEPING);
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.SLEEPING);
          }
       }
    }

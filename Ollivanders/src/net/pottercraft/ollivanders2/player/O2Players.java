@@ -91,6 +91,18 @@ public class O2Players
       common = new Ollivanders2Common(p);
    }
 
+   public void onEnable()
+   {
+      loadO2Players();
+
+      playerEffects.onEnable();
+   }
+
+   public void onDisable()
+   {
+      saveO2Players();
+   }
+
    /**
     * Add a new O2Player.
     *
@@ -269,8 +281,8 @@ public class O2Players
          //
          // Wand
          //
-         playerData.put(woodLabel, o2p.getWandWood());
-         playerData.put(coreLabel, o2p.getWandCore());
+         playerData.put(woodLabel, o2p.getDestinedWandWood());
+         playerData.put(coreLabel, o2p.getDestinedWandCore());
 
          //
          // Souls
@@ -358,7 +370,7 @@ public class O2Players
          //
          // Effects
          //
-         Map<String, String> effects = Ollivanders2API.getPlayers(p).playerEffects.serializeEffects(pid);
+         Map<String, String> effects = Ollivanders2API.getPlayers().playerEffects.serializeEffects(pid);
          for (Entry<String, String> entry : effects.entrySet())
          {
             playerData.put(entry.getKey(), entry.getValue());
@@ -639,7 +651,7 @@ public class O2Players
     */
    public boolean runSummary(@NotNull CommandSender sender, @NotNull String[] args)
    {
-      if ((sender.hasPermission("Ollivanders2.admin") || (args.length == 1 && sender instanceof Player)))
+      if ((!sender.hasPermission("Ollivanders2.admin") || (args.length == 1)))
       {
          playerSummary(sender, (Player)sender);
          return true;
@@ -652,35 +664,43 @@ public class O2Players
             playerSummary(sender, target);
             return true;
          }
-         else
-         {
-            usageSummary(sender);
-            return true;
-         }
       }
 
       usageSummary(sender);
       return true;
    }
 
-   private boolean usageSummary(CommandSender sender)
+   /**
+    * Usage summary for player commands
+    *
+    * @param sender the command sender
+    */
+   public void usageSummary(CommandSender sender)
    {
       if (sender.hasPermission("Ollivanders2.admin"))
          usageSummaryAdmin(sender);
       else
          usageSummaryPlayer(sender);
-
-      return true;
    }
 
-   private void usageSummaryPlayer(CommandSender sender)
+   /**
+    * Usage summary for players
+    *
+    * @param sender the command sender
+    */
+   public void usageSummaryPlayer(CommandSender sender)
    {
       sender.sendMessage(Ollivanders2.chatColor
               + "\nUsage:"
               + "\n/olli summary - gives a summary of wand type, house, year, and known spells\n");
    }
 
-   private void usageSummaryAdmin(CommandSender sender)
+   /**
+    * Usage summary for admins
+    *
+    * @param sender the command sender
+    */
+   public void usageSummaryAdmin(CommandSender sender)
    {
       sender.sendMessage(Ollivanders2.chatColor
               + "\nUsage:"
@@ -884,7 +904,7 @@ public class O2Players
       // wand type
       if (o2p.foundWand())
       {
-         String wandlore = o2p.getDestinedWandLore();
+         String wandlore = Ollivanders2API.getItems().getWands().createLore(o2p.getDestinedWandWood(), o2p.getDestinedWandCore());
          summary.append("\nWand Type: ").append(wandlore);
 
          O2SpellType masterSpell = o2p.getMasterSpell();
@@ -933,7 +953,7 @@ public class O2Players
       // effects
       if (sender.hasPermission("Ollivanders2.admin"))
       {
-         List<O2EffectType> effects = Ollivanders2API.getPlayers(p).playerEffects.getEffects(o2p.getID());
+         List<O2EffectType> effects = Ollivanders2API.getPlayers().playerEffects.getEffects(o2p.getID());
          summary.append("\n\nAffected by:\n");
 
          if (effects.isEmpty())

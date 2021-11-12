@@ -128,7 +128,7 @@ public class Ollivanders2OwlPost
         }
 
         // find recipient
-        O2Player recipient = Ollivanders2API.getPlayers(p).getPlayer(splitString[2]);
+        O2Player recipient = Ollivanders2API.getPlayers().getPlayer(splitString[2]);
         if (recipient == null)
         {
             player.sendMessage(Ollivanders2.chatColor + "Player " + splitString[2] + " not found.");

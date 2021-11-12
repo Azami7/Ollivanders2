@@ -8,7 +8,6 @@ import net.pottercraft.ollivanders2.item.O2Items;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2Players;
 import net.pottercraft.ollivanders2.potion.O2Potions;
-import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells;
 import org.jetbrains.annotations.NotNull;
@@ -18,10 +17,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Ollivanders2API
 {
-   private static O2Players players;
    private static O2StationarySpells stationarySpells;
    private static O2Prophecies prophecies;
-   private static O2Items items;
    private static Ollivanders2OwlPost owlPost;
 
    public static O2PlayerCommon playerCommon;
@@ -46,39 +43,15 @@ public class Ollivanders2API
       return Ollivanders2.houses;
    }
 
-   static void initPlayers (@NotNull Ollivanders2 p)
-   {
-      if (players == null)
-      {
-         players = new O2Players(p);
-         players.loadO2Players();
-      }
-
-      if (playerCommon == null)
-      {
-         playerCommon = new O2PlayerCommon(p);
-      }
-   }
-
-   static void savePlayers()
-   {
-      if (players != null)
-         players.saveO2Players();
-   }
-
    /**
     * Get the player management object.
     *
-    * @param p a reference to the Ollivanders2 plugin
     * @return the player management object
     */
    @NotNull
-   public static O2Players getPlayers(@NotNull Ollivanders2 p)
+   public static O2Players getPlayers()
    {
-      if (players == null)
-         initPlayers(p);
-
-      return players;
+      return Ollivanders2.players;
    }
 
    /**
@@ -172,27 +145,15 @@ public class Ollivanders2API
       return prophecies;
    }
 
-   public static void initItems (@NotNull Ollivanders2 p)
-   {
-      if (items == null)
-      {
-         items = new O2Items(p);
-      }
-   }
-
    /**
     * Get the item management object.
     *
-    * @param p a reference to the Ollivanders2 plugin
     * @return the item management object
     */
    @NotNull
-   public static O2Items getItems (@NotNull Ollivanders2 p)
+   public static O2Items getItems ()
    {
-      if (items == null)
-         initItems(p);
-
-      return items;
+      return Ollivanders2.items;
    }
 
    /**

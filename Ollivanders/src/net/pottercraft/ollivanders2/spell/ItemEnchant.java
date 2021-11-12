@@ -54,6 +54,11 @@ public abstract class ItemEnchant extends O2Spell
    int magnitude;
 
    /**
+    * The optional arguments for the enchantment
+    */
+   String args = "";
+
+   /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *
     * @param plugin the Ollivanders2 plugin
@@ -121,7 +126,7 @@ public abstract class ItemEnchant extends O2Spell
       for (Item item : items)
       {
          // if this is a wand, skip it - wands are already enchanted
-         if (Ollivanders2API.common.isWand(item.getItemStack()))
+         if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()))
          {
             continue;
          }
@@ -135,13 +140,13 @@ public abstract class ItemEnchant extends O2Spell
          }
 
          // if this item is already enchanted, skip it
-         if (Ollivanders2API.getItems(p).enchantedItems.isEnchanted(item))
+         if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item))
          {
             continue;
          }
 
          Item enchantedItem = enchantItem(item);
-         Ollivanders2API.getItems(p).enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude);
+         Ollivanders2API.getItems().enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude, args);
 
          stopProjectile();
          kill();

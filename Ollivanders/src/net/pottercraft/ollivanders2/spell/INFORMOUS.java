@@ -168,7 +168,7 @@ public final class INFORMOUS extends O2Spell
          player.sendMessage(Ollivanders2.chatColor + " has " + target.getExhaustion() + " exhaustion level.");
 
          // detectable effects
-         String infoText = Ollivanders2API.getPlayers(p).playerEffects.detectEffectWithInformous(entity.getUniqueId());
+         String infoText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithInformous(entity.getUniqueId());
          if (infoText != null)
          {
             player.sendMessage(Ollivanders2.chatColor + " " + infoText + ".");

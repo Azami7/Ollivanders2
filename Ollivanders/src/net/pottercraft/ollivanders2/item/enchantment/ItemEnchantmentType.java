@@ -13,6 +13,7 @@ public enum ItemEnchantmentType
 {
     FLAGRANTE ("flagrante", FLAGRANTE.class, null, Ollivanders2Common.MagicLevel.EXPERT),
     GEMINIO ("geminio", GEMINIO.class, null, Ollivanders2Common.MagicLevel.EXPERT),
+    PORTUS ("portus", PORTUS.class, null, Ollivanders2Common.MagicLevel.NEWT),
     VOLATUS ("volatus", VOLATUS.class, "Flying vehicle used by magical folk", Ollivanders2Common.MagicLevel.EXPERT),
     ;
 

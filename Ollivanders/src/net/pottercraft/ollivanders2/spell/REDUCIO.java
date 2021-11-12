@@ -75,7 +75,7 @@ public final class REDUCIO extends O2Spell
          if (live instanceof Zombie)
          {
             Zombie zombie = (Zombie) live;
-            if (!zombie.isBaby())
+            if (zombie.isAdult())
             {
                zombie.setBaby(true);
             }

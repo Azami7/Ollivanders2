@@ -455,16 +455,7 @@ public abstract class O2Spell
    @NotNull
    public List<Item> getItems(double radius)
    {
-      List<Entity> entities = getCloseEntities(radius);
-      List<Item> items = new ArrayList<>();
-      for (Entity e : entities)
-      {
-         if (e instanceof Item)
-         {
-            items.add((Item) e);
-         }
-      }
-      return items;
+      return common.getItems(location, radius);
    }
 
    /**
@@ -516,7 +507,7 @@ public abstract class O2Spell
             usesModifier = spellUses / rightWand;
 
          // if the caster is affected by HIGHER_SKILL, double their usesModifier
-         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
          {
             usesModifier *= 2;
          }

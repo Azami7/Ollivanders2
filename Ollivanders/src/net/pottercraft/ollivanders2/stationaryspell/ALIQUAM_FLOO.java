@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.UUID;
 
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.item.O2ItemType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -21,7 +21,6 @@ import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.Effect;
@@ -45,6 +44,8 @@ public class ALIQUAM_FLOO extends O2StationarySpell
 
    private HashMap<Player, Location> destinations = new HashMap<>();
 
+   public static List<ALIQUAM_FLOO> flooNetworkLocations = new ArrayList<>();
+
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
     *
@@ -55,6 +56,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
       super(plugin);
 
       spellType = O2StationarySpellType.ALIQUAM_FLOO;
+      flooNetworkLocations.add(this);
    }
 
    /**
@@ -75,7 +77,19 @@ public class ALIQUAM_FLOO extends O2StationarySpell
       spellType = O2StationarySpellType.ALIQUAM_FLOO;
       this.flooName = flooName;
 
+      flooNetworkLocations.add(this);
+
       common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+   }
+
+   /**
+    * This kills the floo stationary spell
+    */
+   @Override
+   public void kill ()
+   {
+      super.kill();
+      flooNetworkLocations.remove(this);
    }
 
    /**
@@ -120,22 +134,10 @@ public class ALIQUAM_FLOO extends O2StationarySpell
             ItemStack stack = item.getItemStack();
             if (item.getLocation().getBlock().equals(block))
             {
-               if (stack.getType() == Ollivanders2.flooPowderMaterial)
+               if (O2ItemType.FLOO_POWDER.isItemThisType(stack))
                {
-                  if (stack.hasItemMeta())
-                  {
-                     ItemMeta meta = stack.getItemMeta();
-
-                     if (meta != null && meta.hasLore())
-                     {
-                        List<String> lore = meta.getLore();
-                        if (lore != null && lore.contains("Glittery, silver powder"))
-                        {
-                           countDown += 20 * 60 * stack.getAmount();
-                           item.remove();
-                        }
-                     }
-                  }
+                  countDown += 20 * 60 * stack.getAmount();
+                  item.remove();
                }
             }
          }
@@ -217,20 +219,12 @@ public class ALIQUAM_FLOO extends O2StationarySpell
       if (!(player.getLocation().getBlock().equals(getBlock())) || !isWorking())
          return;
 
-      List<ALIQUAM_FLOO> flooNetworkLocations = new ArrayList<>();
-
       // look for the destination in the registered floo network
-      for (O2StationarySpell stationary : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (ALIQUAM_FLOO floo : flooNetworkLocations)
       {
-         if (stationary instanceof ALIQUAM_FLOO)
+         if (floo.getFlooName().equalsIgnoreCase(chat.trim()))
          {
-            ALIQUAM_FLOO aliquam = (ALIQUAM_FLOO) stationary;
-
-            flooNetworkLocations.add(aliquam);
-            if (aliquam.getFlooName().equalsIgnoreCase(chat.trim()))
-            {
-               destination = aliquam.location;
-            }
+            destination = floo.location;
          }
       }
 
@@ -249,7 +243,6 @@ public class ALIQUAM_FLOO extends O2StationarySpell
          {
             if (!event.isCancelled())
             {
-               stopWorking();
                doFlooTeleport(player);
             }
          }
@@ -264,7 +257,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
    private void doFlooTeleport (Player player)
    {
       if (destinations.containsKey(player))
-         p.addTeleportEvent(player, player.getLocation(), destinations.get(player));
+         p.addTeleportEvent(player, destinations.get(player));
 
       stopWorking();
       destinations.remove(player);

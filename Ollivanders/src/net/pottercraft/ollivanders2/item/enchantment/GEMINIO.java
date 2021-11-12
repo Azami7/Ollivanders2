@@ -25,11 +25,12 @@ public class GEMINIO extends Enchantment
      *
      * @param plugin a callback to the plugin
      * @param mag the magnitude of this enchantment
+     * @param args optional arguments for this enchantment
      * @param itemLore the optional lore for this enchantment
      */
-    public GEMINIO (@NotNull Ollivanders2 plugin, int mag, @Nullable String itemLore)
+    public GEMINIO (@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
     {
-        super(plugin, mag, itemLore);
+        super(plugin, mag, args, itemLore);
         enchantmentType = ItemEnchantmentType.GEMINIO;
     }
 
@@ -66,7 +67,7 @@ public class GEMINIO extends Enchantment
     public void doItemDrop (@NotNull PlayerDropItemEvent event) { }
 
     /**
-     * Handle item pickup events
+     * Handle item despawn events
      *
      * @param event the item despawn event
      */

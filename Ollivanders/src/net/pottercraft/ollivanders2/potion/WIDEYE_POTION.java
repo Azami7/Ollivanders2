@@ -47,7 +47,7 @@ public class WIDEYE_POTION extends O2Potion
    public void drink(@NotNull Player player)
    {
       AWAKE effect = new AWAKE(p, duration, player.getUniqueId());
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel alert.");
    }

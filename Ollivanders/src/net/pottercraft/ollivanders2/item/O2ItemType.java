@@ -1,9 +1,22 @@
 package net.pottercraft.ollivanders2.item;
 
+import net.pottercraft.ollivanders2.O2Color;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * All custom special items in Ollivanders2
@@ -87,10 +100,29 @@ public enum O2ItemType
    WAND(Material.STICK, (short) 0, "Wand", null, null),
    WOLFSBANE(Material.ALLIUM, (short) 0, "Wolfsbane", null, null);
 
+   /**
+    * Item material
+    */
    private Material material;
+
+   /**
+    * Item name
+    */
    final private String name;
+
+   /**
+    * Item lore, optional
+    */
    final private String lore;
+
+   /**
+    * Item variant
+    */
    final private short variant;
+
+   /**
+    * Item enchantment
+    */
    final private ItemEnchantmentType itemEnchantment;
 
    /**
@@ -136,14 +168,6 @@ public enum O2ItemType
    }
 
    /**
-    * @return the variant for this item
-    */
-   public short getVariant()
-   {
-      return variant;
-   }
-
-   /**
     * @return the material type for this item
     */
    @NotNull
@@ -183,5 +207,100 @@ public enum O2ItemType
       }
 
       return null;
+   }
+
+   /**
+    * Is the specified itemstack this item type
+    *
+    * @param item the item to check
+    * @return true if it is this type, false otherwise
+    */
+   public boolean isItemThisType (@NotNull Item item)
+   {
+      return isItemThisType(item.getItemStack());
+   }
+
+   /**
+    * Is the specified itemstack this item type
+    *
+    * @param itemStack the item stack to check
+    * @return true if it is this type, false otherwise
+    */
+   public boolean isItemThisType (@NotNull ItemStack itemStack)
+   {
+      // check item type
+      if (itemStack.getType() != material)
+         return false;
+
+      // check item NBT
+      ItemMeta meta = itemStack.getItemMeta();
+      if (meta == null)
+         return false;
+
+      PersistentDataContainer container = meta.getPersistentDataContainer();
+      if (container.has(O2Items.o2ItemTypeKey, PersistentDataType.STRING))
+      {
+         String itemTypeKey = container.get(O2Items.o2ItemTypeKey, PersistentDataType.STRING);
+         if (!(itemTypeKey.equalsIgnoreCase(name)))
+            return false;
+      }
+      // TODO remove this when we remove lore-based items in the next major rev
+      else
+      {
+         // check name and lore
+         if (meta.getDisplayName().equalsIgnoreCase(name))
+            return false;
+
+         if (lore != null)
+         {
+            List<String> itemLore = itemStack.getItemMeta().getLore();
+            if (!(itemLore.get(0).equalsIgnoreCase(lore)))
+               return false;
+         }
+      }
+
+      return true;
+   }
+
+   /**
+    * Get an ItemStack of this item type
+    *
+    * @param amount the amount of items in the stack
+    * @return an ItemStack of this item
+    */
+   @Nullable
+   public ItemStack getItem (int amount)
+   {
+      ItemStack o2Item = new ItemStack(material, amount);
+
+      ItemMeta meta = o2Item.getItemMeta();
+      if (meta == null)
+         return null;
+
+      // set name
+      meta.setDisplayName(name);
+
+      // set lore
+      if (lore != null)
+      {
+         ArrayList<String> itemLore = new ArrayList<>();
+         itemLore.add(getLore());
+         meta.setLore(itemLore);
+      }
+
+      // if potion, set potion meta
+      if (material == Material.POTION)
+      {
+         meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+         ((PotionMeta) meta).setColor(O2Color.getBukkitColorByNumber(variant).getBukkitColor());
+      }
+
+      // add custom NBT tag
+      PersistentDataContainer container = meta.getPersistentDataContainer();
+      container.set(O2Items.o2ItemTypeKey, PersistentDataType.STRING, name);
+
+      o2Item.setItemMeta(meta);
+
+      return o2Item;
    }
 }
