@@ -744,7 +744,7 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean runHouse(@NotNull CommandSender sender, @NotNull String[] args)
    {
-      if (O2Houses.useHouses)
+      if (!O2Houses.useHouses)
       {
          sender.sendMessage(chatColor
                  + "House are not currently enabled for your server."
