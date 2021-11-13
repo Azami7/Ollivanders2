@@ -21,5 +21,6 @@ public class OMENS_ORACLES_AND_THE_GOAT extends O2Book
 
         spells.add(O2SpellType.OVOGNOSIS);
         spells.add(O2SpellType.CARTOMANCIE);
+        spells.add(O2SpellType.MANTEIA_KENTAVROS);
     }
 }

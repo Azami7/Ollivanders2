@@ -181,7 +181,7 @@ public class EnchantedItems implements Listener
      * @return the key if present, null otherwise
      */
     @Nullable
-    public String getEnchantmentType (@NotNull ItemStack itemStack)
+    public String getEnchantmentTypeKey(@NotNull ItemStack itemStack)
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null)
@@ -194,6 +194,32 @@ public class EnchantedItems implements Listener
         }
         else
             return null;
+    }
+
+    /**
+     * Get the enchantment type for this item
+     *
+     * @param itemStack the item stack to get the key from
+     * @return the enchantment type if present, null otherwise
+     */
+    @Nullable
+    public ItemEnchantmentType getEnchantmentType (@NotNull ItemStack itemStack)
+    {
+        String enchantmentTypeStr = getEnchantmentTypeKey(itemStack);
+        if (enchantmentTypeStr == null)
+            return null;
+
+        ItemEnchantmentType enchantmentType = null;
+        try
+        {
+            enchantmentType = ItemEnchantmentType.valueOf(enchantmentTypeStr);
+        }
+        catch (Exception e)
+        {
+            common.printDebugMessage("Imvalid item enchantment " + enchantmentTypeStr, null, null, true);
+        }
+
+        return enchantmentType;
     }
 
     /**
@@ -263,7 +289,7 @@ public class EnchantedItems implements Listener
         }
 
         Integer magnitude = getEnchantmentMagnitude(itemStack);
-        String eType = getEnchantmentType(itemStack);
+        String eType = getEnchantmentTypeKey(itemStack);
 
         if (magnitude == null || eType == null)
         {
@@ -312,6 +338,31 @@ public class EnchantedItems implements Listener
         }
 
         return enchantment;
+    }
+
+    /**
+     * Remove the enchantment from an item
+     *
+     * @param item the item to remove the enchantment from
+     */
+    public void removeEnchantment (@NotNull Item item)
+    {
+        if (!isEnchanted(item))
+            return;
+
+        ItemStack itemStack = item.getItemStack();
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null)
+            return;
+
+        String eid = getEnchantmentID(itemStack);
+        if (eid != null)
+            enchantedItems.remove(eid);
+
+        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        container.remove(enchantmentType);
+        container.remove(enchantmentMagnitude);
+        container.remove(enchantmentID);
     }
 
     /**

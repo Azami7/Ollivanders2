@@ -111,7 +111,7 @@ public class VOLATUS extends Enchantment
     private boolean isHoldingBroom (Player player)
     {
         ItemStack primaryItem = player.getInventory().getItemInMainHand();
-        String eTypeStr = Ollivanders2API.getItems(p).enchantedItems.getEnchantmentType(primaryItem);
+        String eTypeStr = Ollivanders2API.getItems(p).enchantedItems.getEnchantmentTypeKey(primaryItem);
 
         if (eTypeStr != null)
         {
@@ -122,7 +122,7 @@ public class VOLATUS extends Enchantment
         }
 
         ItemStack secondaryItem = player.getInventory().getItemInOffHand();
-        eTypeStr = Ollivanders2API.getItems(p).enchantedItems.getEnchantmentType(secondaryItem);
+        eTypeStr = Ollivanders2API.getItems(p).enchantedItems.getEnchantmentTypeKey(secondaryItem);
 
         if (eTypeStr != null)
         {

@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.stationaryspell.ShieldSpell;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -20,12 +19,7 @@ public final class SCUTO_CONTERAM extends O2Spell
    /**
     * The number of shield spells that can be targeted by this spell.
     */
-   private int targets = 1;
-
-   /**
-    * The amount to reduce the duration of the shields.
-    */
-   private int percent = 1;
+   private int targetsRemaining = 1;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -56,17 +50,18 @@ public final class SCUTO_CONTERAM extends O2Spell
       spellType = O2SpellType.SCUTO_CONTERAM;
       branch = O2MagicBranch.CHARMS;
       initSpell();
+   }
 
-      percent = (int) usesModifier / 10;
-      if (percent > 100)
+   /**
+    * Initialize spell data
+    */
+   @Override
+   void doInitSpell()
+   {
+      targetsRemaining = (int) usesModifier / 20;
+      if (targetsRemaining < 1)
       {
-         percent = 100;
-      }
-
-      targets = (int) usesModifier / 20;
-      if (targets < 1)
-      {
-         targets = 1;
+         targetsRemaining = 1;
       }
    }
 
@@ -78,22 +73,16 @@ public final class SCUTO_CONTERAM extends O2Spell
    {
       for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
-         if (stationarySpell instanceof ShieldSpell)
-         {
-            stationarySpell.ageByPercent(percent);
-            stationarySpell.flair(10);
+         if (stationarySpell.getSpellType().getLevel().ordinal() <= spellType.getLevel().ordinal())
+            stationarySpell.kill();
 
-            targets--;
-         }
-
-         if (targets < 1)
-         {
-            kill();
-            return;
-         }
+         targetsRemaining = targetsRemaining - 1;
+         if (targetsRemaining <= 0)
+            break;
       }
 
-      if (hasHitTarget())
+      // kill the spell if the projectile has stopped or we have hit the max number of targets
+      if (hasHitTarget() || targetsRemaining <= 0)
       {
          kill();
       }

@@ -509,8 +509,8 @@ public class O2Player
       Constructor<?> c;
       try
       {
-         c = Class.forName(spellClass).getConstructor();
-         O2Spell s = (O2Spell) c.newInstance();
+         c = Class.forName(spellClass).getConstructor(Ollivanders2.class);
+         O2Spell s = (O2Spell) c.newInstance(p);
 
          recentSpells.put(spellType, System.currentTimeMillis() + s.getCoolDown());
 

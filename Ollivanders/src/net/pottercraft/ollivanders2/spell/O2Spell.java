@@ -661,4 +661,15 @@ public abstract class O2Spell
    {
       return spellType.getSpellName();
    }
+
+   /**
+    * Get the level of this spell. This is primarily for use with counter-spells
+    *
+    * @return the level of the spell
+    */
+   @NotNull
+   public Ollivanders2Common.MagicLevel getLevel()
+   {
+      return spellType.getLevel();
+   }
 }

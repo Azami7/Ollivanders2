@@ -27,7 +27,6 @@ public final class ANIMAGUS_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.ANIMAGUS_POTION;
-      potionLevel = PotionLevel.NEWT;
 
       ingredients.put(O2ItemType.MANDRAKE_LEAF, 1);
       ingredients.put(O2ItemType.DEW_DROP, 2);
@@ -43,10 +42,17 @@ public final class ANIMAGUS_POTION extends O2Potion
       potionColor = Color.fromRGB(102, 0, 0);
    }
 
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
    @Override
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   public void drink(@NotNull Player player)
    {
-      if (!Ollivanders2.libsDisguisesEnabled)
+      O2Player o2p = p.getO2Player(player);
+
+      if (o2p == null || !Ollivanders2.libsDisguisesEnabled)
       {
          player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
 

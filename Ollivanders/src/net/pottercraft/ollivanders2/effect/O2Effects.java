@@ -22,6 +22,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,6 +49,41 @@ public class O2Effects implements Listener
    final static Semaphore semaphore = new Semaphore(1);
 
    public static final String effectLabelPrefix = "Effect_";
+
+   public static HashMap<PotionEffectType, Ollivanders2Common.MagicLevel> potionEffectLevels = new HashMap<>() {{
+      put(PotionEffectType.ABSORPTION, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.BAD_OMEN, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.BLINDNESS, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.CONDUIT_POWER, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.CONFUSION, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.DAMAGE_RESISTANCE, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.DOLPHINS_GRACE, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.FAST_DIGGING, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.FIRE_RESISTANCE, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.GLOWING, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.HARM, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.HEAL, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.HEALTH_BOOST, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.HERO_OF_THE_VILLAGE, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.HUNGER, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.INCREASE_DAMAGE, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.INVISIBILITY, Ollivanders2Common.MagicLevel.EXPERT);
+      put(PotionEffectType.JUMP, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.LEVITATION, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.LUCK, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.NIGHT_VISION, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.POISON, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.REGENERATION, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.SATURATION, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.SLOW, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.SLOW_DIGGING, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.SLOW_FALLING, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.SPEED, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.UNLUCK, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.WATER_BREATHING, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.WEAKNESS, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.WITHER, Ollivanders2Common.MagicLevel.NEWT);
+   }};
 
    /**
     * Thread-safe storage class for the effect data on players.

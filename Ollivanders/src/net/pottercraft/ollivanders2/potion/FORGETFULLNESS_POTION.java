@@ -33,7 +33,6 @@ public final class FORGETFULLNESS_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.FORGETFULLNESS_POTION;
-      potionLevel = PotionLevel.OWL;
 
       ingredients.put(O2ItemType.MISTLETOE_BERRIES, 4);
       ingredients.put(O2ItemType.VALERIAN_SPRIGS, 2);
@@ -46,8 +45,21 @@ public final class FORGETFULLNESS_POTION extends O2Potion
       potionColor = Color.fromRGB(195, 71, 0);
    }
 
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
+   @Override
+   public void drink(@NotNull Player player)
    {
+      O2Player o2p = p.getO2Player(player);
+      if (o2p == null)
+      {
+         player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
+         return;
+      }
+
       int coinToss = Math.abs(Ollivanders2Common.random.nextInt() % 2);
 
       int memLoss = Math.abs(Ollivanders2Common.random.nextInt() % 20) + 1;
