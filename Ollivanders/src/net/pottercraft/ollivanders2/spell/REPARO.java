@@ -94,6 +94,8 @@ public final class REPARO extends O2Spell
             item.setItemStack(stack);
             kill();
 
+            player.sendMessage(Ollivanders2.chatColor + item.getName() + " looks newer than before.");
+
             break;
          }
       }
