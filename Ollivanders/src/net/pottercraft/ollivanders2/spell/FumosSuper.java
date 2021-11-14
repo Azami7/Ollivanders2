@@ -47,7 +47,7 @@ public abstract class FumosSuper extends AddPotionEffectInRadius
         projectilePassThrough.remove(Material.WATER);
 
         effectTypes.add(PotionEffectType.BLINDNESS);
-        strengthModifier = 1;
+        amplifier = 1;
         minDurationInSeconds = 15;
         maxDurationInSeconds = 120;
 

@@ -50,7 +50,7 @@ public final class FUMOS_DUO extends FumosSuper
       spellType = O2SpellType.FUMOS_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      strengthModifier = 2;
+      amplifier = 2;
       minDurationInSeconds = 30;
       maxDurationInSeconds = 240;
 

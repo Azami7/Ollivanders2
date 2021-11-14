@@ -49,20 +49,29 @@ public final class OBSCURO extends AddPotionEffect
 
       spellType = O2SpellType.OBSCURO;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       effectTypes.add(PotionEffectType.BLINDNESS);
-      strengthModifier = 0;
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      // Amplifier
+      maxAmplifier = 1;
+
+      amplifier = (int)(usesModifier / 100);
+      if (amplifier > maxAmplifier)
+         amplifier = maxAmplifier;
+
+      // Duration
       minDurationInSeconds = 30;
 
       durationInSeconds = (int) usesModifier;
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      }
       else if (durationInSeconds > maxDurationInSeconds)
-      {
          durationInSeconds = maxDurationInSeconds;
-      }
    }
 }
