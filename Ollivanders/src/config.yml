@@ -80,6 +80,9 @@ debug: false
 # Override version checks. This will force the plugin to load regardless of MC api version.
 # **IMPORTANT** Backup your plugins/Ollivanders2 directory before enabling this option - running unsupported versions may corrupt plugin data
 overrideVersionCheck: false
+#
+# Fast spells. This increases the speed spell projectiles are created. Can overload server and cause performance issues.
+fastSpells: false
 
 #
 # Zones
@@ -352,7 +355,7 @@ FINITE_INCANTATEM_text: "Reduces all spell effects on an item or player."
 FINITE_INCANTATEM_flavorText: "The General Counter-Spell"
 FLAGRANTE_text: "Flagrante will cause an item to burn it's bearer when picked up."
 FLAGRANTE_flavorText: "The Burning Curse"
-FLIPENDO_text: "Flipendo can be used to repel an opponent away from oneself."
+FLIPENDO_text: "Flipendo can be used to repel an entity away from oneself."
 FLIPENDO_flavorText: "The Knockback Jinx"
 FRANGE_LIGNEA_text: "Frange lignea will cause a log of the spruce, oak, birch, or jungle species to explode into coreless wands."
 FUMOS_text: "Fumos will cause those in an area to be blinded by a smoke cloud."
