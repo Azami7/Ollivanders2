@@ -454,7 +454,7 @@ OPPUGNO_text: "Oppugno will cause a creature or player to attack the targeted en
 OPPUGNO_flavorText: "The Oppugno Jinx"
 OVOGNOSIS_text: "By studying the shape of the egg whites and yolks in water, the seer will have the future revealed to them."
 OVOGNOSIS_flavorText: "Egg divination was a common practice for ancient Greeks and Romans."
-PACK_text: "When this hits a chest, it will suck any items nearby into it."
+PACK_text: "When cast at an ender chest or shulker box, it will suck any items nearby into it."
 PACK_flavorText: "The Packing Charm"
 PARTIS_TEMPORUS_text: "Partis temporus, if cast at a stationary spell that you have cast, will cause that stationary spell's effects to stop for a short time."
 PARTIS_TEMPORUS_flavorText: "The Parting Charm"

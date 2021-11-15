@@ -50,6 +50,16 @@ public abstract class O2Spell
    public static final int maxSpellLifetime = 12000;
 
    /**
+    * The max distance a spell projectile can travel
+    */
+   static final int maxProjectileDistance = 50;
+
+   /**
+    * The currently traveled distance for the projectile
+    */
+   int projectileDistance = 0;
+
+   /**
     * The most number of words a spell name can be.
     */
    public static final int max_spell_words = 3;
@@ -163,6 +173,11 @@ public abstract class O2Spell
    final static String textConfigLabel = "_Text";
 
    /**
+    * A list of block types that this spell is allowed to target. Takes precedence over deny list.
+    */
+   List<Material> materialAllowList = new ArrayList<>();
+
+   /**
     * A list of block types that cannot be affected by this spell
     */
    List<Material> materialBlackList = new ArrayList<>();
@@ -211,7 +226,6 @@ public abstract class O2Spell
 
       // block types that cannot be affected by any spell
       materialBlackList.addAll(Ollivanders2Common.unbreakableMaterials);
-
 
       // block types that this spell's projectiles pass through
       projectilePassThrough.add(Material.AIR);
@@ -262,21 +276,20 @@ public abstract class O2Spell
 
       lifeTicks++;
 
+      // if this spell exceeds the max age, kill it
       if (lifeTicks > maxSpellLifetime)
-      {
          kill();
-      }
 
       // do nothing if spell is already marked as killed
       if (!kill)
       {
          // only move the projectile if a target has not been hit
          if (!hitTarget)
-         {
             move();
-         }
 
-         doCheckEffect();
+         // if the spell has not been killed, run the spell upkeep cycle
+         if (!isKilled())
+            doCheckEffect();
       }
    }
 
@@ -285,14 +298,32 @@ public abstract class O2Spell
     */
    public void move()
    {
-      // if we've already targeted a block, do not move further
-      // if this is somehow called when the spell is set to killed, do nothing
-      if (kill)
+      // if this is somehow called when the spell is set to killed or we've already hit a target, do nothing
+      if (isKilled() || hasHitTarget())
       {
          return;
       }
 
+      // if we have gone beyond the max distance, kill this spell
+      if (projectileDistance > maxProjectileDistance)
+      {
+         kill();
+         return;
+      }
+
+      // move the projectile
       location.add(vector);
+      projectileDistance = projectileDistance + 1;
+
+      // determine if this spell is allowed in this location per Ollivanders2 config and WorldGuard
+      if (!isSpellAllowed())
+      {
+         kill();
+         return;
+      }
+
+      // play the project moving effect
+
       World world = location.getWorld();
       if (world == null)
       {
@@ -303,52 +334,43 @@ public abstract class O2Spell
 
       world.playEffect(location, moveEffect, moveEffectData);
 
-      // if current block type is not a pass-through type, we have hit a target
+      // check the block at this location, if it is not a pass-through block, stop the projectile and check the target
       Material targetBlockType = location.getBlock().getType();
       if (!projectilePassThrough.contains(targetBlockType))
       {
-         targetBlock();
-      }
-
-      // if the max duration of the projectile is reached, kill the spell
-      if (lifeTicks > 160)
-      {
-         kill();
+         stopProjectile();
+         checkTargetBlock();
       }
    }
 
    /**
-    * Target the current block with this spell.
+    * Check the current block for use with this spell.
     *
-    * If the block is a pass-through, nothing happens and the projectile will continue
-    * If the block is on the blacklist or the spell cannot be cast in this location, kills the spell
-    * Otherwise, targets the block
+    * If the block is not on the allow list, is on the blacklist, or the spell cannot be cast in this location, kills the spell
     */
-   private void targetBlock()
+   private void checkTargetBlock()
    {
+      // if this is somehow called before we've hit a target, do nothing
+      if (!hasHitTarget())
+         return;
+
       Block target = location.getBlock();
 
-      // if we are on a pass-through block, keep going
-      if (projectilePassThrough.contains(target.getType()))
+      p.getLogger().info("Checking " + target.getType().toString());
+
+      // check blockAllowList
+      if (!(materialAllowList.contains(target.getType())))
       {
+         common.printDebugMessage(target.getType() + " is not in the material allow list", null, null, false);
+         kill();
          return;
       }
 
-      // determine if this spell is allowed in this location per Ollivanders2 config and WorldGuard
-      if (!isSpellAllowed())
-      {
-         kill();
-      }
-
-      // check blockBlackList
+      // check deny list
       if (materialBlackList.contains(target.getType()))
       {
+         common.printDebugMessage(target.getType() + " is in the material deny list", null, null, false);
          kill();
-      }
-
-      if (!kill)
-      {
-         hitTarget = true;
       }
    }
 

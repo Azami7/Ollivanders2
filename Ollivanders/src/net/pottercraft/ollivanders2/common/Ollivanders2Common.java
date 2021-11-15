@@ -1089,9 +1089,9 @@ public class Ollivanders2Common
    }
 
    /**
-    * Gets item entities within radius of the projectile
+    * Gets item entities within bounding box of the projectile
     *
-    * @return List of item entities within radius of projectile
+    * @return List of item entities within bounding box of projectile
     */
    @NotNull
    public List<Item> getItemsInBounds(@NotNull Location location, double x, double y, double z)
@@ -1107,6 +1107,17 @@ public class Ollivanders2Common
          }
       }
       return items;
+   }
+
+   /**
+    * Gets item entities within radius of the projectile
+    *
+    * @return List of item entities within radius of projectile
+    */
+   @NotNull
+   public List<Item> getItemsInRadius(@NotNull Location location, double radius)
+   {
+      return getItemsInBounds(location, radius, radius, radius);
    }
 
    /**
