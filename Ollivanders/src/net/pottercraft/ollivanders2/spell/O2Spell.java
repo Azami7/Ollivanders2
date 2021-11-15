@@ -359,7 +359,7 @@ public abstract class O2Spell
       p.getLogger().info("Checking " + target.getType().toString());
 
       // check blockAllowList
-      if (!(materialAllowList.contains(target.getType())))
+      if (materialAllowList.size() > 0 && !(materialAllowList.contains(target.getType())))
       {
          common.printDebugMessage(target.getType() + " is not in the material allow list", null, null, false);
          kill();
