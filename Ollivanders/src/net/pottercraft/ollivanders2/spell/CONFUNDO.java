@@ -51,4 +51,18 @@ public final class CONFUNDO extends ConfundusSuper
 
       initSpell();
    }
+
+   @Override
+   void doInitSpell()
+   {
+      // Amplifier
+      amplifier = 0;
+
+      // Duration
+      durationInSeconds = (int)(usesModifier / 4);
+      if (durationInSeconds < minDurationInSeconds)
+         durationInSeconds = minDurationInSeconds;
+      else if (durationInSeconds > maxDurationInSeconds)
+         durationInSeconds = maxDurationInSeconds;
+   }
 }

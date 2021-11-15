@@ -30,7 +30,8 @@ public final class FUMOS_DUO extends FumosSuper
       spellType = O2SpellType.FUMOS_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<>() {{
+      flavorText = new ArrayList<>()
+      {{
          add("A Stronger Smoke-Screen Spell");
       }};
 
@@ -50,10 +51,29 @@ public final class FUMOS_DUO extends FumosSuper
       spellType = O2SpellType.FUMOS_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      strengthModifier = 2;
       minDurationInSeconds = 30;
       maxDurationInSeconds = 240;
 
       initSpell();
+   }
+
+   /**
+    * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
+    * constants.
+    */
+   @Override
+   void doInitSpell()
+   {
+      radius = (int)(usesModifier / 10);
+      if (radius < minDurationInSeconds)
+         radius = minRadius;
+      else if (radius > maxRadius)
+         radius = maxRadius;
+
+      durationInSeconds = (int)(usesModifier);
+      if (durationInSeconds < minDurationInSeconds)
+         durationInSeconds = minDurationInSeconds;
+      else if (durationInSeconds > maxDurationInSeconds)
+         durationInSeconds = maxDurationInSeconds;
    }
 }

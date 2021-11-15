@@ -52,22 +52,30 @@ public final class STUPEFY extends AddPotionEffect
       spellType = O2SpellType.STUPEFY;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       effectTypes.add(PotionEffectType.BLINDNESS);
       effectTypes.add(PotionEffectType.SLOW);
-      strengthModifier = (int) usesModifier / 10;
-      minDurationInSeconds = 1;
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      // amplifier
+      maxAmplifier = 2;
+
+      amplifier = (int) usesModifier / 50;
+      if (amplifier > maxAmplifier)
+         amplifier = maxAmplifier;
+
+      // duration
+      minDurationInSeconds = 5;
       maxDurationInSeconds = 180;
 
       durationInSeconds = (int) usesModifier;
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      }
       else if (durationInSeconds > maxDurationInSeconds)
-      {
          durationInSeconds = maxDurationInSeconds;
-      }
    }
 }
