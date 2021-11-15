@@ -10,14 +10,14 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Throws another player away from the caster. Twice as powerful as depulso.
+ * Throws another entity away from the caster. Twice as powerful as depulso.
  *
  * @author lownes
  */
 public final class FLIPENDO extends Knockback
 {
    /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    * Default constructor for use in generating spell text. Do not use to cast the spell.
     *
     * @param plugin the Ollivanders2 plugin
     */
@@ -34,7 +34,7 @@ public final class FLIPENDO extends Knockback
          add("\"There was a loud bang and he felt himself flying backwards as if punched; as he slammed into the kitchen wall and slid to the floor, he glimpsed the tail of Lupin's cloak disappearing round the door.\"");
       }};
 
-      text = "Flipendo can be used to repel an opponent away from oneself.";
+      text = "Flipendo can be used to repel an entity away from oneself.";
    }
 
    /**
@@ -53,12 +53,5 @@ public final class FLIPENDO extends Knockback
       initSpell();
 
       strengthReducer = 10;
-
-      // world guard flags
-      if (Ollivanders2.worldGuardEnabled)
-      {
-         worldGuardFlags.add(Flags.PVP);
-         worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
-      }
    }
 }
