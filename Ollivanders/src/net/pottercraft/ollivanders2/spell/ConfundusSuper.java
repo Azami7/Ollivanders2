@@ -13,8 +13,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class ConfundusSuper extends AddPotionEffect
 {
-    int durationMultiplier = 1;
-
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
@@ -38,22 +36,8 @@ public abstract class ConfundusSuper extends AddPotionEffect
 
         effectTypes.add(PotionEffectType.CONFUSION);
 
-        strengthModifier = 1;
+        maxAmplifier = 0;
         minDurationInSeconds = 15;
         maxDurationInSeconds = 120;
-    }
-
-    @Override
-    void doInitSpell()
-    {
-        durationInSeconds = (int) usesModifier * durationMultiplier;
-        if (durationInSeconds < minDurationInSeconds)
-        {
-            durationInSeconds = minDurationInSeconds;
-        }
-        else if (durationInSeconds > maxDurationInSeconds)
-        {
-            durationInSeconds = maxDurationInSeconds;
-        }
     }
 }

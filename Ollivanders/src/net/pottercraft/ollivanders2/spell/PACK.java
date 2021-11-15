@@ -2,22 +2,18 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
-import org.bukkit.block.DoubleChest;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Pack is the incantation of a spell used to make items pack themselves into a trunk.
@@ -28,6 +24,8 @@ import java.util.ArrayList;
 public final class PACK extends O2Spell
 {
    private int radius;
+
+   private final static int minRadius = 3;
    private final static int maxRadius = 20;
 
    /**
@@ -48,7 +46,7 @@ public final class PACK extends O2Spell
          add("The Packing Charm");
       }};
 
-      text = "When this hits a chest, it will suck any items nearby into it.";
+      text = "When cast at an ender chest or shulker box, it will suck any items nearby into it.";
    }
 
    /**
@@ -65,23 +63,44 @@ public final class PACK extends O2Spell
       spellType = O2SpellType.PACK;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.CHEST_ACCESS);
 
-      // remove chests from material blacklist
-      for (Material chest : Ollivanders2Common.chests)
-      {
-         materialBlackList.remove(chest);
-      }
+      // only allow targeting ender chests and shulker boxes - aka "magic" chests
+      materialAllowList.add(Material.ENDER_CHEST);
+      materialAllowList.add(Material.WHITE_SHULKER_BOX);
+      materialAllowList.add(Material.BLACK_SHULKER_BOX);
+      materialAllowList.add(Material.BLUE_SHULKER_BOX);
+      materialAllowList.add(Material.SHULKER_BOX);
+      materialAllowList.add(Material.BROWN_SHULKER_BOX);
+      materialAllowList.add(Material.CYAN_SHULKER_BOX);
+      materialAllowList.add(Material.GRAY_SHULKER_BOX);
+      materialAllowList.add(Material.GREEN_SHULKER_BOX);
+      materialAllowList.add(Material.LIGHT_BLUE_SHULKER_BOX);
+      materialAllowList.add(Material.LIGHT_GRAY_SHULKER_BOX);
+      materialAllowList.add(Material.LIME_SHULKER_BOX);
+      materialAllowList.add(Material.MAGENTA_SHULKER_BOX);
+      materialAllowList.add(Material.ORANGE_SHULKER_BOX);
+      materialAllowList.add(Material.PINK_SHULKER_BOX);
+      materialAllowList.add(Material.PURPLE_SHULKER_BOX);
+      materialAllowList.add(Material.RED_SHULKER_BOX);
+      materialAllowList.add(Material.YELLOW_SHULKER_BOX);
 
-      radius = ((int) usesModifier / 10) + 1;
+      materialBlackList.removeAll(materialAllowList); // remove these unbreakables for this spell only
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      radius = (int) usesModifier / 10;
+
       if (radius > maxRadius)
-      {
          radius = maxRadius;
-      }
+      else if (radius < minRadius)
+         radius = minRadius;
    }
 
    @Override
@@ -92,53 +111,45 @@ public final class PACK extends O2Spell
          return;
       }
 
-      Block block = getTargetBlock();
-      if (block == null)
+      kill();
+      common.printDebugMessage("Packing chest", null, null, false);
+
+      // get nearby items
+      List<Item> nearbyItems = common.getItemsInRadius(location, radius);
+
+      for (Item item : nearbyItems)
       {
-         common.printDebugMessage("PACK.doCheckEffect: target block is null", null, null, true);
-         kill();
-         return;
-      }
+         common.printDebugMessage("Adding " + item.getName() + " to chest", null, null, false);
 
-      if (Ollivanders2Common.chests.contains(block.getType()))
-      {
-         for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+         HashMap<Integer, ItemStack> overflow;
+
+         if (getTargetBlock().getType() == Material.ENDER_CHEST)
+            overflow = player.getEnderChest().addItem(item.getItemStack());
+         else if (getTargetBlock().getState() instanceof ShulkerBox)
          {
-            if (stat instanceof COLLOPORTUS)
-            {
-               stat.flair(10);
-
-               kill();
-               return;
-            }
+            overflow = ((ShulkerBox)getTargetBlock().getState()).getInventory().addItem(item.getItemStack());
          }
-
-         Inventory inv;
-
-         try
+         else
          {
-            Chest c = (Chest) block.getState();
-            inv = c.getInventory();
-            if (inv.getHolder() instanceof DoubleChest)
-            {
-               inv = inv.getHolder().getInventory();
-            }
-         }
-         catch (Exception e)
-         {
-            kill();
+            common.printDebugMessage("Target chest is not an ender chest or shulker box", null, null, true);
             return;
          }
 
-         for (Item item : getItems(radius))
+         // figure out how much fit
+         if (overflow.size() < 1)
+            item.remove();
+         else
          {
-            if (inv.addItem(item.getItemStack()).size() == 0)
+            // how many did it stash
+            for (ItemStack itemStack : overflow.values())
             {
-               item.remove();
+               if (itemStack.getType() == item.getItemStack().getType())
+               {
+                  int diff = item.getItemStack().getAmount() - itemStack.getAmount();
+                  item.getItemStack().setAmount(diff);
+               }
             }
          }
       }
-
-      kill();
    }
 }

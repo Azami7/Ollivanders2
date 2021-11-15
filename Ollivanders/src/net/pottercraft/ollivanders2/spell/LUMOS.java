@@ -56,7 +56,7 @@ public final class LUMOS extends AddPotionEffectInRadius
       initSpell();
 
       effectTypes.add(PotionEffectType.NIGHT_VISION);
-      strengthModifier = 1;
+      amplifier = 1;
       minDurationInSeconds = 30;
       targetSelf = true;
 
