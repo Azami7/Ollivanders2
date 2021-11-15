@@ -1089,9 +1089,9 @@ public class Ollivanders2Common
    }
 
    /**
-    * Gets item entities within radius of the projectile
+    * Gets item entities within bounding box of the projectile
     *
-    * @return List of item entities within radius of projectile
+    * @return List of item entities within bounding box of projectile
     */
    @NotNull
    public List<Item> getItemsInBounds(@NotNull Location location, double x, double y, double z)
@@ -1107,6 +1107,17 @@ public class Ollivanders2Common
          }
       }
       return items;
+   }
+
+   /**
+    * Gets item entities within radius of the projectile
+    *
+    * @return List of item entities within radius of projectile
+    */
+   @NotNull
+   public List<Item> getItemsInRadius(@NotNull Location location, double radius)
+   {
+      return getItemsInBounds(location, radius, radius, radius);
    }
 
    /**
@@ -1347,9 +1358,25 @@ public class Ollivanders2Common
     * Makes a particle effect at all points along the radius of
     * spell and at spell loc
     *
-    * @param intensity - Intensity of the flair. If greater than 10, is reduced to 10.
+    * @param location the location for the center of the flair
+    * @param radius the radius of the flair
+    * @param intensity intensity of the flair. If greater than 10, is reduced to 10.
     */
    public static void flair(@NotNull Location location, int radius, double intensity)
+   {
+      flair (location, radius, intensity, Effect.SMOKE);
+   }
+
+   /**
+    * Makes a particle effect at all points along the radius of
+    * spell and at spell loc
+    *
+    * @param location the location for the center of the flair
+    * @param radius the radius of the flair
+    * @param intensity intensity of the flair. If greater than 10, is reduced to 10.
+    * @param effectType the particle effect to use
+    */
+   public static void flair(@NotNull Location location, int radius, double intensity, Effect effectType)
    {
       if (intensity > 10)
       {
@@ -1365,7 +1392,7 @@ public class Ollivanders2Common
             Location effectLocation = location.clone().add(spherToVec(spher, radius));
 
             if (effectLocation.getWorld() != null)
-               effectLocation.getWorld().playEffect(effectLocation, Effect.SMOKE, 4);
+               effectLocation.getWorld().playEffect(effectLocation, effectType, 4);
          }
       }
    }
