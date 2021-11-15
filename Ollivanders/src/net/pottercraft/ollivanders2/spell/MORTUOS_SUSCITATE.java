@@ -95,7 +95,7 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
       }
       else
       {
-         duration--;
+         duration = duration - 1;
 
          if (duration <= 0)
          {

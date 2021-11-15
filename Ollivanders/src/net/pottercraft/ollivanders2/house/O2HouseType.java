@@ -131,7 +131,7 @@ public enum O2HouseType
                 continue;
 
             if (type.getScore() > score)
-                place ++;
+                place = place + 1;
             else if (type.getScore() == score)
                 tied = true;
         }

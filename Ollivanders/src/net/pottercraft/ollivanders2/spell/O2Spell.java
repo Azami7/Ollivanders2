@@ -274,7 +274,7 @@ public abstract class O2Spell
          return;
       }
 
-      lifeTicks++;
+      lifeTicks = lifeTicks + 1;
 
       // if this spell exceeds the max age, kill it
       if (lifeTicks > maxSpellLifetime)

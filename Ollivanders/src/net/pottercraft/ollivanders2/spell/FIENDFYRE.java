@@ -130,7 +130,7 @@ public final class FIENDFYRE extends O2Spell
          for (int x = 0; x < numGhasts; x++)
          {
             world.spawnEntity(location, EntityType.GHAST);
-            numCreatures--;
+            numCreatures = numCreatures - 1;
          }
       }
 
@@ -141,7 +141,7 @@ public final class FIENDFYRE extends O2Spell
          for (int x = 0; x < numBlazes; x++)
          {
             world.spawnEntity(location, EntityType.BLAZE);
-            numCreatures--;
+            numCreatures = numCreatures - 1;
          }
       }
 

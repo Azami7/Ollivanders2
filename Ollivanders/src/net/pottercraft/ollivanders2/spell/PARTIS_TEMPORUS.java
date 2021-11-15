@@ -88,7 +88,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
 
       if (hasHitTarget())
       {
-         duration--;
+         duration = duration - 1;
 
          if (duration <= 0)
          {

@@ -108,7 +108,7 @@ public final class LUMOS_DUO extends O2Spell
                line.add(curBlock);
                p.addTempBlock(curBlock, Material.AIR);
 
-               lineLength++;
+               lineLength = lineLength + 1;
             }
             else
             {
@@ -130,7 +130,7 @@ public final class LUMOS_DUO extends O2Spell
          }
          else
          {
-            spellDuration--;
+            spellDuration =spellDuration - 1;
          }
       }
    }

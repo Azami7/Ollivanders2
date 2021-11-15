@@ -134,7 +134,7 @@ public abstract class EntityTransfiguration extends O2Spell
             return;
          }
 
-         transfigurationTime++;
+         transfigurationTime = transfigurationTime + 1;
       }
    }
 

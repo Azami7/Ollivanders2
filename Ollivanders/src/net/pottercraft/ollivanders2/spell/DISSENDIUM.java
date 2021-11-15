@@ -90,7 +90,7 @@ public final class DISSENDIUM extends O2Spell
       if (isOpen)
       {
          // count down the open time
-         openTime++;
+         openTime = openTime + 1;
 
          // if the open time has expired, close the trap door and kill the spell
          if (openTime >= maxOpenTime)
