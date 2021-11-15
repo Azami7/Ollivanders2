@@ -276,7 +276,7 @@ public class OllivandersSchedule implements Runnable
 
             if (magnitude > 1)
             {
-               magnitude--;
+               magnitude = magnitude - 1;
                newLore.add(GEMINIO.geminio + " " + magnitude);
             }
             stackSize = stackSize * 2;

@@ -184,7 +184,7 @@ public abstract class BlockTransfiguration extends O2Spell
             }
             else
             {
-                spellDuration--;
+                spellDuration = spellDuration - 1;
             }
         }
     }

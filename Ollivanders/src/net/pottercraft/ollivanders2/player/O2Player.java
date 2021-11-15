@@ -715,7 +715,7 @@ public class O2Player
     */
    public void addSoul ()
    {
-      souls++;
+      souls = souls + 1;
    }
 
    /**
@@ -725,7 +725,7 @@ public class O2Player
    {
       if (souls > 0)
       {
-         souls--;
+         souls = souls - 1;
       }
    }
 
@@ -844,11 +844,11 @@ public class O2Player
          String line = spell + " " + count;
          content.append(spell).append(" ").append(count);
 
-         lineCount++;
+         lineCount = lineCount + 1;
          // ~18 characters per line, this will likely wrap
          if (line.length() > 18)
          {
-            lineCount++;
+            lineCount = lineCount + 1;
          }
       }
 

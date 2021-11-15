@@ -92,7 +92,7 @@ public final class CRESCERE_PROTEGAT extends O2Spell
 
          if (inside.radius < limit && inside.getCasterID().equals(player.getUniqueId()))
          {
-            inside.radius++;
+            inside.radius = inside.radius + 1;
             inside.flair(10);
 
             kill();

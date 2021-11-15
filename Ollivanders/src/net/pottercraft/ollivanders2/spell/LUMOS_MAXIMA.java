@@ -124,7 +124,7 @@ public final class LUMOS_MAXIMA extends O2Spell
       }
       else
       {
-         duration--;
+         duration = duration - 1;
 
          if (duration <= 0)
          {

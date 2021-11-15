@@ -90,7 +90,7 @@ public final class HORREAT_PROTEGAT extends O2Spell
       {
          if (spell.radius > limit && spell.getCasterID().equals(player.getUniqueId()))
          {
-            spell.radius--;
+            spell.radius = spell.radius - 1;
             spell.flair(10);
          }
       }

@@ -104,7 +104,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
          {
             live.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 300, 0));
          }
-         countDown--;
+         countDown = countDown - 1;
       }
       if (block.getType() == Material.FIRE)
       {
