@@ -107,20 +107,26 @@ public abstract class AddPotionEffect extends O2Spell
         if (flair)
             Ollivanders2Common.flair(location, (int) radius, 10);
 
+        if (targetSelf)
+        {
+            addEffectsToTarget(player);
+            numberOfTargets = numberOfTargets - 1;
+        }
+
         for (LivingEntity livingEntity : getLivingEntities(radius))
         {
-            if (!targetSelf && livingEntity.getUniqueId() == player.getUniqueId())
-                continue;
-
-            addEffectsToTarget(livingEntity);
-            numberOfTargets--;
-
             // stop when the limit of targets is reached
             if (numberOfTargets <= 0)
             {
                 kill();
                 return;
             }
+
+            if (!targetSelf && livingEntity.getUniqueId() == player.getUniqueId())
+                continue;
+
+            addEffectsToTarget(livingEntity);
+            numberOfTargets = numberOfTargets - 1;
         }
     }
 
