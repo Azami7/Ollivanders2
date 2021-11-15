@@ -53,6 +53,7 @@ public final class AQUA_ERUCTO extends BlockTransfiguration
 
       permanent = true;
       radius = 1;
+      successMessage = "A fire is doused by the water.";
 
       initSpell();
 
@@ -63,7 +64,7 @@ public final class AQUA_ERUCTO extends BlockTransfiguration
       materialWhitelist.add(Material.LAVA);
       materialWhitelist.add(Material.FIRE);
 
-      moveEffectData = Material.WATER;
+      moveEffectData = Material.BLUE_ICE;
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);

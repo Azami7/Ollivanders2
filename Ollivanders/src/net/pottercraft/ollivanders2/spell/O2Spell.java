@@ -173,6 +173,11 @@ public abstract class O2Spell
    List<StateFlag> worldGuardFlags = new ArrayList<>();
 
    /**
+    * Message to display to the user on a successful cast of this spell.
+    */
+   String successMessage = null;
+
+   /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
     * text.
     */

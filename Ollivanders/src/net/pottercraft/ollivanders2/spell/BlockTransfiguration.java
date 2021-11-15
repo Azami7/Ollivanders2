@@ -152,6 +152,12 @@ public abstract class BlockTransfiguration extends O2Spell
             if (target != null)
             {
                 transfigure(target);
+                // check to see if the transfiguration failed
+                if (!isTransfigured)
+                {
+                    kill();
+                    return;
+                }
 
                 if (!permanent)
                 {
@@ -162,6 +168,9 @@ public abstract class BlockTransfiguration extends O2Spell
                     spellDuration = 0;
                     kill();
                 }
+
+                if (successMessage != null)
+                    player.sendMessage(Ollivanders2.chatColor + successMessage);
             }
         }
         // if the entity has transfigured, check time to change back
@@ -215,9 +224,9 @@ public abstract class BlockTransfiguration extends O2Spell
             {
                 blockToChange.setType(transfigureType);
             }
-        }
 
-        isTransfigured = true;
+            isTransfigured = true;
+        }
     }
 
     /**
@@ -256,6 +265,9 @@ public abstract class BlockTransfiguration extends O2Spell
         return canChange;
     }
 
+    /**
+     * Restore the block to its original type if this was not a permanent change
+     */
     @Override
     public void revert()
     {
