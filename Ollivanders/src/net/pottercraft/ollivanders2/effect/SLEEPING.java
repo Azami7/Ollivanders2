@@ -81,14 +81,13 @@ public class SLEEPING extends O2Effect
       target.teleport(newLoc);
 
       // add sleep speech
-      SLEEP_SPEECH effect = new SLEEP_SPEECH(p, -1, targetID);
+      Ollivanders2API.getPlayers(p).playerEffects.addEffect(new SLEEP_SPEECH(p, -1, targetID));
 
       // immobilize them
-      IMMOBILIZE immEffect = new IMMOBILIZE(p, -1, targetID);
-
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers(p).playerEffects.addEffect(new IMMOBILIZE(p, -1, targetID));
 
       sleeping = true;
+      target.sendMessage(Ollivanders2.chatColor + "You fall in to a deep sleep.");
    }
 
    /**
