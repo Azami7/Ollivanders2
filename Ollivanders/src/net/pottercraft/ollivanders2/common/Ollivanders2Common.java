@@ -65,7 +65,7 @@ public class Ollivanders2Common
    public static final int ticksPerMinute = ticksPerSecond * 60;
    public static final int ticksPerHour = ticksPerMinute * 60;
 
-   public static final List<EntityType> smallFriendlyAnimals = new ArrayList<>()
+   public static final List<EntityType> smallFriendlyMobs = new ArrayList<>()
    {{
       add(EntityType.BAT);
       add(EntityType.CHICKEN);
@@ -77,7 +77,7 @@ public class Ollivanders2Common
       add(EntityType.PUFFERFISH);
    }};
 
-   public static final List<EntityType> mediumFriendlyAnimals = new ArrayList<>()
+   public static final List<EntityType> mediumFriendlyMobs = new ArrayList<>()
    {{
       add(EntityType.SHEEP);
       add(EntityType.PIG);
@@ -88,7 +88,7 @@ public class Ollivanders2Common
       add(EntityType.TURTLE);
    }};
 
-   public static final List<EntityType> largeFriendlyAnimals = new ArrayList<>()
+   public static final List<EntityType> largeFriendlyMobs = new ArrayList<>()
    {{
       add(EntityType.COW);
       add(EntityType.DONKEY);

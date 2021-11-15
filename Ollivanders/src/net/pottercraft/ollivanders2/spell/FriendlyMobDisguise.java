@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.listeners.OllivandersListener;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -49,18 +48,18 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
    void doInitSpell()
    {
       // whitelist of entities that can be targeted by this spell
-      entityWhitelist.addAll(Ollivanders2Common.smallFriendlyAnimals);
+      entityWhitelist.addAll(Ollivanders2Common.smallFriendlyMobs);
 
       int uses = (int) (usesModifier * 4);
 
       if (uses > 100)
       {
-         entityWhitelist.addAll(Ollivanders2Common.mediumFriendlyAnimals);
+         entityWhitelist.addAll(Ollivanders2Common.mediumFriendlyMobs);
       }
 
       if (uses > 200)
       {
-         entityWhitelist.addAll(Ollivanders2Common.largeFriendlyAnimals);
+         entityWhitelist.addAll(Ollivanders2Common.largeFriendlyMobs);
       }
 
       // spell duration
