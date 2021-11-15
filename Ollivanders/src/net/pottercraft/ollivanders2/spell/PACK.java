@@ -9,15 +9,20 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
 import org.bukkit.block.DoubleChest;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
+import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Pack is the incantation of a spell used to make items pack themselves into a trunk.
@@ -65,18 +70,19 @@ public final class PACK extends O2Spell
       spellType = O2SpellType.PACK;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.CHEST_ACCESS);
 
-      // remove chests from material blacklist
-      for (Material chest : Ollivanders2Common.chests)
-      {
-         materialBlackList.remove(chest);
-      }
+      // only allow targeting chests
+      materialAllowList.addAll(Ollivanders2Common.chests);
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       radius = ((int) usesModifier / 10) + 1;
       if (radius > maxRadius)
       {
@@ -92,53 +98,32 @@ public final class PACK extends O2Spell
          return;
       }
 
-      Block block = getTargetBlock();
-      if (block == null)
+      // get nearby items
+      List<Item> nearbyItems = common.getItemsInRadius(location, radius);
+
+      Block targetBlock = getTargetBlock();
+      if (!(targetBlock instanceof InventoryHolder))
       {
-         common.printDebugMessage("PACK.doCheckEffect: target block is null", null, null, true);
+         common.printDebugMessage("Pack targeted non-chest block", null, null, true);
          kill();
          return;
       }
 
-      if (Ollivanders2Common.chests.contains(block.getType()))
+      InventoryHolder holder = ((InventoryHolder) targetBlock);
+      Inventory inventory = holder.getInventory();
+
+      for (Item item : nearbyItems)
       {
-         for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-         {
-            if (stat instanceof COLLOPORTUS)
-            {
-               stat.flair(10);
-
-               kill();
-               return;
-            }
-         }
-
-         Inventory inv;
+         HashMap<Integer, ItemStack> overflow;
 
          try
          {
-            Chest c = (Chest) block.getState();
-            inv = c.getInventory();
-            if (inv.getHolder() instanceof DoubleChest)
-            {
-               inv = inv.getHolder().getInventory();
-            }
+            overflow = inventory.addItem(item.getItemStack());
          }
          catch (Exception e)
          {
-            kill();
-            return;
-         }
-
-         for (Item item : getItems(radius))
-         {
-            if (inv.addItem(item.getItemStack()).size() == 0)
-            {
-               item.remove();
-            }
+            common.printDebugMessage("Exception in PACK", e, null, true);
          }
       }
-
-      kill();
    }
 }

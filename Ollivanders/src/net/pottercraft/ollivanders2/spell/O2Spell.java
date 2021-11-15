@@ -158,6 +158,11 @@ public abstract class O2Spell
    final static String textConfigLabel = "_Text";
 
    /**
+    * A list of block types that this spell is allowed to target. Takes precedence over deny list.
+    */
+   List<Material> materialAllowList = new ArrayList<>();
+
+   /**
     * A list of block types that cannot be affected by this spell
     */
    List<Material> materialBlackList = new ArrayList<>();
@@ -206,7 +211,6 @@ public abstract class O2Spell
 
       // block types that cannot be affected by any spell
       materialBlackList.addAll(Ollivanders2Common.unbreakableMaterials);
-
 
       // block types that this spell's projectiles pass through
       projectilePassThrough.add(Material.AIR);
@@ -333,18 +337,29 @@ public abstract class O2Spell
       if (!isSpellAllowed())
       {
          kill();
+         return;
       }
 
-      // check blockBlackList
-      if (materialBlackList.contains(target.getType()))
+      // check blockAllowList
+      if (materialAllowList.size() > 0)
       {
-         kill();
+         if (!materialAllowList.contains(target.getType()))
+         {
+            kill();
+            return;
+         }
+      }
+      else
+      {
+         // check blockBlackList
+         if (materialBlackList.contains(target.getType()))
+         {
+            kill();
+            return;
+         }
       }
 
-      if (!kill)
-      {
-         hitTarget = true;
-      }
+      hitTarget = true;
    }
 
    /**
