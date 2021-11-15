@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.Collection;
 
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
@@ -17,12 +18,16 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Giant;
 import org.bukkit.entity.Item;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
 import org.bukkit.util.Vector;
 
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -698,5 +703,40 @@ public abstract class O2Spell
    public Ollivanders2Common.MagicLevel getLevel()
    {
       return spellType.getLevel();
+   }
+
+   /**
+    * Determine if this entity can be targeted for a potentially harmful spell
+    *
+    * @param entity the entity to check
+    * @return true if it can be targeted, false otherwise
+    */
+   boolean entityHarmWGCheck(Entity entity)
+   {
+      // players
+      if (entity instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.PVP))
+         return false;
+
+      // friendly mobs
+      if (entity instanceof Animals && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.DAMAGE_ANIMALS))
+         return false;
+
+      // items
+      if (entity instanceof Item && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.ITEM_PICKUP))
+         return false;
+
+      // vehicles
+      if (entity instanceof Vehicle && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.DESTROY_VEHICLE))
+         return false;
+
+      // item frames
+      if (entity instanceof ItemFrame && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.ENTITY_ITEM_FRAME_DESTROY))
+         return false;
+
+      // paintings
+      if (entity instanceof Painting && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.ENTITY_PAINTING_DESTROY))
+         return false;
+
+      return true;
    }
 }

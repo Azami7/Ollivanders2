@@ -1,13 +1,9 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Vehicle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -77,7 +73,7 @@ public abstract class Knockback extends O2Spell
          for (Entity entity : entities)
          {
             // check to see if we can target this entity
-            if (!entityCheck(entity))
+            if (!entityHarmCheck(entity))
                continue;
 
             double velocity = usesModifier / strengthReducer;
@@ -103,12 +99,12 @@ public abstract class Knockback extends O2Spell
    }
 
    /**
-    * Determine if this entity can be targeted
+    * Determine if this entity can be targeted for a potentially harmful spell
     *
     * @param entity the entity to check
     * @return true if it can be targeted, false otherwise
     */
-   private boolean entityCheck (Entity entity)
+   private boolean entityHarmCheck(Entity entity)
    {
       // first check entity whitelist
       if (entityWhitelist.size() > 0 && !entityWhitelist.contains(entity.getType()))
@@ -122,22 +118,6 @@ public abstract class Knockback extends O2Spell
       // worldguard
       //
 
-      // players
-      if (entity instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.PVP))
-         return false;
-
-      // friendly mobs
-      if (entity instanceof Animals && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.DAMAGE_ANIMALS))
-         return false;
-
-      // items
-      if (entity instanceof Item && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.ITEM_PICKUP))
-         return false;
-
-      // vehicles
-      if (entity instanceof Vehicle && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.RIDE))
-         return false;
-
-      return true;
+      return entityHarmWGCheck(entity);
    }
 }
