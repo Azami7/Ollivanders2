@@ -52,21 +52,29 @@ public final class EPISKEY extends AddPotionEffect
       branch = O2MagicBranch.HEALING;
       spellType = O2SpellType.EPISKEY;
 
-      initSpell();
-
       effectTypes.add(PotionEffectType.REGENERATION);
-      strengthModifier = 0;
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      // Amplifier
+      maxAmplifier = 1;
+
+      amplifier = (int)(usesModifier / 100);
+      if (amplifier > maxAmplifier)
+         amplifier = maxAmplifier;
+
+      // Duration
       minDurationInSeconds = 15;
       maxDurationInSeconds = 120;
 
-      durationInSeconds = (int) usesModifier;
+      durationInSeconds = (int)(usesModifier / 2);
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      }
       else if (durationInSeconds > maxDurationInSeconds)
-      {
          durationInSeconds = maxDurationInSeconds;
-      }
    }
 }

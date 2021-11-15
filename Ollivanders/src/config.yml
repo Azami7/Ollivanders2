@@ -380,7 +380,7 @@ HORREAT_PROTEGAT_text: "Horreat Protegat will shrink a stationary spell's radius
 HORREAT_PROTEGAT_flavorText: "The Spell-Reduction Charm"
 IMMOBULUS_text: "Slows entity movement for a time period."
 IMMOBULUS_flavorText: "The Freezing Charm"
-IMPEDIMENTA_text: "Slows target movements."
+IMPEDIMENTA_text: "Slows a living entity's movements."
 IMPEDIMENTA_flavorText: "Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal."
 INCARNATIO_DEVITO_text: "Turns target player in to a chicken."
 INCARNATIO_EQUUS_text: "Turns target player in to a horse."

@@ -51,11 +51,23 @@ public final class CONFUNDUS_DUO extends ConfundusSuper
       spellType = O2SpellType.CONFUNDUS_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      strengthModifier = 2;
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      // Amplifier
+      amplifier = 1;
+
+      // Duration
       minDurationInSeconds = 30;
       maxDurationInSeconds = 240;
-      durationMultiplier = 2;
 
-      initSpell();
+      durationInSeconds = (int)(usesModifier / 2);
+      if (durationInSeconds < minDurationInSeconds)
+         durationInSeconds = minDurationInSeconds;
+      else if (durationInSeconds > maxDurationInSeconds)
+         durationInSeconds = maxDurationInSeconds;
    }
 }
