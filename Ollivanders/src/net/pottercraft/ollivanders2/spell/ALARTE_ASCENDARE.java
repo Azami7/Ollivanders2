@@ -1,9 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
-import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -11,7 +9,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
 
 /**
  * Shoots target high into air.
@@ -22,6 +20,11 @@ import java.util.List;
  */
 public final class ALARTE_ASCENDARE extends O2Spell
 {
+   int maxVelocity = 5;
+   int minVelocity = 0;
+
+   Vector vector;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *
@@ -54,17 +57,22 @@ public final class ALARTE_ASCENDARE extends O2Spell
    {
       super(plugin, player, rightWand);
 
-      initSpell();
-
       spellType = O2SpellType.ALARTE_ASCENDARE;
       branch = O2MagicBranch.CHARMS;
 
-      // world guard
-      if (Ollivanders2.worldGuardEnabled)
-      {
-         worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
-         worldGuardFlags.add(Flags.PVP);
-      }
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      double up = usesModifier / 20;
+      if (up < minVelocity)
+         up = minVelocity;
+      else if (up > maxVelocity)
+         up = maxVelocity;
+
+      vector = new Vector(0, up, 0);
    }
 
    /**
@@ -73,54 +81,30 @@ public final class ALARTE_ASCENDARE extends O2Spell
    @Override
    protected void doCheckEffect()
    {
-      double up = usesModifier / 20;
-      if (up < 1)
-      {
-         up = 1;
-      }
-      else if (up > 5)
-      {
-         up = 5;
-      }
-
-      Vector vec = new Vector(0, up, 0);
-
-      // check for entities first
-      List<LivingEntity> livingEntities = getLivingEntities(1.5);
-
-      if (livingEntities.size() > 0)
-      {
-         for (LivingEntity living : livingEntities)
-         {
-            if (living.getUniqueId() == player.getUniqueId())
-               continue;
-
-            common.printDebugMessage("targeting entity " + living.getName(), null, null, false);
-            living.setVelocity(living.getVelocity().add(vec));
-
-            kill();
-            return;
-         }
-
-         return;
-      }
-
-      // check for items next
-      List<Item> items = getItems(1.5);
-
-      if (items.size() > 0)
-      {
-         Item item = items.get(0);
-
-         common.printDebugMessage("targeting item " + item.getName(), null, null, false);
-         item.setVelocity(item.getVelocity().add(vec));
-
-         kill();
-         return;
-      }
-
       // projectile has stopped, kill the spell
       if (hasHitTarget())
+      {
          kill();
+         return;
+      }
+
+      // check for entities first
+      Collection<Entity> entities = common.getEntitiesInRadius(location, 1.5);
+
+      for (Entity entity : entities)
+      {
+         if (entity.getUniqueId() == player.getUniqueId())
+            continue;
+
+         // check entity to see if it can be targeted
+         if (!entityHarmWGCheck(entity))
+            continue;
+
+         common.printDebugMessage("targeting entity " + entity.getName(), null, null, false);
+         entity.setVelocity(entity.getVelocity().add(vector));
+
+         kill();
+         return;
+      }
    }
 }
