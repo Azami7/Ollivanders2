@@ -82,7 +82,7 @@ public abstract class O2Spell
    /**
     * How long this spell projectile has been alive in game ticks.
     */
-   public int lifeTicks = 0;
+   private int lifeTicks = 0;
 
    /**
     * Whether this spell should be terminated.
@@ -419,8 +419,6 @@ public abstract class O2Spell
       // check every flag needed for this spell
       for (StateFlag flag : worldGuardFlags)
       {
-         common.printDebugMessage("checking WG flag " + flag.toString(), null, null, false);
-
          if (!Ollivanders2.worldGuardO2.checkWGFlag(player, location, flag))
          {
             common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag.toString(), null, null, false);
@@ -692,6 +690,15 @@ public abstract class O2Spell
    public String getName()
    {
       return spellType.getSpellName();
+   }
+
+   /**
+    * Get the number of ticks this spell has been alive for
+    * @return the lifeticks for this spell
+    */
+   public int getLifeTicks ()
+   {
+      return lifeTicks;
    }
 
    /**
