@@ -22,10 +22,8 @@ import java.util.List;
  * @author Azami7
  * @version Ollivanders2
  */
-public final class ENGORGIO extends O2Spell
+public final class ENGORGIO extends ChangeEntitySizeSuper
 {
-   private final int maxSlimeSize = 10;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *
@@ -44,7 +42,7 @@ public final class ENGORGIO extends O2Spell
          add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink.");
       }};
 
-      text = "Grows a baby animal, slime, or zombie.";
+      text = "Makes baby entities adults and small slimes larger.";
    }
 
    /**
@@ -60,87 +58,20 @@ public final class ENGORGIO extends O2Spell
       spellType = O2SpellType.ENGORGIO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
+      growing = true;
 
-      // world guard flags
-      if (Ollivanders2.worldGuardEnabled)
-      {
-         worldGuardFlags.add(Flags.MOB_SPAWNING);
-         worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
-      }
+      initSpell();
    }
 
-   /**
-    * Look for entities within the projectile range and grow them, if possible
-    */
    @Override
-   protected void doCheckEffect()
+   void doInitSpell()
    {
-      List<LivingEntity> livingEntities = getLivingEntities(1.5);
+      targets = (int)(usesModifier / 10) + 1;
+      if (targets > maxTargets)
+         targets = maxTargets;
 
-      if (livingEntities.size() > 0)
-      {
-         for (LivingEntity live : livingEntities)
-         {
-            if (live.getUniqueId() == player.getUniqueId())
-               continue;
-
-            if (live instanceof Ageable)
-            {
-               Ageable age = (Ageable) live;
-               double ageIncreaseInMinutes = usesModifier / 5;
-
-               // baby animals become adults after 20 minutes, or ~24000 ticks
-               if (ageIncreaseInMinutes > 20)
-               {
-                  ageIncreaseInMinutes = 20;
-               }
-
-               age.setAge((int) (age.getAge() + (ageIncreaseInMinutes * Ollivanders2Common.ticksPerSecond)));
-
-               kill();
-               return;
-            }
-            else if (live instanceof Zombie)
-            {
-               Zombie zombie = (Zombie) live;
-               if (zombie.isBaby())
-               {
-                  zombie.setBaby(false);
-               }
-               else if (usesModifier >= 100)
-               {
-                  zombie.getWorld().spawnEntity(zombie.getLocation(), EntityType.GIANT);
-                  zombie.remove();
-               }
-
-               kill();
-               return;
-            }
-            else if (live instanceof Slime)
-            {
-               Slime slime = (Slime) live;
-               int slimeSize = (int) usesModifier / 20;
-
-               if (slimeSize < slime.getSize())
-               {
-                  slimeSize = slime.getSize();
-               }
-               else if (slimeSize > maxSlimeSize)
-               {
-                  slimeSize = maxSlimeSize;
-               }
-
-               slime.setSize(slimeSize);
-
-               kill();
-               return;
-            }
-         }
-      }
-
-      // projectile is stopped, kill spell
-      if (hasHitTarget())
-         kill();
+      radius = (int)(usesModifier / 10) + 1;
+      if (radius > maxRadius)
+         radius = maxRadius;
    }
 }
