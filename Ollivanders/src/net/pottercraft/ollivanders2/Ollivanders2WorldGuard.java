@@ -91,14 +91,10 @@ public class Ollivanders2WorldGuard
             return true;
          }
 
-         common.printDebugMessage("State of " + flag.toString() + " for " + player.getDisplayName() + " is " + state.toString(), null, null, false);
          return (state != StateFlag.State.DENY);
       }
       else
-      {
-         common.printDebugMessage("No regions defined here.", null, null, false);
          return true;
-      }
    }
 
    /**
