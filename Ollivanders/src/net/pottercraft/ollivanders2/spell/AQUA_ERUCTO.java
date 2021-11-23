@@ -68,5 +68,6 @@ public final class AQUA_ERUCTO extends BlockTransfiguration
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+      projectilePassThrough.remove(Material.FIRE);
    }
 }
