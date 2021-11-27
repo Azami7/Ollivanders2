@@ -43,13 +43,20 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
             add("\"You know that I can disguise myself most effectively.\" -Peter Pettigrew");
         }};
 
-        text = "Becoming an Animagus takes practice, skill, and patience. The animagus incantation is the one of the "
-                + "most difficult Transfiguration spells. The spell alone is not sufficient to transform the caster the "
-                + "first time. You must drink the Animagus potion immediately after saying the incantation. Both the "
-                + "incantation and the potion also have specific environmental requirements. The incantation must be said "
-                + "at either sunrise or sunset. The potion must be consumed during a thunderstorm. One you have successfully "
-                + "transformed, you no longer need the potion and can use the spell at any time, however it will take "
-                + "considerable practice before you will be able to consistently change form.";
+        if (Ollivanders2.useStrictAnimagusConditions)
+            text = "Becoming an Animagus takes practice, skill, and patience. The animagus incantation is the one of the "
+                    + "most difficult Transfiguration spells. The spell alone is not sufficient to transform the caster the "
+                    + "first time. You must drink the Animagus potion immediately after saying the incantation. Both the "
+                    + "incantation and the potion also have specific environmental requirements. The incantation must be said "
+                    + "at either sunrise or sunset. The potion must be consumed during a thunderstorm. Once you have successfully "
+                    + "transformed, you no longer need the potion and can use the spell at any time, however it will take "
+                    + "considerable practice before you will be able to consistently change form.";
+        else
+            text = "Becoming an Animagus takes practice, skill, and patience. The animagus incantation is the one of the "
+                    + "most difficult Transfiguration spells. The spell alone is not sufficient to transform the caster the "
+                    + "first time. You must drink the Animagus potion immediately after saying the incantation. Once you have successfully "
+                    + "transformed, you no longer need the potion and can use the spell at any time, however it will take "
+                    + "considerable practice before you will be able to consistently change form.";
     }
 
     /**
@@ -110,9 +117,18 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
      */
     private void setAnimagusIncantation()
     {
-        long curTime = player.getWorld().getTime();
+        boolean success = false;
 
-        if ((curTime >= 23000 && curTime <= 24000) || (curTime >= 12000 && curTime <= 13000))
+        if (Ollivanders2.useStrictAnimagusConditions)
+        {
+            long curTime = player.getWorld().getTime();
+            if ((curTime >= 23000 && curTime <= 24000) || (curTime >= 12000 && curTime <= 13000))
+                success = true;
+        }
+        else
+            success = true;
+
+        if (success)
         {
             ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
@@ -120,9 +136,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
             player.sendMessage(Ollivanders2.chatColor + "You feel slightly different.");
         }
         else
-        {
             player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
-        }
     }
 
     /**

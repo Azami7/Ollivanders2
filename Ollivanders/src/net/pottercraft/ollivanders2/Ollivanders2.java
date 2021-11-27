@@ -129,6 +129,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean hourlyBackup;
    public static boolean archivePreviousBackup;
    public static boolean useTranslations;
+   public static boolean useStrictAnimagusConditions;
 
    // other config
    public static boolean worldGuardEnabled = false;
@@ -471,6 +472,13 @@ public class Ollivanders2 extends JavaPlugin
       useTranslations = getConfig().getBoolean("useTranslations");
       if (useTranslations)
          getLogger().info("Enabling string translations.");
+
+      //
+      // Strict animagus potion consume conditions
+      //
+      useStrictAnimagusConditions = getConfig().getBoolean("useStrictAnimagusConditions");
+      if (useStrictAnimagusConditions)
+         getLogger().info("Enabling strict animagus conditions.");
    }
 
    /**
