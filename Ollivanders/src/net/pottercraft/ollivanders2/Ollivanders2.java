@@ -71,6 +71,7 @@ public class Ollivanders2 extends JavaPlugin
    /**
     * All blocks temporarily changed by spells
     */
+   @Deprecated
    final private Map<Block, Material> tempBlocks = new HashMap<>();
 
    /**

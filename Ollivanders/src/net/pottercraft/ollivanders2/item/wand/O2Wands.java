@@ -68,16 +68,17 @@ public class O2Wands
         if (O2ItemType.ELDER_WAND.isItemThisType(itemstack))
             return true;
 
-        // check regular wand
         if (!(O2ItemType.WAND.isItemThisType(itemstack)))
         {
             common.printDebugMessage("not a wand", null, null, false);
             return false;
         }
 
+        // check NBT wand
         if (checkNBT(itemstack))
             return true;
 
+        // check lore-based wand
         // TODO remove this when we remove lore-based items in the next major rev
         return checkLore(itemstack);
     }

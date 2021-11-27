@@ -27,9 +27,9 @@ public class Ollivanders2API
    static void init (@NotNull Ollivanders2 p)
    {
       if (common == null)
-      {
          common = new Ollivanders2Common(p);
-      }
+      if (playerCommon == null)
+         playerCommon = new O2PlayerCommon(p);
    }
 
    /**

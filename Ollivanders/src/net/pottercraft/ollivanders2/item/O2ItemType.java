@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.item;
 
 import net.pottercraft.ollivanders2.O2Color;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Material;
@@ -226,32 +227,55 @@ public enum O2ItemType
    {
       // check item type
       if (itemStack.getType() != material)
+      {
+         Ollivanders2API.common.printDebugMessage("Item is not right material. Expected " + material.toString() + " got " + itemStack.getType().toString(), null, null, false);
          return false;
+      }
 
       // check item NBT
       ItemMeta meta = itemStack.getItemMeta();
       if (meta == null)
+      {
+         Ollivanders2API.common.printDebugMessage("Item meta is null", null, null, true);
          return false;
+      }
 
       PersistentDataContainer container = meta.getPersistentDataContainer();
       if (container.has(O2Items.o2ItemTypeKey, PersistentDataType.STRING))
       {
          String itemTypeKey = container.get(O2Items.o2ItemTypeKey, PersistentDataType.STRING);
          if (!(itemTypeKey.equalsIgnoreCase(name)))
+         {
+            Ollivanders2API.common.printDebugMessage("Item type tag did not match. Expected " + name + " got " + itemTypeKey, null, null, false);
             return false;
+         }
       }
       // TODO remove this when we remove lore-based items in the next major rev
       else
       {
          // check name and lore
-         if (meta.getDisplayName().equalsIgnoreCase(name))
+         if (!(meta.getDisplayName().equalsIgnoreCase(name)))
+         {
+            Ollivanders2API.common.printDebugMessage("Display name does not match. Expected " + name + " got " + meta.getDisplayName(), null, null, false);
             return false;
+         }
 
          if (lore != null)
          {
             List<String> itemLore = itemStack.getItemMeta().getLore();
-            if (!(itemLore.get(0).equalsIgnoreCase(lore)))
+            if (itemLore != null)
+            {
+               if (!(itemLore.get(0).equalsIgnoreCase(lore)))
+               {
+                  Ollivanders2API.common.printDebugMessage("Lore does not match. Expected " + lore + " got " + itemLore.get(0), null, null, false);
+                  return false;
+               }
+            }
+            else
+            {
+               Ollivanders2API.common.printDebugMessage("No item lore when lore expected.", null, null, false);
                return false;
+            }
          }
       }
 
