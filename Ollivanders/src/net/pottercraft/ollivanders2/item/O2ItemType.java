@@ -66,7 +66,7 @@ public enum O2ItemType
    PEWTER_CAULDRON (Material.CAULDRON, (short) 0, "Pewter Cauldron", null, null),
    PLAYING_CARDS(Material.PAPER, (short) 0, "Playing Cards", null, null),
    POISONOUS_POTATO(Material.POISONOUS_POTATO, (short) 0, "Poisonous Potato", null, null),
-   POWDERED_ASHPODEL_ROOT(Material.ORANGE_DYE, (short) 0, "Powedered Root of Asphodel", null, null),
+   POWDERED_ASHPODEL_ROOT(Material.ORANGE_DYE, (short) 0, "Powdered Root of Asphodel", null, null),
    POWDERED_SAGE(Material.LIME_DYE, (short) 0, "Powdered Sage", null, null),
    ROTTEN_FLESH(Material.ROTTEN_FLESH, (short) 0, "Rotten Flesh", null, null),
    RUNESPOOR_EGG(Material.EGG, (short) 0, "Runespoor Egg", null, null),

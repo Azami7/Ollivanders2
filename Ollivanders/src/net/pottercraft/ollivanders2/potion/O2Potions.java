@@ -210,6 +210,7 @@ public class O2Potions
       O2Potion potion = matchPotion(ingredientsInCauldron);
       if (potion == null || (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getPotionType())))
       {
+         brewer.sendMessage(Ollivanders2.chatColor + "You feel somewhat uncertain about this recipe.");
          // make them a bad potion
          return O2Potion.brewBadPotion();
       }
@@ -274,9 +275,12 @@ public class O2Potions
             if (ingredientType == null || material != Ollivanders2API.getItems(p).getItemMaterialByType(ingredientType))
                continue;
 
-            Integer count = ((Item) e).getItemStack().getAmount();
+            int count = ((Item) e).getItemStack().getAmount();
 
             common.printDebugMessage("Found " + count + " of ingredient " + ingredientType.toString(), null, null, false);
+
+            if (ingredientsInCauldron.containsKey(ingredientType))
+               count = count + ingredientsInCauldron.get(ingredientType);
 
             ingredientsInCauldron.put(ingredientType, count);
          }
