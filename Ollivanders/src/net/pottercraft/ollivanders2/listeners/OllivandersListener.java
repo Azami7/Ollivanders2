@@ -5,10 +5,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2OwlPost;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
-import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
-import net.pottercraft.ollivanders2.item.wand.O2WandCoreType;
-import net.pottercraft.ollivanders2.item.wand.O2WandWoodType;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
 import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.Divination;
@@ -847,26 +844,13 @@ public class OllivandersListener implements Listener
    {
       if (event.getEntityType() == EntityType.WITCH && Ollivanders2.enableWitchDrop)
       {
-         int wandType = Math.abs(Ollivanders2Common.random.nextInt() % 4);
-         int coreType = Math.abs(Ollivanders2Common.random.nextInt() % 4);
-
-         ItemStack wand = Ollivanders2API.getItems().getItemByType(O2ItemType.WAND, 1);
+         ItemStack wand = Ollivanders2API.getItems().getWands().createRandomWand();
          if (wand == null)
          {
             common.printDebugMessage("OllivandersListener.witchWandDrop: wand is null", null, null, false);
             return;
          }
 
-         fix
-         List<String> lore = new ArrayList<>();
-         lore.add(O2WandWoodType.getAllWoodsByName().get(wandType) + " and " + O2WandCoreType.getAllCoresByName().get(coreType));
-
-         ItemMeta meta = wand.getItemMeta();
-         if (meta == null)
-            return;
-
-         meta.setLore(lore);
-         wand.setItemMeta(meta);
          event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
       }
    }

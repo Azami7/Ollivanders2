@@ -423,15 +423,28 @@ public class O2Wands
      */
     public boolean giveRandomWand(@NotNull Player player)
     {
-        String wood = O2WandWoodType.getAllWoodsByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandWoodType.getAllWoodsByName().size()));
-        String core = O2WandCoreType.getAllCoresByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandCoreType.getAllCoresByName().size()));
+        ItemStack wand = createRandomWand();
+        if (wand == null)
+            return false;
 
         List<ItemStack> kit = new ArrayList<>();
-        kit.add(makeWand(wood, core, 1));
+        kit.add(wand);
 
         Ollivanders2API.common.givePlayerKit(player, kit);
-
         return true;
     }
 
+    /**
+     * Create a random wand
+     *
+     * @return a random wand or null if something went wrong
+     */
+    @Nullable
+    public ItemStack createRandomWand()
+    {
+        String wood = O2WandWoodType.getAllWoodsByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandWoodType.getAllWoodsByName().size()));
+        String core = O2WandCoreType.getAllCoresByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandCoreType.getAllCoresByName().size()));
+
+        return makeWand(wood, core, 1);
+    }
 }

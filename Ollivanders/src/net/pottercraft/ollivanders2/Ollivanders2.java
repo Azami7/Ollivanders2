@@ -47,7 +47,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.FurnaceRecipe;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ShapedRecipe;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.command.Command;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -1498,20 +1497,10 @@ public class Ollivanders2 extends JavaPlugin
     */
    private boolean giveFlooPowder(@NotNull Player player)
    {
-      ItemStack flooPowder = new ItemStack(Ollivanders2.flooPowderMaterial);
-      List<String> lore = new ArrayList<>();
+      ItemStack flooPowder = Ollivanders2API.getItems().getItemByType(O2ItemType.FLOO_POWDER, 8);
 
-      lore.add("Glittery, silver powder");
-      ItemMeta meta = flooPowder.getItemMeta();
-
-      if (meta == null)
+      if (flooPowder == null)
          return false;
-
-      meta.setLore(lore);
-      meta.setDisplayName("Floo Powder");
-      flooPowder.setItemMeta(meta);
-
-      flooPowder.setAmount(8);
 
       List<ItemStack> fpStack = new ArrayList<>();
       fpStack.add(flooPowder);
