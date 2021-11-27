@@ -55,8 +55,20 @@ public final class NOX extends RemovePotionEffectInRadius
       branch = O2MagicBranch.CHARMS;
       targetSelf = true;
 
-      initSpell();
-
       potionEffectTypes.add(PotionEffectType.NIGHT_VISION);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      // use the same min and max radius and Lumos
+
+      radius = ((int)usesModifier) / 10;
+      if (radius < LUMOS.minRadius)
+         radius = LUMOS.minRadius;
+      else if (radius > LUMOS.maxRadius)
+         radius = LUMOS.maxRadius;
    }
 }
