@@ -51,7 +51,6 @@ public class LOQUELA_INEPTIAS extends AddO2Effect
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.LOQUELA_INEPTIAS;
-      initSpell();
 
       effectsToAdd.add(O2EffectType.BABBLING);
 
@@ -61,5 +60,7 @@ public class LOQUELA_INEPTIAS extends AddO2Effect
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+
+      initSpell();
    }
 }

@@ -52,7 +52,6 @@ public final class LEVICORPUS extends AddO2Effect
 
       spellType = O2SpellType.LEVICORPUS;
       branch = O2MagicBranch.DARK_ARTS;
-      initSpell();
 
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
@@ -60,7 +59,12 @@ public final class LEVICORPUS extends AddO2Effect
 
       effectsToAdd.add(O2EffectType.SUSPENSION);
 
-      // duration
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       maxDurationInSeconds = 180; // 3 minutes
       durationInSeconds = ((int) usesModifier + 30);
    }

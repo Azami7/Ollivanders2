@@ -52,23 +52,7 @@ public class PYROSVESTIRAS extends BlockTransfiguration
       spellType = O2SpellType.PYROSVESTIRAS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
-      if (usesModifier > 50)
-      {
-         radius = 10;
-      }
-      else if (usesModifier < 10)
-      {
-         radius = 1;
-      }
-      else
-      {
-         radius = (int) (usesModifier / 10);
-      }
-
       permanent = true;
-
       transfigurationMap.put(Material.FIRE, Material.AIR);
 
       // whitelist only fire blocks
@@ -77,5 +61,18 @@ public class PYROSVESTIRAS extends BlockTransfiguration
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.BUILD);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      if (usesModifier > 50)
+         radius = 10;
+      else if (usesModifier < 10)
+         radius = 1;
+      else
+         radius = (int) (usesModifier / 10);
    }
 }

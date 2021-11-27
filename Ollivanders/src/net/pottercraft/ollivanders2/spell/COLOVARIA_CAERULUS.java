@@ -42,8 +42,8 @@ public final class COLOVARIA_CAERULUS extends ColoroSuper
       spellType = O2SpellType.COLOVARIA_CAERULUS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       color = O2Color.BLUE;
+
+      initSpell();
    }
 }

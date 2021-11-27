@@ -58,14 +58,6 @@ public final class TERGEO extends BlockTransfiguration
       transfigureType = Material.AIR;
       permanent = false;
 
-      initSpell();
-
-      radius = 1 + ((int) usesModifier / 20);
-      if (radius > maxRadius)
-      {
-         radius = maxRadius;
-      }
-
       // set materials that can be transfigured by this spell
       materialWhitelist.add(Material.WATER);
 
@@ -75,5 +67,17 @@ public final class TERGEO extends BlockTransfiguration
 
       // pass-through
       projectilePassThrough.remove(Material.WATER);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      radius = 1 + ((int) usesModifier / 20);
+      if (radius > maxRadius)
+      {
+         radius = maxRadius;
+      }
    }
 }

@@ -56,13 +56,13 @@ public final class BAO_ZHONG_CHA extends Divination
       divinationType = O2DivinationType.TASSEOMANCY;
       branch = O2MagicBranch.DIVINATION;
 
-      initSpell();
-
       facingBlock = Material.CAULDRON;
       facingBlockString = "a cauldron";
 
       itemHeld = O2ItemType.TEA_LEAVES;
       itemHeldString = "tea leaves";
       consumeHeld = true;
+
+      initSpell();
    }
 }

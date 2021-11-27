@@ -56,13 +56,17 @@ public final class MOV_FOTIA extends Pyrotechnia
       spellType = O2SpellType.MOV_FOTIA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);
       fireworkType = Type.BALL;
       fireworkPower = 0;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(1);
    }
 }

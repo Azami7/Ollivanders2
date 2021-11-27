@@ -213,9 +213,12 @@ public abstract class O2Potion
     */
    public boolean checkRecipe(@NotNull Map<O2ItemType, Integer> cauldronIngredients)
    {
+      common.printDebugMessage("Checking " + potionType.getPotionName() + " recipe", null, null, false);
+
       // are there the right number of ingredients?
       if (ingredients.size() != cauldronIngredients.size())
       {
+         common.printDebugMessage("   expected " + ingredients.size() + " ingredients, got " + cauldronIngredients.size(), null, null, false);
          return false;
       }
 
@@ -227,29 +230,37 @@ public abstract class O2Potion
          // is this ingredient in the recipe?
          if (!cauldronIngredients.containsKey(ingredientType))
          {
+            common.printDebugMessage("   recipe does not contain " + ingredientType.getName(), null, null, false);
             return false;
          }
 
          // is the amount of the ingredient correct?
          if (cauldronIngredients.get(ingredientType).intValue() != count.intValue())
          {
+            common.printDebugMessage("   recipe needs " + count.intValue() + " " + ingredientType.getName() + ", got " + cauldronIngredients.get(ingredientType).intValue(), null, null, false);
             return false;
          }
       }
 
+      common.printDebugMessage("   matches", null, null, false);
       return true;
    }
 
    /**
     * Brew this potion.
     *
+    * @param brewer the player brewing the potion
+    * @param checkCanBrew should we enforce checking if the brewer can brew or not
     * @return an ItemStack with a single bottle of this potion
     */
    @NotNull
    public ItemStack brew(@NotNull Player brewer, boolean checkCanBrew)
    {
       if (checkCanBrew && !canBrew(brewer))
+      {
+         brewer.sendMessage(Ollivanders2.chatColor + "You feel uncertain about how to make this potion.");
          return brewBadPotion();
+      }
 
       ItemStack potion = new ItemStack(potionMaterialType);
       PotionMeta meta = (PotionMeta) potion.getItemMeta();
@@ -297,44 +308,11 @@ public abstract class O2Potion
 
       // do not allow them to brew if book learning is on and they do not know this potion
       if (Ollivanders2.bookLearning && (potionCount < 1))
-      {
-         brewer.sendMessage(Ollivanders2.chatColor + "You feel uncertain about how to make this potion.");
          canBrew = false;
-      }
       else
       {
          int successRate = 0;
-         // If Years is enabled:
-         // success rate = ((potion count * year modifier * 2) / potion success modifier) - potion success modifier
-         //
-         // Examples:
-         //
-         // BEGINNER potion has a success modifier of 1, player has potion count of 10, player is a 7th year
-         // = 99% success rate
-         //
-         // EXPERT potion has a success modifier of 4, player has a potion count of 10, player is a 6th year
-         // = 16% success rate
-         //
-         // OWL potion has a success modifier of 2, player has a potion count of 2, player is a 1st year
-         // = 0% success rate
-         //
-         if (Ollivanders2.useYears)
-         {
-            int year = o2p.getYear().getIntValue();
 
-            int yearModifier = 1; // year 1
-            if (year == 2) // year 2
-               yearModifier = 2;
-            else if (year == 3) // years 3
-               yearModifier = 3;
-            else if (year >= 4 && year <= 5) // years 4-5, OWL
-               yearModifier = 4;
-            else //year 6-7 NEWT
-               yearModifier = 5;
-
-            successRate = ((potionCount * yearModifier * 2) / potionType.getLevel().getSuccessModifier()) - potionType.getLevel().getSuccessModifier();
-         }
-         // If Years is not enabled:
          // success rate = ((potion count * 10) / (potion success modifier) - potions success modifier
          //
          // Examples:
@@ -347,10 +325,7 @@ public abstract class O2Potion
          // OWL potion has a success modifier of 2, player has a potion count of 2, player is a 1st year
          // = 8% success rate
          //
-         else
-         {
-            successRate = ((potionCount * 10) / potionType.getLevel().getSuccessModifier()) - potionType.getLevel().getSuccessModifier();
-         }
+         successRate = ((potionCount * 10) / potionType.getLevel().getSuccessModifier()) - potionType.getLevel().getSuccessModifier();
 
          int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) + 1;
 

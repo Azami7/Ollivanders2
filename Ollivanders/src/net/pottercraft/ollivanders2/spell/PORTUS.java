@@ -70,6 +70,8 @@ public final class PORTUS extends ItemEnchant
       }
       args = sb.toString().trim();
 
+      this.wordsArray = wordsArray;
+
       initSpell();
    }
 

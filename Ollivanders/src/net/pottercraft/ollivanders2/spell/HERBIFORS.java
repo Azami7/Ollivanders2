@@ -51,8 +51,8 @@ public final class HERBIFORS extends GaleatiSuper
       spellType = O2SpellType.HERBIFORS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       materialType = Material.DANDELION;
+
+      initSpell();
    }
 }

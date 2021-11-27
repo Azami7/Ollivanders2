@@ -50,9 +50,6 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_PORCILLI;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-      calculateSuccessRate();
-
       targetType = EntityType.PIG;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
@@ -66,5 +63,13 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguise
          watcher.setSaddled(true);
       else
          watcher.setSaddled(false);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

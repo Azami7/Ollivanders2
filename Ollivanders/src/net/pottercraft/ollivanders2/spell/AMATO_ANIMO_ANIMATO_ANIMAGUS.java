@@ -23,7 +23,7 @@ import java.util.ArrayList;
  * @since 2.2.6
  * @author Azami7
  */
-public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends Transfiguration
+public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
 {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.

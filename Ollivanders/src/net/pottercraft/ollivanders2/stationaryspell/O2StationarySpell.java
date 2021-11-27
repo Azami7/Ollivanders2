@@ -12,9 +12,11 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
@@ -165,7 +167,7 @@ public abstract class O2StationarySpell implements Serializable
     *
     * @param i - amount to age
     */
-   public void age (int i)
+   public void age(int i)
    {
       duration = duration - i;
 
@@ -178,7 +180,7 @@ public abstract class O2StationarySpell implements Serializable
     *
     * @param percent the percent to age the spell by
     */
-   public void ageByPercent (int percent)
+   public void ageByPercent(int percent)
    {
       if (percent < 1)
       {
@@ -195,10 +197,14 @@ public abstract class O2StationarySpell implements Serializable
    /**
     * This kills the stationarySpellObj.
     */
-   public void kill ()
+   public void kill()
    {
       flair(20);
       kill = true;
+
+      Player caster = p.getServer().getPlayer(playerUUID);
+      if (caster != null)
+         caster.sendMessage(Ollivanders2.chatColor + "Your " + spellType.getSpellName() + " spell has ended.");
    }
 
    /**
@@ -392,4 +398,11 @@ public abstract class O2StationarySpell implements Serializable
     * @param event the event
     */
    void doOnEntityCombustEvent(@NotNull EntityCombustEvent event) {}
+
+   /**
+    * Handle spell projectile move events
+    *
+    * @param event the spell projectile move event
+    */
+   void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {}
 }

@@ -50,9 +50,6 @@ public class INCARNATIO_URSUS extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_URSUS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-      calculateSuccessRate();
-
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 20);
 
       if (rand < 1) // 5% chance
@@ -78,5 +75,13 @@ public class INCARNATIO_URSUS extends PlayerDisguise
          ((PandaWatcher) watcher).setMainGene(Panda.Gene.NORMAL);
          ((PandaWatcher) watcher).setSitting(false);
       }
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

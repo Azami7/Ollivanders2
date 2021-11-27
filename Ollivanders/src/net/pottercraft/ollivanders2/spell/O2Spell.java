@@ -13,6 +13,7 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 
+import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -193,9 +194,12 @@ public abstract class O2Spell
    List<StateFlag> worldGuardFlags = new ArrayList<>();
 
    /**
-    * Message to display to the user on a successful cast of this spell.
+    * Message to display to the user on a successful or failed cast of this spell.
     */
    String successMessage = null;
+   String failureMessage = null;
+
+   static final double defaultRadius = 1.5;
 
    /**
     * Default constructor should only be used for fake instances of the spell such as when initializing the book
@@ -311,8 +315,11 @@ public abstract class O2Spell
          return;
       }
 
-      // move the projectile
+      Location prevLoc = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
+
+      // move the projectile and fire move event
       location.add(vector);
+      p.getServer().getPluginManager().callEvent(new OllivandersSpellProjectileMoveEvent(player, this, prevLoc, location));
       projectileDistance = projectileDistance + 1;
 
       // determine if this spell is allowed in this location per Ollivanders2 config and WorldGuard
@@ -736,5 +743,33 @@ public abstract class O2Spell
          return false;
 
       return true;
+   }
+
+   /**
+    * Is this spell a permanent spell?
+    *
+    * @return whether this spell is permanent or not
+    */
+   public boolean isPermanent()
+   {
+      return permanent;
+   }
+
+   /**
+    * Send the player the success message, if it exists, for this spell
+    */
+   public void sendSuccessMessage()
+   {
+      if (successMessage != null && successMessage.length() > 0)
+         player.sendMessage(Ollivanders2.chatColor + successMessage);
+   }
+
+   /**
+    * Send the player the failure message, if it exists, for this spell
+    */
+   public void sendFailureMessage()
+   {
+      if (failureMessage != null && failureMessage.length() > 0)
+         player.sendMessage(Ollivanders2.chatColor + failureMessage);
    }
 }

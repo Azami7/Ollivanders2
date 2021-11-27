@@ -205,25 +205,30 @@ public final class O2PlayerCommon
     * @return 2 - The wand is not player's type
     * 1 - The wand is player's type
     * 0.5 - The wand is the elder wand
+    * -1 - The player is not holding a wand
     * @since 2.2.7
     */
    private double doWandCheck(@NotNull Player player, @NotNull ItemStack itemStack)
    {
       ItemMeta meta = itemStack.getItemMeta();
       if (meta == null)
-          return 2;
+         // not an ollivanders item
+         return -1;
 
-      if (O2ItemType.ELDER_WAND.isItemThisType(itemStack)) // elder wand
+      if (O2ItemType.ELDER_WAND.isItemThisType(itemStack))
+         // elder wand
          return 0.5;
 
-      if (!O2ItemType.WAND.isItemThisType(itemStack)) // not a wand
-         return 2;
+      if (!O2ItemType.WAND.isItemThisType(itemStack))
+         // not a wand
+         return -1;
 
       O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
       {
+         // not a player
          common.printDebugMessage("O2Player is null", null, null, true);
-         return 2;
+         return -1;
       }
 
       if (!(Ollivanders2API.getItems().getWands().isDestinedWand(o2p, itemStack)))
@@ -233,6 +238,7 @@ public final class O2PlayerCommon
          return 2;
       }
 
+      // player's destined wand
       common.printDebugMessage("O2PlayerCommon.doWandCheck: player holds their destined wand", null, null, false);
       return 1;
    }

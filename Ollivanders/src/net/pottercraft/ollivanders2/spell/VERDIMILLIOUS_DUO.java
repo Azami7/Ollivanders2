@@ -43,7 +43,6 @@ public final class VERDIMILLIOUS_DUO extends Pyrotechnia
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.VERDIMILLIOUS_DUO;
-      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.GREEN);
@@ -52,6 +51,12 @@ public final class VERDIMILLIOUS_DUO extends Pyrotechnia
       fireworkType = Type.BALL_LARGE;
       hasTrails = true;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(10);
    }
 }

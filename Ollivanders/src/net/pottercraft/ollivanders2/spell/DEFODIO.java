@@ -62,8 +62,6 @@ public final class DEFODIO extends O2Spell
       spellType = O2SpellType.DEFODIO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       depth = (int) usesModifier;
 
       // world-guard flags
@@ -80,6 +78,8 @@ public final class DEFODIO extends O2Spell
          if (!materialBlackList.contains(material))
             materialBlackList.add(material);
       }
+
+      initSpell();
    }
 
    /**

@@ -45,8 +45,8 @@ public final class METELOJINX extends MetelojinxSuper
       spellType = O2SpellType.METELOJINX;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       storm = true;
+
+      initSpell();
    }
 }

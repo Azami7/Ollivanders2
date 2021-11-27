@@ -14,9 +14,7 @@ import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.Divination;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2Spells;
-import net.pottercraft.ollivanders2.spell.Transfiguration;
 import net.pottercraft.ollivanders2.spell.AMATO_ANIMO_ANIMATO_ANIMAGUS;
-import net.pottercraft.ollivanders2.spell.MORTUOS_SUSCITATE;
 import net.pottercraft.ollivanders2.spell.PORTUS;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.potion.O2Potion;
@@ -47,7 +45,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -93,7 +90,7 @@ public class OllivandersListener implements Listener
    /**
     * Number of ticks to delay thread start for
     */
-   private int threadDelay = Ollivanders2Common.ticksPerSecond;
+   public static int threadDelay = Ollivanders2Common.ticksPerSecond;
 
    /**
     * Constructor
@@ -249,8 +246,6 @@ public class OllivandersListener implements Listener
     */
    private void doSpellCasting(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull String[] words)
    {
-      common.printDebugMessage("doSpellCasting: enter for " + spellType.toString(), null, null, false);
-
       if (p.canCast(player, spellType, true))
       {
          if (Ollivanders2.bookLearning && p.getO2Player(player).getSpellCount(spellType) < 1)
@@ -765,28 +760,6 @@ public class OllivandersListener implements Listener
    }
 
    /**
-    * Prevents a transfigured entity from changing any blocks by exploding.
-    *
-    * @param event the entity explode event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void transfiguredEntityExplodeCancel (@NotNull EntityExplodeEvent event)
-   {
-      for (O2Spell proj : p.getProjectiles())
-      {
-         if (proj instanceof Transfiguration)
-         {
-            Transfiguration trans = (Transfiguration) proj;
-            if (trans.getToID() == event.getEntity().getUniqueId())
-            {
-               event.setCancelled(true);
-               common.printDebugMessage("transfiguredEntityExplodeCancel: cancelling EntityExplodeEvent", null, null, false);
-            }
-         }
-      }
-   }
-
-   /**
     * When an item is picked up by a player, if the item is a portkey, the player will be teleported there.
     *
     * @param event the player Pickup Item Event
@@ -865,30 +838,6 @@ public class OllivandersListener implements Listener
    }
 
    /**
-    * Cancels any targeting of players who own inferi by that inferi
-    *
-    * @param event the Entity Target Event
-    */
-   @EventHandler(priority = EventPriority.HIGH)
-   public void inferiTarget (@NotNull EntityTargetEvent event)
-   {
-      Entity target = event.getTarget();
-      Entity entity = event.getEntity();
-      for (O2Spell sp : p.getProjectiles())
-      {
-         if (sp instanceof MORTUOS_SUSCITATE)
-         {
-            Transfiguration trans = (Transfiguration) sp;
-            if (trans.getToID() == entity.getUniqueId() && trans.player == target)
-            {
-               event.setCancelled(true);
-               common.printDebugMessage("inferiTarget: cancelling EntityTargetEvent", null, null, false);
-            }
-         }
-      }
-   }
-
-   /**
     * This drops a random wand when a witch dies
     *
     * @param event the entity death event
@@ -908,6 +857,7 @@ public class OllivandersListener implements Listener
             return;
          }
 
+         fix
          List<String> lore = new ArrayList<>();
          lore.add(O2WandWoodType.getAllWoodsByName().get(wandType) + " and " + O2WandCoreType.getAllCoresByName().get(coreType));
 

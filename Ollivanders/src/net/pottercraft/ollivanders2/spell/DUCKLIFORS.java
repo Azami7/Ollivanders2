@@ -45,13 +45,13 @@ public final class DUCKLIFORS extends FriendlyMobDisguise
       spellType = O2SpellType.DUCKLIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-
       targetType = EntityType.CHICKEN;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
 
       AgeableWatcher watcher = (AgeableWatcher)disguise.getWatcher();
       watcher.setAdult();
+
+      initSpell();
    }
 }

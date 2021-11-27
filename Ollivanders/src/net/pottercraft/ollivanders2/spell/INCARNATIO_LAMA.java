@@ -49,9 +49,6 @@ public final class INCARNATIO_LAMA extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_LAMA;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-      calculateSuccessRate();
-
       targetType = EntityType.LLAMA;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
@@ -61,5 +58,13 @@ public final class INCARNATIO_LAMA extends PlayerDisguise
 
       Ollivanders2Common common = new Ollivanders2Common(p);
       watcher.setColor(common.getRandomLlamaColor());
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

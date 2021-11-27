@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -88,5 +89,18 @@ public enum O2StationarySpellType
       }
 
       return spellType;
+   }
+
+   /**
+    * Get the spell name for this spell type.
+    *
+    * @return the spell name for this spell type.
+    */
+   @NotNull
+   public String getSpellName ()
+   {
+      String spellTypeString = this.toString().toLowerCase();
+
+      return Ollivanders2API.common.firstLetterCapitalize(spellTypeString.replace("_", " "));
    }
 }

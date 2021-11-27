@@ -36,6 +36,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
@@ -251,6 +252,27 @@ public class Ollivanders2Common
       add(Material.LAVA);
       add(Material.FIRE);
       add(Material.CAMPFIRE);
+   }};
+
+   public static final List<EntityDamageEvent.DamageCause> attackDamageCauses = new ArrayList<>()
+   {{
+      add(EntityDamageEvent.DamageCause.DRAGON_BREATH);
+      add(EntityDamageEvent.DamageCause.ENTITY_ATTACK);
+      add(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK);
+      add(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION);
+      add(EntityDamageEvent.DamageCause.THORNS);
+      add(EntityDamageEvent.DamageCause.PROJECTILE);
+   }};
+
+   public static final List<EntityType> minecarts = new ArrayList<>()
+   {{
+      add(EntityType.MINECART_FURNACE);
+      add(EntityType.MINECART);
+      add(EntityType.MINECART_CHEST);
+      add(EntityType.MINECART_COMMAND);
+      add(EntityType.MINECART_HOPPER);
+      add(EntityType.MINECART_MOB_SPAWNER);
+      add(EntityType.MINECART_TNT);
    }};
 
    public enum TimeOfDay

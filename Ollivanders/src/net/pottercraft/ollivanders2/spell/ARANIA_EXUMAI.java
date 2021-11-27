@@ -50,10 +50,10 @@ public final class ARANIA_EXUMAI extends Knockback
       spellType = O2SpellType.ARANIA_EXUMAI;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       strengthReducer = 10;
 
       entityWhitelist.add(EntityType.SPIDER);
+
+      initSpell();
    }
 }

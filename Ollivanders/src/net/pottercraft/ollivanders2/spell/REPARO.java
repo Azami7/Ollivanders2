@@ -57,7 +57,6 @@ public final class REPARO extends O2Spell
 
       spellType = O2SpellType.REPARO;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
@@ -65,6 +64,8 @@ public final class REPARO extends O2Spell
          worldGuardFlags.add(Flags.ITEM_DROP);
          worldGuardFlags.add(Flags.ITEM_PICKUP);
       }
+
+      initSpell();
    }
 
    @Override

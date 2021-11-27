@@ -50,8 +50,8 @@ public final class COLOVARIA extends ColoroSuper
       spellType = O2SpellType.COLOVARIA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       color = O2Color.getRandomDyeableColor();
+
+      initSpell();
    }
 }

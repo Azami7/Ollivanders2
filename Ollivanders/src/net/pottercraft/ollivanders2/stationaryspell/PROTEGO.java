@@ -8,6 +8,7 @@ import java.util.UUID;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.spell.O2Spell;
+import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
@@ -109,6 +110,26 @@ public class PROTEGO extends ShieldSpell
          event.setCancelled(true);
          common.printDebugMessage("PROTEGO: canceled PlayerInteractEvent", null, null, false);
       }
+   }
+
+   /**
+    * Handle spell projectile move events
+    *
+    * @param event the spell projectile move event
+    */
+   void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event)
+   {
+      // is the spell inside this protego?
+      Location to = event.getTo();
+      if (!isInside(to))
+         return;
+
+      // did it originate within this protego?
+      Location from = event.getFrom();
+      if (isInside(from))
+         return;
+
+      event.setCancelled(true);
    }
 
    /**

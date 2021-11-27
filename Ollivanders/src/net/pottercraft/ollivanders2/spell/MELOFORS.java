@@ -57,8 +57,8 @@ public final class MELOFORS extends GaleatiSuper
       spellType = O2SpellType.MELOFORS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       materialType = melons[Math.abs(Ollivanders2Common.random.nextInt() % melons.length)];
+
+      initSpell();
    }
 }

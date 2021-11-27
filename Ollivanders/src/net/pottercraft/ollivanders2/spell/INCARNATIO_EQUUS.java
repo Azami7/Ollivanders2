@@ -49,9 +49,6 @@ public final class INCARNATIO_EQUUS extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_EQUUS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-      calculateSuccessRate();
-
       targetType = EntityType.HORSE;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
@@ -64,5 +61,13 @@ public final class INCARNATIO_EQUUS extends PlayerDisguise
 
       watcher.setStyle(common.getRandomHorseStyle());
       watcher.setColor(common.getRandomHorseColor());
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

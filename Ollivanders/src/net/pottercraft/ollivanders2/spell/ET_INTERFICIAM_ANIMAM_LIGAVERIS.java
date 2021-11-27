@@ -61,11 +61,11 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
       spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
       branch = O2MagicBranch.DARK_ARTS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.MOB_SPAWNING); // needed because Fiendfyre requires it, otherwise horcruxes could get made in locations players couldn't kill them
+
+      initSpell();
    }
 
    @Override

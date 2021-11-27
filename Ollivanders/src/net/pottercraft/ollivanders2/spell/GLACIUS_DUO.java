@@ -49,11 +49,11 @@ public final class GLACIUS_DUO extends GlaciusSuper
       spellType = O2SpellType.GLACIUS_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // 50% duration
       durationModifier = 0.5;
       // 2x radius
       radiusModifier = 2.0;
+
+      initSpell();
    }
 }

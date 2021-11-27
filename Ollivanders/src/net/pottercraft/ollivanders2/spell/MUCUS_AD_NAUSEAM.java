@@ -51,16 +51,20 @@ public final class MUCUS_AD_NAUSEAM extends AddO2Effect
 
       spellType = O2SpellType.MUCUS_AD_NAUSEAM;
       branch = O2MagicBranch.DARK_ARTS;
-      initSpell();
 
       // effect
       effectsToAdd.add(O2EffectType.MUCUS);
 
-      // duration
-      durationInSeconds = ((int) usesModifier + 30);
-      maxDurationInSeconds = 180; // 3 minutes
-
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      durationInSeconds = ((int) usesModifier + 30);
+      maxDurationInSeconds = 180; // 3 minutes
    }
 }
