@@ -151,7 +151,7 @@ public class OllivandersSchedule implements Runnable
       {
          UUID pid = player.getUniqueId();
 
-         Ollivanders2API.getPlayers(p).playerEffects.upkeep(pid);
+         Ollivanders2API.getPlayers().playerEffects.upkeep(pid);
       }
    }
 
@@ -230,7 +230,7 @@ public class OllivandersSchedule implements Runnable
          else if (!hasCloak && alreadyInvis) {
             for (Player player2 : p.getServer().getOnlinePlayers())
             {
-               O2Player viewer = Ollivanders2API.getPlayers(p).getPlayer(player2.getUniqueId());
+               O2Player viewer = Ollivanders2API.getPlayers().getPlayer(player2.getUniqueId());
                if (viewer == null)
                   continue;
 

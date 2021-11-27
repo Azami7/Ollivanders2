@@ -1381,7 +1381,7 @@ public class Ollivanders2Common
    public void restoreFullHealth (@NotNull Player player)
    {
       // remove O2Effecs
-      Ollivanders2API.getPlayers(p).playerEffects.onDeath(player.getUniqueId());
+      Ollivanders2API.getPlayers().playerEffects.onDeath(player.getUniqueId());
 
       // remove other potion effects
       Collection<PotionEffect> potions = player.getActivePotionEffects();
