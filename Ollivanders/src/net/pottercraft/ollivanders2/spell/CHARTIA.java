@@ -54,9 +54,9 @@ public final class CHARTIA extends Divination
       divinationType = O2DivinationType.CARTOMANCY;
       branch = O2MagicBranch.DIVINATION;
 
-      initSpell();
-
       itemHeld = O2ItemType.PLAYING_CARDS;
       itemHeldString = "playing cards";
+
+      initSpell();
    }
 }

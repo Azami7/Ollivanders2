@@ -51,7 +51,6 @@ public final class PROTEGO_TOTALUM extends StationarySpell
 
       spellType = O2SpellType.PROTEGO_TOTALUM;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       baseDurationInSeconds = 300;
       durationModifierInSeconds = 10;
@@ -59,6 +58,8 @@ public final class PROTEGO_TOTALUM extends StationarySpell
       radiusModifier = 1;
       flairSize = 10;
       centerOnCaster = true;
+
+      initSpell();
    }
 
    @Override

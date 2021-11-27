@@ -54,8 +54,6 @@ public final class LAPIFORS extends FriendlyMobDisguise
       spellType = O2SpellType.LAPIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-
       targetType = EntityType.RABBIT;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
@@ -64,5 +62,7 @@ public final class LAPIFORS extends FriendlyMobDisguise
       watcher.setAdult();
 
       watcher.setType(Ollivanders2API.common.getRandomRabbitType());
+
+      initSpell();
    }
 }

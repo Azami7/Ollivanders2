@@ -42,8 +42,8 @@ public final class COLOVARIA_AURANTIACO extends ColoroSuper
       spellType = O2SpellType.COLOVARIA_AURANTIACO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       color = O2Color.ORANGE;
+
+      initSpell();
    }
 }

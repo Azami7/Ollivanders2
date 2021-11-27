@@ -42,8 +42,8 @@ public final class COLOVARIA_OSTRUM extends ColoroSuper
       spellType = O2SpellType.COLOVARIA_OSTRUM;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       color = O2Color.PURPLE;
+
+      initSpell();
    }
 }

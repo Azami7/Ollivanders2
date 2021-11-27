@@ -61,7 +61,6 @@ public final class LUMOS_MAXIMA extends O2Spell
 
       spellType = O2SpellType.LUMOS_MAXIMA;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       // base line length on experience
       lineLength = 1 + (int) usesModifier / 10;
@@ -87,6 +86,8 @@ public final class LUMOS_MAXIMA extends O2Spell
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.BUILD);
+
+      initSpell();
    }
 
    @Override

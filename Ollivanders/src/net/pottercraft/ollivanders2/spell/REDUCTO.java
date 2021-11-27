@@ -54,11 +54,11 @@ public final class REDUCTO extends O2Spell
       spellType = O2SpellType.REDUCTO;
       branch = O2MagicBranch.DARK_ARTS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.OTHER_EXPLOSION);
+
+      initSpell();
    }
 
    @Override

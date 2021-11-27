@@ -42,12 +42,17 @@ public final class VERDIMILLIOUS extends Pyrotechnia
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.VERDIMILLIOUS;
-      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.GREEN);
       fireworkType = Type.BALL_LARGE;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(10);
    }
 }

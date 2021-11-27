@@ -50,8 +50,8 @@ public final class FLIPENDO extends Knockback
       spellType = O2SpellType.FLIPENDO;
       branch = O2MagicBranch.DARK_ARTS;
 
-      initSpell();
-
       strengthReducer = 10;
+
+      initSpell();
    }
 }

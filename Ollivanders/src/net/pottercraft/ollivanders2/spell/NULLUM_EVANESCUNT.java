@@ -44,14 +44,14 @@ public final class NULLUM_EVANESCUNT extends StationarySpell
       spellType = O2SpellType.NULLUM_EVANESCUNT;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       baseDurationInSeconds = 300;
       durationModifierInSeconds = 15;
       baseRadius = 5;
       radiusModifier = 1;
       flairSize = 10;
       centerOnCaster = true;
+
+      initSpell();
    }
 
    @Override

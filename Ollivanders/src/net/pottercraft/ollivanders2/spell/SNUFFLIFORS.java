@@ -54,13 +54,13 @@ public class SNUFFLIFORS extends FriendlyMobDisguise
       spellType = O2SpellType.SNUFFLIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-
       targetType = EntityType.BAT;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
 
       BatWatcher watcher = (BatWatcher)disguise.getWatcher();
       watcher.setFlyingWithElytra(true);
+
+      initSpell();
    }
 }

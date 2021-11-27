@@ -60,8 +60,6 @@ public final class HERBIVICUS extends O2Spell
       spellType = O2SpellType.HERBIVICUS;
       branch = O2MagicBranch.HERBOLOGY;
 
-      initSpell();
-
       // pass-through materials
       projectilePassThrough.add(Material.WATER);
 
@@ -73,6 +71,8 @@ public final class HERBIVICUS extends O2Spell
       stateList.add(CropState.TALL);
       stateList.add(CropState.VERY_TALL);
       stateList.add(CropState.RIPE);
+
+      initSpell();
    }
 
    /**

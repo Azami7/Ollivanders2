@@ -60,8 +60,6 @@ public final class OPPUGNO extends O2Spell
       spellType = O2SpellType.OPPUGNO;
       branch = O2MagicBranch.DARK_ARTS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
       {
@@ -69,15 +67,17 @@ public final class OPPUGNO extends O2Spell
          worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
       }
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       damage = usesModifier / 20;
       if (damage < minDamage)
-      {
          damage = minDamage;
-      }
       else if (damage > maxDamage)
-      {
          damage = maxDamage;
-      }
    }
 
    @Override

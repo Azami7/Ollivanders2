@@ -48,7 +48,6 @@ public final class INCARNATIO_DEVITO extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_DEVITO;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
       calculateSuccessRate();
 
       targetType = EntityType.CHICKEN;
@@ -57,5 +56,7 @@ public final class INCARNATIO_DEVITO extends PlayerDisguise
 
       AgeableWatcher watcher = (AgeableWatcher) disguise.getWatcher();
       watcher.setAdult();
+
+      initSpell();
    }
 }

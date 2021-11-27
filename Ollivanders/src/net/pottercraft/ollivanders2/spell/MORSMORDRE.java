@@ -51,11 +51,13 @@ public final class MORSMORDRE extends Pyrotechnia
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.MORSMORDRE;
-      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.GREEN);
       fireworkType = Type.CREEPER;
-      maxFireworks = 20;
+
+      initSpell();
+      // do this after initSpell because this should always be 1 firework
+      maxFireworks = 1;
    }
 }

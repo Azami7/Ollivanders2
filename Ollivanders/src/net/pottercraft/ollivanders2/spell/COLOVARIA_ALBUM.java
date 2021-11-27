@@ -43,8 +43,8 @@ public final class COLOVARIA_ALBUM extends ColoroSuper
       spellType = O2SpellType.COLOVARIA_ALBUM;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       color = O2Color.WHITE;
+
+      initSpell();
    }
 }

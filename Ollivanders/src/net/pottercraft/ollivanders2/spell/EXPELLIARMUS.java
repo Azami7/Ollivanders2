@@ -64,10 +64,10 @@ public final class EXPELLIARMUS extends O2Spell
       spellType = O2SpellType.EXPELLIARMUS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+
+      initSpell();
    }
 
    @Override

@@ -53,13 +53,13 @@ public final class MOLLIARE extends StationarySpell
       spellType = O2SpellType.MOLLIARE;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       baseDurationInSeconds = 30;
       durationModifierInSeconds = 1;
       baseRadius = 5;
       radiusModifier = 1;
       flairSize = 10;
+
+      initSpell();
    }
 
    @Override

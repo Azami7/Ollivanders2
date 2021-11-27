@@ -51,12 +51,12 @@ public final class INCENDIO_TRIA extends IncendioSuper
       spellType = O2SpellType.INCENDIO_TRIA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       location.add(vector.multiply(2));
       strafe = true;
       radius = 2;
       blockRadius = 4;
       durationModifier = 4;
+
+      initSpell();
    }
 }

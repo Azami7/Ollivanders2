@@ -59,7 +59,11 @@ public final class VENTO_FOLIO extends O2Spell
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.VENTO_FOLIO;
       initSpell();
+   }
 
+   @Override
+   void doInitSpell()
+   {
       setSuccessRate();
    }
 

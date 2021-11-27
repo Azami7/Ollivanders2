@@ -51,7 +51,6 @@ public final class REPELLO_MUGGLETON extends StationarySpell
 
       spellType = O2SpellType.REPELLO_MUGGLETON;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       baseDurationInSeconds = 30;
       durationModifierInSeconds = 15;
@@ -59,6 +58,8 @@ public final class REPELLO_MUGGLETON extends StationarySpell
       radiusModifier = 1;
       flairSize = 10;
       centerOnCaster = true;
+
+      initSpell();
    }
 
    @Override

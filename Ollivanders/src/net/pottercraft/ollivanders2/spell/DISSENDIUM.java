@@ -64,8 +64,6 @@ public final class DISSENDIUM extends O2Spell
       spellType = O2SpellType.DISSENDIUM;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       maxOpenTime = usesModifier * Ollivanders2Common.ticksPerSecond;
 
       openTime = 0;
@@ -74,6 +72,8 @@ public final class DISSENDIUM extends O2Spell
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.USE);
+
+      initSpell();
    }
 
    /**

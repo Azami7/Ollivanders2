@@ -47,8 +47,6 @@ public final class BOTHYNUS_TRIA extends Pyrotechnia
       spellType = O2SpellType.BOTHYNUS_TRIA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.YELLOW);
       fireworkColors.add(Color.ORANGE);
@@ -60,6 +58,12 @@ public final class BOTHYNUS_TRIA extends Pyrotechnia
       hasTrails = true;
       hasFade = true;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(15);
    }
 }

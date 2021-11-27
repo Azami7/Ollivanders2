@@ -69,9 +69,9 @@ public final class PORTUS extends O2Spell
       spellType = O2SpellType.PORTUS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       this.wordsArray = wordsArray;
+
+      initSpell();
    }
 
    /**

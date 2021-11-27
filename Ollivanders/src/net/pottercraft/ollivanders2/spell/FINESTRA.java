@@ -44,11 +44,11 @@ public final class FINESTRA extends O2Spell
       spellType = O2SpellType.FINESTRA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.BUILD);
+
+      initSpell();
    }
 
    /**

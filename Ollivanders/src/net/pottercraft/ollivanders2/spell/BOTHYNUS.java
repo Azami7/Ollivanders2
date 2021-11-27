@@ -46,12 +46,16 @@ public final class BOTHYNUS extends Pyrotechnia
       spellType = O2SpellType.BOTHYNUS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.YELLOW);
       fireworkType = Type.STAR;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(10);
    }
 }

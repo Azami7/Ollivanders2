@@ -51,22 +51,20 @@ public final class DURO extends BlockTransfiguration
       spellType = O2SpellType.DURO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       transfigureType = Material.STONE;
       permanent = false;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       if (usesModifier > 50)
-      {
          radius = 5;
-      }
       else if (usesModifier < 10)
-      {
          radius = 1;
-      }
       else
-      {
          radius = (int) (usesModifier / 10);
-      }
    }
 }

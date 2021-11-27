@@ -55,8 +55,6 @@ public final class AVADA_KEDAVRA extends O2Spell
       super(plugin, player, rightWand);
       spellType = O2SpellType.AVADA_KEDAVRA;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
       {
@@ -65,6 +63,8 @@ public final class AVADA_KEDAVRA extends O2Spell
       }
 
       moveEffectData = Material.GREEN_WOOL;
+
+      initSpell();
    }
 
    /**

@@ -61,11 +61,11 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
       spellType = O2SpellType.HARMONIA_NECTERE_PASSUS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.BUILD);
+
+      initSpell();
    }
 
    /**

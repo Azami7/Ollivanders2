@@ -42,8 +42,8 @@ public final class COLOVARIA_VERIDI extends ColoroSuper
       spellType = O2SpellType.COLOVARIA_VERIDI;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       color = O2Color.GREEN;
+
+      initSpell();
    }
 }
