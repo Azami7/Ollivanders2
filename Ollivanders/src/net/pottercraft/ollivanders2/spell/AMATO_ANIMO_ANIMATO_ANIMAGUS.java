@@ -48,13 +48,13 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
                     + "most difficult Transfiguration spells. The spell alone is not sufficient to transform the caster the "
                     + "first time. You must drink the Animagus potion immediately after saying the incantation. Both the "
                     + "incantation and the potion also have specific environmental requirements. The incantation must be said "
-                    + "at either sunrise or sunset. The potion must be consumed during a thunderstorm. One you have successfully "
+                    + "at either sunrise or sunset. The potion must be consumed during a thunderstorm. Once you have successfully "
                     + "transformed, you no longer need the potion and can use the spell at any time, however it will take "
                     + "considerable practice before you will be able to consistently change form.";
         else
             text = "Becoming an Animagus takes practice, skill, and patience. The animagus incantation is the one of the "
                     + "most difficult Transfiguration spells. The spell alone is not sufficient to transform the caster the "
-                    + "first time. You must drink the Animagus potion immediately after saying the incantation. One you have successfully "
+                    + "first time. You must drink the Animagus potion immediately after saying the incantation. Once you have successfully "
                     + "transformed, you no longer need the potion and can use the spell at any time, however it will take "
                     + "considerable practice before you will be able to consistently change form.";
     }
