@@ -253,14 +253,14 @@ public abstract class O2Book
    /**
     * Turn a spell text word list in to a set of pages that fit in an MC book.
     *
-    * Book pages cannot be more than 14 lines with ~18 characters per line, 256 characters max
+    * Book pages cannot be more than 14 lines with ~16 characters per line, 256 characters max
     * assume 2 lines for spell name, 1 blank line between name and flavor text, 1 blank link between flavor text
     * and description text, means the first page has 9 lines of ~15 characters + continue, subsequent pages are 13
     * lines of ~15 characters + continue.
     *
     * This means the first page for a spell can have ~175 characters and subsequent pages can be ~195.
     *
-    * Assumes there is no word in the list that is >= 200 characters.
+    * Assumes there is no word in the list that is >= max page size.
     *
     * @param words an array of all the words in the book
     * @return a list of book pages
@@ -271,7 +271,7 @@ public abstract class O2Book
       ArrayList<String> pages = new ArrayList<>();
 
       // first page
-      int remaining = 175;
+      int remaining = 150;
       StringBuilder page = new StringBuilder();
 
       // first page
@@ -299,7 +299,7 @@ public abstract class O2Book
       // remaining pages
       while (!words.isEmpty())
       {
-         remaining = 200;
+         remaining = 180;
          page = new StringBuilder();
 
          while (remaining > 0)
