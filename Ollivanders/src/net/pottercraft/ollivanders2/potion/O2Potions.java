@@ -294,9 +294,7 @@ public class O2Potions
       // check NBT first
       PersistentDataContainer container = itemMeta.getPersistentDataContainer();
       if (container.has(O2Items.o2ItemTypeKey, PersistentDataType.STRING))
-      {
          name = container.get(O2Items.o2ItemTypeKey, PersistentDataType.STRING);
-      }
 
       if (name != null && name.length() > 0)
          return name;

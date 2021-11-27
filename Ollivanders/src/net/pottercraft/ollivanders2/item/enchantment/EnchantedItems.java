@@ -120,6 +120,7 @@ public class EnchantedItems implements Listener
         if (itemMeta == null)
             return;
 
+        // add NBT tags
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
         container.set(enchantmentID, PersistentDataType.STRING, eid);
         container.set(enchantmentMagnitude, PersistentDataType.INTEGER, magnitude);
@@ -132,6 +133,7 @@ public class EnchantedItems implements Listener
         if (enchantment == null)
             return;
 
+        // optional lore for the item such as for a broom or floo powder
         if (enchantment.lore != null)
         {
             List<String> lore = itemMeta.getLore();

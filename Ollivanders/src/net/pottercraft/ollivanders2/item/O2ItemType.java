@@ -158,13 +158,9 @@ public enum O2ItemType
    public String getLore()
    {
       if (lore == null)
-      {
          return name;
-      }
       else
-      {
          return lore;
-      }
    }
 
    /**
