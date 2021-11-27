@@ -106,7 +106,7 @@ public final class EVANESCO extends Transfiguration
          }
          else
          {
-            spellDuration--;
+            spellDuration = spellDuration - 1;
          }
       }
    }

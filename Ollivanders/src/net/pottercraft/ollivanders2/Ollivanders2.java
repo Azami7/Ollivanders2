@@ -198,10 +198,6 @@ public class Ollivanders2 extends JavaPlugin
 
       Ollivanders2API.init(this);
 
-      // set up event listeners
-      OllivandersListener ollivandersListener = new OllivandersListener(this);
-      getServer().getPluginManager().registerEvents(ollivandersListener, this);
-
       // check for plugin data directory and config
       if (new File(pluginDir).mkdirs())
       {
@@ -218,12 +214,16 @@ public class Ollivanders2 extends JavaPlugin
          return;
       }
 
+      // set up event listeners
+      OllivandersListener ollivandersListener = new OllivandersListener(this);
+      ollivandersListener.onEnable();
+
       // set up scheduler
       OllivandersSchedule schedule = new OllivandersSchedule(this);
       Bukkit.getScheduler().scheduleSyncRepeatingTask(this, schedule, 20L, 1L);
 
       // set up dependencies
-      loadDependenciesPlugins();
+      loadDependencyPlugins();
 
       // set up players
       players.onEnable();
@@ -478,7 +478,7 @@ public class Ollivanders2 extends JavaPlugin
     * Load dependency plugins or turn of the features that require them if
     * they are not present.
     */
-   private void loadDependenciesPlugins ()
+   private void loadDependencyPlugins()
    {
       // set up libDisguises
       Plugin libsDisguises = Bukkit.getServer().getPluginManager().getPlugin("LibsDisguises");

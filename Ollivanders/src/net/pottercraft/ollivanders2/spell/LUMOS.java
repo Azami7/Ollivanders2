@@ -16,6 +16,9 @@ import java.util.ArrayList;
  */
 public final class LUMOS extends AddPotionEffectInRadius
 {
+   public static int minRadius = 5;
+   public static int maxRadius = 20;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *
@@ -53,20 +56,27 @@ public final class LUMOS extends AddPotionEffectInRadius
       spellType = O2SpellType.LUMOS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       effectTypes.add(PotionEffectType.NIGHT_VISION);
-      strengthModifier = 1;
+      amplifier = 1;
       minDurationInSeconds = 30;
       targetSelf = true;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       durationInSeconds = (int) usesModifier;
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      } else if (durationInSeconds > maxDurationInSeconds)
-      {
+      else if (durationInSeconds > maxDurationInSeconds)
          durationInSeconds = maxDurationInSeconds;
-      }
+
+      radius = ((int)usesModifier) / 10;
+      if (radius < minRadius)
+         radius = minRadius;
+      else if (radius > maxRadius)
+         radius = maxRadius;
    }
 }

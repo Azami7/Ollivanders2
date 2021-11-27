@@ -91,6 +91,11 @@ public class OllivandersListener implements Listener
    private final Ollivanders2Common common;
 
    /**
+    * Number of ticks to delay thread start for
+    */
+   private int threadDelay = Ollivanders2Common.ticksPerSecond;
+
+   /**
     * Constructor
     *
     * @param plugin reference to plugin
@@ -99,6 +104,21 @@ public class OllivandersListener implements Listener
    {
       p = plugin;
       common = new Ollivanders2Common(plugin);
+   }
+
+   /**
+    * Listener set up on plugin enable.
+    */
+   public void onEnable()
+   {
+      // read config
+      boolean useFastSpells = p.getConfig().getBoolean("fastSpells", false);
+
+      if (useFastSpells)
+         threadDelay = (int)(Ollivanders2Common.ticksPerSecond * 0.25);
+
+      // register listeners
+      p.getServer().getPluginManager().registerEvents(this, p);
    }
 
    /**
@@ -324,7 +344,7 @@ public class OllivandersListener implements Listener
          {
             Ollivanders2API.getOwlPost(p).processOwlPostRequest(event.getPlayer(), message);
          }
-      }.runTaskLater(p, 3);
+      }.runTaskLater(p, threadDelay);
    }
 
    /**
@@ -461,7 +481,7 @@ public class OllivandersListener implements Listener
                //if (!event.isCancelled())
                   primaryHandInteractEvents(event);
             }
-         }.runTaskLater(p, (int)(Ollivanders2Common.ticksPerSecond * 0.25));
+         }.runTaskLater(p, threadDelay);
       }
       else
       {
@@ -475,7 +495,7 @@ public class OllivandersListener implements Listener
                //if (!event.isCancelled())
                   secondaryHandInteractEvents(event);
             }
-         }.runTaskLater(p, (int)(Ollivanders2Common.ticksPerSecond * 0.25));
+         }.runTaskLater(p, threadDelay);
       }
    }
 

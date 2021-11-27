@@ -141,7 +141,7 @@ public class O2Prophecy
 
    public void age()
    {
-      time--;
+      time = time - 1;
    }
 
    public void kill()

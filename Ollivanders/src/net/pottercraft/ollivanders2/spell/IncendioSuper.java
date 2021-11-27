@@ -74,7 +74,7 @@ public abstract class IncendioSuper extends O2Spell
 
       if (burning)
       {
-         lifeTime--;
+         lifeTime = lifeTime - 1;
 
          if (lifeTime <= 0)
             kill();

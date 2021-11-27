@@ -101,7 +101,7 @@ public class ReduceO2Effect extends O2Spell
 
             reducePotionEffects((Player) livingEntity);
 
-            numberOfTargets--;
+            numberOfTargets = numberOfTargets - 1;
 
             // stop when the limit of targets is reached
             if (numberOfTargets <= 0)

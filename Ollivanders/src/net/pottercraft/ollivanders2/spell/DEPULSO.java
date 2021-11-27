@@ -52,13 +52,6 @@ public final class DEPULSO extends Knockback
 
       strengthReducer = 20;
 
-      // world guard flags
-      if (Ollivanders2.worldGuardEnabled)
-      {
-         worldGuardFlags.add(Flags.PVP);
-         worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
-      }
-
       initSpell();
    }
 }

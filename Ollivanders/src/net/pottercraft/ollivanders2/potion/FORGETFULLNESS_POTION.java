@@ -75,7 +75,12 @@ public final class FORGETFULLNESS_POTION extends O2Potion
             ArrayList<O2SpellType> listOfSpells = new ArrayList<>(keySet);
             int index = Math.abs(Ollivanders2Common.random.nextInt() % listOfSpells.size());
 
-            o2p.setSpellCount(listOfSpells.get(index), memLoss);
+            // spell to affect
+            O2SpellType spell = listOfSpells.get(index);
+
+            // decrease their skill level
+            int curLevel = o2p.getSpellCount(spell);
+            o2p.setSpellCount(spell, curLevel - memLoss);
             lostSpell = listOfSpells.get(index).toString();
          }
       }
@@ -88,7 +93,12 @@ public final class FORGETFULLNESS_POTION extends O2Potion
             ArrayList<O2PotionType> listOfPotions = new ArrayList<>(keySet);
             int index = Math.abs(Ollivanders2Common.random.nextInt() % listOfPotions.size());
 
-            o2p.setPotionCount(listOfPotions.get(index), memLoss);
+            // potion to affect
+            O2PotionType potion = listOfPotions.get(index);
+
+            // decrease their skill level
+            int curLevel = o2p.getPotionCount(potion);
+            o2p.setPotionCount(potion, curLevel - memLoss);
             lostSpell = listOfPotions.get(index).toString();
          }
       }

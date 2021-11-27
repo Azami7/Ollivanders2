@@ -249,7 +249,7 @@ public final class APPARATE extends O2Spell
         while ((projectilePassThrough.contains(material)) && distance < maxLineOfSight)
         {
             currentLocation = currentLocation.add(currentLocation.getDirection());
-            distance++;
+            distance = distance + 1;
             material = currentLocation.getBlock().getType();
         }
 

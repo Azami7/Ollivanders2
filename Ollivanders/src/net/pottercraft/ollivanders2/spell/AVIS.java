@@ -99,7 +99,7 @@ public final class AVIS extends O2Spell
 
             bird.setVariant(common.getRandomParrotColor());
 
-            birdCount++;
+            birdCount = birdCount + 1;
         }
         else
         {

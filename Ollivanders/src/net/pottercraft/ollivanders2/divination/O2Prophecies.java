@@ -370,7 +370,7 @@ public class O2Prophecies
             activeProphecies.add(prophecy);
             offlineProphecies.remove(prophecy);
 
-            count++;
+            count = count + 1;
          }
       }
 

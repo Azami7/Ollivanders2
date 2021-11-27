@@ -131,7 +131,7 @@ public abstract class Pyrotechnia extends O2Spell
          meta.addEffect(builder.build());
          firework.setFireworkMeta(meta);
 
-         fireworkCount++;
+         fireworkCount = fireworkCount + 1;
       }
       else
          kill();

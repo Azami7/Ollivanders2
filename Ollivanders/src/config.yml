@@ -80,6 +80,9 @@ debug: false
 # Override version checks. This will force the plugin to load regardless of MC api version.
 # **IMPORTANT** Backup your plugins/Ollivanders2 directory before enabling this option - running unsupported versions may corrupt plugin data
 overrideVersionCheck: false
+#
+# Fast spells. This increases the speed spell projectiles are created. Can overload server and cause performance issues.
+fastSpells: false
 
 #
 # Zones
@@ -328,7 +331,7 @@ DURO_text: "Duro will turn the blocks in a radius in to stone."
 DURO_flavorText: "The Hardening Charm"
 EBUBLIO_text: "Gives target player the ability to breathe underwater."
 EBUBLIO_flavorText: "The Bubble-Head Charm"
-ENGORGIO_text: "Grows a baby animal, slime, or zombie."
+ENGORGIO_text: "Makes baby entities adults and small slimes larger."
 ENGORGIO_flavorText: "The Engorgement Charm"
 ENTOMORPHIS_text: "Entomorphis will transfigure a player into a spider for a duration dependent on your experience."
 ENTOMORPHIS_flavorText: "The Insect Jinx"
@@ -352,7 +355,7 @@ FINITE_INCANTATEM_text: "Reduces all spell effects on an item or player."
 FINITE_INCANTATEM_flavorText: "The General Counter-Spell"
 FLAGRANTE_text: "Flagrante will cause an item to burn it's bearer when picked up."
 FLAGRANTE_flavorText: "The Burning Curse"
-FLIPENDO_text: "Flipendo can be used to repel an opponent away from oneself."
+FLIPENDO_text: "Flipendo can be used to repel an entity away from oneself."
 FLIPENDO_flavorText: "The Knockback Jinx"
 FRANGE_LIGNEA_text: "Frange lignea will cause a log of the spruce, oak, birch, or jungle species to explode into coreless wands."
 FUMOS_text: "Fumos will cause those in an area to be blinded by a smoke cloud."
@@ -377,7 +380,7 @@ HORREAT_PROTEGAT_text: "Horreat Protegat will shrink a stationary spell's radius
 HORREAT_PROTEGAT_flavorText: "The Spell-Reduction Charm"
 IMMOBULUS_text: "Slows entity movement for a time period."
 IMMOBULUS_flavorText: "The Freezing Charm"
-IMPEDIMENTA_text: "Slows target movements."
+IMPEDIMENTA_text: "Slows a living entity's movements."
 IMPEDIMENTA_flavorText: "Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal."
 INCARNATIO_DEVITO_text: "Turns target player in to a chicken."
 INCARNATIO_EQUUS_text: "Turns target player in to a horse."
@@ -451,7 +454,7 @@ OPPUGNO_text: "Oppugno will cause a creature or player to attack the targeted en
 OPPUGNO_flavorText: "The Oppugno Jinx"
 OVOGNOSIS_text: "By studying the shape of the egg whites and yolks in water, the seer will have the future revealed to them."
 OVOGNOSIS_flavorText: "Egg divination was a common practice for ancient Greeks and Romans."
-PACK_text: "When this hits a chest, it will suck any items nearby into it."
+PACK_text: "When cast at an ender chest or shulker box, it will suck any items nearby into it."
 PACK_flavorText: "The Packing Charm"
 PARTIS_TEMPORUS_text: "Partis temporus, if cast at a stationary spell that you have cast, will cause that stationary spell's effects to stop for a short time."
 PARTIS_TEMPORUS_flavorText: "The Parting Charm"
@@ -482,7 +485,7 @@ PROTEGO_TOTALUM_text: "Protego totalum is a stationary spell which will prevent 
 PROTEGO_TOTALUM_flavorText: "Raising her wand, she began to walk in a wide circle around Harry and Ron, murmuring incantations as she went. Harry saw little disturbances in the surrounding air: it was as if Hermione had cast a heat haze across their clearing."
 PYROSVESTIRAS_text: "A spell that turns fire into air."
 PYROSVESTIRAS_flavorText: "The Extinguishing Charm"
-REDUCIO_text: "Shrinks a giant to a normal zombie, makes certain entities babies and slimes smaller."
+REDUCIO_text: "Makes adult entities babies and slimes smaller."
 REDUCIO_flavorText: "The Shrinking Charm"
 REDUCTO_text: "Reducto creates an explosion which will damage the terrain."
 REDUCTO_flavorText: "The Reductor Curse"

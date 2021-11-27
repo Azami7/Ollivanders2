@@ -32,14 +32,10 @@ public final class LUMOS_DUO extends O2Spell
    int spellDuration = Ollivanders2Common.ticksPerSecond * 15;
 
    /**
-    * Allows spell variants to change the duration of this spell.
-    */
-   double durationModifier = 1.0;
-
-   /**
     * Max duration of this spell. Default is 5 minutes.
     */
    int maxDuration = Ollivanders2Common.ticksPerSecond * 300;
+   int minDuration = Ollivanders2Common.ticksPerSecond * 60;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -74,64 +70,64 @@ public final class LUMOS_DUO extends O2Spell
       spellType = O2SpellType.LUMOS_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
-      lifeTicks = (int) (-(usesModifier * 20)) * (int) durationModifier;
-      if (lifeTicks > maxDuration)
-         lifeTicks = maxDuration;
-
       // pass-through materials
-      projectilePassThrough.remove(Material.WATER);
+      projectilePassThrough.clear();
+      projectilePassThrough.add(Material.AIR);
 
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.BUILD);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      spellDuration = (int)((usesModifier / 10) * Ollivanders2Common.ticksPerSecond);
+      if (spellDuration < maxDuration)
+         spellDuration = maxDuration;
+      else if (spellDuration < minDuration)
+         spellDuration = minDuration;
    }
 
    @Override
    protected void doCheckEffect()
    {
-      if (!hasHitTarget())
+      if (hasHitTarget())
       {
-         // wait 2 before starting to create the line
-         if (lifeTicks < 2)
+         kill();
+         return;
+      }
+
+      // wait 2 before starting to create the line
+      if (getLifeTicks() < 2)
+         return;
+
+      if (lineLength < maxLineLength)
+      {
+         Block curBlock = location.getBlock();
+
+         if (curBlock.getType() != Material.AIR)
          {
+            kill();
             return;
          }
 
-         if (lineLength < maxLineLength)
-         {
-            Block curBlock = location.getBlock();
-            if (curBlock.getType() == Material.AIR)
-            {
-               curBlock.setType(Material.GLOWSTONE);
-               line.add(curBlock);
-               p.addTempBlock(curBlock, Material.AIR);
+         curBlock.setType(Material.GLOWSTONE);
+         line.add(curBlock);
+         p.addTempBlock(curBlock, Material.AIR);
 
-               lineLength++;
-            }
-            else
-            {
-               stopProjectile();
-            }
-         }
-         else
-         {
-            stopProjectile();
-         }
+         lineLength = lineLength + 1;
       }
       else
       {
          // check time to live on the spell
          if (spellDuration <= 0)
-         {
             // spell duration is up, kill the spell
             kill();
-         }
          else
-         {
-            spellDuration--;
-         }
+            spellDuration = spellDuration - 1;
       }
    }
 
@@ -139,9 +135,7 @@ public final class LUMOS_DUO extends O2Spell
    protected void revert()
    {
       for (Block block : line)
-      {
          p.revertTempBlock(block);
-      }
 
       line.clear();
    }

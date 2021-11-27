@@ -29,6 +29,11 @@ public abstract class RemovePotionEffect extends O2Spell
     int numberOfTargets = 1;
 
     /**
+     * Whether the spell targets the caster
+     */
+    boolean targetSelf = false;
+
+    /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
@@ -77,25 +82,28 @@ public abstract class RemovePotionEffect extends O2Spell
     void affectRadius(double radius, boolean flair)
     {
         if (flair)
+            Ollivanders2Common.flair(location, (int)radius, 10);
+
+        if (targetSelf)
         {
-            Ollivanders2Common.flair(location, (int) radius, 10);
+            removePotionEffects(player);
+            numberOfTargets = numberOfTargets - 1;
         }
 
         for (LivingEntity livingEntity : getLivingEntities(radius))
         {
-            if ((livingEntity.getUniqueId() == player.getUniqueId()) || !(livingEntity instanceof Player))
-                continue;
-
-            removePotionEffects((Player) livingEntity);
-
-            numberOfTargets--;
-
             // stop when the limit of targets is reached
             if (numberOfTargets <= 0)
             {
                 kill();
                 return;
             }
+
+            if (livingEntity.getUniqueId() == player.getUniqueId()) // already handled self above
+                continue;
+
+            removePotionEffects(livingEntity);
+            numberOfTargets = numberOfTargets - 1;
         }
     }
 
@@ -104,10 +112,11 @@ public abstract class RemovePotionEffect extends O2Spell
      *
      * @param target the player to remove effects from
      */
-    void removePotionEffects(@NotNull Player target)
+    void removePotionEffects(@NotNull LivingEntity target)
     {
         for (PotionEffectType effectType : potionEffectTypes)
         {
+            common.printDebugMessage("Removing " + effectType.getName() + " from " + target.getName(), null, null, false);
             target.removePotionEffect(effectType);
         }
     }

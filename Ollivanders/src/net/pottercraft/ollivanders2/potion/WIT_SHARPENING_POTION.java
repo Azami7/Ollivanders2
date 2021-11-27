@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.potion;
 import net.pottercraft.ollivanders2.effect.IMPROVED_BOOK_LEARNING;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;

@@ -73,7 +73,7 @@ public enum O2ItemType
    LIONFISH_SPINES(Material.PUMPKIN_SEEDS, (short) 0, "Lionfish Spines", null, null),
    MANDRAKE_LEAF(Material.LILY_PAD, (short) 0, "Mandrake Leaf", null, null),
    MERCURY(Material.POTION, (short) 13, "Mercury", null, null), // silver liquid
-   MINT_SPRIG(Material.MELON_STEM, (short) 0, "Mint Sprig", null, null),
+   MINT_SPRIG(Material.KELP, (short) 0, "Mint Sprig", null, null),
    MISTLETOE_BERRIES(Material.NETHER_WART, (short) 0, "Mistletoe Berries", null, null),
    MOONDEW_DROP(Material.GHAST_TEAR, (short) 0, "Moondew Drop", null, null),
    PEWTER_CAULDRON (Material.CAULDRON, (short) 0, "Pewter Cauldron", null, null),

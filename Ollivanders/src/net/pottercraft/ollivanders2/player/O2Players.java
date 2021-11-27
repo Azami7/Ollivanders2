@@ -587,7 +587,7 @@ public class O2Players
          o2p.fix();
 
          deserializedMap.put(pid, o2p);
-         recordCount++;
+         recordCount = recordCount + 1;
       }
 
       return deserializedMap;

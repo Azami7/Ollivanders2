@@ -118,7 +118,7 @@ public final class DEFODIO extends O2Spell
       // stop the spell if something prevented the current block breaking naturally
       if (curBlock.breakNaturally())
       {
-         depth--;
+         depth = depth - 1;
 
          Location nextLoc = curLoc.add(vector);
          curBlock = nextLoc.getBlock();
