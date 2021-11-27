@@ -19,12 +19,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The super class for transfiguration projectile spells.
+ * The super class for entity transfiguration projectile spells.
  *
  * @version Ollivanders2
  * @author lownes
  * @author Azami7
  */
+@Deprecated
 public abstract class Transfiguration extends O2Spell
 {
    private final UUID nullUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
@@ -245,31 +246,5 @@ public abstract class Transfiguration extends O2Spell
    public UUID getToID()
    {
       return toID;
-   }
-
-   /**
-    * Decrease the duration of this transfiguration, if it is not permanent, by the percent.
-    *
-    * @param percent the percent to reduce this transfiguration duration
-    */
-   public void reparifarge(int percent)
-   {
-      if (permanent)
-      {
-         return;
-      }
-
-      if (percent > 50)
-      {
-         percent = 50;
-      }
-      else if (percent < 1)
-      {
-         percent = 1;
-      }
-
-      double reduction = spellDuration * ((double) percent / 100);
-
-      spellDuration = spellDuration - (int) reduction;
    }
 }

@@ -94,7 +94,7 @@ public class OllivandersListener implements Listener
    /**
     * Number of ticks to delay thread start for
     */
-   private int threadDelay = Ollivanders2Common.ticksPerSecond;
+   public static int threadDelay = Ollivanders2Common.ticksPerSecond;
 
    /**
     * Constructor
@@ -881,30 +881,6 @@ public class OllivandersListener implements Listener
          {
             event.setCancelled(true);
             common.printDebugMessage("cloakPlayer: cancelling EntityTargetEvent", null, null, false);
-         }
-      }
-   }
-
-   /**
-    * Cancels any targeting of players who own inferi by that inferi
-    *
-    * @param event the Entity Target Event
-    */
-   @EventHandler(priority = EventPriority.HIGH)
-   public void inferiTarget (@NotNull EntityTargetEvent event)
-   {
-      Entity target = event.getTarget();
-      Entity entity = event.getEntity();
-      for (O2Spell sp : p.getProjectiles())
-      {
-         if (sp instanceof MORTUOS_SUSCITATE)
-         {
-            Transfiguration trans = (Transfiguration) sp;
-            if (trans.getToID() == entity.getUniqueId() && trans.player == target)
-            {
-               event.setCancelled(true);
-               common.printDebugMessage("inferiTarget: cancelling EntityTargetEvent", null, null, false);
-            }
          }
       }
    }
