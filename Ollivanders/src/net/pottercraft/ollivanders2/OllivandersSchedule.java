@@ -1,34 +1,26 @@
 package net.pottercraft.ollivanders2;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Set;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.effect.O2EffectType;
+import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
-import net.pottercraft.ollivanders2.spell.GEMINIO;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
 import net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON;
-import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -92,7 +84,6 @@ public class OllivandersSchedule implements Runnable
          oeffectSched();
          Ollivanders2API.getStationarySpells(p).upkeep();
          Ollivanders2API.getProphecies(p).upkeep();
-         broomSched();
          teleportSched();
          Ollivanders2API.getOwlPost(p).upkeep();
       }
@@ -100,14 +91,6 @@ public class OllivandersSchedule implements Runnable
       {
          common.printDebugMessage("Exceoption running scheduled tasks.", e, null, true);
       }
-
-      // run item curse schedule once a second
-      /*
-      if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 0)
-      {
-         itemCurseSched();
-      }
-       */
 
       // run invis player every second, offset from itemCurse schedule
       if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 1)
@@ -168,129 +151,8 @@ public class OllivandersSchedule implements Runnable
       {
          UUID pid = player.getUniqueId();
 
-         Ollivanders2API.getPlayers(p).playerEffects.upkeep(pid);
+         Ollivanders2API.getPlayers().playerEffects.upkeep(pid);
       }
-   }
-
-   /**
-    * Scheduling method that checks for any curses on items in player inventories and
-    * performs their effect.
-    */
-   private void itemCurseSched ()
-   {
-      for (World world : p.getServer().getWorlds())
-      {
-         for (Player player : world.getPlayers())
-         {
-            List<ItemStack> geminioIS = new ArrayList<>();
-            ListIterator<ItemStack> invIt = player.getInventory().iterator();
-            while (invIt.hasNext())
-            {
-               ItemStack item = invIt.next();
-               if (item != null)
-               {
-                  ItemMeta meta = item.getItemMeta();
-                  if (meta == null)
-                     continue;
-
-                  if (meta.hasLore())
-                  {
-                     List<String> itemLore = meta.getLore();
-                     if (itemLore == null)
-                        continue;
-
-                     for (String lore : itemLore)
-                     {
-                        if (lore.contains(GEMINIO.geminio))
-                        {
-                           geminioIS.add(geminio(item.clone()));
-                           invIt.set(null);
-                        }
-                     }
-                  }
-               }
-            }
-            HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(geminioIS.toArray(new ItemStack[geminioIS.size()]));
-            for (ItemStack item : leftover.values())
-            {
-               player.getWorld().dropItem(player.getLocation(), item);
-            }
-         }
-      }
-   }
-
-   /**
-    * Enacts the geminio duplicating effect on an itemstack
-    *
-    * @param item - item with geminio curse on it
-    * @return Duplicated itemstacks
-    * @assumes item stack being passed is a Geminio
-    */
-   @NotNull
-   private ItemStack geminio (@NotNull ItemStack item)
-   {
-      int stackSize = item.getAmount();
-      ItemMeta meta = item.getItemMeta();
-      if (meta == null)
-      {
-         common.printDebugMessage("Ollivanders2Schedule.geminio: item meta is null", null, null, true);
-         return item;
-      }
-
-      List<String> lore = meta.getLore();
-      if (lore == null)
-      {
-         // this should not happen if the item stack being sent is a Geminio
-         return item;
-      }
-
-      ArrayList<String> newLore = new ArrayList<>();
-      for (String l : lore)
-      {
-         if (l.contains(GEMINIO.geminio))
-         {
-            String[] loreParts = l.split(" ");
-            if (loreParts.length != 2)
-            {
-               common.printDebugMessage("Geminio item with malformed lore \"" + l + "\"", null, null, false);
-
-               // clear out the lore on this item so this doesn't happen every schedule tick
-               newLore = new ArrayList<>();
-               break;
-            }
-
-            int magnitude;
-
-            try
-            {
-               magnitude = Integer.parseInt(loreParts[1]);
-            }
-            catch (Exception e)
-            {
-               common.printDebugMessage("Geminio item with malformed lore \"" + l + "\"", null, null, false);
-
-               // clear out the lore on this item so this doesn't happen every schedule tick
-               newLore = new ArrayList<>();
-               break;
-            }
-
-            if (magnitude > 1)
-            {
-               magnitude = magnitude - 1;
-               newLore.add(GEMINIO.geminio + " " + magnitude);
-            }
-            stackSize = stackSize * 2;
-         }
-         else
-         {
-            newLore.add(l);
-         }
-      }
-
-      meta.setLore(newLore);
-      item.setItemMeta(meta);
-      item.setAmount(stackSize);
-      return item;
    }
 
    /**
@@ -368,7 +230,7 @@ public class OllivandersSchedule implements Runnable
          else if (!hasCloak && alreadyInvis) {
             for (Player player2 : p.getServer().getOnlinePlayers())
             {
-               O2Player viewer = Ollivanders2API.getPlayers(p).getPlayer(player2.getUniqueId());
+               O2Player viewer = Ollivanders2API.getPlayers().getPlayer(player2.getUniqueId());
                if (viewer == null)
                   continue;
 
@@ -414,47 +276,9 @@ public class OllivandersSchedule implements Runnable
       ItemStack chestPlate = player.getInventory().getChestplate();
       if (chestPlate != null)
       {
-         return Ollivanders2API.common.isInvisibilityCloak(chestPlate);
+         return O2ItemType.INVISIBILITY_CLOAK.isItemThisType(chestPlate);
       }
       return false;
-   }
-
-   /**
-    * Goes through all players and sets any holding a broom to flying
-    */
-   private void broomSched ()
-   {
-      playerIter:
-      for (World world : p.getServer().getWorlds())
-      {
-         for (Player player : world.getPlayers())
-         {
-            if (Ollivanders2API.common.isBroom(player.getInventory().getItemInMainHand()) && Ollivanders2API.getSpells().isSpellTypeAllowed(player.getLocation(), O2SpellType.VOLATUS))
-            {
-               player.setAllowFlight(true);
-               player.setFlying(true);
-               this.onBroom.add(player.getUniqueId());
-               if (flying.contains(player.getUniqueId()))
-               {
-                  Vector broomVec = player.getLocation().getDirection().clone();
-                  broomVec.multiply(Math.sqrt(player.getInventory().getItemInMainHand().getEnchantmentLevel(Enchantment.PROTECTION_FALL)) / 40.0);
-                  player.setVelocity(player.getVelocity().add(broomVec));
-               }
-            }
-            else
-            {
-               if (player.getGameMode() == GameMode.SURVIVAL && (this.onBroom.contains(player.getUniqueId())))
-               {
-                  if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FLYING))
-                  {
-                     continue playerIter;
-                  }
-                  player.setFlying(false);
-                  this.onBroom.remove(player.getUniqueId());
-               }
-            }
-         }
-      }
    }
 
    /**
@@ -501,11 +325,5 @@ public class OllivandersSchedule implements Runnable
 
          p.removeTeleportEvent(event);
       }
-   }
-
-   @NotNull
-   public static Set<UUID> getFlying()
-   {
-      return flying;
    }
 }

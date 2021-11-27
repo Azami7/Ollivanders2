@@ -36,12 +36,13 @@ public class FLAGRANTE extends Enchantment
      *
      * @param plugin a callback to the plugin
      * @param mag the magnitude of this enchantment
+     * @param args optional arguments for this enchantment
      * @param itemLore the optional lore for this enchantment
      */
-    public FLAGRANTE (@NotNull Ollivanders2 plugin, int mag, @Nullable String itemLore)
+    public FLAGRANTE (@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
     {
-        super(plugin, mag, itemLore);
-        enchantmentType = ItemEnchantmentType.GEMINIO;
+        super(plugin, mag,args, itemLore);
+        enchantmentType = ItemEnchantmentType.FLAGRANTE;
     }
 
     /**
@@ -65,7 +66,7 @@ public class FLAGRANTE extends Enchantment
         BURNING burning = new BURNING(p, 0, entity.getUniqueId());
         burning.addDamage(damage);
 
-        Ollivanders2API.getPlayers(p).playerEffects.addEffect(burning);
+        Ollivanders2API.getPlayers().playerEffects.addEffect(burning);
 
         common.printDebugMessage("Added flagrante curse to " + entity.getName(), null, null, false);
     }
@@ -80,12 +81,12 @@ public class FLAGRANTE extends Enchantment
     {
         Player player = event.getPlayer();
 
-        Ollivanders2API.getPlayers(p).playerEffects.removeEffect(player.getUniqueId(), O2EffectType.BURNING);
+        Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.BURNING);
         common.printDebugMessage("Removed flagrante curse to " + player.getName(), null, null, false);
     }
 
     /**
-     * Handle item pickup events
+     * Handle item despawn events
      *
      * @param event the item despawn event
      */

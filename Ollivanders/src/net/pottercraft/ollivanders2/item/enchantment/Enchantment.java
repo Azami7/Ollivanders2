@@ -38,6 +38,11 @@ public abstract class Enchantment
     String lore;
 
     /**
+     * Optional arguments for this enchantment
+     */
+    String args;
+
+    /**
      * Common functions
      */
     Ollivanders2Common common;
@@ -47,19 +52,21 @@ public abstract class Enchantment
      *
      * @param plugin a callback to the plugin
      * @param mag the magnitude of this enchantment
+     * @param args optional arguments for this enchantment
      * @param itemLore the optional lore for this enchantment
      */
-    public Enchantment (@NotNull Ollivanders2 plugin, int mag, @Nullable String itemLore)
+    public Enchantment (@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
     {
         p = plugin;
         magnitude = mag;
         lore = itemLore;
+        this.args = args;
 
         common = new Ollivanders2Common(p);
     }
 
     /**
-     * Handle item pickup events
+     * Handle item despawn events
      *
      * @param event the item despawn event
      */

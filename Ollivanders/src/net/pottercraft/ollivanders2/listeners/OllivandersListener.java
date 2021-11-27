@@ -3,13 +3,9 @@ package net.pottercraft.ollivanders2.listeners;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2OwlPost;
-import net.pottercraft.ollivanders2.OllivandersSchedule;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
-import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
-import net.pottercraft.ollivanders2.player.O2WandCoreType;
-import net.pottercraft.ollivanders2.player.O2WandWoodType;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
 import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.Divination;
@@ -260,7 +256,7 @@ public class OllivandersListener implements Listener
 
          boolean castSuccess = true;
 
-         if (!Ollivanders2API.playerCommon.holdsWand(player))
+         if (!Ollivanders2API.getItems().getWands().holdsWand(player))
          {
             // if they are not holding their destined wand, casting success is reduced
             common.printDebugMessage("doSpellCasting: player not holding destined wand", null, null, false);
@@ -316,7 +312,7 @@ public class OllivandersListener implements Listener
 
       p.incrementSpellCount(player, spell.spellType);
 
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
          p.incrementSpellCount(player, spell.spellType);
    }
 
@@ -397,7 +393,7 @@ public class OllivandersListener implements Listener
     */
    private void castSpell(@NotNull Player player)
    {
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
       {
          common.printDebugMessage("Unable to find o2player casting spell.", null, null, false);
@@ -417,12 +413,11 @@ public class OllivandersListener implements Listener
       if (spellType != null)
       {
          double wandCheck;
-         boolean playerHoldsWand = Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.HAND);
+         boolean playerHoldsWand = Ollivanders2API.getItems().getWands().holdsWand(player, EquipmentSlot.HAND);
          if (playerHoldsWand)
          {
             common.printDebugMessage("OllivandersListener:castSpell: player holds a wand in their primary hand", null, null, false);
             wandCheck = Ollivanders2API.playerCommon.wandCheck(player, EquipmentSlot.HAND);
-            allyWand(player);
          }
          else
          {
@@ -511,7 +506,7 @@ public class OllivandersListener implements Listener
       //
       if (action == Action.LEFT_CLICK_AIR || action == Action.RIGHT_CLICK_AIR)
       {
-         if (Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.OFF_HAND))
+         if (Ollivanders2API.getItems().getWands().holdsWand(player, EquipmentSlot.OFF_HAND))
          {
             rotateNonVerbalSpell(player, action);
          }
@@ -531,7 +526,7 @@ public class OllivandersListener implements Listener
       //
       // A right or left click of the primary hand when holding a wand is used to make a magical action.
       //
-      if ((Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.HAND)))
+      if ((Ollivanders2API.getItems().getWands().holdsWand(player, EquipmentSlot.HAND)))
       {
          common.printDebugMessage("primaryHandInteractEvents: player holding a wand", null, null, false);
 
@@ -551,7 +546,7 @@ public class OllivandersListener implements Listener
          //
          else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
          {
-            if (!Ollivanders2API.playerCommon.holdsWand(player))
+            if (!Ollivanders2API.getItems().getWands().holdsWand(player))
             {
                return;
             }
@@ -599,10 +594,10 @@ public class OllivandersListener implements Listener
 
       common.printDebugMessage("Rotating mastered spells for non-verbal casting.", null, null, false);
 
-      if (!Ollivanders2API.playerCommon.holdsWand(player, EquipmentSlot.OFF_HAND))
+      if (!Ollivanders2API.getItems().getWands().holdsWand(player, EquipmentSlot.OFF_HAND))
          return;
 
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
          return;
 
@@ -637,7 +632,7 @@ public class OllivandersListener implements Listener
    {
       Player player = event.getPlayer();
 
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
 
       if (o2p == null) // new player
       {
@@ -692,7 +687,7 @@ public class OllivandersListener implements Listener
     */
    private void playerQuit (@NotNull Player player)
    {
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
          return;
 
@@ -710,7 +705,7 @@ public class OllivandersListener implements Listener
    {
       if (Ollivanders2.enableDeathExpLoss)
       {
-         O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(event.getEntity().getUniqueId());
+         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(event.getEntity().getUniqueId());
 
          if (o2p == null)
             return;
@@ -762,36 +757,15 @@ public class OllivandersListener implements Listener
    }
 
    /**
-    * If a wand is not already allied with a player, this allies it.
-    *
-    * @param player player holding a wand.
-    */
-   private void allyWand (@NotNull Player player)
-   {
-      ItemStack wand = player.getInventory().getItemInMainHand();
-      ItemMeta wandMeta = wand.getItemMeta();
-      if (wandMeta == null)
-         return;
-
-      List<String> wandLore = wandMeta.getLore();
-
-      if (wandLore != null && wandLore.size() == 1)
-      {
-         wandLore.add(player.getUniqueId().toString());
-         wandMeta.setLore(wandLore);
-         wand.setItemMeta(wandMeta);
-         player.getInventory().setItemInMainHand(wand);
-      }
-   }
-
-   /**
     * When an item is picked up by a player, if the item is a portkey, the player will be teleported there.
     *
     * @param event the player Pickup Item Event
     */
+   @Deprecated
    @EventHandler(priority = EventPriority.NORMAL)
    public void portkeyPickUp (@NotNull EntityPickupItemEvent event)
    {
+      //TODO remove this when we remove lore-based items in the next major rev
       Entity entity = event.getEntity();
       if (entity instanceof Player)
       {
@@ -826,10 +800,10 @@ public class OllivandersListener implements Listener
                {
                   if (player.getLocation().distance(e.getLocation()) <= 2)
                   {
-                     p.addTeleportEvent(player, player.getLocation(), to);
+                     p.addTeleportEvent(player, to);
                   }
                }
-               p.addTeleportEvent(player, player.getLocation(), to);
+               p.addTeleportEvent(player, to);
                lore.remove(s);
                meta.setLore(lore);
                item.getItemStack().setItemMeta(meta);
@@ -870,25 +844,13 @@ public class OllivandersListener implements Listener
    {
       if (event.getEntityType() == EntityType.WITCH && Ollivanders2.enableWitchDrop)
       {
-         int wandType = Math.abs(Ollivanders2Common.random.nextInt() % 4);
-         int coreType = Math.abs(Ollivanders2Common.random.nextInt() % 4);
-
-         ItemStack wand = Ollivanders2API.getItems(p).getItemByType(O2ItemType.WAND, 1);
+         ItemStack wand = Ollivanders2API.getItems().getWands().createRandomWand();
          if (wand == null)
          {
             common.printDebugMessage("OllivandersListener.witchWandDrop: wand is null", null, null, false);
             return;
          }
 
-         List<String> lore = new ArrayList<>();
-         lore.add(O2WandWoodType.getAllWoodsByName().get(wandType) + " and " + O2WandCoreType.getAllCoresByName().get(coreType));
-
-         ItemMeta meta = wand.getItemMeta();
-         if (meta == null)
-            return;
-
-         meta.setLore(lore);
-         wand.setItemMeta(meta);
          event.getEntity().getWorld().dropItemNaturally(event.getEntity().getLocation(), wand);
       }
    }
@@ -924,32 +886,6 @@ public class OllivandersListener implements Listener
 
                potion.drink(player);
             }
-         }
-      }
-   }
-
-   /**
-    * Event fires when a player right clicks with a broom in their hand
-    *
-    * @param event the player interact event
-    */
-   @EventHandler(priority = EventPriority.HIGH)
-   public void broomClick (@NotNull PlayerInteractEvent event)
-   {
-      Player player = event.getPlayer();
-
-      if (((event.getAction() == Action.RIGHT_CLICK_AIR) || (event.getAction() == Action.RIGHT_CLICK_BLOCK))
-            && (Ollivanders2API.common.isBroom(player.getInventory().getItemInMainHand())))
-      {
-         UUID playerUid = player.getUniqueId();
-         Set<UUID> flying = OllivandersSchedule.getFlying();
-         if (flying.contains(playerUid))
-         {
-            flying.remove(playerUid);
-         }
-         else
-         {
-            flying.add(playerUid);
          }
       }
    }

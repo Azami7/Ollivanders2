@@ -18,6 +18,8 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.entity.Player;
@@ -108,7 +110,7 @@ public abstract class O2Potion
       for (Entry<O2ItemType, Integer> e : ingredients.entrySet())
       {
          O2ItemType ingredientType = e.getKey();
-         String name = Ollivanders2API.getItems(p).getItemDisplayNameByType(ingredientType);
+         String name = Ollivanders2API.getItems().getItemDisplayNameByType(ingredientType);
 
          stringBuilder.append("\n").append(e.getValue().toString()).append(" ").append(name);
       }
@@ -269,7 +271,9 @@ public abstract class O2Potion
       }
 
       meta.setDisplayName(potionType.getPotionName());
-      meta.setLore(Arrays.asList(potionType.getPotionName()));
+      PersistentDataContainer container = meta.getPersistentDataContainer();
+      container.set(O2Potions.potionTypeKey, PersistentDataType.STRING, potionType.toString());
+
       meta.setColor(potionColor);
       if (minecraftPotionEffect != null)
          meta.addCustomEffect(minecraftPotionEffect, true);
@@ -296,7 +300,7 @@ public abstract class O2Potion
 
       boolean canBrew;
 
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(brewer.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(brewer.getUniqueId());
       if (o2p == null)
          return false;
 

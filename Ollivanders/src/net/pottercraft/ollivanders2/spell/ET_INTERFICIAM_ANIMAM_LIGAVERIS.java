@@ -77,7 +77,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
          return;
       }
 
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
       {
          kill();

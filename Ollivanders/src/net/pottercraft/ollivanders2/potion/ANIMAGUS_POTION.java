@@ -61,9 +61,9 @@ public final class ANIMAGUS_POTION extends O2Potion
 
       if (o2p.isAnimagus())
       {
-         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION))
+         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION))
          {
-            Ollivanders2API.getPlayers(p).playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION);
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION);
          }
 
          player.sendMessage(Ollivanders2.chatColor + "You taste something vaguely familiar.");
@@ -78,13 +78,13 @@ public final class ANIMAGUS_POTION extends O2Potion
          return;
       }
 
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION))
       {
          o2p.setIsAnimagus();
-         Ollivanders2API.getPlayers(p).playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION);
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION);
 
          ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
-         Ollivanders2API.getPlayers(p).playerEffects.addEffect(animagusEffect);
+         Ollivanders2API.getPlayers().playerEffects.addEffect(animagusEffect);
 
          player.sendMessage(Ollivanders2.chatColor + "You feel transformed.");
       }

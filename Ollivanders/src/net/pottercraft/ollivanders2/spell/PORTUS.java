@@ -1,26 +1,20 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Creates a port key.
  */
-public final class PORTUS extends O2Spell
+public final class PORTUS extends ItemEnchant
 {
-   private final String[] wordsArray;
-
    public static final String portus = "Portkey";
    private Location toLoc;
 
@@ -51,34 +45,39 @@ public final class PORTUS extends O2Spell
             + "caster of the protective enchantments is the portkey maker. Portkeys can be used to cross worlds as well, if you use "
             + "a portkey which was made in a different world. If the enchantment is said incorrectly, then the portkey will be created "
             + "linking to the caster's current location.";
-
-      wordsArray = null;
    }
 
    /**
     * Constructor.
     *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
     * @param rightWand which wand the player was using
+    * @param words the location this portkey goes to
     */
-   public PORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand, @NotNull String[] wordsArray)
+   public PORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand, @NotNull String[] words)
    {
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.PORTUS;
       branch = O2MagicBranch.CHARMS;
+      enchantmentType = ItemEnchantmentType.PORTUS;
 
-      this.wordsArray = wordsArray;
+      StringBuilder sb = new StringBuilder();
+      for (String word : words)
+      {
+         sb.append(word).append(" ");
+      }
+      args = sb.toString().trim();
 
       initSpell();
    }
 
    /**
-    * Constructor.
+    * Constructor. This is here just in case some reflection tries to create this spell.
     *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
+    * @param plugin a callback to the MC plugin
+    * @param player the player who cast this spell
     * @param rightWand which wand the player was using
     */
    public PORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
@@ -87,84 +86,21 @@ public final class PORTUS extends O2Spell
 
       spellType = O2SpellType.PORTUS;
       branch = O2MagicBranch.CHARMS;
+      enchantmentType = ItemEnchantmentType.PORTUS;
 
       initSpell();
-
-      Location loc = player.getLocation();
-      wordsArray = new String[4];
-      wordsArray[0] = "portus";
-      wordsArray[1] = Double.toString(((int) loc.getX()));
-      wordsArray[2] = Double.toString(((int) loc.getY()));
-      wordsArray[3] = Double.toString(((int) loc.getZ()));
    }
 
    @Override
-   protected void doInitSpell()
+   void doInitSpell()
    {
-      // world guard flags
-      if (Ollivanders2.worldGuardEnabled)
+      super.doInitSpell();
+
+      if (args == null || args.length() < 1)
       {
-         worldGuardFlags.add(Flags.BUILD);
-         worldGuardFlags.add(Flags.INTERACT);
-      }
-   }
+         Location loc = player.getLocation();
 
-   @Override
-   protected void doCheckEffect()
-   {
-      if (toLoc == null)
-         setDestinationLocation();
-
-      for (Item item : getItems(1.5))
-      {
-         // update item meta
-         ItemMeta meta = item.getItemStack().getItemMeta();
-
-         if (meta == null)
-            continue;
-
-         List<String> lore = null;
-         if (meta.hasLore())
-            lore = meta.getLore();
-
-         if (lore == null)
-            lore = new ArrayList<>();
-
-         World world = toLoc.getWorld();
-         if (world == null)
-            continue;
-
-         lore.add(portus + " " + world.getUID() + " " + (toLoc.getX()) + " " + (toLoc.getY()) + " " + (toLoc.getZ()));
-         meta.setLore(lore);
-         item.getItemStack().setItemMeta(meta);
-
-         kill();
-      }
-
-      if (hasHitTarget())
-      {
-         kill();
-      }
-   }
-
-   private void setDestinationLocation()
-   {
-      if (wordsArray.length == 4)
-      {
-         try
-         {
-            toLoc = new Location(player.getWorld(),
-                  Double.parseDouble(wordsArray[1]),
-                  Double.parseDouble(wordsArray[2]),
-                  Double.parseDouble(wordsArray[3]));
-         }
-         catch (NumberFormatException e)
-         {
-            toLoc = player.getLocation().clone();
-         }
-      } else
-      {
-         toLoc = player.getLocation().clone();
+         args = player.getLocation().getWorld().getName() + " " + player.getLocation().getX() + " " + player.getLocation().getY() + " " + player.getLocation().getZ();
       }
    }
 }

@@ -47,7 +47,7 @@ public class SLEEPING extends O2Effect
    {
       if (!sleeping)
       {
-         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(targetID, O2EffectType.AWAKE))
+         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, O2EffectType.AWAKE))
          {
             kill();
          }
@@ -81,10 +81,10 @@ public class SLEEPING extends O2Effect
       target.teleport(newLoc);
 
       // add sleep speech
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(new SLEEP_SPEECH(p, -1, targetID));
+      Ollivanders2API.getPlayers().playerEffects.addEffect(new SLEEP_SPEECH(p, -1, targetID));
 
       // immobilize them
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(new IMMOBILIZE(p, -1, targetID));
+      Ollivanders2API.getPlayers().playerEffects.addEffect(new IMMOBILIZE(p, -1, targetID));
 
       sleeping = true;
       target.sendMessage(Ollivanders2.chatColor + "You fall in to a deep sleep.");
@@ -98,8 +98,8 @@ public class SLEEPING extends O2Effect
    {
       if (sleeping)
       {
-         Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
-         Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, O2EffectType.IMMOBILIZE);
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.IMMOBILIZE);
          sleeping = false;
 
          Player target = p.getServer().getPlayer(targetID);

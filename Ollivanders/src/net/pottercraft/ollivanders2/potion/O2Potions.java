@@ -11,6 +11,8 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
+import net.pottercraft.ollivanders2.item.O2Items;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
@@ -19,6 +21,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -34,6 +38,11 @@ public class O2Potions
    private Ollivanders2Common common;
 
    final static private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
+
+   /**
+    * Namespace keys for NBT tags
+    */
+   static NamespacedKey potionTypeKey;
 
    public static final List<O2ItemType> ingredients = new ArrayList<>()
    {{
@@ -109,6 +118,7 @@ public class O2Potions
       p = plugin;
 
       common = new Ollivanders2Common(p);
+      potionTypeKey = new NamespacedKey(p, "o2potion_type");
    }
 
    /**
@@ -260,19 +270,10 @@ public class O2Potions
             if (meta == null)
                continue;
 
-            List<String> itemLore = meta.getLore();
-            if (itemLore == null)
-               continue;
+            String ingredientName = getIngredientName(meta);
+            O2ItemType ingredientType = Ollivanders2API.getItems().getTypeByDisplayName(ingredientName);
 
-            String lore = itemLore.get(0);
-            if (lore == null)
-               continue;
-
-            // For ingredients, lore and name are the same. We use lore instead of item name because this cannot be set by using an anvil - so players cannot "make"
-            // ingredients, they can only get real ones from the plugin.
-            O2ItemType ingredientType = Ollivanders2API.getItems(p).getTypeByDisplayName(lore);
-
-            if (ingredientType == null || material != Ollivanders2API.getItems(p).getItemMaterialByType(ingredientType))
+            if (ingredientType == null || material != Ollivanders2API.getItems().getItemMaterialByType(ingredientType))
                continue;
 
             int count = ((Item) e).getItemStack().getAmount();
@@ -289,6 +290,31 @@ public class O2Potions
       return ingredientsInCauldron;
    }
 
+   @NotNull
+   private String getIngredientName (@NotNull ItemMeta itemMeta)
+   {
+      String name = null;
+
+      // check NBT first
+      PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+      if (container.has(O2Items.o2ItemTypeKey, PersistentDataType.STRING))
+         name = container.get(O2Items.o2ItemTypeKey, PersistentDataType.STRING);
+
+      if (name != null && name.length() > 0)
+         return name;
+
+      // TODO remove this once we can deprecate lore-based items in next major rev
+      List<String> itemLore = itemMeta.getLore();
+      if (itemLore == null)
+         return "";
+
+      name = itemLore.get(0);
+      if (name == null)
+         return "";
+
+      return name;
+   }
+
    /**
     * Get an O2Potion from ItemMeta
     *
@@ -298,6 +324,31 @@ public class O2Potions
    @Nullable
    public O2Potion findPotionByItemMeta(@NotNull ItemMeta meta)
    {
+      // check NBT first
+      O2PotionType potionType = null;
+      String potionTypeString = null;
+
+      PersistentDataContainer container = meta.getPersistentDataContainer();
+      if (container.has(potionTypeKey, PersistentDataType.STRING))
+      {
+         potionTypeString = container.get(potionTypeKey, PersistentDataType.STRING);
+      }
+
+      if (potionTypeString != null && potionTypeString.length() > 0)
+      {
+         potionType = O2PotionType.potionTypeFromString(potionTypeString);
+      }
+
+      // if the type was found and this type is currently loaded
+      if (potionType != null)
+      {
+         if (O2PotionMap.containsValue(potionType))
+            return getPotionFromType(potionType);
+         else
+            return null;
+      }
+
+      // TODO remove this once we can deprecate lore-based items in next major rev
       if (meta.hasLore())
       {
          List<String> lore = meta.getLore();
@@ -370,7 +421,7 @@ public class O2Potions
 
       for (O2ItemType i : ingredients)
       {
-         ingredientList.add(Ollivanders2API.getItems(p).getItemDisplayNameByType(i));
+         ingredientList.add(Ollivanders2API.getItems().getItemDisplayNameByType(i));
       }
 
       return ingredientList;

@@ -13,6 +13,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Volatus - add broom flight to an item
@@ -26,11 +27,12 @@ public class VOLATUS extends Enchantment
      *
      * @param plugin a callback to the plugin
      * @param mag the magnitude of this enchantment
+     * @param args optional arguments for this enchantment
      * @param itemLore the optional lore for this enchantment
      */
-    public VOLATUS (@NotNull Ollivanders2 plugin, int mag, String itemLore)
+    public VOLATUS (@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
     {
-        super(plugin, mag, itemLore);
+        super(plugin, mag, args, itemLore);
         enchantmentType = ItemEnchantmentType.VOLATUS;
     }
 
@@ -51,7 +53,7 @@ public class VOLATUS extends Enchantment
     public void doItemDrop (@NotNull PlayerDropItemEvent event) { }
 
     /**
-     * Handle item pickup events
+     * Handle item despawn events
      *
      * @param event the item despawn event
      */
@@ -94,11 +96,11 @@ public class VOLATUS extends Enchantment
         if (isHoldingBroom(player))
         {
             BROOM_FLYING effect = new BROOM_FLYING(p, 5, player.getUniqueId());
-            Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
         }
         else
         {
-            Ollivanders2API.getPlayers(p).playerEffects.removeEffect(player.getUniqueId(), O2EffectType.FLYING);
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.FLYING);
         }
     }
 
@@ -111,7 +113,7 @@ public class VOLATUS extends Enchantment
     private boolean isHoldingBroom (Player player)
     {
         ItemStack primaryItem = player.getInventory().getItemInMainHand();
-        String eTypeStr = Ollivanders2API.getItems(p).enchantedItems.getEnchantmentTypeKey(primaryItem);
+        String eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(primaryItem);
 
         if (eTypeStr != null)
         {
@@ -122,7 +124,7 @@ public class VOLATUS extends Enchantment
         }
 
         ItemStack secondaryItem = player.getInventory().getItemInOffHand();
-        eTypeStr = Ollivanders2API.getItems(p).enchantedItems.getEnchantmentTypeKey(secondaryItem);
+        eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(secondaryItem);
 
         if (eTypeStr != null)
         {

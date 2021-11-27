@@ -81,7 +81,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
             return;
         }
 
-        O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
 
         if (o2p == null)
         {
@@ -115,7 +115,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
         if ((curTime >= 23000 && curTime <= 24000) || (curTime >= 12000 && curTime <= 13000))
         {
             ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, player.getUniqueId());
-            Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             player.sendMessage(Ollivanders2.chatColor + "You feel slightly different.");
         }
@@ -134,10 +134,10 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
      */
     private void transform(@NotNull O2Player o2p)
     {
-        if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT))
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT))
         {
             // change them back to human form
-            Ollivanders2API.getPlayers(p).playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT);
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT);
         }
         else
         {
@@ -164,7 +164,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
         if (rand < successRate)
         {
             ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
-            Ollivanders2API.getPlayers(p).playerEffects.addEffect(animagusEffect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(animagusEffect);
 
             player.sendMessage(Ollivanders2.chatColor + "You feel very different.");
         }
@@ -184,7 +184,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
     {
         usesModifier = p.getSpellCount(player, spellType);
 
-        if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
         {
             usesModifier *= 2;
         }

@@ -84,7 +84,7 @@ public enum O2PotionType
    /**
     * Get a O2PotionType enum from a string. This should be used as the opposite of toString() on the enum.
     *
-    * @param potionString the name of the spell type, ex. "AQUA_ERUCTO"
+    * @param potionString the name of the potion type, ex. "AQUA_ERUCTO"
     * @return the potion type
     */
    @Nullable

@@ -195,9 +195,9 @@ public class O2Prophecy
             }
 
             effect.setPermanent(false);
-            Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-            O2Player player = Ollivanders2API.getPlayers(p).getPlayer(prophetID);
+            O2Player player = Ollivanders2API.getPlayers().getPlayer(prophetID);
             if (player != null)
             {
                String playerName = player.getPlayerName();
