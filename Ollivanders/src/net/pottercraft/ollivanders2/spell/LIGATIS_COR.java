@@ -58,14 +58,14 @@ public final class LIGATIS_COR extends O2Spell
       spellType = O2SpellType.LIGATIS_COR;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
       {
          worldGuardFlags.add(Flags.ITEM_PICKUP);
          worldGuardFlags.add(Flags.ITEM_DROP);
       }
+
+      initSpell();
    }
 
    @Override

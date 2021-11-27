@@ -49,11 +49,11 @@ public final class GLACIUS_TRIA extends GlaciusSuper
       spellType = O2SpellType.GLACIUS_TRIA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       //25% duration
       durationModifier = 0.25;
       //4x radius radius
       radiusModifier = 4.0;
+
+      initSpell();
    }
 }

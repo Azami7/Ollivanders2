@@ -279,6 +279,7 @@ public final class O2PlayerCommon
     * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
     * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
     * 0.5 - The wand is the elder wand and it is allied to player.
+    * -1 - The player is not holding a wand
     * @assumes the item stack being checked is a wand
     * @since 2.2.7
     */
@@ -286,19 +287,13 @@ public final class O2PlayerCommon
    {
       ItemMeta meta = item.getItemMeta();
       if (meta == null)
-      {
-         // this should never happen if isWand() check was done first
-         common.printDebugMessage("O2PlayerCommon.doWandCheck: held item meta is null", null, null, true);
-         return 2;
-      }
+         // not a wand
+         return -1;
 
       List<String> lore = item.getItemMeta().getLore();
       if (lore == null)
-      {
-         // this should never happen if isWand() check was done first
-         common.printDebugMessage("O2PlayerCommon.doWandCheck: held item lore is null", null, null, true);
-         return 2;
-      }
+         // not a wand
+         return -1;
 
       if (lore.get(0).equals("Blaze and Ender Pearl")) // elder wand
       {

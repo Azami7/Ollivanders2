@@ -52,10 +52,11 @@ public final class CALAMUS extends ItemTransfiguration
       transfigurationMap.put(Material.STICK, Material.ARROW);
       successMessage = "You changed a stick in to an arrow.";
       failureMessage = "Nothing happens.";
+      permanent = true;
 
       initSpell();
 
+      // do this after init spell to ensure success rate is always 100
       successRate = 100;
-      permanent = true;
    }
 }

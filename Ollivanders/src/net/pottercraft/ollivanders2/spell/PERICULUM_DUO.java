@@ -44,14 +44,18 @@ public final class PERICULUM_DUO extends Pyrotechnia
       spellType = O2SpellType.PERICULUM_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.RED);
       fireworkType = Type.BALL_LARGE;
 
       hasTrails = true;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(10);
    }
 }

@@ -53,8 +53,6 @@ public final class AVIFORS extends FriendlyMobDisguise
       spellType = O2SpellType.AVIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-
       targetType = EntityType.PARROT;
 
       disguiseType = DisguiseType.getType(targetType);
@@ -64,5 +62,7 @@ public final class AVIFORS extends FriendlyMobDisguise
       watcher.setVariant(common.getRandomParrotColor());
 
       watcher.setFlyingWithElytra(true);
+
+      initSpell();
    }
 }

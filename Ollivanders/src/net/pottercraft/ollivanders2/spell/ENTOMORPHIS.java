@@ -53,11 +53,16 @@ public final class ENTOMORPHIS extends PlayerDisguise
       spellType = O2SpellType.ENTOMORPHIS;
       branch = O2MagicBranch.DARK_ARTS;
 
-      initSpell();
-      calculateSuccessRate();
-
       targetType = EntityType.SPIDER;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

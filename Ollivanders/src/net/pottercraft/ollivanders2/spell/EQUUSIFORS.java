@@ -47,8 +47,6 @@ public final class EQUUSIFORS extends FriendlyMobDisguise
       spellType = O2SpellType.EQUUSIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-
       targetType = EntityType.HORSE;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
@@ -60,5 +58,7 @@ public final class EQUUSIFORS extends FriendlyMobDisguise
       Ollivanders2Common common = new Ollivanders2Common(p);
       watcher.setStyle(common.getRandomHorseStyle());
       watcher.setColor(common.getRandomHorseColor());
+
+      initSpell();
    }
 }

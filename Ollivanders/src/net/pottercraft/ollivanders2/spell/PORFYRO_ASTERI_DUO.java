@@ -46,7 +46,6 @@ public final class PORFYRO_ASTERI_DUO extends Pyrotechnia
 
       spellType = O2SpellType.PORFYRO_ASTERI_DUO;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);
@@ -60,6 +59,12 @@ public final class PORFYRO_ASTERI_DUO extends Pyrotechnia
 
       fireworkType = FireworkEffect.Type.STAR;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(10);
    }
 }

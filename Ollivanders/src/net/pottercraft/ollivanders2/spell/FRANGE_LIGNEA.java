@@ -55,14 +55,14 @@ public final class FRANGE_LIGNEA extends O2Spell
       spellType = O2SpellType.FRANGE_LIGNEA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // material black list
       materialBlackList.add(Material.WATER);
 
       // world-guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.BUILD);
+
+      initSpell();
    }
 
    /**

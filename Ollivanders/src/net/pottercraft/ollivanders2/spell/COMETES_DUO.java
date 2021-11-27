@@ -47,8 +47,6 @@ public final class COMETES_DUO extends Pyrotechnia
       spellType = O2SpellType.COMETES_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.ORANGE);
       fireworkType = Type.BURST;
@@ -61,6 +59,12 @@ public final class COMETES_DUO extends Pyrotechnia
       fadeColors.add(Color.YELLOW);
       fadeColors.add(Color.WHITE);
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(10);
    }
 }

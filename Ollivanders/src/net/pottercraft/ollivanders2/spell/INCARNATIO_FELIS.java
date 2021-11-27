@@ -50,9 +50,6 @@ public final class INCARNATIO_FELIS extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_FELIS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-      calculateSuccessRate();
-
       targetType = EntityType.CAT;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
@@ -66,5 +63,13 @@ public final class INCARNATIO_FELIS extends PlayerDisguise
       int rand = Ollivanders2Common.random.nextInt() % 10;
       if (rand == 0)
          watcher.isTamed();
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

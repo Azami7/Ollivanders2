@@ -52,9 +52,6 @@ public final class INCARNATIO_LUPI extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_LUPI;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-      calculateSuccessRate();
-
       targetType = EntityType.WOLF;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
@@ -68,5 +65,13 @@ public final class INCARNATIO_LUPI extends PlayerDisguise
          watcher.isTamed();
          watcher.setCollarColor(O2Color.getRandomPrimaryDyeableColor().getDyeColor());
       }
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

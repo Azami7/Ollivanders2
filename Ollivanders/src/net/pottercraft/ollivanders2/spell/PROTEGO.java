@@ -53,7 +53,6 @@ public final class PROTEGO extends StationarySpell
 
       spellType = O2SpellType.PROTEGO;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       baseDurationInSeconds = 1;
       durationModifierInSeconds = 1;
@@ -61,16 +60,16 @@ public final class PROTEGO extends StationarySpell
       radiusModifier = 1;
       flairSize = 10;
       centerOnCaster = true;
+
+      initSpell();
    }
 
    @Override
    protected O2StationarySpell createStationarySpell()
    {
       // protego has a limited duration, ensure duration is not set too high
-      if (duration > (3 * Ollivanders2Common.ticksPerSecond))
-      {
-         duration = 3 * Ollivanders2Common.ticksPerSecond;
-      }
+      if (duration > (Ollivanders2Common.ticksPerMinute))
+         duration = Ollivanders2Common.ticksPerMinute;
 
       return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO, radius, duration);
    }

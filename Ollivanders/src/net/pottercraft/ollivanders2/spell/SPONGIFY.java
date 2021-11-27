@@ -57,21 +57,6 @@ public class SPONGIFY extends BlockTransfiguration
       transfigureType = Material.SLIME_BLOCK;
       permanent = false;
 
-      initSpell();
-
-      if (usesModifier > 50)
-      {
-         radius = 5;
-      }
-      else if (usesModifier < 10)
-      {
-         radius = 1;
-      }
-      else
-      {
-         radius = (int) (usesModifier / 10);
-      }
-
       materialBlacklist.add(Material.WATER);
       materialBlacklist.add(Material.LAVA);
       materialBlacklist.add(Material.FIRE);
@@ -79,5 +64,18 @@ public class SPONGIFY extends BlockTransfiguration
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.BUILD);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      radius = (int) (usesModifier / 10);
+
+      if (usesModifier > 5)
+         radius = 5;
+      else if (usesModifier < 1)
+         radius = 1;
    }
 }

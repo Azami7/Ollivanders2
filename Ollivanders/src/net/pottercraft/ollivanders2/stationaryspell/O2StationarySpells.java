@@ -13,6 +13,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
+import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.Location;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -271,6 +272,20 @@ public class O2StationarySpells implements Listener
       for (O2StationarySpell stationary : O2StationarySpells)
       {
          stationary.doOnEntityCombustEvent(event);
+      }
+   }
+
+   /**
+    * Handle spell projectile move events
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.LOWEST)
+   public void onSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event)
+   {
+      for (O2StationarySpell stationary : O2StationarySpells)
+      {
+         stationary.doOnSpellProjectileMoveEvent(event);
       }
    }
 

@@ -54,7 +54,6 @@ public final class PROTEGO_MAXIMA extends StationarySpell
 
       spellType = O2SpellType.PROTEGO_MAXIMA;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       baseDurationInSeconds = 300;
       durationModifierInSeconds = 10;
@@ -63,6 +62,12 @@ public final class PROTEGO_MAXIMA extends StationarySpell
       flairSize = 10;
       centerOnCaster = true;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       damage = (usesModifier / 10) + 1;
    }
 

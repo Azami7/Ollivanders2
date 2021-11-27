@@ -13,6 +13,7 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 
+import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -314,8 +315,11 @@ public abstract class O2Spell
          return;
       }
 
-      // move the projectile
+      Location prevLoc = new Location(location.getWorld(), location.getX(), location.getY(), location.getZ());
+
+      // move the projectile and fire move event
       location.add(vector);
+      p.getServer().getPluginManager().callEvent(new OllivandersSpellProjectileMoveEvent(player, this, prevLoc, location));
       projectileDistance = projectileDistance + 1;
 
       // determine if this spell is allowed in this location per Ollivanders2 config and WorldGuard

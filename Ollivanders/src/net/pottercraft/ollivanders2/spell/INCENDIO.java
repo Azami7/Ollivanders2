@@ -53,11 +53,11 @@ public final class INCENDIO extends IncendioSuper
       spellType = O2SpellType.INCENDIO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       strafe = false;
       radius = 1;
       blockRadius = 1;
       durationModifier = 1;
+
+      initSpell();
    }
 }

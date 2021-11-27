@@ -57,11 +57,11 @@ public final class AVIS extends O2Spell
         spellType = O2SpellType.AVIS;
         branch = O2MagicBranch.CHARMS;
 
-        initSpell();
-
         // world guard flags
         if (Ollivanders2.worldGuardEnabled)
            worldGuardFlags.add(Flags.MOB_SPAWNING);
+
+        initSpell();
     }
 
     @Override

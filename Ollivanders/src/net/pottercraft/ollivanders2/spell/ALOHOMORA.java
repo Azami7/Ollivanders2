@@ -56,11 +56,11 @@ public final class ALOHOMORA extends O2Spell
       spellType = O2SpellType.ALOHOMORA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.INTERACT);
+
+      initSpell();
    }
 
    /**

@@ -56,8 +56,6 @@ public final class VERA_VERTO extends FriendlyMobDisguise
       spellType = O2SpellType.VERA_VERTO;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-
       targetType = EntityType.FALLING_BLOCK;
       ItemStack flowerPot = new ItemStack(Material.FLOWER_POT, 1);
 
@@ -65,5 +63,7 @@ public final class VERA_VERTO extends FriendlyMobDisguise
       disguise = new MiscDisguise(disguiseType);
       FallingBlockWatcher watcher = (FallingBlockWatcher)disguise.getWatcher();
       watcher.setBlock(flowerPot);
+
+      initSpell();
    }
 }

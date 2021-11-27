@@ -62,11 +62,11 @@ public final class COLLOPORTUS extends StationarySpell
          worldGuardFlags.add(Flags.BUILD);
       }
 
-      initSpell();
-
       baseRadius = 5;
       radiusModifier = 1;
       flairSize = 10;
+
+      initSpell();
    }
 
    /**

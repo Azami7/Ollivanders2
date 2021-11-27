@@ -53,9 +53,9 @@ public final class CARTOMANCIE extends Divination
       divinationType = O2DivinationType.CARTOMANCY_TAROT;
       branch = O2MagicBranch.DIVINATION;
 
-      initSpell();
-
       itemHeld = O2ItemType.TAROT_CARDS;
       itemHeldString = "tarot cards";
+
+      initSpell();
    }
 }

@@ -54,12 +54,12 @@ public final class HORREAT_PROTEGAT extends O2Spell
       spellType = O2SpellType.HORREAT_PROTEGAT;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
       projectilePassThrough.remove(Material.LAVA);
       projectilePassThrough.add(Material.CAVE_AIR);
+
+      initSpell();
    }
 
    /**

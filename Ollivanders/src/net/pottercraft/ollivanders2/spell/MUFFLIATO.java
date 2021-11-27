@@ -53,7 +53,6 @@ public final class MUFFLIATO extends StationarySpell
 
       spellType = O2SpellType.MUFFLIATO;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       baseDurationInSeconds = 30;
       durationModifierInSeconds = 10;
@@ -61,6 +60,8 @@ public final class MUFFLIATO extends StationarySpell
       radiusModifier = 1;
       flairSize = 10;
       centerOnCaster = true;
+
+      initSpell();
    }
 
    @Override

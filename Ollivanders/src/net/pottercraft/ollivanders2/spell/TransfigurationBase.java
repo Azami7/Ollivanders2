@@ -28,12 +28,12 @@ public abstract class TransfigurationBase extends O2Spell
     /**
      * Set max duration to 4 hours by default
      */
-    static int maxDuration = 4 * Ollivanders2Common.ticksPerHour;
+    int maxDuration = 4 * Ollivanders2Common.ticksPerHour;
 
     /**
      * Set min duration to 1 minute
      */
-    static int minDuration = Ollivanders2Common.ticksPerMinute;
+    int minDuration = Ollivanders2Common.ticksPerMinute;
 
     /**
      * If this is not permanent, how long it should last.

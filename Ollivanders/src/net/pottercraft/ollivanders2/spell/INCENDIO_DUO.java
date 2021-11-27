@@ -50,12 +50,12 @@ public final class INCENDIO_DUO extends IncendioSuper
       spellType = O2SpellType.INCENDIO_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       location.add(vector);
       strafe = true;
       blockRadius = 2;
       radius = 2;
       durationModifier = 2;
+
+      initSpell();
    }
 }

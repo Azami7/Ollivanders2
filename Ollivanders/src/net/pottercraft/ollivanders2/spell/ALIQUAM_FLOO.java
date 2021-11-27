@@ -64,8 +64,6 @@ public final class ALIQUAM_FLOO extends O2Spell
       spellType = O2SpellType.ALIQUAM_FLOO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // required worldGuard state flags
       if (Ollivanders2.worldGuardEnabled)
       {
@@ -76,6 +74,8 @@ public final class ALIQUAM_FLOO extends O2Spell
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
       projectilePassThrough.remove(Material.FIRE);
+
+      initSpell();
    }
 
    /**

@@ -54,11 +54,11 @@ public final class DELETRIUS extends O2Spell
       spellType = O2SpellType.DELETRIUS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.ITEM_PICKUP);
+
+      initSpell();
    }
 
    /**

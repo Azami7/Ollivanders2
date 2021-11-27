@@ -57,12 +57,14 @@ public final class PARTIS_TEMPORUS extends O2Spell
       branch = O2MagicBranch.CHARMS;
 
       initSpell();
+   }
 
+   @Override
+   void doInitSpell()
+   {
       int durationInSeconds = (int) usesModifier;
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      }
 
       duration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
    }

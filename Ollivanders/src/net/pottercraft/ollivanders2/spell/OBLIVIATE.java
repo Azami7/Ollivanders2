@@ -54,11 +54,11 @@ public final class OBLIVIATE extends O2Spell
       spellType = O2SpellType.OBLIVIATE;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.PVP);
+
+      initSpell();
    }
 
    @Override

@@ -53,12 +53,16 @@ public final class DRACONIFORS extends FriendlyMobDisguise
       spellType = O2SpellType.DRACONIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-
       targetType = EntityType.ENDER_DRAGON;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       if (usesModifier < 20)
          successRate = 5;
       else if (usesModifier < 100)

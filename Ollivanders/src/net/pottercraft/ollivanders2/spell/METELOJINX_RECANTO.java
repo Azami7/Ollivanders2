@@ -45,7 +45,8 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
       spellType = O2SpellType.METELOJINX_RECANTO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
       storm = false;
+
+      initSpell();
    }
 }

@@ -103,9 +103,9 @@ public final class APPARATE extends O2Spell
         spellType = O2SpellType.APPARATE;
         branch = O2MagicBranch.CHARMS;
 
-        initSpell();
-
         this.wordsArray = wordsArray;
+
+        initSpell();
     }
 
     /**

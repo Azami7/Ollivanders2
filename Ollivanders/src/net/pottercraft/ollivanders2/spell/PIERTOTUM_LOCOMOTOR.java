@@ -76,9 +76,9 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration impl
       transfigurationMap.put(Material.IRON_BLOCK, EntityType.IRON_GOLEM);
       transfigurationMap.put(Material.SNOW_BLOCK, EntityType.SNOWMAN);
 
-      successRate = 100;
-
       initSpell();
+      // put this after initSpell to ensure it is always 100
+      successRate = 100;
    }
 
    @Override

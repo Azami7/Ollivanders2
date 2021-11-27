@@ -51,8 +51,8 @@ public final class LIBERACORPUS extends ReduceO2Effect
       spellType = O2SpellType.LIBERACORPUS;
       branch = O2MagicBranch.COUNTER_SPELL;
 
-      initSpell();
-
       effectsToReduce.add(O2EffectType.SUSPENSION);
+
+      initSpell();
    }
 }
