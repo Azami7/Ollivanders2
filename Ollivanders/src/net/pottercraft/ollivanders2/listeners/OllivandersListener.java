@@ -15,9 +15,7 @@ import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.Divination;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2Spells;
-import net.pottercraft.ollivanders2.spell.Transfiguration;
 import net.pottercraft.ollivanders2.spell.AMATO_ANIMO_ANIMATO_ANIMAGUS;
-import net.pottercraft.ollivanders2.spell.MORTUOS_SUSCITATE;
 import net.pottercraft.ollivanders2.spell.PORTUS;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.potion.O2Potion;
@@ -48,7 +46,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -784,28 +781,6 @@ public class OllivandersListener implements Listener
          wandMeta.setLore(wandLore);
          wand.setItemMeta(wandMeta);
          player.getInventory().setItemInMainHand(wand);
-      }
-   }
-
-   /**
-    * Prevents a transfigured entity from changing any blocks by exploding.
-    *
-    * @param event the entity explode event
-    */
-   @EventHandler(priority = EventPriority.HIGHEST)
-   public void transfiguredEntityExplodeCancel (@NotNull EntityExplodeEvent event)
-   {
-      for (O2Spell proj : p.getProjectiles())
-      {
-         if (proj instanceof Transfiguration)
-         {
-            Transfiguration trans = (Transfiguration) proj;
-            if (trans.getToID() == event.getEntity().getUniqueId())
-            {
-               event.setCancelled(true);
-               common.printDebugMessage("transfiguredEntityExplodeCancel: cancelling EntityExplodeEvent", null, null, false);
-            }
-         }
       }
    }
 

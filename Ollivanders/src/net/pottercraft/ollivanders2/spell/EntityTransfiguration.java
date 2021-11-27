@@ -87,6 +87,17 @@ public abstract class EntityTransfiguration extends TransfigurationBase
    @Override
    void transfigure()
    {
+      if (hasHitTarget() && !isTransfigured)
+      {
+         // we've hit a block and the projectile is stopped but we didn't find anything to transfigure
+         kill();
+         return;
+      }
+
+      if (isTransfigured)
+         // we've already transfigured something
+         return;
+
       for (Entity entity : getCloseEntities(1.5))
       {
          if (entity.getUniqueId() == player.getUniqueId())

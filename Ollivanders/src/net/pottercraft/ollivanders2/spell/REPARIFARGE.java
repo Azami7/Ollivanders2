@@ -116,7 +116,7 @@ public final class REPARIFARGE extends O2Spell
     * Decrease the duration of this transfiguration, if it is not permanent, by the percent.
     *
     * @param target the percent to reduce this transfiguration duration
-    * @return true if it changed a transfiguration, false otherwise
+    * @return true if the spell targeted a transfiguration, false otherwise
     */
    public boolean reparifargeEntity(@NotNull Entity target)
    {
@@ -127,7 +127,8 @@ public final class REPARIFARGE extends O2Spell
 
          if (spell instanceof TransfigurationBase && ((TransfigurationBase)spell).isEntityTransfigured(target))
          {
-            spell.kill();
+            if (checkSuccess())
+               spell.kill();
             return true;
          }
       }
@@ -139,7 +140,7 @@ public final class REPARIFARGE extends O2Spell
     * Decrease the duration of this transfiguration, if it is not permanent, by the percent.
     *
     * @param target the percent to reduce this transfiguration duration
-    * @return true if it changed a transfiguration, false otherwise
+    * @return true if the spell targeted a transfiguration, false otherwise
     */
    public boolean reparifargeBlock(@NotNull Block target)
    {
@@ -150,7 +151,8 @@ public final class REPARIFARGE extends O2Spell
 
          if (spell instanceof TransfigurationBase && ((TransfigurationBase)spell).isBlockTransfigured(target))
          {
-            spell.kill();
+            if (checkSuccess())
+               spell.kill();
             return true;
          }
       }
@@ -167,7 +169,7 @@ public final class REPARIFARGE extends O2Spell
    {
       int success = Math.abs(Ollivanders2Common.random.nextInt()) % 100;
 
-      if (success <= successRate)
+      if (success < successRate)
          return true;
       else
          return false;
