@@ -55,23 +55,19 @@ public final class ANIMAGUS_POTION extends O2Potion
       if (o2p == null || !Ollivanders2.libsDisguisesEnabled)
       {
          player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
-
          return;
       }
 
       if (o2p.isAnimagus())
       {
          if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION))
-         {
             Ollivanders2API.getPlayers().playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION);
-         }
 
          player.sendMessage(Ollivanders2.chatColor + "You taste something vaguely familiar.");
-
          return;
       }
 
-      if (!player.getWorld().isThundering())
+      if (!player.getWorld().isThundering() && Ollivanders2.useStrictAnimagusConditions)
       {
          // potion only works in a thunderstorm
          player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");

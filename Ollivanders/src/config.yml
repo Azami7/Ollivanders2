@@ -25,6 +25,7 @@ bookLearning: true
 nonVerbalSpellCasting: false
 spellJournal: true
 hostileMobAnimagi: false
+useStrictAnimagusConditions: true
 deathExpLoss: false
 apparateLocations: false
 maxSpellLevel: false
