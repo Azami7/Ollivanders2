@@ -33,7 +33,7 @@ public final class SCUTO_CONTERAM extends O2Spell
       spellType = O2SpellType.SCUTO_CONTERAM;
       branch = O2MagicBranch.CHARMS;
 
-      text = "Scuto conteram will shorten the duration of a stationary spell.";
+      text = "Scuto conteram will shorten the duration of some stationary spells.";
    }
 
    /**
