@@ -62,6 +62,8 @@ public final class AGUAMENTI extends BlockTransfiguration
 
       // set materials that can be transfigured by this spell
       materialWhitelist.add(Material.AIR);
+      materialWhitelist.add(Material.FIRE);
+      materialWhitelist.add(Material.SOUL_FIRE);
 
       // world-guard flags
       if (Ollivanders2.worldGuardEnabled)

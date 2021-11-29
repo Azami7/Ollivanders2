@@ -11,6 +11,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.Material;
@@ -105,11 +106,11 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      */
     protected void transfigure()
     {
-        if (isTransfigured || !hasHitTarget())
+        if (isTransfigured || !hasHitTarget() || getTargetBlock() == null)
             return;
 
-        // get the objects to be transfigured
-        for (Block blockToChange : Ollivanders2API.common.getBlocksInRadius(location, (int) (radius * radiusModifier)))
+        // get the objects to be transfigured, target block is not always the block at the location (such as aguamenti), so we cannot use 'location'
+        for (Block blockToChange : Ollivanders2API.common.getBlocksInRadius(getTargetBlock().getLocation(), (int) (radius * radiusModifier)))
         {
             if (!canTransfigure(blockToChange))
                 continue;

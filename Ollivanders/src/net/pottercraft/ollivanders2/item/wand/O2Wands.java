@@ -68,19 +68,19 @@ public class O2Wands
         if (O2ItemType.ELDER_WAND.isItemThisType(itemstack))
             return true;
 
-        if (!(O2ItemType.WAND.isItemThisType(itemstack)))
+        if ((O2ItemType.WAND.isItemThisType(itemstack)))
         {
-            common.printDebugMessage("not a wand", null, null, false);
-            return false;
+            // check NBT wand
+            if (checkNBT(itemstack))
+                return true;
+
+            // check lore-based wand
+            // TODO remove this when we remove lore-based items in the next major rev
+            return checkLore(itemstack);
         }
 
-        // check NBT wand
-        if (checkNBT(itemstack))
-            return true;
-
-        // check lore-based wand
-        // TODO remove this when we remove lore-based items in the next major rev
-        return checkLore(itemstack);
+        common.printDebugMessage("not a wand", null, null, false);
+        return false;
     }
 
     /**
@@ -235,11 +235,12 @@ public class O2Wands
      * @param itemStack the item to check
      * @return true if the lore matches this wood and core, false otherwise
      */
-    public boolean matchesLore(@NotNull String core, @NotNull String wood, @NotNull ItemStack itemStack)
+    public boolean matchesLore(@NotNull String wood, @NotNull String core, @NotNull ItemStack itemStack)
     {
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null)
             return false;
+
 
         List<String> lore = itemStack.getItemMeta().getLore();
         if (lore == null)
@@ -249,10 +250,10 @@ public class O2Wands
         if (wandLore.length != 2)
             return false;
 
-        if (wood.equalsIgnoreCase(wandLore[0]) && core.equalsIgnoreCase(wandLore[1]))
-            return true;
+        if (!wood.equalsIgnoreCase(wandLore[0]) || !core.equalsIgnoreCase(wandLore[1]))
+            return false;
 
-        return false;
+        return true;
     }
 
     /**
