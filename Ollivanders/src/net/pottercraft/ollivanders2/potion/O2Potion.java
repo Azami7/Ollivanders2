@@ -418,6 +418,7 @@ public abstract class O2Potion
       // rand < 5, no effect
 
       potion.setItemMeta(meta);
+      meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
       return potion;
    }

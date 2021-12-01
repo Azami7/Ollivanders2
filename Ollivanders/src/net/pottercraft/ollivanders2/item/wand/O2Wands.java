@@ -7,8 +7,10 @@ import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -355,6 +357,10 @@ public class O2Wands
         // set the lore
         lore.add(wood + wandLoreConjunction + core);
         meta.setLore(lore);
+
+        // make wands not look like sticks
+        meta.addEnchant(Enchantment.LOYALTY, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
 
         wand.setItemMeta(meta);
         wand.setAmount(amount);
