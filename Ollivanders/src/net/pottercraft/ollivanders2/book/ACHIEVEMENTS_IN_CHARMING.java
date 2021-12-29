@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +16,7 @@ public class ACHIEVEMENTS_IN_CHARMING extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Achievements in Charming";
-      author = "Unknown";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.ACHIEVEMENTS_IN_CHARMING;
 
       spells.add(O2SpellType.LUMOS);
       spells.add(O2SpellType.WINGARDIUM_LEVIOSA);

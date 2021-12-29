@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +16,7 @@ public class EXTREME_INCANTATIONS extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Extreme Incantations";
-      author = "Violeta Stitch";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.EXTREME_INCANTATIONS;
 
       spells.add(O2SpellType.LUMOS_DUO);
       spells.add(O2SpellType.BOMBARDA);

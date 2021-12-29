@@ -2,17 +2,25 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Zombie;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Transfigures a rotten flesh into inferi
@@ -20,23 +28,31 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  */
-public final class MORTUOS_SUSCITATE extends Transfiguration
+public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration implements Listener
 {
-   int duration;
+   /**
+    * Keep track of the number of inferi a player has created
+    */
+   final static HashMap <Player, Integer> inferiCount = new HashMap<>();
 
-   static int maxDuration = Ollivanders2Common.ticksPerSecond * 1200; // 10 minutes
+   /**
+    * The maximum number of inferi any player can create so this doesn't get out of control
+    */
+   final static int maxInferi = 10;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public MORTUOS_SUSCITATE ()
+   public MORTUOS_SUSCITATE(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.MORTUOS_SUSCITATE;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("They are corpses, dead bodies that have been bewitched to do a Dark wizard's bidding. Inferi have not been seen for a long time, however, not since Voldemort was last powerful... He killed enough people to make an army of them, of course.");
       }};
 
@@ -57,58 +73,114 @@ public final class MORTUOS_SUSCITATE extends Transfiguration
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.MORTUOS_SUSCITATE;
 
-      initSpell();
-
       // world guard flags
-      worldGuardFlags.add(Flags.MOB_SPAWNING);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.MOB_SPAWNING);
 
-      duration = ((int) usesModifier * Ollivanders2Common.ticksPerSecond * 2) + (Ollivanders2Common.ticksPerSecond * 30);
-      if (duration > maxDuration)
+      permanent = false;
+      maxDuration = Ollivanders2Common.ticksPerSecond * 1200; // 10 minutes
+
+      transfigurationMap.put(Material.ROTTEN_FLESH, EntityType.ZOMBIE);
+      entityCustomName = "Inferi";
+      consumeOriginal = true;
+
+      failureMessage = "You are not skilled enough to create more Inferi.";
+
+      initSpell();
+   }
+
+   /**
+    * Determine whether this player can create more inferi based on their skill level
+    */
+   @Override
+   void doInitSpell()
+   {
+      // can the player create more inferi?
+      int playerMax = (int)(usesModifier / 10);
+      if (playerMax > maxInferi)
+         playerMax = maxInferi;
+      else if (playerMax < 1)
+         playerMax = 1;
+
+      if (inferiCount.containsKey(player))
       {
-         duration = maxDuration;
+         int curInferi = inferiCount.get(player);
+         if (curInferi >= playerMax)
+         {
+            // if the number they currently have created exceeds their max based on skill, set success to 0
+            successRate = 0;
+         }
       }
    }
 
+   /**
+    * Reduce the count of inferi for this player by 1
+    */
    @Override
-   protected void doCheckEffect ()
+   void doRevert()
    {
-      if (!hasTransfigured())
+      if (isTransfigured)
       {
-         for (Item item : getItems(1.5))
-         {
-            if (item.getItemStack().getType() == Material.ROTTEN_FLESH)
-            {
-               Zombie inferi = (Zombie) transfigureEntity(item, EntityType.ZOMBIE, null);
-               if (inferi == null)
-               {
-                  common.printDebugMessage("MORTUOS_SUSCITATE.doCheckEffect: inferi is null", null, null, true);
-                  kill();
-                  return;
-               }
-
-               inferi.setCustomName("Inferius");
-            }
-         }
+         int curInferi = inferiCount.get(player) - 1;
+         if (curInferi <= 0)
+            inferiCount.remove(player);
+         else
+            inferiCount.put(player, curInferi);
       }
-      else
-      {
-         duration--;
+   }
 
-         if (duration <= 0)
-         {
-            kill();
-         }
-      }
+   /**
+    * Prevent the golem from harming its creator and have it attack anyone who does
+    *
+    * @param event the entity damage event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityDamageEvent(EntityDamageByEntityEvent event)
+   {
+      Entity attacker = event.getDamager();
+      Entity target = event.getEntity();
+      EntityDamageEvent.DamageCause cause = event.getCause();
 
-      if (hasHitTarget() && !hasTransfigured())
-      {
+      if (!Ollivanders2Common.attackDamageCauses.contains(cause))
+         return;
+
+      if (attacker.getUniqueId() == transfiguredEntity.getUniqueId() && target.getUniqueId() == player.getUniqueId())
+         // prevent the inferi attacking its creator
+         event.setCancelled(true);
+      else if (target.getUniqueId() == player.getUniqueId() && transfiguredEntity instanceof LivingEntity)
+         // attack anyone who attacks the creator
+         ((LivingEntity)transfiguredEntity).attack(attacker);
+   }
+
+   /**
+    * Prevent inferi from targeting its creator.
+    *
+    * @param event the entity target event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityTargetEvent(EntityTargetEvent event)
+   {
+      Entity attacker = event.getEntity();
+      Entity target = event.getTarget();
+
+      if (target == null)
+         return;
+
+      if (attacker.getUniqueId() == transfiguredEntity.getUniqueId() && target.getUniqueId() == player.getUniqueId())
+         event.setCancelled(true);
+   }
+
+   /**
+    * Handle when the inferi is killed.
+    *
+    * @param event the entity death event
+    */
+   @EventHandler(priority = EventPriority.LOWEST)
+   public void onEntityDeath(EntityDeathEvent event)
+   {
+      Entity entity = event.getEntity();
+      if (entity.getUniqueId() == transfiguredEntity.getUniqueId())
+         // the inferi was killed, kill this spell
          kill();
-      }
-   }
-
-   @Override
-   protected void revert ()
-   {
-      endTransfigure();
    }
 }

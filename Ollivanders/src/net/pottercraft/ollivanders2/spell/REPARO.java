@@ -24,15 +24,17 @@ public final class REPARO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public REPARO()
+   public REPARO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.REPARO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Mending Charm");
          add("Mr. Weasley took Harry's glasses, gave them a tap of his wand and returned them, good as new.");
@@ -55,17 +57,22 @@ public final class REPARO extends O2Spell
 
       spellType = O2SpellType.REPARO;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.ITEM_DROP);
-      worldGuardFlags.add(Flags.ITEM_PICKUP);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.ITEM_DROP);
+         worldGuardFlags.add(Flags.ITEM_PICKUP);
+      }
+
+      initSpell();
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<Item> items = getItems(1.5);
+
       for (Item item : items)
       {
          ItemStack stack = item.getItemStack();
@@ -74,15 +81,23 @@ public final class REPARO extends O2Spell
          if (itemMeta instanceof Damageable)
          {
             int damage = ((Damageable) itemMeta).getDamage();
-            damage -= usesModifier * usesModifier;
+
+            damage = damage - (int)usesModifier;
+
             if (damage < 0)
             {
                damage = 0;
             }
 
             ((Damageable) itemMeta).setDamage(damage);
+            stack.setItemMeta(itemMeta);
+
             item.setItemStack(stack);
             kill();
+
+            player.sendMessage(Ollivanders2.chatColor + item.getName() + " looks newer than before.");
+
+            break;
          }
       }
 

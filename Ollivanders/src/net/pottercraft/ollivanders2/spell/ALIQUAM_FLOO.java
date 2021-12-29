@@ -4,8 +4,8 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,15 +28,17 @@ public final class ALIQUAM_FLOO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ALIQUAM_FLOO()
+   public ALIQUAM_FLOO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ALIQUAM_FLOO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"In use for centuries, the Floo Network, while somewhat uncomfortable, has many advantages. Firstly, unlike broomsticks, the Network can be used without fear of breaking the International Statute of Secrecy. Secondly, unlike Apparition, there is little to no danger of serious injury. Thirdly, it can be used to transport children, the elderly and the infirm.\"");
       }};
@@ -45,7 +47,7 @@ public final class ALIQUAM_FLOO extends O2Spell
               + "Place a sign above a fire with the unique name of the fireplace and cast this spell at the fire. "
               + "Once your fireplace is registered, you can destroy the sign and even put out the fire, but you must not "
               + "place a solid block where the fire was, or you will have to re-register your fireplace. "
-              + "People can use your fireplace via Floo powder, which is made by smelting ender pearl. "
+              + "People can use your fireplace via Floo powder. "
               + "Toss the powder into a registered fireplace, walk into the fire, and say the name of your destination.";
    }
 
@@ -62,29 +64,32 @@ public final class ALIQUAM_FLOO extends O2Spell
       spellType = O2SpellType.ALIQUAM_FLOO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // required worldGuard state flags
-      worldGuardFlags.add(Flags.INTERACT);
-      worldGuardFlags.add(Flags.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.INTERACT);
+         worldGuardFlags.add(Flags.BUILD);
+      }
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
       projectilePassThrough.remove(Material.FIRE);
+
+      initSpell();
    }
 
    /**
     * Creates an aliquam floo stationary spell at this location if it is a fire with a sign over it.
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
 
       Block target = getTargetBlock();
 
-      if (target != null && target.getType() == Material.FIRE)
+      if (target != null && (target.getType() == Material.FIRE || target.getType() == Material.CAMPFIRE))
       {
          Location statLocation = new Location(location.getWorld(), target.getX() + 0.5, target.getY() + 0.125, target.getZ() + 0.5);
 
@@ -98,7 +103,7 @@ public final class ALIQUAM_FLOO extends O2Spell
             common.printDebugMessage("Floo name on sign is " + flooName, null, null, false);
 
             // make sure there is not already an aliquam floo spell at this block
-            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+            for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
             {
                if (stat instanceof net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO)
                {

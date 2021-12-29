@@ -1,8 +1,7 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.potion.*;
+import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,9 +18,7 @@ public class POTION_OPUSCULE extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Potion Opuscule";
-      author = "Arsenius Jigger";
-      branch = O2MagicBranch.POTIONS;
+      bookType = O2BookType.POTION_OPUSCULE;
 
       potions.add(O2PotionType.ANIMAGUS_POTION);
       potions.add(O2PotionType.BABBLING_BEVERAGE);

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -30,15 +30,17 @@ public final class DEFODIO extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public DEFODIO()
+   public DEFODIO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.DEFODIO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Gouging Spell enables a witch or wizard to carve through earth and stone with ease. From budding Herbologists digging for Snargaluff seedlings to treasure-hunting curse breakers uncovering ancient wizard tombs, the Gouging Spell makes all manner of heavy labour a matter of pointing a wand.");
          add("The Gouging Charm");
@@ -60,12 +62,11 @@ public final class DEFODIO extends O2Spell
       spellType = O2SpellType.DEFODIO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       depth = (int) usesModifier;
 
       // world-guard flags
-      worldGuardFlags.add(Flags.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.BUILD);
 
       // material black list
       materialBlackList.add(Material.WATER);
@@ -77,6 +78,8 @@ public final class DEFODIO extends O2Spell
          if (!materialBlackList.contains(material))
             materialBlackList.add(material);
       }
+
+      initSpell();
    }
 
    /**
@@ -115,7 +118,7 @@ public final class DEFODIO extends O2Spell
       // stop the spell if something prevented the current block breaking naturally
       if (curBlock.breakNaturally())
       {
-         depth--;
+         depth = depth - 1;
 
          Location nextLoc = curLoc.add(vector);
          curBlock = nextLoc.getBlock();

@@ -2,11 +2,11 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -24,15 +24,17 @@ public final class PARTIS_TEMPORUS extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PARTIS_TEMPORUS()
+   public PARTIS_TEMPORUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PARTIS_TEMPORUS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Parting Charm");
       }};
@@ -55,20 +57,22 @@ public final class PARTIS_TEMPORUS extends O2Spell
       branch = O2MagicBranch.CHARMS;
 
       initSpell();
+   }
 
+   @Override
+   void doInitSpell()
+   {
       int durationInSeconds = (int) usesModifier;
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      }
 
       duration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
-      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
+      for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (stationarySpell.getCasterID() == player.getUniqueId())
          {
@@ -86,7 +90,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
 
       if (hasHitTarget())
       {
-         duration--;
+         duration = duration - 1;
 
          if (duration <= 0)
          {
@@ -96,9 +100,9 @@ public final class PARTIS_TEMPORUS extends O2Spell
    }
 
    @Override
-   protected void revert ()
+   protected void revert()
    {
-      for (StationarySpellObj stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
+      for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
       {
          if (stationarySpell.getCasterID() == player.getUniqueId())
          {

@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -19,12 +19,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * The super class for transfiguration projectile spells.
+ * The super class for entity transfiguration projectile spells.
  *
  * @version Ollivanders2
  * @author lownes
  * @author Azami7
  */
+@Deprecated
 public abstract class Transfiguration extends O2Spell
 {
    private final UUID nullUUID = UUID.fromString("00000000-0000-0000-0000-000000000000");
@@ -50,10 +51,12 @@ public abstract class Transfiguration extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public Transfiguration ()
+   public Transfiguration(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.TRANSFIGURATION;
    }
@@ -159,7 +162,7 @@ public abstract class Transfiguration extends O2Spell
     * @return The newly spawned Entity. Null if no entity was spawned from the ending of the transfiguration.
     */
    @Nullable
-   public Entity endTransfigure ()
+   public Entity endTransfigure()
    {
       kill();
       for (World w : p.getServer().getWorlds())
@@ -230,7 +233,7 @@ public abstract class Transfiguration extends O2Spell
     *
     * @return If the transfiguration has taken place
     */
-   public boolean hasTransfigured ()
+   public boolean hasTransfigured()
    {
       return hasTransfigured;
    }
@@ -240,34 +243,8 @@ public abstract class Transfiguration extends O2Spell
     *
     * @return the toID
     */
-   public UUID getToID ()
+   public UUID getToID()
    {
       return toID;
-   }
-
-   /**
-    * Decrease the duration of this transfiguration, if it is not permanent, by the percent.
-    *
-    * @param percent the percent to reduce this transfiguration duration
-    */
-   public void reparifarge (int percent)
-   {
-      if (permanent)
-      {
-         return;
-      }
-
-      if (percent > 50)
-      {
-         percent = 50;
-      }
-      else if (percent < 1)
-      {
-         percent = 1;
-      }
-
-      double reduction = spellDuration * ((double) percent / 100);
-
-      spellDuration = spellDuration - (int) reduction;
    }
 }

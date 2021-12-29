@@ -20,15 +20,17 @@ public final class LACARNUM_INFLAMARI extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LACARNUM_INFLAMARI()
+   public LACARNUM_INFLAMARI(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.LACARNUM_INFLAMARI;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Some of the new incantations, such as ‘lacarnum inflamari’ must have sounded more dramatic onscreen – although by the time you’ve managed to say ‘lacarnum inflamari’, you’ve surely lost precious seconds in which the Devil’s Snare might have throttled you. But that’s showbiz.");
          add("She whipped out her wand, waved it, muttered something, and sent a jet of the same bluebell flames she had used on Snape at the plant. In a matter of seconds, the two boys felt it loosening its grip as it cringed away from the light and warmth.");
@@ -53,14 +55,15 @@ public final class LACARNUM_INFLAMARI extends O2Spell
       spellType = O2SpellType.LACARNUM_INFLAMARI;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
-      worldGuardFlags.add(Flags.LIGHTER);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.LIGHTER);
+
+      initSpell();
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       player.launchProjectile(SmallFireball.class, vector);
 

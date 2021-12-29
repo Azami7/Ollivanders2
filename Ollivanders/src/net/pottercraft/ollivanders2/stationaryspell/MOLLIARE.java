@@ -3,6 +3,8 @@ package net.pottercraft.ollivanders2.stationaryspell;
 import org.bukkit.Location;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.entity.Entity;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -13,8 +15,9 @@ import java.util.UUID;
  * Negates fall damage.
  *
  * @author lownes
+ * @author Azami7
  */
-public class MOLLIARE extends StationarySpellObj implements StationarySpell
+public class MOLLIARE extends O2StationarySpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -45,9 +48,33 @@ public class MOLLIARE extends StationarySpellObj implements StationarySpell
       spellType = O2StationarySpellType.MOLLIARE;
    }
 
+   /**
+    * Upkeep
+    */
+   @Override
    public void checkEffect ()
    {
       age();
+   }
+
+   /**
+    * Handle player interact event
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnEntityDamageEvent (@NotNull EntityDamageEvent event)
+   {
+      if (event.getCause() != EntityDamageEvent.DamageCause.FALL)
+         return;
+
+      Entity entity = event.getEntity();
+
+      if (isInside(entity.getLocation()))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("MOLLIARE: canceled EntityDamageEvent", null, null, false);
+      }
    }
 
    /**
@@ -68,5 +95,5 @@ public class MOLLIARE extends StationarySpellObj implements StationarySpell
     * @param spellData a map of the saved spell data
     */
    @Override
-   public void deserializeSpellData(@NotNull Map<String, String> spellData) { }
+   public void deserializeSpellData(@NotNull Map<String, String> spellData) {}
 }

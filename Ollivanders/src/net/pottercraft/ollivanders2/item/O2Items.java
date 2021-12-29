@@ -1,7 +1,12 @@
 package net.pottercraft.ollivanders2.item;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.item.enchantment.EnchantedItems;
+import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
+import net.pottercraft.ollivanders2.item.wand.O2Wands;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -21,6 +26,17 @@ public class O2Items
 
    final private HashMap<O2ItemType, O2Item> O2ItemMap = new HashMap<>();
 
+   public EnchantedItems enchantedItems;
+
+   private Ollivanders2Common common;
+
+   static O2Wands wands;
+
+   /**
+    * Namespace key for NTB flags
+    */
+   public static NamespacedKey o2ItemTypeKey;
+
    /**
     * Constructor
     *
@@ -29,20 +45,27 @@ public class O2Items
    public O2Items(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
+      wands = new O2Wands(p);
 
-      initItems();
+      enchantedItems = new EnchantedItems(p);
+      p.getServer().getPluginManager().registerEvents(enchantedItems, p);
+
+      o2ItemTypeKey = new NamespacedKey(p, "o2enchantment_id");
    }
 
    /**
     * Initialization
     */
-   private void initItems()
+   public void onEnable()
    {
       for (O2ItemType itemType : O2ItemType.values())
       {
          O2Item item = new O2Item(p, itemType);
          O2ItemMap.put(item.getType(), item);
       }
+
+      enchantedItems.onEnable();
    }
 
    /**
@@ -60,9 +83,18 @@ public class O2Items
          return null;
       }
 
-      O2Item item = O2ItemMap.get(itemType);
+      O2Item o2item = O2ItemMap.get(itemType);
+      ItemStack itemStack = o2item.getItem(amount);
 
-      return item.getItem(amount);
+      // does this item need an enchantment on it?
+      ItemEnchantmentType enchantment = itemType.getItemEnchantment();
+      if (itemStack != null && enchantment != null)
+      {
+         String eid = common.getCurrentTimestamp() + " " + itemType.getName() + " " + enchantment.getName();
+         enchantedItems.addEnchantedItem(itemStack, enchantment, 1, eid, "");
+      }
+
+      return itemStack;
    }
 
    /**
@@ -170,10 +202,7 @@ public class O2Items
       }
       catch (Exception e)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("No item type " + itemTypeString + " found.");
-         }
+         common.printDebugMessage("No item type " + itemTypeString + " found.", null, null, false);
       }
 
       return itemType;
@@ -229,5 +258,15 @@ public class O2Items
       }
 
       return itemNames;
+   }
+
+   /**
+    * Get wands management class
+    *
+    * @return wands
+    */
+   public O2Wands getWands()
+   {
+      return wands;
    }
 }

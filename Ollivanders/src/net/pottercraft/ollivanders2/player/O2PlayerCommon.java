@@ -6,7 +6,8 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import org.bukkit.Material;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.item.O2ItemType;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
@@ -24,6 +25,8 @@ public final class O2PlayerCommon
 {
    final Ollivanders2 p;
 
+   final Ollivanders2Common common;
+
    /**
     * Constructor
     *
@@ -32,9 +35,10 @@ public final class O2PlayerCommon
    public O2PlayerCommon(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(plugin);
    }
 
-   private static final List<EntityType> commonAnimagusShapes = new ArrayList<EntityType>()
+   private static final List<EntityType> commonAnimagusShapes = new ArrayList<>()
    {{
       add(EntityType.COW);
       add(EntityType.PIG);
@@ -49,16 +53,17 @@ public final class O2PlayerCommon
       add(EntityType.FOX);
    }};
 
-   private static final List<EntityType> rareAnimagusShapes = new ArrayList<EntityType>()
+   private static final List<EntityType> rareAnimagusShapes = new ArrayList<>()
    {{
       add(EntityType.OCELOT);
       add(EntityType.POLAR_BEAR);
       add(EntityType.TRADER_LLAMA);
       add(EntityType.PANDA);
       add(EntityType.TURTLE);
+      add(EntityType.IRON_GOLEM);
    }};
 
-   private static final List<EntityType> hostileAnimagusShapes = new ArrayList<EntityType>()
+   private static final List<EntityType> hostileAnimagusShapes = new ArrayList<>()
    {{
       add(EntityType.SPIDER);
       add(EntityType.SLIME);
@@ -66,9 +71,10 @@ public final class O2PlayerCommon
       add(EntityType.CREEPER);
       add(EntityType.SILVERFISH);
       add(EntityType.SHULKER);
+      add(EntityType.HOGLIN);
+      add(EntityType.PIGLIN);
+      add(EntityType.STRIDER);
    }};
-
-   static final String wandLoreConjunction = " and ";
 
    /**
     * Take an integer and get the corresponding year
@@ -150,77 +156,6 @@ public final class O2PlayerCommon
    }
 
    /**
-    * Does the player hold a wand item in their primary hand?
-    *
-    * @param player player to check.
-    * @return True if the player holds a wand. False if not or if player is null.
-    */
-   public boolean holdsWand(@NotNull Player player)
-   {
-      return holdsWand(player, EquipmentSlot.HAND);
-   }
-
-   /**
-    * Does the player hold a wand item in their hand?
-    *
-    * @param player player to check.
-    * @param hand   the equipment slot to check for this player
-    * @return True if the player holds a wand. False if not or if player is null.
-    * @since 2.2.7
-    */
-   public boolean holdsWand(@NotNull Player player, @NotNull EquipmentSlot hand)
-   {
-      ItemStack held;
-      if (hand == EquipmentSlot.HAND)
-      {
-         held = player.getInventory().getItemInMainHand();
-      }
-      else if (hand == EquipmentSlot.OFF_HAND)
-      {
-         held = player.getInventory().getItemInOffHand();
-      }
-      else
-         return false;
-
-      if (held.getType() == Material.AIR)
-      {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("holdsWand: player not holding an item");
-         }
-         return false;
-      }
-
-      return Ollivanders2API.common.isWand(held);
-   }
-
-   /**
-    * Is this ItemStack the player's destined wand?
-    *
-    * @param player player to check the stack against.
-    * @param stack  ItemStack to be checked
-    * @return true if yes, false if no
-    */
-   public boolean destinedWand(@NotNull Player player, @NotNull ItemStack stack)
-   {
-      if (Ollivanders2API.common.isWand(stack))
-      {
-         O2Player o2Player = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
-
-         if (o2Player == null)
-         {
-            return false;
-         }
-
-         return o2Player.isDestinedWand(stack);
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /**
     * Checks what kind of wand a player holds in their primary hand. Returns a value based on the
     * wand and it's relation to the player.
     *
@@ -228,7 +163,7 @@ public final class O2PlayerCommon
     * @return 2 - the wand is not player's type AND/OR is not allied to player.<p>
     * 1 - the wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
     * 0.5 - the wand is the elder wand and it is allied to player.
-    * @assumes player not null, player holding a wand
+    * @assumes player not null, player holding a wand (holdsWand has already been checked)
     */
    public double wandCheck(@NotNull Player player)
    {
@@ -265,42 +200,46 @@ public final class O2PlayerCommon
    /**
     * Checks what kind of wand a player holds. Returns a value based on the wand and it's relation to the player.
     *
-    * @param player - the player to check
-    * @param item   - the
-    * @return 2 - The wand is not player's type AND/OR is not allied to player.<p>
-    * 1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player.<p>
-    * 0.5 - The wand is the elder wand and it is allied to player.
-    * @assumes the item stack being checked is a wand
+    * @param player the player to check
+    * @param itemStack the item to check
+    * @return 2 - The wand is not player's type
+    * 1 - The wand is player's type
+    * 0.5 - The wand is the elder wand
+    * -1 - The player is not holding a wand
     * @since 2.2.7
     */
-   private double doWandCheck(@NotNull Player player, @NotNull ItemStack item)
+   private double doWandCheck(@NotNull Player player, @NotNull ItemStack itemStack)
    {
-      ItemMeta meta = item.getItemMeta();
+      ItemMeta meta = itemStack.getItemMeta();
       if (meta == null)
-         return 2;
+         // not an ollivanders item
+         return -1;
 
-      List<String> lore = item.getItemMeta().getLore();
-      if (lore == null)
-         // this should never happen if idWand() check was done first
-         return 2;
+      if (O2ItemType.ELDER_WAND.isItemThisType(itemStack))
+         // elder wand
+         return 0.5;
 
-      if (lore.get(0).equals("Blaze and Ender Pearl")) // elder wand
+      if (!O2ItemType.WAND.isItemThisType(itemStack))
+         // not a wand
+         return -1;
+
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+      if (o2p == null)
       {
-         if (lore.size() == 2 && lore.get(1).equals(player.getUniqueId().toString()))
-         {
-            // wand is Elder Wand and allied to player
-            return 0.5;
-         }
-      }
-      else // not the elder wand
-      {
-         if (!destinedWand(player, player.getInventory().getItemInMainHand()))
-         {
-            // not the player's destined wand
-            return 2;
-         }
+         // not a player
+         common.printDebugMessage("O2Player is null", null, null, true);
+         return -1;
       }
 
+      if (!(Ollivanders2API.getItems().getWands().isDestinedWand(o2p, itemStack)))
+      {
+         // not the player's destined wand
+         common.printDebugMessage("O2PlayerCommon.doWandCheck: player holds a wand which is not their destined wand", null, null, false);
+         return 2;
+      }
+
+      // player's destined wand
+      common.printDebugMessage("O2PlayerCommon.doWandCheck: player holds their destined wand", null, null, false);
       return 1;
    }
 }

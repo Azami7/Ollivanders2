@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -31,15 +31,17 @@ public final class BRACKIUM_EMENDO extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public BRACKIUM_EMENDO ()
+   public BRACKIUM_EMENDO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.BRACKIUM_EMENDO;
       branch = O2MagicBranch.HEALING;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("Bone-Healing Spell");
          add("\"Lie back, Harry. It's a simple charm I've used countless times --\" - Gilderoy Lockhard");
          add("As Harry got to his feet, he felt strangely lopsided. Taking a deep breath he looked down at his right side. What he saw nearly made him pass out again. Poking out of the end of his robes was what looked like a thick, fleshcoloured rubber glove. He tried to move his fingers. Nothing happened. Lockhart hadn't mended Harry's bones. He had removed them.");
@@ -70,7 +72,7 @@ public final class BRACKIUM_EMENDO extends O2Spell
     * heal them.
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<LivingEntity> entities = getLivingEntities(1.5);
 

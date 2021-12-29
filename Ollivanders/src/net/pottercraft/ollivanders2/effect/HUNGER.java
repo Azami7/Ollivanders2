@@ -29,4 +29,10 @@ public class HUNGER extends PotionEffectSuper
         divinationText.add("shall be cursed");
         divinationText.add("will become insatiable");
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

@@ -20,15 +20,17 @@ public class PYROSVESTIRAS extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PYROSVESTIRAS()
+   public PYROSVESTIRAS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.CHARMS;
       spellType = O2SpellType.PYROSVESTIRAS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("A charm that extinguishes fires. Most commonly employed by Dragonologists.");
          add("The Extinguishing Charm");
       }};
@@ -50,29 +52,27 @@ public class PYROSVESTIRAS extends BlockTransfiguration
       spellType = O2SpellType.PYROSVESTIRAS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
-      if (usesModifier > 50)
-      {
-         radius = 10;
-      }
-      else if (usesModifier < 10)
-      {
-         radius = 1;
-      }
-      else
-      {
-         radius = (int) (usesModifier / 10);
-      }
-
       permanent = true;
-
       transfigurationMap.put(Material.FIRE, Material.AIR);
 
       // whitelist only fire blocks
       materialWhitelist.add(Material.FIRE);
 
       // world guard flags
-      worldGuardFlags.add(Flags.BUILD);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.BUILD);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      if (usesModifier > 50)
+         radius = 10;
+      else if (usesModifier < 10)
+         radius = 1;
+      else
+         radius = (int) (usesModifier / 10);
    }
 }

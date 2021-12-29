@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +16,7 @@ public class ESSENTIAL_DARK_ARTS extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Essential Dark Arts Defence";
-      title = "The Essential Defence Against the Dark Arts";
-      author = "Arsenius Jigger";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.ESSENTIAL_DARK_ARTS;
 
       spells.add(O2SpellType.CARPE_RETRACTUM);
       spells.add(O2SpellType.GLACIUS);

@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,10 +35,12 @@ public abstract class Pyrotechnia extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public Pyrotechnia()
+   public Pyrotechnia(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
    }
 
    /**
@@ -59,7 +61,7 @@ public abstract class Pyrotechnia extends O2Spell
     * Shoot a firework in to the sky from caster's location.
     */
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!isSpellAllowed())
       {
@@ -129,7 +131,7 @@ public abstract class Pyrotechnia extends O2Spell
          meta.addEffect(builder.build());
          firework.setFireworkMeta(meta);
 
-         fireworkCount++;
+         fireworkCount = fireworkCount + 1;
       }
       else
          kill();
@@ -140,7 +142,7 @@ public abstract class Pyrotechnia extends O2Spell
     *
     * @param max the base maximum
     */
-   void setMaxFireworks (int max)
+   void setMaxFireworks(int max)
    {
       if (usesModifier > (max*10))
       {
@@ -154,4 +156,7 @@ public abstract class Pyrotechnia extends O2Spell
       if (maxFireworks < 1)
          maxFireworks = 1;
    }
+
+   @Override
+   protected void doCheckEffect() {}
 }

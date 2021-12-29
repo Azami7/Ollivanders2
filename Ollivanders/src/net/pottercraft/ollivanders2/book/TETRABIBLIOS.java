@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
@@ -18,9 +17,7 @@ public class TETRABIBLIOS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Tetrabilios";
-      author = "Ptolemy";
-      branch = O2MagicBranch.DIVINATION;
+      bookType = O2BookType.TETRABIBLIOS;
 
       spells.add(O2SpellType.ASTROLOGIA);
       spells.add(O2SpellType.PROPHETEIA);

@@ -4,9 +4,9 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -32,15 +32,17 @@ public final class DISSENDIUM extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public DISSENDIUM()
+   public DISSENDIUM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.DISSENDIUM;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Opening Charm");
          add("At once, the statue's hump opened wide enough to admit a fairly thin person.");
@@ -62,15 +64,16 @@ public final class DISSENDIUM extends O2Spell
       spellType = O2SpellType.DISSENDIUM;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       maxOpenTime = usesModifier * Ollivanders2Common.ticksPerSecond;
 
       openTime = 0;
       isOpen = false;
 
       // world guard flags
-      worldGuardFlags.add(Flags.USE);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.USE);
+
+      initSpell();
    }
 
    /**
@@ -78,7 +81,7 @@ public final class DISSENDIUM extends O2Spell
     * duration of the spell is reached.
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
@@ -87,7 +90,7 @@ public final class DISSENDIUM extends O2Spell
       if (isOpen)
       {
          // count down the open time
-         openTime++;
+         openTime = openTime + 1;
 
          // if the open time has expired, close the trap door and kill the spell
          if (openTime >= maxOpenTime)
@@ -134,9 +137,9 @@ public final class DISSENDIUM extends O2Spell
 
       // check for colloportus spell locking this door
       Location targetLocation = target.getLocation();
-      List<StationarySpellObj> spellsAtLocation = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(targetLocation);
+      List<O2StationarySpell> spellsAtLocation = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(targetLocation);
 
-      for (StationarySpellObj statSpell : spellsAtLocation)
+      for (O2StationarySpell statSpell : spellsAtLocation)
       {
          if (statSpell instanceof COLLOPORTUS)
          {
@@ -164,7 +167,7 @@ public final class DISSENDIUM extends O2Spell
    /**
     * Close the trap door
     */
-   private void closeTrapDoor ()
+   private void closeTrapDoor()
    {
       if (!isOpen)
       {

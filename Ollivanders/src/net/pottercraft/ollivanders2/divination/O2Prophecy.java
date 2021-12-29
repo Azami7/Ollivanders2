@@ -4,7 +4,7 @@ import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -141,7 +141,7 @@ public class O2Prophecy
 
    public void age()
    {
-      time--;
+      time = time - 1;
    }
 
    public void kill()
@@ -185,7 +185,7 @@ public class O2Prophecy
 
             try
             {
-               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, duration, targetID);
+               effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration, targetID);
             }
             catch (Exception e)
             {
@@ -195,9 +195,9 @@ public class O2Prophecy
             }
 
             effect.setPermanent(false);
-            Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-            O2Player player = Ollivanders2API.getPlayers(p).getPlayer(prophetID);
+            O2Player player = Ollivanders2API.getPlayers().getPlayer(prophetID);
             if (player != null)
             {
                String playerName = player.getPlayerName();

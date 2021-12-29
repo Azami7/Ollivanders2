@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -18,10 +17,7 @@ public class BASIC_HEXES extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Basic Hexes";
-      title = "Basic Hexes for the Busy and Vexed";
-      author = "Unknown";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.BASIC_HEXES;
 
       spells.add(O2SpellType.MUCUS_AD_NAUSEAM);
       spells.add(O2SpellType.IMPEDIMENTA);

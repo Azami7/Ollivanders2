@@ -19,10 +19,12 @@ public abstract class FumosSuper extends AddPotionEffectInRadius
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public FumosSuper()
+    public FumosSuper(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**
@@ -45,39 +47,9 @@ public abstract class FumosSuper extends AddPotionEffectInRadius
         projectilePassThrough.remove(Material.WATER);
 
         effectTypes.add(PotionEffectType.BLINDNESS);
-        strengthModifier = 1;
+
+        maxAmplifier = 1;
         minDurationInSeconds = 15;
         maxDurationInSeconds = 120;
-
-        durationInSeconds = minDurationInSeconds;
-        radius = minRadius;
-    }
-
-    /**
-     * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
-     * constants.
-     */
-    @Override
-    void doInitSpell()
-    {
-        radius = (int) usesModifier / 10;
-        if (radius < minDurationInSeconds)
-        {
-            radius = minRadius;
-        }
-        else if (radius > maxRadius)
-        {
-            radius = maxRadius;
-        }
-
-        durationInSeconds = (int) usesModifier;
-        if (durationInSeconds < minDurationInSeconds)
-        {
-            durationInSeconds = minDurationInSeconds;
-        }
-        else if (durationInSeconds > maxDurationInSeconds)
-        {
-            durationInSeconds = maxDurationInSeconds;
-        }
     }
 }

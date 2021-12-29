@@ -4,7 +4,7 @@ import net.pottercraft.ollivanders2.effect.IMMOBILIZE;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -22,14 +22,19 @@ public class PETRIFICUS_TOTALUS extends O2Spell
 {
    private final static int maxDurationInSeconds = 300;
 
-   public PETRIFICUS_TOTALUS()
+   /**
+    * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
+    */
+   public PETRIFICUS_TOTALUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PETRIFICUS_TOTALUS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Full Body-Bind Curse");
          add("\"Neville's arms snapped to his sides. His legs sprang together. His whole body rigid, he swayed where he stood and then fell flat on his face, stiff as a board. Neville's jaws were jammed together so he couldn't speak. Only his eyes were moving, looking at them in horror.\"");
@@ -57,7 +62,7 @@ public class PETRIFICUS_TOTALUS extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       for (LivingEntity live : getLivingEntities(1.5))
       {
@@ -76,7 +81,7 @@ public class PETRIFICUS_TOTALUS extends O2Spell
 
             IMMOBILIZE immobilize = new IMMOBILIZE(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, live.getUniqueId());
 
-            Ollivanders2API.getPlayers(p).playerEffects.addEffect(immobilize);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(immobilize);
 
             kill();
             return;

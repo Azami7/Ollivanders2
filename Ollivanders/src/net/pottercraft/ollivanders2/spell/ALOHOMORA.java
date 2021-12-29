@@ -10,7 +10,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,15 +24,17 @@ public final class ALOHOMORA extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ALOHOMORA()
+   public ALOHOMORA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ALOHOMORA;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("There are many ways to pass through locked doors in the magical world.  When you wish to enter or depart discreetly, however, the Unlocking Charm is your best friend.");
          add("The Unlocking Charm");
@@ -54,24 +56,34 @@ public final class ALOHOMORA extends O2Spell
       spellType = O2SpellType.ALOHOMORA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard
-      worldGuardFlags.add(Flags.INTERACT);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.INTERACT);
+
+      initSpell();
    }
 
    /**
     * Checks for colloportus stationary spells and ages them, if found
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       // check all the stationary spells in the location of the projectile for a Colloportus
-      List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location))
+      List<O2StationarySpell> inside = new ArrayList<>();
+      List<O2StationarySpell> stationarySpellsAtLocation = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
+
+      if (stationarySpellsAtLocation.size() < 1)
+      {
+         common.printDebugMessage("No stationary spells found at location", null, null, false);
+         return;
+      }
+
+      for (O2StationarySpell spell : stationarySpellsAtLocation)
       {
          if (spell instanceof COLLOPORTUS)
          {
+            common.printDebugMessage("Found a COLLOPORTUS spell", null, null, false);
             inside.add(spell);
          }
       }
@@ -79,7 +91,7 @@ public final class ALOHOMORA extends O2Spell
       // remove the colloportus spells found
       if (inside.size() > 0)
       {
-         for (StationarySpellObj spell : inside)
+         for (O2StationarySpell spell : inside)
          {
             spell.kill();
             spell.flair(10);

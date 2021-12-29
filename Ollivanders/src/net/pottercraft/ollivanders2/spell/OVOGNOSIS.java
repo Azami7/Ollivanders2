@@ -21,16 +21,18 @@ public class OVOGNOSIS extends Divination
 {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public OVOGNOSIS ()
+    public OVOGNOSIS (Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         spellType = O2SpellType.OVOGNOSIS;
         divinationType = O2DivinationType.OVOMANCY;
         branch = O2MagicBranch.DIVINATION;
 
-        flavorText = new ArrayList<String>()
+        flavorText = new ArrayList<>()
         {{
             add("Egg divination was a common practice for ancient Greeks and Romans.");
             add("A practice that dates back to Orpheus of Greeze allows the one to know the future though interpreting eggs.");

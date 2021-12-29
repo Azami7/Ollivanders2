@@ -20,15 +20,17 @@ public final class INCENDIO extends IncendioSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCENDIO ()
+   public INCENDIO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCENDIO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("The Fire-Making Charm");
          add("The ability to produce fire with the flick or a wand can be dangerous to your fellow students (and worse, your books).");
          add("From lighting a warm hearth to igniting a Christmas pudding, the Fire-Making Spell is always useful around the wizarding household.");
@@ -51,11 +53,11 @@ public final class INCENDIO extends IncendioSuper
       spellType = O2SpellType.INCENDIO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       strafe = false;
       radius = 1;
       blockRadius = 1;
       durationModifier = 1;
+
+      initSpell();
    }
 }

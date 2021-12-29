@@ -18,15 +18,17 @@ public final class LIBERACORPUS extends ReduceO2Effect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LIBERACORPUS()
+   public LIBERACORPUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.LIBERACORPUS;
       branch = O2MagicBranch.COUNTER_SPELL;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Levicorpus Counter-Spell");
          add("...he jerked his wand upwards; Snape fell into a crumpled heap on the ground.");
@@ -49,8 +51,8 @@ public final class LIBERACORPUS extends ReduceO2Effect
       spellType = O2SpellType.LIBERACORPUS;
       branch = O2MagicBranch.COUNTER_SPELL;
 
-      initSpell();
-
       effectsToReduce.add(O2EffectType.SUSPENSION);
+
+      initSpell();
    }
 }

@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO;
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS;
@@ -17,7 +18,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,15 +32,17 @@ public final class INFORMOUS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INFORMOUS()
+   public INFORMOUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INFORMOUS;
       branch = O2MagicBranch.ARITHMANCY;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Basic Arithmancy");
       }};
@@ -68,7 +71,7 @@ public final class INFORMOUS extends O2Spell
     * Give information about an entity, stationary spells at the target, or the weather at the player's location.
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
@@ -87,7 +90,7 @@ public final class INFORMOUS extends O2Spell
 
       if (!gaveInfo)
       {
-         for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+         for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
          {
             if (spell.isInside(location))
             {
@@ -165,7 +168,7 @@ public final class INFORMOUS extends O2Spell
          player.sendMessage(Ollivanders2.chatColor + " has " + target.getExhaustion() + " exhaustion level.");
 
          // detectable effects
-         String infoText = Ollivanders2API.getPlayers(p).playerEffects.detectEffectWithInformous(entity.getUniqueId());
+         String infoText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithInformous(entity.getUniqueId());
          if (infoText != null)
          {
             player.sendMessage(Ollivanders2.chatColor + " " + infoText + ".");
@@ -178,11 +181,11 @@ public final class INFORMOUS extends O2Spell
             player.sendMessage(Ollivanders2.chatColor + " cannot see you.");
 
          // house
-         if (Ollivanders2.useHouses)
+         if (O2Houses.useHouses)
          {
-            if (Ollivanders2API.getHouses(p).isSorted(target))
+            if (Ollivanders2API.getHouses().isSorted(target))
             {
-               player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses(p).getHouse(target).getName() + ".");
+               player.sendMessage(Ollivanders2.chatColor + " is a member of " + Ollivanders2API.getHouses().getHouse(target).getName() + ".");
             }
             else
             {
@@ -197,7 +200,7 @@ public final class INFORMOUS extends O2Spell
     *
     * @param spell the stationary spell
     */
-   private void stationarySpellInfo(@NotNull StationarySpellObj spell)
+   private void stationarySpellInfo(@NotNull O2StationarySpell spell)
    {
       if (spell instanceof COLLOPORTUS)
       {

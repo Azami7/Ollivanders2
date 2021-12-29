@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -18,9 +17,7 @@ public class JINXES_FOR_THE_JINXED extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Jinxes for the Jinxed";
-      author = "Unknown";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.JINXES_FOR_THE_JINXED;
 
       openingPage = "Learn some jinxes to add to your arsenal with this handy volume.";
 

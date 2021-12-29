@@ -1,8 +1,7 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.potion.*;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -19,9 +18,7 @@ public class MOSTE_POTENTE_POTIONS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Moste Potente Potions";
-      author = "Phineas Bourne";
-      branch = O2MagicBranch.POTIONS;
+      bookType = O2BookType.MOSTE_POTENTE_POTIONS;
 
       potions.add(O2PotionType.BARUFFIOS_BRAIN_ELIXIR);
       potions.add(O2PotionType.WOLFSBANE_POTION);

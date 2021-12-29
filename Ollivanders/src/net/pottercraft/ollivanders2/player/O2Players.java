@@ -1,19 +1,26 @@
 package net.pottercraft.ollivanders2.player;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
 import java.util.ArrayList;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.effect.O2Effects;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.house.O2HouseType;
+import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,6 +46,11 @@ public class O2Players
     * The MC plugin callback
     */
    private final Ollivanders2 p;
+
+   /**
+    * Common functions
+    */
+   private final Ollivanders2Common common;
 
    /**
     * A count of the player records read at start. This can be used to prevent writing back out at server
@@ -76,6 +88,19 @@ public class O2Players
       p = plugin;
 
       playerEffects = new O2Effects(p);
+      common = new Ollivanders2Common(p);
+   }
+
+   public void onEnable()
+   {
+      loadO2Players();
+
+      playerEffects.onEnable();
+   }
+
+   public void onDisable()
+   {
+      saveO2Players();
    }
 
    /**
@@ -103,7 +128,7 @@ public class O2Players
    }
 
    /**
-    * Get an O2Player.
+    * Get an O2Player by UUID
     *
     * @param pid the UUID of the player
     * @return the O2Player if found, null otherwise.
@@ -112,6 +137,24 @@ public class O2Players
    public O2Player getPlayer(@NotNull UUID pid)
    {
       return O2PlayerMap.getOrDefault(pid, null);
+   }
+
+   /**
+    * Get an O2Player by name. This is inefficient compared to by UUID and should only be used when UUID is not available.
+    *
+    * @param playerName the name of the player
+    * @return the O2Player if found, null otherwise.
+    */
+   @Nullable
+   public O2Player getPlayer(@NotNull String playerName)
+   {
+      for (Entry<UUID, O2Player> entry : O2PlayerMap.entrySet())
+      {
+         if (entry.getValue().getPlayerName().equalsIgnoreCase(playerName))
+            return entry.getValue();
+      }
+
+      return null;
    }
 
    /**
@@ -148,16 +191,16 @@ public class O2Players
          return;
       }
 
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       gsonLayer.writeSaveData(serializedMap, GsonDAO.o2PlayerJSONFile);
    }
 
    /**
     * Load players from save file
     */
-   public void loadO2Players ()
+   public void loadO2Players()
    {
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
 
       // load players from the save file, if it exists
       Map<String, Map<String, String>> serializedMap = gsonLayer.readSavedDataMapStringMap(GsonDAO.o2PlayerJSONFile);
@@ -206,8 +249,7 @@ public class O2Players
    {
       Map<String, Map<String, String>> serializedMap = new HashMap<>();
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("Serializing O2Players...");
+      common.printDebugMessage("Serializing O2Players...", null, null, false);
 
       if (recordCount != 0)
       {
@@ -239,8 +281,8 @@ public class O2Players
          //
          // Wand
          //
-         playerData.put(woodLabel, o2p.getWandWood());
-         playerData.put(coreLabel, o2p.getWandCore());
+         playerData.put(woodLabel, o2p.getDestinedWandWood());
+         playerData.put(coreLabel, o2p.getDestinedWandCore());
 
          //
          // Souls
@@ -328,7 +370,7 @@ public class O2Players
          //
          // Effects
          //
-         Map<String, String> effects = Ollivanders2API.getPlayers(p).playerEffects.serializeEffects(pid);
+         Map<String, String> effects = Ollivanders2API.getPlayers().playerEffects.serializeEffects(pid);
          for (Entry<String, String> entry : effects.entrySet())
          {
             playerData.put(entry.getKey(), entry.getValue());
@@ -463,7 +505,7 @@ public class O2Players
                Boolean foundWand = Ollivanders2API.common.booleanFromString(value);
                if (foundWand != null)
                {
-                  o2p.setFoundWand(foundWand);
+                  o2p.initFoundWand(foundWand);
                }
             }
             else if (label.equalsIgnoreCase(masterSpellLabel))
@@ -521,7 +563,7 @@ public class O2Players
                      o2p.setYear(year);
                }
             }
-            else if (label.startsWith(playerEffects.effectLabelPrefix))
+            else if (label.startsWith(O2Effects.effectLabelPrefix))
             {
                playerEffects.deserializeEffect(pid, label, value);
             }
@@ -545,7 +587,7 @@ public class O2Players
          o2p.fix();
 
          deserializedMap.put(pid, o2p);
-         recordCount++;
+         recordCount = recordCount + 1;
       }
 
       return deserializedMap;
@@ -599,5 +641,430 @@ public class O2Players
 
       if (player != null)
          player.setAnimagusColor(correctedVariant);
+   }
+
+   /**
+    * Commands related to players.
+    *
+    * @param sender the command sender
+    * @param args the args for the command
+    */
+   public boolean runSummary(@NotNull CommandSender sender, @NotNull String[] args)
+   {
+      if ((!sender.hasPermission("Ollivanders2.admin") || (args.length == 1)))
+      {
+         playerSummary(sender, (Player)sender);
+         return true;
+      }
+      else if (args.length > 1)
+      {
+         Player target = p.getServer().getPlayer(args[1]);
+         if (target != null)
+         {
+            playerSummary(sender, target);
+            return true;
+         }
+      }
+
+      usageSummary(sender);
+      return true;
+   }
+
+   /**
+    * Usage summary for player commands
+    *
+    * @param sender the command sender
+    */
+   public void usageSummary(CommandSender sender)
+   {
+      if (sender.hasPermission("Ollivanders2.admin"))
+         usageSummaryAdmin(sender);
+      else
+         usageSummaryPlayer(sender);
+   }
+
+   /**
+    * Usage summary for players
+    *
+    * @param sender the command sender
+    */
+   public void usageSummaryPlayer(CommandSender sender)
+   {
+      sender.sendMessage(Ollivanders2.chatColor
+              + "\nUsage:"
+              + "\n/olli summary - gives a summary of wand type, house, year, and known spells\n");
+   }
+
+   /**
+    * Usage summary for admins
+    *
+    * @param sender the command sender
+    */
+   public void usageSummaryAdmin(CommandSender sender)
+   {
+      sender.sendMessage(Ollivanders2.chatColor
+              + "\nUsage:"
+              + "\n/olli summary - gives a summary of your player info such as wand type, house, year, and known spells"
+              + "\n/olli summary <player name> - gives a summary of the player's info such as wand type, house, year, and known spells\n");
+   }
+
+   /**
+    * The year subCommand for managing everything related to years.
+    *
+    * @param sender the player that issued the command
+    * @param args   the arguments for the command, if any
+    * @return true unless an error occurred
+    */
+   public boolean runYear(@NotNull CommandSender sender, @NotNull String[] args)
+   {
+      if (!sender.hasPermission("Ollivanders2.admin"))
+         return false;
+
+      if (!Ollivanders2.useYears)
+      {
+         sender.sendMessage(Ollivanders2.chatColor
+                 + "Years are not currently enabled for your server."
+                 + "\nTo enable years, update the Ollivanders2 config.yml setting to true and restart your server."
+                 + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki");
+
+         return true;
+      }
+
+      if (args.length == 2)
+      {
+         String playerName = args[1];
+         if (playerName.length() < 1)
+         {
+            usageYear(sender);
+            return true;
+         }
+
+         O2Player o2p = getPlayer(playerName);
+         if (o2p != null)
+            sender.sendMessage(Ollivanders2.chatColor + "Player " + playerName + " is in year " + o2p.getYear().getIntValue());
+         else
+            sender.sendMessage(Ollivanders2.chatColor + "Unable to find player.");
+
+         return true;
+      }
+      else if (args.length > 2)
+      {
+         String subCommand = args[1];
+
+         if (subCommand.equalsIgnoreCase("set"))
+         {
+            if (args.length < 4)
+            {
+               usageYear(sender);
+               return true;
+            }
+
+            return runYearSet(sender, args[2], args[3]);
+         }
+         else if (subCommand.equalsIgnoreCase("promote"))
+            return runYearChange(sender, args[2], 1);
+         else if (subCommand.equalsIgnoreCase("demote"))
+            return runYearChange(sender, args[2], -1);
+      }
+
+      usageYear(sender);
+
+      return true;
+   }
+
+   /**
+    * Run the command to set a player's year
+    *
+    * @param sender       the player that issued the command
+    * @param targetPlayer the player to set the year for
+    * @param targetYear   the year to set for the player
+    * @return true unless an error occurred
+    */
+   private boolean runYearSet(@NotNull CommandSender sender, @NotNull String targetPlayer, @NotNull String targetYear)
+   {
+      if (!sender.hasPermission("Ollivanders2.admin"))
+         return false;
+
+      if (targetPlayer.length() < 1 || targetYear.length() < 1)
+      {
+         usageYear(sender);
+         return true;
+      }
+
+      O2Player o2p = getPlayer(targetPlayer);
+      if (o2p == null)
+      {
+         sender.sendMessage(Ollivanders2.chatColor + "Unable to find a player named " + targetPlayer + ".\n");
+         common.printDebugMessage("O2Player is null", null, null, true);
+         return true;
+      }
+
+      Year year = stringToYear(targetYear);
+
+      if (year != null)
+         o2p.setYear(year);
+
+      return true;
+   }
+
+   /**
+    * Run promote and demote year commands
+    *
+    * @param sender       the player that issued the command
+    * @param targetPlayer the player to promote or demote
+    * @param yearChange   the year to change the player to
+    * @return true unless an error occurred
+    */
+   private boolean runYearChange(@NotNull CommandSender sender, @NotNull String targetPlayer, int yearChange)
+   {
+      if (!sender.hasPermission("Ollivanders2.admin"))
+         return false;
+
+      O2Player o2p = getPlayer(targetPlayer);
+      if (o2p == null)
+      {
+         sender.sendMessage(Ollivanders2.chatColor + "Unable to find player.");
+
+         return true;
+      }
+
+      int y = o2p.getYear().getIntValue() + yearChange;
+      if (y > 0 && y < 8)
+      {
+         Year year = O2PlayerCommon.intToYear(y);
+
+         if (year != null)
+            o2p.setYear(year);
+      }
+      return true;
+   }
+
+   /**
+    * Get a year from a string.
+    *
+    * @param yearStr the year as a string
+    * @return the Year if parsed, null otherwise
+    */
+   @Nullable
+   private Year stringToYear (@NotNull String yearStr)
+   {
+      int y;
+      try
+      {
+         y = Integer.parseInt(yearStr);
+      }
+      catch (NumberFormatException e)
+      {
+         return null;
+      }
+
+      if (y < 1 || y > 7)
+      {
+         return null;
+      }
+      return O2PlayerCommon.intToYear(y);
+   }
+
+   /**
+    * Display the usage message for /ollivanders2 year set
+    *
+    * @param sender the player that issued the command
+    */
+   private void usageYear (@NotNull CommandSender sender)
+   {
+      sender.sendMessage(Ollivanders2.chatColor
+              + "Year commands: "
+              + "\n/olli year <player name> - tells you the year or a player"
+              + "\n/olli year set <player name> <1-7> - sets a player's year, years must be between 1 and 7"
+              + "\n/olli year promote <player name> - increases a player's year by 1 year"
+              + "\n/olli year demote <player name> - decreases a player's year by 1 year\n");
+   }
+
+   /**
+    * Displays a summary of player info for the Ollivanders2 plugin
+    *
+    * @param sender the player who issued the command
+    * @param player the player to send the info for
+    * @return true if no error occurred
+    */
+   public void playerSummary(@NotNull CommandSender sender, @NotNull Player player)
+   {
+      O2Player o2p = getPlayer(player.getUniqueId());
+
+      if (o2p == null)
+      {
+         sender.sendMessage(Ollivanders2.chatColor + "Unable to find player.");
+         return;
+      }
+
+      StringBuilder summary = new StringBuilder();
+
+      summary.append("Player summary:\n\n");
+
+      // wand type
+      if (o2p.foundWand())
+      {
+         String wandlore = Ollivanders2API.getItems().getWands().createLore(o2p.getDestinedWandWood(), o2p.getDestinedWandCore());
+         summary.append("\nWand Type: ").append(wandlore);
+
+         O2SpellType masterSpell = o2p.getMasterSpell();
+         if (masterSpell != null)
+         {
+            summary.append("\nMaster Spell: ").append(Ollivanders2API.common.enumRecode(masterSpell.toString().toLowerCase()));
+         }
+
+         summary.append("\n");
+      }
+
+      // sorted
+      if (O2Houses.useHouses)
+      {
+         summary.append("\nHouse: ");
+         String house = null;
+         if (Ollivanders2API.getHouses().isSorted(player))
+         {
+            O2HouseType houseType = Ollivanders2API.getHouses().getHouse(player);
+            if (houseType != null)
+               house = houseType.getName();
+         }
+
+         if (house != null)
+            summary.append(house);
+         else
+            summary.append("not sorted");
+
+         summary.append("\n");
+      }
+
+      //year
+      if (Ollivanders2.useYears)
+         summary.append("\nYear: ").append(o2p.getYear().getIntValue()).append("\n");
+
+      //animagus
+      if (o2p.isAnimagus())
+      {
+         EntityType animagusForm = o2p.getAnimagusForm();
+         if (animagusForm != null)
+         {
+            summary.append("\nAnimagus Form: ").append(Ollivanders2API.common.enumRecode(animagusForm.toString()));
+         }
+      }
+
+      // effects
+      if (sender.hasPermission("Ollivanders2.admin"))
+      {
+         List<O2EffectType> effects = Ollivanders2API.getPlayers().playerEffects.getEffects(o2p.getID());
+         summary.append("\n\nAffected by:\n");
+
+         if (effects.isEmpty())
+         {
+            summary.append("Nothing");
+         }
+         else
+         {
+            for (O2EffectType effectType : effects)
+            {
+               summary.append(Ollivanders2API.common.enumRecode(effectType.toString())).append("\n");
+            }
+         }
+
+         summary.append("\n");
+      }
+
+      // spells
+      Map<O2SpellType, Integer> knownSpells = o2p.getKnownSpells();
+
+      if (knownSpells.size() > 0)
+      {
+         summary.append("\n\nKnown Spells and Spell Level:");
+
+         for (O2SpellType spellType : O2SpellType.values())
+         {
+            if (knownSpells.containsKey(spellType) && Ollivanders2API.getSpells().isLoaded(spellType))
+            {
+               summary.append("\n* ").append(spellType.getSpellName()).append(" ").append(knownSpells.get(spellType).toString());
+            }
+         }
+      }
+      else
+      {
+         if (sender.getName().equalsIgnoreCase(player.getName()))
+            summary.append("\n\nYou have not learned any spells.");
+         else
+            summary.append("\n\n").append(player.getName()).append(" has not learned any spells.");
+      }
+
+      Map<O2PotionType, Integer> knownPotions = o2p.getKnownPotions();
+      if (!knownPotions.isEmpty())
+      {
+         summary.append("\n\nKnown potions and Potion Level:");
+
+         for (O2PotionType potionType : O2PotionType.values())
+         {
+            if (knownPotions.containsKey(potionType) && Ollivanders2API.getPotions().isLoaded(potionType))
+            {
+               summary.append("\n* ").append(potionType.getPotionName()).append(" ").append(knownPotions.get(potionType).toString());
+            }
+         }
+      }
+      else
+      {
+         if (sender.getName().equalsIgnoreCase(player.getName()))
+            summary.append("\n\nYou have not learned any potions.");
+         else
+            summary.append("\n\n").append(player.getName()).append(" has not learned any potions.");
+      }
+
+      sender.sendMessage(Ollivanders2.chatColor + summary.toString());
+   }
+
+   /**
+    * The year subCommand for managing everything related to animagus.
+    *
+    * @param sender the player that issued the command
+    * @param args   the arguments for the command, if any
+    * @return true unless an error occurred
+    */
+   public boolean runAnimagus(@NotNull CommandSender sender, @NotNull String[] args)
+   {
+      if (!sender.hasPermission("Ollivanders2.admin"))
+         return false;
+
+      if (args.length != 2)
+      {
+         usageAnimagus(sender);
+         return true;
+      }
+
+      String targetPlayer = args[1];
+      O2Player o2p = getPlayer(targetPlayer);
+      if (o2p == null)
+      {
+         usageAnimagus(sender);
+         return true;
+      }
+
+      if (o2p.isAnimagus())
+      {
+         sender.sendMessage(Ollivanders2.chatColor + targetPlayer + " is already an animagus.");
+         return true;
+      }
+
+      o2p.setIsAnimagus();
+
+      sender.sendMessage(Ollivanders2.chatColor + targetPlayer + " is now an animagus.");
+      return true;
+   }
+
+   /**
+    * Usage message for the animagus command.
+    *
+    * @param sender the command sender
+    */
+   private void usageAnimagus (CommandSender sender)
+   {
+      sender.sendMessage(Ollivanders2.chatColor
+              + "\nUsage:"
+              + "\n/olli animagus <player name> - make a player an animagus, has no effect if they already are\n");
    }
 }

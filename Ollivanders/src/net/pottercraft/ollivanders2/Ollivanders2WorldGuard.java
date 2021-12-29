@@ -7,8 +7,10 @@ import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.Flags;
 import com.sk89q.worldguard.protection.flags.StateFlag;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -27,6 +29,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public class Ollivanders2WorldGuard
 {
+   private Ollivanders2Common common;
    private WorldGuardPlugin worldGuard;
    final private Ollivanders2 p;
 
@@ -39,6 +42,7 @@ public class Ollivanders2WorldGuard
    {
       p = o2plugin;
       worldGuard = null;
+      common = new Ollivanders2Common(p);
 
       Plugin wg = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");
 
@@ -87,19 +91,10 @@ public class Ollivanders2WorldGuard
             return true;
          }
 
-         if (Ollivanders2.debug)
-            p.getLogger().info("State of " + flag.toString() + " for " + player.getDisplayName() + " is " + state.toString());
-
-
-         return (state == StateFlag.State.DENY);
+         return (state != StateFlag.State.DENY);
       }
       else
-      {
-         if (Ollivanders2.debug)
-            p.getLogger().info("No regions defined here.");
-
          return true;
-      }
    }
 
    /**
@@ -122,18 +117,14 @@ public class Ollivanders2WorldGuard
 
       if (regionContainer == null)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Failed to get RegionContainer...");
-
+         common.printDebugMessage("Failed to get RegionContainer...", null, null, false);
          return null;
       }
 
       RegionQuery query = regionContainer.createQuery();
       if (query == null)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Failed to get RegionQuery...");
-
+         common.printDebugMessage("Failed to get RegionQuery...", null, null, false);
          return null;
       }
 
@@ -179,5 +170,30 @@ public class Ollivanders2WorldGuard
 
       LocalPlayer wgPlayer = WorldGuardPlugin.inst().wrapPlayer(player);
       return regionSet.testState(wgPlayer, Flags.BUILD);
+   }
+
+   /**
+    * Determine if a location is in a region by name
+    *
+    * @param regionName the name of the region to check
+    * @param location the location to check
+    * @return true if it is inside a region with this name, false otherwise
+    */
+   public boolean isLocationInRegionByName(String regionName, Location location)
+   {
+      ApplicableRegionSet regionSet = getWGRegionSet(location);
+
+      if (regionSet == null || regionSet.size() < 1)
+         return false;
+
+      for (ProtectedRegion region : regionSet.getRegions())
+      {
+         if (region.getId().equalsIgnoreCase(regionName))
+         {
+            return true;
+         }
+      }
+
+      return false;
    }
 }

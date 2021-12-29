@@ -43,11 +43,11 @@ public class SLEEPING extends O2Effect
    }
 
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!sleeping)
       {
-         if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(targetID, O2EffectType.AWAKE))
+         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, O2EffectType.AWAKE))
          {
             kill();
          }
@@ -63,21 +63,10 @@ public class SLEEPING extends O2Effect
       }
    }
 
-   @Override
-   public void kill ()
-   {
-      if (sleeping)
-      {
-         playerWake();
-      }
-
-      kill = true;
-   }
-
    /**
     * Put the player to sleep.
     */
-   private void playerSleep ()
+   private void playerSleep()
    {
       Player target = p.getServer().getPlayer(targetID);
       if (target == null)
@@ -92,24 +81,30 @@ public class SLEEPING extends O2Effect
       target.teleport(newLoc);
 
       // add sleep speech
-      SLEEP_SPEECH effect = new SLEEP_SPEECH(p, 5, targetID);
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(new SLEEP_SPEECH(p, -1, targetID));
+
+      // immobilize them
+      Ollivanders2API.getPlayers().playerEffects.addEffect(new IMMOBILIZE(p, -1, targetID));
 
       sleeping = true;
+      target.sendMessage(Ollivanders2.chatColor + "You fall in to a deep sleep.");
    }
 
    /**
-    * Wake the player up.
+    * Do any cleanup related to removing this effect from the player
     */
-   private void playerWake ()
+   @Override
+   public void doRemove()
    {
-      Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
-      sleeping = false;
+      if (sleeping)
+      {
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.IMMOBILIZE);
+         sleeping = false;
 
-      Player target = p.getServer().getPlayer(targetID);
-      if (target != null)
-         target.sendMessage(Ollivanders2.chatColor + "You awaken from a deep sleep.");
-      else
-         kill();
+         Player target = p.getServer().getPlayer(targetID);
+         if (target != null)
+            target.sendMessage(Ollivanders2.chatColor + "You awaken from a deep sleep.");
+      }
    }
 }

@@ -32,6 +32,13 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Panda;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -60,12 +67,10 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       transformed = false;
       permanent = true;
 
-
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(pid);
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(pid);
       if (o2p == null)
       {
-         p.getLogger().info("o2player cannot be found");
-
+         common.printDebugMessage("o2player cannot be found", null, null, false);
          kill();
          return;
       }
@@ -75,9 +80,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
 
       if (form == null)
       {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Unable to get animagus form for " + Ollivanders2API.getPlayers(p).getPlayer(pid).getPlayerName());
-
+         common.printDebugMessage("Unable to get animagus form for " + Ollivanders2API.getPlayers().getPlayer(pid).getPlayerName(), null, null, false);
          kill();
       }
    }
@@ -86,7 +89,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     * If the player has not yet transformed, transform them.
     */
    @Override
-   protected void upkeep ()
+   protected void upkeep()
    {
       if (!transformed && !kill)
       {
@@ -116,10 +119,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Cat.Type " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse Cat.Type " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -136,10 +136,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Rabbit.Type " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse Rabbit.Type " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -155,10 +152,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse DyeColor " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -175,10 +169,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Horse.Color " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse Horse.Color " + colorVariant, null, null, false);
             correctedVariant = color.toString();
          }
 
@@ -195,10 +186,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Llama.Color " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse Llama.Color " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -231,10 +219,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse Fox.Type " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse Fox.Type " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -255,10 +240,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse DyeColor " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -282,10 +264,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failed to parse DyeColor " + colorVariant);
-            if (Ollivanders2.debug)
-               e.printStackTrace();
-
+            common.printDebugMessage("Failed to parse DyeColor " + colorVariant, e, null, false);
             correctedVariant = color.toString();
          }
 
@@ -304,7 +283,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       // fix player's animagus color variant if needed
       if (correctedVariant != null)
       {
-         Ollivanders2API.getPlayers(p).fixPlayerAnimagusColorVariant(targetID, correctedVariant);
+         Ollivanders2API.getPlayers().fixPlayerAnimagusColorVariant(targetID, correctedVariant);
       }
    }
 
@@ -315,4 +294,89 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
     */
    @Override
    public void setPermanent(boolean perm) { }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove() {}
+
+   /**
+    * Do any on player interact effects
+    */
+   @Override
+   void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
+   {
+      Action action = event.getAction();
+
+      if (action == Action.RIGHT_CLICK_BLOCK || action == Action.LEFT_CLICK_BLOCK)
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerInteractEvent", null, null, false);
+      }
+   }
+
+   /**
+    * Cows, cats, and dogs can't fly - no flight-enabled mobs can be transformed in to
+    *
+    * @param event the player toggle flight event
+    */
+   @Override
+   void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
+   {
+      if (event.isFlying())
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerToggleFlightEvent", null, null, false);
+      }
+   }
+
+   /**
+    * Do any effects when player picks up an item
+    *
+    * @param event the entity item pickup event
+    */
+   @Override
+   void doOnPlayerPickupItemEvent (@NotNull EntityPickupItemEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("ANIMAGUS_EFFECT: cancelling cancelling EntityPickupItemEvent", null, null, false);
+   }
+
+   /**
+    * Do any effects when player holds an item
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnPlayerItemHeldEvent (@NotNull PlayerItemHeldEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemHeldEvent", null, null, false);
+
+   }
+
+   /**
+    * Do any effects when player consumes an item
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnPlayerItemConsumeEvent (@NotNull PlayerItemConsumeEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerItemConsumeEvent", null, null, false);
+   }
+
+   /**
+    * Do any effects when player drop an item
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnPlayerDropItemEvent (@NotNull PlayerDropItemEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("ANIMAGUS_EFFECT: cancelling PlayerDropItemEvent", null, null, false);
+   }
 }

@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +16,7 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Magical Drafts and Potions";
-      author = "Arsenius Jigger";
-      branch = O2MagicBranch.POTIONS;
+      bookType = O2BookType.MAGICAL_DRAFTS_AND_POTIONS;
 
       potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
       potions.add(O2PotionType.WIT_SHARPENING_POTION);

@@ -6,7 +6,7 @@ import java.util.List;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.attribute.AttributeInstance;
@@ -28,15 +28,17 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ET_INTERFICIAM_ANIMAM_LIGAVERIS()
+   public ET_INTERFICIAM_ANIMAM_LIGAVERIS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Tamper with the deepest mysteries — the source of life, the essence of self — only if prepared for consequences of the most extreme and dangerous kind.");
       }};
@@ -59,14 +61,15 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
       spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
       branch = O2MagicBranch.DARK_ARTS;
 
-      initSpell();
-
       // world guard flags
-      worldGuardFlags.add(Flags.MOB_SPAWNING); // needed because Fiendfyre requires it, otherwise horcruxes could get made in locations players couldn't kill them
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.MOB_SPAWNING); // needed because Fiendfyre requires it, otherwise horcruxes could get made in locations players couldn't kill them
+
+      initSpell();
    }
 
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!isSpellAllowed())
       {
@@ -74,7 +77,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
          return;
       }
 
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(player.getUniqueId());
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
       if (o2p == null)
       {
          kill();
@@ -117,8 +120,8 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
       else
       {
          //If they player couldn't survive making another horcrux then they are sent back to a previous horcrux
-         List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells(p).getActiveStationarySpells();
-         for (StationarySpellObj stationary : stationaries)
+         List<O2StationarySpell> stationaries = Ollivanders2API.getStationarySpells(p).getActiveStationarySpells();
+         for (O2StationarySpell stationary : stationaries)
          {
             if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(player.getUniqueId()))
             {
@@ -138,4 +141,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
 
       kill();
    }
+
+   @Override
+   protected void doCheckEffect() { }
 }

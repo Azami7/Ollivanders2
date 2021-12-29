@@ -27,7 +27,6 @@ public final class WOLFSBANE_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.WOLFSBANE_POTION;
-      potionLevel = PotionLevel.EXPERT;
 
       ingredients.put(O2ItemType.WOLFSBANE, 2);
       ingredients.put(O2ItemType.MANDRAKE_LEAF, 3);
@@ -42,11 +41,16 @@ public final class WOLFSBANE_POTION extends O2Potion
       potionColor = Color.fromRGB(51, 0, 102);
    }
 
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
    @Override
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   public void drink(@NotNull Player player)
    {
       LYCANTHROPY_RELIEF effect = new LYCANTHROPY_RELIEF(p, duration, player.getUniqueId());
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel a sense of relief.");
    }

@@ -26,10 +26,12 @@ public abstract class ColoroSuper extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    ColoroSuper()
+    ColoroSuper(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**
@@ -44,7 +46,8 @@ public abstract class ColoroSuper extends O2Spell
         super(plugin, player, rightWand);
 
         // world-guard flags
-        worldGuardFlags.add(Flags.BUILD);
+        if (Ollivanders2.worldGuardEnabled)
+           worldGuardFlags.add(Flags.BUILD);
     }
 
     /**

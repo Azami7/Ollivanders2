@@ -5,7 +5,7 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.PigWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -23,10 +23,12 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_PORCILLI()
+   public INCARNATIO_PORCILLI(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_PORCILLI;
       branch = O2MagicBranch.TRANSFIGURATION;
@@ -48,9 +50,6 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_PORCILLI;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-      calculateSuccessRate();
-
       targetType = EntityType.PIG;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
@@ -64,5 +63,13 @@ public final class INCARNATIO_PORCILLI extends PlayerDisguise
          watcher.setSaddled(true);
       else
          watcher.setSaddled(false);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

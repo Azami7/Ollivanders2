@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -20,9 +19,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Standard Book of Spells Grade 7";
-      author = "Miranda Goshawk";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_7;
 
       spells.add(O2SpellType.MUFFLIATO);
       spells.add(O2SpellType.REPELLO_MUGGLETON);

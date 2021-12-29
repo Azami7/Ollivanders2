@@ -1,24 +1,17 @@
 package net.pottercraft.ollivanders2.spell;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
-import net.pottercraft.ollivanders2.player.O2WandCoreType;
+import net.pottercraft.ollivanders2.item.O2ItemType;
+import net.pottercraft.ollivanders2.item.wand.O2WandCoreType;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * If a coreless wand is near enough a core material, makes a wand of the wand wood type and core type. Itemstack amount
@@ -31,10 +24,12 @@ public final class LIGATIS_COR extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LIGATIS_COR()
+   public LIGATIS_COR(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.LIGATIS_COR;
       branch = O2MagicBranch.CHARMS;
@@ -56,106 +51,90 @@ public final class LIGATIS_COR extends O2Spell
       spellType = O2SpellType.LIGATIS_COR;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
-      worldGuardFlags.add(Flags.ITEM_PICKUP);
-      worldGuardFlags.add(Flags.ITEM_DROP);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.ITEM_PICKUP);
+         worldGuardFlags.add(Flags.ITEM_DROP);
+      }
+
+      initSpell();
    }
 
+   /**
+    * Look for any coreless wands near the projectile and try to make a wand.
+    */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
-      List<Item> items = super.getItems(1.5);
-
-      for (Item item : items)
+      // projectile has stopped, kill the spell
+      if (hasHitTarget())
       {
-         ItemMeta meta = item.getItemStack().getItemMeta();
-         if (meta == null)
-         {
-            common.printDebugMessage("LIGATIS_COR.doCheckEffect: item meta is null", null, null, true);
-            kill();
-            return;
-         }
-
-         // look for any coreless wands by item meta
-         if (meta.hasLore())
-         {
-            List<String> lore = meta.getLore();
-            if (lore == null)
-               continue;
-
-            for (String l : lore)
-            {
-               if (l.contains(FRANGE_LIGNEA.corelessWandLabel))
-               {
-                  Location loc = item.getLocation();
-
-                  // create the wand
-                  ItemStack wand = createWand(item);
-                  if (wand != null)
-                  {
-                     // spawn in to the world
-                     item.getWorld().dropItem(loc, wand);
-                  }
-
-                  kill();
-                  return;
-               }
-            }
-         }
-
+         player.sendMessage(Ollivanders2.chatColor + "Spell failed to find a coreless wand.");
          kill();
          return;
       }
 
-      // projectile has stopped, kill the spell
-      if (hasHitTarget())
-         kill();
+      // is there a wand nearby?
+      Item baseWand = common.getNearbyItemByType(location, O2ItemType.WAND, 1.5);
+      if (baseWand == null)
+         return;
+
+      // is this wand already complete?
+      if (Ollivanders2API.getItems().getWands().isWand(baseWand.getItemStack()))
+         return;
+
+      kill();
+      createAndDropWand(baseWand);
    }
 
    /**
     * Create the wand from the material and core.
     *
-    * @param corelessWand a coreless wand
-    * @return a wand if a nerby core material is found, null otherwise
+    * @param baseWand a coreless wand
     */
-   @Nullable
-   private ItemStack createWand(@NotNull Item corelessWand)
+   private void createAndDropWand(@NotNull Item baseWand)
    {
       ItemStack wand = null;
 
-      // pick a random wood type
-      ArrayList<String> woodTypes = O2WandCoreType.getAllCoresByName();
-
-      int rand = Math.abs(Ollivanders2Common.random.nextInt() % woodTypes.size());
-      String wood = woodTypes.get(rand);
-
-      // determine core based on nearby materials
-      List<Entity> entities = corelessWand.getNearbyEntities(2, 2, 2);
-      for (Entity coreItem : entities)
+      // is there a core material nearby?
+      Item coreItem = common.getNearbyItemByMaterialList(baseWand.getLocation(), O2WandCoreType.getAllCoresByMaterial(), 2.0);
+      if (coreItem != null)
       {
-         if (coreItem instanceof Item)
+         O2WandCoreType coreType = O2WandCoreType.getWandCoreTypeByMaterial(coreItem.getItemStack().getType());
+         if (coreType != null)
          {
-            Material coreMaterial = ((Item) coreItem).getItemStack().getType();
-
-            if (O2WandCoreType.getAllCoresByMaterial().contains(coreMaterial))
-            {
-               O2WandCoreType coreType = O2WandCoreType.getWandCoreTypeByMaterial(coreMaterial);
-               if (coreType == null)
-                  continue;
-
-               wand = Ollivanders2API.common.makeWands(wood, coreType.getLabel(), 1);
-
-               // use up the wand materials
-               corelessWand.remove();
-               coreItem.remove();
-
-               break;
-            }
+            String core = coreType.getLabel();
+            wand = Ollivanders2API.getItems().getWands().makeWandFromCoreless(baseWand.getItemStack(), core, 1);
          }
       }
 
-      return wand;
+      if (wand == null)
+      {
+         player.sendMessage(Ollivanders2.chatColor + "No wand cores items found.");
+         return;
+      }
+
+      Location dropLocation = player.getLocation();
+      if (dropLocation.getWorld() == null)
+         return;
+
+      int amount = baseWand.getItemStack().getAmount();
+
+      // decrement the baseWand amount
+      if (amount > 1)
+         baseWand.getItemStack().setAmount(amount - 1);
+      else
+         baseWand.remove();
+
+      // decrement the core material
+      amount = coreItem.getItemStack().getAmount();
+      if (amount > 1)
+         coreItem.getItemStack().setAmount(amount - 1);
+      else
+         coreItem.remove();
+
+      // drop the wand
+      dropLocation.getWorld().dropItemNaturally(dropLocation, wand);
    }
 }

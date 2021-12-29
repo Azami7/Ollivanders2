@@ -19,15 +19,17 @@ public final class ARANIA_EXUMAI extends Knockback
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ARANIA_EXUMAI ()
+   public ARANIA_EXUMAI(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ARANIA_EXUMAI;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("\"Know any spells?\"\n\"One, but it's not powerful enough for all of them.\"\n\"Where's Hermione when you need her?\"\n\"Let's go! Arania Exumai\" -Harry Potter and Ron Weasley");
          add("Defense Against Spiders");
       }};
@@ -48,10 +50,10 @@ public final class ARANIA_EXUMAI extends Knockback
       spellType = O2SpellType.ARANIA_EXUMAI;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       strengthReducer = 10;
 
       entityWhitelist.add(EntityType.SPIDER);
+
+      initSpell();
    }
 }

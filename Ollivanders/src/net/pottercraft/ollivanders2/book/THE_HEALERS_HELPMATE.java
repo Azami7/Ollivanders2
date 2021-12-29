@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -18,10 +17,7 @@ public class THE_HEALERS_HELPMATE extends O2Book
    {
       super(plugin);
 
-      title = "The Healer's Helpmate";
-      shortTitle = "The Healers Helpmate";
-      author = "H. Pollingtonious";
-      branch = O2MagicBranch.HEALING;
+      bookType = O2BookType.THE_HEALERS_HELPMATE;
 
       spells.add(O2SpellType.AGUAMENTI);
       spells.add(O2SpellType.BRACKIUM_EMENDO);

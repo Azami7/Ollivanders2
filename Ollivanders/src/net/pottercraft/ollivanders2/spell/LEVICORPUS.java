@@ -19,15 +19,17 @@ public final class LEVICORPUS extends AddO2Effect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public LEVICORPUS()
+   public LEVICORPUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.LEVICORPUS;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"Oh, that one had a great vogue during my time at Hogwarts. There were a few months in my fifth year when you couldn't move for being hoisted into the air by your ankle.\" -Remus Lupin");
          add("Pointing his wand at nothing in particular, he gave it an upward flick and said Levicorpus! inside his head... There was a flash of light... Ron was dangling upside down in midair as though an invisible hook had hoisted him up by the ankle.");
@@ -50,14 +52,19 @@ public final class LEVICORPUS extends AddO2Effect
 
       spellType = O2SpellType.LEVICORPUS;
       branch = O2MagicBranch.DARK_ARTS;
-      initSpell();
 
       // world guard flags
-      worldGuardFlags.add(Flags.PVP);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.PVP);
 
       effectsToAdd.add(O2EffectType.SUSPENSION);
 
-      // duration
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       maxDurationInSeconds = 180; // 3 minutes
       durationInSeconds = ((int) usesModifier + 30);
    }

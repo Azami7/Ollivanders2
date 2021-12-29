@@ -18,10 +18,12 @@ public final class METELOJINX extends MetelojinxSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public METELOJINX ()
+   public METELOJINX(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.METELOJINX;
       branch = O2MagicBranch.CHARMS;
@@ -43,8 +45,8 @@ public final class METELOJINX extends MetelojinxSuper
       spellType = O2SpellType.METELOJINX;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       storm = true;
+
+      initSpell();
    }
 }

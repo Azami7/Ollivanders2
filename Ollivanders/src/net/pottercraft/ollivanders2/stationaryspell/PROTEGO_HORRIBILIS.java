@@ -18,7 +18,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author lownes
  */
-public class PROTEGO_HORRIBILIS extends ShieldSpell implements StationarySpell
+public class PROTEGO_HORRIBILIS extends ShieldSpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -49,6 +49,9 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell implements StationarySpell
       spellType = O2StationarySpellType.PROTEGO_HORRIBILIS;
    }
 
+   /**
+    * Upkeep
+    */
    @Override
    public void checkEffect()
    {

@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +16,7 @@ public final class CHARMING_COLORS extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Charming Colors";
-      author = "Nymphadora Tonks";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.CHARMING_COLORS;
 
       openingPage = "\"Mere color, unspoiled by meaning, and unallied with definite form, can speak to the soul in a thousand different ways.\"";
 

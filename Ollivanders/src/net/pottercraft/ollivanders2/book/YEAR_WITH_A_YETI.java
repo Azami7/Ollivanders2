@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -20,9 +19,7 @@ public class YEAR_WITH_A_YETI extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Year with a Yeti";
-      author = "Gilderoy Lockhart";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.YEAR_WITH_A_YETI;
 
       spells.add(O2SpellType.ARANIA_EXUMAI);
       spells.add(O2SpellType.OBLIVIATE);

@@ -8,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Created by Azami7 on 7/2/17.
- * <p>
+ *
  * Glacius will cause a great cold to descend in a radius from it's impact point which freezes blocks. The radius and
  * duration of the freeze depend on your experience.
  *
@@ -18,10 +18,12 @@ public abstract class GlaciusSuper extends BlockTransfiguration
 {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public GlaciusSuper()
+    public GlaciusSuper(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         branch = O2MagicBranch.CHARMS;
     }
@@ -39,7 +41,21 @@ public abstract class GlaciusSuper extends BlockTransfiguration
 
         branch = O2MagicBranch.CHARMS;
 
-        initSpell();
+        transfigurationMap.put(Material.FIRE, Material.AIR);
+        transfigurationMap.put(Material.WATER, Material.ICE);
+        transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
+        transfigurationMap.put(Material.ICE, Material.PACKED_ICE);
+
+        materialWhitelist.add(Material.FIRE);
+        materialWhitelist.add(Material.WATER);
+        materialWhitelist.add(Material.LAVA);
+        materialWhitelist.add(Material.ICE);
+    }
+
+    @Override
+    public void initSpell()
+    {
+        super.initSpell();
 
         if (usesModifier > 50)
         {
@@ -54,15 +70,5 @@ public abstract class GlaciusSuper extends BlockTransfiguration
             radius = (int) (usesModifier / 10);
         }
         permanent = false;
-
-        transfigurationMap.put(Material.FIRE, Material.AIR);
-        transfigurationMap.put(Material.WATER, Material.ICE);
-        transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
-        transfigurationMap.put(Material.ICE, Material.PACKED_ICE);
-
-        materialWhitelist.add(Material.FIRE);
-        materialWhitelist.add(Material.WATER);
-        materialWhitelist.add(Material.LAVA);
-        materialWhitelist.add(Material.ICE);
     }
 }

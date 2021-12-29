@@ -2,15 +2,16 @@ package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.effect.O2EffectType;
+import net.pottercraft.ollivanders2.effect.O2Effects;
+import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.potion.PotionEffect;
@@ -24,20 +25,24 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class FINITE_INCANTATEM extends O2Spell
 {
-   private final double minPercent = 0.1;
-   private double percent;
+   /**
+    * The number of spells that can be targeted by this spell.
+    */
+   private int maxTargets = 1;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FINITE_INCANTATEM()
+   public FINITE_INCANTATEM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.FINITE_INCANTATEM;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"He pointed his wand at the rampart, cried, \"Finite!\" and it steadied.\"");
          add("\"Try Finite Incantatem, that should stop the rain if it’s a hex or curse.\"  -Hermione Granger");
@@ -45,7 +50,7 @@ public final class FINITE_INCANTATEM extends O2Spell
          add("The General Counter-Spell");
       }};
 
-      text = "Reduces all spell effects on an item or player.";
+      text = "Reduces spell effects on an item or player. Is not effective against more powerful jinxes and enchantments.";
    }
 
    /**
@@ -67,18 +72,15 @@ public final class FINITE_INCANTATEM extends O2Spell
    @Override
    void doInitSpell()
    {
-      percent = (usesModifier / 2) / 100;
-      if (percent < minPercent)
+      maxTargets = (int) usesModifier / 20;
+      if (maxTargets < 1)
       {
-         percent = minPercent;
-      } else if (percent > 1)
-      {
-         percent = 1;
+         maxTargets = 1;
       }
    }
 
    /**
-    *
+    * Check players and items in the projectiles path for enchantments and effects
     */
    @Override
    protected void doCheckEffect()
@@ -102,8 +104,10 @@ public final class FINITE_INCANTATEM extends O2Spell
    /**
     * Finite Incantatem on entities.
     */
-   private void finiteIncantatemEntities ()
+   private void finiteIncantatemEntities()
    {
+      int effectsTargeted = 0;
+
       for (LivingEntity live : getLivingEntities(1.5))
       {
          if (live.getUniqueId() == player.getUniqueId())
@@ -113,43 +117,49 @@ public final class FINITE_INCANTATEM extends O2Spell
 
          common.printDebugMessage("finite incantatem targeting " + live.getName(), null, null, false);
 
+         // if they are a player, look for O2Effects
          if (live instanceof Player)
          {
-            Player ply = (Player) live;
+            Player target = (Player)live;
 
             // look for any effects on the player
-            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffects(ply.getUniqueId()))
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffects(target.getUniqueId()))
             {
-               if (usesModifier < 100)
+               for (O2EffectType effectType : Ollivanders2API.getPlayers().playerEffects.getEffects(target.getUniqueId()))
                {
-                  Ollivanders2API.getPlayers(p).playerEffects.ageAllEffectsByPercent(ply.getUniqueId(), (int) (percent * 100));
+                  if (effectType.getLevel().ordinal() <= spellType.getLevel().ordinal())
+                     Ollivanders2API.getPlayers().playerEffects.removeEffect(target.getUniqueId(), effectType);
+
+                  effectsTargeted = effectsTargeted + 1;
+                  if (effectsTargeted >= maxTargets)
+                     break;
                }
-
-               kill();
-               return;
             }
          }
 
-         Collection<PotionEffect> potionEffects = live.getActivePotionEffects();
-
-         for (PotionEffect effect : potionEffects)
+         if (effectsTargeted < maxTargets)
          {
-            int curDuration = effect.getDuration();
-            double difference = curDuration * percent;
-            int newDuration = curDuration - (int) difference;
+            // look for any minecraft PotionEffects
+            Collection<PotionEffect> potionEffects = live.getActivePotionEffects();
 
-            PotionEffect newEffect = new PotionEffect(effect.getType(), newDuration, effect.getAmplifier(), effect.isAmbient(), effect.hasParticles(), effect.hasIcon());
-
-            live.removePotionEffect(effect.getType());
-
-            if (percent < 100)
+            for (PotionEffect effect : potionEffects)
             {
-               live.addPotionEffect(newEffect);
-            }
+               Ollivanders2Common.MagicLevel level;
+               if (O2Effects.potionEffectLevels.containsKey(effect.getType()))
+                  level = O2Effects.potionEffectLevels.get(effect.getType());
+               else
+                  level = Ollivanders2Common.MagicLevel.OWL;
 
-            kill();
+               if (level.ordinal() <= spellType.getLevel().ordinal())
+                  player.removePotionEffect(effect.getType());
+
+               effectsTargeted = effectsTargeted + 1;
+               if (effectsTargeted >= maxTargets)
+                  break;
+            }
          }
 
+         kill();
          return;
       }
    }
@@ -157,96 +167,20 @@ public final class FINITE_INCANTATEM extends O2Spell
    /**
     * Finite Incantatem on items.
     */
-   private void finiteIncantatemItems ()
+   private void finiteIncantatemItems()
    {
-      if (hasHitTarget())
+      for (Item item : getItems(1.5))
       {
+         if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item))
+         {
+            ItemEnchantmentType enchantmentType = Ollivanders2API.getItems().enchantedItems.getEnchantmentType(item.getItemStack());
+
+            if (enchantmentType.getLevel().ordinal() <= spellType.getLevel().ordinal())
+               Ollivanders2API.getItems().enchantedItems.removeEnchantment(item);
+         }
+
          kill();
          return;
       }
-
-      for (Item item : getItems(1.5))
-      {
-         ItemStack stack = item.getItemStack();
-         ItemMeta meta = stack.getItemMeta();
-
-         if (meta == null)
-            continue;
-
-         common.printDebugMessage("finite incantatem targeting " + item.getName(), null, null, false);
-
-         if (meta.hasLore())
-         {
-            List<String> lore = meta.getLore();
-            if (lore == null)
-               continue;
-
-            List<String> newLore = updateLore(lore);
-            if (newLore == null)
-               continue;
-
-            meta.setLore(newLore);
-            stack.setItemMeta(meta);
-            item.setItemStack(stack);
-
-            stopProjectile();
-            return;
-         }
-      }
-   }
-
-   private List<String> updateLore(List<String> lore)
-   {
-      if (lore == null)
-         return null;
-
-      ArrayList<String> newLore = new ArrayList<>();
-
-      for (String loreLine : lore)
-      {
-         String[] loreParts = loreLine.split(" ");
-         String curseName = loreParts[0];
-
-         common.printDebugMessage("item meta line starts with " + curseName, null, null, false);
-
-         if (curseName.equals(GEMINIO.geminio))
-         {
-            common.printDebugMessage("item has " + curseName + " curse", null, null, false);
-
-            int curMagnitude;
-
-            try
-            {
-               curMagnitude = Integer.parseInt(loreParts[1]);
-            }
-            catch (Exception e)
-            {
-               continue;
-            }
-
-            if (curMagnitude > 0)
-            {
-               double difference = curMagnitude * percent;
-               int newMagnitude = curMagnitude - (int) difference;
-
-               common.printDebugMessage("reducing magnitude by " + percent + "%, " + difference + ", from " + curMagnitude + " to " + newMagnitude, null, null, false);
-
-               if (percent < 100)
-               {
-                  newLore.add(loreParts[0] + " " + newMagnitude);
-               }
-            }
-         }
-         else if (curseName.equals(FLAGRANTE.flagrante))
-         {
-            // special case for flagrante, do nothing which will just remove the effect entirely
-         }
-         else
-         {
-            newLore.add(loreLine);
-         }
-      }
-
-      return newLore;
    }
 }

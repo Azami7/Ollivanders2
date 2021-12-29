@@ -21,10 +21,12 @@ public final class BOTHYNUS_TRIA extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public BOTHYNUS_TRIA()
+   public BOTHYNUS_TRIA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.BOTHYNUS_TRIA;
       branch = O2MagicBranch.CHARMS;
@@ -45,8 +47,6 @@ public final class BOTHYNUS_TRIA extends Pyrotechnia
       spellType = O2SpellType.BOTHYNUS_TRIA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.YELLOW);
       fireworkColors.add(Color.ORANGE);
@@ -58,6 +58,12 @@ public final class BOTHYNUS_TRIA extends Pyrotechnia
       hasTrails = true;
       hasFade = true;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(15);
    }
 }

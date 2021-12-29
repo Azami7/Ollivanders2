@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,10 +19,12 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FriendlyMobDisguise()
+   public FriendlyMobDisguise(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
    }
 
    /**
@@ -36,25 +38,28 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
    {
       super(plugin, player, rightWand);
 
-      worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+      }
    }
 
    @Override
    void doInitSpell()
    {
       // whitelist of entities that can be targeted by this spell
-      entityWhitelist.addAll(Ollivanders2Common.smallFriendlyAnimals);
+      entityWhitelist.addAll(Ollivanders2Common.smallFriendlyMobs);
 
       int uses = (int) (usesModifier * 4);
 
       if (uses > 100)
       {
-         entityWhitelist.addAll(Ollivanders2Common.mediumFriendlyAnimals);
+         entityWhitelist.addAll(Ollivanders2Common.mediumFriendlyMobs);
       }
 
       if (uses > 200)
       {
-         entityWhitelist.addAll(Ollivanders2Common.largeFriendlyAnimals);
+         entityWhitelist.addAll(Ollivanders2Common.largeFriendlyMobs);
       }
 
       // spell duration

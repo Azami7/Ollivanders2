@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
@@ -90,4 +90,10 @@ public class WEALTH extends O2Effect
    {
       strength = s;
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

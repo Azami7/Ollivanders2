@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -22,9 +21,7 @@ public class INTERMEDIATE_TRANSFIGURATION extends O2Book
    {
       super(plugin);
 
-      shortTitle = title = "Intermediate Transfiguration";
-      author = "Unknown";
-      branch = O2MagicBranch.TRANSFIGURATION;
+      bookType = O2BookType.INTERMEDIATE_TRANSFIGURATION;
 
       spells.add(O2SpellType.DRACONIFORS);
       spells.add(O2SpellType.DUCKLIFORS);
@@ -35,7 +32,6 @@ public class INTERMEDIATE_TRANSFIGURATION extends O2Book
       spells.add(O2SpellType.DELETRIUS);
       spells.add(O2SpellType.HERBIFORS);
       spells.add(O2SpellType.LAPIFORS);
-      spells.add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       //spell 11
    }
 }

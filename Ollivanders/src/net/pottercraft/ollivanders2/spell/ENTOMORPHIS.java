@@ -21,15 +21,17 @@ public final class ENTOMORPHIS extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public ENTOMORPHIS()
+   public ENTOMORPHIS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.ENTOMORPHIS;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("What wouldn't he give to strike now, to jinx Dudley so thoroughly he'd have to crawl home like an insect, struck dumb, sprouting feelers...");
          add("The Insect Jinx");
@@ -51,11 +53,16 @@ public final class ENTOMORPHIS extends PlayerDisguise
       spellType = O2SpellType.ENTOMORPHIS;
       branch = O2MagicBranch.DARK_ARTS;
 
-      initSpell();
-      calculateSuccessRate();
-
       targetType = EntityType.SPIDER;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

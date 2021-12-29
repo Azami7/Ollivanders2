@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.divination;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -21,6 +22,7 @@ import java.util.UUID;
 public class O2Prophecies
 {
    final private Ollivanders2 p;
+   private Ollivanders2Common common;
 
    final private List<O2Prophecy> activeProphecies = new ArrayList<>();
    final private List<O2Prophecy> offlineProphecies = new ArrayList<>();
@@ -43,6 +45,7 @@ public class O2Prophecies
       p = plugin;
 
       loadProphecies();
+      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -52,11 +55,7 @@ public class O2Prophecies
     */
    public void addProphecy(@NotNull O2Prophecy prophecy)
    {
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("Adding prophecy");
-      }
-
+      common.printDebugMessage("Adding prophecy", null, null, false);
       activeProphecies.add(prophecy);
    }
 
@@ -67,11 +66,7 @@ public class O2Prophecies
     */
    void addOfflineProphecy(@NotNull O2Prophecy prophecy)
    {
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("Adding prophecy");
-      }
-
+      common.printDebugMessage("Adding prophecy", null, null, false);
       offlineProphecies.add(prophecy);
    }
 
@@ -176,7 +171,7 @@ public class O2Prophecies
    {
       List<Map<String, String>> prophecies = serializeProphecies();
 
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       gsonLayer.writeSaveData(prophecies, GsonDAO.o2PropheciesJSONFile);
    }
 
@@ -185,7 +180,7 @@ public class O2Prophecies
     */
    private void loadProphecies ()
    {
-      GsonDAO gsonLayer = new GsonDAO(p);
+      GsonDAO gsonLayer = new GsonDAO();
       List<Map<String, String>> prophecies = gsonLayer.readSavedDataListMap(GsonDAO.o2PropheciesJSONFile);
 
       if (prophecies == null)
@@ -341,9 +336,7 @@ public class O2Prophecies
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failure reading saved prophecy data.");
-            e.printStackTrace();
-            return null;
+            common.printDebugMessage("Failure reading saved prophecy data.", e, null, true);
          }
       }
 
@@ -377,14 +370,11 @@ public class O2Prophecies
             activeProphecies.add(prophecy);
             offlineProphecies.remove(prophecy);
 
-            count++;
+            count = count + 1;
          }
       }
 
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("Loaded " + count + " prophecies for player.");
-      }
+      common.printDebugMessage("Loaded " + count + " prophecies for player.", null, null, false);
    }
 
    /**

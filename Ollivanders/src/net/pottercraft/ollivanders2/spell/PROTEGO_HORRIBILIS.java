@@ -1,7 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -20,15 +20,17 @@ public final class PROTEGO_HORRIBILIS extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PROTEGO_HORRIBILIS()
+   public PROTEGO_HORRIBILIS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PROTEGO_HORRIBILIS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add(" [...] although he could barely see out of it, he pointed his wand through the smashed window and started muttering incantations of great complexity. Harry heard a weird rushing noise, as though Flitwick had unleashed the power of the wind into the grounds.");
       }};
@@ -49,7 +51,6 @@ public final class PROTEGO_HORRIBILIS extends StationarySpell
 
       spellType = O2SpellType.PROTEGO_HORRIBILIS;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       baseDurationInSeconds = 30;
       durationModifierInSeconds = 10;
@@ -57,10 +58,12 @@ public final class PROTEGO_HORRIBILIS extends StationarySpell
       radiusModifier = 1;
       flairSize = 10;
       centerOnCaster = true;
+
+      initSpell();
    }
 
    @Override
-   protected StationarySpellObj createStationarySpell ()
+   protected O2StationarySpell createStationarySpell()
    {
       return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_HORRIBILIS(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO_HORRIBILIS, radius, duration);
    }

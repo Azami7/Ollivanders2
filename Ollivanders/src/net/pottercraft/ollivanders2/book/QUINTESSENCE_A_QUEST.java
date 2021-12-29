@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +16,7 @@ public class QUINTESSENCE_A_QUEST extends O2Book
    {
       super(plugin);
 
-      shortTitle = "Quintessence";
-      title = "Quintessence: A Quest";
-      author = "Unknown";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.QUINTESSENCE_A_QUEST;
 
       spells.add(O2SpellType.PROTEGO_TOTALUM);
       spells.add(O2SpellType.PROTEGO_HORRIBILIS);

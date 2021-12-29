@@ -6,8 +6,8 @@ import java.util.List;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
@@ -30,14 +30,16 @@ public final class FIENDFYRE extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FIENDFYRE()
+   public FIENDFYRE(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
       spellType = O2SpellType.FIENDFYRE;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("It was not normal fire; Crabbe had used a curse of which Harry had no knowledge: As they turned a corner the flames chased them as though they were alive, sentient, intent upon killing them. ");
          add("Bewitched Flame Curse");
@@ -60,22 +62,23 @@ public final class FIENDFYRE extends O2Spell
       spellType = O2SpellType.FIENDFYRE;
       branch = O2MagicBranch.DARK_ARTS;
 
-      initSpell();
-
       // world guard flags
-      worldGuardFlags.add(Flags.MOB_SPAWNING);
+      if (Ollivanders2.worldGuardEnabled)
+         worldGuardFlags.add(Flags.MOB_SPAWNING);
+
+      initSpell();
    }
 
    /**
     * Check projectile location for HORCRUX spell and kill it, otherwise spawn fire entities
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       // check for stationary spells first to remove HORCRUX spells
-      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
+      List<O2StationarySpell> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
 
-      for (StationarySpellObj stationary : stationaries)
+      for (O2StationarySpell stationary : stationaries)
       {
          if (stationary.getSpellType().equals(O2StationarySpellType.HORCRUX))
          {
@@ -127,7 +130,7 @@ public final class FIENDFYRE extends O2Spell
          for (int x = 0; x < numGhasts; x++)
          {
             world.spawnEntity(location, EntityType.GHAST);
-            numCreatures--;
+            numCreatures = numCreatures - 1;
          }
       }
 
@@ -138,7 +141,7 @@ public final class FIENDFYRE extends O2Spell
          for (int x = 0; x < numBlazes; x++)
          {
             world.spawnEntity(location, EntityType.BLAZE);
-            numCreatures--;
+            numCreatures = numCreatures - 1;
          }
       }
 

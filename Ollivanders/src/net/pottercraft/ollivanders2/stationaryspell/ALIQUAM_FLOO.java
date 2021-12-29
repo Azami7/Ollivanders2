@@ -1,37 +1,50 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.item.O2ItemType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.Effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Stays in the fireplace and makes the floo network work
  *
  * @author lownes
+ * @author Azami7
  */
-public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
+public class ALIQUAM_FLOO extends O2StationarySpell
 {
    private String flooName;
    private int countDown = 0;
 
    private final String flooNameLabel = "name";
+
+   private HashMap<Player, Location> destinations = new HashMap<>();
+
+   public static List<ALIQUAM_FLOO> flooNetworkLocations = new ArrayList<>();
 
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -43,6 +56,7 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
       super(plugin);
 
       spellType = O2StationarySpellType.ALIQUAM_FLOO;
+      flooNetworkLocations.add(this);
    }
 
    /**
@@ -63,12 +77,24 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
       spellType = O2StationarySpellType.ALIQUAM_FLOO;
       this.flooName = flooName;
 
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("Creating stationary spell type " + spellType.name());
-      }
+      flooNetworkLocations.add(this);
+
+      common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
    }
 
+   /**
+    * This kills the floo stationary spell
+    */
+   @Override
+   public void kill ()
+   {
+      super.kill();
+      flooNetworkLocations.remove(this);
+   }
+
+   /**
+    * Check for players activating the floo
+    */
    @Override
    public void checkEffect ()
    {
@@ -92,7 +118,7 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
          {
             live.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 300, 0));
          }
-         countDown--;
+         countDown = countDown - 1;
       }
       if (block.getType() == Material.FIRE)
       {
@@ -108,28 +134,20 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
             ItemStack stack = item.getItemStack();
             if (item.getLocation().getBlock().equals(block))
             {
-               if (stack.getType() == Ollivanders2.flooPowderMaterial)
+               if (O2ItemType.FLOO_POWDER.isItemThisType(stack))
                {
-                  if (stack.hasItemMeta())
-                  {
-                     ItemMeta meta = stack.getItemMeta();
-
-                     if (meta != null && meta.hasLore())
-                     {
-                        List<String> lore = meta.getLore();
-                        if (lore != null && lore.contains("Glittery, silver powder"))
-                        {
-                           countDown += 20 * 60 * stack.getAmount();
-                           item.remove();
-                        }
-                     }
-                  }
+                  countDown += 20 * 60 * stack.getAmount();
+                  item.remove();
                }
             }
          }
       }
    }
 
+   /**
+    * Get the name of this floo location
+    * @return
+    */
    public String getFlooName ()
    {
       return flooName;
@@ -183,6 +201,101 @@ public class ALIQUAM_FLOO extends StationarySpellObj implements StationarySpell
          {
             flooName = e.getValue();
          }
+      }
+   }
+
+   /**
+    * Handle player floo chat
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event)
+   {
+      Player player = event.getPlayer();
+      String chat = event.getMessage();
+      Location destination = null;
+
+      if (!(player.getLocation().getBlock().equals(getBlock())) || !isWorking())
+         return;
+
+      // look for the destination in the registered floo network
+      for (ALIQUAM_FLOO floo : flooNetworkLocations)
+      {
+         if (floo.getFlooName().equalsIgnoreCase(chat.trim()))
+         {
+            destination = floo.location;
+         }
+      }
+
+      if (destination == null)
+      {
+         int randomIndex = Math.abs(Ollivanders2Common.random.nextInt() % flooNetworkLocations.size());
+         destination = flooNetworkLocations.get(randomIndex).location;
+      }
+
+      destinations.put(player, destination);
+
+      new BukkitRunnable()
+      {
+         @Override
+         public void run()
+         {
+            if (!event.isCancelled())
+            {
+               doFlooTeleport(player);
+            }
+         }
+      }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+   }
+
+   /**
+    * Do the teleport event.
+    *
+    * @param player the player to teleport
+    */
+   private void doFlooTeleport (Player player)
+   {
+      if (destinations.containsKey(player))
+         p.addTeleportEvent(player, destinations.get(player));
+
+      stopWorking();
+      destinations.remove(player);
+   }
+
+   /**
+    * Handle entity combusting due to the fire block
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnEntityCombustEvent(@NotNull EntityCombustEvent event)
+   {
+      Entity entity = event.getEntity();
+      Location entityLocation = entity.getLocation();
+
+      if (isInside(entityLocation))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("ALIQUAM_FLOO: canceled EntityCombustEvent", null, null, false);
+      }
+   }
+
+   /**
+    * Dont take damage in the fireplace
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnEntityDamageEvent (@NotNull EntityDamageEvent event)
+   {
+      Entity entity = event.getEntity();
+      Location entityLocation = entity.getLocation();
+
+      if (isInside(entityLocation))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("ALIQUAM_FLOO: canceled EntityDamageEvent", null, null, false);
       }
    }
 }

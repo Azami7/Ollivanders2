@@ -19,15 +19,17 @@ public final class AQUA_ERUCTO extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public AQUA_ERUCTO()
+   public AQUA_ERUCTO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.AQUA_ERUCTO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Aqua Eructo Charm");
          add("\"Very good. You'll need to use Aqua Eructo to put out the fires.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
@@ -51,8 +53,7 @@ public final class AQUA_ERUCTO extends BlockTransfiguration
 
       permanent = true;
       radius = 1;
-
-      initSpell();
+      successMessage = "A fire is doused by the water.";
 
       transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
       transfigurationMap.put(Material.FIRE, Material.AIR);
@@ -61,9 +62,12 @@ public final class AQUA_ERUCTO extends BlockTransfiguration
       materialWhitelist.add(Material.LAVA);
       materialWhitelist.add(Material.FIRE);
 
-      moveEffectData = Material.WATER;
+      moveEffectData = Material.BLUE_ICE;
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+      projectilePassThrough.remove(Material.FIRE);
+
+      initSpell();
    }
 }

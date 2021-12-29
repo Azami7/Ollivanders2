@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -24,15 +24,17 @@ public final class MELOFORS extends GaleatiSuper
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public MELOFORS()
+   public MELOFORS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.MELOFORS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Harry overheard one second-year girl assuring another that Fudge was now lying in St Mungo’s with a pumpkin for a head.\"");
          add("The Melon-Head Spell");
@@ -55,8 +57,8 @@ public final class MELOFORS extends GaleatiSuper
       spellType = O2SpellType.MELOFORS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       materialType = melons[Math.abs(Ollivanders2Common.random.nextInt() % melons.length)];
+
+      initSpell();
    }
 }

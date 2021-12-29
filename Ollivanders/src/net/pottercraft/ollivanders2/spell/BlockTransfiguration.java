@@ -9,14 +9,14 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * The super class for transfiguration of objects.  Not for use on players or entities.
@@ -24,24 +24,13 @@ import org.jetbrains.annotations.Nullable;
  * @author Azami7
  * @since 2.2.5
  */
-public abstract class BlockTransfiguration extends O2Spell
+public abstract class BlockTransfiguration extends TransfigurationBase
 {
-    int minDurationInSeconds = 15;
-    int maxDurationInSeconds = 600; // 10 minutes
-
-    /**
-     * If the transfiguration has taken place or not.
-     */
-    private boolean isTransfigured = false;
-
     /**
      * A map of the transfigured blocks and their original types for use with revert()
      */
-    final private List<Block> changedBlocks = new ArrayList<>();
+    final HashMap<Block, Material> changedBlocks = new HashMap<>();
 
-    //
-    // these should be set by each spell as needed
-    //
     /**
      * If this is populated, any material type key will be changed to the value
      */
@@ -63,16 +52,6 @@ public abstract class BlockTransfiguration extends O2Spell
     double radiusModifier = 1.0;
 
     /**
-     * If this is not permanent, how long it should last.
-     */
-    int spellDuration = 300 * Ollivanders2Common.ticksPerSecond; // 5 minutes
-
-    /**
-     * Allows spell variants to change the duration of this spell.
-     */
-    double durationModifier = 1.0;
-
-    /**
      * A blacklist of Material types that will not be affected by this spell.  Only used if the whitelist is empty.
      */
     List<Material> materialBlacklist = new ArrayList<>();
@@ -84,10 +63,12 @@ public abstract class BlockTransfiguration extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public BlockTransfiguration()
+    public BlockTransfiguration(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         branch = O2MagicBranch.TRANSFIGURATION;
     }
@@ -106,116 +87,49 @@ public abstract class BlockTransfiguration extends O2Spell
         branch = O2MagicBranch.TRANSFIGURATION;
 
         // material black list
-        for (Material material : Ollivanders2Common.unbreakableMaterials)
-        {
-            if (!materialBlackList.contains(material))
-                materialBlackList.add(material);
-        }
+        materialBlackList.addAll(Ollivanders2Common.unbreakableMaterials);
 
         // required worldGuard state flags
-        worldGuardFlags.add(Flags.BUILD);
-    }
+        if (Ollivanders2.worldGuardEnabled)
+           worldGuardFlags.add(Flags.BUILD);
 
-    @Override
-    void doInitSpell()
-    {
-        // spell duration
-        int durationInSeconds = (int) usesModifier;
-        if (durationInSeconds < minDurationInSeconds)
-        {
-            durationInSeconds = minDurationInSeconds;
-        }
-        else if (durationInSeconds > maxDurationInSeconds)
-        {
-            durationInSeconds = maxDurationInSeconds;
-        }
+        minDuration = 15 * Ollivanders2Common.ticksPerSecond;
+        maxDuration = 10 * Ollivanders2Common.ticksPerMinute;
+        spellDuration = minDuration;
 
-        spellDuration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
-    }
-
-    /**
-     * If we have hit a target, transform it if it is not transformed or change it back if it is already transformed and
-     * the duration is expired for a temporary spell.
-     */
-    @Override
-    protected void doCheckEffect()
-    {
-        if (!hasHitTarget())
-            return;
-
-        // if the object has not transfigured, transfigure it
-        if (!isTransfigured)
-        {
-            Block target = getTargetBlock();
-            if (target != null)
-            {
-                transfigure(target);
-
-                if (!permanent)
-                {
-                    spellDuration = (int) (spellDuration * durationModifier);
-                }
-                else
-                {
-                    spellDuration = 0;
-                    kill();
-                }
-            }
-        }
-        // if the entity has transfigured, check time to change back
-        else
-        {
-            // check time to live on the spell
-            if (spellDuration <= 0)
-            {
-                // spell duration is up, kill the spell
-                kill();
-            }
-            else
-            {
-                spellDuration--;
-            }
-        }
+        successMessage = "Transfiguration successful.";
     }
 
     /**
      * Transfigure the target block or blocks. Will not change the block if it is on the materialBlacklist list or if the
      * target block is already the transfigure type.
      */
-    protected void transfigure(@NotNull Block block)
+    protected void transfigure()
     {
-        if (isTransfigured)
-        {
+        if (isTransfigured || !hasHitTarget() || getTargetBlock() == null)
             return;
-        }
 
-        // get the objects to be transfigured
-        for (Block blockToChange : Ollivanders2API.common.getBlocksInRadius(block.getLocation(), (int) (radius * radiusModifier)))
+        // get the objects to be transfigured, target block is not always the block at the location (such as aguamenti), so we cannot use 'location'
+        for (Block blockToChange : Ollivanders2API.common.getBlocksInRadius(getTargetBlock().getLocation(), (int) (radius * radiusModifier)))
         {
             if (!canTransfigure(blockToChange))
-            {
                 continue;
-            }
 
-            Material orig = blockToChange.getType();
+            Material originalMaterial = blockToChange.getType();
             // if not permanent, keep track of what the original block was
             if (!permanent)
-            {
-                p.addTempBlock(blockToChange, orig);
-                changedBlocks.add(blockToChange);
-            }
+                changedBlocks.put(blockToChange, originalMaterial);
 
-            if (transfigurationMap.containsKey(orig))
-            {
-                blockToChange.setType(transfigurationMap.get(orig));
-            }
+            if (transfigurationMap.containsKey(originalMaterial))
+                blockToChange.setType(transfigurationMap.get(originalMaterial));
             else
-            {
                 blockToChange.setType(transfigureType);
-            }
+
+            isTransfigured = true;
         }
 
-        isTransfigured = true;
+        if (permanent)
+            kill();
     }
 
     /**
@@ -224,7 +138,7 @@ public abstract class BlockTransfiguration extends O2Spell
      * @param block the block to check
      * @return true if the block can be changed, false otherwise.
      */
-    private boolean canTransfigure(@NotNull Block block)
+    boolean canTransfigure(@NotNull Block block)
     {
         // get block type
         Material blockType = block.getType();
@@ -232,68 +146,83 @@ public abstract class BlockTransfiguration extends O2Spell
         boolean canChange = true;
 
         if (blockType == transfigureType) // do not change if this block is already the target type
-        {
             canChange = false;
-        }
         else if (block.getState() instanceof Entity) // do not change if this block is an Entity
-        {
             canChange = false;
-        }
         else if (materialBlacklist.contains(blockType)) // do not change if this block is in the blacklist
-        {
             canChange = false;
-        }
         else if (!materialWhitelist.isEmpty()) // do not change if the whitelist exists and this block is not in it
         {
             if (!materialWhitelist.contains(blockType))
-            {
                 canChange = false;
+        }
+        else // do not change if this block is already the subject of a temporary transfiguration
+        {
+            for (O2Spell spell : p.getProjectiles())
+            {
+                if (spell instanceof TransfigurationBase)
+                {
+                    if (((TransfigurationBase)spell).isBlockTransfigured(block))
+                        return false;
+                }
             }
         }
 
         return canChange;
     }
 
+    /**
+     * Restore the block to its original type if this was not a permanent change
+     */
     @Override
     public void revert()
     {
-        if (!permanent)
-        {
-            for (Block block : changedBlocks)
-            {
-                p.revertTempBlock(block);
-            }
+        if (permanent)
+            return;
 
-            changedBlocks.clear();
+        for (Block block : changedBlocks.keySet())
+        {
+            Material originalMaterial = changedBlocks.get(block);
+            block.setType(originalMaterial);
         }
+
+        changedBlocks.clear();
+
+        // do any spell specific revert actions beyond changing the block back
+        doRevert();
     }
 
+    /**
+     * Spell specific revert actions beyond changing the block type back. Needs to be overridden by child classes.
+     */
+    void doRevert () {}
+
+    /**
+     * Is this spell currently affecting this block?
+     *
+     * @param block the block to check
+     * @return true if this spell is affecting this block, false otherwise
+     */
     @Override
-    @NotNull
-    public String getText()
+    public boolean isBlockTransfigured(@NotNull Block block)
     {
-        return text;
+        if (permanent)
+            // if this spell is permanent, it is no longer considered as "affecting" the block, the block *is* the new type
+            // this condition should never happen because permanent spells should be killed but just in case one is hanging around
+            return false;
+
+        return changedBlocks.containsKey(block);
     }
 
+    /**
+     * Is this entity transfigured by this spell
+     *
+     * @param entity the entity to check
+     * @return true if transfigured, false otherwise
+     */
     @Override
-    @Nullable
-    public String getFlavorText()
+    public boolean isEntityTransfigured(@NotNull Entity entity)
     {
-        if (flavorText.size() < 1)
-        {
-            return null;
-        }
-        else
-        {
-            int index = Math.abs(Ollivanders2Common.random.nextInt() % flavorText.size());
-            return flavorText.get(index);
-        }
-    }
-
-    @Override
-    @NotNull
-    public O2MagicBranch getMagicBranch()
-    {
-        return branch;
+        return false;
     }
 }

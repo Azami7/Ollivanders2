@@ -9,16 +9,17 @@ import java.util.Map.Entry;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.Teachable;
 
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.entity.Player;
@@ -38,32 +39,15 @@ import org.jetbrains.annotations.Nullable;
  * @author Azami7
  * @since 2.2.7
  */
-public abstract class O2Potion implements Teachable
+public abstract class O2Potion
 {
-   enum PotionLevel
-   {
-      BEGINNER (1),
-      OWL (2),
-      NEWT (3),
-      EXPERT (4);
-
-      final int successModifier;
-
-      PotionLevel (int mod)
-      {
-         successModifier = mod;
-      }
-   }
+   Ollivanders2 p;
+   Ollivanders2Common common;
 
    /**
     * The type this potion is.
     */
    protected O2PotionType potionType;
-
-   /**
-    * The difficulty level of this potion.
-    */
-   PotionLevel potionLevel = PotionLevel.BEGINNER;
 
    /**
     * The ingredients list for this potion.
@@ -88,7 +72,7 @@ public abstract class O2Potion implements Teachable
    /**
     * The PotionEffect for this potion
     */
-   PotionEffect effect = null;
+   PotionEffect minecraftPotionEffect = null;
 
    /**
     * The type of potion this is
@@ -100,8 +84,6 @@ public abstract class O2Potion implements Teachable
     */
    protected int duration = 3600;
 
-   protected Ollivanders2 p;
-
    /**
     * Constructor
     *
@@ -111,6 +93,7 @@ public abstract class O2Potion implements Teachable
    {
       p = plugin;
       potionType = O2PotionType.BABBLING_BEVERAGE;
+      common = new Ollivanders2Common(p);
    }
 
    /**
@@ -119,7 +102,7 @@ public abstract class O2Potion implements Teachable
     * @return the recipe text for this ingredient
     */
    @NotNull
-   protected String getIngredientsText ()
+   protected String getIngredientsText()
    {
       StringBuilder stringBuilder = new StringBuilder();
       stringBuilder.append("\n\nIngredients:");
@@ -127,7 +110,7 @@ public abstract class O2Potion implements Teachable
       for (Entry<O2ItemType, Integer> e : ingredients.entrySet())
       {
          O2ItemType ingredientType = e.getKey();
-         String name = Ollivanders2API.getItems(p).getItemDisplayNameByType(ingredientType);
+         String name = Ollivanders2API.getItems().getItemDisplayNameByType(ingredientType);
 
          stringBuilder.append("\n").append(e.getValue().toString()).append(" ").append(name);
       }
@@ -141,7 +124,7 @@ public abstract class O2Potion implements Teachable
     * @return the type of potion
     */
    @NotNull
-   public O2PotionType getPotionType ()
+   public O2PotionType getPotionType()
    {
       return potionType;
    }
@@ -152,7 +135,7 @@ public abstract class O2Potion implements Teachable
     * @return the name of the potion
     */
    @NotNull
-   public String getName ()
+   public String getName()
    {
       return potionType.getPotionName();
    }
@@ -163,7 +146,7 @@ public abstract class O2Potion implements Teachable
     * @return a Map of the ingredients for this potion
     */
    @NotNull
-   Map<O2ItemType, Integer> getIngredients ()
+   Map<O2ItemType, Integer> getIngredients()
    {
       return ingredients;
    }
@@ -200,10 +183,26 @@ public abstract class O2Potion implements Teachable
       }
    }
 
+   /**
+    * Get the branch of magic for this potion
+    *
+    * @return the branch of magic for this potion
+    */
    @NotNull
-   public O2MagicBranch getMagicBranch ()
+   public O2MagicBranch getMagicBranch()
    {
       return O2MagicBranch.POTIONS;
+   }
+
+   /**
+    * Get get the level of magic for this potion
+    *
+    * @return the level of magic for this potion
+    */
+   @NotNull
+   public Ollivanders2Common.MagicLevel getLevel()
+   {
+      return potionType.getLevel();
    }
 
    /**
@@ -214,9 +213,12 @@ public abstract class O2Potion implements Teachable
     */
    public boolean checkRecipe(@NotNull Map<O2ItemType, Integer> cauldronIngredients)
    {
+      common.printDebugMessage("Checking " + potionType.getPotionName() + " recipe", null, null, false);
+
       // are there the right number of ingredients?
       if (ingredients.size() != cauldronIngredients.size())
       {
+         common.printDebugMessage("   expected " + ingredients.size() + " ingredients, got " + cauldronIngredients.size(), null, null, false);
          return false;
       }
 
@@ -228,43 +230,53 @@ public abstract class O2Potion implements Teachable
          // is this ingredient in the recipe?
          if (!cauldronIngredients.containsKey(ingredientType))
          {
+            common.printDebugMessage("   recipe does not contain " + ingredientType.getName(), null, null, false);
             return false;
          }
 
          // is the amount of the ingredient correct?
          if (cauldronIngredients.get(ingredientType).intValue() != count.intValue())
          {
+            common.printDebugMessage("   recipe needs " + count.intValue() + " " + ingredientType.getName() + ", got " + cauldronIngredients.get(ingredientType).intValue(), null, null, false);
             return false;
          }
       }
 
+      common.printDebugMessage("   matches", null, null, false);
       return true;
    }
 
    /**
     * Brew this potion.
     *
+    * @param brewer the player brewing the potion
+    * @param checkCanBrew should we enforce checking if the brewer can brew or not
     * @return an ItemStack with a single bottle of this potion
     */
    @NotNull
    public ItemStack brew(@NotNull Player brewer, boolean checkCanBrew)
    {
       if (checkCanBrew && !canBrew(brewer))
+      {
+         brewer.sendMessage(Ollivanders2.chatColor + "You feel uncertain about how to make this potion.");
          return brewBadPotion();
+      }
 
       ItemStack potion = new ItemStack(potionMaterialType);
       PotionMeta meta = (PotionMeta) potion.getItemMeta();
       if (meta == null)
       {
-         p.getLogger().warning("O2Potion.brew: item meta is null");
+         common.printDebugMessage("O2Potion.brew: item meta is null", null, null, true);
          return brewBadPotion();
       }
 
       meta.setDisplayName(potionType.getPotionName());
-      meta.setLore(Arrays.asList(potionType.getPotionName()));
+      PersistentDataContainer container = meta.getPersistentDataContainer();
+      container.set(O2Potions.potionTypeKey, PersistentDataType.STRING, potionType.toString());
+
       meta.setColor(potionColor);
-      if (effect != null)
-         meta.addCustomEffect(effect, true);
+      if (minecraftPotionEffect != null)
+         meta.addCustomEffect(minecraftPotionEffect, true);
 
       meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
@@ -282,9 +294,13 @@ public abstract class O2Potion implements Teachable
     */
    private boolean canBrew(@NotNull Player brewer)
    {
-      boolean canBrew = true;
+      // When maxSpellLevel is on, potions are always successful
+      if (Ollivanders2.maxSpellLevel)
+         return true;
 
-      O2Player o2p = Ollivanders2API.getPlayers(p).getPlayer(brewer.getUniqueId());
+      boolean canBrew;
+
+      O2Player o2p = Ollivanders2API.getPlayers().getPlayer(brewer.getUniqueId());
       if (o2p == null)
          return false;
 
@@ -292,61 +308,24 @@ public abstract class O2Potion implements Teachable
 
       // do not allow them to brew if book learning is on and they do not know this potion
       if (Ollivanders2.bookLearning && (potionCount < 1))
-      {
-         brewer.sendMessage(Ollivanders2.chatColor + "You feel uncertain about how to make this potion.");
          canBrew = false;
-      }
       else
       {
-         // first check player year versus potion difficulty
-         int year = o2p.getYear().getIntValue();
-
-         int yearModifier = 1; // year 1
-         if (year == 2) // year 2
-            yearModifier = 2;
-         else if (year == 3 || year == 4) // years 3-4
-            yearModifier = 3;
-         else if (year > 4 && year < 7) // years 5-7, OWL
-            yearModifier = 4;
-         else //year == 7, NEWT
-            yearModifier = 5;
-
          int successRate = 0;
-         // If Years is enabled:
-         // success rate = ((potion count * year modifier * 2) / potion success modifier) - potion success modifier
-         //
-         // Examples:
-         //
-         // BEGINNER potion has a success modifier of 1, player has potion count of 10, player is a 7th year
-         // = 99% success rate
-         //
-         // EXPERT potion has a success modifier of 4, player has a potion count of 10, player is a 6th year
-         // = 16% success rate
-         //
-         // OWL potion has a success modifier of 2, player has a potion count of 2, player is a 1st year
-         // = 0% success rate
-         //
-         if (Ollivanders2.useYears)
-         {
-            successRate = ((potionCount * yearModifier * 2) / potionLevel.successModifier) - potionLevel.successModifier;
-         }
-         // If Years is not enabled:
+
          // success rate = ((potion count * 10) / (potion success modifier) - potions success modifier
          //
          // Examples:
          // BEGINNER potion has a success modifier of 1, player has potion count of 10, player is a 7th year
          // = 99% success rate
          //
-         // EXPERT potion has a success modifier of 4, player has a potion count of 10, player is a 6th year
+         // EXPERT potion has a success modifier of 4, player has a potion count of 10, player is a 5th year
          // = 21% success rate
          //
          // OWL potion has a success modifier of 2, player has a potion count of 2, player is a 1st year
          // = 8% success rate
          //
-         else
-         {
-            successRate = ((potionCount * 10) / potionLevel.successModifier) - potionLevel.successModifier;
-         }
+         successRate = ((potionCount * 10) / potionType.getLevel().getSuccessModifier()) - potionType.getLevel().getSuccessModifier();
 
          int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) + 1;
 
@@ -439,9 +418,15 @@ public abstract class O2Potion implements Teachable
       // rand < 5, no effect
 
       potion.setItemMeta(meta);
+      meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
 
       return potion;
    }
 
-   public void drink(@NotNull O2Player o2p, @NotNull Player player) { }
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
+   public abstract void drink(@NotNull Player player);
 }

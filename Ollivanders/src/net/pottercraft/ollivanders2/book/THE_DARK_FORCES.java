@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -20,10 +19,7 @@ public class THE_DARK_FORCES extends O2Book
    {
       super(plugin);
 
-      shortTitle = "The Dark Forces";
-      title = "The Dark Forces: A Guide to Self-Protection";
-      author = "Quentin Trimble";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.THE_DARK_FORCES;
 
       spells.add(O2SpellType.LUMOS);
       spells.add(O2SpellType.FINITE_INCANTATEM);

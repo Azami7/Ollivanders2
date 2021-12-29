@@ -28,7 +28,6 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.DRAUGHT_OF_LIVING_DEATH;
-      potionLevel = PotionLevel.NEWT;
 
       ingredients.put(O2ItemType.POWDERED_ASHPODEL_ROOT, 1);
       ingredients.put(O2ItemType.INFUSION_OF_WORMWOOD, 1);
@@ -45,10 +44,15 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion
       potionColor = Color.fromRGB(200, 162, 200);
    }
 
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
    @Override
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   public void drink(@NotNull Player player)
    {
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
       {
          player.sendMessage(Ollivanders2.chatColor + "You yawn, close your eyes for a moment, then feel fine.");
       }
@@ -56,7 +60,7 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion
       {
          SLEEPING effect = new SLEEPING(p, 5, player.getUniqueId());
          effect.setPermanent(true);
-         Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
          player.sendMessage(Ollivanders2.chatColor + "You fall in to a powerful magic sleep.");
       }

@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -17,9 +16,7 @@ public class HOLIDAYS_WITH_HAGS extends O2Book
    {
       super(plugin);
 
-      title = shortTitle = "Holidays with Hags";
-      author = "Gilderoy Lockhart";
-      branch = O2MagicBranch.DARK_ARTS;
+      bookType = O2BookType.HOLIDAYS_WITH_HAGS;
 
       spells.add(O2SpellType.MELOFORS);
       spells.add(O2SpellType.OBLIVIATE);

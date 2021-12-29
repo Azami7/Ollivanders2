@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -33,10 +33,12 @@ public abstract class IncendioSuper extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public IncendioSuper()
+   public IncendioSuper(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
    }
 
    /**
@@ -55,21 +57,24 @@ public abstract class IncendioSuper extends O2Spell
          lifeTime = maxDuration;
 
       // world-guard flags
-      worldGuardFlags.add(Flags.BUILD);
-      worldGuardFlags.add(Flags.LIGHTER);
-      worldGuardFlags.add(Flags.PVP);
-      worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+      if (Ollivanders2.worldGuardEnabled)
+      {
+         worldGuardFlags.add(Flags.BUILD);
+         worldGuardFlags.add(Flags.LIGHTER);
+         worldGuardFlags.add(Flags.PVP);
+         worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+      }
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
 
       if (burning)
       {
-         lifeTime--;
+         lifeTime = lifeTime - 1;
 
          if (lifeTime <= 0)
             kill();
@@ -105,9 +110,7 @@ public abstract class IncendioSuper extends O2Spell
             item.setFireTicks((int)lifeTime);
 
             if (!strafe)
-            {
                break;
-            }
          }
 
          // entities
@@ -117,9 +120,7 @@ public abstract class IncendioSuper extends O2Spell
             live.setFireTicks((int)lifeTime);
 
             if (!strafe)
-            {
                break;
-            }
          }
 
          burning = true;
@@ -147,15 +148,19 @@ public abstract class IncendioSuper extends O2Spell
     * Change fire blocks back to air
     */
    @Override
-   public void revert ()
+   public void revert()
    {
       for (Block block : changed)
       {
          Material mat = block.getType();
+
+         // if the fire is on top of a material that burns forever, do not revert it
+         Block down = block.getRelative(BlockFace.DOWN);
+         if (down.getType() == Material.NETHERRACK || down.getType() == Material.SOUL_SAND)
+            continue;
+
          if (mat == Material.FIRE)
-         {
             block.setType(Material.AIR);
-         }
       }
    }
 }

@@ -35,7 +35,7 @@ public abstract class Divination extends O2Spell
     Material facingBlock = null;
     String facingBlockString = "";
 
-    public static final List<O2SpellType> divinationSpells = new ArrayList<O2SpellType>()
+    public static final List<O2SpellType> divinationSpells = new ArrayList<>()
     {{
         add(O2SpellType.ASTROLOGIA);
         add(O2SpellType.BAO_ZHONG_CHA);
@@ -48,10 +48,12 @@ public abstract class Divination extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public Divination()
+    public Divination(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         branch = O2MagicBranch.DIVINATION;
     }
@@ -78,7 +80,7 @@ public abstract class Divination extends O2Spell
     {
         usesModifier = p.getSpellCount(player, spellType);
 
-        if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
         {
             usesModifier *= 2;
         }
@@ -148,7 +150,7 @@ public abstract class Divination extends O2Spell
 
         try
         {
-            divination = (O2Divination) divinationClass.getConstructor(Ollivanders2.class, Player.class, Player.class, Integer.class).newInstance(p, player, target, experience);
+            divination = (O2Divination) divinationClass.getConstructor(Ollivanders2.class, Player.class, Player.class, int.class).newInstance(p, player, target, experience);
         }
         catch (Exception e)
         {
@@ -177,4 +179,7 @@ public abstract class Divination extends O2Spell
         player.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
         kill();
     }
+
+    @Override
+    protected void doCheckEffect() {}
 }

@@ -28,7 +28,6 @@ public final class COMMON_ANTIDOTE_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.COMMON_ANTIDOTE_POTION;
-      potionLevel = PotionLevel.BEGINNER;
 
       ingredients.put(O2ItemType.MISTLETOE_BERRIES, 2);
       ingredients.put(O2ItemType.BEZOAR, 1);
@@ -40,8 +39,13 @@ public final class COMMON_ANTIDOTE_POTION extends O2Potion
       potionColor = Color.TEAL;
    }
 
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
    @Override
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   public void drink(@NotNull Player player)
    {
       if (player.hasPotionEffect(PotionEffectType.POISON))
       {

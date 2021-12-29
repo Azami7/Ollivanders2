@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffectType;
@@ -36,12 +36,22 @@ public abstract class AddPotionEffect extends O2Spell
     /**
      * Strength modifier, 0 is no modifier.
      */
-    int strengthModifier = 0;
+    int amplifier = 0;
+
+    /**
+     * Maximum strength this potion effect can be. Higher than 127 causes odd behaviors (seems to overload a short??)
+     */
+    int maxAmplifier = 127;
 
     /**
      * Number of targets that can be affected
      */
     int numberOfTargets = 1;
+
+    /**
+     * Whether the spell targets the caster
+     */
+    boolean targetSelf = false;
 
     /**
      * The potion effect. Set to luck by default.
@@ -50,10 +60,12 @@ public abstract class AddPotionEffect extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public AddPotionEffect()
+    public AddPotionEffect(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         branch = O2MagicBranch.CHARMS;
     }
@@ -70,7 +82,6 @@ public abstract class AddPotionEffect extends O2Spell
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.CHARMS;
-        durationInSeconds = minDurationInSeconds;
     }
 
     /**
@@ -82,9 +93,7 @@ public abstract class AddPotionEffect extends O2Spell
         affectRadius(1.5, false);
 
         if (hasHitTarget())
-        {
             kill();
-        }
     }
 
     /**
@@ -96,42 +105,46 @@ public abstract class AddPotionEffect extends O2Spell
     void affectRadius(double radius, boolean flair)
     {
         if (flair)
-        {
             Ollivanders2Common.flair(location, (int) radius, 10);
+
+        if (targetSelf)
+        {
+            addEffectsToTarget(player);
+            numberOfTargets = numberOfTargets - 1;
         }
 
         for (LivingEntity livingEntity : getLivingEntities(radius))
         {
-            if ((livingEntity.getUniqueId() == player.getUniqueId()) || !(livingEntity instanceof Player))
-            {
-                continue;
-            }
-
-            addEffectsToTarget((Player) livingEntity);
-            numberOfTargets--;
-
             // stop when the limit of targets is reached
             if (numberOfTargets <= 0)
             {
                 kill();
                 return;
             }
+
+            if (!targetSelf && livingEntity.getUniqueId() == player.getUniqueId())
+                continue;
+
+            addEffectsToTarget(livingEntity);
+            numberOfTargets = numberOfTargets - 1;
         }
     }
 
     /**
-     * Add the effect to a target player.
+     * Add the effect to a target living entity.
      *
-     * @param target the target player
+     * @param target the target living entity
      */
-    void addEffectsToTarget(@NotNull Player target)
+    void addEffectsToTarget(@NotNull LivingEntity target)
     {
         int duration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
 
         for (PotionEffectType effectType : effectTypes)
         {
-            org.bukkit.potion.PotionEffect effect = new org.bukkit.potion.PotionEffect(effectType, duration, strengthModifier);
+            org.bukkit.potion.PotionEffect effect = new org.bukkit.potion.PotionEffect(effectType, duration, amplifier);
             target.addPotionEffect(effect);
+
+            common.printDebugMessage("Added " + effectType.toString() + " to " + target.getName() + " with amplifier of " + amplifier + " and duration of " + durationInSeconds + " seconds", null, null, false);
         }
     }
 }

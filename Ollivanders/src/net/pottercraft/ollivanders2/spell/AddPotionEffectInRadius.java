@@ -17,16 +17,13 @@ public class AddPotionEffectInRadius extends AddPotionEffect
     int radius = 5;
 
     /**
-     * Whether the spell targets the caster
-     */
-    boolean targetSelf = false;
-
-    /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public AddPotionEffectInRadius()
+    public AddPotionEffectInRadius(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
     }
 
     /**
@@ -49,20 +46,8 @@ public class AddPotionEffectInRadius extends AddPotionEffect
     @Override
     public void checkEffect()
     {
-        if (!isSpellAllowed())
-        {
-            kill();
-            return;
-        }
-
-        if (targetSelf)
-        {
-            addEffectsToTarget(player);
-        }
-        else
-        {
+        if (isSpellAllowed())
             affectRadius(radius, true);
-        }
 
         kill();
     }

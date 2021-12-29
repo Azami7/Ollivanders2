@@ -5,7 +5,7 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -64,7 +64,7 @@ public class AddO2Effect extends O2Spell
     /**
      * Blacklist of effects that cannot be added by a spell.
      */
-    List<O2EffectType> effectBlacklist = new ArrayList<O2EffectType>()
+    List<O2EffectType> effectBlacklist = new ArrayList<>()
     {{
         add(O2EffectType.ANIMAGUS_EFFECT);
         add(O2EffectType.ANIMAGUS_INCANTATION);
@@ -75,10 +75,12 @@ public class AddO2Effect extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public AddO2Effect()
+    public AddO2Effect(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         branch = O2MagicBranch.CHARMS;
     }
@@ -158,7 +160,7 @@ public class AddO2Effect extends O2Spell
             O2Effect effect;
             try
             {
-                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, Integer.class, UUID.class).newInstance(p, duration * strengthModifier, target.getUniqueId());
+                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration * strengthModifier, target.getUniqueId());
             }
             catch (Exception e)
             {
@@ -169,7 +171,7 @@ public class AddO2Effect extends O2Spell
             if (permanent)
                 effect.setPermanent(true);
 
-            Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
         }
     }
 }

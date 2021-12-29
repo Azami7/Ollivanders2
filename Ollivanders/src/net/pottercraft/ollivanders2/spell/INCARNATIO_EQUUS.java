@@ -5,7 +5,7 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.HorseWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -22,10 +22,12 @@ public final class INCARNATIO_EQUUS extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_EQUUS()
+   public INCARNATIO_EQUUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_EQUUS;
       branch = O2MagicBranch.TRANSFIGURATION;
@@ -47,9 +49,6 @@ public final class INCARNATIO_EQUUS extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_EQUUS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-      calculateSuccessRate();
-
       targetType = EntityType.HORSE;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
@@ -62,5 +61,13 @@ public final class INCARNATIO_EQUUS extends PlayerDisguise
 
       watcher.setStyle(common.getRandomHorseStyle());
       watcher.setColor(common.getRandomHorseColor());
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

@@ -8,7 +8,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,15 +22,17 @@ public final class APARECIUM extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public APARECIUM()
+   public APARECIUM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.APARECIUM;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Revealing Charm will reveal invisible ink and messages hidden by magical means. Simply tap a book or parchment with your wand and any hidden message will be revealed. This spell is more than sufficient to overcome the basic concealing charms and so is a favourite of parents and teachers alike.");
          add("The Revealing Charm");
@@ -59,9 +61,9 @@ public final class APARECIUM extends O2Spell
     * If any stationary spells are at the location of the spell projectile, make them flair.
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
-      List<StationarySpellObj> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
+      List<O2StationarySpell> stationaries = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
 
       if (stationaries.size() > 0)
       {

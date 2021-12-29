@@ -29,4 +29,10 @@ public class POISON extends PotionEffectSuper
         divinationText.add("will be cursed");
         divinationText.add("will be possessed by a demon spirit");
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

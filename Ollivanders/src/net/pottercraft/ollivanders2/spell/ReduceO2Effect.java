@@ -4,7 +4,7 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -43,10 +43,12 @@ public class ReduceO2Effect extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public ReduceO2Effect()
+    public ReduceO2Effect(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         branch = O2MagicBranch.CHARMS;
     }
@@ -99,7 +101,7 @@ public class ReduceO2Effect extends O2Spell
 
             reducePotionEffects((Player) livingEntity);
 
-            numberOfTargets--;
+            numberOfTargets = numberOfTargets - 1;
 
             // stop when the limit of targets is reached
             if (numberOfTargets <= 0)
@@ -122,9 +124,9 @@ public class ReduceO2Effect extends O2Spell
             if (effectBlacklist.contains(effectType))
                 continue;
 
-            if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(target.getUniqueId(), effectType))
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), effectType))
             {
-                Ollivanders2API.getPlayers(p).playerEffects.ageEffect(target.getUniqueId(), effectType, (int) (usesModifier * 2400));
+                Ollivanders2API.getPlayers().playerEffects.ageEffect(target.getUniqueId(), effectType, (int) (usesModifier * 2400));
             }
         }
     }

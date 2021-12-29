@@ -20,10 +20,12 @@ public final class VERDIMILLIOUS_DUO extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public VERDIMILLIOUS_DUO()
+   public VERDIMILLIOUS_DUO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.VERDIMILLIOUS_DUO;
       text = "Conjures large green ball fireworks with trails.";
@@ -41,7 +43,6 @@ public final class VERDIMILLIOUS_DUO extends Pyrotechnia
       super(plugin, player, rightWand);
 
       spellType = O2SpellType.VERDIMILLIOUS_DUO;
-      initSpell();
 
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.GREEN);
@@ -50,6 +51,12 @@ public final class VERDIMILLIOUS_DUO extends Pyrotechnia
       fireworkType = Type.BALL_LARGE;
       hasTrails = true;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(10);
    }
 }

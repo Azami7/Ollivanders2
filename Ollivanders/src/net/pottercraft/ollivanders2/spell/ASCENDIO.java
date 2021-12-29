@@ -20,15 +20,17 @@ public final class ASCENDIO extends O2Spell
 {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public ASCENDIO()
+    public ASCENDIO(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         spellType = O2SpellType.ASCENDIO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<String>()
+        flavorText = new ArrayList<>()
         {{
             add("The Climbing Charm");
             add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
@@ -76,4 +78,7 @@ public final class ASCENDIO extends O2Spell
 
         kill();
     }
+
+    @Override
+    protected void doCheckEffect() {}
 }

@@ -21,16 +21,18 @@ public final class BAO_ZHONG_CHA extends Divination
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public BAO_ZHONG_CHA ()
+   public BAO_ZHONG_CHA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.BAO_ZHONG_CHA;
       divinationType = O2DivinationType.TASSEOMANCY;
       branch = O2MagicBranch.DIVINATION;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"Now, I want you all to divide into pairs. Collect a teacup from the shelf, come to me, and I will fill it. Then sit down and drink; drink until only the dregs remain. Swirl these around the cup three times with the left hand, then turn the cup upside-down on its saucer; wait for the last of the tea to drain away, then give your cup to your partner to read.\" -Sybill Trelawney");
          add("\"Oh, and dear, after you’ve broken your first cup, would you be so kind as to select one of the blue patterned ones? I’m rather attached to the pink.\" -Sybill Trelawney");
@@ -54,13 +56,13 @@ public final class BAO_ZHONG_CHA extends Divination
       divinationType = O2DivinationType.TASSEOMANCY;
       branch = O2MagicBranch.DIVINATION;
 
-      initSpell();
-
       facingBlock = Material.CAULDRON;
       facingBlockString = "a cauldron";
 
       itemHeld = O2ItemType.TEA_LEAVES;
       itemHeldString = "tea leaves";
       consumeHeld = true;
+
+      initSpell();
    }
 }

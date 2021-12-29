@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -20,10 +19,7 @@ public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book
    {
       super(plugin);
 
-      title = "A Beginner's Guide to Transfiguration";
-      shortTitle = "Beginners Transfiguration";
-      author = "Emeric Switch";
-      branch = O2MagicBranch.TRANSFIGURATION;
+      bookType = O2BookType.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION;
 
       spells.add(O2SpellType.DURO);
       spells.add(O2SpellType.FATUUS_AURUM);
@@ -32,5 +28,6 @@ public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book
       spells.add(O2SpellType.MULTICORFORS);
       spells.add(O2SpellType.VERA_VERTO);
       spells.add(O2SpellType.SNUFFLIFORS);
+      spells.add(O2SpellType.LAPIDO);
    }
 }

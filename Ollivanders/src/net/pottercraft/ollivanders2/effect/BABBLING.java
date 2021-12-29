@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,7 +16,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BABBLING extends O2Effect
 {
-   public ArrayList<String> dictionary = new ArrayList<String>() {{
+   public ArrayList<String> dictionary = new ArrayList<>() {{
       add("mimble");
       add("wimble");
       add("oddment");
@@ -85,7 +85,7 @@ public class BABBLING extends O2Effect
     * Age this effect each game tick.
     */
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       if (!permanent)
       {
@@ -98,7 +98,7 @@ public class BABBLING extends O2Effect
     *
     * @return a string of nonsense words from 1-5 words in length
     */
-   private String getNonsense ()
+   private String getNonsense()
    {
       StringBuilder nonsense = new StringBuilder();
 
@@ -118,18 +118,24 @@ public class BABBLING extends O2Effect
    }
 
    /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove() {}
+
+   /**
     * Change a player's chat to babbling nonsense.
     *
     * @param event the player chat event
     */
-   public void doBabblingEffect(@NotNull AsyncPlayerChatEvent event)
+   @Override
+   void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
    {
       String message = event.getMessage();
       String newMessage = getNonsense();
 
       event.setMessage(newMessage);
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("Changed " + event.getPlayer().getDisplayName() + "'s chat from \"" + message + "\" to \"" + newMessage + "\"");
+      common.printDebugMessage("Changed " + event.getPlayer().getDisplayName() + "'s chat from \"" + message + "\" to \"" + newMessage + "\"", null, null, false);
    }
 }

@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -17,10 +16,7 @@ public final class ADVANCED_FIREWORKS extends O2Book
    {
       super(plugin);
 
-      title = "Advanced Fireworks for Fun and Profit";
-      shortTitle = "Advanced Fireworks";
-      author = "George Weasley";
-      branch = O2MagicBranch.CHARMS;
+      bookType = O2BookType.ADVANCED_FIREWORKS;
 
       spells.add(O2SpellType.BOTHYNUS_DUO);
       spells.add(O2SpellType.COMETES_DUO);
