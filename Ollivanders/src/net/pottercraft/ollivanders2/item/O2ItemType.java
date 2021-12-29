@@ -52,7 +52,7 @@ public enum O2ItemType
    FLOO_POWDER(Material.REDSTONE, (short) 0, "Floo Powder", "Glittery, silver powder", null),
    FULGURITE(Material.GLOWSTONE_DUST, (short) 0, "Fulgurite", null, null),
    GALANTHUS_NIVALIS(Material.AZURE_BLUET, (short) 0, "Galanthus Nivalis", null, null),
-   GALLEON(Material.GOLD_INGOT, (short) 0, "Galleon", null, null),
+   GALLEON(Material.GOLD_INGOT, (short) 0, "Galleon", "Galleon", null),
    GINGER_ROOT(Material.BEETROOT, (short) 0, "Ginger Root", null, null),
    GROUND_DRAGON_HORN(Material.GLOWSTONE_DUST, (short) 0, "Ground Dragon Horn", null, null),
    GROUND_PORCUPINE_QUILLS(Material.GRAY_DYE, (short) 0, "Ground Porcupine Quills", null, null),
@@ -66,7 +66,7 @@ public enum O2ItemType
    INVISIBILITY_CLOAK(Material.CHAINMAIL_CHESTPLATE, (short) 0, "Cloak of Invisibility", "Silvery Transparent Cloak", null),
    JOBBERKNOLL_FEATHER(Material.FEATHER, (short) 0, "Jobberknoll Feather", null, null),
    KNOTGRASS(Material.TALL_GRASS, (short) 0, "Knotgrass", null, null),
-   KNUT(Material.NETHERITE_INGOT, (short) 0, "Knut", null, null),
+   KNUT(Material.NETHERITE_INGOT, (short) 0, "Knut", "Knut", null),
    LACEWING_FLIES(Material.PUMPKIN_SEEDS, (short) 0, "Lacewing Flies", null, null),
    LAVENDER_SPRIG(Material.LILAC, (short) 0, "Lavender Sprig", null, null),
    LEECHES(Material.INK_SAC, (short) 0, "Leeches", null, null),
@@ -86,7 +86,7 @@ public enum O2ItemType
    RUNESPOOR_EGG(Material.EGG, (short) 0, "Runespoor Egg", null, null),
    SALAMANDER_BLOOD(Material.POTION, (short) 7, "Salamander Blood", null, null),
    SALAMANDER_FIRE(Material.BLAZE_POWDER, (short) 0, "Salamander Fire", null, null),
-   SICKLE(Material.IRON_INGOT, (short) 0, "Sickle", null, null),
+   SICKLE(Material.IRON_INGOT, (short) 0, "Sickle", "Sickle", null),
    SLOTH_BRAIN(Material.FERMENTED_SPIDER_EYE, (short) 0, "Sloth Brain", null, null),
    SLOTH_BRAIN_MUCUS(Material.POTION, (short) 4, "Sloth Brain Mucus", null, null),
    SOPOPHORUS_BEAN_JUICE(Material.POTION, (short) 13, "Sopophorus Bean Juice", null, null),
@@ -134,13 +134,13 @@ public enum O2ItemType
     * @param n the name of the item
     * @param l the lore for this item
     */
-   O2ItemType(@NotNull Material m, short v, @NotNull String n, @Nullable String l, @Nullable ItemEnchantmentType enchantment)
+   O2ItemType(@NotNull Material material, short variant, @NotNull String name, @Nullable String lore, @Nullable ItemEnchantmentType enchantment)
    {
-      material = m;
-      name = n;
-      variant = v;
-      lore = l;
-      itemEnchantment = enchantment;
+      this.material = material;
+      this.name = name;
+      this.variant = variant;
+      this.lore = lore;
+      this.itemEnchantment = enchantment;
    }
 
    /**
