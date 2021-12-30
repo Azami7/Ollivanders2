@@ -1,24 +1,28 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
-import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Collection;
 import java.util.UUID;
 
 /**
- * Doesn't let entities pass the boundary.
+ * Doesn't let entities pass into the protected area.
  *
  * @author lownes
+ * @author Azami7
  */
-public class PROTEGO_TOTALUM extends ShieldSpell implements StationarySpell
+public class PROTEGO_TOTALUM extends ShieldSpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -49,38 +53,99 @@ public class PROTEGO_TOTALUM extends ShieldSpell implements StationarySpell
       spellType = O2StationarySpellType.PROTEGO_TOTALUM;
    }
 
+   /**
+    * Upkeep
+    */
    @Override
-   public void checkEffect ()
-   {
-      age();
-      Collection<Entity> nearbyEntities = Ollivanders2API.common.getEntitiesInRadius(location, radius + 1);
+   void checkEffect () { age(); }
 
-      for (Entity entity : nearbyEntities)
+   /**
+    * Prevent players from entering the protected area
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event)
+   {
+      Location toLoc = event.getTo();
+      Location fromLoc = event.getFrom();
+
+      if (toLoc == null || toLoc.getWorld() == null || fromLoc.getWorld() == null)
+         return;
+
+      // they are already inside the protected area
+      if (common.isInside(fromLoc, location, radius))
+         return;
+
+      if (common.isInside(toLoc, location, radius))
       {
-         if (!(entity instanceof Player))
+         event.setCancelled(true);
+         common.printDebugMessage("PROTEGO_TOTALUM: canceled PlayerMoveEvent", null, null, false);
+
+         new BukkitRunnable()
          {
-            if (entity.getLocation().distance(location) < radius + 0.5
-                  && entity.getLocation().distance(location) > radius - 0.5)
+            @Override
+            public void run()
             {
-               Location spellLoc = location;
-               Location eLoc = entity.getLocation();
-               double distance = eLoc.distance(spellLoc);
-               if (distance > radius - 0.5)
+               if (event.isCancelled())
                {
-                  entity.setVelocity(eLoc.toVector()
-                        .subtract(spellLoc.toVector()).normalize()
-                        .multiply(0.5));
                   flair(10);
-               }
-               else if (distance < radius + 0.5)
-               {
-                  entity.setVelocity(spellLoc.toVector()
-                        .subtract(eLoc.toVector()).normalize()
-                        .multiply(0.5));
-                  flair(10);
+                  event.getPlayer().sendMessage(Ollivanders2.chatColor + "A magical force prevents you moving here.");
                }
             }
-         }
+         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+      }
+   }
+
+   /**
+    * Prevent entities from spawning in the protected area
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnCreatureSpawnEvent (@NotNull CreatureSpawnEvent event)
+   {
+      Entity entity = event.getEntity();
+      Location entityLocation = entity.getLocation();
+
+      if (common.isInside(entityLocation, location, radius))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("PROTEGO_TOTALUM: canceled CreatureSpawnEvent", null, null, false);
+      }
+   }
+
+   /**
+    * Prevent entities from spawning in the protected area
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnEntityTargetEvent (@NotNull EntityTargetEvent event)
+   {
+      Entity target = event.getTarget();
+      if (target == null)
+         return;
+
+      Location targetLocation = target.getLocation();
+
+      if (isInside(targetLocation))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("PROTEGO_TOTALUM: canceled EntityTargetEvent", null, null, false);
+
+         new BukkitRunnable()
+         {
+            @Override
+            public void run()
+            {
+               if (event.isCancelled() && target instanceof Player)
+               {
+                  flair(10);
+                  target.sendMessage(Ollivanders2.chatColor + "A magical force protects you.");
+               }
+            }
+         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
       }
    }
 

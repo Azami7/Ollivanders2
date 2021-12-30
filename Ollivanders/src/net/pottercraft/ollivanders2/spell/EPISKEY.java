@@ -19,15 +19,17 @@ public final class EPISKEY extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public EPISKEY()
+   public EPISKEY(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.HEALING;
       spellType = O2SpellType.EPISKEY;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"Episkey,\" said Tonks. Harry's nose felt very hot, then very cold. He raised a hand and felt it gingerly. It seemed to be mended.");
          add("A minor healing spell.");
@@ -50,21 +52,29 @@ public final class EPISKEY extends AddPotionEffect
       branch = O2MagicBranch.HEALING;
       spellType = O2SpellType.EPISKEY;
 
-      initSpell();
-
       effectTypes.add(PotionEffectType.REGENERATION);
-      strengthModifier = 0;
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      // Amplifier
+      maxAmplifier = 1;
+
+      amplifier = (int)(usesModifier / 100);
+      if (amplifier > maxAmplifier)
+         amplifier = maxAmplifier;
+
+      // Duration
       minDurationInSeconds = 15;
       maxDurationInSeconds = 120;
 
-      durationInSeconds = (int) usesModifier;
+      durationInSeconds = (int)(usesModifier / 2);
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      }
       else if (durationInSeconds > maxDurationInSeconds)
-      {
          durationInSeconds = maxDurationInSeconds;
-      }
    }
 }

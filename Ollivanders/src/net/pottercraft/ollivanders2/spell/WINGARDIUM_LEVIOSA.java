@@ -19,7 +19,7 @@ import org.bukkit.util.Vector;
 
 import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,6 +35,8 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
    List<Location> locList = new ArrayList<>();
    boolean moving = true;
    double length = 0;
+   int maxRadius = 5;
+   int radius = 1;
 
    /**
     * If the blocks should be converted to fallingBlocks after the end of the spell.
@@ -43,15 +45,17 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public WINGARDIUM_LEVIOSA ()
+   public WINGARDIUM_LEVIOSA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.CHARMS;
       spellType = O2SpellType.WINGARDIUM_LEVIOSA;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Levitation Charm");
          add("You're saying it wrong ...It's Wing-gar-dium Levi-o-sa, make the 'gar' nice and long.\" -Hermione Granger");
@@ -74,7 +78,6 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
 
       spellType = O2SpellType.WINGARDIUM_LEVIOSA;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       materialBlackList.add(Material.LAVA);
       materialBlackList.add(Material.SAND);
@@ -88,10 +91,22 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
          worldGuardFlags.add(Flags.ITEM_PICKUP);
          worldGuardFlags.add(Flags.ITEM_DROP);
       }
+
+      initSpell();
    }
 
    @Override
-   public void checkEffect ()
+   void doInitSpell()
+   {
+      radius = (int)usesModifier / 20;
+      if (radius > maxRadius)
+         radius = maxRadius;
+      else if (radius < 1)
+         radius = 1;
+   }
+
+   @Override
+   public void checkEffect()
    {
       if (!isSpellAllowed())
       {
@@ -107,9 +122,9 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
          if (type != Material.AIR && type != Material.WATER && type != Material.LAVA)
          {
             moving = false;
-            double radius = usesModifier / 4;
+
             ArrayList<COLLOPORTUS> collos = new ArrayList<>();
-            for (StationarySpellObj stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+            for (O2StationarySpell stat : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
             {
                if (stat instanceof COLLOPORTUS)
                {
@@ -222,4 +237,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
       newLoc.setZ(newLoc.getZ() + 0.5);
       return newLoc;
    }
+
+   @Override
+   protected void doCheckEffect() { }
 }

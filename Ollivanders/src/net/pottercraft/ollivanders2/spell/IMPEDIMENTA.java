@@ -20,21 +20,23 @@ public final class IMPEDIMENTA extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public IMPEDIMENTA()
+   public IMPEDIMENTA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.IMPEDIMENTA;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal.");
          add("\"I like the look of this one, this Impediment Jinx. Should slow down anything that’s trying to attack you, Harry. We’ll start with that one.\" -Hermione Granger");
       }};
 
-      text = "Slows target movements.";
+      text = "Slows a living entity's movements.";
    }
 
    /**
@@ -50,21 +52,30 @@ public final class IMPEDIMENTA extends AddPotionEffect
 
       branch = O2MagicBranch.DARK_ARTS;
       spellType = O2SpellType.IMPEDIMENTA;
-      initSpell();
 
       effectTypes.add(PotionEffectType.SLOW);
-      strengthModifier = 0;
-      minDurationInSeconds = 15;
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      // Amplifier
+      maxAmplifier = 4;
+
+      amplifier = (int)(usesModifier / 50);
+      if (amplifier > maxAmplifier)
+         amplifier = maxAmplifier;
+
+      // Duration
+      minDurationInSeconds = 5;
       maxDurationInSeconds = 60;
 
-      durationInSeconds = (int) (usesModifier / 2);
+      durationInSeconds = (int)(usesModifier / 2);
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      }
       else if (durationInSeconds > maxDurationInSeconds)
-      {
          durationInSeconds = maxDurationInSeconds;
-      }
    }
 }

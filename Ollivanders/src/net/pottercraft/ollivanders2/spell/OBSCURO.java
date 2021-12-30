@@ -18,15 +18,17 @@ public final class OBSCURO extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public OBSCURO()
+   public OBSCURO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.OBSCURO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("A black blindfold appeared over Phineas Nigellus' clever, dark eyes, causing him to bump into the frame and shriek with pain.");
       }};
@@ -47,20 +49,29 @@ public final class OBSCURO extends AddPotionEffect
 
       spellType = O2SpellType.OBSCURO;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       effectTypes.add(PotionEffectType.BLINDNESS);
-      strengthModifier = 0;
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      // Amplifier
+      maxAmplifier = 1;
+
+      amplifier = (int)(usesModifier / 100);
+      if (amplifier > maxAmplifier)
+         amplifier = maxAmplifier;
+
+      // Duration
       minDurationInSeconds = 30;
 
       durationInSeconds = (int) usesModifier;
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      }
       else if (durationInSeconds > maxDurationInSeconds)
-      {
          durationInSeconds = maxDurationInSeconds;
-      }
    }
 }

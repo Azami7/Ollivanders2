@@ -27,7 +27,7 @@ public class SLEEP_SPEECH extends BABBLING
 
       effectType = O2EffectType.SLEEP_SPEECH;
 
-      dictionary = new ArrayList<String>()
+      dictionary = new ArrayList<>()
       {{
          add("§ozzzzzzzz");
          add("§osnore");
@@ -38,4 +38,10 @@ public class SLEEP_SPEECH extends BABBLING
       permanent = true;
       maxWords = 1;
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove() {}
 }

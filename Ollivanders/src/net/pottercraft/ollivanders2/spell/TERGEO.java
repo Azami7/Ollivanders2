@@ -22,15 +22,17 @@ public final class TERGEO extends BlockTransfiguration
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public TERGEO()
+   public TERGEO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.TERGEO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Siphoning Spell");
          add("The wand siphoned off most of the grease. Looking rather pleased with himself, Ron handed the slightly smoking handkerchief to Hermione.");
@@ -56,14 +58,6 @@ public final class TERGEO extends BlockTransfiguration
       transfigureType = Material.AIR;
       permanent = false;
 
-      initSpell();
-
-      radius = 1 + ((int) usesModifier / 20);
-      if (radius > maxRadius)
-      {
-         radius = maxRadius;
-      }
-
       // set materials that can be transfigured by this spell
       materialWhitelist.add(Material.WATER);
 
@@ -73,5 +67,17 @@ public final class TERGEO extends BlockTransfiguration
 
       // pass-through
       projectilePassThrough.remove(Material.WATER);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      radius = 1 + ((int) usesModifier / 20);
+      if (radius > maxRadius)
+      {
+         radius = maxRadius;
+      }
    }
 }

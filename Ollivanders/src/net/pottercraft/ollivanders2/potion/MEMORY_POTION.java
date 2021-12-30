@@ -27,7 +27,6 @@ public final class MEMORY_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.MEMORY_POTION;
-      potionLevel = PotionLevel.NEWT;
 
       ingredients.put(O2ItemType.MANDRAKE_LEAF, 3);
       ingredients.put(O2ItemType.JOBBERKNOLL_FEATHER, 2);
@@ -39,10 +38,15 @@ public final class MEMORY_POTION extends O2Potion
       potionColor = Color.fromRGB(255, 128, 0);
    }
 
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
+   public void drink(@NotNull Player player)
    {
       FAST_LEARNING effect = new FAST_LEARNING(p, duration, player.getUniqueId());
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel more alert.");
    }

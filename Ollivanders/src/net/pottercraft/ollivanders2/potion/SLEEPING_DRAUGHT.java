@@ -28,7 +28,6 @@ public class SLEEPING_DRAUGHT extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.SLEEPING_DRAUGHT;
-      potionLevel = PotionLevel.BEGINNER;
 
       text = "A Sleeping Draught causes the drinker to fall almost instantly into a deep, dreamless sleep.";
 
@@ -45,10 +44,15 @@ public class SLEEPING_DRAUGHT extends O2Potion
       potionColor = Color.fromRGB(75, 0, 130);
    }
 
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
    @Override
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   public void drink(@NotNull Player player)
    {
-      if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.AWAKE))
       {
          player.sendMessage(Ollivanders2.chatColor + "You yawn, otherwise nothing happens.");
       }
@@ -56,7 +60,7 @@ public class SLEEPING_DRAUGHT extends O2Potion
       {
          // put them asleep for ~2 minutes
          SLEEPING effect = new SLEEPING(p, 2400, player.getUniqueId());
-         Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
          player.sendMessage(Ollivanders2.chatColor + "You fall in to a deep, dreamless, enchanted sleep.");
       }

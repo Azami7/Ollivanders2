@@ -7,7 +7,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -20,7 +22,7 @@ import java.util.UUID;
  *
  * @author lownes
  */
-public class REPELLO_MUGGLETON extends ShieldSpell implements StationarySpell
+public class REPELLO_MUGGLETON extends ShieldSpell
 {
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -51,6 +53,9 @@ public class REPELLO_MUGGLETON extends ShieldSpell implements StationarySpell
       spellType = O2StationarySpellType.REPELLO_MUGGLETON;
    }
 
+   /**
+    * Upkeep
+    */
    @Override
    public void checkEffect ()
    {
@@ -63,13 +68,6 @@ public class REPELLO_MUGGLETON extends ShieldSpell implements StationarySpell
          double viewDistance = Math.sqrt(2 * Math.pow(((Bukkit.getServer().getViewDistance() + 1) * 16), 2));
          for (Player player : getBlock().getWorld().getPlayers())
          {
-            if (player.isPermissionSet("Ollivanders2.BYPASS"))
-            {
-               if (player.hasPermission("Ollivanders2.BYPASS"))
-               {
-                  continue;
-               }
-            }
             if (player.getLocation().distance(location) < viewDistance && !isInside(player.getLocation()))
             {
                for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
@@ -95,6 +93,27 @@ public class REPELLO_MUGGLETON extends ShieldSpell implements StationarySpell
                player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
             }
          }
+      }
+   }
+
+   /**
+    * Do not allow targeting if the target is inside the radius and the targeter is not
+    *
+    * @param event the event
+    */
+   @Override
+   void doOnEntityTargetEvent (@NotNull EntityTargetEvent event)
+   {
+      Entity target = event.getTarget();
+      Entity entity = event.getEntity();
+
+      if (target == null)
+         return;
+
+      if (isInside(target.getLocation()) && !isInside(entity.getLocation()))
+      {
+         event.setCancelled(true);
+         common.printDebugMessage("REPELLO_MUGGLETON: canceled EntityTargetEvent", null, null, false);
       }
    }
 

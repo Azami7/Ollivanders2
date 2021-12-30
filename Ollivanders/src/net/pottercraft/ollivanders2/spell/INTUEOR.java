@@ -19,16 +19,18 @@ public class INTUEOR extends Divination
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INTUEOR ()
+   public INTUEOR(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INTUEOR;
       divinationType = O2DivinationType.CRYSTAL_BALL;
       branch = O2MagicBranch.DIVINATION;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"‘I have been crystal-gazing, Headmaster,’ said Professor Trelawney, in her mistiest, most faraway voice, ‘and to my astonishment, I saw myself abandoning my solitary luncheon and coming to join you. Who am I to refuse the prompting of fate?'\"");
          add("\"If you must know, Minerva, I have seen that poor Professor Lupin will not be with us for very long. He seems aware, himself, that his time is short. He positively fled when I offered to crystal-gaze for him.\" -Sybill Trelawney");

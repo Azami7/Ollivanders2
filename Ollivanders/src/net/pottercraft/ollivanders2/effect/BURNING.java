@@ -30,7 +30,6 @@ public class BURNING extends O2Effect
 
       effectType = O2EffectType.BURNING;
       informousText = legilimensText = "is afflicted with a terrible burning";
-      permanent = true;
 
       divinationText.add("shall be cursed");
       divinationText.add("will be consumed by fire");
@@ -106,4 +105,10 @@ public class BURNING extends O2Effect
     */
    @Override
    public void setPermanent(boolean perm) { }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove () { }
 }

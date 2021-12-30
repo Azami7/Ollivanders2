@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -35,7 +34,6 @@ public class CONFRONTING_THE_FACELESS extends O2Book
       spells.add(O2SpellType.REDUCTO);
       spells.add(O2SpellType.LEGILIMENS);
       spells.add(O2SpellType.FLAGRANTE);
-      spells.add(O2SpellType.PRAEPANDO);
       //spells.add(O2SpellType.CRUCIO);
       //spells.add(O2SpellType.IMPERIO);
       //spells.add(O2SpellType.EXPECTO_PATRONUM);

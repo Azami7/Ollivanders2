@@ -48,10 +48,12 @@ public abstract class Divination extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public Divination()
+    public Divination(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         branch = O2MagicBranch.DIVINATION;
     }
@@ -78,7 +80,7 @@ public abstract class Divination extends O2Spell
     {
         usesModifier = p.getSpellCount(player, spellType);
 
-        if (Ollivanders2API.getPlayers(p).playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
         {
             usesModifier *= 2;
         }
@@ -177,4 +179,7 @@ public abstract class Divination extends O2Spell
         player.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
         kill();
     }
+
+    @Override
+    protected void doCheckEffect() {}
 }

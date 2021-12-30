@@ -18,15 +18,17 @@ public final class GLACIUS_TRIA extends GlaciusSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public GLACIUS_TRIA ()
+   public GLACIUS_TRIA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.GLACIUS_TRIA;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>() {{
          add("The Strongest Freezing Charm");
       }};
 
@@ -47,11 +49,11 @@ public final class GLACIUS_TRIA extends GlaciusSuper
       spellType = O2SpellType.GLACIUS_TRIA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       //25% duration
       durationModifier = 0.25;
       //4x radius radius
       radiusModifier = 4.0;
+
+      initSpell();
    }
 }

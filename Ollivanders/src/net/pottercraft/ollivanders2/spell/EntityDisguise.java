@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Super class for all disguise-based transfigurations
@@ -21,10 +22,12 @@ public abstract class EntityDisguise extends EntityTransfiguration
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public EntityDisguise()
+   public EntityDisguise(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
    }
 
    /**
@@ -45,11 +48,12 @@ public abstract class EntityDisguise extends EntityTransfiguration
     * @param entity the entity to transfigure
     */
    @Override
-   protected void transfigureEntity(@NotNull Entity entity)
+   @Nullable
+   protected Entity transfigureEntity(@NotNull Entity entity)
    {
       DisguiseAPI.disguiseToAll(entity, disguise);
 
-      isTransfigured = true;
+      return entity;
    }
 
    /**
@@ -62,26 +66,19 @@ public abstract class EntityDisguise extends EntityTransfiguration
     * 4. The entity is not already the target type
     * 5. There are no WorldGuard permissions preventing the caster from altering this entity type
     *
-    * @param e the entity to check
+    * @param entity the entity to check
     * @return true if it can be changed
     */
    @Override
-   protected boolean canTransfigure(@NotNull Entity e)
+   protected boolean canTransfigure(@NotNull Entity entity)
    {
-      common.printDebugMessage("canTransfigure: " + e.getType().toString(), null, null, false);
-
       if (!Ollivanders2.libsDisguisesEnabled)
       {
          common.printDebugMessage("LibsDisguises not enabled.", null, null, false);
          return false;
       }
-      else if (!targetTypeCheck(e))
-      {
-         common.printDebugMessage("Target entity type cannot be transfigured.", null, null, false);
-         return false;
-      }
 
-      return true;
+      return super.canTransfigure(entity);
    }
 
    /**

@@ -30,6 +30,10 @@ public class O2Houses
 {
    private final Ollivanders2 p;
    private final Ollivanders2Common common;
+
+   public static boolean useHouses = false;
+   public static boolean displayMessageOnSort = false;
+
    private Map<UUID, O2HouseType> O2HouseMap = new HashMap<>();
    private final Map <O2HouseType, Team> O2HouseTeamMap = new HashMap<>();
 
@@ -48,9 +52,24 @@ public class O2Houses
    {
       p = plugin;
       common = new Ollivanders2Common(p);
+   }
 
-      if (!Ollivanders2.useHouses)
+   /**
+    * Set up houses on enable
+    */
+   public void onEnable ()
+   {
+      //
+      // houses
+      //
+      useHouses = p.getConfig().getBoolean("houses");
+
+      if (useHouses)
+         p.getLogger().info("Enabling school houses.");
+      else
          return;
+
+      displayMessageOnSort = p.getConfig().getBoolean("displayMessageOnSort");
 
       readHouseConfig();
       createScoreboard();
@@ -68,32 +87,65 @@ public class O2Houses
       //
       // house names
       //
+      String s;
       if (p.getConfig().isSet("gryffindorName"))
-         O2HouseType.GRYFFINDOR.setName(p.getConfig().getString("gryffindorName"));
+      {
+         s = p.getConfig().getString("gryffindorName");
+         if (s != null && s.length() > 0)
+            O2HouseType.GRYFFINDOR.setName(s);
+      }
 
       if (p.getConfig().isSet("hufflepuffName"))
-         O2HouseType.HUFFLEPUFF.setName(p.getConfig().getString("hufflepuffName"));
+      {
+         s = p.getConfig().getString("hufflepuffName");
+         if (s != null && s.length() > 0)
+            O2HouseType.HUFFLEPUFF.setName(s);
+      }
 
       if (p.getConfig().isSet("ravenclawName"))
-         O2HouseType.RAVENCLAW.setName(p.getConfig().getString("ravenclawName"));
+      {
+         s = p.getConfig().getString("ravenclawName");
+         if (s != null && s.length() > 0)
+            O2HouseType.RAVENCLAW.setName(s);
+      }
 
       if (p.getConfig().isSet("slytherinName"))
-         O2HouseType.SLYTHERIN.setName(p.getConfig().getString("slytherinName"));
+      {
+         s = p.getConfig().getString("slytherinName");
+         if (s != null && s.length() > 0)
+            O2HouseType.SLYTHERIN.setName(s);
+      }
 
       //
       // house colors
       //
       if (p.getConfig().isSet("gryffindorColor"))
-         O2HouseType.GRYFFINDOR.setColor(p.getConfig().getString("gryffindorColor"));
+      {
+         s = p.getConfig().getString("gryffindorColor");
+         if (s != null && s.length() > 0)
+            O2HouseType.GRYFFINDOR.setColor(s);
+      }
 
       if (p.getConfig().isSet("hufflepuffColor"))
-         O2HouseType.HUFFLEPUFF.setColor(p.getConfig().getString("hufflepuffColor"));
+      {
+         s = p.getConfig().getString("hufflepuffColor");
+         if (s != null && s.length() > 0)
+            O2HouseType.HUFFLEPUFF.setColor(s);
+      }
 
       if (p.getConfig().isSet("ravenclawColor"))
-         O2HouseType.RAVENCLAW.setColor(p.getConfig().getString("ravenclawColor"));
+      {
+         s = p.getConfig().getString("ravenclawColor");
+         if (s != null && s.length() > 0)
+            O2HouseType.RAVENCLAW.setColor(s);
+      }
 
       if (p.getConfig().isSet("slytherinColor"))
-         O2HouseType.SLYTHERIN.setColor(p.getConfig().getString("slytherinColor"));
+      {
+         s = p.getConfig().getString("slytherinColor");
+         if (s != null && s.length() > 0)
+            O2HouseType.SLYTHERIN.setColor(s);
+      }
    }
 
    /**
@@ -118,18 +170,12 @@ public class O2Houses
    {
       if (name == null)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("getHouseType: null house passed in");
-         }
-
+         common.printDebugMessage("getHouseType: null house passed in", null, null, false);
          return null;
       }
 
       name = name.trim();
-
-      if (Ollivanders2.debug)
-         p.getLogger().info("getHouseType: getting type for " + name);
+      common.printDebugMessage("getHouseType: getting type for " + name, null, null, false);
 
       for (O2HouseType houseType : O2HouseType.values())
       {
@@ -188,6 +234,9 @@ public class O2Houses
     */
    public void saveHouses()
    {
+      if (!useHouses)
+         return;
+
       // write house data out as JSON
       GsonDAO gsonLayer = new GsonDAO();
       gsonLayer.writeHouses(O2HouseMap);
@@ -217,7 +266,7 @@ public class O2Houses
       O2HouseMap.put(player.getUniqueId(), houseType);
       addPlayerToHouseTeam(player);
 
-      if (Ollivanders2.displayMessageOnSort)
+      if (displayMessageOnSort)
       {
          String title = houseType.getChatColorCode() + player.getName();
          String subtitle = houseType.getChatColorCode() + "better be " + houseType.getName();
@@ -284,6 +333,7 @@ public class O2Houses
     * @param player the player to get the house for
     * @return the House the player is sorted in to, null otherwise.
     */
+   @Nullable
    public O2HouseType getHouse (@NotNull Player player)
    {
       return getHouse(player.getUniqueId());
@@ -295,6 +345,7 @@ public class O2Houses
     * @param pid the uuid of the player to search for
     * @return the House the player is sorted in to, null otherwise.
     */
+   @Nullable
    public O2HouseType getHouse (@NotNull UUID pid)
    {
       O2HouseType houseType = null;
@@ -307,9 +358,7 @@ public class O2Houses
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Failure retrieving player from O2HouseMap.");
-            if (Ollivanders2.debug)
-               e.printStackTrace();
+            common.printDebugMessage("Failure retrieving player from O2HouseMap.", e, null, false);
          }
       }
 
@@ -416,10 +465,10 @@ public class O2Houses
     */
    private void createScoreboard ()
    {
-      if (!Ollivanders2.useHouses)
+      if (!useHouses)
       {
          // do not allow if houses is not enabled
-         p.getLogger().warning("Attempted to create scoreboard when houses is not enabled.");
+         common.printDebugMessage("Attempted to create scoreboard when houses is not enabled.", null, null, false);
          return;
       }
 
@@ -429,7 +478,7 @@ public class O2Houses
 
       scoreboard = p.getServer().getScoreboardManager().getMainScoreboard();
 
-      p.getLogger().info("Created scoreboard...");
+      common.printDebugMessage("Created scoreboard...", null, null, false);
 
       // if there was a previous house points objective, remove it
       Objective objective = scoreboard.getObjective(objectiveName);
@@ -437,7 +486,7 @@ public class O2Houses
       if (objective != null)
       {
          objective.unregister();
-         p.getLogger().info("Unregistered previous house points objective...");
+         common.printDebugMessage("Unregistered previous house points objective...", null, null, false);
       }
 
       // if there is another objective on the slot we want, remove it
@@ -445,14 +494,14 @@ public class O2Houses
       if (objective != null)
       {
          objective.unregister();
-         p.getLogger().info("Unregistered previous scoreboard objective...");
+         common.printDebugMessage("Unregistered previous scoreboard objective...", null, null, false);
       }
 
       scoreboard.registerNewObjective(objectiveName, "dummy", "House Points");
       objective = scoreboard.getObjective(objectiveName);
       if (objective == null)
       {
-         p.getLogger().warning("createScoreboard: Failed to create scoreboard objective");
+         common.printDebugMessage("createScoreboard: Failed to create scoreboard objective", null, null, false);
          return;
       }
 
@@ -482,14 +531,10 @@ public class O2Houses
       if (team == null)
       {
          team = scoreboard.registerNewTeam(houseName);
-         if (Ollivanders2.debug)
-            p.getLogger().info("Added team " + houseName + " to scoreboard.");
+         common.printDebugMessage("Added team " + houseName + " to scoreboard.", null, null, false);
       }
       else
-      {
-         if (Ollivanders2.debug)
-            p.getLogger().info("Team " + houseName + " already registered.");
-      }
+         common.printDebugMessage("Team " + houseName + " already registered.", null, null, false);
 
       team.setColor(houseType.getChatColorCode());
       team.setAllowFriendlyFire(true);
@@ -505,9 +550,9 @@ public class O2Houses
     */
    private synchronized boolean updateScoreboard ()
    {
-      if (!Ollivanders2.useHouses)
+      if (!useHouses)
       {
-         p.getLogger().warning("Tried to update scoreboard when houses are not enabled.");
+         common.printDebugMessage("Tried to update scoreboard when houses are not enabled.", null, null, false);
          return false;
       }
 
@@ -527,8 +572,7 @@ public class O2Houses
          return true;
       }
 
-      p.getLogger().warning("updateScoreboard: house points objective not found.");
-
+      common.printDebugMessage("updateScoreboard: house points objective not found.", null, null, false);
       return false;
    }
 
@@ -555,9 +599,7 @@ public class O2Houses
       }
       catch (Exception e)
       {
-         p.getLogger().warning("updateScoreboardScore: failed to update score for " + houseType.getName());
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         common.printDebugMessage("updateScoreboardScore: failed to update score for " + houseType.getName(), e, null, false);
       }
    }
 
@@ -568,9 +610,9 @@ public class O2Houses
     */
    private boolean hideScoreboard()
    {
-      if (!Ollivanders2.useHouses)
+      if (!useHouses)
       {
-         p.getLogger().warning("Tried to hide scoreboard when houses are not enabled.");
+         common.printDebugMessage("Tried to hide scoreboard when houses are not enabled.", null, null, false);
          return false;
       }
 
@@ -589,9 +631,9 @@ public class O2Houses
     */
    private void showScoreboard ()
    {
-      if (!Ollivanders2.useHouses)
+      if (!useHouses)
       {
-         p.getLogger().warning("Tried to show scoreboard when houses are not enabled.");
+         common.printDebugMessage("Tried to show scoreboard when houses are not enabled.", null, null, false);
          return;
       }
 
@@ -616,10 +658,7 @@ public class O2Houses
 
       if (team == null)
       {
-         if (Ollivanders2.debug)
-         {
-            p.getLogger().info("Team " + houseType + " does not exist.");
-         }
+         common.printDebugMessage("Team " + houseType + " does not exist.", null, null, false);
          return;
       }
 

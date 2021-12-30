@@ -21,4 +21,10 @@ public class SPEED_SPEEDIEST extends PotionEffectSuper
         divinationText.add("will wear the boots of Mercury");
         divinationText.add("will move with the power of the gods");
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

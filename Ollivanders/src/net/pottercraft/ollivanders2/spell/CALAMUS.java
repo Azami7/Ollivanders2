@@ -1,15 +1,9 @@
 package net.pottercraft.ollivanders2.spell;
 
-import java.util.List;
-
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -21,14 +15,16 @@ import org.jetbrains.annotations.NotNull;
  * @author lownes
  * @author Azami7
  */
-public final class CALAMUS extends Transfiguration
+public final class CALAMUS extends ItemTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public CALAMUS ()
+   public CALAMUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.CALAMUS;
       branch = O2MagicBranch.TRANSFIGURATION;
@@ -49,55 +45,18 @@ public final class CALAMUS extends Transfiguration
       spellType = O2SpellType.CALAMUS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-
       // world guard
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.ITEM_DROP);
-   }
 
-   /**
-    * Look for sticks in the projectile's location and turn them in to arrows
-    */
-   @Override
-   protected void doCheckEffect()
-   {
-      List<Item> items = getItems(1.5);
+      transfigurationMap.put(Material.STICK, Material.ARROW);
+      successMessage = "You changed a stick in to an arrow.";
+      failureMessage = "Nothing happens.";
+      permanent = true;
 
-      if (items.size() > 0)
-      {
-         for (Item item : items)
-         {
-            Material mat = item.getItemStack().getType();
+      initSpell();
 
-            if (mat == Material.STICK)
-            {
-               int amount = item.getItemStack().getAmount();
-               Location loc = item.getLocation();
-               ItemStack drop = new ItemStack(Material.ARROW);
-               drop.setAmount(amount);
-
-               World world = loc.getWorld();
-               if (world == null)
-               {
-                  common.printDebugMessage("CALAMUS.doCheckEffect: world is null", null, null, true);
-                  kill();
-                  return;
-               }
-
-               world.dropItem(loc, drop);
-               item.remove();
-
-               break;
-            }
-         }
-
-         kill();
-         return;
-      }
-
-      // projectile has stopped, kill the spell
-      if (hasHitTarget())
-         kill();
+      // do this after init spell to ensure success rate is always 100
+      successRate = 100;
    }
 }

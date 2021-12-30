@@ -16,9 +16,6 @@ import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.O2ItemType;
-import net.pottercraft.ollivanders2.player.O2PlayerCommon;
-import net.pottercraft.ollivanders2.player.O2WandCoreType;
-import net.pottercraft.ollivanders2.player.O2WandWoodType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 
@@ -28,8 +25,8 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -39,8 +36,10 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -63,7 +62,7 @@ public class Ollivanders2Common
    public static final int ticksPerMinute = ticksPerSecond * 60;
    public static final int ticksPerHour = ticksPerMinute * 60;
 
-   public static final List<EntityType> smallFriendlyAnimals = new ArrayList<>()
+   public static final List<EntityType> smallFriendlyMobs = new ArrayList<>()
    {{
       add(EntityType.BAT);
       add(EntityType.CHICKEN);
@@ -75,7 +74,7 @@ public class Ollivanders2Common
       add(EntityType.PUFFERFISH);
    }};
 
-   public static final List<EntityType> mediumFriendlyAnimals = new ArrayList<>()
+   public static final List<EntityType> mediumFriendlyMobs = new ArrayList<>()
    {{
       add(EntityType.SHEEP);
       add(EntityType.PIG);
@@ -86,7 +85,7 @@ public class Ollivanders2Common
       add(EntityType.TURTLE);
    }};
 
-   public static final List<EntityType> largeFriendlyAnimals = new ArrayList<>()
+   public static final List<EntityType> largeFriendlyMobs = new ArrayList<>()
    {{
       add(EntityType.COW);
       add(EntityType.DONKEY);
@@ -201,6 +200,8 @@ public class Ollivanders2Common
       add(Material.DARK_OAK_WALL_SIGN);
       add(Material.OAK_WALL_SIGN);
       add(Material.SPRUCE_WALL_SIGN);
+      add(Material.CRIMSON_WALL_SIGN);
+      add(Material.WARPED_WALL_SIGN);
    }};
 
    public static final List<Material> standingSigns = new ArrayList<>()
@@ -210,6 +211,8 @@ public class Ollivanders2Common
       add(Material.DARK_OAK_SIGN);
       add(Material.OAK_SIGN);
       add(Material.SPRUCE_SIGN);
+      add(Material.CRIMSON_SIGN);
+      add(Material.WARPED_SIGN);
    }};
 
    public static final List<Material> signs = new ArrayList<>()
@@ -218,11 +221,58 @@ public class Ollivanders2Common
       addAll(standingSigns);
    }};
 
+   public static final List<Material> doors = new ArrayList<>()
+   {{
+      add(Material.ACACIA_DOOR);
+      add(Material.BIRCH_DOOR);
+      add(Material.CRIMSON_DOOR);
+      add(Material.DARK_OAK_DOOR);
+      add(Material.IRON_DOOR);
+      add(Material.JUNGLE_DOOR);
+      add(Material.OAK_DOOR);
+      add(Material.SPRUCE_DOOR);
+      add(Material.WARPED_DOOR);
+   }};
+
+   public static final List<Material> trapdoors = new ArrayList<>()
+   {{
+      add(Material.ACACIA_TRAPDOOR);
+      add(Material.BIRCH_TRAPDOOR);
+      add(Material.CRIMSON_TRAPDOOR);
+      add(Material.DARK_OAK_TRAPDOOR);
+      add(Material.IRON_TRAPDOOR);
+      add(Material.JUNGLE_TRAPDOOR);
+      add(Material.OAK_TRAPDOOR);
+      add(Material.SPRUCE_TRAPDOOR);
+      add(Material.WARPED_TRAPDOOR);
+   }};
+
    public static final List<Material> hotBlocks = new ArrayList<>()
    {{
       add(Material.LAVA);
       add(Material.FIRE);
       add(Material.CAMPFIRE);
+   }};
+
+   public static final List<EntityDamageEvent.DamageCause> attackDamageCauses = new ArrayList<>()
+   {{
+      add(EntityDamageEvent.DamageCause.DRAGON_BREATH);
+      add(EntityDamageEvent.DamageCause.ENTITY_ATTACK);
+      add(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK);
+      add(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION);
+      add(EntityDamageEvent.DamageCause.THORNS);
+      add(EntityDamageEvent.DamageCause.PROJECTILE);
+   }};
+
+   public static final List<EntityType> minecarts = new ArrayList<>()
+   {{
+      add(EntityType.MINECART_FURNACE);
+      add(EntityType.MINECART);
+      add(EntityType.MINECART_CHEST);
+      add(EntityType.MINECART_COMMAND);
+      add(EntityType.MINECART_HOPPER);
+      add(EntityType.MINECART_MOB_SPAWNER);
+      add(EntityType.MINECART_TNT);
    }};
 
    public enum TimeOfDay
@@ -242,6 +292,29 @@ public class Ollivanders2Common
       public int getTick()
       {
          return gameTick;
+      }
+   }
+
+   /**
+    * The level of magic a spell or potion is
+    */
+   public enum MagicLevel
+   {
+      BEGINNER (1),
+      OWL (2),
+      NEWT (3),
+      EXPERT (4);
+
+      final int successModifier;
+
+      MagicLevel (int mod)
+      {
+         successModifier = mod;
+      }
+
+      public int getSuccessModifier()
+      {
+         return successModifier;
       }
    }
 
@@ -278,9 +351,7 @@ public class Ollivanders2Common
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Failed to parse uuid " + uuid);
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         printDebugMessage("Failed to parse uuid " + uuid, e, null, true);
       }
 
       return pid;
@@ -303,9 +374,7 @@ public class Ollivanders2Common
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Failed to parse integer " + intString);
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         printDebugMessage("Failed to parse integer " + intString, e, null, true);
       }
 
       return i;
@@ -328,9 +397,7 @@ public class Ollivanders2Common
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Failed to parse boolean " + boolString);
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         printDebugMessage("Failed to parse boolean " + boolString, e, null, true);
       }
 
       return b;
@@ -353,9 +420,7 @@ public class Ollivanders2Common
       }
       catch (Exception e)
       {
-         p.getLogger().warning("Failed to parse EntityType " + entityTypeString);
-         if (Ollivanders2.debug)
-            e.printStackTrace();
+         printDebugMessage("Failed to parse EntityType " + entityTypeString, e, null, true);
       }
       return entityType;
    }
@@ -874,35 +939,6 @@ public class Ollivanders2Common
    }
 
    /**
-    * Determine if this is the Cloak of Invisibility.
-    *
-    * @param held Item stack to check
-    * @return True if held is an invisibility cloak
-    */
-   public boolean isInvisibilityCloak(@NotNull ItemStack held)
-   {
-      if (held.getType() == Material.CHAINMAIL_CHESTPLATE)
-      {
-         ItemMeta meta = held.getItemMeta();
-         if (meta == null)
-            return false;
-
-         if (held.getItemMeta().hasLore())
-         {
-            List<String> lore = held.getItemMeta().getLore();
-            if (lore == null)
-               return false;
-
-            if (lore.get(0).equals("Silvery Transparent Cloak"))
-            {
-               return true;
-            }
-         }
-      }
-      return false;
-   }
-
-   /**
     * Serialize an Location for saving.
     *
     * @param location    the Location to serialize
@@ -919,7 +955,7 @@ public class Ollivanders2Common
       //
       if (location.getWorld() == null)
       {
-         p.getLogger().warning("serializeLocation: location world is null");
+         printDebugMessage("serializeLocation: location world is null", null, null, false);
          return null;
       }
       locData.put(labelPrefix + "_" + locationWorldLabel, location.getWorld().getName());
@@ -969,10 +1005,7 @@ public class Ollivanders2Common
          }
          catch (Exception exception)
          {
-            p.getLogger().info("Unable to deserialize location");
-            if (Ollivanders2.debug)
-               exception.printStackTrace();
-
+            printDebugMessage("Unable to deserialize location", exception, null, true);
             return null;
          }
       }
@@ -983,71 +1016,9 @@ public class Ollivanders2Common
    }
 
    /**
-    * Is this item stack a wand?
+    * Gets item entities within bounding box of the projectile
     *
-    * @param stack stack to be checked
-    * @return true if yes, false if no
-    */
-   public boolean isWand(@NotNull ItemStack stack)
-   {
-      if (stack.getType() == O2ItemType.WAND.getMaterial() || stack.getType() == O2ItemType.ELDER_WAND.getMaterial())
-      {
-         ItemMeta meta = stack.getItemMeta();
-         if (meta == null)
-            return false;
-
-         if (stack.getItemMeta().hasLore())
-         {
-            List<String> lore = stack.getItemMeta().getLore();
-            if (lore == null)
-               return false;
-
-            return (lore.get(0).split(" and ").length == 2);
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /**
-    * Finds out if an item is a broom.
-    *
-    * @param item item in question
-    * @return True if yes
-    */
-   public boolean isBroom(@NotNull ItemStack item)
-   {
-      if (item.getType() == O2ItemType.BROOMSTICK.getMaterial())
-      {
-         if (item.containsEnchantment(Enchantment.PROTECTION_FALL))
-         {
-            ItemMeta meta = item.getItemMeta();
-            if (meta == null)
-               return false;
-
-            if (meta.hasLore())
-            {
-               List<String> lore = meta.getLore();
-               if (lore == null)
-                  return false;
-
-               return lore.contains(O2ItemType.BROOMSTICK.getLore());
-            }
-         }
-      }
-      return false;
-   }
-
-   /**
-    * Gets item entities within radius of the projectile
-    *
-    * @return List of item entities within radius of projectile
+    * @return List of item entities within bounding box of projectile
     */
    @NotNull
    public List<Item> getItemsInBounds(@NotNull Location location, double x, double y, double z)
@@ -1063,6 +1034,17 @@ public class Ollivanders2Common
          }
       }
       return items;
+   }
+
+   /**
+    * Gets item entities within radius of the projectile
+    *
+    * @return List of item entities within radius of projectile
+    */
+   @NotNull
+   public List<Item> getItemsInRadius(@NotNull Location location, double radius)
+   {
+      return getItemsInBounds(location, radius, radius, radius);
    }
 
    /**
@@ -1118,59 +1100,6 @@ public class Ollivanders2Common
    }
 
    /**
-    * Get all the wands in the game.
-    *
-    * @return a list of all the wands
-    */
-   @NotNull
-   public List<ItemStack> getAllWands()
-   {
-      ArrayList<ItemStack> wands = new ArrayList<>();
-
-      for (String wood : O2WandWoodType.getAllWoodsByName())
-      {
-         for (String core : O2WandCoreType.getAllCoresByName())
-         {
-            wands.add(makeWands(wood, core, 1));
-         }
-      }
-
-      return wands;
-   }
-
-   /**
-    * Make an ItemStack of wands of a specific wood and core
-    *
-    * @param wood   the wand wood
-    * @param core   the wand core
-    * @param amount the number of wands to make
-    * @return an ItemStack of wands or null if an error
-    */
-   @Nullable
-   public ItemStack makeWands(@NotNull String wood, @NotNull String core, int amount)
-   {
-      if (amount < 1)
-         amount = 1;
-
-      List<String> lore = new ArrayList<>();
-      ItemStack wand = Ollivanders2API.getItems(p).getItemByType(O2ItemType.WAND, 1);
-      if (wand == null)
-         return null;
-
-      lore.add(wood + O2PlayerCommon.wandLoreConjunction + core);
-      ItemMeta meta = wand.getItemMeta();
-
-      if (meta == null)
-         return null;
-
-      meta.setLore(lore);
-      wand.setItemMeta(meta);
-      wand.setAmount(amount);
-
-      return wand;
-   }
-
-   /**
     * Determine if a player is facing a block type.
     *
     * @param player the player to check
@@ -1207,7 +1136,7 @@ public class Ollivanders2Common
 
       if (meta == null)
       {
-         p.getLogger().warning("getGalleon: item meta is null");
+         printDebugMessage("getGalleon: item meta is null", null, null, false);
          return galleon;
       }
 
@@ -1232,7 +1161,7 @@ public class Ollivanders2Common
 
       if (meta == null)
       {
-         p.getLogger().warning("getSickle: item meta is null");
+         printDebugMessage("getSickle: item meta is null", null, null, false);
          return sickle;
       }
 
@@ -1257,7 +1186,7 @@ public class Ollivanders2Common
 
       if (meta == null)
       {
-         p.getLogger().warning("getKnut: item meta is null");
+         printDebugMessage("getKnut: item meta is null", null, null, false);
          return knut;
       }
 
@@ -1303,9 +1232,25 @@ public class Ollivanders2Common
     * Makes a particle effect at all points along the radius of
     * spell and at spell loc
     *
-    * @param intensity - Intensity of the flair. If greater than 10, is reduced to 10.
+    * @param location the location for the center of the flair
+    * @param radius the radius of the flair
+    * @param intensity intensity of the flair. If greater than 10, is reduced to 10.
     */
    public static void flair(@NotNull Location location, int radius, double intensity)
+   {
+      flair (location, radius, intensity, Effect.SMOKE);
+   }
+
+   /**
+    * Makes a particle effect at all points along the radius of
+    * spell and at spell loc
+    *
+    * @param location the location for the center of the flair
+    * @param radius the radius of the flair
+    * @param intensity intensity of the flair. If greater than 10, is reduced to 10.
+    * @param effectType the particle effect to use
+    */
+   public static void flair(@NotNull Location location, int radius, double intensity, Effect effectType)
    {
       if (intensity > 10)
       {
@@ -1321,7 +1266,7 @@ public class Ollivanders2Common
             Location effectLocation = location.clone().add(spherToVec(spher, radius));
 
             if (effectLocation.getWorld() != null)
-               effectLocation.getWorld().playEffect(effectLocation, Effect.SMOKE, 4);
+               effectLocation.getWorld().playEffect(effectLocation, effectType, 4);
          }
       }
    }
@@ -1389,7 +1334,7 @@ public class Ollivanders2Common
 
       for (Player player : p.getServer().getOnlinePlayers())
       {
-         if (Ollivanders2API.getHouses(p).isSorted(player))
+         if (Ollivanders2API.getHouses().isSorted(player))
             sortedPlayers.add(player);
       }
 
@@ -1439,45 +1384,112 @@ public class Ollivanders2Common
    }
 
    /**
-    * Does the item stack match the described item
+    * Are two locations the same?
     *
-    * @param itemStack the item stack to check
-    * @param material the target material
-    * @param name the target item name
-    * @param lore the target item lore, match is checked on the 0th index lore string
-    * @param amount the amount of the item, < 1 to ignore the amount
-    * @return true if the item stack matches, false otherwise
+    * @param loc1 location 1
+    * @param loc2 location 2
+    * @return true if they are the same, false otherwise
     */
-   public boolean matchesItem (@NotNull ItemStack itemStack, @NotNull Material material, @NotNull String name, @NotNull String lore, int amount)
+   public boolean locationEquals (@NotNull Location loc1, @NotNull Location loc2)
    {
-      // check amount
-      if (itemStack.getAmount() < 1 || (amount > 0 && (itemStack.getAmount() != amount)))
-         return false;
+      return (loc1.getWorld() == loc2.getWorld() && loc1.getX() == loc2.getX() && loc1.getY() == loc2.getY() && loc1.getZ() == loc2.getZ());
+   }
 
-      // check material
-      if (itemStack.getType() != material)
-         return false;
+   /**
+    * Restore a player to full health
+    *
+    * @param player the player to restore
+    */
+   public void restoreFullHealth (@NotNull Player player)
+   {
+      // remove O2Effecs
+      Ollivanders2API.getPlayers().playerEffects.onDeath(player.getUniqueId());
 
-      // check name and lore
-      ItemMeta meta = itemStack.getItemMeta();
-      if (meta == null)
-         return false;
-
-      String itemName = meta.getDisplayName();
-      if (!itemName.equalsIgnoreCase(name))
-         return false;
-
-      // don't check lore on written books
-      if (material != Material.WRITTEN_BOOK)
+      // remove other potion effects
+      Collection<PotionEffect> potions = player.getActivePotionEffects();
+      for (PotionEffect potion : potions)
       {
-         List<String> itemLore = meta.getLore();
-         if (itemLore == null || itemLore.size() < 1)
-            return false;
-
-         if (!itemLore.get(0).equalsIgnoreCase(lore))
-            return false;
+         player.removePotionEffect(potion.getType());
       }
 
-      return true;
+      // reset health to max
+      AttributeInstance playerHealthMax = player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH);
+      if (playerHealthMax != null)
+         player.setHealth(playerHealthMax.getBaseValue());
+   }
+
+   /**
+    * Gets item entities within radius of the projectile
+    *
+    * @param radius - radius within which to get entities
+    * @return List of item entities within one block of projectile
+    */
+   @NotNull
+   public List<Item> getItems(@NotNull Location location, double radius)
+   {
+      return getItemsInBounds(location, radius, radius, radius);
+   }
+
+   /**
+    * Get an item by material
+    *
+    * @param material the material to look for
+    * @param radius the radius to look in
+    * @return an item if found, null otherwise
+    */
+   @Nullable
+   public Item getNearbyItemByMaterial(@NotNull Location location, @NotNull Material material, double radius)
+   {
+      List<Item> items = getItems(location, radius);
+
+      for (Item item : items)
+      {
+         if (item.getItemStack().getType() == material)
+            return item;
+      }
+
+      return null;
+   }
+
+   /**
+    * Get an item by material
+    *
+    * @param materials the list of materials to look for
+    * @param radius the radius to look in
+    * @return an item if found, null otherwise
+    */
+   @Nullable
+   public Item getNearbyItemByMaterialList(@NotNull Location location, @NotNull ArrayList<Material> materials, double radius)
+   {
+      List<Item> items = getItems(location, radius);
+
+      for (Item item : items)
+      {
+         if (materials.contains(item.getItemStack().getType()))
+            return item;
+      }
+
+      return null;
+   }
+
+   /**
+    * Get nearby items by O2ItemType
+    *
+    * @param itemType the item type to get
+    * @param radius the radius to look in
+    * @return the item if found, null otherwise
+    */
+   @Nullable
+   public Item getNearbyItemByType(@NotNull Location location, @NotNull O2ItemType itemType, double radius)
+   {
+      List<Item> items = getItems(location, radius);
+
+      for (Item item : items)
+      {
+         if (itemType.isItemThisType(item))
+            return item;
+      }
+
+      return null;
    }
 }

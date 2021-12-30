@@ -20,16 +20,18 @@ public final class CARTOMANCIE extends Divination
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public CARTOMANCIE ()
+   public CARTOMANCIE(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.CARTOMANCIE;
       divinationType = O2DivinationType.CARTOMANCY_TAROT;
       branch = O2MagicBranch.DIVINATION;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"If Dumbledore chooses to ignore the warnings the cards show - again and again, no matter how I lay them out – the lightning-struck tower. Calamity. Disaster. Coming nearer all the time.’\" -Sybill Trelawney");
       }};
@@ -51,9 +53,9 @@ public final class CARTOMANCIE extends Divination
       divinationType = O2DivinationType.CARTOMANCY_TAROT;
       branch = O2MagicBranch.DIVINATION;
 
-      initSpell();
-
       itemHeld = O2ItemType.TAROT_CARDS;
       itemHeldString = "tarot cards";
+
+      initSpell();
    }
 }

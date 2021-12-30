@@ -28,4 +28,10 @@ public class UNLUCK extends PotionEffectSuper
         divinationText.add("shall be cursed");
         divinationText.add("will find nothing but misfortune");
     }
+
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove () { }
 }

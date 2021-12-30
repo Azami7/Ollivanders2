@@ -19,15 +19,17 @@ public final class DURO extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public DURO()
+   public DURO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.DURO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Hardening Charm");
          add("The Hardening Charm will turn an object into solid stone. This can be surprisingly handy in a tight spot. Of course, most students only seem to use this spell to sabotage their fellow students' schoolbags or to turn a pumpkin pasty to stone just before someone bites into it. It is unwise to try this unworthy trick on any of your teachers.");
@@ -49,22 +51,20 @@ public final class DURO extends BlockTransfiguration
       spellType = O2SpellType.DURO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       transfigureType = Material.STONE;
       permanent = false;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       if (usesModifier > 50)
-      {
          radius = 5;
-      }
       else if (usesModifier < 10)
-      {
          radius = 1;
-      }
       else
-      {
          radius = (int) (usesModifier / 10);
-      }
    }
 }

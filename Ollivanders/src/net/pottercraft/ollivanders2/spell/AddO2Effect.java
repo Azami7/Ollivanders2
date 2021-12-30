@@ -75,10 +75,12 @@ public class AddO2Effect extends O2Spell
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
      */
-    public AddO2Effect()
+    public AddO2Effect(Ollivanders2 plugin)
     {
-        super();
+        super(plugin);
 
         branch = O2MagicBranch.CHARMS;
     }
@@ -169,7 +171,7 @@ public class AddO2Effect extends O2Spell
             if (permanent)
                 effect.setPermanent(true);
 
-            Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
         }
     }
 }

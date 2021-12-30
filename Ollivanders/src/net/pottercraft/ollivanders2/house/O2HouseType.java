@@ -1,6 +1,8 @@
 package net.pottercraft.ollivanders2.house;
 
 import net.pottercraft.ollivanders2.O2Color;
+import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,12 +14,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public enum O2HouseType
 {
-   GRYFFINDOR("Gryffindor", O2Color.DARK_RED),
-   HUFFLEPUFF("Hufflepuff", O2Color.GOLD),
-   RAVENCLAW("Ravenclaw", O2Color.BLUE),
-   SLYTHERIN("Slytherin", O2Color.DARK_GREEN);
+    GRYFFINDOR("Gryffindor", O2Color.DARK_RED),
+    HUFFLEPUFF("Hufflepuff", O2Color.GOLD),
+    RAVENCLAW("Ravenclaw", O2Color.BLUE),
+    SLYTHERIN("Slytherin", O2Color.DARK_GREEN);
 
-   private String name;
+    private String name;
     private O2Color color;
     private int score;
 
@@ -34,16 +36,16 @@ public enum O2HouseType
         score = 0;
     }
 
-   /**
-    * Get the display name for this house
-    *
-    * @return the name of this house
-    */
-   @NotNull
-   public String getName()
-   {
-      return name;
-   }
+    /**
+     * Get the display name for this house
+     *
+     * @return the name of this house
+     */
+    @NotNull
+    public String getName()
+    {
+        return name;
+    }
 
     /**
      * Set the display name for this house. Should only be done from within the House package.
@@ -54,29 +56,29 @@ public enum O2HouseType
     {
         if (n.length() > 0)
             name = n;
-   }
+    }
 
-   /**
-    * Get the chat color for this house
-    *
-    * @return the ChatColor for this house
-    */
-   @NotNull
-   public ChatColor getChatColorCode ()
-   {
-      return color.getChatColor();
-   }
+    /**
+     * Get the chat color for this house
+     *
+     * @return the ChatColor for this house
+     */
+    @NotNull
+    public ChatColor getChatColorCode ()
+    {
+        return color.getChatColor();
+    }
 
-   /**
-    * Get the string prefix for this house color
-    *
-    * @return the string prefix that sets this color
-    */
-   @NotNull
-   public String getColorPrefix ()
-   {
-      return color.getChatColorCode();
-   }
+    /**
+     * Get the string prefix for this house color
+     *
+     * @return the string prefix that sets this color
+     */
+    @NotNull
+    public String getColorPrefix ()
+    {
+        return color.getChatColorCode();
+    }
 
     /**
      * Set the color for this house. Should only be done from within the House package. No change is
@@ -84,7 +86,7 @@ public enum O2HouseType
      *
      * @param name the color as a string
      */
-    void setColor(@NotNull String name)
+    void setColor (@NotNull String name)
     {
         O2Color c = null;
 
@@ -94,11 +96,11 @@ public enum O2HouseType
         }
         catch (Exception e)
         {
-            e.printStackTrace();
-      }
+            Ollivanders2API.common.printDebugMessage(name + " is not a valid color", null, null, false);
+        }
 
-      if (c != null)
-         color = c;
+        if (c != null)
+            color = c;
     }
 
     /**
@@ -128,30 +130,30 @@ public enum O2HouseType
             if (type == houseType)
                 continue;
 
-         if (type.getScore() > score)
-            place ++;
-         else if (type.getScore() == score)
-            tied = true;
-      }
+            if (type.getScore() > score)
+                place = place + 1;
+            else if (type.getScore() == score)
+                tied = true;
+        }
 
-      StringBuilder placeString = new StringBuilder();
-      if (tied)
-         placeString.append("tied for ");
-      else
-         placeString.append("in ");
+        StringBuilder placeString = new StringBuilder();
+        if (tied)
+            placeString.append("tied for ");
+        else
+            placeString.append("in ");
 
-      if (place == 1)
-         placeString.append("1st ");
-      else if (place == 2)
-         placeString.append("2nd ");
-      else if (place == 3)
-         placeString.append("3rd ");
-      else
-         placeString.append("4th ");
+        if (place == 1)
+            placeString.append("1st ");
+        else if (place == 2)
+            placeString.append("2nd ");
+        else if (place == 3)
+            placeString.append("3rd ");
+        else
+            placeString.append("4th ");
 
-      placeString.append("place");
+        placeString.append("place");
 
-      return placeString.toString();
+        return placeString.toString();
     }
 
     /**

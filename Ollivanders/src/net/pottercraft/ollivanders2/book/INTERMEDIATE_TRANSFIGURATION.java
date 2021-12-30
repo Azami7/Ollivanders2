@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +32,6 @@ public class INTERMEDIATE_TRANSFIGURATION extends O2Book
       spells.add(O2SpellType.DELETRIUS);
       spells.add(O2SpellType.HERBIFORS);
       spells.add(O2SpellType.LAPIFORS);
-      spells.add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
       //spell 11
    }
 }

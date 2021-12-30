@@ -21,10 +21,12 @@ public final class INCARNATIO_DEVITO extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_DEVITO()
+   public INCARNATIO_DEVITO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_DEVITO;
       branch = O2MagicBranch.TRANSFIGURATION;
@@ -46,7 +48,6 @@ public final class INCARNATIO_DEVITO extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_DEVITO;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
       calculateSuccessRate();
 
       targetType = EntityType.CHICKEN;
@@ -55,5 +56,7 @@ public final class INCARNATIO_DEVITO extends PlayerDisguise
 
       AgeableWatcher watcher = (AgeableWatcher) disguise.getWatcher();
       watcher.setAdult();
+
+      initSpell();
    }
 }

@@ -21,10 +21,12 @@ public final class EQUUSIFORS extends FriendlyMobDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public EQUUSIFORS()
+   public EQUUSIFORS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.EQUUSIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;
@@ -45,8 +47,6 @@ public final class EQUUSIFORS extends FriendlyMobDisguise
       spellType = O2SpellType.EQUUSIFORS;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-
       targetType = EntityType.HORSE;
       disguiseType = DisguiseType.getType(targetType);
       disguise = new MobDisguise(disguiseType);
@@ -58,5 +58,7 @@ public final class EQUUSIFORS extends FriendlyMobDisguise
       Ollivanders2Common common = new Ollivanders2Common(p);
       watcher.setStyle(common.getRandomHorseStyle());
       watcher.setColor(common.getRandomHorseColor());
+
+      initSpell();
    }
 }

@@ -3,17 +3,20 @@ package net.pottercraft.ollivanders2.book;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Super class for all Ollivanders2 books.
@@ -44,12 +47,24 @@ public abstract class O2Book
     * No more than 256 characters
     */
    String openingPage;
+   final static String openingPageLabel = "_openingPage";
 
    /**
     * No more than 256 characters
     */
    String closingPage;
+   final static String closingPageLabel = "_closingPage";
 
+   /**
+    * Namespace keys for NBT tags
+    */
+   public static NamespacedKey o2BookTypeKey;
+   public static NamespacedKey o2BookSpellsKey;
+   public static NamespacedKey o2BookPotionsKey;
+
+   /**
+    * Callback to the plugin
+    */
    protected Ollivanders2 p;
 
    /**
@@ -74,13 +89,19 @@ public abstract class O2Book
       spells = new ArrayList<>();
       potions = new ArrayList<>();
       p = plugin;
+
+      o2BookTypeKey = new NamespacedKey(p, "O2BookType");
+      o2BookSpellsKey = new NamespacedKey(p, "O2SpellTypes");;
+      o2BookPotionsKey = new NamespacedKey(p, "O2PotionTypes");;
    }
 
    /**
     * Write all the metadata for this book.
     */
-   private void writeSpellBookMeta ()
+   private void writeSpellBookMeta()
    {
+      Ollivanders2Common common = new Ollivanders2Common(p);
+
       if (bookItem == null)
          return;
 
@@ -88,11 +109,15 @@ public abstract class O2Book
       if (bookMeta == null)
          return;
 
-      bookMeta.setAuthor(bookType.author);
-      bookMeta.setTitle(bookType.shortTitle);
+      String shortTitle = bookType.getShortTitle(p);
+      String title = bookType.getTitle(p);
+      String author = bookType.getAuthor();
+
+      bookMeta.setAuthor(bookType.getAuthor());
+      bookMeta.setTitle(shortTitle);
 
       //write title page
-      String titlePage = bookType.title + "\n\nby " + bookType.author;
+      String titlePage = title + "\n\nby " + author;
       bookMeta.addPage(titlePage);
 
       StringBuilder toc = new StringBuilder();
@@ -114,18 +139,18 @@ public abstract class O2Book
 
       for (String content : bookContents)
       {
-         String name = Ollivanders2API.getBooks(p).spellText.getName(content);
+         String name = Ollivanders2API.getBooks().spellText.getName(content);
          if (name == null)
          {
-            p.getLogger().warning(bookType.title + " contains unknown spell or potion " + content);
+            common.printDebugMessage(title + " contains unknown spell or potion " + content, null, null, false);
             continue;
          }
 
          toc.append(name).append("\n");
 
          String text;
-         String mainText = Ollivanders2API.getBooks(p).spellText.getText(content);
-         String flavorText = Ollivanders2API.getBooks(p).spellText.getFlavorText(content);
+         String mainText = Ollivanders2API.getBooks().spellText.getText(content);
+         String flavorText = Ollivanders2API.getBooks().spellText.getFlavorText(content);
 
          if (flavorText == null)
          {
@@ -144,6 +169,12 @@ public abstract class O2Book
       bookMeta.addPage(toc.toString());
 
       // add opening page
+      if (Ollivanders2.useTranslations && p.getConfig().isSet(bookType.toString() + openingPageLabel))
+      {
+         String s = p.getConfig().getString(bookType.toString() + openingPageLabel);
+         if (s != null && s.length() > 0)
+            openingPage = s;
+      }
       if (openingPage.length() > 0)
          bookMeta.addPage(openingPage);
 
@@ -154,13 +185,33 @@ public abstract class O2Book
       }
 
       // add closing page
+      if (Ollivanders2.useTranslations && p.getConfig().isSet(bookType.toString() + closingPageLabel))
+      {
+         String s = p.getConfig().getString(bookType.toString() + closingPageLabel);
+         if (s != null && s.length() > 0)
+            closingPage = s;
+      }
       if (closingPage.length() > 0)
          bookMeta.addPage(closingPage);
 
-      // add lore
-      List<String> lore = getBookLore();
+      // add NBT tags
+      StringBuilder spellsTag = new StringBuilder();
+      for (O2SpellType spellType : spells)
+      {
+         spellsTag.append(spellType.toString()).append(" ");
+      }
 
-      bookMeta.setLore(lore);
+      StringBuilder potionsTag = new StringBuilder();
+      for (O2PotionType potionType : potions)
+      {
+         potionsTag.append(potionType.toString()).append(" ");
+      }
+
+      PersistentDataContainer container = bookMeta.getPersistentDataContainer();
+      container.set(o2BookTypeKey, PersistentDataType.STRING, bookType.toString());
+      container.set(o2BookSpellsKey, PersistentDataType.STRING, spellsTag.toString().trim());
+      container.set(o2BookPotionsKey, PersistentDataType.STRING, potionsTag.toString().trim());
+
       bookMeta.setGeneration(BookMeta.Generation.ORIGINAL);
 
       bookItem.setItemMeta(bookMeta);
@@ -202,14 +253,14 @@ public abstract class O2Book
    /**
     * Turn a spell text word list in to a set of pages that fit in an MC book.
     *
-    * Book pages cannot be more than 14 lines with ~18 characters per line, 256 characters max
+    * Book pages cannot be more than 14 lines with ~16 characters per line, 256 characters max
     * assume 2 lines for spell name, 1 blank line between name and flavor text, 1 blank link between flavor text
     * and description text, means the first page has 9 lines of ~15 characters + continue, subsequent pages are 13
     * lines of ~15 characters + continue.
     *
     * This means the first page for a spell can have ~175 characters and subsequent pages can be ~195.
     *
-    * Assumes there is no word in the list that is >= 200 characters.
+    * Assumes there is no word in the list that is >= max page size.
     *
     * @param words an array of all the words in the book
     * @return a list of book pages
@@ -220,7 +271,7 @@ public abstract class O2Book
       ArrayList<String> pages = new ArrayList<>();
 
       // first page
-      int remaining = 175;
+      int remaining = 150;
       StringBuilder page = new StringBuilder();
 
       // first page
@@ -248,7 +299,7 @@ public abstract class O2Book
       // remaining pages
       while (!words.isEmpty())
       {
-         remaining = 200;
+         remaining = 180;
          page = new StringBuilder();
 
          while (remaining > 0)
@@ -277,32 +328,6 @@ public abstract class O2Book
    }
 
    /**
-    * Create the lore for this book. This will contain the name of each spell and is used by bookLearning
-    * to know what spells are in this book.
-    *
-    * @return a String list of lore
-    */
-   @NotNull
-   private List<String> getBookLore ()
-   {
-      List<String> lore = new ArrayList<>();
-
-      for (O2SpellType spellType : spells)
-      {
-         String s = spellType.getSpellName();
-         lore.add(s);
-      }
-
-      for (O2PotionType potionType : potions)
-      {
-         String s = potionType.getPotionName();
-         lore.add(s);
-      }
-
-      return lore;
-   }
-
-   /**
     * Get the book item for this book
     *
     * @return the book item
@@ -325,9 +350,9 @@ public abstract class O2Book
     * @return title
     */
    @NotNull
-   public String getTitle ()
+   public String getTitle()
    {
-      return bookType.title;
+      return bookType.getTitle(p);
    }
 
    /**
@@ -336,9 +361,9 @@ public abstract class O2Book
     * @return short title for this book
     */
    @NotNull
-   public String getShortTitle ()
+   public String getShortTitle()
    {
-      return bookType.shortTitle;
+      return bookType.getShortTitle(p);
    }
 
    /**
@@ -347,9 +372,9 @@ public abstract class O2Book
     * @return author
     */
    @NotNull
-   public String getAuthor ()
+   public String getAuthor()
    {
-      return bookType.author;
+      return bookType.getAuthor();
    }
 
    /**
@@ -358,8 +383,8 @@ public abstract class O2Book
     * @return branch
     */
    @NotNull
-   public O2MagicBranch getBranch ()
+   public O2MagicBranch getBranch()
    {
-      return bookType.branch;
+      return bookType.getBranch();
    }
 }

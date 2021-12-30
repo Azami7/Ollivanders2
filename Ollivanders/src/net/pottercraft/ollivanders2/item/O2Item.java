@@ -2,11 +2,15 @@ package net.pottercraft.ollivanders2.item;
 
 import net.pottercraft.ollivanders2.O2Color;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -48,44 +52,19 @@ public class O2Item
     * @return an ItemStack of this item
     */
    @Nullable
-   public ItemStack getItem(int amount)
+   public ItemStack getItem (int amount)
    {
-      Material materialType = itemType.getMaterial();
-      short variant = itemType.getVariant();
-      String name = itemType.getName();
-      ArrayList<String> lore = new ArrayList<>();
-      lore.add(itemType.getLore());
+      Ollivanders2Common common = new Ollivanders2Common(p);
+      common.printDebugMessage("Getting item " + itemType.getName(), null, null, false);
 
-      if (Ollivanders2.debug)
-      {
-         p.getLogger().info("Getting item " + name);
-      }
-
-      ItemStack o2Item = new ItemStack(materialType, amount);
-
-      ItemMeta meta = o2Item.getItemMeta();
-      if (meta == null)
-         return null;
-
-      meta.setLore(lore);
-      meta.setDisplayName(name);
-
-      if (materialType == Material.POTION)
-      {
-         meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-         ((PotionMeta) meta).setColor(O2Color.getBukkitColorByNumber(variant).getBukkitColor());
-      }
-
-      o2Item.setItemMeta(meta);
-
-      return o2Item;
+      return itemType.getItem(amount);
    }
 
    /**
     * @return the O2ItemType
     */
    @NotNull
-   public O2ItemType getType()
+   public O2ItemType getType ()
    {
       return itemType;
    }
@@ -94,7 +73,7 @@ public class O2Item
     * @return the item name
     */
    @NotNull
-   public String getName()
+   public String getName ()
    {
       return itemType.getName();
    }
@@ -103,8 +82,24 @@ public class O2Item
     * @return the material type
     */
    @NotNull
-   public Material getMaterialType()
+   public Material getMaterialType ()
    {
       return itemType.getMaterial();
+   }
+
+   /**
+    * Get the item type for this item stack
+    *
+    * @param itemStack the item stack to check
+    * @return the O2ItemType, if it is one, or null otherwise
+    */
+   @Nullable
+   static public O2ItemType getItemType (@NotNull ItemStack itemStack)
+   {
+      ItemMeta meta = itemStack.getItemMeta();
+      if (meta == null)
+         return null;
+
+      return O2ItemType.getTypeByName(meta.getDisplayName());
    }
 }

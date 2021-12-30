@@ -25,10 +25,12 @@ public abstract class GaleatiSuper extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public GaleatiSuper()
+   public GaleatiSuper(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
    }
 
    /**
@@ -47,7 +49,7 @@ public abstract class GaleatiSuper extends O2Spell
     * Targets a player in radius of the projectile and changes their helmet.
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<LivingEntity> livingEntities = getLivingEntities(1.5);
 

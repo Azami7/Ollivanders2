@@ -27,7 +27,6 @@ public class BABBLING_BEVERAGE extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.BABBLING_BEVERAGE;
-      potionLevel = PotionLevel.OWL;
 
       ingredients.put(O2ItemType.VALERIAN_SPRIGS, 2);
       ingredients.put(O2ItemType.DITTANY, 1);
@@ -40,10 +39,16 @@ public class BABBLING_BEVERAGE extends O2Potion
       flavorText.add("\"Potter, when I want nonsense shouted at me I shall give you a Babbling Beverage.\" -Severus Snape");
    }
 
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
+   @Override
+   public void drink(@NotNull Player player)
    {
       BABBLING effect = new BABBLING(p, duration, player.getUniqueId());
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You tongue feels fuzzy.");
    }

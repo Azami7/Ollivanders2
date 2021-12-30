@@ -19,10 +19,12 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FriendlyMobDisguise()
+   public FriendlyMobDisguise(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
    }
 
    /**
@@ -46,18 +48,18 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
    void doInitSpell()
    {
       // whitelist of entities that can be targeted by this spell
-      entityWhitelist.addAll(Ollivanders2Common.smallFriendlyAnimals);
+      entityWhitelist.addAll(Ollivanders2Common.smallFriendlyMobs);
 
       int uses = (int) (usesModifier * 4);
 
       if (uses > 100)
       {
-         entityWhitelist.addAll(Ollivanders2Common.mediumFriendlyAnimals);
+         entityWhitelist.addAll(Ollivanders2Common.mediumFriendlyMobs);
       }
 
       if (uses > 200)
       {
-         entityWhitelist.addAll(Ollivanders2Common.largeFriendlyAnimals);
+         entityWhitelist.addAll(Ollivanders2Common.largeFriendlyMobs);
       }
 
       // spell duration

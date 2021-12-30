@@ -20,15 +20,17 @@ public final class MUCUS_AD_NAUSEAM extends AddO2Effect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public MUCUS_AD_NAUSEAM()
+   public MUCUS_AD_NAUSEAM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.MUCUS_AD_NAUSEAM;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Curse of the Bogies");
       }};
@@ -49,16 +51,20 @@ public final class MUCUS_AD_NAUSEAM extends AddO2Effect
 
       spellType = O2SpellType.MUCUS_AD_NAUSEAM;
       branch = O2MagicBranch.DARK_ARTS;
-      initSpell();
 
       // effect
       effectsToAdd.add(O2EffectType.MUCUS);
 
-      // duration
-      durationInSeconds = ((int) usesModifier + 30);
-      maxDurationInSeconds = 180; // 3 minutes
-
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      durationInSeconds = ((int) usesModifier + 30);
+      maxDurationInSeconds = 180; // 3 minutes
    }
 }

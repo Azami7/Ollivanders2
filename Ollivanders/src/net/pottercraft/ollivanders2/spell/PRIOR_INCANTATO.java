@@ -25,15 +25,17 @@ public class PRIOR_INCANTATO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PRIOR_INCANTATO()
+   public PRIOR_INCANTATO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PRIOR_INCANTATO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Reverse Spell");
          add("\"Placing his wand tip to tip against Harry's wand and saying the spell, Amos causes a shadow of the Dark Mark to erupt from where the two wands meet, showing that this was the last spell cast with Harry's wand.\"");
@@ -60,7 +62,7 @@ public class PRIOR_INCANTATO extends O2Spell
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       for (LivingEntity livingEntity : getLivingEntities(1.5))
       {

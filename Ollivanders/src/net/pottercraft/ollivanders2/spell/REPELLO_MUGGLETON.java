@@ -1,7 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -20,15 +20,17 @@ public final class REPELLO_MUGGLETON extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public REPELLO_MUGGLETON()
+   public REPELLO_MUGGLETON(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.REPELLO_MUGGLETON;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("Muggle-Repelling Charms on every inch of it. Every time Muggles have got anywhere near here all year, they've suddenly remembered urgent appointments and had to dash away again.");
       }};
@@ -49,7 +51,6 @@ public final class REPELLO_MUGGLETON extends StationarySpell
 
       spellType = O2SpellType.REPELLO_MUGGLETON;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       baseDurationInSeconds = 30;
       durationModifierInSeconds = 15;
@@ -57,10 +58,12 @@ public final class REPELLO_MUGGLETON extends StationarySpell
       radiusModifier = 1;
       flairSize = 10;
       centerOnCaster = true;
+
+      initSpell();
    }
 
    @Override
-   protected StationarySpellObj createStationarySpell ()
+   protected O2StationarySpell createStationarySpell()
    {
       return new net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON(p, player.getUniqueId(), location, O2StationarySpellType.REPELLO_MUGGLETON, radius, duration);
    }

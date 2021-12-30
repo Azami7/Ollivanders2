@@ -20,15 +20,18 @@ public final class FUMOS extends FumosSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FUMOS ()
+   public FUMOS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.FUMOS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>() {{
+      flavorText = new ArrayList<>()
+      {{
          add("The Smoke-Screen Spell");
       }};
 
@@ -49,5 +52,25 @@ public final class FUMOS extends FumosSuper
       branch = O2MagicBranch.CHARMS;
 
       initSpell();
+   }
+
+   /**
+    * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
+    * constants.
+    */
+   @Override
+   void doInitSpell()
+   {
+      radius = (int) usesModifier / 10;
+      if (radius < minDurationInSeconds)
+         radius = minRadius;
+      else if (radius > maxRadius)
+         radius = maxRadius;
+
+      durationInSeconds = (int)(usesModifier / 2);
+      if (durationInSeconds < minDurationInSeconds)
+         durationInSeconds = minDurationInSeconds;
+      else if (durationInSeconds > maxDurationInSeconds)
+         durationInSeconds = maxDurationInSeconds;
    }
 }

@@ -33,7 +33,6 @@ public final class FORGETFULLNESS_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.FORGETFULLNESS_POTION;
-      potionLevel = PotionLevel.OWL;
 
       ingredients.put(O2ItemType.MISTLETOE_BERRIES, 4);
       ingredients.put(O2ItemType.VALERIAN_SPRIGS, 2);
@@ -46,8 +45,21 @@ public final class FORGETFULLNESS_POTION extends O2Potion
       potionColor = Color.fromRGB(195, 71, 0);
    }
 
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
+   @Override
+   public void drink(@NotNull Player player)
    {
+      O2Player o2p = p.getO2Player(player);
+      if (o2p == null)
+      {
+         player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
+         return;
+      }
+
       int coinToss = Math.abs(Ollivanders2Common.random.nextInt() % 2);
 
       int memLoss = Math.abs(Ollivanders2Common.random.nextInt() % 20) + 1;
@@ -63,7 +75,12 @@ public final class FORGETFULLNESS_POTION extends O2Potion
             ArrayList<O2SpellType> listOfSpells = new ArrayList<>(keySet);
             int index = Math.abs(Ollivanders2Common.random.nextInt() % listOfSpells.size());
 
-            o2p.setSpellCount(listOfSpells.get(index), memLoss);
+            // spell to affect
+            O2SpellType spell = listOfSpells.get(index);
+
+            // decrease their skill level
+            int curLevel = o2p.getSpellCount(spell);
+            o2p.setSpellCount(spell, curLevel - memLoss);
             lostSpell = listOfSpells.get(index).toString();
          }
       }
@@ -76,13 +93,17 @@ public final class FORGETFULLNESS_POTION extends O2Potion
             ArrayList<O2PotionType> listOfPotions = new ArrayList<>(keySet);
             int index = Math.abs(Ollivanders2Common.random.nextInt() % listOfPotions.size());
 
-            o2p.setPotionCount(listOfPotions.get(index), memLoss);
+            // potion to affect
+            O2PotionType potion = listOfPotions.get(index);
+
+            // decrease their skill level
+            int curLevel = o2p.getPotionCount(potion);
+            o2p.setPotionCount(potion, curLevel - memLoss);
             lostSpell = listOfPotions.get(index).toString();
          }
       }
 
-      if (Ollivanders2.debug)
-         p.getLogger().info("Forgetfullness Potion: " + player.getDisplayName() + " lost " + memLoss + " experience  with " + lostSpell);
+      common.printDebugMessage("Forgetfullness Potion: " + player.getDisplayName() + " lost " + memLoss + " experience  with " + lostSpell, null, null, false);
 
       player.sendMessage(Ollivanders2.chatColor + "It feels like you've forgotten something.");
    }

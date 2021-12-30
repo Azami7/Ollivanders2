@@ -9,7 +9,7 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -24,7 +24,7 @@ public final class CRESCERE_PROTEGAT extends O2Spell
    /**
     * Stationary spell types that cannot be targeted by this spell.
     */
-   List<O2StationarySpellType> spellBlacklist = new ArrayList<O2StationarySpellType>()
+   List<O2StationarySpellType> spellBlacklist = new ArrayList<>()
    {{
       add(O2StationarySpellType.COLLOPORTUS);
       add(O2StationarySpellType.HORCRUX);
@@ -34,10 +34,12 @@ public final class CRESCERE_PROTEGAT extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public CRESCERE_PROTEGAT ()
+   public CRESCERE_PROTEGAT(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.CRESCERE_PROTEGAT;
       branch = O2MagicBranch.CHARMS;
@@ -65,11 +67,11 @@ public final class CRESCERE_PROTEGAT extends O2Spell
     * Look for stationary spells at the projectile's target location and increase its radius
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
-      StationarySpellObj inside = null;
+      O2StationarySpell inside = null;
 
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          // if the stationary spell type is not in the blacklist for this spell
          // was cast by the caster of this spell
@@ -90,7 +92,7 @@ public final class CRESCERE_PROTEGAT extends O2Spell
 
          if (inside.radius < limit && inside.getCasterID().equals(player.getUniqueId()))
          {
-            inside.radius++;
+            inside.radius = inside.radius + 1;
             inside.flair(10);
 
             kill();

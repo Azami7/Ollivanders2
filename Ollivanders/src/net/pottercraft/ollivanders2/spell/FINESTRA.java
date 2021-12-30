@@ -18,10 +18,12 @@ public final class FINESTRA extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FINESTRA()
+   public FINESTRA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.FINESTRA;
       branch = O2MagicBranch.CHARMS;
@@ -42,11 +44,11 @@ public final class FINESTRA extends O2Spell
       spellType = O2SpellType.FINESTRA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.BUILD);
+
+      initSpell();
    }
 
    /**
@@ -86,7 +88,7 @@ public final class FINESTRA extends O2Spell
     * @param block the block to check
     * @return true if the block is glass, false otherwise
     */
-   private boolean isGlass (Block block)
+   private boolean isGlass(Block block)
    {
       Material blockType = block.getType();
 

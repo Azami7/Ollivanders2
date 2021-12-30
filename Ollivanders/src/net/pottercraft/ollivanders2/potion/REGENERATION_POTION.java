@@ -26,7 +26,6 @@ public final class REGENERATION_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.REGENERATION_POTION;
-      potionLevel = PotionLevel.NEWT;
 
       ingredients.put(O2ItemType.BONE, 1);
       ingredients.put(O2ItemType.BLOOD, 1);
@@ -37,9 +36,17 @@ public final class REGENERATION_POTION extends O2Potion
       text = "This potion will heal a player.";
       flavorText.add("\"Bone of the father, unknowingly given, you will renew your son! Flesh of the servant, willingly sacrificed, you will revive your master. Blood of the enemy, forcibly taken, you will resurrect your foe.\" -Peter Pettigrew");
 
-      effect = new PotionEffect(PotionEffectType.REGENERATION, duration, 1);
+      minecraftPotionEffect = new PotionEffect(PotionEffectType.REGENERATION, duration, 1);
       potionColor = Color.WHITE;
    }
 
-   public void drink(@NotNull O2Player o2p, @NotNull Player player) { }
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
+   public void drink(@NotNull Player player)
+   {
+      player.sendMessage(Ollivanders2.chatColor + "You feel recovered.");
+   }
 }

@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
@@ -21,15 +21,17 @@ public final class PROTEGO extends StationarySpell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public PROTEGO()
+   public PROTEGO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.PROTEGO;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("\"I don't remember telling you to use a Shield Charm... but there is no doubt that it was effective...\" -Severus Snape");
          add("The Shield Charm");
@@ -51,7 +53,6 @@ public final class PROTEGO extends StationarySpell
 
       spellType = O2SpellType.PROTEGO;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       baseDurationInSeconds = 1;
       durationModifierInSeconds = 1;
@@ -59,16 +60,16 @@ public final class PROTEGO extends StationarySpell
       radiusModifier = 1;
       flairSize = 10;
       centerOnCaster = true;
+
+      initSpell();
    }
 
    @Override
-   protected StationarySpellObj createStationarySpell ()
+   protected O2StationarySpell createStationarySpell()
    {
       // protego has a limited duration, ensure duration is not set too high
-      if (duration > (3 * Ollivanders2Common.ticksPerSecond))
-      {
-         duration = 3 * Ollivanders2Common.ticksPerSecond;
-      }
+      if (duration > (Ollivanders2Common.ticksPerMinute))
+         duration = Ollivanders2Common.ticksPerMinute;
 
       return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO, radius, duration);
    }

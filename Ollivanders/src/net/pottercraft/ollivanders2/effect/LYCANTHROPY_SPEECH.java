@@ -27,7 +27,7 @@ public class LYCANTHROPY_SPEECH extends BABBLING
 
       effectType = O2EffectType.LYCANTHROPY_SPEECH;
 
-      dictionary = new ArrayList<String>()
+      dictionary = new ArrayList<>()
       {{
          add("§oHOOOOOOWLLLLLL");
          add("§obark bark bark bark");
@@ -38,4 +38,10 @@ public class LYCANTHROPY_SPEECH extends BABBLING
       permanent = true;
       maxWords = 3;
    }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove() {}
 }

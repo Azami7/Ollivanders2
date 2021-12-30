@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.event.player.PlayerVelocityEvent;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -42,7 +43,7 @@ public class SUSPENSION extends O2Effect
     * Age this effect by 1, move the player up 1.5 blocks off the ground if they are not already suspended.
     */
    @Override
-   public void checkEffect ()
+   public void checkEffect()
    {
       age(1);
 
@@ -52,19 +53,10 @@ public class SUSPENSION extends O2Effect
       }
    }
 
-   @Override
-   public void kill ()
-   {
-      release();
-      removeAdditionalEffect();
-
-      kill = true;
-   }
-
    /**
     * Suspend the player in the air.
     */
-   private void suspend ()
+   private void suspend()
    {
       Player target = p.getServer().getPlayer(targetID);
       if (target == null)
@@ -95,19 +87,19 @@ public class SUSPENSION extends O2Effect
    /**
     * Add additional effects for suspension such as immobilizing them.
     */
-   private void addAdditionalEffects ()
+   private void addAdditionalEffects()
    {
       // add an immbolize effect with a duration slightly longer than this one so they cannot
       // move while suspended
       IMMOBILIZE immbobilize = new IMMOBILIZE(p, duration + 10, targetID);
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(immbobilize);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(immbobilize);
       additionalEffects.add(O2EffectType.IMMOBILIZE);
    }
 
    /**
     * Release player from the suspension and return to original location
     */
-   private void release ()
+   private void release()
    {
       Player target = p.getServer().getPlayer(targetID);
       if (target == null)
@@ -121,7 +113,7 @@ public class SUSPENSION extends O2Effect
 
       if (!canFly)
       {
-         if (!Ollivanders2API.getPlayers(p).playerEffects.hasEffect(targetID, O2EffectType.FLYING))
+         if (!Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, O2EffectType.FLYING))
          {
             target.setAllowFlight(false);
          }
@@ -131,11 +123,32 @@ public class SUSPENSION extends O2Effect
    /**
     * Remove additional effects of Suspension
     */
-   private void removeAdditionalEffect ()
+   private void removeAdditionalEffect()
    {
       for (O2EffectType effectType : additionalEffects)
       {
-         Ollivanders2API.getPlayers(p).playerEffects.removeEffect(targetID, effectType);
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, effectType);
       }
+   }
+
+   /**
+    * Do any cleanup related to removing this effect from the player
+    */
+   @Override
+   public void doRemove()
+   {
+      release();
+      removeAdditionalEffect();
+   }
+
+   /**
+    * Do any effects when player velocity changes
+    *
+    * @param event the player velocity event
+    */
+   void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event)
+   {
+      event.setCancelled(true);
+      common.printDebugMessage("SUSPENSION: cancelling PlayerVelocityEvent", null, null, false);
    }
 }

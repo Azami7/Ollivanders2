@@ -22,15 +22,17 @@ public final class DELETRIUS extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public DELETRIUS()
+   public DELETRIUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.DELETRIUS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Eradication Spell");
          add("'Deletrius!' Mr Diggory shouted, and the smoky skull vanished in a wisp of smoke.");
@@ -52,18 +54,18 @@ public final class DELETRIUS extends O2Spell
       spellType = O2SpellType.DELETRIUS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.ITEM_PICKUP);
+
+      initSpell();
    }
 
    /**
     * Delete a item
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<Item> items = getItems(1.5);
 

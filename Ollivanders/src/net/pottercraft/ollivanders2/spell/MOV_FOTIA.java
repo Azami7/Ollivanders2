@@ -23,15 +23,17 @@ public final class MOV_FOTIA extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public MOV_FOTIA()
+   public MOV_FOTIA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.MOV_FOTIA;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("It took several purple firecrackers exploding from the end of Professor Dumbledore's wand to bring silence.");
          add("Purple Firecrackers");
@@ -54,13 +56,17 @@ public final class MOV_FOTIA extends Pyrotechnia
       spellType = O2SpellType.MOV_FOTIA;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.PURPLE);
       fireworkType = Type.BALL;
       fireworkPower = 0;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(1);
    }
 }

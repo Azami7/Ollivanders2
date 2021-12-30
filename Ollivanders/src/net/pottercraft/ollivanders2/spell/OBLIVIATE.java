@@ -20,15 +20,17 @@ public final class OBLIVIATE extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public OBLIVIATE()
+   public OBLIVIATE(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.OBLIVIATE;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Memory Charm");
          add("\"If there’s one thing I pride myself on, it’s my Memory Charms.\" -Gilderoy Lockhart");
@@ -52,15 +54,15 @@ public final class OBLIVIATE extends O2Spell
       spellType = O2SpellType.OBLIVIATE;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
          worldGuardFlags.add(Flags.PVP);
+
+      initSpell();
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       int i = spellUses;
 

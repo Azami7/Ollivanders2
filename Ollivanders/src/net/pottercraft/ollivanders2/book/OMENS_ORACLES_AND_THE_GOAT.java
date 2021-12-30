@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.book;
 
-import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
@@ -22,5 +21,6 @@ public class OMENS_ORACLES_AND_THE_GOAT extends O2Book
 
         spells.add(O2SpellType.OVOGNOSIS);
         spells.add(O2SpellType.CARTOMANCIE);
+        spells.add(O2SpellType.MANTEIA_KENTAVROS);
     }
 }

@@ -19,15 +19,17 @@ public final class STUPEFY extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public STUPEFY()
+   public STUPEFY(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.STUPEFY;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Stunning Spell");
          add("\"Stunning is one of the most useful spells in your arsenal. It's sort of a wizard's bread and butter, really.\" -Harry Potter");
@@ -50,22 +52,30 @@ public final class STUPEFY extends AddPotionEffect
       spellType = O2SpellType.STUPEFY;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       effectTypes.add(PotionEffectType.BLINDNESS);
       effectTypes.add(PotionEffectType.SLOW);
-      strengthModifier = (int) usesModifier / 10;
-      minDurationInSeconds = 1;
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      // amplifier
+      maxAmplifier = 2;
+
+      amplifier = (int) usesModifier / 50;
+      if (amplifier > maxAmplifier)
+         amplifier = maxAmplifier;
+
+      // duration
+      minDurationInSeconds = 5;
       maxDurationInSeconds = 180;
 
       durationInSeconds = (int) usesModifier;
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      }
       else if (durationInSeconds > maxDurationInSeconds)
-      {
          durationInSeconds = maxDurationInSeconds;
-      }
    }
 }

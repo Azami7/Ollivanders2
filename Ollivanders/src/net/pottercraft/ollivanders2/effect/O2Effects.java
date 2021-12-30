@@ -3,7 +3,26 @@ package net.pottercraft.ollivanders2.effect;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
+import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -22,7 +41,7 @@ import java.util.concurrent.Semaphore;
  * @author Azami7
  * @since 2.2.8
  */
-public class O2Effects
+public class O2Effects implements Listener
 {
    final Ollivanders2 p;
    final Ollivanders2Common common;
@@ -30,6 +49,41 @@ public class O2Effects
    final static Semaphore semaphore = new Semaphore(1);
 
    public static final String effectLabelPrefix = "Effect_";
+
+   public static HashMap<PotionEffectType, Ollivanders2Common.MagicLevel> potionEffectLevels = new HashMap<>() {{
+      put(PotionEffectType.ABSORPTION, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.BAD_OMEN, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.BLINDNESS, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.CONDUIT_POWER, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.CONFUSION, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.DAMAGE_RESISTANCE, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.DOLPHINS_GRACE, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.FAST_DIGGING, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.FIRE_RESISTANCE, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.GLOWING, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.HARM, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.HEAL, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.HEALTH_BOOST, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.HERO_OF_THE_VILLAGE, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.HUNGER, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.INCREASE_DAMAGE, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.INVISIBILITY, Ollivanders2Common.MagicLevel.EXPERT);
+      put(PotionEffectType.JUMP, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.LEVITATION, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.LUCK, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.NIGHT_VISION, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.POISON, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.REGENERATION, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.SATURATION, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.SLOW, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.SLOW_DIGGING, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.SLOW_FALLING, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.SPEED, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.UNLUCK, Ollivanders2Common.MagicLevel.BEGINNER);
+      put(PotionEffectType.WATER_BREATHING, Ollivanders2Common.MagicLevel.NEWT);
+      put(PotionEffectType.WEAKNESS, Ollivanders2Common.MagicLevel.OWL);
+      put(PotionEffectType.WITHER, Ollivanders2Common.MagicLevel.NEWT);
+   }};
 
    /**
     * Thread-safe storage class for the effect data on players.
@@ -49,7 +103,7 @@ public class O2Effects
       /**
        * Constructor
        */
-      EffectsData () { }
+      EffectsData() {}
 
       /**
        * Get a copy of the effects active on this player.
@@ -238,6 +292,9 @@ public class O2Effects
       }
    }
 
+   /**
+    * The data for all active effects
+    */
    EffectsData effectsData = new EffectsData();
 
    /**
@@ -249,6 +306,245 @@ public class O2Effects
    {
       p = plugin;
       common = new Ollivanders2Common(plugin);
+
+      p.getServer().getPluginManager().registerEvents(this, p);
+   }
+
+   public void onEnable()
+   {
+      //
+      // lycanthropy
+      //
+      O2EffectType.LYCANTHROPY.setEnabled(p.getConfig().getBoolean("enableLycanthropy"));
+      if (O2EffectType.LYCANTHROPY.isEnabled())
+         p.getLogger().info("Enabling lycanthropy.");
+      else
+         p.getLogger().info("Disabling lycanthropy.");
+   }
+
+   /**
+    * Take effect actions when a player is damaged
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event)
+   {
+      Entity entity = event.getEntity();
+      if (!(entity instanceof Player))
+         return;
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(entity.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnEntityDamageByEntityEvent(event);
+      }
+   }
+
+   /**
+    * Take effect actions when a player interacts with an item
+    *
+    * @param event the event
+    */
+   @EventHandler (priority = EventPriority.HIGHEST)
+   public void onPlayerInteractEvent(@NotNull PlayerInteractEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerInteractEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to players speaking.
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnAsyncPlayerChatEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to players sleeping.
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGH)
+   public void onPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerBedEnterEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to players flying.
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGH)
+   public void onPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerToggleFlightEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to players sneaking.
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGH)
+   public void onPlayerToggleSleepEvent(@NotNull PlayerToggleSneakEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerToggleSneakEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to players sprinting.
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGH)
+   public void onPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerToggleSprintEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to players velocity changes
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGH)
+   public void onPlayerVelocityEvent(@NotNull PlayerVelocityEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerVelocityEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to players picking up items
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGHEST)
+   public void onEntityPickupItemEvent(@NotNull EntityPickupItemEvent event)
+   {
+      Entity entity = event.getEntity();
+      if (!(entity instanceof Player))
+         return;
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(entity.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerPickupItemEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to player holds an item
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGH)
+   public void onPlayerItemHeldEvent(@NotNull PlayerItemHeldEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerItemHeldEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to player consumes an item
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGH)
+   public void onPlayerItemConsumeEvent(@NotNull PlayerItemConsumeEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerItemConsumeEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to player drops an item
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGH)
+   public void onPlayerDropItemEvent(@NotNull PlayerDropItemEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerDropItemEvent(event);
+      }
+   }
+
+   /**
+    * Handles all effects related to the player moving
+    *
+    * @param event the event
+    */
+   @EventHandler(priority = EventPriority.HIGH)
+   public void onPlayerMoveEvent(@NotNull PlayerMoveEvent event)
+   {
+      Player player = event.getPlayer();
+
+      Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
+      for (O2Effect effect : activeEffects.values())
+      {
+         effect.doOnPlayerMoveEvent(event);
+      }
    }
 
    /**
@@ -331,8 +627,11 @@ public class O2Effects
             continue;
          }
 
-         activeEffects.put(effectType, effect);
-         common.printDebugMessage("   added " + effectType.toString(), null, null, false);
+         if (effectType.isEnabled())
+         {
+            activeEffects.put(effectType, effect);
+            common.printDebugMessage("   added " + effectType.toString(), null, null, false);
+         }
       }
 
       effectsData.updatePlayerActiveEffects(pid, activeEffects);
@@ -409,7 +708,7 @@ public class O2Effects
          }
          catch (Exception e)
          {
-            p.getLogger().info("Failed to deserialize effect " + effectName);
+            common.printDebugMessage("Failed to deserialize effect " + effectName, null, null, false);
          }
       }
 
@@ -423,6 +722,9 @@ public class O2Effects
     */
    public synchronized void addEffect(@NotNull O2Effect e)
    {
+      if (!e.effectType.isEnabled())
+         return;
+
       UUID pid = e.getTargetID();
 
       Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
@@ -471,6 +773,9 @@ public class O2Effects
       if (effect != null)
       {
          effect.kill();
+
+         playerEffects.get(effectType).doRemove();
+
          playerEffects.remove(effectType);
       }
       else
@@ -509,7 +814,7 @@ public class O2Effects
       {
          effect.checkEffect();
 
-         if (effect.isKilled())
+         if (effect.isKilled() || !effect.effectType.isEnabled())
          {
             removeEffect(pid, effect.effectType);
          }
@@ -634,7 +939,6 @@ public class O2Effects
          if (effect.informousText != null)
          {
             infoText = effect.informousText;
-            p.getLogger().info(effect.informousText);
             break;
          }
       }
@@ -666,5 +970,115 @@ public class O2Effects
       }
 
       return infoText;
+   }
+
+   /**
+    * The effects command for ops management of effects
+    *
+    * @param sender the player that issued the command
+    * @param args   the arguments for the command, if any
+    * @param p callback to the Ollivanders plugin
+    * @return true unless an error occurred
+    */
+   public static boolean runCommand(@NotNull CommandSender sender, @NotNull String[] args, @NotNull Ollivanders2 p)
+   {
+      if (!(sender instanceof Player))
+         return false;
+
+      if (!sender.hasPermission("Ollivanders2.admin"))
+         return false;
+
+      if (args.length < 2 || args.length > 3)
+         return commandUsage(sender);
+
+      String effectName = args[1].toUpperCase();
+
+      O2EffectType effectType;
+      try
+      {
+         effectType = O2EffectType.valueOf(effectName);
+      }
+      catch (Exception e)
+      {
+         sender.sendMessage(Ollivanders2.chatColor + "No effect named " + effectName + ".\n");
+         return true;
+      }
+
+      Player targetPlayer;
+      if (args.length == 3)
+      {
+         String playerName = args[2];
+         targetPlayer = p.getServer().getPlayer(playerName);
+         if (targetPlayer == null)
+         {
+            sender.sendMessage(Ollivanders2.chatColor + "Unable to find player " + playerName + ".\n");
+            return true;
+         }
+      }
+      else
+         targetPlayer = (Player) sender;
+
+      toggleEffect(sender, targetPlayer, effectType, p);
+
+      return true;
+   }
+
+   /**
+    * Toggle an effect on a player.
+    *
+    * @param sender the player that issued the command
+    * @param player the target player
+    * @param effectType the effect type
+    * @param p a callback to the plugin
+    */
+   private static void toggleEffect(@NotNull CommandSender sender, @NotNull Player player, @NotNull O2EffectType effectType, @NotNull Ollivanders2 p)
+   {
+      if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), effectType))
+      {
+         Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), effectType);
+         sender.sendMessage(Ollivanders2.chatColor + "Removed " + effectType.toString() + " from " + player.getName() + ".\n");
+      }
+      else
+      {
+         Class<?> effectClass = effectType.getClassName();
+
+         if (Ollivanders2.debug)
+            p.getLogger().info("Trying to add effect " + effectType.toString());
+
+         O2Effect effect;
+
+         try
+         {
+            effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, 1200, player.getUniqueId());
+         }
+         catch (Exception e)
+         {
+            sender.sendMessage(Ollivanders2.chatColor + "Failed to add effect " + effectType.toString() + " to " + player.getName() + ".\n");
+            e.printStackTrace();
+            return;
+         }
+
+         if (effect.effectType.isEnabled())
+         {
+            Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+            sender.sendMessage(Ollivanders2.chatColor + "Added " + effectType.toString() + " to " + player.getName() + ".\n");
+         }
+         else
+            sender.sendMessage(Ollivanders2.chatColor + effectType.toString() + " is currently disabled in your server config.\n");
+      }
+   }
+
+   /**
+    * Usage message for Effect subcommands.
+    *
+    * @param sender the player that issued the command
+    */
+   public static boolean commandUsage(@NotNull CommandSender sender)
+   {
+      sender.sendMessage(Ollivanders2.chatColor
+              + "/ollivanders2 effect effect_name - toggles the named effect on the command sender" + "\n"
+              + "/ollivanders2 effect effect_name player_name - toggles the named effect on the player");
+
+      return true;
    }
 }

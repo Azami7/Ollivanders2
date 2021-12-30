@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.potion;
 import net.pottercraft.ollivanders2.effect.IMPROVED_BOOK_LEARNING;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
@@ -27,7 +26,6 @@ public final class WIT_SHARPENING_POTION extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.WIT_SHARPENING_POTION;
-      potionLevel = PotionLevel.OWL;
 
       ingredients.put(O2ItemType.GINGER_ROOT, 2);
       ingredients.put(O2ItemType.GROUND_SCARAB_BEETLE, 3);
@@ -41,11 +39,16 @@ public final class WIT_SHARPENING_POTION extends O2Potion
       potionColor = Color.fromRGB(204, 102, 0);
    }
 
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
    @Override
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   public void drink(@NotNull Player player)
    {
       IMPROVED_BOOK_LEARNING effect = new IMPROVED_BOOK_LEARNING(p, duration, player.getUniqueId());
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel ready to learn.");
    }

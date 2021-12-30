@@ -21,10 +21,12 @@ public final class COMETES_DUO extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public COMETES_DUO()
+   public COMETES_DUO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.COMETES_DUO;
       branch = O2MagicBranch.CHARMS;
@@ -45,8 +47,6 @@ public final class COMETES_DUO extends Pyrotechnia
       spellType = O2SpellType.COMETES_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.ORANGE);
       fireworkType = Type.BURST;
@@ -59,6 +59,12 @@ public final class COMETES_DUO extends Pyrotechnia
       fadeColors.add(Color.YELLOW);
       fadeColors.add(Color.WHITE);
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(10);
    }
 }

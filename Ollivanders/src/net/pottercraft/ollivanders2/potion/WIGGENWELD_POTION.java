@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @since 2.2.8
  */
-public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
+public class WIGGENWELD_POTION extends O2SplashPotion
 {
    /**
     * Constructor
@@ -33,9 +33,6 @@ public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
       super(plugin);
 
       potionType = O2PotionType.WIGGENWELD_POTION;
-      potionLevel = PotionLevel.OWL;
-
-      potionMaterialType = Material.SPLASH_POTION;
 
       ingredients.put(O2ItemType.HORKLUMP_JUICE, 1);
       ingredients.put(O2ItemType.FLOBBERWORM_MUCUS, 2);
@@ -57,12 +54,22 @@ public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
       flavorText.add("\"Today you will learn to brew the Wiggenweld Potion. It is a powerful healing potion that can be used to heal injuries, or reverse the effects of a Sleeping Draught.\" -Severus Snape");
 
       potionColor = Color.fromRGB(0, 206, 209);
-      effect = new PotionEffect(PotionEffectType.HEAL, duration, 1);
+      minecraftPotionEffect = new PotionEffect(PotionEffectType.HEAL, duration, 1);
    }
 
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
    @Override
-   public void drink(@NotNull O2Player o2p, @NotNull Player player) { }
+   public void drink(@NotNull Player player) { }
 
+   /**
+    * Do the effect this potion has when thrown.
+    *
+    * @param event the splash potion thrown event
+    */
    @Override
    public void thrownEffect(@NotNull PotionSplashEvent event)
    {
@@ -71,7 +78,7 @@ public class WIGGENWELD_POTION extends O2Potion implements O2SplashPotion
          if (e instanceof Player)
          {
             Player player = (Player) e;
-            Ollivanders2API.getPlayers(p).playerEffects.removeEffect(player.getUniqueId(), O2EffectType.SLEEPING);
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.SLEEPING);
          }
       }
    }

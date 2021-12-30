@@ -28,15 +28,17 @@ public final class HERBIVICUS extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public HERBIVICUS()
+   public HERBIVICUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.HERBIVICUS;
       branch = O2MagicBranch.HERBOLOGY;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Plant-Growing Charm");
       }};
@@ -58,8 +60,6 @@ public final class HERBIVICUS extends O2Spell
       spellType = O2SpellType.HERBIVICUS;
       branch = O2MagicBranch.HERBOLOGY;
 
-      initSpell();
-
       // pass-through materials
       projectilePassThrough.add(Material.WATER);
 
@@ -71,13 +71,15 @@ public final class HERBIVICUS extends O2Spell
       stateList.add(CropState.TALL);
       stateList.add(CropState.VERY_TALL);
       stateList.add(CropState.RIPE);
+
+      initSpell();
    }
 
    /**
     * Grow all the crops in a radius of the spell target
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;

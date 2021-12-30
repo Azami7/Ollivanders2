@@ -4,7 +4,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -13,6 +12,8 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.O2Color;
+import net.pottercraft.ollivanders2.item.wand.O2WandCoreType;
+import net.pottercraft.ollivanders2.item.wand.O2WandWoodType;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerFoundWandEvent;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.spell.O2Spell;
@@ -22,9 +23,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Fox;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -187,66 +188,12 @@ public class O2Player
    }
 
    /**
-    * Determine if a wand matches the player's destined wand type.
-    *
-    * @param stack the wand to check
-    * @return true if is a wand and it matches, false otherwise
-    */
-   public boolean isDestinedWand(@NotNull ItemStack stack)
-   {
-      if (wandWood == null || wandCore == null)
-         return false;
-
-      if (Ollivanders2API.common.isWand(stack))
-      {
-         ItemMeta meta = stack.getItemMeta();
-         if (meta == null)
-            return false;
-
-         List<String> lore = stack.getItemMeta().getLore();
-         if (lore == null)
-            return false;
-
-         String[] comps = lore.get(0).split(O2PlayerCommon.wandLoreConjunction);
-
-         if (wandWood.equalsIgnoreCase(comps[0]) && wandCore.equalsIgnoreCase(comps[1]))
-         {
-            setFoundWand(true);
-            isMuggle = false;
-            return true;
-         }
-         else
-         {
-            return false;
-         }
-      }
-      else
-      {
-         return false;
-      }
-   }
-
-   /**
-    * Get the player's destined wand lore.
-    *
-    * @return the wand lore for the players destined wand
-    */
-   @NotNull
-   public String getDestinedWandLore()
-   {
-      if (wandWood == null || wandCore == null)
-         initDestinedWand();
-
-      return wandWood + O2PlayerCommon.wandLoreConjunction + wandCore;
-   }
-
-   /**
     * Get the player's destined wand wood type.
     *
     * @return the player's destined wand wood type
     */
    @NotNull
-   public String getWandWood ()
+   public String getDestinedWandWood()
    {
       if (wandWood == null)
          initDestinedWand();
@@ -260,7 +207,7 @@ public class O2Player
     * @return the player's destined wand core type
     */
    @NotNull
-   public String getWandCore ()
+   public String getDestinedWandCore()
    {
       if (wandCore == null)
          initDestinedWand();
@@ -508,8 +455,8 @@ public class O2Player
       Constructor<?> c;
       try
       {
-         c = Class.forName(spellClass).getConstructor();
-         O2Spell s = (O2Spell) c.newInstance();
+         c = Class.forName(spellClass).getConstructor(Ollivanders2.class);
+         O2Spell s = (O2Spell) c.newInstance(p);
 
          recentSpells.put(spellType, System.currentTimeMillis() + s.getCoolDown());
 
@@ -542,8 +489,7 @@ public class O2Player
     */
    public void incrementSpellCount(@NotNull O2SpellType spellType)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("Incrementing spell count for " + spellType.toString());
+      common.printDebugMessage("Incrementing spell count for " + spellType.toString(), null, null, false);
 
       if (knownSpells.containsKey(spellType))
       {
@@ -568,8 +514,7 @@ public class O2Player
     */
    public void incrementPotionCount(@NotNull O2PotionType potionType)
    {
-      if (Ollivanders2.debug)
-         p.getLogger().info("Incrementing potion count for " + potionType.toString());
+      common.printDebugMessage("Incrementing potion count for " + potionType.toString(), null, null, false);
 
       if (knownPotions.containsKey(potionType))
       {
@@ -716,7 +661,7 @@ public class O2Player
     */
    public void addSoul ()
    {
-      souls++;
+      souls = souls + 1;
    }
 
    /**
@@ -726,7 +671,7 @@ public class O2Player
    {
       if (souls > 0)
       {
-         souls--;
+         souls = souls - 1;
       }
    }
 
@@ -734,6 +679,7 @@ public class O2Player
     * Get the year this player is in.
     * @return The year the player is in
     */
+   @NotNull
    public Year getYear()
    {
       return year;
@@ -774,9 +720,13 @@ public class O2Player
     */
    public void setFoundWand (boolean b)
    {
-      if (foundWand != true && b == true)
+      if (foundWand && b)
       {
-         OllivandersPlayerFoundWandEvent event = new OllivandersPlayerFoundWandEvent(p.getServer().getPlayer(pid));
+         Player player = p.getServer().getPlayer(pid);
+         if (player == null)
+            return;
+
+         OllivandersPlayerFoundWandEvent event = new OllivandersPlayerFoundWandEvent(player);
 
          p.getServer().getPluginManager().callEvent(event);
          common.printDebugMessage("Fired PlayerFoundWandEvent", null, null, false);
@@ -809,7 +759,7 @@ public class O2Player
 
       if (bookMeta == null)
       {
-         p.getLogger().warning("getSpellJournal book meta is null");
+         common.printDebugMessage("getSpellJournal book meta is null", null, null, false);
          return null;
       }
 
@@ -840,11 +790,11 @@ public class O2Player
          String line = spell + " " + count;
          content.append(spell).append(" ").append(count);
 
-         lineCount++;
+         lineCount = lineCount + 1;
          // ~18 characters per line, this will likely wrap
          if (line.length() > 18)
          {
-            lineCount++;
+            lineCount = lineCount + 1;
          }
       }
 
@@ -1014,13 +964,12 @@ public class O2Player
             animagusColor = Ollivanders2API.common.getRandomNaturalSheepColor(pid.hashCode()).toString();
          }
 
-         if (animagusColor != null && Ollivanders2.debug)
+         if (animagusColor != null)
          {
-            p.getLogger().info("Color variation " + animagusColor);
+            common.printDebugMessage("Color variation " + animagusColor, null, null, false);
          }
 
-         if (Ollivanders2.debug)
-            p.getLogger().info(playerName + " is an animagus type " + animagusForm.toString());
+         common.printDebugMessage(playerName + " is an animagus type " + animagusForm.toString(), null, null, false);
       }
    }
 
@@ -1109,7 +1058,7 @@ public class O2Player
     */
    public void onJoin ()
    {
-      Ollivanders2API.getPlayers(p).playerEffects.onJoin(pid);
+      Ollivanders2API.getPlayers().playerEffects.onJoin(pid);
       Ollivanders2API.getProphecies(p).onJoin(pid);
    }
 
@@ -1118,7 +1067,7 @@ public class O2Player
     */
    public void onQuit ()
    {
-      Ollivanders2API.getPlayers(p).playerEffects.onQuit(pid);
+      Ollivanders2API.getPlayers().playerEffects.onQuit(pid);
    }
 
    /**
@@ -1131,7 +1080,7 @@ public class O2Player
          resetSpellCount();
          resetPotionCount();
          resetSouls();
-         Ollivanders2API.getPlayers(p).playerEffects.onDeath(pid);
+         Ollivanders2API.getPlayers().playerEffects.onDeath(pid);
       }
 
       setWandSpell(null);

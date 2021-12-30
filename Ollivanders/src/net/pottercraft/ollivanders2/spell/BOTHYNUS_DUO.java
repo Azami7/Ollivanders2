@@ -21,10 +21,12 @@ public final class BOTHYNUS_DUO extends Pyrotechnia
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public BOTHYNUS_DUO()
+   public BOTHYNUS_DUO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.BOTHYNUS_DUO;
       branch = O2MagicBranch.CHARMS;
@@ -45,14 +47,18 @@ public final class BOTHYNUS_DUO extends Pyrotechnia
       spellType = O2SpellType.BOTHYNUS_DUO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       fireworkColors = new ArrayList<>();
       fireworkColors.add(Color.YELLOW);
       fireworkColors.add(Color.ORANGE);
       fireworkType = Type.STAR;
       hasTrails = true;
 
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
       setMaxFireworks(10);
    }
 }

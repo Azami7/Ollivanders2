@@ -5,7 +5,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -61,14 +61,21 @@ public abstract class StationarySpell extends O2Spell
    /**
     * The maximum duration a stationary spell can last, if it is not permanent
     */
-   static int maxDuration = Ollivanders2Common.ticksPerSecond * 1800; // 30 minutes, only applies to temporary stationary spells.
+   static final int maxDuration = Ollivanders2Common.ticksPerSecond * 1800; // 30 minutes, only applies to temporary stationary spells.
+
+   /**
+    * The minimum duration a stationary spell can last
+    */
+   int minDuration = 5 * Ollivanders2Common.ticksPerMinute;
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public StationarySpell()
+   public StationarySpell(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       branch = O2MagicBranch.CHARMS;
    }
@@ -92,30 +99,38 @@ public abstract class StationarySpell extends O2Spell
 
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
+
+      successMessage = "Stationary spell successfully cast.";
+      failureMessage = "Nothing seems to happen.";
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!centerOnCaster && !hasHitTarget())
-      {
          return;
-      }
 
       // set duration to be base time plus a modifier seconds per experience level for this spell
       duration = ((int) usesModifier * Ollivanders2Common.ticksPerSecond * durationModifierInSeconds) + (Ollivanders2Common.ticksPerSecond * baseDurationInSeconds);
+
       if (duration > maxDuration)
          duration = maxDuration;
+      else if (duration < minDuration)
+         duration = minDuration;
 
       radius = baseRadius * radiusModifier;
 
-      StationarySpellObj stationarySpell = createStationarySpell();
+      O2StationarySpell stationarySpell = createStationarySpell();
 
       if (stationarySpell != null)
       {
          stationarySpell.flair(flairSize);
          Ollivanders2API.getStationarySpells(p).addStationarySpell(stationarySpell);
+
+         sendSuccessMessage();
       }
+      else
+         sendFailureMessage();
 
       kill();
    }
@@ -125,7 +140,7 @@ public abstract class StationarySpell extends O2Spell
     *
     * @return the stationary spell or null if one is not created.
     */
-   protected StationarySpellObj createStationarySpell()
+   protected O2StationarySpell createStationarySpell()
    {
       return null;
    }

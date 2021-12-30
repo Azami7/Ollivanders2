@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.2.7
  * @author Azami7
  */
-public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
+public final class HERBICIDE_POTION extends O2SplashPotion
 {
    private final double minimumEffect = 0.1;
 
@@ -34,8 +34,6 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
       super(plugin);
 
       potionType = O2PotionType.HERBICIDE_POTION;
-      potionLevel = PotionLevel.BEGINNER;
-      potionMaterialType = Material.SPLASH_POTION;
 
       ingredients.put(O2ItemType.LIONFISH_SPINES, 4);
       ingredients.put(O2ItemType.FLOBBERWORM_MUCUS, 2);
@@ -46,17 +44,24 @@ public final class HERBICIDE_POTION extends O2Potion implements O2SplashPotion
 
       // set duration of potion effect to 30 seconds
       duration = 600;
-      effect = new PotionEffect(PotionEffectType.HARM, duration, 1);
+      minecraftPotionEffect = new PotionEffect(PotionEffectType.HARM, duration, 1);
       potionColor = Color.fromRGB(51, 102, 0);
    }
 
-   public void drink(@NotNull O2Player o2p, @NotNull Player player) { }
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
+   @Override
+   public void drink(@NotNull Player player) {}
 
    /**
     * Reduce intensity of this potion if the affected entity is not a Creeper.
     *
     * @param event the splash potion thrown event
     */
+   @Override
    public void thrownEffect(@NotNull PotionSplashEvent event)
    {
       for (LivingEntity e : event.getAffectedEntities())

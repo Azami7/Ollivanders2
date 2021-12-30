@@ -23,10 +23,12 @@ public final class INCARNATIO_VACCULA extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_VACCULA()
+   public INCARNATIO_VACCULA(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_VACCULA;
       branch = O2MagicBranch.TRANSFIGURATION;
@@ -48,9 +50,6 @@ public final class INCARNATIO_VACCULA extends PlayerDisguise
       spellType = O2SpellType.INCARNATIO_VACCULA;
       branch = O2MagicBranch.TRANSFIGURATION;
 
-      initSpell();
-      calculateSuccessRate();
-
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
       if (rand == 0) // 1% chance
          targetType = EntityType.MUSHROOM_COW;
@@ -61,5 +60,13 @@ public final class INCARNATIO_VACCULA extends PlayerDisguise
 
       AgeableWatcher watcher = (AgeableWatcher)disguise.getWatcher();
       watcher.setAdult();
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

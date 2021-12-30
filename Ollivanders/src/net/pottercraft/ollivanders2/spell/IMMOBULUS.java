@@ -20,15 +20,17 @@ public final class IMMOBULUS extends AddPotionEffect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public IMMOBULUS()
+   public IMMOBULUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.IMMOBULUS;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Freezing Charm");
          add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");
@@ -52,21 +54,30 @@ public final class IMMOBULUS extends AddPotionEffect
       spellType = O2SpellType.IMMOBULUS;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       effectTypes.add(PotionEffectType.SLOW);
       effectTypes.add(PotionEffectType.SLOW_FALLING);
-      strengthModifier = 10;
-      minDurationInSeconds = 10;
 
-      durationInSeconds = (int) usesModifier;
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      // Amplifier
+      maxAmplifier = 2;
+
+      amplifier = (int)(usesModifier / 50);
+      if (amplifier > maxAmplifier)
+         amplifier = maxAmplifier;
+
+      // Duration
+      minDurationInSeconds = 15;
+      maxDurationInSeconds = 180;
+
+      durationInSeconds = (int)(usesModifier / 2);
       if (durationInSeconds < minDurationInSeconds)
-      {
          durationInSeconds = minDurationInSeconds;
-      }
       else if (durationInSeconds > maxDurationInSeconds)
-      {
          durationInSeconds = maxDurationInSeconds;
-      }
    }
 }

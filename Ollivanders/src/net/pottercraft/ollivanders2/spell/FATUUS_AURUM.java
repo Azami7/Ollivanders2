@@ -18,15 +18,17 @@ public final class FATUUS_AURUM extends BlockTransfiguration
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public FATUUS_AURUM()
+   public FATUUS_AURUM(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.FATUUS_AURUM;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("What glitters may not be gold; and even wolves may smile; and fools will be led by promises to their deaths.");
          add("There is thy gold, worse poison to men's souls.");

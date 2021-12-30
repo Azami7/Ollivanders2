@@ -23,13 +23,17 @@ public final class AVADA_KEDAVRA extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public AVADA_KEDAVRA()
+   public AVADA_KEDAVRA(Ollivanders2 plugin)
    {
+      super(plugin);
+
       spellType = O2SpellType.AVADA_KEDAVRA;
       branch = O2MagicBranch.DARK_ARTS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Killing Curse");
          add("There was a flash of blinding green light and a rushing sound, as though a vast, invisible something was soaring through the air — instantaneously the spider rolled over onto its back, unmarked, but unmistakably dead");
@@ -51,8 +55,6 @@ public final class AVADA_KEDAVRA extends O2Spell
       super(plugin, player, rightWand);
       spellType = O2SpellType.AVADA_KEDAVRA;
 
-      initSpell();
-
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
       {
@@ -61,13 +63,15 @@ public final class AVADA_KEDAVRA extends O2Spell
       }
 
       moveEffectData = Material.GREEN_WOOL;
+
+      initSpell();
    }
 
    /**
     * Kill a living entity
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<LivingEntity> entities = getLivingEntities(1.5);
       if (entities.size() > 0)

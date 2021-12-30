@@ -18,10 +18,12 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public METELOJINX_RECANTO ()
+   public METELOJINX_RECANTO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.METELOJINX_RECANTO;
       branch = O2MagicBranch.CHARMS;
@@ -43,7 +45,8 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
       spellType = O2SpellType.METELOJINX_RECANTO;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
       storm = false;
+
+      initSpell();
    }
 }

@@ -9,7 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.StationarySpellObj;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -22,15 +22,17 @@ public final class HORREAT_PROTEGAT extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public HORREAT_PROTEGAT()
+   public HORREAT_PROTEGAT(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.HORREAT_PROTEGAT;
       branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<String>()
+      flavorText = new ArrayList<>()
       {{
          add("The Spell-Reduction Charm");
       }};
@@ -52,25 +54,25 @@ public final class HORREAT_PROTEGAT extends O2Spell
       spellType = O2SpellType.HORREAT_PROTEGAT;
       branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-
       // pass-through materials
       projectilePassThrough.remove(Material.WATER);
       projectilePassThrough.remove(Material.LAVA);
       projectilePassThrough.add(Material.CAVE_AIR);
+
+      initSpell();
    }
 
    /**
     * Reduce the radius of any stationary spells within a radius of the target, if they were cast by this player
     */
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       if (!hasHitTarget())
          return;
 
-      List<StationarySpellObj> inside = new ArrayList<>();
-      for (StationarySpellObj spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
+      List<O2StationarySpell> inside = new ArrayList<>();
+      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
       {
          if (spell.isInside(location) && spell.radius > (int) (10 / usesModifier))
          {
@@ -84,11 +86,11 @@ public final class HORREAT_PROTEGAT extends O2Spell
       {
          limit = 1;
       }
-      for (StationarySpellObj spell : inside)
+      for (O2StationarySpell spell : inside)
       {
          if (spell.radius > limit && spell.getCasterID().equals(player.getUniqueId()))
          {
-            spell.radius--;
+            spell.radius = spell.radius - 1;
             spell.flair(10);
          }
       }

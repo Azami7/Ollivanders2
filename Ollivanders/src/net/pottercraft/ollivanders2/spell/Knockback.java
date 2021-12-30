@@ -1,9 +1,13 @@
 package net.pottercraft.ollivanders2.spell;
 
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Vehicle;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -20,7 +24,7 @@ public abstract class Knockback extends O2Spell
    boolean pull = false;
 
    /**
-    * This reduces strong the knockback is. 1 is max strength, any number higher than one will reduce the strength.
+    * This reduces how strong the knockback is. 1 is max strength, any number higher than one will reduce the strength.
     */
    protected int strengthReducer = 20;
 
@@ -39,9 +43,12 @@ public abstract class Knockback extends O2Spell
 
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public Knockback()
+   public Knockback(Ollivanders2 plugin)
    {
+      super(plugin);
    }
 
    /**
@@ -69,32 +76,21 @@ public abstract class Knockback extends O2Spell
          // look for entities within radius of the projectile and knockback one of them
          for (Entity entity : entities)
          {
-            // first check entity whitelist
-            if (entityWhitelist.size() > 0 && !entityWhitelist.contains(entity.getType()))
+            // check to see if we can target this entity
+            if (!entityHarmCheck(entity))
                continue;
-
-            // do not knockback the caster or any blacklisted entity
-            if (entity.getUniqueId() == player.getUniqueId() || entityBlacklist.contains(entity.getType()))
-            {
-               continue;
-            }
 
             double velocity = usesModifier / strengthReducer;
             if (velocity < minVelocity)
-            {
                velocity = minVelocity;
-            }
             else if (velocity > maxVelocity)
-            {
                velocity = maxVelocity;
-            }
 
             if (pull)
-            {
                velocity = velocity * -1;
-            }
 
             entity.setVelocity(player.getLocation().getDirection().normalize().multiply(velocity));
+            player.sendMessage("Successfully targeted " + entity.getName());
 
             kill();
             return;
@@ -104,5 +100,28 @@ public abstract class Knockback extends O2Spell
       // projectile is stopped, kill spell
       if (hasHitTarget())
          kill();
+   }
+
+   /**
+    * Determine if this entity can be targeted for a potentially harmful spell
+    *
+    * @param entity the entity to check
+    * @return true if it can be targeted, false otherwise
+    */
+   private boolean entityHarmCheck(Entity entity)
+   {
+      // first check entity whitelist
+      if (entityWhitelist.size() > 0 && !entityWhitelist.contains(entity.getType()))
+         return false;
+
+      // do not knockback the caster or any blacklisted entity
+      if (entity.getUniqueId() == player.getUniqueId() || entityBlacklist.contains(entity.getType()))
+         return false;
+
+      //
+      // worldguard
+      //
+
+      return entityHarmWGCheck(entity);
    }
 }

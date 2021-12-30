@@ -24,10 +24,12 @@ public final class REPARO extends O2Spell
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public REPARO()
+   public REPARO(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.REPARO;
       branch = O2MagicBranch.CHARMS;
@@ -55,7 +57,6 @@ public final class REPARO extends O2Spell
 
       spellType = O2SpellType.REPARO;
       branch = O2MagicBranch.CHARMS;
-      initSpell();
 
       // world guard flags
       if (Ollivanders2.worldGuardEnabled)
@@ -63,10 +64,12 @@ public final class REPARO extends O2Spell
          worldGuardFlags.add(Flags.ITEM_DROP);
          worldGuardFlags.add(Flags.ITEM_PICKUP);
       }
+
+      initSpell();
    }
 
    @Override
-   protected void doCheckEffect ()
+   protected void doCheckEffect()
    {
       List<Item> items = getItems(1.5);
 
@@ -91,6 +94,8 @@ public final class REPARO extends O2Spell
 
             item.setItemStack(stack);
             kill();
+
+            player.sendMessage(Ollivanders2.chatColor + item.getName() + " looks newer than before.");
 
             break;
          }

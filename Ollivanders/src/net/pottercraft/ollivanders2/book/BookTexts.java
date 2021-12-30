@@ -5,10 +5,13 @@ import java.util.HashMap;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.potion.O2Potion;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
+import net.pottercraft.ollivanders2.potion.O2Potions;
+import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Teachable;
+import net.pottercraft.ollivanders2.spell.O2Spells;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class BookTexts
 {
+   Ollivanders2Common common;
+
    private static class BookText
    {
       String name;
@@ -66,7 +71,14 @@ public final class BookTexts
    BookTexts(@NotNull Ollivanders2 plugin)
    {
       p = plugin;
+      common = new Ollivanders2Common(p);
+   }
 
+   /**
+    * Add all spells and potions when the plugin is enabled.
+    */
+   public void onEnable()
+   {
       // add all spells' texts
       addSpells();
       // add all potions' texts
@@ -78,34 +90,37 @@ public final class BookTexts
     */
    private void addSpells ()
    {
-      for (O2SpellType spellType : O2SpellType.values())
+      for (O2SpellType spellType : O2Spells.getAllSpellTypes())
       {
-         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType))
-         {
-            continue;
-         }
-
-         Teachable spell;
+         O2Spell spell;
          Class<?> spellClass = spellType.getClassName();
 
          try
          {
-            spell = (Teachable)spellClass.getConstructor().newInstance();
+            spell = (O2Spell)spellClass.getConstructor(Ollivanders2.class).newInstance(p);
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Exception trying to add book text for " + spellType.toString());
-            e.printStackTrace();
-
+            common.printDebugMessage("Exception trying to add book text for " + spellType.toString(), e, null, true);
             continue;
          }
 
-         String text = spell.getText();
-         String flavorText = spell.getFlavorText();
+         String text = null;
+         String flavorText = null;
+
+         try
+         {
+            text = spell.getText();
+            flavorText = spell.getFlavorText();
+         }
+         catch (Exception e)
+         {
+            common.printDebugMessage("Exception getting book text for " + spellType.toString(), e, null, true);
+         }
 
          if (text == null)
          {
-            p.getLogger().warning("No book text for " + spellType.toString());
+            common.printDebugMessage("No book text for " + spellType.toString(), null, null, false);
             continue;
          }
 
@@ -121,36 +136,23 @@ public final class BookTexts
     */
    private void addPotions ()
    {
-      for (O2PotionType potionType : O2PotionType.values())
+      for (O2PotionType potionType : O2Potions.getAllPotionTypes())
       {
-         if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potionType))
-         {
-            continue;
-         }
-
          Class<?> potionClass = potionType.getClassName();
-         Teachable potion;
+         O2Potion potion;
 
          try
          {
-            potion = (Teachable) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
+            potion = (O2Potion) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
          }
          catch (Exception e)
          {
-            p.getLogger().warning("Exception trying to add book text for " + potionType.toString());
-            e.printStackTrace();
-
+            common.printDebugMessage("Exception trying to add book text for " + potionType.toString(), e, null, true);
             continue;
          }
 
          String text = potion.getText();
          String flavorText = potion.getFlavorText();
-
-         if (text == null)
-         {
-            p.getLogger().warning("No book text for " + potionType.toString());
-            continue;
-         }
 
          String name = Ollivanders2API.common.firstLetterCapitalize(Ollivanders2API.common.enumRecode(potionType.toString().toLowerCase()));
 

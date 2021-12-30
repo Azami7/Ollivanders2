@@ -23,10 +23,12 @@ public class INCARNATIO_URSUS extends PlayerDisguise
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+    *
+    * @param plugin the Ollivanders2 plugin
     */
-   public INCARNATIO_URSUS()
+   public INCARNATIO_URSUS(Ollivanders2 plugin)
    {
-      super();
+      super(plugin);
 
       spellType = O2SpellType.INCARNATIO_URSUS;
       branch = O2MagicBranch.TRANSFIGURATION;
@@ -47,9 +49,6 @@ public class INCARNATIO_URSUS extends PlayerDisguise
 
       spellType = O2SpellType.INCARNATIO_URSUS;
       branch = O2MagicBranch.TRANSFIGURATION;
-
-      initSpell();
-      calculateSuccessRate();
 
       int rand = Math.abs(Ollivanders2Common.random.nextInt() % 20);
 
@@ -76,5 +75,13 @@ public class INCARNATIO_URSUS extends PlayerDisguise
          ((PandaWatcher) watcher).setMainGene(Panda.Gene.NORMAL);
          ((PandaWatcher) watcher).setSitting(false);
       }
+
+      initSpell();
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      calculateSuccessRate();
    }
 }

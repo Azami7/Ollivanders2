@@ -27,7 +27,6 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
       super(plugin);
 
       potionType = O2PotionType.BARUFFIOS_BRAIN_ELIXIR;
-      potionLevel = PotionLevel.EXPERT;
 
       ingredients.put(O2ItemType.RUNESPOOR_EGG, 1);
       ingredients.put(O2ItemType.GINGER_ROOT, 2);
@@ -39,10 +38,16 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion
       potionColor = Color.fromRGB(255, 251, 222);
    }
 
-   public void drink(@NotNull O2Player o2p, @NotNull Player player)
+   /**
+    * Drink this potion and do effects
+    *
+    * @param player the player who drank the potion
+    */
+   @Override
+   public void drink(@NotNull Player player)
    {
       HIGHER_SKILL effect = new HIGHER_SKILL(p, duration, player.getUniqueId());
-      Ollivanders2API.getPlayers(p).playerEffects.addEffect(effect);
+      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
       player.sendMessage(Ollivanders2.chatColor + "You feel clarity of thought.");
    }
