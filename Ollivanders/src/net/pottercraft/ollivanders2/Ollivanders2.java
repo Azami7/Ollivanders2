@@ -152,7 +152,7 @@ public class Ollivanders2 extends JavaPlugin
       }
 
       revertAllTempBlocks();
-      //savePluginConfig();
+      savePluginConfig();
       savePluginData();
 
       getLogger().info(this + " is now disabled!");
