@@ -87,7 +87,7 @@ public class OllivandersListener implements Listener
    /**
     * Number of ticks to delay thread start for
     */
-   public static int threadDelay = Ollivanders2Common.ticksPerSecond;
+   public static int threadDelay = (int)(Ollivanders2Common.ticksPerSecond * 0.5);
 
    /**
     * Constructor
