@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -129,6 +130,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean enableWitchDrop;
    public static boolean hourlyBackup;
    public static boolean archivePreviousBackup;
+   public static int purgeBackupsAfter = 0;
    public static boolean useTranslations;
    public static boolean useStrictAnimagusConditions;
 
@@ -157,6 +159,38 @@ public class Ollivanders2 extends JavaPlugin
 
       getLogger().info(this + " is now disabled!");
    }
+
+   /**
+    * Save plugin data to disk
+    */
+   public void purgeBackups () {
+      File archiveDir = new File(Ollivanders2.pluginDir.toString()+ "/archive");
+      // If archiveDirectory is not found, do not delete.
+      if(!archiveDir.exists()) {
+         return;
+      }
+      File filesList[] = archiveDir.listFiles();
+      Date date = new Date();
+      int i = 0;
+      // If less than 3 files exist, do not delete.
+      if(filesList.length < 3) {
+         return;
+      }
+      for(File file : filesList) {
+         getLogger().info(file.lastModified() + " - " + date.getTime());
+         if(file.lastModified() + Ollivanders2.purgeBackupsAfter*86400000 < date.getTime()) {
+            file.delete();
+            i++;
+         }
+      }
+      if(i == 0) {
+         getLogger().info("No files purged");
+      }
+      else {
+         getLogger().info("Purged " + i + " files from archives.");
+      }return;
+   }
+
 
    /**
     * Save plugin data to disk
@@ -466,6 +500,21 @@ public class Ollivanders2 extends JavaPlugin
       archivePreviousBackup = getConfig().getBoolean("archivePreviousBackup");
       if (archivePreviousBackup)
          getLogger().info("Enabling backup archiving.");
+
+      //
+      // Purging Backups
+      //
+      if(getConfig().isSet("purgeBackupsAfter"))
+      {
+         purgeBackupsAfter = getConfig().getInt("purgeBackupsAfter");
+         if (purgeBackupsAfter <= 1)
+         {
+            getLogger().info("Enabling purging older backups.");
+         }
+      }
+      else {
+         purgeBackupsAfter = 0;
+      }
 
       //
       // Translations

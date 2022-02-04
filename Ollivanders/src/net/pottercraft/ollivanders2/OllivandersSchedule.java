@@ -98,12 +98,19 @@ public class OllivandersSchedule implements Runnable
          invisPlayer();
       }
 
-      // back up plugin data hourly
+      // back up & purge data hourly
       if (Ollivanders2.hourlyBackup && scheduleTimer % Ollivanders2Common.ticksPerHour == 0)
       {
          common.printDebugMessage("Saving plugin data...", null, null, false);
 
          p.savePluginData();
+      }
+
+      // Purge old plugin data hourly
+      if(Ollivanders2.purgeBackupsAfter != 0) {
+         common.printDebugMessage("Purging old plugin data...", null, null, false);
+
+         p.purgeBackups();
       }
 
       // Reset the timer so it does not grow unbounded, use >= just in case a tick gets missed somehow
