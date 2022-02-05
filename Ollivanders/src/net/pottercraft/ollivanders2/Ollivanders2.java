@@ -52,6 +52,7 @@ import org.bukkit.command.Command;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Ollivanders2 plugin object
@@ -161,10 +162,10 @@ public class Ollivanders2 extends JavaPlugin
    }
 
    /**
-    * Save plugin data to disk
+    * Purge Old Plugin Data
     */
-   public void purgeBackups () {
-      File archiveDir = new File(Ollivanders2.pluginDir.toString()+ "/archive");
+   public void purgeBackups (@NotNull Integer args, @Nullable CommandSender sender) {
+      File archiveDir = new File(Ollivanders2.pluginDir.toString() + "/archive");
       // If archiveDirectory is not found, do not delete.
       if(!archiveDir.exists()) {
          return;
@@ -176,19 +177,25 @@ public class Ollivanders2 extends JavaPlugin
       if(filesList.length < 3) {
          return;
       }
+
       for(File file : filesList) {
-         getLogger().info(file.lastModified() + " - " + date.getTime());
-         if(file.lastModified() + Ollivanders2.purgeBackupsAfter*86400000 < date.getTime()) {
+         if(file.lastModified() + args*86400000 < date.getTime()) {
             file.delete();
             i++;
          }
       }
       if(i == 0) {
          getLogger().info("No files purged");
+         if(sender != null) {
+            sender.sendMessage(chatColor + "No files have been purged.");
+         }
       }
       else {
          getLogger().info("Purged " + i + " files from archives.");
-      }return;
+         if(sender != null) {
+            sender.sendMessage(chatColor + "Purged " + i + " files from archives.");
+         }
+      } return;
    }
 
 
@@ -690,6 +697,18 @@ public class Ollivanders2 extends JavaPlugin
             return runItems((Player) sender, args);
          else
             return false;
+      }
+      //
+      // Purge
+      //
+      else if (subCommand.equalsIgnoreCase("purge"))
+      {
+         Integer num = purgeBackupsAfter;
+         if(args.length > 2) {
+            num = Integer.parseInt(args[1]);
+         }
+         purgeBackups(num, sender);
+         return true;
       }
       //
       // House
