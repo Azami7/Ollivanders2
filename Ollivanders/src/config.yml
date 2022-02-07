@@ -71,6 +71,9 @@ hourlyBackup: true
 #
 # Whether the plugin should archive previous saves before writing data. Recommended
 archivePreviousBackup: true
+#
+# Purge backups older than x days. Set to 0 to disable.
+purgeBackupsAfter: 0
 
 # Experimental and Debug options
 #

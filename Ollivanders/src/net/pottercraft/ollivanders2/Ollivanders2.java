@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -51,6 +52,7 @@ import org.bukkit.command.Command;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Ollivanders2 plugin object
@@ -129,6 +131,7 @@ public class Ollivanders2 extends JavaPlugin
    public static boolean enableWitchDrop;
    public static boolean hourlyBackup;
    public static boolean archivePreviousBackup;
+   public static int purgeBackupsAfter = 0;
    public static boolean useTranslations;
    public static boolean useStrictAnimagusConditions;
 
@@ -157,6 +160,44 @@ public class Ollivanders2 extends JavaPlugin
 
       getLogger().info(this + " is now disabled!");
    }
+
+   /**
+    * Purge Old Plugin Data
+    */
+   public void purgeBackups (@NotNull Integer args, @Nullable CommandSender sender) {
+      File archiveDir = new File(Ollivanders2.pluginDir.toString() + "/archive");
+      // If archiveDirectory is not found, do not delete.
+      if(!archiveDir.exists()) {
+         return;
+      }
+      File filesList[] = archiveDir.listFiles();
+      Date date = new Date();
+      int i = 0;
+      // If less than 3 files exist, do not delete.
+      if(filesList.length < 3) {
+         return;
+      }
+
+      for(File file : filesList) {
+         if(file.lastModified() + args*86400000 < date.getTime()) {
+            file.delete();
+            i++;
+         }
+      }
+      if(i == 0) {
+         getLogger().info("No files purged");
+         if(sender != null) {
+            sender.sendMessage(chatColor + "No files have been purged.");
+         }
+      }
+      else {
+         getLogger().info("Purged " + i + " files from archives.");
+         if(sender != null) {
+            sender.sendMessage(chatColor + "Purged " + i + " files from archives.");
+         }
+      } return;
+   }
+
 
    /**
     * Save plugin data to disk
@@ -468,6 +509,21 @@ public class Ollivanders2 extends JavaPlugin
          getLogger().info("Enabling backup archiving.");
 
       //
+      // Purging Backups
+      //
+      if(getConfig().isSet("purgeBackupsAfter"))
+      {
+         purgeBackupsAfter = getConfig().getInt("purgeBackupsAfter");
+         if (purgeBackupsAfter <= 1)
+         {
+            getLogger().info("Enabling purging older backups.");
+         }
+      }
+      else {
+         purgeBackupsAfter = 0;
+      }
+
+      //
       // Translations
       //
       useTranslations = getConfig().getBoolean("useTranslations");
@@ -641,6 +697,18 @@ public class Ollivanders2 extends JavaPlugin
             return runItems((Player) sender, args);
          else
             return false;
+      }
+      //
+      // Purge
+      //
+      else if (subCommand.equalsIgnoreCase("purge"))
+      {
+         Integer num = purgeBackupsAfter;
+         if(args.length > 2) {
+            num = Integer.parseInt(args[1]);
+         }
+         purgeBackups(num, sender);
+         return true;
       }
       //
       // House
