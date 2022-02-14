@@ -139,9 +139,6 @@ public class O2Spells
      */
     public void onEnable()
     {
-        // load the zone config
-        loadZoneConfig(p);
-
         // load enabled spells
         for (O2SpellType spellType : O2SpellType.values())
         {
@@ -153,6 +150,9 @@ public class O2Spells
 
         // load any spell static data
         APPARATE.loadApparateLocations(p);
+
+        // load the zone config
+        loadZoneConfig(p);
     }
 
     /**
@@ -233,8 +233,8 @@ public class O2Spells
             {
                 common.printDebugMessage("Loading global zone config:", null, null, false);
 
-                globalAllowedSpells = getSpellsForZone(globalZoneName, allowedList);
-                globalDisallowedSpells = getSpellsForZone(globalZoneName, disallowList);
+                globalAllowedSpells = getSpellsForZone(zone, allowedList);
+                globalDisallowedSpells = getSpellsForZone(zone, disallowList);
             }
             else
             {
@@ -312,17 +312,17 @@ public class O2Spells
      * Get the spell for a specific list for a zone
      *
      * @param zoneName the name of the zone
-     * @param list the name of the list
+     * @param listName the name of the list
      * @return the spells for that zone list
      */
     @NotNull
-    private ArrayList<O2SpellType> getSpellsForZone(@NotNull String zoneName, @NotNull String list)
+    private ArrayList<O2SpellType> getSpellsForZone(@NotNull String zoneName, @NotNull String listName)
     {
         ArrayList<O2SpellType> spellList = new ArrayList<>();
 
-        common.printDebugMessage(list + ":", null, null, false);
+        common.printDebugMessage(listName + ":", null, null, false);
 
-        for (String spell : zoneConfig.getStringList(zoneName + "." + list))
+        for (String spell : zoneConfig.getStringList(zoneName + "." + listName))
         {
             O2SpellType spellType = O2SpellType.spellTypeFromString(spell.toUpperCase());
             if (spellType != null && isLoaded(spellType))
@@ -331,6 +331,10 @@ public class O2Spells
 
                 spellList.add(spellType);
             }
+            else if (spellType == null)
+                common.printDebugMessage("invalid spell " + spell, null, null, false);
+            else if (!isLoaded(spellType))
+                common.printDebugMessage(spell + " not loaded", null, null, false);
         }
 
         return spellList;
