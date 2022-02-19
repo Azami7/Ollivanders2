@@ -63,7 +63,7 @@ public class O2Spells
     /**
      * Spell allow/disallow zones.
      */
-    private ArrayList<SpellZone> spellZones = new ArrayList<>();
+    final private ArrayList<SpellZone> spellZones = new ArrayList<>();
 
     /**
      * String keys for zone config
@@ -77,7 +77,7 @@ public class O2Spells
     /**
      * Type of spell zones that can be defined
      */
-    private enum SpellZoneType
+    public enum SpellZoneType
     {
         CUBOID,
         WORLD,
@@ -87,7 +87,7 @@ public class O2Spells
     /**
      * A zone that spells can be explicitly allowed and disallowed for
      */
-    private class SpellZone
+    public class SpellZone
     {
         String zoneName;
         SpellZoneType zoneType;
