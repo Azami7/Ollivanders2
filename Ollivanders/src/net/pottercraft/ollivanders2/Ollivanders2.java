@@ -1142,27 +1142,43 @@ public class Ollivanders2 extends JavaPlugin
 
       if (args.length < 2)
       {
-         player.sendMessage("You need to include the name of the item.");
-         return true;
+         usageMessageItem(player);
       }
-
-      if (args[1].equals("list"))
+      else if (args[1].equals("list"))
       {
          player.sendMessage("\n" + listAllItems());
-         return true;
       }
-
-      String itemName = Ollivanders2API.common.stringArrayToString(Arrays.copyOfRange(args, 1, args.length));
-      ItemStack item = items.getItemStartsWith(itemName, 1);
-
-      if (item == null)
+      else if (args[1].equals("give") && args.length >= 4)
       {
-         player.sendMessage("Unable to find an item with that name.");
-         return true;
-      }
+         int amount = 0;
+         try
+         {
+            amount = Integer.parseInt(args[2]);
+         }
+         catch (Exception e)
+         {
+            player.sendMessage("Unable to parse amount " + args[2]);
+         }
 
-      kit.add(item);
-      Ollivanders2API.common.givePlayerKit(player, kit);
+         if (amount > 64)
+            amount = 64;
+
+         String itemName = Ollivanders2API.common.stringArrayToString(Arrays.copyOfRange(args, 3, args.length));
+         ItemStack item = items.getItemStartsWith(itemName, amount);
+
+         if (item == null)
+         {
+            player.sendMessage("Unable to find an item \"" + itemName + "\'");
+            return true;
+         }
+
+         kit.add(item);
+         Ollivanders2API.common.givePlayerKit(player, kit);
+      }
+      else
+      {
+         usageMessageItem(player);
+      }
 
       return true;
    }
@@ -1175,9 +1191,9 @@ public class Ollivanders2 extends JavaPlugin
    private void usageMessageItem(@NotNull CommandSender sender)
    {
       sender.sendMessage(chatColor
-              + "Options to '/ollivanders2 house':"
+              + "Options to '/ollivanders2 item':"
               + "\nlist - lists all items"
-              + "\nitem_name - gives the specified item");
+              + "\ngive <count> <item_name> - gives the specified amount of the item");
    }
 
    /**
@@ -1486,13 +1502,13 @@ public class Ollivanders2 extends JavaPlugin
 
       String versionString = Bukkit.getBukkitVersion();
 
-      if (versionString.startsWith("1.16") || versionString.startsWith("1.17"))
+      if (versionString.startsWith("1.17") || versionString.startsWith("1.18"))
       {
          return true;
       }
       else // anything lower than 1.14 set to 0 because this version of the plugin cannot run on < 1.14
       {
-         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.16 or higher.");
+         getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.17 or higher.");
          return false;
       }
    }

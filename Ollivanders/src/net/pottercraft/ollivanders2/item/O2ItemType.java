@@ -129,10 +129,11 @@ public enum O2ItemType
    /**
     * Constructor
     *
-    * @param m the material type
-    * @param v the variant information, this is 0 for most items but for things like potions it can control color
-    * @param n the name of the item
-    * @param l the lore for this item
+    * @param material the material type
+    * @param variant the variant information, this is 0 for most items but for things like potions it can control color
+    * @param name the name of the item
+    * @param lore the lore for this item
+    * @param enchantment the optional enchantment for this item
     */
    O2ItemType(@NotNull Material material, short variant, @NotNull String name, @Nullable String lore, @Nullable ItemEnchantmentType enchantment)
    {

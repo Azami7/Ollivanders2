@@ -31,6 +31,8 @@ apparateLocations: false
 maxSpellLevel: false
 maxApparateDistance: 10000
 enableLycanthropy: true
+# Fast spells. This increases the speed spell projectiles are created. Can overload server and cause performance issues.
+fastSpells: false
 
 # Houses
 #
@@ -45,10 +47,6 @@ gryffindorColor: DARK_RED
 hufflepuffColor: GOLD
 ravenclawColor: BLUE
 slytherinColor: DARK_GREEN
-
-# Years
-#
-# https://github.com/Azami7/Ollivanders2/wiki/Configuration#years
 years: false
 
 # Magical Items
@@ -81,9 +79,6 @@ debug: false
 # Override version checks. This will force the plugin to load regardless of MC api version.
 # **IMPORTANT** Backup your plugins/Ollivanders2 directory before enabling this option - running unsupported versions may corrupt plugin data
 overrideVersionCheck: false
-#
-# Fast spells. This increases the speed spell projectiles are created. Can overload server and cause performance issues.
-fastSpells: false
 
 #
 # Zones
