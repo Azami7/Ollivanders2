@@ -7,8 +7,10 @@ import java.util.HashMap;
 import java.util.Map.Entry;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
+import net.pottercraft.ollivanders2.stationaryspell.events.FlooNetworkEvent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -20,6 +22,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -42,9 +45,9 @@ public class ALIQUAM_FLOO extends O2StationarySpell
 
    private final String flooNameLabel = "name";
 
-   private HashMap<Player, Location> destinations = new HashMap<>();
-
    public static List<ALIQUAM_FLOO> flooNetworkLocations = new ArrayList<>();
+
+   final HashMap<UUID, FlooNetworkEvent> flooNetworkEvents = new HashMap<>();
 
    /**
     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -57,6 +60,8 @@ public class ALIQUAM_FLOO extends O2StationarySpell
 
       spellType = O2StationarySpellType.ALIQUAM_FLOO;
       flooNetworkLocations.add(this);
+
+      radius = 4;
    }
 
    /**
@@ -72,7 +77,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     */
    public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration, @NotNull String flooName)
    {
-      super(plugin, pid, location, type, radius, duration);
+      super(plugin, pid, location, type, 4, duration);
 
       spellType = O2StationarySpellType.ALIQUAM_FLOO;
       this.flooName = flooName;
@@ -98,50 +103,48 @@ public class ALIQUAM_FLOO extends O2StationarySpell
    @Override
    public void checkEffect ()
    {
-      Block block = location.getBlock();
-      if (block.getType().isSolid())
+      // if this fireplace is already active,
+      if (isWorking())
+      {
+         countDown = countDown - 1;
+
+         if ((countDown % 10) == 0)
+         playEffect();
+
+         if (countDown <= 0)
+         {
+            common.printDebugMessage("Turning off floo " + flooName, null, null, false);
+         }
+      }
+      else
+      {
+         for (Item item : common.getItems(location, 1))
+         {
+            if (!O2ItemType.FLOO_POWDER.isItemThisType(item))
+               continue;
+
+            item.remove();
+            playEffect();
+
+            common.printDebugMessage("Turning on floo " + flooName, null, null, false);
+
+            countDown = Ollivanders2Common.ticksPerSecond * 30;
+         }
+      }
+   }
+
+   /**
+    * Play effect that shows the fireplace is active
+    */
+   private void playEffect()
+   {
+      World world = location.getWorld();
+      if (world == null)
       {
          kill();
+         return;
       }
-      if (countDown > 0)
-      {
-         World world = location.getWorld();
-         if (world == null)
-         {
-            kill();
-            return;
-         }
-
-         world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
-
-         for (LivingEntity live : getCloseLivingEntities())
-         {
-            live.addPotionEffect(new PotionEffect(PotionEffectType.FIRE_RESISTANCE, 300, 0));
-         }
-         countDown = countDown - 1;
-      }
-      if (block.getType() == Material.FIRE)
-      {
-         World world = location.getWorld();
-         if (world == null)
-         {
-            kill();
-            return;
-         }
-
-         for (Item item : location.getWorld().getEntitiesByClass(Item.class))
-         {
-            ItemStack stack = item.getItemStack();
-            if (item.getLocation().getBlock().equals(block))
-            {
-               if (O2ItemType.FLOO_POWDER.isItemThisType(stack))
-               {
-                  countDown += 20 * 60 * stack.getAmount();
-                  item.remove();
-               }
-            }
-         }
-      }
+      world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
    }
 
    /**
@@ -214,27 +217,29 @@ public class ALIQUAM_FLOO extends O2StationarySpell
    {
       Player player = event.getPlayer();
       String chat = event.getMessage();
-      Location destination = null;
 
       if (!(player.getLocation().getBlock().equals(getBlock())) || !isWorking())
          return;
 
       // look for the destination in the registered floo network
+      ALIQUAM_FLOO destination = null;
+
       for (ALIQUAM_FLOO floo : flooNetworkLocations)
       {
          if (floo.getFlooName().equalsIgnoreCase(chat.trim()))
          {
-            destination = floo.location;
+            destination = floo;
          }
       }
 
       if (destination == null)
       {
          int randomIndex = Math.abs(Ollivanders2Common.random.nextInt() % flooNetworkLocations.size());
-         destination = flooNetworkLocations.get(randomIndex).location;
+         destination = flooNetworkLocations.get(randomIndex);
       }
 
-      destinations.put(player, destination);
+      FlooNetworkEvent flooNetworkEvent = new FlooNetworkEvent(player, destination);
+      flooNetworkEvents.put(player.getUniqueId(), flooNetworkEvent);
 
       new BukkitRunnable()
       {
@@ -243,24 +248,49 @@ public class ALIQUAM_FLOO extends O2StationarySpell
          {
             if (!event.isCancelled())
             {
-               doFlooTeleport(player);
+               doFlooTeleportEvent(player);
             }
+            else
+               flooNetworkEvents.remove(player.getUniqueId());
          }
       }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
    }
 
    /**
-    * Do the teleport event.
+    * Do the floo travel event.
     *
     * @param player the player to teleport
     */
-   private void doFlooTeleport (Player player)
+   private void doFlooTeleportEvent (Player player)
    {
-      if (destinations.containsKey(player))
-         p.addTeleportEvent(player, destinations.get(player));
+      FlooNetworkEvent flooNetworkEvent = flooNetworkEvents.get(player.getUniqueId());
 
-      stopWorking();
-      destinations.remove(player);
+      if (flooNetworkEvent == null)
+         return;
+
+      p.getServer().getPluginManager().callEvent(flooNetworkEvent);
+
+      new BukkitRunnable()
+      {
+         @Override
+         public void run()
+         {
+            FlooNetworkEvent flooNetworkEvent = flooNetworkEvents.get(player.getUniqueId());
+            if (flooNetworkEvent == null)
+               return;
+
+            if (!flooNetworkEvent.isCancelled())
+            {
+               p.addTeleportEvent(player, flooNetworkEvent.getDestination());
+               player.sendMessage(Ollivanders2.chatColor + "Fire swirls around you.");
+            }
+            else
+               player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
+
+            stopWorking();
+            flooNetworkEvents.remove(player.getUniqueId());
+         }
+      }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
    }
 
    /**

@@ -28,6 +28,7 @@ import org.bukkit.event.entity.EntityInteractEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
