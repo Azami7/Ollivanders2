@@ -553,7 +553,7 @@ public class OllivandersListener implements Listener
 
             common.printDebugMessage("primaryHandInteractEvents: right click action", null, null, false);
 
-            Block cauldron = (Ollivanders2API.common.playerFacingBlockType(player, Material.CAULDRON));
+            Block cauldron = (Ollivanders2API.common.playerFacingBlockType(player, Material.WATER_CAULDRON));
             if ((cauldron != null) && (player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE))
             {
                common.printDebugMessage("primaryHandInteractEvents: brewing potion", null, null, false);
@@ -938,22 +938,16 @@ public class OllivandersListener implements Listener
 
       // is the player sneaking
       if (!event.isSneaking())
-      {
          return;
-      }
 
-      Block cauldron = Ollivanders2API.common.playerFacingBlockType(player, Material.CAULDRON);
+      Block cauldron = Ollivanders2API.common.playerFacingBlockType(player, Material.WATER_CAULDRON);
       if (cauldron == null)
-      {
          return;
-      }
 
       // check that the item held is in their left hand
       ItemStack heldItem = player.getInventory().getItemInOffHand();
       if (heldItem.getType() == Material.AIR || heldItem.getAmount() == 0)
-      {
          return;
-      }
 
       ItemMeta meta = heldItem.getItemMeta();
       if (meta == null)
@@ -998,13 +992,15 @@ public class OllivandersListener implements Listener
          for (Entity e : cauldron.getWorld().getNearbyEntities(cauldron.getLocation(), 1, 1, 1))
          {
             if (e instanceof Item)
-            {
                e.remove();
-            }
          }
 
          player.getWorld().playEffect(cauldron.getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
          player.getWorld().playSound(player.getLocation(), Sound.BLOCK_BREWING_STAND_BREW, 1, 1);
+
+         // put potion in player's hand
+         ItemStack emptyBottle = player.getInventory().getItemInOffHand();
+         player.getInventory().remove(emptyBottle);
          player.getInventory().setItemInOffHand(potion);
       }
       else

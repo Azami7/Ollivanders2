@@ -1103,7 +1103,7 @@ public class Ollivanders2Common
     * Determine if a player is facing a block type.
     *
     * @param player the player to check
-    * @return the cauldron if a player is facing one, null otherwise
+    * @return the block if a player is facing a block of this type, null otherwise
     */
    public Block playerFacingBlockType(@NotNull Player player, @NotNull Material blockType)
    {

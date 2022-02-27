@@ -24,8 +24,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class HERBIVICUS extends O2Spell
 {
-   private List<CropState> stateList = new ArrayList<>();
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *
@@ -62,15 +60,6 @@ public final class HERBIVICUS extends O2Spell
 
       // pass-through materials
       projectilePassThrough.add(Material.WATER);
-
-      stateList.add(CropState.SEEDED);
-      stateList.add(CropState.GERMINATED);
-      stateList.add(CropState.VERY_SMALL);
-      stateList.add(CropState.SMALL);
-      stateList.add(CropState.MEDIUM);
-      stateList.add(CropState.TALL);
-      stateList.add(CropState.VERY_TALL);
-      stateList.add(CropState.RIPE);
 
       initSpell();
    }

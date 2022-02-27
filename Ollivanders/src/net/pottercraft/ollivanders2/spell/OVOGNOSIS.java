@@ -56,8 +56,8 @@ public class OVOGNOSIS extends Divination
         divinationType = O2DivinationType.OVOMANCY;
         branch = O2MagicBranch.DIVINATION;
 
-        facingBlock = Material.CAULDRON;
-        facingBlockString = "a cauldron";
+        facingBlock = Material.WATER_CAULDRON;
+        facingBlockString = "a water-filled cauldron";
 
         itemHeld = O2ItemType.EGG;
         itemHeldString = "an egg";
