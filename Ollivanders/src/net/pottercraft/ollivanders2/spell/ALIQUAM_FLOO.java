@@ -118,7 +118,7 @@ public final class ALIQUAM_FLOO extends O2Spell
                }
             }
 
-            net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO aliquam = new net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO(p, player.getUniqueId(), statLocation, O2StationarySpellType.ALIQUAM_FLOO, 2, 10, flooName);
+            net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO aliquam = new net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO(p, player.getUniqueId(), statLocation, O2StationarySpellType.ALIQUAM_FLOO, 4, 10, flooName);
             aliquam.flair(20);
             Ollivanders2API.getStationarySpells(p).addStationarySpell(aliquam);
          }
