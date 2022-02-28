@@ -24,6 +24,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class HERBIVICUS extends O2Spell
 {
+   int maxRadius = 15;
+
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *
@@ -73,7 +75,11 @@ public final class HERBIVICUS extends O2Spell
       if (!hasHitTarget())
          return;
 
-      double radius = usesModifier;
+      double radius = usesModifier / 4;
+      if (radius < 1)
+         radius = 1;
+      else if (radius > maxRadius)
+         radius = maxRadius;
 
       for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
       {
