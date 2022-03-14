@@ -83,6 +83,7 @@ public final class AVADA_KEDAVRA extends O2Spell
                     continue;
 
                 entity.damage(usesModifier * 2, player);
+                common.printDebugMessage("Targeting " + entity.getName(), null, null, false) ;
 
                 kill();
                 return;

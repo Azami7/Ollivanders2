@@ -5,10 +5,12 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
@@ -20,7 +22,7 @@ import java.util.ArrayList;
  * <p>
  * https://harrypotter.fandom.com/wiki/Snufflifors_Spell
  */
-public class SNUFFLIFORS extends BlockToEntityTransfiguration
+public class SNUFFLIFORS extends ItemToEntityTransfiguration
 {
     private static final int minDurationConfig = 30 * Ollivanders2Common.ticksPerSecond;
     private static final int maxDurationConfig = 10 * Ollivanders2Common.ticksPerMinute;
@@ -59,7 +61,7 @@ public class SNUFFLIFORS extends BlockToEntityTransfiguration
         spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        consumeOriginal = true;
+        consumeOriginal = false;
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
         durationModifier = 1.0;
@@ -76,12 +78,24 @@ public class SNUFFLIFORS extends BlockToEntityTransfiguration
         materialAllowList.add(Material.KNOWLEDGE_BOOK);
 
         // the target entity type
-        entityType = EntityType.FOX;
+        targetType = EntityType.FOX;
 
         initSpell();
+    }
 
-        // put this after initSpell to ensure it is always 100
-        successRate = 100;
+    /**
+     * Determine success rate and whether this spell is permanent based on player skill level
+     */
+    @Override
+    void doInitSpell()
+    {
+        successRate = (int)(usesModifier);
+
+        if (usesModifier > 100)
+        {
+            consumeOriginal = true;
+            permanent = true;
+        }
     }
 
     /**
@@ -94,5 +108,17 @@ public class SNUFFLIFORS extends BlockToEntityTransfiguration
             ((Ageable) transfiguredEntity).setBaby();
         else
             common.printDebugMessage("transfigured entity is not ageable in SNUFFLIFORS.customizeEntity()", null, null, false);
+    }
+
+    /**
+     * Get the block at the current projectile location. Normally block transfiguration projectiles continue until they hit a solif block but
+     * in this case we want to transfigure a non-solid (Item) block.
+     *
+     * @return the block at the current projectile location
+     */
+    @Override
+    public @Nullable Block getTargetBlock()
+    {
+        return location.getBlock();
     }
 }

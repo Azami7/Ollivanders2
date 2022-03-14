@@ -15,7 +15,7 @@ public class FLYING extends O2Effect
     /**
      * Whether to do the smoke effect when player is flying
      */
-    boolean doSmokeEffect = true;
+    boolean doSmokeEffect = false;
 
     /**
      * Constructor

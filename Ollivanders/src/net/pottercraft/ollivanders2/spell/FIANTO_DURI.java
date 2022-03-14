@@ -43,7 +43,7 @@ public final class FIANTO_DURI extends O2Spell
             add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" - Filius Flitwick");
         }};
 
-        text = "Fianto Duri lengthens the duration of a stationary shield spell at the caster's location.";
+        text = "Fianto Duri increases the duration of your shield spells at the this location.";
     }
 
     /**
@@ -61,6 +61,8 @@ public final class FIANTO_DURI extends O2Spell
         branch = O2MagicBranch.CHARMS;
 
         initSpell();
+
+        failureMessage = "Unable to find any shield spells cast by you in this location.";
     }
 
     @Override
@@ -89,6 +91,13 @@ public final class FIANTO_DURI extends O2Spell
         }
 
         // if we found a target stationary spells, increase their durations
+        if (shieldSpells.size() < 1)
+        {
+            sendFailureMessage();
+            kill();
+            return;
+        }
+
         for (O2StationarySpell spell : shieldSpells)
         {
             spell.increaseDuration(increase);

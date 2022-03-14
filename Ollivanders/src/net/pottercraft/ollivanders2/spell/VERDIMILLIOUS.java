@@ -44,12 +44,17 @@ public final class VERDIMILLIOUS extends Pyrotechnia
         fireworkColors.add(Color.GREEN);
         fireworkType = Type.BALL_LARGE;
 
+        maxFireworks = 10;
+
         initSpell();
     }
 
+    /**
+     * Set the number of fireworks that can be cast based on the user's experience.
+     */
     @Override
     void doInitSpell()
     {
-        setMaxFireworks(10);
+        setNumberOfFireworks();
     }
 }

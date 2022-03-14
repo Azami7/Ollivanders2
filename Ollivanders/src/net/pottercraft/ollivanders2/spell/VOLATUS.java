@@ -57,7 +57,7 @@ public final class VOLATUS extends ItemEnchant
         enchantmentType = ItemEnchantmentType.VOLATUS;
 
         // set to only work for broomsticks
-        itemTypeAllowlist.add(O2ItemType.BROOMSTICK);
+        itemTypeAllowlist.add(O2ItemType.BASIC_BROOM);
 
         // magnitude = (int) ((usesModifier / 4) * strength)
         strength = 0.25;

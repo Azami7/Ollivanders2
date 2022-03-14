@@ -118,11 +118,11 @@ public abstract class ItemEnchant extends O2Spell
         List<Item> items = getItems(1.5);
         for (Item item : items)
         {
-            // if this is a wand, skip it - wands are already enchanted
-            if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()))
+            // if this is a wand or an enchanted item, skip it, we cannot stack enchantments
+            if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)))
                 continue;
 
-            // if this enchantment has a allowed list, check it
+            // if this enchantment has an allowed list, check it
             if (itemTypeAllowlist.size() > 0)
             {
                 O2ItemType itemType = O2Item.getItemType(item.getItemStack());

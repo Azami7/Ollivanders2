@@ -99,11 +99,6 @@ public abstract class O2Spell
     Ollivanders2Common common;
 
     /**
-     * The number of times the player has previously cast this spell.
-     */
-    int spellUses;
-
-    /**
      * The modifier for this spell based on usage. This is for spells that change behavior based on the caster's experience.
      */
     public double usesModifier = 1;
@@ -557,52 +552,51 @@ public abstract class O2Spell
      */
     protected void setUsesModifier()
     {
-        // set up spell use modifier
-        // the number of times the spell has been cast and then halved if the player is not using their
-        // destined wand, doubled if they are using the elder wand
+        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
+        if (o2p == null)
+            common.printLogMessage("Null o2player in O2Spell.setUsesModifier", null, null, true);
+
+        // if max skill is set, set usesModifier to max level
         if (Ollivanders2.maxSpellLevel)
             usesModifier = 200;
-        else
+        // uses modifier is the number of times the spell has been cast
+        else if (o2p != null)
         {
-            O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-            if (o2p == null)
-            {
-                common.printDebugMessage("Null o2player in O2Spell.setUsesModifier", null, null, true);
-                return;
-            }
-            spellUses = o2p.getSpellCount(spellType);
+            usesModifier = o2p.getSpellCount(spellType);
 
-            if (O2Spells.wandlessSpells.contains(spellType))
-                usesModifier = spellUses;
-            else
-                usesModifier = spellUses / rightWand;
+            // if it is not a wandless spell, uses modifier is halved if the player is not using their destined wand,
+            // doubled if they are using the elder wand
+            if (!O2Spells.wandlessSpells.contains(spellType))
+                usesModifier = usesModifier / rightWand;
 
             // if the caster is affected by HIGHER_SKILL, double their usesModifier
             if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
                 usesModifier *= 2;
+        }
+        else
+            usesModifier = 1;
 
-            // if years is enabled, spell usage is affected by caster's level
-            if (Ollivanders2.useYears)
-            {
-                MagicLevel maxLevelForPlayer = o2p.getYear().getHighestLevelForYear();
+        // if years is enabled, spell usage is affected by caster's level
+        if (Ollivanders2.useYears && o2p != null)
+        {
+            MagicLevel maxLevelForPlayer = o2p.getYear().getHighestLevelForYear();
 
-                if (maxLevelForPlayer.ordinal() > (spellType.getLevel().ordinal() + 1))
-                    // double skill level when 2 or more levels above
-                    usesModifier *= 2;
-                else if (maxLevelForPlayer.ordinal() > spellType.getLevel().ordinal())
-                    // 50% skill increase when 1 level above
-                    usesModifier *= 1.5;
+            if (maxLevelForPlayer.ordinal() > (spellType.getLevel().ordinal() + 1))
+                // double skill level when 2 or more levels above
+                usesModifier *= 2;
+            else if (maxLevelForPlayer.ordinal() > spellType.getLevel().ordinal())
+                // 50% skill increase when 1 level above
+                usesModifier *= 1.5;
                 /*
                     maxLevelForPlayer.ordinal() == spellType.getLevel().ordinal())
                     no change to usesModifier
                  */
-                else if ((maxLevelForPlayer.ordinal() + 1) < spellType.getLevel().ordinal())
-                    // 25% skill when 2 or more levels below
-                    usesModifier *= 0.25;
-                else if (maxLevelForPlayer.ordinal() < spellType.getLevel().ordinal())
-                    // half skill when 1 level below
-                    usesModifier *= 0.5;
-            }
+            else if ((maxLevelForPlayer.ordinal() + 1) < spellType.getLevel().ordinal())
+                // 25% skill when 2 or more levels below
+                usesModifier *= 0.25;
+            else if (maxLevelForPlayer.ordinal() < spellType.getLevel().ordinal())
+                // half skill when 1 level below
+                usesModifier *= 0.5;
         }
 
         common.printDebugMessage("usesModifier = " + usesModifier, null, null, false);

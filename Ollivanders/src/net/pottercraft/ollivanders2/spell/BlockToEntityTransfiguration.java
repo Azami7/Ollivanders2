@@ -89,18 +89,14 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
     @Override
     protected void transfigure()
     {
-        if (!hasHitTarget())
-            return;
-
         Block target = getTargetBlock();
         if (target == null)
-        {
-            common.printDebugMessage("Target block is null in " + spellType.toString(), null, null, true);
-            return;
-        }
+            // we have not hit a target yet, continue projectile
+             return;
 
         if (!canTransfigure(target))
         {
+            common.printDebugMessage("Transfiguration not allowed", null, null, false);
             sendFailureMessage();
             kill();
             return;
@@ -140,7 +136,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
     /**
      * Set duration, including making the spell permanent, based on caster's skill.
      */
-    private void setDuration()
+    void setDuration()
     {
         if (usesModifier >= 200)
         {

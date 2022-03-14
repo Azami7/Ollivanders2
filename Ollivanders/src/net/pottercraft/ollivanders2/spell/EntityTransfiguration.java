@@ -114,29 +114,19 @@ public abstract class EntityTransfiguration extends TransfigurationBase
             if (isTransfigured || !canTransfigure(entity))
                 return;
 
-            // check success
-            int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
-            if (rand < successRate)
-            {
-                originalEntity = entity;
-                transfiguredEntity = transfigureEntity(entity);
+            originalEntity = entity;
+            transfiguredEntity = transfigureEntity(entity);
 
-                if (transfiguredEntity == null)
-                {
-                    kill();
-                    common.printDebugMessage("Transfiguration failed in " + spellType.toString(), null, null, true);
-                }
-                else
-                {
-                    isTransfigured = true;
-                    return;
-                }
+            if (transfiguredEntity == null)
+            {
+                kill();
+                common.printDebugMessage("Transfiguration failed in " + spellType.toString(), null, null, true);
             }
             else
             {
-                sendFailureMessage();
-                common.printDebugMessage("Failed success check.", null, null, false);
-                kill();
+                customizeEntity();
+                isTransfigured = true;
+                return;
             }
         }
     }
@@ -149,6 +139,14 @@ public abstract class EntityTransfiguration extends TransfigurationBase
      */
     protected boolean canTransfigure(@NotNull Entity entity)
     {
+        // first check success rate
+        int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
+        if (rand >= successRate)
+        {
+            common.printDebugMessage(player.getName() + " failed success check in canTransfigure()", null, null, false);
+            return false;
+        }
+
         // is this the right entity type?
         if (!targetTypeCheck(entity))
             return false;
@@ -334,5 +332,12 @@ public abstract class EntityTransfiguration extends TransfigurationBase
             return false;
 
         return transfiguredEntity.getUniqueId() == entity.getUniqueId();
+    }
+
+    /**
+     * Let child spells optionally customize the spawned entity. This must be overridden by the child classes.
+     */
+    void customizeEntity()
+    {
     }
 }

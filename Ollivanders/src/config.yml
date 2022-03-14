@@ -119,9 +119,11 @@ zones:
     allowed-spells:
       -
     disallowed-spells:
-      - #
-        # Strings
-      #
+      -
+
+#
+# Strings
+#
 useTranslations: false
 #
 # Books
@@ -344,7 +346,7 @@ EXPELLIARMUS_flavorText: "The Disarming Charm"
 FATUUS_AURUM_text: "Turns a stone block in to gold."
 FATUUS_AURUM_flavorText: "Stone to Gold Charm"
 FELIS_text: "Turns target player in to a cat."
-FIANTO_DURI_text: "Fianto Duri lengthens the duration of a stationary shield spell at the caster's location."
+FIANTO_DURI_text: "Fianto Duri increases the duration of your shield spells at the this location."
 FIANTO_DURI_flavorText: "\"Protego Maxima. Fianto Duri. Repello Inimicum.\" - Filius Flitwick"
 FIENDFYRE_text: "Fiendfyre is a hellish curse which summons a mix of magma cubes, blazes, and ghasts."
 FIENDFYRE_flavorText: "Bewitched Flame Curse"

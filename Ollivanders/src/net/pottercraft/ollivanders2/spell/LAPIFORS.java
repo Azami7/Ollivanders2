@@ -49,7 +49,8 @@ public class LAPIFORS extends ItemToEntityTransfiguration
         spellType = O2SpellType.LAPIFORS;
 
         permanent = false;
-        maxDuration = Ollivanders2Common.ticksPerMinute * 10; // 10 minutes
+        maxDuration = maxDurationConfig;
+        minDuration = minDurationConfig;
         targetType = EntityType.RABBIT;
 
         consumeOriginal = false;

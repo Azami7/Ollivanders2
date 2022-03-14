@@ -141,24 +141,29 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      */
     boolean canTransfigure(@NotNull Block block)
     {
+        // first check success rate
+        int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
+        if (rand >= successRate)
+        {
+            common.printDebugMessage(player.getName() + " failed success check in canTransfigure()", null, null, false);
+            return false;
+        }
+
         // get block type
         Material blockType = block.getType();
 
-        boolean canChange = true;
-
-        if (blockType == transfigureType) // do not change if this block is already the target type
-            canChange = false;
-        else if (block.getState() instanceof Entity) // do not change if this block is an Entity
-            canChange = false;
-        else if (materialBlockedList.contains(blockType)) // do not change if this block is in the blocked list
-            canChange = false;
-        else if (!materialAllowList.isEmpty()) // do not change if the allow list exists and this block is not in it
+        if (blockType == transfigureType)
+            // do not change if this block is already the target type
+            return false;
+        else if (materialBlockedList.contains(blockType))
+            // do not change if this block is in the blocked list
+            return false;
+        else if (!materialAllowList.isEmpty() && !materialAllowList.contains(blockType))
+            // do not change if the allowed list exists and this block is not in it
+            return false;
+        else
         {
-            if (!materialBlockedList.contains(blockType))
-                canChange = false;
-        }
-        else // do not change if this block is already the subject of a temporary transfiguration
-        {
+            // do not change if this block is already the subject of a temporary transfiguration
             for (O2Spell spell : p.getProjectiles())
             {
                 if (spell instanceof TransfigurationBase)
@@ -169,7 +174,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase
             }
         }
 
-        return canChange;
+        return true;
     }
 
     /**

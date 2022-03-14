@@ -24,14 +24,14 @@ public enum O2ItemType
 {
     ACONITE(Material.ALLIUM, (short) 0, "Aconite", null, null),
     ARMADILLO_BILE(Material.POTION, (short) 9, "Armadillo Bile", null, null),
+    BASIC_BROOM(Material.STICK, (short) 0, "Broomstick", null, null),
     BEZOAR(Material.COAL, (short) 1, "Bezoar", null, null), // charcoal
     BILLYWIG_STING_SLIME(Material.SLIME_BALL, (short) 0, "Billywig Sting Slime", null, null),
     BLOOD(Material.POTION, (short) 7, "Blood", null, null),
     BOOM_BERRY_JUICE(Material.POTION, (short) 11, "Boom Berry Juice", null, null),
     BOOMSLANG_SKIN(Material.ROTTEN_FLESH, (short) 0, "Boomslang Skin", null, null),
     BONE(Material.BONE, (short) 0, "Bone", null, null),
-    BROOM(Material.STICK, (short) 0, "Broomstick", null, ItemEnchantmentType.VOLATUS),
-    BROOMSTICK(Material.STICK, (short) 0, "Broomstick", null, null),
+    BROOMSTICK(Material.STICK, (short) 0, "Broomstick", null, ItemEnchantmentType.VOLATUS),
     CHIZPURFLE_FANGS(Material.PUMPKIN_SEEDS, (short) 0, "Chizpurfle Fangs", null, null),
     CRUSHED_FIRE_SEEDS(Material.REDSTONE, (short) 0, "Crushed Fire Seeds", null, null),
     DEATHS_HEAD_MOTH_CHRYSALIS(Material.COAL, (short) 0, "Death's Head Moth Chrysalis", null, null),
@@ -247,25 +247,6 @@ public enum O2ItemType
 
             if (!(itemTypeKey.equalsIgnoreCase(name)))
                 return false;
-        }
-        // TODO remove this when we remove lore-based items in the next major rev
-        else
-        {
-            // check name and lore
-            if (!(meta.getDisplayName().equalsIgnoreCase(name)))
-                return false;
-
-            if (lore != null)
-            {
-                List<String> itemLore = itemStack.getItemMeta().getLore();
-                if (itemLore != null)
-                {
-                    if (!(itemLore.get(0).equalsIgnoreCase(lore)))
-                        return false;
-                }
-                else
-                    return false;
-            }
         }
 
         return true;

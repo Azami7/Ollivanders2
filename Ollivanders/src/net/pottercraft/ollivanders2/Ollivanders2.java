@@ -476,7 +476,7 @@ public class Ollivanders2 extends JavaPlugin
             broomstickMaterial = Material.getMaterial(Objects.requireNonNull(getConfig().getString("broomstick")));
         if (broomstickMaterial == null)
             broomstickMaterial = Material.STICK;
-        O2ItemType.BROOM.setMaterial(broomstickMaterial);
+        O2ItemType.BASIC_BROOM.setMaterial(broomstickMaterial);
         O2ItemType.BROOMSTICK.setMaterial(broomstickMaterial);
 
         //

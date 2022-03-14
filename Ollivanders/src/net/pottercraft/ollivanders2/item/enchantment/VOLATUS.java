@@ -5,6 +5,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.BROOM_FLYING;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
@@ -44,6 +45,21 @@ public class VOLATUS extends Enchantment
     @Override
     public void doItemPickup(@NotNull EntityPickupItemEvent event)
     {
+        if (!EnchantedItems.enableBrooms)
+            return;
+
+        Entity entity = event.getEntity();
+        if (!(entity instanceof Player))
+            return;
+
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                checkBroomStatus((Player)entity);
+            }
+        }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
     }
 
     /**
@@ -54,6 +70,17 @@ public class VOLATUS extends Enchantment
     @Override
     public void doItemDrop(@NotNull PlayerDropItemEvent event)
     {
+        if (!EnchantedItems.enableBrooms)
+            return;
+
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                checkBroomStatus(event.getPlayer());
+            }
+        }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
     }
 
     /**

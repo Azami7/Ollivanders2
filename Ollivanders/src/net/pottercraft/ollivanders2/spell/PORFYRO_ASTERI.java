@@ -12,51 +12,53 @@ import java.util.ArrayList;
 
 /**
  * Shoots purple fireworks in to the air.
- *
- * @author Azami7
- * @see Pyrotechnia
  */
 public final class PORFYRO_ASTERI extends Pyrotechnia
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public PORFYRO_ASTERI(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public PORFYRO_ASTERI(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      spellType = O2SpellType.PORFYRO_ASTERI;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.PORFYRO_ASTERI;
+        branch = O2MagicBranch.CHARMS;
 
-      text = "Conjures purple star fireworks in the sky.";
-   }
+        text = "Conjures purple star fireworks in the sky.";
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public PORFYRO_ASTERI(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public PORFYRO_ASTERI(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      spellType = O2SpellType.PORFYRO_ASTERI;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.PORFYRO_ASTERI;
+        branch = O2MagicBranch.CHARMS;
 
-      fireworkColors = new ArrayList<>();
-      fireworkColors.add(Color.PURPLE);
-      fireworkType = Type.STAR;
+        fireworkColors = new ArrayList<>();
+        fireworkColors.add(Color.PURPLE);
+        fireworkType = Type.STAR;
 
-      initSpell();
-   }
+        maxFireworks = 10;
 
-   @Override
-   void doInitSpell()
-   {
-      setMaxFireworks(10);
-   }
+        initSpell();
+    }
+
+    /**
+     * Set the number of fireworks that can be cast based on the user's experience.
+     */
+    @Override
+    void doInitSpell()
+    {
+        setNumberOfFireworks();
+    }
 }
