@@ -13,73 +13,99 @@ import java.util.ArrayList;
 
 /**
  * Creates an explosion of magnitude depending on the spell level which destroys blocks and sets fires.
- *
- * @author lownes
- * @author Azami7
+ * <p>
+ * https://harrypotter.fandom.com/wiki/Reductor_Curse
  */
 public final class REDUCTO extends O2Spell
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public REDUCTO(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * The maximum possible strength, 4f is TNT
+     */
+    private final static float maxPower = 4f;
 
-      spellType = O2SpellType.REDUCTO;
-      branch = O2MagicBranch.DARK_ARTS;
+    /**
+     * The minimum strength for this spell
+     */
+    private final static float minPower = 0.25f;
 
-      flavorText = new ArrayList<>()
-      {{
-         add("The Reductor Curse");
-         add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
-      }};
+    /**
+     * The power of the explosion - 4f is TNT
+     */
+    private float power;
 
-      text = "Reducto creates an explosion which will damage the terrain.";
-   }
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public REDUCTO(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public REDUCTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        spellType = O2SpellType.REDUCTO;
+        branch = O2MagicBranch.DARK_ARTS;
 
-      spellType = O2SpellType.REDUCTO;
-      branch = O2MagicBranch.DARK_ARTS;
+        flavorText = new ArrayList<>()
+        {{
+            add("The Reductor Curse");
+            add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
+        }};
 
-      // world guard flags
-      if (Ollivanders2.worldGuardEnabled)
-         worldGuardFlags.add(Flags.OTHER_EXPLOSION);
+        text = "Reducto creates an explosion which will damage the terrain.";
+    }
 
-      initSpell();
-   }
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public REDUCTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-   @Override
-   protected void doCheckEffect()
-   {
-      if (!hasHitTarget())
-      {
-         return;
-      }
+        spellType = O2SpellType.REDUCTO;
+        branch = O2MagicBranch.DARK_ARTS;
 
-      Location backLoc = location.clone().subtract(vector);
-      World world = backLoc.getWorld();
-      if (world == null)
-      {
-         common.printDebugMessage("REDUCTO.doCheckEffect: world is null", null, null, true);
-      }
-      else
-      {
-         world.createExplosion(backLoc, (float) (usesModifier * 0.4));
-      }
+        power = minPower;
 
-      kill();
-   }
+        // world guard flags
+        if (Ollivanders2.worldGuardEnabled)
+            worldGuardFlags.add(Flags.OTHER_EXPLOSION);
+
+        initSpell();
+    }
+
+    /**
+     * Set the power for the explosion based on the caster's skill.
+     */
+    @Override
+    void doInitSpell()
+    {
+        power = (float) (usesModifier / 4);
+        if (power < minPower)
+            power = minPower;
+        else if (power > maxPower)
+            power = maxPower;
+    }
+
+    /**
+     * Cause an explosion in the location 1 before the target location.
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        if (!hasHitTarget())
+            return;
+
+        Location backLoc = location.clone().subtract(vector);
+        World world = backLoc.getWorld();
+        if (world == null)
+            common.printDebugMessage("REDUCTO.doCheckEffect: world is null", null, null, true);
+        else
+            world.createExplosion(backLoc, power);
+
+        kill();
+    }
 }

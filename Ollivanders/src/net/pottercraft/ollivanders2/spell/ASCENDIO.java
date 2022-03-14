@@ -11,10 +11,8 @@ import java.util.ArrayList;
 
 /**
  * Shoots caster high into air.
- *
- * @author lownes
- * @author Azami7
- * @version Ollivanders2
+ * <p>
+ * Referece: https://harrypotter.fandom.com/wiki/Ascendio
  */
 public final class ASCENDIO extends O2Spell
 {
@@ -62,23 +60,22 @@ public final class ASCENDIO extends O2Spell
     @Override
     public void checkEffect()
     {
-        if (!isSpellAllowed())
-        {
-            kill();
-            return;
-        }
+        kill();
+
+        if (!isSpellAllowed()) return;
 
         double up = usesModifier * 0.25;
-        if (up > 2)
-        {
-            up = 2;
-        }
+        if (up > 2) up = 2;
+
         Vector vec = new Vector(0, up, 0);
         player.setVelocity(player.getVelocity().add(vec));
-
-        kill();
     }
 
+    /**
+     * Nothing to do since we overrode checkEffect() itself
+     */
     @Override
-    protected void doCheckEffect() {}
+    protected void doCheckEffect()
+    {
+    }
 }

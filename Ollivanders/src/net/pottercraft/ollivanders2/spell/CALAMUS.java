@@ -9,54 +9,50 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Turns sticks in to arrows. Created by Azami7 on 6/29/17. Imported from iarepandemonium/Ollivanders.
- *
- * @version Ollivanders2
- * @author lownes
- * @author Azami7
+ * Turns sticks in to arrows.
  */
-public final class CALAMUS extends ItemTransfiguration
+public final class CALAMUS extends ItemToItemTransfiguration
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public CALAMUS(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public CALAMUS(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      spellType = O2SpellType.CALAMUS;
-      branch = O2MagicBranch.TRANSFIGURATION;
+        spellType = O2SpellType.CALAMUS;
+        branch = O2MagicBranch.TRANSFIGURATION;
 
-      text = "Turns sticks in to arrows.";
-   }
+        text = "Turns sticks in to arrows.";
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public CALAMUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
-      spellType = O2SpellType.CALAMUS;
-      branch = O2MagicBranch.TRANSFIGURATION;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public CALAMUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.CALAMUS;
+        branch = O2MagicBranch.TRANSFIGURATION;
 
-      // world guard
-      if (Ollivanders2.worldGuardEnabled)
-         worldGuardFlags.add(Flags.ITEM_DROP);
+        // world guard
+        if (Ollivanders2.worldGuardEnabled)
+            worldGuardFlags.add(Flags.ITEM_DROP);
 
-      transfigurationMap.put(Material.STICK, Material.ARROW);
-      successMessage = "You changed a stick in to an arrow.";
-      failureMessage = "Nothing happens.";
-      permanent = true;
+        transfigurationMap.put(Material.STICK, Material.ARROW);
+        successMessage = "You changed a stick in to an arrow.";
+        failureMessage = "Nothing happens.";
+        permanent = true;
 
-      initSpell();
+        initSpell();
 
-      // do this after init spell to ensure success rate is always 100
-      successRate = 100;
-   }
+        // do this after init spell to ensure success rate is always 100
+        successRate = 100;
+    }
 }

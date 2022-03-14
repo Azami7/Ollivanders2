@@ -1,105 +1,132 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
-import org.bukkit.CropState;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
-import org.bukkit.material.Crops;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Herbivicus causes crops in a radius to grow.
- *
- * @author lownes
- * @author Azami7
- * @version Ollivanders2
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Herbivicus_Charm
  */
 public final class HERBIVICUS extends O2Spell
 {
-   int maxRadius = 15;
+    private final static int maxRadius = 15;
+    private final static int maxGrowth = 7;
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public HERBIVICUS(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * The radius of crops that can be targeted
+     */
+    private int radius;
 
-      spellType = O2SpellType.HERBIVICUS;
-      branch = O2MagicBranch.HERBOLOGY;
+    /**
+     * The amount the crops will grow
+     */
+    private int growth;
 
-      flavorText = new ArrayList<>()
-      {{
-         add("The Plant-Growing Charm");
-      }};
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public HERBIVICUS(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      text = "Herbivicus causes crops within a radius to grow.";
-   }
+        spellType = O2SpellType.HERBIVICUS;
+        branch = O2MagicBranch.HERBOLOGY;
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public HERBIVICUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        flavorText = new ArrayList<>()
+        {{
+            add("The Plant-Growing Charm");
+        }};
 
-      spellType = O2SpellType.HERBIVICUS;
-      branch = O2MagicBranch.HERBOLOGY;
+        text = "Herbivicus causes crops within a radius to grow.";
+    }
 
-      // pass-through materials
-      projectilePassThrough.add(Material.WATER);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public HERBIVICUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      initSpell();
-   }
+        spellType = O2SpellType.HERBIVICUS;
+        branch = O2MagicBranch.HERBOLOGY;
 
-   /**
-    * Grow all the crops in a radius of the spell target
-    */
-   @Override
-   protected void doCheckEffect()
-   {
-      if (!hasHitTarget())
-         return;
+        // pass-through materials
+        projectilePassThrough.add(Material.WATER);
 
-      double radius = usesModifier / 4;
-      if (radius < 1)
-         radius = 1;
-      else if (radius > maxRadius)
-         radius = maxRadius;
+        initSpell();
+    }
 
-      for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
-      {
-         BlockData blockData = block.getBlockData();
+    /**
+     * Determine radius and growth amount by caster's level and year
+     */
+    @Override
+    void doInitSpell()
+    {
+        radius = (int) ((usesModifier / 4));
 
-         if (blockData instanceof Ageable)
-         {
-            int cropState = ((Ageable) blockData).getAge();
+        if (radius < 1)
+            radius = 1;
+        else if (radius > maxRadius)
+            radius = maxRadius;
 
-            int newCropState = cropState + 1;
-            if (newCropState > 7)
+        growth = (int) ((usesModifier / 25));
+        if (growth < 1)
+            growth = 1;
+        else if (growth > maxGrowth)
+            growth = maxGrowth;
+    }
+
+    /**
+     * Grow all the crops in a radius of the spell target
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        if (!hasHitTarget())
+            return;
+
+        for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
+        {
+            BlockData blockData = block.getBlockData();
+
+            if (blockData instanceof Ageable)
             {
-               newCropState = 7;
+                Ageable cropData = (Ageable) blockData;
+
+                if (cropData.getAge() == cropData.getMaximumAge())
+                {
+                    successMessage = "Those plants are already fully grown.";
+                }
+                else
+                {
+                    int toGrow = cropData.getAge() + growth;
+                    if (toGrow > cropData.getMaximumAge())
+                        toGrow = cropData.getMaximumAge();
+
+                    cropData.setAge(toGrow);
+                    block.setBlockData(cropData);
+
+                    successMessage = "The plants grow faster.";
+                }
             }
+        }
 
-            ((Ageable) blockData).setAge(newCropState);
-            block.setBlockData(blockData);
-         }
-      }
-
-      kill();
-   }
+        kill();
+    }
 }

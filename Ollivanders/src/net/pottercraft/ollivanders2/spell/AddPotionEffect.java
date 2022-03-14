@@ -13,8 +13,8 @@ import java.util.List;
 
 /**
  * Spell that adds a potion effect to one or more targets.
- *
- * @author Azami7
+ * <p>
+ * Reference: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffect.html
  */
 public abstract class AddPotionEffect extends O2Spell
 {
@@ -34,14 +34,33 @@ public abstract class AddPotionEffect extends O2Spell
     int minDurationInSeconds = 5; // 5 seconds
 
     /**
+     * Duration modifier is a multiplier on the usesModifier for this spell
+     */
+    double durationModifier = 1.0; // 100% of usesModifier
+
+    /**
      * Strength modifier, 0 is no modifier.
      */
     int amplifier = 0;
 
     /**
-     * Maximum strength this potion effect can be. Higher than 127 causes odd behaviors (seems to overload a short??)
+     * Maximum strength this potion effect can be.
+     * <p>
+     * Reference: https://minecraft.fandom.com/wiki/Effect
      */
     int maxAmplifier = 127;
+
+    /**
+     * Minimum strength this potion effect can be.
+     * <p>
+     * Reference: https://minecraft.fandom.com/wiki/Effect
+     */
+    int minAmplifier = -127;
+
+    /**
+     * Amplifier modifier is a multiplier on the usesModifier for this spell
+     */
+    double amplifierModifier = 0.1; // 10% of usesModifier
 
     /**
      * Number of targets that can be affected
@@ -90,7 +109,7 @@ public abstract class AddPotionEffect extends O2Spell
     @Override
     protected void doCheckEffect()
     {
-        affectRadius(1.5, false);
+        affectRadius(defaultRadius, false);
 
         if (hasHitTarget())
             kill();
@@ -113,7 +132,7 @@ public abstract class AddPotionEffect extends O2Spell
             numberOfTargets = numberOfTargets - 1;
         }
 
-        for (LivingEntity livingEntity : getLivingEntities(radius))
+        for (LivingEntity livingEntity : getNearbyLivingEntities(radius))
         {
             // stop when the limit of targets is reached
             if (numberOfTargets <= 0)
@@ -137,7 +156,20 @@ public abstract class AddPotionEffect extends O2Spell
      */
     void addEffectsToTarget(@NotNull LivingEntity target)
     {
+        // duration
+        durationInSeconds = (int) (usesModifier * durationModifier);
+        if (durationInSeconds < minDurationInSeconds)
+            durationInSeconds = minDurationInSeconds;
+        else if (durationInSeconds > maxDurationInSeconds)
+            durationInSeconds = maxDurationInSeconds;
         int duration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
+
+        // amplifier
+        amplifier = (int) (usesModifier * amplifierModifier);
+        if (amplifier < minAmplifier)
+            amplifier = minAmplifier;
+        else if (amplifier > maxAmplifier)
+            amplifier = maxAmplifier;
 
         for (PotionEffectType effectType : effectTypes)
         {

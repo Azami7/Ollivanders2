@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2;
 
 import net.pottercraft.ollivanders2.book.O2Books;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.divination.O2Prophecies;
 import net.pottercraft.ollivanders2.house.O2Houses;
@@ -17,170 +18,127 @@ import org.jetbrains.annotations.NotNull;
  */
 public class Ollivanders2API
 {
-   private static O2StationarySpells stationarySpells;
-   private static O2Prophecies prophecies;
-   private static Ollivanders2OwlPost owlPost;
+    /**
+     * Common player functions
+     */
+    public static O2PlayerCommon playerCommon;
 
-   public static O2PlayerCommon playerCommon;
-   public static Ollivanders2Common common;
+    /**
+     * Common functions
+     */
+    public static Ollivanders2Common common;
 
-   static void init (@NotNull Ollivanders2 p)
-   {
-      if (common == null)
-         common = new Ollivanders2Common(p);
-      if (playerCommon == null)
-         playerCommon = new O2PlayerCommon(p);
-   }
+    /**
+     * Entity common functions
+     */
+    public static EntityCommon entityCommon;
 
-   /**
-    * Get the house management object
-    *
-    * @return houses management object
-    */
-   @NotNull
-   public static O2Houses getHouses ()
-   {
-      return Ollivanders2.houses;
-   }
+    static void init(@NotNull Ollivanders2 p)
+    {
+        if (common == null)
+            common = new Ollivanders2Common(p);
+        if (playerCommon == null)
+            playerCommon = new O2PlayerCommon(p);
+        if (entityCommon == null)
+            entityCommon = new EntityCommon(p);
+    }
 
-   /**
-    * Get the player management object.
-    *
-    * @return the player management object
-    */
-   @NotNull
-   public static O2Players getPlayers()
-   {
-      return Ollivanders2.players;
-   }
+    /**
+     * Get the house management object
+     *
+     * @return houses management object
+     */
+    @NotNull
+    public static O2Houses getHouses()
+    {
+        return Ollivanders2.houses;
+    }
 
-   /**
-    * Get the books management object.
-    *
-    * @return the book management object
-    */
-   @NotNull
-   public static O2Books getBooks()
-   {
-      return Ollivanders2.books;
-   }
+    /**
+     * Get the player management object.
+     *
+     * @return the player management object
+     */
+    @NotNull
+    public static O2Players getPlayers()
+    {
+        return Ollivanders2.players;
+    }
 
-   /**
-    * Get the spells management object.
-    *
-    * @return the spells management object
-    */
-   @NotNull
-   public static O2Spells getSpells ()
-   {
-      return Ollivanders2.spells;
-   }
+    /**
+     * Get the books management object.
+     *
+     * @return the book management object
+     */
+    @NotNull
+    public static O2Books getBooks()
+    {
+        return Ollivanders2.books;
+    }
 
-   /**
-    * Get the potions management object.
-    *
-    * @return the potions management object
-    */
-   @NotNull
-   public static O2Potions getPotions ()
-   {
-      return Ollivanders2.potions;
-   }
+    /**
+     * Get the spells management object.
+     *
+     * @return the spells management object
+     */
+    @NotNull
+    public static O2Spells getSpells()
+    {
+        return Ollivanders2.spells;
+    }
 
-   static void initStationarySpells (@NotNull Ollivanders2 p)
-   {
-      if (stationarySpells == null)
-      {
-         stationarySpells = new O2StationarySpells(p);
-      }
-   }
+    /**
+     * Get the potions management object.
+     *
+     * @return the potions management object
+     */
+    @NotNull
+    public static O2Potions getPotions()
+    {
+        return Ollivanders2.potions;
+    }
 
-   static void saveStationarySpells ()
-   {
-      if (stationarySpells != null)
-         stationarySpells.saveO2StationarySpells();
-   }
+    /**
+     * Get the stationary spells management object.
+     *
+     * @return the stationary spells management object
+     */
+    @NotNull
+    public static O2StationarySpells getStationarySpells()
+    {
+        return Ollivanders2.stationarySpells;
+    }
 
-   /**
-    * Get the stationary spells management object.
-    *
-    * @param p a reference to the Ollivanders2 plugin
-    * @return the stationary spells management object
-    */
-   @NotNull
-   public static O2StationarySpells getStationarySpells (@NotNull Ollivanders2 p)
-   {
-      if (stationarySpells == null)
-         initStationarySpells(p);
+    /**
+     * Get the prophecy management object.
+     *
+     * @return the prophecy management object
+     */
+    @NotNull
+    public static O2Prophecies getProphecies()
+    {
+        return Ollivanders2.prophecies;
+    }
 
-      return stationarySpells;
-   }
+    /**
+     * Get the item management object.
+     *
+     * @return the item management object
+     */
+    @NotNull
+    public static O2Items getItems()
+    {
+        return Ollivanders2.items;
+    }
 
-   static void initProphecies (@NotNull Ollivanders2 p)
-   {
-      if (prophecies == null)
-      {
-         prophecies = new O2Prophecies(p);
-      }
-   }
-
-   static void saveProphecies ()
-   {
-      if (prophecies != null)
-         prophecies.saveProphecies();
-   }
-
-   /**
-    * Get the prophecy management object.
-    *
-    * @param p a reference to the Ollivanders2 plugin
-    * @return the prophecy management object
-    */
-   @NotNull
-   public static O2Prophecies getProphecies (@NotNull Ollivanders2 p)
-   {
-      if (prophecies == null)
-         initProphecies(p);
-
-      return prophecies;
-   }
-
-   /**
-    * Get the item management object.
-    *
-    * @return the item management object
-    */
-   @NotNull
-   public static O2Items getItems ()
-   {
-      return Ollivanders2.items;
-   }
-
-   /**
-    * Set up owl post
-    *
-    * @param p a callback to the plugin
-    */
-   public static void initOwlPost (@NotNull Ollivanders2 p)
-   {
-      if (owlPost == null)
-      {
-         owlPost = new Ollivanders2OwlPost(p);
-      }
-   }
-
-   /**
-    * Get the owl post management object
-    *
-    * @param p a callback to the plugin
-    * @return the owlPost management object
-    */
-   @NotNull
-   public static Ollivanders2OwlPost getOwlPost (@NotNull Ollivanders2 p)
-   {
-      if (owlPost == null)
-         initOwlPost(p);
-
-      return owlPost;
-   }
+    /**
+     * Get the owl post management object
+     *
+     * @return the owlPost management object
+     */
+    @NotNull
+    public static Ollivanders2OwlPost getOwlPost()
+    {
+        return Ollivanders2.owlPost;
+    }
 }

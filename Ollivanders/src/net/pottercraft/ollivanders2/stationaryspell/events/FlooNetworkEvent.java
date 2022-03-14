@@ -8,25 +8,35 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A floo network events fire when a player attempts to use a floo fireplace to teleport.
+ */
 public class FlooNetworkEvent extends PlayerEvent implements Cancellable
 {
     private static final HandlerList handlers = new HandlerList();
     boolean canceled = false;
 
+    /**
+     * The name of the teleport destination
+     */
     String destinationName;
+
+    /**
+     * The location of the teleport destination
+     */
     Location destination;
 
     /**
      * Constructor
      *
      * @param player the player traveling
-     * @param dest the destination floo fireplace being traveled to
+     * @param dest   the destination floo fireplace being traveled to
      */
     public FlooNetworkEvent(@NotNull Player player, ALIQUAM_FLOO dest)
     {
         super(player);
 
-        destination = dest.location;
+        destination = dest.getLocation();
         destinationName = dest.getFlooName();
     }
 
@@ -35,7 +45,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
      *
      * @return the name of the destination being apparated to
      */
-    public String getDestinationName ()
+    public String getDestinationName()
     {
         return destinationName;
     }
@@ -45,7 +55,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
      *
      * @return the destination being apparated to
      */
-    public Location getDestination ()
+    public Location getDestination()
     {
         return destination;
     }
@@ -69,7 +79,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
     }
 
     @Override
-    public void setCancelled (boolean cancel)
+    public void setCancelled(boolean cancel)
     {
         canceled = cancel;
     }

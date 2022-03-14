@@ -8,14 +8,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Super class for all transfigurations of players.
- *
- * @author Azami7
- * @since 2.2.6
  */
 public abstract class PlayerDisguise extends EntityDisguise
 {
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -35,11 +32,11 @@ public abstract class PlayerDisguise extends EntityDisguise
     {
         super(plugin, player, rightWand);
 
-        entityWhitelist.add(EntityType.PLAYER);
+        entityAllowedList.add(EntityType.PLAYER);
 
         // world guard flags
         if (Ollivanders2.worldGuardEnabled)
-           worldGuardFlags.add(Flags.PVP);
+            worldGuardFlags.add(Flags.PVP);
     }
 
     /**

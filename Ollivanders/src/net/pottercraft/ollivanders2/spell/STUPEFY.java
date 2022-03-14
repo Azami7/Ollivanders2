@@ -11,71 +11,60 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Blinds and slows the target entity for a duration depending on the spell's level.
- *
- * @author lownes
- * @author Azami7
+ * <p>
+ * https://harrypotter.fandom.com/wiki/Stunning_Spell
  */
 public final class STUPEFY extends AddPotionEffect
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public STUPEFY(Ollivanders2 plugin)
-   {
-      super(plugin);
+    private static final int minDurationInSecondsConfig = 5;
+    private static final int maxDurationInSecondsConfig = 180;
+    private static final int minAmplifierConfig = 0;
+    private static final int maxAmplifierConfig = 2;
 
-      spellType = O2SpellType.STUPEFY;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public STUPEFY(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      flavorText = new ArrayList<>()
-      {{
-         add("The Stunning Spell");
-         add("\"Stunning is one of the most useful spells in your arsenal. It's sort of a wizard's bread and butter, really.\" -Harry Potter");
-      }};
+        spellType = O2SpellType.STUPEFY;
+        branch = O2MagicBranch.CHARMS;
 
-      text = "Stupefy will stun an opponent for a duration.";
-   }
+        flavorText = new ArrayList<>()
+        {{
+            add("The Stunning Spell");
+            add("\"Stunning is one of the most useful spells in your arsenal. It's sort of a wizard's bread and butter, really.\" -Harry Potter");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public STUPEFY(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        text = "Stupefy will stun an opponent for a duration.";
+    }
 
-      spellType = O2SpellType.STUPEFY;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public STUPEFY(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.STUPEFY;
+        branch = O2MagicBranch.CHARMS;
 
-      effectTypes.add(PotionEffectType.BLINDNESS);
-      effectTypes.add(PotionEffectType.SLOW);
+        minDurationInSeconds = minDurationInSecondsConfig;
+        maxDurationInSeconds = maxDurationInSecondsConfig;
+        durationModifier = 1.0;
+        minAmplifier = minAmplifierConfig;
+        maxAmplifier = maxAmplifierConfig;
+        amplifierModifier = 0.02; // 1/50th usesModifier
 
-      initSpell();
-   }
+        effectTypes.add(PotionEffectType.BLINDNESS);
+        effectTypes.add(PotionEffectType.SLOW);
 
-   @Override
-   void doInitSpell()
-   {
-      // amplifier
-      maxAmplifier = 2;
-
-      amplifier = (int) usesModifier / 50;
-      if (amplifier > maxAmplifier)
-         amplifier = maxAmplifier;
-
-      // duration
-      minDurationInSeconds = 5;
-      maxDurationInSeconds = 180;
-
-      durationInSeconds = (int) usesModifier;
-      if (durationInSeconds < minDurationInSeconds)
-         durationInSeconds = minDurationInSeconds;
-      else if (durationInSeconds > maxDurationInSeconds)
-         durationInSeconds = maxDurationInSeconds;
-   }
+        initSpell();
+    }
 }

@@ -11,71 +11,83 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Slows any living entity by an amount and time depending on the player's spell level.
- *
- * @author lownes
- * @author Azami7
- * @version Ollivanders2
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Impediment_Jinx
  */
 public final class IMPEDIMENTA extends AddPotionEffect
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public IMPEDIMENTA(Ollivanders2 plugin)
-   {
-      super(plugin);
+    private static final int minDurationInSecondsConfig = 5;
+    private static final int maxDurationInSecondsConfig = 60;
+    private static final int minAmplifierConfig = 0;
+    private static final int maxAmplifierConfig = 4;
 
-      branch = O2MagicBranch.DARK_ARTS;
-      spellType = O2SpellType.IMPEDIMENTA;
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public IMPEDIMENTA(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      flavorText = new ArrayList<>()
-      {{
-         add("Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal.");
-         add("\"I like the look of this one, this Impediment Jinx. Should slow down anything that’s trying to attack you, Harry. We’ll start with that one.\" -Hermione Granger");
-      }};
+        branch = O2MagicBranch.DARK_ARTS;
+        spellType = O2SpellType.IMPEDIMENTA;
 
-      text = "Slows a living entity's movements.";
-   }
+        flavorText = new ArrayList<>()
+        {{
+            add("Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal.");
+            add("\"I like the look of this one, this Impediment Jinx. Should slow down anything that’s trying to attack you, Harry. We’ll start with that one.\" -Hermione Granger");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public IMPEDIMENTA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        text = "Slows a living entity's movements.";
+    }
 
-      branch = O2MagicBranch.DARK_ARTS;
-      spellType = O2SpellType.IMPEDIMENTA;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public IMPEDIMENTA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        branch = O2MagicBranch.DARK_ARTS;
+        spellType = O2SpellType.IMPEDIMENTA;
 
-      effectTypes.add(PotionEffectType.SLOW);
+        minDurationInSeconds = minDurationInSecondsConfig;
+        maxDurationInSeconds = maxDurationInSecondsConfig;
+        durationModifier = 0.5; // 50%
+        minAmplifier = minAmplifierConfig;
+        maxAmplifier = maxAmplifierConfig;
+        amplifierModifier = 0.02; // 1/50th usesModifier
 
-      initSpell();
-   }
+        effectTypes.add(PotionEffectType.SLOW);
 
-   @Override
-   void doInitSpell()
-   {
-      // Amplifier
-      maxAmplifier = 4;
+        initSpell();
+    }
 
-      amplifier = (int)(usesModifier / 50);
-      if (amplifier > maxAmplifier)
-         amplifier = maxAmplifier;
+    /**
+     * Set the amplifier and duration based on caster's skill
+     */
+    @Override
+    void doInitSpell()
+    {
+        // Amplifier
+        maxAmplifier = 4;
 
-      // Duration
-      minDurationInSeconds = 5;
-      maxDurationInSeconds = 60;
+        amplifier = (int) (usesModifier / 50);
+        if (amplifier > maxAmplifier)
+            amplifier = maxAmplifier;
 
-      durationInSeconds = (int)(usesModifier / 2);
-      if (durationInSeconds < minDurationInSeconds)
-         durationInSeconds = minDurationInSeconds;
-      else if (durationInSeconds > maxDurationInSeconds)
-         durationInSeconds = maxDurationInSeconds;
-   }
+        // Duration
+        minDurationInSeconds = 5;
+        maxDurationInSeconds = 60;
+
+        durationInSeconds = (int) (usesModifier / 2);
+        if (durationInSeconds < minDurationInSeconds)
+            durationInSeconds = minDurationInSeconds;
+        else if (durationInSeconds > maxDurationInSeconds)
+            durationInSeconds = maxDurationInSeconds;
+    }
 }

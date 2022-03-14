@@ -58,6 +58,7 @@ public final class NOX extends RemovePotionEffectInRadius
       potionEffectTypes.add(PotionEffectType.NIGHT_VISION);
 
       initSpell();
+      successModifier = 0.01f; // this will make casting NOX 100% successful
    }
 
    @Override

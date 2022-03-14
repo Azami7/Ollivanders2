@@ -16,9 +16,6 @@ import java.util.Map;
 
 /**
  * Manages all spells
- *
- * @author Azami7
- * @since 2.2.8
  */
 public class O2Spells
 {
@@ -94,7 +91,10 @@ public class O2Spells
         APPARATE.loadApparateLocations(p);
 
         // load the zone config
-        loadZoneConfig(p);
+        loadZoneConfig();
+
+        // add divination spells to wandless spells
+        wandlessSpells.addAll(Divination.divinationSpells);
     }
 
     /**
@@ -159,10 +159,8 @@ public class O2Spells
 
     /**
      * Load the zone config for spells
-     *
-     * @param p a callback to the plugin
      */
-    public void loadZoneConfig(@NotNull Ollivanders2 p)
+    public void loadZoneConfig()
     {
         zoneConfig = p.getConfig().getConfigurationSection("zones");
 
@@ -182,7 +180,7 @@ public class O2Spells
             {
                 common.printDebugMessage("Loading zone config for " + zone + ":", null, null, false);
 
-                loadZoneConfig(zone, p);
+                loadZoneConfig(zone);
             }
         }
     }
@@ -191,9 +189,8 @@ public class O2Spells
      * Load zone config for allowed and disallowed spells
      *
      * @param zoneName the name of the zone
-     * @param p a callback to the plugin
      */
-    private void loadZoneConfig(@NotNull String zoneName, @NotNull Ollivanders2 p)
+    private void loadZoneConfig(@NotNull String zoneName)
     {
         String typeString = zoneConfig.getString(zoneName + "." + "type");
         if (typeString == null || typeString.length() < 1)
@@ -285,7 +282,7 @@ public class O2Spells
     /**
      * Check if a spell is allowed based on zone config
      *
-     * @param location the location of the spell
+     * @param location  the location of the spell
      * @param spellType the spell type to check
      * @return true if spell is allowed, false otherwise
      */
@@ -296,16 +293,7 @@ public class O2Spells
 
         // first check global allow lists
         if (globalAllowedSpells.size() > 0)
-        {
-            if (globalAllowedSpells.contains(spellType))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
+            return globalAllowedSpells.contains(spellType);
 
         // check world permissions
         for (SpellZone zone : spellZones)
@@ -321,16 +309,7 @@ public class O2Spells
             }
 
             if (world.getName().equalsIgnoreCase(zone.zoneWorldName) && zone.allowedSpells.size() > 0)
-            {
-                if (zone.allowedSpells.contains(spellType))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+                return zone.allowedSpells.contains(spellType);
         }
 
         // check world guard zone permissions
@@ -340,16 +319,7 @@ public class O2Spells
                 continue;
 
             if (Ollivanders2.worldGuardO2.isLocationInRegionByName(zone.zoneName, location) && zone.allowedSpells.size() > 0)
-            {
-                if (zone.allowedSpells.contains(spellType))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+                return zone.allowedSpells.contains(spellType);
         }
 
         // check cuboid zone permissions
@@ -359,22 +329,11 @@ public class O2Spells
                 continue;
 
             if (zone.cuboid.isInside(location, common) && zone.allowedSpells.size() > 0)
-            {
-                if (zone.allowedSpells.contains(spellType))
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+                return zone.allowedSpells.contains(spellType);
         }
 
         if (isExplicitlyDisallowed(location, spellType))
-        {
             return false;
-        }
 
         return true;
     }
@@ -382,7 +341,7 @@ public class O2Spells
     /**
      * Determine if this spell is explicitly disallowed
      *
-     * @param location the location to check
+     * @param location  the location to check
      * @param spellType the spell type
      * @return true if the spell is explicitly disallowed at this location, false otherwise
      */
@@ -390,9 +349,7 @@ public class O2Spells
     {
         // first check global disallow lists
         if (globalDisallowedSpells.contains(spellType))
-        {
             return true;
-        }
 
         // check world permissions
         for (SpellZone zone : spellZones)
@@ -408,9 +365,7 @@ public class O2Spells
             }
 
             if (world.getName().equalsIgnoreCase(zone.zoneWorldName) && zone.disallowedSpells.contains(spellType))
-            {
                 return true;
-            }
         }
 
         // check world guard zone permissions
@@ -420,9 +375,7 @@ public class O2Spells
                 continue;
 
             if (Ollivanders2.worldGuardO2.isLocationInRegionByName(zone.zoneName, location) && zone.disallowedSpells.contains(spellType))
-            {
                 return true;
-            }
         }
 
         // check cuboid zone permissions
@@ -432,9 +385,7 @@ public class O2Spells
                 continue;
 
             if (zone.cuboid.isInside(location, common) && zone.disallowedSpells.contains(spellType))
-            {
                 return true;
-            }
         }
 
         return false;

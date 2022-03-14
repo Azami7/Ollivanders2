@@ -8,10 +8,8 @@ import java.util.Map;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
-import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.Material;
@@ -20,12 +18,12 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The super class for transfiguration of objects.  Not for use on players or entities.
- *
- * @author Azami7
- * @since 2.2.5
  */
 public abstract class BlockTransfiguration extends TransfigurationBase
 {
+    static int minRadius = 1;
+    static int maxRadius = 10;
+
     /**
      * A map of the transfigured blocks and their original types for use with revert()
      */
@@ -50,16 +48,6 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      * Allows spell variants to change the radius of the spell.
      */
     double radiusModifier = 1.0;
-
-    /**
-     * A blacklist of Material types that will not be affected by this spell.  Only used if the whitelist is empty.
-     */
-    List<Material> materialBlacklist = new ArrayList<>();
-
-    /**
-     * A whitelist of Material types that will be affected by this spell.
-     */
-    List<Material> materialWhitelist = new ArrayList<>();
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -87,30 +75,38 @@ public abstract class BlockTransfiguration extends TransfigurationBase
         branch = O2MagicBranch.TRANSFIGURATION;
 
         // material black list
-        materialBlackList.addAll(Ollivanders2Common.unbreakableMaterials);
+        materialBlockedList.addAll(Ollivanders2Common.unbreakableMaterials);
 
         // required worldGuard state flags
         if (Ollivanders2.worldGuardEnabled)
-           worldGuardFlags.add(Flags.BUILD);
+            worldGuardFlags.add(Flags.BUILD);
 
         minDuration = 15 * Ollivanders2Common.ticksPerSecond;
         maxDuration = 10 * Ollivanders2Common.ticksPerMinute;
         spellDuration = minDuration;
 
         successMessage = "Transfiguration successful.";
+        failureMessage = "Transfiguration failed.";
     }
 
     /**
      * Transfigure the target block or blocks. Will not change the block if it is on the materialBlacklist list or if the
-     * target block is already the transfigure type.
+     * target block is already the transfiguration type.
      */
     protected void transfigure()
     {
         if (isTransfigured || !hasHitTarget() || getTargetBlock() == null)
             return;
 
+        radius = radius * (int) radiusModifier;
+
+        if (radius < minRadius)
+            radius = minRadius;
+        else if (radius > maxRadius)
+            radius = maxRadius;
+
         // get the objects to be transfigured, target block is not always the block at the location (such as aguamenti), so we cannot use 'location'
-        for (Block blockToChange : Ollivanders2API.common.getBlocksInRadius(getTargetBlock().getLocation(), (int) (radius * radiusModifier)))
+        for (Block blockToChange : Ollivanders2Common.getBlocksInRadius(getTargetBlock().getLocation(), radius))
         {
             if (!canTransfigure(blockToChange))
                 continue;
@@ -127,6 +123,11 @@ public abstract class BlockTransfiguration extends TransfigurationBase
 
             isTransfigured = true;
         }
+
+        if (isTransfigured)
+            sendSuccessMessage();
+        else
+            sendFailureMessage();
 
         if (permanent)
             kill();
@@ -149,11 +150,11 @@ public abstract class BlockTransfiguration extends TransfigurationBase
             canChange = false;
         else if (block.getState() instanceof Entity) // do not change if this block is an Entity
             canChange = false;
-        else if (materialBlacklist.contains(blockType)) // do not change if this block is in the blacklist
+        else if (materialBlockedList.contains(blockType)) // do not change if this block is in the blocked list
             canChange = false;
-        else if (!materialWhitelist.isEmpty()) // do not change if the whitelist exists and this block is not in it
+        else if (!materialAllowList.isEmpty()) // do not change if the allow list exists and this block is not in it
         {
-            if (!materialWhitelist.contains(blockType))
+            if (!materialBlockedList.contains(blockType))
                 canChange = false;
         }
         else // do not change if this block is already the subject of a temporary transfiguration
@@ -162,7 +163,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase
             {
                 if (spell instanceof TransfigurationBase)
                 {
-                    if (((TransfigurationBase)spell).isBlockTransfigured(block))
+                    if (((TransfigurationBase) spell).isBlockTransfigured(block))
                         return false;
                 }
             }
@@ -195,7 +196,9 @@ public abstract class BlockTransfiguration extends TransfigurationBase
     /**
      * Spell specific revert actions beyond changing the block type back. Needs to be overridden by child classes.
      */
-    void doRevert () {}
+    void doRevert()
+    {
+    }
 
     /**
      * Is this spell currently affecting this block?

@@ -8,6 +8,9 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The base class for all transfiguration spells that change blocks and entities.
+ */
 public abstract class TransfigurationBase extends O2Spell
 {
     /**
@@ -51,7 +54,7 @@ public abstract class TransfigurationBase extends O2Spell
     protected int successRate = 100;
 
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -88,16 +91,29 @@ public abstract class TransfigurationBase extends O2Spell
         return isTransfigured;
     }
 
+    /**
+     * Is this spell permanent.
+     *
+     * @return true if permanent, false otherwise
+     */
     public boolean isPermanent()
     {
         return permanent;
     }
 
+    /**
+     * Does this spell consume the original block or not.
+     *
+     * @return true if it consumes the block, false otherwise
+     */
     public boolean isConsumeOriginal()
     {
         return consumeOriginal;
     }
 
+    /**
+     * If the target is not transfigured, attempt to transfigure it. If it is transfigured and this is not a permanent spell, age the spell one tick.
+     */
     @Override
     protected void doCheckEffect()
     {

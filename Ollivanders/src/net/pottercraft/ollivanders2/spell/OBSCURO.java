@@ -10,68 +10,58 @@ import java.util.ArrayList;
 
 /**
  * Gives a target blindness
- *
- * @author lownes
- * @author Azami7
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Obscuro
  */
 public final class OBSCURO extends AddPotionEffect
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public OBSCURO(Ollivanders2 plugin)
-   {
-      super(plugin);
+    private static final int minDurationInSecondsConfig = 30;
+    private static final int maxDurationInSecondsConfig = 120;
+    private static final int minAmplifierConfig = 0;
+    private static final int maxAmplifierConfig = 1;
 
-      spellType = O2SpellType.OBSCURO;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public OBSCURO(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      flavorText = new ArrayList<>()
-      {{
-         add("A black blindfold appeared over Phineas Nigellus' clever, dark eyes, causing him to bump into the frame and shriek with pain.");
-      }};
+        spellType = O2SpellType.OBSCURO;
+        branch = O2MagicBranch.CHARMS;
 
-      text = "Obscuro will blind the target.";
-   }
+        flavorText = new ArrayList<>()
+        {{
+            add("A black blindfold appeared over Phineas Nigellus' clever, dark eyes, causing him to bump into the frame and shriek with pain.");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public OBSCURO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        text = "Obscuro will blind the target.";
+    }
 
-      spellType = O2SpellType.OBSCURO;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public OBSCURO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.OBSCURO;
+        branch = O2MagicBranch.CHARMS;
 
-      effectTypes.add(PotionEffectType.BLINDNESS);
+        minDurationInSeconds = minDurationInSecondsConfig;
+        maxDurationInSeconds = maxDurationInSecondsConfig;
+        durationModifier = 1.0;
+        minAmplifier = minAmplifierConfig;
+        maxAmplifier = maxAmplifierConfig;
+        amplifierModifier = 0.01; // 1/100th usesModifier
 
-      initSpell();
-   }
+        effectTypes.add(PotionEffectType.BLINDNESS);
 
-   @Override
-   void doInitSpell()
-   {
-      // Amplifier
-      maxAmplifier = 1;
-
-      amplifier = (int)(usesModifier / 100);
-      if (amplifier > maxAmplifier)
-         amplifier = maxAmplifier;
-
-      // Duration
-      minDurationInSeconds = 30;
-
-      durationInSeconds = (int) usesModifier;
-      if (durationInSeconds < minDurationInSeconds)
-         durationInSeconds = minDurationInSeconds;
-      else if (durationInSeconds > maxDurationInSeconds)
-         durationInSeconds = maxDurationInSeconds;
-   }
+        initSpell();
+    }
 }

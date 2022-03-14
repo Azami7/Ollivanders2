@@ -15,95 +15,123 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Repairs an itemstack you aim it at.
- *
- * @author lownes
- * @author Azami7
+ * Repairs a damageable item you aim it at.
+ * <p>
+ * https://harrypotter.fandom.com/wiki/Mending_Charm
  */
-public final class REPARO extends O2Spell
+public class REPARO extends O2Spell
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public REPARO(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * The minimum this spell will repair
+     */
+    int minRepair = 30; // half the durability of a wooden sword
 
-      spellType = O2SpellType.REPARO;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * The maximum this spell will repair
+     */
+    int maxRepair = 251; // durability of an iron sword
 
-      flavorText = new ArrayList<>()
-      {{
-         add("The Mending Charm");
-         add("Mr. Weasley took Harry's glasses, gave them a tap of his wand and returned them, good as new.");
-         add("The Mending Charm will repair broken objects with a flick of the wand.  Accidents do happen, so it is essential to know how to mend our errors.");
-      }};
+    /**
+     * The multiplier on usesModifier used to determine the level of repair
+     */
+    float repairMultiplier = 0.5f;
 
-      text = "Repair the durability of a tool.";
-   }
+    /**
+     * How much durability to repair
+     */
+    int repair;
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public REPARO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public REPARO(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      spellType = O2SpellType.REPARO;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.REPARO;
+        branch = O2MagicBranch.CHARMS;
 
-      // world guard flags
-      if (Ollivanders2.worldGuardEnabled)
-      {
-         worldGuardFlags.add(Flags.ITEM_DROP);
-         worldGuardFlags.add(Flags.ITEM_PICKUP);
-      }
+        flavorText = new ArrayList<>()
+        {{
+            add("The Mending Charm");
+            add("Mr. Weasley took Harry's glasses, gave them a tap of his wand and returned them, good as new.");
+            add("The Mending Charm will repair broken objects with a flick of the wand.  Accidents do happen, so it is essential to know how to mend our errors.");
+        }};
 
-      initSpell();
-   }
+        text = "Repair the durability of a tool.";
+    }
 
-   @Override
-   protected void doCheckEffect()
-   {
-      List<Item> items = getItems(1.5);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public REPARO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      for (Item item : items)
-      {
-         ItemStack stack = item.getItemStack();
-         ItemMeta itemMeta = stack.getItemMeta();
+        spellType = O2SpellType.REPARO;
+        branch = O2MagicBranch.CHARMS;
 
-         if (itemMeta instanceof Damageable)
-         {
-            int damage = ((Damageable) itemMeta).getDamage();
+        // world guard flags
+        if (Ollivanders2.worldGuardEnabled)
+        {
+            worldGuardFlags.add(Flags.ITEM_DROP);
+            worldGuardFlags.add(Flags.ITEM_PICKUP);
+        }
 
-            damage = damage - (int)usesModifier;
+        initSpell();
+    }
 
-            if (damage < 0)
-            {
-               damage = 0;
-            }
+    /**
+     * Determine the amount to repair based on caster's skill.
+     */
+    @Override
+    void doInitSpell()
+    {
+        repair = (int) (usesModifier / repairMultiplier);
 
-            ((Damageable) itemMeta).setDamage(damage);
-            stack.setItemMeta(itemMeta);
+        if (repair < minRepair)
+            repair = minRepair;
+        else if (repair > maxRepair)
+            repair = maxRepair;
+    }
 
-            item.setItemStack(stack);
+    /**
+     * Find a damageable item and repair it.
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        if (hasHitTarget())
             kill();
 
-            player.sendMessage(Ollivanders2.chatColor + item.getName() + " looks newer than before.");
+        List<Item> items = getItems(1.5);
 
-            break;
-         }
-      }
+        for (Item item : items)
+        {
+            ItemStack stack = item.getItemStack();
+            ItemMeta itemMeta = stack.getItemMeta();
 
-      if (hasHitTarget())
-      {
-         kill();
-      }
-   }
+            if (itemMeta instanceof Damageable)
+            {
+                int damage = ((Damageable) itemMeta).getDamage();
+                damage = damage - repair;
+
+                ((Damageable) itemMeta).setDamage(damage);
+                stack.setItemMeta(itemMeta);
+
+                item.setItemStack(stack);
+                kill();
+
+                player.sendMessage(Ollivanders2.chatColor + item.getName() + " looks newer than before.");
+
+                break;
+            }
+        }
+    }
 }

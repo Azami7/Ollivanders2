@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -12,86 +11,83 @@ import java.util.ArrayList;
 
 /**
  * Reveal an unfulfilled prophecy about a player.
- *
- * @author Azami7
- * @since 2.2.9
+ * <p>
+ * https://harrypotter.fandom.com/wiki/Prophecy
+ * {@link net.pottercraft.ollivanders2.divination.O2Prophecy}
  */
 public class PROPHETEIA extends O2Spell
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public PROPHETEIA(Ollivanders2 plugin)
-   {
-      super(plugin);
+    private final static int messageRadius = 10;
 
-      branch = O2MagicBranch.DIVINATION;
-      spellType = O2SpellType.PROPHETEIA;
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public PROPHETEIA(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      flavorText = new ArrayList<>()
-      {{
-         add("\"But when Sybill Trelawney spoke, it was not in her usual ethereal, mystic voice, but in the hard, hoarse tones Harry had heard her use once before.\"");
-      }};
+        branch = O2MagicBranch.DIVINATION;
+        spellType = O2SpellType.PROPHETEIA;
 
-      text = "Propheteia allows one to reveal an unfulfilled prophecy that has been made about a target player. Chances of success depend on experience.";
-   }
+        flavorText = new ArrayList<>()
+        {{
+            add("\"But when Sybill Trelawney spoke, it was not in her usual ethereal, mystic voice, but in the hard, hoarse tones Harry had heard her use once before.\"");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public PROPHETEIA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        text = "Propheteia allows one to reveal an unfulfilled prophecy that has been made about a target player. Chances of success depend on experience.";
+    }
 
-      branch = O2MagicBranch.DIVINATION;
-      spellType = O2SpellType.PROPHETEIA;
-      initSpell();
-   }
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public PROPHETEIA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-   @Override
-   protected void doCheckEffect()
-   {
-      for (LivingEntity livingEntity : getLivingEntities(1.5))
-      {
-         if (livingEntity.getUniqueId() == player.getUniqueId())
-         {
-            continue;
-         }
+        branch = O2MagicBranch.DIVINATION;
+        spellType = O2SpellType.PROPHETEIA;
+        initSpell();
+    }
 
-         if (!(livingEntity instanceof Player))
-         {
-            continue;
-         }
+    /**
+     * Find a nearby player and reveal an unfulfilled prophecy about them.
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        if (hasHitTarget())
+        kill();
 
-         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
+        for (Player target : getNearbyPlayers(defaultRadius))
+        {
+            if (target.getUniqueId() == player.getUniqueId())
+                continue;
 
-         if (usesModifier > rand)
-         {
-            String prophecy = Ollivanders2API.getProphecies(p).getProphecy(livingEntity.getUniqueId());
+            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
 
-            if (prophecy != null)
+            if (usesModifier > rand)
             {
-               player.sendMessage(Ollivanders2.chatColor + prophecy);
-               kill();
-               return;
+                String prophecy = Ollivanders2API.getProphecies().getProphecy(target.getUniqueId());
+
+                if (prophecy != null)
+                {
+                    Ollivanders2Common.sendMessageInRadius(prophecy, location, messageRadius);
+
+                    kill();
+                    return;
+                }
             }
-         }
 
-         player.sendMessage(Ollivanders2.chatColor + "You do not discover anything.");
+            player.sendMessage(Ollivanders2.chatColor + "You do not discover anything.");
 
-         kill();
-         return;
-      }
-
-      if (hasHitTarget())
-      {
-         kill();
-      }
-   }
+            kill();
+            return;
+        }
+    }
 }

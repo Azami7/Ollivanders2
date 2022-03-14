@@ -2,7 +2,9 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.item.enchantment.Enchantment;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -15,7 +17,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class ItemTransfiguration extends EntityTransfiguration
+/**
+ * Super class for all item entity transfigurations
+ */
+public abstract class ItemToItemTransfiguration extends EntityTransfiguration
 {
     /**
      * The list of changed items for non-permanent spells to revert
@@ -28,11 +33,16 @@ public abstract class ItemTransfiguration extends EntityTransfiguration
     protected Map<Material, Material> transfigurationMap = new HashMap<>();
 
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Can this spell target enchanted items
+     */
+    boolean canTransfigureEnchantedItems = false;
+
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public ItemTransfiguration(Ollivanders2 plugin)
+    public ItemToItemTransfiguration(Ollivanders2 plugin)
     {
         super(plugin);
 
@@ -46,11 +56,11 @@ public abstract class ItemTransfiguration extends EntityTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public ItemTransfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    public ItemToItemTransfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
     {
         super(plugin, player, rightWand);
 
-        entityWhitelist.add(EntityType.DROPPED_ITEM);
+        entityAllowedList.add(EntityType.DROPPED_ITEM);
     }
 
     /**
@@ -79,7 +89,7 @@ public abstract class ItemTransfiguration extends EntityTransfiguration
                 continue;
             }
 
-            Item item = (Item)entity;
+            Item item = (Item) entity;
             Material originalType = item.getItemStack().getType();
 
             if (!transfigurationMap.containsKey(originalType))
@@ -105,13 +115,48 @@ public abstract class ItemTransfiguration extends EntityTransfiguration
                 player.sendMessage(Ollivanders2.chatColor + successMessage);
             }
             else
-            {
                 player.sendMessage(Ollivanders2.chatColor + failureMessage);
-            }
 
             kill();
             return;
         }
+    }
+
+    /**
+     * Determine if this entity be transfigured by this spell.
+     * <p>
+     * Entity can transfigure if:
+     * 1. It is not in the bloked list
+     * 2. It is in the allowed list, if the allowed list exists
+     * 3. The entity is not already the target type
+     * 4. There are no WorldGuard permissions preventing the caster from altering this entity type
+     * 5. The item is not enchanted -or- the magic level of the enchantment is lower than this spell's magic level
+     *
+     * @param entity the entity to check
+     * @return true if it can be changed
+     */
+    @Override
+    protected boolean canTransfigure(@NotNull Entity entity)
+    {
+        boolean canTransfigure = super.canTransfigure(entity);
+
+        // if all prev checks passed, now verify this item is not enchanted
+        if (canTransfigure)
+        {
+            if (Ollivanders2API.getItems().enchantedItems.isEnchanted((Item) entity))
+            {
+                if (!canTransfigureEnchantedItems)
+                    canTransfigure = false;
+                else
+                {
+                    Enchantment enchantment = Ollivanders2API.getItems().enchantedItems.getEnchantment(((Item) entity).getItemStack());
+                    if (enchantment != null && enchantment.getType().getLevel().ordinal() > this.spellType.getLevel().ordinal())
+                        canTransfigure = false;
+                }
+            }
+        }
+
+        return canTransfigure;
     }
 
     /**
@@ -140,6 +185,6 @@ public abstract class ItemTransfiguration extends EntityTransfiguration
     @Nullable
     protected Entity transfigureEntity(@NotNull Entity entity)
     {
-        return null;
+        return entity;
     }
 }

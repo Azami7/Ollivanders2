@@ -11,137 +11,137 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Creates a glowstone at the reticule that goes away after a time.
- *
- * @author azami7
- * @version Ollivanders2
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Lumos_Maxima
  */
 public final class LUMOS_MAXIMA extends O2Spell
 {
-   int lineLength;
-   int duration;
+    /**
+     * The length of the line of glowstone
+     */
+    int lineLength;
 
-   static int maxLineLength = 20;
-   static int maxDuration = Ollivanders2Common.ticksPerSecond * 600; // 10 minutes
-   static int minDuration = Ollivanders2Common.ticksPerSecond * 30; // 30 seconds
+    /**
+     * How long the glowstone will remain
+     */
+    int duration;
 
-   ArrayList<Block> changedBlocks = new ArrayList<>();
+    static int maxLineLength = 20;
+    static int maxDuration = Ollivanders2Common.ticksPerSecond * 600; // 10 minutes
+    static int minDuration = Ollivanders2Common.ticksPerSecond * 30; // 30 seconds
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public LUMOS_MAXIMA(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * A map of the affected blocks and their original types for use with revert()
+     */
+    final HashMap<Block, Material> affectedBlocks = new HashMap<>();
 
-      spellType = O2SpellType.LUMOS_MAXIMA;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public LUMOS_MAXIMA(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      flavorText = new ArrayList<>() {{
-         add("\"Light your wands, can’t you? And hurry, we have little time!\" -Griphook");
-      }};
+        spellType = O2SpellType.LUMOS_MAXIMA;
+        branch = O2MagicBranch.CHARMS;
 
-      text = "Lumos Maxima will spawn a glowstone at the impact site.";
-   }
+        flavorText = new ArrayList<>()
+        {{
+            add("\"Light your wands, can’t you? And hurry, we have little time!\" -Griphook");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin a callback to the MC plugin
-    * @param player the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public LUMOS_MAXIMA(Ollivanders2 plugin, Player player, Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        text = "Lumos Maxima will spawn a glowstone at the impact site.";
+    }
 
-      spellType = O2SpellType.LUMOS_MAXIMA;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public LUMOS_MAXIMA(Ollivanders2 plugin, Player player, Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      // base line length on experience
-      lineLength = 1 + (int) usesModifier / 10;
-      if (lineLength > maxLineLength)
-      {
-         lineLength = maxLineLength;
-      }
+        spellType = O2SpellType.LUMOS_MAXIMA;
+        branch = O2MagicBranch.CHARMS;
 
-      // set duration based on experience, min 30 seconds
-      duration = Ollivanders2Common.ticksPerSecond * (int) usesModifier;
-      if (duration < minDuration)
-      {
-         duration = minDuration;
-      }
-      else if (duration > maxDuration)
-      {
-         duration = maxDuration;
-      }
+        // base line length on experience
+        lineLength = 1 + (int) usesModifier / 10;
+        if (lineLength > maxLineLength)
+            lineLength = maxLineLength;
 
-      // pass-through materials
-      projectilePassThrough.remove(Material.WATER);
+        // set duration based on experience, min 30 seconds
+        duration = Ollivanders2Common.ticksPerSecond * (int) usesModifier;
+        if (duration < minDuration)
+            duration = minDuration;
+        else if (duration > maxDuration)
+            duration = maxDuration;
 
-      // world guard flags
-      if (Ollivanders2.worldGuardEnabled)
-         worldGuardFlags.add(Flags.BUILD);
+        // remove all pass-through materials, this can only go through air and water
+        projectilePassThrough.clear();
+        projectilePassThrough.add(Material.AIR);
+        projectilePassThrough.add(Material.CAVE_AIR);
+        projectilePassThrough.add(Material.WATER);
 
-      initSpell();
-   }
+        // world guard flags
+        if (Ollivanders2.worldGuardEnabled)
+            worldGuardFlags.add(Flags.BUILD);
 
-   @Override
-   protected void doCheckEffect()
-   {
-      if (!hasHitTarget())
-      {
-         // if we have not hit a solid target and still have more line to draw, add a glowstone
-         if (lineLength > 0)
-         {
-            Block curBlock = location.getBlock();
+        initSpell();
+    }
 
-            if (curBlock.getType() == Material.AIR)
+    /**
+     * Create a line of glowstone from the caster's wand then age the effect and revert the blocks
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        if (!hasHitTarget())
+        {
+            // if we have not hit a solid target and still have more line to draw, add a glowstone
+            if (lineLength > 0)
             {
-               curBlock.setType(Material.GLOWSTONE);
+                Block curBlock = location.getBlock();
+                affectedBlocks.put(curBlock, curBlock.getType());
 
-               World world = location.getWorld();
-               if (world == null)
-               {
-                  common.printDebugMessage("LUMOS_MAXIMA.doCheckEffect: world is null", null, null, true);
-                  kill();
-                  return;
-               }
-               world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
+                curBlock.setType(Material.GLOWSTONE);
 
-               changedBlocks.add(curBlock);
-               p.addTempBlock(curBlock, Material.AIR);
+                World world = location.getWorld();
+                if (world == null)
+                    common.printDebugMessage("LUMOS_MAXIMA.doCheckEffect: world is null", null, null, true);
+                else
+                    world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
             }
-         }
-         // if we have not hit a solid target but don't have more line left, stop the projectile
-         else
-         {
-            stopProjectile();
-         }
-      }
-      else
-      {
-         duration = duration - 1;
+            // if we have not hit a solid target but don't have more line left, stop the projectile
+            else
+                stopProjectile();
+        }
+        else
+        {
+            duration = duration - 1;
 
-         if (duration <= 0)
-         {
-            kill();
-         }
-      }
-   }
+            if (duration <= 0)
+                kill();
+        }
+    }
 
-   @Override
-   public void revert()
-   {
-      for (Block block : changedBlocks)
-      {
-         p.revertTempBlock(block);
-      }
-
-      changedBlocks.clear();
-   }
+    /**
+     * Revert all the blocks changed by this spell
+     */
+    @Override
+    public void revert()
+    {
+        for (Block block : affectedBlocks.keySet())
+        {
+            block.setType(affectedBlocks.get(block));
+        }
+    }
 }

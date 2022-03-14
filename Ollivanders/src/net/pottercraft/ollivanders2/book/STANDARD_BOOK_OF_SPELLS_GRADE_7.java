@@ -6,31 +6,27 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Standard Book of Spells Grade 7
- *
- * Missing spells:
- * Prior Incantato - https://github.com/Azami7/Ollivanders2/issues/62
- *
- * @since 2.2.4
- * @author Azami7
+ * <p>
+ * https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_7
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book
 {
-   public STANDARD_BOOK_OF_SPELLS_GRADE_7(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+    public STANDARD_BOOK_OF_SPELLS_GRADE_7(@NotNull Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_7;
+        bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_7;
 
-      spells.add(O2SpellType.MUFFLIATO);
-      spells.add(O2SpellType.REPELLO_MUGGLETON);
-      spells.add(O2SpellType.INFORMOUS);
-      spells.add(O2SpellType.GLACIUS_TRIA);
-      spells.add(O2SpellType.INCENDIO_TRIA);
-      spells.add(O2SpellType.DEFODIO);
-      spells.add(O2SpellType.APPARATE);
-      //8
-      //9
-      //10
-      //11
-   }
+        spells.add(O2SpellType.MUFFLIATO);
+        spells.add(O2SpellType.REPELLO_MUGGLETON);
+        spells.add(O2SpellType.INFORMOUS);
+        spells.add(O2SpellType.GLACIUS_TRIA);
+        spells.add(O2SpellType.INCENDIO_TRIA);
+        spells.add(O2SpellType.DEFODIO);
+        spells.add(O2SpellType.APPARATE);
+        spells.add(O2SpellType.DIAMAS_REPARO);
+        spells.add(O2SpellType.PRIOR_INCANTATO);
+        //10
+        //11
+    }
 }

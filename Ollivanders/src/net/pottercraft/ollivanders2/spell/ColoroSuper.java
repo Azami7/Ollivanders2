@@ -14,18 +14,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 /**
- * Created by Azami7 on 6/30/17.
- * <p>
  * Change a sheep or a colorable block to a specific color.
- *
- * @author Azami7
  */
 public abstract class ColoroSuper extends O2Spell
 {
     O2Color color = O2Color.WHITE;
 
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -47,7 +43,7 @@ public abstract class ColoroSuper extends O2Spell
 
         // world-guard flags
         if (Ollivanders2.worldGuardEnabled)
-           worldGuardFlags.add(Flags.BUILD);
+            worldGuardFlags.add(Flags.BUILD);
     }
 
     /**
@@ -57,7 +53,7 @@ public abstract class ColoroSuper extends O2Spell
     protected void doCheckEffect()
     {
         // first try to recolor any sheep in range
-        List<LivingEntity> entities = getLivingEntities(1.5);
+        List<LivingEntity> entities = getNearbyLivingEntities(defaultRadius);
 
         if (entities.size() > 0)
         {

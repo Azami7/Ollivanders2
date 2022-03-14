@@ -74,7 +74,7 @@ public final class BRACKIUM_EMENDO extends O2Spell
    @Override
    protected void doCheckEffect()
    {
-      List<LivingEntity> entities = getLivingEntities(1.5);
+      List<LivingEntity> entities = getNearbyLivingEntities(1.5);
 
       if (entities.size() > 0)
       {

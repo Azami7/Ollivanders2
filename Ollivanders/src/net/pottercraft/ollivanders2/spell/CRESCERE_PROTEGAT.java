@@ -13,95 +13,109 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Grows a Stationary Spell's radius. Only the player who created the Stationary Spell can change it's radius.
- *
- * @author lownes
- * @author Azami7
- * @version Ollivanders2
+ * Grows a Stationary Spell's radius. Only the player who created the Stationary Spell can change its radius.
  */
 public final class CRESCERE_PROTEGAT extends O2Spell
 {
-   /**
-    * Stationary spell types that cannot be targeted by this spell.
-    */
-   List<O2StationarySpellType> spellBlacklist = new ArrayList<>()
-   {{
-      add(O2StationarySpellType.COLLOPORTUS);
-      add(O2StationarySpellType.HORCRUX);
-      add(O2StationarySpellType.HARMONIA_NECTERE_PASSUS);
-      add(O2StationarySpellType.ALIQUAM_FLOO);
-   }};
+    private static final int minIncrease = 1;
+    private static final int maxIncrease = 10;
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public CRESCERE_PROTEGAT(Ollivanders2 plugin)
-   {
-      super(plugin);
+    int increase;
 
-      spellType = O2SpellType.CRESCERE_PROTEGAT;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Stationary spell types that cannot be targeted by this spell.
+     */
+    List<O2StationarySpellType> spellBlockedList = new ArrayList<>()
+    {{
+        add(O2StationarySpellType.COLLOPORTUS);
+        add(O2StationarySpellType.HORCRUX);
+        add(O2StationarySpellType.HARMONIA_NECTERE_PASSUS);
+        add(O2StationarySpellType.ALIQUAM_FLOO);
+    }};
 
-      text = "Grows a stationary spell's radius. Only the player who created the Stationary Spell can change it's radius.";
-   }
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public CRESCERE_PROTEGAT(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public CRESCERE_PROTEGAT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
-      spellType = O2SpellType.CRESCERE_PROTEGAT;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.CRESCERE_PROTEGAT;
+        branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-   }
+        text = "Grows a stationary spell's radius. Only the player who created the Stationary Spell can change it's radius.";
+    }
 
-   /**
-    * Look for stationary spells at the projectile's target location and increase its radius
-    */
-   @Override
-   protected void doCheckEffect()
-   {
-      O2StationarySpell inside = null;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public CRESCERE_PROTEGAT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.CRESCERE_PROTEGAT;
+        branch = O2MagicBranch.CHARMS;
 
-      for (O2StationarySpell spell : Ollivanders2API.getStationarySpells(p).getActiveStationarySpells())
-      {
-         // if the stationary spell type is not in the blacklist for this spell
-         // was cast by the caster of this spell
-         // and is inside the radius of this spell, then target it
-         if (!spellBlacklist.contains(spell.getSpellType()) && spell.getCasterID().equals(player.getUniqueId())
-                 && spell.isInside(location) && spell.radius < (int) usesModifier)
-         {
-            inside = spell;
+        initSpell();
+    }
 
-            break;
-         }
-      }
+    /**
+     * Set the amount of increase based on the caster's skill.
+     */
+    @Override
+    void doInitSpell()
+    {
+        increase = (int) usesModifier / 20;
+        if (increase < minIncrease)
+            increase = minIncrease;
+        else if (increase > maxIncrease)
+            increase = maxIncrease;
+    }
 
-      // if we found a target stationary spell, increase its radius
-      if (inside != null)
-      {
-         int limit = (int) usesModifier;
-
-         if (inside.radius < limit && inside.getCasterID().equals(player.getUniqueId()))
-         {
-            inside.radius = inside.radius + 1;
-            inside.flair(10);
-
+    /**
+     * Look for a stationary spell at the projectile's location and increase its radius.
+     * <p>
+     * 1. Target spell must have been cast by this caster.
+     * 2. Target spell cannot be higher difficulty level than this spell.
+     * 3. Target spell cannot be on the spell blocked list (ex. floo network, vanishing cabinets)
+     * <p>
+     * {@link O2StationarySpell}
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        // projectile has stopped, kill the spell
+        if (hasHitTarget())
             kill();
-            return;
-         }
-      }
 
-      // projectile has stopped, kill the spell
-      if (hasHitTarget())
-         kill();
-   }
+        O2StationarySpell targetSpell = null;
+
+        for (O2StationarySpell spell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
+        {
+            // if the stationary spell type is not in the blocked list for this spell
+            // was cast by the caster of this spell
+            // is inside the radius of this spell, then target it
+            // and the target spell is at or lower than this spell in level
+            if (!spellBlockedList.contains(spell.getSpellType())
+                    && spell.getCasterID().equals(player.getUniqueId())
+                    && spell.getSpellType().getLevel().ordinal() <= this.spellType.getLevel().ordinal())
+            {
+                targetSpell = spell;
+                break;
+            }
+        }
+
+        // if we found a target stationary spell, increase its radius
+        if (targetSpell != null)
+        {
+            targetSpell.increaseRadius(increase);
+            targetSpell.flair(10);
+            kill();
+        }
+    }
 }

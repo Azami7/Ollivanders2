@@ -12,9 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Projectile spell to remove potion effects from a target.
- *
- * @author Azami7
+ * Remove potion effects from a target.
  */
 public abstract class RemovePotionEffect extends O2Spell
 {
@@ -32,6 +30,11 @@ public abstract class RemovePotionEffect extends O2Spell
      * Whether the spell targets the caster
      */
     boolean targetSelf = false;
+
+    /**
+     * The modifier for success rate on this spell
+     */
+    float successModifier = 1.0f;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -65,12 +68,10 @@ public abstract class RemovePotionEffect extends O2Spell
     @Override
     protected void doCheckEffect()
     {
-        affectRadius(1.5, false);
-
         if (hasHitTarget())
-        {
             kill();
-        }
+
+        affectRadius(defaultRadius, false);
     }
 
     /**
@@ -82,7 +83,7 @@ public abstract class RemovePotionEffect extends O2Spell
     void affectRadius(double radius, boolean flair)
     {
         if (flair)
-            Ollivanders2Common.flair(location, (int)radius, 10);
+            Ollivanders2Common.flair(location, (int) radius, 10);
 
         if (targetSelf)
         {
@@ -90,7 +91,7 @@ public abstract class RemovePotionEffect extends O2Spell
             numberOfTargets = numberOfTargets - 1;
         }
 
-        for (LivingEntity livingEntity : getLivingEntities(radius))
+        for (LivingEntity livingEntity : getNearbyLivingEntities(radius))
         {
             // stop when the limit of targets is reached
             if (numberOfTargets <= 0)
@@ -116,8 +117,27 @@ public abstract class RemovePotionEffect extends O2Spell
     {
         for (PotionEffectType effectType : potionEffectTypes)
         {
-            common.printDebugMessage("Removing " + effectType.getName() + " from " + target.getName(), null, null, false);
-            target.removePotionEffect(effectType);
+            if (checkSuccess())
+            {
+                common.printDebugMessage("Removing " + effectType.getName() + " from " + target.getName(), null, null, false);
+                target.removePotionEffect(effectType);
+            }
         }
+    }
+
+    /**
+     * Determine if this spell is successful based on player skill and level of the effect relative to the level of this spell.
+     *
+     * @return true if the effect can be removed, false otherwise
+     */
+    boolean checkSuccess()
+    {
+        int successRate = (int) (usesModifier / successModifier);
+        if (successRate < 1)
+            successRate = 1;
+        else if (successRate > 100)
+            successRate = 100;
+
+        return Math.abs(Ollivanders2Common.random.nextInt() % 100) < successRate;
     }
 }

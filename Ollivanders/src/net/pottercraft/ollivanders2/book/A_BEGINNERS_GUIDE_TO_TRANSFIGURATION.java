@@ -6,28 +6,28 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A Beginner's Guide to Transfiguration - 1-3 year transfiguration book
- *
- * Topics:
- * Switching
- *
- * @since 2.2.4
- * @author Azami7
+ * <p>
+ * https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration
  */
 public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book
 {
-   public A_BEGINNERS_GUIDE_TO_TRANSFIGURATION(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+    public A_BEGINNERS_GUIDE_TO_TRANSFIGURATION(@NotNull Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      bookType = O2BookType.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION;
+        bookType = O2BookType.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION;
 
-      spells.add(O2SpellType.DURO);
-      spells.add(O2SpellType.FATUUS_AURUM);
-      spells.add(O2SpellType.CALAMUS);
-      spells.add(O2SpellType.DEPRIMO);
-      spells.add(O2SpellType.MULTICORFORS);
-      spells.add(O2SpellType.VERA_VERTO);
-      spells.add(O2SpellType.SNUFFLIFORS);
-      spells.add(O2SpellType.LAPIDO);
-   }
+        spells.add(O2SpellType.DURO);
+        spells.add(O2SpellType.FATUUS_AURUM);
+        spells.add(O2SpellType.CALAMUS);
+        spells.add(O2SpellType.DEPRIMO);
+        spells.add(O2SpellType.MULTICORFORS);
+        spells.add(O2SpellType.VERA_VERTO);
+        spells.add(O2SpellType.SNUFFLIFORS);
+        // 8
+        // 9
+        // 10
+        // 11
+        // 12
+    }
 }

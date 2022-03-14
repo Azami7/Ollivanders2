@@ -15,20 +15,19 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Geminio Curse is used to curse an object into multiplying repeatedly when touched.
  *
- * @author Azami7
- * @since 2.6
+ * @link https://harrypotter.fandom.com/wiki/Doubling_Charm
  */
 public class GEMINIO extends Enchantment
 {
     /**
      * Constructor
      *
-     * @param plugin a callback to the plugin
-     * @param mag the magnitude of this enchantment
-     * @param args optional arguments for this enchantment
+     * @param plugin   a callback to the plugin
+     * @param mag      the magnitude of this enchantment
+     * @param args     optional arguments for this enchantment
      * @param itemLore the optional lore for this enchantment
      */
-    public GEMINIO (@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
+    public GEMINIO(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
     {
         super(plugin, mag, args, itemLore);
         enchantmentType = ItemEnchantmentType.GEMINIO;
@@ -40,7 +39,7 @@ public class GEMINIO extends Enchantment
      * @param event the item pickup event
      */
     @Override
-    public void doItemPickup (@NotNull EntityPickupItemEvent event)
+    public void doItemPickup(@NotNull EntityPickupItemEvent event)
     {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player))
@@ -54,7 +53,7 @@ public class GEMINIO extends Enchantment
         for (int i = 0; i < copies; i++)
         {
             ItemStack copy = item.getItemStack().clone();
-            ((Player)entity).getInventory().addItem(copy);
+            ((Player) entity).getInventory().addItem(copy);
         }
     }
 
@@ -64,7 +63,9 @@ public class GEMINIO extends Enchantment
      * @param event the item drop event
      */
     @Override
-    public void doItemDrop (@NotNull PlayerDropItemEvent event) { }
+    public void doItemDrop(@NotNull PlayerDropItemEvent event)
+    {
+    }
 
     /**
      * Handle item despawn events
@@ -72,7 +73,7 @@ public class GEMINIO extends Enchantment
      * @param event the item despawn event
      */
     @Override
-    public void doItemDespawn (@NotNull ItemDespawnEvent event)
+    public void doItemDespawn(@NotNull ItemDespawnEvent event)
     {
         event.setCancelled(true);
     }
@@ -82,5 +83,7 @@ public class GEMINIO extends Enchantment
      *
      * @param event the item drop event
      */
-    public void doItemHeld (@NotNull PlayerItemHeldEvent event) { }
+    public void doItemHeld(@NotNull PlayerItemHeldEvent event)
+    {
+    }
 }
