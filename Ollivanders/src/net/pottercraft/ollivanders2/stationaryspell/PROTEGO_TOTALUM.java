@@ -18,154 +18,175 @@ import java.util.UUID;
 
 /**
  * Doesn't let entities pass into the protected area.
- *
- * @author lownes
- * @author Azami7
+ * <p>
+ * https://harrypotter.fandom.com/wiki/Protego_totalum
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.PROTEGO_TOTALUM}
  */
 public class PROTEGO_TOTALUM extends ShieldSpell
 {
-   /**
-    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
-    *
-    * @param plugin a callback to the MC plugin
-    */
-   public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+    public static final int minRadiusConfig = 5;
+    public static final int maxRadiusConfig = 30;
+    public static final int minDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
+    public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
-      spellType = O2StationarySpellType.PROTEGO_TOTALUM;
-   }
+    /**
+     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     *
+     * @param plugin a callback to the MC plugin
+     */
+    public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin)
+    {
+        super(plugin);
 
-   /**
-    * Constructor
-    *
-    * @param plugin   a callback to the MC plugin
-    * @param pid      the player who cast the spell
-    * @param location the center location of the spell
-    * @param type     the type of this spell
-    * @param radius   the radius for this spell
-    * @param duration the duration of the spell
-    */
-   public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration)
-   {
-      super(plugin, pid, location, type, radius, duration);
+        spellType = O2StationarySpellType.PROTEGO_TOTALUM;
+    }
 
-      spellType = O2StationarySpellType.PROTEGO_TOTALUM;
-   }
+    /**
+     * Constructor
+     *
+     * @param plugin   a callback to the MC plugin
+     * @param pid      the player who cast the spell
+     * @param location the center location of the spell
+     * @param radius   the radius for this spell
+     * @param duration the duration of the spell
+     */
+    public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
+    {
+        super(plugin);
+        spellType = O2StationarySpellType.PROTEGO_TOTALUM;
 
-   /**
-    * Upkeep
-    */
-   @Override
-   void checkEffect () { age(); }
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
 
-   /**
-    * Prevent players from entering the protected area
-    *
-    * @param event the event
-    */
-   @Override
-   void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event)
-   {
-      Location toLoc = event.getTo();
-      Location fromLoc = event.getFrom();
+        setPlayerID(pid);
+        setLocation(location);
+        setRadius(radius);
+        setDuration(duration);
 
-      if (toLoc == null || toLoc.getWorld() == null || fromLoc.getWorld() == null)
-         return;
+        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
 
-      // they are already inside the protected area
-      if (common.isInside(fromLoc, location, radius))
-         return;
+    /**
+     * Age the spell by 1 tick
+     */
+    @Override
+    void checkEffect()
+    {
+        age();
+    }
 
-      if (common.isInside(toLoc, location, radius))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("PROTEGO_TOTALUM: canceled PlayerMoveEvent", null, null, false);
+    /**
+     * Prevent players from entering the protected area
+     *
+     * @param event the player move event
+     */
+    @Override
+    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event)
+    {
+        Location toLoc = event.getTo();
+        Location fromLoc = event.getFrom();
 
-         new BukkitRunnable()
-         {
-            @Override
-            public void run()
+        if (toLoc == null || toLoc.getWorld() == null || fromLoc.getWorld() == null)
+            return;
+
+        // they are already inside the protected area
+        if (Ollivanders2Common.isInside(fromLoc, location, radius))
+            return;
+
+        if (Ollivanders2Common.isInside(toLoc, location, radius))
+        {
+            event.setCancelled(true);
+            common.printDebugMessage("PROTEGO_TOTALUM: canceled PlayerMoveEvent", null, null, false);
+
+            new BukkitRunnable()
             {
-               if (event.isCancelled())
-               {
-                  flair(10);
-                  event.getPlayer().sendMessage(Ollivanders2.chatColor + "A magical force prevents you moving here.");
-               }
-            }
-         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
-      }
-   }
+                @Override
+                public void run()
+                {
+                    if (event.isCancelled())
+                    {
+                        flair(10);
+                        event.getPlayer().sendMessage(Ollivanders2.chatColor + "A magical force prevents you moving here.");
+                    }
+                }
+            }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+        }
+    }
 
-   /**
-    * Prevent entities from spawning in the protected area
-    *
-    * @param event the event
-    */
-   @Override
-   void doOnCreatureSpawnEvent (@NotNull CreatureSpawnEvent event)
-   {
-      Entity entity = event.getEntity();
-      Location entityLocation = entity.getLocation();
+    /**
+     * Prevent entities from spawning in the protected area
+     *
+     * @param event the creature spawn event
+     */
+    @Override
+    void doOnCreatureSpawnEvent(@NotNull CreatureSpawnEvent event)
+    {
+        Entity entity = event.getEntity();
+        Location entityLocation = entity.getLocation();
 
-      if (common.isInside(entityLocation, location, radius))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("PROTEGO_TOTALUM: canceled CreatureSpawnEvent", null, null, false);
-      }
-   }
+        if (Ollivanders2Common.isInside(entityLocation, location, radius))
+        {
+            event.setCancelled(true);
+            common.printDebugMessage("PROTEGO_TOTALUM: canceled CreatureSpawnEvent", null, null, false);
+        }
+    }
 
-   /**
-    * Prevent entities from spawning in the protected area
-    *
-    * @param event the event
-    */
-   @Override
-   void doOnEntityTargetEvent (@NotNull EntityTargetEvent event)
-   {
-      Entity target = event.getTarget();
-      if (target == null)
-         return;
+    /**
+     * Prevent entities inside the protected area from being targeted
+     *
+     * @param event the event
+     */
+    @Override
+    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event)
+    {
+        Entity target = event.getTarget();
+        if (target == null)
+            return;
 
-      Location targetLocation = target.getLocation();
+        Location targetLocation = target.getLocation();
 
-      if (isInside(targetLocation))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("PROTEGO_TOTALUM: canceled EntityTargetEvent", null, null, false);
+        if (isLocationInside(targetLocation))
+        {
+            event.setCancelled(true);
+            common.printDebugMessage("PROTEGO_TOTALUM: canceled EntityTargetEvent", null, null, false);
 
-         new BukkitRunnable()
-         {
-            @Override
-            public void run()
+            new BukkitRunnable()
             {
-               if (event.isCancelled() && target instanceof Player)
-               {
-                  flair(10);
-                  target.sendMessage(Ollivanders2.chatColor + "A magical force protects you.");
-               }
-            }
-         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
-      }
-   }
+                @Override
+                public void run()
+                {
+                    if (event.isCancelled() && target instanceof Player)
+                    {
+                        flair(10);
+                        target.sendMessage(Ollivanders2.chatColor + "A magical force protects you.");
+                    }
+                }
+            }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+        }
+    }
 
-   /**
-    * Serialize all data specific to this spell so it can be saved.
-    *
-    * @return a map of the serialized data
-    */
-   @Override
-   @NotNull
-   public Map<String, String> serializeSpellData ()
-   {
-      return new HashMap<>();
-   }
+    /**
+     * Serialize all data specific to this spell so it can be saved.
+     *
+     * @return a map of the serialized data
+     */
+    @Override
+    @NotNull
+    public Map<String, String> serializeSpellData()
+    {
+        return new HashMap<>();
+    }
 
-   /**
-    * Deserialize the data for this spell and load the data to this spell.
-    *
-    * @param spellData a map of the saved spell data
-    */
-   @Override
-   public void deserializeSpellData(@NotNull Map<String, String> spellData) { }
+    /**
+     * Deserialize the data for this spell and load the data to this spell.
+     *
+     * @param spellData a map of the saved spell data
+     */
+    @Override
+    public void deserializeSpellData(@NotNull Map<String, String> spellData)
+    {
+    }
 }

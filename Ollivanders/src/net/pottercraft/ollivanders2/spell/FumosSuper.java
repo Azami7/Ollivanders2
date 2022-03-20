@@ -9,12 +9,19 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Causes blindness in a radius
- *
- * @author Azami7
+ * <p>
+ * https://harrypotter.fandom.com/wiki/Smokescreen_Spell
  */
 public abstract class FumosSuper extends AddPotionEffectInRadius
 {
+    /**
+     * The minimum radius to affect
+     */
     int minRadius = 5;
+
+    /**
+     * The maximum radius that can be affected
+     */
     int maxRadius = 20;
 
     /**
@@ -39,9 +46,9 @@ public abstract class FumosSuper extends AddPotionEffectInRadius
         super(plugin, player, rightWand);
 
         // material black list
-        materialBlackList.add(Material.WATER);
-        materialBlackList.add(Material.LAVA);
-        materialBlackList.add(Material.FIRE);
+        materialBlockedList.add(Material.WATER);
+        materialBlockedList.add(Material.LAVA);
+        materialBlockedList.add(Material.FIRE);
 
         // pass-through materials
         projectilePassThrough.remove(Material.WATER);

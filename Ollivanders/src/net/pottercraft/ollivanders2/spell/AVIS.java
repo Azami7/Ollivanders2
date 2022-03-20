@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -14,13 +15,20 @@ import java.util.ArrayList;
 
 /**
  * Conjures a flock of birds from the tip of the wand.
- *
- * @author Azami7
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Bird-Conjuring_Charm
  */
 public final class AVIS extends O2Spell
 {
-    private int birdCount = 0;
-    private int maxBirds = 2;
+    /**
+     * The number of birds remaining to be spawned
+     */
+    private int birdsRemaining = 1;
+
+    /**
+     * The max number of birds this spell can spawn
+     */
+    private static final int maxBirds = 10;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -59,7 +67,7 @@ public final class AVIS extends O2Spell
 
         // world guard flags
         if (Ollivanders2.worldGuardEnabled)
-           worldGuardFlags.add(Flags.MOB_SPAWNING);
+            worldGuardFlags.add(Flags.MOB_SPAWNING);
 
         initSpell();
     }
@@ -67,10 +75,12 @@ public final class AVIS extends O2Spell
     @Override
     void doInitSpell()
     {
-        if (usesModifier > 100)
-            maxBirds += 10;
-        else
-            maxBirds += (int) usesModifier / 10;
+        birdsRemaining = (int) usesModifier / 4;
+
+        if (birdsRemaining > maxBirds)
+            birdsRemaining = maxBirds;
+        else if (birdsRemaining < 1)
+            birdsRemaining = 1;
     }
 
     /**
@@ -85,7 +95,7 @@ public final class AVIS extends O2Spell
             return;
         }
 
-        if (birdCount < maxBirds)
+        if (birdsRemaining > 0)
         {
             World world = location.getWorld();
             if (world == null)
@@ -96,17 +106,19 @@ public final class AVIS extends O2Spell
             }
 
             Parrot bird = (Parrot) (world.spawnEntity(location, EntityType.PARROT));
+            bird.setVariant(EntityCommon.getRandomParrotColor());
 
-            bird.setVariant(common.getRandomParrotColor());
-
-            birdCount = birdCount + 1;
+            birdsRemaining = birdsRemaining - 1;
         }
         else
-        {
             kill();
-        }
     }
 
+    /**
+     * Nothing to do since we overrode checkEffect() itself
+     */
     @Override
-    protected void doCheckEffect() {}
+    protected void doCheckEffect()
+    {
+    }
 }

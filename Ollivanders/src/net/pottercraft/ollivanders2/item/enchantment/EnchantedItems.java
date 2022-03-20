@@ -24,14 +24,16 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Enchantment effect on items
- *
- * @author Azami7
+ * Enchantment effect on items.
+ * <p>
+ * Enchantments are used to give items magical properties like broom flight, port keys, and cursed items.
+ * <p>
+ * Reference: https://minecraft.fandom.com/wiki/Tutorials/Command_NBT_tags
  */
 public class EnchantedItems implements Listener
 {
     /**
-     * Callback to the plugin
+     * Reference to the plugin
      */
     Ollivanders2 p;
 
@@ -44,8 +46,20 @@ public class EnchantedItems implements Listener
      * Namespace keys for NBT tags
      */
     static NamespacedKey enchantmentType;
+
+    /**
+     * Namespace keys for NBT tags
+     */
     static NamespacedKey enchantmentMagnitude;
+
+    /**
+     * Namespace keys for NBT tags
+     */
     static NamespacedKey enchantmentID;
+
+    /**
+     * Namespace keys for NBT tags
+     */
     static NamespacedKey enchantmentArgs;
 
     /**
@@ -63,7 +77,7 @@ public class EnchantedItems implements Listener
      *
      * @param plugin a callback to the plugin
      */
-    public EnchantedItems (@NotNull Ollivanders2 plugin)
+    public EnchantedItems(@NotNull Ollivanders2 plugin)
     {
         p = plugin;
         common = new Ollivanders2Common(p);
@@ -74,6 +88,9 @@ public class EnchantedItems implements Listener
         enchantmentArgs = new NamespacedKey(p, "o2enchantment_args");
     }
 
+    /**
+     * Initialization steps to run when the plugin is enabled
+     */
     public void onEnable()
     {
         //
@@ -81,20 +98,18 @@ public class EnchantedItems implements Listener
         //
         enableBrooms = p.getConfig().getBoolean("enableBrooms");
         if (enableBrooms)
-        {
             p.getLogger().info("Enabling brooms.");
-        }
     }
 
     /**
      * Add enchanted item
      *
-     * @param item the enchanted item
-     * @param eType the type of enchantment
+     * @param item      the enchanted item
+     * @param eType     the type of enchantment
      * @param magnitude the magnitude of enchantment
-     * @param args optional arguments for this enchantment
+     * @param args      optional arguments for this enchantment
      */
-    public void addEnchantedItem (@NotNull Item item, @NotNull ItemEnchantmentType eType, int magnitude, @NotNull String args)
+    public void addEnchantedItem(@NotNull Item item, @NotNull ItemEnchantmentType eType, int magnitude, @NotNull String args)
     {
         ItemMeta itemMeta = item.getItemStack().getItemMeta();
         if (itemMeta == null)
@@ -109,12 +124,12 @@ public class EnchantedItems implements Listener
      * Add enchanted item
      *
      * @param itemStack the enchanted item
-     * @param eType the type of enchantment
+     * @param eType     the type of enchantment
      * @param magnitude the magnitude of enchantment
-     * @param eid the uniqueID for this enchantment
-     * @param args optional arguments for this enchantment
+     * @param eid       the uniqueID for this enchantment
+     * @param args      optional arguments for this enchantment
      */
-    public void addEnchantedItem (@NotNull ItemStack itemStack, @NotNull ItemEnchantmentType eType, int magnitude, @NotNull String eid, @NotNull String args)
+    public void addEnchantedItem(@NotNull ItemStack itemStack, @NotNull ItemEnchantmentType eType, int magnitude, @NotNull String eid, @NotNull String args)
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null)
@@ -158,7 +173,7 @@ public class EnchantedItems implements Listener
      * @param item the item to check
      * @return true if the item stack has the NBT tag, false otherwise
      */
-    public boolean isEnchanted (@NotNull Item item)
+    public boolean isEnchanted(@NotNull Item item)
     {
         return isEnchanted(item.getItemStack());
     }
@@ -169,7 +184,7 @@ public class EnchantedItems implements Listener
      * @param itemStack the item to check
      * @return true if the item stack has the NBT tag, false otherwise
      */
-    public boolean isEnchanted (@NotNull ItemStack itemStack)
+    public boolean isEnchanted(@NotNull ItemStack itemStack)
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null)
@@ -193,7 +208,7 @@ public class EnchantedItems implements Listener
             return null;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if(container.has(enchantmentType, PersistentDataType.STRING))
+        if (container.has(enchantmentType, PersistentDataType.STRING))
         {
             return container.get(enchantmentType, PersistentDataType.STRING);
         }
@@ -208,7 +223,7 @@ public class EnchantedItems implements Listener
      * @return the enchantment type if present, null otherwise
      */
     @Nullable
-    public ItemEnchantmentType getEnchantmentType (@NotNull ItemStack itemStack)
+    public ItemEnchantmentType getEnchantmentType(@NotNull ItemStack itemStack)
     {
         String enchantmentTypeStr = getEnchantmentTypeKey(itemStack);
         if (enchantmentTypeStr == null)
@@ -241,10 +256,8 @@ public class EnchantedItems implements Listener
             return null;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if(container.has(enchantmentID, PersistentDataType.STRING))
-        {
+        if (container.has(enchantmentID, PersistentDataType.STRING))
             return container.get(enchantmentID, PersistentDataType.STRING);
-        }
         else
             return null;
     }
@@ -262,10 +275,8 @@ public class EnchantedItems implements Listener
             return -1;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if(container.has(enchantmentMagnitude, PersistentDataType.INTEGER))
-        {
+        if (container.has(enchantmentMagnitude, PersistentDataType.INTEGER))
             return container.get(enchantmentMagnitude, PersistentDataType.INTEGER);
-        }
         else
             return -1;
     }
@@ -277,14 +288,14 @@ public class EnchantedItems implements Listener
      * @return the args if present, null otherwise
      */
     @Nullable
-    public String getEnchantmentArgs (@NotNull ItemStack itemStack)
+    public String getEnchantmentArgs(@NotNull ItemStack itemStack)
     {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null)
             return null;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if(container.has(enchantmentArgs, PersistentDataType.STRING))
+        if (container.has(enchantmentArgs, PersistentDataType.STRING))
         {
             return container.get(enchantmentArgs, PersistentDataType.STRING);
         }
@@ -299,7 +310,7 @@ public class EnchantedItems implements Listener
      * @return the Enchantment if enchantment NBT tags are present, null otherwise
      */
     @Nullable
-    public Enchantment getEnchantment (@NotNull ItemStack itemStack)
+    public Enchantment getEnchantment(@NotNull ItemStack itemStack)
     {
         if (!isEnchanted(itemStack))
             return null;
@@ -311,9 +322,7 @@ public class EnchantedItems implements Listener
 
         // have we already loaded this one?
         if (enchantedItems.containsKey(eid))
-        {
             return enchantedItems.get(eid);
-        }
 
         Integer magnitude = getEnchantmentMagnitude(itemStack);
         String eType = getEnchantmentTypeKey(itemStack);
@@ -331,13 +340,13 @@ public class EnchantedItems implements Listener
     /**
      * Create the enchantment object for an enchanted item
      *
-     * @param eType the type of enchantment
+     * @param eType     the type of enchantment
      * @param magnitude the magnitude of the enchantment
-     * @param args optional arguments for the enchantment
+     * @param args      optional arguments for the enchantment
      * @return the enchantment if type and magnitude were valid, null otherwise
      */
     @Nullable
-    public Enchantment createEnchantment (@NotNull String eType, @NotNull Integer magnitude, @Nullable String args)
+    public Enchantment createEnchantment(@NotNull String eType, @NotNull Integer magnitude, @Nullable String args)
     {
         if (magnitude < 1)
             return null;
@@ -359,7 +368,7 @@ public class EnchantedItems implements Listener
 
         try
         {
-            enchantment = (Enchantment)enchantmentClass.getConstructor(Ollivanders2.class, int.class, String.class, String.class).newInstance(p, magnitude, args, enchantmentType.getLore());
+            enchantment = (Enchantment) enchantmentClass.getConstructor(Ollivanders2.class, int.class, String.class, String.class).newInstance(p, magnitude, args, enchantmentType.getLore());
         }
         catch (Exception e)
         {
@@ -374,7 +383,7 @@ public class EnchantedItems implements Listener
      *
      * @param item the item to remove the enchantment from
      */
-    public void removeEnchantment (@NotNull Item item)
+    public void removeEnchantment(@NotNull Item item)
     {
         if (!isEnchanted(item))
             return;
@@ -401,7 +410,7 @@ public class EnchantedItems implements Listener
      * @param event the item despawn event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onItemDespawn (@NotNull ItemDespawnEvent event)
+    public void onItemDespawn(@NotNull ItemDespawnEvent event)
     {
         Item item = event.getEntity();
 
@@ -420,10 +429,10 @@ public class EnchantedItems implements Listener
     /**
      * Handle when an enchanted item is picked up.
      *
-     * @param event the item pick up event
+     * @param event the item pickup event
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onItemPickup (@NotNull EntityPickupItemEvent event)
+    public void onItemPickup(@NotNull EntityPickupItemEvent event)
     {
         Item item = event.getItem();
         ItemStack itemStack = item.getItemStack();
@@ -444,7 +453,7 @@ public class EnchantedItems implements Listener
      * @param event the item drop event
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onItemDrop (@NotNull PlayerDropItemEvent event)
+    public void onItemDrop(@NotNull PlayerDropItemEvent event)
     {
         Item item = event.getItemDrop();
         ItemStack itemStack = item.getItemStack();
@@ -465,7 +474,7 @@ public class EnchantedItems implements Listener
      * @param event the player item held event
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onItemHeld (@NotNull PlayerItemHeldEvent event)
+    public void onItemHeld(@NotNull PlayerItemHeldEvent event)
     {
         Player player = event.getPlayer();
 
@@ -487,56 +496,4 @@ public class EnchantedItems implements Listener
 
         enchantment.doItemHeld(event);
     }
-
-    /**
-     * Handle when an enchanted item broken.
-     *
-     * @param event
-     */
-    /*
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void itemBreak (@NotNull PlayerItemBreakEvent event)
-    {
-    }
-
-     */
-
-    /**
-     * Handle when an enchanted item damaged.
-     *
-     * @param event
-     */
-    /*
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void itemDamage (@NotNull PlayerItemDamageEvent event)
-    {
-    }
-
-     */
-
-    /**
-     * Handle when an enchanted item broken.
-     *
-     * @param event
-     */
-    /*
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void itemMend (@NotNull PlayerItemMendEvent event)
-    {
-    }
-
-     */
-
-    /**
-     * Handle when an enchanted item is moved from one hand to another.
-     *
-     * @param event
-     */
-    /*
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void itemSwapHands (@NotNull PlayerSwapHandItemsEvent event)
-    {
-    }
-
-     */
 }

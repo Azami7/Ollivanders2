@@ -5,75 +5,90 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 /**
  * Makes a spell projectile that creates a shield that hurts any entities within 0.5 meters of the spell wall.
- *
- * @author Azami7
- * @version Ollivanders2
+ * <p>
+ * https://harrypotter.fandom.com/wiki/Protego_Maxima
+ * <p>
+ * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
  */
 public final class PROTEGO_MAXIMA extends StationarySpell
 {
-   double damage;
+    private static int minDamage;
+    private static int maxDamage;
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public PROTEGO_MAXIMA(Ollivanders2 plugin)
-   {
-      super(plugin);
+    double damage;
 
-      spellType = O2SpellType.PROTEGO_MAXIMA;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public PROTEGO_MAXIMA(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      flavorText = new ArrayList<>()
-      {{
-         add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" -Filius Flitwick");
-         add("A Stronger Shield Charm");
-      }};
+        spellType = O2SpellType.PROTEGO_MAXIMA;
+        branch = O2MagicBranch.CHARMS;
 
-      text = "Protego maxima is a stationary spell which will hurt any entities close to it's boundary.";
-   }
+        flavorText = new ArrayList<>()
+        {{
+            add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" -Filius Flitwick");
+            add("A Stronger Shield Charm");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public PROTEGO_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        text = "Protego maxima is a stationary spell which will hurt any entities close to it's boundary.";
+    }
 
-      spellType = O2SpellType.PROTEGO_MAXIMA;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public PROTEGO_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      baseDurationInSeconds = 300;
-      durationModifierInSeconds = 10;
-      baseRadius = 5;
-      radiusModifier = 1;
-      flairSize = 10;
-      centerOnCaster = true;
+        spellType = O2SpellType.PROTEGO_MAXIMA;
+        branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-   }
+        durationModifierInSeconds = 10;
+        radiusModifier = 1;
+        flairSize = 10;
+        centerOnCaster = true;
+        minRadius = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.minRadiusConfig;
+        maxRadius = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.maxRadiusConfig;
+        minDuration = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.minDurationConfig;
+        maxDuration = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.maxDurationConfig;
+        minDamage = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.minDamageConfig;
+        maxDamage = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.maxDamageConfig;
 
-   @Override
-   void doInitSpell()
-   {
-      damage = (usesModifier / 10) + 1;
-   }
+        initSpell();
+    }
 
-   @Override
-   protected O2StationarySpell createStationarySpell()
-   {
-      return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA(p, player.getUniqueId(), location, O2StationarySpellType.PROTEGO_MAXIMA, radius, duration, damage);
-   }
+    /**
+     * Set the damage this shield does based on caster's experience.
+     */
+    @Override
+    void doInitSpell()
+    {
+        damage = (usesModifier / 4);
+
+        if (damage < minDamage)
+            damage = minDamage;
+        else if (damage > maxDamage)
+            damage = maxDamage;
+    }
+
+    @Override
+    protected O2StationarySpell createStationarySpell()
+    {
+        return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA(p, player.getUniqueId(), location, radius, duration, damage);
+    }
 }

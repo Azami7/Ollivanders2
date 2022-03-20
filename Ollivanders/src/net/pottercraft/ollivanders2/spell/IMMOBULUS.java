@@ -11,73 +11,61 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Immobilizes a player for an amount of time depending on the player's spell level.
- *
- * @author lownes
- * @author Azami7
- * @version Ollivanders2
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Freezing_Charm
  */
 public final class IMMOBULUS extends AddPotionEffect
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public IMMOBULUS(Ollivanders2 plugin)
-   {
-      super(plugin);
+    private static final int minDurationInSecondsConfig = 15;
+    private static final int maxDurationInSecondsConfig = 180;
+    private static final int minAmplifierConfig = 0;
+    private static final int maxAmplifierConfig = 2;
 
-      spellType = O2SpellType.IMMOBULUS;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public IMMOBULUS(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      flavorText = new ArrayList<>()
-      {{
-         add("The Freezing Charm");
-         add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");
-         add("The Freezing Charm is a spell which immobilises living targets.");
-      }};
+        spellType = O2SpellType.IMMOBULUS;
+        branch = O2MagicBranch.CHARMS;
 
-      text = "Slows entity movement for a time period.";
-   }
+        flavorText = new ArrayList<>()
+        {{
+            add("The Freezing Charm");
+            add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");
+            add("The Freezing Charm is a spell which immobilises living targets.");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public IMMOBULUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        text = "Slows entity movement for a time period.";
+    }
 
-      spellType = O2SpellType.IMMOBULUS;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public IMMOBULUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.IMMOBULUS;
+        branch = O2MagicBranch.CHARMS;
 
-      effectTypes.add(PotionEffectType.SLOW);
-      effectTypes.add(PotionEffectType.SLOW_FALLING);
+        minDurationInSeconds = minDurationInSecondsConfig;
+        maxDurationInSeconds = maxDurationInSecondsConfig;
+        durationModifier = 0.5; // 50%
+        minAmplifier = minAmplifierConfig;
+        maxAmplifier = maxAmplifierConfig;
+        amplifierModifier = 0.02; // 1/50th usesModifier
 
-      initSpell();
-   }
+        effectTypes.add(PotionEffectType.SLOW);
+        effectTypes.add(PotionEffectType.SLOW_FALLING);
 
-   @Override
-   void doInitSpell()
-   {
-      // Amplifier
-      maxAmplifier = 2;
-
-      amplifier = (int)(usesModifier / 50);
-      if (amplifier > maxAmplifier)
-         amplifier = maxAmplifier;
-
-      // Duration
-      minDurationInSeconds = 15;
-      maxDurationInSeconds = 180;
-
-      durationInSeconds = (int)(usesModifier / 2);
-      if (durationInSeconds < minDurationInSeconds)
-         durationInSeconds = minDurationInSeconds;
-      else if (durationInSeconds > maxDurationInSeconds)
-         durationInSeconds = maxDurationInSeconds;
-   }
+        initSpell();
+    }
 }

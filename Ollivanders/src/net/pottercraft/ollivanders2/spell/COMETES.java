@@ -11,53 +11,53 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Created by Azami7 on 6/29/17.
- * <p>
- * Shoots mutliple orange burst fireworks in to the air.
- *
- * @author Azami7
- * @see Pyrotechnia
+ * Shoots multiple orange burst fireworks in to the air.
  */
 public final class COMETES extends Pyrotechnia
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public COMETES(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public COMETES(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      spellType = O2SpellType.COMETES;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.COMETES;
+        branch = O2MagicBranch.CHARMS;
 
-      text = "Creates one or more orange burst fireworks.";
-   }
+        text = "Creates one or more orange burst fireworks.";
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public COMETES(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
-      spellType = O2SpellType.COMETES;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public COMETES(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.COMETES;
+        branch = O2MagicBranch.CHARMS;
 
-      fireworkColors = new ArrayList<>();
-      fireworkColors.add(Color.ORANGE);
-      fireworkType = Type.BURST;
+        fireworkColors = new ArrayList<>();
+        fireworkColors.add(Color.ORANGE);
+        fireworkType = Type.BURST;
 
-      initSpell();
-   }
+        maxFireworks = 10;
 
-   @Override
-   void doInitSpell()
-   {
-      setMaxFireworks(10);
-   }
+        initSpell();
+    }
+
+    /**
+     * Set the number of fireworks that can be cast based on the user's experience.
+     */
+    @Override
+    void doInitSpell()
+    {
+        setNumberOfFireworks();
+    }
 }

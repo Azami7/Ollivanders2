@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.book;
 import java.util.Map;
 import java.util.HashMap;
 
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.potion.O2Potion;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
@@ -16,199 +15,247 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The text and flavor text for all Ollivanders2 magic.  This can be used for writing books, creating lessons, or
- * other in-game magic learning.
- *
- * @since 2.2.4
- * @author Azami7
+ * The text and flavor text for all Ollivanders2 magic.
  */
 public final class BookTexts
 {
-   Ollivanders2Common common;
+    /**
+     * Common functions
+     */
+    Ollivanders2Common common;
 
-   private static class BookText
-   {
-      String name;
-      String text;
-      String flavorText;
+    /**
+     * The text for a "page" of a book. This may actually be longer than a real page in a MC book (and will be split
+     * accordingly to multiple pages.
+     */
+    private static class BookPage
+    {
+        /**
+         * The heading of the page - spell or potion name.
+         */
+        String heading;
 
-      BookText(@NotNull String n, @NotNull String t, @Nullable String f)
-      {
-         name = n;
-         text = t;
+        /**
+         * The primary text for this page.
+         */
+        String text;
 
-         flavorText = f;
-      }
+        /**
+         * The optional flavor text - this is usually a quote or some other tie-in to the game or the HP universe to make the book more fun to read.
+         */
+        String flavorText;
 
-      @NotNull
-      public String getName ()
-      {
-         return name;
-      }
+        /**
+         * Constructor
+         *
+         * @param heading    the title for this page
+         * @param text       the primary text for the page
+         * @param flavorText the optional flavor text for this page
+         */
+        BookPage(@NotNull String heading, @NotNull String text, @Nullable String flavorText)
+        {
+            this.heading = heading;
+            this.text = text;
 
-      @NotNull
-      public String getText ()
-      {
-         return text;
-      }
+            this.flavorText = flavorText;
+        }
 
-      @Nullable
-      public String getFlavorText ()
-      {
-         return flavorText;
-      }
-   }
+        /**
+         * Get the heading for this page
+         *
+         * @return the heading
+         */
+        @NotNull
+        public String getHeading()
+        {
+            return heading;
+        }
 
-   private final Map<String, BookText> O2MagicTextMap = new HashMap<>();
+        /**
+         * Get the primary text for this page
+         *
+         * @return the text
+         */
+        @NotNull
+        public String getText()
+        {
+            return text;
+        }
 
-   private final Ollivanders2 p;
+        /**
+         * Get the optional flavorText for this page
+         *
+         * @return the flavor text or null if none present
+         */
+        @Nullable
+        public String getFlavorText()
+        {
+            return flavorText;
+        }
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin the MC plugin
-    */
-   BookTexts(@NotNull Ollivanders2 plugin)
-   {
-      p = plugin;
-      common = new Ollivanders2Common(p);
-   }
+    /**
+     * A map of pages and the spell/potion each covers.
+     * <p>
+     * This is a master list of the text for every spell or potion loaded so that we do not have to generate this text
+     * every time a book is created, since many spells/potions exist in more than one book.
+     */
+    private final Map<String, BookPage> O2MagicTextMap = new HashMap<>();
 
-   /**
-    * Add all spells and potions when the plugin is enabled.
-    */
-   public void onEnable()
-   {
-      // add all spells' texts
-      addSpells();
-      // add all potions' texts
-      addPotions();
-   }
+    /**
+     * A reference to the plugin
+     */
+    private final Ollivanders2 p;
 
-   /**
-    * Add the learnable text for every registered spell projectile.
-    */
-   private void addSpells ()
-   {
-      for (O2SpellType spellType : O2Spells.getAllSpellTypes())
-      {
-         O2Spell spell;
-         Class<?> spellClass = spellType.getClassName();
+    /**
+     * Constructor.
+     *
+     * @param plugin the MC plugin
+     */
+    BookTexts(@NotNull Ollivanders2 plugin)
+    {
+        p = plugin;
+        common = new Ollivanders2Common(p);
+    }
 
-         try
-         {
-            spell = (O2Spell)spellClass.getConstructor(Ollivanders2.class).newInstance(p);
-         }
-         catch (Exception e)
-         {
-            common.printDebugMessage("Exception trying to add book text for " + spellType.toString(), e, null, true);
-            continue;
-         }
+    /**
+     * Add all spells and potions when the plugin is enabled.
+     * <p>
+     * This should be called *after* spells are loaded in to O2Spells and potions loaded in to O2Potions or the lists will
+     * be empty.
+     */
+    public void onEnable()
+    {
+        // add all spells' texts
+        addSpells();
+        // add all potions' texts
+        addPotions();
+    }
 
-         String text = null;
-         String flavorText = null;
+    /**
+     * Add the learnable text for every registered spell projectile.
+     */
+    private void addSpells()
+    {
+        for (O2SpellType spellType : O2Spells.getAllSpellTypes())
+        {
+            O2Spell spell;
+            Class<?> spellClass = spellType.getClassName();
 
-         try
-         {
-            text = spell.getText();
-            flavorText = spell.getFlavorText();
-         }
-         catch (Exception e)
-         {
-            common.printDebugMessage("Exception getting book text for " + spellType.toString(), e, null, true);
-         }
+            try
+            {
+                spell = (O2Spell) spellClass.getConstructor(Ollivanders2.class).newInstance(p);
+            }
+            catch (Exception e)
+            {
+                common.printDebugMessage("Exception trying to add book text for " + spellType.toString(), e, null, true);
+                continue;
+            }
 
-         if (text == null)
-         {
-            common.printDebugMessage("No book text for " + spellType.toString(), null, null, false);
-            continue;
-         }
+            String text = null;
+            String flavorText = null;
 
-         String name = spell.getName();
+            try
+            {
+                text = spell.getText();
+                flavorText = spell.getFlavorText();
+            }
+            catch (Exception e)
+            {
+                common.printDebugMessage("Exception getting book text for " + spellType.toString(), e, null, true);
+            }
 
-         BookText sText = new BookText(name, text, flavorText);
-         O2MagicTextMap.put(spellType.toString(), sText);
-      }
-   }
+            if (text == null)
+            {
+                common.printDebugMessage("No book text for " + spellType.toString(), null, null, false);
+                continue;
+            }
 
-   /**
-    * Add the learnable text for every potion.
-    */
-   private void addPotions ()
-   {
-      for (O2PotionType potionType : O2Potions.getAllPotionTypes())
-      {
-         Class<?> potionClass = potionType.getClassName();
-         O2Potion potion;
+            String name = spell.getName();
 
-         try
-         {
-            potion = (O2Potion) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
-         }
-         catch (Exception e)
-         {
-            common.printDebugMessage("Exception trying to add book text for " + potionType.toString(), e, null, true);
-            continue;
-         }
+            BookPage sText = new BookPage(name, text, flavorText);
+            O2MagicTextMap.put(spellType.toString(), sText);
+        }
+    }
 
-         String text = potion.getText();
-         String flavorText = potion.getFlavorText();
+    /**
+     * Add the learnable text for every potion.
+     */
+    private void addPotions()
+    {
+        for (O2PotionType potionType : O2Potions.getAllPotionTypes())
+        {
+            Class<?> potionClass = potionType.getClassName();
+            O2Potion potion;
 
-         String name = Ollivanders2API.common.firstLetterCapitalize(Ollivanders2API.common.enumRecode(potionType.toString().toLowerCase()));
+            try
+            {
+                potion = (O2Potion) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
+            }
+            catch (Exception e)
+            {
+                common.printDebugMessage("Exception trying to add book text for " + potionType.toString(), e, null, true);
+                continue;
+            }
 
-         BookText sText = new BookText(name, text, flavorText);
-         O2MagicTextMap.put(potionType.toString(), sText);
-      }
-   }
+            String text = potion.getText();
+            String flavorText = potion.getFlavorText();
 
-   /**
-    * Get the flavor text for a specific magic.
-    *
-    * @param magic the name of the magic topic
-    * @return the flavor text for that spell or null if it has none.
-    */
-   @Nullable
-   String getFlavorText(@NotNull String magic)
-   {
-      String flavorText = null;
+            String name = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(potionType.toString().toLowerCase()));
 
-      if (O2MagicTextMap.containsKey(magic))
-         flavorText = O2MagicTextMap.get(magic).getFlavorText();
+            BookPage sText = new BookPage(name, text, flavorText);
+            O2MagicTextMap.put(potionType.toString(), sText);
+        }
+    }
 
-      return flavorText;
-   }
+    /**
+     * Get the flavor text for a specific magic.
+     *
+     * @param magic the name of the magic topic
+     * @return the flavor text for that spell or null if it has none.
+     */
+    @Nullable
+    String getFlavorText(@NotNull String magic)
+    {
+        String flavorText = null;
 
-   /**
-    * Get the description text for a specific magic.
-    *
-    * @param magic the name of the magic topic
-    * @return the description text for this spell
-    */
-   @Nullable
-   String getText(@NotNull String magic)
-   {
-      String text = null;
+        if (O2MagicTextMap.containsKey(magic))
+            flavorText = O2MagicTextMap.get(magic).getFlavorText();
 
-      if (O2MagicTextMap.containsKey(magic))
-         text = O2MagicTextMap.get(magic).getText();
+        return flavorText;
+    }
 
-      return text;
-   }
+    /**
+     * Get the description text for a specific magic.
+     *
+     * @param magic the name of the magic topic
+     * @return the description text for this spell
+     */
+    @Nullable
+    String getText(@NotNull String magic)
+    {
+        String text = null;
 
-   /**
-    * Get the printable name for a specific magic.
-    *
-    * @param magic the name of the magic topic
-    * @return the printable name for this magic
-    */
-   @Nullable
-   public String getName(@NotNull String magic)
-   {
-      String name = null;
+        if (O2MagicTextMap.containsKey(magic))
+            text = O2MagicTextMap.get(magic).getText();
 
-      if (O2MagicTextMap.containsKey(magic))
-         name = O2MagicTextMap.get(magic).getName();
+        return text;
+    }
 
-      return name;
-   }
+    /**
+     * Get the printable name for a specific magic.
+     *
+     * @param magic the name of the magic topic
+     * @return the printable name for this magic
+     */
+    @Nullable
+    public String getName(@NotNull String magic)
+    {
+        String name = null;
+
+        if (O2MagicTextMap.containsKey(magic))
+            name = O2MagicTextMap.get(magic).getHeading();
+
+        return name;
+    }
 }

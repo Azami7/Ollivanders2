@@ -10,69 +10,78 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Created by Phevek on 10/17/18.
- * <p>
  * Pyrosvestiras is a fire extinquishing spell if you decide that you want to put out that thing you lit on fire.
- *
- * @author Phevek
  */
 public class PYROSVESTIRAS extends BlockTransfiguration
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public PYROSVESTIRAS(Ollivanders2 plugin)
-   {
-      super(plugin);
+    private static final int minRadiusConfig = 1;
+    private static final int maxRadiusConfig = 15;
 
-      branch = O2MagicBranch.CHARMS;
-      spellType = O2SpellType.PYROSVESTIRAS;
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public PYROSVESTIRAS(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      flavorText = new ArrayList<>() {{
-         add("A charm that extinguishes fires. Most commonly employed by Dragonologists.");
-         add("The Extinguishing Charm");
-      }};
+        branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.PYROSVESTIRAS;
 
-      text = "A spell that turns fire into air.";
-   }
+        flavorText = new ArrayList<>()
+        {{
+            add("A charm that extinguishes fires. Most commonly employed by Dragonologists.");
+            add("The Extinguishing Charm");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public PYROSVESTIRAS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        text = "A spell that turns fire into air and campfires in to logs.";
+    }
 
-      spellType = O2SpellType.PYROSVESTIRAS;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public PYROSVESTIRAS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.PYROSVESTIRAS;
+        branch = O2MagicBranch.CHARMS;
 
-      permanent = true;
-      transfigurationMap.put(Material.FIRE, Material.AIR);
+        permanent = true;
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        radiusModifier = 0.25; // 25% of usesModifier
 
-      // whitelist only fire blocks
-      materialWhitelist.add(Material.FIRE);
+        // allow list only fire blocks
+        materialAllowList.add(Material.FIRE);
+        materialAllowList.add(Material.CAMPFIRE);
 
-      // world guard flags
-      if (Ollivanders2.worldGuardEnabled)
-         worldGuardFlags.add(Flags.BUILD);
+        // what type blocks transfigure in to for this spell
+        transfigurationMap.put(Material.FIRE, Material.AIR);
+        transfigurationMap.put(Material.CAMPFIRE, Material.OAK_LOG);
 
-      initSpell();
-   }
+        // world guard flags
+        if (Ollivanders2.worldGuardEnabled)
+            worldGuardFlags.add(Flags.BUILD);
 
-   @Override
-   void doInitSpell()
-   {
-      if (usesModifier > 50)
-         radius = 10;
-      else if (usesModifier < 10)
-         radius = 1;
-      else
-         radius = (int) (usesModifier / 10);
-   }
+        initSpell();
+    }
+
+    /**
+     * Set the radius for this spell based on the caster's experience.
+     */
+    @Override
+    void doInitSpell()
+    {
+        if (usesModifier > 50)
+            radius = 10;
+        else if (usesModifier < 10)
+            radius = 1;
+        else
+            radius = (int) (usesModifier / 10);
+    }
 }

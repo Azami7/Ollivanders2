@@ -12,19 +12,27 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Port key enchantment
+ *
+ * @link https://harrypotter.fandom.com/wiki/Portkey
+ */
 public class PORTUS extends Enchantment
 {
+    /**
+     * The teleport destination for this portkey
+     */
     Location location;
 
     /**
      * Constructor
      *
-     * @param plugin a callback to the plugin
-     * @param mag the magnitude of this enchantment
-     * @param args optional arguments for this enchantment
+     * @param plugin   a callback to the plugin
+     * @param mag      the magnitude of this enchantment
+     * @param args     optional arguments for this enchantment
      * @param itemLore the optional lore for this enchantment
      */
-    public PORTUS (@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
+    public PORTUS(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
     {
         super(plugin, mag, args, itemLore);
         enchantmentType = ItemEnchantmentType.GEMINIO;
@@ -47,7 +55,7 @@ public class PORTUS extends Enchantment
         double y;
         double z;
 
-        if (split == null || split.length != 4)
+        if (split.length != 4)
         {
             common.printDebugMessage("Invalid coordinates on Portkey", null, null, false);
             return;
@@ -78,7 +86,7 @@ public class PORTUS extends Enchantment
      * @param event the item despawn event
      */
     @Override
-    public void doItemDespawn (@NotNull ItemDespawnEvent event)
+    public void doItemDespawn(@NotNull ItemDespawnEvent event)
     {
         event.setCancelled(true);
     }
@@ -89,7 +97,7 @@ public class PORTUS extends Enchantment
      * @param event the item pickup event
      */
     @Override
-    public void doItemPickup (@NotNull EntityPickupItemEvent event)
+    public void doItemPickup(@NotNull EntityPickupItemEvent event)
     {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player))
@@ -102,7 +110,10 @@ public class PORTUS extends Enchantment
         if (location == null)
             location = ((Player) entity).getBedSpawnLocation();
 
-        p.addTeleportEvent((Player)entity, location, true);
+        if (location != null) // location could still be null
+            p.addTeleportEvent((Player) entity, location, true);
+        else
+            common.printDebugMessage("Null location in PORTUS.doItemPickup()", null, null, false);
     }
 
     /**
@@ -111,12 +122,16 @@ public class PORTUS extends Enchantment
      * @param event the item drop event
      */
     @Override
-    public void doItemDrop (@NotNull PlayerDropItemEvent event) {}
+    public void doItemDrop(@NotNull PlayerDropItemEvent event)
+    {
+    }
 
     /**
      * Handle item held events
      *
      * @param event the item drop event
      */
-    public void doItemHeld (@NotNull PlayerItemHeldEvent event) {}
+    public void doItemHeld(@NotNull PlayerItemHeldEvent event)
+    {
+    }
 }

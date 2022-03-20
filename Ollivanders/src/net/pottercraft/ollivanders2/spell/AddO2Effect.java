@@ -6,7 +6,6 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,8 +15,6 @@ import java.util.UUID;
 
 /**
  * Spell that adds an O2Effect to a target.
- *
- * @author Azami7
  */
 public class AddO2Effect extends O2Spell
 {
@@ -118,14 +115,12 @@ public class AddO2Effect extends O2Spell
             return;
         }
 
-        for (LivingEntity livingEntity : getLivingEntities(1.5))
+        for (Player target : getNearbyPlayers(defaultRadius))
         {
-            if ((livingEntity.getUniqueId() == player.getUniqueId()) || !(livingEntity instanceof Player))
-            {
+            if ((target.getUniqueId() == player.getUniqueId()))
                 continue;
-            }
 
-            addEffectsToTarget((Player) livingEntity);
+            addEffectsToTarget(target);
 
             // if the spell can only target a limited number, stop when the limit is reached
             if (numberOfTargets <= 0)
@@ -136,9 +131,7 @@ public class AddO2Effect extends O2Spell
         }
 
         if (hasHitTarget())
-        {
             kill();
-        }
     }
 
     /**

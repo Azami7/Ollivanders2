@@ -1,68 +1,75 @@
 package net.pottercraft.ollivanders2.spell;
 
-import me.libraryaddict.disguise.disguisetypes.DisguiseType;
-import me.libraryaddict.disguise.disguisetypes.MobDisguise;
-import me.libraryaddict.disguise.disguisetypes.watchers.RabbitWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-/**
- * Transfigures entity into a rabbit.
- *
- * @author Azami7
- * @link https://github.com/Azami7/Ollivanders2/issues/51
- * @since 2.2.3
- */
-public final class LAPIFORS extends FriendlyMobDisguise
+public class LAPIFORS extends ItemToEntityTransfiguration
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public LAPIFORS(Ollivanders2 plugin)
-   {
-      super(plugin);
+    private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
+    private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
-      spellType = O2SpellType.LAPIFORS;
-      branch = O2MagicBranch.TRANSFIGURATION;
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public LAPIFORS(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      flavorText = new ArrayList<>()
-      {{
-         add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
-      }};
+        spellType = O2SpellType.LAPIFORS;
+        branch = O2MagicBranch.TRANSFIGURATION;
 
-      text = "The transfiguration spell Lapifors will transfigure an entity into a rabbit.";
-   }
+        flavorText = new ArrayList<>()
+        {{
+            add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public LAPIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
-      spellType = O2SpellType.LAPIFORS;
-      branch = O2MagicBranch.TRANSFIGURATION;
+        text = "The transfiguration spell Lapifors will transfigure an entity into a rabbit.";
+    }
 
-      targetType = EntityType.RABBIT;
-      disguiseType = DisguiseType.getType(targetType);
-      disguise = new MobDisguise(disguiseType);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public LAPIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      RabbitWatcher watcher = (RabbitWatcher)disguise.getWatcher();
-      watcher.setAdult();
+        branch = O2MagicBranch.TRANSFIGURATION;
+        spellType = O2SpellType.LAPIFORS;
 
-      watcher.setType(Ollivanders2API.common.getRandomRabbitType());
+        permanent = false;
+        maxDuration = maxDurationConfig;
+        minDuration = minDurationConfig;
+        targetType = EntityType.RABBIT;
 
-      initSpell();
-   }
+        consumeOriginal = false;
+
+        initSpell();
+    }
+
+    /**
+     * Determine success rate and whether this spell is permanent based on player skill level
+     */
+    @Override
+    void doInitSpell()
+    {
+        successRate = (int) (usesModifier / 2);
+
+        if (usesModifier > 100)
+        {
+            consumeOriginal = true;
+            permanent = true;
+        }
+    }
 }

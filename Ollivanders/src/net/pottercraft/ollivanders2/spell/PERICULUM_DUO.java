@@ -15,47 +15,51 @@ import java.util.ArrayList;
  */
 public final class PERICULUM_DUO extends Pyrotechnia
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public PERICULUM_DUO(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public PERICULUM_DUO(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      spellType = O2SpellType.PERICULUM_DUO;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.PERICULUM_DUO;
+        branch = O2MagicBranch.CHARMS;
 
-      text = "Conjures large red ball fireworks in the air.";
-   }
+        text = "Conjures large red ball fireworks in the air.";
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public PERICULUM_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public PERICULUM_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      spellType = O2SpellType.PERICULUM_DUO;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.PERICULUM_DUO;
+        branch = O2MagicBranch.CHARMS;
 
-      fireworkColors = new ArrayList<>();
-      fireworkColors.add(Color.RED);
-      fireworkType = Type.BALL_LARGE;
+        fireworkColors = new ArrayList<>();
+        fireworkColors.add(Color.RED);
+        fireworkType = Type.BALL_LARGE;
 
-      hasTrails = true;
+        hasTrails = true;
+        maxFireworks = 10;
 
-      initSpell();
-   }
+        initSpell();
+    }
 
-   @Override
-   void doInitSpell()
-   {
-      setMaxFireworks(10);
-   }
+    /**
+     * Set the number of fireworks that can be cast based on the user's experience.
+     */
+    @Override
+    void doInitSpell()
+    {
+        setNumberOfFireworks();
+    }
 }

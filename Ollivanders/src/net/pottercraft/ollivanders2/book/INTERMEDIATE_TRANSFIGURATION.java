@@ -6,32 +6,31 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Intermediate Transfiguration - an O.W.L level transfiguration book
- *
- * Topics:
- * Animal Transfiguration
- * Self-Transformation
- * Vanishing
- *
- * @since 2.2.4
- * @author Azami7
+ * <p>
+ * Topics:<br>
+ * Animal Transfiguration<br>
+ * Self-Transformation<br>
+ * Vanishing<br>
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration
  */
 public class INTERMEDIATE_TRANSFIGURATION extends O2Book
 {
-   public INTERMEDIATE_TRANSFIGURATION(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+    public INTERMEDIATE_TRANSFIGURATION(@NotNull Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      bookType = O2BookType.INTERMEDIATE_TRANSFIGURATION;
+        bookType = O2BookType.INTERMEDIATE_TRANSFIGURATION;
 
-      spells.add(O2SpellType.DRACONIFORS);
-      spells.add(O2SpellType.DUCKLIFORS);
-      spells.add(O2SpellType.AVIFORS);
-      spells.add(O2SpellType.EQUUSIFORS);
-      spells.add(O2SpellType.EVANESCO);
-      spells.add(O2SpellType.PIERTOTUM_LOCOMOTOR);
-      spells.add(O2SpellType.DELETRIUS);
-      spells.add(O2SpellType.HERBIFORS);
-      spells.add(O2SpellType.LAPIFORS);
-      //spell 11
-   }
+        spells.add(O2SpellType.DRACONIFORS);
+        spells.add(O2SpellType.DUCKLIFORS);
+        spells.add(O2SpellType.AVIFORS);
+        spells.add(O2SpellType.EQUUSIFORS);
+        spells.add(O2SpellType.EVANESCO);
+        spells.add(O2SpellType.PIERTOTUM_LOCOMOTOR);
+        spells.add(O2SpellType.DELETRIUS);
+        spells.add(O2SpellType.HERBIFORS);
+        spells.add(O2SpellType.LAPIFORS);
+        //spell 11
+    }
 }

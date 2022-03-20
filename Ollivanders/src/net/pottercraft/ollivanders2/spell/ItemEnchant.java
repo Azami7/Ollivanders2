@@ -16,170 +16,155 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Place an enchantment on a item.
- *
- * @author Azami7
- * @since 2.3
+ * Place an enchantment on an item.
  */
 public abstract class ItemEnchant extends O2Spell
 {
-   /**
-    * The type of enchantment
-    */
-   protected ItemEnchantmentType enchantmentType;
+    /**
+     * The type of enchantment
+     */
+    protected ItemEnchantmentType enchantmentType;
 
-   /**
-    * The list of item types that this can enchant, if limited. When empty, all item types can be enchanted
-    */
-   protected ArrayList<O2ItemType> itemTypeAllowlist = new ArrayList<>();
+    /**
+     * The list of item types that this can enchant, if limited. When empty, all item types can be enchanted
+     */
+    protected ArrayList<O2ItemType> itemTypeAllowlist = new ArrayList<>();
 
-   /**
-    * Minimum magnitude
-    */
-   int minMagnitude = 1;
+    /**
+     * Minimum magnitude
+     */
+    int minMagnitude = 1;
 
-   /**
-    * Maximum magnitude
-    */
-   int maxMagnitude = 100;
+    /**
+     * Maximum magnitude
+     */
+    int maxMagnitude = 100;
 
-   /**
-    * Strength multiplier for this enchantment
-    */
-   double strength = 1;
+    /**
+     * Strength multiplier for this enchantment
+     */
+    double strength = 1;
 
-   /**
-    * Magnitude of this enchantment - this is the final value used to determine the enchantment effect
-    */
-   int magnitude;
+    /**
+     * Magnitude of this enchantment - this is the final value used to determine the enchantment effect
+     */
+    int magnitude;
 
-   /**
-    * The optional arguments for the enchantment
-    */
-   String args = "";
+    /**
+     * The optional arguments for the enchantment
+     */
+    String args = "";
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public ItemEnchant(Ollivanders2 plugin)
-   {
-      super(plugin);
-   }
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public ItemEnchant(Ollivanders2 plugin)
+    {
+        super(plugin);
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public ItemEnchant(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public ItemEnchant(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-      // world guard flags
-      if (Ollivanders2.worldGuardEnabled)
-      {
-         worldGuardFlags.add(Flags.ITEM_PICKUP);
-         worldGuardFlags.add(Flags.ITEM_DROP);
-      }
+        // world guard flags
+        if (Ollivanders2.worldGuardEnabled)
+        {
+            worldGuardFlags.add(Flags.ITEM_PICKUP);
+            worldGuardFlags.add(Flags.ITEM_DROP);
+        }
 
-      // pass-through materials
-      projectilePassThrough.remove(Material.WATER);
-   }
+        // pass-through materials
+        projectilePassThrough.remove(Material.WATER);
+    }
 
-   /**
-    * Initialize spell data
-    */
-   @Override
-   void doInitSpell()
-   {
-      magnitude = (int) ((usesModifier / 4) * strength);
+    /**
+     * Set enchantment magnitude based on caster's skill
+     */
+    @Override
+    void doInitSpell()
+    {
+        magnitude = (int) ((usesModifier / 4) * strength);
 
-      if (magnitude < minMagnitude)
-      {
-         magnitude = minMagnitude;
-      }
-      else if (magnitude > maxMagnitude)
-      {
-         magnitude = maxMagnitude;
-      }
+        if (magnitude < minMagnitude)
+            magnitude = minMagnitude;
+        else if (magnitude > maxMagnitude)
+            magnitude = maxMagnitude;
 
-      common.printDebugMessage("Magnitude for enchantment = " + magnitude, null, null, false);
-   }
+        common.printDebugMessage("Magnitude for enchantment = " + magnitude, null, null, false);
+    }
 
-   /**
-    * Add the curse effect to an item stack in the projectile's location
-    */
-   @Override
-   protected void doCheckEffect()
-   {
-      if (hasHitTarget())
-      {
-         kill();
-         return;
-      }
+    /**
+     * Add the curse effect to an item stack in the projectile's location
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        if (hasHitTarget())
+        {
+            kill();
+            return;
+        }
 
-      List<Item> items = getItems(1.5);
-      for (Item item : items)
-      {
-         // if this is a wand, skip it - wands are already enchanted
-         if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()))
-         {
-            continue;
-         }
+        List<Item> items = getItems(1.5);
+        for (Item item : items)
+        {
+            // if this is a wand or an enchanted item, skip it, we cannot stack enchantments
+            if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)))
+                continue;
 
-         // if this enchantment has a whitelist, check it
-         if (itemTypeAllowlist.size() > 0)
-         {
-            O2ItemType itemType = O2Item.getItemType(item.getItemStack());
-            if (itemType == null || !(itemTypeAllowlist.contains(itemType)))
-               continue;
-         }
+            // if this enchantment has an allowed list, check it
+            if (itemTypeAllowlist.size() > 0)
+            {
+                O2ItemType itemType = O2Item.getItemType(item.getItemStack());
+                if (itemType == null || !(itemTypeAllowlist.contains(itemType)))
+                    continue;
+            }
 
-         // if this item is already enchanted, skip it
-         if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item))
-         {
-            continue;
-         }
+            // if this item is already enchanted, skip it
+            if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item))
+                continue;
 
-         Item enchantedItem = enchantItem(item);
-         Ollivanders2API.getItems().enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude, args);
+            Item enchantedItem = enchantItem(item);
+            Ollivanders2API.getItems().enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude, args);
 
-         stopProjectile();
-         kill();
+            stopProjectile();
+            kill();
 
-         break;
-      }
-   }
+            break;
+        }
+    }
 
-   /**
-    * Enchant the item.
-    *
-    * @param item the item to enchant
-    * @return the enchanted item
-    */
-   @NotNull
-   private Item enchantItem(@NotNull Item item)
-   {
-      // clone the item stack
-      ItemStack enchantedItemStack = item.getItemStack().clone();
+    /**
+     * Enchant the item.
+     *
+     * @param item the item to enchant
+     * @return the enchanted item
+     */
+    @NotNull
+    private Item enchantItem(@NotNull Item item)
+    {
+        // clone the item stack
+        ItemStack enchantedItemStack = item.getItemStack().clone();
 
-      enchantedItemStack.setAmount(1);
+        enchantedItemStack.setAmount(1);
 
-      // update original itemStack to remove 1 item, if it had more than one, or remove the original item if there is only 1
-      if (item.getItemStack().getAmount() > 1)
-      {
-         item.getItemStack().setAmount(item.getItemStack().getAmount() - 1);
-      }
-      else
-      {
-         item.remove();
-      }
+        // update original itemStack to remove 1 item, if it had more than one, or remove the original item if there is only 1
+        if (item.getItemStack().getAmount() > 1)
+            item.getItemStack().setAmount(item.getItemStack().getAmount() - 1);
+        else
+            item.remove();
 
-      // drop enchanted item in World
-      return item.getWorld().dropItem(item.getLocation(), enchantedItemStack);
-   }
+        // drop enchanted item in World
+        return item.getWorld().dropItem(item.getLocation(), enchantedItemStack);
+    }
 }

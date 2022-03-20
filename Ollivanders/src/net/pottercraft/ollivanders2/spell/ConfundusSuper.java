@@ -6,10 +6,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Confundus Charm super class which causes confusion in the target
- *
- * @author Azami7
- * @author lownes
+ * Confundus Charm super class which causes confusion in the target.
  */
 public abstract class ConfundusSuper extends AddPotionEffect
 {
@@ -35,9 +32,5 @@ public abstract class ConfundusSuper extends AddPotionEffect
         super(plugin, player, rightWand);
 
         effectTypes.add(PotionEffectType.CONFUSION);
-
-        maxAmplifier = 0;
-        minDurationInSeconds = 15;
-        maxDurationInSeconds = 120;
     }
 }

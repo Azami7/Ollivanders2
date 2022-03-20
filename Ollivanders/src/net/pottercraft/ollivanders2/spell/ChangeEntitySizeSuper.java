@@ -7,12 +7,29 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Change the size of growing entity
+ */
 public abstract class ChangeEntitySizeSuper extends O2Spell
 {
-    static final int maxTargets = 10;
+    /**
+     * Max number of entities that can be targeted
+     */
+    static int maxTargets = 10;
+
+    /**
+     * Max possible radius for the spell
+     */
+    static int maxRadius = 20;
+
+    /**
+     * The number of entities to target
+     */
     int targets;
 
-    static final int maxRadius = 20;
+    /**
+     * The radius to affect
+     */
     int radius;
 
     /**
@@ -24,7 +41,15 @@ public abstract class ChangeEntitySizeSuper extends O2Spell
      * How much can this change a slimes size
      */
     static final int maxSlimeSizeChange = 2;
+
+    /**
+     * How much can this change a slimes size
+     */
     static final int minSlimeSize = 1;
+
+    /**
+     * How much can this change a slimes size
+     */
     static final int maxSlimeSize = 3;
 
     /**
@@ -61,7 +86,7 @@ public abstract class ChangeEntitySizeSuper extends O2Spell
             return;
         }
 
-        for (LivingEntity livingEntity : getLivingEntities(radius))
+        for (LivingEntity livingEntity : getNearbyLivingEntities(radius))
         {
             if (targets < 1)
             {
@@ -85,9 +110,7 @@ public abstract class ChangeEntitySizeSuper extends O2Spell
                     ((Ageable) livingEntity).setBaby();
             }
             else if (livingEntity instanceof Slime)
-            {
                 changeSlimeSize((Slime) livingEntity);
-            }
             else
                 continue;
 
@@ -100,9 +123,9 @@ public abstract class ChangeEntitySizeSuper extends O2Spell
      *
      * @param slime the smile to reduce the size of
      */
-    private void changeSlimeSize (@NotNull Slime slime)
+    private void changeSlimeSize(@NotNull Slime slime)
     {
-        int delta = (int)(usesModifier / 25) + 1;
+        int delta = (int) (usesModifier / 25) + 1;
         if (delta > maxSlimeSizeChange)
             delta = maxSlimeSizeChange;
 
