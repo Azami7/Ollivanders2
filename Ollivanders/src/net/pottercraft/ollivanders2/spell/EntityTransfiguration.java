@@ -98,6 +98,9 @@ public abstract class EntityTransfiguration extends TransfigurationBase
         if (hasHitTarget() && !isTransfigured)
         {
             // we've hit a block and the projectile is stopped but we didn't find anything to transfigure
+            common.printDebugMessage("Failed to transfigure an entity before projectile stopped", null, null, false);
+            sendFailureMessage();
+
             kill();
             return;
         }
@@ -112,7 +115,10 @@ public abstract class EntityTransfiguration extends TransfigurationBase
                 continue;
 
             if (isTransfigured || !canTransfigure(entity))
+            {
+                common.printDebugMessage("Cannot target entity " + entity.getName(), null, null, false);
                 return;
+            }
 
             originalEntity = entity;
             transfiguredEntity = transfigureEntity(entity);

@@ -83,7 +83,7 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
     }};
 
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -105,6 +105,8 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
 
         if (Ollivanders2.worldGuardEnabled)
             worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
+
+        failureMessage = "Your transfiguration failed.";
     }
 
     /**
@@ -121,22 +123,21 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
         if (o2p == null)
         {
             common.printDebugMessage("Null o2player in FriendlyMobDisguise.doInitSpell()", null, null, true);
+            return;
         }
-        else
-        {
-            if (usesModifier > 50)
-            {
-                if (!Ollivanders2.useYears || o2p.getYear().getHighestLevelForYear().ordinal() >= MagicLevel.OWL.ordinal())
-                    entityAllowedList.addAll(mediumFriendlyMobs);
-            }
 
-            if (usesModifier > 100)
-            {
-                // if years are off or
-                // if years are on and this player's year's max level is >= NEWT level
-                if (!Ollivanders2.useYears || o2p.getYear().getHighestLevelForYear().ordinal() >= MagicLevel.NEWT.ordinal())
-                    entityAllowedList.addAll(largeFriendlyMobs);
-            }
+        if (usesModifier > 50 || Ollivanders2.maxSpellLevel)
+        {
+            if (!Ollivanders2.useYears || o2p.getYear().getHighestLevelForYear().ordinal() >= MagicLevel.OWL.ordinal())
+                entityAllowedList.addAll(mediumFriendlyMobs);
+        }
+
+        if (usesModifier > 100 || Ollivanders2.maxSpellLevel)
+        {
+            // if years are off or
+            // if years are on and this player's year's max level is >= NEWT level
+            if (!Ollivanders2.useYears || o2p.getYear().getHighestLevelForYear().ordinal() >= MagicLevel.NEWT.ordinal())
+                entityAllowedList.addAll(largeFriendlyMobs);
         }
     }
 }

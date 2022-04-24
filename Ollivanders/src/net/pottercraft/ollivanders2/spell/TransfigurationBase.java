@@ -117,7 +117,7 @@ public abstract class TransfigurationBase extends O2Spell
     @Override
     protected void doCheckEffect()
     {
-        // if a target has not transfigured, look for one to transfigure
+        // if a target has not transfigured, look for one to transfigure otherwise move the projectile on
         if (!isTransfigured())
         {
             common.printDebugMessage("Attempting to transfigure " + location.getBlock().getType(), null, null, false);
@@ -129,16 +129,17 @@ public abstract class TransfigurationBase extends O2Spell
                 stopProjectile();
 
                 if (permanent)
-                {
                     kill();
-                    return;
+                else
+                {
+                    spellDuration = (int) (usesModifier * Ollivanders2Common.ticksPerSecond * durationModifier);
+                    if (spellDuration > maxDuration)
+                        spellDuration = maxDuration;
+                    else if (spellDuration < minDuration)
+                        spellDuration = minDuration;
                 }
 
-                spellDuration = (int) (usesModifier * Ollivanders2Common.ticksPerSecond * durationModifier);
-                if (spellDuration > maxDuration)
-                    spellDuration = maxDuration;
-                else if (spellDuration < minDuration)
-                    spellDuration = minDuration;
+                sendSuccessMessage();
             }
         }
         else

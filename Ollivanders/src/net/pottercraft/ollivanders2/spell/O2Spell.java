@@ -818,5 +818,7 @@ public abstract class O2Spell
     {
         if (failureMessage != null && failureMessage.length() > 0)
             player.sendMessage(Ollivanders2.chatColor + failureMessage);
+        else
+            common.printDebugMessage("failure message unset or 0 length", null, null, false);
     }
 }
