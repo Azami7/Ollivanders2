@@ -51,6 +51,9 @@ public class PYROSVESTIRAS extends BlockTransfiguration
         spellType = O2SpellType.PYROSVESTIRAS;
         branch = O2MagicBranch.CHARMS;
 
+        successMessage = "A fire is doused by the water.";
+        failureMessage = "Nothing seems to happen.";
+
         permanent = true;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
@@ -59,6 +62,9 @@ public class PYROSVESTIRAS extends BlockTransfiguration
         // allow list only fire blocks
         materialAllowList.add(Material.FIRE);
         materialAllowList.add(Material.CAMPFIRE);
+
+        // do not pass through fire blocks
+        projectilePassThrough.remove(Material.FIRE);
 
         // what type blocks transfigure in to for this spell
         transfigurationMap.put(Material.FIRE, Material.AIR);

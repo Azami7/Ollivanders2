@@ -71,10 +71,10 @@ public final class AGUAMENTI extends BlockTransfiguration
         // pass-through materials
         projectilePassThrough.remove(Material.WATER);
 
-        // set materials that can be transfigured by this spell
-        materialAllowList.add(Material.AIR);
-        materialAllowList.add(Material.FIRE);
-        materialAllowList.add(Material.SOUL_FIRE);
+        // set materials that cannot be transfigured by this spell
+        materialBlockedList.add(Material.FIRE);
+        materialBlockedList.add(Material.SOUL_FIRE);
+        materialBlockedList.add(Material.WATER);
 
         // what type blocks transfigure in to for this spell
         transfigureType = Material.WATER;
@@ -97,7 +97,7 @@ public final class AGUAMENTI extends BlockTransfiguration
     {
         if (hasHitTarget())
         {
-            // we want the pass-through block before this block
+            // we want to target block before this block
             return location.subtract(super.vector).getBlock();
         }
 

@@ -38,7 +38,7 @@ public final class AQUA_ERUCTO extends BlockTransfiguration
             add("\"Very good. You'll need to use Aqua Eructo to put out the fires.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
         }};
 
-        text = "Shoots a jet of water from your wand tip.";
+        text = "Shoots a jet of water from your wand tip to extinguish a fire.";
     }
 
     /**
@@ -62,8 +62,7 @@ public final class AQUA_ERUCTO extends BlockTransfiguration
 
         moveEffectData = Material.BLUE_ICE;
 
-        // pass-through materials
-        projectilePassThrough.remove(Material.WATER);
+        // remove fire as a pass-through material
         projectilePassThrough.remove(Material.FIRE);
 
         // materials that can be transfigured by this spell

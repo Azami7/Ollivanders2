@@ -127,7 +127,10 @@ public abstract class BlockTransfiguration extends TransfigurationBase
         if (isTransfigured)
             sendSuccessMessage();
         else
+        {
             sendFailureMessage();
+            kill();
+        }
 
         if (permanent)
             kill();
@@ -141,6 +144,8 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      */
     boolean canTransfigure(@NotNull Block block)
     {
+        common.printDebugMessage("BlockTransfigure.canTranfigure: Checking if this block can be transfigured.", null, null, false);
+
         // first check success rate
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
         if (rand >= successRate)
@@ -152,15 +157,30 @@ public abstract class BlockTransfiguration extends TransfigurationBase
         // get block type
         Material blockType = block.getType();
 
-        if (blockType == transfigureType)
+        if (transfigurationMap.size() > 0 && transfigurationMap.containsKey(transfigureType) && transfigurationMap.get(transfigureType) == blockType)
+        {
             // do not change if this block is already the target type
+            common.printDebugMessage("Block is already type " + transfigureType.toString(), null, null, false);
             return false;
+        }
+        else if (blockType == transfigureType)
+        {
+            // do not change if this block is already the target type
+            common.printDebugMessage("Block is already type " + transfigureType.toString(), null, null, false);
+            return false;
+        }
         else if (materialBlockedList.contains(blockType))
+        {
             // do not change if this block is in the blocked list
+            common.printDebugMessage("Material on blocked list: " + blockType.toString(), null, null, false);
             return false;
+        }
         else if (!materialAllowList.isEmpty() && !materialAllowList.contains(blockType))
+        {
             // do not change if the allowed list exists and this block is not in it
+            common.printDebugMessage("Material not on allow list: " + blockType.toString(), null, null, false);
             return false;
+        }
         else
         {
             // do not change if this block is already the subject of a temporary transfiguration
@@ -169,7 +189,10 @@ public abstract class BlockTransfiguration extends TransfigurationBase
                 if (spell instanceof TransfigurationBase)
                 {
                     if (((TransfigurationBase) spell).isBlockTransfigured(block))
+                    {
+                        common.printDebugMessage("Block is already a non-permanent transfiguration", null, null, false);
                         return false;
+                    }
                 }
             }
         }

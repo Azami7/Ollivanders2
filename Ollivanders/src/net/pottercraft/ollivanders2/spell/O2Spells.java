@@ -84,6 +84,7 @@ public class O2Spells
             if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType))
                 continue;
 
+            common.printDebugMessage("Loading spell " + spellType.getSpellName(), null, null, false);
             O2SpellMap.put(spellType.getSpellName().toLowerCase(), spellType);
         }
 

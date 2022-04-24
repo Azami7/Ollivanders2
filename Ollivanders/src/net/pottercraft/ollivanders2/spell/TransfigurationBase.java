@@ -120,21 +120,25 @@ public abstract class TransfigurationBase extends O2Spell
         // if a target has not transfigured, look for one to transfigure
         if (!isTransfigured())
         {
+            common.printDebugMessage("Attempting to transfigure " + location.getBlock().getType(), null, null, false);
             transfigure();
 
             if (isTransfigured)
             {
+                // if the spell successfully transfigured something, stop the projectile
+                stopProjectile();
+
+                if (permanent)
+                {
+                    kill();
+                    return;
+                }
+
                 spellDuration = (int) (usesModifier * Ollivanders2Common.ticksPerSecond * durationModifier);
                 if (spellDuration > maxDuration)
                     spellDuration = maxDuration;
                 else if (spellDuration < minDuration)
                     spellDuration = minDuration;
-
-                // if the spell successfully transfigured something, stop the projectile and return
-                stopProjectile();
-
-                if (permanent)
-                    kill();
             }
         }
         else

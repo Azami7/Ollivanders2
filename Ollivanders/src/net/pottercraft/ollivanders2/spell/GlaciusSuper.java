@@ -44,6 +44,7 @@ public abstract class GlaciusSuper extends BlockTransfiguration
         transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);
         transfigurationMap.put(Material.ICE, Material.PACKED_ICE);
 
+        // materials that can be targeted by this spell
         materialAllowList.add(Material.FIRE);
         materialAllowList.add(Material.WATER);
         materialAllowList.add(Material.LAVA);

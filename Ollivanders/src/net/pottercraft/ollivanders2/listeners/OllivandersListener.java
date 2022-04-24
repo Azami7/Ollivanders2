@@ -171,9 +171,7 @@ public class OllivandersListener implements Listener
         spellType = Ollivanders2API.getSpells().getSpellTypeByName(message);
 
         if (spellType != null)
-        {
             return spellType;
-        }
 
         String[] words = message.split(" ");
 
@@ -353,11 +351,6 @@ public class OllivandersListener implements Listener
     private O2Spell createSpellProjectile(@NotNull Player player, @NotNull O2SpellType name, double wandC)
     {
         common.printDebugMessage("OllivandersListener.createSpellProjectile: enter", null, null, false);
-
-        if (Ollivanders2Common.libsDisguisesSpells.contains(name) && !Ollivanders2.libsDisguisesEnabled)
-        {
-            return null;
-        }
 
         //spells go here, using any of the three types of m
         String spellClass = "net.pottercraft.ollivanders2.spell." + name.toString();

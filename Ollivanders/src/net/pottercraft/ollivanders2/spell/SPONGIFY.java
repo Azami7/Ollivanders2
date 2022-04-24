@@ -68,9 +68,9 @@ public class SPONGIFY extends BlockTransfiguration
         transfigureType = Material.SPONGE;
 
         // types of materials this spell cannot change or pass through
-        materialAllowList.add(Material.WATER);
-        materialAllowList.add(Material.LAVA);
-        materialAllowList.add(Material.FIRE);
+        materialBlockedList.add(Material.WATER);
+        materialBlockedList.add(Material.LAVA);
+        materialBlockedList.add(Material.FIRE);
 
         // world guard flags
         if (Ollivanders2.worldGuardEnabled)
