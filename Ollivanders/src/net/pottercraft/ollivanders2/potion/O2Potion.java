@@ -1,12 +1,12 @@
 package net.pottercraft.ollivanders2.potion;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
 import net.pottercraft.ollivanders2.common.MagicLevel;
+import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -32,8 +32,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * O2Potions can have either or both of the following types of effects:
  * <p>
- * PotionEffect - this is a standard Minecraft potion effect such as Night Vision and is set in the item metadata in the
- * brew().
+ * PotionEffect - this is a standard Minecraft potion effect such as Night Vision and is set in the item metadata in the brew().
  * <p>
  * Ollivanders Effect - effects related to the mechanics of the Ollivanders plugin. These are applied on the potion
  * drink action in OllivandersListener in the onPlayerDrink().
@@ -91,6 +90,11 @@ public abstract class O2Potion
      * The duration for this potion
      */
     protected int duration = 3600;
+
+    /**
+     * The modifier for this potion based on usage.
+     */
+    public double usesModifier = 1;
 
     /**
      * Constructor
@@ -285,7 +289,6 @@ public abstract class O2Potion
             meta.addCustomEffect(minecraftPotionEffect, true);
 
         meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-
         potion.setItemMeta(meta);
 
         return potion;
@@ -314,30 +317,15 @@ public abstract class O2Potion
 
         int potionCount = o2p.getPotionCount(potionType);
 
-        // do not allow them to brew if book learning is on and they do not know this potion
+        // do not allow them to brew if book learning is turned on and the brewer does not know this potion
         if (Ollivanders2.bookLearning && (potionCount < 1))
             canBrew = false;
         else
         {
-            int successRate = 0;
-
-            // success rate = ((potion count * 10) / (potion success modifier) - potions success modifier
-            //
-            // Examples:
-            // BEGINNER potion has a success modifier of 1, player has potion count of 10, player is a 7th year
-            // = 99% success rate
-            //
-            // EXPERT potion has a success modifier of 4, player has a potion count of 10, player is a 5th year
-            // = 21% success rate
-            //
-            // OWL potion has a success modifier of 2, player has a potion count of 2, player is a 1st year
-            // = 8% success rate
-            //
-            successRate = ((potionCount * 10) / potionType.getLevel().ordinal()) - potionType.getLevel().ordinal();
+            setUsesModifier(o2p);
 
             int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) + 1;
-
-            canBrew = (successRate > rand);
+            canBrew = (usesModifier > rand);
         }
 
         return canBrew;
@@ -389,7 +377,7 @@ public abstract class O2Potion
         // else rand < 5, use "Watery Potion" and Color.BLUE
 
         meta.setDisplayName(name);
-        meta.setLore(Arrays.asList(name));
+        //meta.setLore(Arrays.asList(name));
         meta.setColor(color);
 
         rand = Math.abs(Ollivanders2Common.random.nextInt() % 10);
@@ -415,8 +403,8 @@ public abstract class O2Potion
         }
         // rand < 5, no effect
 
-        potion.setItemMeta(meta);
         meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+        potion.setItemMeta(meta);
 
         return potion;
     }
@@ -427,4 +415,46 @@ public abstract class O2Potion
      * @param player the player who drank the potion
      */
     public abstract void drink(@NotNull Player player);
+
+    /**
+     * Sets the uses modifier that takes into account potion brew count and level, if years is enabled.
+     */
+    protected void setUsesModifier(@NotNull O2Player o2p)
+    {
+        // if max skill is set, set usesModifier to max level
+        if (Ollivanders2.maxSpellLevel)
+            usesModifier = 200;
+            // uses modifier is the number of times the spell has been cast
+        else
+        {
+            usesModifier = o2p.getPotionCount(potionType);
+
+            // if the caster is affected by HIGHER_SKILL, double their usesModifier
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.HIGHER_SKILL))
+                usesModifier *= 2;
+        }
+
+        // if years is enabled, spell usage is affected by caster's level
+        if (Ollivanders2.useYears)
+        {
+            MagicLevel maxLevelForPlayer = o2p.getYear().getHighestLevelForYear();
+
+            if (maxLevelForPlayer.ordinal() > (potionType.getLevel().ordinal() + 1))
+                // double skill level when 2 or more levels above
+                usesModifier *= 2;
+            else if (maxLevelForPlayer.ordinal() > potionType.getLevel().ordinal())
+                // 50% skill increase when 1 level above
+                usesModifier *= 1.5;
+                /*
+                    maxLevelForPlayer.ordinal() == spellType.getLevel().ordinal())
+                    no change to usesModifier
+                 */
+            else if ((maxLevelForPlayer.ordinal() + 1) < potionType.getLevel().ordinal())
+                // 25% skill when 2 or more levels below
+                usesModifier *= 0.25;
+            else if (maxLevelForPlayer.ordinal() < potionType.getLevel().ordinal())
+                // half skill when 1 level below
+                usesModifier *= 0.5;
+        }
+    }
 }

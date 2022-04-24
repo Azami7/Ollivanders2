@@ -548,20 +548,23 @@ public abstract class O2Spell
     }
 
     /**
-     * Sets the uses modifier that takes into account spell uses and wand type. Returns 10.0 if the uses are 100 and the right wand is held.
+     * Sets the uses modifier that takes into account spell uses, wand type, and spell level if years are enabled. Returns 10.0 if the uses are 100 and the right wand is held.
      */
     protected void setUsesModifier()
     {
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
         if (o2p == null)
+        {
             common.printLogMessage("Null o2player in O2Spell.setUsesModifier", null, null, true);
+            return;
+        }
 
         // if max skill is set, set usesModifier to max level
         if (Ollivanders2.maxSpellLevel)
             usesModifier = 200;
-        // uses modifier is the number of times the spell has been cast
-        else if (o2p != null)
+        else
         {
+            // uses modifier is the number of times the spell has been cast
             usesModifier = o2p.getSpellCount(spellType);
 
             // if it is not a wandless spell, uses modifier is halved if the player is not using their destined wand,
@@ -573,11 +576,9 @@ public abstract class O2Spell
             if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
                 usesModifier *= 2;
         }
-        else
-            usesModifier = 1;
 
         // if years is enabled, spell usage is affected by caster's level
-        if (Ollivanders2.useYears && o2p != null)
+        if (Ollivanders2.useYears)
         {
             MagicLevel maxLevelForPlayer = o2p.getYear().getHighestLevelForYear();
 
@@ -598,8 +599,6 @@ public abstract class O2Spell
                 // half skill when 1 level below
                 usesModifier *= 0.5;
         }
-
-        common.printDebugMessage("usesModifier = " + usesModifier, null, null, false);
     }
 
     /**

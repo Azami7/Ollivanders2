@@ -83,7 +83,7 @@ public class NULLUM_EVANESCUNT extends O2StationarySpell
     @Override
     void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getPlayer(); // will never be null
         Location playerLocation = player.getLocation();
 
         if (isLocationInside(playerLocation))
@@ -111,7 +111,7 @@ public class NULLUM_EVANESCUNT extends O2StationarySpell
     @Override
     void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getPlayer(); // will never be null
         Location playerLocation = player.getLocation();
 
         if (isLocationInside(playerLocation))
@@ -139,7 +139,7 @@ public class NULLUM_EVANESCUNT extends O2StationarySpell
     @Override
     void doOnEntityTeleportEvent(@NotNull EntityTeleportEvent event)
     {
-        Entity entity = event.getEntity();
+        Entity entity = event.getEntity(); // will never be null
         Location entityLocation = entity.getLocation();
 
         if (isLocationInside(entityLocation))
@@ -157,7 +157,7 @@ public class NULLUM_EVANESCUNT extends O2StationarySpell
     @Override
     void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getPlayer(); // will never be null
         Location playerLocation = player.getLocation();
 
         if (isLocationInside(playerLocation))

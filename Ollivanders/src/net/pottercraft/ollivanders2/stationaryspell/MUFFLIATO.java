@@ -83,7 +83,7 @@ public class MUFFLIATO extends ShieldSpell
     @Override
     void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
     {
-        Player speaker = event.getPlayer();
+        Player speaker = event.getPlayer(); // will never be null
 
         if (!isLocationInside(speaker.getLocation()))
             return;

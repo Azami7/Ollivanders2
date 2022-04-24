@@ -225,13 +225,13 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
     @Override
     void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event)
     {
-        Player player = event.getPlayer();
+        Player player = event.getPlayer(); // will never be null
         // make sure player is not already using this vanishing cabinet
         if (isUsing(player))
             return;
 
         Location toLoc = event.getTo();
-        Location fromLoc = event.getFrom();
+        Location fromLoc = event.getFrom(); // will never be null
 
         // make sure they actually moved locations, not turned head, etc
         if (toLoc == null || Ollivanders2Common.locationEquals(toLoc, fromLoc))

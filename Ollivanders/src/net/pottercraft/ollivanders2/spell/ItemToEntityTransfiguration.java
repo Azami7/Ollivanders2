@@ -158,6 +158,9 @@ public class ItemToEntityTransfiguration extends EntityTransfiguration implement
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDeath(EntityDeathEvent event)
     {
+        if (transfiguredEntity == null)
+            return;
+
         Entity entity = event.getEntity();
         if (entity.getUniqueId() == transfiguredEntity.getUniqueId())
             // the entity was killed, kill this spell

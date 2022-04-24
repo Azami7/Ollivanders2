@@ -24,8 +24,7 @@ import java.util.ArrayList;
 /**
  * Transfigures an iron golem from a block of iron, and snow golem from block of snow.
  * <p>
- * There is no spell like this in HP universe though we know there must be some sort of animation spell
- * which McGonagall used on the giant wizards chess board in 1991.
+ * There is no spell like this in HP universe though we know there must be some sort of animation spell which McGonagall used on the giant wizards chess board in 1991.
  */
 public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration
 {
@@ -105,6 +104,9 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamage(EntityDamageByEntityEvent event)
     {
+        if (transfiguredEntity == null)
+            return;
+
         Entity attacker = event.getDamager();
         Entity target = event.getEntity();
         EntityDamageEvent.DamageCause cause = event.getCause();
@@ -128,6 +130,9 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityTarget(EntityTargetEvent event)
     {
+        if (transfiguredEntity == null)
+            return;
+
         Entity attacker = event.getEntity();
         Entity target = event.getTarget();
 
@@ -136,19 +141,5 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration
 
         if (attacker.getUniqueId() == transfiguredEntity.getUniqueId() && target.getUniqueId() == player.getUniqueId())
             event.setCancelled(true);
-    }
-
-    /**
-     * Handle when the golem is killed.
-     *
-     * @param event the entity death event
-     */
-    @EventHandler(priority = EventPriority.LOWEST)
-    public void onEntityDeath(EntityDeathEvent event)
-    {
-        Entity entity = event.getEntity();
-        if (entity.getUniqueId() == transfiguredEntity.getUniqueId())
-            // the golem was killed, kill this spell
-            kill();
     }
 }

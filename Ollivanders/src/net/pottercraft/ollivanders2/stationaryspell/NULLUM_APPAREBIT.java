@@ -127,6 +127,8 @@ public class NULLUM_APPAREBIT extends O2StationarySpell
     void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event)
     {
         Location destination = event.getDestination();
+        if (destination == null)
+            return;
 
         if (isLocationInside(destination))
         {

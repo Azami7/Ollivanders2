@@ -108,7 +108,7 @@ public class REPELLO_MUGGLETON extends ShieldSpell
     void doOnEntityTargetEvent(@NotNull EntityTargetEvent event)
     {
         Entity target = event.getTarget();
-        Entity entity = event.getEntity();
+        Entity entity = event.getEntity(); // will never be null
 
         if (target == null)
             return;

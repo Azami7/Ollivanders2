@@ -14,8 +14,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Geminio Curse is used to curse an object into multiplying repeatedly when touched.
- *
- * @link https://harrypotter.fandom.com/wiki/Doubling_Charm
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Doubling_Charm
  */
 public class GEMINIO extends Enchantment
 {

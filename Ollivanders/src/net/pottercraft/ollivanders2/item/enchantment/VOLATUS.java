@@ -5,21 +5,22 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.BROOM_FLYING;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
+import net.pottercraft.ollivanders2.item.O2ItemType;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
  * Add broom flight to an item
- *
- * @link https://harrypotter.fandom.com/wiki/Broomstick
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Broomstick
  */
 public class VOLATUS extends Enchantment
 {
@@ -57,7 +58,7 @@ public class VOLATUS extends Enchantment
             @Override
             public void run()
             {
-                checkBroomStatus((Player)entity);
+                checkBroomStatus((Player) entity);
             }
         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
     }
@@ -91,6 +92,25 @@ public class VOLATUS extends Enchantment
     @Override
     public void doItemDespawn(@NotNull ItemDespawnEvent event)
     {
+        if (!EnchantedItems.enableBrooms)
+            return;
+
+        Item despawnedItem = event.getEntity();
+
+        // is this a broom?
+        if (!O2ItemType.BASIC_BROOM.isItemThisType(despawnedItem))
+            return;
+
+        // is it enchanted with Volatus?
+        Enchantment enchantment = Ollivanders2API.getItems().enchantedItems.getEnchantment(despawnedItem.getItemStack());
+        if (enchantment == null || enchantment.getType() != ItemEnchantmentType.VOLATUS)
+            return;
+
+        // someone is holding this - we don't know who so we need to iterate through all players to check broom flying
+        for (Player player : p.getServer().getOnlinePlayers())
+        {
+            checkBroomStatus(player);
+        }
     }
 
     /**
@@ -116,7 +136,7 @@ public class VOLATUS extends Enchantment
     }
 
     /**
-     * A broom was either held or stopped being held - check to see if the player is still holding a least 1 broom
+     * A broom was either held or stopped being held - check to see if the player is still holding at least 1 broom
      *
      * @param player the player to check
      */
@@ -126,7 +146,7 @@ public class VOLATUS extends Enchantment
             return;
 
         // do they have a broom in either hand?
-        if (isHoldingVolatusEnchantedItem(player))
+        if (isHoldingEnchantedItem(player))
         {
             common.printDebugMessage(player.getDisplayName() + " is holding a broom", null, null, false);
             BROOM_FLYING effect = new BROOM_FLYING(p, 5, player.getUniqueId());
@@ -135,33 +155,7 @@ public class VOLATUS extends Enchantment
         else
         {
             common.printDebugMessage(player.getDisplayName() + " is not holding a broom", null, null, false);
-            Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.FLYING);
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.BROOM_FLYING);
         }
-    }
-
-    /**
-     * Is the player holding an item enchanted with Volatus?
-     *
-     * @param player the player to check
-     * @return true if they are holding a broom, false otherwise
-     */
-    private boolean isHoldingVolatusEnchantedItem(Player player)
-    {
-        ItemStack primaryItem = player.getInventory().getItemInMainHand();
-
-        // first check NBT tag of item in primary hand
-        String eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(primaryItem);
-        if (eTypeStr != null)
-            return eTypeStr.equalsIgnoreCase(enchantmentType.toString());
-
-        // check NBT tag in item in player's off hand
-        ItemStack secondaryItem = player.getInventory().getItemInOffHand();
-        eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(secondaryItem);
-
-        if (eTypeStr != null)
-            return eTypeStr.equalsIgnoreCase(enchantmentType.toString());
-
-        // no NBT tag, this is not a broom, return false
-        return false;
     }
 }

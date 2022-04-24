@@ -2,7 +2,7 @@ package net.pottercraft.ollivanders2.item.enchantment;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.effect.BURNING;
+import net.pottercraft.ollivanders2.effect.FLAGRANTE_BURNING;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Flagrante Curse causes objects to emit searing heat when touched.
- *
- * @link https://harrypotter.fandom.com/wiki/Flagrante_Curse
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Flagrante_Curse
  */
 public class FLAGRANTE extends Enchantment
 {
@@ -31,6 +31,11 @@ public class FLAGRANTE extends Enchantment
     final double maxDamage = 8.0;
 
     /**
+     * The amount of damage this instance of the curse will do
+     */
+    double damage = 0.5;
+
+    /**
      * Constructor
      *
      * @param plugin   a callback to the plugin
@@ -42,6 +47,12 @@ public class FLAGRANTE extends Enchantment
     {
         super(plugin, mag, args, itemLore);
         enchantmentType = ItemEnchantmentType.FLAGRANTE;
+
+        damage = magnitude / 20.0;
+        if (damage < minDamage)
+            damage = minDamage;
+        else if (damage > maxDamage)
+            damage = maxDamage;
     }
 
     /**
@@ -56,22 +67,11 @@ public class FLAGRANTE extends Enchantment
         if (!(entity instanceof Player))
             return;
 
-        double damage = magnitude / 20.0;
-        if (damage < minDamage)
-            damage = minDamage;
-        else if (damage > maxDamage)
-            damage = maxDamage;
-
-        BURNING burning = new BURNING(p, 0, entity.getUniqueId());
-        burning.addDamage(damage);
-
-        Ollivanders2API.getPlayers().playerEffects.addEffect(burning);
-
-        common.printDebugMessage("Added flagrante curse to " + entity.getName(), null, null, false);
+        checkFlagranteStatus((Player) entity);
     }
 
     /**
-     * Handle item drop events
+     * Handle when a player drops a flagrante item
      *
      * @param event the item drop event
      */
@@ -80,12 +80,11 @@ public class FLAGRANTE extends Enchantment
     {
         Player player = event.getPlayer();
 
-        Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.BURNING);
-        common.printDebugMessage("Removed flagrante curse to " + player.getName(), null, null, false);
+        checkFlagranteStatus(player);
     }
 
     /**
-     * Handle item despawn events
+     * Do not allow flagrate items to be despawned
      *
      * @param event the item despawn event
      */
@@ -95,11 +94,33 @@ public class FLAGRANTE extends Enchantment
     }
 
     /**
-     * Handle item held events
+     * Flagrate effect the player as soon as the item enters their inventory so we do not need to check for held
      *
      * @param event the item drop event
      */
     public void doItemHeld(@NotNull PlayerItemHeldEvent event)
     {
+    }
+
+    /**
+     * A flagrante-cursed item was either held or stopped being held - check to see if the player is still holding at least 1 flagrante item
+     *
+     * @param player the player to check
+     */
+    void checkFlagranteStatus(Player player)
+    {
+        if (isHoldingEnchantedItem(player))
+        {
+            FLAGRANTE_BURNING burning = new FLAGRANTE_BURNING(p, 0, player.getUniqueId());
+            burning.addDamage(damage);
+
+            Ollivanders2API.getPlayers().playerEffects.addEffect(burning);
+            common.printDebugMessage("Added flagrante curse to " + player.getName(), null, null, false);
+        }
+        else
+        {
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.FLAGRANTE_BURNING);
+            common.printDebugMessage("Removed flagrante curse from " + player.getName(), null, null, false);
+        }
     }
 }

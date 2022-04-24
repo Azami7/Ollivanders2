@@ -62,16 +62,19 @@ public class OllivandersSpellProjectileMoveEvent extends PlayerEvent implements 
         }
     }
 
+    @NotNull
     public Location getFrom()
     {
         return from;
     }
 
+    @NotNull
     public Location getTo()
     {
         return to;
     }
 
+    @NotNull
     public O2Spell getSpell()
     {
         return spell;

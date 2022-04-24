@@ -7,6 +7,7 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
+import net.pottercraft.ollivanders2.potion.O2Potions;
 import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.Divination;
 import net.pottercraft.ollivanders2.spell.O2Spell;
@@ -61,6 +62,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
@@ -865,7 +868,9 @@ public class OllivandersListener implements Listener
             if (meta == null)
                 return;
 
-            if (meta.hasLore())
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+
+            if (container.has(O2Potions.potionTypeKey, PersistentDataType.STRING) || meta.hasLore())
             {
                 O2Potion potion = Ollivanders2API.getPotions().findPotionByItemMeta(meta);
 

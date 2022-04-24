@@ -87,7 +87,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell
     void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event)
     {
         Location toLoc = event.getTo();
-        Location fromLoc = event.getFrom();
+        Location fromLoc = event.getFrom(); // will never be null
 
         if (toLoc == null || toLoc.getWorld() == null || fromLoc.getWorld() == null)
             return;
@@ -124,7 +124,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell
     @Override
     void doOnCreatureSpawnEvent(@NotNull CreatureSpawnEvent event)
     {
-        Entity entity = event.getEntity();
+        Entity entity = event.getEntity(); // will never be null
         Location entityLocation = entity.getLocation();
 
         if (Ollivanders2Common.isInside(entityLocation, location, radius))

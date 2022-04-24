@@ -1,12 +1,15 @@
 package net.pottercraft.ollivanders2.item.enchantment;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -131,5 +134,29 @@ public abstract class Enchantment
     public String getArgs()
     {
         return args;
+    }
+
+    /**
+     * Is the player holding an item enchanted with this enchantment type?
+     *
+     * @param player the player to check
+     * @return true if they are holding an item with this enchantment type, false otherwise
+     */
+    boolean isHoldingEnchantedItem(Player player)
+    {
+        // first check NBT tag of item in primary hand
+        ItemStack primaryItem = player.getInventory().getItemInMainHand();
+        String eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(primaryItem);
+        if (eTypeStr != null)
+            return eTypeStr.equalsIgnoreCase(enchantmentType.toString());
+
+        // check NBT tag in item in player's off hand
+        ItemStack secondaryItem = player.getInventory().getItemInOffHand();
+        eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(secondaryItem);
+        if (eTypeStr != null)
+            return eTypeStr.equalsIgnoreCase(enchantmentType.toString());
+
+        // no NBT tag, this is not enchanted, return false
+        return false;
     }
 }

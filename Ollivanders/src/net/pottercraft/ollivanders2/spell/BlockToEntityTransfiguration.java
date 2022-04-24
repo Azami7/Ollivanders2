@@ -92,7 +92,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
         Block target = getTargetBlock();
         if (target == null)
             // we have not hit a target yet, continue projectile
-             return;
+            return;
 
         if (!canTransfigure(target))
         {
@@ -211,13 +211,16 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
     }
 
     /**
-     * Handle when the golem is killed.
+     * Handle when the transfigured entity is killed.
      *
      * @param event the entity death event
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityDeath(EntityDeathEvent event)
     {
+        if (transfiguredEntity == null)
+            return;
+
         Entity entity = event.getEntity();
         if (entity.getUniqueId() == transfiguredEntity.getUniqueId())
             // the entity was killed, kill this spell

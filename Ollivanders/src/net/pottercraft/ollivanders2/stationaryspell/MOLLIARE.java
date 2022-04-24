@@ -84,7 +84,7 @@ public class MOLLIARE extends O2StationarySpell
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL)
             return;
 
-        Entity entity = event.getEntity();
+        Entity entity = event.getEntity(); // entity and location will never be null
 
         if (isLocationInside(entity.getLocation()))
         {

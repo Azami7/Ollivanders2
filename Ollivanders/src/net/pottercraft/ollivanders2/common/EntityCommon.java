@@ -251,10 +251,9 @@ public class EntityCommon
         for (Entity e : entities)
         {
             if (e instanceof Item)
-            {
                 items.add((Item) e);
-            }
         }
+
         return items;
     }
 
@@ -648,17 +647,11 @@ public class EntityCommon
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 100;
 
         if (rand < 2) // 2% chance
-        {
             return DyeColor.BLACK;
-        }
         else if (rand < 22) // 20% chance
-        {
             return DyeColor.BROWN;
-        }
         else if (rand < 32) // 10% chance
-        {
             return DyeColor.LIGHT_GRAY;
-        }
         else
             return DyeColor.WHITE;
     }

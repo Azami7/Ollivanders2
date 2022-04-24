@@ -238,8 +238,8 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     @Override
     void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
     {
-        Player player = event.getPlayer();
-        String chat = event.getMessage();
+        Player player = event.getPlayer(); // will never be null
+        String chat = event.getMessage(); // will never be null
 
         if (!(player.getLocation().getBlock().equals(getBlock())) || !isWorking())
             return;
@@ -320,8 +320,8 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     @Override
     void doOnEntityCombustEvent(@NotNull EntityCombustEvent event)
     {
-        Entity entity = event.getEntity();
-        Location entityLocation = entity.getLocation();
+        Entity entity = event.getEntity(); // will never be null
+        Location entityLocation = entity.getLocation(); // will never be null
 
         if (isLocationInside(entityLocation))
         {
@@ -338,8 +338,8 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     @Override
     void doOnEntityDamageEvent(@NotNull EntityDamageEvent event)
     {
-        Entity entity = event.getEntity();
-        Location entityLocation = entity.getLocation();
+        Entity entity = event.getEntity(); // will never be null
+        Location entityLocation = entity.getLocation(); // will never be null
 
         if (isLocationInside(entityLocation))
         {

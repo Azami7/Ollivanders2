@@ -82,7 +82,7 @@ public class COLLOPORTUS extends O2StationarySpell
     @Override
     void doOnBlockBreakEvent(@NotNull BlockBreakEvent event)
     {
-        Block block = event.getBlock();
+        Block block = event.getBlock(); // will never be null
 
         if (!Ollivanders2Common.doors.contains(block.getType()) && !Ollivanders2Common.trapdoors.contains(block.getType()))
             return;
@@ -102,7 +102,7 @@ public class COLLOPORTUS extends O2StationarySpell
     @Override
     void doOnEntityBreakDoorEvent(@NotNull EntityBreakDoorEvent event)
     {
-        Block block = event.getBlock();
+        Block block = event.getBlock(); // will never be null
 
         if (isLocationInside(block.getLocation()))
         {
@@ -119,7 +119,7 @@ public class COLLOPORTUS extends O2StationarySpell
     @Override
     void doOnEntityChangeBlockEvent(@NotNull EntityChangeBlockEvent event)
     {
-        Block block = event.getBlock();
+        Block block = event.getBlock(); // will never be null
 
         if (!Ollivanders2Common.doors.contains(block.getType()) && !Ollivanders2Common.trapdoors.contains(block.getType()))
             return;
@@ -139,7 +139,7 @@ public class COLLOPORTUS extends O2StationarySpell
     @Override
     void doOnEntityInteractEvent(@NotNull EntityInteractEvent event)
     {
-        Block block = event.getBlock();
+        Block block = event.getBlock(); // will never be null
 
         if (!Ollivanders2Common.doors.contains(block.getType()) && !Ollivanders2Common.trapdoors.contains(block.getType()))
             return;

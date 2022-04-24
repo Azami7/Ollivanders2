@@ -121,7 +121,7 @@ public class HORCRUX extends O2StationarySpell
     @Override
     void doOnEntityDamageEvent(@NotNull EntityDamageEvent event)
     {
-        Entity entity = event.getEntity();
+        Entity entity = event.getEntity(); // will never be null
         double damage = event.getDamage();
 
         if (!(entity instanceof Player) || damage <= 0 || entity.getUniqueId() != getCasterID())

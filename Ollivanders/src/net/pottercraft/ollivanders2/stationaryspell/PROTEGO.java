@@ -122,7 +122,7 @@ public class PROTEGO extends ShieldSpell
     @Override
     void doOnEntityCombustEvent(@NotNull EntityCombustEvent event)
     {
-        Entity entity = event.getEntity();
+        Entity entity = event.getEntity(); // will never be null
         Location entityLocation = entity.getLocation();
 
         if (isLocationInside(entityLocation))
@@ -140,17 +140,17 @@ public class PROTEGO extends ShieldSpell
     void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event)
     {
         // is the spell inside this protego?
-        Location to = event.getTo();
+        Location to = event.getTo(); // will never be null
         if (!isLocationInside(to))
             return;
 
         // did it originate within this protego?
-        Location from = event.getFrom();
+        Location from = event.getFrom(); // will never be null
         if (isLocationInside(from))
             return;
 
         // is this spell higher level than Protego?
-        O2Spell spell = event.getSpell();
+        O2Spell spell = event.getSpell(); // will never be null
         if (spell.spellType.getLevel().ordinal() > this.spellType.getLevel().ordinal())
             return;
 

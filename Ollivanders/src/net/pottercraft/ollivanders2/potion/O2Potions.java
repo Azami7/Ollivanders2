@@ -42,7 +42,7 @@ public class O2Potions
    /**
     * Namespace keys for NBT tags
     */
-   static NamespacedKey potionTypeKey;
+   static public NamespacedKey potionTypeKey;
 
    public static final List<O2ItemType> ingredients = new ArrayList<>()
    {{

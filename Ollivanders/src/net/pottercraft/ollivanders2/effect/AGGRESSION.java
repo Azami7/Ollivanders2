@@ -15,15 +15,16 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * This effect causes the player to impulsively harm those nearby and causes them to provoke attacks by
- * nearby mobs. This effect does not age but must be removed explicitly.
+ * This effect causes the player to impulsively harm those nearby and causes them to provoke attacks by nearby mobs.
+ * <p>
+ * This effect does not age but must be removed explicitly.
  */
 public class AGGRESSION extends O2Effect
 {
     /**
      * The level of aggression this player has.
      * <p>
-     * Value from 1-10 for how aggressive this player will be with 1 being lowest level
+     * Value from 1-10 for how aggressive this player will be with 1 being the lowest level
      */
     int aggressionLevel = 5;
 
@@ -65,6 +66,8 @@ public class AGGRESSION extends O2Effect
     @Override
     public void checkEffect()
     {
+        age(1);
+
         // only take action once per 10 seconds, which is every 120 ticks
         if ((duration % 120) == 0)
         {
@@ -91,6 +94,8 @@ public class AGGRESSION extends O2Effect
     private void damageRandomEntity(@NotNull Collection<LivingEntity> nearby)
     {
         Player target = p.getServer().getPlayer(targetID);
+        if(target == null)
+            return;
 
         if (!nearby.isEmpty())
         {
@@ -101,21 +106,15 @@ public class AGGRESSION extends O2Effect
 
             // don't let the player hit themselves
             if (toDamage.getUniqueId() != targetID)
-            {
                 return;
-            }
 
             // don't do damage if worldguard is protecting where the entity is
             if (Ollivanders2.worldGuardEnabled)
             {
                 if (toDamage instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(target, toDamage.getEyeLocation(), Flags.PVP))
-                {
                     return;
-                }
                 else if (!(toDamage instanceof Monster) && !Ollivanders2.worldGuardO2.checkWGFlag(target, toDamage.getEyeLocation(), Flags.DAMAGE_ANIMALS))
-                {
                     return;
-                }
             }
 
             double curHealth = toDamage.getHealth();
@@ -140,9 +139,7 @@ public class AGGRESSION extends O2Effect
             for (LivingEntity entity : nearby)
             {
                 if (entity instanceof Creature)
-                {
                     ((Creature) entity).setTarget(target);
-                }
             }
         }
     }

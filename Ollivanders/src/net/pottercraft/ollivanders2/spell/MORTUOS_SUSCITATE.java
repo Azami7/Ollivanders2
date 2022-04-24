@@ -131,9 +131,12 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageEvent(EntityDamageByEntityEvent event)
     {
-        Entity attacker = event.getDamager();
-        Entity target = event.getEntity();
-        EntityDamageEvent.DamageCause cause = event.getCause();
+        if (transfiguredEntity == null)
+            return;
+
+        Entity attacker = event.getDamager(); // will never be null
+        Entity target = event.getEntity(); // will never be null
+        EntityDamageEvent.DamageCause cause = event.getCause(); // will never be null
 
         if (!EntityCommon.attackDamageCauses.contains(cause))
             return;
@@ -154,7 +157,10 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityTargetEvent(EntityTargetEvent event)
     {
-        Entity attacker = event.getEntity();
+        if (transfiguredEntity == null)
+            return;
+
+        Entity attacker = event.getEntity(); // will never be null
         Entity target = event.getTarget();
 
         if (target == null)
