@@ -36,6 +36,11 @@ public final class DEFODIO extends O2Spell
     private Block curBlock = null;
 
     /**
+     * Slow down defodio mining to 4 blocks per second
+     */
+    private int cooldown = Ollivanders2Common.ticksPerSecond / 4;
+
+    /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
@@ -96,6 +101,10 @@ public final class DEFODIO extends O2Spell
             remainingCount = maxDepth;
         else if (remainingCount < 1)
             remainingCount = 1;
+
+        cooldown = 0;
+
+        common.printDebugMessage("Defodio remaining set to " + remainingCount, null, null, false);
     }
 
     /**
@@ -106,6 +115,13 @@ public final class DEFODIO extends O2Spell
     {
         if (!hasHitTarget())
             return;
+
+        // use cooldown to slow defodio to 4 blocks per second
+        if (cooldown > 0)
+        {
+            cooldown = cooldown - 1;
+            return;
+        }
 
         curBlock = getTargetBlock();
         if (curBlock == null)
@@ -118,6 +134,7 @@ public final class DEFODIO extends O2Spell
         // stop the spell if we hit a block type on the blocked list or when the max depth is reached
         if (materialBlockedList.contains(curBlock.getType()) || remainingCount <= 0)
         {
+            common.printDebugMessage("Block type not allowed: " + curBlock.getType(), null, null, false);
             kill();
             return;
         }
@@ -125,14 +142,11 @@ public final class DEFODIO extends O2Spell
         Location curLoc = curBlock.getLocation();
 
         // stop the spell if something prevented the current block breaking naturally
-        if (curBlock.breakNaturally())
-        {
-            remainingCount = remainingCount - 1;
+        curBlock.breakNaturally();
+        remainingCount = remainingCount - 1;
+        common.printDebugMessage("Blocks remaining: " + remainingCount, null, null, false);
 
-            Location nextLoc = curLoc.add(vector);
-            curBlock = nextLoc.getBlock();
-        }
-        else
-            kill();
+        Location nextLoc = curLoc.add(vector);
+        curBlock = nextLoc.getBlock();
     }
 }
