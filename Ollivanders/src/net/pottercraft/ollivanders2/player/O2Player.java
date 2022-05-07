@@ -430,13 +430,9 @@ public class O2Player
     public void setPotionCount(@NotNull O2PotionType potionType, int count)
     {
         if (count >= 1)
-        {
             knownPotions.put(potionType, count);
-        }
         else
-        {
             knownPotions.remove(potionType);
-        }
     }
 
     /**
@@ -493,14 +489,10 @@ public class O2Player
             knownSpells.replace(spellType, curCount + 1);
 
             if (curCount + 1 >= 100)
-            {
                 addMasteredSpell(spellType);
-            }
         }
         else
-        {
             knownSpells.put(spellType, 1);
-        }
     }
 
     /**
@@ -518,9 +510,7 @@ public class O2Player
             knownPotions.replace(potionType, curCount + 1);
         }
         else
-        {
             knownPotions.put(potionType, 1);
-        }
     }
 
     /**

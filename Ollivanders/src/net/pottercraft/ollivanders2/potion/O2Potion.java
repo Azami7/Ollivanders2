@@ -266,30 +266,43 @@ public abstract class O2Potion
     @NotNull
     public ItemStack brew(@NotNull Player brewer, boolean checkCanBrew)
     {
+        ItemStack potion;
+
         if (checkCanBrew && !canBrew(brewer))
         {
             brewer.sendMessage(Ollivanders2.chatColor + "You feel uncertain about how to make this potion.");
-            return brewBadPotion();
+            potion = brewBadPotion();
         }
-
-        ItemStack potion = new ItemStack(potionMaterialType);
-        PotionMeta meta = (PotionMeta) potion.getItemMeta();
-        if (meta == null)
+        else
         {
-            common.printDebugMessage("O2Potion.brew: item meta is null", null, null, true);
-            return brewBadPotion();
+            potion = new ItemStack(potionMaterialType);
+            PotionMeta meta = (PotionMeta) potion.getItemMeta();
+
+            if (meta == null)
+            {
+                common.printDebugMessage("O2Potion.brew: item meta is null", null, null, true);
+                potion = brewBadPotion();
+            }
+            else
+            {
+                meta.setDisplayName(potionType.getPotionName());
+                PersistentDataContainer container = meta.getPersistentDataContainer();
+                container.set(O2Potions.potionTypeKey, PersistentDataType.STRING, potionType.toString());
+
+                meta.setColor(potionColor);
+                if (minecraftPotionEffect != null)
+                    meta.addCustomEffect(minecraftPotionEffect, true);
+
+                meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
+                potion.setItemMeta(meta);
+            }
         }
 
-        meta.setDisplayName(potionType.getPotionName());
-        PersistentDataContainer container = meta.getPersistentDataContainer();
-        container.set(O2Potions.potionTypeKey, PersistentDataType.STRING, potionType.toString());
-
-        meta.setColor(potionColor);
-        if (minecraftPotionEffect != null)
-            meta.addCustomEffect(minecraftPotionEffect, true);
-
-        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
-        potion.setItemMeta(meta);
+        O2Player o2p = p.getO2Player(brewer);
+        if (o2p == null)
+            common.printDebugMessage("Null O2Player in O2Potion.brew", null, null, true);
+        else
+            o2p.incrementPotionCount(potionType);
 
         return potion;
     }

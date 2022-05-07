@@ -1352,22 +1352,6 @@ public class Ollivanders2 extends JavaPlugin
     }
 
     /**
-     * Increment the potion use count for a player.
-     *
-     * @param player     the player to increment the count for
-     * @param potionType the potion to increment
-     */
-    public void incrementPotionCount(@NotNull Player player, @NotNull O2PotionType potionType)
-    {
-        //returns the incremented potion count
-        UUID pid = player.getUniqueId();
-        O2Player o2p = getO2Player(player);
-
-        o2p.incrementPotionCount(potionType);
-        Ollivanders2API.getPlayers().updatePlayer(pid, o2p);
-    }
-
-    /**
      * Gets the O2Player associated with the Player
      *
      * @param player the player to get
