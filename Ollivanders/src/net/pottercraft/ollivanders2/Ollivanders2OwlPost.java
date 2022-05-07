@@ -157,6 +157,7 @@ public class Ollivanders2OwlPost
         Ollivanders2API.common.printDebugMessage("Added owl post delivery from " + player.getName() + " to " + recipient.getPlayerName(), null, null, false);
 
         player.getInventory().setItemInMainHand(null);
+        player.sendMessage(Ollivanders2.chatColor + "Owl post delivery for " + recipient.getPlayerName() + " scheduled.");
     }
 
     /**
