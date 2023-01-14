@@ -19,181 +19,185 @@ import java.util.UUID;
 
 /**
  * Nullum evanescunt creates a stationary spell which will not allow apparition out of it.
- *
- * @author lownes
- * @author Azami7
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.NULLUM_EVANESCUNT}
  */
 public class NULLUM_EVANESCUNT extends O2StationarySpell
 {
-   /**
-    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
-    *
-    * @param plugin a callback to the MC plugin
-    */
-   public NULLUM_EVANESCUNT(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     *
+     * @param plugin a callback to the MC plugin
+     */
+    public NULLUM_EVANESCUNT(@NotNull Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      spellType = O2StationarySpellType.NULLUM_EVANESCUNT;
-   }
+        spellType = O2StationarySpellType.NULLUM_EVANESCUNT;
+    }
 
-   /**
-    * Constructor
-    *
-    * @param plugin   a callback to the MC plugin
-    * @param pid      the player who cast the spell
-    * @param location the center location of the spell
-    * @param type     the type of this spell
-    * @param radius   the radius for this spell
-    * @param duration the duration of the spell
-    */
-   public NULLUM_EVANESCUNT(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration)
-   {
-      super(plugin, pid, location, type, radius, duration);
+    /**
+     * Constructor
+     *
+     * @param plugin   a callback to the MC plugin
+     * @param pid      the player who cast the spell
+     * @param location the center location of the spell
+     * @param radius   the radius for this spell
+     * @param duration the duration of the spell
+     */
+    public NULLUM_EVANESCUNT(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
+    {
+        super(plugin);
+        spellType = O2StationarySpellType.NULLUM_EVANESCUNT;
 
-      spellType = O2StationarySpellType.NULLUM_EVANESCUNT;
-   }
+        // make min/max radius and duration the same as Nullum Apparebit
+        minRadius = NULLUM_APPAREBIT.minRadiusConfig;
+        maxRadius = NULLUM_APPAREBIT.maxRadiusConfig;
+        minDuration = NULLUM_APPAREBIT.minDurationConfig;
+        maxDuration = NULLUM_APPAREBIT.maxDurationConfig;
 
-   /**
-    * Upkeep
-    */
-   @Override
-   public void checkEffect ()
-   {
-      age();
-   }
+        setPlayerID(pid);
+        setLocation(location);
+        setRadius(radius);
+        setDuration(duration);
 
-   /**
-    * Prevent player apparating to this location
-    *
-    * @param event the event
-    */
-   @Override
-   void doOnOllivandersApparateByNameEvent (@NotNull OllivandersApparateByNameEvent event)
-   {
-      Player player = event.getPlayer();
-      Location playerLocation = player.getLocation();
+        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
 
-      if (isInside(playerLocation))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("NULLUM_EVANESCUNT: canceled OllivandersApparateByNameEvent", null, null, false);
-      }
+    /**
+     * Age the spell by 1 tick
+     */
+    @Override
+    public void checkEffect()
+    {
+        age();
+    }
 
-      new BukkitRunnable()
-      {
-         @Override
-         public void run()
-         {
-            if (event.isCancelled())
-               playerFeedback(player);
-         }
-      }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
-   }
+    /**
+     * Prevent player apparating to this location
+     *
+     * @param event the apparate event
+     */
+    @Override
+    void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event)
+    {
+        Player player = event.getPlayer(); // will never be null
+        Location playerLocation = player.getLocation();
 
-   /**
-    * Prevent player apparating to this location
-    *
-    * @param event the event
-    */
-   @Override
-   void doOnOllivandersApparateByCoordinatesEvent (@NotNull OllivandersApparateByCoordinatesEvent event)
-   {
-      Player player = event.getPlayer();
-      Location playerLocation = player.getLocation();
+        if (isLocationInside(playerLocation))
+        {
+            event.setCancelled(true);
+            common.printDebugMessage("NULLUM_EVANESCUNT: canceled OllivandersApparateByNameEvent", null, null, false);
+        }
 
-      if (isInside(playerLocation))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("NULLUM_EVANESCUNT: canceled OllivandersApparateByCoordinatesEvent", null, null, false);
-      }
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if (event.isCancelled())
+                    playerFeedback(player);
+            }
+        }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+    }
 
-      new BukkitRunnable()
-      {
-         @Override
-         public void run()
-         {
-            if (event.isCancelled())
-               playerFeedback(player);
-         }
-      }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
-   }
+    /**
+     * Prevent player apparating to this location
+     *
+     * @param event the apparate event
+     */
+    @Override
+    void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event)
+    {
+        Player player = event.getPlayer(); // will never be null
+        Location playerLocation = player.getLocation();
 
-   /**
-    * Prevent entity teleporting to this location
-    *
-    * @param event the event
-    */
-   @Override
-   void doOnEntityTeleportEvent (@NotNull EntityTeleportEvent event)
-   {
-      Entity entity = event.getEntity();
-      Location entityLocation = entity.getLocation();
+        if (isLocationInside(playerLocation))
+        {
+            event.setCancelled(true);
+            common.printDebugMessage("NULLUM_EVANESCUNT: canceled OllivandersApparateByCoordinatesEvent", null, null, false);
+        }
 
-      if (isInside(entityLocation))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("NULLUM_EVANESCUNT: canceled EntityTeleportEvent", null, null, false);
-      }
-   }
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if (event.isCancelled())
+                    playerFeedback(player);
+            }
+        }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+    }
 
-   /**
-    * Prevent player teleporting to this location
-    *
-    * @param event the event
-    */
-   @Override
-   void doOnPlayerTeleportEvent (@NotNull PlayerTeleportEvent event)
-   {
-      Player player = event.getPlayer();
-      Location playerLocation = player.getLocation();
+    /**
+     * Prevent entity teleporting to this location
+     *
+     * @param event the teleport event
+     */
+    @Override
+    void doOnEntityTeleportEvent(@NotNull EntityTeleportEvent event)
+    {
+        Entity entity = event.getEntity(); // will never be null
+        Location entityLocation = entity.getLocation();
 
-      if (isInside(playerLocation))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("NULLUM_EVANESCUNT: canceled PlayerTeleportEvent", null, null, false);
-      }
+        if (isLocationInside(entityLocation))
+        {
+            event.setCancelled(true);
+            common.printDebugMessage("NULLUM_EVANESCUNT: canceled EntityTeleportEvent", null, null, false);
+        }
+    }
 
-      new BukkitRunnable()
-      {
-         @Override
-         public void run()
-         {
-            if (event.isCancelled())
-               playerFeedback(player);
-         }
-      }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
-   }
+    /**
+     * Prevent player teleporting to this location
+     *
+     * @param event the teleport event
+     */
+    @Override
+    void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event)
+    {
+        Player player = event.getPlayer(); // will never be null
+        Location playerLocation = player.getLocation();
 
-   /**
-    * Feedback to the player when they try to apparate.
-    *
-    * @param player the player
-    */
-   private void playerFeedback (@NotNull Player player)
-   {
-      player.sendMessage(Ollivanders2.chatColor + "A powerful magic protects this place.");
-      player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
-      flair(5);
-   }
+        if (isLocationInside(playerLocation))
+        {
+            event.setCancelled(true);
+            common.printDebugMessage("NULLUM_EVANESCUNT: canceled PlayerTeleportEvent", null, null, false);
+        }
 
-   /**
-    * Serialize all data specific to this spell so it can be saved.
-    *
-    * @return a map of the serialized data
-    */
-   @Override
-   @NotNull
-   public Map<String, String> serializeSpellData ()
-   {
-      return new HashMap<>();
-   }
+        new BukkitRunnable()
+        {
+            @Override
+            public void run()
+            {
+                if (event.isCancelled())
+                    playerFeedback(player);
+            }
+        }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+    }
 
-   /**
-    * Deserialize the data for this spell and load the data to this spell.
-    *
-    * @param spellData a map of the saved spell data
-    */
-   @Override
-   public void deserializeSpellData(@NotNull Map<String, String> spellData) { }
+    /**
+     * Feedback to the player when they try to apparate.
+     *
+     * @param player the player trying to teleport/apparate
+     */
+    private void playerFeedback(@NotNull Player player)
+    {
+        player.sendMessage(Ollivanders2.chatColor + "A powerful magic protects this place.");
+        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
+        flair(5);
+    }
+
+    @Override
+    @NotNull
+    public Map<String, String> serializeSpellData()
+    {
+        return new HashMap<>();
+    }
+
+    @Override
+    public void deserializeSpellData(@NotNull Map<String, String> spellData)
+    {
+    }
 }

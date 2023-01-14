@@ -11,10 +11,9 @@ import java.util.ArrayList;
 /**
  * Reduces the time duration of any levicorpus effects on the target.
  *
- * @author lownes
- * @author Azami7
+ * https://harrypotter.fandom.com/wiki/Liberacorpus
  */
-public final class LIBERACORPUS extends ReduceO2Effect
+public final class LIBERACORPUS extends RemoveO2Effect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -34,7 +33,7 @@ public final class LIBERACORPUS extends ReduceO2Effect
          add("...he jerked his wand upwards; Snape fell into a crumpled heap on the ground.");
       }};
 
-      text = "Liberacorpus will reduce the time left on any levicorpus effects on the target by an amount determined by your experience.";
+      text = "Liberacorpus counters the Levicorpus Jinx.";
    }
 
    /**
@@ -51,8 +50,17 @@ public final class LIBERACORPUS extends ReduceO2Effect
       spellType = O2SpellType.LIBERACORPUS;
       branch = O2MagicBranch.COUNTER_SPELL;
 
-      effectsToReduce.add(O2EffectType.SUSPENSION);
+      effectsAllowList.add(O2EffectType.SUSPENSION);
 
       initSpell();
+
+      maxTargets = targetsRemaining = 1;
+      successModifier = 1.0f;
+   }
+
+   @Override
+   void doInitSpell()
+   {
+      super.doInitSpell();
    }
 }

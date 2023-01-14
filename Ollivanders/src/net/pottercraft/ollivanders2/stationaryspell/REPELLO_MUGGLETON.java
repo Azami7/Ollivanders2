@@ -17,123 +17,118 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * Hides all blocks within its area by sending out block changes.
  * Hides all players within its area. The code to hide players is located in OllivandersSchedule.invisPlayer()
- *
- * @author lownes
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.REPELLO_MUGGLETON}
  */
 public class REPELLO_MUGGLETON extends ShieldSpell
 {
-   /**
-    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
-    *
-    * @param plugin a callback to the MC plugin
-    */
-   public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+    public static final int minRadiusConfig = 5;
+    public static final int maxRadiusConfig = 20;
+    public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
+    public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
-      spellType = O2StationarySpellType.REPELLO_MUGGLETON;
-   }
+    /**
+     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     *
+     * @param plugin a callback to the MC plugin
+     */
+    public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin)
+    {
+        super(plugin);
 
-   /**
-    * Constructor
-    *
-    * @param plugin   a callback to the MC plugin
-    * @param pid      the player who cast the spell
-    * @param location the center location of the spell
-    * @param type     the type of this spell
-    * @param radius   the radius for this spell
-    * @param duration the duration of the spell
-    */
-   public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration)
-   {
-      super(plugin, pid, location, type, radius, duration);
+        spellType = O2StationarySpellType.REPELLO_MUGGLETON;
+    }
 
-      spellType = O2StationarySpellType.REPELLO_MUGGLETON;
-   }
+    /**
+     * Constructor
+     *
+     * @param plugin   a callback to the MC plugin
+     * @param pid      the player who cast the spell
+     * @param location the center location of the spell
+     * @param radius   the radius for this spell
+     * @param duration the duration of the spell
+     */
+    public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
+    {
+        super(plugin);
 
-   /**
-    * Upkeep
-    */
-   @Override
-   public void checkEffect ()
-   {
-      age();
+        spellType = O2StationarySpellType.REPELLO_MUGGLETON;
+    }
 
-      if (duration % Ollivanders2Common.ticksPerSecond == 0)
-      {
-         Material toMat = getBlock().getType();
-         byte toDat = getBlock().getData();
-         double viewDistance = Math.sqrt(2 * Math.pow(((Bukkit.getServer().getViewDistance() + 1) * 16), 2));
-         for (Player player : getBlock().getWorld().getPlayers())
-         {
-            if (player.getLocation().distance(location) < viewDistance && !isInside(player.getLocation()))
+    /**
+     * Upkeep
+     */
+    @Override
+    public void checkEffect()
+    {
+        age();
+
+        if (duration % Ollivanders2Common.ticksPerSecond == 0)
+        {
+            Material toMat = getBlock().getType();
+            byte toDat = getBlock().getData();
+            double viewDistance = Math.sqrt(2 * Math.pow(((Bukkit.getServer().getViewDistance() + 1) * 16), 2));
+            for (Player player : getBlock().getWorld().getPlayers())
             {
-               for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
-               {
-                  player.sendBlockChange(block.getLocation(), toMat, toDat);
-               }
+                if (player.getLocation().distance(location) < viewDistance && !isLocationInside(player.getLocation()))
+                {
+                    for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
+                    {
+                        player.sendBlockChange(block.getLocation(), toMat, toDat);
+                    }
+                }
+                else if (isLocationInside(player.getLocation()))
+                {
+                    for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
+                    {
+                        player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
+                    }
+                }
             }
-            else if (isInside(player.getLocation()))
+        }
+        if (duration <= 1)
+        {
+            for (Player player : getBlock().getWorld().getPlayers())
             {
-               for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
-               {
-                  player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
-               }
+                for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
+                {
+                    player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
+                }
             }
-         }
-      }
-      if (duration <= 1)
-      {
-         for (Player player : getBlock().getWorld().getPlayers())
-         {
-            for (Block block : Ollivanders2API.common.getBlocksInRadius(location, radius))
-            {
-               player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
-            }
-         }
-      }
-   }
+        }
+    }
 
-   /**
-    * Do not allow targeting if the target is inside the radius and the targeter is not
-    *
-    * @param event the event
-    */
-   @Override
-   void doOnEntityTargetEvent (@NotNull EntityTargetEvent event)
-   {
-      Entity target = event.getTarget();
-      Entity entity = event.getEntity();
+    /**
+     * Do not allow targeting if the target is inside the radius and the targeter is not
+     *
+     * @param event the event
+     */
+    @Override
+    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event)
+    {
+        Entity target = event.getTarget();
+        Entity entity = event.getEntity(); // will never be null
 
-      if (target == null)
-         return;
+        if (target == null)
+            return;
 
-      if (isInside(target.getLocation()) && !isInside(entity.getLocation()))
-      {
-         event.setCancelled(true);
-         common.printDebugMessage("REPELLO_MUGGLETON: canceled EntityTargetEvent", null, null, false);
-      }
-   }
+        if (isLocationInside(target.getLocation()) && !isLocationInside(entity.getLocation()))
+        {
+            event.setCancelled(true);
+            common.printDebugMessage("REPELLO_MUGGLETON: canceled EntityTargetEvent", null, null, false);
+        }
+    }
 
-   /**
-    * Serialize all data specific to this spell so it can be saved.
-    *
-    * @return a map of the serialized data
-    */
-   @Override
-   @NotNull
-   public Map<String, String> serializeSpellData ()
-   {
-      return new HashMap<>();
-   }
+    @Override
+    @NotNull
+    public Map<String, String> serializeSpellData()
+    {
+        return new HashMap<>();
+    }
 
-   /**
-    * Deserialize the data for this spell and load the data to this spell.
-    *
-    * @param spellData a map of the saved spell data
-    */
-   @Override
-   public void deserializeSpellData(@NotNull Map<String, String> spellData) { }
+    @Override
+    public void deserializeSpellData(@NotNull Map<String, String> spellData)
+    {
+    }
 }

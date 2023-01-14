@@ -57,7 +57,17 @@ public final class MORSMORDRE extends Pyrotechnia
       fireworkType = Type.CREEPER;
 
       initSpell();
+
       // do this after initSpell because this should always be 1 firework
       maxFireworks = 1;
+   }
+
+   /**
+    * Set the number of fireworks, will always be 1
+    */
+   @Override
+   void doInitSpell()
+   {
+      setNumberOfFireworks();
    }
 }

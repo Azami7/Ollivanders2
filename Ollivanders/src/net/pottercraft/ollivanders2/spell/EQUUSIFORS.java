@@ -5,6 +5,7 @@ import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.HorseWatcher;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -12,53 +13,55 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Transfigures an entity into a horse.
- *
- * @author lownes
- * @author Azami7
- * @since 1.0
  */
 public final class EQUUSIFORS extends FriendlyMobDisguise
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public EQUUSIFORS(Ollivanders2 plugin)
-   {
-      super(plugin);
+    private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
+    private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
-      spellType = O2SpellType.EQUUSIFORS;
-      branch = O2MagicBranch.TRANSFIGURATION;
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public EQUUSIFORS(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      text = "Turns target entity in to a horse.";
-   }
+        spellType = O2SpellType.EQUUSIFORS;
+        branch = O2MagicBranch.TRANSFIGURATION;
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public EQUUSIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
-      spellType = O2SpellType.EQUUSIFORS;
-      branch = O2MagicBranch.TRANSFIGURATION;
+        text = "Turns target entity in to a horse.";
+    }
 
-      targetType = EntityType.HORSE;
-      disguiseType = DisguiseType.getType(targetType);
-      disguise = new MobDisguise(disguiseType);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public EQUUSIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.EQUUSIFORS;
+        branch = O2MagicBranch.TRANSFIGURATION;
 
-      HorseWatcher watcher = (HorseWatcher) disguise.getWatcher();
-      watcher.setAdult();
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
+        durationModifier = 1.0;
 
-      // randomize appearance
-      Ollivanders2Common common = new Ollivanders2Common(p);
-      watcher.setStyle(common.getRandomHorseStyle());
-      watcher.setColor(common.getRandomHorseColor());
+        targetType = EntityType.HORSE;
+        disguiseType = DisguiseType.getType(targetType);
+        disguise = new MobDisguise(disguiseType);
+        HorseWatcher watcher = (HorseWatcher) disguise.getWatcher();
+        watcher.setAdult();
+        watcher.setStyle(EntityCommon.getRandomHorseStyle());
+        watcher.setColor(EntityCommon.getRandomHorseColor());
 
-      initSpell();
-   }
+        initSpell();
+
+        // this needs to be done at the end because it needs to consider the usesModifier
+        populateEntityAllowedList();
+    }
 }

@@ -21,7 +21,7 @@ public class OllivandersApparateByCoordinatesEvent extends ApparateEvent
      * @param player the player apparating
      * @param dest the destination being apparated to
      */
-    public OllivandersApparateByCoordinatesEvent(@NotNull Player player, Location dest)
+    public OllivandersApparateByCoordinatesEvent(@NotNull Player player, @NotNull Location dest)
     {
         super(player);
 
@@ -33,6 +33,7 @@ public class OllivandersApparateByCoordinatesEvent extends ApparateEvent
      *
      * @return the destination being apparated to
      */
+    @NotNull
     public Location getDestination ()
     {
         return destination;

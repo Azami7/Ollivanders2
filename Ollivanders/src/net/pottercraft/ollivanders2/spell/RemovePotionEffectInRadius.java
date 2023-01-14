@@ -6,8 +6,6 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Remove a potion effect for all entities in a radius of the caster
- *
- * @author Azami7
  */
 public class RemovePotionEffectInRadius extends RemovePotionEffect
 {

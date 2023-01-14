@@ -10,71 +10,59 @@ import java.util.ArrayList;
 
 /**
  * Gives an entity a healing effect for usesModifier seconds
- *
- * @author lownes
- * @author Azami7
- * @version Ollivanders2
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Episkey
  */
 public final class EPISKEY extends AddPotionEffect
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public EPISKEY(Ollivanders2 plugin)
-   {
-      super(plugin);
+    private static final int minDurationInSecondsConfig = 15;
+    private static final int maxDurationInSecondsConfig = 120;
+    private static final int minAmplifierConfig = 0;
+    private static final int maxAmplifierConfig = 1;
 
-      branch = O2MagicBranch.HEALING;
-      spellType = O2SpellType.EPISKEY;
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public EPISKEY(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      flavorText = new ArrayList<>()
-      {{
-         add("\"Episkey,\" said Tonks. Harry's nose felt very hot, then very cold. He raised a hand and felt it gingerly. It seemed to be mended.");
-         add("A minor healing spell.");
-      }};
+        branch = O2MagicBranch.HEALING;
+        spellType = O2SpellType.EPISKEY;
 
-      text = "Episkey will heal minor injuries.";
-   }
+        flavorText = new ArrayList<>()
+        {{
+            add("\"Episkey,\" said Tonks. Harry's nose felt very hot, then very cold. He raised a hand and felt it gingerly. It seemed to be mended.");
+            add("A minor healing spell.");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public EPISKEY(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        text = "Episkey will heal minor injuries.";
+    }
 
-      branch = O2MagicBranch.HEALING;
-      spellType = O2SpellType.EPISKEY;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public EPISKEY(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        branch = O2MagicBranch.HEALING;
+        spellType = O2SpellType.EPISKEY;
 
-      effectTypes.add(PotionEffectType.REGENERATION);
+        minDurationInSeconds = minDurationInSecondsConfig;
+        maxDurationInSeconds = maxDurationInSecondsConfig;
+        durationModifier = 0.5; // 50%
+        minAmplifier = minAmplifierConfig;
+        maxAmplifier = maxAmplifierConfig;
+        amplifierModifier = 0.01; // 1/100th usesModifier
 
-      initSpell();
-   }
+        effectTypes.add(PotionEffectType.REGENERATION);
 
-   @Override
-   void doInitSpell()
-   {
-      // Amplifier
-      maxAmplifier = 1;
-
-      amplifier = (int)(usesModifier / 100);
-      if (amplifier > maxAmplifier)
-         amplifier = maxAmplifier;
-
-      // Duration
-      minDurationInSeconds = 15;
-      maxDurationInSeconds = 120;
-
-      durationInSeconds = (int)(usesModifier / 2);
-      if (durationInSeconds < minDurationInSeconds)
-         durationInSeconds = minDurationInSeconds;
-      else if (durationInSeconds > maxDurationInSeconds)
-         durationInSeconds = maxDurationInSeconds;
-   }
+        initSpell();
+    }
 }

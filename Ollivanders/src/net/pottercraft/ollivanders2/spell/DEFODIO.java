@@ -4,9 +4,7 @@ import java.util.ArrayList;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -17,115 +15,138 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Mines a line of blocks of length depending on the player's level in this spell.
- *
- * @author lownes
- * @author Azami7
- * @version Ollivanders2
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Gouging_Spell
  */
 public final class DEFODIO extends O2Spell
 {
-   private int depth;
+    /**
+     * The maximum depth this spell can dig
+     */
+    private static int maxDepth = 10;
 
-   private Block curBlock = null;
+    /**
+     * The number of blocks remaining to be mined
+     */
+    private int remainingCount;
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public DEFODIO(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * The current block position
+     */
+    private Block curBlock = null;
 
-      spellType = O2SpellType.DEFODIO;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Slow down defodio mining to 4 blocks per second
+     */
+    private int cooldown = Ollivanders2Common.ticksPerSecond / 4;
 
-      flavorText = new ArrayList<>()
-      {{
-         add("The Gouging Spell enables a witch or wizard to carve through earth and stone with ease. From budding Herbologists digging for Snargaluff seedlings to treasure-hunting curse breakers uncovering ancient wizard tombs, the Gouging Spell makes all manner of heavy labour a matter of pointing a wand.");
-         add("The Gouging Charm");
-      }};
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public DEFODIO(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      text = "Mines a line of blocks.";
-   }
+        spellType = O2SpellType.DEFODIO;
+        branch = O2MagicBranch.CHARMS;
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public DEFODIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
-      spellType = O2SpellType.DEFODIO;
-      branch = O2MagicBranch.CHARMS;
+        flavorText = new ArrayList<>()
+        {{
+            add("The Gouging Spell enables a witch or wizard to carve through earth and stone with ease. From budding Herbologists digging for Snargaluff seedlings to treasure-hunting curse breakers uncovering ancient wizard tombs, the Gouging Spell makes all manner of heavy labour a matter of pointing a wand.");
+            add("The Gouging Charm");
+        }};
 
-      depth = (int) usesModifier;
+        text = "Mines a line of blocks.";
+    }
 
-      // world-guard flags
-      if (Ollivanders2.worldGuardEnabled)
-         worldGuardFlags.add(Flags.BUILD);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public DEFODIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.DEFODIO;
+        branch = O2MagicBranch.CHARMS;
 
-      // material black list
-      materialBlackList.add(Material.WATER);
-      materialBlackList.add(Material.LAVA);
-      materialBlackList.add(Material.FIRE);
+        // world-guard flags
+        if (Ollivanders2.worldGuardEnabled)
+            worldGuardFlags.add(Flags.BUILD);
 
-      for (Material material : Ollivanders2Common.unbreakableMaterials)
-      {
-         if (!materialBlackList.contains(material))
-            materialBlackList.add(material);
-      }
+        // material blocked list
+        materialBlockedList.add(Material.WATER);
+        materialBlockedList.add(Material.LAVA);
+        materialBlockedList.add(Material.FIRE);
 
-      initSpell();
-   }
+        for (Material material : Ollivanders2Common.unbreakableMaterials)
+        {
+            if (!materialBlockedList.contains(material))
+                materialBlockedList.add(material);
+        }
 
-   /**
-    * Break a row of blocks
-    */
-   @Override
-   protected void doCheckEffect()
-   {
-      if (!hasHitTarget())
-         return;
+        initSpell();
+    }
 
-      curBlock = getTargetBlock();
-      if (curBlock == null)
-      {
-         common.printDebugMessage("DEFODIO.doCheckEffect: target block is null", null, null, true);
-         kill();
-         return;
-      }
+    @Override
+    void doInitSpell()
+    {
+        remainingCount = (int) usesModifier / 4;
 
-      // stop the spell if we hit a blacklisted block type or when the max depth is reached
-      if (materialBlackList.contains(curBlock.getType()) || depth <= 0)
-      {
-         kill();
-         return;
-      }
+        if (remainingCount > maxDepth)
+            remainingCount = maxDepth;
+        else if (remainingCount < 1)
+            remainingCount = 1;
 
-      Location curLoc = curBlock.getLocation();
+        cooldown = 0;
 
-      // stop the spell if we hit a colloportus stationary spell
-      if (Ollivanders2API.getStationarySpells(p).checkLocationForSpell(curLoc, O2StationarySpellType.COLLOPORTUS))
-      {
-         kill();
-         return;
-      }
+        common.printDebugMessage("Defodio remaining set to " + remainingCount, null, null, false);
+    }
 
-      // stop the spell if something prevented the current block breaking naturally
-      if (curBlock.breakNaturally())
-      {
-         depth = depth - 1;
+    /**
+     * Break a row of blocks along the vector of the spell projectile
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        if (!hasHitTarget())
+            return;
 
-         Location nextLoc = curLoc.add(vector);
-         curBlock = nextLoc.getBlock();
-      }
-      else
-      {
-         kill();
-      }
-   }
+        // use cooldown to slow defodio to 4 blocks per second
+        if (cooldown > 0)
+        {
+            cooldown = cooldown - 1;
+            return;
+        }
+
+        curBlock = getTargetBlock();
+        if (curBlock == null)
+        {
+            common.printDebugMessage("DEFODIO.doCheckEffect: target block is null", null, null, true);
+            kill();
+            return;
+        }
+
+        // stop the spell if we hit a block type on the blocked list or when the max depth is reached
+        if (materialBlockedList.contains(curBlock.getType()) || remainingCount <= 0)
+        {
+            common.printDebugMessage("Block type not allowed: " + curBlock.getType(), null, null, false);
+            kill();
+            return;
+        }
+
+        Location curLoc = curBlock.getLocation();
+
+        // stop the spell if something prevented the current block breaking naturally
+        curBlock.breakNaturally();
+        remainingCount = remainingCount - 1;
+        common.printDebugMessage("Blocks remaining: " + remainingCount, null, null, false);
+
+        Location nextLoc = curLoc.add(vector);
+        curBlock = nextLoc.getBlock();
+    }
 }

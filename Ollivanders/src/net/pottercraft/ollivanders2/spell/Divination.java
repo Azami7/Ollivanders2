@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.spell;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.divination.O2Divination;
 import net.pottercraft.ollivanders2.divination.O2DivinationType;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
@@ -19,22 +20,51 @@ import java.util.List;
 
 /**
  * Super class for all divination spells.
- *
- * @author Azami7
- * @since 2.2.9
  */
 public abstract class Divination extends O2Spell
 {
+    /**
+     * The type of divination
+     */
     O2DivinationType divinationType = null;
+
+    /**
+     * The target of this divination's prophecy
+     */
     Player target = null;
 
+    /**
+     * (optional) Item type that needs to be held to perform this divination (such as an egg for Ovognosis)
+     */
     O2ItemType itemHeld = null;
+
+    /**
+     * (optional) The description string for the item held, used in spell book texts
+     * <p>
+     * Needs to be set if itemHeld is set or the book text cannot include this information.
+     */
     String itemHeldString = "";
+
+    /**
+     * Is the item held consumed as a part of the divination
+     */
     boolean consumeHeld = false;
 
+    /**
+     * (optional) The block a player must be facing to do this divination (such as a crystal ball for Intueor)
+     */
     Material facingBlock = null;
+
+    /**
+     * (optional) The description string for the block to be faced, used in spell book texts
+     * <p>
+     * Needs to be set if facingBlock is set or the book text cannot include this information.
+     */
     String facingBlockString = "";
 
+    /**
+     * All divination spell types
+     */
     public static final List<O2SpellType> divinationSpells = new ArrayList<>()
     {{
         add(O2SpellType.ASTROLOGIA);
@@ -81,9 +111,7 @@ public abstract class Divination extends O2Spell
         usesModifier = p.getSpellCount(player, spellType);
 
         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
-        {
             usesModifier *= 2;
-        }
     }
 
     /**
@@ -94,9 +122,7 @@ public abstract class Divination extends O2Spell
     public void setTarget(@NotNull Player t)
     {
         if (player != null)
-        {
             target = t;
-        }
     }
 
     @Override
@@ -111,7 +137,7 @@ public abstract class Divination extends O2Spell
         // if this divination type requires the player be facing an block, like a crystal ball, check for the block
         if (facingBlock != null)
         {
-            Block facing = Ollivanders2API.common.playerFacingBlockType(player, facingBlock);
+            Block facing = Ollivanders2Common.playerFacingBlockType(player, facingBlock);
             if (facing == null)
             {
                 player.sendMessage(Ollivanders2.chatColor + "You must be facing " + facingBlockString + " to do that.");
@@ -181,5 +207,7 @@ public abstract class Divination extends O2Spell
     }
 
     @Override
-    protected void doCheckEffect() {}
+    protected void doCheckEffect()
+    {
+    }
 }

@@ -5,6 +5,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -23,8 +24,6 @@ import java.util.List;
 
 /**
  * Manage wands and wand functions
- *
- * @author Azami7
  */
 public class O2Wands
 {
@@ -161,7 +160,7 @@ public class O2Wands
     /**
      * Determine if a wand matches the player's destined wand type.
      *
-     * @param player the player to check
+     * @param player    the player to check
      * @param itemStack the wand to check
      * @return true if is a wand and it matches the player's destined wand, false otherwise
      */
@@ -184,7 +183,7 @@ public class O2Wands
     /**
      * Does this core match what is set on the NBT for this wand?
      *
-     * @param core the wood type
+     * @param core      the wood type
      * @param itemStack the item to check
      * @return true if it matches, false otherwise
      */
@@ -208,7 +207,7 @@ public class O2Wands
     /**
      * Does this wood match what is set on the NBT for this wand?
      *
-     * @param wood the wood type
+     * @param wood      the wood type
      * @param itemStack the item to check
      * @return true if it matches, false otherwise
      */
@@ -232,8 +231,8 @@ public class O2Wands
     /**
      * Does the lore for this itemstack match the wood and core specified
      *
-     * @param core the core to match
-     * @param wood the wood to match
+     * @param core      the core to match
+     * @param wood      the wood to match
      * @param itemStack the item to check
      * @return true if the lore matches this wood and core, false otherwise
      */
@@ -275,7 +274,6 @@ public class O2Wands
      * @param player player to check.
      * @param hand   the equipment slot to check for this player
      * @return True if the player holds a wand. False if not or if player is null.
-     * @since 2.2.7
      */
     public boolean holdsWand(@NotNull Player player, @NotNull EquipmentSlot hand)
     {
@@ -372,8 +370,8 @@ public class O2Wands
      * Make a wand from a coreless wand and a wand core
      *
      * @param corelessWand the coreless wand
-     * @param core the wand core
-     * @param amount the amount to make
+     * @param core         the wand core
+     * @param amount       the amount to make
      * @return an item stack of the wand type, null if an error occurred
      */
     @Nullable
@@ -401,7 +399,7 @@ public class O2Wands
      * Create a coreless wand of a specied wood type.
      *
      * @param woodType the wood type for the wand
-     * @param amount the amount
+     * @param amount   the amount
      * @return an item stack of this wand type, null if an error occurred
      */
     @Nullable
@@ -438,7 +436,7 @@ public class O2Wands
         List<ItemStack> kit = new ArrayList<>();
         kit.add(wand);
 
-        Ollivanders2API.common.givePlayerKit(player, kit);
+        O2PlayerCommon.givePlayerKit(player, kit);
         return true;
     }
 

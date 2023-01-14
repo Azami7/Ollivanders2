@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -15,89 +16,96 @@ import java.util.UUID;
 
 /**
  * Only players within this can hear other conversation from other players within. Duration depending on spell's level.
- *
- * @author lownes
- * @author Azami7
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Muffliato_Charm
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.MUFFLIATO}
  */
 public class MUFFLIATO extends ShieldSpell
 {
-   /**
-    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
-    *
-    * @param plugin a callback to the MC plugin
-    */
-   public MUFFLIATO(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+    public static final int minRadiusConfig = 5;
+    public static final int maxRadiusConfig = 20;
+    public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
+    public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
-      spellType = O2StationarySpellType.MUFFLIATO;
-   }
+    /**
+     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     *
+     * @param plugin a callback to the MC plugin
+     */
+    public MUFFLIATO(@NotNull Ollivanders2 plugin)
+    {
+        super(plugin);
 
-   /**
-    * Constructor
-    *
-    * @param plugin   a callback to the MC plugin
-    * @param pid      the player who cast the spell
-    * @param location the center location of the spell
-    * @param type     the type of this spell
-    * @param radius   the radius for this spell
-    * @param duration the duration of the spell
-    */
-   public MUFFLIATO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull O2StationarySpellType type, int radius, int duration)
-   {
-      super(plugin, pid, location, type, radius, duration);
+        spellType = O2StationarySpellType.MUFFLIATO;
+    }
 
-      spellType = O2StationarySpellType.MUFFLIATO;
-   }
+    /**
+     * Constructor
+     *
+     * @param plugin   a callback to the MC plugin
+     * @param pid      the player who cast the spell
+     * @param location the center location of the spell
+     * @param radius   the radius for this spell
+     * @param duration the duration of the spell
+     */
+    public MUFFLIATO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
+    {
+        super(plugin);
+        spellType = O2StationarySpellType.MUFFLIATO;
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
 
-   /**
-    * Upkeep
-    */
-   @Override
-   public void checkEffect ()
-   {
-      age();
-   }
+        setPlayerID(pid);
+        setLocation(location);
+        setRadius(radius);
+        setDuration(duration);
 
-   /**
-    * Handle player chat
-    *
-    * @param event the event
-    */
-   @Override
-   void doOnAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event)
-   {
-      Player speaker = event.getPlayer();
+        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
 
-      if (!isInside(speaker.getLocation()))
-         return;
+    /**
+     * Age the spell by 1 tick
+     */
+    @Override
+    public void checkEffect()
+    {
+        age();
+    }
 
-      Set<Player> recipients = new HashSet<>(event.getRecipients());
+    /**
+     * Handle player chat
+     *
+     * @param event the event
+     */
+    @Override
+    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
+    {
+        Player speaker = event.getPlayer(); // will never be null
 
-      for (Player player : recipients)
-      {
-         if (!isInside(player.getLocation()))
-            event.getRecipients().remove(player);
-      }
-   }
+        if (!isLocationInside(speaker.getLocation()))
+            return;
 
-   /**
-    * Serialize all data specific to this spell so it can be saved.
-    *
-    * @return a map of the serialized data
-    */
-   @Override
-   @NotNull
-   public Map<String, String> serializeSpellData ()
-   {
-      return new HashMap<>();
-   }
+        Set<Player> recipients = new HashSet<>(event.getRecipients());
 
-   /**
-    * Deserialize the data for this spell and load the data to this spell.
-    *
-    * @param spellData a map of the saved spell data
-    */
-   @Override
-   public void deserializeSpellData(@NotNull Map<String, String> spellData) { }
+        for (Player player : recipients)
+        {
+            if (!isLocationInside(player.getLocation()))
+                event.getRecipients().remove(player);
+        }
+    }
+
+    @Override
+    @NotNull
+    public Map<String, String> serializeSpellData()
+    {
+        return new HashMap<>();
+    }
+
+    @Override
+    public void deserializeSpellData(@NotNull Map<String, String> spellData)
+    {
+    }
 }

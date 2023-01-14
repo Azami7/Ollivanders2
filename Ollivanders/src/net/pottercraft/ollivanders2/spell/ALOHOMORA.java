@@ -15,93 +15,90 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The unlocking spell.
- *
- * @author cakenggt
- * @author Azami7
- * @version Ollivanders2
+ * <p>
+ * Reference: https://harrypotter.fandom.com/wiki/Unlocking_Charm
  */
 public final class ALOHOMORA extends O2Spell
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public ALOHOMORA(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public ALOHOMORA(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-      spellType = O2SpellType.ALOHOMORA;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.ALOHOMORA;
+        branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<>()
-      {{
-         add("There are many ways to pass through locked doors in the magical world.  When you wish to enter or depart discreetly, however, the Unlocking Charm is your best friend.");
-         add("The Unlocking Charm");
-      }};
+        flavorText = new ArrayList<>()
+        {{
+            add("There are many ways to pass through locked doors in the magical world.  When you wish to enter or depart discreetly, however, the Unlocking Charm is your best friend.");
+            add("The Unlocking Charm");
+        }};
 
-      text = "Unlocks blocks locked by Colloportus.";
-   }
+        text = "Unlocks blocks locked by Colloportus.";
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public ALOHOMORA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
-      spellType = O2SpellType.ALOHOMORA;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public ALOHOMORA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.ALOHOMORA;
+        branch = O2MagicBranch.CHARMS;
 
-      // world guard
-      if (Ollivanders2.worldGuardEnabled)
-         worldGuardFlags.add(Flags.INTERACT);
+        // world guard
+        if (Ollivanders2.worldGuardEnabled)
+            worldGuardFlags.add(Flags.INTERACT);
 
-      initSpell();
-   }
+        initSpell();
+    }
 
-   /**
-    * Checks for colloportus stationary spells and ages them, if found
-    */
-   @Override
-   protected void doCheckEffect()
-   {
-      // check all the stationary spells in the location of the projectile for a Colloportus
-      List<O2StationarySpell> inside = new ArrayList<>();
-      List<O2StationarySpell> stationarySpellsAtLocation = Ollivanders2API.getStationarySpells(p).getStationarySpellsAtLocation(location);
+    /**
+     * Checks for colloportus stationary spells and ages them, if found
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        if (hasHitTarget())
+            kill();
 
-      if (stationarySpellsAtLocation.size() < 1)
-      {
-         common.printDebugMessage("No stationary spells found at location", null, null, false);
-         return;
-      }
+        // check all the stationary spells in the location of the projectile for a Colloportus
+        List<O2StationarySpell> inside = new ArrayList<>();
+        List<O2StationarySpell> stationarySpellsAtLocation = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location);
 
-      for (O2StationarySpell spell : stationarySpellsAtLocation)
-      {
-         if (spell instanceof COLLOPORTUS)
-         {
-            common.printDebugMessage("Found a COLLOPORTUS spell", null, null, false);
-            inside.add(spell);
-         }
-      }
+        if (stationarySpellsAtLocation.size() < 1)
+        {
+            common.printDebugMessage("No stationary spells found at location", null, null, false);
+            return;
+        }
 
-      // remove the colloportus spells found
-      if (inside.size() > 0)
-      {
-         for (O2StationarySpell spell : inside)
-         {
-            spell.kill();
-            spell.flair(10);
-         }
+        for (O2StationarySpell spell : stationarySpellsAtLocation)
+        {
+            if (spell instanceof COLLOPORTUS)
+            {
+                common.printDebugMessage("Found a COLLOPORTUS spell", null, null, false);
+                inside.add(spell);
+            }
+        }
 
-         kill();
-      }
+        // remove the colloportus spells found
+        if (inside.size() > 0)
+        {
+            for (O2StationarySpell spell : inside)
+            {
+                spell.kill();
+                spell.flair(10);
+            }
 
-      // if the spell has hit a solid block, the projectile is stopped and wont go further so kill the spell
-      if (hasHitTarget())
-         kill();
-   }
+            kill();
+        }
+    }
 }

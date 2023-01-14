@@ -1,19 +1,19 @@
 package net.pottercraft.ollivanders2.item.enchantment;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.craftbukkit.libs.jline.internal.Nullable;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Item enchantment
- *
- * @author Azami7
- * @since 2.6
  */
 public abstract class Enchantment
 {
@@ -50,12 +50,12 @@ public abstract class Enchantment
     /**
      * Constructor
      *
-     * @param plugin a callback to the plugin
-     * @param mag the magnitude of this enchantment
-     * @param args optional arguments for this enchantment
+     * @param plugin   a callback to the plugin
+     * @param mag      the magnitude of this enchantment
+     * @param args     optional arguments for this enchantment
      * @param itemLore the optional lore for this enchantment
      */
-    public Enchantment (@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
+    public Enchantment(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
     {
         p = plugin;
         magnitude = mag;
@@ -70,28 +70,28 @@ public abstract class Enchantment
      *
      * @param event the item despawn event
      */
-    abstract public void doItemDespawn (@NotNull ItemDespawnEvent event);
+    abstract public void doItemDespawn(@NotNull ItemDespawnEvent event);
 
     /**
      * Handle item pickup events
      *
      * @param event the item pick up event
      */
-    abstract public void doItemPickup (@NotNull EntityPickupItemEvent event);
+    abstract public void doItemPickup(@NotNull EntityPickupItemEvent event);
 
     /**
      * Handle item drop events
      *
      * @param event the item drop event
      */
-    abstract public void doItemDrop (@NotNull PlayerDropItemEvent event);
+    abstract public void doItemDrop(@NotNull PlayerDropItemEvent event);
 
     /**
      * Handle item held events
      *
      * @param event the item drop event
      */
-    abstract public void doItemHeld (@NotNull PlayerItemHeldEvent event);
+    abstract public void doItemHeld(@NotNull PlayerItemHeldEvent event);
 
     /**
      * Get the name of this enchantment.
@@ -99,8 +99,64 @@ public abstract class Enchantment
      * @return the enchantment name
      */
     @NotNull
-    public String getName ()
+    public String getName()
     {
         return enchantmentType.getName();
+    }
+
+    /**
+     * Get the magnitude for this enchantment
+     *
+     * @return the magnitude
+     */
+    public int getMagnitude()
+    {
+        return magnitude;
+    }
+
+    /**
+     * Get the type of enchantment
+     *
+     * @return the enchantment type
+     */
+    @NotNull
+    public ItemEnchantmentType getType()
+    {
+        return enchantmentType;
+    }
+
+    /**
+     * Get the optional arguments for this enchantment
+     *
+     * @return the args string
+     */
+    @Nullable
+    public String getArgs()
+    {
+        return args;
+    }
+
+    /**
+     * Is the player holding an item enchanted with this enchantment type?
+     *
+     * @param player the player to check
+     * @return true if they are holding an item with this enchantment type, false otherwise
+     */
+    boolean isHoldingEnchantedItem(Player player)
+    {
+        // first check NBT tag of item in primary hand
+        ItemStack primaryItem = player.getInventory().getItemInMainHand();
+        String eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(primaryItem);
+        if (eTypeStr != null)
+            return eTypeStr.equalsIgnoreCase(enchantmentType.toString());
+
+        // check NBT tag in item in player's off hand
+        ItemStack secondaryItem = player.getInventory().getItemInOffHand();
+        eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(secondaryItem);
+        if (eTypeStr != null)
+            return eTypeStr.equalsIgnoreCase(enchantmentType.toString());
+
+        // no NBT tag, this is not enchanted, return false
+        return false;
     }
 }

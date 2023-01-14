@@ -8,7 +8,7 @@ import java.util.UUID;
 import java.util.Collection;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByNameEvent;
@@ -34,375 +34,596 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Stationary spell object in Ollivanders2
- *
- * @author lownes
- * @author Azami7
  */
 public abstract class O2StationarySpell implements Serializable
 {
-   Ollivanders2 p;
-   final Ollivanders2Common common;
-   public UUID playerUUID;
-   protected O2StationarySpellType spellType;
-   public Location location;
-   public int duration;
-   public boolean kill = false;
-   public boolean active = true;
-   public int radius;
+    /**
+     * The minimum radius for this spell
+     */
+    int minRadius = 5;
 
-   /**
-    * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
-    *
-    * @param plugin a callback to the MC plugin
-    */
-   public O2StationarySpell(@NotNull Ollivanders2 plugin)
-   {
-      p = plugin;
-      common = new Ollivanders2Common(p);
+    /**
+     * The maximum radius for this spell
+     */
+    int maxRadius = 5;
 
-      duration = 10;
-      radius = 1;
-      active = false;
-   }
+    /**
+     * The minimum duration for the spell
+     */
+    int minDuration = Ollivanders2Common.ticksPerSecond * 30; // 30 seconds
 
-   /**
-    * Constructor
-    *
-    * @param plugin   a callback to the MC plugin
-    * @param playerID the player who cast the spell
-    * @param loc      the center location of the spell
-    * @param type     the type of this spell
-    * @param radius   the radius for this spell
-    * @param duration the duration of the spell
-    */
-   public O2StationarySpell(@NotNull Ollivanders2 plugin, @NotNull UUID playerID, @NotNull Location loc, @NotNull O2StationarySpellType type, int radius, int duration)
-   {
-      p = plugin;
-      common = new Ollivanders2Common(p);
+    /**
+     * The maximum duration for the spell
+     */
+    int maxDuration = Ollivanders2Common.ticksPerMinute * 30; // 30 minutes
 
-      location = loc;
-      this.spellType = type;
-      playerUUID = playerID;
-      this.duration = duration;
-      this.radius = radius;
-   }
+    /**
+     * True if this spell permanent
+     */
+    boolean permanent = false;
 
-   /**
-    * Set the duration of this stationary spell
-    *
-    * @param d the duration in game ticks
-    */
-   void setDuration(int d)
-   {
-      if (d < 0)
-         d = 0;
+    /**
+     * A reference to the plugin
+     */
+    Ollivanders2 p;
 
-      duration = d;
-   }
+    /**
+     * Common functions
+     */
+    final Ollivanders2Common common;
 
-   /**
-    * Set the radius of this stationary spell
-    *
-    * @param r the radius in blocks
-    */
-   void setRadius(int r)
-   {
-      if (r < 0)
-         r = 0;
+    /**
+     * The UUID of the caster of this stationary spell
+     */
+    UUID playerUUID;
 
-      radius = r;
-   }
+    /**
+     * The type of stationary spell
+     */
+    O2StationarySpellType spellType;
 
-   /**
-    * Set the center location of this stationary spell
-    *
-    * @param l the spell location
-    */
-   void setLocation(@NotNull Location l)
-   {
-      location = l;
-   }
+    /**
+     * The location of this stationary spell
+     */
+    Location location;
 
-   /**
-    * Set the ID of the player who cast this spell
-    *
-    * @param pid the player ID
-    */
-   void setPlayerID(@NotNull UUID pid)
-   {
-      playerUUID = pid;
-   }
+    /**
+     * The remaining duration of this stationary spell
+     */
+    int duration = 10;
 
-   /**
-    * Get the type of this stationary spell
-    *
-    * @return the spell type
-    */
-   @NotNull
-   public O2StationarySpellType getSpellType()
-   {
-      return spellType;
-   }
+    /**
+     * Is this spell currently active. Duration still counts down when spell is inactive.
+     */
+    boolean active = true;
 
-   /**
-    * Set whether this stationary spell is active
-    *
-    * @param a true if the spell is active, false otherwise
-    */
-   void setActive(boolean a)
-   {
-      active = a;
-   }
+    /**
+     * Is this spell expired
+     */
+    boolean kill = false;
 
-   /**
-    * Ages the StationarySpellObj
-    */
-   public void age()
-   {
-      age(1);
-   }
+    /**
+     * The radius of this stationary spell from the location
+     */
+    int radius = 1;
 
-   /**
-    * Ages the StationarySpellObj
-    *
-    * @param i - amount to age
-    */
-   public void age(int i)
-   {
-      duration = duration - i;
+    /**
+     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     *
+     * @param plugin a callback to the MC plugin
+     */
+    public O2StationarySpell(@NotNull Ollivanders2 plugin)
+    {
+        p = plugin;
+        common = new Ollivanders2Common(p);
+    }
 
-      if (duration <= 0)
-         kill();
-   }
+    /**
+     * Get the duration remaining for this spell
+     *
+     * @return the duration remaining
+     */
+    public int getDuration()
+    {
+        return duration;
+    }
 
-   /**
-    * Ages the stationary spell by the specified percent.
-    *
-    * @param percent the percent to age the spell by
-    */
-   public void ageByPercent(int percent)
-   {
-      if (percent < 1)
-      {
-         percent = 1;
-      }
-      else if (percent > 100)
-      {
-         percent = 100;
-      }
+    /**
+     * Set the duration remaining for this stationary spell. This can be lower than the min duration since spells may reduce the time remaining and loading stationary spells from the
+     * save file on restart should set them to however much time was left
+     *
+     * @param duration the duration in game ticks
+     */
+    void setDuration(int duration)
+    {
+        if (duration < 0)
+            duration = 0;
+        else if (duration > maxDuration)
+            duration = maxDuration;
 
-      age(duration * (percent/100));
-   }
+        this.duration = duration;
+    }
 
-   /**
-    * This kills the stationarySpellObj.
-    */
-   public void kill()
-   {
-      flair(20);
-      kill = true;
+    /**
+     * Get the spell's current radius
+     *
+     * @return the radius of this spell
+     */
+    public int getRadius()
+    {
+        return radius;
+    }
 
-      Player caster = p.getServer().getPlayer(playerUUID);
-      if (caster != null)
-         caster.sendMessage(Ollivanders2.chatColor + "Your " + spellType.getSpellName() + " spell has ended.");
-   }
+    /**
+     * Set the radius of this stationary spell.
+     *
+     * @param radius the radius in blocks
+     */
+    void setRadius(int radius)
+    {
+        if (radius < minRadius)
+            radius = minRadius;
+        else if (radius > maxRadius)
+            radius = maxRadius;
 
-   /**
-    * Is the location specified inside the object's radius?
-    *
-    * @param loc - The location specified.
-    * @return true if yes, false if no.
-    */
-   public boolean isInside(@NotNull Location loc)
-   {
-      return Ollivanders2API.common.isInside(location, loc, radius);
-   }
+        this.radius = radius;
+    }
 
-   /**
-    * Gets the block the projectile is inside
-    *
-    * @return Block the projectile is inside
-    */
-   @NotNull
-   public Block getBlock ()
-   {
-      return location.getBlock();
-   }
+    /**
+     * Increase the radius of this stationary spell.
+     *
+     * @param increase the amount to increase the radius by
+     */
+    public void increaseRadius(int increase)
+    {
+        // if they sent a negative number, do decrease
+        if (increase < 0)
+            decreaseRadius(increase);
 
-   /**
-    * Get living entities who's eye location is within the radius.
-    *
-    * @return List of living entities with an eye location within radius
-    */
-   @NotNull
-   public List<LivingEntity> getCloseLivingEntities ()
-   {
-      Collection<LivingEntity> entities = Ollivanders2API.common.getLivingEntitiesInRadius(location, radius);
-      List<LivingEntity> close = new ArrayList<>();
+        radius = radius + increase;
 
-      /* only add living entities if their eye location is within the radius */
-      for (LivingEntity e : entities)
-      {
-         if (location.distance(e.getEyeLocation()) < radius)
-         {
-            close.add(e);
-         }
-      }
+        if (radius > maxRadius)
+            radius = maxRadius;
+    }
 
-      return close;
-   }
+    /**
+     * Decrease the radius of this stationary spell.
+     *
+     * @param decrease the amount to decrease the radius
+     */
+    public void decreaseRadius(int decrease)
+    {
+        // if they sent negative number, do increase
+        if (decrease < 0)
+            increaseRadius(decrease);
 
-   /**
-    * Makes a particle effect at all points along the radius of
-    * spell and at spell loc
-    *
-    * @param d - Intensity of the flair. If greater than 10, is reduced to 10.
-    */
-   public void flair (double d)
-   {
-      Ollivanders2Common.flair(location, radius, d);
-   }
+        radius = radius - decrease;
 
-   /**
-    * Get the ID of the player that cast the spell
-    *
-    * @return the MC UUID of the player that cast the spell
-    */
-   @NotNull
-   public UUID getCasterID ()
-   {
-      return playerUUID;
-   }
+        // if radius is smaller than the min, kill this spell
+        if (radius < minRadius)
+            kill();
+    }
 
-   /**
-    * This is the stationary spell's effect. age() must be called in this if you want the spell to age and die eventually.
-    */
-   abstract void checkEffect ();
+    /**
+     * Increase the duration of this stationary spell.
+     *
+     * @param increase the amount to increase the duration by
+     */
+    public void increaseDuration(int increase)
+    {
+        duration = duration + increase;
 
-   /**
-    * Serialize all data specific to this spell so it can be saved.
-    *
-    * @return a map of the serialized data
-    */
-   @NotNull
-   abstract Map<String, String> serializeSpellData ();
+        if (duration > maxDuration)
+            duration = maxDuration;
+    }
 
-   /**
-    * Deserialize the data for this spell and load the data to this spell.
-    *
-    * @param spellData the serialized spell data
-    */
-   abstract void deserializeSpellData(@NotNull Map<String, String> spellData);
+    /**
+     * Set the center location of this stationary spell
+     *
+     * @param location the spell location
+     */
+    void setLocation(@NotNull Location location)
+    {
+        this.location = location;
+    }
 
-   /**
-    * Handle players moving
-    *
-    * @param event the event
-    */
-   void doOnPlayerMoveEvent (@NotNull PlayerMoveEvent event) {}
+    /**
+     * Set the ID of the player who cast this spell
+     *
+     * @param pid the player ID
+     */
+    void setPlayerID(@NotNull UUID pid)
+    {
+        playerUUID = pid;
+    }
 
-   /**
-    * Handle creatures from spawning
-    *
-    * @param event the event
-    */
-   void doOnCreatureSpawnEvent (@NotNull CreatureSpawnEvent event) {}
+    /**
+     * Get the type of this stationary spell
+     *
+     * @return the spell type
+     */
+    @NotNull
+    public O2StationarySpellType getSpellType()
+    {
+        return spellType;
+    }
 
-   /**
-    * Handle entities spawning
-    *
-    * @param event the event
-    */
-   void doOnEntityTargetEvent (@NotNull EntityTargetEvent event) {}
+    /**
+     * Set whether this spell should be active or not. Duration counts down regardless of this state.
+     *
+     * @param active true if active, false is not active
+     */
+    public void setActive(boolean active)
+    {
+        this.active = active;
+    }
 
-   /**
-    * Handle player chat
-    *
-    * @param event the event
-    */
-   void doOnAsyncPlayerChatEvent (@NotNull AsyncPlayerChatEvent event) {}
+    /**
+     * Ages the StationarySpellObj
+     */
+    public void age()
+    {
+        if (permanent)
+            return;
 
-   /**
-    * Handle block break event
-    *
-    * @param event the event
-    */
-   void doOnBlockBreakEvent (@NotNull BlockBreakEvent event) {}
+        age(1);
+    }
 
-   /**
-    * Handle break door event
-    *
-    * @param event the event
-    */
-   void doOnEntityBreakDoorEvent (@NotNull EntityBreakDoorEvent event) {}
+    /**
+     * Ages the StationarySpellObj
+     *
+     * @param i number of ticks to age the spell by
+     */
+    public void age(int i)
+    {
+        if (permanent)
+            return;
 
-   /**
-    * Handle entity change block event
-    *
-    * @param event the event
-    */
-   void doOnEntityChangeBlockEvent (@NotNull EntityChangeBlockEvent event) {}
+        duration = duration - i;
 
-   /**
-    * Handle entity interact event
-    *
-    * @param event the event
-    */
-   void doOnEntityInteractEvent (@NotNull EntityInteractEvent event) {}
+        if (duration <= 0)
+            kill();
+    }
 
-   /**
-    * Handle player interact event
-    *
-    * @param event the event
-    */
-   void doOnPlayerInteractEvent (@NotNull PlayerInteractEvent event) {}
+    /**
+     * Ages the stationary spell by the specified percent.
+     *
+     * @param percent the percent to age the spell by
+     */
+    public void ageByPercent(int percent)
+    {
+        if (permanent)
+            return;
 
-   /**
-    * Handle entity damage
-    *
-    * @param event the event
-    */
-   void doOnEntityDamageEvent (@NotNull EntityDamageEvent event) {}
+        if (percent < 1)
+            percent = 1;
+        else if (percent > 100)
+            percent = 100;
 
-   /**
-    * Handle apparate by name event
-    *
-    * @param event the event
-    */
-   void doOnOllivandersApparateByNameEvent (@NotNull OllivandersApparateByNameEvent event) {}
+        age(duration * (percent / 100));
+    }
 
-   /**
-    * Handle apparate by coord event
-    *
-    * @param event the event
-    */
-   void doOnOllivandersApparateByCoordinatesEvent (@NotNull OllivandersApparateByCoordinatesEvent event) {}
+    /**
+     * This kills the spell
+     */
+    public void kill()
+    {
+        flair(20);
+        kill = true;
 
-   /**
-    * Handle entity teleport event
-    *
-    * @param event the event
-    */
-   void doOnEntityTeleportEvent (@NotNull EntityTeleportEvent event) {}
+        Player caster = p.getServer().getPlayer(playerUUID);
+        if (caster != null)
+            caster.sendMessage(Ollivanders2.chatColor + "Your " + spellType.getSpellName() + " spell has ended.");
+    }
 
-   /**
-    * Handle player teleport event
-    *
-    * @param event the event
-    */
-   void doOnPlayerTeleportEvent (@NotNull PlayerTeleportEvent event) {}
+    /**
+     * Is the location specified inside the object's radius?
+     *
+     * @param loc the location specified.
+     * @return true if the location is inside of this spell radius, false otherwise
+     */
+    public boolean isLocationInside(@NotNull Location loc)
+    {
+        return Ollivanders2Common.isInside(location, loc, radius);
+    }
 
-   /**
-    * Handle entity combust by block events
-    *
-    * @param event the event
-    */
-   void doOnEntityCombustEvent(@NotNull EntityCombustEvent event) {}
+    /**
+     * Gets the block at the center of this spell radius
+     *
+     * @return the center block for this spell
+     */
+    @NotNull
+    public Block getBlock()
+    {
+        return location.getBlock();
+    }
 
-   /**
-    * Handle spell projectile move events
-    *
-    * @param event the spell projectile move event
-    */
-   void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {}
+    /**
+     * Get living entities whose eye location is within the radius. We use eye radius to handle entities bigger than 1 block.
+     *
+     * @return a list of living entities with an eye location within radius
+     */
+    @NotNull
+    public List<LivingEntity> getEntitiesInsideSpellRadius()
+    {
+        Collection<LivingEntity> entities = EntityCommon.getLivingEntitiesInRadius(location, radius);
+        List<LivingEntity> close = new ArrayList<>();
+
+        /* only add living entities if their eye location is within the radius */
+        for (LivingEntity e : entities)
+        {
+            if (location.distance(e.getEyeLocation()) < radius)
+                close.add(e);
+        }
+
+        return close;
+    }
+
+    /**
+     * Makes a particle effect at all points along the radius of spell and at spell loc
+     * <p>
+     * {@link Ollivanders2Common}
+     *
+     * @param d intensity of the flair
+     */
+    public void flair(double d)
+    {
+        Ollivanders2Common.flair(location, radius, d);
+    }
+
+    /**
+     * Get the ID of the player that cast the spell
+     *
+     * @return the MC UUID of the player that cast the spell
+     */
+    @NotNull
+    public UUID getCasterID()
+    {
+        return playerUUID;
+    }
+
+    /**
+     * Get the max radius for this spell
+     *
+     * @return the max radius possible for this spell
+     */
+    public int getMaxRadius()
+    {
+        return maxRadius;
+    }
+
+    /**
+     * Get the min radius for this spell
+     *
+     * @return the min default radius for this spell
+     */
+    public int getMinRadius()
+    {
+        return minRadius;
+    }
+
+    /**
+     * Get the max duration for this spell
+     *
+     * @return the max duration possible for this spell
+     */
+    public int getMaxDuration()
+    {
+        return maxDuration;
+    }
+
+    /**
+     * Get the min duration for this spell
+     *
+     * @return the min default duration for this spell
+     */
+    public int getMinDuration()
+    {
+        return minDuration;
+    }
+
+    /**
+     * Get the duration remaining for this spell.
+     *
+     * @return the duration remaining for this spell.
+     */
+    public int getDurationRemaining()
+    {
+        return duration;
+    }
+
+    /**
+     * Is this stationary spell currently active?
+     *
+     * @return true if active, false if not active
+     */
+    public boolean isActive()
+    {
+        return active;
+    }
+
+    /**
+     * Is this spell killed (marked for removal)?
+     *
+     * @return true if killed, false otherwise
+     */
+    public boolean isKilled()
+    {
+        return kill;
+    }
+
+    /**
+     * Get a copy of the location for this stationary spell. A copy is returned because a stationary spell location cannot be changed.
+     *
+     * @return a clone of the spell location
+     */
+    @NotNull
+    public Location getLocation()
+    {
+        return location.clone();
+    }
+
+    /**
+     * This is the stationary spell's effect. age() must be called in this if you want the spell to age and die eventually.
+     */
+    abstract void checkEffect();
+
+    /**
+     * Serialize all data specific to this spell so it can be saved.
+     *
+     * @return a map of the serialized data
+     */
+    @NotNull
+    abstract Map<String, String> serializeSpellData();
+
+    /**
+     * Deserialize the data for this spell and load the data to this spell.
+     *
+     * @param spellData the serialized spell data
+     */
+    abstract void deserializeSpellData(@NotNull Map<String, String> spellData);
+
+    /**
+     * Handle players moving
+     *
+     * @param event the event
+     */
+    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event)
+    {
+    }
+
+    /**
+     * Handle creatures from spawning
+     *
+     * @param event the event
+     */
+    void doOnCreatureSpawnEvent(@NotNull CreatureSpawnEvent event)
+    {
+    }
+
+    /**
+     * Handle entities spawning
+     *
+     * @param event the event
+     */
+    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event)
+    {
+    }
+
+    /**
+     * Handle player chat
+     *
+     * @param event the event
+     */
+    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
+    {
+    }
+
+    /**
+     * Handle block break event
+     *
+     * @param event the event
+     */
+    void doOnBlockBreakEvent(@NotNull BlockBreakEvent event)
+    {
+    }
+
+    /**
+     * Handle break door event
+     *
+     * @param event the event
+     */
+    void doOnEntityBreakDoorEvent(@NotNull EntityBreakDoorEvent event)
+    {
+    }
+
+    /**
+     * Handle entity change block event
+     *
+     * @param event the event
+     */
+    void doOnEntityChangeBlockEvent(@NotNull EntityChangeBlockEvent event)
+    {
+    }
+
+    /**
+     * Handle entity interact event
+     *
+     * @param event the event
+     */
+    void doOnEntityInteractEvent(@NotNull EntityInteractEvent event)
+    {
+    }
+
+    /**
+     * Handle player interact event
+     *
+     * @param event the event
+     */
+    void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
+    {
+    }
+
+    /**
+     * Handle entity damage
+     *
+     * @param event the event
+     */
+    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event)
+    {
+    }
+
+    /**
+     * Handle apparate by name event
+     *
+     * @param event the event
+     */
+    void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event)
+    {
+    }
+
+    /**
+     * Handle apparate by coord event
+     *
+     * @param event the event
+     */
+    void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event)
+    {
+    }
+
+    /**
+     * Handle entity teleport event
+     *
+     * @param event the event
+     */
+    void doOnEntityTeleportEvent(@NotNull EntityTeleportEvent event)
+    {
+    }
+
+    /**
+     * Handle player teleport event
+     *
+     * @param event the event
+     */
+    void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event)
+    {
+    }
+
+    /**
+     * Handle entity combust by block events
+     *
+     * @param event the event
+     */
+    void doOnEntityCombustEvent(@NotNull EntityCombustEvent event)
+    {
+    }
+
+    /**
+     * Handle spell projectile move events
+     *
+     * @param event the spell projectile move event
+     */
+    void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event)
+    {
+    }
 }

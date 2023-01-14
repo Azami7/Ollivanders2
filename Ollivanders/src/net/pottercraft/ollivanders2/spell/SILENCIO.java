@@ -1,87 +1,108 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.MUTED_SPEECH;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Silences a player for a duration depending on the spell's level. The target player can only use nonverbal spells.
- *
- * @author Azami7
- * @version Ollivanders2
+ * <p>
+ * https://harrypotter.fandom.com/wiki/Silencing_Charm
  */
 public final class SILENCIO extends O2Spell
 {
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public SILENCIO(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * The minimum time the target will be silenced for
+     */
+    private static final int minDuration = 5 * Ollivanders2Common.ticksPerSecond; // 5 seconds
 
-      spellType = O2SpellType.SILENCIO;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * The maximum time the target will be silenced for
+     */
+    private static final int maxDuration = 2 * Ollivanders2Common.ticksPerMinute; // 2 minutes
 
-      flavorText = new ArrayList<>()
-      {{
-         add("The raven continued to open and close its sharp beak, but no sound came out.");
-         add("The Silencing Charm");
-      }};
+    /**
+     * The duration the target will be silenced for
+     */
+    private int duration;
 
-      text = "Mutes the target for a time.";
-   }
+    /**
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public SILENCIO(Ollivanders2 plugin)
+    {
+        super(plugin);
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public SILENCIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        spellType = O2SpellType.SILENCIO;
+        branch = O2MagicBranch.CHARMS;
 
-      spellType = O2SpellType.SILENCIO;
-      branch = O2MagicBranch.CHARMS;
+        flavorText = new ArrayList<>()
+        {{
+            add("The raven continued to open and close its sharp beak, but no sound came out.");
+            add("The Silencing Charm");
+        }};
 
-      initSpell();
-   }
+        text = "Mutes the target for a time.";
+    }
 
-   @Override
-   protected void doCheckEffect()
-   {
-      List<LivingEntity> living = getLivingEntities(1.5);
-      for (LivingEntity live : living)
-      {
-         if (live.getUniqueId() == player.getUniqueId())
-            continue;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public SILENCIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
+    {
+        super(plugin, player, rightWand);
 
-         if (live instanceof Player)
-         {
-            Player player = (Player) live;
-            int dur = (int) (usesModifier * 1200);
+        spellType = O2SpellType.SILENCIO;
+        branch = O2MagicBranch.CHARMS;
+        duration = minDuration;
 
-            MUTED_SPEECH effect = new MUTED_SPEECH(p, dur, player.getUniqueId());
+        initSpell();
+    }
+
+    /**
+     * Set the duration based on the caster's skill.
+     */
+    @Override
+    void doInitSpell()
+    {
+        duration = (int) usesModifier * Ollivanders2Common.ticksPerSecond;
+        if (duration < minDuration)
+            duration = minDuration;
+        else if (duration > maxDuration)
+            duration = maxDuration;
+    }
+
+    /**
+     * Find a target player and mute their typing
+     */
+    @Override
+    protected void doCheckEffect()
+    {
+        if (hasHitTarget())
+            kill();
+
+        for (Player target : getNearbyPlayers(defaultRadius))
+        {
+            if (target.getUniqueId() == player.getUniqueId())
+                continue;
+
+            MUTED_SPEECH effect = new MUTED_SPEECH(p, duration, target.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             kill();
             return;
-         }
-      }
-
-      if (hasHitTarget())
-      {
-         kill();
-      }
-   }
+        }
+    }
 }

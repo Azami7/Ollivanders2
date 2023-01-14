@@ -42,7 +42,7 @@ public class O2Potions
    /**
     * Namespace keys for NBT tags
     */
-   static NamespacedKey potionTypeKey;
+   static public NamespacedKey potionTypeKey;
 
    public static final List<O2ItemType> ingredients = new ArrayList<>()
    {{
@@ -202,11 +202,7 @@ public class O2Potions
    public ItemStack brewPotion(@NotNull Block cauldron, @NotNull Player brewer)
    {
       // make sure the block passed to us is a cauldron
-      if (cauldron.getType() != Material.CAULDRON)
-         return null;
-
-      // make sure cauldron has water in it
-      if (cauldron.isEmpty())
+      if (cauldron.getType() != Material.WATER_CAULDRON)
          return null;
 
       // get ingredients from the cauldron

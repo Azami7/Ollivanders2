@@ -37,7 +37,7 @@ public class CURE_FOR_BOILS extends O2Potion
       flavorText.add("\"Being an effective remedie against pustules, hives, boils and many other scrofulous conditions. This is a robust potion of powerful character. Care should be taken when brewing. Prepared incorrectly this potion has been known to cause boils, rather than cure them...\" -Zygmunt Budge");
 
       minecraftPotionEffect = new PotionEffect(PotionEffectType.HEAL, duration, 1);
-      potionColor = Color.fromRGB(65, 105, 225);
+      potionColor = Color.fromRGB(65, 105, 225); // blue
    }
 
    /**
