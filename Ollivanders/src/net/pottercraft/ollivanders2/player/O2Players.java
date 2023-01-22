@@ -603,12 +603,12 @@ public class O2Players
      */
     public boolean runSummary(@NotNull CommandSender sender, @NotNull String[] args)
     {
-        if ((!sender.hasPermission("Ollivanders2.admin") || (args.length == 1)))
+        if (args.length == 1)
         {
             playerSummary(sender, (Player) sender);
             return true;
         }
-        else if (args.length > 1)
+        else if (args.length == 2 && sender.hasPermission("Ollivanders2.admin"))
         {
             Player target = p.getServer().getPlayer(args[1]);
             if (target != null)
@@ -693,7 +693,7 @@ public class O2Players
 
             O2Player o2p = getPlayer(playerName);
             if (o2p != null)
-                sender.sendMessage(Ollivanders2.chatColor + "Player " + playerName + " is in year " + o2p.getYear().ordinal());
+                sender.sendMessage(Ollivanders2.chatColor + "Player " + playerName + " is a " + o2p.getYear().getDisplayText() + " year.");
             else
                 sender.sendMessage(Ollivanders2.chatColor + "Unable to find player.");
 
@@ -781,7 +781,7 @@ public class O2Players
         }
 
         int y = o2p.getYear().ordinal() + yearChange;
-        if (y > 0 && y < 8)
+        if (y >= 0 && y < 7)
         {
             Year year = Year.getYearByValue(y);
 
@@ -835,7 +835,6 @@ public class O2Players
      *
      * @param sender the player who issued the command
      * @param player the player to send the info for
-     * @return true if no error occurred
      */
     public void playerSummary(@NotNull CommandSender sender, @NotNull Player player)
     {
@@ -886,7 +885,7 @@ public class O2Players
 
         //year
         if (Ollivanders2.useYears)
-            summary.append("\nYear: ").append(o2p.getYear().ordinal()).append("\n");
+            summary.append("\nYear: ").append(o2p.getYear().getDisplayText()).append("\n");
 
         //animagus
         if (o2p.isAnimagus())
