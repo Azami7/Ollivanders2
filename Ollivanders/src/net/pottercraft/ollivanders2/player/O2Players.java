@@ -835,7 +835,6 @@ public class O2Players
      *
      * @param sender the player who issued the command
      * @param player the player to send the info for
-     * @return true if no error occurred
      */
     public void playerSummary(@NotNull CommandSender sender, @NotNull Player player)
     {
