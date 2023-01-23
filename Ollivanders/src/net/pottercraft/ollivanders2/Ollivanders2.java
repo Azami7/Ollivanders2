@@ -582,7 +582,7 @@ public class Ollivanders2 extends JavaPlugin
         else if (cmd.getName().equalsIgnoreCase("Quidd"))
         {
             if (sender.hasPermission("Ollivanders2.admin"))
-                return true;
+                return false;
             return runQuidd(sender, args);
         }
 
@@ -606,6 +606,7 @@ public class Ollivanders2 extends JavaPlugin
 
         String subCommand = args[0];
 
+
         //
         // Help
         //
@@ -615,98 +616,123 @@ public class Ollivanders2 extends JavaPlugin
             return true;
         }
         //
-        // Wands
+        // Summary
         //
-        else if (subCommand.equalsIgnoreCase("wands") || subCommand.equalsIgnoreCase("wand"))
+        else if (subCommand.equalsIgnoreCase("summary"))
+            return Ollivanders2API.getPlayers().runSummary(sender, args);
+
+        //
+        //
+        // Admin only permissions beyond this point
+        //
+        //
+        if (sender.hasPermission("Ollivanders2.admin"))
         {
-            if (args.length == 1 && sender instanceof Player)
-                return okitWands((Player) sender);
-            else if (args.length > 1)
+            //
+            // Wands
+            //
+            if (subCommand.equalsIgnoreCase("wands") || subCommand.equalsIgnoreCase("wand"))
             {
-                Player target = getServer().getPlayer(args[1]);
-                if (target != null)
-                    return Ollivanders2API.getItems().getWands().giveRandomWand(target);
+                if (args.length == 1 && sender instanceof Player)
+                    return okitWands((Player) sender);
+                else if (args.length > 1)
+                {
+                    Player target = getServer().getPlayer(args[1]);
+                    if (target != null)
+                        return Ollivanders2API.getItems().getWands().giveRandomWand(target);
+                    else
+                    {
+                        usageMessageWand(sender);
+                        return true;
+                    }
+                }
                 else
-                    usageMessageWand(sender);
+                    return false;
             }
-            else
-                return false;
-        }
-        //
-        // Reload
-        //
-        else if (subCommand.equalsIgnoreCase("reload"))
-            return runReloadConfigs(sender);
+            //
+            // Reload
+            //
+            else if (subCommand.equalsIgnoreCase("reload"))
+                return runReloadConfigs(sender);
             //
             // Items
             //
-        else if (subCommand.equalsIgnoreCase("items") || subCommand.equalsIgnoreCase("item"))
-        {
-            if (sender instanceof Player)
-                return runItems((Player) sender, args);
-            else
-                return false;
-        }
-        //
-        // House
-        //
-        else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
-            return runHouse(sender, args);
+            else if (subCommand.equalsIgnoreCase("items") || subCommand.equalsIgnoreCase("item"))
+            {
+                if (sender instanceof Player)
+                    return runItems((Player) sender, args);
+                else
+                    return false;
+            }
+            //
+            // House
+            //
+            else if (subCommand.equalsIgnoreCase("house") || subCommand.equalsIgnoreCase("houses"))
+                return runHouse(sender, args);
             //
             // Debug
             //
-        else if (subCommand.equalsIgnoreCase("debug"))
-            return toggleDebug(sender);
+            else if (subCommand.equalsIgnoreCase("debug"))
+                return toggleDebug(sender);
             //
             // Floo
             //
-        else if (subCommand.equalsIgnoreCase("floo"))
-        {
-            if (args.length == 1 && sender instanceof Player)
-                return giveFlooPowder((Player) sender);
-            else if (args.length > 1)
+            else if (subCommand.equalsIgnoreCase("floo"))
             {
-                Player target = getServer().getPlayer(args[1]);
-                if (target != null)
-                    return giveFlooPowder(target);
+                if (args.length == 1 && sender instanceof Player)
+                    return giveFlooPowder((Player) sender);
+                else if (args.length > 1)
+                {
+                    Player target = getServer().getPlayer(args[1]);
+                    if (target != null)
+                        return giveFlooPowder(target);
+                    else
+                    {
+                        sender.sendMessage(Ollivanders2.chatColor + "Unable to find player.");
+                        return true;
+                    }
+                }
+                else
+                    return false;
             }
-            else
-                return false;
-        }
-        //
-        // Books
-        //
-        else if (subCommand.equalsIgnoreCase("books") || subCommand.equalsIgnoreCase("book"))
-            return books.runCommand(sender, args);
             //
-            // Player related commands
+            // Books
             //
-        else if (subCommand.equalsIgnoreCase("summary"))
-            return Ollivanders2API.getPlayers().runSummary(sender, args);
-        else if (subCommand.equalsIgnoreCase("year") || subCommand.equalsIgnoreCase("years"))
-            return Ollivanders2API.getPlayers().runYear(sender, args);
-        else if (subCommand.equalsIgnoreCase("animagus"))
-            return Ollivanders2API.getPlayers().runAnimagus(sender, args);
+            else if (subCommand.equalsIgnoreCase("books") || subCommand.equalsIgnoreCase("book"))
+                return books.runCommand(sender, args);
+            //
+            // Year
+            //
+            else if (subCommand.equalsIgnoreCase("year") || subCommand.equalsIgnoreCase("years"))
+                return Ollivanders2API.getPlayers().runYear(sender, args);
+            //
+            // Animagus
+            //
+            else if (subCommand.equalsIgnoreCase("animagus"))
+                return Ollivanders2API.getPlayers().runAnimagus(sender, args);
             //
             // Potions
             //
-        else if (subCommand.equalsIgnoreCase("potions") || subCommand.equalsIgnoreCase("potion"))
-            return runPotions(sender, args);
+            else if (subCommand.equalsIgnoreCase("potions") || subCommand.equalsIgnoreCase("potion"))
+                return runPotions(sender, args);
             //
             // Effects
             //
-        else if (subCommand.equalsIgnoreCase("effect") || subCommand.equalsIgnoreCase("effects"))
-            return O2Effects.runCommand(sender, args, this);
+            else if (subCommand.equalsIgnoreCase("effect") || subCommand.equalsIgnoreCase("effects"))
+                return O2Effects.runCommand(sender, args, this);
             //
             // Prophecy
             //
-        else if (subCommand.equalsIgnoreCase("prophecy") || subCommand.equalsIgnoreCase("prophecies"))
-            return runProphecies(sender);
+            else if (subCommand.equalsIgnoreCase("prophecy") || subCommand.equalsIgnoreCase("prophecies"))
+                return runProphecies(sender);
             //
             // Apparate locations
             //
-        else if (subCommand.equalsIgnoreCase("apparate") || subCommand.equalsIgnoreCase("apparateLoc"))
-            return runApparateLocation(sender, args);
+            else if (subCommand.equalsIgnoreCase("apparate") || subCommand.equalsIgnoreCase("apparateLoc"))
+                return runApparateLocation(sender, args);
+        }
+        else
+            usageMessageOllivanders(sender);
 
         return true;
     }
@@ -753,6 +779,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private boolean runHouse(@NotNull CommandSender sender, @NotNull String[] args)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         if (!O2Houses.useHouses)
         {
             sender.sendMessage(chatColor
@@ -807,6 +836,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private void usageMessageHouse(@NotNull CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return;
+
         sender.sendMessage(chatColor
                 + "Usage: /ollivanders2 house points [option]"
                 + "\n\nOptions to '/ollivanders2 house':"
@@ -824,6 +856,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private boolean runListHouse(@NotNull CommandSender sender, @NotNull String[] args)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         // list houses
         if (debug)
             getLogger().info("Running list houses");
@@ -886,6 +921,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private boolean runSort(@NotNull CommandSender sender, @NotNull String targetPlayer, @NotNull String targetHouse, boolean forcesort)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         if (debug)
             getLogger().info("Running house sort");
 
@@ -947,6 +985,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private void usageMessageHouseSort(@NotNull CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return;
+
         sender.sendMessage(chatColor
                 + "Usage: /ollivanders2 house sort [player] [house]"
                 + "\nFor example '/ollivanders2 house sort Harry Gryffindor");
@@ -961,6 +1002,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private boolean runHousePoints(@NotNull CommandSender sender, @NotNull String[] args)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         if (debug)
             getLogger().info("Running house points");
 
@@ -1040,6 +1084,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private void usageMessageHousePoints(@NotNull CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return;
+
         sender.sendMessage(chatColor
                 + "Usage: /ollivanders2 house points [option] [house] [value]"
                 + "\n\nOptions to '/ollivanders2 house points':"
@@ -1060,6 +1107,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private boolean runQuidd(@NotNull CommandSender sender, @NotNull String[] args)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         if (args.length >= 1)
         {
             Player player;
@@ -1086,6 +1136,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private boolean toggleDebug(@NotNull CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         debug = !debug;
 
         if (debug)
@@ -1110,6 +1163,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private boolean runReloadConfigs(@NotNull CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         reloadConfig();
         initConfig();
 
@@ -1120,17 +1176,20 @@ public class Ollivanders2 extends JavaPlugin
     /**
      * Give a player an item.
      *
-     * @param player the player to give item to
+     * @param sender the player to give item to
      * @return true unless an error occurred
      */
-    private boolean runItems(@NotNull Player player, @NotNull String[] args)
+    private boolean runItems(@NotNull Player sender, @NotNull String[] args)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         List<ItemStack> kit = new ArrayList<>();
 
         if (args.length < 2)
-            usageMessageItem(player);
+            usageMessageItem(sender);
         else if (args[1].equals("list"))
-            player.sendMessage("\n" + listAllItems());
+            sender.sendMessage("\n" + listAllItems());
         else if (args[1].equals("give") && args.length >= 4)
         {
             int amount = 0;
@@ -1140,7 +1199,7 @@ public class Ollivanders2 extends JavaPlugin
             }
             catch (Exception e)
             {
-                player.sendMessage("Unable to parse amount " + args[2]);
+                sender.sendMessage("Unable to parse amount " + args[2]);
             }
 
             if (amount > 64)
@@ -1151,15 +1210,15 @@ public class Ollivanders2 extends JavaPlugin
 
             if (item == null)
             {
-                player.sendMessage("Unable to find an item \"" + itemName + "\"");
+                sender.sendMessage("Unable to find an item \"" + itemName + "\"");
                 return true;
             }
 
             kit.add(item);
-            O2PlayerCommon.givePlayerKit(player, kit);
+            O2PlayerCommon.givePlayerKit(sender, kit);
         }
         else
-            usageMessageItem(player);
+            usageMessageItem(sender);
 
         return true;
     }
@@ -1171,6 +1230,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private void usageMessageItem(@NotNull CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return;
+
         sender.sendMessage(chatColor
                 + "Options to '/ollivanders2 item':"
                 + "\nlist - lists all items"
@@ -1221,6 +1283,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private void usageMessageWand(@NotNull CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return;
+
         sender.sendMessage(chatColor
                 + "/ollivanders2 wand - gives you one of every wand"
                 + "\n/ollivanders2 wand player_name - gives named player a random wand");
@@ -1528,6 +1593,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     public boolean runPotions(@NotNull CommandSender sender, @NotNull String[] args)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         if (args.length > 1)
         {
             String subCommand = args[1];
@@ -1601,6 +1669,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     public boolean givePotion(@NotNull Player sender, @NotNull Player player, @NotNull String potionName)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         O2PotionType potionType = null;
 
         // need to iterate rather than call potions.getPotionTypeByName so we can do startsWith
@@ -1641,6 +1712,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private void usageMessagePotions(CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return;
+
         sender.sendMessage(chatColor
                 + "Usage: /ollivanders2 potions"
                 + "\ningredient list - lists all potions ingredients"
@@ -1660,6 +1734,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private boolean listAllIngredients(@NotNull CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         List<String> ingredientList = O2Potions.getAllIngredientNames(this);
         StringBuilder displayString = new StringBuilder();
         displayString.append("Ingredients:");
@@ -1683,6 +1760,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private boolean listAllPotions(@NotNull CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         StringBuilder displayString = new StringBuilder();
         displayString.append("Potions:");
 
@@ -1755,6 +1835,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     public boolean runProphecies(@NotNull CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return false;
+
         StringBuilder output = new StringBuilder();
         List<String> allProphecies = prophecies.getProphecies();
 
@@ -1784,7 +1867,7 @@ public class Ollivanders2 extends JavaPlugin
      */
     public boolean runApparateLocation(@NotNull CommandSender sender, @NotNull String[] args)
     {
-        if (!(sender instanceof Player))
+        if (!sender.hasPermission("Ollivanders2.admin") || !(sender instanceof Player))
             return false;
 
         if (!apparateLocations)
@@ -1883,6 +1966,9 @@ public class Ollivanders2 extends JavaPlugin
      */
     private void usageMessageApparateLocation(CommandSender sender)
     {
+        if (!sender.hasPermission("Ollivanders2.admin"))
+            return;
+
         sender.sendMessage(chatColor
                 + "Usage: /ollivanders2 apparateLoc"
                 + "\nlist - lists all apparate locations"
