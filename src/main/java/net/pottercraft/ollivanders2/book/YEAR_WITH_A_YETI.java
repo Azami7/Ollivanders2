@@ -1,0 +1,26 @@
+package net.pottercraft.ollivanders2.book;
+
+import org.jetbrains.annotations.NotNull;
+
+import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.spell.O2SpellType;
+
+/**
+ * Year with a Yeti - 2nd year Defense Against the Dark Arts book
+ *
+ * Missing spells: Mimblewimble -
+ * https://github.com/Azami7/Ollivanders2/issues/54
+ *
+ * @since 2.2.4
+ * @author Azami7
+ */
+public class YEAR_WITH_A_YETI extends O2Book {
+	public YEAR_WITH_A_YETI(@NotNull Ollivanders2 plugin) {
+		super(plugin);
+
+		bookType = O2BookType.YEAR_WITH_A_YETI;
+
+		spells.add(O2SpellType.ARANIA_EXUMAI);
+		spells.add(O2SpellType.OBLIVIATE);
+	}
+}

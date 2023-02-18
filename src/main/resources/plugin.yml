@@ -1,0 +1,21 @@
+name: ${project.name}
+version: ${project.version}
+description: ${project.description}
+website: https://www.spigotmc.org/resources/ollivanders2.38992/
+authors: [ Azami7, autumnwoz, Whitescan ]
+main: net.pottercraft.ollivanders2.Ollivanders2
+api-version: 1.19
+softdepend: [ WorldGuard, LibsDisguises ]
+
+commands:
+  ollivanders2:
+    description: This is the main admin command for the Ollivanders2 plugin
+    usage: Example usage /ollivanders2
+    permissions: ollivanders2.admin
+    permission-message: You do not have Ollivanders admin permissions.
+    aliases: [olli]
+
+permissions:
+  ollivanders2.admin:
+    decription: Allows all Ollivanders commands
+    default: op

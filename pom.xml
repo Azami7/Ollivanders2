@@ -1,0 +1,138 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	
+	<groupId>net.pottercraft.ollivanders2</groupId>
+	<artifactId>ollivanders2</artifactId>
+	<version>2.9.1</version>
+	<name>Ollivanders2</name>
+	<description>A reboot of the Ollivanders Bukkit plugin which adds the magic from Harry Potter to your Minecraft server</description>
+
+	<properties>
+		<java.version>17</java.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<repositories>
+
+		<!-- Spigot Repo -->
+		<repository>
+			<id>spigot-repo</id>
+			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+		</repository>
+		
+		<!-- WorldEdit Repo -->
+		<repository>
+  			<id>enginehub-maven</id>
+  			<url>https://maven.enginehub.org/repo/</url>
+		</repository>
+		
+		<!-- WorldGuard Repo -->
+		<repository>
+	        <id>sk89q-repo</id>
+	        <url>https://maven.enginehub.org/repo/</url>
+	    </repository>
+	    
+	    <!-- LibsDisguises Repo -->
+	    <repository>
+		   <id>md_5-public</id>
+		   <url>https://repo.md-5.net/content/groups/public/</url>
+	    </repository>
+
+	</repositories>
+
+	<dependencies>
+
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.24</version>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- https://mvnrepository.com/artifact/org.jetbrains/annotations -->
+		<dependency>
+		    <groupId>org.jetbrains</groupId>
+		    <artifactId>annotations</artifactId>
+		    <version>24.0.0</version>
+		</dependency>
+
+		<!-- Spigot API -->
+		<dependency>
+			<groupId>org.spigotmc</groupId>
+			<artifactId>spigot-api</artifactId>
+			<version>1.19-R0.1-SNAPSHOT</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- WorldEdit Bukkit API -->
+		<dependency>
+		    <groupId>com.sk89q.worldedit</groupId>
+		    <artifactId>worldedit-bukkit</artifactId>
+		    <version>7.2.9</version>
+		    <scope>provided</scope>
+		</dependency>
+		
+		<!-- WorldGuard Bukkit API -->
+	    <dependency>
+	        <groupId>com.sk89q.worldguard</groupId>
+	        <artifactId>worldguard-bukkit</artifactId>
+	        <version>7.0.5</version>
+	        <scope>provided</scope>
+	    </dependency>
+	    
+	    <!-- LibsDisguises API -->
+		<dependency>
+		   <groupId>LibsDisguises</groupId>
+		   <artifactId>LibsDisguises</artifactId>
+		    <version>10.0.32</version>
+		   <scope>provided</scope>
+		</dependency>
+	
+	</dependencies>
+
+	<build>
+
+		<finalName>${project.name}-${project.version}</finalName>
+
+		<plugins>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+				<configuration>
+					<source>${java.version}</source>
+					<target>${java.version}</target>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.3.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<createDependencyReducedPom>false</createDependencyReducedPom>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+
+	</build>
+
+</project>
