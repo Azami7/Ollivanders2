@@ -317,13 +317,6 @@ public class Ollivanders2 extends JavaPlugin
         // read configuration
         initConfig();
 
-        // check MC version
-        if (!mcVersionCheck())
-        {
-            Bukkit.getPluginManager().disablePlugin(this);
-            return;
-        }
-
         // set up event listeners
         OllivandersListener ollivandersListener = new OllivandersListener(this);
         ollivandersListener.onEnable();
@@ -1509,25 +1502,6 @@ public class Ollivanders2 extends JavaPlugin
             spellCannotBeCastMessage(player);
 
         return cast;
-    }
-
-    /**
-     * Check to see what MC version is being run to determine what Ollivanders2 features are supported.
-     */
-    private boolean mcVersionCheck()
-    {
-        if (overrideVersionCheck)
-            return true;
-
-        String versionString = Bukkit.getBukkitVersion();
-
-        if (versionString.startsWith("1.17") || versionString.startsWith("1.18"))
-            return true;
-        else // anything lower than 1.14 set to 0 because this version of the plugin cannot run on < 1.14
-        {
-            getLogger().warning("MC version " + versionString + ". This version of Ollivanders2 requires 1.17 or higher.");
-            return false;
-        }
     }
 
     /**
