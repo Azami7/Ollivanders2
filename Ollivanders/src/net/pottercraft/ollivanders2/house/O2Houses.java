@@ -10,6 +10,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.house.events.OllivandersPlayerSortedEvent;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
@@ -309,12 +310,19 @@ public class O2Houses
         O2HouseMap.put(player.getUniqueId(), houseType);
         addPlayerToHouseTeam(player);
 
+        // display sort message
         if (displayMessageOnSort)
         {
             String title = houseType.getChatColorCode() + player.getName();
             String subtitle = houseType.getChatColorCode() + "better be " + houseType.getName();
             Ollivanders2Common.sendTitleMessage(title, subtitle, Ollivanders2API.playerCommon.getAllOnlineSortedPlayers());
         }
+
+        // throw the sort event
+        OllivandersPlayerSortedEvent event = new OllivandersPlayerSortedEvent(player);
+
+        p.getServer().getPluginManager().callEvent(event);
+        common.printDebugMessage("Fired OllivandersPlayerSortedEvent", null, null, false);
 
         return true;
     }
