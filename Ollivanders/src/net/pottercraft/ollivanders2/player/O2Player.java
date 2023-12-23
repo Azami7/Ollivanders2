@@ -694,7 +694,7 @@ public class O2Player
             OllivandersPlayerFoundWandEvent event = new OllivandersPlayerFoundWandEvent(player);
 
             p.getServer().getPluginManager().callEvent(event);
-            common.printDebugMessage("Fired PlayerFoundWandEvent", null, null, false);
+            common.printDebugMessage("Fired OllivandersPlayerFoundWandEvent", null, null, false);
         }
 
         foundWand = found;
