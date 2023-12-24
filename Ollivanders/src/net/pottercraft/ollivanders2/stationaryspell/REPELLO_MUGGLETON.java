@@ -2,12 +2,15 @@ package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.jetbrains.annotations.NotNull;
@@ -64,36 +67,18 @@ public class REPELLO_MUGGLETON extends ShieldSpell
     {
         age();
 
-        if (duration % Ollivanders2Common.ticksPerSecond == 0)
-        {
-            Material toMat = getBlock().getType();
-            byte toDat = getBlock().getData();
-            double viewDistance = Math.sqrt(2 * Math.pow(((Bukkit.getServer().getViewDistance() + 1) * 16), 2));
-            for (Player player : getBlock().getWorld().getPlayers())
-            {
-                if (player.getLocation().distance(location) < viewDistance && !isLocationInside(player.getLocation()))
-                {
-                    for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
-                    {
-                        player.sendBlockChange(block.getLocation(), toMat, toDat);
-                    }
-                }
-                else if (isLocationInside(player.getLocation()))
-                {
-                    for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
-                    {
-                        player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
-                    }
-                }
-            }
-        }
         if (duration <= 1)
         {
             for (Player player : getBlock().getWorld().getPlayers())
             {
-                for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
+                for (Entity target : EntityCommon.getNearbyEntitiesByType(location, radius, EntityType.PLAYER))
                 {
-                    player.sendBlockChange(block.getLocation(), block.getType(), block.getData());
+                    Location targetLoc = target.getLocation();
+
+                    // change the player location block and the one above it - this is going to be weird if the player is currently shape shifted to a 1-block sized create with Animagus but acceptable
+                    BlockData fakeData = Bukkit.createBlockData(Material.AIR);
+                    player.sendBlockChange(targetLoc, fakeData);
+                    player.sendBlockChange(targetLoc.add(0, 1, 0), fakeData);
                 }
             }
         }
