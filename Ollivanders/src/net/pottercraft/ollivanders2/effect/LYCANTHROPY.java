@@ -86,7 +86,7 @@ public class LYCANTHROPY extends ShapeShiftSuper
 
                addAdditionalEffects();
 
-               target.playSound(target.getEyeLocation(), Sound.ENTITY_WOLF_HOWL, 1, 0);
+               target.playSound(target.getEyeLocation(), Sound.ENTITY_WOLF_AMBIENT, 1, 0);
             }
          }
       }
