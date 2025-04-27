@@ -44,7 +44,7 @@ public final class HERBICIDE_POTION extends O2SplashPotion
 
       // set duration of potion effect to 30 seconds
       duration = 600;
-      minecraftPotionEffect = new PotionEffect(PotionEffectType.HARM, duration, 1);
+      minecraftPotionEffect = new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, 1);
       potionColor = Color.fromRGB(51, 102, 0);
    }
 
