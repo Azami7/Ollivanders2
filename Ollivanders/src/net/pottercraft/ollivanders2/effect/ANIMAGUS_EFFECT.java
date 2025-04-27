@@ -129,11 +129,11 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       }
       else if (watcher instanceof RabbitWatcher)
       {
-         RabbitType color = RabbitType.WHITE;
+         Rabbit.Type color = Rabbit.Type.WHITE;
 
          try
          {
-            color = RabbitType.valueOf(colorVariant);
+            color = Rabbit.Type.valueOf(colorVariant);
          }
          catch (Exception e)
          {

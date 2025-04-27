@@ -63,7 +63,7 @@ public final class IMMOBULUS extends AddPotionEffect
         maxAmplifier = maxAmplifierConfig;
         amplifierModifier = 0.02; // 1/50th usesModifier
 
-        effectTypes.add(PotionEffectType.SLOW);
+        effectTypes.add(PotionEffectType.SLOWNESS);
         effectTypes.add(PotionEffectType.SLOW_FALLING);
 
         initSpell();
