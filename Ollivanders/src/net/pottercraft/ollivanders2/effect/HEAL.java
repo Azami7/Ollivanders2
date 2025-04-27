@@ -21,7 +21,7 @@ public class HEAL extends PotionEffectSuper
         strength = 1;
 
         effectType = O2EffectType.HEAL;
-        potionEffectType = PotionEffectType.HEAL;
+        potionEffectType = PotionEffectType.INSTANT_HEALTH;
         informousText = legilimensText = "feels healthy";
 
         divinationText.add("will feel rejuvenated");
