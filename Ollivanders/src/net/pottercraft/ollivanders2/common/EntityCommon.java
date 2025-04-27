@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.common;
 
+import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import org.bukkit.DyeColor;
@@ -84,8 +85,26 @@ public class EntityCommon
      */
     public static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>()
     {{
-        add(EntityType.BOAT);
-        add(EntityType.CHEST_BOAT);
+        add(EntityType.ACACIA_BOAT);
+        add(EntityType.ACACIA_CHEST_BOAT);
+        add(EntityType.BIRCH_BOAT);
+        add(EntityType.BIRCH_CHEST_BOAT);
+        add(EntityType.CHERRY_BOAT);
+        add(EntityType.CHERRY_CHEST_BOAT);
+        add(EntityType.DARK_OAK_BOAT);
+        add(EntityType.DARK_OAK_BOAT);
+        add(EntityType.JUNGLE_BOAT);
+        add(EntityType.JUNGLE_CHEST_BOAT);
+        add(EntityType.MANGROVE_BOAT);
+        add(EntityType.MANGROVE_CHEST_BOAT);
+        add(EntityType.OAK_BOAT);
+        add(EntityType.OAK_CHEST_BOAT);
+        add(EntityType.PALE_OAK_BOAT);
+        add(EntityType.PALE_OAK_CHEST_BOAT);
+        add(EntityType.SPRUCE_BOAT);
+        add(EntityType.SPRUCE_CHEST_BOAT);
+        add(EntityType.BAMBOO_RAFT);
+        add(EntityType.BAMBOO_CHEST_RAFT);
     }};
 
     /**
