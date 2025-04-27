@@ -118,7 +118,7 @@ public abstract class Pyrotechnia extends O2Spell
                 return;
             }
 
-            Firework firework = (Firework) (world.spawnEntity(location, EntityType.FIREWORK));
+            Firework firework = (Firework) (world.spawnEntity(location, EntityType.FIREWORK_ROCKET));
 
             FireworkMeta meta = firework.getFireworkMeta();
             meta.setPower(fireworkPower);
