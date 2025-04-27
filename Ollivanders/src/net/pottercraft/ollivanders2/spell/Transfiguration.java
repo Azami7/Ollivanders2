@@ -89,7 +89,7 @@ public abstract class Transfiguration extends O2Spell
    public Entity transfigureEntity(@NotNull Entity entity, @Nullable EntityType toType, @Nullable ItemStack toStack)
    {
       fromEType = entity.getType();
-      if (fromEType == EntityType.DROPPED_ITEM)
+      if (fromEType == EntityType.ITEM)
       {
          fromStack = ((Item) entity).getItemStack();
       }
@@ -124,7 +124,7 @@ public abstract class Transfiguration extends O2Spell
       Entity newEntity = null;
       Location loc = entity.getLocation();
 
-      if (toType == EntityType.DROPPED_ITEM && toStack != null)
+      if (toType == EntityType.ITEM && toStack != null)
       {
          newEntity = player.getWorld().dropItemNaturally(loc, toStack);
       }
@@ -183,7 +183,7 @@ public abstract class Transfiguration extends O2Spell
                {
                   return null;
                }
-               if (fromEType.equals(EntityType.DROPPED_ITEM))
+               if (fromEType.equals(EntityType.ITEM))
                {
                   return e.getWorld().dropItemNaturally(e.getLocation(), fromStack);
                }
@@ -212,7 +212,7 @@ public abstract class Transfiguration extends O2Spell
          }
          else
          {
-            if (fromEType.equals(EntityType.DROPPED_ITEM))
+            if (fromEType.equals(EntityType.ITEM))
             {
                return world.dropItemNaturally(location, fromStack);
             }

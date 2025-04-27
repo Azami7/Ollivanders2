@@ -140,10 +140,12 @@ public class Ollivanders2Common
     {{
         add(Material.CHEST);
         add(Material.ENDER_CHEST);
-        add(Material.WHITE_SHULKER_BOX);
+        add(Material.TRAPPED_CHEST);
+        // minecart chests
+        add(Material.CHEST_MINECART);
+        // shulker boxes
         add(Material.BLACK_SHULKER_BOX);
         add(Material.BLUE_SHULKER_BOX);
-        add(Material.SHULKER_BOX);
         add(Material.BROWN_SHULKER_BOX);
         add(Material.CYAN_SHULKER_BOX);
         add(Material.GRAY_SHULKER_BOX);
@@ -156,7 +158,21 @@ public class Ollivanders2Common
         add(Material.PINK_SHULKER_BOX);
         add(Material.PURPLE_SHULKER_BOX);
         add(Material.RED_SHULKER_BOX);
+        add(Material.SHULKER_BOX);
         add(Material.YELLOW_SHULKER_BOX);
+        add(Material.WHITE_SHULKER_BOX);
+        // chest boats
+        add(Material.ACACIA_CHEST_BOAT);
+        add(Material.BIRCH_CHEST_BOAT);
+        add(Material.BAMBOO_CHEST_RAFT);
+        add(Material.CHERRY_CHEST_BOAT);
+        add(Material.CHEST_MINECART);
+        add(Material.DARK_OAK_CHEST_BOAT);
+        add(Material.JUNGLE_CHEST_BOAT);
+        add(Material.MANGROVE_CHEST_BOAT);
+        add(Material.OAK_CHEST_BOAT);
+        add(Material.PALE_OAK_CHEST_BOAT);
+        add(Material.SPRUCE_CHEST_BOAT);
     }};
 
     /**
@@ -166,11 +182,16 @@ public class Ollivanders2Common
     public static final List<Material> wallSigns = new ArrayList<>()
     {{
         add(Material.ACACIA_WALL_SIGN);
+        add(Material.BAMBOO_WALL_SIGN);
         add(Material.BIRCH_WALL_SIGN);
-        add(Material.DARK_OAK_WALL_SIGN);
-        add(Material.OAK_WALL_SIGN);
-        add(Material.SPRUCE_WALL_SIGN);
+        add(Material.CHERRY_WALL_SIGN);
         add(Material.CRIMSON_WALL_SIGN);
+        add(Material.DARK_OAK_WALL_SIGN);
+        add(Material.JUNGLE_WALL_SIGN);
+        add(Material.MANGROVE_WALL_SIGN);
+        add(Material.OAK_WALL_SIGN);
+        add(Material.PALE_OAK_WALL_SIGN);
+        add(Material.SPRUCE_WALL_SIGN);
         add(Material.WARPED_WALL_SIGN);
     }};
 
@@ -181,11 +202,16 @@ public class Ollivanders2Common
     public static final List<Material> standingSigns = new ArrayList<>()
     {{
         add(Material.ACACIA_SIGN);
+        add(Material.BAMBOO_SIGN);
         add(Material.BIRCH_SIGN);
-        add(Material.DARK_OAK_SIGN);
-        add(Material.OAK_SIGN);
-        add(Material.SPRUCE_SIGN);
+        add(Material.CHERRY_SIGN);
         add(Material.CRIMSON_SIGN);
+        add(Material.DARK_OAK_SIGN);
+        add(Material.JUNGLE_SIGN);
+        add(Material.MANGROVE_SIGN);
+        add(Material.OAK_SIGN);
+        add(Material.PALE_OAK_SIGN);
+        add(Material.SPRUCE_SIGN);
         add(Material.WARPED_SIGN);
     }};
 
@@ -206,14 +232,25 @@ public class Ollivanders2Common
     public static final List<Material> doors = new ArrayList<>()
     {{
         add(Material.ACACIA_DOOR);
+        add(Material.BAMBOO_DOOR);
         add(Material.BIRCH_DOOR);
+        add(Material.CHERRY_DOOR);
+        add(Material.COPPER_DOOR);
         add(Material.CRIMSON_DOOR);
         add(Material.DARK_OAK_DOOR);
+        add(Material.EXPOSED_COPPER_DOOR);
         add(Material.IRON_DOOR);
         add(Material.JUNGLE_DOOR);
+        add(Material.MANGROVE_DOOR);
         add(Material.OAK_DOOR);
+        add(Material.OXIDIZED_COPPER_DOOR);
+        add(Material.PALE_OAK_DOOR);
         add(Material.SPRUCE_DOOR);
         add(Material.WARPED_DOOR);
+        add(Material.WAXED_COPPER_DOOR);
+        add(Material.WAXED_EXPOSED_COPPER_DOOR);
+        add(Material.WAXED_WEATHERED_COPPER_DOOR);
+        add(Material.WEATHERED_COPPER_DOOR);
     }};
 
     /**
@@ -223,14 +260,25 @@ public class Ollivanders2Common
     public static final List<Material> trapdoors = new ArrayList<>()
     {{
         add(Material.ACACIA_TRAPDOOR);
+        add(Material.BAMBOO_TRAPDOOR);
         add(Material.BIRCH_TRAPDOOR);
+        add(Material.CHERRY_TRAPDOOR);
+        add(Material.COPPER_TRAPDOOR);
         add(Material.CRIMSON_TRAPDOOR);
         add(Material.DARK_OAK_TRAPDOOR);
+        add(Material.EXPOSED_COPPER_TRAPDOOR);
         add(Material.IRON_TRAPDOOR);
         add(Material.JUNGLE_TRAPDOOR);
+        add(Material.MANGROVE_TRAPDOOR);
         add(Material.OAK_TRAPDOOR);
+        add(Material.OXIDIZED_COPPER_TRAPDOOR);
+        add(Material.PALE_OAK_TRAPDOOR);
         add(Material.SPRUCE_TRAPDOOR);
         add(Material.WARPED_TRAPDOOR);
+        add(Material.WAXED_COPPER_DOOR);
+        add(Material.WAXED_OXIDIZED_COPPER_DOOR);
+        add(Material.WAXED_WEATHERED_COPPER_TRAPDOOR);
+        add(Material.WEATHERED_COPPER_TRAPDOOR);
     }};
 
     /**

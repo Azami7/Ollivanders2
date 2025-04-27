@@ -32,6 +32,7 @@ import org.bukkit.entity.Fox;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Panda;
+import org.bukkit.entity.Rabbit;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -128,11 +129,11 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper
       }
       else if (watcher instanceof RabbitWatcher)
       {
-         RabbitType color = RabbitType.WHITE;
+         Rabbit.Type color = Rabbit.Type.WHITE;
 
          try
          {
-            color = RabbitType.valueOf(colorVariant);
+            color = Rabbit.Type.valueOf(colorVariant);
          }
          catch (Exception e)
          {
