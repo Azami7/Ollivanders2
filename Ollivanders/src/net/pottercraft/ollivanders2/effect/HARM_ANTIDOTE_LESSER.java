@@ -25,7 +25,7 @@ public class HARM_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper
         super (plugin, duration, pid);
 
         effectType = O2EffectType.HARM_ANTIDOTE_LESSER;
-        potionEffectType = PotionEffectType.HARM;
+        potionEffectType = PotionEffectType.INSTANT_DAMAGE;
         strength = 0.25;
     }
 
