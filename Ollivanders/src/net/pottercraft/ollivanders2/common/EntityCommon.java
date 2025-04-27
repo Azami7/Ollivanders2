@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.common;
 
+import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import org.bukkit.DyeColor;
