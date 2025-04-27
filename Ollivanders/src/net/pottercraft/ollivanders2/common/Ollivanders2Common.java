@@ -171,6 +171,7 @@ public class Ollivanders2Common
         add(Material.JUNGLE_CHEST_BOAT);
         add(Material.MANGROVE_CHEST_BOAT);
         add(Material.OAK_CHEST_BOAT);
+        add(Material.PALE_OAK_CHEST_BOAT);
         add(Material.SPRUCE_CHEST_BOAT);
     }};
 
@@ -189,6 +190,7 @@ public class Ollivanders2Common
         add(Material.JUNGLE_WALL_SIGN);
         add(Material.MANGROVE_WALL_SIGN);
         add(Material.OAK_WALL_SIGN);
+        add(Material.PALE_OAK_WALL_SIGN);
         add(Material.SPRUCE_WALL_SIGN);
         add(Material.WARPED_WALL_SIGN);
     }};
@@ -208,6 +210,7 @@ public class Ollivanders2Common
         add(Material.JUNGLE_SIGN);
         add(Material.MANGROVE_SIGN);
         add(Material.OAK_SIGN);
+        add(Material.PALE_OAK_SIGN);
         add(Material.SPRUCE_SIGN);
         add(Material.WARPED_SIGN);
     }};
@@ -241,6 +244,7 @@ public class Ollivanders2Common
         add(Material.MANGROVE_DOOR);
         add(Material.OAK_DOOR);
         add(Material.OXIDIZED_COPPER_DOOR);
+        add(Material.PALE_OAK_DOOR);
         add(Material.SPRUCE_DOOR);
         add(Material.WARPED_DOOR);
         add(Material.WAXED_COPPER_DOOR);
@@ -268,6 +272,7 @@ public class Ollivanders2Common
         add(Material.MANGROVE_TRAPDOOR);
         add(Material.OAK_TRAPDOOR);
         add(Material.OXIDIZED_COPPER_TRAPDOOR);
+        add(Material.PALE_OAK_TRAPDOOR);
         add(Material.SPRUCE_TRAPDOOR);
         add(Material.WARPED_TRAPDOOR);
         add(Material.WAXED_COPPER_DOOR);
