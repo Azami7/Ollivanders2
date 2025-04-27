@@ -166,6 +166,7 @@ public class Ollivanders2Common
     public static final List<Material> wallSigns = new ArrayList<>()
     {{
         add(Material.ACACIA_WALL_SIGN);
+        add(Material.BAMBOO_WALL_SIGN);
         add(Material.BIRCH_WALL_SIGN);
         add(Material.DARK_OAK_WALL_SIGN);
         add(Material.OAK_WALL_SIGN);
@@ -181,6 +182,7 @@ public class Ollivanders2Common
     public static final List<Material> standingSigns = new ArrayList<>()
     {{
         add(Material.ACACIA_SIGN);
+        add(Material.BAMBOO_SIGN);
         add(Material.BIRCH_SIGN);
         add(Material.DARK_OAK_SIGN);
         add(Material.OAK_SIGN);
