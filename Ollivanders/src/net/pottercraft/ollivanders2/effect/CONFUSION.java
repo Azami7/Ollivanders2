@@ -19,7 +19,7 @@ public class CONFUSION extends PotionEffectSuper
       super(plugin, duration, pid);
 
       effectType = O2EffectType.CONFUSION;
-      potionEffectType = PotionEffectType.CONFUSION;
+      potionEffectType = PotionEffectType.NAUSEA;
       informousText = legilimensText = "feels confused";
 
       strength = 1;

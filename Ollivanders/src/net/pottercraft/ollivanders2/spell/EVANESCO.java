@@ -62,9 +62,9 @@ public final class EVANESCO extends EntityTransfiguration
             worldGuardFlags.add(Flags.BUILD);
         }
 
-        entityAllowedList.add(EntityType.DROPPED_ITEM);
+        entityAllowedList.add(EntityType.ITEM);
         entityAllowedList.addAll(EntityCommon.minecarts);
-        entityAllowedList.add(EntityType.BOAT);
+        entityAllowedList.addAll(EntityCommon.boats);
 
         durationModifier = 4.0;
 
