@@ -62,9 +62,9 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
         add(EntityType.COW);
         add(EntityType.DONKEY);
         add(EntityType.HORSE);
-        add(EntityType.MUSHROOM_COW);
+        add(EntityType.MOOSHROOM);
         add(EntityType.IRON_GOLEM);
-        add(EntityType.SNOWMAN);
+        add(EntityType.SNOW_GOLEM);
         add(EntityType.MULE);
         add(EntityType.SQUID);
         add(EntityType.GLOW_SQUID);

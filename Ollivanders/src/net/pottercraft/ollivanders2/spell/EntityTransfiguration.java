@@ -81,7 +81,7 @@ public abstract class EntityTransfiguration extends TransfigurationBase
         entityBlockedList.add(EntityType.EXPERIENCE_ORB);
         entityBlockedList.add(EntityType.FALLING_BLOCK);
         entityBlockedList.add(EntityType.EXPERIENCE_ORB);
-        entityBlockedList.add(EntityType.THROWN_EXP_BOTTLE);
+        entityBlockedList.add(EntityType.EXPERIENCE_BOTTLE);
         entityBlockedList.add(EntityType.UNKNOWN);
 
         permanent = false;
@@ -256,7 +256,7 @@ public abstract class EntityTransfiguration extends TransfigurationBase
                 return;
             }
 
-            if (originalEntity.getType() == EntityType.DROPPED_ITEM)
+            if (originalEntity.getType() == EntityType.ITEM)
             {
                 Item item = (Item) originalEntity;
                 loc.getWorld().dropItemNaturally(loc, item.getItemStack());
