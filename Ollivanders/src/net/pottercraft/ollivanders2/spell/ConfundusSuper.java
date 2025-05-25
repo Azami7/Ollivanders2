@@ -31,6 +31,6 @@ public abstract class ConfundusSuper extends AddPotionEffect
     {
         super(plugin, player, rightWand);
 
-        effectTypes.add(PotionEffectType.NAUSEA);
+        effectTypes.add(PotionEffectType.CONFUSION);
     }
 }
