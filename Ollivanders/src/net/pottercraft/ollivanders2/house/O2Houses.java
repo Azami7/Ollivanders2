@@ -12,6 +12,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.house.events.OllivandersPlayerSortedEvent;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Criteria;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
@@ -76,6 +77,11 @@ public class O2Houses
      * House points scoreboard objective
      */
     private final String objectiveName = "o2_hpoints";
+
+    /**
+     * House points scoreboard label
+     */
+    private final String scoreboardDisplayName = "House Points";
 
     /**
      * The scoreboard objective display name for house points
@@ -549,7 +555,8 @@ public class O2Houses
             common.printDebugMessage("Unregistered previous scoreboard objective...", null, null, false);
         }
 
-        scoreboard.registerNewObjective(objectiveName, "dummy", "House Points");
+        scoreboard.registerNewObjective(objectiveName, Criteria.DUMMY, scoreboardDisplayName);
+
         objective = scoreboard.getObjective(objectiveName);
         if (objective == null)
         {
