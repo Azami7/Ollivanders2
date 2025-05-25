@@ -63,7 +63,7 @@ public final class STUPEFY extends AddPotionEffect
         amplifierModifier = 0.02; // 1/50th usesModifier
 
         effectTypes.add(PotionEffectType.BLINDNESS);
-        effectTypes.add(PotionEffectType.SLOWNESS);
+        effectTypes.add(PotionEffectType.SLOW);
 
         initSpell();
     }
