@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -17,7 +16,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 /**
- * Prevents opening of target door.
+ * Prevents opening of target door, trapdoor, or chest.
  * <p>
  * https://harrypotter.fandom.com/wiki/Locking_Spell
  * <p>
@@ -84,9 +83,6 @@ public class COLLOPORTUS extends O2StationarySpell
     {
         Block block = event.getBlock(); // will never be null
 
-        if (!Ollivanders2Common.doors.contains(block.getType()) && !Ollivanders2Common.trapdoors.contains(block.getType()))
-            return;
-
         if (isLocationInside(block.getLocation()))
         {
             event.setCancelled(true);
@@ -121,9 +117,6 @@ public class COLLOPORTUS extends O2StationarySpell
     {
         Block block = event.getBlock(); // will never be null
 
-        if (!Ollivanders2Common.doors.contains(block.getType()) && !Ollivanders2Common.trapdoors.contains(block.getType()))
-            return;
-
         if (isLocationInside(block.getLocation()))
         {
             event.setCancelled(true);
@@ -140,9 +133,6 @@ public class COLLOPORTUS extends O2StationarySpell
     void doOnEntityInteractEvent(@NotNull EntityInteractEvent event)
     {
         Block block = event.getBlock(); // will never be null
-
-        if (!Ollivanders2Common.doors.contains(block.getType()) && !Ollivanders2Common.trapdoors.contains(block.getType()))
-            return;
 
         if (isLocationInside(block.getLocation()))
         {
@@ -161,9 +151,6 @@ public class COLLOPORTUS extends O2StationarySpell
     {
         Block block = event.getClickedBlock();
         if (block == null)
-            return;
-
-        if (!Ollivanders2Common.doors.contains(block.getType()) && !Ollivanders2Common.trapdoors.contains(block.getType()))
             return;
 
         if (isLocationInside(block.getLocation()))
