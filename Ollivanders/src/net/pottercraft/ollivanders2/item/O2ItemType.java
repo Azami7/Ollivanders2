@@ -281,7 +281,7 @@ public enum O2ItemType
         // if potion, set potion meta
         if (material == Material.POTION)
         {
-            meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+            meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
             ((PotionMeta) meta).setColor(O2Color.getBukkitColorByNumber(variant).getBukkitColor());
         }
 

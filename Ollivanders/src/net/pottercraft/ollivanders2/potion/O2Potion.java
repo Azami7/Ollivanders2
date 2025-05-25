@@ -293,7 +293,7 @@ public abstract class O2Potion
                 if (minecraftPotionEffect != null)
                     meta.addCustomEffect(minecraftPotionEffect, true);
 
-                meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+                meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
                 potion.setItemMeta(meta);
             }
         }
@@ -403,20 +403,20 @@ public abstract class O2Potion
             PotionEffect e;
 
             if (rand == 9)
-                e = new PotionEffect(PotionEffectType.SLOWNESS, duration, amplifier);
+                e = new PotionEffect(PotionEffectType.SLOW, duration, amplifier);
             else if (rand == 8)
                 e = new PotionEffect(PotionEffectType.BLINDNESS, duration, amplifier);
             else if (rand == 7)
                 e = new PotionEffect(PotionEffectType.HUNGER, duration, amplifier);
             else if (rand == 6)
-                e = new PotionEffect(PotionEffectType.NAUSEA, duration, amplifier);
+                e = new PotionEffect(PotionEffectType.CONFUSION, duration, amplifier);
             else
                 e = new PotionEffect(PotionEffectType.WEAKNESS, duration, amplifier);
             meta.addCustomEffect(e, true);
         }
         // rand < 5, no effect
 
-        meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
         potion.setItemMeta(meta);
 
         return potion;
