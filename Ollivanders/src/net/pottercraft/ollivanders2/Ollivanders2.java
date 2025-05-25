@@ -901,7 +901,7 @@ public class Ollivanders2 extends JavaPlugin
     }
 
     /**
-     * Sorts a player in to a specific house.  The player will not be sorted if:
+     * Sorts a player in to a specific house. The player will not be sorted if:
      * a) the player is not online
      * b) an invalid house name is specified
      * c) they have already been sorted

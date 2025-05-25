@@ -320,7 +320,6 @@ public class O2Houses
 
         // throw the sort event
         OllivandersPlayerSortedEvent event = new OllivandersPlayerSortedEvent(player);
-
         p.getServer().getPluginManager().callEvent(event);
         common.printDebugMessage("Fired OllivandersPlayerSortedEvent", null, null, false);
 

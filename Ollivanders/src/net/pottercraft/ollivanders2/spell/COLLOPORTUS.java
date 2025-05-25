@@ -15,14 +15,14 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 /**
- * Locks doors and trapdoors.
+ * Locks doors, trapdoors, and chests.
  * <p>
  * Reference: https://harrypotter.fandom.com/wiki/Locking_Spell
  */
 public final class COLLOPORTUS extends StationarySpell
 {
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -38,7 +38,7 @@ public final class COLLOPORTUS extends StationarySpell
             add("The Locking Spell.");
         }};
 
-        text = "Locks doors and trapdoors so they cannot be opened. This spell does not age and can only be removed with the Unlocking Spell, Alohomora.";
+        text = "Locks doors, trapdoors, and chests so they cannot be opened or broken. This spell does not age and can only be removed with the Unlocking Spell, Alohomora.";
     }
 
     /**
@@ -79,9 +79,9 @@ public final class COLLOPORTUS extends StationarySpell
         }
 
         Material blockType = targetBlock.getType();
-        if (!(Ollivanders2Common.doors.contains(blockType) || Ollivanders2Common.trapdoors.contains(blockType)))
+        if (!(Ollivanders2Common.doors.contains(blockType) || Ollivanders2Common.trapdoors.contains(blockType) || Ollivanders2Common.chests.contains(blockType)))
         {
-            common.printDebugMessage("block is not a door or trapdoor", null, null, true);
+            common.printDebugMessage("block is not a door, trapdoor, or chest", null, null, true);
             return null;
         }
 
