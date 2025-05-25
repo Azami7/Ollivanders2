@@ -36,7 +36,6 @@ public class EntityCommon
      */
     public static final List<EntityType> undeadEntities = new ArrayList<>()
     {{
-        add(EntityType.BOGGED);
         add(EntityType.DROWNED);
         add(EntityType.GIANT);
         add(EntityType.HUSK);
@@ -71,13 +70,13 @@ public class EntityCommon
      */
     public static final List<org.bukkit.entity.EntityType> minecarts = new ArrayList<>()
     {{
-        add(EntityType.FURNACE_MINECART);
+        add(EntityType.MINECART_FURNACE);
         add(EntityType.MINECART);
-        add(EntityType.CHEST_MINECART);
-        add(EntityType.COMMAND_BLOCK_MINECART);
-        add(EntityType.HOPPER_MINECART);
-        add(EntityType.SPAWNER_MINECART);
-        add(EntityType.TNT_MINECART);
+        add(EntityType.MINECART_CHEST);
+        add(EntityType.MINECART_COMMAND);
+        add(EntityType.MINECART_HOPPER);
+        add(EntityType.MINECART_MOB_SPAWNER);
+        add(EntityType.MINECART_TNT);
     }};
 
     /**
@@ -85,26 +84,8 @@ public class EntityCommon
      */
     public static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>()
     {{
-        add(EntityType.ACACIA_BOAT);
-        add(EntityType.ACACIA_CHEST_BOAT);
-        add(EntityType.BIRCH_BOAT);
-        add(EntityType.BIRCH_CHEST_BOAT);
-        add(EntityType.CHERRY_BOAT);
-        add(EntityType.CHERRY_CHEST_BOAT);
-        add(EntityType.DARK_OAK_BOAT);
-        add(EntityType.DARK_OAK_BOAT);
-        add(EntityType.JUNGLE_BOAT);
-        add(EntityType.JUNGLE_CHEST_BOAT);
-        add(EntityType.MANGROVE_BOAT);
-        add(EntityType.MANGROVE_CHEST_BOAT);
-        add(EntityType.OAK_BOAT);
-        add(EntityType.OAK_CHEST_BOAT);
-        add(EntityType.PALE_OAK_BOAT);
-        add(EntityType.PALE_OAK_CHEST_BOAT);
-        add(EntityType.SPRUCE_BOAT);
-        add(EntityType.SPRUCE_CHEST_BOAT);
-        add(EntityType.BAMBOO_RAFT);
-        add(EntityType.BAMBOO_CHEST_RAFT);
+        add(EntityType.BOAT);
+        add(EntityType.CHEST_BOAT);
     }};
 
     /**
@@ -122,36 +103,30 @@ public class EntityCommon
         put(PotionEffectType.DOLPHINS_GRACE, MagicLevel.NEWT);
         put(PotionEffectType.FIRE_RESISTANCE, MagicLevel.NEWT);
         put(PotionEffectType.GLOWING, MagicLevel.BEGINNER);
-        put(PotionEffectType.HASTE, MagicLevel.BEGINNER);
+        put(PotionEffectType.FAST_DIGGING, MagicLevel.BEGINNER);
         put(PotionEffectType.HEALTH_BOOST, MagicLevel.NEWT);
         put(PotionEffectType.HERO_OF_THE_VILLAGE, MagicLevel.NEWT);
         put(PotionEffectType.HUNGER, MagicLevel.BEGINNER);
-        put(PotionEffectType.INFESTED, MagicLevel.OWL);
-        put(PotionEffectType.INSTANT_DAMAGE, MagicLevel.OWL);
-        put(PotionEffectType.INSTANT_HEALTH, MagicLevel.OWL);
+        put(PotionEffectType.HARM, MagicLevel.OWL);
+        put(PotionEffectType.HEAL, MagicLevel.OWL);
         put(PotionEffectType.INVISIBILITY, MagicLevel.EXPERT);
-        put(PotionEffectType.JUMP_BOOST, MagicLevel.BEGINNER);
+        put(PotionEffectType.JUMP, MagicLevel.BEGINNER);
         put(PotionEffectType.LEVITATION, MagicLevel.OWL);
         put(PotionEffectType.LUCK, MagicLevel.BEGINNER);
-        put(PotionEffectType.MINING_FATIGUE, MagicLevel.BEGINNER);
-        put(PotionEffectType.NAUSEA, MagicLevel.OWL);
+        put(PotionEffectType.SLOW_DIGGING, MagicLevel.BEGINNER);
+        put(PotionEffectType.CONFUSION, MagicLevel.OWL);
         put(PotionEffectType.NIGHT_VISION, MagicLevel.BEGINNER);
-        put(PotionEffectType.OOZING, MagicLevel.OWL);
         put(PotionEffectType.POISON, MagicLevel.OWL);
-        put(PotionEffectType.RAID_OMEN, MagicLevel.NEWT);
         put(PotionEffectType.REGENERATION, MagicLevel.NEWT);
-        put(PotionEffectType.RESISTANCE, MagicLevel.NEWT);
+        put(PotionEffectType.DAMAGE_RESISTANCE, MagicLevel.NEWT);
         put(PotionEffectType.SATURATION, MagicLevel.BEGINNER);
         put(PotionEffectType.SLOW_FALLING, MagicLevel.NEWT);
-        put(PotionEffectType.SLOWNESS, MagicLevel.BEGINNER);
+        put(PotionEffectType.SLOW, MagicLevel.BEGINNER);
         put(PotionEffectType.SPEED, MagicLevel.BEGINNER);
-        put(PotionEffectType.STRENGTH, MagicLevel.NEWT);
-        put(PotionEffectType.TRIAL_OMEN, MagicLevel.NEWT);
+        put(PotionEffectType.INCREASE_DAMAGE, MagicLevel.NEWT);
         put(PotionEffectType.UNLUCK, MagicLevel.BEGINNER);
         put(PotionEffectType.WATER_BREATHING, MagicLevel.NEWT);
         put(PotionEffectType.WEAKNESS, MagicLevel.OWL);
-        put(PotionEffectType.WEAVING, MagicLevel.OWL);
-        put(PotionEffectType.WIND_CHARGED, MagicLevel.OWL);
         put(PotionEffectType.WITHER, MagicLevel.NEWT);
     }};
 
@@ -451,26 +426,26 @@ public class EntityCommon
      * @return the type color for the rabbit
      */
     @NotNull
-    static public Rabbit.Type getRandomRabbitType(int seed)
+    static public RabbitType getRandomRabbitType(int seed)
     {
-        Rabbit.Type type;
+        RabbitType type;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 61;
 
         if (rand < 10)
-            type = Rabbit.Type.BROWN;
+            type = RabbitType.BROWN;
         else if (rand < 20)
-            type = Rabbit.Type.BLACK;
+            type = RabbitType.BLACK;
         else if (rand < 30)
-            type = Rabbit.Type.WHITE;
+            type = RabbitType.WHITE;
         else if (rand < 40)
-            type = Rabbit.Type.GOLD;
+            type = RabbitType.GOLD;
         else if (rand < 50)
-            type = Rabbit.Type.BLACK_AND_WHITE;
+            type = RabbitType.PATCHES;
         else if (rand < 60)
-            type = Rabbit.Type.SALT_AND_PEPPER;
+            type = RabbitType.PEPPER;
         else
-            type = Rabbit.Type.THE_KILLER_BUNNY;
+            type = RabbitType.KILLER_BUNNY;
 
         return type;
     }
@@ -481,7 +456,7 @@ public class EntityCommon
      * @return the type color for the rabbit
      */
     @NotNull
-    static public org.bukkit.entity.Rabbit.Type getRandomRabbitType()
+    static public RabbitType getRandomRabbitType()
     {
         return getRandomRabbitType((int) TimeCommon.getDefaultWorldTime());
     }
