@@ -21,7 +21,7 @@ import org.jetbrains.annotations.NotNull;
 public final class ALOHOMORA extends O2Spell
 {
     /**
-     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
@@ -34,11 +34,11 @@ public final class ALOHOMORA extends O2Spell
 
         flavorText = new ArrayList<>()
         {{
-            add("There are many ways to pass through locked doors in the magical world.  When you wish to enter or depart discreetly, however, the Unlocking Charm is your best friend.");
+            add("There are many ways to pass through locked doors in the magical world. When you wish to enter or depart discreetly, however, the Unlocking Charm is your best friend.");
             add("The Unlocking Charm");
         }};
 
-        text = "Unlocks blocks locked by Colloportus.";
+        text = "Unlocks doors locked by Colloportus.";
     }
 
     /**
