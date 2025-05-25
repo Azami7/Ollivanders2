@@ -46,7 +46,7 @@ public final class BOS extends PlayerDisguise
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
         if (rand == 0) // 1% chance
-            targetType = EntityType.MOOSHROOM;
+            targetType = EntityType.MUSHROOM_COW;
         else
             targetType = EntityType.COW;
         disguiseType = DisguiseType.getType(targetType);
