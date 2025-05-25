@@ -60,7 +60,7 @@ public abstract class ItemToItemTransfiguration extends EntityTransfiguration
     {
         super(plugin, player, rightWand);
 
-        entityAllowedList.add(EntityType.ITEM);
+        entityAllowedList.add(EntityType.DROPPED_ITEM);
     }
 
     /**

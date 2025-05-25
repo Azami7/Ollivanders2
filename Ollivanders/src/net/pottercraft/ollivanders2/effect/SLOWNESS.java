@@ -21,7 +21,7 @@ public class SLOWNESS extends PotionEffectSuper
         strength = 1;
 
         effectType = O2EffectType.SLOWNESS;
-        potionEffectType = PotionEffectType.SLOWNESS;
+        potionEffectType = PotionEffectType.SLOW;
         informousText = legilimensText = "feels confused";
 
         divinationText.add("shall be cursed");
