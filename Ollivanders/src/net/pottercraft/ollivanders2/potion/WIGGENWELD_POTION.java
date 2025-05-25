@@ -54,7 +54,7 @@ public class WIGGENWELD_POTION extends O2SplashPotion
       flavorText.add("\"Today you will learn to brew the Wiggenweld Potion. It is a powerful healing potion that can be used to heal injuries, or reverse the effects of a Sleeping Draught.\" -Severus Snape");
 
       potionColor = Color.fromRGB(0, 206, 209);
-      minecraftPotionEffect = new PotionEffect(PotionEffectType.INSTANT_HEALTH, duration, 1);
+      minecraftPotionEffect = new PotionEffect(PotionEffectType.HEAL, duration, 1);
    }
 
    /**

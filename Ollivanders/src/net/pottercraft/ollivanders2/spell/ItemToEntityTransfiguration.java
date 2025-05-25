@@ -63,7 +63,7 @@ public class ItemToEntityTransfiguration extends EntityTransfiguration implement
     {
         super(plugin, player, rightWand);
 
-        entityAllowedList.add(EntityType.ITEM);
+        entityAllowedList.add(EntityType.DROPPED_ITEM);
 
         // world guard flags
         if (Ollivanders2.worldGuardEnabled)

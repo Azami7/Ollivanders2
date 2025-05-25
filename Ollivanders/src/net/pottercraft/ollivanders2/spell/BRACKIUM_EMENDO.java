@@ -115,7 +115,7 @@ public final class BRACKIUM_EMENDO extends O2Spell
 
                int durationInTicks = duration * Ollivanders2Common.ticksPerSecond;
 
-               PotionEffect effect = new PotionEffect(PotionEffectType.INSTANT_HEALTH, durationInTicks, 1);
+               PotionEffect effect = new PotionEffect(PotionEffectType.HEAL, durationInTicks, 1);
                entity.addPotionEffect(effect);
 
                common.printDebugMessage("Adding heal potion effect to " + entity.getName() + " for " + durationInTicks + " game ticks.", null, null, false);
