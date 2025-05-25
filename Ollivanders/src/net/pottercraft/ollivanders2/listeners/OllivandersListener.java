@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.Ollivanders2OwlPost;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.player.events.OllivandersPlayerFoundWandEvent;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
 import net.pottercraft.ollivanders2.potion.O2Potions;
 import net.pottercraft.ollivanders2.spell.APPARATE;
@@ -566,6 +567,10 @@ public class OllivandersListener implements Listener
                     player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
                     player.getWorld().playSound(location, Sound.ENTITY_PLAYER_LEVELUP, 1, 1);
                     p.getO2Player(player).setFoundWand(true);
+
+                    OllivandersPlayerFoundWandEvent wandEvent = new OllivandersPlayerFoundWandEvent(player);
+                    p.getServer().getPluginManager().callEvent(wandEvent);
+                    common.printDebugMessage("fired found wand event", null, null, false);
                 }
                 else
                 {
