@@ -36,9 +36,9 @@ public class EntityCommon
     public static final List<EntityType> undeadEntities = new ArrayList<>()
     {{
         add(EntityType.DROWNED);
+        add(EntityType.GIANT);
         add(EntityType.HUSK);
         add(EntityType.PHANTOM);
-        add(EntityType.ZOMBIFIED_PIGLIN);
         add(EntityType.SKELETON);
         add(EntityType.SKELETON_HORSE);
         add(EntityType.STRAY);
@@ -47,11 +47,12 @@ public class EntityCommon
         add(EntityType.ZOMBIE);
         add(EntityType.ZOMBIE_HORSE);
         add(EntityType.ZOMBIE_VILLAGER);
-        add(EntityType.GIANT);
+        add(EntityType.ZOMBIFIED_PIGLIN);
+        add(EntityType.ZOGLIN);
     }};
 
     /**
-     * Reasons an entity may get damaged which are caused by an attack (rather than falling, etc)
+     * Reasons an entity may get damaged which are caused by an attack (rather than falling, etc.)
      */
     public static final List<EntityDamageEvent.DamageCause> attackDamageCauses = new ArrayList<>()
     {{
@@ -59,14 +60,14 @@ public class EntityCommon
         add(EntityDamageEvent.DamageCause.ENTITY_ATTACK);
         add(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK);
         add(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION);
-        add(EntityDamageEvent.DamageCause.THORNS);
         add(EntityDamageEvent.DamageCause.PROJECTILE);
+        add(EntityDamageEvent.DamageCause.THORNS);
     }};
 
     /**
      * All minecart entity types.
      */
-    public static final List<EntityType> minecarts = new ArrayList<>()
+    public static final List<org.bukkit.entity.EntityType> minecarts = new ArrayList<>()
     {{
         add(EntityType.MINECART_FURNACE);
         add(EntityType.MINECART);
@@ -75,6 +76,15 @@ public class EntityCommon
         add(EntityType.MINECART_HOPPER);
         add(EntityType.MINECART_MOB_SPAWNER);
         add(EntityType.MINECART_TNT);
+    }};
+
+    /**
+     * All boat entity types.
+     */
+    public static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>()
+    {{
+        add(EntityType.BOAT);
+        add(EntityType.CHEST_BOAT);
     }};
 
     /**
@@ -88,30 +98,31 @@ public class EntityCommon
         put(PotionEffectType.BAD_OMEN, MagicLevel.NEWT);
         put(PotionEffectType.BLINDNESS, MagicLevel.OWL);
         put(PotionEffectType.CONDUIT_POWER, MagicLevel.NEWT);
-        put(PotionEffectType.CONFUSION, MagicLevel.OWL);
-        put(PotionEffectType.DAMAGE_RESISTANCE, MagicLevel.NEWT);
+        put(PotionEffectType.DARKNESS, MagicLevel.OWL);
         put(PotionEffectType.DOLPHINS_GRACE, MagicLevel.NEWT);
-        put(PotionEffectType.FAST_DIGGING, MagicLevel.BEGINNER);
         put(PotionEffectType.FIRE_RESISTANCE, MagicLevel.NEWT);
         put(PotionEffectType.GLOWING, MagicLevel.BEGINNER);
-        put(PotionEffectType.HARM, MagicLevel.OWL);
-        put(PotionEffectType.HEAL, MagicLevel.OWL);
+        put(PotionEffectType.FAST_DIGGING, MagicLevel.BEGINNER);
         put(PotionEffectType.HEALTH_BOOST, MagicLevel.NEWT);
         put(PotionEffectType.HERO_OF_THE_VILLAGE, MagicLevel.NEWT);
         put(PotionEffectType.HUNGER, MagicLevel.BEGINNER);
-        put(PotionEffectType.INCREASE_DAMAGE, MagicLevel.NEWT);
+        put(PotionEffectType.HARM, MagicLevel.OWL);
+        put(PotionEffectType.HEAL, MagicLevel.OWL);
         put(PotionEffectType.INVISIBILITY, MagicLevel.EXPERT);
         put(PotionEffectType.JUMP, MagicLevel.BEGINNER);
         put(PotionEffectType.LEVITATION, MagicLevel.OWL);
         put(PotionEffectType.LUCK, MagicLevel.BEGINNER);
+        put(PotionEffectType.SLOW_DIGGING, MagicLevel.BEGINNER);
+        put(PotionEffectType.CONFUSION, MagicLevel.OWL);
         put(PotionEffectType.NIGHT_VISION, MagicLevel.BEGINNER);
         put(PotionEffectType.POISON, MagicLevel.OWL);
         put(PotionEffectType.REGENERATION, MagicLevel.NEWT);
+        put(PotionEffectType.DAMAGE_RESISTANCE, MagicLevel.NEWT);
         put(PotionEffectType.SATURATION, MagicLevel.BEGINNER);
-        put(PotionEffectType.SLOW, MagicLevel.BEGINNER);
-        put(PotionEffectType.SLOW_DIGGING, MagicLevel.BEGINNER);
         put(PotionEffectType.SLOW_FALLING, MagicLevel.NEWT);
+        put(PotionEffectType.SLOW, MagicLevel.BEGINNER);
         put(PotionEffectType.SPEED, MagicLevel.BEGINNER);
+        put(PotionEffectType.INCREASE_DAMAGE, MagicLevel.NEWT);
         put(PotionEffectType.UNLUCK, MagicLevel.BEGINNER);
         put(PotionEffectType.WATER_BREATHING, MagicLevel.NEWT);
         put(PotionEffectType.WEAKNESS, MagicLevel.OWL);

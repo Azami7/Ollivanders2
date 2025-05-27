@@ -62,10 +62,12 @@ public final class O2PlayerCommon
         add(EntityType.WOLF);
         add(EntityType.LLAMA);
         add(EntityType.FOX);
+        add(EntityType.CAMEL);
+        add(EntityType.GOAT);
     }};
 
     /**
-     * Rare (low probability) animagus hapes
+     * Rare (low probability) animagus shapes
      */
     private static final List<EntityType> rareAnimagusShapes = new ArrayList<>()
     {{
@@ -75,6 +77,8 @@ public final class O2PlayerCommon
         add(EntityType.PANDA);
         add(EntityType.TURTLE);
         add(EntityType.IRON_GOLEM);
+        add(EntityType.FROG);
+        add(EntityType.SNIFFER);
     }};
 
     /**
@@ -93,6 +97,7 @@ public final class O2PlayerCommon
         add(EntityType.HOGLIN);
         add(EntityType.PIGLIN);
         add(EntityType.STRIDER);
+        add(EntityType.BREEZE);
     }};
 
     /**
