@@ -10,6 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -156,7 +157,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
         Location location = null;
 
         Sign sign = (Sign) block.getState();
-        String[] lines = sign.getLines();
+        String[] lines = sign.getSide(Side.FRONT).getLines();
 
         if (lines.length == 4)
         {

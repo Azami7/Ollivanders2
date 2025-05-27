@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -94,7 +95,7 @@ public final class ALIQUAM_FLOO extends O2Spell
             if (Ollivanders2Common.wallSigns.contains(target.getRelative(BlockFace.UP).getType()))
             {
                 Sign sign = (Sign) target.getRelative(BlockFace.UP).getState();
-                String flooName = sign.getLine(0).trim() + " " + sign.getLine(1).trim() + " " + sign.getLine(2).trim() + " " + sign.getLine(3).trim();
+                String flooName = sign.getSide(Side.FRONT).getLine(0).trim() + " " + sign.getSide(Side.FRONT).getLine(1).trim() + " " + sign.getSide(Side.FRONT).getLine(2).trim() + " " + sign.getSide(Side.FRONT).getLine(3).trim();
                 flooName = flooName.trim();
                 flooName = flooName.toLowerCase();
                 common.printDebugMessage("Floo name on sign is " + flooName, null, null, false);
