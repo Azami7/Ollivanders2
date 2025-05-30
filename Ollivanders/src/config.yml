@@ -52,7 +52,6 @@ years: false
 # Magical Items
 #
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#magical-items
-flooPowder: REDSTONE
 witchDrop: false
 enableBrooms: true
 broomstick: STICK
@@ -72,7 +71,8 @@ archivePreviousBackup: true
 
 # Floo network options
 #
-# Whether the floo network uses soul fire or the legacy mob-spawner effect
+# the material for floo powder
+flooPowder: REDSTONE
 legacyFlooEffect: true
 
 # Experimental and Debug options
