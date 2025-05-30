@@ -72,7 +72,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -218,6 +217,7 @@ public class OllivandersListener implements Listener
         }
 
         // handle spell chat dropoff
+        /*
         Set<Player> temp = new HashSet<>(recipients);
         for (Player recipient : temp)
         {
@@ -234,6 +234,8 @@ public class OllivandersListener implements Listener
                 }
             }
         }
+         */
+        Ollivanders2Common.chatDropoff(recipients, Ollivanders2.chatDropoff, player.getLocation());
     }
 
     /**
@@ -354,7 +356,7 @@ public class OllivandersListener implements Listener
         common.printDebugMessage("OllivandersListener.createSpellProjectile: enter", null, null, false);
 
         //spells go here, using any of the three types of m
-        String spellClass = "net.pottercraft.ollivanders2.spell." + name.toString();
+        String spellClass = "net.pottercraft.ollivanders2.spell." + name;
 
         Constructor<?> c;
         try
@@ -449,9 +451,6 @@ public class OllivandersListener implements Listener
     @EventHandler(priority = EventPriority.HIGH)
     public void onPlayerInteract(@NotNull PlayerInteractEvent event)
     {
-        Player player = event.getPlayer();
-        Action action = event.getAction();
-
         common.printDebugMessage("onPlayerInteract: enter", null, null, false);
 
         //

@@ -200,6 +200,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
             }
             else
             {
+                // we have to change the block underneath or the fire won't stay lit
                 Block fireBase = block.getRelative(BlockFace.DOWN);
 
                 fireBase.setType(Material.SOUL_SAND);
@@ -256,6 +257,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
             }
             else
             {
+                // we have to change the block underneath or the fire won't stay lit
                 Block fireBase = block.getRelative(BlockFace.DOWN);
 
                 fireBase.setType(Material.NETHERRACK);
@@ -322,6 +324,8 @@ public class ALIQUAM_FLOO extends O2StationarySpell
         {
             int randomIndex = Math.abs(Ollivanders2Common.random.nextInt() % flooNetworkLocations.size());
             destination = flooNetworkLocations.get(randomIndex);
+
+            Ollivanders2Common.chatDropoff(event.getRecipients(), Ollivanders2.chatDropoff, player.getLocation());
         }
 
         FlooNetworkEvent flooNetworkEvent = new FlooNetworkEvent(player, destination);
