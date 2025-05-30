@@ -12,7 +12,9 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.stationaryspell.events.FlooNetworkEvent;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -70,6 +72,11 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     final HashMap<UUID, FlooNetworkEvent> flooNetworkEvents = new HashMap<>();
 
     /**
+     * Whether we use the legacy floo effect or soul fire
+     */
+    private boolean useLegacyFlooEffect = false;
+
+    /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
      *
      * @param plugin a callback to the MC plugin
@@ -101,6 +108,8 @@ public class ALIQUAM_FLOO extends O2StationarySpell
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         permanent = true;
+        if (p.getConfig().isSet("legacyFlooEffect"))
+           useLegacyFlooEffect = p.getConfig().getBoolean("legacyFlooEffect");
 
         setPlayerID(pid);
         setLocation(location);
@@ -135,10 +144,13 @@ public class ALIQUAM_FLOO extends O2StationarySpell
             cooldown = cooldown - 1;
 
             if ((cooldown % 10) == 0)
-                playEffect();
+                turnOnFlooFireEffect();
 
             if (cooldown <= 0)
+            {
+                stopWorking();
                 common.printDebugMessage("Turning off floo " + flooName, null, null, false);
+            }
         }
         else
         {
@@ -148,7 +160,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
                     continue;
 
                 item.remove();
-                playEffect();
+                turnOnFlooFireEffect();
 
                 common.printDebugMessage("Turning on floo " + flooName, null, null, false);
 
@@ -160,15 +172,38 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     /**
      * Play effect that shows the fireplace is active
      */
-    private void playEffect()
+    private void turnOnFlooFireEffect()
     {
-        World world = location.getWorld();
-        if (world == null)
+        if (useLegacyFlooEffect)
         {
-            kill();
-            return;
+            World world = location.getWorld();
+            if (world == null)
+            {
+                kill();
+                return;
+            }
+
+            world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
         }
-        world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
+        else
+        {
+            Block block = location.getBlock();
+            if (block == null)
+            {
+                kill();
+                return;
+            }
+
+            // turn the flame in to blue flame
+            if (block.getType() == Material.FIRE)
+            {
+                block.setType(Material.SOUL_FIRE);
+            }
+            else if (block.getType() != Material.SOUL_FIRE)
+            {
+                kill();
+            }
+        }
     }
 
     /**
@@ -197,6 +232,18 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     public void stopWorking()
     {
         cooldown = 0;
+
+        if(!useLegacyFlooEffect)
+        {
+            Block block = location.getBlock();
+            if (block == null)
+            {
+                kill();
+                return;
+            }
+
+            block.setType(Material.FIRE);
+        }
     }
 
     /**

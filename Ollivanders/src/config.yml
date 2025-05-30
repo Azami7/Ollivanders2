@@ -70,6 +70,11 @@ hourlyBackup: true
 # Whether the plugin should archive previous saves before writing data. Recommended
 archivePreviousBackup: true
 
+# Floo network options
+#
+# Whether the floo network uses soul fire or the legacy mob-spawner effect
+legacyFlooEffect: true
+
 # Experimental and Debug options
 #
 # Turns on debug output in your logs. This can also be toggled on and off in game by using the command
