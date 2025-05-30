@@ -4,7 +4,7 @@ version: 2.21.4.1
 authors: [ Azami7, autumnwoz ]
 website: https://www.spigotmc.org/resources/ollivanders2.38992/
 softdepend: [ WorldGuard, LibsDisguises ]
-api-version: 1.21
+api-version: 1.21.4
 prefix: Ollivanders2
 commands:
   Ollivanders2:
