@@ -244,7 +244,7 @@ public final class O2PlayerCommon
         }
 
         // reset health to max
-        AttributeInstance playerHealthMax = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+        AttributeInstance playerHealthMax = player.getAttribute(org.bukkit.attribute.Attribute.GENERIC_MAX_HEALTH);
         if (playerHealthMax != null)
             player.setHealth(playerHealthMax.getBaseValue());
     }
