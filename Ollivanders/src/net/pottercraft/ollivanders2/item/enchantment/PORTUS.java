@@ -108,7 +108,7 @@ public class PORTUS extends Enchantment
 
         // teleport the player to the location
         if (location == null)
-            location = ((Player) entity).getBedSpawnLocation();
+            location = ((Player) entity).getRespawnLocation();
 
         if (location != null) // location could still be null
             p.addTeleportEvent((Player) entity, location, true);

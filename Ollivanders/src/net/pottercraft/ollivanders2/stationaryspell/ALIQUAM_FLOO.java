@@ -12,7 +12,10 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.stationaryspell.events.FlooNetworkEvent;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -70,6 +73,16 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     final HashMap<UUID, FlooNetworkEvent> flooNetworkEvents = new HashMap<>();
 
     /**
+     * Whether we use the legacy floo effect or soul fire
+     */
+    private boolean soulFireFlooEffect = false;
+
+    /**
+     * What type of fire this floo spell is on
+     */
+    private Material fireType = Material.FIRE;
+
+    /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
      *
      * @param plugin a callback to the MC plugin
@@ -78,11 +91,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     {
         super(plugin);
 
-        spellType = O2StationarySpellType.ALIQUAM_FLOO;
-        flooNetworkLocations.add(this);
-
-        this.radius = minRadius = maxRadius = minRadiusConfig;
-        permanent = true;
+        init();
     }
 
     /**
@@ -97,20 +106,35 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     {
         super(plugin);
 
-        spellType = O2StationarySpellType.ALIQUAM_FLOO;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
-        permanent = true;
-
+        this.flooName = flooName;
         setPlayerID(pid);
         setLocation(location);
-        radius = minRadius = maxRadius = minRadiusConfig;
-        duration = 10;
-        this.flooName = flooName;
 
-        flooNetworkLocations.add(this);
+        init();
 
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
+
+    /**
+     * Common constructor steps
+     */
+    private void init()
+    {
+        spellType = O2StationarySpellType.ALIQUAM_FLOO;
+
+        if (p.getConfig().isSet("soulFireFlooEffect"))
+        {
+            soulFireFlooEffect = p.getConfig().getBoolean("soulFireFlooEffect");
+            common.printDebugMessage("soulFireFlooEffect=" + soulFireFlooEffect, null, null, false);
+        }
+
+        this.radius = minRadius = maxRadius = minRadiusConfig;
+        permanent = true;
+        fireType = location.getBlock().getType();
+
+        flooNetworkLocations.add(this);
     }
 
     /**
@@ -135,10 +159,13 @@ public class ALIQUAM_FLOO extends O2StationarySpell
             cooldown = cooldown - 1;
 
             if ((cooldown % 10) == 0)
-                playEffect();
+                turnOnFlooFireEffect();
 
             if (cooldown <= 0)
+            {
+                stopWorking();
                 common.printDebugMessage("Turning off floo " + flooName, null, null, false);
+            }
         }
         else
         {
@@ -148,7 +175,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
                     continue;
 
                 item.remove();
-                playEffect();
+                turnOnFlooFireEffect();
 
                 common.printDebugMessage("Turning on floo " + flooName, null, null, false);
 
@@ -160,15 +187,36 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     /**
      * Play effect that shows the fireplace is active
      */
-    private void playEffect()
+    private void turnOnFlooFireEffect()
     {
-        World world = location.getWorld();
-        if (world == null)
+        if (soulFireFlooEffect)
         {
-            kill();
-            return;
+            Block block = location.getBlock();
+
+            // turn the flame in to blue flame
+            if (fireType == Material.CAMPFIRE)
+            {
+                block.setType(Material.SOUL_CAMPFIRE);
+            }
+            else
+            {
+                Block fireBase = block.getRelative(BlockFace.DOWN);
+
+                fireBase.setType(Material.SOUL_SAND);
+                block.setType(Material.SOUL_FIRE);
+            }
         }
-        world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
+        else
+        {
+            World world = location.getWorld();
+            if (world == null)
+            {
+                kill();
+                return;
+            }
+
+            world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
+        }
     }
 
     /**
@@ -197,6 +245,23 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     public void stopWorking()
     {
         cooldown = 0;
+
+        Block block = location.getBlock();
+
+        if(soulFireFlooEffect)
+        {
+            if (fireType == Material.CAMPFIRE)
+            {
+                block.setType(Material.CAMPFIRE);
+            }
+            else
+            {
+                Block fireBase = block.getRelative(BlockFace.DOWN);
+
+                fireBase.setType(Material.NETHERRACK);
+                block.setType(Material.FIRE);
+            }
+        }
     }
 
     /**

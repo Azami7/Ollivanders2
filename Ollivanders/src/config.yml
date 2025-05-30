@@ -52,7 +52,6 @@ years: false
 # Magical Items
 #
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#magical-items
-flooPowder: REDSTONE
 witchDrop: false
 enableBrooms: true
 broomstick: STICK
@@ -69,6 +68,12 @@ hourlyBackup: true
 #
 # Whether the plugin should archive previous saves before writing data. Recommended
 archivePreviousBackup: true
+
+# Floo network options
+#
+# the material for floo powder
+flooPowder: REDSTONE
+soulFireFlooEffect: true
 
 # Experimental and Debug options
 #
