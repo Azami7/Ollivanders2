@@ -2,10 +2,12 @@ package net.pottercraft.ollivanders2.common;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.Set;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -661,7 +663,6 @@ public class Ollivanders2Common
      * @param vector Vector to be translated
      * @return Spherical coords in double array with indexes 0=inclination 1=azimuth
      */
-    @NotNull
     public static double[] vectorToSphere(@NotNull Vector vector)
     {
         double inc = Math.acos(vector.getZ());
@@ -680,7 +681,7 @@ public class Ollivanders2Common
      * @return Vector
      */
     @NotNull
-    public static Vector sphereToVector(@NotNull double[] sphere, int radius)
+    public static Vector sphereToVector(double[] sphere, int radius)
     {
         double inc = sphere[0];
         double azi = sphere[1];
@@ -772,5 +773,32 @@ public class Ollivanders2Common
     static public boolean locationEquals(@NotNull Location loc1, @NotNull Location loc2)
     {
         return (loc1.getWorld() == loc2.getWorld() && loc1.getX() == loc2.getX() && loc1.getY() == loc2.getY() && loc1.getZ() == loc2.getZ());
+    }
+
+    /**
+     * Get the recpients for this chat based on the dropoff distance
+     *
+     * @param recipients the original list of recipients
+     * @param dropoff the dropoff distance
+     * @param location the source location of the speaker
+     */
+    static public void chatDropoff (Set<Player> recipients, int dropoff, Location location)
+    {
+        // handle spell chat dropoff
+        Set<Player> temp = new HashSet<>(recipients);
+        for (Player recipient : temp)
+        {
+            if (!Ollivanders2Common.isInside(location, recipient.getLocation(), dropoff))
+            {
+                try
+                {
+                    recipients.remove(recipient);
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }
