@@ -15,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -74,7 +75,12 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     /**
      * Whether we use the legacy floo effect or soul fire
      */
-    private boolean useLegacyFlooEffect = false;
+    private boolean soulFireFlooEffect = false;
+
+    /**
+     * What type of fire this floo spell is on
+     */
+    private Material fireType = Material.FIRE;
 
     /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -85,11 +91,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     {
         super(plugin);
 
-        spellType = O2StationarySpellType.ALIQUAM_FLOO;
-        flooNetworkLocations.add(this);
-
-        this.radius = minRadius = maxRadius = minRadiusConfig;
-        permanent = true;
+        init();
     }
 
     /**
@@ -104,22 +106,35 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     {
         super(plugin);
 
-        spellType = O2StationarySpellType.ALIQUAM_FLOO;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
-        permanent = true;
-        if (p.getConfig().isSet("legacyFlooEffect"))
-           useLegacyFlooEffect = p.getConfig().getBoolean("legacyFlooEffect");
-
+        this.flooName = flooName;
         setPlayerID(pid);
         setLocation(location);
-        radius = minRadius = maxRadius = minRadiusConfig;
-        duration = 10;
-        this.flooName = flooName;
 
-        flooNetworkLocations.add(this);
+        init();
 
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
+
+    /**
+     * Common constructor steps
+     */
+    private void init()
+    {
+        spellType = O2StationarySpellType.ALIQUAM_FLOO;
+
+        if (p.getConfig().isSet("soulFireFlooEffect"))
+        {
+            soulFireFlooEffect = p.getConfig().getBoolean("soulFireFlooEffect");
+            common.printDebugMessage("soulFireFlooEffect=" + soulFireFlooEffect, null, null, false);
+        }
+
+        this.radius = minRadius = maxRadius = minRadiusConfig;
+        permanent = true;
+        fireType = location.getBlock().getType();
+
+        flooNetworkLocations.add(this);
     }
 
     /**
@@ -174,7 +189,24 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      */
     private void turnOnFlooFireEffect()
     {
-        if (useLegacyFlooEffect)
+        if (soulFireFlooEffect)
+        {
+            Block block = location.getBlock();
+
+            // turn the flame in to blue flame
+            if (fireType == Material.CAMPFIRE)
+            {
+                block.setType(Material.SOUL_CAMPFIRE);
+            }
+            else
+            {
+                Block fireBase = block.getRelative(BlockFace.DOWN);
+
+                fireBase.setType(Material.SOUL_SAND);
+                block.setType(Material.SOUL_FIRE);
+            }
+        }
+        else
         {
             World world = location.getWorld();
             if (world == null)
@@ -184,25 +216,6 @@ public class ALIQUAM_FLOO extends O2StationarySpell
             }
 
             world.playEffect(location, Effect.MOBSPAWNER_FLAMES, 0);
-        }
-        else
-        {
-            Block block = location.getBlock();
-            if (block == null)
-            {
-                kill();
-                return;
-            }
-
-            // turn the flame in to blue flame
-            if (block.getType() == Material.FIRE)
-            {
-                block.setType(Material.SOUL_FIRE);
-            }
-            else if (block.getType() != Material.SOUL_FIRE)
-            {
-                kill();
-            }
         }
     }
 
@@ -233,16 +246,21 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     {
         cooldown = 0;
 
-        if(!useLegacyFlooEffect)
-        {
-            Block block = location.getBlock();
-            if (block == null)
-            {
-                kill();
-                return;
-            }
+        Block block = location.getBlock();
 
-            block.setType(Material.FIRE);
+        if(soulFireFlooEffect)
+        {
+            if (fireType == Material.CAMPFIRE)
+            {
+                block.setType(Material.CAMPFIRE);
+            }
+            else
+            {
+                Block fireBase = block.getRelative(BlockFace.DOWN);
+
+                fireBase.setType(Material.NETHERRACK);
+                block.setType(Material.FIRE);
+            }
         }
     }
 

@@ -13,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -269,6 +270,7 @@ public class O2Items
             itemNames.add(itemType.getName());
         }
 
+        Collections.sort(itemNames);
         return itemNames;
     }
 

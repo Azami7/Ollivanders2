@@ -73,7 +73,7 @@ archivePreviousBackup: true
 #
 # the material for floo powder
 flooPowder: REDSTONE
-legacyFlooEffect: true
+soulFireFlooEffect: true
 
 # Experimental and Debug options
 #
