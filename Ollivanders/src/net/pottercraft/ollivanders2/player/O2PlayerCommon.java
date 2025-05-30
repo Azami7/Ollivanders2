@@ -77,6 +77,7 @@ public final class O2PlayerCommon
         add(EntityType.PANDA);
         add(EntityType.TURTLE);
         add(EntityType.IRON_GOLEM);
+        add(EntityType.ARMADILLO);
         add(EntityType.FROG);
         add(EntityType.SNIFFER);
     }};

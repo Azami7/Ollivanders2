@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.common;
 
-import me.libraryaddict.disguise.disguisetypes.RabbitType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import org.bukkit.DyeColor;
@@ -15,6 +14,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Rabbit;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -35,6 +35,7 @@ public class EntityCommon
      */
     public static final List<EntityType> undeadEntities = new ArrayList<>()
     {{
+        add(EntityType.BOGGED);
         add(EntityType.DROWNED);
         add(EntityType.GIANT);
         add(EntityType.HUSK);
@@ -69,13 +70,13 @@ public class EntityCommon
      */
     public static final List<org.bukkit.entity.EntityType> minecarts = new ArrayList<>()
     {{
-        add(EntityType.MINECART_FURNACE);
+        add(EntityType.FURNACE_MINECART);
         add(EntityType.MINECART);
-        add(EntityType.MINECART_CHEST);
-        add(EntityType.MINECART_COMMAND);
-        add(EntityType.MINECART_HOPPER);
-        add(EntityType.MINECART_MOB_SPAWNER);
-        add(EntityType.MINECART_TNT);
+        add(EntityType.CHEST_MINECART);
+        add(EntityType.COMMAND_BLOCK_MINECART);
+        add(EntityType.HOPPER_MINECART);
+        add(EntityType.SPAWNER_MINECART);
+        add(EntityType.TNT_MINECART);
     }};
 
     /**
@@ -102,30 +103,36 @@ public class EntityCommon
         put(PotionEffectType.DOLPHINS_GRACE, MagicLevel.NEWT);
         put(PotionEffectType.FIRE_RESISTANCE, MagicLevel.NEWT);
         put(PotionEffectType.GLOWING, MagicLevel.BEGINNER);
-        put(PotionEffectType.FAST_DIGGING, MagicLevel.BEGINNER);
+        put(PotionEffectType.HASTE, MagicLevel.BEGINNER);
         put(PotionEffectType.HEALTH_BOOST, MagicLevel.NEWT);
         put(PotionEffectType.HERO_OF_THE_VILLAGE, MagicLevel.NEWT);
         put(PotionEffectType.HUNGER, MagicLevel.BEGINNER);
-        put(PotionEffectType.HARM, MagicLevel.OWL);
-        put(PotionEffectType.HEAL, MagicLevel.OWL);
+        put(PotionEffectType.INFESTED, MagicLevel.OWL);
+        put(PotionEffectType.INSTANT_DAMAGE, MagicLevel.OWL);
+        put(PotionEffectType.INSTANT_HEALTH, MagicLevel.OWL);
         put(PotionEffectType.INVISIBILITY, MagicLevel.EXPERT);
-        put(PotionEffectType.JUMP, MagicLevel.BEGINNER);
+        put(PotionEffectType.JUMP_BOOST, MagicLevel.BEGINNER);
         put(PotionEffectType.LEVITATION, MagicLevel.OWL);
         put(PotionEffectType.LUCK, MagicLevel.BEGINNER);
-        put(PotionEffectType.SLOW_DIGGING, MagicLevel.BEGINNER);
-        put(PotionEffectType.CONFUSION, MagicLevel.OWL);
+        put(PotionEffectType.MINING_FATIGUE, MagicLevel.BEGINNER);
+        put(PotionEffectType.NAUSEA, MagicLevel.OWL);
         put(PotionEffectType.NIGHT_VISION, MagicLevel.BEGINNER);
+        put(PotionEffectType.OOZING, MagicLevel.OWL);
         put(PotionEffectType.POISON, MagicLevel.OWL);
+        put(PotionEffectType.RAID_OMEN, MagicLevel.NEWT);
         put(PotionEffectType.REGENERATION, MagicLevel.NEWT);
-        put(PotionEffectType.DAMAGE_RESISTANCE, MagicLevel.NEWT);
+        put(PotionEffectType.RESISTANCE, MagicLevel.NEWT);
         put(PotionEffectType.SATURATION, MagicLevel.BEGINNER);
         put(PotionEffectType.SLOW_FALLING, MagicLevel.NEWT);
-        put(PotionEffectType.SLOW, MagicLevel.BEGINNER);
+        put(PotionEffectType.SLOWNESS, MagicLevel.BEGINNER);
         put(PotionEffectType.SPEED, MagicLevel.BEGINNER);
-        put(PotionEffectType.INCREASE_DAMAGE, MagicLevel.NEWT);
+        put(PotionEffectType.STRENGTH, MagicLevel.NEWT);
+        put(PotionEffectType.TRIAL_OMEN, MagicLevel.NEWT);
         put(PotionEffectType.UNLUCK, MagicLevel.BEGINNER);
         put(PotionEffectType.WATER_BREATHING, MagicLevel.NEWT);
         put(PotionEffectType.WEAKNESS, MagicLevel.OWL);
+        put(PotionEffectType.WEAVING, MagicLevel.OWL);
+        put(PotionEffectType.WIND_CHARGED, MagicLevel.OWL);
         put(PotionEffectType.WITHER, MagicLevel.NEWT);
     }};
 
@@ -425,26 +432,26 @@ public class EntityCommon
      * @return the type color for the rabbit
      */
     @NotNull
-    static public RabbitType getRandomRabbitType(int seed)
+    static public Rabbit.Type getRandomRabbitType(int seed)
     {
-        RabbitType type;
+        Rabbit.Type type;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 61;
 
         if (rand < 10)
-            type = RabbitType.BROWN;
+            type = Rabbit.Type.BROWN;
         else if (rand < 20)
-            type = RabbitType.BLACK;
+            type = Rabbit.Type.BLACK;
         else if (rand < 30)
-            type = RabbitType.WHITE;
+            type = Rabbit.Type.WHITE;
         else if (rand < 40)
-            type = RabbitType.GOLD;
+            type = Rabbit.Type.GOLD;
         else if (rand < 50)
-            type = RabbitType.PATCHES;
+            type = Rabbit.Type.BLACK_AND_WHITE;
         else if (rand < 60)
-            type = RabbitType.PEPPER;
+            type = Rabbit.Type.SALT_AND_PEPPER;
         else
-            type = RabbitType.KILLER_BUNNY;
+            type = Rabbit.Type.THE_KILLER_BUNNY;
 
         return type;
     }
@@ -455,7 +462,7 @@ public class EntityCommon
      * @return the type color for the rabbit
      */
     @NotNull
-    static public RabbitType getRandomRabbitType()
+    static public org.bukkit.entity.Rabbit.Type getRandomRabbitType()
     {
         return getRandomRabbitType((int) TimeCommon.getDefaultWorldTime());
     }
