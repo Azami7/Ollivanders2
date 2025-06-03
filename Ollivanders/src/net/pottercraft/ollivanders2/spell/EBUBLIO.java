@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public final class EBUBLIO extends AddO2Effect
 {
+   // todo this spell is wrong, ebublio is not the bubble-head charm
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *
