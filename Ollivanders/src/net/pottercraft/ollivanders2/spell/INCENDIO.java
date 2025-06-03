@@ -16,6 +16,7 @@ import java.util.ArrayList;
  */
 public final class INCENDIO extends IncendioSuper
 {
+    // todo rework to make this lower strength - equiv to a flint and steel
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *

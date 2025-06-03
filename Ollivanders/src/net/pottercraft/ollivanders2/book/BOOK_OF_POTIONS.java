@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.book;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -23,13 +24,13 @@ public class BOOK_OF_POTIONS extends O2Book
 
       openingPage = "You, young potioneer, hold in your hands my masterpiece. With it, my place in history is assured. -Zygmunt Budge";
 
-      // polyjuice
-      // Beautification Potion
-      // cure for boils
-      // Doxycide
-      // Felix Felicis
-      // Laughing Potion
-      // Shrinking Solution
-      // Sleeping Potion
+      // todo polyjuice potion - https://harrypotter.fandom.com/wiki/Polyjuice_Potion
+      // todo Beautification Potion - https://harrypotter.fandom.com/wiki/Beautification_Potion
+      potions.add(O2PotionType.CURE_FOR_BOILS);
+      // todo doxycide - https://harrypotter.fandom.com/wiki/Doxycide
+      // todo felix felicis - https://harrypotter.fandom.com/wiki/Felix_Felicis
+      // todo Laughing Potion - ame effect as the tickling charm - https://harrypotter.fandom.com/wiki/Laughing_Potion
+      // todo swelling solution - https://harrypotter.fandom.com/wiki/Swelling_Solution - must be different than engorgio
+      // todo sleeping potion - https://harrypotter.fandom.com/wiki/Sleeping_Draught
    }
 }

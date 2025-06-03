@@ -10,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
  */
 public enum O2SpellType
 {
+    //todo adjust levels to match books refactor
     ACCIO(ACCIO.class, MagicLevel.OWL),
     AGUAMENTI(AGUAMENTI.class, MagicLevel.OWL),
     ALARTE_ASCENDARE(ALARTE_ASCENDARE.class, MagicLevel.OWL),

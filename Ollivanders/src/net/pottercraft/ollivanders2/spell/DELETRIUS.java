@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class DELETRIUS extends O2Spell
 {
+    // todo rework to make this different than evanesco - make make smoke or spider webs disappear - https://harrypotter.fandom.com/wiki/Eradication_Spell
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *

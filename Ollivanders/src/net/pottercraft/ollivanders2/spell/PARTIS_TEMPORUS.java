@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public final class PARTIS_TEMPORUS extends O2Spell
 {
+    // todo rework to actually match the books - part fire or water - https://harrypotter.fandom.com/wiki/Partis_Temporus
     /**
      * The duration of the spell effect
      */

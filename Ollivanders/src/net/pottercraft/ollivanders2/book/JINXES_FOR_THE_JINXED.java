@@ -24,11 +24,8 @@ public class JINXES_FOR_THE_JINXED extends O2Book
         spells.add(O2SpellType.LEVICORPUS);
         spells.add(O2SpellType.LACARNUM_INFLAMARI);
         spells.add(O2SpellType.LAGOMORPHA);
-        // 6
-        // 7
-        // 8
-        // 9
-        // 10
-        // 11
+        spells.add(O2SpellType.EBUBLIO);
+        // todo jelly legs jinx https://harrypotter.fandom.com/wiki/Jelly-Legs_Jinx
+        // todo trip jinx - https://harrypotter.fandom.com/wiki/Trip_Jinx
     }
 }

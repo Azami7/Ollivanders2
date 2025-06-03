@@ -20,10 +20,26 @@ public class MOSTE_POTENTE_POTIONS extends O2Book
 
       bookType = O2BookType.MOSTE_POTENTE_POTIONS;
 
+      // todo polyjuice potion - https://harrypotter.fandom.com/wiki/Polyjuice_Potion
+      // todo felix felicis - https://harrypotter.fandom.com/wiki/Felix_Felicis
+      // todo slow acting venoms - https://harrypotter.fandom.com/wiki/Slow-acting_venom
+      // todo invisibility potion effect
+      // todo levitation potion effect
+
       potions.add(O2PotionType.BARUFFIOS_BRAIN_ELIXIR);
       potions.add(O2PotionType.WOLFSBANE_POTION);
       potions.add(O2PotionType.REGENERATION_POTION);
-      // polyjuice potion
-      // laxative potion
+      potions.add(O2PotionType.ANIMAGUS_POTION);
+      // todo bad omen potion effect
+      // todo infested potion effect
+      // todo oozing potion effect
+      // todo raid open potion effect
+      // todo trial omen potion effect
+      // todo unluck potion effect
+      // todo hero of the village potion effect
+      // todo focus potion - https://harrypotter.fandom.com/wiki/Focus_Potion
+      // todo maxima potion - https://harrypotter.fandom.com/wiki/Maxima_Potion
+      // todo another spell boost potion - https://harrypotter.fandom.com/wiki/Exstimulo_Potion
+      // todo restoration potion - https://harrypotter.fandom.com/wiki/Restoration_Potion
    }
 }

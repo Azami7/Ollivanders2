@@ -24,6 +24,7 @@ import java.util.UUID;
  */
 public class REPELLO_MUGGLETON extends ShieldSpell
 {
+    // todo rewrite to use inivisiblity potion effect
     public static final int minRadiusConfig = 5;
     public static final int maxRadiusConfig = 20;
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;

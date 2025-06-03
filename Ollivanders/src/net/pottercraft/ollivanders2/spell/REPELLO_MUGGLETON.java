@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Repello Muggleton will hide any blocks and players in it's radius from those outside of it.
+ * Repello Muggleton will hide any blocks and players in its radius from those outside of it.
  * <p>
  * https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm
  * <p>
@@ -18,6 +18,8 @@ import java.util.ArrayList;
  */
 public final class REPELLO_MUGGLETON extends StationarySpell
 {
+    // todo make this match the book - https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm
+    // todo as written this spell is https://harrypotter.fandom.com/wiki/Cave_inimicum
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *

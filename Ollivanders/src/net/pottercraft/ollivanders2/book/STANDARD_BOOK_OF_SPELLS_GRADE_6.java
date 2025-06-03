@@ -7,9 +7,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Standard Book of Spells Grade 6
  *
- * Missing spells:
- * Expecto Patronum - https://github.com/Azami7/Ollivanders2/issues/32
- *
  * @since 2.2.4
  * @author Azami7
  */
@@ -21,16 +18,18 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_6 extends O2Book
 
       bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_6;
 
-      spells.add(O2SpellType.EPISKEY);
-      spells.add(O2SpellType.HERBIVICUS);
-      spells.add(O2SpellType.EVANESCO);
       spells.add(O2SpellType.AGUAMENTI);
-      spells.add(O2SpellType.ALARTE_ASCENDARE);
-      spells.add(O2SpellType.LUMOS_SOLEM);
+      spells.add(O2SpellType.DEFODIO);
       spells.add(O2SpellType.PARTIS_TEMPORUS);
-      //spells.add(O2SpellType.EXPECTO_PATRONUM);
-      //9
-      //10
-      //11
+      // todo - vinegar to wine - https://harrypotter.fandom.com/wiki/Vinegar_to_wine_spell
+      // todo - knitting charm - https://harrypotter.fandom.com/wiki/Knitting_Charm
+      // todo - bubble head charm - https://harrypotter.fandom.com/wiki/Bubble-Head_Charm
+      // todo - blue sparks - https://harrypotter.fandom.com/wiki/Blue_Sparks
+      spells.add(O2SpellType.PYROSVESTIRAS);
+
+      spells.add(O2SpellType.EVANESCO);
+      spells.add(O2SpellType.ALARTE_ASCENDARE);
+      spells.add(O2SpellType.PARTIS_TEMPORUS);
+      spells.add(O2SpellType.APPARATE);
    }
 }

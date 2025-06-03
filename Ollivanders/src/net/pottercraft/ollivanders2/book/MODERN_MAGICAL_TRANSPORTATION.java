@@ -21,6 +21,7 @@ public class MODERN_MAGICAL_TRANSPORTATION extends O2Book
       openingPage = "Understanding magical transportation is important for every witch and wizard. In this book we will learn three primary means of transport - Brooms, Floo Powder, and Portkeys.";
 
       spells.add(O2SpellType.VOLATUS);
+      spells.add(O2SpellType.MOLLIARE);
       spells.add(O2SpellType.ALIQUAM_FLOO);
       spells.add(O2SpellType.PORTUS);
    }

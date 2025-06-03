@@ -18,7 +18,7 @@ public class BREAK_WITH_A_BANSHEE extends O2Book
 
       bookType = O2BookType.BREAK_WITH_A_BANSHEE;
 
-      spells.add(O2SpellType.EXPELLIARMUS);
       spells.add(O2SpellType.OBLIVIATE);
+      // todo banshee banishment charm
    }
 }

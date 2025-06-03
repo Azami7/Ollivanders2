@@ -26,17 +26,29 @@ public class ADVANCED_TRANSFIGURATION extends O2Book
 
         bookType = O2BookType.ADVANCED_TRANSFIGURATION;
 
+        spells.add(O2SpellType.AVIS);
+        // todo other small animal conjuration like snake summoning spell - https://harrypotter.fandom.com/wiki/Snake_Summons_Spell
         spells.add(O2SpellType.PULLUS);
-        spells.add(O2SpellType.EQUUS);
         spells.add(O2SpellType.FELIS);
-        spells.add(O2SpellType.LAMA);
         spells.add(O2SpellType.CANIS);
-        spells.add(O2SpellType.SUS);
-        spells.add(O2SpellType.URSUS);
-        spells.add(O2SpellType.BOS);
-        spells.add(O2SpellType.GEMINIO);
-        spells.add(O2SpellType.REPARIFARGE);
+        // todo frog
+        // todo rabbit
+        // todo sheep
+        // todo turtle
+        // todo fox
+        // todo goat
         spells.add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
-        //spells.add(O2SpellType.HOMORPHUS);
+
+
+        spells.add(O2SpellType.BOS);
+        spells.add(O2SpellType.EQUUS);
+        spells.add(O2SpellType.LAMA);
+        spells.add(O2SpellType.URSUS);
+        spells.add(O2SpellType.SUS);
+        // todo camel
+        // todo donkey
+        // todo goat
+        // due to dragons only being huge mobs in MC, this is now a NEWT-level spell
+        spells.add(O2SpellType.DRACONIFORS);
     }
 }

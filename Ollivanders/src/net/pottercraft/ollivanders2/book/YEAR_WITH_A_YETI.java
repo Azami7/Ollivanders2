@@ -7,9 +7,6 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Year with a Yeti - 2nd year Defense Against the Dark Arts book
  *
- * Missing spells:
- * Mimblewimble - https://github.com/Azami7/Ollivanders2/issues/54
- *
  * @since 2.2.4
  * @author Azami7
  */
@@ -23,5 +20,6 @@ public class YEAR_WITH_A_YETI extends O2Book
 
       spells.add(O2SpellType.ARANIA_EXUMAI);
       spells.add(O2SpellType.OBLIVIATE);
+      // todo Mimblewimble - https://github.com/Azami7/Ollivanders2/issues/54
    }
 }

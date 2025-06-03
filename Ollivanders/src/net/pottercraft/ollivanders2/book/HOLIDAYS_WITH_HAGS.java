@@ -18,7 +18,7 @@ public class HOLIDAYS_WITH_HAGS extends O2Book
 
       bookType = O2BookType.HOLIDAYS_WITH_HAGS;
 
-      spells.add(O2SpellType.MELOFORS);
       spells.add(O2SpellType.OBLIVIATE);
+      // todo some spell related to witches
    }
 }

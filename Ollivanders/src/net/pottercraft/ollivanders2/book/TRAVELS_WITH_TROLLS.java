@@ -18,8 +18,8 @@ public class TRAVELS_WITH_TROLLS extends O2Book
 
       bookType = O2BookType.TRAVELS_WITH_TROLLS;
 
-      spells.add(O2SpellType.VERDIMILLIOUS_DUO);
       spells.add(O2SpellType.OBLIVIATE);
       spells.add(O2SpellType.CONFUNDUS_DUO);
+      spells.add(O2SpellType.BRACKIUM_EMENDO);
    }
 }

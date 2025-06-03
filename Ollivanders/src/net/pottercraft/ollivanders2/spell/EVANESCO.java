@@ -21,6 +21,7 @@ import java.util.ArrayList;
  */
 public final class EVANESCO extends EntityTransfiguration
 {
+    // todo rework to more align with https://harrypotter.fandom.com/wiki/Vanishing_Spell
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *

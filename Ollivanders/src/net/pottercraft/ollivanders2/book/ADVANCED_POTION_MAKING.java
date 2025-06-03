@@ -22,13 +22,33 @@ public class ADVANCED_POTION_MAKING extends O2Book
 
       bookType = O2BookType.ADVANCED_POTION_MAKING;
 
-      potions.add(O2PotionType.MEMORY_POTION);
-      potions.add(O2PotionType.WIGGENWELD_POTION);
+      // todo draught of peace - https://harrypotter.fandom.com/wiki/Draught_of_Peace
+      // todo invigoration draught - speed potion effect - https://harrypotter.fandom.com/wiki/Invigoration_Draught
+      // todo everlasting elixir - https://harrypotter.fandom.com/wiki/Everlasting_Elixirs
+      // todo befuddlement draught - slowness potion effect - https://harrypotter.fandom.com/wiki/Befuddlement_Draught
+      // todo blindness potion effect
+      // todo occulua potion - reverses blindness - https://harrypotter.fandom.com/wiki/Oculus_Potion
+      // todo jump boost potion effect
+      // todo wither potion effect
+      // todo Hiccoughing Solution
+
+      // todo elixir to induce euphornia - https://harrypotter.fandom.com/wiki/Elixir_to_Induce_Euphoria
+      // todo Amortentia - https://harrypotter.fandom.com/wiki/Amortentia
       potions.add(O2PotionType.DRAUGHT_OF_LIVING_DEATH);
-      // elixir to induce euphoria
-      // Hiccoughing Solution
-      // Everlasting Elixirs
-      // Felix Felicis
-      // Poison Antidote (Golpalott's Third Law)
+      // todo pink poison - poison potion effect - https://harrypotter.fandom.com/wiki/Garish_pink_blended_poison
+      // todo antidote for pink poison - https://harrypotter.fandom.com/wiki/Antidote_to_garish_pink_blended_poison
+      // todo regerminating potion - restore dead plants - https://harrypotter.fandom.com/wiki/Regerminating_Potion
+      potions.add(O2PotionType.MEMORY_POTION);
+      // todo Scintillation Solution - glowing potion effect - https://harrypotter.fandom.com/wiki/Scintillation_Solution
+      // todo dolphins grace potion effect
+      // todo exploding potion - https://harrypotter.fandom.com/wiki/Exploding_Potion
+
+      // todo mandrake restorative draught - https://harrypotter.fandom.com/wiki/Mandrake_Restorative_Draught
+      // todo stronger healing potion - instance health potion effect
+      // todo instant damage potion effect
+      // todo potion to force animagus to turn back to human form
+      // todo wolfsbane
+      // todo shrinking solution, snape's version - https://harrypotter.fandom.com/wiki/Shrinking_Solution
+      // todo water breathing potion
    }
 }

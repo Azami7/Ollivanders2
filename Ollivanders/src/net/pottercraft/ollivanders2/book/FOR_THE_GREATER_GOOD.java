@@ -25,7 +25,8 @@ public class FOR_THE_GREATER_GOOD extends O2Book
       spells.add(O2SpellType.IMMOBULUS);
       spells.add(O2SpellType.LEVICORPUS);
       spells.add(O2SpellType.LEGILIMENS);
-      //Crucio
-      //Imperio
+      //todo Crucio
+      //todo Imperio
+      // todo protego diabolica - https://harrypotter.fandom.com/wiki/Protego_Diabolica
    }
 }

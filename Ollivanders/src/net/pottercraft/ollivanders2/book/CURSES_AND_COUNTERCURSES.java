@@ -27,7 +27,8 @@ public class CURSES_AND_COUNTERCURSES extends O2Book
       spells.add(O2SpellType.METELOJINX_RECANTO);
       spells.add(O2SpellType.SILENCIO);
       spells.add(O2SpellType.PETRIFICUS_TOTALUS);
-      // jelly legs
-      // tongue tying
+      spells.add(O2SpellType.GEMINIO);
+      spells.add(O2SpellType.LOQUELA_INEPTIAS);
+      // todo counter-curse - https://harrypotter.fandom.com/wiki/Counter-curse
    }
 }

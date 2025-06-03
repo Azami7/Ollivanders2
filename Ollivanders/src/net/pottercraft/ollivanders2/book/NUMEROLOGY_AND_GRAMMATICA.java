@@ -21,5 +21,6 @@ public class NUMEROLOGY_AND_GRAMMATICA extends O2Book
       openingPage = "The study of Arithmancy is not for the weak of mind. With work and dedication, one can learn the secrets of the Universe by understanding the language of numbers.";
 
       spells.add(O2SpellType.INFORMOUS);
+      spells.add(O2SpellType.POINT_ME);
    }
 }

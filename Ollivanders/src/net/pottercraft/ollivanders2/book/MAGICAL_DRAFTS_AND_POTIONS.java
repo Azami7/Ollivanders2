@@ -19,12 +19,36 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book
       bookType = O2BookType.MAGICAL_DRAFTS_AND_POTIONS;
 
       potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
-      potions.add(O2PotionType.WIT_SHARPENING_POTION);
       potions.add(O2PotionType.FORGETFULLNESS_POTION);
       potions.add(O2PotionType.HERBICIDE_POTION);
-      potions.add(O2PotionType.WIDEYE_POTION);
       potions.add(O2PotionType.CURE_FOR_BOILS);
+      // todo night vision potion effect
+
+      potions.add(O2PotionType.WIGGENWELD_POTION);
+      // todo fire protection potion - fire resistance potion effect
+      // todo strengthening solution - strength potion effect
+      // todo weakness potion - weakness potion effect
+      // todo swelling solution - https://harrypotter.fandom.com/wiki/Swelling_Solution - must be different than engorgio
+      // todo shrinking solution - https://harrypotter.fandom.com/wiki/Shrinking_Solution - must be different than reducio
+      // todo hunger potion effect
+      // todo saturation potion effect
+
+      potions.add(O2PotionType.WIDEYE_POTION);
+      // todo Confusing Concoctio - nausea potion effect - https://harrypotter.fandom.com/wiki/Confusing_Concoction
+      // todo antidote to uncommon poisons - https://harrypotter.fandom.com/wiki/Antidote_to_Uncommon_Poisons
       potions.add(O2PotionType.SLEEPING_DRAUGHT);
-      // swelling solution
+      // todo doxycide - https://harrypotter.fandom.com/wiki/Doxycide
+      // todo absorbtion potion effect
+      // todo darkness potion effect
+      // todo slow-falling potion effect
+
+      potions.add(O2PotionType.WIT_SHARPENING_POTION);
+      // todo calming draught
+      // todo pepperup potion - https://harrypotter.fandom.com/wiki/Pepperup_Potion
+      // todo ageing potion
+      // todo Weedosoros poison - https://harrypotter.fandom.com/wiki/Weedosoros
+      // todo skele-gro - regeneration potion effect
+      // todo health boost potion effect
+      // todo resistance potion effect
    }
 }

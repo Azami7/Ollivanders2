@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Standard Book of Spells Grade 1
+ * https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_1
  *
  * @since 2.2.4
  * @author Azami7
@@ -23,11 +24,9 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_1 extends O2Book
       spells.add(O2SpellType.ALOHOMORA);
       spells.add(O2SpellType.COLLOPORTUS);
       spells.add(O2SpellType.REPARO);
-      spells.add(O2SpellType.DIFFINDO);
       spells.add(O2SpellType.INCENDIO);
+      spells.add(O2SpellType.SPONGIFY);
+      //todo cistern aperio - https://harrypotter.fandom.com/wiki/Box_Blasting_Charm
       spells.add(O2SpellType.WINGARDIUM_LEVIOSA);
-      //9
-      //10
-      //11
    }
 }
