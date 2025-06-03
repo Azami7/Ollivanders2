@@ -548,7 +548,7 @@ public abstract class O2Spell
     }
 
     /**
-     * Sets the uses modifier that takes into account spell uses, wand type, and spell level if years are enabled. Returns 10.0 if the uses are 100 and the right wand is held.
+     * Sets the uses modifier that takes into account spell uses, wand type, and spell level if years are enabled. Returns 100 if the uses are 100 and the right wand is held.
      */
     protected void setUsesModifier()
     {

@@ -19,22 +19,19 @@ import java.util.ArrayList;
  * <p>
  * Reference: https://harrypotter.fandom.com/wiki/Locking_Spell
  */
-public final class COLLOPORTUS extends StationarySpell
-{
+public final class COLLOPORTUS extends StationarySpell {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public COLLOPORTUS(Ollivanders2 plugin)
-    {
+    public COLLOPORTUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.COLLOPORTUS;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Locking Spell.");
         }};
 
@@ -48,15 +45,13 @@ public final class COLLOPORTUS extends StationarySpell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public COLLOPORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public COLLOPORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.COLLOPORTUS;
         branch = O2MagicBranch.CHARMS;
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.BUILD);
         }
 
@@ -69,18 +64,15 @@ public final class COLLOPORTUS extends StationarySpell
 
     @Override
     @Nullable
-    protected O2StationarySpell createStationarySpell()
-    {
+    protected O2StationarySpell createStationarySpell() {
         Block targetBlock = getTargetBlock();
-        if (targetBlock == null)
-        {
+        if (targetBlock == null) {
             common.printDebugMessage("COLLOPORTUS.doCheckEffect: from block is null", null, null, true);
             return null;
         }
 
         Material blockType = targetBlock.getType();
-        if (!(Ollivanders2Common.doors.contains(blockType) || Ollivanders2Common.trapdoors.contains(blockType) || Ollivanders2Common.chests.contains(blockType)))
-        {
+        if (!Ollivanders2Common.isDoor(targetBlock) && !Ollivanders2Common.isChest(targetBlock)) {
             common.printDebugMessage("block is not a door, trapdoor, or chest", null, null, true);
             return null;
         }

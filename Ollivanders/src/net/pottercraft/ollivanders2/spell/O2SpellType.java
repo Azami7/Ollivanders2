@@ -8,8 +8,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * All supported spells.
  */
-public enum O2SpellType
-{
+public enum O2SpellType {
+    ABERTO(ABERTO.class, MagicLevel.BEGINNER),
     ACCIO(ACCIO.class, MagicLevel.OWL),
     AGUAMENTI(AGUAMENTI.class, MagicLevel.OWL),
     ALARTE_ASCENDARE(ALARTE_ASCENDARE.class, MagicLevel.OWL),
@@ -39,6 +39,7 @@ public enum O2SpellType
     CARPE_RETRACTUM(CARPE_RETRACTUM.class, MagicLevel.BEGINNER),
     CARTOMANCIE(CARTOMANCIE.class, MagicLevel.OWL),
     CHARTIA(CHARTIA.class, MagicLevel.BEGINNER),
+    CISTERN_APERIO(CISTERN_APERIO.class, MagicLevel.BEGINNER),
     COLLOPORTUS(COLLOPORTUS.class, MagicLevel.BEGINNER),
     COLOVARIA(COLOVARIA.class, MagicLevel.BEGINNER),
     COLOVARIA_ALBUM(COLOVARIA_ALBUM.class, MagicLevel.OWL),
@@ -187,8 +188,7 @@ public enum O2SpellType
      * @param className the name of the spell class associated with this spell type
      * @param level     the level of this spell
      */
-    O2SpellType(@NotNull Class<?> className, MagicLevel level)
-    {
+    O2SpellType(@NotNull Class<?> className, MagicLevel level) {
         this.className = className;
         this.level = level;
     }
@@ -199,8 +199,7 @@ public enum O2SpellType
      * @return the classname for this spell type
      */
     @NotNull
-    public Class<?> getClassName()
-    {
+    public Class<?> getClassName() {
         return className;
     }
 
@@ -210,8 +209,7 @@ public enum O2SpellType
      * @return the level of this spell
      */
     @NotNull
-    public MagicLevel getLevel()
-    {
+    public MagicLevel getLevel() {
         return level;
     }
 
@@ -221,8 +219,7 @@ public enum O2SpellType
      * @return the spell name for this spell type.
      */
     @NotNull
-    public String getSpellName()
-    {
+    public String getSpellName() {
         String spellTypeString = this.toString().toLowerCase();
 
         return Ollivanders2Common.firstLetterCapitalize(spellTypeString.replace("_", " "));
@@ -235,16 +232,13 @@ public enum O2SpellType
      * @return the spell type
      */
     @Nullable
-    public static O2SpellType spellTypeFromString(@NotNull String spellString)
-    {
+    public static O2SpellType spellTypeFromString(@NotNull String spellString) {
         O2SpellType spellType = null;
 
-        try
-        {
+        try {
             spellType = O2SpellType.valueOf(spellString);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             // this is expected when spellString is not a valid spell
         }
 
