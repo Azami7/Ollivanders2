@@ -20,7 +20,11 @@ public class POTION_OPUSCULE extends O2Book
 
       bookType = O2BookType.POTION_OPUSCULE;
 
-      potions.add(O2PotionType.ANIMAGUS_POTION);
       potions.add(O2PotionType.BABBLING_BEVERAGE);
+      potions.add(O2PotionType.FORGETFULLNESS_POTION);
+      // todo hunger potion effect
+      // todo mining fatigue potion effect - https://harrypotter.fandom.com/wiki/Fatiguing_Fusion
+      // todo weaving potion effect
+      // todo wind charged potion effect
    }
 }

@@ -14,6 +14,7 @@ import java.util.ArrayList;
  */
 public final class REDUCIO extends ChangeEntitySizeSuper
 {
+    // todo rework with shrinking solution potion
     private static final int maxRadiusConfig = 20;
     private static final int maxTargetsConfig = 10;
 

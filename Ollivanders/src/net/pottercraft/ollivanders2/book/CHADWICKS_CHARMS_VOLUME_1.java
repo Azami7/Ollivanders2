@@ -23,5 +23,7 @@ public class CHADWICKS_CHARMS_VOLUME_1 extends O2Book
       spells.add(O2SpellType.HORREAT_PROTEGAT);
       spells.add(O2SpellType.MOV_FOTIA);
       spells.add(O2SpellType.FINESTRA);
+      spells.add(O2SpellType.FATUUS_AURUM);
+      spells.add(O2SpellType.ABERTO);
    }
 }

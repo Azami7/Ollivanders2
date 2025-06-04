@@ -17,16 +17,15 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book
 
         bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_7;
 
-        spells.add(O2SpellType.MUFFLIATO);
-        spells.add(O2SpellType.REPELLO_MUGGLETON);
+        spells.add(O2SpellType.BOMBARDA_MAXIMA);
+        spells.add(O2SpellType.HERBIVICUS);
         spells.add(O2SpellType.INFORMOUS);
-        spells.add(O2SpellType.GLACIUS_TRIA);
-        spells.add(O2SpellType.INCENDIO_TRIA);
-        spells.add(O2SpellType.DEFODIO);
-        spells.add(O2SpellType.APPARATE);
+        spells.add(O2SpellType.LUMOS_SOLEM);
+        spells.add(O2SpellType.OBLIVIATE);
+        spells.add(O2SpellType.REPELLO_MUGGLETON);
+        // todo anti-alohomora - https://harrypotter.fandom.com/wiki/Anti-Alohomora_Charm
+        // todo impervious - https://harrypotter.fandom.com/wiki/Impervius_Charm
+        // todo Imperturbable Charm - like muffliato but not a stationary spell, less range, targets self - https://harrypotter.fandom.com/wiki/Imperturbable_Charm
         spells.add(O2SpellType.DIAMAS_REPARO);
-        spells.add(O2SpellType.PRIOR_INCANTATO);
-        //10
-        //11
     }
 }

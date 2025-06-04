@@ -5,7 +5,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Defensive Magical Theory - 5th year defense against the dark arts
+ * The Essential Defence Against the Dark Arts. 3rd - 4th year defense against the dark arts
  *
  * @since 2.2.4
  * @author Azami7
@@ -18,13 +18,19 @@ public class ESSENTIAL_DARK_ARTS extends O2Book
 
       bookType = O2BookType.ESSENTIAL_DARK_ARTS;
 
-      spells.add(O2SpellType.CARPE_RETRACTUM);
-      spells.add(O2SpellType.GLACIUS);
+      // todo Riddikulus - https://harrypotter.fandom.com/wiki/Boggart-Banishing_Spell
       spells.add(O2SpellType.LUMOS_DUO);
-      spells.add(O2SpellType.AQUA_ERUCTO);
-      spells.add(O2SpellType.GLACIUS_DUO);
+      spells.add(O2SpellType.INCENDIO_DUO);
+      spells.add(O2SpellType.IMMOBULUS);
+      // todo spell that slows/injures skeletons
+      spells.add(O2SpellType.ARANIA_EXUMAI);
+
+      // todo salvio hexia - https://harrypotter.fandom.com/wiki/Hex-deflection
       spells.add(O2SpellType.ALARTE_ASCENDARE);
-      spells.add(O2SpellType.DISSENDIUM);
+      spells.add(O2SpellType.AQUA_ERUCTO);
       spells.add(O2SpellType.FUMOS_DUO);
+      // todo knockback wolf
+      // todo set fire to zombie (short duration)
+      // todo kill small slime
    }
 }

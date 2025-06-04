@@ -20,7 +20,9 @@ public class BASIC_HEXES extends O2Book
         spells.add(O2SpellType.IMPEDIMENTA);
         spells.add(O2SpellType.IMMOBULUS);
         spells.add(O2SpellType.OBSCURO);
-        spells.add(O2SpellType.LOQUELA_INEPTIAS);
-        // pepper breath
+        // todo pepper breath - https://harrypotter.fandom.com/wiki/Pepper_Breath
+        // todo counter-hex spell
+        // todo weakening hex - https://harrypotter.fandom.com/wiki/Weakening_Hex
+        // todo hurling hex - https://harrypotter.fandom.com/wiki/Hurling_Hex
     }
 }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public final class REDUCTO extends O2Spell
 {
+    // todo rework what type of blocks this can target, make work with bombarda (prob can be a child class), 5th year dark arts spell
     /**
      * The maximum possible strength, 4f is TNT
      */

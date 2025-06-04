@@ -17,16 +17,16 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_3 extends O2Book
 
         bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_3;
 
-        spells.add(O2SpellType.EXPELLIARMUS);
-        spells.add(O2SpellType.DRACONIFORS);
+        //todo cheering charm - https://harrypotter.fandom.com/wiki/Cheering_Charm
+        spells.add(O2SpellType.GLACIUS);
+        spells.add(O2SpellType.DEPULSO);
+        spells.add(O2SpellType.GLACIUS_DUO);
+        spells.add(O2SpellType.PACK);
+        spells.add(O2SpellType.HERBIFORS);
+        spells.add(O2SpellType.CARPE_RETRACTUM);
+        spells.add(O2SpellType.DURO);
         spells.add(O2SpellType.IMMOBULUS);
         spells.add(O2SpellType.LUMOS_DUO);
-        spells.add(O2SpellType.REPARO);
-        spells.add(O2SpellType.CARPE_RETRACTUM);
-        spells.add(O2SpellType.PACK);
-        spells.add(O2SpellType.LAPIFORS);
-        spells.add(O2SpellType.SNUFFLIFORS);
-        //10
-        //11
+        spells.add(O2SpellType.EXPELLIARMUS);
     }
 }

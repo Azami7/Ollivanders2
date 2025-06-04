@@ -18,7 +18,7 @@ public class GADDING_WITH_GHOULS extends O2Book
 
       bookType = O2BookType.GADDING_WITH_GHOULS;
 
-      spells.add(O2SpellType.MOLLIARE);
       spells.add(O2SpellType.OBLIVIATE);
+      // todo Transmogrifian Torture counter-curse - https://harrypotter.fandom.com/wiki/Counter-curse_for_the_Transmogrifian_Torture
    }
 }

@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public final class FUMOS extends FumosSuper
 {
+   //todo redo now there is a smoke effect
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *

@@ -18,7 +18,7 @@ public class VOYAGES_WITH_VAMPIRES extends O2Book
 
       bookType = O2BookType.VOYAGES_WITH_VAMPIRES;
 
-      spells.add(O2SpellType.DEPULSO);
       spells.add(O2SpellType.OBLIVIATE);
+      // todo Peskipiksi Pesternomi - https://harrypotter.fandom.com/wiki/Peskipiksi_Pesternomi
    }
 }

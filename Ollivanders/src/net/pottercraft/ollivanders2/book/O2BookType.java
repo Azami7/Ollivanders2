@@ -26,6 +26,7 @@ public enum O2BookType
    CONFRONTING_THE_FACELESS (CONFRONTING_THE_FACELESS.class, "Confronting the Faceless", "Confronting the Faceless", "Unknown", O2MagicBranch.DARK_ARTS),
    CURSES_AND_COUNTERCURSES (CURSES_AND_COUNTERCURSES.class, "Curses and Counter-Curses", "Curses and Counter-Curses", "Professor Vindictus Viridian", O2MagicBranch.DARK_ARTS),
    DE_MEDICINA_PRAECEPTA (DE_MEDICINA_PRAECEPTA.class, "De Medicina Praecepta", "De Medicina Praecepta", "Quintus Serenus Sammonicus", O2MagicBranch.HEALING),
+   DEFENSE_AGAINST_THE_DARK_ARTS (DEFENSE_AGAINST_THE_DARK_ARTS.class, "Defence Against the Dark Arts", "Defence Against Dark Arts", "Galatea Merrythought", O2MagicBranch.DARK_ARTS),
    ESSENTIAL_DARK_ARTS (ESSENTIAL_DARK_ARTS.class, "The Essential Defence Against the Dark Arts", "Essential Dark Arts Defence", "Arsenius Jigger", O2MagicBranch.DARK_ARTS),
    EXTREME_INCANTATIONS (EXTREME_INCANTATIONS.class, "Extreme Incantations", "Extreme Incantations", "Violeta Stitch", O2MagicBranch.CHARMS),
    //FANTASTIC_BEASTS (FANTASTIC_BEASTS.class, "Fantastic Beasts and Where to Find Them", "Fantastic Beasts", "Newt Scamander", O2MagicBranch.CARE_OF_MAGICAL_CREATURES;),

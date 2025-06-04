@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public final class PROTEGO_MAXIMA extends StationarySpell
 {
+    // todo make this match the book - https://harrypotter.fandom.com/wiki/Protego_Maxima
     private static int minDamage;
     private static int maxDamage;
 

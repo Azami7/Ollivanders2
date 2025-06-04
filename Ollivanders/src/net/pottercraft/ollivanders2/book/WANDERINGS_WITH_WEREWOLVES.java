@@ -22,5 +22,6 @@ public class WANDERINGS_WITH_WEREWOLVES extends O2Book
 
       spells.add(O2SpellType.CONFUNDUS_DUO);
       spells.add(O2SpellType.OBLIVIATE);
+      // todo homorphus - https://harrypotter.fandom.com/wiki/Homorphus_Charm
    }
 }

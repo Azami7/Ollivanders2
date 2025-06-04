@@ -20,10 +20,14 @@ public class UNFOGGING_THE_FUTURE extends O2Book
       bookType = O2BookType.UNFOGGING_THE_FUTURE;
 
       spells.add(O2SpellType.ASTROLOGIA);
-      // Palmistry
+      // todo fire omens - https://harrypotter.fandom.com/wiki/Fire-omens
       spells.add(O2SpellType.BAO_ZHONG_CHA);
       spells.add(O2SpellType.INTUEOR);
-      // Bird Entrails
       spells.add(O2SpellType.CHARTIA);
+      spells.add(O2SpellType.OVOGNOSIS);
+      // todo xylomancy - https://harrypotter.fandom.com/wiki/Xylomancy
+      // todo bibliomancy - https://harrypotter.fandom.com/wiki/Bibliomancy
+      // todo Ornithomancy - https://harrypotter.fandom.com/wiki/Ornithomancy
+      // todo Capnomancy - https://harrypotter.fandom.com/wiki/Capnomancy
    }
 }

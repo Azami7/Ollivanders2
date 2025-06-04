@@ -21,13 +21,12 @@ public class CURSES_AND_COUNTERCURSES extends O2Book
 
       openingPage = "Bewitch your friends and befuddle your enemies with the latest revenges: Hair loss, Jelly-Legs, Tongue-Tying, and much, much more.";
 
-      spells.add(O2SpellType.LEVICORPUS);
-      spells.add(O2SpellType.LIBERACORPUS);
       spells.add(O2SpellType.METELOJINX);
       spells.add(O2SpellType.METELOJINX_RECANTO);
       spells.add(O2SpellType.SILENCIO);
       spells.add(O2SpellType.PETRIFICUS_TOTALUS);
-      // jelly legs
-      // tongue tying
+      spells.add(O2SpellType.GEMINIO);
+      spells.add(O2SpellType.LOQUELA_INEPTIAS);
+      // todo counter-curse - https://harrypotter.fandom.com/wiki/Counter-curse
    }
 }

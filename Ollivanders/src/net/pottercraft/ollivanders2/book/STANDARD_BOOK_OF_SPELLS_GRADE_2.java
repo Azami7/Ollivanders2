@@ -22,16 +22,16 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_2 extends O2Book
 
       bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_2;
 
-      spells.add(O2SpellType.DIFFINDO);
-      spells.add(O2SpellType.EXPELLIARMUS);
+      //todo skurge - gets rid of slime
+      //todo Tarantallegra - https://harrypotter.fandom.com/wiki/Dancing_Feet_Spell
+      //todo Rictusempra - https://harrypotter.fandom.com/wiki/Tickling_Charm
       spells.add(O2SpellType.ENGORGIO);
       spells.add(O2SpellType.REDUCIO);
-      spells.add(O2SpellType.INCENDIO);
-      spells.add(O2SpellType.IMMOBULUS);
       spells.add(O2SpellType.FINITE_INCANTATEM);
-      spells.add(O2SpellType.OBLIVIATE);
+      spells.add(O2SpellType.ARRESTO_MOMENTUM);
+      spells.add(O2SpellType.APARECIUM);
       spells.add(O2SpellType.FLIPENDO);
-      //spells.add(O2SpellType.SKURGE);
-      //spells.add(O2SpellType.TARANTALLEGRA);
+      spells.add(O2SpellType.EXPELLIARMUS);
+      spells.add(O2SpellType.SPONGIFY);
    }
 }
