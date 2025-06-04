@@ -132,7 +132,6 @@ public class ALIQUAM_FLOO extends O2StationarySpell
 
         this.radius = minRadius = maxRadius = minRadiusConfig;
         permanent = true;
-        fireType = location.getBlock().getType();
 
         flooNetworkLocations.add(this);
     }
@@ -192,6 +191,8 @@ public class ALIQUAM_FLOO extends O2StationarySpell
         if (soulFireFlooEffect)
         {
             Block block = location.getBlock();
+            // need to keep track of what type of fire this is
+            fireType = block.getType();
 
             // turn the flame in to blue flame
             if (fireType == Material.CAMPFIRE)

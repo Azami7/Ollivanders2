@@ -30,8 +30,7 @@ import org.jetbrains.annotations.Nullable;
  * A collection of common functions and data.
  */
 
-public class Ollivanders2Common
-{
+public class Ollivanders2Common {
     /**
      * Default world label used for serializing and unserializing locations
      */
@@ -77,8 +76,7 @@ public class Ollivanders2Common
      * Spells that use libsDisguises. Used to disable these spells when we detect libsDisguises is not
      * installed on the server.
      */
-    public static final List<O2SpellType> libsDisguisesSpells = new ArrayList<>()
-    {{
+    public static final List<O2SpellType> libsDisguisesSpells = new ArrayList<>() {{
         add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
         add(O2SpellType.AVIFORS);
         add(O2SpellType.DRACONIFORS);
@@ -102,16 +100,14 @@ public class Ollivanders2Common
      * Potions that use libsDisguises. Used to disable these potions when we detect libsDisguises is not
      * installed on the server.
      */
-    public static final List<O2PotionType> libDisguisesPotions = new ArrayList<>()
-    {{
+    public static final List<O2PotionType> libDisguisesPotions = new ArrayList<>() {{
         add(O2PotionType.ANIMAGUS_POTION);
     }};
 
     /**
      * Unbreakable materials.
      */
-    public static final List<Material> unbreakableMaterials = new ArrayList<>()
-    {{
+    public static final List<Material> unbreakableMaterials = new ArrayList<>() {{
         add(Material.BARRIER);
         add(Material.BEDROCK);
         add(Material.ENDER_CHEST);
@@ -138,13 +134,11 @@ public class Ollivanders2Common
      * All chest materials. Newer versions of minecraft have made checks to determine if a block is
      * a chest a lot harder than the olden days.
      */
-    public static final List<Material> chests = new ArrayList<>()
-    {{
+    public static final List<Material> chestBlocks = new ArrayList<>() {{
+        // chests
         add(Material.CHEST);
         add(Material.ENDER_CHEST);
         add(Material.TRAPPED_CHEST);
-        // minecart chests
-        add(Material.CHEST_MINECART);
         // shulker boxes
         add(Material.BLACK_SHULKER_BOX);
         add(Material.BLUE_SHULKER_BOX);
@@ -163,26 +157,13 @@ public class Ollivanders2Common
         add(Material.SHULKER_BOX);
         add(Material.YELLOW_SHULKER_BOX);
         add(Material.WHITE_SHULKER_BOX);
-        // chest boats
-        add(Material.ACACIA_CHEST_BOAT);
-        add(Material.BIRCH_CHEST_BOAT);
-        add(Material.BAMBOO_CHEST_RAFT);
-        add(Material.CHERRY_CHEST_BOAT);
-        add(Material.CHEST_MINECART);
-        add(Material.DARK_OAK_CHEST_BOAT);
-        add(Material.JUNGLE_CHEST_BOAT);
-        add(Material.MANGROVE_CHEST_BOAT);
-        add(Material.OAK_CHEST_BOAT);
-        add(Material.PALE_OAK_CHEST_BOAT);
-        add(Material.SPRUCE_CHEST_BOAT);
     }};
 
     /**
      * All wall sign materials. Newer versions of minecraft have made checks to determine if a block is
      * a wall sign a lot harder than the olden days.
      */
-    public static final List<Material> wallSigns = new ArrayList<>()
-    {{
+    public static final List<Material> wallSigns = new ArrayList<>() {{
         add(Material.ACACIA_WALL_SIGN);
         add(Material.BAMBOO_WALL_SIGN);
         add(Material.BIRCH_WALL_SIGN);
@@ -201,8 +182,7 @@ public class Ollivanders2Common
      * All standing sign materials. Newer versions of minecraft have made checks to determine if a block is
      * a sign a lot harder than the olden days.
      */
-    public static final List<Material> standingSigns = new ArrayList<>()
-    {{
+    public static final List<Material> standingSigns = new ArrayList<>() {{
         add(Material.ACACIA_SIGN);
         add(Material.BAMBOO_SIGN);
         add(Material.BIRCH_SIGN);
@@ -221,8 +201,7 @@ public class Ollivanders2Common
      * All sign materials. Newer versions of minecraft have made checks to determine if a block is
      * a sign a lot harder than the olden days.
      */
-    public static final List<Material> signs = new ArrayList<>()
-    {{
+    public static final List<Material> signs = new ArrayList<>() {{
         addAll(wallSigns);
         addAll(standingSigns);
     }};
@@ -231,8 +210,7 @@ public class Ollivanders2Common
      * All door materials. Newer versions of minecraft have made checks to determine if a block is
      * a door a lot harder than the olden days.
      */
-    public static final List<Material> doors = new ArrayList<>()
-    {{
+    public static final List<Material> doors = new ArrayList<>() {{
         add(Material.ACACIA_DOOR);
         add(Material.BAMBOO_DOOR);
         add(Material.BIRCH_DOOR);
@@ -259,8 +237,7 @@ public class Ollivanders2Common
      * All trapdoor materials. Newer versions of minecraft have made checks to determine if a block is
      * a trapdoor a lot harder than the olden days.
      */
-    public static final List<Material> trapdoors = new ArrayList<>()
-    {{
+    public static final List<Material> trapdoors = new ArrayList<>() {{
         add(Material.ACACIA_TRAPDOOR);
         add(Material.BAMBOO_TRAPDOOR);
         add(Material.BIRCH_TRAPDOOR);
@@ -286,8 +263,7 @@ public class Ollivanders2Common
     /**
      * All hotblock materials. To simplify checks to see if a block is a hotblock.
      */
-    public static final List<Material> hotBlocks = new ArrayList<>()
-    {{
+    public static final List<Material> hotBlocks = new ArrayList<>() {{
         add(Material.LAVA);
         add(Material.FIRE);
         add(Material.CAMPFIRE);
@@ -308,8 +284,7 @@ public class Ollivanders2Common
      *
      * @param plugin a reference to the plugin using this common
      */
-    public Ollivanders2Common(@NotNull Ollivanders2 plugin)
-    {
+    public Ollivanders2Common(@NotNull Ollivanders2 plugin) {
         p = plugin;
 
         random.setSeed(System.currentTimeMillis());
@@ -322,16 +297,13 @@ public class Ollivanders2Common
      * @return the UUID or null if an exception occurred.
      */
     @Nullable
-    public UUID uuidFromString(@NotNull String uuid)
-    {
+    public UUID uuidFromString(@NotNull String uuid) {
         UUID pid = null;
 
-        try
-        {
+        try {
             pid = UUID.fromString(uuid);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             printDebugMessage("Failed to parse uuid " + uuid, e, null, true);
         }
 
@@ -345,16 +317,13 @@ public class Ollivanders2Common
      * @return the Integer or null if an exception occurred
      */
     @Nullable
-    public Integer integerFromString(@NotNull String intString)
-    {
+    public Integer integerFromString(@NotNull String intString) {
         Integer i = null;
 
-        try
-        {
+        try {
             i = Integer.parseInt(intString);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             printDebugMessage("Failed to parse integer " + intString, e, null, true);
         }
 
@@ -368,16 +337,13 @@ public class Ollivanders2Common
      * @return the Boolean or null if an exception occurred
      */
     @Nullable
-    public Boolean booleanFromString(@NotNull String boolString)
-    {
+    public Boolean booleanFromString(@NotNull String boolString) {
         Boolean b = null;
 
-        try
-        {
+        try {
             b = Boolean.valueOf(boolString);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             printDebugMessage("Failed to parse boolean " + boolString, e, null, true);
         }
 
@@ -392,19 +358,16 @@ public class Ollivanders2Common
      * @param radius         the radius from the source location
      * @return true if checkLocation is in the radius of sourceLocation
      */
-    static public boolean isInside(@NotNull Location sourceLocation, @NotNull Location checkLocation, int radius)
-    {
+    static public boolean isInside(@NotNull Location sourceLocation, @NotNull Location checkLocation, int radius) {
         double distance;
 
         if (sourceLocation.getWorld() != checkLocation.getWorld())
             return false;
 
-        try
-        {
+        try {
             distance = checkLocation.distance(sourceLocation);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -420,26 +383,20 @@ public class Ollivanders2Common
      * @return List of blocks that are within radius of the location.
      */
     @NotNull
-    static public List<Block> getBlocksInRadius(@NotNull Location loc, double radius)
-    {
+    static public List<Block> getBlocksInRadius(@NotNull Location loc, double radius) {
         Block center = loc.getBlock();
         int blockRadius = (int) (radius + 1);
         List<Block> blockList = new ArrayList<>();
-        for (int x = -blockRadius; x <= blockRadius; x++)
-        {
-            for (int y = -blockRadius; y <= blockRadius; y++)
-            {
-                for (int z = -blockRadius; z <= blockRadius; z++)
-                {
+        for (int x = -blockRadius; x <= blockRadius; x++) {
+            for (int y = -blockRadius; y <= blockRadius; y++) {
+                for (int z = -blockRadius; z <= blockRadius; z++) {
                     blockList.add(center.getRelative(x, y, z));
                 }
             }
         }
         ArrayList<Block> returnList = new ArrayList<>();
-        for (Block block : blockList)
-        {
-            if (block.getLocation().distance(center.getLocation()) < radius)
-            {
+        for (Block block : blockList) {
+            if (block.getLocation().distance(center.getLocation()) < radius) {
                 returnList.add(block);
             }
         }
@@ -453,14 +410,12 @@ public class Ollivanders2Common
      * @return string such that it is the lowercase version of the spell minus underscores
      */
     @NotNull
-    static public String enumRecode(@NotNull String s)
-    {
+    static public String enumRecode(@NotNull String s) {
         String nameLow = s.toLowerCase();
         String[] words = nameLow.split("_");
         String comp = "";
 
-        for (String st : words)
-        {
+        for (String st : words) {
             comp = comp.concat(st);
             comp = comp.concat(" ");
         }
@@ -476,15 +431,12 @@ public class Ollivanders2Common
      * @return String with correct formatting.
      */
     @NotNull
-    static public String firstLetterCapitalize(@NotNull String str)
-    {
+    static public String firstLetterCapitalize(@NotNull String str) {
         StringBuilder sb = new StringBuilder();
         String[] wordList = str.split(" ");
-        for (String s : wordList)
-        {
+        for (String s : wordList) {
             sb.append(s.substring(0, 1).toUpperCase());
-            if (s.length() > 1)
-            {
+            if (s.length() > 1) {
                 sb.append(s.substring(1).toLowerCase());
             }
             sb.append(" ");
@@ -500,15 +452,13 @@ public class Ollivanders2Common
      * @return a map of the serialized OLocation data
      */
     @Nullable
-    public Map<String, String> serializeLocation(@NotNull Location location, @NotNull String labelPrefix)
-    {
+    public Map<String, String> serializeLocation(@NotNull Location location, @NotNull String labelPrefix) {
         Map<String, String> locData = new HashMap<>();
 
         //
         // Location world
         //
-        if (location.getWorld() == null)
-        {
+        if (location.getWorld() == null) {
             printDebugMessage("serializeLocation: location world is null", null, null, false);
             return null;
         }
@@ -529,17 +479,14 @@ public class Ollivanders2Common
      * @return the location if the data was successfully read, null otherwise
      */
     @Nullable
-    public Location deserializeLocation(@NotNull Map<String, String> locData, @NotNull String labelPrefix)
-    {
+    public Location deserializeLocation(@NotNull Map<String, String> locData, @NotNull String labelPrefix) {
         double x = 0.0;
         double y = 0.0;
         double z = 0.0;
         String worldName = "world";
 
-        for (Entry<String, String> e : locData.entrySet())
-        {
-            try
-            {
+        for (Entry<String, String> e : locData.entrySet()) {
+            try {
                 if (e.getKey().equals(labelPrefix + "_" + locationWorldLabel))
                     worldName = e.getValue();
                 else if (e.getKey().equals(labelPrefix + "_" + locationXLabel))
@@ -549,8 +496,7 @@ public class Ollivanders2Common
                 else if (e.getKey().equals(labelPrefix + "_" + locationZLabel))
                     z = Double.parseDouble(e.getValue());
             }
-            catch (Exception exception)
-            {
+            catch (Exception exception) {
                 printDebugMessage("Unable to deserialize location", exception, null, true);
                 return null;
             }
@@ -568,12 +514,10 @@ public class Ollivanders2Common
      * @return the array as a single string
      */
     @NotNull
-    static public String stringArrayToString(@NotNull String[] strArray)
-    {
+    static public String stringArrayToString(@NotNull String[] strArray) {
         StringBuilder newString = new StringBuilder();
 
-        for (String str : strArray)
-        {
+        for (String str : strArray) {
             newString.append(" ").append(str);
         }
 
@@ -586,15 +530,12 @@ public class Ollivanders2Common
      * @param player the player to check
      * @return the block if a player is facing a block of this type, null otherwise
      */
-    static public Block playerFacingBlockType(@NotNull Player player, @NotNull Material blockType)
-    {
+    static public Block playerFacingBlockType(@NotNull Player player, @NotNull Material blockType) {
         List<Block> blocksInFront = player.getLineOfSight(null, 3);
         Block target = null;
 
-        for (Block block : blocksInFront)
-        {
-            if (block.getType() == blockType)
-            {
+        for (Block block : blocksInFront) {
+            if (block.getType() == blockType) {
                 target = block;
                 break;
             }
@@ -609,8 +550,7 @@ public class Ollivanders2Common
      * @param block the block to check
      * @return true if it is a natural log, false otherwise
      */
-    static public boolean isNaturalLog(@NotNull Block block)
-    {
+    static public boolean isNaturalLog(@NotNull Block block) {
         Material material = block.getType();
 
         return (material == Material.OAK_LOG || material == Material.BIRCH_LOG || material == Material.ACACIA_LOG
@@ -624,8 +564,7 @@ public class Ollivanders2Common
      * @param radius    the radius of the flair
      * @param intensity intensity of the flair. If greater than 10, is reduced to 10.
      */
-    public static void flair(@NotNull Location location, int radius, double intensity)
-    {
+    public static void flair(@NotNull Location location, int radius, double intensity) {
         flair(location, radius, intensity, Effect.SMOKE);
     }
 
@@ -637,15 +576,12 @@ public class Ollivanders2Common
      * @param intensity  intensity of the flair. If greater than 10, is reduced to 10.
      * @param effectType the particle effect to use
      */
-    public static void flair(@NotNull Location location, int radius, double intensity, Effect effectType)
-    {
+    public static void flair(@NotNull Location location, int radius, double intensity, Effect effectType) {
         if (intensity > 10)
             intensity = 10;
 
-        for (double inc = (Math.random() * Math.PI) / intensity; inc < Math.PI; inc += Math.PI / intensity)
-        {
-            for (double azi = (Math.random() * Math.PI) / intensity; azi < 2 * Math.PI; azi += Math.PI / intensity)
-            {
+        for (double inc = (Math.random() * Math.PI) / intensity; inc < Math.PI; inc += Math.PI / intensity) {
+            for (double azi = (Math.random() * Math.PI) / intensity; azi < 2 * Math.PI; azi += Math.PI / intensity) {
                 double[] spher = new double[2];
                 spher[0] = inc;
                 spher[1] = azi;
@@ -663,8 +599,7 @@ public class Ollivanders2Common
      * @param vector Vector to be translated
      * @return Spherical coords in double array with indexes 0=inclination 1=azimuth
      */
-    public static double[] vectorToSphere(@NotNull Vector vector)
-    {
+    public static double[] vectorToSphere(@NotNull Vector vector) {
         double inc = Math.acos(vector.getZ());
         double azi = Math.atan2(vector.getY(), vector.getX());
         double[] sphere = new double[2];
@@ -681,8 +616,7 @@ public class Ollivanders2Common
      * @return Vector
      */
     @NotNull
-    public static Vector sphereToVector(double[] sphere, int radius)
-    {
+    public static Vector sphereToVector(double[] sphere, int radius) {
         double inc = sphere[0];
         double azi = sphere[1];
         double x = radius * Math.sin(inc) * Math.cos(azi);
@@ -699,10 +633,8 @@ public class Ollivanders2Common
      * @param subtitle the subtitle
      * @param players  message recipients
      */
-    static public void sendTitleMessage(@NotNull String title, @Nullable String subtitle, @NotNull List<Player> players)
-    {
-        for (Player player : players)
-        {
+    static public void sendTitleMessage(@NotNull String title, @Nullable String subtitle, @NotNull List<Player> players) {
+        for (Player player : players) {
             player.sendTitle(title, subtitle, 10, 70, 20);
         }
     }
@@ -714,10 +646,8 @@ public class Ollivanders2Common
      * @param location the location of the message
      * @param radius   the radius around the location
      */
-    static public void sendMessageInRadius(@NotNull String message, @NotNull Location location, int radius)
-    {
-        for (LivingEntity entity : EntityCommon.getLivingEntitiesInRadius(location, radius))
-        {
+    static public void sendMessageInRadius(@NotNull String message, @NotNull Location location, int radius) {
+        for (LivingEntity entity : EntityCommon.getLivingEntitiesInRadius(location, radius)) {
             if (entity instanceof Player)
                 entity.sendMessage(Ollivanders2.chatColor + message);
         }
@@ -731,8 +661,7 @@ public class Ollivanders2Common
      * @param runtimeException the runtime exception, if applicable
      * @param isWarning        true if this should be at WARNING level, false if it should be INFO level
      */
-    public void printDebugMessage(@NotNull String message, @Nullable Exception exception, @Nullable RuntimeException runtimeException, boolean isWarning)
-    {
+    public void printDebugMessage(@NotNull String message, @Nullable Exception exception, @Nullable RuntimeException runtimeException, boolean isWarning) {
         if (!Ollivanders2.debug)
             return;
 
@@ -747,10 +676,8 @@ public class Ollivanders2Common
      * @param runtimeException the runtime exception, if applicable
      * @param isWarning        true if this should be at WARNING level, false if it should be INFO level
      */
-    public void printLogMessage(@NotNull String message, @Nullable Exception exception, @Nullable RuntimeException runtimeException, boolean isWarning)
-    {
-        if (isWarning)
-        {
+    public void printLogMessage(@NotNull String message, @Nullable Exception exception, @Nullable RuntimeException runtimeException, boolean isWarning) {
+        if (isWarning) {
             p.getLogger().warning(message);
 
             if (exception != null)
@@ -770,8 +697,7 @@ public class Ollivanders2Common
      * @param loc2 location 2
      * @return true if they are the same, false otherwise
      */
-    static public boolean locationEquals(@NotNull Location loc1, @NotNull Location loc2)
-    {
+    static public boolean locationEquals(@NotNull Location loc1, @NotNull Location loc2) {
         return (loc1.getWorld() == loc2.getWorld() && loc1.getX() == loc2.getX() && loc1.getY() == loc2.getY() && loc1.getZ() == loc2.getZ());
     }
 
@@ -779,26 +705,51 @@ public class Ollivanders2Common
      * Get the recpients for this chat based on the dropoff distance
      *
      * @param recipients the original list of recipients
-     * @param dropoff the dropoff distance
-     * @param location the source location of the speaker
+     * @param dropoff    the dropoff distance
+     * @param location   the source location of the speaker
      */
-    static public void chatDropoff (Set<Player> recipients, int dropoff, Location location)
-    {
+    static public void chatDropoff(Set<Player> recipients, int dropoff, Location location) {
         // handle spell chat dropoff
         Set<Player> temp = new HashSet<>(recipients);
-        for (Player recipient : temp)
-        {
-            if (!Ollivanders2Common.isInside(location, recipient.getLocation(), dropoff))
-            {
-                try
-                {
+        for (Player recipient : temp) {
+            if (!Ollivanders2Common.isInside(location, recipient.getLocation(), dropoff)) {
+                try {
                     recipients.remove(recipient);
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     e.printStackTrace();
                 }
             }
         }
+    }
+
+    /**
+     * Determine if a block is a door or trapdoor
+     *
+     * @param block the block to check
+     * @return true if it is a door or trapdoor, false otherwise
+     */
+    static public boolean isDoor(Block block) {
+        Material blockType = block.getType();
+        if (doors.contains(blockType) || trapdoors.contains(blockType)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
+     * Determine if a block is a chest
+     *
+     * @param block the block to check
+     * @return true if it is a chest, false otherwise
+     */
+    static public boolean isChest(Block block) {
+        Material blockType = block.getType();
+        if (chestBlocks.contains(blockType)) {
+            return true;
+        }
+
+        return false;
     }
 }

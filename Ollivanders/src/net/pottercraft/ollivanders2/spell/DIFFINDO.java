@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Reference: https://harrypotter.fandom.com/wiki/Severing_Charm
  */
+// todo why does this spell do two totally unrelated things? fix this to align with books
 public final class DIFFINDO extends O2Spell
 {
     private static final int maxRadius = 20;
