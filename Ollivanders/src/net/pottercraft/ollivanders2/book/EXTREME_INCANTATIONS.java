@@ -7,21 +7,19 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Extreme Incantations - Charms book for 2nd year.
  *
- * @since 2.2.4
  * @author Azami7
+ * @since 2.2.4
  */
-public class EXTREME_INCANTATIONS extends O2Book
-{
-   public EXTREME_INCANTATIONS(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public class EXTREME_INCANTATIONS extends O2Book {
+    public EXTREME_INCANTATIONS(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      bookType = O2BookType.EXTREME_INCANTATIONS;
+        bookType = O2BookType.EXTREME_INCANTATIONS;
 
-      spells.add(O2SpellType.LUMOS_DUO);
-      spells.add(O2SpellType.BOMBARDA);
-      spells.add(O2SpellType.BOMBARDA_MAXIMA);
-      spells.add(O2SpellType.COLOVARIA);
-      spells.add(O2SpellType.LUMOS_MAXIMA);
-   }
+        spells.add(O2SpellType.LUMOS_DUO);
+        spells.add(O2SpellType.BOMBARDA);
+        spells.add(O2SpellType.BOMBARDA_MAXIMA);
+        spells.add(O2SpellType.COLOVARIA);
+        spells.add(O2SpellType.LUMOS_MAXIMA);
+    }
 }

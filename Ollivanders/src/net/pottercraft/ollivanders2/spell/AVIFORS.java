@@ -21,6 +21,7 @@ import java.util.ArrayList;
  */
 public final class AVIFORS extends FriendlyMobDisguise
 {
+    //todo make the entities this can target small
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 

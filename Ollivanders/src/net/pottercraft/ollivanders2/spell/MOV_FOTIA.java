@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public final class MOV_FOTIA extends Pyrotechnia
 {
+    // todo make this a sparks spell rather than a firework spell, should also pacify in a radius
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *

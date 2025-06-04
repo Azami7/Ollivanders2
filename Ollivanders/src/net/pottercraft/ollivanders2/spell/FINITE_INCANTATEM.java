@@ -24,6 +24,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class FINITE_INCANTATEM extends O2Spell
 {
+    // todo change to make this work only on non-curses so that counter-curse can also be a spell
     /**
      * The maximum number of spells that can be targeted at the same time
      */

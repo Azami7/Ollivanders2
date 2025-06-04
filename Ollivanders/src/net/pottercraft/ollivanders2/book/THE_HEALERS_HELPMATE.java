@@ -8,24 +8,22 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The Healer's Helpmate
  *
- * @since 2.2.4
  * @author Azami7
+ * @since 2.2.4
  */
-public class THE_HEALERS_HELPMATE extends O2Book
-{
-   public THE_HEALERS_HELPMATE(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public class THE_HEALERS_HELPMATE extends O2Book {
+    public THE_HEALERS_HELPMATE(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      bookType = O2BookType.THE_HEALERS_HELPMATE;
+        bookType = O2BookType.THE_HEALERS_HELPMATE;
 
-      spells.add(O2SpellType.AGUAMENTI);
-      spells.add(O2SpellType.BRACKIUM_EMENDO);
-      spells.add(O2SpellType.EPISKEY);
-      potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
-      // wound cleaning potion
-      // pepperup potion
-      potions.add(O2PotionType.WIDEYE_POTION);
-      // burn healing paste
-   }
+        spells.add(O2SpellType.AGUAMENTI);
+        spells.add(O2SpellType.BRACKIUM_EMENDO);
+        spells.add(O2SpellType.EPISKEY);
+        potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
+        // todo wound cleaning potion
+        // todo pepperup potion
+        potions.add(O2PotionType.WIDEYE_POTION);
+        // todo burn healing paste
+    }
 }

@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class FANTASTIC_BEASTS extends O2Book
 {
+   // todo make creature summoning and banishment charms
    public FANTASTIC_BEASTS(@NotNull Ollivanders2 plugin)
    {
       super(plugin);

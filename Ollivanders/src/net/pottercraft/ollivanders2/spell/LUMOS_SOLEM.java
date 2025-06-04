@@ -19,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class LUMOS_SOLEM extends O2Spell
 {
+    //todo make it work like the book - https://harrypotter.fandom.com/wiki/Sunlight_Charm
     /**
      * How long the spell will last
      */

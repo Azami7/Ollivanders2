@@ -11,16 +11,14 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @since 2.2.9
  */
-public class OMENS_ORACLES_AND_THE_GOAT extends O2Book
-{
-    public OMENS_ORACLES_AND_THE_GOAT(@NotNull Ollivanders2 plugin)
-    {
+public class OMENS_ORACLES_AND_THE_GOAT extends O2Book {
+    public OMENS_ORACLES_AND_THE_GOAT(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         bookType = O2BookType.OMENS_ORACLES_AND_THE_GOAT;
 
-        spells.add(O2SpellType.OVOGNOSIS);
         spells.add(O2SpellType.CARTOMANCIE);
         spells.add(O2SpellType.MANTEIA_KENTAVROS);
+        // todo rune stones - https://harrypotter.fandom.com/wiki/Rune_stone
     }
 }
