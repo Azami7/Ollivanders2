@@ -125,10 +125,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
         spellType = O2StationarySpellType.ALIQUAM_FLOO;
 
         if (p.getConfig().isSet("soulFireFlooEffect"))
-        {
             soulFireFlooEffect = p.getConfig().getBoolean("soulFireFlooEffect");
-            common.printDebugMessage("soulFireFlooEffect=" + soulFireFlooEffect, null, null, false);
-        }
 
         this.radius = minRadius = maxRadius = minRadiusConfig;
         permanent = true;
