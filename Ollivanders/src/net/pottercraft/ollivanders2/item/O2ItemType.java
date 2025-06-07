@@ -1,6 +1,6 @@
 package net.pottercraft.ollivanders2.item;
 
-import net.pottercraft.ollivanders2.O2Color;
+import net.pottercraft.ollivanders2.common.O2Color;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Material;
@@ -15,15 +15,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * All custom special items in Ollivanders2
  */
-public enum O2ItemType
-{
+public enum O2ItemType {
     ACONITE(Material.ALLIUM, (short) 0, "Aconite", null, null),
     ARMADILLO_BILE(Material.POTION, (short) 9, "Armadillo Bile", null, null),
+    ASPHODEL(Material.LILY_OF_THE_VALLEY, (short) 0, "Asphodel", null, null),
     BASIC_BROOM(Material.STICK, (short) 0, "Broomstick", null, null),
     BEZOAR(Material.COAL, (short) 1, "Bezoar", null, null), // charcoal
     BILLYWIG_STING_SLIME(Material.SLIME_BALL, (short) 0, "Billywig Sting Slime", null, null),
@@ -33,6 +32,7 @@ public enum O2ItemType
     BONE(Material.BONE, (short) 0, "Bone", null, null),
     BROOMSTICK(Material.STICK, (short) 0, "Broomstick", null, ItemEnchantmentType.VOLATUS),
     CHIZPURFLE_FANGS(Material.PUMPKIN_SEEDS, (short) 0, "Chizpurfle Fangs", null, null),
+    CRUSHED_CATS_EYE_OPAL(Material.ORANGE_DYE, (short) 0, "Crushed Cat's Eye Opal", null, null),
     CRUSHED_FIRE_SEEDS(Material.REDSTONE, (short) 0, "Crushed Fire Seeds", null, null),
     DEATHS_HEAD_MOTH_CHRYSALIS(Material.COAL, (short) 0, "Death's Head Moth Chrysalis", null, null),
     DEW_DROP(Material.GHAST_TEAR, (short) 0, "Dew Drop", null, null),
@@ -72,6 +72,7 @@ public enum O2ItemType
     MERCURY(Material.POTION, (short) 13, "Mercury", null, null), // silver liquid
     MINT_SPRIG(Material.KELP, (short) 0, "Mint Sprig", null, null),
     MISTLETOE_BERRIES(Material.NETHER_WART, (short) 0, "Mistletoe Berries", null, null),
+    MOONCALF_MILK(Material.POTION, (short) -1, "Moonclaf Milk", null, null),
     MOONDEW_DROP(Material.GHAST_TEAR, (short) 0, "Moondew Drop", null, null),
     PEWTER_CAULDRON(Material.CAULDRON, (short) 0, "Pewter Cauldron", null, null),
     PLAYING_CARDS(Material.PAPER, (short) 0, "Playing Cards", null, null),
@@ -131,8 +132,7 @@ public enum O2ItemType
      * @param lore        the lore for this item
      * @param enchantment the optional enchantment for this item
      */
-    O2ItemType(@NotNull Material material, short variant, @NotNull String name, @Nullable String lore, @Nullable ItemEnchantmentType enchantment)
-    {
+    O2ItemType(@NotNull Material material, short variant, @NotNull String name, @Nullable String lore, @Nullable ItemEnchantmentType enchantment) {
         this.material = material;
         this.name = name;
         this.variant = variant;
@@ -144,8 +144,7 @@ public enum O2ItemType
      * @return the name of this item
      */
     @NotNull
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -153,8 +152,7 @@ public enum O2ItemType
      * @return the lore for this item or its name if there is no lore
      */
     @NotNull
-    public String getLore()
-    {
+    public String getLore() {
         if (lore == null)
             return name;
         else
@@ -165,8 +163,7 @@ public enum O2ItemType
      * @return the material type for this item
      */
     @NotNull
-    public Material getMaterial()
-    {
+    public Material getMaterial() {
         return material;
     }
 
@@ -174,8 +171,7 @@ public enum O2ItemType
      * @return the enchantment for this item if there is one, null otherwise
      */
     @Nullable
-    public ItemEnchantmentType getItemEnchantment()
-    {
+    public ItemEnchantmentType getItemEnchantment() {
         return itemEnchantment;
     }
 
@@ -184,8 +180,7 @@ public enum O2ItemType
      *
      * @param m the material type
      */
-    public void setMaterial(@NotNull Material m)
-    {
+    public void setMaterial(@NotNull Material m) {
         material = m;
     }
 
@@ -196,10 +191,8 @@ public enum O2ItemType
      * @return the type if found, null otherwise
      */
     @Nullable
-    public static O2ItemType getTypeByName(@NotNull String itemName)
-    {
-        for (O2ItemType itemType : O2ItemType.values())
-        {
+    public static O2ItemType getTypeByName(@NotNull String itemName) {
+        for (O2ItemType itemType : O2ItemType.values()) {
             if (itemType.name.equalsIgnoreCase(itemName))
                 return itemType;
         }
@@ -213,8 +206,7 @@ public enum O2ItemType
      * @param item the item to check
      * @return true if it is this type, false otherwise
      */
-    public boolean isItemThisType(@NotNull Item item)
-    {
+    public boolean isItemThisType(@NotNull Item item) {
         return isItemThisType(item.getItemStack());
     }
 
@@ -224,23 +216,20 @@ public enum O2ItemType
      * @param itemStack the item stack to check
      * @return true if it is this type, false otherwise
      */
-    public boolean isItemThisType(@NotNull ItemStack itemStack)
-    {
+    public boolean isItemThisType(@NotNull ItemStack itemStack) {
         // check item type
         if (itemStack.getType() != material)
             return false;
 
         // check item NBT
         ItemMeta meta = itemStack.getItemMeta();
-        if (meta == null)
-        {
+        if (meta == null) {
             Ollivanders2API.common.printDebugMessage("Item meta is null", null, null, true);
             return false;
         }
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        if (container.has(O2Items.o2ItemTypeKey, PersistentDataType.STRING))
-        {
+        if (container.has(O2Items.o2ItemTypeKey, PersistentDataType.STRING)) {
             String itemTypeKey = container.get(O2Items.o2ItemTypeKey, PersistentDataType.STRING);
             if (itemTypeKey == null)
                 return false;
@@ -259,8 +248,7 @@ public enum O2ItemType
      * @return an ItemStack of this item
      */
     @Nullable
-    public ItemStack getItem(int amount)
-    {
+    public ItemStack getItem(int amount) {
         ItemStack o2Item = new ItemStack(material, amount);
 
         ItemMeta meta = o2Item.getItemMeta();
@@ -271,16 +259,14 @@ public enum O2ItemType
         meta.setDisplayName(name);
 
         // set lore
-        if (lore != null)
-        {
+        if (lore != null) {
             ArrayList<String> itemLore = new ArrayList<>();
             itemLore.add(getLore());
             meta.setLore(itemLore);
         }
 
         // if potion, set potion meta
-        if (material == Material.POTION)
-        {
+        if (material == Material.POTION) {
             meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
             ((PotionMeta) meta).setColor(O2Color.getBukkitColorByNumber(variant).getBukkitColor());
         }
