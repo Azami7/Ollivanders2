@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.effect.O2EffectType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -11,12 +12,11 @@ import java.util.ArrayList;
 /**
  * Causes blindness in a radius
  *
- * @see FumosSuper
  * @version Ollivanders2
  * @author lownes
  * @author Azami7
  */
-public final class FUMOS extends FumosSuper
+public final class FUMOS extends AddO2Effect
 {
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -48,8 +48,15 @@ public final class FUMOS extends FumosSuper
    public FUMOS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
    {
       super(plugin, player, rightWand);
+
       spellType = O2SpellType.FUMOS;
       branch = O2MagicBranch.CHARMS;
+
+      effectsToAdd.add(O2EffectType.FUMOS);
+      strengthModifier = 1;
+      minDurationInSeconds = 10;
+      maxDurationInSeconds = 90;
+      targetSelf = true;
 
       initSpell();
    }
@@ -59,18 +66,17 @@ public final class FUMOS extends FumosSuper
     * constants.
     */
    @Override
-   void doInitSpell()
-   {
-      radius = (int) usesModifier / 10;
-      if (radius < minDurationInSeconds)
-         radius = minRadius;
-      else if (radius > maxRadius)
-         radius = maxRadius;
+   void doInitSpell() {
+      // for testing
+      durationInSeconds = 15;
 
+      /*
       durationInSeconds = (int)(usesModifier / 2);
       if (durationInSeconds < minDurationInSeconds)
          durationInSeconds = minDurationInSeconds;
       else if (durationInSeconds > maxDurationInSeconds)
          durationInSeconds = maxDurationInSeconds;
+
+       */
    }
 }

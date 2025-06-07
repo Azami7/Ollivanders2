@@ -26,12 +26,12 @@ public class AddO2Effect extends O2Spell
     /**
      * If temporary, the longest this effect can last.
      */
-    int maxDurationInSeconds = 300; // 5 minutes;
+    int maxDurationInSeconds = Ollivanders2Common.ticksPerMinute * 5; // 5 minutes;
 
     /**
      * If temporary, the least amount of time this effect can last.
      */
-    int minDurationInSeconds = 5; // 5 seconds
+    int minDurationInSeconds = Ollivanders2Common.ticksPerSecond * 5; // 5 seconds
 
     /**
      * Strength modifier, 1 is no modifier.

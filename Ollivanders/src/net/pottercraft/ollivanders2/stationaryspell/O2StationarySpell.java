@@ -8,7 +8,6 @@ import java.util.UUID;
 import java.util.Collection;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.OllivandersApparateByCoordinatesEvent;
@@ -36,8 +35,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Stationary spell object in Ollivanders2
  */
-public abstract class O2StationarySpell implements Serializable
-{
+public abstract class O2StationarySpell implements Serializable {
     /**
      * The minimum radius for this spell
      */
@@ -113,8 +111,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param plugin a callback to the MC plugin
      */
-    public O2StationarySpell(@NotNull Ollivanders2 plugin)
-    {
+    public O2StationarySpell(@NotNull Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(p);
     }
@@ -124,8 +121,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @return the duration remaining
      */
-    public int getDuration()
-    {
+    public int getDuration() {
         return duration;
     }
 
@@ -135,8 +131,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param duration the duration in game ticks
      */
-    void setDuration(int duration)
-    {
+    void setDuration(int duration) {
         if (duration < 0)
             duration = 0;
         else if (duration > maxDuration)
@@ -150,8 +145,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @return the radius of this spell
      */
-    public int getRadius()
-    {
+    public int getRadius() {
         return radius;
     }
 
@@ -160,8 +154,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param radius the radius in blocks
      */
-    void setRadius(int radius)
-    {
+    void setRadius(int radius) {
         if (radius < minRadius)
             radius = minRadius;
         else if (radius > maxRadius)
@@ -175,8 +168,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param increase the amount to increase the radius by
      */
-    public void increaseRadius(int increase)
-    {
+    public void increaseRadius(int increase) {
         // if they sent a negative number, do decrease
         if (increase < 0)
             decreaseRadius(increase);
@@ -192,8 +184,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param decrease the amount to decrease the radius
      */
-    public void decreaseRadius(int decrease)
-    {
+    public void decreaseRadius(int decrease) {
         // if they sent negative number, do increase
         if (decrease < 0)
             increaseRadius(decrease);
@@ -210,8 +201,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param increase the amount to increase the duration by
      */
-    public void increaseDuration(int increase)
-    {
+    public void increaseDuration(int increase) {
         duration = duration + increase;
 
         if (duration > maxDuration)
@@ -223,8 +213,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param location the spell location
      */
-    void setLocation(@NotNull Location location)
-    {
+    void setLocation(@NotNull Location location) {
         this.location = location;
     }
 
@@ -233,8 +222,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param pid the player ID
      */
-    void setPlayerID(@NotNull UUID pid)
-    {
+    void setPlayerID(@NotNull UUID pid) {
         playerUUID = pid;
     }
 
@@ -244,8 +232,7 @@ public abstract class O2StationarySpell implements Serializable
      * @return the spell type
      */
     @NotNull
-    public O2StationarySpellType getSpellType()
-    {
+    public O2StationarySpellType getSpellType() {
         return spellType;
     }
 
@@ -254,16 +241,14 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param active true if active, false is not active
      */
-    public void setActive(boolean active)
-    {
+    public void setActive(boolean active) {
         this.active = active;
     }
 
     /**
      * Ages the StationarySpellObj
      */
-    public void age()
-    {
+    public void age() {
         if (permanent)
             return;
 
@@ -275,8 +260,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param i number of ticks to age the spell by
      */
-    public void age(int i)
-    {
+    public void age(int i) {
         if (permanent)
             return;
 
@@ -291,8 +275,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param percent the percent to age the spell by
      */
-    public void ageByPercent(int percent)
-    {
+    public void ageByPercent(int percent) {
         if (permanent)
             return;
 
@@ -307,8 +290,7 @@ public abstract class O2StationarySpell implements Serializable
     /**
      * This kills the spell
      */
-    public void kill()
-    {
+    public void kill() {
         flair(20);
         kill = true;
 
@@ -323,8 +305,7 @@ public abstract class O2StationarySpell implements Serializable
      * @param loc the location specified.
      * @return true if the location is inside of this spell radius, false otherwise
      */
-    public boolean isLocationInside(@NotNull Location loc)
-    {
+    public boolean isLocationInside(@NotNull Location loc) {
         return Ollivanders2Common.isInside(location, loc, radius);
     }
 
@@ -334,8 +315,7 @@ public abstract class O2StationarySpell implements Serializable
      * @return the center block for this spell
      */
     @NotNull
-    public Block getBlock()
-    {
+    public Block getBlock() {
         return location.getBlock();
     }
 
@@ -345,14 +325,12 @@ public abstract class O2StationarySpell implements Serializable
      * @return a list of living entities with an eye location within radius
      */
     @NotNull
-    public List<LivingEntity> getEntitiesInsideSpellRadius()
-    {
+    public List<LivingEntity> getEntitiesInsideSpellRadius() {
         Collection<LivingEntity> entities = EntityCommon.getLivingEntitiesInRadius(location, radius);
         List<LivingEntity> close = new ArrayList<>();
 
         /* only add living entities if their eye location is within the radius */
-        for (LivingEntity e : entities)
-        {
+        for (LivingEntity e : entities) {
             if (location.distance(e.getEyeLocation()) < radius)
                 close.add(e);
         }
@@ -365,11 +343,10 @@ public abstract class O2StationarySpell implements Serializable
      * <p>
      * {@link Ollivanders2Common}
      *
-     * @param d intensity of the flair
+     * @param intensity intensity of the flair
      */
-    public void flair(double d)
-    {
-        Ollivanders2Common.flair(location, radius, d);
+    public void flair(int intensity) {
+        Ollivanders2Common.flair(location, radius, intensity);
     }
 
     /**
@@ -378,8 +355,7 @@ public abstract class O2StationarySpell implements Serializable
      * @return the MC UUID of the player that cast the spell
      */
     @NotNull
-    public UUID getCasterID()
-    {
+    public UUID getCasterID() {
         return playerUUID;
     }
 
@@ -388,8 +364,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @return the max radius possible for this spell
      */
-    public int getMaxRadius()
-    {
+    public int getMaxRadius() {
         return maxRadius;
     }
 
@@ -398,8 +373,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @return the min default radius for this spell
      */
-    public int getMinRadius()
-    {
+    public int getMinRadius() {
         return minRadius;
     }
 
@@ -408,8 +382,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @return the max duration possible for this spell
      */
-    public int getMaxDuration()
-    {
+    public int getMaxDuration() {
         return maxDuration;
     }
 
@@ -418,8 +391,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @return the min default duration for this spell
      */
-    public int getMinDuration()
-    {
+    public int getMinDuration() {
         return minDuration;
     }
 
@@ -428,8 +400,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @return the duration remaining for this spell.
      */
-    public int getDurationRemaining()
-    {
+    public int getDurationRemaining() {
         return duration;
     }
 
@@ -438,8 +409,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @return true if active, false if not active
      */
-    public boolean isActive()
-    {
+    public boolean isActive() {
         return active;
     }
 
@@ -448,8 +418,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @return true if killed, false otherwise
      */
-    public boolean isKilled()
-    {
+    public boolean isKilled() {
         return kill;
     }
 
@@ -459,8 +428,7 @@ public abstract class O2StationarySpell implements Serializable
      * @return a clone of the spell location
      */
     @NotNull
-    public Location getLocation()
-    {
+    public Location getLocation() {
         return location.clone();
     }
 
@@ -489,8 +457,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event)
-    {
+    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
     }
 
     /**
@@ -498,8 +465,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnCreatureSpawnEvent(@NotNull CreatureSpawnEvent event)
-    {
+    void doOnCreatureSpawnEvent(@NotNull CreatureSpawnEvent event) {
     }
 
     /**
@@ -507,8 +473,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event)
-    {
+    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
     }
 
     /**
@@ -516,8 +481,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
-    {
+    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
     }
 
     /**
@@ -525,8 +489,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnBlockBreakEvent(@NotNull BlockBreakEvent event)
-    {
+    void doOnBlockBreakEvent(@NotNull BlockBreakEvent event) {
     }
 
     /**
@@ -534,8 +497,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnEntityBreakDoorEvent(@NotNull EntityBreakDoorEvent event)
-    {
+    void doOnEntityBreakDoorEvent(@NotNull EntityBreakDoorEvent event) {
     }
 
     /**
@@ -543,8 +505,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnEntityChangeBlockEvent(@NotNull EntityChangeBlockEvent event)
-    {
+    void doOnEntityChangeBlockEvent(@NotNull EntityChangeBlockEvent event) {
     }
 
     /**
@@ -552,8 +513,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnEntityInteractEvent(@NotNull EntityInteractEvent event)
-    {
+    void doOnEntityInteractEvent(@NotNull EntityInteractEvent event) {
     }
 
     /**
@@ -561,8 +521,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
-    {
+    void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {
     }
 
     /**
@@ -570,8 +529,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event)
-    {
+    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event) {
     }
 
     /**
@@ -579,8 +537,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event)
-    {
+    void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {
     }
 
     /**
@@ -588,8 +545,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event)
-    {
+    void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event) {
     }
 
     /**
@@ -597,8 +553,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnEntityTeleportEvent(@NotNull EntityTeleportEvent event)
-    {
+    void doOnEntityTeleportEvent(@NotNull EntityTeleportEvent event) {
     }
 
     /**
@@ -606,8 +561,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event)
-    {
+    void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {
     }
 
     /**
@@ -615,8 +569,7 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the event
      */
-    void doOnEntityCombustEvent(@NotNull EntityCombustEvent event)
-    {
+    void doOnEntityCombustEvent(@NotNull EntityCombustEvent event) {
     }
 
     /**
@@ -624,7 +577,6 @@ public abstract class O2StationarySpell implements Serializable
      *
      * @param event the spell projectile move event
      */
-    void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event)
-    {
+    void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
     }
 }
