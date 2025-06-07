@@ -151,6 +151,7 @@ public enum O2SpellType {
     PULLUS(PULLUS.class, MagicLevel.NEWT),
     PYRO_PRASINA(PYRO_PRASINA.class, MagicLevel.BEGINNER),
     PYROSVESTIRAS(PYROSVESTIRAS.class, MagicLevel.BEGINNER),
+    RANACULUS_AMPHORAM(RANACULUS_AMPHORAM.class, MagicLevel.BEGINNER),
     REDUCIO(REDUCIO.class, MagicLevel.BEGINNER),
     REDUCTO(REDUCTO.class, MagicLevel.OWL),
     REPARIFARGE(REPARIFARGE.class, MagicLevel.NEWT),

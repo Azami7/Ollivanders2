@@ -10,28 +10,24 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Beetle to button - https://harrypotter.fandom.com/wiki/Beetle_into_Button - for minecraft we are using endermites to button
+ * Snail to teapot - https://harrypotter.fandom.com/wiki/Snail_to_Teapot - for mincraft using tadpole as one of the smallest mobs
  *
  * @since 2.21
  * @author Azami7
  */
-public class SCARABAEUS_FIBULUM extends LivingEntityToItemTransfiguration {
+public class RANACULUS_AMPHORAM extends LivingEntityToItemTransfiguration {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public SCARABAEUS_FIBULUM(Ollivanders2 plugin) {
+    public RANACULUS_AMPHORAM(Ollivanders2 plugin) {
         super(plugin);
 
-        spellType = O2SpellType.SCARABAEUS_FIBULUM;
+        spellType = O2SpellType.RANACULUS_AMPHORAM;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        flavorText = new ArrayList<>() {{
-            add("\"He was supposed to be turning a beetle into a button, but all he managed to do was give his beetle a lot of exercise as it scuttled over the desk top avoiding his wand.\"");
-        }};
-
-        text = "The transfiguration spell Scarabaeus Fibulum will transfigure an endermite into a button.";
+        text = "The transfiguration spell Ranaculus Amphoram will transfigure a tadpole into a decorated pot.";
     }
 
     /**
@@ -41,15 +37,15 @@ public class SCARABAEUS_FIBULUM extends LivingEntityToItemTransfiguration {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public SCARABAEUS_FIBULUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public RANACULUS_AMPHORAM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        spellType = O2SpellType.SCARABAEUS_FIBULUM;
+        spellType = O2SpellType.RANACULUS_AMPHORAM;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        transfigurationMap.put(EntityType.ENDERMITE, Material.POLISHED_BLACKSTONE_BUTTON);
+        transfigurationMap.put(EntityType.TADPOLE, Material.DECORATED_POT);
         radius = 3;
-        successMessage = "The endermite transforms.";
+        successMessage = "The tadpole transforms.";
 
         initSpell();
     }
