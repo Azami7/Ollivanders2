@@ -8,8 +8,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * All potions types
  */
-public enum O2PotionType
-{
+public enum O2PotionType {
     ANIMAGUS_POTION(ANIMAGUS_POTION.class, MagicLevel.NEWT),
     BABBLING_BEVERAGE(BABBLING_BEVERAGE.class, MagicLevel.OWL),
     BARUFFIOS_BRAIN_ELIXIR(BARUFFIOS_BRAIN_ELIXIR.class, MagicLevel.EXPERT),
@@ -19,6 +18,7 @@ public enum O2PotionType
     FORGETFULLNESS_POTION(FORGETFULLNESS_POTION.class, MagicLevel.OWL),
     HERBICIDE_POTION(HERBICIDE_POTION.class, MagicLevel.BEGINNER),
     MEMORY_POTION(MEMORY_POTION.class, MagicLevel.NEWT),
+    OCULUS_FELIS(OCULUS_FELIS.class, MagicLevel.BEGINNER),
     REGENERATION_POTION(REGENERATION_POTION.class, MagicLevel.NEWT),
     SLEEPING_DRAUGHT(SLEEPING_DRAUGHT.class, MagicLevel.BEGINNER),
     WIDEYE_POTION(WIDEYE_POTION.class, MagicLevel.BEGINNER),
@@ -42,8 +42,7 @@ public enum O2PotionType
      * @param className the class for this potion type
      * @param level     the level of this potion
      */
-    O2PotionType(@NotNull Class<?> className, MagicLevel level)
-    {
+    O2PotionType(@NotNull Class<?> className, MagicLevel level) {
         this.className = className;
         this.level = level;
     }
@@ -54,14 +53,12 @@ public enum O2PotionType
      * @return the class name for this type of potion.
      */
     @NotNull
-    public Class<?> getClassName()
-    {
+    public Class<?> getClassName() {
         return className;
     }
 
     @NotNull
-    public MagicLevel getLevel()
-    {
+    public MagicLevel getLevel() {
         return level;
     }
 
@@ -71,8 +68,7 @@ public enum O2PotionType
      * @return the spell name for this potion type.
      */
     @NotNull
-    public String getPotionName()
-    {
+    public String getPotionName() {
         String potionTypeString = this.toString().toLowerCase();
 
         return Ollivanders2Common.firstLetterCapitalize(potionTypeString.replace("_", " "));
@@ -85,16 +81,13 @@ public enum O2PotionType
      * @return the potion type
      */
     @Nullable
-    public static O2PotionType potionTypeFromString(@NotNull String potionString)
-    {
+    public static O2PotionType potionTypeFromString(@NotNull String potionString) {
         O2PotionType potionType = null;
 
-        try
-        {
+        try {
             potionType = O2PotionType.valueOf(potionString);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             // we don't do anything, this will happen if they send an invalid potion name
         }
 
