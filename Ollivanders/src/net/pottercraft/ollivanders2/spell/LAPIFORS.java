@@ -9,8 +9,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-public class LAPIFORS extends ItemToEntityTransfiguration
-{
+/**
+ * Turn an entity in to a rabbit.
+ */
+public class LAPIFORS extends ItemToEntityTransfiguration {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
@@ -19,15 +21,13 @@ public class LAPIFORS extends ItemToEntityTransfiguration
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public LAPIFORS(Ollivanders2 plugin)
-    {
+    public LAPIFORS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.LAPIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("\"Lapifors, the transformation of a small object into a rabbit\" -Hermione Granger");
         }};
 
@@ -41,8 +41,7 @@ public class LAPIFORS extends ItemToEntityTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public LAPIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public LAPIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -62,12 +61,10 @@ public class LAPIFORS extends ItemToEntityTransfiguration
      * Determine success rate and whether this spell is permanent based on player skill level
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         successRate = (int) (usesModifier / 2);
 
-        if (usesModifier > 100)
-        {
+        if (usesModifier > 100) {
             consumeOriginal = true;
             permanent = true;
         }

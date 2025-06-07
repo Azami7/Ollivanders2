@@ -22,7 +22,7 @@ public class O2Spells
     /**
      * Callback to the plugin
      */
-    private Ollivanders2 p;
+    private final Ollivanders2 p;
 
     /**
      * Common functions
@@ -84,9 +84,9 @@ public class O2Spells
             if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType))
                 continue;
 
-            common.printDebugMessage("Loading spell " + spellType.getSpellName(), null, null, false);
             O2SpellMap.put(spellType.getSpellName().toLowerCase(), spellType);
         }
+        p.getLogger().info("Loaded " + O2SpellMap.size() + " spells.");
 
         // load any spell static data
         APPARATE.loadApparateLocations(p);
@@ -127,7 +127,7 @@ public class O2Spells
         }
         catch (Exception exception)
         {
-            common.printDebugMessage("Exception trying to create new instance of " + spellType.toString(), exception, null, true);
+            common.printDebugMessage("Exception trying to create new instance of " + spellType, exception, null, true);
             return null;
         }
 
@@ -194,7 +194,7 @@ public class O2Spells
     private void loadZoneConfig(@NotNull String zoneName)
     {
         String typeString = zoneConfig.getString(zoneName + "." + "type");
-        if (typeString == null || typeString.length() < 1)
+        if (typeString == null || typeString.isEmpty())
             return;
 
         SpellZone.SpellZoneType type;
@@ -213,7 +213,7 @@ public class O2Spells
         {
             world = zoneConfig.getString(zoneName + "." + "world");
 
-            if (world == null || world.length() < 1)
+            if (world == null || world.isEmpty())
             {
                 common.printDebugMessage("O2Spells.loadZoneConfig: world or cuboid zone " + zoneName + " with no world name set, ignored.", null, null, true);
                 return;
@@ -226,7 +226,7 @@ public class O2Spells
         {
             String areaString = zoneConfig.getString(zoneName + "." + "area");
 
-            if (areaString == null || areaString.length() < 1)
+            if (areaString == null || areaString.isEmpty())
             {
                 common.printDebugMessage("O2Spells.loadZoneConfig: cuboid zone " + zoneName + " with no area coordinates set, ignored", null, null, true);
                 return;
@@ -245,7 +245,7 @@ public class O2Spells
 
         SpellZone zone = new SpellZone(zoneName, world, type, area, allowed, disallowed);
         spellZones.add(zone);
-        p.getLogger().info("Added zone type " + type.toString() + " " + zoneName);
+        p.getLogger().info("Added zone type " + type + " " + zoneName);
     }
 
     /**
@@ -267,7 +267,7 @@ public class O2Spells
             O2SpellType spellType = O2SpellType.spellTypeFromString(spell.toUpperCase());
             if (spellType != null && isLoaded(spellType))
             {
-                common.printDebugMessage(" - " + spellType.toString(), null, null, false);
+                common.printDebugMessage(" - " + spellType, null, null, false);
 
                 spellList.add(spellType);
             }
@@ -293,7 +293,7 @@ public class O2Spells
             return false;
 
         // first check global allow lists
-        if (globalAllowedSpells.size() > 0)
+        if (!globalAllowedSpells.isEmpty())
             return globalAllowedSpells.contains(spellType);
 
         // check world permissions
@@ -309,7 +309,7 @@ public class O2Spells
                 return false;
             }
 
-            if (world.getName().equalsIgnoreCase(zone.zoneWorldName) && zone.allowedSpells.size() > 0)
+            if (world.getName().equalsIgnoreCase(zone.zoneWorldName) && !zone.allowedSpells.isEmpty())
                 return zone.allowedSpells.contains(spellType);
         }
 
@@ -319,7 +319,7 @@ public class O2Spells
             if (zone.zoneType != SpellZone.SpellZoneType.WORLD_GUARD)
                 continue;
 
-            if (Ollivanders2.worldGuardO2.isLocationInRegionByName(zone.zoneName, location) && zone.allowedSpells.size() > 0)
+            if (Ollivanders2.worldGuardO2.isLocationInRegionByName(zone.zoneName, location) && !zone.allowedSpells.isEmpty())
                 return zone.allowedSpells.contains(spellType);
         }
 
@@ -329,7 +329,7 @@ public class O2Spells
             if (zone.zoneType != SpellZone.SpellZoneType.CUBOID)
                 continue;
 
-            if (zone.cuboid.isInside(location, common) && zone.allowedSpells.size() > 0)
+            if (zone.cuboid.isInside(location, common) && !zone.allowedSpells.isEmpty())
                 return zone.allowedSpells.contains(spellType);
         }
 
