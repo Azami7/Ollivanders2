@@ -50,7 +50,7 @@ public abstract class O2Spell {
     /**
      * The max distance a spell projectile can travel
      */
-    static int maxProjectileDistance = 50;
+    static final int maxProjectileDistance = 50;
 
     /**
      * The currently traveled distance for the projectile
