@@ -2,8 +2,13 @@ package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
+import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -11,8 +16,8 @@ import java.util.UUID;
 /**
  * Causes the player to be surrounded in smoke and not targetable by projectile spells
  *
- * @since 2.21
  * @author Azami7
+ * @since 2.21
  */
 public class FUMOS extends O2Effect {
     /**
@@ -23,7 +28,7 @@ public class FUMOS extends O2Effect {
     /**
      * The radius of the smoke cloud
      */
-    private int radius = 5;
+    private int radius = 3;
 
     /**
      * Constructor
@@ -48,10 +53,8 @@ public class FUMOS extends O2Effect {
      * Age this effect each game tick.
      */
     @Override
-    public void checkEffect()
-    {
-        if (!permanent)
-        {
+    public void checkEffect() {
+        if (!permanent) {
             age(1);
         }
 
@@ -68,5 +71,42 @@ public class FUMOS extends O2Effect {
      * Do any cleanup related to removing this effect from the player
      */
     @Override
-    public void doRemove() {}
+    public void doRemove() {
+    }
+
+    /**
+     * handle any effects when a spell projectile moves
+     *
+     * @param event the event
+     */
+    void doOnOllivandersSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
+        Location projectileLocation = event.getTo();
+
+        if (Ollivanders2Common.isInside(projectileLocation, player.getLocation(), radius))
+            event.setCancelled(true);
+    }
+
+    /**
+     * handle on player quit event
+     *
+     * @param event the event
+     */
+    void doOnPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
+        if (event.getPlayer().getUniqueId() == targetID)
+            kill();
+    }
+
+    /**
+     * handle entity target event
+     *
+     * @param event the event
+     */
+    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
+        Entity target = event.getTarget();
+        if (target == null)
+            return;
+
+        if (target.getUniqueId() == targetID)
+            event.setCancelled(true);
+    }
 }

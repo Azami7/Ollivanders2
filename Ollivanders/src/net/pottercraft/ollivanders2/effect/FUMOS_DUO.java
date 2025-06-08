@@ -17,7 +17,7 @@ public class FUMOS_DUO extends O2Effect {
     /**
      * The radius of the smoke cloud
      */
-    private int radius = 10;
+    private int radius = 5;
 
     /**
      * Constructor

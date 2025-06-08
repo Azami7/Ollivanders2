@@ -12,65 +12,61 @@ import java.util.ArrayList;
 /**
  * Causes blindness in a radius larger than fumos.
  *
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
  */
-public final class FUMOS_DUO extends AddO2Effect
-{
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public FUMOS_DUO(Ollivanders2 plugin)
-   {
-      super(plugin);
+public final class FUMOS_DUO extends AddO2Effect {
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public FUMOS_DUO(Ollivanders2 plugin) {
+        super(plugin);
 
-      spellType = O2SpellType.FUMOS_DUO;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.FUMOS_DUO;
+        branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<>()
-      {{
-         add("A Stronger Smoke-Screen Spell");
-      }};
+        flavorText = new ArrayList<>() {{
+            add("A Stronger Smoke-Screen Spell");
+        }};
 
-      text = "Fumos Duo will cause those in an area to be blinded by a smoke cloud. The blindness lasts for a time twice as long as that created by Fumos";
-   }
+        text = "Fumos Duo will cause those in an area to be blinded by a smoke cloud. The blindness lasts for a time twice as long as that created by Fumos";
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public FUMOS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public FUMOS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+        super(plugin, player, rightWand);
 
-      spellType = O2SpellType.FUMOS_DUO;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.FUMOS_DUO;
+        branch = O2MagicBranch.CHARMS;
 
-      effectsToAdd.add(O2EffectType.FUMOS_DUO);
-      strengthModifier = 1;
-      minDurationInSeconds = 30;
-      maxDurationInSeconds = 180; // 3 mins
-      targetSelf = true;
+        effectsToAdd.add(O2EffectType.FUMOS_DUO);
+        strengthModifier = 1;
+        minDurationInSeconds = 30;
+        maxDurationInSeconds = 90;
+        targetSelf = true;
 
-      initSpell();
-   }
+        initSpell();
+    }
 
-   /**
-    * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
-    * constants.
-    */
-   @Override
-   void doInitSpell() {
-      durationInSeconds = (int) usesModifier;
-      if (durationInSeconds < minDurationInSeconds)
-         durationInSeconds = minDurationInSeconds;
-      else if (durationInSeconds > maxDurationInSeconds)
-         durationInSeconds = maxDurationInSeconds;
-   }
+    /**
+     * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
+     * constants.
+     */
+    @Override
+    void doInitSpell() {
+        durationInSeconds = (int) usesModifier;
+        if (durationInSeconds < minDurationInSeconds)
+            durationInSeconds = minDurationInSeconds;
+        else if (durationInSeconds > maxDurationInSeconds)
+            durationInSeconds = maxDurationInSeconds;
+    }
 }
