@@ -32,7 +32,7 @@ public final class FUMOS extends AddO2Effect {
             add("The Smoke-Screen Spell");
         }};
 
-        text = "Fumos will cause those in an area to be blinded by a smoke cloud.";
+        text = "Fumos creates a defensive cloud around the caster which prevents those outside the cloud accurately targeting anyone inside.";
     }
 
     /**
