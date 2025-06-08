@@ -6,8 +6,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * All effect types
  */
-public enum O2EffectType
-{
+public enum O2EffectType {
     AGGRESSION(AGGRESSION.class, MagicLevel.OWL),
     ANIMAGUS_EFFECT(ANIMAGUS_EFFECT.class, MagicLevel.EXPERT),
     ANIMAGUS_INCANTATION(ANIMAGUS_INCANTATION.class, MagicLevel.EXPERT),
@@ -21,6 +20,8 @@ public enum O2EffectType
     CONFUSION(CONFUSION.class, MagicLevel.OWL),
     FAST_LEARNING(FAST_LEARNING.class, MagicLevel.NEWT),
     FLAGRANTE_BURNING(FLAGRANTE_BURNING.class, MagicLevel.EXPERT),
+    FUMOS(FUMOS.class, MagicLevel.BEGINNER),
+    FUMOS_DUO(FUMOS.class, MagicLevel.OWL),
     FLYING(FLYING.class, MagicLevel.EXPERT),
     HARM(HARM.class, MagicLevel.OWL),
     HARM_ANTIDOTE_LESSER(HARM_ANTIDOTE_LESSER.class, MagicLevel.OWL),
@@ -74,8 +75,7 @@ public enum O2EffectType
      * @param className the name of the effect class this type represents.
      * @param level     the level of this effect
      */
-    O2EffectType(@NotNull Class<?> className, @NotNull MagicLevel level)
-    {
+    O2EffectType(@NotNull Class<?> className, @NotNull MagicLevel level) {
         this.className = className;
         this.level = level;
     }
@@ -86,8 +86,7 @@ public enum O2EffectType
      * @return the effect class
      */
     @NotNull
-    public Class<?> getClassName()
-    {
+    public Class<?> getClassName() {
         return className;
     }
 
@@ -97,8 +96,7 @@ public enum O2EffectType
      * @return the level of this effect
      */
     @NotNull
-    public MagicLevel getLevel()
-    {
+    public MagicLevel getLevel() {
         return level;
     }
 
@@ -107,8 +105,7 @@ public enum O2EffectType
      *
      * @return true if this effect is enabled, false otherwise
      */
-    public boolean isEnabled()
-    {
+    public boolean isEnabled() {
         return enabled;
     }
 
@@ -117,8 +114,7 @@ public enum O2EffectType
      *
      * @param enabled true to enable this effect, false to disable
      */
-    public void setEnabled(boolean enabled)
-    {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 }

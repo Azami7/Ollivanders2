@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
@@ -564,8 +565,8 @@ public class Ollivanders2Common {
      * @param radius    the radius of the flair
      * @param intensity intensity of the flair. If greater than 10, is reduced to 10.
      */
-    public static void flair(@NotNull Location location, int radius, double intensity) {
-        flair(location, radius, intensity, Effect.SMOKE);
+    public static void flair(@NotNull Location location, int radius, int intensity) {
+        flair(location, radius, intensity, Particle.SMOKE);
     }
 
     /**
@@ -576,7 +577,7 @@ public class Ollivanders2Common {
      * @param intensity  intensity of the flair. If greater than 10, is reduced to 10.
      * @param effectType the particle effect to use
      */
-    public static void flair(@NotNull Location location, int radius, double intensity, Effect effectType) {
+    public static void flair(@NotNull Location location, int radius, int intensity, Effect effectType) {
         if (intensity > 10)
             intensity = 10;
 
@@ -589,6 +590,31 @@ public class Ollivanders2Common {
 
                 if (effectLocation.getWorld() != null)
                     effectLocation.getWorld().playEffect(effectLocation, effectType, 4);
+            }
+        }
+    }
+
+    /**
+     * Makes a particle effect at all points along the radius of spell and at spell loc.
+     *
+     * @param location   the location for the center of the flair
+     * @param radius     the radius of the flair
+     * @param intensity  intensity of the flair. If greater than 10, is reduced to 10.
+     * @param particleType the particle to use
+     */
+    public static void flair(@NotNull Location location, int radius, int intensity, Particle particleType) {
+        if (intensity > 10)
+            intensity = 10;
+
+        for (double inc = (Math.random() * Math.PI) / intensity; inc < Math.PI; inc += Math.PI / intensity) {
+            for (double azi = (Math.random() * Math.PI) / intensity; azi < 2 * Math.PI; azi += Math.PI / intensity) {
+                double[] spher = new double[2];
+                spher[0] = inc;
+                spher[1] = azi;
+                Location effectLocation = location.clone().add(sphereToVector(spher, radius));
+
+                if (effectLocation.getWorld() != null)
+                    effectLocation.getWorld().spawnParticle(particleType, effectLocation, 4, 0, 0, 0, 0);
             }
         }
     }
