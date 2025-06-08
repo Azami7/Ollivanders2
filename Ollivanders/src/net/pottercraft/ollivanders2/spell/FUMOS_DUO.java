@@ -32,7 +32,7 @@ public final class FUMOS_DUO extends AddO2Effect {
             add("A Stronger Smoke-Screen Spell");
         }};
 
-        text = "Fumos Duo will cause those in an area to be blinded by a smoke cloud. The blindness lasts for a time twice as long as that created by Fumos";
+        text = "Fumos creates a defensive cloud around the caster which prevents those outside the cloud accurately targeting anyone inside. The protective radius of Fumos Duo is larger and the lasts longer.";
     }
 
     /**
