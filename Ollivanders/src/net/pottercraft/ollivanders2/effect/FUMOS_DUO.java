@@ -1,24 +1,11 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import org.bukkit.Particle;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class FUMOS_DUO extends O2Effect {
-    /**
-     * The player this fumos is protecting
-     */
-    private Player player = null;
-
-    /**
-     * The radius of the smoke cloud
-     */
-    private int radius = 5;
-
+public class FUMOS_DUO extends FUMOS {
     /**
      * Constructor
      *
@@ -30,37 +17,6 @@ public class FUMOS_DUO extends O2Effect {
         super(plugin, duration, pid);
 
         effectType = O2EffectType.FUMOS_DUO;
-
-        player = p.getServer().getPlayer(pid);
-        if (player == null) {
-            common.printDebugMessage("O2Effect.FUMOS: target player is null", null, null, false);
-            kill();
-        }
+        radius = 5;
     }
-
-    /**
-     * Age this effect each game tick.
-     */
-    @Override
-    public void checkEffect()
-    {
-        if (!permanent)
-        {
-            age(1);
-        }
-
-        if (isKilled())
-            return;
-
-        // flair
-        if ((duration % 10) == 0) {
-            Ollivanders2Common.flair(player.getLocation(), radius, 10, Particle.CAMPFIRE_COSY_SMOKE);
-        }
-    }
-
-    /**
-     * Do any cleanup related to removing this effect from the player
-     */
-    @Override
-    public void doRemove() {}
 }

@@ -23,12 +23,12 @@ public class FUMOS extends O2Effect {
     /**
      * The player this fumos is protecting
      */
-    private Player player = null;
+    Player player = null;
 
     /**
      * The radius of the smoke cloud
      */
-    private int radius = 3;
+    int radius = 3;
 
     /**
      * Constructor
