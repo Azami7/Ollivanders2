@@ -10,28 +10,28 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Beetle to button - https://harrypotter.fandom.com/wiki/Beetle_into_Button - for minecraft we are using endermites to button
+ * Mice to snuffboxes - https://harrypotter.fandom.com/wiki/Mice_to_Snuffboxes - for minecraft we are using rabbits and bundles
  *
  * @since 2.21
  * @author Azami7
  */
-public class SCARABAEUS_FIBULUM extends LivingEntityToItemTransfiguration {
+public class LEPUS_SACCULUM extends LivingEntityToItemTransfiguration {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public SCARABAEUS_FIBULUM(Ollivanders2 plugin) {
+    public LEPUS_SACCULUM(Ollivanders2 plugin) {
         super(plugin);
 
-        spellType = O2SpellType.SCARABAEUS_FIBULUM;
+        spellType = O2SpellType.LEPUS_SACCULUM;
         branch = O2MagicBranch.TRANSFIGURATION;
 
         flavorText = new ArrayList<>() {{
-            add("\"He was supposed to be turning a beetle into a button, but all he managed to do was give his beetle a lot of exercise as it scuttled over the desk top avoiding his wand.\"");
+            add("\"Professor McGonagall watched them turn a mouse into a snuffbox - points were given for how pretty the snuffbox was, but taken away if it had whiskers.\"");
         }};
 
-        text = "The transfiguration spell Scarabaeus Fibulum will transfigure an endermite into a button.";
+        text = "The transfiguration spell Lepus Sacculum will transfigure a rabbit into a bundle.";
     }
 
     /**
@@ -41,15 +41,15 @@ public class SCARABAEUS_FIBULUM extends LivingEntityToItemTransfiguration {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public SCARABAEUS_FIBULUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public LEPUS_SACCULUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        spellType = O2SpellType.SCARABAEUS_FIBULUM;
+        spellType = O2SpellType.LEPUS_SACCULUM;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        transfigurationMap.put(EntityType.ENDERMITE, Material.POLISHED_BLACKSTONE_BUTTON);
+        transfigurationMap.put(EntityType.RABBIT, Material.WHITE_BUNDLE);
         radius = 1.5;
-        successMessage = "The endermite transforms.";
+        successMessage = "The rabbit transforms.";
 
         initSpell();
     }
