@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
  * All supported spells.
  */
 public enum O2SpellType {
+    //todo adjust levels to match books refactor
     ABERTO(ABERTO.class, MagicLevel.BEGINNER),
     ACCIO(ACCIO.class, MagicLevel.OWL),
     AGUAMENTI(AGUAMENTI.class, MagicLevel.NEWT),
