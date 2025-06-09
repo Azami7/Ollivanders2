@@ -104,6 +104,7 @@ public enum O2SpellType {
     LAMA(LAMA.class, MagicLevel.NEWT),
     LAPIFORS(net.pottercraft.ollivanders2.spell.LAPIFORS.class, MagicLevel.BEGINNER),
     LEGILIMENS(LEGILIMENS.class, MagicLevel.NEWT),
+    LEPUS_SACCULUM(LEPUS_SACCULUM.class, MagicLevel.BEGINNER),
     LEVICORPUS(LEVICORPUS.class, MagicLevel.OWL),
     LIBERACORPUS(LIBERACORPUS.class, MagicLevel.OWL),
     LIGATIS_COR(LIGATIS_COR.class, MagicLevel.NEWT),

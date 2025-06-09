@@ -44,7 +44,7 @@ public class RANACULUS_AMPHORAM extends LivingEntityToItemTransfiguration {
         branch = O2MagicBranch.TRANSFIGURATION;
 
         transfigurationMap.put(EntityType.TADPOLE, Material.DECORATED_POT);
-        radius = 3;
+        radius = 1.5;
         successMessage = "The tadpole transforms.";
 
         initSpell();
