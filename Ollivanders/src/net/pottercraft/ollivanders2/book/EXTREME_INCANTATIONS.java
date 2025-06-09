@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Extreme Incantations - Charms book for 2nd year.
  *
+ * @link https://harrypotter.fandom.com/wiki/Extreme_Incantations
  * @author Azami7
  * @since 2.2.4
  */

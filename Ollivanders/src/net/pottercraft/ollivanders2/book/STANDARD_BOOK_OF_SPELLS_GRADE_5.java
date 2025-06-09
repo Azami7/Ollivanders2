@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Standard Book of Spells Grade 5
- * https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_5
  *
+ * @link https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_5
  * @author Azami7
  * @since 2.2.4
  */

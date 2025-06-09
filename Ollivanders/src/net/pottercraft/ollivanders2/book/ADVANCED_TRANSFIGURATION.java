@@ -5,16 +5,14 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A Guide to Advanced Transfiguration - N.E.W.T level Transfiguration book
+ * A Guide to Advanced Transfiguration - N.E.W.T level Transfiguration book.
  * <p>
- * Topics:
- * Conjuration
- * Human Transfiguration
- * Untransfiguration
- * <p>
- * Missing Spell:
- * Homorphus Charm - https://github.com/Azami7/Ollivanders2/issues/39
+ * Topics:<br>
+ * Conjuration<br>
+ * Human Transfiguration<br>
+ * Untransfiguration</p>
  *
+ * @link https://harrypotter.fandom.com/wiki/A_Guide_to_Advanced_Transfiguration
  * @author Azami7
  * @since 2.2.4
  */

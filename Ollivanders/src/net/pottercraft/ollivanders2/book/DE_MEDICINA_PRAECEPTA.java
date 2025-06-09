@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 2nd Century Roman healing text.
  *
+ * @link https://en.wikipedia.org/wiki/Serenus_Sammonicus
  * @author Azami7
  * @sinze 2.2.9
  */
@@ -19,7 +20,7 @@ public class DE_MEDICINA_PRAECEPTA extends O2Book {
         openingPage = "Phoebus, protect this health-giving song, which I composed and let this manifest favour be an attendant to the art you discovered.";
 
         spells.add(O2SpellType.REPARIFORS);
-        //todo Abracadabra
+        //todo Abracadabra - a cure for fever and ague
         //todo Mithridates Antidotum - a powerful antidote to poison
     }
 }

@@ -10,9 +10,9 @@ import org.jetbrains.annotations.NotNull;
  * Topics:<br>
  * Animal Transfiguration<br>
  * Self-Transformation<br>
- * Vanishing<br>
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration
+ * Vanishing</p>
+ *
+ * @link https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration
  */
 public class INTERMEDIATE_TRANSFIGURATION extends O2Book {
     public INTERMEDIATE_TRANSFIGURATION(@NotNull Ollivanders2 plugin) {

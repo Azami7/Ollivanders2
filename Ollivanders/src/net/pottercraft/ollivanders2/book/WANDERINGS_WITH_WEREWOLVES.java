@@ -6,11 +6,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Wanderings with Werewolves - 2nd year Defense Against the Dark Arts book
- * <p>
- * Missing Spells:
- * Rictusempra - https://github.com/Azami7/Ollivanders2/issues/92
  *
+ * @link https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves
  * @author Azami7
+ * @since 2.2.4
  */
 public class WANDERINGS_WITH_WEREWOLVES extends O2Book {
     public WANDERINGS_WITH_WEREWOLVES(@NotNull Ollivanders2 plugin) {

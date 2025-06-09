@@ -37,13 +37,14 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * All magic books.
- * <p>
- * When bookLearning is enabled, reading a book will increase the reader's spell level by 1 to a maximum of 10. This can
- * be used for classes, creating lessons, or other in-game magic learning.
- * <p>
- * When bookLEarning is enabled, every Ollivanders2 spell must be in a WrittenBook with lore or NBT set up correctly or players will not be able to learn them.
- * <p>
- * Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning
+ *
+ * <p>When bookLearning is enabled, reading a book will increase the reader's spell level by 1 to a maximum of 10. This can
+ * be used for classes, creating lessons, or other in-game magic learning.</p>
+ *
+ * <p>When bookLEarning is enabled, every Ollivanders2 spell must be in a WrittenBook with lore or NBT set up correctly
+ * or players will not be able to learn them.</p>
+ *
+ * @link https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning
  */
 public final class O2Books implements Listener {
     /**
@@ -129,27 +130,21 @@ public final class O2Books implements Listener {
      * @param book   the book being read
      */
     private void readBook(@NotNull Player player, @NotNull ItemStack book) {
-        common.printDebugMessage(player.getDisplayName() + " reading a book and book learning is enabled.", null, null, false);
+        common.printDebugMessage("O2Books: " + player.getDisplayName() + " reading a book and book learning is enabled.", null, null, false);
 
         // reading a book, if it is a spell book we want to let the player "learn" the spell.
         ItemMeta meta = book.getItemMeta();
         if (meta == null)
             return;
 
-        List<String> bookLore = book.getItemMeta().getLore();
-
-        if (bookLore == null)
-            readNBT(meta, player);
-            // TODO remove this when we remove lore-based items in the next major rev
-        else
-            readLore(bookLore, player);
+        readNBT(meta, player);
     }
 
     /**
      * Add all books in the O2BookType enum to the O2BooksMap.
      */
     private void addBooks() {
-        common.printDebugMessage("Adding all books...", null, null, false);
+        common.printDebugMessage("O2Books: adding all books...", null, null, false);
 
         for (O2BookType bookType : O2BookType.values()) {
             O2Book book = getO2BookByType(bookType);
@@ -160,7 +155,7 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Get an o2book by book type.
+     * Get an O2Book by book type.
      *
      * @param bookType the book to be returned
      * @return the BookItem if found bookType was found, null otherwise.
@@ -175,7 +170,7 @@ public final class O2Books implements Listener {
             book = (O2Book) bookClass.getConstructor(Ollivanders2.class).newInstance(p);
         }
         catch (Exception e) {
-            common.printDebugMessage("Exception trying to create new instance of " + bookType, e, null, true);
+            common.printDebugMessage("O2Books: exception trying to create new instance of " + bookType, e, null, true);
         }
 
         return book;
@@ -189,7 +184,6 @@ public final class O2Books implements Listener {
      */
     @Nullable
     public ItemStack getBookByTitle(@NotNull String title) {
-        String searchFor = title.toLowerCase();
         O2BookType match = getBookTypeByTitle(title);
 
         if (match == null)
@@ -222,14 +216,14 @@ public final class O2Books implements Listener {
      */
     @Nullable
     public O2BookType getBookTypeByTitle(String title) {
-        if (title.length() < 1)
+        if (title.isEmpty())
             return null;
 
         String searchFor = title.toLowerCase();
         O2BookType match = null;
 
         // Iterate through all keys rather than a direct lookup so that we can:
-        // - allow case insensitive lookup
+        // - allow case-insensitive lookup
         // - allow partial match for lazy typing
         for (String key : O2BookMap.keySet()) {
             String bookTitle = key.toLowerCase();
@@ -313,7 +307,7 @@ public final class O2Books implements Listener {
             @Override
             public void run() {
                 if (!(event.isCancelled())) {
-                    incrementSpell(o2p, spellType, p);
+                    incrementSpell(o2p, spellType);
                 }
             }
         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond * 2);
@@ -338,7 +332,7 @@ public final class O2Books implements Listener {
             @Override
             public void run() {
                 if (!(event.isCancelled())) {
-                    incrementPotion(o2p, potionType, p);
+                    incrementPotion(o2p, potionType);
                 }
             }
         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond * 2);
@@ -374,9 +368,8 @@ public final class O2Books implements Listener {
      *
      * @param o2p       the player
      * @param spellType the spell
-     * @param p         a callback to the plugin
      */
-    private static void incrementSpell(@NotNull O2Player o2p, @NotNull O2SpellType spellType, @NotNull Ollivanders2 p) {
+    private static void incrementSpell(@NotNull O2Player o2p, @NotNull O2SpellType spellType) {
         int spellLevel = o2p.getSpellCount(spellType);
 
         // if spell count is less than 25, learn this spell
@@ -420,9 +413,8 @@ public final class O2Books implements Listener {
      *
      * @param o2p        the player
      * @param potionType the spell
-     * @param p          a callback to the plugin
      */
-    private static void incrementPotion(@NotNull O2Player o2p, @NotNull O2PotionType potionType, @NotNull Ollivanders2 p) {
+    private static void incrementPotion(@NotNull O2Player o2p, @NotNull O2PotionType potionType) {
         int potionLevel = o2p.getPotionCount(potionType);
 
         // if spell count is less than 25, learn this spell
@@ -437,41 +429,7 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * If bookLearning is enabled, read the lore for a book and learn all spells not yet known.
-     *
-     * @param bookLore the lore from a book
-     * @param player   the player reading the book
-     */
-    @Deprecated
-    public void readLore(@NotNull List<String> bookLore, @NotNull Player player) {
-        if (!Ollivanders2.bookLearning) {
-            return;
-        }
-
-        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-        if (o2p == null)
-            return;
-
-        for (String spell : bookLore) {
-            // see if it is a spell
-            O2SpellType spellType = Ollivanders2API.getSpells().getSpellTypeByName(spell);
-
-            if (spellType != null) {
-                doBookLearningSpell(player, spellType);
-            }
-            else // see if it is a potion
-            {
-                O2PotionType potionType = Ollivanders2API.getPotions().getPotionTypeByName(spell);
-
-                if (potionType != null) {
-                    doBookLearningPotion(player, potionType);
-                }
-            }
-        }
-    }
-
-    /**
-     * Get all of the titles for all loaded O2 books
+     * Get all the titles for all loaded O2 books
      *
      * @return a list of the titles for all loaded books
      */
@@ -539,7 +497,7 @@ public final class O2Books implements Listener {
                 return true;
             }
             else {
-                common.printDebugMessage("player to give book to is " + targetName, null, null, false);
+                common.printDebugMessage("O2Books:: player to give book to is " + targetName, null, null, false);
             }
 
             // args after "book give <player>" are book name

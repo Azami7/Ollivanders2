@@ -5,8 +5,9 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Year with a Yeti - 2nd year Defense Against the Dark Arts book
+ * Year with the Yeti - 2nd year Defense Against the Dark Arts book
  *
+ * @link https://harrypotter.fandom.com/wiki/Year_with_the_Yeti
  * @author Azami7
  * @since 2.2.4
  */

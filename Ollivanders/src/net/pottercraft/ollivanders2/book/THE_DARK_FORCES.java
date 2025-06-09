@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The Dark Forces: A Guide to Self-Protection - 1st and 2nd year Defense Against the Dark Arts
- * https://harrypotter.fandom.com/wiki/The_Dark_Forces:_A_Guide_to_Self-Protection
  *
+ * @link https://harrypotter.fandom.com/wiki/The_Dark_Forces:_A_Guide_to_Self-Protection
  * @author Azami7
  * @since 2.2.4
  */

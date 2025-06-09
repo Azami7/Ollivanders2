@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Defence Against the Dark Arts by Galatea Merrythought. 7th year Defense against the dark arts book
  *
+ * @link https://harrypotter.fandom.com/wiki/Defence_Against_the_Dark_Arts_(book)
  * @author Azami7
  * @since 2.21
  */

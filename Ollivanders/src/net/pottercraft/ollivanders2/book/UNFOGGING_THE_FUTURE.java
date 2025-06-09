@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Unfogging the Future - 3rd and 4th year Divination textbook
- * http://harrypotter.wikia.com/wiki/Unfogging_the_Future
  *
+ * @link http://harrypotter.wikia.com/wiki/Unfogging_the_Future
  * @author Azami7
  * @since 2.2.9
  */

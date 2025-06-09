@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Omens, Oracles & the Goat was a book by the celebrated magical historian, Bathilda Bagshot, covering a historical overview of Divination practises.
- * http://harrypotter.wikia.com/wiki/Omens,_Oracles_%26_the_Goat
  *
+ * @link http://harrypotter.wikia.com/wiki/Omens,_Oracles_%26_the_Goat
  * @author Azami7
  * @since 2.2.9
  */

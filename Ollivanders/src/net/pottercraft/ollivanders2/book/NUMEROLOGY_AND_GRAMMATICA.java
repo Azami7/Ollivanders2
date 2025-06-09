@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Numerology and Grammatica - Arithmancy text
  *
+ * @link https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica
  * @author Azami7
  * @since 2.2.4
  */
