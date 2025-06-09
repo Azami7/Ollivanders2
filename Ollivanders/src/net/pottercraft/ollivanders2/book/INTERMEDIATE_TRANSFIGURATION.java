@@ -24,7 +24,7 @@ public class INTERMEDIATE_TRANSFIGURATION extends O2Book {
         spells.add(O2SpellType.DURO);
         // todo version of duro that "hardens" tools
         spells.add(O2SpellType.LAGOMORPHA);
-        // todo teaput to tortoise
+        // todo teapot to tortoise
         // todo felifors (cats in to cauldrons)
         // todo owl in to opera glasses - https://harrypotter.fandom.com/wiki/Owl_to_Opera_Glasses
         spells.add(O2SpellType.AVIFORS);

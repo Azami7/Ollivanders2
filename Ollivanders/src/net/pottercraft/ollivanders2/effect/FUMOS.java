@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -23,7 +24,7 @@ public class FUMOS extends O2Effect {
     /**
      * The player this fumos is protecting
      */
-    Player player = null;
+    Player player;
 
     /**
      * The radius of the smoke cloud
@@ -82,8 +83,18 @@ public class FUMOS extends O2Effect {
     void doOnOllivandersSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
         Location projectileLocation = event.getTo();
 
-        if (Ollivanders2Common.isInside(projectileLocation, player.getLocation(), radius))
-            event.setCancelled(true);
+        if (Ollivanders2Common.isInside(projectileLocation, player.getLocation(), radius)) {
+            boolean canceled = true;
+
+            // if years enabled, this spell can only protect against spells up to one level higher than this spell
+            if (Ollivanders2.useYears) {
+                O2Spell spell = event.getSpell();
+                if (spell.spellType.getLevel().ordinal() > effectType.getLevel().ordinal() + 1)
+                    canceled = false;
+            }
+
+            event.setCancelled(canceled);
+        }
     }
 
     /**
