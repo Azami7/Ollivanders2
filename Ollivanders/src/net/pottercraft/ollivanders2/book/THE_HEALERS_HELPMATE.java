@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The Healer's Helpmate
  *
+ * @link https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate
  * @author Azami7
  * @since 2.2.4
  */

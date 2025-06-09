@@ -8,9 +8,8 @@ import org.jetbrains.annotations.NotNull;
  * Advanced Potion-Making is a book written by Libatius Borage. As the title implies this book contains advanced recipes
  * and various other topics related to potion-making. This textbook has been used for decades in the education of young
  * witches and wizards.
- * <p>
- * http://harrypotter.wikia.com/wiki/Advanced_Potion-Making
  *
+ * @link http://harrypotter.wikia.com/wiki/Advanced_Potion-Making
  * @author Azami7
  * @since 2.2.7
  */

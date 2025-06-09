@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Quintessence: A Quest - 6th year Charms book
  *
+ * @link https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest
  * @author Azami7
  * @since 2.2.4
  */

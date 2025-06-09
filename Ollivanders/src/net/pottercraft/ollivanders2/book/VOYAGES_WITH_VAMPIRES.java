@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Voyages with Vampires - 2nd year Defense Against the Dark Arts book
  *
+ * @link https://harrypotter.fandom.com/wiki/Voyages_with_Vampires
  * @author Azami7
  * @since 2.2.4
  */

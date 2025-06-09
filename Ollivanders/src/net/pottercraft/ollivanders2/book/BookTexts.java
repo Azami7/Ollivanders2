@@ -24,8 +24,8 @@ public final class BookTexts {
     Ollivanders2Common common;
 
     /**
-     * The text for a "page" of a book. This may actually be longer than a real page in a MC book (and will be split
-     * accordingly to multiple pages.
+     * The text for a "page" of a book. This may actually be longer than a real page in an MC book (and will be split
+     * accordingly to multiple pages).
      */
     private static class BookPage {
         /**
@@ -90,9 +90,9 @@ public final class BookTexts {
 
     /**
      * A map of pages and the spell/potion each covers.
-     * <p>
-     * This is a master list of the text for every spell or potion loaded so that we do not have to generate this text
-     * every time a book is created, since many spells/potions exist in more than one book.
+     *
+     * <p>This is a master list of the text for every spell or potion loaded so that we do not have to generate this text
+     * every time a book is created, since many spells/potions exist in more than one book.</p>
      */
     private final Map<String, BookPage> O2MagicTextMap = new HashMap<>();
 
@@ -113,9 +113,9 @@ public final class BookTexts {
 
     /**
      * Add all spells and potions when the plugin is enabled.
-     * <p>
-     * This should be called *after* spells are loaded in to O2Spells and potions loaded in to O2Potions or the lists will
-     * be empty.
+     *
+     * <p>This should be called *after* spells are loaded in to O2Spells and potions loaded in to O2Potions or the lists will
+     * be empty.</p>
      */
     public void onEnable() {
         // add all spells' texts
@@ -136,7 +136,7 @@ public final class BookTexts {
                 spell = (O2Spell) spellClass.getConstructor(Ollivanders2.class).newInstance(p);
             }
             catch (Exception e) {
-                common.printDebugMessage("Exception trying to add book text for " + spellType.toString(), e, null, true);
+                common.printDebugMessage("BookTexts: exception trying to add book text for " + spellType, e, null, true);
                 continue;
             }
 
@@ -148,11 +148,11 @@ public final class BookTexts {
                 flavorText = spell.getFlavorText();
             }
             catch (Exception e) {
-                common.printDebugMessage("Exception getting book text for " + spellType.toString(), e, null, true);
+                common.printDebugMessage("BookTexts: exception getting book text for " + spellType, e, null, true);
             }
 
             if (text == null) {
-                common.printDebugMessage("No book text for " + spellType.toString(), null, null, false);
+                common.printDebugMessage("BookTexts: no book text for " + spellType, null, null, false);
                 continue;
             }
 
@@ -175,7 +175,7 @@ public final class BookTexts {
                 potion = (O2Potion) potionClass.getConstructor(Ollivanders2.class).newInstance(p);
             }
             catch (Exception e) {
-                common.printDebugMessage("Exception trying to add book text for " + potionType.toString(), e, null, true);
+                common.printDebugMessage("BookTexts: exception trying to add book text for " + potionType, e, null, true);
                 continue;
             }
 

@@ -26,7 +26,7 @@ import java.util.Collections;
  * Pages - 50<br>
  * Lines per page - 14<br>
  * Characters per page - 256, newlines count as 2 characters<br>
- * Characters per line - 16-18 depending on the exact characters<br>
+ * Characters per line - 16-18 depending on the exact characters</p>
  *
  * @author Azami7
  * @since 2.2.4
@@ -55,10 +55,18 @@ public abstract class O2Book {
     final static String closingPageLabel = "_closingPage";
 
     /**
-     * Namespace keys for NBT tags
+     * Namespace key for NBT tag - book type
      */
     public static NamespacedKey o2BookTypeKey;
+
+    /**
+     * Namespace key for NBT tag - spells
+     */
     public static NamespacedKey o2BookSpellsKey;
+
+    /**
+     * Namespace key for NBT tag - potions
+     */
     public static NamespacedKey o2BookPotionsKey;
 
     /**
@@ -67,9 +75,13 @@ public abstract class O2Book {
     protected Ollivanders2 p;
 
     /**
-     * No more than 11 spells + potions in a book or they won't fit on the table of contents.
+     * Spells in book
      */
     protected ArrayList<O2SpellType> spells;
+
+    /**
+     * Potions in book
+     */
     protected ArrayList<O2PotionType> potions;
 
     /**
@@ -81,7 +93,7 @@ public abstract class O2Book {
         openingPage = "";
         closingPage = "";
 
-        // create the book on first request to ensure texts, etc are loaded before trying to create it
+        // create the book on first request to ensure texts, etc. are loaded before trying to create it
         bookItem = null;
 
         spells = new ArrayList<>();
@@ -90,9 +102,7 @@ public abstract class O2Book {
 
         o2BookTypeKey = new NamespacedKey(p, "O2BookType");
         o2BookSpellsKey = new NamespacedKey(p, "O2SpellTypes");
-        ;
         o2BookPotionsKey = new NamespacedKey(p, "O2PotionTypes");
-        ;
     }
 
     /**
@@ -115,12 +125,15 @@ public abstract class O2Book {
         bookMeta.setAuthor(bookType.getAuthor());
         bookMeta.setTitle(shortTitle);
 
-        //write title page
+        // write title page
         String titlePage = title + "\n\nby " + author;
         bookMeta.addPage(titlePage);
 
+        // table of contents
         StringBuilder toc = new StringBuilder();
         toc.append("Contents:\n\n");
+
+        // main book content
         ArrayList<String> mainContent = new ArrayList<>();
 
         // add the names of all spells in the book
@@ -137,7 +150,7 @@ public abstract class O2Book {
         for (String content : bookContents) {
             String name = Ollivanders2API.getBooks().spellText.getName(content);
             if (name == null) {
-                common.printDebugMessage(title + " contains unknown spell or potion " + content, null, null, false);
+                common.printDebugMessage("O2Book: " + title + " contains unknown spell or potion " + content, null, null, false);
                 continue;
             }
 
@@ -159,16 +172,19 @@ public abstract class O2Book {
             mainContent.addAll(pages);
         }
 
-        // add TOC page
-        bookMeta.addPage(toc.toString());
+        // add TOC page(s)
+        ArrayList<String> tocPages = createPages(toc.toString());
+        for (String tocPage: tocPages) {
+            bookMeta.addPage(tocPage);
+        }
 
         // add opening page
         if (Ollivanders2.useTranslations && p.getConfig().isSet(bookType.toString() + openingPageLabel)) {
             String s = p.getConfig().getString(bookType.toString() + openingPageLabel);
-            if (s != null && s.length() > 0)
+            if (s != null && !(s.isEmpty()))
                 openingPage = s;
         }
-        if (openingPage.length() > 0)
+        if (!(openingPage.isEmpty()))
             bookMeta.addPage(openingPage);
 
         // add spell pages
@@ -179,10 +195,10 @@ public abstract class O2Book {
         // add closing page
         if (Ollivanders2.useTranslations && p.getConfig().isSet(bookType.toString() + closingPageLabel)) {
             String s = p.getConfig().getString(bookType.toString() + closingPageLabel);
-            if (s != null && s.length() > 0)
+            if (s != null && !(s.isEmpty()))
                 closingPage = s;
         }
-        if (closingPage.length() > 0)
+        if (!(closingPage.isEmpty()))
             bookMeta.addPage(closingPage);
 
         // add NBT tags
@@ -201,8 +217,10 @@ public abstract class O2Book {
         container.set(o2BookSpellsKey, PersistentDataType.STRING, spellsTag.toString().trim());
         container.set(o2BookPotionsKey, PersistentDataType.STRING, potionsTag.toString().trim());
 
+        // set book generation
         bookMeta.setGeneration(BookMeta.Generation.ORIGINAL);
 
+        // set book meta
         bookItem.setItemMeta(bookMeta);
     }
 
@@ -239,15 +257,15 @@ public abstract class O2Book {
 
     /**
      * Turn a spell text word list in to a set of pages that fit in an MC book.
-     * <p>
-     * Book pages cannot be more than 14 lines with ~16 characters per line, 256 characters max
+     *
+     * <p>Book pages cannot be more than 14 lines with ~16 characters per line, 256 characters max,
      * assume 2 lines for spell name, 1 blank line between name and flavor text, 1 blank link between flavor text
      * and description text, means the first page has 9 lines of ~15 characters + continue, subsequent pages are 13
-     * lines of ~15 characters + continue.
-     * <p>
-     * This means the first page for a spell can have ~175 characters and subsequent pages can be ~195.
-     * <p>
-     * Assumes there is no word in the list that is >= max page size.
+     * lines of ~15 characters + continue.</p>
+     *
+     * <p>This means the first page for a spell can have ~175 characters and subsequent pages can be ~195.</p>
+     *
+     * <p>Assumes there is no word in the list that is >= max page size.</p>
      *
      * @param words an array of all the words in the book
      * @return a list of book pages
@@ -265,7 +283,7 @@ public abstract class O2Book {
             if (words.isEmpty())
                 break;
 
-            String word = words.get(0);
+            String word = words.getFirst();
 
             if (word.length() >= remaining)
                 break;
@@ -274,7 +292,7 @@ public abstract class O2Book {
 
             // decrement remaining, remove word from list
             remaining = remaining - word.length() - 1;
-            words.remove(0);
+            words.removeFirst();
         }
         if (!words.isEmpty())
             page.append("(cont.)");
@@ -290,7 +308,7 @@ public abstract class O2Book {
                 if (words.isEmpty())
                     break;
 
-                String word = words.get(0);
+                String word = words.getFirst();
 
                 if (word.length() >= remaining)
                     break;
@@ -299,7 +317,7 @@ public abstract class O2Book {
 
                 // decrement remaining, remove word from list
                 remaining = remaining - word.length() - 1;
-                words.remove(0);
+                words.removeFirst();
             }
             if (!words.isEmpty())
                 page.append("(cont.)");

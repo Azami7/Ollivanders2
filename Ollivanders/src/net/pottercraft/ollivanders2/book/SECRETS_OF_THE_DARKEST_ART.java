@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Secrets of the Darkest Art - The only known book that explains how to make a Horcrux.
  *
+ * @link https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art
  * @author Azami7
  * @since 2.2.4
  */

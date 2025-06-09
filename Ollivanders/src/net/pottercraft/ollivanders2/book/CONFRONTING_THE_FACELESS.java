@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Confronting the Faceless - 6th year Defense Against the Dark Arts book
  *
+ * @link https://harrypotter.fandom.com/wiki/Confronting_the_Faceless
  * @author Azami7
  * @since 2.2.4
  */

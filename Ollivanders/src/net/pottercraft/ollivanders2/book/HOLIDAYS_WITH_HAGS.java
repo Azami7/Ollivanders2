@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Holidays with Hags - 2nd year Defense Against the Dark Arts book
  *
+ * @link https://harrypotter.fandom.com/wiki/Holidays_with_Hags
  * @author Azami7
  * @since 2.2.4
  */

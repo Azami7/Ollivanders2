@@ -6,9 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Moste Potente Potions is a book by Phineas Bourne that gives instructions on how to brew advanced potions.
- * <p>
- * http://harrypotter.wikia.com/wiki/Moste_Potente_Potions
  *
+ * @link http://harrypotter.wikia.com/wiki/Moste_Potente_Potions
  * @author Azami7
  * @since 2.2.7
  */

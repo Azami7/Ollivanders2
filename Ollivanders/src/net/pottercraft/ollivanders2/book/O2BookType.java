@@ -76,13 +76,21 @@ public enum O2BookType {
     /**
      * The full book title
      */
-    private String title;
+    final private String title;
+
+    /**
+     * label for book title string
+     */
     final static String titleLabel = "_title";
 
     /**
-     * The book title for item lore, cannot be more than 32 characters or it will appear blank.
+     * The book title for item lore, cannot be more than 32 characters, or it will appear blank.
      */
-    private String shortTitle;
+    final private String shortTitle;
+
+    /**
+     * label for short title string
+     */
     final static String shortTitleLabel = "_shortTitle";
 
     /**
@@ -94,6 +102,10 @@ public enum O2BookType {
      * Constructor
      *
      * @param className the name of the class this type represents
+     * @param author the author
+     * @param branch the branch of magic
+     * @param title the book title
+     * @param shortTitle the short title for the book for item meta
      */
     O2BookType(@NotNull Class<?> className, @NotNull String title, @NotNull String shortTitle, @NotNull String author, @NotNull O2MagicBranch branch) {
         this.className = className;
@@ -126,9 +138,9 @@ public enum O2BookType {
      */
     public String getShortTitle(@NotNull Ollivanders2 p) {
         // first check to see if it has been set with config
-        if (Ollivanders2.useTranslations && p.getConfig().isSet(this.toString() + shortTitleLabel)) {
-            String s = p.getConfig().getString(this.toString() + shortTitleLabel);
-            if (s != null && s.length() > 0)
+        if (Ollivanders2.useTranslations && p.getConfig().isSet(this + shortTitleLabel)) {
+            String s = p.getConfig().getString(this + shortTitleLabel);
+            if (s != null && !(s.isEmpty()))
                 return s;
         }
 
@@ -143,12 +155,12 @@ public enum O2BookType {
      */
     public String getTitle(@NotNull Ollivanders2 p) {
         // first check to see if it has been set with config
-        String identifier = this.toString() + titleLabel;
+        String identifier = this + titleLabel;
 
         if (Ollivanders2.useTranslations && p.getConfig().isSet(identifier)) {
             String t = p.getConfig().getString(identifier);
 
-            if (t != null && t.length() > 0)
+            if (t != null && !(t.isEmpty()))
                 return t;
         }
 

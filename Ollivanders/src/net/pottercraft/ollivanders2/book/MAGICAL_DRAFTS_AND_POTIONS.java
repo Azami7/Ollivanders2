@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Magical Drafts and Potions - OWL potions book
  *
+ * @link https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions
  * @author Azami7
  * @since 2.2.7
  */

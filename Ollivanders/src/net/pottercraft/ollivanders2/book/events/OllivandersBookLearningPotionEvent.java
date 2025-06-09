@@ -7,51 +7,59 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class OllivandersBookLearningPotionEvent extends PlayerEvent implements Cancellable
-{
+/**
+ * Event whenever a potion is learned/leveled up from book learning
+ */
+public class OllivandersBookLearningPotionEvent extends PlayerEvent implements Cancellable {
+    /**
+     * the handlers for this event
+     */
     private static final HandlerList handlers = new HandlerList();
-    private O2PotionType potionType;
+
+    /**
+     * the potion type learned
+     */
+    final private O2PotionType potionType;
+
+    /**
+     * whether the event is canceled or not
+     */
     boolean canceled = false;
 
     /**
      * Constructor
      *
      * @param player the player who found their wand
+     * @param potion the potion type that was learned
      */
-    public OllivandersBookLearningPotionEvent(@NotNull Player player, @NotNull O2PotionType spell)
-    {
+    public OllivandersBookLearningPotionEvent(@NotNull Player player, @NotNull O2PotionType potion) {
         super(player);
 
-        potionType = spell;
+        potionType = potion;
     }
 
     @NotNull
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @NotNull
-    public O2PotionType getPotionType()
-    {
+    public O2PotionType getPotionType() {
         return potionType;
     }
 
     @Override
-    public boolean isCancelled()
-    {
+    public boolean isCancelled() {
         return canceled;
     }
 
     @Override
-    public void setCancelled (boolean cancel)
-    {
+    public void setCancelled(boolean cancel) {
         canceled = cancel;
     }
 }

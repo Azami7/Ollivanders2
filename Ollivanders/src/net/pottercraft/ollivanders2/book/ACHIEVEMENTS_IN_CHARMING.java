@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Achievements in Charming - Charms book for 1st year.
  *
+ * @link https://harrypotter.fandom.com/wiki/Achievements_in_Charming
  * @author Azami7
  * @since 2.2.4
  */

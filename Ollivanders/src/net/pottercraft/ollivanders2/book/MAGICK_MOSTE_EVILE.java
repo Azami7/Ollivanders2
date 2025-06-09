@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Magick Moste Evile - O2Book of Dark Magic written in the Middle Ages
  *
+ * @link https://harrypotter.fandom.com/wiki/Magick_Moste_Evile
  * @author Azami7
  * @since 2.2.4
  */

@@ -5,8 +5,9 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Traveling with Trolls - 2nd year Defense Against the Dark Arts book
+ * Travels with Trolls - 2nd year Defense Against the Dark Arts book
  *
+ * @link https://harrypotter.fandom.com/wiki/Travels_with_Trolls
  * @author Azami7
  * @since 2.2.4
  */
