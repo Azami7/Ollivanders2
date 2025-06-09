@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class BombardaSuper extends O2Spell
 {
+    // todo limit blocks this can effect to align with https://harrypotter.fandom.com/wiki/Bombardment_Spell
     double minStrength = 1;
     double maxStrength = 4.0; // 4.0 is the strength of TNT
 

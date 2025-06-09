@@ -11,15 +11,13 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @since 2.2.9
  */
-public class TETRABIBLIOS extends O2Book
-{
-   public TETRABIBLIOS(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public class TETRABIBLIOS extends O2Book {
+    public TETRABIBLIOS(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      bookType = O2BookType.TETRABIBLIOS;
+        bookType = O2BookType.TETRABIBLIOS;
 
-      spells.add(O2SpellType.ASTROLOGIA);
-      spells.add(O2SpellType.PROPHETEIA);
-   }
+        spells.add(O2SpellType.ASTROLOGIA);
+        spells.add(O2SpellType.PROPHETEIA);
+    }
 }

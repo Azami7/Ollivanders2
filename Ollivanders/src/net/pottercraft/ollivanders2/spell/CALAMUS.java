@@ -9,7 +9,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Turns sticks in to arrows.
+ * match to needle - https://harrypotter.fandom.com/wiki/Match_to_needle_spell
  */
 public final class CALAMUS extends ItemToItemTransfiguration {
     /**

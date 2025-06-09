@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class COMMON_ANTIDOTE_POTION extends O2Potion
 {
+   // todo lower strength so that we can also have the stronger antidote to uncommon poisons for longer duration poison
    /**
     * Constructor
     *

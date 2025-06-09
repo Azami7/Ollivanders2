@@ -11,19 +11,32 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @since 2.2.9
  */
-public class UNFOGGING_THE_FUTURE extends O2Book
-{
-   public UNFOGGING_THE_FUTURE(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public class UNFOGGING_THE_FUTURE extends O2Book {
+    public UNFOGGING_THE_FUTURE(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      bookType = O2BookType.UNFOGGING_THE_FUTURE;
+        bookType = O2BookType.UNFOGGING_THE_FUTURE;
 
-      spells.add(O2SpellType.ASTROLOGIA);
-      // Palmistry
-      spells.add(O2SpellType.BAO_ZHONG_CHA);
-      spells.add(O2SpellType.INTUEOR);
-      // Bird Entrails
-      spells.add(O2SpellType.CHARTIA);
-   }
+        // year 3
+        spells.add(O2SpellType.BAO_ZHONG_CHA);
+        spells.add(O2SpellType.INTUEOR);
+        // todo fire omens - https://harrypotter.fandom.com/wiki/Fire-omens
+
+        // year 4
+        spells.add(O2SpellType.ASTROLOGIA);
+        // todo xylomancy - https://harrypotter.fandom.com/wiki/Xylomancy
+        // todo bibliomancy - https://harrypotter.fandom.com/wiki/Bibliomancy
+
+        // year 5
+        spells.add(O2SpellType.CARTOMANCIE);
+        // todo rune stones
+
+        // year 6
+        spells.add(O2SpellType.CHARTIA);
+
+        // year 7
+        spells.add(O2SpellType.OVOGNOSIS);
+        // todo Ornithomancy - https://harrypotter.fandom.com/wiki/Ornithomancy
+        // todo Capnomancy - https://harrypotter.fandom.com/wiki/Capnomancy
+    }
 }

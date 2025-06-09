@@ -7,19 +7,18 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Numerology and Grammatica - Arithmancy text
  *
- * @since 2.2.4
  * @author Azami7
+ * @since 2.2.4
  */
-public class NUMEROLOGY_AND_GRAMMATICA extends O2Book
-{
-   public NUMEROLOGY_AND_GRAMMATICA(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public class NUMEROLOGY_AND_GRAMMATICA extends O2Book {
+    public NUMEROLOGY_AND_GRAMMATICA(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      bookType = O2BookType.NUMEROLOGY_AND_GRAMMATICA;
+        bookType = O2BookType.NUMEROLOGY_AND_GRAMMATICA;
 
-      openingPage = "The study of Arithmancy is not for the weak of mind. With work and dedication, one can learn the secrets of the Universe by understanding the language of numbers.";
+        openingPage = "The study of Arithmancy is not for the weak of mind. With work and dedication, one can learn the secrets of the Universe by understanding the language of numbers.";
 
-      spells.add(O2SpellType.INFORMOUS);
-   }
+        spells.add(O2SpellType.INFORMOUS);
+        spells.add(O2SpellType.POINT_ME);
+    }
 }

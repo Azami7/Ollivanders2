@@ -6,33 +6,27 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Standard Book of Spells Grade 4
+ * https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_4
  *
- * Missing spells:
- * Orchideous - https://github.com/Azami7/Ollivanders2/issues/56
- * Four-Points Spell - https://github.com/Azami7/Ollivanders2/issues/97
- *
- * @since 2.2.4
  * @author Azami7
+ * @since 2.2.4
  */
-public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends O2Book
-{
-   public STANDARD_BOOK_OF_SPELLS_GRADE_4(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends O2Book {
+    public STANDARD_BOOK_OF_SPELLS_GRADE_4(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_4;
+        bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_4;
 
-      spells.add(O2SpellType.AVIFORS);
-      spells.add(O2SpellType.ACCIO);
-      spells.add(O2SpellType.EBUBLIO);
-      spells.add(O2SpellType.COLOVARIA);
-      spells.add(O2SpellType.ARRESTO_MOMENTUM);
-      spells.add(O2SpellType.FINITE_INCANTATEM);
-      spells.add(O2SpellType.TERGEO);
-      spells.add(O2SpellType.REDUCTO);
-      spells.add(O2SpellType.GLACIUS_DUO);
-      //10
-      //11
-   }
+        spells.add(O2SpellType.ACCIO);
+        spells.add(O2SpellType.BOMBARDA);
+        spells.add(O2SpellType.MELOFORS);
+        spells.add(O2SpellType.DIAMAS_REPARO);
+        spells.add(O2SpellType.DIFFINDO);
+        spells.add(O2SpellType.LUMOS_MAXIMA);
+        spells.add(O2SpellType.TERGEO);
+        spells.add(O2SpellType.COLOVARIA);
+        // todo Orchideous - https://github.com/Azami7/Ollivanders2/issues/56
+        spells.add(O2SpellType.AVIFORS);
+    }
 }
 

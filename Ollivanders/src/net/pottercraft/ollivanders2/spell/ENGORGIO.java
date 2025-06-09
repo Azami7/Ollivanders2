@@ -14,6 +14,7 @@ import java.util.ArrayList;
  */
 public final class ENGORGIO extends ChangeEntitySizeSuper
 {
+    // todo rework with swelling solution potion
     private static final int maxRadiusConfig = 20;
     private static final int maxTargetsConfig = 10;
 
