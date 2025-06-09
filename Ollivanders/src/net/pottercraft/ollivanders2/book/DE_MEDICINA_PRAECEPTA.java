@@ -19,7 +19,7 @@ public class DE_MEDICINA_PRAECEPTA extends O2Book {
         openingPage = "Phoebus, protect this health-giving song, which I composed and let this manifest favour be an attendant to the art you discovered.";
 
         spells.add(O2SpellType.REPARIFORS);
-        //Abracadabra
-        //Mithridates Antidotum - a powerful antidote to poison
+        //todo Abracadabra
+        //todo Mithridates Antidotum - a powerful antidote to poison
     }
 }
