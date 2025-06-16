@@ -38,17 +38,17 @@ public class Ollivanders2Common {
     private static final String locationWorldLabel = "World";
 
     /**
-     * Default x-coord label used for serializing and unserializing locations
+     * Default x-coordinate label used for serializing and unserializing locations
      */
     private static final String locationXLabel = "X-Value";
 
     /**
-     * Default y-coord label used for serializing and unserializing locations
+     * Default y-coordinate label used for serializing and unserializing locations
      */
     private static final String locationYLabel = "Y-Value";
 
     /**
-     * Default z-coord label used for serializing and unserializing locations
+     * Default z-coordinate label used for serializing and unserializing locations
      */
     private static final String locationZLabel = "Z-Value";
 
@@ -268,6 +268,7 @@ public class Ollivanders2Common {
         add(Material.LAVA);
         add(Material.FIRE);
         add(Material.CAMPFIRE);
+        add(Material.MAGMA_BLOCK);
     }};
 
     /**
@@ -477,6 +478,8 @@ public class Ollivanders2Common {
     /**
      * Returns a Location from serialized data.
      *
+     * @param locData     the serialized location data
+     * @param labelPrefix the label for the location field, ex. "Spell_Loc_Y-Value": "75.49627835773515" the prefix is "Spell_Loc"
      * @return the location if the data was successfully read, null otherwise
      */
     @Nullable
@@ -546,7 +549,7 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Is this material a natural log (ie. living tree)
+     * Is this material a natural log (i.e. living tree)
      *
      * @param block the block to check
      * @return true if it is a natural log, false otherwise
@@ -583,10 +586,10 @@ public class Ollivanders2Common {
 
         for (double inc = (Math.random() * Math.PI) / intensity; inc < Math.PI; inc += Math.PI / intensity) {
             for (double azi = (Math.random() * Math.PI) / intensity; azi < 2 * Math.PI; azi += Math.PI / intensity) {
-                double[] spher = new double[2];
-                spher[0] = inc;
-                spher[1] = azi;
-                Location effectLocation = location.clone().add(sphereToVector(spher, radius));
+                double[] sphere = new double[2];
+                sphere[0] = inc;
+                sphere[1] = azi;
+                Location effectLocation = location.clone().add(sphereToVector(sphere, radius));
 
                 if (effectLocation.getWorld() != null)
                     effectLocation.getWorld().playEffect(effectLocation, effectType, 4);
@@ -597,9 +600,9 @@ public class Ollivanders2Common {
     /**
      * Makes a particle effect at all points along the radius of spell and at spell loc.
      *
-     * @param location   the location for the center of the flair
-     * @param radius     the radius of the flair
-     * @param intensity  intensity of the flair. If greater than 10, is reduced to 10.
+     * @param location     the location for the center of the flair
+     * @param radius       the radius of the flair
+     * @param intensity    intensity of the flair. If greater than 10, is reduced to 10.
      * @param particleType the particle to use
      */
     public static void flair(@NotNull Location location, int radius, int intensity, Particle particleType) {
@@ -608,10 +611,10 @@ public class Ollivanders2Common {
 
         for (double inc = (Math.random() * Math.PI) / intensity; inc < Math.PI; inc += Math.PI / intensity) {
             for (double azi = (Math.random() * Math.PI) / intensity; azi < 2 * Math.PI; azi += Math.PI / intensity) {
-                double[] spher = new double[2];
-                spher[0] = inc;
-                spher[1] = azi;
-                Location effectLocation = location.clone().add(sphereToVector(spher, radius));
+                double[] sphere = new double[2];
+                sphere[0] = inc;
+                sphere[1] = azi;
+                Location effectLocation = location.clone().add(sphereToVector(sphere, radius));
 
                 if (effectLocation.getWorld() != null)
                     effectLocation.getWorld().spawnParticle(particleType, effectLocation, 4, 0, 0, 0, 0);
@@ -620,10 +623,10 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Translates vector to spherical coords
+     * Translates vector to spherical coordinates
      *
      * @param vector Vector to be translated
-     * @return Spherical coords in double array with indexes 0=inclination 1=azimuth
+     * @return Spherical coordinates in double array with indexes 0=inclination 1=azimuth
      */
     public static double[] vectorToSphere(@NotNull Vector vector) {
         double inc = Math.acos(vector.getZ());
@@ -636,7 +639,7 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Translates spherical coords to vector
+     * Translates spherical coordinates to vector
      *
      * @param sphere array with indexes 0=inclination 1=azimuth
      * @return Vector
@@ -728,7 +731,7 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Get the recpients for this chat based on the dropoff distance
+     * Get the recipients for this chat based on the dropoff distance
      *
      * @param recipients the original list of recipients
      * @param dropoff    the dropoff distance
