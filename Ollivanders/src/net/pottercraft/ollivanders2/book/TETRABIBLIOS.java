@@ -8,6 +8,7 @@ import org.jetbrains.annotations.NotNull;
  * Hellenistic astrology book that became the basis for all western astrology, added as a "rare" book for
  * more powerful spells.
  *
+ * @link https://en.wikipedia.org/wiki/Tetrabiblos
  * @author Azami7
  * @since 2.2.9
  */

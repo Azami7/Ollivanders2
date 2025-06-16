@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A Beginner's Guide to Transfiguration - 1st & 2nd year transfiguration book
- * <p>
- * https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration
+ *
+ * @link https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration
  */
 public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book {
     public A_BEGINNERS_GUIDE_TO_TRANSFIGURATION(@NotNull Ollivanders2 plugin) {

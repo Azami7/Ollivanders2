@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Gadding with Ghouls - 2nd year Defense Against the Dark Arts book
  *
+ * @link https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls
  * @author Azami7
  * @since 2.2.4
  */

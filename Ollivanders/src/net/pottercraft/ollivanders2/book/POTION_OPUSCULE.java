@@ -6,9 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Potion Opuscule is an elementary book on potions by Jigger.
- * <p>
- * http://harrypotter.wikia.com/wiki/Potion_Opuscule
  *
+ * @link http://harrypotter.wikia.com/wiki/Potion_Opuscule
  * @author Azami7
  * @since 2.2.7
  */

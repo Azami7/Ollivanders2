@@ -8,9 +8,8 @@ import org.jetbrains.annotations.NotNull;
  * The Book of Potions is a book concerned with Potion-making, written by wizard Zygmunt Budge. Like with Miranda
  * Goshawk's Book of Spells, this potions book has the ability to conjure utensils with which the reader can brew the
  * various potions included.
- * <p>
- * http://harrypotter.wikia.com/wiki/Book_of_Potions
  *
+ * @link http://harrypotter.wikia.com/wiki/Book_of_Potions
  * @author Azami7
  * @since 2.2.7
  */

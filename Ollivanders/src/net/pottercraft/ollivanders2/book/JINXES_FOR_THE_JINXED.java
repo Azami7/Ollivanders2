@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Jinxes for the Jinxed
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed
+ *
+ * @link https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed
  */
 public class JINXES_FOR_THE_JINXED extends O2Book {
     public JINXES_FOR_THE_JINXED(@NotNull Ollivanders2 plugin) {
