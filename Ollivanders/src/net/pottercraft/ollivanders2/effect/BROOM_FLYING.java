@@ -10,8 +10,7 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public class BROOM_FLYING extends FLYING
-{
+public class BROOM_FLYING extends FLYING {
     /**
      * Constructor
      *
@@ -19,8 +18,7 @@ public class BROOM_FLYING extends FLYING
      * @param duration the duration of the effect
      * @param pid      the ID of the player this effect acts on
      */
-    public BROOM_FLYING (@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-    {
+    public BROOM_FLYING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
 
         effectType = O2EffectType.FLYING;

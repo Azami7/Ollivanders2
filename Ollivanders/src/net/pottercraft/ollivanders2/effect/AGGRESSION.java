@@ -16,15 +16,14 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * This effect causes the player to impulsively harm those nearby and causes them to provoke attacks by nearby mobs.
- * <p>
- * This effect does not age but must be removed explicitly.
+ *
+ * <p>This effect does not age but must be removed explicitly.</p>
  */
-public class AGGRESSION extends O2Effect
-{
+public class AGGRESSION extends O2Effect {
     /**
      * The level of aggression this player has.
-     * <p>
-     * Value from 1-10 for how aggressive this player will be with 1 being the lowest level
+     *
+     * <p>Value from 1-10 for how aggressive this player will be with 1 being the lowest level</p>
      */
     int aggressionLevel = 5;
 
@@ -40,8 +39,7 @@ public class AGGRESSION extends O2Effect
      * @param duration the duration of the effect
      * @param pid      the ID of the player this effect acts on
      */
-    public AGGRESSION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-    {
+    public AGGRESSION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
 
         effectType = O2EffectType.AGGRESSION;
@@ -64,17 +62,14 @@ public class AGGRESSION extends O2Effect
      * Attack random entity every 15 seconds and provoke nearby Creatures to attack.
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         age(1);
 
         // only take action once per 10 seconds, which is every 120 ticks
-        if ((duration % 120) == 0)
-        {
+        if ((duration % 120) == 0) {
             int rand = Math.abs(Ollivanders2Common.random.nextInt()) % 10;
 
-            if (rand < aggressionLevel)
-            {
+            if (rand < aggressionLevel) {
                 // damage nearby entity
                 Collection<LivingEntity> nearby = EntityCommon.getLivingEntitiesInRadius(target.getLocation(), 3);
                 damageRandomEntity(nearby);
@@ -91,14 +86,12 @@ public class AGGRESSION extends O2Effect
      *
      * @param nearby a collection of nearby entities
      */
-    private void damageRandomEntity(@NotNull Collection<LivingEntity> nearby)
-    {
+    private void damageRandomEntity(@NotNull Collection<LivingEntity> nearby) {
         Player target = p.getServer().getPlayer(targetID);
-        if(target == null)
+        if (target == null)
             return;
 
-        if (!nearby.isEmpty())
-        {
+        if (!nearby.isEmpty()) {
             int rand = Math.abs(Ollivanders2Common.random.nextInt());
             LivingEntity[] nArray = nearby.toArray(new LivingEntity[nearby.size()]);
 
@@ -109,8 +102,7 @@ public class AGGRESSION extends O2Effect
                 return;
 
             // don't do damage if worldguard is protecting where the entity is
-            if (Ollivanders2.worldGuardEnabled)
-            {
+            if (Ollivanders2.worldGuardEnabled) {
                 if (toDamage instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(target, toDamage.getEyeLocation(), Flags.PVP))
                     return;
                 else if (!(toDamage instanceof Monster) && !Ollivanders2.worldGuardO2.checkWGFlag(target, toDamage.getEyeLocation(), Flags.DAMAGE_ANIMALS))
@@ -130,14 +122,11 @@ public class AGGRESSION extends O2Effect
      *
      * @param nearby collection of nearby living entities
      */
-    private void provoke(@NotNull Collection<LivingEntity> nearby)
-    {
+    private void provoke(@NotNull Collection<LivingEntity> nearby) {
         Player target = p.getServer().getPlayer(targetID);
 
-        if (!nearby.isEmpty())
-        {
-            for (LivingEntity entity : nearby)
-            {
+        if (!nearby.isEmpty()) {
+            for (LivingEntity entity : nearby) {
                 if (entity instanceof Creature)
                     ((Creature) entity).setTarget(target);
             }
@@ -149,8 +138,7 @@ public class AGGRESSION extends O2Effect
      *
      * @param level 1-10 where 1 is the lowest
      */
-    void setAggressionLevel(int level)
-    {
+    void setAggressionLevel(int level) {
         aggressionLevel = level;
 
         if (aggressionLevel < 1)
@@ -168,15 +156,13 @@ public class AGGRESSION extends O2Effect
      * @param perm true if this is permanent, false otherwise
      */
     @Override
-    public void setPermanent(boolean perm)
-    {
+    public void setPermanent(boolean perm) {
     }
 
     /**
      * Do any cleanup related to removing this effect from the player
      */
     @Override
-    public void doRemove()
-    {
+    public void doRemove() {
     }
 }

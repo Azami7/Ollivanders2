@@ -25,8 +25,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * An effect is either a temporary or semi-permanent alteration of an O2Player.
- * <p>
- * O2EffectType cannot permanently change the O2Player but some effects may remain until a specific removal action/effect is taken.
+ *
+ * <p>O2EffectType cannot permanently change the O2Player but some effects may remain until a specific removal action/effect is taken.</p>
  */
 public abstract class O2Effect {
     /**
@@ -188,7 +188,7 @@ public abstract class O2Effect {
      */
     @NotNull
     public String getDivinationText() {
-        if (divinationText.size() < 1) {
+        if (divinationText.isEmpty()) {
             return "will be affected by an unseen affliction";
         }
         else {
@@ -214,7 +214,7 @@ public abstract class O2Effect {
     }
 
     /**
-     * Do any on player player chat effects
+     * Do any on player chat effects
      *
      * @param event the event
      */

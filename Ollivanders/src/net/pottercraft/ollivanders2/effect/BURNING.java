@@ -12,8 +12,7 @@ import java.util.UUID;
 /**
  * Add burning damage effect to a player.
  */
-public class BURNING extends O2Effect
-{
+public class BURNING extends O2Effect {
     /**
      * The minimum damage the effect will do
      */
@@ -46,8 +45,7 @@ public class BURNING extends O2Effect
      * @param duration the duration of the effect
      * @param pid      the player this effect acts on
      */
-    public BURNING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-    {
+    public BURNING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
 
         effectType = O2EffectType.BURNING;
@@ -64,20 +62,17 @@ public class BURNING extends O2Effect
      * Age the effect if not permanent and damage the player if this is the right tick
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         age(1);
 
         Player target = p.getServer().getPlayer(targetID);
 
-        if (target == null)
-        {
+        if (target == null) {
             kill();
             return;
         }
 
-        if (damageCooldown <= 0)
-        {
+        if (damageCooldown <= 0) {
             doDamage();
             damageCooldown = damageFrequencyInSeconds * Ollivanders2Common.ticksPerSecond;
         }
@@ -88,11 +83,9 @@ public class BURNING extends O2Effect
     /**
      * Damage the player but do not kill them
      */
-    private void doDamage()
-    {
+    private void doDamage() {
         Player target = p.getServer().getPlayer(targetID);
-        if (target != null)
-        {
+        if (target != null) {
             if ((target.getHealth() - damage) > 1)
                 target.damage(damage);
 
@@ -108,8 +101,7 @@ public class BURNING extends O2Effect
      *
      * @param d the amount to increase the damage by
      */
-    public void addDamage(double d)
-    {
+    public void addDamage(double d) {
         damage = damage + d;
 
         if (damage < minDamage)
@@ -126,8 +118,7 @@ public class BURNING extends O2Effect
      *
      * @param d the amount to decrease the damage by
      */
-    public void removeDamage(double d)
-    {
+    public void removeDamage(double d) {
         addDamage(d * -1.0);
     }
 
@@ -136,8 +127,7 @@ public class BURNING extends O2Effect
      *
      * @return the damage done by this effect
      */
-    public double getDamage()
-    {
+    public double getDamage() {
         return damage;
     }
 
@@ -148,15 +138,13 @@ public class BURNING extends O2Effect
      * @param perm true if this is permanent, false otherwise
      */
     @Override
-    public void setPermanent(boolean perm)
-    {
+    public void setPermanent(boolean perm) {
     }
 
     /**
      * Do any cleanup related to removing this effect from the player
      */
     @Override
-    public void doRemove()
-    {
+    public void doRemove() {
     }
 }
