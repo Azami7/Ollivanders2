@@ -10,8 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The event that is fired every time a spell is learned/leveled up from book learning
  */
-public class OllivandersBookLearningSpellEvent extends PlayerEvent implements Cancellable
-{
+public class OllivandersBookLearningSpellEvent extends PlayerEvent implements Cancellable {
     /**
      * the handlers for this event
      */
@@ -20,7 +19,7 @@ public class OllivandersBookLearningSpellEvent extends PlayerEvent implements Ca
     /**
      * the spell learned
      */
-    private O2SpellType spellType;
+    private final O2SpellType spellType;
 
     /**
      * whether the event is canceled or not
@@ -31,10 +30,9 @@ public class OllivandersBookLearningSpellEvent extends PlayerEvent implements Ca
      * Constructor
      *
      * @param player the player who found their wand
-     * @param spell the spell type that was learned
+     * @param spell  the spell type that was learned
      */
-    public OllivandersBookLearningSpellEvent(@NotNull Player player, @NotNull O2SpellType spell)
-    {
+    public OllivandersBookLearningSpellEvent(@NotNull Player player, @NotNull O2SpellType spell) {
         super(player);
 
         spellType = spell;
@@ -42,31 +40,26 @@ public class OllivandersBookLearningSpellEvent extends PlayerEvent implements Ca
 
     @NotNull
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
     @NotNull
-    public O2SpellType getSpellType()
-    {
+    public O2SpellType getSpellType() {
         return spellType;
     }
 
     @Override
-    public boolean isCancelled()
-    {
+    public boolean isCancelled() {
         return canceled;
     }
 
     @Override
-    public void setCancelled (boolean cancel)
-    {
+    public void setCancelled(boolean cancel) {
         canceled = cancel;
     }
 }

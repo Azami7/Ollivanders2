@@ -42,8 +42,19 @@ public enum O2Color {
     YELLOW(Color.YELLOW, ChatColor.YELLOW, "§e", DyeColor.YELLOW),
     ;
 
+    /**
+     * Primary dye colors
+     */
     final static O2Color[] primaryDyeableColors = new O2Color[]{RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE};
+
+    /**
+     * All dye colors
+     */
     final static O2Color[] dyeableColors = new O2Color[]{BLACK, BLUE, BROWN, CYAN, GRAY, GREEN, LIGHT_BLUE, LIGHT_GRAY, LIME, MAGENTA, ORANGE, PINK, PURPLE, RED, WHITE, YELLOW};
+
+    /**
+     * Bukkit color names
+     */
     final static O2Color[] bukkitColors = new O2Color[]{AQUA, BLACK, BLUE, FUCHSIA, GRAY, GREEN, LIME, MAROON, NAVY, OLIVE, ORANGE, PURPLE, RED, SILVER, TEAL, WHITE};
 
     /**
@@ -61,9 +72,24 @@ public enum O2Color {
         dyeColor = dye;
     }
 
+    /**
+     * The bukkit color name for this color type
+     */
     final Color bukkitColor;
+
+    /**
+     * The chat color for this color type
+     */
     final ChatColor chatColor;
+
+    /**
+     * The color code for this color type
+     */
     final String chatColorCode;
+
+    /**
+     * The dye color for this color type
+     */
     final DyeColor dyeColor;
 
     /**
@@ -96,90 +122,6 @@ public enum O2Color {
     @NotNull
     public DyeColor getDyeColor() {
         return dyeColor;
-    }
-
-    /**
-     * @return the wool material for this type
-     */
-    @NotNull
-    public Material getWoolMaterial() {
-        Material material = getColoredMaterial("WOOL");
-
-        if (material == null) {
-            material = Material.WHITE_WOOL;
-        }
-
-        return material;
-    }
-
-    /**
-     * @return the carpet material for this type
-     */
-    @NotNull
-    public Material getCarpetMaterial() {
-        Material material = getColoredMaterial("CARPET");
-
-        if (material == null) {
-            material = Material.WHITE_CARPET;
-        }
-
-        return material;
-    }
-
-    /**
-     * @return the concrete material for this type
-     */
-    @NotNull
-    public Material getConcreteMaterial() {
-        Material material = getColoredMaterial("CONCRETE");
-
-        if (material == null) {
-            material = Material.WHITE_CONCRETE;
-        }
-
-        return material;
-    }
-
-    /**
-     * @return the concrete powder material for this type
-     */
-    @NotNull
-    public Material getConcretePowderMaterial() {
-        Material material = getColoredMaterial("CONCRETE_POWDER");
-
-        if (material == null) {
-            material = Material.WHITE_CONCRETE_POWDER;
-        }
-
-        return material;
-    }
-
-    /**
-     * @return the shulker box for this type
-     */
-    @NotNull
-    public Material getShulkerBoxMaterial() {
-        Material material = getColoredMaterial("SHULKER_BOX");
-
-        if (material == null) {
-            material = Material.WHITE_SHULKER_BOX;
-        }
-
-        return material;
-    }
-
-    /**
-     * @return the stained glass for this type
-     */
-    @NotNull
-    public Material getStainedGlassMaterial() {
-        Material material = getColoredMaterial("STAINED_GLASS");
-
-        if (material == null) {
-            material = Material.WHITE_STAINED_GLASS;
-        }
-
-        return material;
     }
 
     /**
@@ -280,7 +222,9 @@ public enum O2Color {
 
         if (materialName.endsWith("_WOOL") || materialName.endsWith("_CARPET") || materialName.endsWith("_CONCRETE")
                 || materialName.endsWith("_CONCRETE_POWDER") || materialName.endsWith("_SHULKER_BOX")
-                || materialName.endsWith("_STAINED_GLASS")) {
+                || materialName.endsWith("_STAINED_GLASS") || materialName.endsWith("_STAINED_GLASS_PANE")
+                || materialName.endsWith("_BED") || materialName.endsWith("_CANDLE")
+                || materialName.endsWith("_BANNER")){
             return true;
         }
 
@@ -296,27 +240,24 @@ public enum O2Color {
      */
     public static Material changeColor(@NotNull Material material, @NotNull O2Color color) {
         String materialName = material.toString();
-        Material newColor = material;
 
-        if (materialName.endsWith("_WOOL")) {
-            newColor = color.getWoolMaterial();
-        }
-        else if (materialName.endsWith("_CARPET")) {
-            newColor = color.getCarpetMaterial();
-        }
-        else if (materialName.endsWith("_CONCRETE")) {
-            newColor = color.getConcreteMaterial();
-        }
-        else if (materialName.endsWith("_CONCRETE_POWDER")) {
-            newColor = color.getConcretePowderMaterial();
-        }
-        else if (materialName.endsWith("_SHULKER_BOX")) {
-            newColor = color.getShulkerBoxMaterial();
-        }
-        else if (materialName.endsWith("_STAINED_GLASS")) {
-            newColor = color.getStainedGlassMaterial();
-        }
+        // is this material colorable?
+        if (!isColorable(material))
+            return material;
 
-        return newColor;
+        // get the base material where name pattern is COLOR_MATERIAL, ex. WHITE_WOOL
+        String [] materialNameParts = materialName.split("_", 2);
+        if (materialNameParts.length != 2)
+            return material;
+
+        // get the new material color
+        String materialBase = materialNameParts[1];
+        Material newMaterialColor = color.getColoredMaterial(materialBase);
+
+        // return back the original if we failed to get this color for the material
+        if (newMaterialColor == null)
+            return material;
+
+        return newMaterialColor;
     }
 }

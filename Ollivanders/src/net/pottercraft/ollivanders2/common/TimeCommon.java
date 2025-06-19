@@ -12,8 +12,7 @@ import java.util.Date;
  * <p>
  * Reference: https://www.digminecraft.com/game_commands/time_set_day.php
  */
-public enum TimeCommon
-{
+public enum TimeCommon {
     MIDNIGHT(18000),
     DAWN(23000),
     MIDDAY(6000),
@@ -29,8 +28,7 @@ public enum TimeCommon
      *
      * @param tick the game tick value for this enumerated time of day
      */
-    TimeCommon(int tick)
-    {
+    TimeCommon(int tick) {
         gameTick = tick;
     }
 
@@ -39,8 +37,7 @@ public enum TimeCommon
      *
      * @return the day-relative tick for this time of day
      */
-    public int getTick()
-    {
+    public int getTick() {
         return gameTick;
     }
 
@@ -49,8 +46,7 @@ public enum TimeCommon
      *
      * @return the time for the default world
      */
-    static public long getDefaultWorldTime()
-    {
+    static public long getDefaultWorldTime() {
         return Bukkit.getServer().getWorlds().get(0).getFullTime();
     }
 
@@ -60,8 +56,7 @@ public enum TimeCommon
      * @return timestamp in the format 2018-09-30-12-15-30
      */
     @NotNull
-    static public String getCurrentTimestamp()
-    {
+    static public String getCurrentTimestamp() {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
         Date date = new Date();
 

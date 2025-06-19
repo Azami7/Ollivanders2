@@ -28,13 +28,11 @@ import java.util.List;
 /**
  * Common functions that deal with MC entities
  */
-public class EntityCommon
-{
+public class EntityCommon {
     /**
      * Undead entities (for use with magic that targets undead)
      */
-    public static final List<EntityType> undeadEntities = new ArrayList<>()
-    {{
+    public static final List<EntityType> undeadEntities = new ArrayList<>() {{
         add(EntityType.BOGGED);
         add(EntityType.DROWNED);
         add(EntityType.GIANT);
@@ -55,8 +53,7 @@ public class EntityCommon
     /**
      * Reasons an entity may get damaged which are caused by an attack (rather than falling, etc.)
      */
-    public static final List<EntityDamageEvent.DamageCause> attackDamageCauses = new ArrayList<>()
-    {{
+    public static final List<EntityDamageEvent.DamageCause> attackDamageCauses = new ArrayList<>() {{
         add(EntityDamageEvent.DamageCause.DRAGON_BREATH);
         add(EntityDamageEvent.DamageCause.ENTITY_ATTACK);
         add(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK);
@@ -68,8 +65,7 @@ public class EntityCommon
     /**
      * All minecart entity types.
      */
-    public static final List<org.bukkit.entity.EntityType> minecarts = new ArrayList<>()
-    {{
+    public static final List<org.bukkit.entity.EntityType> minecarts = new ArrayList<>() {{
         add(EntityType.FURNACE_MINECART);
         add(EntityType.MINECART);
         add(EntityType.CHEST_MINECART);
@@ -82,8 +78,7 @@ public class EntityCommon
     /**
      * All boat entity types.
      */
-    public static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>()
-    {{
+    public static final List<org.bukkit.entity.EntityType> boats = new ArrayList<>() {{
         add(EntityType.ACACIA_BOAT);
         add(EntityType.ACACIA_CHEST_BOAT);
         add(EntityType.BIRCH_BOAT);
@@ -111,8 +106,7 @@ public class EntityCommon
      * <p>
      * {@link net.pottercraft.ollivanders2.spell.FINITE_INCANTATEM}
      */
-    static HashMap<PotionEffectType, MagicLevel> potionEffectLevels = new HashMap<>()
-    {{
+    static HashMap<PotionEffectType, MagicLevel> potionEffectLevels = new HashMap<>() {{
         put(PotionEffectType.ABSORPTION, MagicLevel.OWL);
         put(PotionEffectType.BAD_OMEN, MagicLevel.NEWT);
         put(PotionEffectType.BLINDNESS, MagicLevel.OWL);
@@ -169,8 +163,7 @@ public class EntityCommon
      *
      * @param plugin a reference to the plugin using this common
      */
-    public EntityCommon(@NotNull Ollivanders2 plugin)
-    {
+    public EntityCommon(@NotNull Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(p);
     }
@@ -182,16 +175,13 @@ public class EntityCommon
      * @return the EntityType or null if an exception occurred
      */
     @Nullable
-    public EntityType entityTypeFromString(@NotNull String entityTypeString)
-    {
+    public EntityType entityTypeFromString(@NotNull String entityTypeString) {
         EntityType entityType = null;
 
-        try
-        {
+        try {
             entityType = EntityType.valueOf(entityTypeString);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             common.printDebugMessage("Failed to parse EntityType " + entityTypeString, e, null, true);
         }
         return entityType;
@@ -207,8 +197,7 @@ public class EntityCommon
      * @return a Collection of all entities within the bounding box.
      */
     @NotNull
-    static public Collection<Entity> getEntitiesInBounds(@NotNull Location location, double x, double y, double z)
-    {
+    static public Collection<Entity> getEntitiesInBounds(@NotNull Location location, double x, double y, double z) {
         World world = location.getWorld();
         if (world == null)
             return new ArrayList<>();
@@ -224,8 +213,7 @@ public class EntityCommon
      * @return List of entities within the radius
      */
     @NotNull
-    static public Collection<Entity> getEntitiesInRadius(@NotNull Location location, double radius)
-    {
+    static public Collection<Entity> getEntitiesInRadius(@NotNull Location location, double radius) {
         return getEntitiesInBounds(location, radius, radius, radius);
     }
 
@@ -237,13 +225,11 @@ public class EntityCommon
      * @return List of living entities within the radius
      */
     @NotNull
-    static public List<LivingEntity> getLivingEntitiesInRadius(@NotNull Location location, double radius)
-    {
+    static public List<LivingEntity> getLivingEntitiesInRadius(@NotNull Location location, double radius) {
         Collection<Entity> entities = getEntitiesInRadius(location, radius);
         List<LivingEntity> close = new ArrayList<>();
 
-        for (Entity e : entities)
-        {
+        for (Entity e : entities) {
             if (e instanceof LivingEntity)
                 close.add(((LivingEntity) e));
         }
@@ -260,13 +246,11 @@ public class EntityCommon
      * @return List of entities of the specified type within the radius
      */
     @NotNull
-    static public List<Entity> getNearbyEntitiesByType(@NotNull Location location, double radius, @NotNull EntityType entityType)
-    {
+    static public List<Entity> getNearbyEntitiesByType(@NotNull Location location, double radius, @NotNull EntityType entityType) {
         Collection<Entity> entities = getEntitiesInRadius(location, radius);
         List<Entity> close = new ArrayList<>();
 
-        for (Entity e : entities)
-        {
+        for (Entity e : entities) {
             if (e.getType() == entityType)
                 close.add(e);
         }
@@ -279,13 +263,11 @@ public class EntityCommon
      * @return List of item entities within bounding box of projectile
      */
     @NotNull
-    static public List<Item> getItemsInBounds(@NotNull Location location, double x, double y, double z)
-    {
+    static public List<Item> getItemsInBounds(@NotNull Location location, double x, double y, double z) {
         Collection<Entity> entities = getEntitiesInBounds(location, x, y, z);
 
         List<Item> items = new ArrayList<>();
-        for (Entity e : entities)
-        {
+        for (Entity e : entities) {
             if (e instanceof Item)
                 items.add((Item) e);
         }
@@ -299,8 +281,7 @@ public class EntityCommon
      * @return List of item entities within radius of projectile
      */
     @NotNull
-    static public List<Item> getItemsInRadius(@NotNull Location location, double radius)
-    {
+    static public List<Item> getItemsInRadius(@NotNull Location location, double radius) {
         return getItemsInBounds(location, radius, radius, radius);
     }
 
@@ -311,8 +292,7 @@ public class EntityCommon
      * @return List of item entities within one block of projectile
      */
     @NotNull
-    static public List<Item> getItems(@NotNull Location location, double radius)
-    {
+    static public List<Item> getItems(@NotNull Location location, double radius) {
         return getItemsInBounds(location, radius, radius, radius);
     }
 
@@ -324,12 +304,10 @@ public class EntityCommon
      * @return an item if found, null otherwise
      */
     @Nullable
-    static public Item getNearbyItemByMaterial(@NotNull Location location, @NotNull Material material, double radius)
-    {
+    static public Item getNearbyItemByMaterial(@NotNull Location location, @NotNull Material material, double radius) {
         List<Item> items = getItems(location, radius);
 
-        for (Item item : items)
-        {
+        for (Item item : items) {
             if (item.getItemStack().getType() == material)
                 return item;
         }
@@ -345,12 +323,10 @@ public class EntityCommon
      * @return an item if found, null otherwise
      */
     @Nullable
-    static public Item getNearbyItemByMaterialList(@NotNull Location location, @NotNull ArrayList<Material> materials, double radius)
-    {
+    static public Item getNearbyItemByMaterialList(@NotNull Location location, @NotNull ArrayList<Material> materials, double radius) {
         List<Item> items = getItems(location, radius);
 
-        for (Item item : items)
-        {
+        for (Item item : items) {
             if (materials.contains(item.getItemStack().getType()))
                 return item;
         }
@@ -366,12 +342,10 @@ public class EntityCommon
      * @return the item if found, null otherwise
      */
     @Nullable
-    static public Item getNearbyItemByType(@NotNull Location location, @NotNull O2ItemType itemType, double radius)
-    {
+    static public Item getNearbyItemByType(@NotNull Location location, @NotNull O2ItemType itemType, double radius) {
         List<Item> items = getItems(location, radius);
 
-        for (Item item : items)
-        {
+        for (Item item : items) {
             if (itemType.isItemThisType(item))
                 return item;
         }
@@ -386,14 +360,12 @@ public class EntityCommon
      * @return the Cat type
      */
     @NotNull
-    static public Cat.Type getRandomCatType(int seed)
-    {
+    static public Cat.Type getRandomCatType(int seed) {
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 11;
 
         Cat.Type type;
 
-        switch (rand)
-        {
+        switch (rand) {
             case 0:
                 type = Cat.Type.ALL_BLACK;
                 break;
@@ -438,8 +410,7 @@ public class EntityCommon
      * @return the Cat type
      */
     @NotNull
-    static public Cat.Type getRandomCatType()
-    {
+    static public Cat.Type getRandomCatType() {
         return getRandomCatType((int) TimeCommon.getDefaultWorldTime());
     }
 
@@ -450,8 +421,7 @@ public class EntityCommon
      * @return the type color for the rabbit
      */
     @NotNull
-    static public Rabbit.Type getRandomRabbitType(int seed)
-    {
+    static public Rabbit.Type getRandomRabbitType(int seed) {
         Rabbit.Type type;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 61;
@@ -480,8 +450,7 @@ public class EntityCommon
      * @return the type color for the rabbit
      */
     @NotNull
-    static public org.bukkit.entity.Rabbit.Type getRandomRabbitType()
-    {
+    static public org.bukkit.entity.Rabbit.Type getRandomRabbitType() {
         return getRandomRabbitType((int) TimeCommon.getDefaultWorldTime());
     }
 
@@ -492,14 +461,12 @@ public class EntityCommon
      * @return the horse style
      */
     @NotNull
-    static public Horse.Style getRandomHorseStyle(int seed)
-    {
+    static public Horse.Style getRandomHorseStyle(int seed) {
         Horse.Style style;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 20;
 
-        switch (rand)
-        {
+        switch (rand) {
             case 0:
                 style = Horse.Style.WHITE;
                 break;
@@ -526,8 +493,7 @@ public class EntityCommon
      * @return the horse style
      */
     @NotNull
-    static public Horse.Style getRandomHorseStyle()
-    {
+    static public Horse.Style getRandomHorseStyle() {
         return getRandomHorseStyle((int) TimeCommon.getDefaultWorldTime());
     }
 
@@ -538,14 +504,12 @@ public class EntityCommon
      * @return the color
      */
     @NotNull
-    static public Horse.Color getRandomHorseColor(int seed)
-    {
+    static public Horse.Color getRandomHorseColor(int seed) {
         Horse.Color color;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 7;
 
-        switch (rand)
-        {
+        switch (rand) {
             case 0:
                 color = Horse.Color.BLACK;
                 break;
@@ -578,8 +542,7 @@ public class EntityCommon
      * @return the color
      */
     @NotNull
-    static public Horse.Color getRandomHorseColor()
-    {
+    static public Horse.Color getRandomHorseColor() {
         return getRandomHorseColor((int) TimeCommon.getDefaultWorldTime());
     }
 
@@ -590,14 +553,12 @@ public class EntityCommon
      * @return the color
      */
     @NotNull
-    static public Llama.Color getRandomLlamaColor(int seed)
-    {
+    static public Llama.Color getRandomLlamaColor(int seed) {
         Llama.Color color;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 4;
 
-        switch (rand)
-        {
+        switch (rand) {
             case 0:
                 color = Llama.Color.BROWN;
                 break;
@@ -621,8 +582,7 @@ public class EntityCommon
      * @return the color
      */
     @NotNull
-    static public Llama.Color getRandomLlamaColor()
-    {
+    static public Llama.Color getRandomLlamaColor() {
         return getRandomLlamaColor((int) TimeCommon.getDefaultWorldTime());
     }
 
@@ -633,14 +593,12 @@ public class EntityCommon
      * @return the color
      */
     @NotNull
-    static public Parrot.Variant getRandomParrotColor(int seed)
-    {
+    static public Parrot.Variant getRandomParrotColor(int seed) {
         Parrot.Variant variant;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 5;
 
-        switch (rand)
-        {
+        switch (rand) {
             case 0:
                 variant = Parrot.Variant.CYAN;
                 break;
@@ -666,8 +624,7 @@ public class EntityCommon
      * @return the color
      */
     @NotNull
-    static public Parrot.Variant getRandomParrotColor()
-    {
+    static public Parrot.Variant getRandomParrotColor() {
         return getRandomParrotColor((int) TimeCommon.getDefaultWorldTime());
     }
 
@@ -678,8 +635,7 @@ public class EntityCommon
      * @return the color
      */
     @NotNull
-    static public DyeColor getRandomNaturalSheepColor(int seed)
-    {
+    static public DyeColor getRandomNaturalSheepColor(int seed) {
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 100;
 
         if (rand < 2) // 2% chance
@@ -698,8 +654,7 @@ public class EntityCommon
      * @return the color
      */
     @NotNull
-    static public DyeColor getRandomNaturalSheepColor()
-    {
+    static public DyeColor getRandomNaturalSheepColor() {
         return getRandomNaturalSheepColor((int) TimeCommon.getDefaultWorldTime());
     }
 
@@ -710,8 +665,7 @@ public class EntityCommon
      * @return the effect type level or OWL if it is not explicitly defined
      */
     @NotNull
-    static public MagicLevel getPotionEffectMagicLevel(@NotNull PotionEffectType potionEffectType)
-    {
+    static public MagicLevel getPotionEffectMagicLevel(@NotNull PotionEffectType potionEffectType) {
         if (potionEffectLevels.containsKey(potionEffectType))
             return potionEffectLevels.get(potionEffectType);
         else
