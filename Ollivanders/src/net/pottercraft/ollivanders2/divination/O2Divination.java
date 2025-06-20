@@ -15,11 +15,10 @@ import java.util.UUID;
 
 /**
  * Super class for all divination methods. Creates a prophecy which may come to pass at a future time.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Divination
+ *
+ * <p>Reference: https://harrypotter.fandom.com/wiki/Divination</p>
  */
-public abstract class O2Divination
-{
+public abstract class O2Divination {
     /**
      * Reference to the plugin
      */
@@ -28,7 +27,7 @@ public abstract class O2Divination
     /**
      * The type of divination this is.
      */
-    O2DivinationType divintationType = O2DivinationType.ASTROLOGY;
+    O2DivinationType divinationType = O2DivinationType.ASTROLOGY;
 
     /**
      * The maximum odds this divination will happen.
@@ -63,8 +62,7 @@ public abstract class O2Divination
     /**
      * Possible effects the divination can cause.
      */
-    static final ArrayList<O2EffectType> divinationEffects = new ArrayList<>()
-    {{
+    static final ArrayList<O2EffectType> divinationEffects = new ArrayList<>() {{
         add(O2EffectType.AGGRESSION);
         add(O2EffectType.BABBLING);
         add(O2EffectType.BLINDNESS);
@@ -88,13 +86,12 @@ public abstract class O2Divination
     /**
      * Constructor
      *
-     * @param plugin     a referenc to the plugin
+     * @param plugin     a reference to the plugin
      * @param prophet    the player making the prophecy
      * @param target     the player the prophecy is about
      * @param experience the experience level of the prophet with this divination
      */
-    O2Divination(@NotNull Ollivanders2 plugin, @NotNull Player prophet, @NotNull Player target, int experience)
-    {
+    O2Divination(@NotNull Ollivanders2 plugin, @NotNull Player prophet, @NotNull Player target, int experience) {
         p = plugin;
         this.target = target;
         this.prophet = prophet;
@@ -105,19 +102,19 @@ public abstract class O2Divination
 
     /**
      * Make a prophecy by the prophet about the target.
+     *
+     * <p>Parts of a prophecy:</p>
      * <p>
-     * Parts of a prophecy:
-     * <p>
-     * 1. prophecyPrefix - optional prefix based on the specific divination method, such as "Due to the influence of Mars"
-     * 2. the time of day - midnight, sunrise, midday, sunset
-     * 3. the day - today, tomorrow, 3rd day, 4th day
-     * 4. the target's name
-     * 5. what will happen to them - see
-     * A prophecy should read like:
-     * "After the sun sets on the 3rd day, Fred will fall in to a deep sleep."
+     * 1. prophecyPrefix - optional prefix based on the specific divination method, such as "Due to the influence of Mars"<br>
+     * 2. the time of day - midnight, sunrise, midday, sunset</ol>
+     * 3. the day - today, tomorrow, 3rd day, 4th day</ol>
+     * 4. the target's name</ol>
+     * 5. what will happen to them - see</p>
+     *
+     * <p>A prophecy should read like:<br>
+     * "After the sun sets on the 3rd day, Fred will fall in to a deep sleep."</p>
      */
-    public void divine()
-    {
+    public void divine() {
         UUID prophetID = prophet.getUniqueId();
         UUID targetID = target.getUniqueId();
 
@@ -146,8 +143,7 @@ public abstract class O2Divination
         if (effect == null)
             return;
 
-        if (prophecyPrefix.size() > 0)
-        {
+        if (prophecyPrefix.size() > 0) {
             rand = (Math.abs(Ollivanders2Common.random.nextInt()) % prophecyPrefix.size());
             prophecyMessage.append(prophecyPrefix.get(rand)).append(" ");
         }
@@ -167,20 +163,17 @@ public abstract class O2Divination
         if (rand == 0)
             //tomorrow
             prophecyMessage.append("tomorrow, ");
-        else if (rand == 1)
-        {
+        else if (rand == 1) {
             //tomorrow
             prophecyMessage.append("in two days, ");
             ticks = ticks + 24000;
         }
-        else if (rand == 2)
-        {
+        else if (rand == 2) {
             //3rd day
             prophecyMessage.append("in three days, ");
             ticks = ticks + 48000;
         }
-        else
-        {
+        else {
             //4th day
             prophecyMessage.append("in four days, ");
             ticks = ticks + 72000;
@@ -216,17 +209,14 @@ public abstract class O2Divination
      * @return the effect this prophecy causes
      */
     @Nullable
-    private O2Effect getEffect(@NotNull UUID targetID, @NotNull O2EffectType effectType)
-    {
+    private O2Effect getEffect(@NotNull UUID targetID, @NotNull O2EffectType effectType) {
         Class<?> effectClass = effectType.getClassName();
         O2Effect effect;
 
-        try
-        {
+        try {
             effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, 1, targetID);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             e.printStackTrace();
             return null;
         }

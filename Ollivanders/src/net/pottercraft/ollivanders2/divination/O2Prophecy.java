@@ -15,8 +15,7 @@ import java.util.UUID;
  * Class representing a prophecy. Every prophecy involves predicting an effect on a player in the future and
  * has a specific accuracy which changes the likelihood the prophecy will come to pass.
  */
-public class O2Prophecy
-{
+public class O2Prophecy {
     /**
      * A reference to the plugin
      */
@@ -72,8 +71,7 @@ public class O2Prophecy
      * @param effectDuration the duration of the effect, 0 for permanent
      * @param accuracy       the accuracy of this prophecy as a percent from 0 to 99, greater than 99 will be rounded down to 99
      */
-    O2Prophecy(@NotNull Ollivanders2 plugin, @NotNull O2EffectType effectType, @NotNull String message, @NotNull UUID targetID, @NotNull UUID prophetID, long delayTime, int effectDuration, int accuracy)
-    {
+    O2Prophecy(@NotNull Ollivanders2 plugin, @NotNull O2EffectType effectType, @NotNull String message, @NotNull UUID targetID, @NotNull UUID prophetID, long delayTime, int effectDuration, int accuracy) {
         p = plugin;
         this.effectType = effectType;
         this.targetID = targetID;
@@ -96,8 +94,7 @@ public class O2Prophecy
      * @return the effect type
      */
     @NotNull
-    public O2EffectType getEffect()
-    {
+    public O2EffectType getEffect() {
         return effectType;
     }
 
@@ -107,8 +104,7 @@ public class O2Prophecy
      * @return the target player's unique ID
      */
     @NotNull
-    public UUID getTargetID()
-    {
+    public UUID getTargetID() {
         return targetID;
     }
 
@@ -118,8 +114,7 @@ public class O2Prophecy
      * @return the target player's unique ID
      */
     @NotNull
-    UUID getProphetID()
-    {
+    UUID getProphetID() {
         return prophetID;
     }
 
@@ -128,8 +123,7 @@ public class O2Prophecy
      *
      * @return the time in game ticks
      */
-    public long getTime()
-    {
+    public long getTime() {
         return time;
     }
 
@@ -138,18 +132,16 @@ public class O2Prophecy
      *
      * @return the duration in game ticks
      */
-    public int getDuration()
-    {
+    public int getDuration() {
         return duration;
     }
 
     /**
-     * Get the prophecy message, ie. "After the sun sets on the 3rd day, Fred will fall in to a deep sleep."
+     * Get the prophecy message, i.e. "After the sun sets on the 3rd day, Fred will fall in to a deep sleep."
      *
      * @return the prophecy message
      */
-    String getProphecyMessage()
-    {
+    String getProphecyMessage() {
         return prophecyMessage;
     }
 
@@ -158,8 +150,7 @@ public class O2Prophecy
      *
      * @return the accuracy percent 0-99
      */
-    int getAccuracy()
-    {
+    int getAccuracy() {
         return accuracy;
     }
 
@@ -168,47 +159,40 @@ public class O2Prophecy
      *
      * @return true if killed, false otherwise
      */
-    boolean isKilled()
-    {
+    boolean isKilled() {
         return kill;
     }
 
     /**
      * Age this prophecy 1 game tick
      */
-    public void age()
-    {
+    public void age() {
         time = time - 1;
     }
 
     /**
      * Kill this prophecy
      */
-    public void kill()
-    {
+    public void kill() {
         kill = true;
     }
 
     /**
      * Execute this prophecy.
      */
-    void fulfill()
-    {
-        if (Ollivanders2.debug)
-        {
+    void fulfill() {
+        if (Ollivanders2.debug) {
             p.getLogger().info("Fulfilling prophecy");
         }
 
         // this should only be called when the prophecy time has expired
-        if (kill)
-        {
+        if (kill) {
             return;
         }
 
         Player target = p.getServer().getPlayer(targetID);
 
-        if (target == null)
-        {
+        if (target == null) {
             // player is offline, stash this prophecy for when the player returns
             Ollivanders2API.getProphecies().addOfflineProphecy(this);
             return;
@@ -216,17 +200,14 @@ public class O2Prophecy
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
 
-        if (accuracy > rand)
-        {
+        if (accuracy > rand) {
             O2Effect effect;
             Class<?> effectClass = effectType.getClassName();
 
-            try
-            {
+            try {
                 effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration, targetID);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 e.printStackTrace();
                 kill();
                 return;
@@ -236,14 +217,12 @@ public class O2Prophecy
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             O2Player player = Ollivanders2API.getPlayers().getPlayer(prophetID);
-            if (player != null)
-            {
+            if (player != null) {
                 String playerName = player.getPlayerName();
                 p.getServer().broadcastMessage(Ollivanders2.chatColor + "And so came to pass the prophecy of " + playerName + ", \"" + prophecyMessage + "\"");
             }
         }
-        else
-        {
+        else {
             Player prophet = p.getServer().getPlayer(prophetID);
             if (prophet != null)
                 prophet.sendMessage(Ollivanders2.chatColor + "Your prophecy, \"" + prophecyMessage + "\" did not come to pass.");

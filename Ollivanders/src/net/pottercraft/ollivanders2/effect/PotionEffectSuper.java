@@ -15,50 +15,52 @@ import java.util.UUID;
  * @author Azami7
  * @since 2.2.9
  */
-public abstract class PotionEffectSuper extends O2Effect
-{
-   int strength = 1;
-   PotionEffectType potionEffectType = PotionEffectType.GLOWING;
+public abstract class PotionEffectSuper extends O2Effect {
+    /**
+     * how strong is this potion effect, 1 is normal strength
+     */
+    int strength = 1;
 
-   /**
-    * Constructor
-    *
-    * @param plugin   a reference to the plugin
-    * @param duration the duration of this effect
-    * @param pid      the ID of the affected player
-    */
-   public PotionEffectSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-   {
-      super(plugin, duration, pid);
-   }
+    /**
+     * the potion effect type to create
+     */
+    PotionEffectType potionEffectType = PotionEffectType.GLOWING;
 
-   /**
-    * Do the effect immediately on the target and kill.
-    */
-   @Override
-   public void checkEffect()
-   {
-      Player target = p.getServer().getPlayer(targetID);
+    /**
+     * Constructor
+     *
+     * @param plugin   a reference to the plugin
+     * @param duration the duration of this effect
+     * @param pid      the ID of the affected player
+     */
+    public PotionEffectSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
+        super(plugin, duration, pid);
+    }
 
-      if (target != null)
-      {
-         // base time is 2 minutes
-         int base_time = 2400;
-         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 5) + 1;
+    /**
+     * Do the effect immediately on the target and kill.
+     */
+    @Override
+    public void checkEffect() {
+        Player target = p.getServer().getPlayer(targetID);
 
-         target.addPotionEffect(new PotionEffect(potionEffectType, base_time * rand, strength));
-      }
+        if (target != null) {
+            // base time is 2 minutes
+            int base_time = 2400;
+            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 5) + 1;
 
-      kill();
-   }
+            target.addPotionEffect(new PotionEffect(potionEffectType, base_time * rand, strength));
+        }
 
-   /**
-    * Set the strength of this effect
-    *
-    * @param s a positive integer where 1 is normal strength
-    */
-   public void setStrength (int s)
-   {
-      strength = s;
-   }
+        kill();
+    }
+
+    /**
+     * Set the strength of this effect
+     *
+     * @param s a positive integer where 1 is normal strength
+     */
+    public void setStrength(int s) {
+        strength = s;
+    }
 }

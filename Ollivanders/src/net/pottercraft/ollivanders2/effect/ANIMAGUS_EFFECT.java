@@ -48,6 +48,9 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.2.8
  */
 public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
+    /**
+     * color variant for the animal type, if relevant
+     */
     String colorVariant;
 
     /**
@@ -92,7 +95,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
     }
 
     /**
-     * Customize the animal form for the player based on their Animagus form.
+     * Customize the animal color/type variant based on the Animagus form.
      */
     @Override
     protected void customizeWatcher() {

@@ -484,6 +484,11 @@ public class O2Effects implements Listener {
     public void onEntityTargetEvent(@NotNull EntityTargetEvent event) {
         Entity entity = event.getTarget();
 
+        if (entity == null) {
+            common.printDebugMessage("O2Effects: target entity is null", null, null, true);
+            return;
+        }
+
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(entity.getUniqueId());
         for (O2Effect effect : activeEffects.values()) {
             effect.doOnEntityTargetEvent(event);
@@ -550,7 +555,7 @@ public class O2Effects implements Listener {
         Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
         Map<O2EffectType, O2Effect> activeEffects = new HashMap<>();
 
-        if (savedEffects.size() < 1)
+        if (savedEffects.isEmpty())
             return;
 
         Player player = p.getServer().getPlayer(pid);
@@ -572,14 +577,14 @@ public class O2Effects implements Listener {
                 effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration, pid);
             }
             catch (Exception e) {
-                common.printDebugMessage("O2Effects.onJoin: failed to create class for " + effectType.toString(), e, null, true);
+                common.printDebugMessage("O2Effects.onJoin: failed to create class for " + effectType, e, null, true);
 
                 continue;
             }
 
             if (effectType.isEnabled()) {
                 activeEffects.put(effectType, effect);
-                common.printDebugMessage("   added " + effectType.toString(), null, null, false);
+                common.printDebugMessage("   added " + effectType, null, null, false);
             }
         }
 
@@ -689,7 +694,7 @@ public class O2Effects implements Listener {
         }
 
         effectsData.updatePlayerActiveEffects(pid, playerEffects);
-        common.printDebugMessage("Added effect " + effect.effectType.toString() + " to " + pid.toString(), null, null, false);
+        common.printDebugMessage("Added effect " + effect.effectType.toString() + " to " + pid, null, null, false);
     }
 
     /**
@@ -712,7 +717,7 @@ public class O2Effects implements Listener {
             common.printDebugMessage("O2Effects.removeEffect: effect to remove is null.", null, null, false);
 
         effectsData.updatePlayerActiveEffects(pid, playerEffects);
-        common.printDebugMessage("Removed effect " + effectType.toString() + " from " + pid.toString(), null, null, false);
+        common.printDebugMessage("Removed effect " + effectType + " from " + pid, null, null, false);
     }
 
     /**
@@ -836,7 +841,7 @@ public class O2Effects implements Listener {
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
         Collection<O2Effect> effects = activeEffects.values();
 
-        common.printDebugMessage("O2Effects.detectEffectWithInformous: found " + activeEffects.keySet().size() + " active effects", null, null, false);
+        common.printDebugMessage("O2Effects.detectEffectWithInformous: found " + activeEffects.size() + " active effects", null, null, false);
 
         for (O2Effect effect : effects) {
             common.printDebugMessage("O2Effects.detectEffectWithInformous: checking effect " + effect.effectType.toString(), null, null, false);
@@ -932,13 +937,13 @@ public class O2Effects implements Listener {
     private static void toggleEffect(@NotNull CommandSender sender, @NotNull Player player, @NotNull O2EffectType effectType, @NotNull Ollivanders2 p) {
         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), effectType)) {
             Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), effectType);
-            sender.sendMessage(Ollivanders2.chatColor + "Removed " + effectType.toString() + " from " + player.getName() + ".\n");
+            sender.sendMessage(Ollivanders2.chatColor + "Removed " + effectType + " from " + player.getName() + ".\n");
         }
         else {
             Class<?> effectClass = effectType.getClassName();
 
             if (Ollivanders2.debug)
-                p.getLogger().info("Trying to add effect " + effectType.toString());
+                p.getLogger().info("Trying to add effect " + effectType);
 
             O2Effect effect;
 
@@ -946,14 +951,14 @@ public class O2Effects implements Listener {
                 effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, 1200, player.getUniqueId());
             }
             catch (Exception e) {
-                sender.sendMessage(Ollivanders2.chatColor + "Failed to add effect " + effectType.toString() + " to " + player.getName() + ".\n");
+                sender.sendMessage(Ollivanders2.chatColor + "Failed to add effect " + effectType + " to " + player.getName() + ".\n");
                 e.printStackTrace();
                 return;
             }
 
             if (effect.effectType.isEnabled()) {
                 Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
-                sender.sendMessage(Ollivanders2.chatColor + "Added " + effectType.toString() + " to " + player.getName() + ".\n");
+                sender.sendMessage(Ollivanders2.chatColor + "Added " + effectType + " to " + player.getName() + ".\n");
             }
             else
                 sender.sendMessage(Ollivanders2.chatColor + effectType.toString() + " is currently disabled in your server config.\n");

@@ -15,8 +15,7 @@ import java.util.UUID;
 /**
  * Add money to a player's inventory every 10 seconds
  */
-public class WEALTH extends O2Effect
-{
+public class WEALTH extends O2Effect {
     /**
      * Multiplier that affects how likely the player will get a more valuable coin.
      */
@@ -34,8 +33,7 @@ public class WEALTH extends O2Effect
      * @param duration the duration of the effect
      * @param pid      the player this effect acts on
      */
-    public WEALTH(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-    {
+    public WEALTH(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
 
         effectType = O2EffectType.WEALTH;
@@ -53,15 +51,13 @@ public class WEALTH extends O2Effect
      * Age this effect each game tick.
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         age(1);
 
         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) * strength;
 
         // only take action once per 10 seconds, which is every 120 ticks
-        if ((duration % 120) == 0)
-        {
+        if ((duration % 120) == 0) {
             List<ItemStack> kit = new ArrayList<>();
 
             ItemStack money;
@@ -84,8 +80,7 @@ public class WEALTH extends O2Effect
      *
      * @param strength a positive integer where 1 is normal strength
      */
-    public void setStrength(int strength)
-    {
+    public void setStrength(int strength) {
         this.strength = strength;
     }
 
@@ -93,7 +88,6 @@ public class WEALTH extends O2Effect
      * Do any cleanup related to removing this effect from the player
      */
     @Override
-    public void doRemove()
-    {
+    public void doRemove() {
     }
 }
