@@ -49,7 +49,7 @@ public enum O2HouseType {
      * @param n the display name for this house
      */
     void setName(@NotNull String n) {
-        if (n.length() > 0)
+        if (!n.isEmpty())
             name = n;
     }
 

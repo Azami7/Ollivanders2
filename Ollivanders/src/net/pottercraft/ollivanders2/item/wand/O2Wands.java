@@ -25,9 +25,15 @@ import java.util.List;
 /**
  * Manage wands and wand functions
  */
-public class O2Wands
-{
+public class O2Wands {
+    /**
+     * plugin callback
+     */
     Ollivanders2 p;
+
+    /**
+     * common functions
+     */
     Ollivanders2Common common;
 
     /**
@@ -46,8 +52,7 @@ public class O2Wands
      *
      * @param plugin callback to the plugin
      */
-    public O2Wands(Ollivanders2 plugin)
-    {
+    public O2Wands(Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(p);
 
@@ -61,23 +66,17 @@ public class O2Wands
      * @param itemstack stack to be checked
      * @return true if yes, false if no
      */
-    public boolean isWand(@NotNull ItemStack itemstack)
-    {
+    public boolean isWand(@NotNull ItemStack itemstack) {
         common.printDebugMessage("isWand enter", null, null, false);
 
         // check elder wand
         if (O2ItemType.ELDER_WAND.isItemThisType(itemstack))
             return true;
 
-        if ((O2ItemType.WAND.isItemThisType(itemstack)))
-        {
+        if ((O2ItemType.WAND.isItemThisType(itemstack))) {
             // check NBT wand
             if (checkNBT(itemstack))
                 return true;
-
-            // check lore-based wand
-            // TODO remove this when we remove lore-based items in the next major rev
-            return checkLore(itemstack);
         }
 
         common.printDebugMessage("not a wand", null, null, false);
@@ -90,41 +89,19 @@ public class O2Wands
      * @param itemstack the itemstack to check
      * @return true if this wand has a valid NBT, false otherwise
      */
-    public boolean checkNBT(@NotNull ItemStack itemstack)
-    {
+    public boolean checkNBT(@NotNull ItemStack itemstack) {
         ItemMeta itemMeta = itemstack.getItemMeta();
         if (itemMeta == null)
             return false;
 
         // check NBT
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if (container.has(wandWoodKey, PersistentDataType.STRING) && container.has(wandCoreKey, PersistentDataType.STRING))
-        {
-            // assume if something is set, this is good enough since players cannot set NBT this shouldnt be faked
+        if (container.has(wandWoodKey, PersistentDataType.STRING) && container.has(wandCoreKey, PersistentDataType.STRING)) {
+            // assume if something is set, this is good enough since players cannot set NBT this shouldn't be faked
             return true;
         }
 
         return false;
-    }
-
-    /**
-     * Check wand lore. This is needed for wands created before 2.6.5.
-     *
-     * @param itemStack the itemstack to check
-     * @return true if the lore is correctly set for a wand, false otherwise
-     */
-    @Deprecated
-    public boolean checkLore(@NotNull ItemStack itemStack)
-    {
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta == null)
-            return false;
-
-        List<String> lore = itemMeta.getLore();
-        if (lore == null || lore.size() < 1)
-            return false;
-
-        return (lore.get(0).split(wandLoreConjunction).length == 2);
     }
 
     /**
@@ -135,8 +112,7 @@ public class O2Wands
      * @return the wand lore string
      */
     @NotNull
-    public String createLore(@NotNull String wood, @NotNull String core)
-    {
+    public String createLore(@NotNull String wood, @NotNull String core) {
         return wood + wandLoreConjunction + core;
     }
 
@@ -147,8 +123,7 @@ public class O2Wands
      * @param stack  ItemStack to be checked
      * @return true if yes, false if no
      */
-    public boolean isDestinedWand(@NotNull Player player, @NotNull ItemStack stack)
-    {
+    public boolean isDestinedWand(@NotNull Player player, @NotNull ItemStack stack) {
         O2Player o2Player = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
 
         if (o2Player == null)
@@ -162,10 +137,9 @@ public class O2Wands
      *
      * @param player    the player to check
      * @param itemStack the wand to check
-     * @return true if is a wand and it matches the player's destined wand, false otherwise
+     * @return true if is a wand and matches the player's destined wand, false otherwise
      */
-    public boolean isDestinedWand(@NotNull O2Player player, @NotNull ItemStack itemStack)
-    {
+    public boolean isDestinedWand(@NotNull O2Player player, @NotNull ItemStack itemStack) {
         if (!isWand(itemStack))
             return false;
 
@@ -173,11 +147,7 @@ public class O2Wands
         String destinedCore = player.getDestinedWandCore();
 
         // check NBT
-        if (checkCoreNBT(destinedCore, itemStack) && checkWoodNBT(destinedWood, itemStack))
-            return true;
-
-        // check Lore
-        return matchesLore(destinedWood, destinedCore, itemStack);
+        return checkCoreNBT(destinedCore, itemStack) && checkWoodNBT(destinedWood, itemStack);
     }
 
     /**
@@ -187,8 +157,7 @@ public class O2Wands
      * @param itemStack the item to check
      * @return true if it matches, false otherwise
      */
-    public boolean checkCoreNBT(@NotNull String core, @NotNull ItemStack itemStack)
-    {
+    public boolean checkCoreNBT(@NotNull String core, @NotNull ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null)
             return false;
@@ -211,8 +180,7 @@ public class O2Wands
      * @param itemStack the item to check
      * @return true if it matches, false otherwise
      */
-    public boolean checkWoodNBT(@NotNull String wood, @NotNull ItemStack itemStack)
-    {
+    public boolean checkWoodNBT(@NotNull String wood, @NotNull ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null)
             return false;
@@ -229,42 +197,12 @@ public class O2Wands
     }
 
     /**
-     * Does the lore for this itemstack match the wood and core specified
-     *
-     * @param core      the core to match
-     * @param wood      the wood to match
-     * @param itemStack the item to check
-     * @return true if the lore matches this wood and core, false otherwise
-     */
-    public boolean matchesLore(@NotNull String wood, @NotNull String core, @NotNull ItemStack itemStack)
-    {
-        ItemMeta meta = itemStack.getItemMeta();
-        if (meta == null)
-            return false;
-
-
-        List<String> lore = itemStack.getItemMeta().getLore();
-        if (lore == null)
-            return false;
-
-        String[] wandLore = lore.get(0).split(wandLoreConjunction);
-        if (wandLore.length != 2)
-            return false;
-
-        if (!wood.equalsIgnoreCase(wandLore[0]) || !core.equalsIgnoreCase(wandLore[1]))
-            return false;
-
-        return true;
-    }
-
-    /**
      * Does the player hold a wand item in their primary hand?
      *
      * @param player player to check.
      * @return True if the player holds a wand. False if not or if player is null.
      */
-    public boolean holdsWand(@NotNull Player player)
-    {
+    public boolean holdsWand(@NotNull Player player) {
         return holdsWand(player, EquipmentSlot.HAND);
     }
 
@@ -275,26 +213,21 @@ public class O2Wands
      * @param hand   the equipment slot to check for this player
      * @return True if the player holds a wand. False if not or if player is null.
      */
-    public boolean holdsWand(@NotNull Player player, @NotNull EquipmentSlot hand)
-    {
+    public boolean holdsWand(@NotNull Player player, @NotNull EquipmentSlot hand) {
         ItemStack held;
-        if (hand == EquipmentSlot.HAND)
-        {
+        if (hand == EquipmentSlot.HAND) {
             common.printDebugMessage("O2PlayerCommon.holdsWand: checking for wand in main hand", null, null, false);
             held = player.getInventory().getItemInMainHand();
         }
-        else if (hand == EquipmentSlot.OFF_HAND)
-        {
+        else if (hand == EquipmentSlot.OFF_HAND) {
             common.printDebugMessage("O2PlayerCommon.holdsWand: checking for wand in off hand", null, null, false);
             held = player.getInventory().getItemInOffHand();
         }
-        else
-        {
+        else {
             return false;
         }
 
-        if (held.getType() == Material.AIR)
-        {
+        if (held.getType() == Material.AIR) {
             common.printDebugMessage("O2PlayerCommon.holdsWand: player not holding an item", null, null, false);
             return false;
         }
@@ -308,14 +241,11 @@ public class O2Wands
      * @return a list of all the wands
      */
     @NotNull
-    public List<ItemStack> getAllWands()
-    {
+    public List<ItemStack> getAllWands() {
         ArrayList<ItemStack> wands = new ArrayList<>();
 
-        for (String wood : O2WandWoodType.getAllWoodsByName())
-        {
-            for (String core : O2WandCoreType.getAllCoresByName())
-            {
+        for (String wood : O2WandWoodType.getAllWoodsByName()) {
+            for (String core : O2WandCoreType.getAllCoresByName()) {
                 wands.add(makeWand(wood, core, 1));
             }
         }
@@ -332,8 +262,7 @@ public class O2Wands
      * @return an ItemStack of wands or null if an error
      */
     @Nullable
-    public ItemStack makeWand(@NotNull String wood, @NotNull String core, int amount)
-    {
+    public ItemStack makeWand(@NotNull String wood, @NotNull String core, int amount) {
         if (amount < 1)
             amount = 1;
 
@@ -375,16 +304,14 @@ public class O2Wands
      * @return an item stack of the wand type, null if an error occurred
      */
     @Nullable
-    public ItemStack makeWandFromCoreless(@NotNull ItemStack corelessWand, @NotNull String core, int amount)
-    {
+    public ItemStack makeWandFromCoreless(@NotNull ItemStack corelessWand, @NotNull String core, int amount) {
         // determine the wand wood
         ItemMeta itemMeta = corelessWand.getItemMeta();
         if (itemMeta == null)
             return null;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if (container.has(wandWoodKey, PersistentDataType.STRING))
-        {
+        if (container.has(wandWoodKey, PersistentDataType.STRING)) {
             String wood = container.get(wandWoodKey, PersistentDataType.STRING);
             if (wood == null)
                 wood = O2WandWoodType.getRandomWoodByName();
@@ -396,15 +323,14 @@ public class O2Wands
     }
 
     /**
-     * Create a coreless wand of a specied wood type.
+     * Create a coreless wand of a specified wood type.
      *
      * @param woodType the wood type for the wand
      * @param amount   the amount
      * @return an item stack of this wand type, null if an error occurred
      */
     @Nullable
-    public ItemStack createCorelessWand(@NotNull O2WandWoodType woodType, int amount)
-    {
+    public ItemStack createCorelessWand(@NotNull O2WandWoodType woodType, int amount) {
         ItemStack wands = new ItemStack(O2ItemType.WAND.getMaterial(), amount);
         ItemMeta itemMeta = wands.getItemMeta();
         if (itemMeta == null)
@@ -427,8 +353,7 @@ public class O2Wands
     /**
      * Give a player a random wand.
      */
-    public boolean giveRandomWand(@NotNull Player player)
-    {
+    public boolean giveRandomWand(@NotNull Player player) {
         ItemStack wand = createRandomWand();
         if (wand == null)
             return false;
@@ -446,8 +371,7 @@ public class O2Wands
      * @return a random wand or null if something went wrong
      */
     @Nullable
-    public ItemStack createRandomWand()
-    {
+    public ItemStack createRandomWand() {
         String wood = O2WandWoodType.getAllWoodsByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandWoodType.getAllWoodsByName().size()));
         String core = O2WandCoreType.getAllCoresByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandCoreType.getAllCoresByName().size()));
 

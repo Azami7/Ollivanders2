@@ -20,8 +20,7 @@ import java.util.Set;
 /**
  * Manager for all items in Ollivanders
  */
-public class O2Items
-{
+public class O2Items {
     /**
      * A reference to the plugin
      */
@@ -40,7 +39,7 @@ public class O2Items
     /**
      * Common functions
      */
-    private Ollivanders2Common common;
+    final private Ollivanders2Common common;
 
     /**
      * The wand manager - wands being complex items with special logic
@@ -57,8 +56,7 @@ public class O2Items
      *
      * @param plugin a reference to the plugin
      */
-    public O2Items(@NotNull Ollivanders2 plugin)
-    {
+    public O2Items(@NotNull Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(p);
         wands = new O2Wands(p);
@@ -72,10 +70,8 @@ public class O2Items
     /**
      * Load all items and enchantments
      */
-    public void onEnable()
-    {
-        for (O2ItemType itemType : O2ItemType.values())
-        {
+    public void onEnable() {
+        for (O2ItemType itemType : O2ItemType.values()) {
             O2Item item = new O2Item(p, itemType);
             O2ItemMap.put(item.getType(), item);
         }
@@ -91,10 +87,8 @@ public class O2Items
      * @return an item stack of the item and amount, null if item not found
      */
     @Nullable
-    public ItemStack getItemByType(@NotNull O2ItemType itemType, int amount)
-    {
-        if (amount < 1)
-        {
+    public ItemStack getItemByType(@NotNull O2ItemType itemType, int amount) {
+        if (amount < 1) {
             return null;
         }
 
@@ -103,8 +97,7 @@ public class O2Items
 
         // does this item need an enchantment on it?
         ItemEnchantmentType enchantment = itemType.getItemEnchantment();
-        if (itemStack != null && enchantment != null)
-        {
+        if (itemStack != null && enchantment != null) {
             String eid = TimeCommon.getCurrentTimestamp() + " " + itemType.getName() + " " + enchantment.getName();
             enchantedItems.addEnchantedItem(itemStack, enchantment, 1, eid, "");
         }
@@ -120,8 +113,7 @@ public class O2Items
      * @return an item stack of the item and amount, null if item not found
      */
     @Nullable
-    public ItemStack getItemByName(@NotNull String name, int amount)
-    {
+    public ItemStack getItemByName(@NotNull String name, int amount) {
         O2ItemType itemType = getItemTypeByName(name);
         if (itemType == null)
             return null;
@@ -137,8 +129,7 @@ public class O2Items
      * @return an item stack of the item and amount, null if item not found
      */
     @Nullable
-    public ItemStack getItemByDisplayName(@NotNull String name, int amount)
-    {
+    public ItemStack getItemByDisplayName(@NotNull String name, int amount) {
         O2ItemType itemType = getTypeByDisplayName(name);
         if (itemType == null)
             return null;
@@ -153,14 +144,11 @@ public class O2Items
      * @return the item type if found, null otherwise
      */
     @Nullable
-    public O2ItemType getTypeByDisplayName(@NotNull String name)
-    {
+    public O2ItemType getTypeByDisplayName(@NotNull String name) {
         O2ItemType itemType = null;
 
-        for (O2Item item : O2ItemMap.values())
-        {
-            if (item.getName().toLowerCase().equals(name.toLowerCase()))
-            {
+        for (O2Item item : O2ItemMap.values()) {
+            if (item.getName().equalsIgnoreCase(name)) {
                 itemType = item.getType();
                 break;
             }
@@ -177,8 +165,7 @@ public class O2Items
      * @return an item stack of the item and amount, null if item not found
      */
     @Nullable
-    public ItemStack getItemStartsWith(@NotNull String name, int amount)
-    {
+    public ItemStack getItemStartsWith(@NotNull String name, int amount) {
         O2ItemType itemType = getItemTypeByStartsWith(name);
 
         if (itemType == null)
@@ -194,29 +181,25 @@ public class O2Items
      * @return the name of this item or null if not found
      */
     @Nullable
-    public String getItemDisplayNameByType(@NotNull O2ItemType itemType)
-    {
+    public String getItemDisplayNameByType(@NotNull O2ItemType itemType) {
         return O2ItemMap.get(itemType).getName();
     }
 
     /**
-     * Get the type of an item from the name. This must be a full match on the string.
+     * Get the type of item from the name. This must be a full match on the string.
      *
      * @param name the name of the item type as a string
      * @return the item type if found, null otherwise
      */
     @Nullable
-    public O2ItemType getItemTypeByName(@NotNull String name)
-    {
+    public O2ItemType getItemTypeByName(@NotNull String name) {
         String itemTypeString = name.trim().toUpperCase().replaceAll(" ", "_");
         O2ItemType itemType = null;
 
-        try
-        {
+        try {
             itemType = O2ItemType.valueOf(itemTypeString);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             common.printDebugMessage("No item type " + itemTypeString + " found.", null, null, false);
         }
 
@@ -230,10 +213,8 @@ public class O2Items
      * @return the item type if found, null otherwise
      */
     @Nullable
-    public O2ItemType getItemTypeByStartsWith(@NotNull String name)
-    {
-        for (O2Item item : O2ItemMap.values())
-        {
+    public O2ItemType getItemTypeByStartsWith(@NotNull String name) {
+        for (O2Item item : O2ItemMap.values()) {
             if (item.getName().toLowerCase().startsWith(name.trim().toLowerCase()))
                 return item.getType();
         }
@@ -248,8 +229,7 @@ public class O2Items
      * @return the material type if found, null otherwise
      */
     @Nullable
-    public Material getItemMaterialByType(@NotNull O2ItemType itemType)
-    {
+    public Material getItemMaterialByType(@NotNull O2ItemType itemType) {
         return O2ItemMap.get(itemType).getMaterialType();
     }
 
@@ -259,14 +239,12 @@ public class O2Items
      * @return an array of the item names
      */
     @NotNull
-    public ArrayList<String> getAllItems()
-    {
+    public ArrayList<String> getAllItems() {
         Set<O2ItemType> itemKeys = O2ItemMap.keySet();
 
         ArrayList<String> itemNames = new ArrayList<>();
 
-        for (O2ItemType itemType : itemKeys)
-        {
+        for (O2ItemType itemType : itemKeys) {
             itemNames.add(itemType.getName());
         }
 
@@ -279,8 +257,7 @@ public class O2Items
      *
      * @return wands
      */
-    public O2Wands getWands()
-    {
+    public O2Wands getWands() {
         return wands;
     }
 }

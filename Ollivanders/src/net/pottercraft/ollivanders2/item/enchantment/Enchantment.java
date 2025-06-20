@@ -15,8 +15,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Item enchantment
  */
-public abstract class Enchantment
-{
+public abstract class Enchantment {
     /**
      * The type of enchantment
      */
@@ -55,8 +54,7 @@ public abstract class Enchantment
      * @param args     optional arguments for this enchantment
      * @param itemLore the optional lore for this enchantment
      */
-    public Enchantment(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
-    {
+    public Enchantment(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore) {
         p = plugin;
         magnitude = mag;
         lore = itemLore;
@@ -75,7 +73,7 @@ public abstract class Enchantment
     /**
      * Handle item pickup events
      *
-     * @param event the item pick up event
+     * @param event the item pickup event
      */
     abstract public void doItemPickup(@NotNull EntityPickupItemEvent event);
 
@@ -99,8 +97,7 @@ public abstract class Enchantment
      * @return the enchantment name
      */
     @NotNull
-    public String getName()
-    {
+    public String getName() {
         return enchantmentType.getName();
     }
 
@@ -109,8 +106,7 @@ public abstract class Enchantment
      *
      * @return the magnitude
      */
-    public int getMagnitude()
-    {
+    public int getMagnitude() {
         return magnitude;
     }
 
@@ -120,8 +116,7 @@ public abstract class Enchantment
      * @return the enchantment type
      */
     @NotNull
-    public ItemEnchantmentType getType()
-    {
+    public ItemEnchantmentType getType() {
         return enchantmentType;
     }
 
@@ -131,8 +126,7 @@ public abstract class Enchantment
      * @return the args string
      */
     @Nullable
-    public String getArgs()
-    {
+    public String getArgs() {
         return args;
     }
 
@@ -142,15 +136,14 @@ public abstract class Enchantment
      * @param player the player to check
      * @return true if they are holding an item with this enchantment type, false otherwise
      */
-    boolean isHoldingEnchantedItem(Player player)
-    {
+    boolean isHoldingEnchantedItem(Player player) {
         // first check NBT tag of item in primary hand
         ItemStack primaryItem = player.getInventory().getItemInMainHand();
         String eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(primaryItem);
         if (eTypeStr != null)
             return eTypeStr.equalsIgnoreCase(enchantmentType.toString());
 
-        // check NBT tag in item in player's off hand
+        // check NBT tag in item in player's off-hand
         ItemStack secondaryItem = player.getInventory().getItemInOffHand();
         eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(secondaryItem);
         if (eTypeStr != null)
