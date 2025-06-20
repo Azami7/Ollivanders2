@@ -26,10 +26,10 @@ import java.util.List;
 
 /**
  * Enchantment effect on items.
- * <p>
- * Enchantments are used to give items magical properties like broom flight, port keys, and cursed items.
- * <p>
- * Reference: https://minecraft.fandom.com/wiki/Tutorials/Command_NBT_tags
+ *
+ * <p>Enchantments are used to give items magical properties like broom flight, port keys, and cursed items.</p>
+ *
+ *  <p>Reference: https://minecraft.fandom.com/wiki/Tutorials/Command_NBT_tags</p>
  */
 public class EnchantedItems implements Listener {
     /**
@@ -229,6 +229,9 @@ public class EnchantedItems implements Listener {
             // it is cursed, but can they tell based on the level of the spell checking for it?
             ItemEnchantmentType enchantmentType = getEnchantmentType(item.getItemStack());
 
+            if (enchantmentType == null)
+                return false;
+
             // ignore npe warning, if it is cursed then enchantmentType cannot be null
             if (enchantmentType.getLevel().ordinal() <= (level.ordinal() + 1)) {
                 return false;
@@ -277,7 +280,7 @@ public class EnchantedItems implements Listener {
             enchantmentType = ItemEnchantmentType.valueOf(enchantmentTypeStr);
         }
         catch (Exception e) {
-            common.printDebugMessage("Imvalid item enchantment " + enchantmentTypeStr, null, null, true);
+            common.printDebugMessage("Invalid item enchantment " + enchantmentTypeStr, null, null, true);
         }
 
         return enchantmentType;
