@@ -97,8 +97,8 @@ public class O2Player {
 
     /**
      * The mastered spell set for silent casting - is cast anytime a player left-clicks their wand in their primary hand.
-     * <p>
-     * Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#non-verbal-spell-casting
+     *
+     * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#non-verbal-spell-casting</p>
      */
     private O2SpellType masterSpell = null;
 
@@ -118,17 +118,12 @@ public class O2Player {
     private boolean isInvisible = false;
 
     /**
-     * Whether the player is in a Repello Muggleton area
-     */
-    private boolean inRepelloMuggleton = false;
-
-    /**
      * Whether the player has found their destined wand yet
      */
     private boolean foundWand = false;
 
     /**
-     * The player'ss animagus form, if they are an animagus
+     * The player's animagus form, if they are an animagus
      */
     private EntityType animagusForm = null;
 
@@ -138,7 +133,7 @@ public class O2Player {
     private String animagusColor = null;
 
     /**
-     * Whether the player is a Muggle.
+     * Whether the player is a Muggle (i.e. not sorted)
      */
     private boolean isMuggle = true;
 
@@ -147,6 +142,9 @@ public class O2Player {
      */
     private Year year = Year.YEAR_1;
 
+    /**
+     * common player functions
+     */
     private final O2PlayerCommon o2PlayerCommon;
 
     /**
@@ -311,7 +309,7 @@ public class O2Player {
     /**
      * Get the list of known potions for this player.
      *
-     * @return a map of all the known potions and potion breww count for each.
+     * @return a map of all the known potions and potion brew count for each.
      */
     @NotNull
     public Map<O2PotionType, Integer> getKnownPotions() {
@@ -411,7 +409,7 @@ public class O2Player {
      * @param spellType the spell to set the time for
      */
     public void setSpellRecentCastTime(@NotNull O2SpellType spellType) {
-        String spellClass = "net.pottercraft.ollivanders2.spell." + spellType.toString();
+        String spellClass = "net.pottercraft.ollivanders2.spell." + spellType;
 
         Constructor<?> c;
         try {
@@ -445,7 +443,7 @@ public class O2Player {
      * @param spellType the spell to increment
      */
     public void incrementSpellCount(@NotNull O2SpellType spellType) {
-        common.printDebugMessage("Incrementing spell count for " + spellType.toString(), null, null, false);
+        common.printDebugMessage("Incrementing spell count for " + spellType, null, null, false);
 
         if (knownSpells.containsKey(spellType)) {
             int curCount = knownSpells.get(spellType);
@@ -464,7 +462,7 @@ public class O2Player {
      * @param potionType the potion to increment
      */
     public void incrementPotionCount(@NotNull O2PotionType potionType) {
-        common.printDebugMessage("Incrementing potion count for " + potionType.toString(), null, null, false);
+        common.printDebugMessage("Incrementing potion count for " + potionType, null, null, false);
 
         if (knownPotions.containsKey(potionType)) {
             int curCount = knownPotions.get(potionType);
@@ -714,7 +712,7 @@ public class O2Player {
     private void addMasteredSpell(@NotNull O2SpellType spell) {
         if (spell != O2SpellType.AVADA_KEDAVRA) {
             if (!masteredSpells.contains(spell)) {
-                if (masteredSpells.size() < 1)
+                if (masteredSpells.isEmpty())
                     // this is their first mastered spell, set it on their wand
                     masterSpell = spell;
                 masteredSpells.add(spell);
@@ -757,9 +755,9 @@ public class O2Player {
      */
     public void shiftMasterSpell(boolean reverse) {
         // shift to the next spell if there is more than one mastered spell
-        if (masteredSpells.size() >= 1) {
+        if (!masteredSpells.isEmpty()) {
             if (masterSpell == null || masteredSpells.size() == 1) {
-                masterSpell = masteredSpells.get(0);
+                masterSpell = masteredSpells.getFirst();
             }
             else {
                 int curSpellIndex = masteredSpells.indexOf(masterSpell);
@@ -770,7 +768,7 @@ public class O2Player {
                 else
                     nextSpellIndex = curSpellIndex - 1;
 
-                // handle roll overs
+                // handle rollovers
                 if (nextSpellIndex >= masteredSpells.size())
                     nextSpellIndex = 0;
                 else if (nextSpellIndex < 0)

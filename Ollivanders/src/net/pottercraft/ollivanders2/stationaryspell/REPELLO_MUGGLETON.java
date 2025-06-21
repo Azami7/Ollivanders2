@@ -19,12 +19,10 @@ import java.util.UUID;
 
 /**
  * Hides all players within its area. The code to hide players is located in OllivandersSchedule.invisPlayer()
- * <p>
- * {@link net.pottercraft.ollivanders2.spell.REPELLO_MUGGLETON}
+ *
+ * @see net.pottercraft.ollivanders2.spell.REPELLO_MUGGLETON
  */
-public class REPELLO_MUGGLETON extends ShieldSpell
-{
-    // todo rewrite to use inivisiblity potion effect
+public class REPELLO_MUGGLETON extends ShieldSpell {
     public static final int minRadiusConfig = 5;
     public static final int maxRadiusConfig = 20;
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
@@ -35,8 +33,7 @@ public class REPELLO_MUGGLETON extends ShieldSpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin)
-    {
+    public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.REPELLO_MUGGLETON;
@@ -51,8 +48,7 @@ public class REPELLO_MUGGLETON extends ShieldSpell
      * @param radius   the radius for this spell
      * @param duration the duration of the spell
      */
-    public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
-    {
+    public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin);
 
         spellType = O2StationarySpellType.REPELLO_MUGGLETON;
@@ -62,16 +58,12 @@ public class REPELLO_MUGGLETON extends ShieldSpell
      * Upkeep
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         age();
 
-        if (duration <= 1)
-        {
-            for (Player player : getBlock().getWorld().getPlayers())
-            {
-                for (Entity target : EntityCommon.getNearbyEntitiesByType(location, radius, EntityType.PLAYER))
-                {
+        if (duration <= 1) {
+            for (Player player : getBlock().getWorld().getPlayers()) {
+                for (Entity target : EntityCommon.getNearbyEntitiesByType(location, radius, EntityType.PLAYER)) {
                     Location targetLoc = target.getLocation();
 
                     // change the player location block and the one above it - this is going to be weird if the player is currently shape shifted to a 1-block sized create with Animagus but acceptable
@@ -89,16 +81,14 @@ public class REPELLO_MUGGLETON extends ShieldSpell
      * @param event the event
      */
     @Override
-    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event)
-    {
+    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
         Entity target = event.getTarget();
         Entity entity = event.getEntity(); // will never be null
 
         if (target == null)
             return;
 
-        if (isLocationInside(target.getLocation()) && !isLocationInside(entity.getLocation()))
-        {
+        if (isLocationInside(target.getLocation()) && !isLocationInside(entity.getLocation())) {
             event.setCancelled(true);
             common.printDebugMessage("REPELLO_MUGGLETON: canceled EntityTargetEvent", null, null, false);
         }
@@ -106,13 +96,11 @@ public class REPELLO_MUGGLETON extends ShieldSpell
 
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 }

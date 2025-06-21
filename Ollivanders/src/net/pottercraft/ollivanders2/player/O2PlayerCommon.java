@@ -23,8 +23,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Player common functions.
  */
-public final class O2PlayerCommon
-{
+public final class O2PlayerCommon {
     /**
      * Reference to the plugin
      */
@@ -40,8 +39,7 @@ public final class O2PlayerCommon
      *
      * @param plugin a reference to the MC plugin
      */
-    public O2PlayerCommon(@NotNull Ollivanders2 plugin)
-    {
+    public O2PlayerCommon(@NotNull Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(plugin);
     }
@@ -49,8 +47,7 @@ public final class O2PlayerCommon
     /**
      * Common (high probability) animagus shapes
      */
-    private static final List<EntityType> commonAnimagusShapes = new ArrayList<>()
-    {{
+    private static final List<EntityType> commonAnimagusShapes = new ArrayList<>() {{
         add(EntityType.COW);
         add(EntityType.PIG);
         add(EntityType.HORSE);
@@ -69,8 +66,7 @@ public final class O2PlayerCommon
     /**
      * Rare (low probability) animagus shapes
      */
-    private static final List<EntityType> rareAnimagusShapes = new ArrayList<>()
-    {{
+    private static final List<EntityType> rareAnimagusShapes = new ArrayList<>() {{
         add(EntityType.OCELOT);
         add(EntityType.POLAR_BEAR);
         add(EntityType.TRADER_LLAMA);
@@ -84,11 +80,10 @@ public final class O2PlayerCommon
 
     /**
      * Animagus forms that can only be used when config is set.
-     * <p>
-     * Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#hostile-mob-animagi
+     *
+     * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#hostile-mob-animagi</p>
      */
-    private static final List<EntityType> hostileAnimagusShapes = new ArrayList<>()
-    {{
+    private static final List<EntityType> hostileAnimagusShapes = new ArrayList<>() {{
         add(EntityType.SPIDER);
         add(EntityType.SLIME);
         add(EntityType.CAVE_SPIDER);
@@ -107,20 +102,17 @@ public final class O2PlayerCommon
      * @return the animagus form for this player - should always be the same since it is based on a hash of their PID
      */
     @NotNull
-    public EntityType getAnimagusForm(@NotNull UUID pid)
-    {
+    public EntityType getAnimagusForm(@NotNull UUID pid) {
         // 1% chance to get a rare form
         int form = Math.abs(pid.hashCode() % 100);
-        if (form < 1)
-        {
+        if (form < 1) {
             form = Math.abs(pid.hashCode() % rareAnimagusShapes.size());
             return rareAnimagusShapes.get(form);
         }
 
         // if using hostile mob animagi, 10% chance of getting a hostile mob form
         form = Math.abs(pid.hashCode() % 10);
-        if (form < 1)
-        {
+        if (form < 1) {
             form = Math.abs(pid.hashCode() % hostileAnimagusShapes.size());
             return hostileAnimagusShapes.get(form);
         }
@@ -136,10 +128,8 @@ public final class O2PlayerCommon
      * @param form the animagus form to check
      * @return true if this is an allowed form, false otherwise
      */
-    public boolean isAllowedAnimagusForm(@NotNull EntityType form)
-    {
-        if (Ollivanders2.useHostileMobAnimagi)
-        {
+    public boolean isAllowedAnimagusForm(@NotNull EntityType form) {
+        if (Ollivanders2.useHostileMobAnimagi) {
             if (hostileAnimagusShapes.contains(form))
                 return true;
         }
@@ -152,28 +142,28 @@ public final class O2PlayerCommon
 
     /**
      * Checks what kind of wand a player holds in their primary hand. Returns a value based on the wand and its relation to the player.
-     * <p>
-     * Assumes:holdsWand has already been checked
+     *
+     * <p>Assumes:holdsWand has already been checked</p>
      *
      * @param player player being checked. The player must be holding a wand.
-     * @return 2 - the wand is not player's type AND/OR is not allied to player. <br>1 - the wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player. <br>0.5 - the wand is the elder wand and it is allied to player.
+     * @return 2 - the wand is not player's type AND/OR is not allied to player.<br>
+     * 1 - the wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player. <br>
+     * 0.5 - the wand is the elder wand and is allied to player.
      */
-    public double wandCheck(@NotNull Player player)
-    {
+    public double wandCheck(@NotNull Player player) {
         return wandCheck(player, EquipmentSlot.HAND);
     }
 
     /**
-     * Checks what kind of wand a player holds. Returns a value based on the wand and it's relation to the player.
-     * <p>
-     * Assumes: player is holding a wand in the equipment slot passed in.
+     * Checks what kind of wand a player holds. Returns a value based on the wand and its relation to the player.
+     *
+     * <p>Assumes: player is holding a wand in the equipment slot passed in.</p>
      *
      * @param player player being checked. The player must be holding a wand.
      * @param hand   the hand that is holding the wand to check.
-     * @return 2 - The wand is not player's type AND/OR is not allied to player <br>>1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player <br>0.5 - The wand is the elder wand and it is allied to player.
+     * @return 2 - The wand is not player's type AND/OR is not allied to player <br>>1 - The wand is player's type and is allied to player OR the wand is the elder wand and is not allied to player <br>0.5 - The wand is the elder wand and is allied to player.
      */
-    public double wandCheck(@NotNull Player player, @NotNull EquipmentSlot hand)
-    {
+    public double wandCheck(@NotNull Player player, @NotNull EquipmentSlot hand) {
         ItemStack item;
 
         if (hand == EquipmentSlot.HAND)
@@ -185,14 +175,13 @@ public final class O2PlayerCommon
     }
 
     /**
-     * Checks what kind of wand a player holds. Returns a value based on the wand and it's relation to the player.
+     * Checks what kind of wand a player holds. Returns a value based on the wand and its relation to the player.
      *
      * @param player    the player to check
      * @param itemStack the item to check
      * @return 2 - The wand is not player's type <br>1 - The wand is player's type <br>0.5 - The wand is the elder wand <br>-1 - The player is not holding a wand
      */
-    private double doWandCheck(@NotNull Player player, @NotNull ItemStack itemStack)
-    {
+    private double doWandCheck(@NotNull Player player, @NotNull ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null)
             // not an ollivanders item
@@ -207,15 +196,13 @@ public final class O2PlayerCommon
             return -1;
 
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-        if (o2p == null)
-        {
+        if (o2p == null) {
             // not a player
             common.printDebugMessage("O2Player is null", null, null, true);
             return -1;
         }
 
-        if (!(Ollivanders2API.getItems().getWands().isDestinedWand(o2p, itemStack)))
-        {
+        if (!(Ollivanders2API.getItems().getWands().isDestinedWand(o2p, itemStack))) {
             // not the player's destined wand
             common.printDebugMessage("O2PlayerCommon.doWandCheck: player holds a wand which is not their destined wand", null, null, false);
             return 2;
@@ -231,15 +218,13 @@ public final class O2PlayerCommon
      *
      * @param player the player to restore
      */
-    static public void restoreFullHealth(@NotNull Player player)
-    {
-        // remove O2Effecs
+    static public void restoreFullHealth(@NotNull Player player) {
+        // remove O2Effects
         Ollivanders2API.getPlayers().playerEffects.onDeath(player.getUniqueId());
 
         // remove other potion effects
         Collection<PotionEffect> potions = player.getActivePotionEffects();
-        for (PotionEffect potion : potions)
-        {
+        for (PotionEffect potion : potions) {
             player.removePotionEffect(potion.getType());
         }
 
@@ -255,12 +240,10 @@ public final class O2PlayerCommon
      * @return the list of sorted online players
      */
     @NotNull
-    public List<Player> getAllOnlineSortedPlayers()
-    {
+    public List<Player> getAllOnlineSortedPlayers() {
         ArrayList<Player> sortedPlayers = new ArrayList<>();
 
-        for (Player player : p.getServer().getOnlinePlayers())
-        {
+        for (Player player : p.getServer().getOnlinePlayers()) {
             if (Ollivanders2API.getHouses().isSorted(player))
                 sortedPlayers.add(player);
         }
@@ -274,13 +257,11 @@ public final class O2PlayerCommon
      * @param player the player to give the items to
      * @param kit    the items to give
      */
-    static public void givePlayerKit(@NotNull Player player, @NotNull List<ItemStack> kit)
-    {
+    static public void givePlayerKit(@NotNull Player player, @NotNull List<ItemStack> kit) {
         Location loc = player.getEyeLocation();
         ItemStack[] kitArray = kit.toArray(new ItemStack[kit.size()]);
         HashMap<Integer, ItemStack> leftover = player.getInventory().addItem(kitArray);
-        for (ItemStack item : leftover.values())
-        {
+        for (ItemStack item : leftover.values()) {
             player.getWorld().dropItem(loc, item);
         }
     }

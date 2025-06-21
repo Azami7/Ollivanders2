@@ -1594,7 +1594,7 @@ public class Ollivanders2 extends JavaPlugin {
         if (!sender.hasPermission("Ollivanders2.admin"))
             return false;
 
-        List<String> ingredientList = O2Potions.getAllIngredientNames(this);
+        List<String> ingredientList = O2Potions.getAllIngredientNames();
         StringBuilder displayString = new StringBuilder();
         displayString.append("Ingredients:");
 
