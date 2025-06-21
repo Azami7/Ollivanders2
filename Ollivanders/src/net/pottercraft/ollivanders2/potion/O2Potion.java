@@ -28,16 +28,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Ollivander2 magical potion.
- * <p>
- * O2Potions can have either or both of the following types of effects:
- * <p>
- * PotionEffect - this is a standard Minecraft potion effect such as Night Vision and is set in the item metadata in the brew().
- * <p>
+ * Ollivanders2 magical potion.
+ *
+ * <p>O2Potions can have either or both of the following types of effects:<br>
+ * PotionEffect - this is a standard Minecraft potion effect such as Night Vision and is set in the item metadata in the brew().<br>
  * Ollivanders Effect - effects related to the mechanics of the Ollivanders plugin. These are applied on the potion
- * drink action in OllivandersListener in the onPlayerDrink().
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Potion
+ * drink action in OllivandersListener in the onPlayerDrink().</p>
+ *
+ * <p>Reference: https://harrypotter.fandom.com/wiki/Potion</p>
  */
 public abstract class O2Potion
 {
@@ -184,7 +182,7 @@ public abstract class O2Potion
     @Nullable
     public String getFlavorText()
     {
-        if (flavorText.size() < 1)
+        if (flavorText.isEmpty())
             return null;
         else
         {
@@ -205,7 +203,7 @@ public abstract class O2Potion
     }
 
     /**
-     * Get get the level of magic for this potion
+     * Get the level of magic for this potion
      *
      * @return the level of magic for this potion
      */
@@ -247,7 +245,7 @@ public abstract class O2Potion
             // is the amount of the ingredient correct?
             if (cauldronIngredients.get(ingredientType).intValue() != count.intValue())
             {
-                common.printDebugMessage("   recipe needs " + count.intValue() + " " + ingredientType.getName() + ", got " + cauldronIngredients.get(ingredientType).intValue(), null, null, false);
+                common.printDebugMessage("   recipe needs " + count + " " + ingredientType.getName() + ", got " + cauldronIngredients.get(ingredientType), null, null, false);
                 return false;
             }
         }
@@ -298,11 +296,7 @@ public abstract class O2Potion
             }
         }
 
-        O2Player o2p = p.getO2Player(brewer);
-        if (o2p == null)
-            common.printDebugMessage("Null O2Player in O2Potion.brew", null, null, true);
-        else
-            o2p.incrementPotionCount(potionType);
+        p.getO2Player(brewer).incrementPotionCount(potionType);
 
         return potion;
     }

@@ -10,8 +10,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public final class OllivandersPlayerNotDestinedWandEvent extends PlayerEvent
-{
+public final class OllivandersPlayerNotDestinedWandEvent extends PlayerEvent {
     private static final HandlerList handlers = new HandlerList();
 
     /**
@@ -19,20 +18,17 @@ public final class OllivandersPlayerNotDestinedWandEvent extends PlayerEvent
      *
      * @param player the player who used a wand that isnt their destined wand
      */
-    public OllivandersPlayerNotDestinedWandEvent (@NotNull Player player)
-    {
+    public OllivandersPlayerNotDestinedWandEvent(@NotNull Player player) {
         super(player);
     }
 
     @NotNull
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

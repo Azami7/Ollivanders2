@@ -17,59 +17,55 @@ import org.jetbrains.annotations.NotNull;
  * Herbicide Potion (or simply Herbicide) is a potion that kills or damages creepers. It will also harm other
  * entities, including players, though not as much as Creepers.
  *
- * @since 2.2.7
  * @author Azami7
+ * @since 2.2.7
  */
-public final class HERBICIDE_POTION extends O2SplashPotion
-{
-   private final double minimumEffect = 0.1;
+public final class HERBICIDE_POTION extends O2SplashPotion {
+    private final double minimumEffect = 0.1;
 
-   /**
-    * Constructor
-    *
-    * @param plugin a callback to the plugin
-    */
-   public HERBICIDE_POTION(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
+    public HERBICIDE_POTION(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      potionType = O2PotionType.HERBICIDE_POTION;
+        potionType = O2PotionType.HERBICIDE_POTION;
 
-      ingredients.put(O2ItemType.LIONFISH_SPINES, 4);
-      ingredients.put(O2ItemType.FLOBBERWORM_MUCUS, 2);
-      ingredients.put(O2ItemType.HORKLUMP_JUICE, 2);
-      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
+        ingredients.put(O2ItemType.LIONFISH_SPINES, 4);
+        ingredients.put(O2ItemType.FLOBBERWORM_MUCUS, 2);
+        ingredients.put(O2ItemType.HORKLUMP_JUICE, 2);
+        ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
-      text = "The Herbicide Potion is damages or kills Creepers. It is also harmful to other living creatures.";
+        text = "The Herbicide Potion is damages or kills Creepers. It is also harmful to other living creatures.";
 
-      // set duration of potion effect to 30 seconds
-      duration = 600;
-      minecraftPotionEffect = new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, 1);
-      potionColor = Color.fromRGB(51, 102, 0);
-   }
+        // set duration of potion effect to 30 seconds
+        duration = 600;
+        minecraftPotionEffect = new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, 1);
+        potionColor = Color.fromRGB(51, 102, 0);
+    }
 
-   /**
-    * Drink this potion and do effects
-    *
-    * @param player the player who drank the potion
-    */
-   @Override
-   public void drink(@NotNull Player player) {}
+    /**
+     * Drink this potion and do effects
+     *
+     * @param player the player who drank the potion
+     */
+    @Override
+    public void drink(@NotNull Player player) {
+    }
 
-   /**
-    * Reduce intensity of this potion if the affected entity is not a Creeper.
-    *
-    * @param event the splash potion thrown event
-    */
-   @Override
-   public void thrownEffect(@NotNull PotionSplashEvent event)
-   {
-      for (LivingEntity e : event.getAffectedEntities())
-      {
-         if (e.getType() != EntityType.CREEPER)
-         {
-            event.setIntensity(e, minimumEffect);
-         }
-      }
-   }
+    /**
+     * Reduce intensity of this potion if the affected entity is not a Creeper.
+     *
+     * @param event the splash potion thrown event
+     */
+    @Override
+    public void thrownEffect(@NotNull PotionSplashEvent event) {
+        for (LivingEntity e : event.getAffectedEntities()) {
+            if (e.getType() != EntityType.CREEPER) {
+                event.setIntensity(e, minimumEffect);
+            }
+        }
+    }
 }
