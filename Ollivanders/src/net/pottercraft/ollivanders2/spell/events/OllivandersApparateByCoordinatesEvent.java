@@ -10,19 +10,24 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public class OllivandersApparateByCoordinatesEvent extends ApparateEvent
-{
+public class OllivandersApparateByCoordinatesEvent extends ApparateEvent {
+    /**
+     * Event handlers
+     */
     private static final HandlerList handlers = new HandlerList();
+
+    /**
+     * Where the player is apparating to
+     */
     Location destination;
 
     /**
      * Constructor
      *
      * @param player the player apparating
-     * @param dest the destination being apparated to
+     * @param dest   the destination being apparated to
      */
-    public OllivandersApparateByCoordinatesEvent(@NotNull Player player, @NotNull Location dest)
-    {
+    public OllivandersApparateByCoordinatesEvent(@NotNull Player player, @NotNull Location dest) {
         super(player);
 
         destination = dest;
@@ -34,8 +39,7 @@ public class OllivandersApparateByCoordinatesEvent extends ApparateEvent
      * @return the destination being apparated to
      */
     @NotNull
-    public Location getDestination ()
-    {
+    public Location getDestination() {
         return destination;
     }
 }

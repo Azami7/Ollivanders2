@@ -14,10 +14,9 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * Spell that adds an O2Effect to a target.
+ * Spell type that adds an O2Effect to a target.
  */
-public class AddO2Effect extends O2Spell
-{
+public abstract class AddO2Effect extends O2Spell {
     /**
      * The duration for this effect.
      */
@@ -61,8 +60,7 @@ public class AddO2Effect extends O2Spell
     /**
      * Blacklist of effects that cannot be added by a spell.
      */
-    List<O2EffectType> effectBlacklist = new ArrayList<>()
-    {{
+    List<O2EffectType> effectBlacklist = new ArrayList<>() {{
         add(O2EffectType.ANIMAGUS_EFFECT);
         add(O2EffectType.ANIMAGUS_INCANTATION);
         add(O2EffectType.LYCANTHROPY);
@@ -75,8 +73,7 @@ public class AddO2Effect extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public AddO2Effect(Ollivanders2 plugin)
-    {
+    public AddO2Effect(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
@@ -89,8 +86,7 @@ public class AddO2Effect extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public AddO2Effect(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public AddO2Effect(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.CHARMS;
@@ -101,30 +97,26 @@ public class AddO2Effect extends O2Spell
      * If a target player is within the radius of the projectile, add the effect to the player.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (durationInSeconds > maxDurationInSeconds)
             durationInSeconds = maxDurationInSeconds;
         else if (durationInSeconds < minDurationInSeconds)
             durationInSeconds = minDurationInSeconds;
 
-        if (targetSelf)
-        {
+        if (targetSelf) {
             addEffectsToTarget(player);
             kill();
             return;
         }
 
-        for (Player target : getNearbyPlayers(defaultRadius))
-        {
+        for (Player target : getNearbyPlayers(defaultRadius)) {
             if ((target.getUniqueId() == player.getUniqueId()))
                 continue;
 
             addEffectsToTarget(target);
 
             // if the spell can only target a limited number, stop when the limit is reached
-            if (numberOfTargets <= 0)
-            {
+            if (numberOfTargets <= 0) {
                 kill();
                 return;
             }
@@ -139,25 +131,21 @@ public class AddO2Effect extends O2Spell
      *
      * @param target the player to add spells to
      */
-    private void addEffectsToTarget(@NotNull Player target)
-    {
+    private void addEffectsToTarget(@NotNull Player target) {
         int duration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
 
-        for (O2EffectType effectType : effectsToAdd)
-        {
+        for (O2EffectType effectType : effectsToAdd) {
             if (effectBlacklist.contains(effectType))
                 continue;
 
             Class<?> effectClass = effectType.getClassName();
 
             O2Effect effect;
-            try
-            {
+            try {
                 effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration * strengthModifier, target.getUniqueId());
             }
-            catch (Exception e)
-            {
-                common.printDebugMessage("Failed to create class for " + effectType.toString(), e, null, true);
+            catch (Exception e) {
+                common.printDebugMessage("Failed to create class for " + effectType, e, null, true);
                 continue;
             }
 

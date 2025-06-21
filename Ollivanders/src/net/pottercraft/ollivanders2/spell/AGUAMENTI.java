@@ -13,9 +13,8 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 
 /**
- * Spell which places a block of water against the targeted block.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Water-Making_Spell
+ * Water-Making Spell - https://harrypotter.fandom.com/wiki/Water-Making_Spell - which places a block of water against
+ * the targeted block.
  */
 public final class AGUAMENTI extends BlockTransfiguration
 {

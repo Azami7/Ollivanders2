@@ -12,12 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Spell that adds a potion effect to one or more targets.
- * <p>
- * Reference: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffect.html
+ * Spell type that adds a potion effect to one or more targets.
+ *
+ * <p>Reference: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/potion/PotionEffect.html</p>
  */
-public abstract class AddPotionEffect extends O2Spell
-{
+public abstract class AddPotionEffect extends O2Spell {
     /**
      * The duration for this effect.
      */
@@ -45,15 +44,15 @@ public abstract class AddPotionEffect extends O2Spell
 
     /**
      * Maximum strength this potion effect can be.
-     * <p>
-     * Reference: https://minecraft.fandom.com/wiki/Effect
+     *
+     * <p>Reference: https://minecraft.fandom.com/wiki/Effect</p>
      */
     int maxAmplifier = 127;
 
     /**
      * Minimum strength this potion effect can be.
-     * <p>
-     * Reference: https://minecraft.fandom.com/wiki/Effect
+     *
+     * <p>Reference: https://minecraft.fandom.com/wiki/Effect</p>
      */
     int minAmplifier = -127;
 
@@ -82,8 +81,7 @@ public abstract class AddPotionEffect extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public AddPotionEffect(Ollivanders2 plugin)
-    {
+    public AddPotionEffect(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
@@ -96,8 +94,7 @@ public abstract class AddPotionEffect extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public AddPotionEffect(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public AddPotionEffect(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.CHARMS;
@@ -107,8 +104,7 @@ public abstract class AddPotionEffect extends O2Spell
      * If a target player is within the radius of the projectile, add the potion effect to the player.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         affectRadius(defaultRadius, false);
 
         if (hasHitTarget())
@@ -119,24 +115,20 @@ public abstract class AddPotionEffect extends O2Spell
      * Affect targets within the radius.
      *
      * @param radius the radius of the spell
-     * @param flair  whether or not to show a visual flair
+     * @param flair  whether to show a visual flair
      */
-    void affectRadius(double radius, boolean flair)
-    {
+    void affectRadius(double radius, boolean flair) {
         if (flair)
             Ollivanders2Common.flair(location, (int) radius, 10);
 
-        if (targetSelf)
-        {
+        if (targetSelf) {
             addEffectsToTarget(player);
             numberOfTargets = numberOfTargets - 1;
         }
 
-        for (LivingEntity livingEntity : getNearbyLivingEntities(radius))
-        {
+        for (LivingEntity livingEntity : getNearbyLivingEntities(radius)) {
             // stop when the limit of targets is reached
-            if (numberOfTargets <= 0)
-            {
+            if (numberOfTargets <= 0) {
                 kill();
                 return;
             }
@@ -154,8 +146,7 @@ public abstract class AddPotionEffect extends O2Spell
      *
      * @param target the target living entity
      */
-    void addEffectsToTarget(@NotNull LivingEntity target)
-    {
+    void addEffectsToTarget(@NotNull LivingEntity target) {
         // duration
         durationInSeconds = (int) (usesModifier * durationModifier);
         if (durationInSeconds < minDurationInSeconds)
@@ -171,12 +162,11 @@ public abstract class AddPotionEffect extends O2Spell
         else if (amplifier > maxAmplifier)
             amplifier = maxAmplifier;
 
-        for (PotionEffectType effectType : effectTypes)
-        {
+        for (PotionEffectType effectType : effectTypes) {
             org.bukkit.potion.PotionEffect effect = new org.bukkit.potion.PotionEffect(effectType, duration, amplifier);
             target.addPotionEffect(effect);
 
-            common.printDebugMessage("Added " + effectType.toString() + " to " + target.getName() + " with amplifier of " + amplifier + " and duration of " + durationInSeconds + " seconds", null, null, false);
+            common.printDebugMessage("Added " + effectType + " to " + target.getName() + " with amplifier of " + amplifier + " and duration of " + durationInSeconds + " seconds", null, null, false);
         }
     }
 }

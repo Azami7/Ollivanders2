@@ -20,25 +20,22 @@ import java.util.ArrayList;
  * a lightning storm. Once the player has successfully become an Animagus it will require considerable practice
  * before they can consistently take the form.
  *
- * @since 2.2.6
  * @author Azami7
+ * @since 2.2.6
  */
-public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
-{
+public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public AMATO_ANIMO_ANIMATO_ANIMAGUS(Ollivanders2 plugin)
-    {
+    public AMATO_ANIMO_ANIMATO_ANIMAGUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("An Animagus is a wizard who elects to turn into an animal.");
             add("\"You know that I can disguise myself most effectively.\" -Peter Pettigrew");
         }};
@@ -66,8 +63,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public AMATO_ANIMO_ANIMATO_ANIMAGUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public AMATO_ANIMO_ANIMATO_ANIMAGUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS;
@@ -80,30 +76,25 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
      * Perform the Animagus spell
      */
     @Override
-    public void checkEffect()
-    {
-        if (!isSpellAllowed())
-        {
+    public void checkEffect() {
+        if (!isSpellAllowed()) {
             kill();
             return;
         }
 
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
 
-        if (o2p == null)
-        {
+        if (o2p == null) {
             kill();
             return;
         }
 
-        if (o2p.isAnimagus())
-        {
+        if (o2p.isAnimagus()) {
             // If the player is already an animagus, the incantation changes them to and from their animal form.
             common.printDebugMessage(player.getDisplayName() + " is an Animagus.", null, null, false);
             transform(o2p);
         }
-        else
-        {
+        else {
             common.printDebugMessage(player.getDisplayName() + " is not an Animagus.", null, null, false);
             setAnimagusIncantation();
         }
@@ -115,12 +106,10 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
      * If the player is not an animagus, saying the incantation at the correct time of day is the first
      * step to becoming one. Once said, the player must drink the Animagus potion within 15 seconds.
      */
-    private void setAnimagusIncantation()
-    {
+    private void setAnimagusIncantation() {
         boolean success = false;
 
-        if (Ollivanders2.useStrictAnimagusConditions)
-        {
+        if (Ollivanders2.useStrictAnimagusConditions) {
             long curTime = player.getWorld().getTime();
             if ((curTime >= 23000 && curTime <= 24000) || (curTime >= 12000 && curTime <= 13000))
                 success = true;
@@ -128,8 +117,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
         else
             success = true;
 
-        if (success)
-        {
+        if (success) {
             ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
@@ -144,23 +132,19 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
      * animal form. Changing to animal form takes practice to do consistently. Players can always
      * return to their human form once transformed.
      *
-     * @param o2p the o2player casting this spell
+     * @param o2p the player casting this spell
      */
-    private void transform(@NotNull O2Player o2p)
-    {
-        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT))
-        {
+    private void transform(@NotNull O2Player o2p) {
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT)) {
             // change them back to human form
             Ollivanders2API.getPlayers().playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_EFFECT);
         }
-        else
-        {
+        else {
             transformToAnimalForm(o2p);
         }
     }
 
-    private void transformToAnimalForm(@NotNull O2Player o2p)
-    {
+    private void transformToAnimalForm(@NotNull O2Player o2p) {
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
         int uses = (int) (usesModifier * 10);
 
@@ -175,15 +159,13 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
         else
             successRate = 100;
 
-        if (rand < successRate)
-        {
+        if (rand < successRate) {
             ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(animagusEffect);
 
             player.sendMessage(Ollivanders2.chatColor + "You feel very different.");
         }
-        else
-        {
+        else {
             player.sendMessage(Ollivanders2.chatColor + "You feel a momentary change but it quickly fades.");
         }
 
@@ -194,16 +176,15 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell
      * Override setUsesModifier because this spell does not require holding a wand.
      */
     @Override
-    protected void setUsesModifier()
-    {
+    protected void setUsesModifier() {
         usesModifier = p.getSpellCount(player, spellType);
 
-        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
-        {
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL)) {
             usesModifier *= 2;
         }
     }
 
     @Override
-    protected void doCheckEffect() {}
+    protected void doCheckEffect() {
+    }
 }
