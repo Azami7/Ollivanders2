@@ -11,12 +11,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Spell shoots a block of water at a target, extinguishing fire.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Aqua_Eructo
+ * Aqua Eructo Charm - https://harrypotter.fandom.com/wiki/Aqua_Eructo - shoots a block of water at a target,
+ * extinguishing fire.
  */
-public final class AQUA_ERUCTO extends BlockTransfiguration
-{
+public final class AQUA_ERUCTO extends BlockTransfiguration {
     private static final int minRadiusConfig = 1;
     private static final int maxRadiusConfig = 1;
 
@@ -25,15 +23,13 @@ public final class AQUA_ERUCTO extends BlockTransfiguration
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public AQUA_ERUCTO(Ollivanders2 plugin)
-    {
+    public AQUA_ERUCTO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.AQUA_ERUCTO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Aqua Eructo Charm");
             add("\"Very good. You'll need to use Aqua Eructo to put out the fires.\" -Bartemius Crouch Jr (disguised as Alastor Moody)");
         }};
@@ -48,8 +44,7 @@ public final class AQUA_ERUCTO extends BlockTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public AQUA_ERUCTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public AQUA_ERUCTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.AQUA_ERUCTO;
         branch = O2MagicBranch.CHARMS;

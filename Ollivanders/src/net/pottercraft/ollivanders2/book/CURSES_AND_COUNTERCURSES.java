@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Curses and Counter-Curses
  *
- * @link http://harrypotter.wikia.com/wiki/Curses_and_Counter-Curses
+ * @see <a href = "https://harrypotter.wikia.com/wiki/Curses_and_Counter-Curses">https://harrypotter.wikia.com/wiki/Curses_and_Counter-Curses</a>
  * @author Azami7
  * @since 2.2.4
  */

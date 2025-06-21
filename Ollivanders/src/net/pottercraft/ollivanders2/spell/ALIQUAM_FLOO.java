@@ -18,9 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Registers a new floo network entry
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Floo_Network
+ * Registers a new floo network entry - https://harrypotter.fandom.com/wiki/Floo_Network
  */
 public final class ALIQUAM_FLOO extends O2Spell {
     /**
@@ -113,7 +111,7 @@ public final class ALIQUAM_FLOO extends O2Spell {
         else {
             if (Ollivanders2.debug) {
                 if (target != null)
-                    common.printDebugMessage("target block was " + target.getType().toString(), null, null, false);
+                    common.printDebugMessage("target block was " + target.getType(), null, null, false);
                 else
                     common.printDebugMessage("target block was null", null, null, false);
             }

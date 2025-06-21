@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * Human Transfiguration<br>
  * Untransfiguration</p>
  *
- * @link https://harrypotter.fandom.com/wiki/A_Guide_to_Advanced_Transfiguration
+ * @see <a href = "https://harrypotter.fandom.com/wiki/A_Guide_to_Advanced_Transfiguration">https://harrypotter.fandom.com/wiki/A_Guide_to_Advanced_Transfiguration</a>
  * @author Azami7
  * @since 2.2.4
  */

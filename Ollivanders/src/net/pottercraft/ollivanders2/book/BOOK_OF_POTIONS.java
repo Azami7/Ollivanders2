@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * Goshawk's Book of Spells, this potions book has the ability to conjure utensils with which the reader can brew the
  * various potions included.
  *
- * @link http://harrypotter.wikia.com/wiki/Book_of_Potions
+ * @see <a href = "https://harrypotter.wikia.com/wiki/Book_of_Potions">https://harrypotter.wikia.com/wiki/Book_of_Potions</a>
  * @author Azami7
  * @since 2.2.7
  */

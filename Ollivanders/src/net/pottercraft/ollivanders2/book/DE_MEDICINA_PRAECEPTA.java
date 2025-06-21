@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * 2nd Century Roman healing text.
  *
- * @link https://en.wikipedia.org/wiki/Serenus_Sammonicus
+ * @see <a href = "https://en.wikipedia.org/wiki/Serenus_Sammonicus">https://en.wikipedia.org/wiki/Serenus_Sammonicus</a>
  * @author Azami7
  * @sinze 2.2.9
  */

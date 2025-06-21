@@ -13,14 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
-
 /**
- * Transfigures entity into a parrot.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Avifors_Spell
+ * Avifors - https://harrypotter.fandom.com/wiki/Avifors_Spell - transfigures entity into a parrot.
  */
-public final class AVIFORS extends FriendlyMobDisguise
-{
+public final class AVIFORS extends FriendlyMobDisguise {
     //todo make the entities this can target small
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
@@ -30,15 +26,13 @@ public final class AVIFORS extends FriendlyMobDisguise
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public AVIFORS(Ollivanders2 plugin)
-    {
+    public AVIFORS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.AVIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("However, mastering a Transfiguration spell such as \"Avifors\" can be both rewarding and useful.");
         }};
 
@@ -52,8 +46,7 @@ public final class AVIFORS extends FriendlyMobDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public AVIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public AVIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.AVIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -79,8 +72,7 @@ public final class AVIFORS extends FriendlyMobDisguise
      * Revert the entity back to their original form.
      */
     @Override
-    public void revert()
-    {
+    public void revert() {
         disguise.getWatcher().setFlyingWithElytra(false);
 
         super.revert();

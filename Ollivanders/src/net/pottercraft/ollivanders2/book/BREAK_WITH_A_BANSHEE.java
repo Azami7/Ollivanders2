@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Break with a Banshee - 2nd year Defense Against the Dark Arts book
  *
- * @link https://harrypotter.fandom.com/wiki/Break_with_a_Banshee
+ * @see <q href = "https://harrypotter.fandom.com/wiki/Break_with_a_Banshee">https://harrypotter.fandom.com/wiki/Break_with_a_Banshee</q>
  * @author Azami7
  * @since 2.2.4
  */
