@@ -5,9 +5,9 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The Essential Defence Against the Dark Arts. 3rd - 4th year defense against the dark arts
+ * The Essential Defence Against the Dark Arts. 3rd and 4th year defense against the dark arts
  *
- * @link https://harrypotter.fandom.com/wiki/The_Essential_Defence_Against_the_Dark_Arts
+ * @see <a href = "https://harrypotter.fandom.com/wiki/The_Essential_Defence_Against_the_Dark_Arts">https://harrypotter.fandom.com/wiki/The_Essential_Defence_Against_the_Dark_Arts</a>
  * @author Azami7
  * @since 2.2.4
  */

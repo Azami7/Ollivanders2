@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * and various other topics related to potion-making. This textbook has been used for decades in the education of young
  * witches and wizards.
  *
- * @link http://harrypotter.wikia.com/wiki/Advanced_Potion-Making
+ * @see <a href = "http://harrypotter.wikia.com/wiki/Advanced_Potion-Making">http://harrypotter.wikia.com/wiki/Advanced_Potion-Making</a>
  * @author Azami7
  * @since 2.2.7
  */

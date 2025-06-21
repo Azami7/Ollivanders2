@@ -6,8 +6,16 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Extreme Incantations - Charms book for 2nd year.
+ * <p>
+ * Contents:<br>{@link net.pottercraft.ollivanders2.spell.LUMOS_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.BOMBARDA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.BOMBARDA_MAXIMA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LUMOS_MAXIMA}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Extreme_Incantations
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Extreme_Incantations">https://harrypotter.fandom.com/wiki/Extreme_Incantations</a>
+ *
  * @author Azami7
  * @since 2.2.4
  */

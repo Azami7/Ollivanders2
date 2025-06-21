@@ -5,9 +5,22 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * A Beginner's Guide to Transfiguration - 1st & 2nd year transfiguration book
+ * A Beginner's Guide to Transfiguration - 1st and 2nd year transfiguration book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.CALAMUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PERMURATE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LEPUS_SACCULUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.SCARABAEUS_FIBULUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.RANACULUS_AMPHORAM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.VERA_VERTO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LAGOMORPHA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.REPARIFARGE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.MULTICORFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.SNUFFLIFORS}<br>
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration
+ * @see <a href = "https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration">https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration</a>
  */
 public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book {
     public A_BEGINNERS_GUIDE_TO_TRANSFIGURATION(@NotNull Ollivanders2 plugin) {

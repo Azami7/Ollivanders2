@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Chadwick's Charms - O.W.L level charms book
  *
- * @link https://harrypotter.fandom.com/wiki/Chadwick's_Charms
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Chadwick's_Charms">https://harrypotter.fandom.com/wiki/Chadwick's_Charms</a>
  * @author Azami7
  * @since 2.2.4
  */
