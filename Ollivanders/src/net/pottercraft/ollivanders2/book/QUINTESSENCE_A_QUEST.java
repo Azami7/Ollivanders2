@@ -6,12 +6,24 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Quintessence: A Quest - 6th year Charms book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.CONFUNDUS_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.APARECIUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.GLACIUS_TRIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.MOLLIARE}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest">https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class QUINTESSENCE_A_QUEST extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public QUINTESSENCE_A_QUEST(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

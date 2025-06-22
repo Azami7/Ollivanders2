@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Port key enchantment
  *
- * <p>Reference: https://harrypotter.fandom.com/wiki/Portkey</p>
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Portkey">https://harrypotter.fandom.com/wiki/Portkey</a>
  */
 public class PORTUS extends Enchantment {
     /**

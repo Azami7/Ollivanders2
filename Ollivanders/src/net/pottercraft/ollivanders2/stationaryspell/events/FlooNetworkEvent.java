@@ -60,6 +60,11 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
         return destination;
     }
 
+    /**
+     * Get the handlers for this Event
+     *
+     * @return the event handlers
+     */
     @NotNull
     @Override
     public HandlerList getHandlers()
@@ -67,17 +72,32 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
         return handlers;
     }
 
+    /**
+     * Get the handlers for this Event
+     *
+     * @return the event handlers
+     */
     public static HandlerList getHandlerList()
     {
         return handlers;
     }
 
+    /**
+     * Is this event canceled?
+     *
+     * @return true if canceled, false otherwise
+     */
     @Override
     public boolean isCancelled()
     {
         return canceled;
     }
 
+    /**
+     * Set whether this event is canceled or not
+     *
+     * @param cancel true if event should be canceled, false otherwise
+     */
     @Override
     public void setCancelled(boolean cancel)
     {

@@ -6,12 +6,30 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Standard Book of Spells Grade 6
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.AGUAMENTI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.CONFUNDUS_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.DEFODIO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.GLACIUS_TRIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.MOLLIARE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PARTIS_TEMPORUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PYROSVESTIRAS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.EVANESCO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.ALARTE_ASCENDARE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.APPARATE}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_6
+ * @see <a href = "https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_6">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_6</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_6 extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public STANDARD_BOOK_OF_SPELLS_GRADE_6(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

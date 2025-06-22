@@ -8,12 +8,33 @@ import org.jetbrains.annotations.Nullable;
  * Represents the year this player is in school.
  */
 public enum Year {
+    /**
+     * "1st", MagicLevel.BEGINNER
+     */
     YEAR_1("1st", MagicLevel.BEGINNER),
+    /**
+     * "2nd", MagicLevel.BEGINNER
+     */
     YEAR_2("2nd", MagicLevel.BEGINNER),
+    /**
+     * "3rd", MagicLevel.OWL
+     */
     YEAR_3("3rd", MagicLevel.OWL),
+    /**
+     * "4th", MagicLevel.OWL
+     */
     YEAR_4("4th", MagicLevel.OWL),
+    /**
+     * "5th", MagicLevel.NEWT
+     */
     YEAR_5("5th", MagicLevel.NEWT),
+    /**
+     * "6th", MagicLevel.NEWT
+     */
     YEAR_6("6th", MagicLevel.NEWT),
+    /**
+     * "7th", MagicLevel.EXPERT
+     */
     YEAR_7("7th", MagicLevel.EXPERT);
 
     /**

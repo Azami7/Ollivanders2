@@ -7,16 +7,30 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A Guide to Advanced Transfiguration - N.E.W.T level Transfiguration book.
  * <p>
- * Topics:<br>
- * Conjuration<br>
- * Human Transfiguration<br>
- * Untransfiguration</p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.AVIS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PULLUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.FELIS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.CANIS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.AMATO_ANIMO_ANIMATO_ANIMAGUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.BOS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.EQUUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LAMA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.URSUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.SUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.DRACONIFORS}
+ * </p>
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/A_Guide_to_Advanced_Transfiguration">https://harrypotter.fandom.com/wiki/A_Guide_to_Advanced_Transfiguration</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class ADVANCED_TRANSFIGURATION extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public ADVANCED_TRANSFIGURATION(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

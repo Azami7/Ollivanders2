@@ -12,8 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Enchants a broomstick to fly.
- * <p>
- * https://harrypotter.fandom.com/wiki/Broomstick
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Broomstick">a href = "https://harrypotter.fandom.com/wiki/Broomstick</a>
  */
 public final class VOLATUS extends ItemEnchant
 {

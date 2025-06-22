@@ -14,16 +14,27 @@ import java.util.UUID;
 
 /**
  * Negates fall damage.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Cushioning_Charm
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Cushioning_Charm">https://harrypotter.fandom.com/wiki/Cushioning_Charm</a>
  * {@link net.pottercraft.ollivanders2.spell.MOLLIARE}
  */
 public class MOLLIARE extends O2StationarySpell
 {
+    /**
+     * the min radius for this spell
+     */
     public static final int minRadiusConfig = 5;
+    /**
+     * the max radius for this spell
+     */
     public static final int maxRadiusConfig = 20;
+    /**
+     * the min duration for this spell
+     */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
+    /**
+     * the max duration for this spell
+     */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**

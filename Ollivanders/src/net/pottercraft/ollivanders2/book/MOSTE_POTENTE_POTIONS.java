@@ -6,12 +6,24 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Moste Potente Potions is a book by Phineas Bourne that gives instructions on how to brew advanced potions.
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.potion.BARUFFIOS_BRAIN_ELIXIR}<br>
+ * {@link net.pottercraft.ollivanders2.potion.WOLFSBANE_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.REGENERATION_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.ANIMAGUS_POTION}
+ * </p>
  *
- * @link http://harrypotter.wikia.com/wiki/Moste_Potente_Potions
+ * @see <a href = "http://harrypotter.wikia.com/wiki/Moste_Potente_Potions">http://harrypotter.wikia.com/wiki/Moste_Potente_Potions</a>
  * @author Azami7
  * @since 2.2.7
  */
 public class MOSTE_POTENTE_POTIONS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public MOSTE_POTENTE_POTIONS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

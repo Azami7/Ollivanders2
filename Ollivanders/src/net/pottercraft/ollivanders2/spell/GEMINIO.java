@@ -10,15 +10,13 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Places a geminio affect on the item.
+ * Places a geminio effect on the item.
  *
  * @author Azami7
  * @version Ollivanders2
  */
 public final class GEMINIO extends ItemEnchant
 {
-   public static final String geminio = "Geminio";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *

@@ -6,12 +6,27 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Chadwick's Charms - O.W.L level charms book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.ASCENDIO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.CRESCERE_PROTEGAT}<br>
+ * {@link net.pottercraft.ollivanders2.spell.HORREAT_PROTEGAT}<br>
+ * {@link net.pottercraft.ollivanders2.spell.MOV_FOTIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.FINESTRA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.FATUUS_AURUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.ABERTO}
+ * </p>
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Chadwick's_Charms">https://harrypotter.fandom.com/wiki/Chadwick's_Charms</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class CHADWICKS_CHARMS_VOLUME_1 extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public CHADWICKS_CHARMS_VOLUME_1(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

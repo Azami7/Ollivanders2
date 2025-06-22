@@ -14,7 +14,6 @@ import java.util.ArrayList;
  * Turn target player in to a spider.
  *
  * @author Azami7
- * @link https://github.com/Azami7/Ollivanders2/issues/30
  * @since 2.2.6
  */
 public final class ENTOMORPHIS extends PlayerDisguise

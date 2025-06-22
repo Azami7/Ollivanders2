@@ -7,11 +7,23 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Non-cannon book written by Gellert Grindelwald that is the only location of Morsmordre appears, which makes it
  * Grindelwald's mark that Voldemort took for his own purposes.
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.MORSMORDRE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.IMMOBULUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LEVICORPUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LIBERACORPUS}
+ * </p>
  *
  * @author Azami7
  * @since 2.2.8
  */
 public class FOR_THE_GREATER_GOOD extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public FOR_THE_GREATER_GOOD(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

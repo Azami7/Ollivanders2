@@ -30,11 +30,35 @@ public class GsonDAO implements GenericDAO
     final private Gson gson;
 
     private static final String archiveDirectory = "plugins/Ollivanders2/archive";
+
+    /**
+     * the house points save file name
+     */
     public static final String housesJSONFile = "O2Houses.txt";
+
+    /**
+     * the house points save file name
+     */
     public static final String housePointsJSONFile = "O2HousePoints.txt";
+
+    /**
+     * the apparate locations save file name
+     */
     public static final String apparateLocationsJSONFile = "O2ApparateLocations.txt";
+
+    /**
+     * the players save file name
+     */
     public static final String o2PlayerJSONFile = "O2Players.txt";
+
+    /**
+     * the stationary spell save file name
+     */
     public static final String o2StationarySpellsJSONFile = "O2StationarySpells.txt";
+
+    /**
+     * the prophecies save file name
+     */
     public static final String o2PropheciesJSONFile = "O2Prophecies.txt";
 
     /**
@@ -46,7 +70,7 @@ public class GsonDAO implements GenericDAO
     }
 
     /**
-     * Write the O2house data
+     * Write the house sort data
      *
      * @param map a map of player and house data as strings
      */
@@ -65,9 +89,9 @@ public class GsonDAO implements GenericDAO
     }
 
     /**
-     * Write O2House points
+     * Write house points
      *
-     * @param map a map of the O2House points data as strings
+     * @param map a map of the house points data as strings
      */
     @Override
     public void writeHousePoints(@NotNull Map<O2HouseType, Integer> map)
@@ -139,9 +163,9 @@ public class GsonDAO implements GenericDAO
     }
 
     /**
-     * Read the O2House data from json
+     * Read the house sort data from json
      *
-     * @return a map of player UUIDs and their O2House
+     * @return a map of player UUIDs and their house
      */
     @Override
     @Nullable
@@ -194,7 +218,7 @@ public class GsonDAO implements GenericDAO
     /**
      * read the house points json data
      *
-     * @return a map of O2Houses and their points
+     * @return a map of houses and their points
      */
     @Override
     @Nullable

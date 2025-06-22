@@ -329,7 +329,7 @@ public class O2Spells
             if (zone.zoneType != SpellZone.SpellZoneType.CUBOID)
                 continue;
 
-            if (zone.cuboid.isInside(location, common) && !zone.allowedSpells.isEmpty())
+            if (zone.cuboid.isInside(location) && !zone.allowedSpells.isEmpty())
                 return zone.allowedSpells.contains(spellType);
         }
 
@@ -385,7 +385,7 @@ public class O2Spells
             if (zone.zoneType != SpellZone.SpellZoneType.CUBOID)
                 continue;
 
-            if (zone.cuboid.isInside(location, common) && zone.disallowedSpells.contains(spellType))
+            if (zone.cuboid.isInside(location) && zone.disallowedSpells.contains(spellType))
                 return true;
         }
 

@@ -28,6 +28,7 @@ public abstract class PotionEffectAntidoteSuper extends O2Effect {
      * Constructor
      *
      * @param plugin a reference to the plugin for logging
+     * @param duration the duration of the effect
      * @param pid    the player to target
      */
     public PotionEffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

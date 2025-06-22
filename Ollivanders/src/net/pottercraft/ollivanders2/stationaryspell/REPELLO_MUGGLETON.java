@@ -23,9 +23,21 @@ import java.util.UUID;
  * @see net.pottercraft.ollivanders2.spell.REPELLO_MUGGLETON
  */
 public class REPELLO_MUGGLETON extends ShieldSpell {
+    /**
+     * min radius for this spell
+     */
     public static final int minRadiusConfig = 5;
+    /**
+     * max radius for this spell
+     */
     public static final int maxRadiusConfig = 20;
+    /**
+     * min duration for this spell
+     */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
+    /**
+     * max duration for this spell
+     */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**

@@ -6,12 +6,22 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Secrets of the Darkest Art - The only known book that explains how to make a Horcrux.
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.ET_INTERFICIAM_ANIMAM_LIGAVERIS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.VENTO_FOLIO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.SCUTO_CONTERAM}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art
- * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art">https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art</a>
  * @since 2.2.4
  */
 public class SECRETS_OF_THE_DARKEST_ART extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public SECRETS_OF_THE_DARKEST_ART(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

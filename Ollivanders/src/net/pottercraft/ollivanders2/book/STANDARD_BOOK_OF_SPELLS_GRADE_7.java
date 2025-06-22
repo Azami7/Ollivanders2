@@ -6,12 +6,26 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Standard Book of Spells Grade 7
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.BOMBARDA_MAXIMA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.HERBIVICUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.INFORMOUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LUMOS_SOLEM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.REPELLO_MUGGLETON}<br>
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_7">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_7</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public STANDARD_BOOK_OF_SPELLS_GRADE_7(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

@@ -106,9 +106,9 @@ public abstract class O2Divination {
      * <p>Parts of a prophecy:</p>
      * <p>
      * 1. prophecyPrefix - optional prefix based on the specific divination method, such as "Due to the influence of Mars"<br>
-     * 2. the time of day - midnight, sunrise, midday, sunset</ol>
-     * 3. the day - today, tomorrow, 3rd day, 4th day</ol>
-     * 4. the target's name</ol>
+     * 2. the time of day - midnight, sunrise, midday, sunset<br>
+     * 3. the day - today, tomorrow, 3rd day, 4th day<br>
+     * 4. the target's name<br>
      * 5. what will happen to them - see</p>
      *
      * <p>A prophecy should read like:<br>

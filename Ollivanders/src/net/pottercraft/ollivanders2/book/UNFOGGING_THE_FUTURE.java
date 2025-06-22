@@ -6,12 +6,26 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Unfogging the Future - 3rd and 4th year Divination textbook
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.BAO_ZHONG_CHA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.INTUEOR}<br>
+ * {@link net.pottercraft.ollivanders2.spell.ASTROLOGIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.CARTOMANCIE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.CHARTIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.OVOGNOSIS}
+ * </p>
  *
- * @link http://harrypotter.wikia.com/wiki/Unfogging_the_Future
+ * @see <a href = "http://harrypotter.wikia.com/wiki/Unfogging_the_Future">http://harrypotter.wikia.com/wiki/Unfogging_the_Future</a>
  * @author Azami7
  * @since 2.2.9
  */
 public class UNFOGGING_THE_FUTURE extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public UNFOGGING_THE_FUTURE(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

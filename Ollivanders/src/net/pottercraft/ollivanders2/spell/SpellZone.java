@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+/**
+ * Allow/disallow spells in an area
+ */
 public class SpellZone
 {
     /**
@@ -12,8 +15,17 @@ public class SpellZone
      */
     public enum SpellZoneType
     {
+        /**
+         * bounding box
+         */
         CUBOID,
+        /**
+         * entire world
+         */
         WORLD,
+        /**
+         * world guard region
+         */
         WORLD_GUARD;
     }
 

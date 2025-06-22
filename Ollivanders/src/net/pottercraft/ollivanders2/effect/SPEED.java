@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+/**
+ * Make a player move faster by adding the SPEED potion effect
+ */
 public class SPEED extends PotionEffectSuper {
     /**
      * Constructor

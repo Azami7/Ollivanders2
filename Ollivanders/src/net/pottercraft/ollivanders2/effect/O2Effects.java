@@ -969,6 +969,7 @@ public class O2Effects implements Listener {
      * Usage message for Effect subcommands.
      *
      * @param sender the player that issued the command
+     * @return true
      */
     public static boolean commandUsage(@NotNull CommandSender sender) {
         sender.sendMessage(Ollivanders2.chatColor

@@ -6,11 +6,27 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Charming Colors - spells for changing colors
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA_ALBUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA_AURANTIACO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA_CAERULUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA_FLAVO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA_OSTRUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA_VERIDI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA_VERMICULO}
+ * </p>
  *
  * @author Azami7
  * @since 2.2.4
  */
 public final class CHARMING_COLORS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public CHARMING_COLORS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

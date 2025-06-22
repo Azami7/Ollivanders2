@@ -6,12 +6,22 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Wanderings with Werewolves - 2nd year Defense Against the Dark Arts book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.CONFUNDUS_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves">https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class WANDERINGS_WITH_WEREWOLVES extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public WANDERINGS_WITH_WEREWOLVES(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

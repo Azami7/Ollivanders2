@@ -97,8 +97,9 @@ public final class O2PlayerCommon {
     }};
 
     /**
-     * Get the animagus form for this player
+     * Get the animagus form for this player, check by uuid so this can be run for players who are not online too
      *
+     * @param pid the id of the player to check
      * @return the animagus form for this player - should always be the same since it is based on a hash of their PID
      */
     @NotNull

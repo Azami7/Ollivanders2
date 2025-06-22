@@ -16,7 +16,14 @@ import java.util.ArrayList;
  */
 public final class LUMOS extends AddPotionEffectInRadius
 {
+   /**
+    * the min radius of players affected by this spell
+    */
    public static int minRadius = 5;
+
+   /**
+    * the max radius of players affected by this spell
+    */
    public static int maxRadius = 20;
 
    /**

@@ -6,12 +6,22 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Potion Opuscule is an elementary book on potions by Jigger.
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.potion.BABBLING_BEVERAGE}<br>
+ * {@link net.pottercraft.ollivanders2.potion.FORGETFULLNESS_POTION}
+ * </p>
  *
- * @link http://harrypotter.wikia.com/wiki/Potion_Opuscule
+ * @see <a href = "http://harrypotter.wikia.com/wiki/Potion_Opuscule">http://harrypotter.wikia.com/wiki/Potion_Opuscule</a>
  * @author Azami7
  * @since 2.2.7
  */
 public class POTION_OPUSCULE extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public POTION_OPUSCULE(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

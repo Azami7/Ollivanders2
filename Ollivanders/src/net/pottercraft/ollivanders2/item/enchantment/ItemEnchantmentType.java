@@ -10,9 +10,21 @@ import org.jetbrains.annotations.Nullable;
  * @author Azami7
  */
 public enum ItemEnchantmentType {
+    /**
+     * {@link FLAGRANTE}
+     */
     FLAGRANTE("flagrante", FLAGRANTE.class, null, MagicLevel.EXPERT, true),
+    /**
+     * {@link GEMINIO}
+     */
     GEMINIO("geminio", GEMINIO.class, null, MagicLevel.EXPERT, true),
+    /**
+     * {@link PORTUS}
+     */
     PORTUS("portus", PORTUS.class, null, MagicLevel.NEWT, false),
+    /**
+     * {@link VOLATUS}
+     */
     VOLATUS("volatus", VOLATUS.class, "Flying vehicle used by magical folk", MagicLevel.EXPERT, false),
     ;
 

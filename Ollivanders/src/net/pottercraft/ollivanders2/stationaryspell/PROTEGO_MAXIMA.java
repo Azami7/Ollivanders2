@@ -22,12 +22,30 @@ import java.util.UUID;
  */
 public class PROTEGO_MAXIMA extends ShieldSpell
 {
+    /**
+     * min radius for this spell
+     */
     public static final int minRadiusConfig = 5;
+    /**
+     * max radius for this spell
+     */
     public static final int maxRadiusConfig = 30;
+    /**
+     * min duration for this spell
+     */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
+    /**
+     * max duration for this spell
+     */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
-    public static final int minDamageConfig = 2; // half the damage of a wooden sword
-    public static final int maxDamageConfig = 8; // damage of a netherite sword
+    /**
+     * min damage for this spell - half the damage done by a wooden sword
+     */
+    public static final int minDamageConfig = 2;
+    /**
+     * max damage for this spell - damage done by a netherite sword
+     */
+    public static final int maxDamageConfig = 8;
 
     /**
      * The amount of damage to do to nearby entities

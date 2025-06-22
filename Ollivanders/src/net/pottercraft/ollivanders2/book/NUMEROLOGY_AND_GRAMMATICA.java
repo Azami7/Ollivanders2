@@ -6,12 +6,22 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Numerology and Grammatica - Arithmancy text
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.INFORMOUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.POINT_ME}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica">https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class NUMEROLOGY_AND_GRAMMATICA extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public NUMEROLOGY_AND_GRAMMATICA(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

@@ -19,14 +19,20 @@ import java.util.UUID;
 
 /**
  * Checks for entities going into a vanishing cabinet
- * <p>
- * https://harrypotter.fandom.com/wiki/Vanishing_Cabinet
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Vanishing_Cabinet">https://harrypotter.fandom.com/wiki/Vanishing_Cabinet</a>
  * {@link net.pottercraft.ollivanders2.spell.HARMONIA_NECTERE_PASSUS}
  */
 public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
 {
+    /**
+     * the min radius for this spell
+     */
     public static final int minRadiusConfig = 1;
+
+    /**
+     * the max radius for this spell
+     */
     public static final int maxRadiusConfig = 1;
 
     /**

@@ -10,14 +10,12 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Places a flagrante affect on the item.
+ * Places a flagrante effect on the item.
  *
  * @author Azami7
  */
 public final class FLAGRANTE extends ItemEnchant
 {
-   public static final String flagrante = "Flagrante";
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *

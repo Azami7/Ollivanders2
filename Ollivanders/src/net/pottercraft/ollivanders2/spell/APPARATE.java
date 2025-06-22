@@ -31,7 +31,7 @@ import java.util.Map;
  */
 public final class APPARATE extends O2Spell {
     /**
-     * The maximum apparate distance, value <= 0 means no limit
+     * The maximum apparate distance, value less than or equal 0 means no limit
      */
     public static int maxApparateDistance = 0;
 

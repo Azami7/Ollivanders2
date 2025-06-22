@@ -12,9 +12,21 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.2.8
  */
 public enum O2HouseType {
+    /**
+     * Gryffindor
+     */
     GRYFFINDOR("Gryffindor", O2Color.DARK_RED),
+    /**
+     * Hufflepuff
+     */
     HUFFLEPUFF("Hufflepuff", O2Color.GOLD),
+    /**
+     * Ravenclaw
+     */
     RAVENCLAW("Ravenclaw", O2Color.BLUE),
+    /**
+     * Slytherin
+     */
     SLYTHERIN("Slytherin", O2Color.DARK_GREEN);
 
     private String name;

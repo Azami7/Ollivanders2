@@ -660,57 +660,6 @@ public class OllivandersListener implements Listener {
     }
 
     /**
-     * When an item is picked up by a player, if the item is a portkey, the player will be teleported there.
-     *
-     * @param event the player Pickup Item Event
-     */
-    @Deprecated
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void portkeyPickUp(@NotNull EntityPickupItemEvent event) {
-        //TODO remove this when we remove lore-based items in the next major rev
-        Entity entity = event.getEntity();
-        if (entity instanceof Player) {
-            Player player = (Player) entity;
-            Item item = event.getItem();
-            ItemMeta meta = item.getItemStack().getItemMeta();
-            if (meta == null)
-                return;
-
-            List<String> lore = null;
-
-            if (meta.hasLore())
-                lore = meta.getLore();
-
-            if (lore == null)
-                lore = new ArrayList<>();
-
-            List<String> temp = new ArrayList<>(lore);
-
-            for (String s : temp) {
-                if (s.startsWith(PORTUS.portus)) {
-                    String[] portArray = s.split(" ");
-                    Location to;
-                    to = new Location(Bukkit.getServer().getWorld(UUID.fromString(portArray[1])),
-                            Double.parseDouble(portArray[2]),
-                            Double.parseDouble(portArray[3]),
-                            Double.parseDouble(portArray[4]));
-                    to.setDirection(player.getLocation().getDirection());
-                    for (Entity e : player.getWorld().getEntities()) {
-                        if (player.getLocation().distance(e.getLocation()) <= 2) {
-                            p.addTeleportEvent(player, to);
-                        }
-                    }
-                    p.addTeleportEvent(player, to);
-                    lore.remove(s);
-                    meta.setLore(lore);
-                    item.getItemStack().setItemMeta(meta);
-                    return;
-                }
-            }
-        }
-    }
-
-    /**
      * Cancels any targeting of players with the Cloak of Invisibility.
      *
      * @param event the Entity Target Event

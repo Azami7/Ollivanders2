@@ -5,6 +5,13 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * A stronger Red Sparks Charm
+ *
+ * @see VERMILLIOUS
+ * @author Azami7
+ * @since 2.21
+ */
 public class VERMILLIOUS_DUO extends SparksBase {
     /**
      * Default constructor for use in generating spell book text.  Do not use to cast the spell.

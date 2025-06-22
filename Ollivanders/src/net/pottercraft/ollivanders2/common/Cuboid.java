@@ -45,10 +45,9 @@ public class Cuboid {
      * @param location the location to check
      * @return true if inside, false otherwise
      */
-    public boolean isInside(@NotNull Location location, @NotNull Ollivanders2Common common) {
+    public boolean isInside(@NotNull Location location) {
         World world = location.getWorld();
         if (world == null) {
-            common.printDebugMessage("Cuboid.isInside: World is null", null, null, true);
             return false;
         }
 

@@ -13,18 +13,57 @@ import org.jetbrains.annotations.Nullable;
  */
 public enum O2StationarySpellType
 {
+    /**
+     * {@link ALIQUAM_FLOO}
+     */
     ALIQUAM_FLOO(ALIQUAM_FLOO.class, MagicLevel.EXPERT),
+    /**
+     * {@link COLLOPORTUS}
+     */
     COLLOPORTUS(COLLOPORTUS.class, MagicLevel.EXPERT), // colloportus can only be undone with alohomora so we level to max to ensure other spells cannot undo it
+    /**
+     * {@link HARMONIA_NECTERE_PASSUS}
+     */
     HARMONIA_NECTERE_PASSUS(HARMONIA_NECTERE_PASSUS.class, MagicLevel.EXPERT),
+    /**
+     * {@link HORCRUX}
+     */
     HORCRUX(HORCRUX.class, MagicLevel.EXPERT),
+    /**
+     * {@link MOLLIARE}
+     */
     MOLLIARE(MOLLIARE.class, MagicLevel.OWL),
+    /**
+     * {@link MUFFLIATO}
+     */
     MUFFLIATO(MUFFLIATO.class, MagicLevel.NEWT),
+    /**
+     * {@link NULLUM_APPAREBIT}
+     */
     NULLUM_APPAREBIT(NULLUM_APPAREBIT.class, MagicLevel.EXPERT),
+    /**
+     * {@link NULLUM_EVANESCUNT}
+     */
     NULLUM_EVANESCUNT(NULLUM_EVANESCUNT.class, MagicLevel.EXPERT),
+    /**
+     * {@link PROTEGO}
+     */
     PROTEGO(PROTEGO.class, MagicLevel.OWL),
+    /**
+     * {@link PROTEGO_HORRIBILIS}
+     */
     PROTEGO_HORRIBILIS(PROTEGO_HORRIBILIS.class, MagicLevel.EXPERT),
+    /**
+     * {@link PROTEGO_MAXIMA}
+     */
     PROTEGO_MAXIMA(PROTEGO_MAXIMA.class, MagicLevel.EXPERT),
+    /**
+     * {@link PROTEGO_TOTALUM}
+     */
     PROTEGO_TOTALUM(PROTEGO_TOTALUM.class, MagicLevel.EXPERT),
+    /**
+     * {@link REPELLO_MUGGLETON}
+     */
     REPELLO_MUGGLETON(REPELLO_MUGGLETON.class, MagicLevel.NEWT);
 
     /**

@@ -6,10 +6,24 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Jinxes for the Jinxed
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.ENTOMORPHIS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.IMPEDIMENTA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LEVICORPUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LACARNUM_INFLAMARI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LAGOMORPHA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.EBUBLIO}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed">https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed</a>
  */
 public class JINXES_FOR_THE_JINXED extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public JINXES_FOR_THE_JINXED(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

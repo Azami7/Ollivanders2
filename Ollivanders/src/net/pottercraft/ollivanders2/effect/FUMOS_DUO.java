@@ -5,6 +5,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+/**
+ * A stronger version of Fumos
+ */
 public class FUMOS_DUO extends FUMOS {
     /**
      * Constructor

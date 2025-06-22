@@ -11,34 +11,121 @@ import org.jetbrains.annotations.Nullable;
  * Ollivanders2 colors - because MC doesn't handle colors consistently
  */
 public enum O2Color {
+    /**
+     * aqua - Color.AQUA, ChatColor.AQUA, "§b", DyeColor.LIGHT_BLUE
+     */
     AQUA(Color.AQUA, ChatColor.AQUA, "§b", DyeColor.LIGHT_BLUE),
+    /**
+     * black - Color.BLACK, ChatColor.BLACK, "§0", DyeColor.BLACK
+     */
     BLACK(Color.BLACK, ChatColor.BLACK, "§0", DyeColor.BLACK),
+    /**
+     * blue - Color.BLUE, ChatColor.BLUE, "§9", DyeColor.BLUE
+     */
     BLUE(Color.BLUE, ChatColor.BLUE, "§9", DyeColor.BLUE),
+    /**
+     * brown - Color.ORANGE, ChatColor.GOLD, "§6", DyeColor.BROWN
+     */
     BROWN(Color.ORANGE, ChatColor.GOLD, "§6", DyeColor.BROWN),
+    /**
+     * cyan - Color.TEAL, ChatColor.DARK_AQUA, "§3", DyeColor.CYAN
+     */
     CYAN(Color.TEAL, ChatColor.DARK_AQUA, "§3", DyeColor.CYAN),
+    /**
+     * dark blue - Color.NAVY, ChatColor.DARK_BLUE, "§1", DyeColor.BLUE
+     */
     DARK_BLUE(Color.NAVY, ChatColor.DARK_BLUE, "§1", DyeColor.BLUE),
+    /**
+     * dark gray - Color.GRAY, ChatColor.GRAY, "§8", DyeColor.GRAY
+     */
     DARK_GRAY(Color.GRAY, ChatColor.GRAY, "§8", DyeColor.GRAY),
+    /**
+     * dark green - Color.GREEN, ChatColor.DARK_GREEN, "§2", DyeColor.GREEN
+     */
     DARK_GREEN(Color.GREEN, ChatColor.DARK_GREEN, "§2", DyeColor.GREEN),
+    /**
+     * dark red - Color.RED, ChatColor.RED, "§4", DyeColor.RED
+     */
     DARK_RED(Color.RED, ChatColor.RED, "§4", DyeColor.RED),
+    /**
+     * fuschia - Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PINK
+     */
     FUCHSIA(Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PINK),
+    /**
+     * gold - Color.YELLOW, ChatColor.GOLD, "§6", DyeColor.YELLOW
+     */
     GOLD(Color.YELLOW, ChatColor.GOLD, "§6", DyeColor.YELLOW),
+    /**
+     * gray - Color.GRAY, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY
+     */
     GRAY(Color.GRAY, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY),
+    /**
+     * green - Color.GREEN, ChatColor.GREEN, "§a", DyeColor.GREEN
+     */
     GREEN(Color.GREEN, ChatColor.GREEN, "§a", DyeColor.GREEN),
+    /**
+     * light blue - Color.TEAL, ChatColor.BLUE, "§9", DyeColor.LIGHT_BLUE
+     */
     LIGHT_BLUE(Color.TEAL, ChatColor.BLUE, "§9", DyeColor.LIGHT_BLUE),
+    /**
+     * light gray - Color.SILVER, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY
+     */
     LIGHT_GRAY(Color.SILVER, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY),
+    /**
+     * light purple - Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PURPLE
+     */
     LIGHT_PURPLE(Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PURPLE),
+    /**
+     * lime - Color.LIME, ChatColor.GREEN, "§a", DyeColor.LIME
+     */
     LIME(Color.LIME, ChatColor.GREEN, "§a", DyeColor.LIME),
+    /**
+     * magenta - Color.PURPLE, ChatColor.DARK_PURPLE, "§5", DyeColor.MAGENTA
+     */
     MAGENTA(Color.PURPLE, ChatColor.DARK_PURPLE, "§5", DyeColor.MAGENTA),
+    /**
+     * maroon - Color.MAROON, ChatColor.DARK_RED, "§4", DyeColor.RED
+     */
     MAROON(Color.MAROON, ChatColor.DARK_RED, "§4", DyeColor.RED),
+    /**
+     * navy - Color.NAVY, ChatColor.DARK_BLUE, "§1", DyeColor.BLUE
+     */
     NAVY(Color.NAVY, ChatColor.DARK_BLUE, "§1", DyeColor.BLUE),
+    /**
+     * olive - Color.OLIVE, ChatColor.DARK_GREEN, "§2", DyeColor.GREEN
+     */
     OLIVE(Color.OLIVE, ChatColor.DARK_GREEN, "§2", DyeColor.GREEN),
+    /**
+     * orange - Color.ORANGE, ChatColor.GOLD, "§6", DyeColor.ORANGE
+     */
     ORANGE(Color.ORANGE, ChatColor.GOLD, "§6", DyeColor.ORANGE),
+    /**
+     * pink - Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PINK
+     */
     PINK(Color.FUCHSIA, ChatColor.LIGHT_PURPLE, "§d", DyeColor.PINK),
+    /**
+     * purple - Color.PURPLE, ChatColor.DARK_PURPLE, "§5", DyeColor.PURPLE
+     */
     PURPLE(Color.PURPLE, ChatColor.DARK_PURPLE, "§5", DyeColor.PURPLE),
+    /**
+     * red - Color.RED, ChatColor.RED, "§c", DyeColor.RED
+     */
     RED(Color.RED, ChatColor.RED, "§c", DyeColor.RED),
+    /**
+     * silver - Color.SILVER, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY
+     */
     SILVER(Color.SILVER, ChatColor.GRAY, "§7", DyeColor.LIGHT_GRAY),
+    /**
+     * teal - Color.TEAL, ChatColor.DARK_AQUA, "§3", DyeColor.CYAN
+     */
     TEAL(Color.TEAL, ChatColor.DARK_AQUA, "§3", DyeColor.CYAN),
+    /**
+     * white - Color.WHITE, ChatColor.WHITE, "§f", DyeColor.WHITE
+     */
     WHITE(Color.WHITE, ChatColor.WHITE, "§f", DyeColor.WHITE),
+    /**
+     * yellow - Color.YELLOW, ChatColor.YELLOW, "§e", DyeColor.YELLOW
+     */
     YELLOW(Color.YELLOW, ChatColor.YELLOW, "§e", DyeColor.YELLOW),
     ;
 
@@ -93,6 +180,7 @@ public enum O2Color {
     final DyeColor dyeColor;
 
     /**
+     * Get the Bukkit Color type for this color
      * @return the Color for this type
      */
     @NotNull
@@ -101,6 +189,8 @@ public enum O2Color {
     }
 
     /**
+     * Get the ChatColor for this color
+     *
      * @return the ChatColor for this type
      */
     @NotNull
@@ -109,6 +199,8 @@ public enum O2Color {
     }
 
     /**
+     * Get the chat string code for this color
+     *
      * @return the chat code for this type
      */
     @NotNull
@@ -117,6 +209,8 @@ public enum O2Color {
     }
 
     /**
+     * get the DyeColor for this color
+     *
      * @return the dye color for this type
      */
     @NotNull
