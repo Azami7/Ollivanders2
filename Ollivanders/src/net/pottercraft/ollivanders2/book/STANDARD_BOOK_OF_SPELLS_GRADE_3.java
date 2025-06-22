@@ -6,12 +6,30 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Standard Book of Spells Grade 3
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.GLACIUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.DEPULSO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.GLACIUS_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PACK}<br>
+ * {@link net.pottercraft.ollivanders2.spell.HERBIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.CARPE_RETRACTUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.DURO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.IMMOBULUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LUMOS_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.EXPELLIARMUS}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_3
+ * @see <a href = "https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_3">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_3</a>
  * @since 2.2.4
  * @author Azami7
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_3 extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public STANDARD_BOOK_OF_SPELLS_GRADE_3(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

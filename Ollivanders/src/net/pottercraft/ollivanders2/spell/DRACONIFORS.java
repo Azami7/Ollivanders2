@@ -18,6 +18,7 @@ import java.util.ArrayList;
  */
 public final class DRACONIFORS extends FriendlyMobDisguise
 {
+    // todo make this spawn phantoms and not dragons since the ender dragon is way too big
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 

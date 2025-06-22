@@ -20,12 +20,22 @@ public class OllivandersPlayerSortedEvent extends PlayerEvent {
         super(player);
     }
 
+    /**
+     * Get the handlers for this Event
+     *
+     * @return the event handlers
+     */
     @NotNull
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
 
+    /**
+     * Get the handlers for this Event
+     *
+     * @return the event handlers
+     */
     public static HandlerList getHandlerList() {
         return handlers;
     }

@@ -33,6 +33,11 @@ public class Ollivanders2API
      */
     public static EntityCommon entityCommon;
 
+    /**
+     * Init this static class
+     *
+     * @param p a callback to the plugin
+     */
     static void init(@NotNull Ollivanders2 p)
     {
         if (common == null)

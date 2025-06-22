@@ -532,6 +532,7 @@ public class Ollivanders2Common {
      * Determine if a player is facing a block type.
      *
      * @param player the player to check
+     * @param blockType the block type to check
      * @return the block if a player is facing a block of this type, null otherwise
      */
     static public Block playerFacingBlockType(@NotNull Player player, @NotNull Material blockType) {
@@ -642,6 +643,7 @@ public class Ollivanders2Common {
      * Translates spherical coordinates to vector
      *
      * @param sphere array with indexes 0=inclination 1=azimuth
+     * @param radius the radius of the sphere
      * @return Vector
      */
     @NotNull

@@ -6,11 +6,20 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Harmonious Connections
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.HARMONIA_NECTERE_PASSUS}
+ * </p>
  *
  * @author Azami7
  * @since 2.2.4
  */
 public class HARMONIOUS_CONNECTIONS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public HARMONIOUS_CONNECTIONS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

@@ -6,12 +6,27 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The Essential Defence Against the Dark Arts. 3rd and 4th year defense against the dark arts
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.LUMOS_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.INCENDIO_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.IMMOBULUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.ARANIA_EXUMAI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.ALARTE_ASCENDARE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.AQUA_ERUCTO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.FUMOS_DUO}
+ * </p>
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/The_Essential_Defence_Against_the_Dark_Arts">https://harrypotter.fandom.com/wiki/The_Essential_Defence_Against_the_Dark_Arts</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class ESSENTIAL_DARK_ARTS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public ESSENTIAL_DARK_ARTS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

@@ -12,9 +12,22 @@ import java.util.List;
  * Wand cores
  */
 public enum O2WandCoreType {
+    // todo add more core types, use o2items for cores
+    /**
+     * spider eye
+     */
     SPIDER_EYE(Material.SPIDER_EYE, "Spider Eye"),
+    /**
+     * bone
+     */
     BONE(Material.BONE, "Bone"),
+    /**
+     * rotten flesh
+     */
     ROTTEN_FLESH(Material.ROTTEN_FLESH, "Rotten Flesh"),
+    /**
+     * gunpowder
+     */
     GUNPOWDER(Material.GUNPOWDER, "Gunpowder");
 
     private final Material material;

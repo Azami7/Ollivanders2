@@ -5,6 +5,13 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * The strongest red sparks spell
+ *
+ * @see VERDIMILLIOUS
+ * @author Azami1
+ * @since 2.21
+ */
 public final class VERDIMILLIOUS_TRIA extends VERDIMILLIOUS_DUO {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.

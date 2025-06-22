@@ -11,55 +11,202 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.2.4
  */
 public enum O2BookType {
+    /**
+     * {@link A_BEGINNERS_GUIDE_TO_TRANSFIGURATION}
+     */
     A_BEGINNERS_GUIDE_TO_TRANSFIGURATION(A_BEGINNERS_GUIDE_TO_TRANSFIGURATION.class, "A Beginner's Guide to Transfiguration", "Beginners Transfiguration", "Emeric Switch", O2MagicBranch.TRANSFIGURATION),
+    /**
+     * {@link ACHIEVEMENTS_IN_CHARMING}
+     */
     ACHIEVEMENTS_IN_CHARMING(ACHIEVEMENTS_IN_CHARMING.class, "Achievements in Charming", "Achievements in Charming", "Unknown", O2MagicBranch.CHARMS),
+    /**
+     * {@link ADVANCED_FIREWORKS}
+     */
     ADVANCED_FIREWORKS(ADVANCED_FIREWORKS.class, "Advanced Fireworks for Fun and Profit", "Advanced Fireworks", "George Weasley", O2MagicBranch.CHARMS),
+    /**
+     * {@link ADVANCED_POTION_MAKING}
+     */
     ADVANCED_POTION_MAKING(ADVANCED_POTION_MAKING.class, "Advanced Potion Making", "Advanced Potion Making", "Libatius Borage", O2MagicBranch.POTIONS),
+    /**
+     * {@link ADVANCED_TRANSFIGURATION}
+     */
     ADVANCED_TRANSFIGURATION(ADVANCED_TRANSFIGURATION.class, "A Guide to Advanced Transfiguration", "Advanced Transfiguration", "Unknown", O2MagicBranch.TRANSFIGURATION),
+    /**
+     * {@link BASIC_FIREWORKS}
+     */
     BASIC_FIREWORKS(BASIC_FIREWORKS.class, "Basic Fireworks", "Basic Fireworks", "George Weasley", O2MagicBranch.CHARMS),
+    /**
+     * {@link BASIC_HEXES}
+     */
     BASIC_HEXES(BASIC_HEXES.class, "Basic Hexes for the Busy and Vexed", "Basic Hexes", "Unknown", O2MagicBranch.DARK_ARTS),
-    // BOOK_OF_POTIONS (BOOK_OF_POTIONS.class, "Book Of Potions", "Book Of Potions", "Zygmunt Budge", O2MagicBranch.POTIONS),
+    /**
+     * {@link BOOK_OF_POTIONS}
+     */
+    BOOK_OF_POTIONS (BOOK_OF_POTIONS.class, "Book Of Potions", "Book Of Potions", "Zygmunt Budge", O2MagicBranch.POTIONS),
+    /**
+     * {@link BREAK_WITH_A_BANSHEE}
+     */
     BREAK_WITH_A_BANSHEE(BREAK_WITH_A_BANSHEE.class, "Break With A Banshee", "Break With A Banshee", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link CHADWICKS_CHARMS_VOLUME_1}
+     */
     CHADWICKS_CHARMS_VOLUME_1(CHADWICKS_CHARMS_VOLUME_1.class, "Chadwick's Charms Volume 1", "Chadwicks Charms Volume 1", "Chadwick Boot", O2MagicBranch.CHARMS),
+    /**
+     * {@link CHARMING_COLORS}
+     */
     CHARMING_COLORS(CHARMING_COLORS.class, "Charming Colors", "Charming Colors", "Nymphadora Tonks", O2MagicBranch.CHARMS),
+    /**
+     * {@link CONFRONTING_THE_FACELESS}
+     */
     CONFRONTING_THE_FACELESS(CONFRONTING_THE_FACELESS.class, "Confronting the Faceless", "Confronting the Faceless", "Unknown", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link CURSES_AND_COUNTERCURSES}
+     */
     CURSES_AND_COUNTERCURSES(CURSES_AND_COUNTERCURSES.class, "Curses and Counter-Curses", "Curses and Counter-Curses", "Professor Vindictus Viridian", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link DE_MEDICINA_PRAECEPTA}
+     */
     DE_MEDICINA_PRAECEPTA(DE_MEDICINA_PRAECEPTA.class, "De Medicina Praecepta", "De Medicina Praecepta", "Quintus Serenus Sammonicus", O2MagicBranch.HEALING),
+    /**
+     * {@link DEFENSE_AGAINST_THE_DARK_ARTS}
+     */
     DEFENSE_AGAINST_THE_DARK_ARTS(DEFENSE_AGAINST_THE_DARK_ARTS.class, "Defence Against the Dark Arts", "Defence Against Dark Arts", "Galatea Merrythought", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link ESSENTIAL_DARK_ARTS}
+     */
     ESSENTIAL_DARK_ARTS(ESSENTIAL_DARK_ARTS.class, "The Essential Defence Against the Dark Arts", "Essential Dark Arts Defence", "Arsenius Jigger", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link EXTREME_INCANTATIONS}
+     */
     EXTREME_INCANTATIONS(EXTREME_INCANTATIONS.class, "Extreme Incantations", "Extreme Incantations", "Violeta Stitch", O2MagicBranch.CHARMS),
     //FANTASTIC_BEASTS (FANTASTIC_BEASTS.class, "Fantastic Beasts and Where to Find Them", "Fantastic Beasts", "Newt Scamander", O2MagicBranch.CARE_OF_MAGICAL_CREATURES;),
+    /**
+     * {@link FOR_THE_GREATER_GOOD}
+     */
     FOR_THE_GREATER_GOOD(FOR_THE_GREATER_GOOD.class, "For The Greater Good", "For The Greater Good", "Gellert Grindelwald", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link GADDING_WITH_GHOULS}
+     */
     GADDING_WITH_GHOULS(GADDING_WITH_GHOULS.class, "Gadding with Ghouls", "Gadding with Ghouls", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link HARMONIOUS_CONNECTIONS}
+     */
     HARMONIOUS_CONNECTIONS(HARMONIOUS_CONNECTIONS.class, "Harmonious Connections", "Harmonious Connections", "Unknown", O2MagicBranch.CHARMS),
+    /**
+     * {@link HOLIDAYS_WITH_HAGS}
+     */
     HOLIDAYS_WITH_HAGS(HOLIDAYS_WITH_HAGS.class, "Holidays with Hags", "Holidays with Hags", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link INTERMEDIATE_TRANSFIGURATION}
+     */
     INTERMEDIATE_TRANSFIGURATION(INTERMEDIATE_TRANSFIGURATION.class, "Intermediate Transfiguration", "Intermediate Transfiguration", "Unknown", O2MagicBranch.TRANSFIGURATION),
+    /**
+     * {@link JINXES_FOR_THE_JINXED}
+     */
     JINXES_FOR_THE_JINXED(JINXES_FOR_THE_JINXED.class, "Jinxes for the Jinxed", "Jinxes for the Jinxed", "Unknown", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link MAGICAL_DRAFTS_AND_POTIONS}
+     */
     MAGICAL_DRAFTS_AND_POTIONS(MAGICAL_DRAFTS_AND_POTIONS.class, "Magical Drafts and Potions", "Magical Drafts and Potions", "Arsenius Jigger", O2MagicBranch.POTIONS),
+    /**
+     * {@link MAGICK_MOSTE_EVILE}
+     */
     MAGICK_MOSTE_EVILE(MAGICK_MOSTE_EVILE.class, "Magick Moste Evile", "Magick Moste Evile", "Godelot", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link MODERN_MAGICAL_TRANSPORTATION}
+     */
     MODERN_MAGICAL_TRANSPORTATION(MODERN_MAGICAL_TRANSPORTATION.class, "Modern Magical Transportation", "Magical Transportation", "Azami7", O2MagicBranch.CHARMS),
+    /**
+     * {@link MOSTE_POTENTE_POTIONS}
+     */
     MOSTE_POTENTE_POTIONS(MOSTE_POTENTE_POTIONS.class, "Moste Potente Potions", "Moste Potente Potions", "Phineas Bourne", O2MagicBranch.POTIONS),
+    /**
+     * {@link NUMEROLOGY_AND_GRAMMATICA}
+     */
     NUMEROLOGY_AND_GRAMMATICA(NUMEROLOGY_AND_GRAMMATICA.class, "Numerology and Grammatica", "Numerology and Grammatica", "Unknown", O2MagicBranch.ARITHMANCY),
+    /**
+     * {@link OMENS_ORACLES_AND_THE_GOAT}
+     */
     OMENS_ORACLES_AND_THE_GOAT(OMENS_ORACLES_AND_THE_GOAT.class, "Omens, Oracles & the Goat", "Omens, Oracles & the Goat", "Bathilda Bagshot", O2MagicBranch.DIVINATION),
+    /**
+     * {@link POTION_OPUSCULE}
+     */
     POTION_OPUSCULE(POTION_OPUSCULE.class, "Potion Opuscule", "Potion Opuscule", "Arsenius Jigger", O2MagicBranch.POTIONS),
+    /**
+     * {@link PRACTICAL_DEFENSIVE_MAGIC}
+     */
     PRACTICAL_DEFENSIVE_MAGIC(PRACTICAL_DEFENSIVE_MAGIC.class, "Practical Defensive Magic Volume One", "Practical Defensive Magic 1", "Unknown", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link QUINTESSENCE_A_QUEST}
+     */
     QUINTESSENCE_A_QUEST(QUINTESSENCE_A_QUEST.class, "Quintessence: A Quest", "Quintessence", "Unknown", O2MagicBranch.CHARMS),
+    /**
+     * {@link SECRETS_OF_THE_DARKEST_ART}
+     */
     SECRETS_OF_THE_DARKEST_ART(SECRETS_OF_THE_DARKEST_ART.class, "Secrets of the Darkest Art", "Darkest Art", "Owle Bullock", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link SECRETS_OF_WANDLORE}
+     */
     SECRETS_OF_WANDLORE(SECRETS_OF_WANDLORE.class, "Secrets of Wandlore", "Secrets of Wandlore", "Geraint Ollivander", O2MagicBranch.CHARMS),
+    /**
+     * {@link STANDARD_BOOK_OF_SPELLS_GRADE_1}
+     */
     STANDARD_BOOK_OF_SPELLS_GRADE_1(STANDARD_BOOK_OF_SPELLS_GRADE_1.class, "Standard Book of Spells Grade 1", "Standard Book of Spells Grade 1", "Miranda Goshawk", O2MagicBranch.CHARMS),
+    /**
+     * {@link STANDARD_BOOK_OF_SPELLS_GRADE_2}
+     */
     STANDARD_BOOK_OF_SPELLS_GRADE_2(STANDARD_BOOK_OF_SPELLS_GRADE_2.class, "Standard Book of Spells Grade 2", "Standard Book of Spells Grade 2", "Miranda Goshawk", O2MagicBranch.CHARMS),
+    /**
+     * {@link STANDARD_BOOK_OF_SPELLS_GRADE_3}
+     */
     STANDARD_BOOK_OF_SPELLS_GRADE_3(STANDARD_BOOK_OF_SPELLS_GRADE_3.class, "Standard Book of Spells Grade 3", "Standard Book of Spells Grade 3", "Miranda Goshawk", O2MagicBranch.CHARMS),
+    /**
+     * {@link STANDARD_BOOK_OF_SPELLS_GRADE_4}
+     */
     STANDARD_BOOK_OF_SPELLS_GRADE_4(STANDARD_BOOK_OF_SPELLS_GRADE_4.class, "Standard Book of Spells Grade 4", "Standard Book of Spells Grade 4", "Miranda Goshawk", O2MagicBranch.CHARMS),
+    /**
+     * {@link STANDARD_BOOK_OF_SPELLS_GRADE_5}
+     */
     STANDARD_BOOK_OF_SPELLS_GRADE_5(STANDARD_BOOK_OF_SPELLS_GRADE_5.class, "Standard Book of Spells Grade 5", "Standard Book of Spells Grade 5", "Miranda Goshawk", O2MagicBranch.CHARMS),
+    /**
+     * {@link STANDARD_BOOK_OF_SPELLS_GRADE_6}
+     */
     STANDARD_BOOK_OF_SPELLS_GRADE_6(STANDARD_BOOK_OF_SPELLS_GRADE_6.class, "Standard Book of Spells Grade 6", "Standard Book of Spells Grade 6", "Miranda Goshawk", O2MagicBranch.CHARMS),
+    /**
+     * {@link STANDARD_BOOK_OF_SPELLS_GRADE_7}
+     */
     STANDARD_BOOK_OF_SPELLS_GRADE_7(STANDARD_BOOK_OF_SPELLS_GRADE_7.class, "Standard Book of Spells Grade 7", "Standard Book of Spells Grade 7", "Miranda Goshawk", O2MagicBranch.CHARMS),
+    /**
+     * {@link TETRABIBLIOS}
+     */
     TETRABIBLIOS(TETRABIBLIOS.class, "Tetrabilios", "Tetrabilios", "Ptolemy", O2MagicBranch.DIVINATION),
+    /**
+     * {@link THE_DARK_FORCES}
+     */
     THE_DARK_FORCES(THE_DARK_FORCES.class, "The Dark Forces: A Guide to Self-Protection", "The Dark Forces", "Quentin Trimble", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link THE_HEALERS_HELPMATE}
+     */
     THE_HEALERS_HELPMATE(THE_HEALERS_HELPMATE.class, "The Healer's Helpmate", "The Healers Helpmate", "H. Pollingtonious", O2MagicBranch.HEALING),
+    /**
+     * {@link TRAVELS_WITH_TROLLS}
+     */
     TRAVELS_WITH_TROLLS(TRAVELS_WITH_TROLLS.class, "Traveling with Trolls", "Traveling with Trolls", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link UNFOGGING_THE_FUTURE}
+     */
     UNFOGGING_THE_FUTURE(UNFOGGING_THE_FUTURE.class, "Unfogging the Future", "Unfogging the Future", "Cassandra Vablatsky", O2MagicBranch.DIVINATION),
+    /**
+     * {@link VOYAGES_WITH_VAMPIRES}
+     */
     VOYAGES_WITH_VAMPIRES(VOYAGES_WITH_VAMPIRES.class, "Voyages with Vampires", "Voyages with Vampires", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link WANDERINGS_WITH_WEREWOLVES}
+     */
     WANDERINGS_WITH_WEREWOLVES(WANDERINGS_WITH_WEREWOLVES.class, "Wanderings with Werewolves", "Wanderings with Werewolves", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
+    /**
+     * {@link YEAR_WITH_A_YETI}
+     */
     YEAR_WITH_A_YETI(YEAR_WITH_A_YETI.class, "Year with a Yeti", "Year with a Yeti", "Gilderoy Lockhart", O2MagicBranch.DARK_ARTS),
     ;
 

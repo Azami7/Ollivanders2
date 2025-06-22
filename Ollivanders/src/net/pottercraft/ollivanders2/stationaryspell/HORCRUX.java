@@ -23,14 +23,21 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Player will spawn here when killed, with all of their spell levels intact. Only fiendfyre can destroy it.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Horcrux-making_spell
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Horcrux-making_spell">https://harrypotter.fandom.com/wiki/Horcrux-making_spell</a>
  * {@link net.pottercraft.ollivanders2.spell.ET_INTERFICIAM_ANIMAM_LIGAVERIS}
  */
 public class HORCRUX extends O2StationarySpell
 {
+    // todo make this an item enchantment and not a stationary spell
+    /**
+     * the min radius for this spell
+     */
     public static final int minRadiusConfig = 3;
+
+    /**
+     * the max radius for this spell
+     */
     public static final int maxRadiusConfig = 3;
 
     /**

@@ -6,6 +6,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+/**
+ * fastest speed effect
+ *
+ * @see SPEED
+ */
 public class SPEED_SPEEDIEST extends PotionEffectSuper {
     /**
      * Constructor

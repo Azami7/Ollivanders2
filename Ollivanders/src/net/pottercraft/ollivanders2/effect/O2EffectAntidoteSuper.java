@@ -6,6 +6,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
+/**
+ * Effect type that is an antidote to O2Effects
+ */
 public abstract class O2EffectAntidoteSuper extends O2Effect {
     /**
      * the o2effect type this effect is the antidote for
@@ -20,8 +23,9 @@ public abstract class O2EffectAntidoteSuper extends O2Effect {
     /**
      * Constructor
      *
-     * @param plugin a reference to the plugin for logging
-     * @param pid    the target player
+     * @param plugin   a reference to the plugin for logging
+     * @param duration how much time does this antidote cut from the effect's duration
+     * @param pid      the target player
      */
     public O2EffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         // hard-code duration because these are instant effects

@@ -6,12 +6,21 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Voyages with Vampires - 2nd year Defense Against the Dark Arts book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Voyages_with_Vampires
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Voyages_with_Vampires">https://harrypotter.fandom.com/wiki/Voyages_with_Vampires</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class VOYAGES_WITH_VAMPIRES extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public VOYAGES_WITH_VAMPIRES(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

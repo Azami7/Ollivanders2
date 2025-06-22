@@ -5,6 +5,9 @@ import java.util.UUID;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Stops lycanthropy symptoms
+ */
 public class LYCANTHROPY_RELIEF extends O2Effect {
     /**
      * Constructor

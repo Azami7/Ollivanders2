@@ -196,6 +196,8 @@ public abstract class O2Spell {
     /**
      * Default constructor should only be used for fake instances of the spell such as when initializing the book
      * text.
+     *
+     * @param plugin a callback to the plugin
      */
     public O2Spell(Ollivanders2 plugin) {
         p = plugin;
@@ -627,6 +629,8 @@ public abstract class O2Spell {
     }
 
     /**
+     * Get the spell's casting cooldown
+     *
      * @return the cool-down time for this spell in ticks
      */
     public long getCoolDown() {
@@ -634,6 +638,8 @@ public abstract class O2Spell {
     }
 
     /**
+     * Get the spell's book text
+     *
      * @return the book text for this spell
      */
     @NotNull
@@ -649,6 +655,8 @@ public abstract class O2Spell {
     }
 
     /**
+     * Get the spell's book flavor text
+     *
      * @return the flavor text for this spell
      */
     @Nullable
@@ -669,6 +677,8 @@ public abstract class O2Spell {
     }
 
     /**
+     * Get the spell's branch of magic
+     *
      * @return the branch of magic for this spell
      */
     @NotNull
@@ -677,6 +687,8 @@ public abstract class O2Spell {
     }
 
     /**
+     * Get the name of the spell
+     * 
      * @return the name of the spell
      */
     @NotNull

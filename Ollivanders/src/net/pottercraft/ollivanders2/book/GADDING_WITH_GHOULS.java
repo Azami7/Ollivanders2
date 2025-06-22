@@ -6,12 +6,21 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Gadding with Ghouls - 2nd year Defense Against the Dark Arts book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls">https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class GADDING_WITH_GHOULS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public GADDING_WITH_GHOULS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

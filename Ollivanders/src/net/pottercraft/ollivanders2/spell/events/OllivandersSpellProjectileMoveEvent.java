@@ -53,21 +53,41 @@ public class OllivandersSpellProjectileMoveEvent extends PlayerEvent implements 
         this.to = to;
     }
 
+    /**
+     * Get the handlers for this Event
+     *
+     * @return the event handlers
+     */
     @NotNull
     @Override
     public HandlerList getHandlers() {
         return handlers;
     }
 
+    /**
+     * Get the handlers for this Event
+     *
+     * @return the event handlers
+     */
     public static HandlerList getHandlerList() {
         return handlers;
     }
 
+    /**
+     * Is this event canceled?
+     *
+     * @return true if canceled, false otherwise
+     */
     @Override
     public boolean isCancelled() {
         return canceled;
     }
 
+    /**
+     * Set whether this event is canceled or not
+     *
+     * @param cancel true if event should be canceled, false otherwise
+     */
     @Override
     public void setCancelled(boolean cancel) {
         if (cancel) {
@@ -76,16 +96,31 @@ public class OllivandersSpellProjectileMoveEvent extends PlayerEvent implements 
         }
     }
 
+    /**
+     * Get the location where the projectile moved from
+     *
+     * @return the locationt the spell moved from
+     */
     @NotNull
     public Location getFrom() {
         return from;
     }
 
+    /**
+     * Get the location the projectile moved to
+     *
+     * @return the location the projectile moved to
+     */
     @NotNull
     public Location getTo() {
         return to;
     }
 
+    /**
+     * Get the spell this projectile is
+     *
+     * @return the spell for this projectile
+     */
     @NotNull
     public O2Spell getSpell() {
         return spell;

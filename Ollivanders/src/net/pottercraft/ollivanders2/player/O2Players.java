@@ -552,6 +552,7 @@ public class O2Players {
      *
      * @param sender the command sender
      * @param args   the args for the command
+     * @return true if the command succeeded
      */
     public boolean runSummary(@NotNull CommandSender sender, @NotNull String[] args) {
         if (args.length == 1) {

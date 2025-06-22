@@ -7,12 +7,25 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The Healer's Helpmate
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.AGUAMENTI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.BRACKIUM_EMENDO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.EPISKEY}<br>
+ * {@link net.pottercraft.ollivanders2.potion.COMMON_ANTIDOTE_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.WIDEYE_POTION}<br>
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate
+ * @see <a href = "https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate">https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class THE_HEALERS_HELPMATE extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public THE_HEALERS_HELPMATE(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

@@ -6,12 +6,22 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Year with the Yeti - 2nd year Defense Against the Dark Arts book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.ARANIA_EXUMAI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}<br>
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Year_with_the_Yeti
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Year_with_the_Yeti">https://harrypotter.fandom.com/wiki/Year_with_the_Yeti</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class YEAR_WITH_A_YETI extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public YEAR_WITH_A_YETI(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

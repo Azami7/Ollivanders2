@@ -352,6 +352,9 @@ public class O2Wands {
 
     /**
      * Give a player a random wand.
+     *
+     * @param player the player to give the wand to
+     * @return true if successful
      */
     public boolean giveRandomWand(@NotNull Player player) {
         ItemStack wand = createRandomWand();

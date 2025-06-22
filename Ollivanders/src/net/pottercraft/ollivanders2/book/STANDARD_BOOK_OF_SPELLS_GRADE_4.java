@@ -6,12 +6,29 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Standard Book of Spells Grade 4
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.ACCIO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.BOMBARDA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.MELOFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.DIAMAS_REPARO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.DIFFINDO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LUMOS_MAXIMA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.TERGEO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.AVIFORS}<br>
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_4
+ * @see <a href = "https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_4">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_4</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_4 extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public STANDARD_BOOK_OF_SPELLS_GRADE_4(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

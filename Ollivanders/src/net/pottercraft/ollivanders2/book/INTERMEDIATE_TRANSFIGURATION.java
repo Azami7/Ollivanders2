@@ -7,14 +7,27 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Intermediate Transfiguration - an O.W.L level (3rd - 5th year) transfiguration book
  * <p>
- * Topics:<br>
- * Animal Transfiguration<br>
- * Self-Transformation<br>
- * Vanishing</p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.DURO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LAGOMORPHA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.AVIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.EVANESCO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LAPIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COLOVARIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.DUCKLIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LAPIFORS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PIERTOTUM_LOCOMOTOR}<br>
+ * {@link net.pottercraft.ollivanders2.spell.DELETRIUS}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration">https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration</a>
  */
 public class INTERMEDIATE_TRANSFIGURATION extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public INTERMEDIATE_TRANSFIGURATION(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

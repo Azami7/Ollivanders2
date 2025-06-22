@@ -16,16 +16,27 @@ import java.util.UUID;
 
 /**
  * Only players within this can hear other conversation from other players within. Duration depending on spell's level.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Muffliato_Charm
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Muffliato_Charm">https://harrypotter.fandom.com/wiki/Muffliato_Charm</a>
  * {@link net.pottercraft.ollivanders2.spell.MUFFLIATO}
  */
 public class MUFFLIATO extends ShieldSpell
 {
+    /**
+     * the min radius for this spell
+     */
     public static final int minRadiusConfig = 5;
+    /**
+     * the max radius for this spell
+     */
     public static final int maxRadiusConfig = 20;
+    /**
+     * the min duration for this spell
+     */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
+    /**
+     * the max duration for this spell
+     */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**

@@ -425,6 +425,8 @@ public abstract class O2Potion
 
     /**
      * Sets the uses modifier that takes into account potion brew count and level, if years is enabled.
+     *
+     * @param o2p the player who is brewing the potion
      */
     protected void setUsesModifier(@NotNull O2Player o2p)
     {

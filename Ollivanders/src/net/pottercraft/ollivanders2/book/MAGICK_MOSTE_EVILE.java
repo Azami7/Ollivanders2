@@ -6,12 +6,26 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Magick Moste Evile - O2Book of Dark Magic written in the Middle Ages
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.FIENDFYRE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.AVADA_KEDAVRA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.FLAGRANTE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LEGILIMENS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.SCUTO_CONTERAM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.AMATO_ANIMO_ANIMATO_ANIMAGUS}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Magick_Moste_Evile
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Magick_Moste_Evile">https://harrypotter.fandom.com/wiki/Magick_Moste_Evile</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class MAGICK_MOSTE_EVILE extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public MAGICK_MOSTE_EVILE(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

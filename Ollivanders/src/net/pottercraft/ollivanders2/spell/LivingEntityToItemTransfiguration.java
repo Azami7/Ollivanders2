@@ -20,6 +20,7 @@ import java.util.Map;
  * Transforms entities in to items. This spell kills the entity (ie. it does not revert)
  */
 public abstract class LivingEntityToItemTransfiguration extends EntityTransfiguration {
+    //todo make player transfiguration an effect so it persists over log out/restarts
     /**
      * The target item material for this spell, only used if transfiguration map is not populated, then will turn any
      * entity type in to this material.

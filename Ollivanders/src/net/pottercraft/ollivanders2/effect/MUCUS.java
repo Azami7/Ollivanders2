@@ -10,6 +10,9 @@ import org.bukkit.entity.Slime;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Makes slime spawn on a player's head
+ */
 public class MUCUS extends O2Effect {
     /**
      * Constructor

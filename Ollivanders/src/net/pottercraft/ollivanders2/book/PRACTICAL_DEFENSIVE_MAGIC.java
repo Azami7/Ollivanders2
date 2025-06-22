@@ -6,12 +6,30 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Practical Defensive Magic - sent to Harry by Sirius and Lupin in his 5th year
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.DEPRIMO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PROTEGO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.DISSENDIUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.EXPELLIARMUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.FIANTO_DURI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.REDUCTO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.IMPEDIMENTA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.LACARNUM_INFLAMARI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.MUFFLIATO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.VERMILLIOUS_TRIA}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Practical_Defensive_Magic_and_Its_Use_Against_the_Dark_Arts
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Practical_Defensive_Magic_and_Its_Use_Against_the_Dark_Arts">https://harrypotter.fandom.com/wiki/Practical_Defensive_Magic_and_Its_Use_Against_the_Dark_Arts</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public PRACTICAL_DEFENSIVE_MAGIC(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

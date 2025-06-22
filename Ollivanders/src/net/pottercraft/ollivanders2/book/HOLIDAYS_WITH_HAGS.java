@@ -6,12 +6,21 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Holidays with Hags - 2nd year Defense Against the Dark Arts book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Holidays_with_Hags
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Holidays_with_Hags">https://harrypotter.fandom.com/wiki/Holidays_with_Hags</a>
  * @author Azami7
  * @since 2.2.4
  */
 public class HOLIDAYS_WITH_HAGS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public HOLIDAYS_WITH_HAGS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

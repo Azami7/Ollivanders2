@@ -13,9 +13,21 @@ import java.util.Date;
  * Reference: https://www.digminecraft.com/game_commands/time_set_day.php
  */
 public enum TimeCommon {
+    /**
+     * 18000
+     */
     MIDNIGHT(18000),
+    /**
+     * 23000
+     */
     DAWN(23000),
+    /**
+     * 6000
+     */
     MIDDAY(6000),
+    /**
+     * 12000
+     */
     SUNSET(12000);
 
     /**

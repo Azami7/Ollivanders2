@@ -6,11 +6,24 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Non-cannon book written by George Weasley on firework making.
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.BOTHYNUS}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COMETES}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PERICULUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PORFYRO_ASTERI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PYRO_PRASINA}
+ * </p>
  *
  * @author Azami7
  * @since 2.2.4
  */
 public final class BASIC_FIREWORKS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public BASIC_FIREWORKS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

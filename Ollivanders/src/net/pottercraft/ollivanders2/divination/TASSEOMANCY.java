@@ -12,8 +12,16 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.2.9
  */
 public class TASSEOMANCY extends O2Divination {
-    public TASSEOMANCY(@NotNull Ollivanders2 plugin, @NotNull Player pro, @NotNull Player tar, int exp) {
-        super(plugin, pro, tar, exp);
+    /**
+     * Constructor
+     *
+     * @param plugin     a callback to the plugin
+     * @param prophet    the player making the prophecy
+     * @param target     the target of the prophecy
+     * @param experience the experience level of the prophet
+     */
+    public TASSEOMANCY(@NotNull Ollivanders2 plugin, @NotNull Player prophet, @NotNull Player target, int experience) {
+        super(plugin, prophet, target, experience);
 
         divinationType = O2DivinationType.TASSEOMANCY;
         maxAccuracy = 20;

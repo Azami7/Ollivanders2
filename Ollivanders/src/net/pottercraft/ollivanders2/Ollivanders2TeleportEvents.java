@@ -80,24 +80,44 @@ public class Ollivanders2TeleportEvents
          explosionOnTeleport = explosion;
       }
 
+      /**
+       * get the player who teleported
+       *
+       * @return the player who teleported
+       */
       @NotNull
       public Player getPlayer()
       {
          return player;
       }
 
+      /**
+       * get the location the player teleported to
+       *
+       * @return the destination
+       */
       @NotNull
       public Location getToLocation()
       {
          return toLocation;
       }
 
+      /**
+       * get the location the player teleported from
+       *
+       * @return the source
+       */
       @NotNull
       public Location getFromLocation()
       {
          return fromLocation;
       }
 
+      /**
+       * does this teleport do an explosion sound on teleport?
+       *
+       * @return true if it does an explosion sound, false otherwise
+       */
       public boolean isExplosionOnTeleport()
       {
          return explosionOnTeleport;
@@ -116,7 +136,7 @@ public class Ollivanders2TeleportEvents
    }
 
    /**
-    * Get all of the teleport events.
+    * Get all the teleport events.
     *
     * @return an array of the pending teleport events
     */

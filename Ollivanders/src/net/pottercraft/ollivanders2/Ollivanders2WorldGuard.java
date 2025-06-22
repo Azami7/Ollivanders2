@@ -24,7 +24,7 @@ import org.jetbrains.annotations.Nullable;
  * will short circuit to allow actions.
  *
  * @since 2.2.5
- * @link https://worldguard.enginehub.org/en/latest/developer/
+ * @see <a href = "https://worldguard.enginehub.org/en/latest/developer/">https://worldguard.enginehub.org/en/latest/developer/</a>
  * @author Azami7
  */
 public class Ollivanders2WorldGuard
@@ -36,7 +36,8 @@ public class Ollivanders2WorldGuard
    /**
     * Constructor.
     *
-    * @link https://worldguard.enginehub.org/en/latest/developer/dependency/
+    * @see <a href = "https://worldguard.enginehub.org/en/latest/developer/dependency/">https://worldguard.enginehub.org/en/latest/developer/dependency/</a>
+    * @param o2plugin a callback to the ollivanders plugin
     */
    public Ollivanders2WorldGuard (@NotNull Ollivanders2 o2plugin)
    {
@@ -141,6 +142,7 @@ public class Ollivanders2WorldGuard
     *
     * @param player the player to check for
     * @param location the location to check (since it may not be where the player is)
+    * @param flag the flag to check
     * @return true if the player has this permission at this location, false otherwise
     */
    public boolean checkWGFlag (@NotNull Player player, @NotNull Location location, @NotNull StateFlag flag)
@@ -152,8 +154,6 @@ public class Ollivanders2WorldGuard
     * If WorldGuard is enabled, determine if the player has build permissions.  This is done so that
     * Ollivanders2 actions do not complete partially, such as object transformation spells, and then
     * cannot complete because WorldGuard is enabled.
-    *
-    * @link https://github.com/Azami7/Ollivanders2/issues/5
     *
     * @param player the player to check WG for
     * @param location the location to check (since it may not be where the player is)

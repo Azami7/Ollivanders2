@@ -15,9 +15,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public final class PORTUS extends ItemEnchant
 {
-   public static final String portus = "Portkey";
-   private Location toLoc;
-
    /**
     * Default constructor for use in generating spell text.  Do not use to cast the spell.
     *

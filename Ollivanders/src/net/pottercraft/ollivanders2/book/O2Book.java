@@ -46,13 +46,13 @@ public abstract class O2Book {
      * No more than 256 characters
      */
     String openingPage;
-    final static String openingPageLabel = "_openingPage";
+    final private static String openingPageLabel = "_openingPage";
 
     /**
      * No more than 256 characters
      */
     String closingPage;
-    final static String closingPageLabel = "_closingPage";
+    final private static String closingPageLabel = "_closingPage";
 
     /**
      * Namespace key for NBT tag - book type
@@ -86,6 +86,8 @@ public abstract class O2Book {
 
     /**
      * Constructor
+     *
+     * @param plugin a callback to the plugin
      */
     public O2Book(@NotNull Ollivanders2 plugin) {
         bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1;

@@ -6,12 +6,28 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Defence Against the Dark Arts by Galatea Merrythought - 7th year Defense against the dark arts book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.ASCENDIO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.MORTUOS_SUSCITATE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.INCENDIO_TRIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.NULLUM_APPAREBIT}<br>
+ * {@link net.pottercraft.ollivanders2.spell.NULLUM_EVANESCUNT}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PRIOR_INCANTATO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PROTEGO_TOTALUM}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PROTEGO_HORRIBILIS}
+ * </p>
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Defence_Against_the_Dark_Arts_(book)">https://harrypotter.fandom.com/wiki/Defence_Against_the_Dark_Arts_(book)</a>
  * @author Azami7
  * @since 2.21
  */
 public class DEFENSE_AGAINST_THE_DARK_ARTS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public DEFENSE_AGAINST_THE_DARK_ARTS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

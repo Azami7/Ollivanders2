@@ -19,16 +19,27 @@ import java.util.UUID;
 
 /**
  * Nullum apparebit creates a stationary spell which will not allow apparition into it.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx</a>
  * {@link net.pottercraft.ollivanders2.spell.NULLUM_APPAREBIT}
  */
 public class NULLUM_APPAREBIT extends O2StationarySpell
 {
+    /**
+     * the min radius for this spell
+     */
     public static final int minRadiusConfig = 5;
+    /**
+     * the max radius for this spell
+     */
     public static final int maxRadiusConfig = 50;
+    /**
+     * the min duration for this spell
+     */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
+    /**
+     * the max duration for this spell
+     */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**

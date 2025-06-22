@@ -50,6 +50,7 @@ public class O2Item {
     }
 
     /**
+     * get the type for this item
      * @return the O2ItemType
      */
     @NotNull
@@ -58,6 +59,7 @@ public class O2Item {
     }
 
     /**
+     * get the name of this item
      * @return the item name
      */
     @NotNull
@@ -66,6 +68,7 @@ public class O2Item {
     }
 
     /**
+     * get the material type for this item
      * @return the material type
      */
     @NotNull

@@ -44,7 +44,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>When bookLEarning is enabled, every Ollivanders2 spell must be in a WrittenBook with lore or NBT set up correctly
  * or players will not be able to learn them.</p>
  *
- * @link https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning
+ * @see <a href = "https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning">https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning</a>
  */
 public final class O2Books implements Listener {
     /**

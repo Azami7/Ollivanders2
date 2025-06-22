@@ -423,6 +423,8 @@ public class O2Houses {
 
     /**
      * Resets all house points to 0.
+     *
+     * @return true if reset was successful
      */
     public boolean resetHousePoints() {
         initHousePoints();
@@ -432,6 +434,8 @@ public class O2Houses {
 
     /**
      * Resets houses completely.
+     *
+     * @return true if reset was successful
      */
     public boolean reset() {
         p.getLogger().info("Resetting houses...");

@@ -20,6 +20,11 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.2.4
  */
 public class EXTREME_INCANTATIONS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public EXTREME_INCANTATIONS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

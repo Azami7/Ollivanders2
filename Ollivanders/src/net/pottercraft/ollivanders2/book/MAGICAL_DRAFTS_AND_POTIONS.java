@@ -6,12 +6,28 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Magical Drafts and Potions - OWL potions book
+ * <p>
+ * {@link net.pottercraft.ollivanders2.potion.COMMON_ANTIDOTE_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.FORGETFULLNESS_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.HERBICIDE_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.CURE_FOR_BOILS}<br>
+ * {@link net.pottercraft.ollivanders2.potion.OCULUS_FELIS}<br>
+ * {@link net.pottercraft.ollivanders2.potion.WIGGENWELD_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.WIDEYE_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.SLEEPING_DRAUGHT}<br>
+ * {@link net.pottercraft.ollivanders2.potion.WIT_SHARPENING_POTION}
+ * </p>
  *
- * @link https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions">https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions</a>
  * @author Azami7
  * @since 2.2.7
  */
 public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
     public MAGICAL_DRAFTS_AND_POTIONS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 

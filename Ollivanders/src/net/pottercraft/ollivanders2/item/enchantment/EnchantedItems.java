@@ -220,7 +220,7 @@ public class EnchantedItems implements Listener {
      *
      * @param item  the item to check
      * @param level the level of the spell or person doing the checking
-     * @return true if it is cursed and the level of the enchantment is <= level + 1, false otherwise
+     * @return true if it is cursed and the level of the enchantment is less than or equal to level + 1, false otherwise
      */
     public boolean isCursedLevelBased(@NotNull Item item, @NotNull MagicLevel level) {
         boolean cursed = isCursed(item);

@@ -23,9 +23,21 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PROTEGO_HORRIBILIS extends ShieldSpell
 {
+    /**
+     * min radius for this spell
+     */
     public static final int minRadiusConfig = 5;
+    /**
+     * max radius for this spell
+     */
     public static final int maxRadiusConfig = 30;
+    /**
+     * min duration for this spell
+     */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
+    /**
+     * max duration for this spell
+     */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**

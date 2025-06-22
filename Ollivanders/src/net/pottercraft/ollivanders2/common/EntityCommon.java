@@ -260,6 +260,10 @@ public class EntityCommon {
     /**
      * Gets item entities within bounding box of the projectile
      *
+     * @param location the location to check
+     * @param x the x-limit to check
+     * @param y the y-limit to check
+     * @param z the z-limit to check
      * @return List of item entities within bounding box of projectile
      */
     @NotNull
@@ -278,6 +282,8 @@ public class EntityCommon {
     /**
      * Gets item entities within radius of the projectile
      *
+     * @param location the location to check
+     * @param radius the radius to check around the location
      * @return List of item entities within radius of projectile
      */
     @NotNull
@@ -288,6 +294,7 @@ public class EntityCommon {
     /**
      * Gets item entities within radius of the projectile
      *
+     * @param location the location to check
      * @param radius radius within which to get entities
      * @return List of item entities within one block of projectile
      */
@@ -299,6 +306,7 @@ public class EntityCommon {
     /**
      * Get an item by material
      *
+     * @param location the location to check
      * @param material the material to look for
      * @param radius   the radius to look in
      * @return an item if found, null otherwise
@@ -318,6 +326,7 @@ public class EntityCommon {
     /**
      * Get an item by material
      *
+     * @param location the location to check
      * @param materials the list of materials to look for
      * @param radius    the radius to look in
      * @return an item if found, null otherwise
@@ -337,6 +346,7 @@ public class EntityCommon {
     /**
      * Get nearby items by O2ItemType
      *
+     * @param location the location to check
      * @param itemType the item type to get
      * @param radius   the radius to look in
      * @return the item if found, null otherwise

@@ -29,10 +29,22 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PROTEGO extends ShieldSpell
 {
+    /**
+     * min radius for this spell
+     */
     public static final int minRadiusConfig = 5;
+    /**
+     * max radius for this spell
+     */
     public static final int maxRadiusConfig = 20;
-    public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15; // 15 seconds
-    public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute; // simple protego lasts up to 1 minute
+    /**
+     * min duration for this spell - 15 seconds
+     */
+    public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
+    /**
+     * max duration for this spell - 1 min
+     */
+    public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute;
 
     /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
