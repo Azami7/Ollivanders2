@@ -6,15 +6,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Super class for all shield spells
  */
-public abstract class ShieldSpell extends O2StationarySpell
-{
+public abstract class ShieldSpell extends O2StationarySpell {
     /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
      *
      * @param plugin a callback to the MC plugin
      */
-    public ShieldSpell(@NotNull Ollivanders2 plugin)
-    {
+    public ShieldSpell(@NotNull Ollivanders2 plugin) {
         super(plugin);
     }
 }

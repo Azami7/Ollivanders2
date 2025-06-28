@@ -11,8 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A floo network events fire when a player attempts to use a floo fireplace to teleport.
  */
-public class FlooNetworkEvent extends PlayerEvent implements Cancellable
-{
+public class FlooNetworkEvent extends PlayerEvent implements Cancellable {
     private static final HandlerList handlers = new HandlerList();
     boolean canceled = false;
 
@@ -32,8 +31,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
      * @param player the player traveling
      * @param dest   the destination floo fireplace being traveled to
      */
-    public FlooNetworkEvent(@NotNull Player player, ALIQUAM_FLOO dest)
-    {
+    public FlooNetworkEvent(@NotNull Player player, ALIQUAM_FLOO dest) {
         super(player);
 
         destination = dest.getLocation();
@@ -45,8 +43,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
      *
      * @return the name of the destination being apparated to
      */
-    public String getDestinationName()
-    {
+    public String getDestinationName() {
         return destinationName;
     }
 
@@ -55,8 +52,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
      *
      * @return the destination being apparated to
      */
-    public Location getDestination()
-    {
+    public Location getDestination() {
         return destination;
     }
 
@@ -67,8 +63,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
      */
     @NotNull
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
@@ -77,8 +72,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
      *
      * @return the event handlers
      */
-    public static HandlerList getHandlerList()
-    {
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 
@@ -88,8 +82,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
      * @return true if canceled, false otherwise
      */
     @Override
-    public boolean isCancelled()
-    {
+    public boolean isCancelled() {
         return canceled;
     }
 
@@ -99,8 +92,7 @@ public class FlooNetworkEvent extends PlayerEvent implements Cancellable
      * @param cancel true if event should be canceled, false otherwise
      */
     @Override
-    public void setCancelled(boolean cancel)
-    {
+    public void setCancelled(boolean cancel) {
         canceled = cancel;
     }
 }

@@ -25,8 +25,7 @@ import java.util.Map.Entry;
 /**
  * GSON data persistance layer
  */
-public class GsonDAO implements GenericDAO
-{
+public class GsonDAO implements GenericDAO {
     final private Gson gson;
 
     private static final String archiveDirectory = "plugins/Ollivanders2/archive";
@@ -64,8 +63,7 @@ public class GsonDAO implements GenericDAO
     /**
      * Constructor
      */
-    public GsonDAO()
-    {
+    public GsonDAO() {
         gson = new GsonBuilder().setPrettyPrinting().create();
     }
 
@@ -75,12 +73,10 @@ public class GsonDAO implements GenericDAO
      * @param map a map of player and house data as strings
      */
     @Override
-    public void writeHouses(@NotNull Map<UUID, O2HouseType> map)
-    {
+    public void writeHouses(@NotNull Map<UUID, O2HouseType> map) {
         // convert to something that can be properly serialized
         Map<String, String> strMap = new HashMap<>();
-        for (Entry<UUID, O2HouseType> e : map.entrySet())
-        {
+        for (Entry<UUID, O2HouseType> e : map.entrySet()) {
             strMap.put(e.getKey().toString(), e.getValue().toString());
         }
 
@@ -94,11 +90,9 @@ public class GsonDAO implements GenericDAO
      * @param map a map of the house points data as strings
      */
     @Override
-    public void writeHousePoints(@NotNull Map<O2HouseType, Integer> map)
-    {
+    public void writeHousePoints(@NotNull Map<O2HouseType, Integer> map) {
         Map<String, String> strMap = new HashMap<>();
-        for (Entry<O2HouseType, Integer> e : map.entrySet())
-        {
+        for (Entry<O2HouseType, Integer> e : map.entrySet()) {
             strMap.put(e.getKey().toString(), e.getValue().toString());
         }
 
@@ -111,11 +105,9 @@ public class GsonDAO implements GenericDAO
      *
      * @param locations the map of location names to Locations
      */
-    public void writeApparateData(@NotNull HashMap<String, Location> locations)
-    {
+    public void writeApparateData(@NotNull HashMap<String, Location> locations) {
         Map<String, String[]> serializedLocations = new HashMap<>();
-        for (Entry<String, Location> entry : locations.entrySet())
-        {
+        for (Entry<String, Location> entry : locations.entrySet()) {
             Location location = entry.getValue();
             String[] locationAsArray = {location.getWorld().getName(), String.valueOf(location.getX()), String.valueOf(location.getY()), String.valueOf(location.getZ())};
             serializedLocations.put(entry.getKey(), locationAsArray);
@@ -132,8 +124,7 @@ public class GsonDAO implements GenericDAO
      * @param filename the file to write to
      */
     @Override
-    public void writeSaveData(@NotNull HashMap<String, String> map, @NotNull String filename)
-    {
+    public void writeSaveData(@NotNull HashMap<String, String> map, @NotNull String filename) {
         String json = gson.toJson(map);
         writeJSON(json, filename);
     }
@@ -144,8 +135,7 @@ public class GsonDAO implements GenericDAO
      * @param map a map of the player data as strings
      */
     @Override
-    public void writeSaveData(@NotNull Map<String, Map<String, String>> map, @NotNull String filename)
-    {
+    public void writeSaveData(@NotNull Map<String, Map<String, String>> map, @NotNull String filename) {
         String json = gson.toJson(map);
         writeJSON(json, filename);
     }
@@ -156,8 +146,7 @@ public class GsonDAO implements GenericDAO
      * @param map a map of prophecy data as strings
      */
     @Override
-    public void writeSaveData(@NotNull List<Map<String, String>> map, @NotNull String filename)
-    {
+    public void writeSaveData(@NotNull List<Map<String, String>> map, @NotNull String filename) {
         String json = gson.toJson(map);
         writeJSON(json, filename);
     }
@@ -169,20 +158,17 @@ public class GsonDAO implements GenericDAO
      */
     @Override
     @Nullable
-    public Map<UUID, O2HouseType> readHouses()
-    {
+    public Map<UUID, O2HouseType> readHouses() {
         String json = readJSON(housesJSONFile);
         if (json == null)
             return null;
 
-        Map<String, String> strMap = gson.fromJson(json, new TypeToken<HashMap<String, String>>()
-        {
+        Map<String, String> strMap = gson.fromJson(json, new TypeToken<HashMap<String, String>>() {
         }.getType());
 
 
         Map<UUID, O2HouseType> map = new HashMap<>();
-        for (Entry<String, String> entry : strMap.entrySet())
-        {
+        for (Entry<String, String> entry : strMap.entrySet()) {
             String playerID = entry.getKey();
             String house = entry.getValue();
 
@@ -190,19 +176,16 @@ public class GsonDAO implements GenericDAO
                 continue;
 
             UUID pid = Ollivanders2API.common.uuidFromString(playerID);
-            if (pid == null)
-            {
+            if (pid == null) {
                 continue;
             }
 
             O2HouseType hType;
 
-            try
-            {
+            try {
                 hType = O2HouseType.valueOf(house);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 if (Ollivanders2.debug)
                     e.printStackTrace();
 
@@ -222,19 +205,16 @@ public class GsonDAO implements GenericDAO
      */
     @Override
     @Nullable
-    public Map<O2HouseType, Integer> readHousePoints()
-    {
+    public Map<O2HouseType, Integer> readHousePoints() {
         String json = readJSON(housePointsJSONFile);
         if (json == null)
             return null;
 
-        Map<String, String> strMap = gson.fromJson(json, new TypeToken<HashMap<String, String>>()
-        {
+        Map<String, String> strMap = gson.fromJson(json, new TypeToken<HashMap<String, String>>() {
         }.getType());
 
         Map<O2HouseType, Integer> map = new HashMap<>();
-        for (Entry<String, String> entry : strMap.entrySet())
-        {
+        for (Entry<String, String> entry : strMap.entrySet()) {
             String house = entry.getKey();
             String points = entry.getValue();
 
@@ -244,12 +224,10 @@ public class GsonDAO implements GenericDAO
             O2HouseType hType;
             Integer pts;
 
-            try
-            {
+            try {
                 hType = O2HouseType.valueOf(house);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 if (Ollivanders2.debug)
                     e.printStackTrace();
 
@@ -257,8 +235,7 @@ public class GsonDAO implements GenericDAO
             }
 
             pts = Ollivanders2API.common.integerFromString(points);
-            if (pts == null)
-            {
+            if (pts == null) {
                 continue;
             }
 
@@ -274,39 +251,32 @@ public class GsonDAO implements GenericDAO
      * @return a map of apparate locations or null if load failed
      */
     @Nullable
-    public HashMap<String, Location> readApparateLocation()
-    {
+    public HashMap<String, Location> readApparateLocation() {
         String json = readJSON(apparateLocationsJSONFile);
-        if (json == null)
-        {
+        if (json == null) {
             return null;
         }
 
         Map<String, String[]> serializedLocations = new HashMap<>();
-        serializedLocations = gson.fromJson(json, new TypeToken<Map<String, String[]>>()
-        {
+        serializedLocations = gson.fromJson(json, new TypeToken<Map<String, String[]>>() {
         }.getType());
 
         HashMap<String, Location> locations = new HashMap<>();
-        for (Entry<String, String[]> entry : serializedLocations.entrySet())
-        {
+        for (Entry<String, String[]> entry : serializedLocations.entrySet()) {
             // get location name
             String locationName = entry.getKey();
-            if (locationName == null || locationName.length() < 1)
-            {
+            if (locationName == null || locationName.length() < 1) {
                 continue;
             }
 
-            if (entry.getValue().length != 4)
-            {
+            if (entry.getValue().length != 4) {
                 continue;
             }
 
             // get world
             String worldName = entry.getValue()[0];
             World world = Bukkit.getServer().getWorld(worldName);
-            if (world == null)
-            {
+            if (world == null) {
                 continue;
             }
 
@@ -317,14 +287,12 @@ public class GsonDAO implements GenericDAO
             double yCoord;
             double zCoord;
 
-            try
-            {
+            try {
                 xCoord = Double.parseDouble(xCoordStr);
                 yCoord = Double.parseDouble(yCoordStr);
                 zCoord = Double.parseDouble(zCoordStr);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 continue;
             }
 
@@ -341,8 +309,7 @@ public class GsonDAO implements GenericDAO
      */
     @Override
     @Nullable
-    public Map<String, Map<String, String>> readSavedDataMapStringMap(@NotNull String filename)
-    {
+    public Map<String, Map<String, String>> readSavedDataMapStringMap(@NotNull String filename) {
         String json = readJSON(filename);
 
         if (json == null)
@@ -361,8 +328,7 @@ public class GsonDAO implements GenericDAO
      */
     @Override
     @Nullable
-    public List<Map<String, String>> readSavedDataListMap(@NotNull String filename)
-    {
+    public List<Map<String, String>> readSavedDataListMap(@NotNull String filename) {
         String json = readJSON(filename);
 
         if (json == null)
@@ -380,22 +346,17 @@ public class GsonDAO implements GenericDAO
      * @param json the json data to write
      * @param path the path to the json file
      */
-    private synchronized void writeJSON(@NotNull String json, @NotNull String path)
-    {
+    private synchronized void writeJSON(@NotNull String json, @NotNull String path) {
         String saveFile = Ollivanders2.pluginDir + path;
 
         File file = new File(saveFile);
         File dir = new File(Ollivanders2.pluginDir);
 
-        try
-        {
+        try {
             // if the file exists and archiving is turned on, we want to move it, otherwise delete it so we can write a new one
-            if (file.exists())
-            {
-                try
-                {
-                    if (Ollivanders2.archivePreviousBackup)
-                    {
+            if (file.exists()) {
+                try {
+                    if (Ollivanders2.archivePreviousBackup) {
                         File archiveDir = new File(archiveDirectory);
                         archiveDir.mkdirs();
                         String archiveFile = archiveDirectory + "/" + path + "-" + TimeCommon.getCurrentTimestamp();
@@ -406,10 +367,8 @@ public class GsonDAO implements GenericDAO
                     else
                         file.delete();
                 }
-                catch (Exception e)
-                {
-                    if (Ollivanders2.debug)
-                    {
+                catch (Exception e) {
+                    if (Ollivanders2.debug) {
                         e.printStackTrace();
                     }
                 }
@@ -419,23 +378,19 @@ public class GsonDAO implements GenericDAO
             if (!dir.exists())
                 dir.mkdirs();
 
-            if (!file.createNewFile())
-            {
+            if (!file.createNewFile()) {
                 return;
             }
         }
-        catch (Exception e)
-        {
-            if (Ollivanders2.debug)
-            {
+        catch (Exception e) {
+            if (Ollivanders2.debug) {
                 e.printStackTrace();
             }
 
             return;
         }
 
-        try
-        {
+        try {
             BufferedWriter bWriter = new BufferedWriter(new OutputStreamWriter(
                     new FileOutputStream(saveFile), StandardCharsets.UTF_8));
 
@@ -443,10 +398,8 @@ public class GsonDAO implements GenericDAO
             bWriter.flush();
             bWriter.close();
         }
-        catch (Exception e)
-        {
-            if (Ollivanders2.debug)
-            {
+        catch (Exception e) {
+            if (Ollivanders2.debug) {
                 e.printStackTrace();
             }
         }
@@ -458,37 +411,30 @@ public class GsonDAO implements GenericDAO
      * @param path path to the json file
      * @return the json read or null if the file could not be read
      */
-    private String readJSON(@NotNull String path)
-    {
+    private String readJSON(@NotNull String path) {
         String json = null;
         String saveFile = Ollivanders2.pluginDir + path;
 
         File file = new File(saveFile);
 
         // see if the file exists and we can access it
-        try
-        {
-            if (!file.exists())
-            {
+        try {
+            if (!file.exists()) {
                 return null;
             }
 
-            if (!file.canRead())
-            {
+            if (!file.canRead()) {
                 return null;
             }
         }
-        catch (Exception e)
-        {
-            if (Ollivanders2.debug)
-            {
+        catch (Exception e) {
+            if (Ollivanders2.debug) {
                 e.printStackTrace();
             }
             return null;
         }
 
-        try
-        {
+        try {
             BufferedReader bReader = new BufferedReader(new InputStreamReader(
                     new FileInputStream(saveFile), StandardCharsets.UTF_8));
 
@@ -496,17 +442,14 @@ public class GsonDAO implements GenericDAO
 
             // read the rest of the file if we're not done
             String curLine;
-            while ((curLine = bReader.readLine()) != null)
-            {
+            while ((curLine = bReader.readLine()) != null) {
                 json = json + curLine;
             }
 
             bReader.close();
         }
-        catch (Exception e)
-        {
-            if (Ollivanders2.debug)
-            {
+        catch (Exception e) {
+            if (Ollivanders2.debug) {
                 e.printStackTrace();
             }
         }

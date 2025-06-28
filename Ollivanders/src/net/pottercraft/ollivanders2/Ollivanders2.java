@@ -1527,7 +1527,7 @@ public class Ollivanders2 extends JavaPlugin {
     /**
      * Give a specific potion to a player.
      *
-     * @param sender the player who did the command
+     * @param sender     the player who did the command
      * @param player     the player to give the potion to
      * @param potionName the potion to give the player
      * @return true if the command succeeded, false otherwise

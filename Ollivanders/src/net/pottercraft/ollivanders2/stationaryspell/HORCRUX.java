@@ -27,8 +27,7 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href = "https://harrypotter.fandom.com/wiki/Horcrux-making_spell">https://harrypotter.fandom.com/wiki/Horcrux-making_spell</a>
  * {@link net.pottercraft.ollivanders2.spell.ET_INTERFICIAM_ANIMAM_LIGAVERIS}
  */
-public class HORCRUX extends O2StationarySpell
-{
+public class HORCRUX extends O2StationarySpell {
     // todo make this an item enchantment and not a stationary spell
     /**
      * the min radius for this spell
@@ -45,8 +44,7 @@ public class HORCRUX extends O2StationarySpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public HORCRUX(@NotNull Ollivanders2 plugin)
-    {
+    public HORCRUX(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.HORCRUX;
@@ -61,8 +59,7 @@ public class HORCRUX extends O2StationarySpell
      * @param pid      the player who cast the spell
      * @param location the center location of the spell
      */
-    public HORCRUX(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location)
-    {
+    public HORCRUX(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location) {
         super(plugin);
 
         spellType = O2StationarySpellType.HORCRUX;
@@ -80,15 +77,11 @@ public class HORCRUX extends O2StationarySpell
      * Harm players who get too close to the Horcrux
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         List<LivingEntity> entities = getEntitiesInsideSpellRadius();
-        for (LivingEntity entity : entities)
-        {
-            if (entity instanceof Player)
-            {
-                if (entity.getUniqueId() != getCasterID())
-                {
+        for (LivingEntity entity : entities) {
+            if (entity instanceof Player) {
+                if (entity.getUniqueId() != getCasterID()) {
                     PotionEffect blindness = new PotionEffect(PotionEffectType.BLINDNESS, 200, 2);
                     PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 200, 3);
                     entity.addPotionEffect(blindness);
@@ -105,8 +98,7 @@ public class HORCRUX extends O2StationarySpell
      */
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
@@ -116,8 +108,7 @@ public class HORCRUX extends O2StationarySpell
      * @param spellData a map of the saved spell data
      */
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 
     /**
@@ -126,8 +117,7 @@ public class HORCRUX extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event)
-    {
+    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event) {
         Entity entity = event.getEntity(); // will never be null
         double damage = event.getDamage();
 
@@ -146,11 +136,9 @@ public class HORCRUX extends O2StationarySpell
         // reset them to full health
         O2PlayerCommon.restoreFullHealth(player);
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 playerFeedback(player);
             }
         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
@@ -162,15 +150,12 @@ public class HORCRUX extends O2StationarySpell
      * @param playerID the player to check
      * @return true if this is the first instance of a horcrux for this player, false otherwise
      */
-    private boolean isFirstHorcrux(UUID playerID)
-    {
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-        {
+    private boolean isFirstHorcrux(UUID playerID) {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
             if (stationarySpell.getSpellType() != O2StationarySpellType.HORCRUX)
                 continue;
 
-            if (stationarySpell.getCasterID() == playerID)
-            {
+            if (stationarySpell.getCasterID() == playerID) {
                 return stationarySpell == this;
             }
         }
@@ -183,8 +168,7 @@ public class HORCRUX extends O2StationarySpell
      *
      * @param player the player
      */
-    private void playerFeedback(@NotNull Player player)
-    {
+    private void playerFeedback(@NotNull Player player) {
         player.sendMessage(Ollivanders2.chatColor + "Your Horcrux has been used to restore your health.");
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
         flair(5);

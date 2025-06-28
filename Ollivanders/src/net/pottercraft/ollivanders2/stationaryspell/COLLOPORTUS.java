@@ -17,11 +17,10 @@ import java.util.UUID;
 
 /**
  * Prevents opening of target door, trapdoor, or chest.
- *
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.COLLOPORTUS}
  */
-public class COLLOPORTUS extends O2StationarySpell
-{
+public class COLLOPORTUS extends O2StationarySpell {
     /**
      * the min radius for this spell
      */
@@ -37,8 +36,7 @@ public class COLLOPORTUS extends O2StationarySpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public COLLOPORTUS(@NotNull Ollivanders2 plugin)
-    {
+    public COLLOPORTUS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.COLLOPORTUS;
@@ -53,8 +51,7 @@ public class COLLOPORTUS extends O2StationarySpell
      * @param pid      the player who cast the spell
      * @param location the center location of the spell
      */
-    public COLLOPORTUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location)
-    {
+    public COLLOPORTUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location) {
         super(plugin);
 
         spellType = O2StationarySpellType.COLLOPORTUS;
@@ -74,8 +71,7 @@ public class COLLOPORTUS extends O2StationarySpell
      * No upkeep for this spell
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
     }
 
     /**
@@ -84,12 +80,10 @@ public class COLLOPORTUS extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnBlockBreakEvent(@NotNull BlockBreakEvent event)
-    {
+    void doOnBlockBreakEvent(@NotNull BlockBreakEvent event) {
         Block block = event.getBlock(); // will never be null
 
-        if (isLocationInside(block.getLocation()))
-        {
+        if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
             common.printDebugMessage("COLLOPORTUS: canceled BlockBreakEvent", null, null, false);
         }
@@ -101,12 +95,10 @@ public class COLLOPORTUS extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnEntityBreakDoorEvent(@NotNull EntityBreakDoorEvent event)
-    {
+    void doOnEntityBreakDoorEvent(@NotNull EntityBreakDoorEvent event) {
         Block block = event.getBlock(); // will never be null
 
-        if (isLocationInside(block.getLocation()))
-        {
+        if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
             common.printDebugMessage("COLLOPORTUS: canceled EntityBreakDoorEvent", null, null, false);
         }
@@ -118,12 +110,10 @@ public class COLLOPORTUS extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnEntityChangeBlockEvent(@NotNull EntityChangeBlockEvent event)
-    {
+    void doOnEntityChangeBlockEvent(@NotNull EntityChangeBlockEvent event) {
         Block block = event.getBlock(); // will never be null
 
-        if (isLocationInside(block.getLocation()))
-        {
+        if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
             common.printDebugMessage("COLLOPORTUS: canceled EntityChangeBlockEvent", null, null, false);
         }
@@ -135,12 +125,10 @@ public class COLLOPORTUS extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnEntityInteractEvent(@NotNull EntityInteractEvent event)
-    {
+    void doOnEntityInteractEvent(@NotNull EntityInteractEvent event) {
         Block block = event.getBlock(); // will never be null
 
-        if (isLocationInside(block.getLocation()))
-        {
+        if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
             common.printDebugMessage("COLLOPORTUS: canceled EntityInteractEvent", null, null, false);
         }
@@ -152,14 +140,12 @@ public class COLLOPORTUS extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
-    {
+    void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {
         Block block = event.getClickedBlock();
         if (block == null)
             return;
 
-        if (isLocationInside(block.getLocation()))
-        {
+        if (isLocationInside(block.getLocation())) {
             event.setCancelled(true);
             common.printDebugMessage("COLLOPORTUS: canceled PlayerInteractEvent", null, null, false);
         }
@@ -167,13 +153,11 @@ public class COLLOPORTUS extends O2StationarySpell
 
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 }

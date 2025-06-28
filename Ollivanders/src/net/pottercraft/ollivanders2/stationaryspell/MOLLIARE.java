@@ -18,8 +18,7 @@ import java.util.UUID;
  * @see <a href = "https://harrypotter.fandom.com/wiki/Cushioning_Charm">https://harrypotter.fandom.com/wiki/Cushioning_Charm</a>
  * {@link net.pottercraft.ollivanders2.spell.MOLLIARE}
  */
-public class MOLLIARE extends O2StationarySpell
-{
+public class MOLLIARE extends O2StationarySpell {
     /**
      * the min radius for this spell
      */
@@ -42,8 +41,7 @@ public class MOLLIARE extends O2StationarySpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public MOLLIARE(@NotNull Ollivanders2 plugin)
-    {
+    public MOLLIARE(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.MOLLIARE;
@@ -58,8 +56,7 @@ public class MOLLIARE extends O2StationarySpell
      * @param radius   the radius for this spell
      * @param duration the duration of the spell
      */
-    public MOLLIARE(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
-    {
+    public MOLLIARE(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin);
         spellType = O2StationarySpellType.MOLLIARE;
         minRadius = minRadiusConfig;
@@ -79,8 +76,7 @@ public class MOLLIARE extends O2StationarySpell
      * Age the spell by a tick
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         age();
     }
 
@@ -90,15 +86,13 @@ public class MOLLIARE extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event)
-    {
+    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event) {
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL)
             return;
 
         Entity entity = event.getEntity(); // entity and location will never be null
 
-        if (isLocationInside(entity.getLocation()))
-        {
+        if (isLocationInside(entity.getLocation())) {
             event.setCancelled(true);
             common.printDebugMessage("MOLLIARE: canceled EntityDamageEvent", null, null, false);
         }
@@ -106,13 +100,11 @@ public class MOLLIARE extends O2StationarySpell
 
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 }

@@ -12,8 +12,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Generic data access object layer
  */
-public interface GenericDAO
-{
+public interface GenericDAO {
     /**
      * Write house membership data
      *
@@ -31,7 +30,7 @@ public interface GenericDAO
     /**
      * Data writer
      *
-     * @param map the data to write
+     * @param map      the data to write
      * @param filename the name of the output stream
      */
     void writeSaveData(@NotNull HashMap<String, String> map, String filename);
@@ -39,7 +38,7 @@ public interface GenericDAO
     /**
      * Data writer
      *
-     * @param map the data to write
+     * @param map      the data to write
      * @param filename the name of the output stream
      */
     void writeSaveData(@NotNull Map<String, Map<String, String>> map, String filename);
@@ -47,7 +46,7 @@ public interface GenericDAO
     /**
      * Data writer
      *
-     * @param list the data to write
+     * @param list     the data to write
      * @param filename the name of the output stream
      */
     void writeSaveData(@NotNull List<Map<String, String>> list, String filename);
@@ -62,6 +61,7 @@ public interface GenericDAO
 
     /**
      * Read saved house points data
+     *
      * @return the house types and their points
      */
     @Nullable

@@ -15,9 +15,8 @@ import java.util.UUID;
 
 /**
  * Hurts any entities within 0.5 meters of the spell wall.
- * <p>
- * https://harrypotter.fandom.com/wiki/Protego_Maxima
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_Maxima">https://harrypotter.fandom.com/wiki/Protego_Maxima</a>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_MAXIMA}
  */
 public class PROTEGO_MAXIMA extends ShieldSpell

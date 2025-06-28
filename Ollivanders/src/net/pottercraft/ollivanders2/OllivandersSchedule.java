@@ -25,10 +25,9 @@ import net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Scheduler for Ollivanders2
+ * Main scheduler for Ollivanders2
  */
-public class OllivandersSchedule implements Runnable
-{
+public class OllivandersSchedule implements Runnable {
     /**
      * A callback to the plugin
      */
@@ -49,19 +48,16 @@ public class OllivandersSchedule implements Runnable
      *
      * @param plugin a callback to the plugin
      */
-    OllivandersSchedule(@NotNull Ollivanders2 plugin)
-    {
+    OllivandersSchedule(@NotNull Ollivanders2 plugin) {
         p = plugin;
     }
 
     /**
      * Primary plugin thread
      */
-    public void run()
-    {
+    public void run() {
         // run every tick
-        try
-        {
+        try {
             projectileSched();
             oeffectSched();
             Ollivanders2API.getStationarySpells().upkeep();
@@ -69,8 +65,7 @@ public class OllivandersSchedule implements Runnable
             teleportSched();
             Ollivanders2API.getOwlPost().upkeep();
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Ollivanders2API.common.printDebugMessage("Exceoption running scheduled tasks.", e, null, true);
         }
 
@@ -79,8 +74,7 @@ public class OllivandersSchedule implements Runnable
             invisPlayer();
 
         // back up plugin data hourly
-        if (Ollivanders2.hourlyBackup && scheduleTimer % Ollivanders2Common.ticksPerHour == 0)
-        {
+        if (Ollivanders2.hourlyBackup && scheduleTimer % Ollivanders2Common.ticksPerHour == 0) {
             Ollivanders2API.common.printDebugMessage("Saving plugin data...", null, null, false);
 
             p.savePluginData();
@@ -97,17 +91,13 @@ public class OllivandersSchedule implements Runnable
      * Scheduling method that calls checkEffect() on all SpellProjectile objects
      * and removes those that have kill set to true.
      */
-    private void projectileSched()
-    {
+    private void projectileSched() {
         List<O2Spell> projectiles = p.getProjectiles();
         List<O2Spell> projectiles2 = new ArrayList<>(projectiles);
-        if (projectiles2.size() > 0)
-        {
-            for (O2Spell proj : projectiles2)
-            {
+        if (projectiles2.size() > 0) {
+            for (O2Spell proj : projectiles2) {
                 proj.checkEffect();
-                if (proj.isKilled())
-                {
+                if (proj.isKilled()) {
                     p.removeProjectile(proj);
                 }
             }
@@ -118,17 +108,14 @@ public class OllivandersSchedule implements Runnable
      * Scheduling method that calls checkEffect on all OEffect objects associated with every online player
      * and removes those that have kill set to true.
      */
-    private void oeffectSched()
-    {
+    private void oeffectSched() {
         List<Player> onlinePlayers = new ArrayList<>();
 
-        for (World world : p.getServer().getWorlds())
-        {
+        for (World world : p.getServer().getWorlds()) {
             onlinePlayers.addAll(world.getPlayers());
         }
 
-        for (Player player : onlinePlayers)
-        {
+        for (Player player : onlinePlayers) {
             UUID pid = player.getUniqueId();
 
             Ollivanders2API.getPlayers().playerEffects.upkeep(pid);
@@ -140,19 +127,15 @@ public class OllivandersSchedule implements Runnable
      * Also hides players in Repello Muggleton from players not in that same spell.
      * Also sets any Creature targeting this player to have null target.
      */
-    private void invisPlayer()
-    {
+    private void invisPlayer() {
         Set<REPELLO_MUGGLETON> repelloMuggletons = new HashSet<>();
-        for (O2StationarySpell stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-        {
-            if (stat instanceof REPELLO_MUGGLETON)
-            {
+        for (O2StationarySpell stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
+            if (stat instanceof REPELLO_MUGGLETON) {
                 repelloMuggletons.add((REPELLO_MUGGLETON) stat);
             }
         }
 
-        for (Player player : p.getServer().getOnlinePlayers())
-        {
+        for (Player player : p.getServer().getOnlinePlayers()) {
             O2Player o2p = p.getO2Player(player);
             if (o2p == null)
                 continue;
@@ -160,10 +143,8 @@ public class OllivandersSchedule implements Runnable
             boolean alreadyInvis = o2p.isInvisible();
             boolean hasCloak = hasCloak(player);
 
-            if (hasCloak)
-            {
-                if (!alreadyInvis)
-                {
+            if (hasCloak) {
+                if (!alreadyInvis) {
                     o2p.setInvisible(true);
                     player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
                 }
@@ -172,12 +153,9 @@ public class OllivandersSchedule implements Runnable
             boolean inRepelloMuggletons = O2StationarySpellType.REPELLO_MUGGLETON.isPlayerInsideStationary(player);
 
             //TODO check the logic on this, I am not sure it is right
-            if (hasCloak || inRepelloMuggletons)
-            {
-                for (Player player2 : p.getServer().getOnlinePlayers())
-                {
-                    if (player2.isPermissionSet("Ollivanders2.BYPASS") && player2.hasPermission("Ollivanders2.BYPASS"))
-                    {
+            if (hasCloak || inRepelloMuggletons) {
+                for (Player player2 : p.getServer().getOnlinePlayers()) {
+                    if (player2.isPermissionSet("Ollivanders2.BYPASS") && player2.hasPermission("Ollivanders2.BYPASS")) {
                         continue;
                     }
 
@@ -185,53 +163,41 @@ public class OllivandersSchedule implements Runnable
                     if (viewer == null)
                         continue;
 
-                    if (hasCloak)
-                    {
+                    if (hasCloak) {
                         player2.hidePlayer(p, player);
                         System.out.println(player2.canSee(player));
                     }
-                    else if (viewer.isMuggle())
-                    {
+                    else if (viewer.isMuggle()) {
                         player2.hidePlayer(p, player);
                     }
                 }
             }
-            else if (!hasCloak && alreadyInvis)
-            {
-                for (Player player2 : p.getServer().getOnlinePlayers())
-                {
+            else if (!hasCloak && alreadyInvis) {
+                for (Player player2 : p.getServer().getOnlinePlayers()) {
                     O2Player viewer = Ollivanders2API.getPlayers().getPlayer(player2.getUniqueId());
                     if (viewer == null)
                         continue;
 
-                    if (!inRepelloMuggletons && viewer.isMuggle())
-                    {
+                    if (!inRepelloMuggletons && viewer.isMuggle()) {
                         player2.showPlayer(p, player);
                     }
                 }
                 o2p.setInvisible(false);
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
             }
-            else if (!inRepelloMuggletons)
-            {
-                if (!hasCloak)
-                {
-                    for (Player player2 : p.getServer().getOnlinePlayers())
-                    {
+            else if (!inRepelloMuggletons) {
+                if (!hasCloak) {
+                    for (Player player2 : p.getServer().getOnlinePlayers()) {
                         player2.showPlayer(p, player);
                     }
                 }
             }
 
-            if (o2p.isInvisible())
-            {
-                for (Entity entity : player.getWorld().getEntities())
-                {
-                    if (entity instanceof Creature)
-                    {
+            if (o2p.isInvisible()) {
+                for (Entity entity : player.getWorld().getEntities()) {
+                    if (entity instanceof Creature) {
                         Creature creature = (Creature) entity;
-                        if (creature.getTarget() == player)
-                        {
+                        if (creature.getTarget() == player) {
                             creature.setTarget(null);
                         }
                     }
@@ -248,11 +214,9 @@ public class OllivandersSchedule implements Runnable
      * @param player player to be checked
      * @return true if yes, false if no
      */
-    private boolean hasCloak(@NotNull Player player)
-    {
+    private boolean hasCloak(@NotNull Player player) {
         ItemStack chestPlate = player.getInventory().getChestplate();
-        if (chestPlate != null)
-        {
+        if (chestPlate != null) {
             return O2ItemType.INVISIBILITY_CLOAK.isItemThisType(chestPlate);
         }
         return false;
@@ -261,12 +225,10 @@ public class OllivandersSchedule implements Runnable
     /**
      * Handle all teleport events.
      */
-    private void teleportSched()
-    {
+    private void teleportSched() {
         List<Ollivanders2TeleportEvents.O2TeleportEvent> teleportEvents = p.getTeleportEvents();
 
-        for (Ollivanders2TeleportEvents.O2TeleportEvent event : teleportEvents)
-        {
+        for (Ollivanders2TeleportEvents.O2TeleportEvent event : teleportEvents) {
             Player player = event.getPlayer();
 
             Ollivanders2API.common.printDebugMessage("Teleporting " + player.getName(), null, null, false);
@@ -276,27 +238,22 @@ public class OllivandersSchedule implements Runnable
             destination.setPitch(currentLocation.getPitch());
             destination.setYaw(currentLocation.getYaw());
 
-            try
-            {
+            try {
                 player.teleport(destination);
 
                 World curWorld = currentLocation.getWorld();
                 World destWorld = destination.getWorld();
-                if (curWorld == null || destWorld == null)
-                {
+                if (curWorld == null || destWorld == null) {
                     Ollivanders2API.common.printDebugMessage("OllvandersSchedule.teleportSched: world is null", null, null, true);
                 }
-                else
-                {
-                    if (event.isExplosionOnTeleport())
-                    {
+                else {
+                    if (event.isExplosionOnTeleport()) {
                         curWorld.createExplosion(currentLocation, 0);
                         destWorld.createExplosion(destination, 0);
                     }
                 }
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 Ollivanders2API.common.printDebugMessage("Failed to teleport player.", e, null, true);
             }
 

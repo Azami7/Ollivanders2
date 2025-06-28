@@ -37,8 +37,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Manager for all stationary spells
  */
-public class O2StationarySpells implements Listener
-{
+public class O2StationarySpells implements Listener {
     /**
      * The list of all stationary spells in the game
      */
@@ -84,8 +83,7 @@ public class O2StationarySpells implements Listener
      *
      * @param plugin a reference to the plugin
      */
-    public O2StationarySpells(@NotNull Ollivanders2 plugin)
-    {
+    public O2StationarySpells(@NotNull Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(plugin);
     }
@@ -93,8 +91,7 @@ public class O2StationarySpells implements Listener
     /**
      * Load all stationary spells on plugin start and register listeners
      */
-    public void onEnable()
-    {
+    public void onEnable() {
         loadO2StationarySpells();
 
         p.getServer().getPluginManager().registerEvents(this, p);
@@ -106,10 +103,8 @@ public class O2StationarySpells implements Listener
      * @param event the player move event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerMove(@NotNull PlayerMoveEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onPlayerMove(@NotNull PlayerMoveEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnPlayerMoveEvent(event);
         }
@@ -121,10 +116,8 @@ public class O2StationarySpells implements Listener
      * @param event the creature spawn event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onCreatureSpawnEvent(@NotNull CreatureSpawnEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onCreatureSpawnEvent(@NotNull CreatureSpawnEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnCreatureSpawnEvent(event);
         }
@@ -136,10 +129,8 @@ public class O2StationarySpells implements Listener
      * @param event the pevent
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityTargetEvent(@NotNull EntityTargetEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onEntityTargetEvent(@NotNull EntityTargetEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnEntityTargetEvent(event);
         }
@@ -151,10 +142,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnAsyncPlayerChatEvent(event);
         }
@@ -166,10 +155,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onBlockBreakEvent(@NotNull BlockBreakEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onBlockBreakEvent(@NotNull BlockBreakEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnBlockBreakEvent(event);
         }
@@ -181,10 +168,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityBreakDoorEvent(@NotNull EntityBreakDoorEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onEntityBreakDoorEvent(@NotNull EntityBreakDoorEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnEntityBreakDoorEvent(event);
         }
@@ -196,10 +181,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityChangeBlockEvent(@NotNull EntityChangeBlockEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onEntityChangeBlockEvent(@NotNull EntityChangeBlockEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnEntityChangeBlockEvent(event);
         }
@@ -211,10 +194,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityInteractEvent(@NotNull EntityInteractEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onEntityInteractEvent(@NotNull EntityInteractEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnEntityInteractEvent(event);
         }
@@ -226,10 +207,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityDamageEvent(@NotNull EntityDamageEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onEntityDamageEvent(@NotNull EntityDamageEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnEntityDamageEvent(event);
         }
@@ -241,10 +220,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerInteractEvent(@NotNull PlayerInteractEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onPlayerInteractEvent(@NotNull PlayerInteractEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnPlayerInteractEvent(event);
         }
@@ -256,10 +233,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnOllivandersApparateByNameEvent(event);
         }
@@ -271,10 +246,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnOllivandersApparateByCoordinatesEvent(event);
         }
@@ -286,10 +259,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityTeleportEvent(@NotNull EntityTeleportEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onEntityTeleportEvent(@NotNull EntityTeleportEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnEntityTeleportEvent(event);
         }
@@ -301,10 +272,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerTeleportEvent(@NotNull PlayerTeleportEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnPlayerTeleportEvent(event);
         }
@@ -316,10 +285,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityCombustEvent(@NotNull EntityCombustEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onEntityCombustEvent(@NotNull EntityCombustEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnEntityCombustEvent(event);
         }
@@ -331,10 +298,8 @@ public class O2StationarySpells implements Listener
      * @param event the event
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event)
-    {
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+    public void onSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnSpellProjectileMoveEvent(event);
         }
@@ -345,8 +310,7 @@ public class O2StationarySpells implements Listener
      *
      * @param spell the stationary spell to add
      */
-    public void addStationarySpell(@NotNull O2StationarySpell spell)
-    {
+    public void addStationarySpell(@NotNull O2StationarySpell spell) {
         common.printDebugMessage("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString() + " with duration " + spell.duration + " and radius of " + spell.radius, null, null, false);
         O2StationarySpells.add(spell);
     }
@@ -357,8 +321,7 @@ public class O2StationarySpells implements Listener
      *
      * @param spell the stationary spell to remove
      */
-    public void removeStationarySpell(@NotNull O2StationarySpell spell)
-    {
+    public void removeStationarySpell(@NotNull O2StationarySpell spell) {
         common.printDebugMessage("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType().toString(), null, null, false);
         spell.kill();
     }
@@ -369,12 +332,10 @@ public class O2StationarySpells implements Listener
      * @return a list of active stationary spells
      */
     @NotNull
-    public List<O2StationarySpell> getActiveStationarySpells()
-    {
+    public List<O2StationarySpell> getActiveStationarySpells() {
         List<O2StationarySpell> active = new ArrayList<>();
 
-        for (O2StationarySpell spell : O2StationarySpells)
-        {
+        for (O2StationarySpell spell : O2StationarySpells) {
             if (!spell.kill && spell.active)
                 active.add(spell);
         }
@@ -389,12 +350,10 @@ public class O2StationarySpells implements Listener
      * @return a list of StationarySpellObj that the location is inside
      */
     @NotNull
-    public List<O2StationarySpell> getStationarySpellsAtLocation(@NotNull Location targetLoc)
-    {
+    public List<O2StationarySpell> getStationarySpellsAtLocation(@NotNull Location targetLoc) {
         List<O2StationarySpell> inside = new ArrayList<>();
 
-        for (O2StationarySpell stationary : O2StationarySpells)
-        {
+        for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isLocationInside(targetLoc))
                 inside.add(stationary);
         }
@@ -410,13 +369,11 @@ public class O2StationarySpells implements Listener
      * @return a list of spells of that type found at the location
      */
     @NotNull
-    public List<O2StationarySpell> getActiveStationarySpellsAtLocationByType(@NotNull Location location, @NotNull O2StationarySpellType spellType)
-    {
+    public List<O2StationarySpell> getActiveStationarySpellsAtLocationByType(@NotNull Location location, @NotNull O2StationarySpellType spellType) {
         List<O2StationarySpell> spells = getStationarySpellsAtLocation(location);
         List<O2StationarySpell> found = new ArrayList<>();
 
-        for (O2StationarySpell spell : spells)
-        {
+        for (O2StationarySpell spell : spells) {
             if (spell.getSpellType() == spellType && spell.active)
                 found.add(spell);
         }
@@ -431,12 +388,10 @@ public class O2StationarySpells implements Listener
      * @param stationarySpellType the stationary spell type to check for
      * @return true if spell of that type exists at that location, false otherwise
      */
-    public boolean checkLocationForSpell(@NotNull Location location, @NotNull O2StationarySpellType stationarySpellType)
-    {
+    public boolean checkLocationForSpell(@NotNull Location location, @NotNull O2StationarySpellType stationarySpellType) {
         List<O2StationarySpell> spellsAtLocation = getStationarySpellsAtLocation(location);
 
-        for (O2StationarySpell statSpell : spellsAtLocation)
-        {
+        for (O2StationarySpell statSpell : spellsAtLocation) {
             if (statSpell.spellType == stationarySpellType)
                 return true;
         }
@@ -451,12 +406,9 @@ public class O2StationarySpells implements Listener
      * @param loc             the location to check
      * @return true if the location is inside this stationary spell, false otherwise
      */
-    public boolean isInsideOf(@NotNull O2StationarySpellType stationarySpell, @NotNull Location loc)
-    {
-        for (O2StationarySpell spell : O2StationarySpells)
-        {
-            if (spell.getSpellType() == stationarySpell)
-            {
+    public boolean isInsideOf(@NotNull O2StationarySpellType stationarySpell, @NotNull Location loc) {
+        for (O2StationarySpell spell : O2StationarySpells) {
+            if (spell.getSpellType() == stationarySpell) {
                 if (spell.isLocationInside(loc) && !spell.kill && spell.active)
                     return true;
             }
@@ -467,16 +419,13 @@ public class O2StationarySpells implements Listener
     /**
      * Run each spell's upkeep and clean up killed spells
      */
-    public void upkeep()
-    {
+    public void upkeep() {
         List<O2StationarySpell> s = new ArrayList<>(O2StationarySpells);
 
-        for (O2StationarySpell statSpell : s)
-        {
+        for (O2StationarySpell statSpell : s) {
             statSpell.checkEffect();
 
-            if (statSpell.kill)
-            {
+            if (statSpell.kill) {
                 common.printDebugMessage("O2StationarySpells.upkeep: removing " + statSpell.getSpellType().toString(), null, null, false);
 
                 O2StationarySpells.remove(statSpell);
@@ -487,8 +436,7 @@ public class O2StationarySpells implements Listener
     /**
      * Save stationary spells
      */
-    public void saveO2StationarySpells()
-    {
+    public void saveO2StationarySpells() {
         List<Map<String, String>> serializedList = serializeO2StationarySpells();
 
         GsonDAO gsonLayer = new GsonDAO();
@@ -498,17 +446,14 @@ public class O2StationarySpells implements Listener
     /**
      * Load stationary spells
      */
-    void loadO2StationarySpells()
-    {
+    void loadO2StationarySpells() {
         GsonDAO gsonLayer = new GsonDAO();
         List<Map<String, String>> serializedSpells = gsonLayer.readSavedDataListMap(GsonDAO.o2StationarySpellsJSONFile);
 
-        if (serializedSpells == null)
-        {
+        if (serializedSpells == null) {
             common.printLogMessage("Unable to load saved stationary spells.", null, null, false);
         }
-        else
-        {
+        else {
             common.printLogMessage("Reading saved stationary spells", null, null, false);
             O2StationarySpells = deserializeO2StationarySpells(serializedSpells);
         }
@@ -520,14 +465,12 @@ public class O2StationarySpells implements Listener
      * @return a map of the serialized stationary spell data
      */
     @NotNull
-    private List<Map<String, String>> serializeO2StationarySpells()
-    {
+    private List<Map<String, String>> serializeO2StationarySpells() {
         List<Map<String, String>> serializedList = new ArrayList<>();
 
         common.printDebugMessage("Serializing O2StationarySpells...", null, null, false);
 
-        for (O2StationarySpell spell : O2StationarySpells)
-        {
+        for (O2StationarySpell spell : O2StationarySpells) {
             Map<String, String> spellData = new HashMap<>();
 
             //
@@ -544,10 +487,8 @@ public class O2StationarySpells implements Listener
             // Location
             //
             Map<String, String> locData = Ollivanders2API.common.serializeLocation(spell.location, spellLocLabel);
-            if (locData != null)
-            {
-                for (Entry<String, String> e : locData.entrySet())
-                {
+            if (locData != null) {
+                for (Entry<String, String> e : locData.entrySet()) {
                     spellData.put(e.getKey(), e.getValue());
                 }
             }
@@ -568,8 +509,7 @@ public class O2StationarySpells implements Listener
             // get spell-specific data
             //
             Map<String, String> uniqueData = spell.serializeSpellData();
-            for (Entry<String, String> e : uniqueData.entrySet())
-            {
+            for (Entry<String, String> e : uniqueData.entrySet()) {
                 spellData.put(e.getKey(), e.getValue());
             }
         }
@@ -581,12 +521,10 @@ public class O2StationarySpells implements Listener
      * Deserialize stationary spells
      */
     @NotNull
-    private List<O2StationarySpell> deserializeO2StationarySpells(@NotNull List<Map<String, String>> serializedSpells)
-    {
+    private List<O2StationarySpell> deserializeO2StationarySpells(@NotNull List<Map<String, String>> serializedSpells) {
         List<O2StationarySpell> statSpells = new ArrayList<>();
 
-        for (Map<String, String> spellData : serializedSpells)
-        {
+        for (Map<String, String> spellData : serializedSpells) {
             //
             // spell name
             //
@@ -658,17 +596,14 @@ public class O2StationarySpells implements Listener
      * @return the spell if it could be created, null otherwise
      */
     @Nullable
-    public O2StationarySpell getStationarySpellByType(@NotNull O2StationarySpellType spellType)
-    {
+    public O2StationarySpell getStationarySpellByType(@NotNull O2StationarySpellType spellType) {
         O2StationarySpell statSpell;
 
         Class<?> spellClass = spellType.getClassName();
-        try
-        {
+        try {
             statSpell = (O2StationarySpell) spellClass.getConstructor(Ollivanders2.class).newInstance(p);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             common.printDebugMessage("Exception trying to create new instance of " + spellType.toString(), e, null, true);
             return null;
         }

@@ -18,9 +18,8 @@ import java.util.UUID;
 
 /**
  * Doesn't let entities pass into the protected area.
- * <p>
- * https://harrypotter.fandom.com/wiki/Protego_totalum
- * <p>
+ *
+ * <a href = "https://harrypotter.fandom.com/wiki/Protego_totalum">https://harrypotter.fandom.com/wiki/Protego_totalum</a>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_TOTALUM}
  */
 public class PROTEGO_TOTALUM extends ShieldSpell

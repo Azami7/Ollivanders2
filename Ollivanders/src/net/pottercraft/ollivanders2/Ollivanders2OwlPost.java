@@ -21,8 +21,7 @@ import java.util.UUID;
  * In newer versions of MC triggering teleport events from AsyncChatEvents is no longer thread-safe. Need to create a queue of owl post events like we use for
  * things like spell projectiles and effects.
  */
-public class Ollivanders2OwlPost
-{
+public class Ollivanders2OwlPost {
     /**
      * The words the player has to say to trigger owl post
      */
@@ -46,8 +45,7 @@ public class Ollivanders2OwlPost
     /**
      * Represents a delivery
      */
-    static private class Delivery
-    {
+    static private class Delivery {
         UUID sender;
         String senderName;
         UUID recipient;
@@ -73,8 +71,7 @@ public class Ollivanders2OwlPost
          * @param entity the delivery
          * @param item   the item to deliver
          */
-        Delivery(@NotNull Player from, @NotNull UUID to, @NotNull Entity entity, @NotNull ItemStack item)
-        {
+        Delivery(@NotNull Player from, @NotNull UUID to, @NotNull Entity entity, @NotNull ItemStack item) {
             sender = from.getUniqueId();
             senderName = from.getName();
             recipient = to;
@@ -89,8 +86,7 @@ public class Ollivanders2OwlPost
      *
      * @param plugin a callback to the plugin
      */
-    public Ollivanders2OwlPost(@NotNull Ollivanders2 plugin)
-    {
+    public Ollivanders2OwlPost(@NotNull Ollivanders2 plugin) {
         p = plugin;
     }
 
@@ -102,8 +98,7 @@ public class Ollivanders2OwlPost
      * @param entity the delivery
      * @param item   the item to deliver
      */
-    public void addDelivery(@NotNull Player from, @NotNull UUID to, @NotNull Entity entity, @NotNull ItemStack item)
-    {
+    public void addDelivery(@NotNull Player from, @NotNull UUID to, @NotNull Entity entity, @NotNull ItemStack item) {
         Delivery delivery = new Delivery(from, to, entity, item);
 
         deliveryQueue.add(delivery);
@@ -115,23 +110,20 @@ public class Ollivanders2OwlPost
      * @param player  the player requesting delivery
      * @param message the delivery request message
      */
-    public void processOwlPostRequest(@NotNull Player player, @NotNull String message)
-    {
+    public void processOwlPostRequest(@NotNull Player player, @NotNull String message) {
         if (!message.toLowerCase().startsWith(Ollivanders2OwlPost.deliveryKeyword.toLowerCase()))
             return;
 
         // who do they want to deliver to?
         String[] splitString = message.split(" ");
-        if (splitString.length != 3)
-        {
+        if (splitString.length != 3) {
             Ollivanders2API.common.printDebugMessage("Ollivanders2OwlPost.processOwlPostRequest: bad request \"" + message + "\"", null, null, false);
             return;
         }
 
         // find recipient
         O2Player recipient = Ollivanders2API.getPlayers().getPlayer(splitString[2]);
-        if (recipient == null)
-        {
+        if (recipient == null) {
             player.sendMessage(Ollivanders2.chatColor + "Player " + splitString[2] + " not found.");
             return;
         }
@@ -139,16 +131,14 @@ public class Ollivanders2OwlPost
         // are they standing close an entity that can deliver?
         Location location = player.getLocation();
         List<Entity> nearbyEntities = EntityCommon.getNearbyEntitiesByType(player.getLocation(), 5, owlPostEntityType);
-        if (nearbyEntities.size() < 1)
-        {
+        if (nearbyEntities.size() < 1) {
             player.sendMessage(Ollivanders2.chatColor + "Player " + splitString[2] + " not found.");
             return;
         }
 
         // is the player holding an item?
         ItemStack held = player.getInventory().getItemInMainHand();
-        if (held.getType() == Material.AIR)
-        {
+        if (held.getType() == Material.AIR) {
             player.sendMessage(Ollivanders2.chatColor + "No item in your primary hand. Please hold the item you wish to send.");
             return;
         }
@@ -163,20 +153,16 @@ public class Ollivanders2OwlPost
     /**
      * Run the game tick upkeep for owl post deliveries
      */
-    public void upkeep()
-    {
+    public void upkeep() {
         ArrayList<Delivery> deliveryQueueCopy = new ArrayList<>(deliveryQueue);
 
-        for (Delivery delivery : deliveryQueueCopy)
-        {
-            if (delivery.cooldown > 0)
-            {
+        for (Delivery delivery : deliveryQueueCopy) {
+            if (delivery.cooldown > 0) {
                 delivery.cooldown = delivery.cooldown - 1;
                 continue;
             }
 
-            if (doDelivery(delivery))
-            {
+            if (doDelivery(delivery)) {
                 deliveryQueue.remove(delivery);
             }
         }
@@ -187,12 +173,10 @@ public class Ollivanders2OwlPost
      *
      * @param delivery the delivery to deliver
      */
-    private boolean doDelivery(Delivery delivery)
-    {
+    private boolean doDelivery(Delivery delivery) {
         // is the recipient online?
         Player player = p.getServer().getPlayer(delivery.recipient);
-        if (player == null)
-        {
+        if (player == null) {
             // player is not online, reset cooldown so we can wait for them
             delivery.cooldown = Delivery.retryCooldown;
 
@@ -202,8 +186,7 @@ public class Ollivanders2OwlPost
 
         Location playerLocation = player.getLocation();
         Location deliveryLocation = new Location(playerLocation.getWorld(), playerLocation.getX(), playerLocation.getY() + 2, playerLocation.getZ());
-        if (deliveryLocation.getWorld() == null)
-        {
+        if (deliveryLocation.getWorld() == null) {
             Ollivanders2API.common.printDebugMessage("Ollivanders2OwlPost.doDelivery: delivery location world is null", null, null, true);
             return false;
         }
@@ -211,8 +194,7 @@ public class Ollivanders2OwlPost
         Material blockType = deliveryLocation.getWorld().getBlockAt(deliveryLocation).getType();
 
         // can the owl get to this delivery location?
-        if (!(blockType == Material.AIR || blockType == Material.CAVE_AIR))
-        {
+        if (!(blockType == Material.AIR || blockType == Material.CAVE_AIR)) {
             // owl cannot go to this place
             delivery.cooldown = Delivery.retryCooldown;
 
@@ -223,11 +205,9 @@ public class Ollivanders2OwlPost
         delivery.courierOriginalLocation = delivery.courier.getLocation();
         delivery.courier.teleport(deliveryLocation);
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 deliverItemToPlayer(delivery.senderName, player, delivery.deliveryPackage, delivery.courier, delivery.courierOriginalLocation);
             }
         }.runTaskLater(p, 2 * Ollivanders2Common.ticksPerSecond);
@@ -244,18 +224,15 @@ public class Ollivanders2OwlPost
      * @param courier        the courier of the delivery
      * @param returnLocation the courier's original location
      */
-    private void deliverItemToPlayer(String senderName, Player recipient, ItemStack item, Entity courier, Location returnLocation)
-    {
+    private void deliverItemToPlayer(String senderName, Player recipient, ItemStack item, Entity courier, Location returnLocation) {
         recipient.sendMessage(Ollivanders2.chatColor + "An owl post delivery arrives for you from " + senderName + ".");
         List<ItemStack> kit = new ArrayList<>();
         kit.add(item);
         O2PlayerCommon.givePlayerKit(recipient, kit);
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 courier.teleport(returnLocation);
             }
         }.runTaskLater(p, 5 * Ollivanders2Common.ticksPerSecond);
