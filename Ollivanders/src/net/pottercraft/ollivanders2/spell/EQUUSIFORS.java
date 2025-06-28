@@ -14,8 +14,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Transfigures an entity into a horse.
  */
-public final class EQUUSIFORS extends FriendlyMobDisguise
-{
+public final class EQUUSIFORS extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
@@ -24,8 +23,7 @@ public final class EQUUSIFORS extends FriendlyMobDisguise
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public EQUUSIFORS(Ollivanders2 plugin)
-    {
+    public EQUUSIFORS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.EQUUSIFORS;
@@ -41,8 +39,7 @@ public final class EQUUSIFORS extends FriendlyMobDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public EQUUSIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public EQUUSIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.EQUUSIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;

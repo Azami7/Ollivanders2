@@ -13,15 +13,13 @@ import java.util.ArrayList;
 /**
  * Shoots red burst fireworks in to the air.
  */
-public final class PERICULUM_DUO extends Pyrotechnia
-{
+public final class PERICULUM_DUO extends Pyrotechnia {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public PERICULUM_DUO(Ollivanders2 plugin)
-    {
+    public PERICULUM_DUO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.PERICULUM_DUO;
@@ -37,8 +35,7 @@ public final class PERICULUM_DUO extends Pyrotechnia
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public PERICULUM_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public PERICULUM_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.PERICULUM_DUO;
@@ -58,8 +55,7 @@ public final class PERICULUM_DUO extends Pyrotechnia
      * Set the number of fireworks that can be cast based on the user's experience.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         setNumberOfFireworks();
     }
 }

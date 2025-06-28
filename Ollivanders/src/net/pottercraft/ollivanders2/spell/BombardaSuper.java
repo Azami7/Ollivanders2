@@ -9,12 +9,11 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Creates an explosion at the target which scales with the player's level in the spell. Doesn't break blocks.
+ * Creates an explosion at the target which scales with the player's level in the spell.
  *
  * @author Azami7
  */
-public abstract class BombardaSuper extends O2Spell
-{
+public abstract class BombardaSuper extends O2Spell {
     // todo limit blocks this can effect to align with https://harrypotter.fandom.com/wiki/Bombardment_Spell
     double minStrength = 1;
     double maxStrength = 4.0; // 4.0 is the strength of TNT
@@ -26,8 +25,7 @@ public abstract class BombardaSuper extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    BombardaSuper(Ollivanders2 plugin)
-    {
+    BombardaSuper(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -38,13 +36,11 @@ public abstract class BombardaSuper extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    BombardaSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    BombardaSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.TNT);
             worldGuardFlags.add(Flags.OTHER_EXPLOSION);
         }
@@ -53,24 +49,19 @@ public abstract class BombardaSuper extends O2Spell
     /**
      * Create an explosion in front of the target block
      */
-    protected void doCheckEffect()
-    {
-        if (hasHitTarget())
-        {
+    protected void doCheckEffect() {
+        if (hasHitTarget()) {
             double strength = (usesModifier / 10) * strengthMultiplier;
-            if (strength < minStrength)
-            {
+            if (strength < minStrength) {
                 strength = minStrength;
             }
-            else if (strength > maxStrength)
-            {
+            else if (strength > maxStrength) {
                 strength = maxStrength;
             }
 
             Location backLoc = location.clone().subtract(vector);
             World world = backLoc.getWorld();
-            if (world == null)
-            {
+            if (world == null) {
                 common.printDebugMessage("BombardaSuper.doCheckEffect: world is null", null, null, true);
                 kill();
                 return;

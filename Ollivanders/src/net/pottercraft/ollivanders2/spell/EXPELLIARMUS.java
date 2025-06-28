@@ -16,11 +16,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Disarms an entity of it's held item, flinging the item in the direction of the caster with force determined by the spell level.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Disarming_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Disarming_Charm">https://harrypotter.fandom.com/wiki/Disarming_Charm</a>
  */
-public final class EXPELLIARMUS extends O2Spell
-{
+public final class EXPELLIARMUS extends O2Spell {
     private final double minVelocity = 0.25;
     private final double maxVelocity = 3;
 
@@ -34,15 +33,13 @@ public final class EXPELLIARMUS extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public EXPELLIARMUS(Ollivanders2 plugin)
-    {
+    public EXPELLIARMUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.EXPELLIARMUS;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Disarming Charm");
             add("They made the most of the last few hours in which they were allowed to do magic before the holidays... and practised disarming each other by magic. Harry was getting very good at it.");
             add("A handy (even life-saving) spell for removing an object from an enemy’s grasp.");
@@ -60,8 +57,7 @@ public final class EXPELLIARMUS extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public EXPELLIARMUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public EXPELLIARMUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.EXPELLIARMUS;
         branch = O2MagicBranch.CHARMS;
@@ -76,8 +72,7 @@ public final class EXPELLIARMUS extends O2Spell
      * Determine the velocity based on the caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         velocity = usesModifier / 10;
         if (velocity < minVelocity)
             velocity = minVelocity;
@@ -89,21 +84,17 @@ public final class EXPELLIARMUS extends O2Spell
      * Look for entities in the projectile location and disarm them if they are holding something
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         List<LivingEntity> livingEntities = getNearbyLivingEntities(1.5);
 
-        if (livingEntities.size() > 0)
-        {
-            for (LivingEntity entity : livingEntities)
-            {
+        if (livingEntities.size() > 0) {
+            for (LivingEntity entity : livingEntities) {
                 if (entity.getUniqueId() == player.getUniqueId())
                     continue;
 
                 // is entity holding something
                 EntityEquipment entityEquipment = entity.getEquipment();
-                if (entityEquipment == null)
-                {
+                if (entityEquipment == null) {
                     // they do not have any equipment
                     kill();
                     return;
@@ -112,8 +103,7 @@ public final class EXPELLIARMUS extends O2Spell
                 ItemStack held = entityEquipment.getItemInMainHand();
                 boolean offHand = false;
 
-                if (held.getType() == Material.AIR)
-                {
+                if (held.getType() == Material.AIR) {
                     // try the other hand
                     held = entityEquipment.getItemInOffHand();
 

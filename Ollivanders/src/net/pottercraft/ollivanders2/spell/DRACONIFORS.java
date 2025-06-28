@@ -13,11 +13,10 @@ import java.util.ArrayList;
 
 /**
  * Turn target entity in to a Dragon.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Draconifors_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Draconifors_Spell">https://harrypotter.fandom.com/wiki/Draconifors_Spell</a>
  */
-public final class DRACONIFORS extends FriendlyMobDisguise
-{
+public final class DRACONIFORS extends FriendlyMobDisguise {
     // todo make this spawn phantoms and not dragons since the ender dragon is way too big
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
@@ -27,15 +26,13 @@ public final class DRACONIFORS extends FriendlyMobDisguise
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public DRACONIFORS(Ollivanders2 plugin)
-    {
+    public DRACONIFORS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.DRACONIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Draconifors Transfiguration");
             add("\"It was great! Now I can turn anything into dragons!\" -Hermione Granger");
         }};
@@ -50,8 +47,7 @@ public final class DRACONIFORS extends FriendlyMobDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public DRACONIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public DRACONIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.DRACONIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -74,8 +70,7 @@ public final class DRACONIFORS extends FriendlyMobDisguise
      * Set success rate based on caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         if (usesModifier < 20)
             successRate = 5;
         else if (usesModifier < 100)

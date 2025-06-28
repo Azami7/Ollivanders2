@@ -11,51 +11,47 @@ import java.util.ArrayList;
 
 /**
  * Cartomancy is the art of reading cards to gain insight into future events.
- * http://harrypotter.wikia.com/wiki/Cartomancy
  *
  * @author Azami7
+ * @see <a href = "http://harrypotter.wikia.com/wiki/Cartomancy">http://harrypotter.wikia.com/wiki/Cartomancy</a>
  * @since 2.2.9
  */
-public final class CARTOMANCIE extends Divination
-{
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public CARTOMANCIE(Ollivanders2 plugin)
-   {
-      super(plugin);
+public final class CARTOMANCIE extends Divination {
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public CARTOMANCIE(Ollivanders2 plugin) {
+        super(plugin);
 
-      spellType = O2SpellType.CARTOMANCIE;
-      divinationType = O2DivinationType.CARTOMANCY_TAROT;
-      branch = O2MagicBranch.DIVINATION;
+        spellType = O2SpellType.CARTOMANCIE;
+        divinationType = O2DivinationType.CARTOMANCY_TAROT;
+        branch = O2MagicBranch.DIVINATION;
 
-      flavorText = new ArrayList<>()
-      {{
-         add("\"If Dumbledore chooses to ignore the warnings the cards show - again and again, no matter how I lay them out – the lightning-struck tower. Calamity. Disaster. Coming nearer all the time.’\" -Sybill Trelawney");
-      }};
+        flavorText = new ArrayList<>() {{
+            add("\"If Dumbledore chooses to ignore the warnings the cards show - again and again, no matter how I lay them out – the lightning-struck tower. Calamity. Disaster. Coming nearer all the time.’\" -Sybill Trelawney");
+        }};
 
-      text = "Divination by reading tarot cards will reveal future events to those who possess the inner eye.";
-   }
+        text = "Divination by reading tarot cards will reveal future events to those who possess the inner eye.";
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public CARTOMANCIE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
-      spellType = O2SpellType.CARTOMANCIE;
-      divinationType = O2DivinationType.CARTOMANCY_TAROT;
-      branch = O2MagicBranch.DIVINATION;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public CARTOMANCIE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.CARTOMANCIE;
+        divinationType = O2DivinationType.CARTOMANCY_TAROT;
+        branch = O2MagicBranch.DIVINATION;
 
-      itemHeld = O2ItemType.TAROT_CARDS;
-      itemHeldString = "tarot cards";
+        itemHeld = O2ItemType.TAROT_CARDS;
+        itemHeldString = "tarot cards";
 
-      initSpell();
-   }
+        initSpell();
+    }
 }

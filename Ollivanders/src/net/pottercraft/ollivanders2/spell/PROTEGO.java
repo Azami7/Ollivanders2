@@ -11,27 +11,23 @@ import java.util.ArrayList;
 
 /**
  * The basic protection spell
- * <p>
- * https://harrypotter.fandom.com/wiki/Shield_Charm
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Shield_Charm">https://harrypotter.fandom.com/wiki/Shield_Charm</a>
  * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
  */
-public final class PROTEGO extends StationarySpell
-{
+public final class PROTEGO extends StationarySpell {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public PROTEGO(Ollivanders2 plugin)
-    {
+    public PROTEGO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.PROTEGO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("\"I don't remember telling you to use a Shield Charm... but there is no doubt that it was effective...\" -Severus Snape");
             add("The Shield Charm");
         }};
@@ -46,8 +42,7 @@ public final class PROTEGO extends StationarySpell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public PROTEGO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public PROTEGO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.PROTEGO;
@@ -66,8 +61,7 @@ public final class PROTEGO extends StationarySpell
     }
 
     @Override
-    protected O2StationarySpell createStationarySpell()
-    {
+    protected O2StationarySpell createStationarySpell() {
         return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO(p, player.getUniqueId(), location, radius, duration);
     }
 }

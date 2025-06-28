@@ -10,10 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Mice to snuffboxes - https://harrypotter.fandom.com/wiki/Mice_to_Snuffboxes - for minecraft we are using rabbits and bundles
+ * Mice to snuffboxes for minecraft we are using rabbits and bundles
  *
- * @since 2.21
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Mice_to_Snuffboxes">https://harrypotter.fandom.com/wiki/Mice_to_Snuffboxes</a>
+ * @since 2.21
  */
 public class LEPUS_SACCULUM extends LivingEntityToItemTransfiguration {
     /**

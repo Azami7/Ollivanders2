@@ -14,11 +14,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Herbivicus causes crops in a radius to grow.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Herbivicus_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Herbivicus_Charm">https://harrypotter.fandom.com/wiki/Herbivicus_Charm</a>
  */
-public final class HERBIVICUS extends O2Spell
-{
+public final class HERBIVICUS extends O2Spell {
     private final static int maxRadius = 15;
     private final static int maxGrowth = 7;
 
@@ -37,15 +36,13 @@ public final class HERBIVICUS extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public HERBIVICUS(Ollivanders2 plugin)
-    {
+    public HERBIVICUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.HERBIVICUS;
         branch = O2MagicBranch.HERBOLOGY;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Plant-Growing Charm");
         }};
 
@@ -59,8 +56,7 @@ public final class HERBIVICUS extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public HERBIVICUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public HERBIVICUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.HERBIVICUS;
@@ -76,8 +72,7 @@ public final class HERBIVICUS extends O2Spell
      * Determine radius and growth amount by caster's level and year
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         radius = (int) ((usesModifier / 4));
 
         if (radius < 1)
@@ -96,25 +91,20 @@ public final class HERBIVICUS extends O2Spell
      * Grow all the crops in a radius of the spell target
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (!hasHitTarget())
             return;
 
-        for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
-        {
+        for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius)) {
             BlockData blockData = block.getBlockData();
 
-            if (blockData instanceof Ageable)
-            {
+            if (blockData instanceof Ageable) {
                 Ageable cropData = (Ageable) blockData;
 
-                if (cropData.getAge() == cropData.getMaximumAge())
-                {
+                if (cropData.getAge() == cropData.getMaximumAge()) {
                     successMessage = "Those plants are already fully grown.";
                 }
-                else
-                {
+                else {
                     int toGrow = cropData.getAge() + growth;
                     if (toGrow > cropData.getMaximumAge())
                         toGrow = cropData.getMaximumAge();

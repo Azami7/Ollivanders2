@@ -11,25 +11,22 @@ import java.util.ArrayList;
 
 /**
  * Creates a muffliato stationary spell object. Only players within that object can hear other players within it. Time duration depends on spell's level.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Muffliato_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Muffliato_Charm">https://harrypotter.fandom.com/wiki/Muffliato_Charm</a>
  */
-public final class MUFFLIATO extends StationarySpell
-{
+public final class MUFFLIATO extends StationarySpell {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public MUFFLIATO(Ollivanders2 plugin)
-    {
+    public MUFFLIATO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.MUFFLIATO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add(" [...] perhaps most useful of all, Muffliato, a spell that filled the ears of anyone nearby with an unidentifiable buzzing, so that lengthy conversations could be held in class without being overheard.");
         }};
 
@@ -43,8 +40,7 @@ public final class MUFFLIATO extends StationarySpell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public MUFFLIATO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public MUFFLIATO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.MUFFLIATO;
@@ -63,8 +59,7 @@ public final class MUFFLIATO extends StationarySpell
     }
 
     @Override
-    protected O2StationarySpell createStationarySpell()
-    {
+    protected O2StationarySpell createStationarySpell() {
         return new net.pottercraft.ollivanders2.stationaryspell.MUFFLIATO(p, player.getUniqueId(), location, radius, duration);
     }
 }

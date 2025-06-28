@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 /**
  * Turn an entity in to a rabbit.
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Lapifors_Spell">https://harrypotter.fandom.com/wiki/Lapifors_Spell</a>
  */
 public class LAPIFORS extends ItemToEntityTransfiguration {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;

@@ -7,8 +7,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Remove a potion effect for all entities in a radius of the caster
  */
-public class RemovePotionEffectInRadius extends RemovePotionEffect
-{
+public class RemovePotionEffectInRadius extends RemovePotionEffect {
     /**
      * Radius of the spell from the caster.
      */
@@ -19,8 +18,7 @@ public class RemovePotionEffectInRadius extends RemovePotionEffect
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public RemovePotionEffectInRadius(Ollivanders2 plugin)
-    {
+    public RemovePotionEffectInRadius(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -31,8 +29,7 @@ public class RemovePotionEffectInRadius extends RemovePotionEffect
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public RemovePotionEffectInRadius(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public RemovePotionEffectInRadius(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 
@@ -40,10 +37,8 @@ public class RemovePotionEffectInRadius extends RemovePotionEffect
      * Remove the potion effect from the caster.
      */
     @Override
-    public void checkEffect()
-    {
-        if (!isSpellAllowed())
-        {
+    public void checkEffect() {
+        if (!isSpellAllowed()) {
             kill();
             return;
         }

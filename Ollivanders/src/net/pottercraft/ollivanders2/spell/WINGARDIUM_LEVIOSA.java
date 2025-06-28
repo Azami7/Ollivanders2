@@ -25,13 +25,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Moves a group of blocks.
- * <p>
- * https://harrypotter.fandom.com/wiki/Levitation_Charm
- * <p>
- * https://github.com/Azami7/Ollivanders2/issues/282 - this code needs to be totally redone (yick)
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Levitation_Charm">https://harrypotter.fandom.com/wiki/Levitation_Charm</a>
  */
-public final class WINGARDIUM_LEVIOSA extends O2Spell
-{
+public final class WINGARDIUM_LEVIOSA extends O2Spell {
     /**
      * The map of block data for the selected blocks
      */
@@ -77,15 +74,13 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public WINGARDIUM_LEVIOSA(Ollivanders2 plugin)
-    {
+    public WINGARDIUM_LEVIOSA(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
         spellType = O2SpellType.WINGARDIUM_LEVIOSA;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Levitation Charm");
             add("You're saying it wrong ...It's Wing-gar-dium Levi-o-sa, make the 'gar' nice and long.\" -Hermione Granger");
             add("The Levitation Charm is one of the first spells learnt by any young witch or wizard.  With the charm a witch or wizard can make things fly with the flick of a wand.");
@@ -101,8 +96,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public WINGARDIUM_LEVIOSA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public WINGARDIUM_LEVIOSA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.WINGARDIUM_LEVIOSA;
@@ -114,8 +108,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
 
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.BUILD);
             worldGuardFlags.add(Flags.ITEM_PICKUP);
             worldGuardFlags.add(Flags.ITEM_DROP);
@@ -128,8 +121,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
      * Set the radius based on the caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         radius = (int) usesModifier / 20;
         if (radius > maxRadius)
             radius = maxRadius;
@@ -141,48 +133,37 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
      * Select and move a group of blocks
      */
     @Override
-    public void checkEffect()
-    {
-        if (!isSpellAllowed())
-        {
+    public void checkEffect() {
+        if (!isSpellAllowed()) {
             kill();
             return;
         }
 
-        if (moving)
-        {
+        if (moving) {
             move();
 
             Material type = location.getBlock().getType();
-            if (type != Material.AIR && type != Material.WATER && type != Material.LAVA)
-            {
+            if (type != Material.AIR && type != Material.WATER && type != Material.LAVA) {
                 moving = false;
 
                 ArrayList<COLLOPORTUS> collos = new ArrayList<>();
-                for (O2StationarySpell stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-                {
-                    if (stat instanceof COLLOPORTUS)
-                    {
+                for (O2StationarySpell stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
+                    if (stat instanceof COLLOPORTUS) {
                         collos.add((COLLOPORTUS) stat);
                     }
                 }
 
-                for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius))
-                {
+                for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius)) {
                     boolean insideCollo = false;
-                    for (COLLOPORTUS collo : collos)
-                    {
-                        if (collo.isLocationInside(block.getLocation()))
-                        {
+                    for (COLLOPORTUS collo : collos) {
+                        if (collo.isLocationInside(block.getLocation())) {
                             insideCollo = true;
                         }
                     }
 
-                    if (!insideCollo)
-                    {
+                    if (!insideCollo) {
                         type = block.getType();
-                        if (!materialBlockedList.contains(type) && type.isSolid())
-                        {
+                        if (!materialBlockedList.contains(type) && type.isSolid()) {
                             Location loc = centerOfBlock(block).subtract(location);
                             blockDataMap.put(loc, block.getBlockData());
                             locList.add(loc);
@@ -193,54 +174,43 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
                 length = player.getEyeLocation().distance(location);
             }
         }
-        else
-        {
-            if (player.isSneaking())
-            {
+        else {
+            if (player.isSneaking()) {
                 List<Location> locList2 = new ArrayList<>(locList);
-                for (Block block : blockList)
-                {
-                    if (block.getType() == Material.AIR)
-                    {
+                for (Block block : blockList) {
+                    if (block.getType() == Material.AIR) {
                         locList2.remove(locList.get(blockList.indexOf(block)));
                     }
                 }
                 locList = locList2;
-                for (Block block : blockList)
-                {
+                for (Block block : blockList) {
                     block.setType(Material.AIR);
                 }
                 blockList.clear();
-                for (Location loc : locList)
-                {
+                for (Location loc : locList) {
                     Vector direction = player.getEyeLocation().getDirection().multiply(length);
                     Location center = player.getEyeLocation().add(direction);
                     location = center;
                     Location toLoc = center.clone().add(loc);
-                    if (toLoc.getBlock().getType() == Material.AIR)
-                    {
+                    if (toLoc.getBlock().getType() == Material.AIR) {
                         toLoc.getBlock().setType(blockDataMap.get(loc).getMaterial());
                         blockList.add(toLoc.getBlock());
                     }
                 }
             }
-            else if (dropBlocks)
-            {
-                for (Block block : blockList)
-                {
+            else if (dropBlocks) {
+                for (Block block : blockList) {
                     block.setType(Material.AIR);
                 }
                 Vector direction = player.getEyeLocation().getDirection().multiply(length);
                 Location center = player.getEyeLocation().add(direction);
                 Vector moveVec = center.toVector().subtract(location.toVector());
-                for (Location loc : locList)
-                {
+                for (Location loc : locList) {
                     Location toLoc = center.clone().add(loc);
                     BlockData blockData = blockDataMap.get(loc);
 
                     World world = loc.getWorld();
-                    if (world == null)
-                    {
+                    if (world == null) {
                         kill();
                         return;
                     }
@@ -250,8 +220,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
                 }
                 kill();
             }
-            else
-            {
+            else {
                 kill();
             }
         }
@@ -264,8 +233,7 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
      * @return Location at the center of the block.
      */
     @NotNull
-    private Location centerOfBlock(@NotNull Block block)
-    {
+    private Location centerOfBlock(@NotNull Block block) {
         Location newLoc = block.getLocation().clone();
         newLoc.setX(newLoc.getX() + 0.5);
         newLoc.setY(newLoc.getY() + 0.5);
@@ -274,7 +242,6 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell
     }
 
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
     }
 }

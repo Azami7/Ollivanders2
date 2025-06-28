@@ -11,11 +11,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Immobilizes a player for an amount of time depending on the player's spell level.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Freezing_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Freezing_Charm">https://harrypotter.fandom.com/wiki/Freezing_Charm</a>
  */
-public final class IMMOBULUS extends AddPotionEffect
-{
+public final class IMMOBULUS extends AddPotionEffect {
     private static final int minDurationInSecondsConfig = 15;
     private static final int maxDurationInSecondsConfig = 180;
     private static final int minAmplifierConfig = 0;
@@ -26,15 +25,13 @@ public final class IMMOBULUS extends AddPotionEffect
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public IMMOBULUS(Ollivanders2 plugin)
-    {
+    public IMMOBULUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.IMMOBULUS;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Freezing Charm");
             add("\"[…] immobilising two pixies at once with a clever Freezing Charm and stuffing them back into their cage.\"");
             add("The Freezing Charm is a spell which immobilises living targets.");
@@ -50,8 +47,7 @@ public final class IMMOBULUS extends AddPotionEffect
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public IMMOBULUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public IMMOBULUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.IMMOBULUS;
         branch = O2MagicBranch.CHARMS;

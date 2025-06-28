@@ -13,11 +13,10 @@ import java.util.ArrayList;
 
 /**
  * Creates an explosion of magnitude depending on the spell level which destroys blocks and sets fires.
- * <p>
- * https://harrypotter.fandom.com/wiki/Reductor_Curse
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Reductor_Curse">https://harrypotter.fandom.com/wiki/Reductor_Curse</a>
  */
-public final class REDUCTO extends O2Spell
-{
+public final class REDUCTO extends O2Spell {
     // todo rework what type of blocks this can target, make work with bombarda (prob can be a child class), 5th year dark arts spell
     /**
      * The maximum possible strength, 4f is TNT
@@ -39,15 +38,13 @@ public final class REDUCTO extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public REDUCTO(Ollivanders2 plugin)
-    {
+    public REDUCTO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.REDUCTO;
         branch = O2MagicBranch.DARK_ARTS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Reductor Curse");
             add("With this powerful curse, skilled wizards can easily reduce obstacles to pieces. For obvious reasons great care must be exercised when learning and practising this spell, lest you find yourself sweeping up in detention for it is all too easy to bring your classroom ceiling crashing down, or to reduce your teacher's desk to a fine mist.");
         }};
@@ -62,8 +59,7 @@ public final class REDUCTO extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public REDUCTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public REDUCTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.REDUCTO;
@@ -82,8 +78,7 @@ public final class REDUCTO extends O2Spell
      * Set the power for the explosion based on the caster's skill.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         power = (float) (usesModifier / 4);
         if (power < minPower)
             power = minPower;
@@ -95,8 +90,7 @@ public final class REDUCTO extends O2Spell
      * Cause an explosion in the location 1 before the target location.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (!hasHitTarget())
             return;
 

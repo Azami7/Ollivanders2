@@ -14,8 +14,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Parent class for all spells that create a stationary spell.
  */
-public abstract class StationarySpell extends O2Spell
-{
+public abstract class StationarySpell extends O2Spell {
     /**
      * The time left for this stationary spell.
      */
@@ -71,8 +70,7 @@ public abstract class StationarySpell extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public StationarySpell(Ollivanders2 plugin)
-    {
+    public StationarySpell(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
@@ -85,8 +83,7 @@ public abstract class StationarySpell extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public StationarySpell(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public StationarySpell(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         branch = O2MagicBranch.CHARMS;
 
@@ -106,8 +103,7 @@ public abstract class StationarySpell extends O2Spell
      * Create the stationary spell with duration and radius based on the caster's skill.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (!centerOnCaster && !hasHitTarget())
             return;
 
@@ -127,8 +123,7 @@ public abstract class StationarySpell extends O2Spell
 
         O2StationarySpell stationarySpell = createStationarySpell();
 
-        if (stationarySpell != null)
-        {
+        if (stationarySpell != null) {
             stationarySpell.flair(flairSize);
             Ollivanders2API.getStationarySpells().addStationarySpell(stationarySpell);
 

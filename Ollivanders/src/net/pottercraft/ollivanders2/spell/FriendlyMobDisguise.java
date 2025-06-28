@@ -14,13 +14,13 @@ import java.util.List;
 
 /**
  * Super class for transfiguring friendly mobs.
+ *
+ * @see <a href = "https://minecraft.fandom.com/wiki/Mob">https://minecraft.fandom.com/wiki/Mob</a>
  */
 public abstract class FriendlyMobDisguise extends EntityDisguise
 {
     /**
      * Small size friendly and neutral mobs (mostly birds and fish).
-     * <p>
-     * Reference: https://minecraft.fandom.com/wiki/Mob
      */
     public static final List<EntityType> smallFriendlyMobs = new ArrayList<>()
     {{
@@ -37,8 +37,6 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
 
     /**
      * Medium size friendly mobs.
-     * <p>
-     * Reference: https://minecraft.fandom.com/wiki/Mob
      */
     public static final List<EntityType> mediumFriendlyMobs = new ArrayList<>()
     {{
@@ -54,8 +52,6 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
 
     /**
      * Large size friendly mobs. Ender Dragon is explicitly excluded as it is too big/strong to target.
-     * <p>
-     * Reference: https://minecraft.fandom.com/wiki/Mob
      */
     public static final List<EntityType> largeFriendlyMobs = new ArrayList<>()
     {{
@@ -111,8 +107,8 @@ public abstract class FriendlyMobDisguise extends EntityDisguise
 
     /**
      * Populate the entity allowed list for this spell based on the caster's skill and level.
-     * <p>
-     * This must be called after initSpell() so that usesModifier is populated.
+     *
+     * <p>This must be called after initSpell() so that usesModifier is populated.</p>
      */
     void populateEntityAllowedList()
     {

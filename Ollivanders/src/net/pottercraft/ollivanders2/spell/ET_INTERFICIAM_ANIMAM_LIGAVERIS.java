@@ -20,25 +20,22 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Creates a horcrux stationary spell object where it collides with a block.
  * Also damages the player and increases their souls count.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Horcrux-making_spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Horcrux-making_spell">https://harrypotter.fandom.com/wiki/Horcrux-making_spell</a>
  */
-public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
-{
+public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public ET_INTERFICIAM_ANIMAM_LIGAVERIS(Ollivanders2 plugin)
-    {
+    public ET_INTERFICIAM_ANIMAM_LIGAVERIS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
         branch = O2MagicBranch.DARK_ARTS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("Tamper with the deepest mysteries — the source of life, the essence of self — only if prepared for consequences of the most extreme and dangerous kind.");
         }};
 
@@ -54,8 +51,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public ET_INTERFICIAM_ANIMAM_LIGAVERIS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public ET_INTERFICIAM_ANIMAM_LIGAVERIS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.ET_INTERFICIAM_ANIMAM_LIGAVERIS;
         branch = O2MagicBranch.DARK_ARTS;
@@ -71,25 +67,21 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
      * This spell is not a projectile but makes the stationary spell in the player's current location.
      */
     @Override
-    public void checkEffect()
-    {
-        if (!isSpellAllowed())
-        {
+    public void checkEffect() {
+        if (!isSpellAllowed()) {
             kill();
             return;
         }
 
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-        if (o2p == null)
-        {
+        if (o2p == null) {
             kill();
             return;
         }
 
         double futureHealth = player.getHealth();
         AttributeInstance healthAttribute = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
-        if (healthAttribute == null)
-        {
+        if (healthAttribute == null) {
             common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, false);
             kill();
             return;
@@ -100,16 +92,14 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
 
         int souls = o2p.getSouls();
 
-        if (souls == 0)
-        {
+        if (souls == 0) {
             player.sendMessage(Ollivanders2.chatColor + "Your soul is not yet so damaged to allow this.");
             kill();
             return;
         }
 
         //If the player's soul isn't s0 split that they can survive making another horcrux, then make a new one and damage them
-        if (futureHealth - 1 > 0)
-        {
+        if (futureHealth - 1 > 0) {
             HORCRUX horcrux = new HORCRUX(p, player.getUniqueId(), location);
             horcrux.flair(10);
             Ollivanders2API.getStationarySpells().addStationarySpell(horcrux);
@@ -117,14 +107,11 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
             o2p.subtractSoul();
             player.damage(1.0);
         }
-        else
-        {
+        else {
             //If they player couldn't survive making another horcrux then they are sent back to a previous horcrux
             List<O2StationarySpell> stationaries = Ollivanders2API.getStationarySpells().getActiveStationarySpells();
-            for (O2StationarySpell stationary : stationaries)
-            {
-                if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(player.getUniqueId()))
-                {
+            for (O2StationarySpell stationary : stationaries) {
+                if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(player.getUniqueId())) {
                     Location tp = stationary.getLocation();
                     tp.setY(tp.getY() + 1);
                     player.teleport(tp);
@@ -143,7 +130,6 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell
     }
 
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
     }
 }

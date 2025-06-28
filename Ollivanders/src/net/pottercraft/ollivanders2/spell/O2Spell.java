@@ -688,7 +688,7 @@ public abstract class O2Spell {
 
     /**
      * Get the name of the spell
-     * 
+     *
      * @return the name of the spell
      */
     @NotNull

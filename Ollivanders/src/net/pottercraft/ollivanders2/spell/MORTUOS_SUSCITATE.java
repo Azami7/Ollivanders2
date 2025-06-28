@@ -22,11 +22,10 @@ import java.util.HashMap;
 
 /**
  * Transfigures a rotten flesh into inferi
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Inferius
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Inferius">https://harrypotter.fandom.com/wiki/Inferius</a>
  */
-public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration
-{
+public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
     /**
      * Keep track of the number of inferi a player has created
      */
@@ -42,15 +41,13 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public MORTUOS_SUSCITATE(Ollivanders2 plugin)
-    {
+    public MORTUOS_SUSCITATE(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.DARK_ARTS;
         spellType = O2SpellType.MORTUOS_SUSCITATE;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("They are corpses, dead bodies that have been bewitched to do a Dark wizard's bidding. Inferi have not been seen for a long time, however, not since Voldemort was last powerful... He killed enough people to make an army of them, of course.");
         }};
 
@@ -64,8 +61,7 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public MORTUOS_SUSCITATE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public MORTUOS_SUSCITATE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.DARK_ARTS;
@@ -87,8 +83,7 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration
      * Determine whether this player can create more inferi based on their skill level
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         // can the player create more inferi?
         int playerMax = (int) (usesModifier / 10);
         if (playerMax > maxInferi)
@@ -96,11 +91,9 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration
         else if (playerMax < 1)
             playerMax = 1;
 
-        if (inferiCount.containsKey(player))
-        {
+        if (inferiCount.containsKey(player)) {
             int curInferi = inferiCount.get(player);
-            if (curInferi >= playerMax)
-            {
+            if (curInferi >= playerMax) {
                 // if the number they currently have created exceeds their max based on skill, set success to 0
                 successRate = 0;
             }
@@ -111,10 +104,8 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration
      * Reduce the count of inferi for this player by 1
      */
     @Override
-    void doRevert()
-    {
-        if (isTransfigured)
-        {
+    void doRevert() {
+        if (isTransfigured) {
             int curInferi = inferiCount.get(player) - 1;
             if (curInferi <= 0)
                 inferiCount.remove(player);
@@ -129,8 +120,7 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration
      * @param event the entity damage event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityDamageEvent(EntityDamageByEntityEvent event)
-    {
+    public void onEntityDamageEvent(EntityDamageByEntityEvent event) {
         if (transfiguredEntity == null)
             return;
 
@@ -155,8 +145,7 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration
      * @param event the entity target event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityTargetEvent(EntityTargetEvent event)
-    {
+    public void onEntityTargetEvent(EntityTargetEvent event) {
         if (transfiguredEntity == null)
             return;
 

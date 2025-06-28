@@ -9,18 +9,16 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Makes an anti-disapparition spell that players cannot apparate in to.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx</a>
  */
-public final class NULLUM_APPAREBIT extends StationarySpell
-{
+public final class NULLUM_APPAREBIT extends StationarySpell {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public NULLUM_APPAREBIT(Ollivanders2 plugin)
-    {
+    public NULLUM_APPAREBIT(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.NULLUM_APPAREBIT;
@@ -36,8 +34,7 @@ public final class NULLUM_APPAREBIT extends StationarySpell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public NULLUM_APPAREBIT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public NULLUM_APPAREBIT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.NULLUM_APPAREBIT;
@@ -56,8 +53,7 @@ public final class NULLUM_APPAREBIT extends StationarySpell
     }
 
     @Override
-    protected O2StationarySpell createStationarySpell()
-    {
+    protected O2StationarySpell createStationarySpell() {
         return new net.pottercraft.ollivanders2.stationaryspell.NULLUM_APPAREBIT(p, player.getUniqueId(), location, radius, duration);
     }
 }

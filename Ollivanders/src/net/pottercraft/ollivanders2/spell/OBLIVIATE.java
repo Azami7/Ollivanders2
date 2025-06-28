@@ -15,12 +15,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Decreases all of target player's spell levels by the caster's level in obliviate.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Memory_Charm
+ * Decreases all target player's spell levels by the caster's level in obliviate.
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Memory_Charm">https://harrypotter.fandom.com/wiki/Memory_Charm</a>
  */
-public final class OBLIVIATE extends O2Spell
-{
+public final class OBLIVIATE extends O2Spell {
     private static final int maxReduction = 200;
     private static final int maxImpact = 20;
 
@@ -29,15 +28,13 @@ public final class OBLIVIATE extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public OBLIVIATE(Ollivanders2 plugin)
-    {
+    public OBLIVIATE(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.OBLIVIATE;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Memory Charm");
             add("\"If there’s one thing I pride myself on, it’s my Memory Charms.\" -Gilderoy Lockhart");
             add("\"Miss Dursley has been punctured and her memory has been modified. She has no recollection of the incident at all. So that's that, and no harm done.\" -Cornelius Fudge");
@@ -53,8 +50,7 @@ public final class OBLIVIATE extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public OBLIVIATE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public OBLIVIATE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.OBLIVIATE;
@@ -71,26 +67,22 @@ public final class OBLIVIATE extends O2Spell
      * Target the first player we find and remove random potion and/or spell knowledge
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (hasHitTarget())
             kill();
 
-        for (Player target : getNearbyPlayers(defaultRadius))
-        {
+        for (Player target : getNearbyPlayers(defaultRadius)) {
             if (target.getUniqueId() == player.getUniqueId())
                 continue;
 
             O2Player o2player = Ollivanders2API.getPlayers().getPlayer(target.getUniqueId());
-            if (o2player == null)
-            {
+            if (o2player == null) {
                 common.printDebugMessage("Null O2Player in OBLIVIATE.doCheckEffect()", null, null, true);
                 continue;
             }
 
             // start making the player forget things
-            for (int i = 0; i < maxImpact; i++)
-            {
+            for (int i = 0; i < maxImpact; i++) {
                 forgetSomething(o2player);
 
                 if (!canContinue())
@@ -107,8 +99,7 @@ public final class OBLIVIATE extends O2Spell
      *
      * @return true if the spell continues to affect the target, flase otherwise
      */
-    private boolean canContinue()
-    {
+    private boolean canContinue() {
         int chance = (Math.abs(Ollivanders2Common.random.nextInt()) % 100); // 0-99
 
         if (chance <= 10) // 10% chance this fails no matter what skill level
@@ -122,8 +113,7 @@ public final class OBLIVIATE extends O2Spell
      *
      * @param o2player the player to affect
      */
-    private void forgetSomething(O2Player o2player)
-    {
+    private void forgetSomething(O2Player o2player) {
         // determine how much the player forgets
         int reduction = Math.abs(Ollivanders2Common.random.nextInt()) % (int) usesModifier;
         if (reduction < 5)

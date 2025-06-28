@@ -16,8 +16,7 @@ import java.util.List;
  * In HP, these would be Transfiguration spells but for code purposes they behave like charm projectiles, so we
  * extend Charms then override the spell type.
  */
-public abstract class GaleatiSuper extends O2Spell
-{
+public abstract class GaleatiSuper extends O2Spell {
     Material materialType = Material.AIR;
 
     /**
@@ -25,8 +24,7 @@ public abstract class GaleatiSuper extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public GaleatiSuper(Ollivanders2 plugin)
-    {
+    public GaleatiSuper(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -37,8 +35,7 @@ public abstract class GaleatiSuper extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public GaleatiSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public GaleatiSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 
@@ -46,30 +43,26 @@ public abstract class GaleatiSuper extends O2Spell
      * Targets a player in radius of the projectile and changes their helmet.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         // projectile has stopped, kill the spell
         if (hasHitTarget())
             kill();
 
         List<Player> livingEntities = getNearbyPlayers(defaultRadius);
 
-        for (Player target : livingEntities)
-        {
+        for (Player target : livingEntities) {
             if (target.getUniqueId() == player.getUniqueId())
                 continue;
 
             EntityEquipment entityEquipment = target.getEquipment();
-            if (entityEquipment == null)
-            {
+            if (entityEquipment == null) {
                 // they have no equipment
                 kill();
                 return;
             }
 
             ItemStack helmet = entityEquipment.getHelmet();
-            if (helmet != null)
-            {
+            if (helmet != null) {
                 if (helmet.getType() != Material.AIR)
                     target.getWorld().dropItem(target.getEyeLocation(), helmet);
             }

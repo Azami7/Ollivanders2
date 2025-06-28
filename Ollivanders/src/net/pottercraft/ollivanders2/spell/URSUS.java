@@ -16,15 +16,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Turns target player in to a bear.
  */
-public class URSUS extends PlayerDisguise
-{
+public class URSUS extends PlayerDisguise {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public URSUS(Ollivanders2 plugin)
-    {
+    public URSUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.URSUS;
@@ -40,8 +38,7 @@ public class URSUS extends PlayerDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public URSUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public URSUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.URSUS;
@@ -76,8 +73,7 @@ public class URSUS extends PlayerDisguise
      * Calculate success rate based on player skill level
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         calculateSuccessRate();
     }
 }

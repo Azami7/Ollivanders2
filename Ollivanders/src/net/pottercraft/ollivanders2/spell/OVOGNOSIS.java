@@ -12,28 +12,25 @@ import java.util.ArrayList;
 
 /**
  * Ovomancy is an ancient greek form of divination by interpreting the inside (yolk and whites) of an egg.
- * http://harrypotter.wikia.com/wiki/Ovomancy
  *
  * @author Azami7
+ * @see <a href = "http://harrypotter.wikia.com/wiki/Ovomancy">http://harrypotter.wikia.com/wiki/Ovomancy</a>
  * @since 2.2.9
  */
-public class OVOGNOSIS extends Divination
-{
+public class OVOGNOSIS extends Divination {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public OVOGNOSIS (Ollivanders2 plugin)
-    {
+    public OVOGNOSIS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.OVOGNOSIS;
         divinationType = O2DivinationType.OVOMANCY;
         branch = O2MagicBranch.DIVINATION;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("Egg divination was a common practice for ancient Greeks and Romans.");
             add("A practice that dates back to Orpheus of Greeze allows the one to know the future though interpreting eggs.");
         }};
@@ -48,8 +45,7 @@ public class OVOGNOSIS extends Divination
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public OVOGNOSIS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public OVOGNOSIS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.OVOGNOSIS;

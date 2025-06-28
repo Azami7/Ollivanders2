@@ -15,11 +15,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Lengthens the duration of shield spells.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Fianto_Duri
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Fianto_Duri">https://harrypotter.fandom.com/wiki/Fianto_Duri</a>
  */
-public final class FIANTO_DURI extends O2Spell
-{
+public final class FIANTO_DURI extends O2Spell {
     private static final int maxIncrease = Ollivanders2Common.ticksPerHour * 24; // 1 day
 
     /**
@@ -32,14 +31,12 @@ public final class FIANTO_DURI extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public FIANTO_DURI(Ollivanders2 plugin)
-    {
+    public FIANTO_DURI(Ollivanders2 plugin) {
         super(plugin);
         spellType = O2SpellType.FIANTO_DURI;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("\"Protego Maxima. Fianto Duri. Repello Inimicum.\" - Filius Flitwick");
         }};
 
@@ -53,8 +50,7 @@ public final class FIANTO_DURI extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public FIANTO_DURI(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public FIANTO_DURI(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.FIANTO_DURI;
@@ -66,8 +62,7 @@ public final class FIANTO_DURI extends O2Spell
     }
 
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         increase = (int) usesModifier * Ollivanders2Common.ticksPerMinute * 2;
 
         if (increase > maxIncrease)
@@ -78,12 +73,10 @@ public final class FIANTO_DURI extends O2Spell
      * Look for any shield spells at the caster location and increase their duration
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         List<O2StationarySpell> shieldSpells = new ArrayList<>();
 
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
-        {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
             // if the stationary spell type is not in the blocked list for this spell
             // was cast by the caster of this spell
             if ((stationarySpell instanceof ShieldSpell) && stationarySpell.getCasterID().equals(player.getUniqueId()))
@@ -91,15 +84,13 @@ public final class FIANTO_DURI extends O2Spell
         }
 
         // if we found a target stationary spells, increase their durations
-        if (shieldSpells.size() < 1)
-        {
+        if (shieldSpells.size() < 1) {
             sendFailureMessage();
             kill();
             return;
         }
 
-        for (O2StationarySpell spell : shieldSpells)
-        {
+        for (O2StationarySpell spell : shieldSpells) {
             spell.increaseDuration(increase);
             spell.flair(10);
         }
@@ -108,7 +99,6 @@ public final class FIANTO_DURI extends O2Spell
     }
 
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
     }
 }

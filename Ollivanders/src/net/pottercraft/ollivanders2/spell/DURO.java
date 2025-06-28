@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 /**
  * Turns a target area or object to stone.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Hardening_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Hardening_Charm">https://harrypotter.fandom.com/wiki/Hardening_Charm</a>
  */
 public final class DURO extends BlockTransfiguration {
     private static final int minRadiusConfig = 1;

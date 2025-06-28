@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Breaks glass.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Finestra_spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Finestra_spell">https://harrypotter.fandom.com/wiki/Finestra_spell</a>
  */
 public final class FINESTRA extends O2Spell
 {

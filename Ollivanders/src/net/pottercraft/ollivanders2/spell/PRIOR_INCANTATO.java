@@ -15,11 +15,10 @@ import java.util.List;
 
 /**
  * Prior Incantato is a spell that forced a wand to show an "echo" of the most recent spell it had performed.
- * <p>
- * http://harrypotter.wikia.com/wiki/Reverse_Spell
+ *
+ * @see <a href = "http://harrypotter.wikia.com/wiki/Reverse_Spell">http://harrypotter.wikia.com/wiki/Reverse_Spell</a>
  */
-public class PRIOR_INCANTATO extends O2Spell
-{
+public class PRIOR_INCANTATO extends O2Spell {
     /**
      * The radius of players who will "see" the effect
      */
@@ -30,15 +29,13 @@ public class PRIOR_INCANTATO extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public PRIOR_INCANTATO(Ollivanders2 plugin)
-    {
+    public PRIOR_INCANTATO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.PRIOR_INCANTATO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Reverse Spell");
             add("\"Placing his wand tip to tip against Harry's wand and saying the spell, Amos causes a shadow of the Dark Mark to erupt from where the two wands meet, showing that this was the last spell cast with Harry's wand.\"");
         }};
@@ -53,8 +50,7 @@ public class PRIOR_INCANTATO extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public PRIOR_INCANTATO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public PRIOR_INCANTATO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.INFORMOUS;
@@ -67,13 +63,11 @@ public class PRIOR_INCANTATO extends O2Spell
      * Find a nearby player and attempt to force the shadow of the last spell from
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (hasHitTarget())
             kill();
 
-        for (Player target : getNearbyPlayers(defaultRadius))
-        {
+        for (Player target : getNearbyPlayers(defaultRadius)) {
             if (target.getUniqueId() == player.getUniqueId())
                 continue;
 
@@ -94,19 +88,16 @@ public class PRIOR_INCANTATO extends O2Spell
      *
      * @param target the target player
      */
-    private void doPriorIncantato(@NotNull Player target)
-    {
+    private void doPriorIncantato(@NotNull Player target) {
         O2Player o2p = p.getO2Player(target);
-        if (o2p == null)
-        {
+        if (o2p == null) {
             common.printDebugMessage("Null o2player in PRIOR_INCANTATO.doPriorIncantato", null, null, true);
             return;
         }
 
         O2SpellType prior = o2p.getPriorIncantatem();
 
-        if (prior == null)
-        {
+        if (prior == null) {
             player.sendMessage(Ollivanders2.chatColor + target.getName() + "'s wand has not cast a spell.");
 
             return;
@@ -115,8 +106,7 @@ public class PRIOR_INCANTATO extends O2Spell
         // if the wand has previously cast a spell, let the target plus all nearby players "see" the prior incantato
         List<Entity> nearbyPlayers = EntityCommon.getNearbyEntitiesByType(target.getLocation(), visibleRadius, EntityType.PLAYER);
 
-        for (Entity entity : nearbyPlayers)
-        {
+        for (Entity entity : nearbyPlayers) {
             if (!(entity instanceof Player) || entity.getUniqueId() == target.getUniqueId())
                 continue;
 

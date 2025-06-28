@@ -9,13 +9,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Glacius will cause a great cold to descend in a radius from it's impact point which freezes blocks. The radius and
+ * Glacius will cause a great cold to descend in a radius from its impact point which freezes blocks. The radius and
  * duration of the freeze depend on your experience.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Freezing_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Freezing_Spell">https://harrypotter.fandom.com/wiki/Freezing_Spell</a>
  */
-public final class GLACIUS extends GlaciusSuper
-{
+public final class GLACIUS extends GlaciusSuper {
     static final int minRadiusConfig = 1;
     static final int maxRadiusConfig = 10;
     static final int minDurationConfig = 30 * Ollivanders2Common.ticksPerSecond;
@@ -26,15 +25,13 @@ public final class GLACIUS extends GlaciusSuper
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public GLACIUS(Ollivanders2 plugin)
-    {
+    public GLACIUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.GLACIUS;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("A charm that conjures a blast of freezing cold air from the end of the wand.");
             add("The Freezing Charm");
         }};
@@ -49,8 +46,7 @@ public final class GLACIUS extends GlaciusSuper
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public GLACIUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public GLACIUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.GLACIUS;

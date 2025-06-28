@@ -10,10 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Beetle to button - https://harrypotter.fandom.com/wiki/Beetle_into_Button - for minecraft we are using endermites to button
+ * Beetle to button for minecraft we are using endermites to button
  *
- * @since 2.21
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Beetle_into_Button">https://harrypotter.fandom.com/wiki/Beetle_into_Button</a>
+ * @since 2.21
  */
 public class SCARABAEUS_FIBULUM extends LivingEntityToItemTransfiguration {
     /**

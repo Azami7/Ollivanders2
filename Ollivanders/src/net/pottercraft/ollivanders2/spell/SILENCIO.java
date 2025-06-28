@@ -12,11 +12,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Silences a player for a duration depending on the spell's level. The target player can only use nonverbal spells.
- * <p>
- * https://harrypotter.fandom.com/wiki/Silencing_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Silencing_Charm">https://harrypotter.fandom.com/wiki/Silencing_Charm</a>
  */
-public final class SILENCIO extends O2Spell
-{
+public final class SILENCIO extends O2Spell {
     /**
      * The minimum time the target will be silenced for
      */
@@ -37,15 +36,13 @@ public final class SILENCIO extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public SILENCIO(Ollivanders2 plugin)
-    {
+    public SILENCIO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.SILENCIO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The raven continued to open and close its sharp beak, but no sound came out.");
             add("The Silencing Charm");
         }};
@@ -60,8 +57,7 @@ public final class SILENCIO extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public SILENCIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public SILENCIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.SILENCIO;
@@ -75,8 +71,7 @@ public final class SILENCIO extends O2Spell
      * Set the duration based on the caster's skill.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         duration = (int) usesModifier * Ollivanders2Common.ticksPerSecond;
         if (duration < minDuration)
             duration = minDuration;
@@ -88,13 +83,11 @@ public final class SILENCIO extends O2Spell
      * Find a target player and mute their typing
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (hasHitTarget())
             kill();
 
-        for (Player target : getNearbyPlayers(defaultRadius))
-        {
+        for (Player target : getNearbyPlayers(defaultRadius)) {
             if (target.getUniqueId() == player.getUniqueId())
                 continue;
 

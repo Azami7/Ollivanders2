@@ -15,9 +15,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Box Blasting Charm - https://harrypotter.fandom.com/wiki/Box_Blasting_Charm
+ * Box Blasting Charm
  *
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Box_Blasting_Charm">https://harrypotter.fandom.com/wiki/Box_Blasting_Charm</a>
  * @since 2.21
  */
 public class CISTERN_APERIO extends O2Spell {
@@ -79,7 +80,7 @@ public class CISTERN_APERIO extends O2Spell {
             return;
         }
 
-        Inventory inventory = ((Container)blockState).getInventory();
+        Inventory inventory = ((Container) blockState).getInventory();
         failureMessage = "The container shakes but nothing happens.";
 
         if (inventory.isEmpty()) {

@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Slows any living entity by an amount and time depending on the player's spell level.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Impediment_Jinx
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Impediment_Jinx">https://harrypotter.fandom.com/wiki/Impediment_Jinx</a>
  */
 public final class IMPEDIMENTA extends AddPotionEffect
 {
