@@ -45,7 +45,7 @@ public class NULLUM_EVANESCUNT extends O2StationarySpell {
      * @param duration the duration of the spell
      */
     public NULLUM_EVANESCUNT(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
-        super(plugin);
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.NULLUM_EVANESCUNT;
 
         // make min/max radius and duration the same as Nullum Apparebit
@@ -54,8 +54,6 @@ public class NULLUM_EVANESCUNT extends O2StationarySpell {
         minDuration = NULLUM_APPAREBIT.minDurationConfig;
         maxDuration = NULLUM_APPAREBIT.maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
 
@@ -178,4 +176,7 @@ public class NULLUM_EVANESCUNT extends O2StationarySpell {
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
+
+    @Override
+    void doCleanUp() {}
 }

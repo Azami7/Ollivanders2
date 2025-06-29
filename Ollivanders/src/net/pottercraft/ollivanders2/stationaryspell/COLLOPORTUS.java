@@ -52,15 +52,13 @@ public class COLLOPORTUS extends O2StationarySpell {
      * @param location the center location of the spell
      */
     public COLLOPORTUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location) {
-        super(plugin);
+        super(plugin, pid, location);
 
         spellType = O2StationarySpellType.COLLOPORTUS;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         permanent = true;
 
-        setPlayerID(pid);
-        setLocation(location);
         radius = minRadius = maxRadius = minRadiusConfig;
         duration = 10;
 
@@ -160,4 +158,7 @@ public class COLLOPORTUS extends O2StationarySpell {
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
+
+    @Override
+    void doCleanUp() {}
 }

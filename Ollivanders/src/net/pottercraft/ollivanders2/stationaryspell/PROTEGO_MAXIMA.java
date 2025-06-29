@@ -90,15 +90,13 @@ public class PROTEGO_MAXIMA extends ShieldSpell
      */
     public PROTEGO_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration, double damage)
     {
-        super(plugin);
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO_MAXIMA;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
         setDamage(damage);
@@ -190,4 +188,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell
 
         this.damage = damage;
     }
+
+    @Override
+    void doCleanUp() {}
 }

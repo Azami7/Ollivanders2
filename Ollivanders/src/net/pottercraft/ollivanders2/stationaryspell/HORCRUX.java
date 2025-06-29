@@ -60,13 +60,11 @@ public class HORCRUX extends O2StationarySpell {
      * @param location the center location of the spell
      */
     public HORCRUX(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location) {
-        super(plugin);
+        super(plugin, pid, location);
 
         spellType = O2StationarySpellType.HORCRUX;
         permanent = true;
 
-        setPlayerID(pid);
-        setLocation(location);
         radius = minRadius = maxRadius = minRadiusConfig;
         duration = 10;
 
@@ -173,4 +171,7 @@ public class HORCRUX extends O2StationarySpell {
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
         flair(5);
     }
+
+    @Override
+    void doCleanUp() {}
 }

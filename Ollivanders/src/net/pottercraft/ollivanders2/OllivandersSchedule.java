@@ -1,27 +1,20 @@
 package net.pottercraft.ollivanders2;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
-import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.spell.O2Spell;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -69,9 +62,10 @@ public class OllivandersSchedule implements Runnable {
             Ollivanders2API.common.printDebugMessage("Exceoption running scheduled tasks.", e, null, true);
         }
 
-        // run invis player every second, offset from itemCurse schedule
-        if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 1)
-            invisPlayer();
+        // run invis functions every second, offset from itemCurse schedule
+        if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 1) {
+            handleInvisibilityCloaks();
+        }
 
         // back up plugin data hourly
         if (Ollivanders2.hourlyBackup && scheduleTimer % Ollivanders2Common.ticksPerHour == 0) {
@@ -123,88 +117,23 @@ public class OllivandersSchedule implements Runnable {
     }
 
     /**
-     * Hides a player with the Cloak of Invisibility from other players.
-     * Also hides players in Repello Muggleton from players not in that same spell.
-     * Also sets any Creature targeting this player to have null target.
+     * Handles hiding and revealing players when they wear an invisibilty cloak. We cannot make this an
+     * item enchantment that can listen to events and react because MC doesn't have an event for a player
+     * equipping an item, lame.
      */
-    private void invisPlayer() {
-        Set<REPELLO_MUGGLETON> repelloMuggletons = new HashSet<>();
-        for (O2StationarySpell stat : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
-            if (stat instanceof REPELLO_MUGGLETON) {
-                repelloMuggletons.add((REPELLO_MUGGLETON) stat);
-            }
-        }
-
+    private void handleInvisibilityCloaks() {
         for (Player player : p.getServer().getOnlinePlayers()) {
-            O2Player o2p = p.getO2Player(player);
-            if (o2p == null)
-                continue;
+            boolean wearingInvisbilityCloak = wearingInvisibilityCloak(player);
+            boolean hasInvisiblityPotionEffect = O2PlayerCommon.hasPotionEffect(player, PotionEffectType.INVISIBILITY);
 
-            boolean alreadyInvis = o2p.isInvisible();
-            boolean hasCloak = hasCloak(player);
-
-            if (hasCloak) {
-                if (!alreadyInvis) {
-                    o2p.setInvisible(true);
-                    player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
-                }
+            // if they are wearing the cloak but not invisible, make them invisible
+            if (wearingInvisbilityCloak && !hasInvisiblityPotionEffect) {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
             }
-
-            boolean inRepelloMuggletons = O2StationarySpellType.REPELLO_MUGGLETON.isPlayerInsideStationary(player);
-
-            //TODO check the logic on this, I am not sure it is right
-            if (hasCloak || inRepelloMuggletons) {
-                for (Player player2 : p.getServer().getOnlinePlayers()) {
-                    if (player2.isPermissionSet("Ollivanders2.BYPASS") && player2.hasPermission("Ollivanders2.BYPASS")) {
-                        continue;
-                    }
-
-                    O2Player viewer = p.getO2Player(player2);
-                    if (viewer == null)
-                        continue;
-
-                    if (hasCloak) {
-                        player2.hidePlayer(p, player);
-                        System.out.println(player2.canSee(player));
-                    }
-                    else if (viewer.isMuggle()) {
-                        player2.hidePlayer(p, player);
-                    }
-                }
-            }
-            else if (!hasCloak && alreadyInvis) {
-                for (Player player2 : p.getServer().getOnlinePlayers()) {
-                    O2Player viewer = Ollivanders2API.getPlayers().getPlayer(player2.getUniqueId());
-                    if (viewer == null)
-                        continue;
-
-                    if (!inRepelloMuggletons && viewer.isMuggle()) {
-                        player2.showPlayer(p, player);
-                    }
-                }
-                o2p.setInvisible(false);
+            // if they are not wearing the cloak but are invisible, make them visible
+            else if (!wearingInvisbilityCloak && hasInvisiblityPotionEffect) {
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
             }
-            else if (!inRepelloMuggletons) {
-                if (!hasCloak) {
-                    for (Player player2 : p.getServer().getOnlinePlayers()) {
-                        player2.showPlayer(p, player);
-                    }
-                }
-            }
-
-            if (o2p.isInvisible()) {
-                for (Entity entity : player.getWorld().getEntities()) {
-                    if (entity instanceof Creature) {
-                        Creature creature = (Creature) entity;
-                        if (creature.getTarget() == player) {
-                            creature.setTarget(null);
-                        }
-                    }
-                }
-            }
-
-            p.setO2Player(player, o2p);
         }
     }
 
@@ -214,7 +143,7 @@ public class OllivandersSchedule implements Runnable {
      * @param player player to be checked
      * @return true if yes, false if no
      */
-    private boolean hasCloak(@NotNull Player player) {
+    private boolean wearingInvisibilityCloak(@NotNull Player player) {
         ItemStack chestPlate = player.getInventory().getChestplate();
         if (chestPlate != null) {
             return O2ItemType.INVISIBILITY_CLOAK.isItemThisType(chestPlate);
