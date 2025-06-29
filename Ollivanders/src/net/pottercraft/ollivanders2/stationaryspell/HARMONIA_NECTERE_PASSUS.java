@@ -76,15 +76,13 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
      * @param twin     the location of this cabinet's twin
      */
     public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull Location twin) {
-        super(plugin);
+        super(plugin, pid, location);
 
         spellType = O2StationarySpellType.HARMONIA_NECTERE_PASSUS;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         permanent = true;
 
-        setPlayerID(pid);
-        setLocation(location);
         radius = minRadius = maxRadius = minRadiusConfig;
         duration = 10;
 
@@ -234,7 +232,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
             return;
         }
 
-        // make sure they do not have a use cooldown on the twin or we'll just teleport them right back as soon as they arrive and trigger a move event
+        // make sure they do not have a use cooldown on the twin, or we'll just teleport them right back as soon as they arrive and trigger a move event
         if (twin.isUsing(player))
             return;
 
@@ -251,4 +249,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
             }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
         }
     }
+
+    @Override
+    void doCleanUp() {}
 }

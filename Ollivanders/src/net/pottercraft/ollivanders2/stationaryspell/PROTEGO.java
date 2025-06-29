@@ -65,7 +65,7 @@ public class PROTEGO extends ShieldSpell {
      * @param duration the duration of the spell
      */
     public PROTEGO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
-        super(plugin);
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO;
 
         minRadius = minRadiusConfig;
@@ -73,8 +73,6 @@ public class PROTEGO extends ShieldSpell {
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
 
@@ -165,4 +163,7 @@ public class PROTEGO extends ShieldSpell {
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
+
+    @Override
+    void doCleanUp() {}
 }

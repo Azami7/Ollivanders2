@@ -104,7 +104,12 @@ public abstract class StationarySpell extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (!centerOnCaster && !hasHitTarget())
+        // we do not want a spell projectile if the spell centers on the caster, this will set the target on the caster
+        if (centerOnCaster)
+            stopProjectile();
+
+        // if we have not hit a target, continue
+        if (!hasHitTarget())
             return;
 
         // set duration to be base time plus a modifier seconds per experience level for this spell

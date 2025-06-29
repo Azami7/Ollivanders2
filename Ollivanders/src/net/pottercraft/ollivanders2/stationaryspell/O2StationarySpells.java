@@ -29,6 +29,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.Nullable;
@@ -126,7 +127,7 @@ public class O2StationarySpells implements Listener {
     /**
      * Handle when entities target
      *
-     * @param event the pevent
+     * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityTargetEvent(@NotNull EntityTargetEvent event) {
@@ -306,12 +307,25 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
+     * Handle player join events
+     *
+     * @param event the event
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
+            if (stationary.isActive())
+                stationary.doOnPlayerJoinEvent(event);
+        }
+    }
+
+    /**
      * Add a stationary spell
      *
      * @param spell the stationary spell to add
      */
     public void addStationarySpell(@NotNull O2StationarySpell spell) {
-        common.printDebugMessage("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType().toString() + " with duration " + spell.duration + " and radius of " + spell.radius, null, null, false);
+        common.printDebugMessage("O2StationarySpells.addStationarySpell: adding " + spell.getSpellType() + " with duration " + spell.duration + " and radius of " + spell.radius, null, null, false);
         O2StationarySpells.add(spell);
     }
 
@@ -322,7 +336,7 @@ public class O2StationarySpells implements Listener {
      * @param spell the stationary spell to remove
      */
     public void removeStationarySpell(@NotNull O2StationarySpell spell) {
-        common.printDebugMessage("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType().toString(), null, null, false);
+        common.printDebugMessage("O2StationarySpells.removeStationarySpell: removing " + spell.getSpellType(), null, null, false);
         spell.kill();
     }
 
@@ -426,7 +440,7 @@ public class O2StationarySpells implements Listener {
             statSpell.checkEffect();
 
             if (statSpell.kill) {
-                common.printDebugMessage("O2StationarySpells.upkeep: removing " + statSpell.getSpellType().toString(), null, null, false);
+                common.printDebugMessage("O2StationarySpells.upkeep: removing " + statSpell.getSpellType(), null, null, false);
 
                 O2StationarySpells.remove(statSpell);
             }
@@ -462,7 +476,7 @@ public class O2StationarySpells implements Listener {
     /**
      * Serialize stationary spells for saving
      *
-     * @return a map of the serialized stationary spell data
+     * @return a list of the serialized stationary spell data
      */
     @NotNull
     private List<Map<String, String>> serializeO2StationarySpells() {
@@ -488,9 +502,7 @@ public class O2StationarySpells implements Listener {
             //
             Map<String, String> locData = Ollivanders2API.common.serializeLocation(spell.location, spellLocLabel);
             if (locData != null) {
-                for (Entry<String, String> e : locData.entrySet()) {
-                    spellData.put(e.getKey(), e.getValue());
-                }
+                spellData.putAll(locData);
             }
 
             //
@@ -509,9 +521,7 @@ public class O2StationarySpells implements Listener {
             // get spell-specific data
             //
             Map<String, String> uniqueData = spell.serializeSpellData();
-            for (Entry<String, String> e : uniqueData.entrySet()) {
-                spellData.put(e.getKey(), e.getValue());
-            }
+            spellData.putAll(uniqueData);
         }
 
         return serializedList;
@@ -604,7 +614,7 @@ public class O2StationarySpells implements Listener {
             statSpell = (O2StationarySpell) spellClass.getConstructor(Ollivanders2.class).newInstance(p);
         }
         catch (Exception e) {
-            common.printDebugMessage("Exception trying to create new instance of " + spellType.toString(), e, null, true);
+            common.printDebugMessage("Exception trying to create new instance of " + spellType, e, null, true);
             return null;
         }
 

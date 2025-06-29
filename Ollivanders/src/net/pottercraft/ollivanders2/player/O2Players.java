@@ -218,11 +218,11 @@ public class O2Players {
      *    WandWood : wandWood
      *    WandCore : wandCore
      *    Souls : souls
-     *    Invisible : invisible
      *    Animagus : [EntityType]
      *    AnimagusColor : [EntityColorType]
      *    MasterSpell : [Spell Type]
      *    Year : [Year]
+     *    Muggle: isMuggle
      *    [Spell] : [Count]
      *    [Potion] : [Count]
      *    [Effect] : [Duration]
@@ -273,13 +273,6 @@ public class O2Players {
             playerData.put(soulsLabel, Integer.toString(souls));
 
             //
-            // Invisible
-            //
-            if (o2p.isInvisible()) {
-                playerData.put(invisibleLabel, Boolean.toString(true));
-            }
-
-            //
             // Found Wand
             //
             if (o2p.foundWand()) {
@@ -324,9 +317,7 @@ public class O2Players {
             //
             // Muggle
             //
-            if (!o2p.isMuggle()) {
-                playerData.put(muggleLabel, Boolean.toString(false));
-            }
+            playerData.put(muggleLabel, Boolean.toString(o2p.isMuggle()));
 
             //
             // Year
@@ -428,11 +419,6 @@ public class O2Players {
                     Integer souls = Ollivanders2API.common.integerFromString(value);
                     if (souls != null)
                         o2p.setSouls(souls);
-                }
-                else if (label.equalsIgnoreCase(invisibleLabel)) {
-                    Boolean invisible = Ollivanders2API.common.booleanFromString(value);
-                    if (invisible != null)
-                        o2p.setInvisible(invisible);
                 }
                 else if (label.equalsIgnoreCase(foundWandLabel)) {
                     Boolean foundWand = Ollivanders2API.common.booleanFromString(value);
@@ -556,12 +542,14 @@ public class O2Players {
      */
     public boolean runSummary(@NotNull CommandSender sender, @NotNull String[] args) {
         if (args.length == 1) {
+            common.printDebugMessage("Running playerSummary for sender: " + sender.getName(), null, null, false);
             playerSummary(sender, (Player) sender);
             return true;
         }
         else if (args.length == 2 && sender.hasPermission("Ollivanders2.admin")) {
             Player target = p.getServer().getPlayer(args[1]);
             if (target != null) {
+                common.printDebugMessage("Running playerSummary for player: " + target.getName(), null, null, false);
                 playerSummary(sender, target);
                 return true;
             }
@@ -777,45 +765,89 @@ public class O2Players {
 
         summary.append("Player summary:\n\n");
 
-        // wand type
-        if (o2p.foundWand()) {
-            String wandlore = Ollivanders2API.getItems().getWands().createLore(o2p.getDestinedWandWood(), o2p.getDestinedWandCore());
-            summary.append("\nWand Type: ").append(wandlore);
-
-            O2SpellType masterSpell = o2p.getMasterSpell();
-            if (masterSpell != null)
-                summary.append("\nMaster Spell: ").append(Ollivanders2Common.enumRecode(masterSpell.toString().toLowerCase()));
-
-            summary.append("\n");
+        // are they a muggle?
+        if (o2p.isMuggle()) {
+            common.printDebugMessage("Player " + player.getName() + " is a muggle", null, null, false);
+            summary.append("is a Muggle.\n\n");
         }
+        else {
+            summary.append("is a Wizard.\n\n");
 
-        // sorted
-        if (O2Houses.useHouses) {
-            summary.append("\nHouse: ");
-            String house = null;
-            if (Ollivanders2API.getHouses().isSorted(player)) {
-                O2HouseType houseType = Ollivanders2API.getHouses().getHouse(player);
-                if (houseType != null)
-                    house = houseType.getName();
+            // wand type
+            if (o2p.foundWand()) {
+                String wandlore = Ollivanders2API.getItems().getWands().createLore(o2p.getDestinedWandWood(), o2p.getDestinedWandCore());
+                summary.append("\nWand Type: ").append(wandlore);
+
+                O2SpellType masterSpell = o2p.getMasterSpell();
+                if (masterSpell != null)
+                    summary.append("\nMaster Spell: ").append(Ollivanders2Common.enumRecode(masterSpell.toString().toLowerCase()));
+
+                summary.append("\n");
             }
 
-            if (house != null)
-                summary.append(house);
-            else
-                summary.append("not sorted");
+            // sorted
+            if (O2Houses.useHouses) {
+                summary.append("\nHouse: ");
+                String house = null;
+                if (Ollivanders2API.getHouses().isSorted(player)) {
+                    O2HouseType houseType = Ollivanders2API.getHouses().getHouse(player);
+                    if (houseType != null)
+                        house = houseType.getName();
+                }
 
-            summary.append("\n");
-        }
+                if (house != null)
+                    summary.append(house);
+                else
+                    summary.append("not sorted");
 
-        //year
-        if (Ollivanders2.useYears)
-            summary.append("\nYear: ").append(o2p.getYear().getDisplayText()).append("\n");
+                summary.append("\n");
+            }
 
-        //animagus
-        if (o2p.isAnimagus()) {
-            EntityType animagusForm = o2p.getAnimagusForm();
-            if (animagusForm != null)
-                summary.append("\nAnimagus Form: ").append(Ollivanders2Common.enumRecode(animagusForm.toString()));
+            //year
+            if (Ollivanders2.useYears)
+                summary.append("\nYear: ").append(o2p.getYear().getDisplayText()).append("\n");
+
+            //animagus
+            if (o2p.isAnimagus()) {
+                EntityType animagusForm = o2p.getAnimagusForm();
+                if (animagusForm != null)
+                    summary.append("\nAnimagus Form: ").append(Ollivanders2Common.enumRecode(animagusForm.toString()));
+            }
+
+            // spells
+            Map<O2SpellType, Integer> knownSpells = o2p.getKnownSpells();
+
+            if (!knownSpells.isEmpty()) {
+                summary.append("\n\nKnown Spells and Spell Level:");
+
+                for (O2SpellType spellType : O2SpellType.values()) {
+                    if (knownSpells.containsKey(spellType) && Ollivanders2API.getSpells().isLoaded(spellType))
+                        summary.append("\n* ").append(spellType.getSpellName()).append(" ").append(knownSpells.get(spellType).toString());
+                }
+            }
+            else {
+                if (sender.getName().equalsIgnoreCase(player.getName()))
+                    summary.append("\n\nYou have not learned any spells.");
+                else
+                    summary.append("\n\n").append(player.getName()).append(" has not learned any spells.");
+            }
+
+            // potions
+            Map<O2PotionType, Integer> knownPotions = o2p.getKnownPotions();
+            if (!knownPotions.isEmpty()) {
+                summary.append("\n\nKnown potions and Potion Level:");
+
+                for (O2PotionType potionType : O2PotionType.values()) {
+                    if (knownPotions.containsKey(potionType) && Ollivanders2API.getPotions().isLoaded(potionType))
+                        summary.append("\n* ").append(potionType.getPotionName()).append(" ").append(knownPotions.get(potionType).toString());
+                }
+            }
+            else {
+                if (sender.getName().equalsIgnoreCase(player.getName()))
+                    summary.append("\n\nYou have not learned any potions.");
+                else
+                    summary.append("\n\n").append(player.getName()).append(" has not learned any potions.");
+            }
         }
 
         // effects
@@ -832,40 +864,6 @@ public class O2Players {
             }
 
             summary.append("\n");
-        }
-
-        // spells
-        Map<O2SpellType, Integer> knownSpells = o2p.getKnownSpells();
-
-        if (!knownSpells.isEmpty()) {
-            summary.append("\n\nKnown Spells and Spell Level:");
-
-            for (O2SpellType spellType : O2SpellType.values()) {
-                if (knownSpells.containsKey(spellType) && Ollivanders2API.getSpells().isLoaded(spellType))
-                    summary.append("\n* ").append(spellType.getSpellName()).append(" ").append(knownSpells.get(spellType).toString());
-            }
-        }
-        else {
-            if (sender.getName().equalsIgnoreCase(player.getName()))
-                summary.append("\n\nYou have not learned any spells.");
-            else
-                summary.append("\n\n").append(player.getName()).append(" has not learned any spells.");
-        }
-
-        Map<O2PotionType, Integer> knownPotions = o2p.getKnownPotions();
-        if (!knownPotions.isEmpty()) {
-            summary.append("\n\nKnown potions and Potion Level:");
-
-            for (O2PotionType potionType : O2PotionType.values()) {
-                if (knownPotions.containsKey(potionType) && Ollivanders2API.getPotions().isLoaded(potionType))
-                    summary.append("\n* ").append(potionType.getPotionName()).append(" ").append(knownPotions.get(potionType).toString());
-            }
-        }
-        else {
-            if (sender.getName().equalsIgnoreCase(player.getName()))
-                summary.append("\n\nYou have not learned any potions.");
-            else
-                summary.append("\n\n").append(player.getName()).append(" has not learned any potions.");
         }
 
         sender.sendMessage(Ollivanders2.chatColor + summary.toString());
