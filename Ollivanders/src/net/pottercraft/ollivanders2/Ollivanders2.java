@@ -1720,10 +1720,9 @@ public class Ollivanders2 extends JavaPlugin {
 
         if (!apparateLocations) {
             sender.sendMessage(chatColor
-                            + "Apprate locations are not currently enabled for your server."
-                            + "\nTo enable apparate locations, update the Ollivanders2 config.yml setting to true and restart your server."
-                    // TODO update wiki and uncomment
-                    //+ "\nFor help, see our documentation at ..."
+                    + "Apprate locations are not currently enabled for your server."
+                    + "\nTo enable apparate locations, update the Ollivanders2 config.yml setting to true and restart your server."
+                    + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki/Configuration#apparate-locations"
             );
 
             return true;
