@@ -113,11 +113,6 @@ public class O2Player {
     private int souls = 0;
 
     /**
-     * Whether the player is currently invisible
-     */
-    private boolean isInvisible = false;
-
-    /**
      * Whether the player has found their destined wand yet
      */
     private boolean foundWand = false;
@@ -133,7 +128,7 @@ public class O2Player {
     private String animagusColor = null;
 
     /**
-     * Whether the player is a Muggle (i.e. not sorted)
+     * Whether the player is a Muggle (i.e. has not found their destined wand), true for all players initially
      */
     private boolean isMuggle = true;
 
@@ -518,38 +513,28 @@ public class O2Player {
     }
 
     /**
-     * Determine if this player is invisible.
-     *
-     * @return true if the player is invisible, false otherwise.
-     */
-    public boolean isInvisible() {
-        return isInvisible;
-    }
-
-    /**
-     * Set whether a player is invisible
-     *
-     * @param isInvisible true if the player is invisible, false if they are not
-     */
-    public void setInvisible(boolean isInvisible) {
-        this.isInvisible = isInvisible;
-    }
-
-    /**
-     * Determine if player is a muggle.
+     * Determine if player is a muggle. Admins are never muggles.
      *
      * @return true if they are a muggle, false otherwise
      */
     public boolean isMuggle() {
+        Player player = p.getServer().getPlayer(pid);
+        if (player != null && player.isOp())
+            return false;
+
         return isMuggle;
     }
 
     /**
-     * Set if a player is a muggle.
+     * Set if a player is a muggle. Admins are never muggles.
      *
      * @param isMuggle true if the player is a muggle
      */
     public void setMuggle(boolean isMuggle) {
+        Player player = p.getServer().getPlayer(pid);
+        if (player != null && player.isOp())
+            isMuggle = false;
+
         this.isMuggle = isMuggle;
     }
 
@@ -613,7 +598,8 @@ public class O2Player {
     }
 
     /**
-     * Initializer for the foundWand class variable for loading the player object.
+     * Initializer for the foundWand class variable for loading the player from saved data. This is different from setFoundWand
+     * which triggers a found wand event.
      *
      * @param found the value to set for foundWand
      */
@@ -622,12 +608,13 @@ public class O2Player {
     }
 
     /**
-     * Set whether the player has found their destined wand before.
+     * Set whether the player has found their destined wand before. Once a player finds their destined wand they are also
+     * no longer a muggle since they can do magic. This should not be called when loading from saved data, use initFoundWand().
      *
      * @param found set whether the player has found their destined wand
      */
     public void setFoundWand(boolean found) {
-        if (foundWand && found) {
+        if (found) {
             Player player = p.getServer().getPlayer(pid);
             if (player == null)
                 return;
@@ -636,6 +623,9 @@ public class O2Player {
 
             p.getServer().getPluginManager().callEvent(event);
             common.printDebugMessage("Fired OllivandersPlayerFoundWandEvent", null, null, false);
+
+            // once they have found their wand and can cast spells, they are no longer a muggle
+            setMuggle(false);
         }
 
         foundWand = found;

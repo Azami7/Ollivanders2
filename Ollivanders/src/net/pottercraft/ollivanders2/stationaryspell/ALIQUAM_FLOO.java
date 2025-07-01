@@ -100,13 +100,11 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
      * @param flooName the name of this floo location
      */
     public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull String flooName) {
-        super(plugin);
+        super(plugin, pid, location);
 
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         this.flooName = flooName;
-        setPlayerID(pid);
-        setLocation(location);
 
         init();
 
@@ -374,5 +372,10 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
             event.setCancelled(true);
             common.printDebugMessage("ALIQUAM_FLOO: canceled EntityDamageEvent", null, null, false);
         }
+    }
+
+    @Override
+    void doCleanUp() {
+        stopWorking();
     }
 }

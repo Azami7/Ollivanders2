@@ -18,6 +18,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -265,5 +266,22 @@ public final class O2PlayerCommon {
         for (ItemStack item : leftover.values()) {
             player.getWorld().dropItem(loc, item);
         }
+    }
+
+    /**
+     * Does a player have a particular potion effect?
+     *
+     * @param player the player to check
+     * @param effectType the potion effect type to check for
+     * @return
+     */
+    static public boolean hasPotionEffect(@NotNull Player player, @NotNull PotionEffectType effectType) {
+        for (PotionEffect effect: player.getActivePotionEffects()) {
+            if (effect.getType() == effectType) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

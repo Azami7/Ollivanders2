@@ -28,6 +28,7 @@ import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.jetbrains.annotations.NotNull;
@@ -114,6 +115,21 @@ public abstract class O2StationarySpell implements Serializable {
     public O2StationarySpell(@NotNull Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(p);
+    }
+
+    /**
+     * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
+     *
+     * @param plugin   a callback to the MC plugin
+     * @param pid      the player who cast the spell
+     * @param location the center location of the spell
+     */
+    public O2StationarySpell(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location) {
+        p = plugin;
+        common = new Ollivanders2Common(p);
+
+        playerUUID = pid;
+        this.location = location;
     }
 
     /**
@@ -209,7 +225,8 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Set the center location of this stationary spell
+     * Set the center location of this stationary spell. This should only be used at start up to set up the saved
+     * stationary spells.
      *
      * @param location the spell location
      */
@@ -218,7 +235,8 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Set the ID of the player who cast this spell
+     * Set the ID of the player who cast this spell. This should only be used at start up to set up the saved
+     * stationary spells.
      *
      * @param pid the player ID
      */
@@ -293,6 +311,9 @@ public abstract class O2StationarySpell implements Serializable {
     public void kill() {
         flair(20);
         kill = true;
+
+        // clean up for the spell, if relevant
+        doCleanUp();
 
         Player caster = p.getServer().getPlayer(playerUUID);
         if (caster != null)
@@ -541,7 +562,7 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Handle apparate by coord event
+     * Handle apparate by coordinate event
      *
      * @param event the event
      */
@@ -579,4 +600,17 @@ public abstract class O2StationarySpell implements Serializable {
      */
     void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
     }
+
+    /**
+     * Handle player join events
+     *
+     * @param event the player join event
+     */
+    void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+    }
+
+    /**
+     * Clean up needed for this spell when it ends.
+     */
+    abstract void doCleanUp();
 }

@@ -62,7 +62,7 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
      * @param duration the duration of the spell
      */
     public NULLUM_APPAREBIT(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
-        super(plugin);
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.NULLUM_APPAREBIT;
 
         minRadius = minRadiusConfig;
@@ -70,8 +70,6 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
 
@@ -194,4 +192,7 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
         flair(5);
     }
+
+    @Override
+    void doCleanUp() {}
 }

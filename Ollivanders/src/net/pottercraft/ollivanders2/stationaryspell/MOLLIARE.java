@@ -57,15 +57,13 @@ public class MOLLIARE extends O2StationarySpell {
      * @param duration the duration of the spell
      */
     public MOLLIARE(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
-        super(plugin);
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.MOLLIARE;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
 
@@ -107,4 +105,7 @@ public class MOLLIARE extends O2StationarySpell {
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
+
+    @Override
+    void doCleanUp() {}
 }

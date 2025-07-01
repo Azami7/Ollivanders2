@@ -569,7 +569,10 @@ public class Ollivanders2Common {
      * @param radius    the radius of the flair
      * @param intensity intensity of the flair. If greater than 10, is reduced to 10.
      */
-    public static void flair(@NotNull Location location, int radius, int intensity) {
+    public static void flair(Location location, int radius, int intensity) {
+        if (location == null)
+            return;
+
         flair(location, radius, intensity, Particle.SMOKE);
     }
 
@@ -581,15 +584,18 @@ public class Ollivanders2Common {
      * @param intensity  intensity of the flair. If greater than 10, is reduced to 10.
      * @param effectType the particle effect to use
      */
-    public static void flair(@NotNull Location location, int radius, int intensity, Effect effectType) {
+    public static void flair(Location location, int radius, int intensity, Effect effectType) {
+        if (location == null)
+            return;
+
         if (intensity > 10)
             intensity = 10;
 
-        for (double inc = (Math.random() * Math.PI) / intensity; inc < Math.PI; inc += Math.PI / intensity) {
-            for (double azi = (Math.random() * Math.PI) / intensity; azi < 2 * Math.PI; azi += Math.PI / intensity) {
+        for (double inclusion = (Math.random() * Math.PI) / intensity; inclusion < Math.PI; inclusion += Math.PI / intensity) {
+            for (double azimuth = (Math.random() * Math.PI) / intensity; azimuth < 2 * Math.PI; azimuth += Math.PI / intensity) {
                 double[] sphere = new double[2];
-                sphere[0] = inc;
-                sphere[1] = azi;
+                sphere[0] = inclusion;
+                sphere[1] = azimuth;
                 Location effectLocation = location.clone().add(sphereToVector(sphere, radius));
 
                 if (effectLocation.getWorld() != null)
@@ -606,7 +612,10 @@ public class Ollivanders2Common {
      * @param intensity    intensity of the flair. If greater than 10, is reduced to 10.
      * @param particleType the particle to use
      */
-    public static void flair(@NotNull Location location, int radius, int intensity, Particle particleType) {
+    public static void flair(Location location, int radius, int intensity, Particle particleType) {
+        if (location == null)
+            return;
+
         if (intensity > 10)
             intensity = 10;
 
@@ -630,11 +639,11 @@ public class Ollivanders2Common {
      * @return Spherical coordinates in double array with indexes 0=inclination 1=azimuth
      */
     public static double[] vectorToSphere(@NotNull Vector vector) {
-        double inc = Math.acos(vector.getZ());
-        double azi = Math.atan2(vector.getY(), vector.getX());
+        double inclusion = Math.acos(vector.getZ());
+        double azimuth = Math.atan2(vector.getY(), vector.getX());
         double[] sphere = new double[2];
-        sphere[0] = inc;
-        sphere[1] = azi;
+        sphere[0] = inclusion;
+        sphere[1] = azimuth;
 
         return sphere;
     }
@@ -648,11 +657,11 @@ public class Ollivanders2Common {
      */
     @NotNull
     public static Vector sphereToVector(double[] sphere, int radius) {
-        double inc = sphere[0];
-        double azi = sphere[1];
-        double x = radius * Math.sin(inc) * Math.cos(azi);
-        double z = radius * Math.sin(inc) * Math.sin(azi);
-        double y = radius * Math.cos(inc);
+        double inclusion = sphere[0];
+        double azimuth = sphere[1];
+        double x = radius * Math.sin(inclusion) * Math.cos(azimuth);
+        double z = radius * Math.sin(inclusion) * Math.sin(azimuth);
+        double y = radius * Math.cos(inclusion);
 
         return new Vector(x, y, z);
     }
