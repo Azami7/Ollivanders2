@@ -8,11 +8,10 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
-import org.bukkit.Location;
 import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
-import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.stationaryspell.HORCRUX;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -24,6 +23,8 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href = "https://harrypotter.fandom.com/wiki/Horcrux-making_spell">https://harrypotter.fandom.com/wiki/Horcrux-making_spell</a>
  */
 public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
+    private double futureHealth = 0.0;
+
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
@@ -64,72 +65,81 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
     }
 
     /**
-     * This spell is not a projectile but makes the stationary spell in the player's current location.
+     * Look for an item to make in to a horcrux in the spell projectile's path.
      */
     @Override
-    public void checkEffect() {
-        if (!isSpellAllowed()) {
+    protected void doCheckEffect() {
+        // if we hit a target but didn't find an item, then end this spell
+        if (hasHitTarget()) {
             kill();
             return;
         }
 
-        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-        if (o2p == null) {
-            kill();
-            return;
-        }
+        // check for an item
+        List<Item> items = getItems(1.5);
+        for (Item item : items) {
+            // if this is a wand or enchanted item, we cannot use it
+            if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)))
+                continue;
 
-        double futureHealth = player.getHealth();
-        AttributeInstance healthAttribute = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
-        if (healthAttribute == null) {
-            common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, false);
-            kill();
-            return;
-        }
-
-        if (futureHealth > healthAttribute.getBaseValue() / 2.0)
-            futureHealth = healthAttribute.getBaseValue() / 2.0;
-
-        int souls = o2p.getSouls();
-
-        if (souls == 0) {
-            player.sendMessage(Ollivanders2.chatColor + "Your soul is not yet so damaged to allow this.");
-            kill();
-            return;
-        }
-
-        //If the player's soul isn't s0 split that they can survive making another horcrux, then make a new one and damage them
-        if (futureHealth - 1 > 0) {
-            HORCRUX horcrux = new HORCRUX(p, player.getUniqueId(), location);
-            horcrux.flair(10);
-            Ollivanders2API.getStationarySpells().addStationarySpell(horcrux);
-            healthAttribute.setBaseValue(healthAttribute.getBaseValue() / 2.0);
-            o2p.subtractSoul();
-            player.damage(1.0);
-        }
-        else {
-            //If they player couldn't survive making another horcrux then they are sent back to a previous horcrux
-            List<O2StationarySpell> stationaries = Ollivanders2API.getStationarySpells().getActiveStationarySpells();
-            for (O2StationarySpell stationary : stationaries) {
-                if (stationary.getSpellType() == O2StationarySpellType.HORCRUX && stationary.getCasterID().equals(player.getUniqueId())) {
-                    Location tp = stationary.getLocation();
-                    tp.setY(tp.getY() + 1);
-                    player.teleport(tp);
-                    player.setHealth(healthAttribute.getBaseValue());
-
-                    Ollivanders2API.getStationarySpells().removeStationarySpell(stationary);
-                    return;
-                }
+            // check to see if they can create a horcrux
+            if (!canCreateHorcrux()) {
+                common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player not able to create a horcrux", null, null, false);
+                kill();
+                return;
             }
 
-            //If the player doesn't have any horcruxes left then they are killed.
-            player.damage(1000.0);
-        }
+            // reduce their health and decrement a soul
+            AttributeInstance healthAttribute = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+            if (healthAttribute == null) {
+                common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, true);
+                kill();
+                return;
+            }
 
-        kill();
+            p.getO2Player(player).subtractSoul();
+            healthAttribute.setBaseValue(futureHealth);
+
+            // create a horcrux from this item
+            HORCRUX horcrux = new HORCRUX(p, player.getUniqueId(), item.getLocation(), item);
+            horcrux.flair(10);
+            Ollivanders2API.getStationarySpells().addStationarySpell(horcrux);
+
+            kill();
+            return;
+        }
     }
 
-    @Override
-    protected void doCheckEffect() {
+    /**
+     * Can this player create a horcrux?
+     */
+    boolean canCreateHorcrux() {
+        // does the caster have souls that can be used
+        if (p.getO2Player(player).getSouls() < 1) {
+            player.sendMessage(Ollivanders2.chatColor + "Your soul is not yet so damaged to allow this.");
+            return false;
+        }
+
+        // do they already have a horcrux?
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
+            if (stationarySpell.getSpellType() == O2StationarySpellType.HORCRUX && stationarySpell.getCasterID().equals(player.getUniqueId())) {
+                player.sendMessage(Ollivanders2.chatColor + "You can have already divided your soul.");
+                return false;
+            }
+        }
+
+        // does the player have enough health to create a new horcrux?
+        AttributeInstance healthAttribute = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+        if (healthAttribute == null) {
+            common.printDebugMessage("ET_INTERFICIAM_ANIMAM_LIGAVERIS.checkEffect: player health attribute is null", null, null, true);
+            return false;
+        }
+        futureHealth = healthAttribute.getBaseValue() / 2;
+        if (futureHealth < 2) {
+            player.sendMessage(Ollivanders2.chatColor + "You are not strong enough to split your soul.");
+            return false;
+        }
+
+        return true;
     }
 }

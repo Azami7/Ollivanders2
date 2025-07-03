@@ -115,15 +115,11 @@ public abstract class ItemEnchant extends O2Spell {
                 continue;
 
             // if this enchantment has an allowed list, check it
-            if (itemTypeAllowlist.size() > 0) {
+            if (!itemTypeAllowlist.isEmpty()) {
                 O2ItemType itemType = O2Item.getItemType(item.getItemStack());
                 if (itemType == null || !(itemTypeAllowlist.contains(itemType)))
                     continue;
             }
-
-            // if this item is already enchanted, skip it
-            if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item))
-                continue;
 
             Item enchantedItem = enchantItem(item);
             Ollivanders2API.getItems().enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude, args);

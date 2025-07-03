@@ -24,8 +24,12 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -602,15 +606,42 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Handle player join events
-     *
-     * @param event the player join event
-     */
-    void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
-    }
-
-    /**
      * Clean up needed for this spell when it ends.
      */
     abstract void doCleanUp();
+
+    /**
+     * Handle spell world load events
+     *
+     * @param event the world load event
+     */
+    void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) { }
+
+    /**
+     * Handle item despawn events
+     *
+     * @param event the item despawn event
+     */
+    void doOnItemDespawnEvent(@NotNull ItemDespawnEvent event) {}
+
+    /**
+     * Handle items being picked up by entities
+     *
+     * @param event the event
+     */
+    void doOnEntityPickupItemEvent(@NotNull EntityPickupItemEvent event) {}
+
+    /**
+     * Handle items being picked up by things like hoppers
+     *
+     * @param event the event
+     */
+    void doOnInventoryItemPickupEvent(@NotNull InventoryPickupItemEvent event ) {}
+
+    /**
+     * Handle player death event
+     *
+     * @param event the event
+     */
+    void doOnPlayerDeathEvent(@NotNull PlayerDeathEvent event) {}
 }

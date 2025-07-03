@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.GsonDAO;
@@ -25,8 +24,12 @@ import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityInteractEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityTeleportEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -307,7 +310,7 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
-     * Handle player join events
+     * Handle world load events
      *
      * @param event the event
      */
@@ -316,6 +319,53 @@ public class O2StationarySpells implements Listener {
         for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnPlayerJoinEvent(event);
+        }
+    }
+
+    /**
+     * Handle item despawn events
+     *
+     * @param event the item despawn event
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onItemDespawnEvent(@NotNull ItemDespawnEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
+            if (stationary.isActive())
+                stationary.doOnItemDespawnEvent(event);
+        }
+    }
+
+    /**
+     * Handle items being picked up by entities
+     *
+     * @param event the event
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onEntityPickupItemEvent(@NotNull EntityPickupItemEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
+            if (stationary.isActive())
+                stationary.doOnEntityPickupItemEvent(event);
+        }
+    }
+
+    /**
+     * Handle items being picked up by things like hoppers
+     *
+     * @param event the event
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onInventoryItemPickupEvent(@NotNull InventoryPickupItemEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
+            if (stationary.isActive())
+                stationary.doOnInventoryItemPickupEvent(event);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerDeathEvent(@NotNull PlayerDeathEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
+            if (stationary.isActive())
+                stationary.doOnPlayerDeathEvent(event);
         }
     }
 
