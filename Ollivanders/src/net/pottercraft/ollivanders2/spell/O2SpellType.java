@@ -390,10 +390,6 @@ public enum O2SpellType {
      */
     LEGILIMENS(LEGILIMENS.class, MagicLevel.NEWT),
     /**
-     * {@link LEPUS_SACCULUM}
-     */
-    LEPUS_SACCULUM(LEPUS_SACCULUM.class, MagicLevel.BEGINNER),
-    /**
      * {@link LEVICORPUS}
      */
     LEVICORPUS(LEVICORPUS.class, MagicLevel.NEWT),

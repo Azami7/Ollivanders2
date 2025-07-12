@@ -11,6 +11,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -231,7 +232,7 @@ public final class O2PlayerCommon {
         }
 
         // reset health to max
-        AttributeInstance playerHealthMax = player.getAttribute(org.bukkit.attribute.Attribute.MAX_HEALTH);
+        AttributeInstance playerHealthMax = player.getAttribute(Attribute.GENERIC_MAX_HEALTH);
         if (playerHealthMax != null)
             player.setHealth(playerHealthMax.getBaseValue());
     }
@@ -271,12 +272,12 @@ public final class O2PlayerCommon {
     /**
      * Does a player have a particular potion effect?
      *
-     * @param player the player to check
+     * @param player     the player to check
      * @param effectType the potion effect type to check for
      * @return
      */
     static public boolean hasPotionEffect(@NotNull Player player, @NotNull PotionEffectType effectType) {
-        for (PotionEffect effect: player.getActivePotionEffects()) {
+        for (PotionEffect effect : player.getActivePotionEffects()) {
             if (effect.getType() == effectType) {
                 return true;
             }

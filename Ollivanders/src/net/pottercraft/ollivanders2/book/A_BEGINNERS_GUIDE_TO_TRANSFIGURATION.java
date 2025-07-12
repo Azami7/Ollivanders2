@@ -36,7 +36,6 @@ public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book {
         // year 1
         spells.add(O2SpellType.CALAMUS);
         spells.add(O2SpellType.PERMURATE);
-        spells.add(O2SpellType.LEPUS_SACCULUM);
         spells.add(O2SpellType.SCARABAEUS_FIBULUM);
         spells.add(O2SpellType.RANACULUS_AMPHORAM);
 
