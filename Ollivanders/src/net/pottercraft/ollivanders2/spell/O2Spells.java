@@ -17,8 +17,7 @@ import java.util.Map;
 /**
  * Manages all spells
  */
-public class O2Spells
-{
+public class O2Spells {
     /**
      * Callback to the plugin
      */
@@ -37,8 +36,7 @@ public class O2Spells
     /**
      * Wandless spells
      */
-    public static final List<O2SpellType> wandlessSpells = new ArrayList<>()
-    {{
+    public static final List<O2SpellType> wandlessSpells = new ArrayList<>() {{
         add(O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS);
     }};
 
@@ -67,8 +65,7 @@ public class O2Spells
      *
      * @param plugin a callback to the MC plugin
      */
-    public O2Spells(@NotNull Ollivanders2 plugin)
-    {
+    public O2Spells(@NotNull Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(plugin);
     }
@@ -76,11 +73,9 @@ public class O2Spells
     /**
      * Load spell data on plugin start
      */
-    public void onEnable()
-    {
+    public void onEnable() {
         // load enabled spells
-        for (O2SpellType spellType : O2SpellType.values())
-        {
+        for (O2SpellType spellType : O2SpellType.values()) {
             if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType))
                 continue;
 
@@ -103,8 +98,7 @@ public class O2Spells
      *
      * @return a list of all loaded spell types
      */
-    public static List<O2SpellType> getAllSpellTypes()
-    {
+    public static List<O2SpellType> getAllSpellTypes() {
         return new ArrayList<>(O2SpellMap.values());
     }
 
@@ -115,18 +109,15 @@ public class O2Spells
      * @return the O2Spell object, if it could be created, or null otherwise
      */
     @Nullable
-    private O2Spell getSpellFromType(@NotNull O2SpellType spellType)
-    {
+    private O2Spell getSpellFromType(@NotNull O2SpellType spellType) {
         O2Spell spell;
 
         Class<?> spellClass = spellType.getClassName();
 
-        try
-        {
+        try {
             spell = (O2Spell) spellClass.getConstructor().newInstance();
         }
-        catch (Exception exception)
-        {
+        catch (Exception exception) {
             common.printDebugMessage("Exception trying to create new instance of " + spellType, exception, null, true);
             return null;
         }
@@ -141,8 +132,7 @@ public class O2Spells
      * @return the type if found, null otherwise
      */
     @Nullable
-    public O2SpellType getSpellTypeByName(@NotNull String name)
-    {
+    public O2SpellType getSpellTypeByName(@NotNull String name) {
         return O2SpellMap.get(name.toLowerCase());
     }
 
@@ -153,32 +143,27 @@ public class O2Spells
      * @param spellType the spell type to check
      * @return true if this spell type is loaded, false otherwise
      */
-    public boolean isLoaded(@NotNull O2SpellType spellType)
-    {
+    public boolean isLoaded(@NotNull O2SpellType spellType) {
         return O2SpellMap.containsValue(spellType);
     }
 
     /**
      * Load the zone config for spells
      */
-    public void loadZoneConfig()
-    {
+    public void loadZoneConfig() {
         zoneConfig = p.getConfig().getConfigurationSection("zones");
 
         if (zoneConfig == null)
             return;
 
-        for (String zone : zoneConfig.getKeys(false))
-        {
-            if (zone.equalsIgnoreCase(SpellZone.globalZoneName))
-            {
+        for (String zone : zoneConfig.getKeys(false)) {
+            if (zone.equalsIgnoreCase(SpellZone.globalZoneName)) {
                 common.printDebugMessage("Loading global zone config:", null, null, false);
 
                 globalAllowedSpells = getSpellsForZone(zone, SpellZone.allowedList);
                 globalDisallowedSpells = getSpellsForZone(zone, SpellZone.disallowList);
             }
-            else
-            {
+            else {
                 common.printDebugMessage("Loading zone config for " + zone + ":", null, null, false);
 
                 loadZoneConfig(zone);
@@ -191,30 +176,25 @@ public class O2Spells
      *
      * @param zoneName the name of the zone
      */
-    private void loadZoneConfig(@NotNull String zoneName)
-    {
+    private void loadZoneConfig(@NotNull String zoneName) {
         String typeString = zoneConfig.getString(zoneName + "." + "type");
         if (typeString == null || typeString.isEmpty())
             return;
 
         SpellZone.SpellZoneType type;
-        try
-        {
+        try {
             type = SpellZone.SpellZoneType.valueOf(typeString.toUpperCase());
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             common.printDebugMessage("O2Spells.loadZoneConfig: zone " + zoneName + " has invalid type " + typeString, null, null, true);
             return;
         }
 
         String world = "";
-        if (type == SpellZone.SpellZoneType.WORLD || type == SpellZone.SpellZoneType.CUBOID)
-        {
+        if (type == SpellZone.SpellZoneType.WORLD || type == SpellZone.SpellZoneType.CUBOID) {
             world = zoneConfig.getString(zoneName + "." + "world");
 
-            if (world == null || world.isEmpty())
-            {
+            if (world == null || world.isEmpty()) {
                 common.printDebugMessage("O2Spells.loadZoneConfig: world or cuboid zone " + zoneName + " with no world name set, ignored.", null, null, true);
                 return;
             }
@@ -222,19 +202,16 @@ public class O2Spells
 
         int[] area = {0, 0, 0, 0, 0, 0};
 
-        if (type == SpellZone.SpellZoneType.CUBOID)
-        {
+        if (type == SpellZone.SpellZoneType.CUBOID) {
             String areaString = zoneConfig.getString(zoneName + "." + "area");
 
-            if (areaString == null || areaString.isEmpty())
-            {
+            if (areaString == null || areaString.isEmpty()) {
                 common.printDebugMessage("O2Spells.loadZoneConfig: cuboid zone " + zoneName + " with no area coordinates set, ignored", null, null, true);
                 return;
             }
 
             area = Cuboid.parseArea(areaString);
-            if (area == null)
-            {
+            if (area == null) {
                 common.printDebugMessage("O2Spells.loadZoneConfig: zone " + zoneName + " has invalid area " + areaString, null, null, true);
                 return;
             }
@@ -256,17 +233,14 @@ public class O2Spells
      * @return the spells for that zone list
      */
     @NotNull
-    private ArrayList<O2SpellType> getSpellsForZone(@NotNull String zoneName, @NotNull String listName)
-    {
+    private ArrayList<O2SpellType> getSpellsForZone(@NotNull String zoneName, @NotNull String listName) {
         ArrayList<O2SpellType> spellList = new ArrayList<>();
 
         common.printDebugMessage(listName + ":", null, null, false);
 
-        for (String spell : zoneConfig.getStringList(zoneName + "." + listName))
-        {
+        for (String spell : zoneConfig.getStringList(zoneName + "." + listName)) {
             O2SpellType spellType = O2SpellType.spellTypeFromString(spell.toUpperCase());
-            if (spellType != null && isLoaded(spellType))
-            {
+            if (spellType != null && isLoaded(spellType)) {
                 common.printDebugMessage(" - " + spellType, null, null, false);
 
                 spellList.add(spellType);
@@ -287,8 +261,7 @@ public class O2Spells
      * @param spellType the spell type to check
      * @return true if spell is allowed, false otherwise
      */
-    public boolean isSpellTypeAllowed(@NotNull Location location, @NotNull O2SpellType spellType)
-    {
+    public boolean isSpellTypeAllowed(@NotNull Location location, @NotNull O2SpellType spellType) {
         if (!isLoaded(spellType))
             return false;
 
@@ -297,14 +270,12 @@ public class O2Spells
             return globalAllowedSpells.contains(spellType);
 
         // check world permissions
-        for (SpellZone zone : spellZones)
-        {
+        for (SpellZone zone : spellZones) {
             if (zone.zoneType != SpellZone.SpellZoneType.WORLD)
                 continue;
 
             World world = location.getWorld();
-            if (world == null)
-            {
+            if (world == null) {
                 common.printDebugMessage("O2Spells.isSpellTypeAllowed: null world on spell location", null, null, true);
                 return false;
             }
@@ -314,8 +285,7 @@ public class O2Spells
         }
 
         // check world guard zone permissions
-        for (SpellZone zone : spellZones)
-        {
+        for (SpellZone zone : spellZones) {
             if (zone.zoneType != SpellZone.SpellZoneType.WORLD_GUARD)
                 continue;
 
@@ -324,8 +294,7 @@ public class O2Spells
         }
 
         // check cuboid zone permissions
-        for (SpellZone zone : spellZones)
-        {
+        for (SpellZone zone : spellZones) {
             if (zone.zoneType != SpellZone.SpellZoneType.CUBOID)
                 continue;
 
@@ -346,21 +315,18 @@ public class O2Spells
      * @param spellType the spell type
      * @return true if the spell is explicitly disallowed at this location, false otherwise
      */
-    private boolean isExplicitlyDisallowed(@NotNull Location location, @NotNull O2SpellType spellType)
-    {
+    private boolean isExplicitlyDisallowed(@NotNull Location location, @NotNull O2SpellType spellType) {
         // first check global disallow lists
         if (globalDisallowedSpells.contains(spellType))
             return true;
 
         // check world permissions
-        for (SpellZone zone : spellZones)
-        {
+        for (SpellZone zone : spellZones) {
             if (zone.zoneType != SpellZone.SpellZoneType.WORLD)
                 continue;
 
             World world = location.getWorld();
-            if (world == null)
-            {
+            if (world == null) {
                 common.printDebugMessage("O2Spells.isSpellTypeAllowed: null world on spell location", null, null, true);
                 return true;
             }
@@ -370,8 +336,7 @@ public class O2Spells
         }
 
         // check world guard zone permissions
-        for (SpellZone zone : spellZones)
-        {
+        for (SpellZone zone : spellZones) {
             if (zone.zoneType != SpellZone.SpellZoneType.WORLD_GUARD)
                 continue;
 
@@ -380,8 +345,7 @@ public class O2Spells
         }
 
         // check cuboid zone permissions
-        for (SpellZone zone : spellZones)
-        {
+        for (SpellZone zone : spellZones) {
             if (zone.zoneType != SpellZone.SpellZoneType.CUBOID)
                 continue;
 

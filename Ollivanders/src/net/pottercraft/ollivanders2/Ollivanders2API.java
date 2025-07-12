@@ -16,8 +16,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * API for allowing other plugins to interact with Ollivanders.
  */
-public class Ollivanders2API
-{
+public class Ollivanders2API {
     /**
      * Common player functions
      */
@@ -38,8 +37,7 @@ public class Ollivanders2API
      *
      * @param p a callback to the plugin
      */
-    static void init(@NotNull Ollivanders2 p)
-    {
+    static void init(@NotNull Ollivanders2 p) {
         if (common == null)
             common = new Ollivanders2Common(p);
         if (playerCommon == null)
@@ -54,8 +52,7 @@ public class Ollivanders2API
      * @return houses management object
      */
     @NotNull
-    public static O2Houses getHouses()
-    {
+    public static O2Houses getHouses() {
         return Ollivanders2.houses;
     }
 
@@ -65,8 +62,7 @@ public class Ollivanders2API
      * @return the player management object
      */
     @NotNull
-    public static O2Players getPlayers()
-    {
+    public static O2Players getPlayers() {
         return Ollivanders2.players;
     }
 
@@ -76,8 +72,7 @@ public class Ollivanders2API
      * @return the book management object
      */
     @NotNull
-    public static O2Books getBooks()
-    {
+    public static O2Books getBooks() {
         return Ollivanders2.books;
     }
 
@@ -87,8 +82,7 @@ public class Ollivanders2API
      * @return the spells management object
      */
     @NotNull
-    public static O2Spells getSpells()
-    {
+    public static O2Spells getSpells() {
         return Ollivanders2.spells;
     }
 
@@ -98,8 +92,7 @@ public class Ollivanders2API
      * @return the potions management object
      */
     @NotNull
-    public static O2Potions getPotions()
-    {
+    public static O2Potions getPotions() {
         return Ollivanders2.potions;
     }
 
@@ -109,8 +102,7 @@ public class Ollivanders2API
      * @return the stationary spells management object
      */
     @NotNull
-    public static O2StationarySpells getStationarySpells()
-    {
+    public static O2StationarySpells getStationarySpells() {
         return Ollivanders2.stationarySpells;
     }
 
@@ -120,8 +112,7 @@ public class Ollivanders2API
      * @return the prophecy management object
      */
     @NotNull
-    public static O2Prophecies getProphecies()
-    {
+    public static O2Prophecies getProphecies() {
         return Ollivanders2.prophecies;
     }
 
@@ -131,8 +122,7 @@ public class Ollivanders2API
      * @return the item management object
      */
     @NotNull
-    public static O2Items getItems()
-    {
+    public static O2Items getItems() {
         return Ollivanders2.items;
     }
 
@@ -142,8 +132,7 @@ public class Ollivanders2API
      * @return the owlPost management object
      */
     @NotNull
-    public static Ollivanders2OwlPost getOwlPost()
-    {
+    public static Ollivanders2OwlPost getOwlPost() {
         return Ollivanders2.owlPost;
     }
 }

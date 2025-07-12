@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * Transfigures an entity into a rabbit. This is a split of the Lapifors spell since we need to handle items and mobs
  * differently.
  *
- * <p>Reference: https://harrypotter.fandom.com/wiki/Lapifors_Spell</p>
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Lapifors_Spell">https://harrypotter.fandom.com/wiki/Lapifors_Spell</a>
  */
 public final class LAGOMORPHA extends FriendlyMobDisguise {
     /**

@@ -1527,7 +1527,7 @@ public class Ollivanders2 extends JavaPlugin {
     /**
      * Give a specific potion to a player.
      *
-     * @param sender the player who did the command
+     * @param sender     the player who did the command
      * @param player     the player to give the potion to
      * @param potionName the potion to give the player
      * @return true if the command succeeded, false otherwise
@@ -1720,10 +1720,9 @@ public class Ollivanders2 extends JavaPlugin {
 
         if (!apparateLocations) {
             sender.sendMessage(chatColor
-                            + "Apprate locations are not currently enabled for your server."
-                            + "\nTo enable apparate locations, update the Ollivanders2 config.yml setting to true and restart your server."
-                    // TODO update wiki and uncomment
-                    //+ "\nFor help, see our documentation at ..."
+                    + "Apprate locations are not currently enabled for your server."
+                    + "\nTo enable apparate locations, update the Ollivanders2 config.yml setting to true and restart your server."
+                    + "\nFor help, see our documentation at https://github.com/Azami7/Ollivanders2/wiki/Configuration#apparate-locations"
             );
 
             return true;

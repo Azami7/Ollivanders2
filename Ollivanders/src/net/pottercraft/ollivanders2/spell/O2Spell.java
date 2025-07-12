@@ -249,7 +249,7 @@ public abstract class O2Spell {
     }
 
     /**
-     * The spell-specific initialization based on usage, etc.. Must be overridden by each spell class that
+     * The spell-specific initialization based on usage, etc. Must be overridden by each spell class that
      * has any initializations.
      */
     void doInitSpell() {
@@ -287,7 +287,7 @@ public abstract class O2Spell {
      * Moves the projectile forward, creating a particle effect
      */
     public void move() {
-        // if this is somehow called when the spell is set to killed or we've already hit a target, do nothing
+        // if this is somehow called when the spell is set to killed, or we've already hit a target, do nothing
         if (isKilled() || hasHitTarget())
             return;
 
@@ -343,8 +343,8 @@ public abstract class O2Spell {
 
         p.getLogger().info("Checking " + target.getType());
 
-        // check blockAllowList
-        if (!(materialAllowList.contains(target.getType()))) {
+        // check blockAllowList, if it ia empty then all block types are allowed
+        if ((!materialAllowList.isEmpty()) && !(materialAllowList.contains(target.getType()))) {
             common.printDebugMessage(target.getType() + " is not in the material allow list", null, null, false);
             kill();
             return;
@@ -395,7 +395,7 @@ public abstract class O2Spell {
         // check every flag needed for this spell
         for (StateFlag flag : worldGuardFlags) {
             if (!Ollivanders2.worldGuardO2.checkWGFlag(player, location, flag)) {
-                common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag.toString(), null, null, false);
+                common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag, null, null, false);
                 return false;
             }
         }
@@ -688,7 +688,7 @@ public abstract class O2Spell {
 
     /**
      * Get the name of the spell
-     * 
+     *
      * @return the name of the spell
      */
     @NotNull

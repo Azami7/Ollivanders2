@@ -17,10 +17,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Transforms entities in to items. This spell kills the entity (ie. it does not revert)
+ * Transforms entities in to items. This spell kills the entity (i.e. it does not revert)
  */
 public abstract class LivingEntityToItemTransfiguration extends EntityTransfiguration {
-    //todo make player transfiguration an effect so it persists over log out/restarts
     /**
      * The target item material for this spell, only used if transfiguration map is not populated, then will turn any
      * entity type in to this material.
@@ -89,7 +88,7 @@ public abstract class LivingEntityToItemTransfiguration extends EntityTransfigur
         if (!(newEntity instanceof Item)) {
             newEntity.remove();
         }
-        ((Item)newEntity).setItemStack(new ItemStack(targetMaterial));
+        ((Item) newEntity).setItemStack(new ItemStack(targetMaterial));
 
         // remove the original entity
         entity.remove();

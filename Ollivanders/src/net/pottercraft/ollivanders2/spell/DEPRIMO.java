@@ -17,11 +17,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Turns all blocks in a radius into fallingBlock entities
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Deprimo_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Deprimo_Spell">https://harrypotter.fandom.com/wiki/Deprimo_Spell</a>
  */
-public final class DEPRIMO extends O2Spell
-{
+public final class DEPRIMO extends O2Spell {
     /**
      * The minimum radius to affect
      */
@@ -42,15 +41,13 @@ public final class DEPRIMO extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public DEPRIMO(Ollivanders2 plugin)
-    {
+    public DEPRIMO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.DEPRIMO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("She had blasted a hole in the sitting-room floor. They fell like boulders, Harry still holding onto her hand for dear life, there as a scream from below and he glimpsed two men trying to get out of the way as vast quantities of rubble and broken furniture rained all around them from the shattered ceiling.");
             add("The Blasting Charm");
         }};
@@ -65,8 +62,7 @@ public final class DEPRIMO extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public DEPRIMO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public DEPRIMO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.DEPRIMO;
         branch = O2MagicBranch.CHARMS;
@@ -76,8 +72,7 @@ public final class DEPRIMO extends O2Spell
         materialBlockedList.add(Material.LAVA);
         materialBlockedList.add(Material.FIRE);
 
-        for (Material material : Ollivanders2Common.unbreakableMaterials)
-        {
+        for (Material material : Ollivanders2Common.unbreakableMaterials) {
             if (!materialBlockedList.contains(material))
                 materialBlockedList.add(material);
         }
@@ -93,8 +88,7 @@ public final class DEPRIMO extends O2Spell
      * Set the radius based on the caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         radius = usesModifier / 10;
 
         if (radius < minRadius)
@@ -107,15 +101,13 @@ public final class DEPRIMO extends O2Spell
      * Turn all the blocks in a radius from the projectile target in to falling blocks and replace with AIR blocks.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (!hasHitTarget())
             return;
 
         List<Block> nearbyBlocks = Ollivanders2Common.getBlocksInRadius(location, radius);
 
-        for (Block block : nearbyBlocks)
-        {
+        for (Block block : nearbyBlocks) {
             common.printDebugMessage("block type is " + block.getType().toString(), null, null, false);
 
             if (materialBlockedList.contains(block.getType()))
@@ -125,8 +117,7 @@ public final class DEPRIMO extends O2Spell
             BlockData blockData = block.getBlockData();
 
             World world = blockLocation.getWorld();
-            if (world == null)
-            {
+            if (world == null) {
                 common.printDebugMessage("DEPRIMO.doCheckEffect: world is null", null, null, true);
                 kill();
                 return;

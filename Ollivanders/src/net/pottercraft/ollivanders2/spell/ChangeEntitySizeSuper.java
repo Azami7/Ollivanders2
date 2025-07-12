@@ -10,8 +10,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Change the size of growing entity
  */
-public abstract class ChangeEntitySizeSuper extends O2Spell
-{
+public abstract class ChangeEntitySizeSuper extends O2Spell {
     /**
      * Max number of entities that can be targeted
      */
@@ -57,8 +56,7 @@ public abstract class ChangeEntitySizeSuper extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public ChangeEntitySizeSuper(Ollivanders2 plugin)
-    {
+    public ChangeEntitySizeSuper(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -69,8 +67,7 @@ public abstract class ChangeEntitySizeSuper extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public ChangeEntitySizeSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public ChangeEntitySizeSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 
@@ -78,18 +75,14 @@ public abstract class ChangeEntitySizeSuper extends O2Spell
      * Look for entities within the projectile range and change their size, if possible
      */
     @Override
-    protected void doCheckEffect()
-    {
-        if (hasHitTarget())
-        {
+    protected void doCheckEffect() {
+        if (hasHitTarget()) {
             kill();
             return;
         }
 
-        for (LivingEntity livingEntity : getNearbyLivingEntities(radius))
-        {
-            if (targets < 1)
-            {
+        for (LivingEntity livingEntity : getNearbyLivingEntities(radius)) {
+            if (targets < 1) {
                 kill();
                 return;
             }
@@ -102,8 +95,7 @@ public abstract class ChangeEntitySizeSuper extends O2Spell
             if (!entityHarmWGCheck(livingEntity))
                 continue;
 
-            if (livingEntity instanceof Ageable)
-            {
+            if (livingEntity instanceof Ageable) {
                 if (growing)
                     ((Ageable) livingEntity).setAdult();
                 else
@@ -123,8 +115,7 @@ public abstract class ChangeEntitySizeSuper extends O2Spell
      *
      * @param slime the smile to reduce the size of
      */
-    private void changeSlimeSize(@NotNull Slime slime)
-    {
+    private void changeSlimeSize(@NotNull Slime slime) {
         int delta = (int) (usesModifier / 25) + 1;
         if (delta > maxSlimeSizeChange)
             delta = maxSlimeSizeChange;

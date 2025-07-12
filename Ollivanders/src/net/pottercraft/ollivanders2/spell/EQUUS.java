@@ -13,15 +13,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Turn target player in to a horse.
  */
-public final class EQUUS extends PlayerDisguise
-{
+public final class EQUUS extends PlayerDisguise {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public EQUUS(Ollivanders2 plugin)
-    {
+    public EQUUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.EQUUS;
@@ -37,8 +35,7 @@ public final class EQUUS extends PlayerDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public EQUUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public EQUUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.EQUUS;
@@ -60,8 +57,7 @@ public final class EQUUS extends PlayerDisguise
      * Calculate success rate based on player skill level
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         calculateSuccessRate();
     }
 }

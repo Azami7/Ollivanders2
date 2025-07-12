@@ -19,8 +19,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * {@link LIGATIS_COR}
  */
-public final class FRANGE_LIGNEA extends O2Spell
-{
+public final class FRANGE_LIGNEA extends O2Spell {
     /**
      * The maximum number of coreless wands to create
      */
@@ -31,8 +30,7 @@ public final class FRANGE_LIGNEA extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public FRANGE_LIGNEA(Ollivanders2 plugin)
-    {
+    public FRANGE_LIGNEA(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.FRANGE_LIGNEA;
@@ -48,8 +46,7 @@ public final class FRANGE_LIGNEA extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public FRANGE_LIGNEA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public FRANGE_LIGNEA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.FRANGE_LIGNEA;
         branch = O2MagicBranch.CHARMS;
@@ -68,8 +65,7 @@ public final class FRANGE_LIGNEA extends O2Spell
      * Break a natural log in to coreless wands
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (!hasHitTarget())
             return;
 
@@ -79,12 +75,10 @@ public final class FRANGE_LIGNEA extends O2Spell
         if (target == null)
             return;
 
-        if (Ollivanders2Common.isNaturalLog(target))
-        {
+        if (Ollivanders2Common.isNaturalLog(target)) {
             // break the log in to the correct wand core type
             O2WandWoodType woodType = O2WandWoodType.getWandWoodTypeByMaterial(target.getType());
-            if (woodType == null)
-            {
+            if (woodType == null) {
                 player.sendMessage(Ollivanders2.chatColor + "The targeted log is not suitable for wand making.");
                 return;
             }
@@ -101,8 +95,7 @@ public final class FRANGE_LIGNEA extends O2Spell
 
             // make a stack of coreless wands
             ItemStack corelessWands = Ollivanders2API.getItems().getWands().createCorelessWand(woodType, amount);
-            if (corelessWands == null)
-            {
+            if (corelessWands == null) {
                 common.printDebugMessage("Frange Lignea: failed to create coreless wands", null, null, true);
                 return;
             }

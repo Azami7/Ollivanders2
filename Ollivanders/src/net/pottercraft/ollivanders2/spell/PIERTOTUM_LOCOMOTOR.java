@@ -24,10 +24,12 @@ import java.util.ArrayList;
 /**
  * Transfigures an iron golem from a block of iron, and snow golem from block of snow.
  * <p>
- * There is no spell like this in HP universe though we know there must be some sort of animation spell which McGonagall used on the giant wizards chess board in 1991.
+ * There is no spell like this in HP universe though we know there must be some sort of animation spell which McGonagall
+ * used on the giant wizards chess board in 1991.
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Animation_Charm">https://harrypotter.fandom.com/wiki/Animation_Charm</a>
  */
-public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration
-{
+public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration {
     private static final int minDurationConfig = 30 * Ollivanders2Common.ticksPerSecond;
     private static final int maxDurationConfig = 10 * Ollivanders2Common.ticksPerMinute;
 
@@ -36,15 +38,13 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public PIERTOTUM_LOCOMOTOR(Ollivanders2 plugin)
-    {
+    public PIERTOTUM_LOCOMOTOR(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("And all along the corridor the statues and suits of armour jumped down from their plinths, and from the echoing crashes from the floors above and below, Harry knew that their fellows throughout the castle had done the same... Cheering and yelling, the horde of moving statues stampeded past Harry; some of them smaller, others larger than life.");
             add("They were standing on the edge of a huge chessboard, behind the black chessmen, which were all taller than they were and carved from what looked like black stone. Facing them, way across the chamber, were white pieces — the towering white chessmen had no faces.");
             add("Next second he had reappeared behind Voldemort and waved his wand toward the remnants of the fountain; the other statues sprang to life too.");
@@ -60,8 +60,7 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public PIERTOTUM_LOCOMOTOR(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public PIERTOTUM_LOCOMOTOR(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.PIERTOTUM_LOCOMOTOR;
@@ -88,8 +87,7 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration
     }
 
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         // ensure it is always 100
         successRate = 100;
 
@@ -102,8 +100,7 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration
      * @param event the entity damage event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityDamage(EntityDamageByEntityEvent event)
-    {
+    public void onEntityDamage(EntityDamageByEntityEvent event) {
         if (transfiguredEntity == null)
             return;
 
@@ -128,8 +125,7 @@ public final class PIERTOTUM_LOCOMOTOR extends BlockToEntityTransfiguration
      * @param event the entity target event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityTarget(EntityTargetEvent event)
-    {
+    public void onEntityTarget(EntityTargetEvent event) {
         if (transfiguredEntity == null)
             return;
 

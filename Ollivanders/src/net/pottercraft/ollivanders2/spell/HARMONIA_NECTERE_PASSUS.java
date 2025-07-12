@@ -18,25 +18,22 @@ import java.util.ArrayList;
 
 /**
  * Creates a pair of vanishing cabinets and teleports between them.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Harmonia_Nectere_Passus
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Harmonia_Nectere_Passus">https://harrypotter.fandom.com/wiki/Harmonia_Nectere_Passus</a>
  */
-public final class HARMONIA_NECTERE_PASSUS extends O2Spell
-{
+public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public HARMONIA_NECTERE_PASSUS(Ollivanders2 plugin)
-    {
+    public HARMONIA_NECTERE_PASSUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.HARMONIA_NECTERE_PASSUS;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Vanishing Cabinet Charm");
             add("He stares at the monolith before him, lifts his wand and begins to chant eerily. The surface of the cabinet glimmers, atremble in the ambient light. Almost alive. Then he stops. Looking back, his eyes haunted, he slips away. Light plays within the cabinet. Movement. Shadows flicker within, coalesce.");
             add("\" ...we forced him head-first into that Vanishing Cabinet on the first floor.\"\n" +
@@ -54,8 +51,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.HARMONIA_NECTERE_PASSUS;
@@ -72,64 +68,54 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
      * Specific logic for targeting the vanishing cabinet sign
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (!hasHitTarget())
             return;
 
         kill();
 
         Block fromBlock = getTargetBlock();
-        if (fromBlock == null)
-        {
+        if (fromBlock == null) {
             common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: from block is null", null, null, true);
             return;
         }
 
         Material blockType = fromBlock.getType();
-        if (!Ollivanders2Common.signs.contains(blockType))
-        {
+        if (!Ollivanders2Common.signs.contains(blockType)) {
             common.printDebugMessage("Block is not a sign", null, null, false);
             return;
         }
 
         // determine the location of the other vanishing cabinet
         Location toLoc = getSignLocation(fromBlock);
-        if (toLoc == null)
-        {
+        if (toLoc == null) {
             common.printDebugMessage("Unable to get toLoc from sign.", null, null, false);
             return;
         }
 
         Block toBlock = toLoc.getBlock();
         Material toBlockType = toBlock.getType();
-        if (!Ollivanders2Common.signs.contains(toBlockType))
-        {
+        if (!Ollivanders2Common.signs.contains(toBlockType)) {
             common.printDebugMessage("Block at toLoc is not a sign block", null, null, false);
             return;
         }
 
         Location fromLoc = getSignLocation(toBlock);
-        if (fromLoc == null)
-        {
+        if (fromLoc == null) {
             common.printDebugMessage("Unable to get fromLoc from sign.", null, null, false);
             return;
         }
 
-        if (Ollivanders2Common.locationEquals(toLoc, fromLoc))
-        {
+        if (Ollivanders2Common.locationEquals(toLoc, fromLoc)) {
             common.printDebugMessage("Vanishing cabinet to and from locations are the same", null, null, false);
             player.sendMessage(Ollivanders2.chatColor + "To and from locations on vanishing cabinet signs are the same.");
             return;
         }
 
-        for (O2StationarySpell statSpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-        {
-            if (statSpell instanceof net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS)
-            {
+        for (O2StationarySpell statSpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
+            if (statSpell instanceof net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS) {
                 net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS harmonia = (net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS) statSpell;
-                if (harmonia.getBlock().equals(fromLoc.getBlock()) || harmonia.getBlock().equals(toLoc.getBlock()))
-                {
+                if (harmonia.getBlock().equals(fromLoc.getBlock()) || harmonia.getBlock().equals(toLoc.getBlock())) {
                     player.sendMessage(Ollivanders2.chatColor + "There is already a vanishing cabinet here.");
                     return;
                 }
@@ -152,15 +138,13 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
      * @param block the sign to check
      * @return the location or null if one could not be created
      */
-    private Location getSignLocation(Block block)
-    {
+    private Location getSignLocation(Block block) {
         Location location = null;
 
         Sign sign = (Sign) block.getState();
         String[] lines = sign.getSide(Side.FRONT).getLines();
 
-        if (lines.length == 4)
-        {
+        if (lines.length == 4) {
             World world = Bukkit.getWorld(lines[0]);
             if (world == null)
                 return null;
@@ -169,14 +153,12 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell
             int y;
             int z;
 
-            try
-            {
+            try {
                 x = Integer.parseInt(lines[1]);
                 y = Integer.parseInt(lines[2]);
                 z = Integer.parseInt(lines[3]);
             }
-            catch (NumberFormatException e)
-            {
+            catch (NumberFormatException e) {
                 common.printDebugMessage("Unable to parse coordinates from sign.", null, null, false);
                 return null;
             }

@@ -30,13 +30,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Makes a "fireplace" a floo network location
- * <p>
- * https://harrypotter.fandom.com/wiki/Floo_Network
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Floo_Network">https://harrypotter.fandom.com/wiki/Floo_Network</a>
  * {@link net.pottercraft.ollivanders2.spell.ALIQUAM_FLOO}
  */
-public class ALIQUAM_FLOO extends O2StationarySpell
-{
+public class ALIQUAM_FLOO extends O2StationarySpell {
     /**
      * Radius for this spell is always 4
      */
@@ -87,8 +85,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin)
-    {
+    public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         init();
@@ -102,15 +99,12 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      * @param location the center location of the spell
      * @param flooName the name of this floo location
      */
-    public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull String flooName)
-    {
-        super(plugin);
+    public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull String flooName) {
+        super(plugin, pid, location);
 
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         this.flooName = flooName;
-        setPlayerID(pid);
-        setLocation(location);
 
         init();
 
@@ -120,8 +114,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     /**
      * Common constructor steps
      */
-    private void init()
-    {
+    private void init() {
         spellType = O2StationarySpellType.ALIQUAM_FLOO;
 
         if (p.getConfig().isSet("soulFireFlooEffect"))
@@ -137,8 +130,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      * This kills the floo stationary spell
      */
     @Override
-    public void kill()
-    {
+    public void kill() {
         super.kill();
         flooNetworkLocations.remove(this);
     }
@@ -147,26 +139,21 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      * Check for players activating the floo
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         // if this fireplace is already active,
-        if (isWorking())
-        {
+        if (isWorking()) {
             cooldown = cooldown - 1;
 
             if ((cooldown % 10) == 0)
                 turnOnFlooFireEffect();
 
-            if (cooldown <= 0)
-            {
+            if (cooldown <= 0) {
                 stopWorking();
                 common.printDebugMessage("Turning off floo " + flooName, null, null, false);
             }
         }
-        else
-        {
-            for (Item item : EntityCommon.getItems(location, 1))
-            {
+        else {
+            for (Item item : EntityCommon.getItems(location, 1)) {
                 if (!O2ItemType.FLOO_POWDER.isItemThisType(item))
                     continue;
 
@@ -183,21 +170,17 @@ public class ALIQUAM_FLOO extends O2StationarySpell
     /**
      * Play effect that shows the fireplace is active
      */
-    private void turnOnFlooFireEffect()
-    {
-        if (soulFireFlooEffect)
-        {
+    private void turnOnFlooFireEffect() {
+        if (soulFireFlooEffect) {
             Block block = location.getBlock();
             // need to keep track of what type of fire this is
             fireType = block.getType();
 
             // turn the flame in to blue flame
-            if (fireType == Material.CAMPFIRE)
-            {
+            if (fireType == Material.CAMPFIRE) {
                 block.setType(Material.SOUL_CAMPFIRE);
             }
-            else
-            {
+            else {
                 // we have to change the block underneath or the fire won't stay lit
                 Block fireBase = block.getRelative(BlockFace.DOWN);
 
@@ -205,11 +188,9 @@ public class ALIQUAM_FLOO extends O2StationarySpell
                 block.setType(Material.SOUL_FIRE);
             }
         }
-        else
-        {
+        else {
             World world = location.getWorld();
-            if (world == null)
-            {
+            if (world == null) {
                 kill();
                 return;
             }
@@ -223,8 +204,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      *
      * @return the name of this floo location
      */
-    public String getFlooName()
-    {
+    public String getFlooName() {
         return flooName;
     }
 
@@ -233,28 +213,23 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      *
      * @return true if this floo destination is online, false otherwise
      */
-    public boolean isWorking()
-    {
+    public boolean isWorking() {
         return cooldown > 0;
     }
 
     /**
      * Stop the floo fireplace working after teleporting.
      */
-    public void stopWorking()
-    {
+    public void stopWorking() {
         cooldown = 0;
 
         Block block = location.getBlock();
 
-        if(soulFireFlooEffect)
-        {
-            if (fireType == Material.CAMPFIRE)
-            {
+        if (soulFireFlooEffect) {
+            if (fireType == Material.CAMPFIRE) {
                 block.setType(Material.CAMPFIRE);
             }
-            else
-            {
+            else {
                 // we have to change the block underneath or the fire won't stay lit
                 Block fireBase = block.getRelative(BlockFace.DOWN);
 
@@ -271,8 +246,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      */
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         Map<String, String> spellData = new HashMap<>();
 
         spellData.put(flooNameLabel, flooName);
@@ -286,10 +260,8 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      * @param spellData a map of the saved spell data
      */
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
-        for (Entry<String, String> e : spellData.entrySet())
-        {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
+        for (Entry<String, String> e : spellData.entrySet()) {
             if (e.getKey().equals(flooNameLabel))
                 flooName = e.getValue();
         }
@@ -301,8 +273,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
-    {
+    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
         Player player = event.getPlayer(); // will never be null
         String chat = event.getMessage(); // will never be null
 
@@ -312,14 +283,12 @@ public class ALIQUAM_FLOO extends O2StationarySpell
         // look for the destination in the registered floo network
         ALIQUAM_FLOO destination = null;
 
-        for (ALIQUAM_FLOO floo : flooNetworkLocations)
-        {
+        for (ALIQUAM_FLOO floo : flooNetworkLocations) {
             if (floo.getFlooName().equalsIgnoreCase(chat.trim()))
                 destination = floo;
         }
 
-        if (destination == null)
-        {
+        if (destination == null) {
             int randomIndex = Math.abs(Ollivanders2Common.random.nextInt() % flooNetworkLocations.size());
             destination = flooNetworkLocations.get(randomIndex);
 
@@ -329,11 +298,9 @@ public class ALIQUAM_FLOO extends O2StationarySpell
         FlooNetworkEvent flooNetworkEvent = new FlooNetworkEvent(player, destination);
         flooNetworkEvents.put(player.getUniqueId(), flooNetworkEvent);
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 if (!event.isCancelled())
                     doFlooTeleportEvent(player);
                 else
@@ -347,8 +314,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      *
      * @param player the player to teleport
      */
-    private void doFlooTeleportEvent(Player player)
-    {
+    private void doFlooTeleportEvent(Player player) {
         FlooNetworkEvent flooNetworkEvent = flooNetworkEvents.get(player.getUniqueId());
 
         if (flooNetworkEvent == null)
@@ -356,17 +322,14 @@ public class ALIQUAM_FLOO extends O2StationarySpell
 
         p.getServer().getPluginManager().callEvent(flooNetworkEvent);
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 FlooNetworkEvent flooNetworkEvent = flooNetworkEvents.get(player.getUniqueId());
                 if (flooNetworkEvent == null)
                     return;
 
-                if (!flooNetworkEvent.isCancelled())
-                {
+                if (!flooNetworkEvent.isCancelled()) {
                     p.addTeleportEvent(player, flooNetworkEvent.getDestination());
                     player.sendMessage(Ollivanders2.chatColor + "Fire swirls around you.");
                 }
@@ -385,13 +348,11 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnEntityCombustEvent(@NotNull EntityCombustEvent event)
-    {
+    void doOnEntityCombustEvent(@NotNull EntityCombustEvent event) {
         Entity entity = event.getEntity(); // will never be null
         Location entityLocation = entity.getLocation(); // will never be null
 
-        if (isLocationInside(entityLocation))
-        {
+        if (isLocationInside(entityLocation)) {
             event.setCancelled(true);
             common.printDebugMessage("ALIQUAM_FLOO: canceled EntityCombustEvent", null, null, false);
         }
@@ -403,15 +364,18 @@ public class ALIQUAM_FLOO extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event)
-    {
+    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event) {
         Entity entity = event.getEntity(); // will never be null
         Location entityLocation = entity.getLocation(); // will never be null
 
-        if (isLocationInside(entityLocation))
-        {
+        if (isLocationInside(entityLocation)) {
             event.setCancelled(true);
             common.printDebugMessage("ALIQUAM_FLOO: canceled EntityDamageEvent", null, null, false);
         }
+    }
+
+    @Override
+    void doCleanUp() {
+        stopWorking();
     }
 }

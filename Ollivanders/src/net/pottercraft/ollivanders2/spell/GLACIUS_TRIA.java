@@ -9,25 +9,22 @@ import java.util.ArrayList;
 
 /**
  * Glacius Tria has the same effect as Glacius but with 4x the duration and radius.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Glacius_Tria
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Glacius_Tria">https://harrypotter.fandom.com/wiki/Glacius_Tria</a>
  */
-public final class GLACIUS_TRIA extends GlaciusSuper
-{
+public final class GLACIUS_TRIA extends GlaciusSuper {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public GLACIUS_TRIA(Ollivanders2 plugin)
-    {
+    public GLACIUS_TRIA(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.GLACIUS_TRIA;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Strongest Freezing Charm");
         }};
 
@@ -41,8 +38,7 @@ public final class GLACIUS_TRIA extends GlaciusSuper
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public GLACIUS_TRIA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public GLACIUS_TRIA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.GLACIUS_TRIA;

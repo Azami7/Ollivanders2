@@ -14,8 +14,7 @@ import java.util.List;
 /**
  * Remove an O2Effect from a target player.
  */
-abstract public class RemoveO2Effect extends O2Spell
-{
+abstract public class RemoveO2Effect extends O2Spell {
     /**
      * The maximum number of targets for this spell
      */
@@ -39,8 +38,7 @@ abstract public class RemoveO2Effect extends O2Spell
     /**
      * List of effects that cannot be removed by any spell.
      */
-    List<O2EffectType> effectBlockedList = new ArrayList<>()
-    {{
+    List<O2EffectType> effectBlockedList = new ArrayList<>() {{
         add(O2EffectType.ANIMAGUS_EFFECT);
         add(O2EffectType.ANIMAGUS_INCANTATION);
         add(O2EffectType.LYCANTHROPY);
@@ -53,8 +51,7 @@ abstract public class RemoveO2Effect extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public RemoveO2Effect(Ollivanders2 plugin)
-    {
+    public RemoveO2Effect(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
@@ -67,8 +64,7 @@ abstract public class RemoveO2Effect extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public RemoveO2Effect(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public RemoveO2Effect(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.CHARMS;
@@ -78,8 +74,7 @@ abstract public class RemoveO2Effect extends O2Spell
      * If a target player is within the radius of the projectile, add the potion effect to the player.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         affectRadius(defaultRadius, false);
 
         if (hasHitTarget())
@@ -92,13 +87,11 @@ abstract public class RemoveO2Effect extends O2Spell
      * @param radius the radius of the spell
      * @param flair  whether to show a visual flair
      */
-    void affectRadius(double radius, boolean flair)
-    {
+    void affectRadius(double radius, boolean flair) {
         if (flair)
             Ollivanders2Common.flair(location, (int) radius, 10);
 
-        for (Player target : getNearbyPlayers(radius))
-        {
+        for (Player target : getNearbyPlayers(radius)) {
             if (target.getUniqueId() == player.getUniqueId())
                 continue;
 
@@ -107,8 +100,7 @@ abstract public class RemoveO2Effect extends O2Spell
             targetsRemaining = targetsRemaining - 1;
 
             // stop when the limit of targets is reached
-            if (targetsRemaining <= 0)
-            {
+            if (targetsRemaining <= 0) {
                 kill();
                 return;
             }
@@ -120,10 +112,8 @@ abstract public class RemoveO2Effect extends O2Spell
      *
      * @param target the player to remove effects from
      */
-    void removeEffects(@NotNull Player target)
-    {
-        for (O2EffectType effectType : effectsAllowList)
-        {
+    void removeEffects(@NotNull Player target) {
+        for (O2EffectType effectType : effectsAllowList) {
             // just in case a blocked effect was added to the allowed list
             if (effectBlockedList.contains(effectType))
                 continue;
@@ -135,8 +125,7 @@ abstract public class RemoveO2Effect extends O2Spell
                 Ollivanders2API.getPlayers().playerEffects.removeEffect(target.getUniqueId(), effectType);
 
             targetsRemaining -= 1;
-            if (targetsRemaining <= 0)
-            {
+            if (targetsRemaining <= 0) {
                 kill();
                 break;
             }
@@ -149,8 +138,7 @@ abstract public class RemoveO2Effect extends O2Spell
      * @param effectType the type of effect targeted
      * @return true if the effect can be removed, false otherwise
      */
-    boolean checkSuccess(O2EffectType effectType)
-    {
+    boolean checkSuccess(O2EffectType effectType) {
         if (effectType.getLevel().ordinal() > this.getLevel().ordinal())
             return false;
 

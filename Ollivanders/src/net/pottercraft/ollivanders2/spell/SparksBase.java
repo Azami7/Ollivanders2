@@ -14,8 +14,8 @@ import java.util.List;
 /**
  * Base class for sparks spells like vermillious and verdimillious
  *
- * @since 2.21
  * @author Azami7
+ * @since 2.21
  */
 public abstract class SparksBase extends O2Spell {
     /**
@@ -39,8 +39,7 @@ public abstract class SparksBase extends O2Spell {
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public SparksBase(Ollivanders2 plugin)
-    {
+    public SparksBase(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
@@ -53,8 +52,7 @@ public abstract class SparksBase extends O2Spell {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public SparksBase(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public SparksBase(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         moveEffectData = Material.GLASS;
@@ -64,8 +62,8 @@ public abstract class SparksBase extends O2Spell {
     /**
      * Set the damage done by this spell
      */
-    void setDamage () {
-        damage = (int)(damageModifier * (usesModifier / 10)) + 1;
+    void setDamage() {
+        damage = (int) (damageModifier * (usesModifier / 10)) + 1;
     }
 
     @Override
@@ -74,7 +72,7 @@ public abstract class SparksBase extends O2Spell {
         if (getLifeTicks() == 1) {
             World world = location.getWorld();
             if (world != null)
-                world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1,0);
+                world.playSound(location, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1, 0);
         }
 
         if (hasHitTarget())
@@ -85,8 +83,7 @@ public abstract class SparksBase extends O2Spell {
 
         // check for entities this spell can damage
         List<LivingEntity> entities = getNearbyLivingEntities(radius);
-        for (LivingEntity entity : entities)
-        {
+        for (LivingEntity entity : entities) {
             // don't damage the caster
             if (entity.getUniqueId() == player.getUniqueId())
                 continue;

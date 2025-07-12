@@ -14,6 +14,7 @@ import java.util.ArrayList;
  *
  * @author lownes
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Colour_Change_Charm">https://harrypotter.fandom.com/wiki/Colour_Change_Charm</a>
  */
 public final class COLOVARIA extends ColoroSuper {
     /**

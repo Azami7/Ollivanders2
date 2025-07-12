@@ -22,13 +22,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * The basic protection spell
- * <p>
- * https://harrypotter.fandom.com/wiki/Shield_Charm
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Shield_Charm">https://harrypotter.fandom.com/wiki/Shield_Charm</a>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO}
  */
-public class PROTEGO extends ShieldSpell
-{
+public class PROTEGO extends ShieldSpell {
     /**
      * min radius for this spell
      */
@@ -51,8 +49,7 @@ public class PROTEGO extends ShieldSpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public PROTEGO(@NotNull Ollivanders2 plugin)
-    {
+    public PROTEGO(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.PROTEGO;
@@ -67,9 +64,8 @@ public class PROTEGO extends ShieldSpell
      * @param radius   the radius for this spell
      * @param duration the duration of the spell
      */
-    public PROTEGO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
-    {
-        super(plugin);
+    public PROTEGO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO;
 
         minRadius = minRadiusConfig;
@@ -77,8 +73,6 @@ public class PROTEGO extends ShieldSpell
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
 
@@ -89,31 +83,25 @@ public class PROTEGO extends ShieldSpell
      * Age the spell by 1 tick,
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         age();
 
         Player ply = Bukkit.getPlayer(getCasterID());
-        if (ply == null)
-        {
+        if (ply == null) {
             kill();
             return;
         }
 
         double rightWand = Ollivanders2API.playerCommon.wandCheck(ply);
-        if (ply.isSneaking() && rightWand != -1)
-        {
+        if (ply.isSneaking() && rightWand != -1) {
             location = ply.getEyeLocation();
             flair(1);
 
             List<O2Spell> projectiles = p.getProjectiles();
 
-            for (O2Spell proj : projectiles)
-            {
-                if (isLocationInside(proj.location) && proj.spellType.getLevel().ordinal() <= this.spellType.getLevel().ordinal())
-                {
-                    if (location.distance(proj.location) > radius - 1)
-                    {
+            for (O2Spell proj : projectiles) {
+                if (isLocationInside(proj.location) && proj.spellType.getLevel().ordinal() <= this.spellType.getLevel().ordinal()) {
+                    if (location.distance(proj.location) > radius - 1) {
                         Vector N = proj.location.toVector().subtract(location.toVector()).normalize();
                         double b = p.getSpellCount(ply, O2SpellType.PROTEGO) / rightWand / 10.0;
                         b += 1;
@@ -132,13 +120,11 @@ public class PROTEGO extends ShieldSpell
      * @param event the event
      */
     @Override
-    void doOnEntityCombustEvent(@NotNull EntityCombustEvent event)
-    {
+    void doOnEntityCombustEvent(@NotNull EntityCombustEvent event) {
         Entity entity = event.getEntity(); // will never be null
         Location entityLocation = entity.getLocation();
 
-        if (isLocationInside(entityLocation))
-        {
+        if (isLocationInside(entityLocation)) {
             event.setCancelled(true);
             common.printDebugMessage("PROTEGO: canceled PlayerInteractEvent", null, null, false);
         }
@@ -149,8 +135,7 @@ public class PROTEGO extends ShieldSpell
      *
      * @param event the spell projectile move event
      */
-    void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event)
-    {
+    void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
         // is the spell inside this protego?
         Location to = event.getTo(); // will never be null
         if (!isLocationInside(to))
@@ -171,13 +156,14 @@ public class PROTEGO extends ShieldSpell
 
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
+
+    @Override
+    void doCleanUp() {}
 }

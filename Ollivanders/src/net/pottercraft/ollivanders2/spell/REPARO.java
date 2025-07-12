@@ -16,11 +16,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Repairs a damageable item you aim it at.
- * <p>
- * https://harrypotter.fandom.com/wiki/Mending_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Mending_Charm">https://harrypotter.fandom.com/wiki/Mending_Charm</a>
  */
-public class REPARO extends O2Spell
-{
+public class REPARO extends O2Spell {
     /**
      * The minimum this spell will repair
      */
@@ -46,15 +45,13 @@ public class REPARO extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public REPARO(Ollivanders2 plugin)
-    {
+    public REPARO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.REPARO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Mending Charm");
             add("Mr. Weasley took Harry's glasses, gave them a tap of his wand and returned them, good as new.");
             add("The Mending Charm will repair broken objects with a flick of the wand.  Accidents do happen, so it is essential to know how to mend our errors.");
@@ -70,16 +67,14 @@ public class REPARO extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public REPARO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public REPARO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.REPARO;
         branch = O2MagicBranch.CHARMS;
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.ITEM_DROP);
             worldGuardFlags.add(Flags.ITEM_PICKUP);
         }
@@ -91,8 +86,7 @@ public class REPARO extends O2Spell
      * Determine the amount to repair based on caster's skill.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         repair = (int) (usesModifier / repairMultiplier);
 
         if (repair < minRepair)
@@ -105,20 +99,17 @@ public class REPARO extends O2Spell
      * Find a damageable item and repair it.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (hasHitTarget())
             kill();
 
         List<Item> items = getItems(1.5);
 
-        for (Item item : items)
-        {
+        for (Item item : items) {
             ItemStack stack = item.getItemStack();
             ItemMeta itemMeta = stack.getItemMeta();
 
-            if (itemMeta instanceof Damageable)
-            {
+            if (itemMeta instanceof Damageable) {
                 int damage = ((Damageable) itemMeta).getDamage();
                 damage = damage - repair;
 

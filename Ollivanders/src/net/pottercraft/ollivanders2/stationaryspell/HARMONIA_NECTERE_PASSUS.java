@@ -23,8 +23,7 @@ import java.util.UUID;
  * @see <a href = "https://harrypotter.fandom.com/wiki/Vanishing_Cabinet">https://harrypotter.fandom.com/wiki/Vanishing_Cabinet</a>
  * {@link net.pottercraft.ollivanders2.spell.HARMONIA_NECTERE_PASSUS}
  */
-public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
-{
+public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     /**
      * the min radius for this spell
      */
@@ -60,8 +59,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin)
-    {
+    public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.HARMONIA_NECTERE_PASSUS;
@@ -77,17 +75,14 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
      * @param location the center location of the spell
      * @param twin     the location of this cabinet's twin
      */
-    public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull Location twin)
-    {
-        super(plugin);
+    public HARMONIA_NECTERE_PASSUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull Location twin) {
+        super(plugin, pid, location);
 
         spellType = O2StationarySpellType.HARMONIA_NECTERE_PASSUS;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         permanent = true;
 
-        setPlayerID(pid);
-        setLocation(location);
         radius = minRadius = maxRadius = minRadiusConfig;
         duration = 10;
 
@@ -98,11 +93,9 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
      * Disable the spell if the twin is broken
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         World world = location.getWorld();
-        if (world == null)
-        {
+        if (world == null) {
             common.printDebugMessage("HARMONIA_NECTERE_PASSUS.checkEffect: world is null", null, null, false);
             kill();
             return;
@@ -110,15 +103,13 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
 
         HARMONIA_NECTERE_PASSUS twinCabinet = getTwin();
 
-        if (twinCabinet == null)
-        {
+        if (twinCabinet == null) {
             common.printDebugMessage("Harmonia stationary: twin cabinet null", null, null, true);
             kill();
             return;
         }
 
-        if (!cabinetCheck(location.getBlock()))
-        {
+        if (!cabinetCheck(location.getBlock())) {
             common.printDebugMessage("Harmonia stationary: twin cabinet malformed", null, null, true);
             kill();
             twinCabinet.kill();
@@ -128,8 +119,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
         // upkeep on inUseBy
         HashMap<Player, Integer> temp = new HashMap<>(inUseBy);
 
-        for (Map.Entry<Player, Integer> entry : temp.entrySet())
-        {
+        for (Map.Entry<Player, Integer> entry : temp.entrySet()) {
             Player player = entry.getKey();
             Integer cooldown = entry.getValue();
 
@@ -149,10 +139,8 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
      * @return the twin if found, null otherwise
      */
     @Nullable
-    public HARMONIA_NECTERE_PASSUS getTwin()
-    {
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-        {
+    public HARMONIA_NECTERE_PASSUS getTwin() {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
             if (stationarySpell instanceof HARMONIA_NECTERE_PASSUS && Ollivanders2Common.locationEquals(stationarySpell.location, twinCabinetLocation))
                 return (HARMONIA_NECTERE_PASSUS) stationarySpell;
         }
@@ -166,8 +154,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
      * @param player the player to check
      * @return true if this player is using this cabinet, false otherwise
      */
-    public boolean isUsing(Player player)
-    {
+    public boolean isUsing(Player player) {
         if (inUseBy.containsKey(player))
             return true;
 
@@ -180,8 +167,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
      * @param feet the block at the player's feet if the player is standing in the cabinet
      * @return true if the cabinet is whole, false if not
      */
-    private boolean cabinetCheck(@NotNull Block feet)
-    {
+    private boolean cabinetCheck(@NotNull Block feet) {
         if (feet.getType() != Material.AIR && !Ollivanders2Common.signs.contains(feet.getType()))
             return false;
 
@@ -199,8 +185,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
      */
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         Map<String, String> serializedLoc = common.serializeLocation(location, twinLabel);
 
         if (serializedLoc == null)
@@ -215,8 +200,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
      * @param spellData a map of the saved spell data
      */
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
         Location loc = common.deserializeLocation(spellData, twinLabel);
 
         if (loc != null)
@@ -229,8 +213,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event)
-    {
+    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
         Player player = event.getPlayer(); // will never be null
         // make sure player is not already using this vanishing cabinet
         if (isUsing(player))
@@ -244,31 +227,29 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell
             return;
 
         HARMONIA_NECTERE_PASSUS twin = getTwin();
-        if (twin == null)
-        {
+        if (twin == null) {
             kill();
             return;
         }
 
-        // make sure they do not have a use cooldown on the twin or we'll just teleport them right back as soon as they arrive and trigger a move event
+        // make sure they do not have a use cooldown on the twin, or we'll just teleport them right back as soon as they arrive and trigger a move event
         if (twin.isUsing(player))
             return;
 
-        if (isLocationInside(toLoc))
-        {
+        if (isLocationInside(toLoc)) {
             inUseBy.put(player, cooldown);
 
-            new BukkitRunnable()
-            {
+            new BukkitRunnable() {
                 @Override
-                public void run()
-                {
-                    if (!event.isCancelled())
-                    {
+                public void run() {
+                    if (!event.isCancelled()) {
                         p.addTeleportEvent(player, twinCabinetLocation, true);
                     }
                 }
             }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
         }
     }
+
+    @Override
+    void doCleanUp() {}
 }

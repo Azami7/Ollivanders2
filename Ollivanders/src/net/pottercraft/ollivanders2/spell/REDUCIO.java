@@ -9,11 +9,10 @@ import java.util.ArrayList;
 
 /**
  * Shrinks a giant to a normal zombie, makes certain entities babies and slimes smaller.
- * <p>
- * https://harrypotter.fandom.com/wiki/Shrinking_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Shrinking_Charm">https://harrypotter.fandom.com/wiki/Shrinking_Charm</a>
  */
-public final class REDUCIO extends ChangeEntitySizeSuper
-{
+public final class REDUCIO extends ChangeEntitySizeSuper {
     // todo rework with shrinking solution potion
     private static final int maxRadiusConfig = 20;
     private static final int maxTargetsConfig = 10;
@@ -23,15 +22,13 @@ public final class REDUCIO extends ChangeEntitySizeSuper
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public REDUCIO(Ollivanders2 plugin)
-    {
+    public REDUCIO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.REDUCIO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Shrinking Charm");
             add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink. You will be learning both charms together, so that you can always undo an over-enthusiastic cast. There is thus no excuse for having accidentally shrunk your homework down to microscopic size or for allowing a giant toad to rampage through your school’s flower gardens.");
         }};
@@ -46,8 +43,7 @@ public final class REDUCIO extends ChangeEntitySizeSuper
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public REDUCIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public REDUCIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.REDUCIO;
@@ -64,8 +60,7 @@ public final class REDUCIO extends ChangeEntitySizeSuper
      * Set the number of targets and the radius based on caster's experience.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         targets = (int) (usesModifier / 10) + 1;
         if (targets > maxTargets)
             targets = maxTargets;

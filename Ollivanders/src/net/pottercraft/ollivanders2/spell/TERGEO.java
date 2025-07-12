@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 /**
  * The siphoning spell.
- * <p>
- * https://harrypotter.fandom.com/wiki/Wiping_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Wiping_Spell">https://harrypotter.fandom.com/wiki/Wiping_Spell</a>
  */
 public final class TERGEO extends BlockTransfiguration
 {

@@ -23,8 +23,7 @@ import java.util.UUID;
  * @see <a href = "https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx</a>
  * {@link net.pottercraft.ollivanders2.spell.NULLUM_APPAREBIT}
  */
-public class NULLUM_APPAREBIT extends O2StationarySpell
-{
+public class NULLUM_APPAREBIT extends O2StationarySpell {
     /**
      * the min radius for this spell
      */
@@ -47,8 +46,7 @@ public class NULLUM_APPAREBIT extends O2StationarySpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public NULLUM_APPAREBIT(@NotNull Ollivanders2 plugin)
-    {
+    public NULLUM_APPAREBIT(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.NULLUM_APPAREBIT;
@@ -63,9 +61,8 @@ public class NULLUM_APPAREBIT extends O2StationarySpell
      * @param radius   the radius for this spell
      * @param duration the duration of the spell
      */
-    public NULLUM_APPAREBIT(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
-    {
-        super(plugin);
+    public NULLUM_APPAREBIT(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.NULLUM_APPAREBIT;
 
         minRadius = minRadiusConfig;
@@ -73,8 +70,6 @@ public class NULLUM_APPAREBIT extends O2StationarySpell
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
 
@@ -85,21 +80,18 @@ public class NULLUM_APPAREBIT extends O2StationarySpell
      * Age the spell by 1 tick
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         age();
     }
 
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 
     /**
@@ -108,21 +100,17 @@ public class NULLUM_APPAREBIT extends O2StationarySpell
      * @param event the apparate event
      */
     @Override
-    void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event)
-    {
+    void doOnOllivandersApparateByNameEvent(@NotNull OllivandersApparateByNameEvent event) {
         Location destination = event.getDestination();
 
-        if (isLocationInside(destination))
-        {
+        if (isLocationInside(destination)) {
             event.setCancelled(true);
             common.printDebugMessage("NULLUM_APPAREBIT: canceled OllivandersApparateByNameEvent", null, null, false);
         }
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 if (event.isCancelled())
                     playerFeedback(event.getPlayer());
             }
@@ -135,23 +123,17 @@ public class NULLUM_APPAREBIT extends O2StationarySpell
      * @param event the apparate event
      */
     @Override
-    void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event)
-    {
+    void doOnOllivandersApparateByCoordinatesEvent(@NotNull OllivandersApparateByCoordinatesEvent event) {
         Location destination = event.getDestination();
-        if (destination == null)
-            return;
 
-        if (isLocationInside(destination))
-        {
+        if (isLocationInside(destination)) {
             event.setCancelled(true);
             common.printDebugMessage("NULLUM_APPAREBIT: canceled OllivandersApparateByCoordinatesEvent", null, null, false);
         }
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 if (event.isCancelled())
                     playerFeedback(event.getPlayer());
             }
@@ -164,14 +146,12 @@ public class NULLUM_APPAREBIT extends O2StationarySpell
      * @param event the teleport event
      */
     @Override
-    void doOnEntityTeleportEvent(@NotNull EntityTeleportEvent event)
-    {
+    void doOnEntityTeleportEvent(@NotNull EntityTeleportEvent event) {
         Location destination = event.getTo();
         if (destination == null)
             return;
 
-        if (isLocationInside(destination))
-        {
+        if (isLocationInside(destination)) {
             event.setCancelled(true);
             common.printDebugMessage("NULLUM_APPAREBIT: canceled EntityTeleportEvent", null, null, false);
         }
@@ -183,23 +163,19 @@ public class NULLUM_APPAREBIT extends O2StationarySpell
      * @param event the teleport event
      */
     @Override
-    void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event)
-    {
+    void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {
         Location destination = event.getTo();
         if (destination == null)
             return;
 
-        if (isLocationInside(destination))
-        {
+        if (isLocationInside(destination)) {
             event.setCancelled(true);
             common.printDebugMessage("NULLUM_APPAREBIT: canceled PlayerTeleportEvent", null, null, false);
         }
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 if (event.isCancelled())
                     playerFeedback(event.getPlayer());
             }
@@ -211,10 +187,12 @@ public class NULLUM_APPAREBIT extends O2StationarySpell
      *
      * @param player the player trying to teleport/apparate
      */
-    private void playerFeedback(@NotNull Player player)
-    {
+    private void playerFeedback(@NotNull Player player) {
         player.sendMessage(Ollivanders2.chatColor + "A powerful magic protects that place.");
         player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
         flair(5);
     }
+
+    @Override
+    void doCleanUp() {}
 }

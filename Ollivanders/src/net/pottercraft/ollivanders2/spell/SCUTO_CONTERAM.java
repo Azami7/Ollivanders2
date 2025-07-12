@@ -11,13 +11,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Kills some shield spells.
- * <p>
- * https://harrypotter.fandom.com/wiki/Shield_penetration_spell
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Shield_penetration_spell">https://harrypotter.fandom.com/wiki/Shield_penetration_spell</a>
  * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
  */
-public final class SCUTO_CONTERAM extends O2Spell
-{
+public final class SCUTO_CONTERAM extends O2Spell {
     /**
      * The number of shield spells that can be targeted by this spell.
      */
@@ -28,8 +26,7 @@ public final class SCUTO_CONTERAM extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public SCUTO_CONTERAM(Ollivanders2 plugin)
-    {
+    public SCUTO_CONTERAM(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.SCUTO_CONTERAM;
@@ -45,8 +42,7 @@ public final class SCUTO_CONTERAM extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public SCUTO_CONTERAM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public SCUTO_CONTERAM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.SCUTO_CONTERAM;
@@ -58,8 +54,7 @@ public final class SCUTO_CONTERAM extends O2Spell
      * Set the number of spells that can be killed based on the caster's skill.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         targetsRemaining = (int) usesModifier / 20;
         if (targetsRemaining < 1)
             targetsRemaining = 1;
@@ -69,10 +64,8 @@ public final class SCUTO_CONTERAM extends O2Spell
      * Look for shield spells and kill them. This cannot kill spells like floo network, vanishing cabinets, etc..
      */
     @Override
-    protected void doCheckEffect()
-    {
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
-        {
+    protected void doCheckEffect() {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
             if (stationarySpell instanceof ShieldSpell && (stationarySpell.getSpellType().getLevel().ordinal() <= spellType.getLevel().ordinal()))
                 stationarySpell.kill();
 

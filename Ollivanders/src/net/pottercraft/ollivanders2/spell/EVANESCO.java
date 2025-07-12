@@ -16,26 +16,24 @@ import java.util.ArrayList;
 
 /**
  * Vanishes items, boats, and minecarts.
- * <p>
- * https://harrypotter.fandom.com/wiki/Vanishing_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Vanishing_Spell">https://harrypotter.fandom.com/wiki/Vanishing_Spell</a>
  */
-public final class EVANESCO extends EntityTransfiguration
-{
+public final class EVANESCO extends EntityTransfiguration {
     // todo rework to more align with https://harrypotter.fandom.com/wiki/Vanishing_Spell
+
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public EVANESCO(Ollivanders2 plugin)
-    {
+    public EVANESCO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.EVANESCO;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Vanishing Spell");
             add("The contents of Harry’s potion vanished; he was left standing foolishly beside an empty cauldron.");
         }};
@@ -50,15 +48,13 @@ public final class EVANESCO extends EntityTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public EVANESCO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public EVANESCO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.EVANESCO;
         branch = O2MagicBranch.TRANSFIGURATION;
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.USE);
             worldGuardFlags.add(Flags.BUILD);
         }
@@ -76,15 +72,12 @@ public final class EVANESCO extends EntityTransfiguration
      * Set the success rate for this spell based on the caster's skill and year (if enabled)
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         float successMultiplier = 1f;
 
-        if (Ollivanders2.useYears)
-        {
+        if (Ollivanders2.useYears) {
             O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-            if (o2p != null)
-            {
+            if (o2p != null) {
                 if (this.spellType.getLevel().ordinal() > o2p.getYear().getHighestLevelForYear().ordinal())
                     successMultiplier = 2f;
                 else
@@ -103,8 +96,7 @@ public final class EVANESCO extends EntityTransfiguration
      */
     @Override
     @Nullable
-    protected Entity transfigureEntity(@NotNull Entity entity)
-    {
+    protected Entity transfigureEntity(@NotNull Entity entity) {
         originalEntity.remove();
 
         return originalEntity;

@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Fumos_Duo">https://harrypotter.fandom.com/wiki/Fumos_Duo</a>
  */
 public final class FUMOS_DUO extends AddO2Effect {
     /**

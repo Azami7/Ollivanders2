@@ -12,11 +12,10 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Super class for all disguise-based transfigurations
- * <p>
- * Reference: https://www.spigotmc.org/wiki/lib-s-disguises-disguising-the-entity/
+ *
+ * @see <a href = "https://www.spigotmc.org/wiki/lib-s-disguises-disguising-the-entity/">https://www.spigotmc.org/wiki/lib-s-disguises-disguising-the-entity/</a>
  */
-public abstract class EntityDisguise extends EntityTransfiguration
-{
+public abstract class EntityDisguise extends EntityTransfiguration {
     /**
      * The libDisguises disguise type
      */
@@ -32,8 +31,7 @@ public abstract class EntityDisguise extends EntityTransfiguration
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public EntityDisguise(Ollivanders2 plugin)
-    {
+    public EntityDisguise(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -44,8 +42,7 @@ public abstract class EntityDisguise extends EntityTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public EntityDisguise(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public EntityDisguise(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 
@@ -56,8 +53,7 @@ public abstract class EntityDisguise extends EntityTransfiguration
      */
     @Override
     @Nullable
-    protected Entity transfigureEntity(@NotNull Entity entity)
-    {
+    protected Entity transfigureEntity(@NotNull Entity entity) {
         DisguiseAPI.disguiseToAll(entity, disguise);
 
         return entity;
@@ -75,10 +71,8 @@ public abstract class EntityDisguise extends EntityTransfiguration
      * @return true if it can be changed
      */
     @Override
-    protected boolean canTransfigure(@NotNull Entity entity)
-    {
-        if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType))
-        {
+    protected boolean canTransfigure(@NotNull Entity entity) {
+        if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType)) {
             common.printDebugMessage("LibsDisguises not enabled.", null, null, false);
             return false;
         }
@@ -90,15 +84,12 @@ public abstract class EntityDisguise extends EntityTransfiguration
      * Revert the entity back to their original form.
      */
     @Override
-    public void revert()
-    {
+    public void revert() {
         Entity entity = disguise.getEntity();
-        try
-        {
+        try {
             DisguiseAPI.undisguiseToAll(entity);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             // in case entity no longer exists
         }
     }

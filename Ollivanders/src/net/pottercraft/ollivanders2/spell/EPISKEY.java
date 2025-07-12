@@ -10,11 +10,10 @@ import java.util.ArrayList;
 
 /**
  * Gives an entity a healing effect for usesModifier seconds
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Episkey
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Episkey">https://harrypotter.fandom.com/wiki/Episkey</a>
  */
-public final class EPISKEY extends AddPotionEffect
-{
+public final class EPISKEY extends AddPotionEffect {
     private static final int minDurationInSecondsConfig = 15;
     private static final int maxDurationInSecondsConfig = 120;
     private static final int minAmplifierConfig = 0;
@@ -25,15 +24,13 @@ public final class EPISKEY extends AddPotionEffect
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public EPISKEY(Ollivanders2 plugin)
-    {
+    public EPISKEY(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.HEALING;
         spellType = O2SpellType.EPISKEY;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("\"Episkey,\" said Tonks. Harry's nose felt very hot, then very cold. He raised a hand and felt it gingerly. It seemed to be mended.");
             add("A minor healing spell.");
         }};
@@ -48,8 +45,7 @@ public final class EPISKEY extends AddPotionEffect
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public EPISKEY(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public EPISKEY(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         branch = O2MagicBranch.HEALING;
         spellType = O2SpellType.EPISKEY;

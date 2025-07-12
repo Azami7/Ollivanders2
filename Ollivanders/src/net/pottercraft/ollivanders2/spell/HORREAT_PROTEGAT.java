@@ -18,8 +18,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Shield spell distinction is to prevent this changing things like floo network and vanishing cabinets.
  */
-public final class HORREAT_PROTEGAT extends O2Spell
-{
+public final class HORREAT_PROTEGAT extends O2Spell {
     private int reduction;
 
     /**
@@ -27,15 +26,13 @@ public final class HORREAT_PROTEGAT extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public HORREAT_PROTEGAT(Ollivanders2 plugin)
-    {
+    public HORREAT_PROTEGAT(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.HORREAT_PROTEGAT;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Spell-Reduction Charm");
         }};
 
@@ -49,8 +46,7 @@ public final class HORREAT_PROTEGAT extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public HORREAT_PROTEGAT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public HORREAT_PROTEGAT(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.HORREAT_PROTEGAT;
@@ -68,8 +64,7 @@ public final class HORREAT_PROTEGAT extends O2Spell
      * Set reduction based on caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         reduction = (int) usesModifier / 10;
         if (reduction < 1)
             reduction = 1;
@@ -79,23 +74,19 @@ public final class HORREAT_PROTEGAT extends O2Spell
      * Reduce the radius of any stationary shield spells within a radius of the target, if they were cast by this player
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (!hasHitTarget())
             return;
 
         List<O2StationarySpell> shieldSpells = new ArrayList<>();
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells())
-        {
-            if ((stationarySpell instanceof ShieldSpell) && stationarySpell.isLocationInside(location) && stationarySpell.getCasterID().equals(player.getUniqueId()))
-            {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
+            if ((stationarySpell instanceof ShieldSpell) && stationarySpell.isLocationInside(location) && stationarySpell.getCasterID().equals(player.getUniqueId())) {
                 shieldSpells.add(stationarySpell);
                 kill();
             }
         }
 
-        for (O2StationarySpell spell : shieldSpells)
-        {
+        for (O2StationarySpell spell : shieldSpells) {
             spell.decreaseRadius(reduction);
             spell.flair(10);
         }

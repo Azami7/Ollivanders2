@@ -13,9 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Switching Spell - https://harrypotter.fandom.com/wiki/Switching_Spell
+ * Switching Spell
  *
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Switching_Spell">https://harrypotter.fandom.com/wiki/Switching_Spell</a>
  * @since 2.21
  */
 public class PERMURATE extends ItemToItemTransfiguration {

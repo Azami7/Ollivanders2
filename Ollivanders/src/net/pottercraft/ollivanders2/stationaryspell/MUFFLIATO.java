@@ -20,8 +20,7 @@ import java.util.UUID;
  * @see <a href = "https://harrypotter.fandom.com/wiki/Muffliato_Charm">https://harrypotter.fandom.com/wiki/Muffliato_Charm</a>
  * {@link net.pottercraft.ollivanders2.spell.MUFFLIATO}
  */
-public class MUFFLIATO extends ShieldSpell
-{
+public class MUFFLIATO extends ShieldSpell {
     /**
      * the min radius for this spell
      */
@@ -44,8 +43,7 @@ public class MUFFLIATO extends ShieldSpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public MUFFLIATO(@NotNull Ollivanders2 plugin)
-    {
+    public MUFFLIATO(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.MUFFLIATO;
@@ -60,17 +58,14 @@ public class MUFFLIATO extends ShieldSpell
      * @param radius   the radius for this spell
      * @param duration the duration of the spell
      */
-    public MUFFLIATO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
-    {
-        super(plugin);
+    public MUFFLIATO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.MUFFLIATO;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
 
@@ -81,8 +76,7 @@ public class MUFFLIATO extends ShieldSpell
      * Age the spell by 1 tick
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         age();
     }
 
@@ -92,8 +86,7 @@ public class MUFFLIATO extends ShieldSpell
      * @param event the event
      */
     @Override
-    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
-    {
+    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
         Player speaker = event.getPlayer(); // will never be null
 
         if (!isLocationInside(speaker.getLocation()))
@@ -101,8 +94,7 @@ public class MUFFLIATO extends ShieldSpell
 
         Set<Player> recipients = new HashSet<>(event.getRecipients());
 
-        for (Player player : recipients)
-        {
+        for (Player player : recipients) {
             if (!isLocationInside(player.getLocation()))
                 event.getRecipients().remove(player);
         }
@@ -110,13 +102,14 @@ public class MUFFLIATO extends ShieldSpell
 
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
+
+    @Override
+    void doCleanUp() {}
 }

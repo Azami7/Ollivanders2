@@ -13,18 +13,16 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * If an entity has leather armor on, then this changes its color.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Multicorfors_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Multicorfors_Spell">https://harrypotter.fandom.com/wiki/Multicorfors_Spell</a>
  */
-public final class MULTICORFORS extends O2Spell
-{
+public final class MULTICORFORS extends O2Spell {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public MULTICORFORS(Ollivanders2 plugin)
-    {
+    public MULTICORFORS(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -40,8 +38,7 @@ public final class MULTICORFORS extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public MULTICORFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public MULTICORFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         // this is a transfiguration spell in HP but does not use the Transfiguration superclass.
@@ -54,28 +51,23 @@ public final class MULTICORFORS extends O2Spell
     /**
      * Look for entities with armor we can change the color of and change it.
      */
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (hasHitTarget())
             kill();
 
-        for (LivingEntity live : getNearbyLivingEntities(defaultRadius))
-        {
+        for (LivingEntity live : getNearbyLivingEntities(defaultRadius)) {
             if (live.getUniqueId() == player.getUniqueId())
                 continue;
 
             EntityEquipment equipment = live.getEquipment();
-            if (equipment == null)
-            {
+            if (equipment == null) {
                 // they have no equipment
                 kill();
                 return;
             }
 
-            for (ItemStack armor : equipment.getArmorContents())
-            {
-                if (armor.getItemMeta() instanceof LeatherArmorMeta)
-                {
+            for (ItemStack armor : equipment.getArmorContents()) {
+                if (armor.getItemMeta() instanceof LeatherArmorMeta) {
                     LeatherArmorMeta meta = (LeatherArmorMeta) armor.getItemMeta();
                     Color curColor = meta.getColor();
                     int modifier = (int) (Math.random() * usesModifier * 40);

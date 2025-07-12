@@ -22,8 +22,7 @@ import java.util.Map;
 /**
  * Transform a block in to an entity.
  */
-public abstract class BlockToEntityTransfiguration extends BlockTransfiguration implements Listener
-{
+public abstract class BlockToEntityTransfiguration extends BlockTransfiguration implements Listener {
     /**
      * The entity that has been transfigured by this spell
      */
@@ -52,8 +51,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public BlockToEntityTransfiguration(Ollivanders2 plugin)
-    {
+    public BlockToEntityTransfiguration(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -66,8 +64,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public BlockToEntityTransfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public BlockToEntityTransfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 
@@ -75,8 +72,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * Register the listeners for this spell
      */
     @Override
-    void initSpell()
-    {
+    void initSpell() {
         super.initSpell();
 
         // register listeners
@@ -87,15 +83,13 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * Transfigure the block in to the desired entity type.
      */
     @Override
-    protected void transfigure()
-    {
+    protected void transfigure() {
         Block target = getTargetBlock();
         if (target == null)
             // we have not hit a target yet, continue projectile
             return;
 
-        if (!canTransfigure(target))
-        {
+        if (!canTransfigure(target)) {
             common.printDebugMessage("Transfiguration not allowed", null, null, false);
             sendFailureMessage();
             kill();
@@ -114,13 +108,11 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
         isTransfigured = true;
 
         // spawn the entity in this location
-        if (entityType != null)
-        {
+        if (entityType != null) {
             transfiguredEntity = target.getWorld().spawnEntity(location, entityType);
             customizeEntity();
         }
-        else
-        {
+        else {
             kill();
             common.printDebugMessage("Entity type was null in " + spellType.toString(), null, null, true);
             sendFailureMessage();
@@ -136,10 +128,8 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
     /**
      * Set duration, including making the spell permanent, based on caster's skill.
      */
-    void setDuration()
-    {
-        if (usesModifier >= 200)
-        {
+    void setDuration() {
+        if (usesModifier >= 200) {
             O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
             if (o2p == null)
                 common.printDebugMessage("Null o2player in BlockToEntityTransfiguration.setDuration()", null, null, true);
@@ -147,8 +137,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
             if (!Ollivanders2.useYears || (o2p != null && o2p.getYear().getHighestLevelForYear().ordinal() >= this.spellType.getLevel().ordinal()))
                 permanent = true;
         }
-        else
-        {
+        else {
             permanent = false;
 
             // spell duration
@@ -164,8 +153,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * Despawn the created entity unless this spell is permanent.
      */
     @Override
-    void doRevert()
-    {
+    void doRevert() {
         if (permanent)
             return;
 
@@ -180,8 +168,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * @return true if transfigured, false otherwise
      */
     @Override
-    public boolean isEntityTransfigured(@NotNull Entity entity)
-    {
+    public boolean isEntityTransfigured(@NotNull Entity entity) {
         if (permanent)
             return false;
 
@@ -198,16 +185,14 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * @return true if transfigured, false otherwise
      */
     @Override
-    public boolean isBlockTransfigured(@NotNull Block block)
-    {
+    public boolean isBlockTransfigured(@NotNull Block block) {
         return false;
     }
 
     /**
      * Let child spells optionally customize the spawned entity. This must be overridden by the child classes.
      */
-    void customizeEntity()
-    {
+    void customizeEntity() {
     }
 
     /**
@@ -216,8 +201,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
      * @param event the entity death event
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onEntityDeath(EntityDeathEvent event)
-    {
+    public void onEntityDeath(EntityDeathEvent event) {
         if (transfiguredEntity == null)
             return;
 

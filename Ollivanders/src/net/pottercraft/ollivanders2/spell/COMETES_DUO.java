@@ -13,15 +13,13 @@ import java.util.ArrayList;
 /**
  * A fancier version of COMETES.
  */
-public final class COMETES_DUO extends Pyrotechnia
-{
+public final class COMETES_DUO extends Pyrotechnia {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public COMETES_DUO(Ollivanders2 plugin)
-    {
+    public COMETES_DUO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.COMETES_DUO;
@@ -37,8 +35,7 @@ public final class COMETES_DUO extends Pyrotechnia
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public COMETES_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public COMETES_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.COMETES_DUO;
         branch = O2MagicBranch.CHARMS;
@@ -64,8 +61,7 @@ public final class COMETES_DUO extends Pyrotechnia
      * Set the number of fireworks that can be cast based on the user's experience.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         setNumberOfFireworks();
     }
 }

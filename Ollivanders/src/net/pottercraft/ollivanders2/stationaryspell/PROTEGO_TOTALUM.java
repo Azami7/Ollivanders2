@@ -18,9 +18,8 @@ import java.util.UUID;
 
 /**
  * Doesn't let entities pass into the protected area.
- * <p>
- * https://harrypotter.fandom.com/wiki/Protego_totalum
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_totalum">https://harrypotter.fandom.com/wiki/Protego_totalum</a>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_TOTALUM}
  */
 public class PROTEGO_TOTALUM extends ShieldSpell
@@ -65,7 +64,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell
      */
     public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
     {
-        super(plugin);
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO_TOTALUM;
 
         minRadius = minRadiusConfig;
@@ -73,8 +72,6 @@ public class PROTEGO_TOTALUM extends ShieldSpell
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
 
@@ -198,7 +195,8 @@ public class PROTEGO_TOTALUM extends ShieldSpell
      * @param spellData a map of the saved spell data
      */
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
-    }
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {}
+
+    @Override
+    void doCleanUp() {}
 }

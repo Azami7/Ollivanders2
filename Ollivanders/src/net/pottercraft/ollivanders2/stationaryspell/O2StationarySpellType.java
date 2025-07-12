@@ -11,8 +11,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents allowable stationary spells.
  */
-public enum O2StationarySpellType
-{
+public enum O2StationarySpellType {
     /**
      * {@link ALIQUAM_FLOO}
      */
@@ -82,8 +81,7 @@ public enum O2StationarySpellType
      * @param className the class this type represents
      * @param level     the level of this stationary spell
      */
-    O2StationarySpellType(@NotNull Class<?> className, @NotNull MagicLevel level)
-    {
+    O2StationarySpellType(@NotNull Class<?> className, @NotNull MagicLevel level) {
         this.className = className;
         this.level = level;
     }
@@ -94,8 +92,7 @@ public enum O2StationarySpellType
      * @return the classname for this spell
      */
     @NotNull
-    public Class<?> getClassName()
-    {
+    public Class<?> getClassName() {
         return className;
     }
 
@@ -105,8 +102,7 @@ public enum O2StationarySpellType
      * @return the level of this spell
      */
     @NotNull
-    public MagicLevel getLevel()
-    {
+    public MagicLevel getLevel() {
         return level;
     }
 
@@ -117,16 +113,13 @@ public enum O2StationarySpellType
      * @return the spell type or null if not found
      */
     @Nullable
-    public static O2StationarySpellType getStationarySpellTypeFromString(@NotNull String name)
-    {
+    public static O2StationarySpellType getStationarySpellTypeFromString(@NotNull String name) {
         O2StationarySpellType spellType = null;
 
-        try
-        {
+        try {
             spellType = O2StationarySpellType.valueOf(name);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             // do nothing, this is expected if they send a string that is not a valid spell
         }
 
@@ -139,8 +132,7 @@ public enum O2StationarySpellType
      * @return the spell name for this spell type.
      */
     @NotNull
-    public String getSpellName()
-    {
+    public String getSpellName() {
         String spellTypeString = this.toString().toLowerCase();
 
         return Ollivanders2Common.firstLetterCapitalize(spellTypeString.replace("_", " "));
@@ -152,12 +144,10 @@ public enum O2StationarySpellType
      * @param player the player to check
      * @return true if the player is within the radius of a stationary spell of this type, false otherwise
      */
-    public boolean isPlayerInsideStationary(Player player)
-    {
+    public boolean isPlayerInsideStationary(Player player) {
         Location location = player.getLocation();
 
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
-        {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
             if (stationarySpell.getSpellType() == this)
                 return true;
         }

@@ -9,7 +9,10 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * match to needle - https://harrypotter.fandom.com/wiki/Match_to_needle_spell
+ * match to needle
+ *
+ * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Match_to_needle_spell">https://harrypotter.fandom.com/wiki/Match_to_needle_spell</a>
  */
 public final class CALAMUS extends ItemToItemTransfiguration {
     /**

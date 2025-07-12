@@ -20,8 +20,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Sets fire to blocks or living entities for an amount of time depending on the player's spell level.
  */
-public abstract class IncendioSuper extends O2Spell
-{
+public abstract class IncendioSuper extends O2Spell {
     /**
      * The list of blocks affected that can be used to restore them later.
      */
@@ -67,8 +66,7 @@ public abstract class IncendioSuper extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public IncendioSuper(Ollivanders2 plugin)
-    {
+    public IncendioSuper(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -79,8 +77,7 @@ public abstract class IncendioSuper extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public IncendioSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public IncendioSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         timeRemaining = (int) (usesModifier * durationModifier * Ollivanders2Common.ticksPerSecond);
@@ -88,8 +85,7 @@ public abstract class IncendioSuper extends O2Spell
             timeRemaining = maxDuration;
 
         // world-guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.BUILD);
             worldGuardFlags.add(Flags.LIGHTER);
             worldGuardFlags.add(Flags.PVP);
@@ -101,44 +97,37 @@ public abstract class IncendioSuper extends O2Spell
      * Set entities or the target block on fire or, if already burning, countdown the duration of the burn effect.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (!hasHitTarget())
             return;
 
-        if (burning)
-        {
+        if (burning) {
             timeRemaining = timeRemaining - 1;
 
             if (timeRemaining <= 0)
                 kill();
         }
-        else
-        {
+        else {
             Block target = getTargetBlock();
-            if (target == null)
-            {
+            if (target == null) {
                 common.printDebugMessage("IncendioSuper.doCheckEffect: target block is null", null, null, true);
                 kill();
                 return;
             }
 
             // blocks
-            if (!strafe)
-            {
+            if (!strafe) {
                 Block above = target.getRelative(BlockFace.UP);
                 setBlockOnFire(above);
             }
-            else
-            {
+            else {
                 for (Block block : Ollivanders2Common.getBlocksInRadius(target.getLocation(), blockRadius))
                     setBlockOnFire(block);
             }
 
             // items
             List<Item> items = getItems(radius);
-            for (Item item : items)
-            {
+            for (Item item : items) {
                 item.setFireTicks((int) timeRemaining);
 
                 if (!strafe)
@@ -147,8 +136,7 @@ public abstract class IncendioSuper extends O2Spell
 
             // entities
             List<LivingEntity> living = getNearbyLivingEntities(radius);
-            for (LivingEntity live : living)
-            {
+            for (LivingEntity live : living) {
                 live.setFireTicks(timeRemaining);
 
                 if (!strafe)
@@ -164,11 +152,9 @@ public abstract class IncendioSuper extends O2Spell
      *
      * @param block the block to change
      */
-    private void setBlockOnFire(@NotNull Block block)
-    {
+    private void setBlockOnFire(@NotNull Block block) {
         Material type = block.getType();
-        if (type == Material.AIR)
-        {
+        if (type == Material.AIR) {
             block.getWorld().playEffect(block.getLocation(), Effect.MOBSPAWNER_FLAMES, 0);
 
             block.setType(Material.FIRE);
@@ -180,10 +166,8 @@ public abstract class IncendioSuper extends O2Spell
      * Change fire blocks back to air
      */
     @Override
-    public void revert()
-    {
-        for (Block block : changed)
-        {
+    public void revert() {
+        for (Block block : changed) {
             Material mat = block.getType();
 
             // if the fire is on top of a material that burns forever, do not revert it

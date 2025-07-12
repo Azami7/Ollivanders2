@@ -18,8 +18,7 @@ import java.util.List;
 /**
  * Place an enchantment on an item.
  */
-public abstract class ItemEnchant extends O2Spell
-{
+public abstract class ItemEnchant extends O2Spell {
     /**
      * The type of enchantment
      */
@@ -60,8 +59,7 @@ public abstract class ItemEnchant extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public ItemEnchant(Ollivanders2 plugin)
-    {
+    public ItemEnchant(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -72,13 +70,11 @@ public abstract class ItemEnchant extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public ItemEnchant(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public ItemEnchant(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.ITEM_PICKUP);
             worldGuardFlags.add(Flags.ITEM_DROP);
         }
@@ -91,8 +87,7 @@ public abstract class ItemEnchant extends O2Spell
      * Set enchantment magnitude based on caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         magnitude = (int) ((usesModifier / 4) * strength);
 
         if (magnitude < minMagnitude)
@@ -107,32 +102,24 @@ public abstract class ItemEnchant extends O2Spell
      * Add the curse effect to an item stack in the projectile's location
      */
     @Override
-    protected void doCheckEffect()
-    {
-        if (hasHitTarget())
-        {
+    protected void doCheckEffect() {
+        if (hasHitTarget()) {
             kill();
             return;
         }
 
         List<Item> items = getItems(1.5);
-        for (Item item : items)
-        {
+        for (Item item : items) {
             // if this is a wand or an enchanted item, skip it, we cannot stack enchantments
             if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)))
                 continue;
 
             // if this enchantment has an allowed list, check it
-            if (itemTypeAllowlist.size() > 0)
-            {
+            if (!itemTypeAllowlist.isEmpty()) {
                 O2ItemType itemType = O2Item.getItemType(item.getItemStack());
                 if (itemType == null || !(itemTypeAllowlist.contains(itemType)))
                     continue;
             }
-
-            // if this item is already enchanted, skip it
-            if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item))
-                continue;
 
             Item enchantedItem = enchantItem(item);
             Ollivanders2API.getItems().enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude, args);
@@ -151,8 +138,7 @@ public abstract class ItemEnchant extends O2Spell
      * @return the enchanted item
      */
     @NotNull
-    private Item enchantItem(@NotNull Item item)
-    {
+    private Item enchantItem(@NotNull Item item) {
         // clone the item stack
         ItemStack enchantedItemStack = item.getItemStack().clone();
 

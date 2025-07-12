@@ -16,13 +16,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Destroys spell projectiles crossing the boundary.
- * <p>
- * https://harrypotter.fandom.com/wiki/Protego_horribilis
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_horribilis">https://harrypotter.fandom.com/wiki/Protego_horribilis</a>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_HORRIBILIS}
  */
-public class PROTEGO_HORRIBILIS extends ShieldSpell
-{
+public class PROTEGO_HORRIBILIS extends ShieldSpell {
     /**
      * min radius for this spell
      */
@@ -45,8 +43,7 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public PROTEGO_HORRIBILIS(@NotNull Ollivanders2 plugin)
-    {
+    public PROTEGO_HORRIBILIS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.PROTEGO_HORRIBILIS;
@@ -61,17 +58,14 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell
      * @param radius   the radius for this spell
      * @param duration the duration of the spell
      */
-    public PROTEGO_HORRIBILIS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
-    {
-        super(plugin);
+    public PROTEGO_HORRIBILIS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO_HORRIBILIS;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
 
@@ -82,21 +76,18 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell
      * Age the spell by a tick and kill projectiles crossing the boundaries
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         age();
         List<O2Spell> projectiles = p.getProjectiles();
 
         List<O2Spell> projectiles2 = new ArrayList<>(projectiles);
-        for (O2Spell proj : projectiles2)
-        {
+        for (O2Spell proj : projectiles2) {
             // https://harrypotter.fandom.com/wiki/Shield_Charm
             // "However, this shield isn't completely impenetrable, as it cannot block a Killing Curse."
             if (proj instanceof AVADA_KEDAVRA)
                 continue;
 
-            if (isLocationInside(proj.location))
-            {
+            if (isLocationInside(proj.location)) {
                 if (location.distance(proj.location) > radius - 1)
                     p.removeProjectile(proj);
             }
@@ -105,13 +96,14 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell
 
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
+
+    @Override
+    void doCleanUp() {}
 }

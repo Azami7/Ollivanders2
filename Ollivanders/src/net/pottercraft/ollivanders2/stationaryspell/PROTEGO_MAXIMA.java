@@ -15,9 +15,8 @@ import java.util.UUID;
 
 /**
  * Hurts any entities within 0.5 meters of the spell wall.
- * <p>
- * https://harrypotter.fandom.com/wiki/Protego_Maxima
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_Maxima">https://harrypotter.fandom.com/wiki/Protego_Maxima</a>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_MAXIMA}
  */
 public class PROTEGO_MAXIMA extends ShieldSpell
@@ -91,15 +90,13 @@ public class PROTEGO_MAXIMA extends ShieldSpell
      */
     public PROTEGO_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration, double damage)
     {
-        super(plugin);
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO_MAXIMA;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
         setDamage(damage);
@@ -191,4 +188,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell
 
         this.damage = damage;
     }
+
+    @Override
+    void doCleanUp() {}
 }

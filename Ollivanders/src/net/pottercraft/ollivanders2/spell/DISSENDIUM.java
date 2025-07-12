@@ -19,11 +19,10 @@ import java.util.List;
 
 /**
  * Opens a trapdoor.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/One-Eyed_Witch_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/One-Eyed_Witch_Spell">https://harrypotter.fandom.com/wiki/One-Eyed_Witch_Spell</a>
  */
-public final class DISSENDIUM extends O2Spell
-{
+public final class DISSENDIUM extends O2Spell {
     private final static int maxOpenTime = Ollivanders2Common.ticksPerSecond * 60; // 1 minute
     private final static int minOpenTime = Ollivanders2Common.ticksPerSecond * 2; // 2 seconds
 
@@ -36,15 +35,13 @@ public final class DISSENDIUM extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public DISSENDIUM(Ollivanders2 plugin)
-    {
+    public DISSENDIUM(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.DISSENDIUM;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Opening Charm");
             add("At once, the statue's hump opened wide enough to admit a fairly thin person.");
         }};
@@ -53,8 +50,7 @@ public final class DISSENDIUM extends O2Spell
     }
 
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         openTime = ((int) usesModifier / 3) * Ollivanders2Common.ticksPerSecond;
 
         if (openTime < minOpenTime)
@@ -70,8 +66,7 @@ public final class DISSENDIUM extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public DISSENDIUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public DISSENDIUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.DISSENDIUM;
         branch = O2MagicBranch.CHARMS;
@@ -90,29 +85,24 @@ public final class DISSENDIUM extends O2Spell
      * duration of the spell is reached.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (!hasHitTarget())
             return;
 
         // continue until the spell opens a trapdoor, hits another block type and is killed, or projectile expires
-        if (isOpen)
-        {
+        if (isOpen) {
             // count down the open time
             openTime = openTime - 1;
 
             // if the open time has expired, close the trap door and kill the spell
-            if (openTime <= 0)
-            {
+            if (openTime <= 0) {
                 closeTrapDoor();
                 kill();
             }
         }
-        else
-        {
+        else {
             Block target = getTargetBlock();
-            if (target == null)
-            {
+            if (target == null) {
                 common.printDebugMessage("DISSENDIUM.doCheckEffect: target block is null", null, null, true);
                 kill();
                 return;
@@ -132,11 +122,9 @@ public final class DISSENDIUM extends O2Spell
     /**
      * Opens the trapdoor at target block
      */
-    private void openTrapDoor()
-    {
+    private void openTrapDoor() {
         Block target = getTargetBlock();
-        if (target == null)
-        {
+        if (target == null) {
             common.printDebugMessage("DISSENDIUM.openTrapDoor: target block is null", null, null, true);
             kill();
             return;
@@ -146,10 +134,8 @@ public final class DISSENDIUM extends O2Spell
         Location targetLocation = target.getLocation();
         List<O2StationarySpell> spellsAtLocation = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(targetLocation);
 
-        for (O2StationarySpell statSpell : spellsAtLocation)
-        {
-            if (statSpell instanceof COLLOPORTUS)
-            {
+        for (O2StationarySpell statSpell : spellsAtLocation) {
+            if (statSpell instanceof COLLOPORTUS) {
                 kill();
                 return;
             }
@@ -158,8 +144,7 @@ public final class DISSENDIUM extends O2Spell
         BlockData targetBlockData = target.getBlockData();
 
         // check to see if the trap door is already open
-        if (((TrapDoor) targetBlockData).isOpen())
-        {
+        if (((TrapDoor) targetBlockData).isOpen()) {
             kill();
             return;
         }
@@ -174,8 +159,7 @@ public final class DISSENDIUM extends O2Spell
     /**
      * Close the trap door
      */
-    private void closeTrapDoor()
-    {
+    private void closeTrapDoor() {
         if (!isOpen)
             return;
 

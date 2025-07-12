@@ -12,8 +12,7 @@ import java.util.List;
 /**
  * Spells that have a knockback effect.
  */
-public abstract class Knockback extends O2Spell
-{
+public abstract class Knockback extends O2Spell {
     boolean pull = false;
 
     /**
@@ -46,8 +45,7 @@ public abstract class Knockback extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public Knockback(Ollivanders2 plugin)
-    {
+    public Knockback(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -58,8 +56,7 @@ public abstract class Knockback extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public Knockback(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public Knockback(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 
@@ -67,19 +64,16 @@ public abstract class Knockback extends O2Spell
      * Looks for an entity near the radius of the spell projectile and try to move it
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         // projectile is stopped, kill spell
         if (hasHitTarget())
             kill();
 
         List<Entity> entities = getCloseEntities(defaultRadius);
 
-        if (entities.size() > 0)
-        {
+        if (entities.size() > 0) {
             // look for entities within radius of the projectile and knockback one of them
-            for (Entity entity : entities)
-            {
+            for (Entity entity : entities) {
                 // check to see if we can target this entity
                 if (!entityHarmCheck(entity))
                     continue;
@@ -108,8 +102,7 @@ public abstract class Knockback extends O2Spell
      * @param entity the entity to check
      * @return true if it can be targeted, false otherwise
      */
-    private boolean entityHarmCheck(Entity entity)
-    {
+    private boolean entityHarmCheck(Entity entity) {
         // first check entity allow list
         if (entityAllowedList.size() > 0 && !entityAllowedList.contains(entity.getType()))
             return false;

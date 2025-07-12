@@ -9,15 +9,15 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Super class for all transfigurations of players.
  */
-public abstract class PlayerDisguise extends EntityDisguise
-{
+public abstract class PlayerDisguise extends EntityDisguise {
+    //todo make player transfiguration an effect so it persists over log out/restarts
+
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public PlayerDisguise(Ollivanders2 plugin)
-    {
+    public PlayerDisguise(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -28,8 +28,7 @@ public abstract class PlayerDisguise extends EntityDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public PlayerDisguise(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public PlayerDisguise(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         entityAllowedList.add(EntityType.PLAYER);
@@ -43,8 +42,7 @@ public abstract class PlayerDisguise extends EntityDisguise
      * Calculate the success rate for this spell. This has to be run from the spell itself after setting
      * usesModifier since it is based on specific spell usage.
      */
-    void calculateSuccessRate()
-    {
+    void calculateSuccessRate() {
         if (usesModifier < 10)
             successRate = 10;
         else if (usesModifier < 100)

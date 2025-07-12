@@ -10,10 +10,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Snail to teapot - https://harrypotter.fandom.com/wiki/Snail_to_Teapot - for mincraft using tadpole as one of the smallest mobs
+ * Snail to teapot for mincraft using tadpole as one of the smallest mobs
  *
- * @since 2.21
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Snail_to_Teapot">https://harrypotter.fandom.com/wiki/Snail_to_Teapot</a>
+ * @since 2.21
  */
 public class RANACULUS_AMPHORAM extends LivingEntityToItemTransfiguration {
     /**

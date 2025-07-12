@@ -14,8 +14,7 @@ import java.util.List;
 /**
  * Remove potion effects from a target.
  */
-public abstract class RemovePotionEffect extends O2Spell
-{
+public abstract class RemovePotionEffect extends O2Spell {
     /**
      * The potion effect. Set to luck by default.
      */
@@ -41,8 +40,7 @@ public abstract class RemovePotionEffect extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public RemovePotionEffect(Ollivanders2 plugin)
-    {
+    public RemovePotionEffect(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
@@ -55,8 +53,7 @@ public abstract class RemovePotionEffect extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public RemovePotionEffect(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public RemovePotionEffect(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.CHARMS;
@@ -66,8 +63,7 @@ public abstract class RemovePotionEffect extends O2Spell
      * If a target player is within the radius of the projectile, add the potion effect to the player.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (hasHitTarget())
             kill();
 
@@ -80,22 +76,18 @@ public abstract class RemovePotionEffect extends O2Spell
      * @param radius the radius of the spell
      * @param flair  whether or not to show a visual flair
      */
-    void affectRadius(double radius, boolean flair)
-    {
+    void affectRadius(double radius, boolean flair) {
         if (flair)
             Ollivanders2Common.flair(location, (int) radius, 10);
 
-        if (targetSelf)
-        {
+        if (targetSelf) {
             removePotionEffects(player);
             numberOfTargets = numberOfTargets - 1;
         }
 
-        for (LivingEntity livingEntity : getNearbyLivingEntities(radius))
-        {
+        for (LivingEntity livingEntity : getNearbyLivingEntities(radius)) {
             // stop when the limit of targets is reached
-            if (numberOfTargets <= 0)
-            {
+            if (numberOfTargets <= 0) {
                 kill();
                 return;
             }
@@ -113,12 +105,9 @@ public abstract class RemovePotionEffect extends O2Spell
      *
      * @param target the player to remove effects from
      */
-    void removePotionEffects(@NotNull LivingEntity target)
-    {
-        for (PotionEffectType effectType : potionEffectTypes)
-        {
-            if (checkSuccess())
-            {
+    void removePotionEffects(@NotNull LivingEntity target) {
+        for (PotionEffectType effectType : potionEffectTypes) {
+            if (checkSuccess()) {
                 common.printDebugMessage("Removing " + effectType.getName() + " from " + target.getName(), null, null, false);
                 target.removePotionEffect(effectType);
             }
@@ -130,8 +119,7 @@ public abstract class RemovePotionEffect extends O2Spell
      *
      * @return true if the effect can be removed, false otherwise
      */
-    boolean checkSuccess()
-    {
+    boolean checkSuccess() {
         int successRate = (int) (usesModifier / successModifier);
         if (successRate < 1)
             successRate = 1;

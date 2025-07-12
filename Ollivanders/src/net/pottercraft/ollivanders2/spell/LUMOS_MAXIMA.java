@@ -15,11 +15,10 @@ import java.util.HashMap;
 
 /**
  * Creates a glowstone at the reticule that goes away after a time.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Lumos_Maxima
+ *
+ * @see <a href="https://harrypotter.fandom.com/wiki/Lumos_Maxima">https://harrypotter.fandom.com/wiki/Lumos_Maxima</a>
  */
-public final class LUMOS_MAXIMA extends O2Spell
-{
+public final class LUMOS_MAXIMA extends O2Spell {
     /**
      * The length of the line of glowstone
      */
@@ -44,15 +43,13 @@ public final class LUMOS_MAXIMA extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public LUMOS_MAXIMA(Ollivanders2 plugin)
-    {
+    public LUMOS_MAXIMA(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.LUMOS_MAXIMA;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("\"Light your wands, can’t you? And hurry, we have little time!\" -Griphook");
         }};
 
@@ -66,8 +63,7 @@ public final class LUMOS_MAXIMA extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public LUMOS_MAXIMA(Ollivanders2 plugin, Player player, Double rightWand)
-    {
+    public LUMOS_MAXIMA(Ollivanders2 plugin, Player player, Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.LUMOS_MAXIMA;
@@ -102,13 +98,10 @@ public final class LUMOS_MAXIMA extends O2Spell
      * Create a line of glowstone from the caster's wand then age the effect and revert the blocks
      */
     @Override
-    protected void doCheckEffect()
-    {
-        if (!hasHitTarget())
-        {
+    protected void doCheckEffect() {
+        if (!hasHitTarget()) {
             // if we have not hit a solid target and still have more line to draw, add a glowstone
-            if (lineLength > 0)
-            {
+            if (lineLength > 0) {
                 Block curBlock = location.getBlock();
                 affectedBlocks.put(curBlock, curBlock.getType());
 
@@ -124,8 +117,7 @@ public final class LUMOS_MAXIMA extends O2Spell
             else
                 stopProjectile();
         }
-        else
-        {
+        else {
             duration = duration - 1;
 
             if (duration <= 0)
@@ -137,10 +129,8 @@ public final class LUMOS_MAXIMA extends O2Spell
      * Revert all the blocks changed by this spell
      */
     @Override
-    public void revert()
-    {
-        for (Block block : affectedBlocks.keySet())
-        {
+    public void revert() {
+        for (Block block : affectedBlocks.keySet()) {
             block.setType(affectedBlocks.get(block));
         }
     }

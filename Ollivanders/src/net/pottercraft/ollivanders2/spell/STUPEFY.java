@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Blinds and slows the target entity for a duration depending on the spell's level.
- * <p>
- * https://harrypotter.fandom.com/wiki/Stunning_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Stunning_Spell">https://harrypotter.fandom.com/wiki/Stunning_Spell</a>
  */
 public final class STUPEFY extends AddPotionEffect
 {

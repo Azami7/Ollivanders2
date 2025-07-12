@@ -14,6 +14,7 @@ import java.util.ArrayList;
  *
  * @author lownes
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Levitation_Charm">https://harrypotter.fandom.com/wiki/Levitation_Charm</a>
  */
 public final class LEVICORPUS extends AddO2Effect
 {

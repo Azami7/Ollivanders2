@@ -12,11 +12,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Transfigures entity into a chicken.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Ducklifors
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Ducklifors">https://harrypotter.fandom.com/wiki/Ducklifors</a>
  */
-public final class DUCKLIFORS extends FriendlyMobDisguise
-{
+public final class DUCKLIFORS extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
@@ -25,8 +24,7 @@ public final class DUCKLIFORS extends FriendlyMobDisguise
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public DUCKLIFORS(Ollivanders2 plugin)
-    {
+    public DUCKLIFORS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.DUCKLIFORS;
@@ -42,8 +40,7 @@ public final class DUCKLIFORS extends FriendlyMobDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public DUCKLIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public DUCKLIFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.DUCKLIFORS;
         branch = O2MagicBranch.TRANSFIGURATION;

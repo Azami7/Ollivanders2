@@ -18,8 +18,8 @@ import java.util.ArrayList;
 
 /**
  * Locks doors, trapdoors, and chests.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Locking_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Locking_Spell">https://harrypotter.fandom.com/wiki/Locking_Spell</a>
  */
 public final class COLLOPORTUS extends StationarySpell {
     /**
