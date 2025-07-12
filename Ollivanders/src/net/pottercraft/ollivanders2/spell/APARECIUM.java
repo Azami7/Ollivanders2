@@ -14,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The Revealing Charm - https://harrypotter.fandom.com/wiki/Revealing_Charm - causes any stationary spell objects to
  * flair with an intensity equal to your level.
+ *
+ * @
  */
 public final class APARECIUM extends O2Spell {
     //todo rework to match books - https://harrypotter.fandom.com/wiki/Revealing_Charm
