@@ -1,24 +1,27 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.player.O2PlayerCommon;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.Location;
-import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -28,7 +31,6 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.ET_INTERFICIAM_ANIMAM_LIGAVERIS}
  */
 public class HORCRUX extends O2StationarySpell {
-    // todo make this an item enchantment and not a stationary spell
     /**
      * the min radius for this spell
      */
@@ -38,6 +40,42 @@ public class HORCRUX extends O2StationarySpell {
      * the max radius for this spell
      */
     public static final int maxRadiusConfig = 3;
+
+    /**
+     * The material type of the horcrux item
+     */
+    private Material horcruxMaterial;
+
+    /**
+     * The item at this location that is the horcrux
+     */
+    private Item horcruxItem;
+
+    /**
+     * The name of the world this horcrux is in
+     */
+    private String worldName;
+
+    /**
+     * Keep track of the affected players
+     */
+    private final Map<String, Integer> affectedPlayers = new HashMap<>();
+
+    /**
+     * How long to affect someone who gets too close to the horcrux
+     */
+    private final int effectDuration = 200;
+
+    /**
+     * Was the horcrux item loaded (for use on restart)
+     */
+    private boolean itemLoaded = false;
+
+    //
+    // save data labels
+    //
+    private final String materialLabel = "itemType";
+    private final String worldLabel = "world";
 
     /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -59,33 +97,40 @@ public class HORCRUX extends O2StationarySpell {
      * @param pid      the player who cast the spell
      * @param location the center location of the spell
      */
-    public HORCRUX(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location) {
-        super(plugin, pid, location);
+    public HORCRUX(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull Item item) {
+        super(plugin);
 
         spellType = O2StationarySpellType.HORCRUX;
         permanent = true;
 
+        setPlayerID(pid);
+        setLocation(location);
         radius = minRadius = maxRadius = minRadiusConfig;
         duration = 10;
+
+        worldName = location.getWorld().getName();
+        horcruxItem = item;
+        horcruxMaterial = item.getItemStack().getType();
+        itemLoaded = true;
 
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     /**
-     * Harm players who get too close to the Horcrux
+     * Upkeep for the spell
      */
     @Override
     public void checkEffect() {
-        List<LivingEntity> entities = getEntitiesInsideSpellRadius();
-        for (LivingEntity entity : entities) {
-            if (entity instanceof Player) {
-                if (entity.getUniqueId() != getCasterID()) {
-                    PotionEffect blindness = new PotionEffect(PotionEffectType.BLINDNESS, 200, 2);
-                    PotionEffect wither = new PotionEffect(PotionEffectType.WITHER, 200, 3);
-                    entity.addPotionEffect(blindness);
-                    entity.addPotionEffect(wither);
-                }
-            }
+        // decrement all the affected cooldowns by a tick
+        ArrayList<String> iterator = new ArrayList<>(affectedPlayers.keySet());
+
+        for (String playerName : iterator) {
+            int duration = affectedPlayers.get(playerName) - 1;
+
+            if (duration > 0)
+                affectedPlayers.replace(playerName, duration);
+            else
+                affectedPlayers.remove(playerName);
         }
     }
 
@@ -97,7 +142,12 @@ public class HORCRUX extends O2StationarySpell {
     @Override
     @NotNull
     public Map<String, String> serializeSpellData() {
-        return new HashMap<>();
+        Map<String, String> spellData = new HashMap<>();
+
+        spellData.put(materialLabel, horcruxMaterial.toString());
+        spellData.put(worldLabel, worldName);
+
+        return spellData;
     }
 
     /**
@@ -107,71 +157,158 @@ public class HORCRUX extends O2StationarySpell {
      */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
+        for (Map.Entry<String, String> e : spellData.entrySet()) {
+            if (e.getKey().equals(materialLabel)) {
+                String materialName = e.getValue();
+
+                horcruxMaterial = Material.getMaterial(materialName);
+                if (horcruxMaterial == null) {
+                    common.printDebugMessage("O2StationarySpell.HORCRUX: saved material " + materialName + " not found", null, null, true);
+                    kill();
+                    return;
+                }
+            }
+            else if (e.getKey().equals(worldLabel)) {
+                worldName = e.getValue();
+            }
+        }
+
+        if (horcruxMaterial == null || worldName == null) {
+            kill();
+        }
     }
 
     /**
-     * Restore a player back to full health if a damage event would kill them.
+     * Respawn the horcrux item after a server start and the world is loaded. Ideally we'd use the WorldLoadEvent, but it
+     * seems to happen before the plugin listeners are registered (tried it, never fires) so load it the first time a
+     * player joins.
+     *
+     * @param event the world load event
+     */
+    @Override
+    void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+        if (!itemLoaded) {
+            // did the game respawn the item?
+            for (Item itemsAtLocation : EntityCommon.getItems(location, 1)) {
+                if (itemsAtLocation.getItemStack().getType() == horcruxMaterial) {
+                    horcruxItem = itemsAtLocation;
+                    return;
+                }
+            }
+
+            // if not, respawn horcrux
+            respawnHorcruxItem();
+
+            itemLoaded = true;
+        }
+    }
+
+    /**
+     * Respawn the horcrux item
+     */
+    private void respawnHorcruxItem() {
+        World world = p.getServer().getWorld(worldName);
+        if (world == null) {
+            common.printDebugMessage("O2StationarySpell.HORCRUX: world " + worldName + " is null", null, null, true);
+            kill();
+            return;
+        }
+
+        ItemStack itemStack = new ItemStack(horcruxMaterial);
+        itemStack.setAmount(1);
+
+        common.printDebugMessage("O2StationarySpell.HORCRUX: creating horcrux for player " + playerUUID, null, null, false);
+        horcruxItem = world.dropItem(location, itemStack);
+    }
+
+    /**
+     * On player death, player keeps inventory, level, and experience.
      *
      * @param event the event
      */
     @Override
-    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event) {
-        Entity entity = event.getEntity(); // will never be null
-        double damage = event.getDamage();
+    void doOnPlayerDeathEvent(@NotNull PlayerDeathEvent event) {
+        Player player = event.getEntity();
 
-        if (!(entity instanceof Player) || damage <= 0 || entity.getUniqueId() != getCasterID())
-            return;
-
-        // we only want to consume 1 horcrux for this player
-        if (!isFirstHorcrux(entity.getUniqueId()))
-            return;
-
-        // will this damage kill the player
-        Player player = (Player) entity;
-        if (damage < player.getHealth())
-            return;
-
-        // reset them to full health
-        O2PlayerCommon.restoreFullHealth(player);
-
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                playerFeedback(player);
-            }
-        }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+        if (player.getUniqueId() == playerUUID) {
+            event.setDeathMessage("Death approaches but cannot claim your split soul.");
+            event.setKeepInventory(true);
+            event.setKeepLevel(true);
+            event.setNewTotalExp(player.getTotalExperience());
+        }
     }
 
     /**
-     * Is this horcrux the first instance for this player?
+     * Affect players that get too close to the horcrux
      *
-     * @param playerID the player to check
-     * @return true if this is the first instance of a horcrux for this player, false otherwise
+     * @param event the event
      */
-    private boolean isFirstHorcrux(UUID playerID) {
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
-            if (stationarySpell.getSpellType() != O2StationarySpellType.HORCRUX)
-                continue;
+    @Override
+    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
+        Location toLocation = event.getTo();
 
-            if (stationarySpell.getCasterID() == playerID) {
-                return stationarySpell == this;
-            }
+        if (toLocation == null || !isLocationInside(toLocation))
+            return;
+
+        Player target = event.getPlayer();
+
+        // don't affect the creator of the horcrux
+        if (target.getUniqueId().equals(playerUUID)) {
+            common.printDebugMessage("HORCRUX: " + target.getName() + " enter their own horcrux area", null, null, false);
+            return;
         }
 
-        return true;
+        // don't affect players already affected
+        if (affectedPlayers.containsKey(target.getName()))
+            return;
+
+        // add blindness and wither effects to player
+        target.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS, effectDuration, 2));
+        target.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, effectDuration, 1));
+
+        // add affected player to list so we keep re-adding these effects every time they move
+        affectedPlayers.put(target.getName(), effectDuration);
     }
 
     /**
-     * Feedback to the player when they try to apparate.
+     * Handle item despawn events
      *
-     * @param player the player
+     * @param event the item despawn event
      */
-    private void playerFeedback(@NotNull Player player) {
-        player.sendMessage(Ollivanders2.chatColor + "Your Horcrux has been used to restore your health.");
-        player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1, 1);
-        flair(5);
+    @Override
+    void doOnItemDespawnEvent(@NotNull ItemDespawnEvent event) {
+        Item eventItem = event.getEntity();
+
+        if (eventItem.getUniqueId() == horcruxItem.getUniqueId())
+            event.setCancelled(true);
+    }
+
+    /**
+     * Handle items being picked up by entities
+     *
+     * @param event the event
+     */
+    @Override
+    void doOnEntityPickupItemEvent(@NotNull EntityPickupItemEvent event) {
+        Item eventItem = event.getItem();
+
+        if (eventItem.getUniqueId() == horcruxItem.getUniqueId())
+            event.setCancelled(true);
+    }
+
+    /**
+     * Handle items being picked up by things like hoppers
+     *
+     * @param event the event
+     */
+    @Override
+    void doOnInventoryItemPickupEvent (@NotNull InventoryPickupItemEvent event ) {
+        Item eventItem = event.getItem();
+
+        if (eventItem.getUniqueId() == horcruxItem.getUniqueId())
+            event.setCancelled(true);
     }
 
     @Override
-    void doCleanUp() {}
+    void doCleanUp() { }
 }
