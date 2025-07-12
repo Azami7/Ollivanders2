@@ -10,21 +10,30 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public class OllivandersApparateByNameEvent extends ApparateEvent
-{
+public class OllivandersApparateByNameEvent extends ApparateEvent {
+    /**
+     * Event handlers
+     */
     private static final HandlerList handlers = new HandlerList();
+
+    /**
+     * the name of the apparate destination
+     */
     String destinationName;
+
+    /**
+     * the Location the player is apparating to
+     */
     Location destination;
 
     /**
      * Constructor
      *
-     * @param player the player apparating
-     * @param dest the destination being apparated to
+     * @param player   the player apparating
+     * @param dest     the destination being apparated to
      * @param destName the name of the destination being apparated to
      */
-    public OllivandersApparateByNameEvent(@NotNull Player player, Location dest, String destName)
-    {
+    public OllivandersApparateByNameEvent(@NotNull Player player, Location dest, String destName) {
         super(player);
 
         destination = dest;
@@ -36,8 +45,7 @@ public class OllivandersApparateByNameEvent extends ApparateEvent
      *
      * @return the name of the destination being apparated to
      */
-    public String getDestinationName ()
-    {
+    public String getDestinationName() {
         return destinationName;
     }
 
@@ -46,8 +54,7 @@ public class OllivandersApparateByNameEvent extends ApparateEvent
      *
      * @return the destination being apparated to
      */
-    public Location getDestination ()
-    {
+    public Location getDestination() {
         return destination;
     }
 }

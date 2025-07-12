@@ -12,27 +12,33 @@ import java.util.UUID;
  * @author Azami7
  * @since 2.2.9
  */
-public class HARM extends PotionEffectSuper
-{
-   public HARM(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-   {
-      super(plugin, duration, pid);
+public class HARM extends PotionEffectSuper {
+    /**
+     * Constructor
+     *
+     * @param plugin   a callback to the MC plugin
+     * @param duration the duration of the effect
+     * @param pid      the ID of the player this effect acts on
+     */
+    public HARM(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
+        super(plugin, duration, pid);
 
-      effectType = O2EffectType.HARM;
-      potionEffectType = PotionEffectType.INSTANT_DAMAGE;
-      informousText = legilimensText = "feels unwell";
+        effectType = O2EffectType.HARM;
+        potionEffectType = PotionEffectType.INSTANT_DAMAGE;
+        informousText = legilimensText = "feels unwell";
 
-      strength = 1;
+        strength = 1;
 
-      divinationText.add("shall be struck by a terrible affliction");
-      divinationText.add("will come to harm");
-      divinationText.add("shall be cursed");
-      divinationText.add("will be develop a terrible illness");
-   }
+        divinationText.add("shall be struck by a terrible affliction");
+        divinationText.add("will come to harm");
+        divinationText.add("shall be cursed");
+        divinationText.add("will be develop a terrible illness");
+    }
 
-   /**
-    * Do any cleanup related to removing this effect from the player
-    */
-   @Override
-   public void doRemove () { }
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove() {
+    }
 }

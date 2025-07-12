@@ -11,20 +11,58 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents allowable stationary spells.
  */
-public enum O2StationarySpellType
-{
+public enum O2StationarySpellType {
+    /**
+     * {@link ALIQUAM_FLOO}
+     */
     ALIQUAM_FLOO(ALIQUAM_FLOO.class, MagicLevel.EXPERT),
+    /**
+     * {@link COLLOPORTUS}
+     */
     COLLOPORTUS(COLLOPORTUS.class, MagicLevel.EXPERT), // colloportus can only be undone with alohomora so we level to max to ensure other spells cannot undo it
+    /**
+     * {@link HARMONIA_NECTERE_PASSUS}
+     */
     HARMONIA_NECTERE_PASSUS(HARMONIA_NECTERE_PASSUS.class, MagicLevel.EXPERT),
+    /**
+     * {@link HORCRUX}
+     */
     HORCRUX(HORCRUX.class, MagicLevel.EXPERT),
+    /**
+     * {@link MOLLIARE}
+     */
     MOLLIARE(MOLLIARE.class, MagicLevel.OWL),
+    /**
+     * {@link MUFFLIATO}
+     */
     MUFFLIATO(MUFFLIATO.class, MagicLevel.NEWT),
+    /**
+     * {@link NULLUM_APPAREBIT}
+     */
     NULLUM_APPAREBIT(NULLUM_APPAREBIT.class, MagicLevel.EXPERT),
+    /**
+     * {@link NULLUM_EVANESCUNT}
+     */
     NULLUM_EVANESCUNT(NULLUM_EVANESCUNT.class, MagicLevel.EXPERT),
+    /**
+     * {@link PROTEGO}
+     */
     PROTEGO(PROTEGO.class, MagicLevel.OWL),
+    /**
+     * {@link PROTEGO_HORRIBILIS}
+     */
     PROTEGO_HORRIBILIS(PROTEGO_HORRIBILIS.class, MagicLevel.EXPERT),
+    /**
+     * {@link PROTEGO_MAXIMA}
+     */
     PROTEGO_MAXIMA(PROTEGO_MAXIMA.class, MagicLevel.EXPERT),
+    /**
+     * {@link PROTEGO_TOTALUM}
+     */
     PROTEGO_TOTALUM(PROTEGO_TOTALUM.class, MagicLevel.EXPERT),
+    /**
+     * {@link REPELLO_MUGGLETON}
+     */
     REPELLO_MUGGLETON(REPELLO_MUGGLETON.class, MagicLevel.NEWT);
 
     /**
@@ -43,8 +81,7 @@ public enum O2StationarySpellType
      * @param className the class this type represents
      * @param level     the level of this stationary spell
      */
-    O2StationarySpellType(@NotNull Class<?> className, @NotNull MagicLevel level)
-    {
+    O2StationarySpellType(@NotNull Class<?> className, @NotNull MagicLevel level) {
         this.className = className;
         this.level = level;
     }
@@ -55,8 +92,7 @@ public enum O2StationarySpellType
      * @return the classname for this spell
      */
     @NotNull
-    public Class<?> getClassName()
-    {
+    public Class<?> getClassName() {
         return className;
     }
 
@@ -66,8 +102,7 @@ public enum O2StationarySpellType
      * @return the level of this spell
      */
     @NotNull
-    public MagicLevel getLevel()
-    {
+    public MagicLevel getLevel() {
         return level;
     }
 
@@ -78,16 +113,13 @@ public enum O2StationarySpellType
      * @return the spell type or null if not found
      */
     @Nullable
-    public static O2StationarySpellType getStationarySpellTypeFromString(@NotNull String name)
-    {
+    public static O2StationarySpellType getStationarySpellTypeFromString(@NotNull String name) {
         O2StationarySpellType spellType = null;
 
-        try
-        {
+        try {
             spellType = O2StationarySpellType.valueOf(name);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             // do nothing, this is expected if they send a string that is not a valid spell
         }
 
@@ -100,8 +132,7 @@ public enum O2StationarySpellType
      * @return the spell name for this spell type.
      */
     @NotNull
-    public String getSpellName()
-    {
+    public String getSpellName() {
         String spellTypeString = this.toString().toLowerCase();
 
         return Ollivanders2Common.firstLetterCapitalize(spellTypeString.replace("_", " "));
@@ -113,12 +144,10 @@ public enum O2StationarySpellType
      * @param player the player to check
      * @return true if the player is within the radius of a stationary spell of this type, false otherwise
      */
-    public boolean isPlayerInsideStationary(Player player)
-    {
+    public boolean isPlayerInsideStationary(Player player) {
         Location location = player.getLocation();
 
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
-        {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
             if (stationarySpell.getSpellType() == this)
                 return true;
         }

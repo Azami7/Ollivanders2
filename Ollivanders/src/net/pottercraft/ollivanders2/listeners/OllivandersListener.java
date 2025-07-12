@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.Ollivanders2OwlPost;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerFoundWandEvent;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerNotDestinedWandEvent;
 import net.pottercraft.ollivanders2.potion.O2Potions;
@@ -19,7 +20,6 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.potion.O2Potion;
 import net.pottercraft.ollivanders2.potion.O2SplashPotion;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -44,7 +44,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -65,23 +64,19 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 
 /**
  * Primary listener for events from the plugin
  */
-public class OllivandersListener implements Listener
-{
+public class OllivandersListener implements Listener {
     /**
      * Reference to the plugin
      */
@@ -102,8 +97,7 @@ public class OllivandersListener implements Listener
      *
      * @param plugin reference to plugin
      */
-    public OllivandersListener(@NotNull Ollivanders2 plugin)
-    {
+    public OllivandersListener(@NotNull Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(plugin);
     }
@@ -111,8 +105,7 @@ public class OllivandersListener implements Listener
     /**
      * Listener set up on plugin enable.
      */
-    public void onEnable()
-    {
+    public void onEnable() {
         // read config
         boolean useFastSpells = p.getConfig().getBoolean("fastSpells", false);
 
@@ -129,8 +122,7 @@ public class OllivandersListener implements Listener
      * @param event the player chat event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerChat(@NotNull AsyncPlayerChatEvent event)
-    {
+    public void onPlayerChat(@NotNull AsyncPlayerChatEvent event) {
         Player sender = event.getPlayer();
         String message = event.getMessage();
 
@@ -141,8 +133,7 @@ public class OllivandersListener implements Listener
         //
         O2SpellType spellType = parseSpell(message);
 
-        if (spellType != null)
-        {
+        if (spellType != null) {
             //
             // Handle removing recipients from chat
             //
@@ -164,8 +155,7 @@ public class OllivandersListener implements Listener
      * @return a spell type if found, null otherwise
      */
     @Nullable
-    private O2SpellType parseSpell(@NotNull String message)
-    {
+    private O2SpellType parseSpell(@NotNull String message) {
         O2SpellType spellType;
 
         // first try all the words as one spell name
@@ -177,8 +167,7 @@ public class OllivandersListener implements Listener
         String[] words = message.split(" ");
 
         StringBuilder spellName = new StringBuilder();
-        for (String word : words)
-        {
+        for (String word : words) {
             spellName.append(word);
             spellType = Ollivanders2API.getSpells().getSpellTypeByName(spellName.toString());
 
@@ -189,12 +178,10 @@ public class OllivandersListener implements Listener
             spellName.append(" ");
         }
 
-        if (spellType != null)
-        {
+        if (spellType != null) {
             common.printDebugMessage("Spell is " + spellType, null, null, false);
         }
-        else
-        {
+        else {
             common.printDebugMessage("No spell found", null, null, false);
         }
 
@@ -208,32 +195,14 @@ public class OllivandersListener implements Listener
      * @param spellType  the spell type chatted
      * @param recipients the recipients for this chat
      */
-    private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients)
-    {
+    private void updateRecipients(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull Set<Player> recipients) {
         // remove all recipients if this is not a "spoken" spell
-        if (spellType == O2SpellType.APPARATE || Divination.divinationSpells.contains(spellType))
-        {
+        if (spellType == O2SpellType.APPARATE || Divination.divinationSpells.contains(spellType)) {
             recipients.clear();
             return;
         }
 
-        // handle spell chat dropoff
-        Set<Player> temp = new HashSet<>(recipients);
-        for (Player recipient : temp)
-        {
-            Location location = player.getLocation();
-            if (!Ollivanders2Common.isInside(location, recipient.getLocation(), Ollivanders2.chatDropoff))
-            {
-                try
-                {
-                    recipients.remove(recipient);
-                }
-                catch (Exception e)
-                {
-                    common.printDebugMessage("OllivandersListener.updateRecipient: exception removing recipient", e, null, true);
-                }
-            }
-        }
+        Ollivanders2Common.chatDropoff(recipients, Ollivanders2.chatDropoff, player.getLocation());
     }
 
     /**
@@ -243,12 +212,9 @@ public class OllivandersListener implements Listener
      * @param spellType the spell cast
      * @param words     the args for this spell, if relevant
      */
-    private void doSpellCasting(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull String[] words)
-    {
-        if (p.canCast(player, spellType, true))
-        {
-            if (Ollivanders2.bookLearning && p.getO2Player(player).getSpellCount(spellType) < 1)
-            {
+    private void doSpellCasting(@NotNull Player player, @NotNull O2SpellType spellType, @NotNull String[] words) {
+        if (p.canCast(player, spellType, true)) {
+            if (Ollivanders2.bookLearning && p.getO2Player(player).getSpellCount(spellType) < 1) {
                 // if bookLearning is set to true then spell count must be > 0 to cast this spell
                 common.printDebugMessage("doSpellCasting: bookLearning enforced", null, null, false);
                 player.sendMessage(Ollivanders2.chatColor + "You do not know that spell yet. To learn a spell, you'll need to read a book about that spell.");
@@ -258,8 +224,7 @@ public class OllivandersListener implements Listener
 
             boolean castSuccess = true;
 
-            if (!Ollivanders2API.getItems().getWands().holdsWand(player))
-            {
+            if (!Ollivanders2API.getItems().getWands().holdsWand(player)) {
                 // if they are not holding their destined wand, casting success is reduced
                 common.printDebugMessage("doSpellCasting: player not holding destined wand", null, null, false);
 
@@ -268,14 +233,12 @@ public class OllivandersListener implements Listener
             }
 
             // wandless spells
-            if (O2Spells.wandlessSpells.contains(spellType))
-            {
+            if (O2Spells.wandlessSpells.contains(spellType)) {
                 common.printDebugMessage("doSpellCasting: allow wandless casting of " + spellType, null, null, false);
                 castSuccess = true;
             }
 
-            if (castSuccess)
-            {
+            if (castSuccess) {
                 common.printDebugMessage("doSpellCasting: begin casting " + spellType, null, null, false);
 
                 if (spellType == O2SpellType.APPARATE)
@@ -284,20 +247,17 @@ public class OllivandersListener implements Listener
                     addSpellProjectile(player, new PORTUS(p, player, 1.0, words));
                 else if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
                     addSpellProjectile(player, new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, player, 1.0));
-                else if (Divination.divinationSpells.contains(spellType))
-                {
+                else if (Divination.divinationSpells.contains(spellType)) {
                     if (!divine(spellType, player, words))
                         return;
                 }
-                else
-                {
+                else {
                     O2Player o2p = p.getO2Player(player);
                     o2p.setWandSpell(spellType);
                 }
             }
         }
-        else
-        {
+        else {
             common.printDebugMessage("doSpellCasting: Either no spell cast attempted or not allowed to cast", null, null, false);
         }
     }
@@ -308,8 +268,7 @@ public class OllivandersListener implements Listener
      * @param player the player who cast the spell
      * @param spell  the spell cast
      */
-    private void addSpellProjectile(@NotNull Player player, @NotNull O2Spell spell)
-    {
+    private void addSpellProjectile(@NotNull Player player, @NotNull O2Spell spell) {
         p.addProjectile(spell);
 
         p.incrementSpellCount(player, spell.spellType);
@@ -324,18 +283,15 @@ public class OllivandersListener implements Listener
      * @param event Chat event of type AsyncPlayerChatEvent
      */
     @EventHandler(priority = EventPriority.HIGH)
-    public void owlPost(@NotNull AsyncPlayerChatEvent event)
-    {
+    public void owlPost(@NotNull AsyncPlayerChatEvent event) {
         String message = event.getMessage();
 
         if (!message.toLowerCase().startsWith(Ollivanders2OwlPost.deliveryKeyword.toLowerCase()))
             return;
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 Ollivanders2API.getOwlPost().processOwlPostRequest(event.getPlayer(), message);
             }
         }.runTaskLater(p, threadDelay);
@@ -349,32 +305,27 @@ public class OllivandersListener implements Listener
      * @param wandC  the wand check value for the held wand
      */
     @Nullable
-    private O2Spell createSpellProjectile(@NotNull Player player, @NotNull O2SpellType name, double wandC)
-    {
+    private O2Spell createSpellProjectile(@NotNull Player player, @NotNull O2SpellType name, double wandC) {
         common.printDebugMessage("OllivandersListener.createSpellProjectile: enter", null, null, false);
 
-        //spells go here, using any of the three types of m
-        String spellClass = "net.pottercraft.ollivanders2.spell." + name.toString();
+        //spells go here, using any of the three types of magic
+        String spellClass = "net.pottercraft.ollivanders2.spell." + name;
 
         Constructor<?> c;
-        try
-        {
+        try {
             c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, Double.class);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell constructor", e, null, true);
             return null;
         }
 
         O2Spell spell;
 
-        try
-        {
+        try {
             spell = (O2Spell) c.newInstance(p, player, wandC);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell", e, null, true);
             return null;
         }
@@ -387,11 +338,9 @@ public class OllivandersListener implements Listener
      *
      * @param player the player casting the spell
      */
-    private void castSpell(@NotNull Player player)
-    {
+    private void castSpell(@NotNull Player player) {
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-        if (o2p == null)
-        {
+        if (o2p == null) {
             common.printDebugMessage("Unable to find o2player casting spell.", null, null, false);
             return;
         }
@@ -400,38 +349,32 @@ public class OllivandersListener implements Listener
 
         // if no spell set, check to see if they have a master spell
         boolean nonverbal = false;
-        if (spellType == null && Ollivanders2.enableNonVerbalSpellCasting)
-        {
+        if (spellType == null && Ollivanders2.enableNonVerbalSpellCasting) {
             spellType = o2p.getMasterSpell();
             nonverbal = true;
         }
 
-        if (spellType != null)
-        {
+        if (spellType != null) {
             double wandCheck;
             boolean playerHoldsWand = Ollivanders2API.getItems().getWands().holdsWand(player, EquipmentSlot.HAND);
-            if (playerHoldsWand)
-            {
+            if (playerHoldsWand) {
                 common.printDebugMessage("OllivandersListener:castSpell: player holds a wand in their primary hand", null, null, false);
                 wandCheck = Ollivanders2API.playerCommon.wandCheck(player, EquipmentSlot.HAND);
             }
-            else
-            {
+            else {
                 common.printDebugMessage("OllivandersListener:castSpell: player does not hold a wand in their primary hand", null, null, false);
                 return;
             }
 
             O2Spell castSpell = createSpellProjectile(player, spellType, wandCheck);
-            if (castSpell == null)
-            {
+            if (castSpell == null) {
                 return;
             }
 
             addSpellProjectile(player, castSpell);
 
             o2p.setSpellRecentCastTime(spellType);
-            if (!nonverbal)
-            {
+            if (!nonverbal) {
                 o2p.setPriorIncantatem(spellType);
             }
 
@@ -447,39 +390,29 @@ public class OllivandersListener implements Listener
      * @param event the player interact event
      */
     @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerInteract(@NotNull PlayerInteractEvent event)
-    {
-        Player player = event.getPlayer();
-        Action action = event.getAction();
-
+    public void onPlayerInteract(@NotNull PlayerInteractEvent event) {
         common.printDebugMessage("onPlayerInteract: enter", null, null, false);
 
         //
         // A right or left click of the primary hand
         //
-        if ((event.getHand() == EquipmentSlot.HAND))
-        {
+        if ((event.getHand() == EquipmentSlot.HAND)) {
             common.printDebugMessage("onPlayerInteract: primary hand right or left click", null, null, false);
 
-            new BukkitRunnable()
-            {
+            new BukkitRunnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     //if (!event.isCancelled())
                     primaryHandInteractEvents(event);
                 }
             }.runTaskLater(p, threadDelay);
         }
-        else
-        {
+        else {
             common.printDebugMessage("onPlayerInteract: secondary hand action", null, null, false);
 
-            new BukkitRunnable()
-            {
+            new BukkitRunnable() {
                 @Override
-                public void run()
-                {
+                public void run() {
                     //if (!event.isCancelled())
                     secondaryHandInteractEvents(event);
                 }
@@ -488,22 +421,19 @@ public class OllivandersListener implements Listener
     }
 
     /**
-     * Handle secondardy hand interact events.
+     * Handle secondary hand interact events.
      *
      * @param event the event
      */
-    private void secondaryHandInteractEvents(@NotNull PlayerInteractEvent event)
-    {
+    private void secondaryHandInteractEvents(@NotNull PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
 
         //
         // A right or left click that is not their primary hand
         //
-        if (action == Action.LEFT_CLICK_AIR || action == Action.RIGHT_CLICK_AIR)
-        {
-            if (Ollivanders2API.getItems().getWands().holdsWand(player, EquipmentSlot.OFF_HAND))
-            {
+        if (action == Action.LEFT_CLICK_AIR || action == Action.RIGHT_CLICK_AIR) {
+            if (Ollivanders2API.getItems().getWands().holdsWand(player, EquipmentSlot.OFF_HAND)) {
                 rotateNonVerbalSpell(player, action);
             }
         }
@@ -514,23 +444,20 @@ public class OllivandersListener implements Listener
      *
      * @param event the interact event
      */
-    private void primaryHandInteractEvents(@NotNull PlayerInteractEvent event)
-    {
+    private void primaryHandInteractEvents(@NotNull PlayerInteractEvent event) {
         Player player = event.getPlayer();
         Action action = event.getAction();
 
         //
         // A right or left click of the primary hand when holding a wand is used to make a magical action.
         //
-        if ((Ollivanders2API.getItems().getWands().holdsWand(player, EquipmentSlot.HAND)))
-        {
+        if ((Ollivanders2API.getItems().getWands().holdsWand(player, EquipmentSlot.HAND))) {
             common.printDebugMessage("primaryHandInteractEvents: player holding a wand", null, null, false);
 
             //
             // A left click of the primary hand is used to cast a spell
             //
-            if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK)
-            {
+            if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
                 common.printDebugMessage("primaryHandInteractEvents: left click action", null, null, false);
                 castSpell(player);
             }
@@ -538,20 +465,17 @@ public class OllivandersListener implements Listener
             //
             // A right click is used:
             // - to determine if the wand is the player's destined wand
-            // - to brew a potion if they are holding a glass bottle in their off hand and facing a cauldron
+            // - to brew a potion if they are holding a glass bottle in their off-hand and facing a cauldron
             //
-            else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)
-            {
-                if (!Ollivanders2API.getItems().getWands().holdsWand(player))
-                {
+            else if (action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK) {
+                if (!Ollivanders2API.getItems().getWands().holdsWand(player)) {
                     return;
                 }
 
                 common.printDebugMessage("primaryHandInteractEvents: right click action", null, null, false);
 
                 Block cauldron = (Ollivanders2Common.playerFacingBlockType(player, Material.WATER_CAULDRON));
-                if ((cauldron != null) && (player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE))
-                {
+                if ((cauldron != null) && (player.getInventory().getItemInOffHand().getType() == Material.GLASS_BOTTLE)) {
                     common.printDebugMessage("primaryHandInteractEvents: brewing potion", null, null, false);
                     brewPotion(player, cauldron);
                     return;
@@ -560,8 +484,7 @@ public class OllivandersListener implements Listener
                 common.printDebugMessage("primaryHandInteractEvents: waving wand", null, null, false);
 
                 // play a sound and visual effect when they right-click their destined wand with no spell
-                if (Ollivanders2API.playerCommon.wandCheck(player, EquipmentSlot.HAND) < 2)
-                {
+                if (Ollivanders2API.playerCommon.wandCheck(player, EquipmentSlot.HAND) < 2) {
                     Location location = player.getLocation();
                     location.setY(location.getY() + 1.6);
                     player.getWorld().playEffect(location, Effect.ENDER_SIGNAL, 0);
@@ -572,8 +495,7 @@ public class OllivandersListener implements Listener
                     p.getServer().getPluginManager().callEvent(wandEvent);
                     common.printDebugMessage("fired found wand event", null, null, false);
                 }
-                else
-                {
+                else {
                     OllivandersPlayerNotDestinedWandEvent wandEvent = new OllivandersPlayerNotDestinedWandEvent(player);
                     p.getServer().getPluginManager().callEvent(wandEvent);
                 }
@@ -587,8 +509,7 @@ public class OllivandersListener implements Listener
      * @param player the player rotating spells
      * @param action the player action
      */
-    private void rotateNonVerbalSpell(@NotNull Player player, @NotNull Action action)
-    {
+    private void rotateNonVerbalSpell(@NotNull Player player, @NotNull Action action) {
         if (!Ollivanders2.enableNonVerbalSpellCasting)
             return;
 
@@ -608,15 +529,12 @@ public class OllivandersListener implements Listener
 
         o2p.shiftMasterSpell(reverse);
         O2SpellType spell = o2p.getMasterSpell();
-        if (spell != null)
-        {
+        if (spell != null) {
             String spellName = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(spell.toString()));
             player.sendMessage(Ollivanders2.chatColor + "Wand master spell set to " + spellName);
         }
-        else
-        {
-            if (Ollivanders2.debug)
-            {
+        else {
+            if (Ollivanders2.debug) {
                 player.sendMessage(Ollivanders2.chatColor + "You have not mastered any spells.");
             }
         }
@@ -628,8 +546,7 @@ public class OllivandersListener implements Listener
      * @param event the player join event
      */
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerJoin(@NotNull PlayerJoinEvent event)
-    {
+    public void onPlayerJoin(@NotNull PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
@@ -660,8 +577,7 @@ public class OllivandersListener implements Listener
      * @param event the quit event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerQuit(@NotNull PlayerQuitEvent event)
-    {
+    public void onPlayerQuit(@NotNull PlayerQuitEvent event) {
         playerQuit(event.getPlayer());
     }
 
@@ -671,8 +587,7 @@ public class OllivandersListener implements Listener
      * @param event the kick event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerKick(@NotNull PlayerKickEvent event)
-    {
+    public void onPlayerKick(@NotNull PlayerKickEvent event) {
         playerQuit(event.getPlayer());
     }
 
@@ -681,8 +596,7 @@ public class OllivandersListener implements Listener
      *
      * @param player the player
      */
-    private void playerQuit(@NotNull Player player)
-    {
+    private void playerQuit(@NotNull Player player) {
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
         if (o2p == null)
             return;
@@ -697,10 +611,8 @@ public class OllivandersListener implements Listener
      * @param event the player death event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerDeath(@NotNull PlayerDeathEvent event)
-    {
-        if (Ollivanders2.enableDeathExpLoss)
-        {
+    public void onPlayerDeath(@NotNull PlayerDeathEvent event) {
+        if (Ollivanders2.enableDeathExpLoss) {
             O2Player o2p = Ollivanders2API.getPlayers().getPlayer(event.getEntity().getUniqueId());
 
             if (o2p == null)
@@ -713,19 +625,16 @@ public class OllivandersListener implements Listener
     }
 
     /**
-     * This checks if a player kills another player, and if so, adds a soul to the attacking o2player
+     * This checks if a player kills another player, and if so, adds a soul to the attacking player
      *
      * @param event the entity damage event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onEntityDamage(@NotNull EntityDamageByEntityEvent event)
-    {
-        if (event.getEntity() instanceof Player)
-        {
+    public void onEntityDamage(@NotNull EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player) {
             Player damaged = (Player) event.getEntity();
 
-            if (event.getDamager() instanceof Player)
-            {
+            if (event.getDamager() instanceof Player) {
                 Player attacker = (Player) event.getDamager();
                 if (damaged.getHealth() - event.getDamage() <= 0)
                     p.getO2Player(attacker).addSoul();
@@ -739,70 +648,11 @@ public class OllivandersListener implements Listener
      * @param event the block break event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onTemporaryBlockBreak(@NotNull BlockBreakEvent event)
-    {
+    public void onTemporaryBlockBreak(@NotNull BlockBreakEvent event) {
         Block block = event.getBlock();
 
-        if (p.isTempBlock(block))
-        {
+        if (p.isTempBlock(block)) {
             event.setDropItems(false);
-        }
-    }
-
-    /**
-     * When an item is picked up by a player, if the item is a portkey, the player will be teleported there.
-     *
-     * @param event the player Pickup Item Event
-     */
-    @Deprecated
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void portkeyPickUp(@NotNull EntityPickupItemEvent event)
-    {
-        //TODO remove this when we remove lore-based items in the next major rev
-        Entity entity = event.getEntity();
-        if (entity instanceof Player)
-        {
-            Player player = (Player) entity;
-            Item item = event.getItem();
-            ItemMeta meta = item.getItemStack().getItemMeta();
-            if (meta == null)
-                return;
-
-            List<String> lore = null;
-
-            if (meta.hasLore())
-                lore = meta.getLore();
-
-            if (lore == null)
-                lore = new ArrayList<>();
-
-            List<String> temp = new ArrayList<>(lore);
-
-            for (String s : temp)
-            {
-                if (s.startsWith(PORTUS.portus))
-                {
-                    String[] portArray = s.split(" ");
-                    Location to;
-                    to = new Location(Bukkit.getServer().getWorld(UUID.fromString(portArray[1])),
-                            Double.parseDouble(portArray[2]),
-                            Double.parseDouble(portArray[3]),
-                            Double.parseDouble(portArray[4]));
-                    to.setDirection(player.getLocation().getDirection());
-                    for (Entity e : player.getWorld().getEntities())
-                    {
-                        if (player.getLocation().distance(e.getLocation()) <= 2)
-                        {
-                            p.addTeleportEvent(player, to);
-                        }
-                    }
-                    p.addTeleportEvent(player, to);
-                    lore.remove(s);
-                    meta.setLore(lore);
-                    item.getItemStack().setItemMeta(meta);
-                    return;
-                }
-            }
         }
     }
 
@@ -812,13 +662,10 @@ public class OllivandersListener implements Listener
      * @param event the Entity Target Event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void cloakPlayer(@NotNull EntityTargetEvent event)
-    {
+    public void cloakPlayer(@NotNull EntityTargetEvent event) {
         Entity target = event.getTarget();
-        if (target instanceof Player)
-        {
-            if (p.getO2Player((Player) target).isInvisible())
-            {
+        if (target instanceof Player) {
+            if (O2PlayerCommon.hasPotionEffect((Player) target, PotionEffectType.INVISIBILITY)) {
                 event.setCancelled(true);
                 common.printDebugMessage("cloakPlayer: cancelling EntityTargetEvent", null, null, false);
             }
@@ -827,19 +674,16 @@ public class OllivandersListener implements Listener
 
     /**
      * This drops a random wand when a witch dies
-     * <p>
-     * Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#witch-wand-drop
+     *
+     * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#witch-wand-drop</p>
      *
      * @param event the entity death event
      */
     @EventHandler(priority = EventPriority.NORMAL)
-    public void witchWandDrop(@NotNull EntityDeathEvent event)
-    {
-        if (event.getEntityType() == EntityType.WITCH && Ollivanders2.enableWitchDrop)
-        {
+    public void witchWandDrop(@NotNull EntityDeathEvent event) {
+        if (event.getEntityType() == EntityType.WITCH && Ollivanders2.enableWitchDrop) {
             ItemStack wand = Ollivanders2API.getItems().getWands().createRandomWand();
-            if (wand == null)
-            {
+            if (wand == null) {
                 common.printDebugMessage("OllivandersListener.witchWandDrop: wand is null", null, null, false);
                 return;
             }
@@ -854,11 +698,9 @@ public class OllivandersListener implements Listener
      * @param event the player item consume event
      */
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerDrink(@NotNull PlayerItemConsumeEvent event)
-    {
+    public void onPlayerDrink(@NotNull PlayerItemConsumeEvent event) {
         ItemStack item = event.getItem();
-        if (item.getType() == Material.POTION)
-        {
+        if (item.getType() == Material.POTION) {
             Player player = event.getPlayer();
             common.printDebugMessage(player.getDisplayName() + " drank a potion.", null, null, false);
 
@@ -868,12 +710,10 @@ public class OllivandersListener implements Listener
 
             PersistentDataContainer container = meta.getPersistentDataContainer();
 
-            if (container.has(O2Potions.potionTypeKey, PersistentDataType.STRING) || meta.hasLore())
-            {
+            if (container.has(O2Potions.potionTypeKey, PersistentDataType.STRING) || meta.hasLore()) {
                 O2Potion potion = Ollivanders2API.getPotions().findPotionByItemMeta(meta);
 
-                if (potion != null)
-                {
+                if (potion != null) {
                     if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getPotionType()))
                         return;
 
@@ -885,14 +725,13 @@ public class OllivandersListener implements Listener
 
     /**
      * When a user holds their spell journal, replace it with an updated version of the book.
-     * <p>
-     * Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-journal
+     *
+     * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-journal</p>
      *
      * @param event the player item held event
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onSpellJournalHold(@NotNull PlayerItemHeldEvent event)
-    {
+    public void onSpellJournalHold(@NotNull PlayerItemHeldEvent event) {
         // only run this if spellJournal is enabled
         if (!Ollivanders2.useSpellJournal)
             return;
@@ -901,8 +740,7 @@ public class OllivandersListener implements Listener
         int slotIndex = event.getNewSlot();
 
         ItemStack heldItem = player.getInventory().getItem(slotIndex);
-        if (heldItem != null && heldItem.getType() == Material.WRITTEN_BOOK)
-        {
+        if (heldItem != null && heldItem.getType() == Material.WRITTEN_BOOK) {
             BookMeta bookMeta = (BookMeta) heldItem.getItemMeta();
             if (bookMeta == null)
                 return;
@@ -911,8 +749,7 @@ public class OllivandersListener implements Listener
             if (bookTitle == null)
                 return;
 
-            if (bookMeta.getTitle().equalsIgnoreCase("Spell Journal"))
-            {
+            if (bookMeta.getTitle().equalsIgnoreCase("Spell Journal")) {
                 O2Player o2Player = p.getO2Player(player);
                 ItemStack spellJournal = o2Player.getSpellJournal();
 
@@ -927,8 +764,7 @@ public class OllivandersListener implements Listener
      * @param event the player toggle sneak event
      */
     @EventHandler(priority = EventPriority.NORMAL)
-    public void onPotionBrewing(@NotNull PlayerToggleSneakEvent event)
-    {
+    public void onPotionBrewing(@NotNull PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
 
         // is the player sneaking
@@ -950,7 +786,7 @@ public class OllivandersListener implements Listener
 
         String ingredientName = heldItem.getItemMeta().getDisplayName();
 
-        // put the item in the player's off hand in to the cauldron
+        // put the item in the player's off-hand in to the cauldron
         Location spawnLoc = cauldron.getLocation();
         World world = cauldron.getWorld();
 
@@ -968,24 +804,20 @@ public class OllivandersListener implements Listener
      * @param cauldron the cauldron of ingredients
      * @apiNote assumes player is holding a glass bottle in their off-hand and will set off-hand item to null
      */
-    private void brewPotion(@NotNull Player player, @NotNull Block cauldron)
-    {
+    private void brewPotion(@NotNull Player player, @NotNull Block cauldron) {
         common.printDebugMessage("OllivandersListener:brewPotion: brewing potion", null, null, false);
 
         Block under = cauldron.getRelative(BlockFace.DOWN);
-        if (Ollivanders2Common.hotBlocks.contains(under.getType()))
-        {
+        if (Ollivanders2Common.hotBlocks.contains(under.getType())) {
             ItemStack potion = Ollivanders2API.getPotions().brewPotion(cauldron, player);
 
-            if (potion == null)
-            {
+            if (potion == null) {
                 player.sendMessage(Ollivanders2.chatColor + "The cauldron appears unchanged. Perhaps you should check your recipe");
                 return;
             }
 
             // remove ingredients from cauldron
-            for (Entity e : cauldron.getWorld().getNearbyEntities(cauldron.getLocation(), 1, 1, 1))
-            {
+            for (Entity e : cauldron.getWorld().getNearbyEntities(cauldron.getLocation(), 1, 1, 1)) {
                 if (e instanceof Item)
                     e.remove();
             }
@@ -1008,8 +840,7 @@ public class OllivandersListener implements Listener
      * @param event the potion splash event
      */
     @EventHandler(priority = EventPriority.HIGH)
-    public void onSplashPotion(@NotNull PotionSplashEvent event)
-    {
+    public void onSplashPotion(@NotNull PotionSplashEvent event) {
         ThrownPotion thrown = event.getEntity();
         ItemMeta meta = thrown.getItem().getItemMeta();
         if (meta == null)
@@ -1017,26 +848,25 @@ public class OllivandersListener implements Listener
 
         O2Potion potion = Ollivanders2API.getPotions().findPotionByItemMeta(meta);
 
-        if (potion != null)
-        {
+        if (potion != null) {
             if (potion instanceof O2SplashPotion)
                 ((O2SplashPotion) potion).thrownEffect(event);
         }
     }
 
     /**
+     * Handle casting a divination spell
+     *
      * @param spellType the type of divination spell
      * @param sender    the player doing the spell
      * @param words     the additional args to the spell
      * @return true if spell was successfully created, false otherwise
      */
-    private boolean divine(@NotNull O2SpellType spellType, @NotNull Player sender, @NotNull String[] words)
-    {
+    private boolean divine(@NotNull O2SpellType spellType, @NotNull Player sender, @NotNull String[] words) {
         common.printDebugMessage("Casting divination spell", null, null, false);
 
         // parse the words for the target player's name
-        if (words.length < 2)
-        {
+        if (words.length < 2) {
             sender.sendMessage(Ollivanders2.chatColor + "You must say the name of the player. Example: 'astrologia steve'.");
             return false;
         }
@@ -1045,8 +875,7 @@ public class OllivandersListener implements Listener
         String targetName = words[words.length - 1];
         Player target = p.getServer().getPlayer(targetName);
 
-        if (target == null)
-        {
+        if (target == null) {
             sender.sendMessage(Ollivanders2.chatColor + "Unable to find player named " + targetName + ".");
             return false;
         }

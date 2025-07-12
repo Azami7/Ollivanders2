@@ -12,14 +12,20 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Transfigures an entity into a rabbit. This is a split oof the Lapifor spell since we need to handle items and mobs
+ * Transfigures an entity into a rabbit. This is a split of the Lapifors spell since we need to handle items and mobs
  * differently.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Lapifors_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Lapifors_Spell">https://harrypotter.fandom.com/wiki/Lapifors_Spell</a>
  */
-public final class LAGOMORPHA extends FriendlyMobDisguise
-{
+public final class LAGOMORPHA extends FriendlyMobDisguise {
+    /**
+     * Min duration for this transfiguration
+     */
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
+
+    /**
+     * Max duration for this transfiguration
+     */
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
     /**
@@ -27,8 +33,7 @@ public final class LAGOMORPHA extends FriendlyMobDisguise
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public LAGOMORPHA(Ollivanders2 plugin)
-    {
+    public LAGOMORPHA(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.LAGOMORPHA;
@@ -44,8 +49,7 @@ public final class LAGOMORPHA extends FriendlyMobDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public LAGOMORPHA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public LAGOMORPHA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.LAGOMORPHA;
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -71,8 +75,7 @@ public final class LAGOMORPHA extends FriendlyMobDisguise
      * Add all small friendly mobs only to this spell.
      */
     @Override
-    void populateEntityAllowedList()
-    {
+    void populateEntityAllowedList() {
         // add all small mobs as allowed targets by default
         entityAllowedList.addAll(smallFriendlyMobs);
     }

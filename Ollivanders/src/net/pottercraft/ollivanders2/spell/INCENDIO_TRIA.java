@@ -10,8 +10,8 @@ import java.util.ArrayList;
 
 /**
  * Creates a larger incendio that strafes and has 4x the radius and duration.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Incendio_Tria
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Incendio_Tria">https://harrypotter.fandom.com/wiki/Incendio_Tria</a>
  */
 public final class INCENDIO_TRIA extends IncendioSuper
 {

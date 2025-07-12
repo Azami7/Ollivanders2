@@ -6,22 +6,30 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * 2nd Century Roman healing text.
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.REPARIFORS}
+ * </p>
  *
+ * @see <a href = "https://en.wikipedia.org/wiki/Serenus_Sammonicus">https://en.wikipedia.org/wiki/Serenus_Sammonicus</a>
  * @author Azami7
- * @sinze 2.2.9
+ * @since 2.2.9
  */
-public class DE_MEDICINA_PRAECEPTA extends O2Book
-{
-   public DE_MEDICINA_PRAECEPTA(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public class DE_MEDICINA_PRAECEPTA extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
+    public DE_MEDICINA_PRAECEPTA(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      bookType = O2BookType.DE_MEDICINA_PRAECEPTA;
+        bookType = O2BookType.DE_MEDICINA_PRAECEPTA;
 
-      openingPage = "Phoebus, protect this health-giving song, which I composed and let this manifest favour be an attendant to the art you discovered.";
+        openingPage = "Phoebus, protect this health-giving song, which I composed and let this manifest favour be an attendant to the art you discovered.";
 
-      spells.add(O2SpellType.REPARIFORS);
-      //Abracadabra
-      //Mithridates Antidotum - a powerful antidote to poison
-   }
+        spells.add(O2SpellType.REPARIFORS);
+        //todo Abracadabra - a cure for fever and ague
+        //todo Mithridates Antidotum - a powerful antidote to poison
+    }
 }

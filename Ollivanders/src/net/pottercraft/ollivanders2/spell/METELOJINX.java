@@ -8,18 +8,16 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Creates a storm of a variable duration.
- * <p>
- * https://harrypotter.fandom.com/wiki/Metelojinx
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Metelojinx">https://harrypotter.fandom.com/wiki/Metelojinx</a>
  */
-public final class METELOJINX extends MetelojinxSuper
-{
+public final class METELOJINX extends MetelojinxSuper {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public METELOJINX(Ollivanders2 plugin)
-    {
+    public METELOJINX(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.METELOJINX;
@@ -35,8 +33,7 @@ public final class METELOJINX extends MetelojinxSuper
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public METELOJINX(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public METELOJINX(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.METELOJINX;

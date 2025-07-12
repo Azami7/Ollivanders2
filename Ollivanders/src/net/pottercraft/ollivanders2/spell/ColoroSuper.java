@@ -7,7 +7,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Sheep;
 
-import net.pottercraft.ollivanders2.O2Color;
+import net.pottercraft.ollivanders2.common.O2Color;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,8 +16,7 @@ import java.util.List;
 /**
  * Change a sheep or a colorable block to a specific color.
  */
-public abstract class ColoroSuper extends O2Spell
-{
+public abstract class ColoroSuper extends O2Spell {
     O2Color color = O2Color.WHITE;
 
     /**
@@ -25,8 +24,7 @@ public abstract class ColoroSuper extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    ColoroSuper(Ollivanders2 plugin)
-    {
+    ColoroSuper(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -37,8 +35,7 @@ public abstract class ColoroSuper extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    ColoroSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    ColoroSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         // world-guard flags
@@ -50,17 +47,13 @@ public abstract class ColoroSuper extends O2Spell
      * Look for colorable entities or blocks, if one is found, change its color
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         // first try to recolor any sheep in range
         List<LivingEntity> entities = getNearbyLivingEntities(defaultRadius);
 
-        if (entities.size() > 0)
-        {
-            for (LivingEntity livingEntity : entities)
-            {
-                if (livingEntity instanceof Sheep)
-                {
+        if (entities.size() > 0) {
+            for (LivingEntity livingEntity : entities) {
+                if (livingEntity instanceof Sheep) {
                     Sheep sheep = (Sheep) livingEntity;
                     sheep.setColor(color.getDyeColor());
 
@@ -72,18 +65,15 @@ public abstract class ColoroSuper extends O2Spell
             return;
         }
 
-        if (hasHitTarget())
-        {
+        if (hasHitTarget()) {
             Block target = getTargetBlock();
-            if (target == null)
-            {
+            if (target == null) {
                 common.printDebugMessage("ColoroSuper.doCheckEffect: target block is null", null, null, true);
                 kill();
                 return;
             }
 
-            if (O2Color.isColorable(target.getType()))
-            {
+            if (O2Color.isColorable(target.getType())) {
                 Material newColor = O2Color.changeColor(target.getType(), color);
                 target.setType(newColor);
             }

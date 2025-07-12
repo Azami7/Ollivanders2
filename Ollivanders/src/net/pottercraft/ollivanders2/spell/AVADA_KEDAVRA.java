@@ -13,9 +13,8 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Does direct damage to a living entity according to your level in the spell.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Killing_Curse
+ * Killing Curse - https://harrypotter.fandom.com/wiki/Killing_Curse - does direct damage to a living entity according
+ * to your level in the spell.
  */
 public final class AVADA_KEDAVRA extends O2Spell
 {
@@ -75,7 +74,7 @@ public final class AVADA_KEDAVRA extends O2Spell
             kill();
 
         List<Damageable> entities = getNearbyDamageableEntities(defaultRadius);
-        if (entities.size() > 0)
+        if (!entities.isEmpty())
         {
             for (Damageable entity : entities)
             {

@@ -18,125 +18,116 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author lownes
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Lumos_Duo">https://harrypotter.fandom.com/wiki/Lumos_Duo</a>
  */
-public final class LUMOS_DUO extends O2Spell
-{
-   private final List<Block> line = new ArrayList<>();
+public final class LUMOS_DUO extends O2Spell {
+    private final List<Block> line = new ArrayList<>();
 
-   private int lineLength = 0;
-   private static final int maxLineLength = 5;
+    private int lineLength = 0;
+    private static final int maxLineLength = 5;
 
-   /**
-    * If this is not permanent, how long it should last. Default is 15 seconds.
-    */
-   int spellDuration = Ollivanders2Common.ticksPerSecond * 15;
+    /**
+     * If this is not permanent, how long it should last. Default is 15 seconds.
+     */
+    int spellDuration = Ollivanders2Common.ticksPerSecond * 15;
 
-   /**
-    * Max duration of this spell. Default is 5 minutes.
-    */
-   int maxDuration = Ollivanders2Common.ticksPerSecond * 300;
-   int minDuration = Ollivanders2Common.ticksPerSecond * 60;
+    /**
+     * Max duration of this spell. Default is 5 minutes.
+     */
+    int maxDuration = Ollivanders2Common.ticksPerSecond * 300;
+    int minDuration = Ollivanders2Common.ticksPerSecond * 60;
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public LUMOS_DUO(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public LUMOS_DUO(Ollivanders2 plugin) {
+        super(plugin);
 
-      spellType = O2SpellType.LUMOS_DUO;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.LUMOS_DUO;
+        branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<>() {{
-         add("A variation of the Wand-Lighting Charm.");
-      }};
+        flavorText = new ArrayList<>() {{
+            add("A variation of the Wand-Lighting Charm.");
+        }};
 
-      text = "Creates a stream of glowstone to light your way.";
-   }
+        text = "Creates a stream of glowstone to light your way.";
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public LUMOS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public LUMOS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+        super(plugin, player, rightWand);
 
-      spellType = O2SpellType.LUMOS_DUO;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.LUMOS_DUO;
+        branch = O2MagicBranch.CHARMS;
 
-      // pass-through materials
-      projectilePassThrough.clear();
-      projectilePassThrough.add(Material.AIR);
+        // pass-through materials
+        projectilePassThrough.clear();
+        projectilePassThrough.add(Material.AIR);
 
-      // world guard flags
-      if (Ollivanders2.worldGuardEnabled)
-         worldGuardFlags.add(Flags.BUILD);
+        // world guard flags
+        if (Ollivanders2.worldGuardEnabled)
+            worldGuardFlags.add(Flags.BUILD);
 
-      initSpell();
-   }
+        initSpell();
+    }
 
-   @Override
-   void doInitSpell()
-   {
-      spellDuration = (int)((usesModifier / 10) * Ollivanders2Common.ticksPerSecond);
-      if (spellDuration < maxDuration)
-         spellDuration = maxDuration;
-      else if (spellDuration < minDuration)
-         spellDuration = minDuration;
-   }
+    @Override
+    void doInitSpell() {
+        spellDuration = (int) ((usesModifier / 10) * Ollivanders2Common.ticksPerSecond);
+        if (spellDuration < maxDuration)
+            spellDuration = maxDuration;
+        else if (spellDuration < minDuration)
+            spellDuration = minDuration;
+    }
 
-   @Override
-   protected void doCheckEffect()
-   {
-      if (hasHitTarget())
-      {
-         kill();
-         return;
-      }
-
-      // wait 2 before starting to create the line
-      if (getLifeTicks() < 2)
-         return;
-
-      if (lineLength < maxLineLength)
-      {
-         Block curBlock = location.getBlock();
-
-         if (curBlock.getType() != Material.AIR)
-         {
+    @Override
+    protected void doCheckEffect() {
+        if (hasHitTarget()) {
             kill();
             return;
-         }
+        }
 
-         curBlock.setType(Material.GLOWSTONE);
-         line.add(curBlock);
-         p.addTempBlock(curBlock, Material.AIR);
+        // wait 2 before starting to create the line
+        if (getLifeTicks() < 2)
+            return;
 
-         lineLength = lineLength + 1;
-      }
-      else
-      {
-         // check time to live on the spell
-         if (spellDuration <= 0)
-            // spell duration is up, kill the spell
-            kill();
-         else
-            spellDuration = spellDuration - 1;
-      }
-   }
+        if (lineLength < maxLineLength) {
+            Block curBlock = location.getBlock();
 
-   @Override
-   protected void revert()
-   {
-      for (Block block : line)
-         p.revertTempBlock(block);
+            if (curBlock.getType() != Material.AIR) {
+                kill();
+                return;
+            }
 
-      line.clear();
-   }
+            curBlock.setType(Material.GLOWSTONE);
+            line.add(curBlock);
+            p.addTempBlock(curBlock, Material.AIR);
+
+            lineLength = lineLength + 1;
+        }
+        else {
+            // check time to live on the spell
+            if (spellDuration <= 0)
+                // spell duration is up, kill the spell
+                kill();
+            else
+                spellDuration = spellDuration - 1;
+        }
+    }
+
+    @Override
+    protected void revert() {
+        for (Block block : line)
+            p.revertTempBlock(block);
+
+        line.clear();
+    }
 }

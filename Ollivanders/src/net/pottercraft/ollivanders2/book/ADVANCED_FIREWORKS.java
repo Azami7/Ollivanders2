@@ -5,25 +5,38 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Non-cannon book written by George Weasley on firework making.
+ * Non-cannon book written by George Weasley on firework making
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.BOTHYNUS_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.COMETES_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PERICULUM_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PORFYRO_ASTERI_DUO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.MEGA_PYRO_PRASINA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.BOTHYNUS_TRIA}<br>
+ * {@link net.pottercraft.ollivanders2.spell.PORFYRO_ASTERI_TRIA}
+ * </p>
  *
- * @since 2.2.4
  * @author Azami7
+ * @since 2.2.4
  */
-public final class ADVANCED_FIREWORKS extends O2Book
-{
-   public ADVANCED_FIREWORKS(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public final class ADVANCED_FIREWORKS extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
+    public ADVANCED_FIREWORKS(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      bookType = O2BookType.ADVANCED_FIREWORKS;
+        bookType = O2BookType.ADVANCED_FIREWORKS;
 
-      spells.add(O2SpellType.BOTHYNUS_DUO);
-      spells.add(O2SpellType.COMETES_DUO);
-      spells.add(O2SpellType.PERICULUM_DUO);
-      spells.add(O2SpellType.PORFYRO_ASTERI_DUO);
-      spells.add(O2SpellType.VERDIMILLIOUS_DUO);
-      spells.add(O2SpellType.BOTHYNUS_TRIA);
-      spells.add(O2SpellType.PORFYRO_ASTERI_TRIA);
-   }
+        spells.add(O2SpellType.BOTHYNUS_DUO);
+        spells.add(O2SpellType.COMETES_DUO);
+        spells.add(O2SpellType.PERICULUM_DUO);
+        spells.add(O2SpellType.PORFYRO_ASTERI_DUO);
+        spells.add(O2SpellType.MEGA_PYRO_PRASINA);
+        spells.add(O2SpellType.BOTHYNUS_TRIA);
+        spells.add(O2SpellType.PORFYRO_ASTERI_TRIA);
+    }
 }

@@ -10,26 +10,21 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Shoots caster high into air.
- * <p>
- * Referece: https://harrypotter.fandom.com/wiki/Ascendio
+ * Climbing Charm - https://harrypotter.fandom.com/wiki/Ascendio - shoots caster high into air.
  */
-public final class ASCENDIO extends O2Spell
-{
+public final class ASCENDIO extends O2Spell {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public ASCENDIO(Ollivanders2 plugin)
-    {
+    public ASCENDIO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.ASCENDIO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Climbing Charm");
             add("Underwater he casts a spell which propels him towards the surface, he flies out and lands on the decking where the crowd are.");
         }};
@@ -44,8 +39,7 @@ public final class ASCENDIO extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public ASCENDIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public ASCENDIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.ASCENDIO;
@@ -58,8 +52,7 @@ public final class ASCENDIO extends O2Spell
      * Propel the caster into the air
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         kill();
 
         if (!isSpellAllowed()) return;
@@ -75,7 +68,6 @@ public final class ASCENDIO extends O2Spell
      * Nothing to do since we overrode checkEffect() itself
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
     }
 }

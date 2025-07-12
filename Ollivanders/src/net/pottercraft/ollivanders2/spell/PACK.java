@@ -18,11 +18,10 @@ import java.util.List;
 
 /**
  * Pack is the incantation of a spell used to make items pack themselves into a trunk.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Pack_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Pack_Charm">https://harrypotter.fandom.com/wiki/Pack_Charm</a>
  */
-public final class PACK extends O2Spell
-{
+public final class PACK extends O2Spell {
     /**
      * The radius of things to pick up
      */
@@ -36,15 +35,13 @@ public final class PACK extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public PACK(Ollivanders2 plugin)
-    {
+    public PACK(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.PACK;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("Books, clothes, telescope and scales all soared into the air and flew pell-mell into the trunk.");
             add("The Packing Charm");
         }};
@@ -59,8 +56,7 @@ public final class PACK extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public PACK(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public PACK(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.PACK;
@@ -99,8 +95,7 @@ public final class PACK extends O2Spell
      * Set the radius based on the caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         radius = (int) usesModifier / 10;
 
         if (radius > maxRadius)
@@ -113,8 +108,7 @@ public final class PACK extends O2Spell
      * Find a nearby shulker box or ender chest and put any nearby items in to it
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (!hasHitTarget())
             return;
 
@@ -124,8 +118,7 @@ public final class PACK extends O2Spell
         // get nearby items
         List<Item> nearbyItems = EntityCommon.getItemsInRadius(location, radius);
 
-        for (Item item : nearbyItems)
-        {
+        for (Item item : nearbyItems) {
             common.printDebugMessage("Adding " + item.getName() + " to chest", null, null, false);
 
             HashMap<Integer, ItemStack> overflow;
@@ -134,8 +127,7 @@ public final class PACK extends O2Spell
                 overflow = player.getEnderChest().addItem(item.getItemStack());
             else if (getTargetBlock().getState() instanceof ShulkerBox)
                 overflow = ((ShulkerBox) getTargetBlock().getState()).getInventory().addItem(item.getItemStack());
-            else
-            {
+            else {
                 common.printDebugMessage("Target chest is not an ender chest or shulker box", null, null, true);
                 return;
             }
@@ -143,13 +135,10 @@ public final class PACK extends O2Spell
             // figure out how much fit
             if (overflow.size() < 1)
                 item.remove();
-            else
-            {
+            else {
                 // how many did it stash
-                for (ItemStack itemStack : overflow.values())
-                {
-                    if (itemStack.getType() == item.getItemStack().getType())
-                    {
+                for (ItemStack itemStack : overflow.values()) {
+                    if (itemStack.getType() == item.getItemStack().getType()) {
                         int diff = item.getItemStack().getAmount() - itemStack.getAmount();
                         item.getItemStack().setAmount(diff);
                     }

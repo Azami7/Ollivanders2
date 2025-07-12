@@ -11,15 +11,13 @@ import org.jetbrains.annotations.NotNull;
  * Glacius will cause a great cold to descend in a radius from its impact point which freezes blocks. The radius and
  * duration of the freeze depend on your experience.
  */
-public abstract class GlaciusSuper extends BlockTransfiguration
-{
+public abstract class GlaciusSuper extends BlockTransfiguration {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public GlaciusSuper(Ollivanders2 plugin)
-    {
+    public GlaciusSuper(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
@@ -32,8 +30,7 @@ public abstract class GlaciusSuper extends BlockTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public GlaciusSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public GlaciusSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         branch = O2MagicBranch.CHARMS;
 

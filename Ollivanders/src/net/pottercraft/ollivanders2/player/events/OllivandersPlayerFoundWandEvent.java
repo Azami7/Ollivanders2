@@ -10,8 +10,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public final class OllivandersPlayerFoundWandEvent extends PlayerEvent
-{
+public final class OllivandersPlayerFoundWandEvent extends PlayerEvent {
     private static final HandlerList handlers = new HandlerList();
 
     /**
@@ -19,20 +18,27 @@ public final class OllivandersPlayerFoundWandEvent extends PlayerEvent
      *
      * @param player the player who found their wand
      */
-    public OllivandersPlayerFoundWandEvent (@NotNull Player player)
-    {
+    public OllivandersPlayerFoundWandEvent(@NotNull Player player) {
         super(player);
     }
 
+    /**
+     * Get the handlers for this Event
+     *
+     * @return the event handlers
+     */
     @NotNull
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    /**
+     * Get the handlers for this Event
+     *
+     * @return the event handlers
+     */
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

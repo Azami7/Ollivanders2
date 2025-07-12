@@ -11,12 +11,10 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Slows down any item or living entity according to your level in the spell.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Slowing_Charm
+ * Arresto Momentum - https://harrypotter.fandom.com/wiki/Slowing_Charm - slows down any item or living entity according
+ * to your level in the spell.
  */
-public final class ARRESTO_MOMENTUM extends O2Spell
-{
+public final class ARRESTO_MOMENTUM extends O2Spell {
     /**
      * The amount to affect the target's velocity
      */
@@ -27,15 +25,13 @@ public final class ARRESTO_MOMENTUM extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public ARRESTO_MOMENTUM(Ollivanders2 plugin)
-    {
+    public ARRESTO_MOMENTUM(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.ARRESTO_MOMENTUM;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("An incantation for slowing velocity.");
             add("\"Dumbledore ...ran onto the field as you fell, waved his wand, and you sort of slowed down before you hit the ground.\" - Hermione Granger");
             add("The witch Daisy Pennifold had the idea of bewitching the Quaffle so that if dropped, it would fall slowly earthwards as though sinking through water, meaning that Chasers could grab it in mid-air.");
@@ -51,8 +47,7 @@ public final class ARRESTO_MOMENTUM extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public ARRESTO_MOMENTUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public ARRESTO_MOMENTUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.ARRESTO_MOMENTUM;
         branch = O2MagicBranch.CHARMS;
@@ -64,8 +59,7 @@ public final class ARRESTO_MOMENTUM extends O2Spell
      * Set the velocity impact based on spell experience
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         if (usesModifier > 100)
             multiplier = 0;
         else if (multiplier > 75)
@@ -82,17 +76,15 @@ public final class ARRESTO_MOMENTUM extends O2Spell
      * Checks for entities or items in a radius around the projectile and slows their velocity, if found
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
+        // todo actually use the modifier
         double modifier = usesModifier;
 
         // check for entities first
         List<Entity> entities = getCloseEntities(defaultRadius);
 
-        if (entities.size() > 0)
-        {
-            for (Entity entity : entities)
-            {
+        if (!entities.isEmpty()) {
+            for (Entity entity : entities) {
                 if (entity.getUniqueId() == player.getUniqueId())
                     continue;
 
@@ -108,7 +100,7 @@ public final class ARRESTO_MOMENTUM extends O2Spell
             return;
         }
 
-        // if the spell has hit a solid block, the projectile is dead and wont go further so kill the spell
+        // if the spell has hit a solid block, the projectile is dead and won't go further so kill the spell
         if (hasHitTarget())
             kill();
     }

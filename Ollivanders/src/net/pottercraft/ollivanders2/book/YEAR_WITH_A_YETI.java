@@ -5,23 +5,30 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Year with a Yeti - 2nd year Defense Against the Dark Arts book
+ * Year with the Yeti - 2nd year Defense Against the Dark Arts book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.ARANIA_EXUMAI}<br>
+ * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}<br>
+ * </p>
  *
- * Missing spells:
- * Mimblewimble - https://github.com/Azami7/Ollivanders2/issues/54
- *
- * @since 2.2.4
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Year_with_the_Yeti">https://harrypotter.fandom.com/wiki/Year_with_the_Yeti</a>
  * @author Azami7
+ * @since 2.2.4
  */
-public class YEAR_WITH_A_YETI extends O2Book
-{
-   public YEAR_WITH_A_YETI(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public class YEAR_WITH_A_YETI extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
+    public YEAR_WITH_A_YETI(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      bookType = O2BookType.YEAR_WITH_A_YETI;
+        bookType = O2BookType.YEAR_WITH_A_YETI;
 
-      spells.add(O2SpellType.ARANIA_EXUMAI);
-      spells.add(O2SpellType.OBLIVIATE);
-   }
+        spells.add(O2SpellType.ARANIA_EXUMAI);
+        spells.add(O2SpellType.OBLIVIATE);
+        // todo Mimblewimble - https://github.com/Azami7/Ollivanders2/issues/54
+    }
 }

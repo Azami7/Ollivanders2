@@ -12,11 +12,10 @@ import java.util.ArrayList;
 
 /**
  * Turns a target area or object to stone.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Hardening_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Hardening_Charm">https://harrypotter.fandom.com/wiki/Hardening_Charm</a>
  */
-public final class DURO extends BlockTransfiguration
-{
+public final class DURO extends BlockTransfiguration {
     private static final int minRadiusConfig = 1;
     private static final int maxRadiusConfig = 30;
     private static final int minDurationConfig = 15 * Ollivanders2Common.ticksPerSecond;
@@ -27,15 +26,14 @@ public final class DURO extends BlockTransfiguration
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public DURO(Ollivanders2 plugin)
-    {
+    public DURO(Ollivanders2 plugin) {
+        // todo make a duro variant that "hardens" tools
         super(plugin);
 
         spellType = O2SpellType.DURO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Hardening Charm");
             add("The Hardening Charm will turn an object into solid stone. This can be surprisingly handy in a tight spot. Of course, most students only seem to use this spell to sabotage their fellow students' schoolbags or to turn a pumpkin pasty to stone just before someone bites into it. It is unwise to try this unworthy trick on any of your teachers.");
         }};
@@ -50,8 +48,7 @@ public final class DURO extends BlockTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public DURO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public DURO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.DURO;
         branch = O2MagicBranch.CHARMS;

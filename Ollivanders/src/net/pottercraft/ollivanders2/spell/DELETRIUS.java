@@ -16,25 +16,24 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Deletes an item entity.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Eradication_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Eradication_Spell">https://harrypotter.fandom.com/wiki/Eradication_Spell</a>
  */
-public final class DELETRIUS extends O2Spell
-{
+public final class DELETRIUS extends O2Spell {
+    // todo rework to make this different than evanesco - make make smoke or spider webs disappear - https://harrypotter.fandom.com/wiki/Eradication_Spell
+
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public DELETRIUS(Ollivanders2 plugin)
-    {
+    public DELETRIUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.DELETRIUS;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Eradication Spell");
             add("'Deletrius!' Mr Diggory shouted, and the smoky skull vanished in a wisp of smoke.");
         }};
@@ -49,8 +48,7 @@ public final class DELETRIUS extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public DELETRIUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public DELETRIUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.DELETRIUS;
         branch = O2MagicBranch.CHARMS;
@@ -68,19 +66,16 @@ public final class DELETRIUS extends O2Spell
      * Delete a item
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         if (hasHitTarget())
             kill();
 
         List<Item> items = getItems(defaultRadius);
 
-        if (items.size() > 0)
-        {
+        if (items.size() > 0) {
             // handle success chance
             int successRate = (int) (usesModifier / 4);
-            if (successRate < Math.abs(Ollivanders2Common.random.nextInt() % 100))
-            {
+            if (successRate < Math.abs(Ollivanders2Common.random.nextInt() % 100)) {
                 sendFailureMessage();
                 return;
             }

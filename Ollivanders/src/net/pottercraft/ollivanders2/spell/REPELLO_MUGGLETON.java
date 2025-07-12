@@ -10,28 +10,27 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Repello Muggleton will hide any blocks and players in it's radius from those outside of it.
- * <p>
- * https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm
- * <p>
+ * Repello Muggleton will hide any blocks and players in its radius from those outside of it.
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm">https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm</a>
  * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
  */
-public final class REPELLO_MUGGLETON extends StationarySpell
-{
+public final class REPELLO_MUGGLETON extends StationarySpell {
+    // todo make this match the book - https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm
+    // todo as written this spell is https://harrypotter.fandom.com/wiki/Cave_inimicum
+
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public REPELLO_MUGGLETON(Ollivanders2 plugin)
-    {
+    public REPELLO_MUGGLETON(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.REPELLO_MUGGLETON;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("Muggle-Repelling Charms on every inch of it. Every time Muggles have got anywhere near here all year, they've suddenly remembered urgent appointments and had to dash away again.");
         }};
 
@@ -45,8 +44,7 @@ public final class REPELLO_MUGGLETON extends StationarySpell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.REPELLO_MUGGLETON;
@@ -65,8 +63,7 @@ public final class REPELLO_MUGGLETON extends StationarySpell
     }
 
     @Override
-    protected O2StationarySpell createStationarySpell()
-    {
+    protected O2StationarySpell createStationarySpell() {
         return new net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON(p, player.getUniqueId(), location, radius, duration);
     }
 }

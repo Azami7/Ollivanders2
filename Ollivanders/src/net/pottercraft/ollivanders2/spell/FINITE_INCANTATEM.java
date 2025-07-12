@@ -19,11 +19,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Reduces any spell or potion effects on an item or player.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/General_Counter-Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Finestra_spell">https://harrypotter.fandom.com/wiki/Finestra_spell</a>
  */
-public final class FINITE_INCANTATEM extends O2Spell
-{
+public final class FINITE_INCANTATEM extends O2Spell {
+    // todo change to make this work only on non-curses so that counter-curse can also be a spell
     /**
      * The maximum number of spells that can be targeted at the same time
      */
@@ -39,15 +39,13 @@ public final class FINITE_INCANTATEM extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public FINITE_INCANTATEM(Ollivanders2 plugin)
-    {
+    public FINITE_INCANTATEM(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.FINITE_INCANTATEM;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("\"He pointed his wand at the rampart, cried, \"Finite!\" and it steadied.\"");
             add("\"Try Finite Incantatem, that should stop the rain if it’s a hex or curse.\"  -Hermione Granger");
             add("\"Stop! Stop!\" screamed Lockhart, but Snape took charge. \"Finite Incantatum!\" he shouted; Harry's feet stopped dancing, Malfoy stopped laughing, and they were able to look up.");
@@ -64,8 +62,7 @@ public final class FINITE_INCANTATEM extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public FINITE_INCANTATEM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public FINITE_INCANTATEM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.FINITE_INCANTATEM;
         branch = O2MagicBranch.CHARMS;
@@ -74,8 +71,7 @@ public final class FINITE_INCANTATEM extends O2Spell
     }
 
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         targetsRemaining = (int) usesModifier / 20;
         if (targetsRemaining < 1)
             targetsRemaining = 1;
@@ -87,8 +83,7 @@ public final class FINITE_INCANTATEM extends O2Spell
      * Check players and items in the projectiles path for enchantments and effects
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         // look for entities first
         finiteIncantatemEntities();
 
@@ -104,25 +99,20 @@ public final class FINITE_INCANTATEM extends O2Spell
     /**
      * Finite Incantatem on entities.
      */
-    private void finiteIncantatemEntities()
-    {
-        for (LivingEntity live : getNearbyLivingEntities(defaultRadius))
-        {
+    private void finiteIncantatemEntities() {
+        for (LivingEntity live : getNearbyLivingEntities(defaultRadius)) {
             if (live.getUniqueId() == player.getUniqueId())
                 continue;
 
             common.printDebugMessage("finite incantatem targeting " + live.getName(), null, null, false);
 
             // if they are a player, look for O2Effects
-            if (live instanceof Player)
-            {
+            if (live instanceof Player) {
                 Player target = (Player) live;
 
                 // look for any effects on the player
-                if (Ollivanders2API.getPlayers().playerEffects.hasEffects(target.getUniqueId()))
-                {
-                    for (O2EffectType effectType : Ollivanders2API.getPlayers().playerEffects.getEffects(target.getUniqueId()))
-                    {
+                if (Ollivanders2API.getPlayers().playerEffects.hasEffects(target.getUniqueId())) {
+                    for (O2EffectType effectType : Ollivanders2API.getPlayers().playerEffects.getEffects(target.getUniqueId())) {
                         if (effectType.getLevel().ordinal() <= spellType.getLevel().ordinal())
                             Ollivanders2API.getPlayers().playerEffects.removeEffect(target.getUniqueId(), effectType);
 
@@ -133,13 +123,11 @@ public final class FINITE_INCANTATEM extends O2Spell
                 }
             }
 
-            if (targetsRemaining > 0)
-            {
+            if (targetsRemaining > 0) {
                 // look for any minecraft PotionEffects
                 Collection<PotionEffect> potionEffects = live.getActivePotionEffects();
 
-                for (PotionEffect effect : potionEffects)
-                {
+                for (PotionEffect effect : potionEffects) {
                     MagicLevel level = EntityCommon.getPotionEffectMagicLevel(effect.getType());
 
                     if (level.ordinal() <= spellType.getLevel().ordinal())
@@ -159,12 +147,9 @@ public final class FINITE_INCANTATEM extends O2Spell
     /**
      * Finite Incantatem on items.
      */
-    private void finiteIncantatemItems()
-    {
-        for (Item item : getItems(1.5))
-        {
-            if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item))
-            {
+    private void finiteIncantatemItems() {
+        for (Item item : getItems(1.5)) {
+            if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)) {
                 ItemEnchantmentType enchantmentType = Ollivanders2API.getItems().enchantedItems.getEnchantmentType(item.getItemStack());
 
                 if (enchantmentType.getLevel().ordinal() <= spellType.getLevel().ordinal())

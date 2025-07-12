@@ -9,25 +9,22 @@ import java.util.ArrayList;
 
 /**
  * Glacius Duo has the same effect as Glacius but with 2x the duration and radius.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Glacius_Duo
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Glacius_Duo">https://harrypotter.fandom.com/wiki/Glacius_Duo</a>
  */
-public final class GLACIUS_DUO extends GlaciusSuper
-{
+public final class GLACIUS_DUO extends GlaciusSuper {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public GLACIUS_DUO(Ollivanders2 plugin)
-    {
+    public GLACIUS_DUO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.GLACIUS_DUO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("A Stronger Freezing Charm");
             add("\"It's about preparing ourselves ...for what's waiting for us out there.\" -Hermione Granger");
         }};
@@ -42,8 +39,7 @@ public final class GLACIUS_DUO extends GlaciusSuper
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public GLACIUS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public GLACIUS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.GLACIUS_DUO;

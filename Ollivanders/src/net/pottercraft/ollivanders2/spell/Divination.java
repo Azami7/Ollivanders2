@@ -21,8 +21,7 @@ import java.util.List;
 /**
  * Super class for all divination spells.
  */
-public abstract class Divination extends O2Spell
-{
+public abstract class Divination extends O2Spell {
     /**
      * The type of divination
      */
@@ -65,8 +64,7 @@ public abstract class Divination extends O2Spell
     /**
      * All divination spell types
      */
-    public static final List<O2SpellType> divinationSpells = new ArrayList<>()
-    {{
+    public static final List<O2SpellType> divinationSpells = new ArrayList<>() {{
         add(O2SpellType.ASTROLOGIA);
         add(O2SpellType.BAO_ZHONG_CHA);
         add(O2SpellType.CARTOMANCIE);
@@ -81,8 +79,7 @@ public abstract class Divination extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public Divination(Ollivanders2 plugin)
-    {
+    public Divination(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.DIVINATION;
@@ -95,8 +92,7 @@ public abstract class Divination extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public Divination(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public Divination(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.DIVINATION;
@@ -106,8 +102,7 @@ public abstract class Divination extends O2Spell
      * Override setUsesModifier because this spell does not require holding a wand.
      */
     @Override
-    protected void setUsesModifier()
-    {
+    protected void setUsesModifier() {
         usesModifier = p.getSpellCount(player, spellType);
 
         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL))
@@ -119,27 +114,22 @@ public abstract class Divination extends O2Spell
      *
      * @param t the target player
      */
-    public void setTarget(@NotNull Player t)
-    {
+    public void setTarget(@NotNull Player t) {
         if (player != null)
             target = t;
     }
 
     @Override
-    public void checkEffect()
-    {
-        if (!isSpellAllowed())
-        {
+    public void checkEffect() {
+        if (!isSpellAllowed()) {
             kill();
             return;
         }
 
         // if this divination type requires the player be facing an block, like a crystal ball, check for the block
-        if (facingBlock != null)
-        {
+        if (facingBlock != null) {
             Block facing = Ollivanders2Common.playerFacingBlockType(player, facingBlock);
-            if (facing == null)
-            {
+            if (facing == null) {
                 player.sendMessage(Ollivanders2.chatColor + "You must be facing " + facingBlockString + " to do that.");
                 kill();
                 return;
@@ -147,22 +137,19 @@ public abstract class Divination extends O2Spell
         }
 
         // if this divination type requires the player hold an item, like an egg, check for the item
-        if (itemHeld != null)
-        {
+        if (itemHeld != null) {
             ItemStack held = player.getInventory().getItemInMainHand();
 
             // if the item has a display name, it is a custom item
             ItemMeta meta = held.getItemMeta();
-            if (meta == null || !meta.getDisplayName().toLowerCase().equals(itemHeld.getName().toLowerCase()))
-            {
+            if (meta == null || !meta.getDisplayName().toLowerCase().equals(itemHeld.getName().toLowerCase())) {
                 wrongItemHeld();
                 return;
             }
         }
 
         // target must be logged in to make prophecy about them
-        if (target == null || !target.isOnline())
-        {
+        if (target == null || !target.isOnline()) {
             player.sendMessage(Ollivanders2.chatColor + "Unable to find that player online.");
             kill();
             return;
@@ -174,12 +161,10 @@ public abstract class Divination extends O2Spell
         O2Divination divination;
         Class<?> divinationClass = divinationType.getClassName();
 
-        try
-        {
+        try {
             divination = (O2Divination) divinationClass.getConstructor(Ollivanders2.class, Player.class, Player.class, int.class).newInstance(p, player, target, experience);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             common.printDebugMessage("Exception creating divination", e, null, true);
             kill();
             return;
@@ -188,8 +173,7 @@ public abstract class Divination extends O2Spell
         divination.divine();
 
         // if requires consume item held, consume it
-        if (itemHeld != null && consumeHeld)
-        {
+        if (itemHeld != null && consumeHeld) {
             int amount = player.getInventory().getItemInMainHand().getAmount();
             player.getInventory().getItemInMainHand().setAmount(amount - 1);
         }
@@ -200,14 +184,12 @@ public abstract class Divination extends O2Spell
     /**
      * When the player is holding the wrong item for this divinination
      */
-    private void wrongItemHeld()
-    {
+    private void wrongItemHeld() {
         player.sendMessage(Ollivanders2.chatColor + "You must hold " + itemHeldString + " to do that.");
         kill();
     }
 
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
     }
 }

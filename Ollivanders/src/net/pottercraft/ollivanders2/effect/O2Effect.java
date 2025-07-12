@@ -5,8 +5,10 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -14,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
@@ -22,11 +25,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * An effect is either a temporary or semi-permanent alteration of an O2Player.
- * <p>
- * O2EffectType cannot permanently change the O2Player but some effects may remain until a specific removal action/effect is taken.
+ *
+ * <p>O2EffectType cannot permanently change the O2Player but some effects may remain until a specific removal action/effect is taken.</p>
  */
-public abstract class O2Effect
-{
+public abstract class O2Effect {
     /**
      * The type this effect is. Set to babbling as a safe default.
      */
@@ -91,8 +93,7 @@ public abstract class O2Effect
      * @param durationInTicks the length this effect should remain
      * @param pid             the player this effect acts on
      */
-    public O2Effect(@NotNull Ollivanders2 plugin, int durationInTicks, @NotNull UUID pid)
-    {
+    public O2Effect(@NotNull Ollivanders2 plugin, int durationInTicks, @NotNull UUID pid) {
         p = plugin;
         common = new Ollivanders2Common(p);
 
@@ -114,8 +115,7 @@ public abstract class O2Effect
      *
      * @param i the amount to age this effect
      */
-    public void age(int i)
-    {
+    public void age(int i) {
         if (permanent)
             return;
 
@@ -129,8 +129,7 @@ public abstract class O2Effect
      *
      * @param perm true if this is permanent, false otherwise
      */
-    public void setPermanent(boolean perm)
-    {
+    public void setPermanent(boolean perm) {
         permanent = perm;
 
         if (permanent)
@@ -140,8 +139,7 @@ public abstract class O2Effect
     /**
      * This kills the effect.
      */
-    public void kill()
-    {
+    public void kill() {
         kill = true;
     }
 
@@ -151,8 +149,7 @@ public abstract class O2Effect
      * @return the id of the player
      */
     @NotNull
-    public UUID getTargetID()
-    {
+    public UUID getTargetID() {
         return new UUID(targetID.getMostSignificantBits(), targetID.getLeastSignificantBits());
     }
 
@@ -171,8 +168,7 @@ public abstract class O2Effect
      *
      * @return true if the effect is permanent, false if it is not
      */
-    public boolean isPermanent()
-    {
+    public boolean isPermanent() {
         return permanent;
     }
 
@@ -181,8 +177,7 @@ public abstract class O2Effect
      *
      * @return true if it is killed, false otherwise
      */
-    public boolean isKilled()
-    {
+    public boolean isKilled() {
         return kill;
     }
 
@@ -192,14 +187,11 @@ public abstract class O2Effect
      * @return a random divination text for this effect
      */
     @NotNull
-    public String getDivinationText()
-    {
-        if (divinationText.size() < 1)
-        {
+    public String getDivinationText() {
+        if (divinationText.isEmpty()) {
             return "will be affected by an unseen affliction";
         }
-        else
-        {
+        else {
             int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % divinationText.size());
             return divinationText.get(rand);
         }
@@ -210,8 +202,7 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event)
-    {
+    void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {
     }
 
     /**
@@ -219,17 +210,15 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event)
-    {
+    void doOnPlayerInteractEvent(@NotNull PlayerInteractEvent event) {
     }
 
     /**
-     * Do any on player player chat effects
+     * Do any on player chat effects
      *
      * @param event the event
      */
-    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event)
-    {
+    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
     }
 
     /**
@@ -237,8 +226,7 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event)
-    {
+    void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event) {
     }
 
     /**
@@ -246,8 +234,7 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event)
-    {
+    void doOnPlayerToggleFlightEvent(@NotNull PlayerToggleFlightEvent event) {
     }
 
     /**
@@ -255,8 +242,7 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event)
-    {
+    void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {
     }
 
     /**
@@ -264,8 +250,7 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event)
-    {
+    void doOnPlayerToggleSprintEvent(@NotNull PlayerToggleSprintEvent event) {
     }
 
     /**
@@ -273,8 +258,7 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event)
-    {
+    void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event) {
     }
 
     /**
@@ -282,8 +266,7 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerPickupItemEvent(@NotNull EntityPickupItemEvent event)
-    {
+    void doOnPlayerPickupItemEvent(@NotNull EntityPickupItemEvent event) {
     }
 
     /**
@@ -291,8 +274,7 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerItemHeldEvent(@NotNull PlayerItemHeldEvent event)
-    {
+    void doOnPlayerItemHeldEvent(@NotNull PlayerItemHeldEvent event) {
     }
 
     /**
@@ -300,8 +282,7 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerItemConsumeEvent(@NotNull PlayerItemConsumeEvent event)
-    {
+    void doOnPlayerItemConsumeEvent(@NotNull PlayerItemConsumeEvent event) {
     }
 
     /**
@@ -309,8 +290,7 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerDropItemEvent(@NotNull PlayerDropItemEvent event)
-    {
+    void doOnPlayerDropItemEvent(@NotNull PlayerDropItemEvent event) {
     }
 
     /**
@@ -318,7 +298,30 @@ public abstract class O2Effect
      *
      * @param event the event
      */
-    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event)
-    {
+    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
+    }
+
+    /**
+     * handle any effects when a spell projectile moves
+     *
+     * @param event the event
+     */
+    void doOnOllivandersSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
+    }
+
+    /**
+     * handle on player quit event
+     *
+     * @param event the event
+     */
+    void doOnPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
+    }
+
+    /**
+     * handle entity target event
+     *
+     * @param event the event
+     */
+    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
     }
 }

@@ -12,27 +12,33 @@ import java.util.UUID;
  * @author Azami7
  * @since 2.2.9
  */
-public class BLINDNESS extends PotionEffectSuper
-{
-   public BLINDNESS(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-   {
-      super(plugin, duration, pid);
+public class BLINDNESS extends PotionEffectSuper {
+    /**
+     * Constructor
+     *
+     * @param plugin   a callback to the plugin
+     * @param duration the duration for the effect
+     * @param pid      the pid of the affected player
+     */
+    public BLINDNESS(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
+        super(plugin, duration, pid);
 
-      effectType = O2EffectType.BLINDNESS;
-      potionEffectType = PotionEffectType.BLINDNESS;
-      informousText = legilimensText = "cannot see";
+        effectType = O2EffectType.BLINDNESS;
+        potionEffectType = PotionEffectType.BLINDNESS;
+        informousText = legilimensText = "cannot see";
 
-      strength = 1;
+        strength = 1;
 
-      divinationText.add("shall be cursed");
-      divinationText.add("shall be afflicted in the mind");
-      divinationText.add("will become unable to see");
-      divinationText.add("will be struck by a terrible affliction");
-   }
+        divinationText.add("shall be cursed");
+        divinationText.add("shall be afflicted in the mind");
+        divinationText.add("will become unable to see");
+        divinationText.add("will be struck by a terrible affliction");
+    }
 
-   /**
-    * Do any cleanup related to removing this effect from the player
-    */
-   @Override
-   public void doRemove () { }
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove() {
+    }
 }

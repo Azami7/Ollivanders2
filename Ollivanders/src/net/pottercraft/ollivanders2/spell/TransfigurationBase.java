@@ -11,8 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The base class for all transfiguration spells that change blocks and entities.
  */
-public abstract class TransfigurationBase extends O2Spell
-{
+public abstract class TransfigurationBase extends O2Spell {
     /**
      * If the transfiguration has taken place or not.
      */
@@ -58,8 +57,7 @@ public abstract class TransfigurationBase extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public TransfigurationBase(Ollivanders2 plugin)
-    {
+    public TransfigurationBase(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -72,8 +70,7 @@ public abstract class TransfigurationBase extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public TransfigurationBase(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public TransfigurationBase(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -86,8 +83,7 @@ public abstract class TransfigurationBase extends O2Spell
      *
      * @return whether the target has transfigured or not
      */
-    public boolean isTransfigured()
-    {
+    public boolean isTransfigured() {
         return isTransfigured;
     }
 
@@ -96,8 +92,7 @@ public abstract class TransfigurationBase extends O2Spell
      *
      * @return true if permanent, false otherwise
      */
-    public boolean isPermanent()
-    {
+    public boolean isPermanent() {
         return permanent;
     }
 
@@ -106,8 +101,7 @@ public abstract class TransfigurationBase extends O2Spell
      *
      * @return true if it consumes the block, false otherwise
      */
-    public boolean isConsumeOriginal()
-    {
+    public boolean isConsumeOriginal() {
         return consumeOriginal;
     }
 
@@ -115,23 +109,23 @@ public abstract class TransfigurationBase extends O2Spell
      * If the target is not transfigured, attempt to transfigure it. If it is transfigured and this is not a permanent spell, age the spell one tick.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
+        // stop the projectile if we've hit something
+        if (hasHitTarget())
+            kill();
+
         // if a target has not transfigured, look for one to transfigure otherwise move the projectile on
-        if (!isTransfigured())
-        {
-            common.printDebugMessage("Attempting to transfigure " + location.getBlock().getType(), null, null, false);
+        if (!isTransfigured()) {
+            common.printDebugMessage("transfiguration base: checking block " + location.getBlock().getType(), null, null, false);
             transfigure();
 
-            if (isTransfigured)
-            {
+            if (isTransfigured) {
                 // if the spell successfully transfigured something, stop the projectile
                 stopProjectile();
 
                 if (permanent)
                     kill();
-                else
-                {
+                else {
                     spellDuration = (int) (usesModifier * Ollivanders2Common.ticksPerSecond * durationModifier);
                     if (spellDuration > maxDuration)
                         spellDuration = maxDuration;
@@ -142,8 +136,7 @@ public abstract class TransfigurationBase extends O2Spell
                 sendSuccessMessage();
             }
         }
-        else
-        {
+        else {
             // check time to live on the spell
             if (spellDuration <= 0)
                 // spell duration is up, kill the spell

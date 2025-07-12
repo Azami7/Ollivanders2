@@ -10,11 +10,10 @@ import java.util.ArrayList;
 
 /**
  * Gives a target blindness
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Obscuro
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Obscuro">https://harrypotter.fandom.com/wiki/Obscuro</a>
  */
-public final class OBSCURO extends AddPotionEffect
-{
+public final class OBSCURO extends AddPotionEffect {
     private static final int minDurationInSecondsConfig = 30;
     private static final int maxDurationInSecondsConfig = 120;
     private static final int minAmplifierConfig = 0;
@@ -25,15 +24,13 @@ public final class OBSCURO extends AddPotionEffect
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public OBSCURO(Ollivanders2 plugin)
-    {
+    public OBSCURO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.OBSCURO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("A black blindfold appeared over Phineas Nigellus' clever, dark eyes, causing him to bump into the frame and shriek with pain.");
         }};
 
@@ -47,8 +44,7 @@ public final class OBSCURO extends AddPotionEffect
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public OBSCURO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public OBSCURO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.OBSCURO;
         branch = O2MagicBranch.CHARMS;

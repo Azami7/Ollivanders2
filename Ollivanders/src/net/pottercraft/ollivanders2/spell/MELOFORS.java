@@ -13,52 +13,50 @@ import java.util.ArrayList;
  * Encases target's head in a melon
  *
  * @author lownes
+ * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Pumpkin-Head_Jinx">https://harrypotter.fandom.com/wiki/Pumpkin-Head_Jinx</a>
  */
-public final class MELOFORS extends GaleatiSuper
-{
-   static Material[] melons = {
-           Material.MELON,
-           Material.JACK_O_LANTERN,
-           Material.PUMPKIN,
-   };
+public final class MELOFORS extends GaleatiSuper {
+    static Material[] melons = {
+            Material.MELON,
+            Material.JACK_O_LANTERN,
+            Material.PUMPKIN,
+    };
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public MELOFORS(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public MELOFORS(Ollivanders2 plugin) {
+        super(plugin);
 
-      spellType = O2SpellType.MELOFORS;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.MELOFORS;
+        branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<>()
-      {{
-         add("Harry overheard one second-year girl assuring another that Fudge was now lying in St Mungo’s with a pumpkin for a head.\"");
-         add("The Melon-Head Spell");
-      }};
+        flavorText = new ArrayList<>() {{
+            add("Harry overheard one second-year girl assuring another that Fudge was now lying in St Mungo’s with a pumpkin for a head.\"");
+            add("The Melon-Head Spell");
+        }};
 
-      text = "Melofors places a melon on the target player's head.";
-   }
+        text = "Melofors places a melon on the target player's head.";
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public MELOFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public MELOFORS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+        super(plugin, player, rightWand);
 
-      spellType = O2SpellType.MELOFORS;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.MELOFORS;
+        branch = O2MagicBranch.CHARMS;
 
-      materialType = melons[Math.abs(Ollivanders2Common.random.nextInt() % melons.length)];
+        materialType = melons[Math.abs(Ollivanders2Common.random.nextInt() % melons.length)];
 
-      initSpell();
-   }
+        initSpell();
+    }
 }

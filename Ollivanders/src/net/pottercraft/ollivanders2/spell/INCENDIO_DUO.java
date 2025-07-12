@@ -10,25 +10,22 @@ import java.util.ArrayList;
 
 /**
  * Creates a larger incendio that strafes and doubles the radius and duration.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Incendio_Duo_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Incendio_Duo_Spell">https://harrypotter.fandom.com/wiki/Incendio_Duo_Spell</a>
  */
-public final class INCENDIO_DUO extends IncendioSuper
-{
+public final class INCENDIO_DUO extends IncendioSuper {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public INCENDIO_DUO(Ollivanders2 plugin)
-    {
+    public INCENDIO_DUO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.INCENDIO_DUO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("A Stronger Fire-Making Charm");
         }};
 
@@ -42,8 +39,7 @@ public final class INCENDIO_DUO extends IncendioSuper
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public INCENDIO_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public INCENDIO_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.INCENDIO_DUO;

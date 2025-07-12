@@ -11,18 +11,16 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public class POISON_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper
-{
+public class POISON_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper {
     /**
      * Constructor
      *
-     * @param plugin a reference to the plugin for logging
+     * @param plugin   a reference to the plugin for logging
      * @param duration the duration of this effect - not used for this effect type
-     * @param pid the target player
+     * @param pid      the target player
      */
-    public POISON_ANTIDOTE_LESSER (@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-    {
-        super (plugin, duration, pid);
+    public POISON_ANTIDOTE_LESSER(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
+        super(plugin, duration, pid);
 
         effectType = O2EffectType.POISON_ANTIDOTE_LESSER;
         potionEffectType = PotionEffectType.POISON;
@@ -33,5 +31,6 @@ public class POISON_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper
      * Do any cleanup related to removing this effect from the player
      */
     @Override
-    public void doRemove () { }
+    public void doRemove() {
+    }
 }

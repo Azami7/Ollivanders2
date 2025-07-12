@@ -9,47 +9,44 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The Wit-Sharpening Potion is a potion which allows the drinker to think more clearly. Due to this, it acts a a
+ * The Wit-Sharpening Potion is a potion which allows the drinker to think more clearly. Due to this, it acts a
  * counteragent to the Confundus Charm.
  *
  * @author Azami7
  */
-public final class WIT_SHARPENING_POTION extends O2Potion
-{
-   /**
-    * Constructor
-    *
-    * @param plugin a callback to the plugin
-    */
-   public WIT_SHARPENING_POTION(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public final class WIT_SHARPENING_POTION extends O2Potion {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
+    public WIT_SHARPENING_POTION(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      potionType = O2PotionType.WIT_SHARPENING_POTION;
+        potionType = O2PotionType.WIT_SHARPENING_POTION;
 
-      ingredients.put(O2ItemType.GINGER_ROOT, 2);
-      ingredients.put(O2ItemType.GROUND_SCARAB_BEETLE, 3);
-      ingredients.put(O2ItemType.ARMADILLO_BILE, 2);
-      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
+        ingredients.put(O2ItemType.GINGER_ROOT, 2);
+        ingredients.put(O2ItemType.GROUND_SCARAB_BEETLE, 3);
+        ingredients.put(O2ItemType.ARMADILLO_BILE, 2);
+        ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
-      text = "The Wit-Sharpening Potion is a potion which allows the drinker to think more clearly. Due to this, it acts"
-            + "as a counteragent to the Confundus Charm.";
-      flavorText.add("\"Some of you will benefit from today's assignment: Wit-Sharpening Potion. Perhaps you should begin immediately.\" -Severus Snape");
+        text = "The Wit-Sharpening Potion is a potion which allows the drinker to think more clearly. Due to this, it acts"
+                + "as a counteragent to the Confundus Charm.";
+        flavorText.add("\"Some of you will benefit from today's assignment: Wit-Sharpening Potion. Perhaps you should begin immediately.\" -Severus Snape");
 
-      potionColor = Color.fromRGB(204, 102, 0);
-   }
+        potionColor = Color.fromRGB(204, 102, 0);
+    }
 
-   /**
-    * Drink this potion and do effects
-    *
-    * @param player the player who drank the potion
-    */
-   @Override
-   public void drink(@NotNull Player player)
-   {
-      IMPROVED_BOOK_LEARNING effect = new IMPROVED_BOOK_LEARNING(p, duration, player.getUniqueId());
-      Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+    /**
+     * Drink this potion and do effects
+     *
+     * @param player the player who drank the potion
+     */
+    @Override
+    public void drink(@NotNull Player player) {
+        IMPROVED_BOOK_LEARNING effect = new IMPROVED_BOOK_LEARNING(p, duration, player.getUniqueId());
+        Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-      player.sendMessage(Ollivanders2.chatColor + "You feel ready to learn.");
-   }
+        player.sendMessage(Ollivanders2.chatColor + "You feel ready to learn.");
+    }
 }

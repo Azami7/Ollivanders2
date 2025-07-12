@@ -13,11 +13,11 @@ import java.util.ArrayList;
 
 /**
  * Temporarily disables a stationary spell's effects if it is your spell.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Partis_Temporus
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Partis_Temporus">https://harrypotter.fandom.com/wiki/Partis_Temporus</a>
  */
-public final class PARTIS_TEMPORUS extends O2Spell
-{
+public final class PARTIS_TEMPORUS extends O2Spell {
+    // todo rework to actually match the books - part fire or water - https://harrypotter.fandom.com/wiki/Partis_Temporus
     /**
      * The duration of the spell effect
      */
@@ -33,15 +33,13 @@ public final class PARTIS_TEMPORUS extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public PARTIS_TEMPORUS(Ollivanders2 plugin)
-    {
+    public PARTIS_TEMPORUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.PARTIS_TEMPORUS;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Parting Charm");
         }};
 
@@ -55,8 +53,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public PARTIS_TEMPORUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public PARTIS_TEMPORUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.PARTIS_TEMPORUS;
@@ -69,8 +66,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
      * Set the duration based on the caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         int durationInSeconds = (int) usesModifier;
         if (durationInSeconds < minDurationInSeconds)
             durationInSeconds = minDurationInSeconds;
@@ -82,15 +78,12 @@ public final class PARTIS_TEMPORUS extends O2Spell
      * Find any nearby stationary spells and, if they were cast by the caster, disable them
      */
     @Override
-    protected void doCheckEffect()
-    {
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
-        {
+    protected void doCheckEffect() {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
             if (stationarySpell.isKilled())
                 continue;
 
-            if (stationarySpell.getCasterID() == player.getUniqueId())
-            {
+            if (stationarySpell.getCasterID() == player.getUniqueId()) {
                 stopProjectile();
 
                 stationarySpell.setActive(false);
@@ -101,8 +94,7 @@ public final class PARTIS_TEMPORUS extends O2Spell
             }
         }
 
-        if (hasHitTarget())
-        {
+        if (hasHitTarget()) {
             duration = duration - 1;
 
             if (duration <= 0)
@@ -114,14 +106,10 @@ public final class PARTIS_TEMPORUS extends O2Spell
      * Re-activate the spells
      */
     @Override
-    protected void revert()
-    {
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location))
-        {
-            if (stationarySpell.getCasterID() == player.getUniqueId())
-            {
-                if (!stationarySpell.isKilled())
-                {
+    protected void revert() {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
+            if (stationarySpell.getCasterID() == player.getUniqueId()) {
+                if (!stationarySpell.isKilled()) {
                     stationarySpell.setActive(true);
                     stationarySpell.flair(10);
                 }

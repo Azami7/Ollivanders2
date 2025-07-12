@@ -12,8 +12,7 @@ import java.util.ArrayList;
 /**
  * Pyrosvestiras is a fire extinquishing spell if you decide that you want to put out that thing you lit on fire.
  */
-public class PYROSVESTIRAS extends BlockTransfiguration
-{
+public class PYROSVESTIRAS extends BlockTransfiguration {
     private static final int minRadiusConfig = 1;
     private static final int maxRadiusConfig = 15;
 
@@ -22,15 +21,13 @@ public class PYROSVESTIRAS extends BlockTransfiguration
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public PYROSVESTIRAS(Ollivanders2 plugin)
-    {
+    public PYROSVESTIRAS(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.CHARMS;
         spellType = O2SpellType.PYROSVESTIRAS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("A charm that extinguishes fires. Most commonly employed by Dragonologists.");
             add("The Extinguishing Charm");
         }};
@@ -45,8 +42,7 @@ public class PYROSVESTIRAS extends BlockTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public PYROSVESTIRAS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public PYROSVESTIRAS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.PYROSVESTIRAS;
         branch = O2MagicBranch.CHARMS;
@@ -81,8 +77,7 @@ public class PYROSVESTIRAS extends BlockTransfiguration
      * Set the radius for this spell based on the caster's experience.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         if (usesModifier > 50)
             radius = 10;
         else if (usesModifier < 10)

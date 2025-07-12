@@ -17,10 +17,9 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The super class for transfiguration of objects.  Not for use on players or entities.
+ * The super class for transfiguration of objects. Not for use on players or entities.
  */
-public abstract class BlockTransfiguration extends TransfigurationBase
-{
+public abstract class BlockTransfiguration extends TransfigurationBase {
     static int minRadius = 1;
     static int maxRadius = 10;
 
@@ -54,8 +53,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public BlockTransfiguration(Ollivanders2 plugin)
-    {
+    public BlockTransfiguration(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -68,8 +66,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public BlockTransfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public BlockTransfiguration(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         branch = O2MagicBranch.TRANSFIGURATION;
@@ -93,8 +90,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      * Transfigure the target block or blocks. Will not change the block if it is on the materialBlacklist list or if the
      * target block is already the transfiguration type.
      */
-    protected void transfigure()
-    {
+    protected void transfigure() {
         if (isTransfigured || !hasHitTarget() || getTargetBlock() == null)
             return;
 
@@ -106,8 +102,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase
             radius = maxRadius;
 
         // get the objects to be transfigured, target block is not always the block at the location (such as aguamenti), so we cannot use 'location'
-        for (Block blockToChange : Ollivanders2Common.getBlocksInRadius(getTargetBlock().getLocation(), radius))
-        {
+        for (Block blockToChange : Ollivanders2Common.getBlocksInRadius(getTargetBlock().getLocation(), radius)) {
             if (!canTransfigure(blockToChange))
                 continue;
 
@@ -126,8 +121,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase
 
         if (isTransfigured)
             sendSuccessMessage();
-        else
-        {
+        else {
             sendFailureMessage();
             kill();
         }
@@ -142,14 +136,12 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      * @param block the block to check
      * @return true if the block can be changed, false otherwise.
      */
-    boolean canTransfigure(@NotNull Block block)
-    {
+    boolean canTransfigure(@NotNull Block block) {
         common.printDebugMessage("BlockTransfigure.canTranfigure: Checking if this block can be transfigured.", null, null, false);
 
         // first check success rate
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
-        if (rand >= successRate)
-        {
+        if (rand >= successRate) {
             common.printDebugMessage(player.getName() + " failed success check in canTransfigure()", null, null, false);
             return false;
         }
@@ -157,39 +149,31 @@ public abstract class BlockTransfiguration extends TransfigurationBase
         // get block type
         Material blockType = block.getType();
 
-        if (transfigurationMap.size() > 0 && transfigurationMap.containsKey(transfigureType) && transfigurationMap.get(transfigureType) == blockType)
-        {
+        if (transfigurationMap.size() > 0 && transfigurationMap.containsKey(transfigureType) && transfigurationMap.get(transfigureType) == blockType) {
             // do not change if this block is already the target type
             common.printDebugMessage("Block is already type " + transfigureType.toString(), null, null, false);
             return false;
         }
-        else if (blockType == transfigureType)
-        {
+        else if (blockType == transfigureType) {
             // do not change if this block is already the target type
             common.printDebugMessage("Block is already type " + transfigureType.toString(), null, null, false);
             return false;
         }
-        else if (materialBlockedList.contains(blockType))
-        {
+        else if (materialBlockedList.contains(blockType)) {
             // do not change if this block is in the blocked list
             common.printDebugMessage("Material on blocked list: " + blockType.toString(), null, null, false);
             return false;
         }
-        else if (!materialAllowList.isEmpty() && !materialAllowList.contains(blockType))
-        {
+        else if (!materialAllowList.isEmpty() && !materialAllowList.contains(blockType)) {
             // do not change if the allowed list exists and this block is not in it
             common.printDebugMessage("Material not on allow list: " + blockType.toString(), null, null, false);
             return false;
         }
-        else
-        {
+        else {
             // do not change if this block is already the subject of a temporary transfiguration
-            for (O2Spell spell : p.getProjectiles())
-            {
-                if (spell instanceof TransfigurationBase)
-                {
-                    if (((TransfigurationBase) spell).isBlockTransfigured(block))
-                    {
+            for (O2Spell spell : p.getProjectiles()) {
+                if (spell instanceof TransfigurationBase) {
+                    if (((TransfigurationBase) spell).isBlockTransfigured(block)) {
                         common.printDebugMessage("Block is already a non-permanent transfiguration", null, null, false);
                         return false;
                     }
@@ -204,13 +188,11 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      * Restore the block to its original type if this was not a permanent change
      */
     @Override
-    public void revert()
-    {
+    public void revert() {
         if (permanent)
             return;
 
-        for (Block block : changedBlocks.keySet())
-        {
+        for (Block block : changedBlocks.keySet()) {
             Material originalMaterial = changedBlocks.get(block);
             block.setType(originalMaterial);
         }
@@ -224,8 +206,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase
     /**
      * Spell specific revert actions beyond changing the block type back. Needs to be overridden by child classes.
      */
-    void doRevert()
-    {
+    void doRevert() {
     }
 
     /**
@@ -235,8 +216,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      * @return true if this spell is affecting this block, false otherwise
      */
     @Override
-    public boolean isBlockTransfigured(@NotNull Block block)
-    {
+    public boolean isBlockTransfigured(@NotNull Block block) {
         if (permanent)
             // if this spell is permanent, it is no longer considered as "affecting" the block, the block *is* the new type
             // this condition should never happen because permanent spells should be killed but just in case one is hanging around
@@ -252,8 +232,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase
      * @return true if transfigured, false otherwise
      */
     @Override
-    public boolean isEntityTransfigured(@NotNull Entity entity)
-    {
+    public boolean isEntityTransfigured(@NotNull Entity entity) {
         return false;
     }
 }

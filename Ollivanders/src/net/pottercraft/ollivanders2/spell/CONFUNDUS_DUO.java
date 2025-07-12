@@ -9,25 +9,22 @@ import java.util.ArrayList;
 
 /**
  * Casts a more powerful confusion potion effect that is twice as strong and lasts twice as long as Confundus.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Confundus_Duo
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Confundus_Duo">https://harrypotter.fandom.com/wiki/Confundus_Duo</a>
  */
-public final class CONFUNDUS_DUO extends ConfundusSuper
-{
+public final class CONFUNDUS_DUO extends ConfundusSuper {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public CONFUNDUS_DUO(Ollivanders2 plugin)
-    {
+    public CONFUNDUS_DUO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.CONFUNDUS_DUO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Confundus Charm");
             add("The guard was confused. He stared down at the thin, golden Probe and then at his companion, who said in a slightly dazed voice, 'Yeah, you've just checked them, Marius.'");
         }};
@@ -43,8 +40,7 @@ public final class CONFUNDUS_DUO extends ConfundusSuper
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public CONFUNDUS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public CONFUNDUS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.CONFUNDUS_DUO;
         branch = O2MagicBranch.CHARMS;
@@ -59,8 +55,7 @@ public final class CONFUNDUS_DUO extends ConfundusSuper
     }
 
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         // Amplifier
         amplifier = 1;
 

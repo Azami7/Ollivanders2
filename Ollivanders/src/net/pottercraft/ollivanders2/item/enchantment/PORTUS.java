@@ -14,11 +14,10 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Port key enchantment
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Portkey
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Portkey">https://harrypotter.fandom.com/wiki/Portkey</a>
  */
-public class PORTUS extends Enchantment
-{
+public class PORTUS extends Enchantment {
     /**
      * The teleport destination for this portkey
      */
@@ -32,8 +31,7 @@ public class PORTUS extends Enchantment
      * @param args     optional arguments for this enchantment
      * @param itemLore the optional lore for this enchantment
      */
-    public PORTUS(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
-    {
+    public PORTUS(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore) {
         super(plugin, mag, args, itemLore);
         enchantmentType = ItemEnchantmentType.GEMINIO;
 
@@ -43,8 +41,7 @@ public class PORTUS extends Enchantment
     /**
      * Parse the location from the args
      */
-    private void parseLocation()
-    {
+    private void parseLocation() {
         if (args == null)
             return;
 
@@ -55,20 +52,17 @@ public class PORTUS extends Enchantment
         double y;
         double z;
 
-        if (split.length != 4)
-        {
+        if (split.length != 4) {
             common.printDebugMessage("Invalid coordinates on Portkey", null, null, false);
             return;
         }
 
-        try
-        {
+        try {
             x = Double.parseDouble(split[1]);
             y = Double.parseDouble(split[2]);
             z = Double.parseDouble(split[3]);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             common.printDebugMessage("Failed to parse coordinates on Portkey", null, null, false);
             return;
         }
@@ -86,8 +80,7 @@ public class PORTUS extends Enchantment
      * @param event the item despawn event
      */
     @Override
-    public void doItemDespawn(@NotNull ItemDespawnEvent event)
-    {
+    public void doItemDespawn(@NotNull ItemDespawnEvent event) {
         event.setCancelled(true);
     }
 
@@ -97,18 +90,16 @@ public class PORTUS extends Enchantment
      * @param event the item pickup event
      */
     @Override
-    public void doItemPickup(@NotNull EntityPickupItemEvent event)
-    {
+    public void doItemPickup(@NotNull EntityPickupItemEvent event) {
         Entity entity = event.getEntity();
-        if (!(entity instanceof Player))
-        {
+        if (!(entity instanceof Player)) {
             event.setCancelled(true);
             return;
         }
 
         // teleport the player to the location
         if (location == null)
-            location = ((Player) entity).getBedSpawnLocation();
+            location = ((Player) entity).getRespawnLocation();
 
         if (location != null) // location could still be null
             p.addTeleportEvent((Player) entity, location, true);
@@ -122,16 +113,12 @@ public class PORTUS extends Enchantment
      * @param event the item drop event
      */
     @Override
-    public void doItemDrop(@NotNull PlayerDropItemEvent event)
-    {
-    }
+    public void doItemDrop(@NotNull PlayerDropItemEvent event) { }
 
     /**
      * Handle item held events
      *
      * @param event the item drop event
      */
-    public void doItemHeld(@NotNull PlayerItemHeldEvent event)
-    {
-    }
+    public void doItemHeld(@NotNull PlayerItemHeldEvent event) { }
 }

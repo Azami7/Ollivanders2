@@ -40,8 +40,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A cast spell
  */
-public abstract class O2Spell
-{
+public abstract class O2Spell {
     /**
      * Max spell lifetime in gameticks, 10 minutes, this is used to ensure a code bug doesn't create never-ending
      * spells. Permanent and semi-permanent spells need to use stationary spells or effects.
@@ -197,9 +196,10 @@ public abstract class O2Spell
     /**
      * Default constructor should only be used for fake instances of the spell such as when initializing the book
      * text.
+     *
+     * @param plugin a callback to the plugin
      */
-    public O2Spell(Ollivanders2 plugin)
-    {
+    public O2Spell(Ollivanders2 plugin) {
         p = plugin;
     }
 
@@ -210,8 +210,7 @@ public abstract class O2Spell
      * @param player    the player casting the spell
      * @param rightWand wand check for the player
      */
-    public O2Spell(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public O2Spell(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         location = player.getEyeLocation();
         this.player = player;
         p = plugin;
@@ -233,13 +232,11 @@ public abstract class O2Spell
 
     /**
      * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
-     * constants. This must be called by each spell constructor since usage is based on the specific class
+     * constants. This must be called by the child-most spell constructor since usage is based on the specific class
      * type and cannot be determined in the super-class constructors.
      */
-    void initSpell()
-    {
-        if (spellType == null)
-        {
+    void initSpell() {
+        if (spellType == null) {
             common.printDebugMessage("O2Spell.initSpell() spell type is null, this probably means initSpell was called in an abstract class.", null, null, true);
             kill();
             return;
@@ -252,21 +249,18 @@ public abstract class O2Spell
     }
 
     /**
-     * The spell-specific initialization based on usage, etc.. Must be overridden by each spell class that
+     * The spell-specific initialization based on usage, etc. Must be overridden by each spell class that
      * has any initializations.
      */
-    void doInitSpell()
-    {
+    void doInitSpell() {
     }
 
     /**
      * Game tick update on this spell - must be overridden in child classes or the spell exits immediately.
      */
-    public void checkEffect()
-    {
+    public void checkEffect() {
         // check whether this spell can exist up until it hits a target
-        if (!hitTarget && !isSpellAllowed())
-        {
+        if (!hitTarget && !isSpellAllowed()) {
             kill();
             return;
         }
@@ -278,8 +272,7 @@ public abstract class O2Spell
             kill();
 
         // do nothing if spell is already marked as killed
-        if (!kill)
-        {
+        if (!kill) {
             // only move the projectile if a target has not been hit
             if (!hitTarget)
                 move();
@@ -293,15 +286,13 @@ public abstract class O2Spell
     /**
      * Moves the projectile forward, creating a particle effect
      */
-    public void move()
-    {
-        // if this is somehow called when the spell is set to killed or we've already hit a target, do nothing
+    public void move() {
+        // if this is somehow called when the spell is set to killed, or we've already hit a target, do nothing
         if (isKilled() || hasHitTarget())
             return;
 
         // if we have gone beyond the max distance, kill this spell
-        if (projectileDistance > maxProjectileDistance)
-        {
+        if (projectileDistance > maxProjectileDistance) {
             kill();
             return;
         }
@@ -314,8 +305,7 @@ public abstract class O2Spell
         projectileDistance = projectileDistance + 1;
 
         // determine if this spell is allowed in this location per Ollivanders2 config and WorldGuard
-        if (!isSpellAllowed())
-        {
+        if (!isSpellAllowed()) {
             kill();
             return;
         }
@@ -323,8 +313,7 @@ public abstract class O2Spell
         // play the project moving effect
 
         World world = location.getWorld();
-        if (world == null)
-        {
+        if (world == null) {
             common.printDebugMessage("O2Spell.move: world null", null, null, true);
             kill();
             return;
@@ -334,8 +323,7 @@ public abstract class O2Spell
 
         // check the block at this location, if it is not a pass-through block, stop the projectile and check the target
         Material targetBlockType = location.getBlock().getType();
-        if (!projectilePassThrough.contains(targetBlockType))
-        {
+        if (!projectilePassThrough.contains(targetBlockType)) {
             stopProjectile();
             checkTargetBlock();
         }
@@ -346,27 +334,24 @@ public abstract class O2Spell
      * <p>
      * If the block is not on the allow list, is on the blocked list, or the spell cannot be cast in this location, kills the spell
      */
-    private void checkTargetBlock()
-    {
+    private void checkTargetBlock() {
         // if this is somehow called before we've hit a target, do nothing
         if (!hasHitTarget())
             return;
 
         Block target = location.getBlock();
 
-        p.getLogger().info("Checking " + target.getType().toString());
+        p.getLogger().info("Checking " + target.getType());
 
-        // check blockAllowList
-        if (materialAllowList.size() > 0 && !(materialAllowList.contains(target.getType())))
-        {
+        // check blockAllowList, if it ia empty then all block types are allowed
+        if ((!materialAllowList.isEmpty()) && !(materialAllowList.contains(target.getType()))) {
             common.printDebugMessage(target.getType() + " is not in the material allow list", null, null, false);
             kill();
             return;
         }
 
         // check deny list
-        if (materialBlockedList.contains(target.getType()))
-        {
+        if (materialBlockedList.contains(target.getType())) {
             common.printDebugMessage(target.getType() + " is in the material deny list", null, null, false);
             kill();
         }
@@ -377,19 +362,17 @@ public abstract class O2Spell
      *
      * @return true if the spell can exist here, false otherwise
      */
-    boolean isSpellAllowed()
-    {
+    // todo centralize this check so it does not have to be repeated in all the overrides of checkEffect()
+    boolean isSpellAllowed() {
         boolean isAllowed = true;
 
         // determine if this spell is allowed in this location per Ollivanders2 config
-        if (!Ollivanders2API.getSpells().isSpellTypeAllowed(location, spellType))
-        {
+        if (!Ollivanders2API.getSpells().isSpellTypeAllowed(location, spellType)) {
             kill();
             isAllowed = false;
         }
         // determine if spell is allowed in this location per WorldGuard
-        else if (!checkWorldGuard())
-        {
+        else if (!checkWorldGuard()) {
             kill();
             isAllowed = false;
         }
@@ -405,17 +388,14 @@ public abstract class O2Spell
      *
      * @return true if the spell can be cast, false otherwise
      */
-    private boolean checkWorldGuard()
-    {
+    private boolean checkWorldGuard() {
         if (!Ollivanders2.worldGuardEnabled)
             return true;
 
         // check every flag needed for this spell
-        for (StateFlag flag : worldGuardFlags)
-        {
-            if (!Ollivanders2.worldGuardO2.checkWGFlag(player, location, flag))
-            {
-                common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag.toString(), null, null, false);
+        for (StateFlag flag : worldGuardFlags) {
+            if (!Ollivanders2.worldGuardO2.checkWGFlag(player, location, flag)) {
+                common.printDebugMessage(spellType.toString() + " cannot be cast because of WorldGuard flag " + flag, null, null, false);
                 return false;
             }
         }
@@ -430,26 +410,21 @@ public abstract class O2Spell
      * @return a list of entities within the radius of the projectile
      */
     @NotNull
-    List<Entity> getCloseEntities(double radius)
-    {
+    List<Entity> getCloseEntities(double radius) {
         if (radius <= 0)
             radius = 1.0;
 
         Collection<Entity> entities = EntityCommon.getEntitiesInRadius(location, radius);
         List<Entity> close = new ArrayList<>();
 
-        for (Entity e : entities)
-        {
-            if (e instanceof LivingEntity)
-            {
+        for (Entity e : entities) {
+            if (e instanceof LivingEntity) {
                 if (((LivingEntity) e).getEyeLocation().distance(location) < radius
                         || ((e instanceof EnderDragon
-                        || e instanceof Giant) && ((LivingEntity) e).getEyeLocation().distance(location) < (radius + 5)))
-                {
+                        || e instanceof Giant) && ((LivingEntity) e).getEyeLocation().distance(location) < (radius + 5))) {
                     if (!e.equals(player))
                         close.add(e);
-                    else
-                    {
+                    else {
                         if (lifeTicks > 1)
                             close.add(e);
                     }
@@ -470,8 +445,7 @@ public abstract class O2Spell
      * @return a list of item entities within the radius of projectile
      */
     @NotNull
-    public List<Item> getItems(double radius)
-    {
+    public List<Item> getItems(double radius) {
         return EntityCommon.getItems(location, radius);
     }
 
@@ -482,12 +456,10 @@ public abstract class O2Spell
      * @return a list of living entities within one block of projectile
      */
     @NotNull
-    public List<LivingEntity> getNearbyLivingEntities(double radius)
-    {
+    public List<LivingEntity> getNearbyLivingEntities(double radius) {
         List<Entity> entities = getCloseEntities(radius);
         List<LivingEntity> living = new ArrayList<>();
-        for (Entity e : entities)
-        {
+        for (Entity e : entities) {
             if (e instanceof LivingEntity)
                 living.add((LivingEntity) e);
         }
@@ -506,12 +478,10 @@ public abstract class O2Spell
      * @return a list of players within one block of projectile
      */
     @NotNull
-    public List<Player> getNearbyPlayers(double radius)
-    {
+    public List<Player> getNearbyPlayers(double radius) {
         List<Entity> entities = getCloseEntities(radius);
         List<Player> players = new ArrayList<>();
-        for (Entity e : entities)
-        {
+        for (Entity e : entities) {
             if (e instanceof Player)
                 players.add((Player) e);
         }
@@ -530,12 +500,10 @@ public abstract class O2Spell
      * @return a list of damageable entities within the radius
      */
     @NotNull
-    public List<Damageable> getNearbyDamageableEntities(double radius)
-    {
+    public List<Damageable> getNearbyDamageableEntities(double radius) {
         List<Entity> entities = getCloseEntities(radius);
         List<Damageable> damageable = new ArrayList<>();
-        for (Entity e : entities)
-        {
+        for (Entity e : entities) {
             if (e instanceof Damageable)
                 damageable.add((Damageable) e);
         }
@@ -548,13 +516,11 @@ public abstract class O2Spell
     }
 
     /**
-     * Sets the uses modifier that takes into account spell uses, wand type, and spell level if years are enabled. Returns 10.0 if the uses are 100 and the right wand is held.
+     * Sets the uses modifier that takes into account spell uses, wand type, and spell level if years are enabled. Returns 100 if the uses are 100 and the right wand is held.
      */
-    protected void setUsesModifier()
-    {
+    protected void setUsesModifier() {
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
-        if (o2p == null)
-        {
+        if (o2p == null) {
             common.printLogMessage("Null o2player in O2Spell.setUsesModifier", null, null, true);
             return;
         }
@@ -562,8 +528,7 @@ public abstract class O2Spell
         // if max skill is set, set usesModifier to max level
         if (Ollivanders2.maxSpellLevel)
             usesModifier = 200;
-        else
-        {
+        else {
             // uses modifier is the number of times the spell has been cast
             usesModifier = o2p.getSpellCount(spellType);
 
@@ -578,8 +543,7 @@ public abstract class O2Spell
         }
 
         // if years is enabled, spell usage is affected by caster's level
-        if (Ollivanders2.useYears)
-        {
+        if (Ollivanders2.useYears) {
             MagicLevel maxLevelForPlayer = o2p.getYear().getHighestLevelForYear();
 
             if (maxLevelForPlayer.ordinal() > (spellType.getLevel().ordinal() + 1))
@@ -607,8 +571,7 @@ public abstract class O2Spell
      * @return the target block
      */
     @Nullable
-    public Block getTargetBlock()
-    {
+    public Block getTargetBlock() {
         if (hitTarget)
             return location.getBlock();
         else
@@ -624,8 +587,7 @@ public abstract class O2Spell
     /**
      * This kills the spell.
      */
-    public void kill()
-    {
+    public void kill() {
         stopProjectile();
 
         if (!permanent)
@@ -638,8 +600,7 @@ public abstract class O2Spell
      * Reverts any changes made to blocks if the effects are temporary. This must be overridden by each spell that has
      * a revert action.
      */
-    protected void revert()
-    {
+    protected void revert() {
     }
 
     /**
@@ -647,16 +608,14 @@ public abstract class O2Spell
      *
      * @return true if the spell has been terminated, false otherwise
      */
-    public boolean isKilled()
-    {
+    public boolean isKilled() {
         return kill;
     }
 
     /**
      * Stops the spell projectile from moving further
      */
-    void stopProjectile()
-    {
+    void stopProjectile() {
         hitTarget = true;
     }
 
@@ -665,30 +624,30 @@ public abstract class O2Spell
      *
      * @return true if the spell has hit a target, false otherwise
      */
-    public boolean hasHitTarget()
-    {
+    public boolean hasHitTarget() {
         return hitTarget;
     }
 
     /**
+     * Get the spell's casting cooldown
+     *
      * @return the cool-down time for this spell in ticks
      */
-    public long getCoolDown()
-    {
+    public long getCoolDown() {
         return DEFAULT_COOLDOWN;
     }
 
     /**
+     * Get the spell's book text
+     *
      * @return the book text for this spell
      */
     @NotNull
-    public String getText()
-    {
+    public String getText() {
         // first check to see if it has been set with config
-        if (p.getConfig().isSet(spellType.toString() + textConfigLabel))
-        {
+        if (p.getConfig().isSet(spellType.toString() + textConfigLabel)) {
             String t = p.getConfig().getString(spellType.toString() + textConfigLabel);
-            if (t != null && t.length() > 0)
+            if (t != null && !(t.isEmpty()))
                 return t;
         }
 
@@ -696,43 +655,44 @@ public abstract class O2Spell
     }
 
     /**
+     * Get the spell's book flavor text
+     *
      * @return the flavor text for this spell
      */
     @Nullable
-    public String getFlavorText()
-    {
+    public String getFlavorText() {
         // first check to see if it has been set with config
-        if (p.getConfig().isSet(spellType.toString() + flavorTextConfigLabel))
-        {
+        if (p.getConfig().isSet(spellType.toString() + flavorTextConfigLabel)) {
             String f = p.getConfig().getString(spellType.toString() + flavorTextConfigLabel);
-            if (f != null && f.length() > 0)
+            if (f != null && !(f.isEmpty()))
                 return f;
         }
 
-        if (flavorText == null || flavorText.size() < 1)
+        if (flavorText == null || flavorText.isEmpty())
             return null;
-        else
-        {
+        else {
             int index = Math.abs(Ollivanders2Common.random.nextInt() % flavorText.size());
             return flavorText.get(index);
         }
     }
 
     /**
+     * Get the spell's branch of magic
+     *
      * @return the branch of magic for this spell
      */
     @NotNull
-    public O2MagicBranch getMagicBranch()
-    {
+    public O2MagicBranch getMagicBranch() {
         return branch;
     }
 
     /**
+     * Get the name of the spell
+     *
      * @return the name of the spell
      */
     @NotNull
-    public String getName()
-    {
+    public String getName() {
         return spellType.getSpellName();
     }
 
@@ -741,8 +701,7 @@ public abstract class O2Spell
      *
      * @return the lifeticks for this spell
      */
-    public int getLifeTicks()
-    {
+    public int getLifeTicks() {
         return lifeTicks;
     }
 
@@ -752,8 +711,7 @@ public abstract class O2Spell
      * @return the level of the spell
      */
     @NotNull
-    public MagicLevel getLevel()
-    {
+    public MagicLevel getLevel() {
         return spellType.getLevel();
     }
 
@@ -763,8 +721,7 @@ public abstract class O2Spell
      * @param entity the entity to check
      * @return true if it can be targeted, false otherwise
      */
-    boolean entityHarmWGCheck(Entity entity)
-    {
+    boolean entityHarmWGCheck(Entity entity) {
         // players
         if (entity instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.PVP))
             return false;
@@ -797,26 +754,23 @@ public abstract class O2Spell
      *
      * @return whether this spell is permanent or not
      */
-    public boolean isPermanent()
-    {
+    public boolean isPermanent() {
         return permanent;
     }
 
     /**
      * Send the player the success message, if it exists, for this spell
      */
-    public void sendSuccessMessage()
-    {
-        if (successMessage != null && successMessage.length() > 0)
+    public void sendSuccessMessage() {
+        if (successMessage != null && !(successMessage.isEmpty()))
             player.sendMessage(Ollivanders2.chatColor + successMessage);
     }
 
     /**
      * Send the player the failure message, if it exists, for this spell
      */
-    public void sendFailureMessage()
-    {
-        if (failureMessage != null && failureMessage.length() > 0)
+    public void sendFailureMessage() {
+        if (failureMessage != null && !(failureMessage.isEmpty()))
             player.sendMessage(Ollivanders2.chatColor + failureMessage);
         else
             common.printDebugMessage("failure message unset or 0 length", null, null, false);

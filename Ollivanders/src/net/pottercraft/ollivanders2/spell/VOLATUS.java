@@ -12,25 +12,22 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Enchants a broomstick to fly.
- * <p>
- * https://harrypotter.fandom.com/wiki/Broomstick
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Broomstick">https://harrypotter.fandom.com/wiki/Broomstick</a>
  */
-public final class VOLATUS extends ItemEnchant
-{
+public final class VOLATUS extends ItemEnchant {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public VOLATUS(Ollivanders2 plugin)
-    {
+    public VOLATUS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.VOLATUS;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("\"As every school-age wizard knows, the fact that we fly on broomsticks is probably our worst-kept secret. No Muggle illustration of a witch is complete without a broom and however ludicrous these drawings are (for none of the broomsticks depicted by Muggles would stay up in the air for a moment), they remind us that we were careless for far too many centuries to be surprised that broomsticks and magic are inextricably linked in the Muggle mind.\" -Kennilworthy Whisp, Quidditch Through the Ages");
         }};
 
@@ -47,8 +44,7 @@ public final class VOLATUS extends ItemEnchant
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public VOLATUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public VOLATUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.VOLATUS;

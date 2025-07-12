@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.effect.O2EffectType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -11,66 +12,62 @@ import java.util.ArrayList;
 /**
  * Causes blindness in a radius
  *
- * @see FumosSuper
- * @version Ollivanders2
  * @author lownes
  * @author Azami7
+ * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Smokescreen_Spell">https://harrypotter.fandom.com/wiki/Smokescreen_Spell</a>
  */
-public final class FUMOS extends FumosSuper
-{
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public FUMOS(Ollivanders2 plugin)
-   {
-      super(plugin);
+public final class FUMOS extends AddO2Effect {
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public FUMOS(Ollivanders2 plugin) {
+        super(plugin);
 
-      spellType = O2SpellType.FUMOS;
-      branch = O2MagicBranch.CHARMS;
+        spellType = O2SpellType.FUMOS;
+        branch = O2MagicBranch.CHARMS;
 
-      flavorText = new ArrayList<>()
-      {{
-         add("The Smoke-Screen Spell");
-      }};
+        flavorText = new ArrayList<>() {{
+            add("The Smoke-Screen Spell");
+        }};
 
-      text = "Fumos will cause those in an area to be blinded by a smoke cloud.";
-   }
+        text = "Fumos creates a defensive cloud around the caster which prevents those outside the cloud accurately targeting anyone inside.";
+    }
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public FUMOS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
-      spellType = O2SpellType.FUMOS;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public FUMOS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+        super(plugin, player, rightWand);
 
-      initSpell();
-   }
+        spellType = O2SpellType.FUMOS;
+        branch = O2MagicBranch.CHARMS;
 
-   /**
-    * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
-    * constants.
-    */
-   @Override
-   void doInitSpell()
-   {
-      radius = (int) usesModifier / 10;
-      if (radius < minDurationInSeconds)
-         radius = minRadius;
-      else if (radius > maxRadius)
-         radius = maxRadius;
+        effectsToAdd.add(O2EffectType.FUMOS);
+        strengthModifier = 1;
+        minDurationInSeconds = 10;
+        maxDurationInSeconds = 60;
+        targetSelf = true;
 
-      durationInSeconds = (int)(usesModifier / 2);
-      if (durationInSeconds < minDurationInSeconds)
-         durationInSeconds = minDurationInSeconds;
-      else if (durationInSeconds > maxDurationInSeconds)
-         durationInSeconds = maxDurationInSeconds;
-   }
+        initSpell();
+    }
+
+    /**
+     * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
+     * constants.
+     */
+    @Override
+    void doInitSpell() {
+        durationInSeconds = (int) (usesModifier / 2);
+        if (durationInSeconds < minDurationInSeconds)
+            durationInSeconds = minDurationInSeconds;
+        else if (durationInSeconds > maxDurationInSeconds)
+            durationInSeconds = maxDurationInSeconds;
+    }
 }

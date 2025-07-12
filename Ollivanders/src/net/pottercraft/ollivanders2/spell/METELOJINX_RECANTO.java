@@ -8,18 +8,16 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Ends a storm for a variable duration.
- * <p>
- * https://harrypotter.fandom.com/wiki/Meteolojinx_Recanto
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Meteolojinx_Recanto">https://harrypotter.fandom.com/wiki/Meteolojinx_Recanto</a>
  */
-public final class METELOJINX_RECANTO extends MetelojinxSuper
-{
+public final class METELOJINX_RECANTO extends MetelojinxSuper {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public METELOJINX_RECANTO(Ollivanders2 plugin)
-    {
+    public METELOJINX_RECANTO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.METELOJINX_RECANTO;
@@ -35,8 +33,7 @@ public final class METELOJINX_RECANTO extends MetelojinxSuper
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public METELOJINX_RECANTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public METELOJINX_RECANTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.METELOJINX_RECANTO;

@@ -17,25 +17,22 @@ import java.util.ArrayList;
 
 /**
  * Reveal certain information about a player
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Legilimency_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Legilimency_Spell">https://harrypotter.fandom.com/wiki/Legilimency_Spell</a>
  */
-public final class LEGILIMENS extends O2Spell
-{
+public final class LEGILIMENS extends O2Spell {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public LEGILIMENS(Ollivanders2 plugin)
-    {
+    public LEGILIMENS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.LEGILIMENS;
         branch = O2MagicBranch.DARK_ARTS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("\"The mind is not a book, to be opened at will and examined at leisure. Thoughts are not etched on the inside of skulls, to be perused by any invader. The mind is a complex and many-layered thing, Potter. Or at least most minds are... It is true, however, that those who have mastered Legilimency are able, under certain conditions, to delve into the minds of their victims and to interpret their findings correctly.\" -Severus Snape");
             add("The Legilimency Spell");
         }};
@@ -50,8 +47,7 @@ public final class LEGILIMENS extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public LEGILIMENS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public LEGILIMENS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.LEGILIMENS;
@@ -64,14 +60,12 @@ public final class LEGILIMENS extends O2Spell
      * Attempt to reveal information about a target player
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         // projectile has stopped, kill the spell
         if (hasHitTarget())
             kill();
 
-        for (Player target : getNearbyPlayers(defaultRadius))
-        {
+        for (Player target : getNearbyPlayers(defaultRadius)) {
             if (target.getUniqueId() == player.getUniqueId())
                 continue;
 
@@ -89,25 +83,21 @@ public final class LEGILIMENS extends O2Spell
                     || ((usesModifier == targetExperience) && (randEqual > 0)) // success on 1, 2
                     || ((usesModifier < targetExperience) && (randLess < 1))) // success on 0
             {
-                if (Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT))
-                {
+                if (Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT)) {
                     common.printDebugMessage("Legilimens: target is in animagus form", null, null, false);
                     common.printDebugMessage("Uses modifier = " + usesModifier, null, null, false);
 
                     // when in animagus form, only someone who has mastered legilimens can mind read a person
-                    if (usesModifier >= 10)
-                    {
+                    if (usesModifier >= 10) {
                         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100);
 
                         // 10% chance to detect animagus
-                        if (rand < 90)
-                        {
+                        if (rand < 90) {
                             kill();
                             return;
                         }
                     }
-                    else
-                    {
+                    else {
                         kill();
                         return;
                     }
@@ -128,8 +118,7 @@ public final class LEGILIMENS extends O2Spell
      *
      * @param target the player to mind read
      */
-    private void readMind(Player target)
-    {
+    private void readMind(Player target) {
         O2Player o2p = p.getO2Player(target);
 
         player.sendMessage(Ollivanders2.chatColor + "You search in to " + o2p.getPlayerName() + "'s mind ...");
@@ -141,13 +130,11 @@ public final class LEGILIMENS extends O2Spell
             player.sendMessage(Ollivanders2.chatColor + " is a witch/wizard.");
 
         // detect house and year
-        if (O2Houses.useHouses)
-        {
+        if (O2Houses.useHouses) {
             StringBuilder message = new StringBuilder();
             message.append(Ollivanders2.chatColor);
 
-            if (Ollivanders2API.getHouses().isSorted(target))
-            {
+            if (Ollivanders2API.getHouses().isSorted(target)) {
                 message.append(" is a ");
 
                 if (Ollivanders2.useYears)
@@ -155,7 +142,7 @@ public final class LEGILIMENS extends O2Spell
 
                 O2HouseType house = Ollivanders2API.getHouses().getHouse(target);
                 if (house != null)
-                   message.append(house.getName()).append(".");
+                    message.append(house.getName()).append(".");
                 else
                     common.printDebugMessage("Null house in LEGILIMENS.readMind()", null, null, false);
             }
@@ -168,8 +155,7 @@ public final class LEGILIMENS extends O2Spell
         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100);
 
         // 50% chance detect destined wand
-        if (rand >= 50)
-        {
+        if (rand >= 50) {
             if (o2p.foundWand())
                 player.sendMessage(Ollivanders2.chatColor + " uses a " + o2p.getDestinedWandWood() + " and " + o2p.getDestinedWandCore() + " wand.");
             else
@@ -177,46 +163,36 @@ public final class LEGILIMENS extends O2Spell
         }
 
         // information beyond this depends on legilimens level
-        if (usesModifier > 2)
-        {
+        if (usesModifier > 2) {
             // 50% chance detect recent spell cast
-            if (rand >= 50)
-            {
+            if (rand >= 50) {
                 O2SpellType lastSpell = o2p.getLastSpell();
                 if (lastSpell != null)
                     player.sendMessage(Ollivanders2.chatColor + " last cast " + lastSpell.getSpellName() + ".");
             }
 
-            if (usesModifier > 3)
-            {
+            if (usesModifier > 3) {
                 // 33% chance detect mastered spell
-                if (rand >= 66)
-                {
-                    if (Ollivanders2.enableNonVerbalSpellCasting)
-                    {
+                if (rand >= 66) {
+                    if (Ollivanders2.enableNonVerbalSpellCasting) {
                         O2SpellType masteredSpell = o2p.getMasterSpell();
                         if (masteredSpell != null)
                             player.sendMessage(Ollivanders2.chatColor + " can non-verbally cast the spell " + masteredSpell.getSpellName() + ".");
                     }
                 }
 
-                if (usesModifier > 5)
-                {
+                if (usesModifier > 5) {
                     // 40% chance detect effects
-                    if (rand >= 40)
-                    {
+                    if (rand >= 40) {
                         String legilText = Ollivanders2API.getPlayers().playerEffects.detectEffectWithLegilimens(o2p.getID());
                         if (legilText != null)
                             player.sendMessage(Ollivanders2.chatColor + " " + legilText + ".");
                     }
 
-                    if (usesModifier >= 10)
-                    {
+                    if (usesModifier >= 10) {
                         // 10% chance detect is animagus
-                        if (rand >= 90)
-                        {
-                            if (o2p.isAnimagus())
-                            {
+                        if (rand >= 90) {
+                            if (o2p.isAnimagus()) {
                                 player.sendMessage(Ollivanders2.chatColor + " is an animagus.");
 
                                 EntityType animagusForm = o2p.getAnimagusForm();

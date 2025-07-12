@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
 import me.libraryaddict.disguise.disguisetypes.MobDisguise;
 import me.libraryaddict.disguise.disguisetypes.watchers.WolfWatcher;
-import net.pottercraft.ollivanders2.O2Color;
+import net.pottercraft.ollivanders2.common.O2Color;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.EntityType;
@@ -15,15 +15,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Turn target player in to a dog, or in rare cases a wolf.
  */
-public final class CANIS extends PlayerDisguise
-{
+public final class CANIS extends PlayerDisguise {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public CANIS(Ollivanders2 plugin)
-    {
+    public CANIS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.CANIS;
@@ -39,8 +37,7 @@ public final class CANIS extends PlayerDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public CANIS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public CANIS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.CANIS;
@@ -54,8 +51,7 @@ public final class CANIS extends PlayerDisguise
         watcher.setAdult();
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 10);
-        if (rand < 9)
-        {
+        if (rand < 9) {
             watcher.isTamed();
             watcher.setCollarColor(O2Color.getRandomPrimaryDyeableColor().getDyeColor());
         }
@@ -64,8 +60,7 @@ public final class CANIS extends PlayerDisguise
     }
 
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         calculateSuccessRate();
     }
 }

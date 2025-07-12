@@ -15,19 +15,36 @@ import java.util.UUID;
 
 /**
  * Hurts any entities within 0.5 meters of the spell wall.
- * <p>
- * https://harrypotter.fandom.com/wiki/Protego_Maxima
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_Maxima">https://harrypotter.fandom.com/wiki/Protego_Maxima</a>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_MAXIMA}
  */
 public class PROTEGO_MAXIMA extends ShieldSpell
 {
+    /**
+     * min radius for this spell
+     */
     public static final int minRadiusConfig = 5;
+    /**
+     * max radius for this spell
+     */
     public static final int maxRadiusConfig = 30;
+    /**
+     * min duration for this spell
+     */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
+    /**
+     * max duration for this spell
+     */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
-    public static final int minDamageConfig = 2; // half the damage of a wooden sword
-    public static final int maxDamageConfig = 8; // damage of a netherite sword
+    /**
+     * min damage for this spell - half the damage done by a wooden sword
+     */
+    public static final int minDamageConfig = 2;
+    /**
+     * max damage for this spell - damage done by a netherite sword
+     */
+    public static final int maxDamageConfig = 8;
 
     /**
      * The amount of damage to do to nearby entities
@@ -73,15 +90,13 @@ public class PROTEGO_MAXIMA extends ShieldSpell
      */
     public PROTEGO_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration, double damage)
     {
-        super(plugin);
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO_MAXIMA;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
         setDamage(damage);
@@ -173,4 +188,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell
 
         this.damage = damage;
     }
+
+    @Override
+    void doCleanUp() {}
 }

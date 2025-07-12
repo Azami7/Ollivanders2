@@ -6,19 +6,27 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Break with a Banshee - 2nd year Defense Against the Dark Arts book
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
+ * </p>
  *
- * @since 2.2.4
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Break_with_a_Banshee">https://harrypotter.fandom.com/wiki/Break_with_a_Banshee</a>
  * @author Azami7
+ * @since 2.2.4
  */
-public class BREAK_WITH_A_BANSHEE extends O2Book
-{
-   public BREAK_WITH_A_BANSHEE(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public class BREAK_WITH_A_BANSHEE extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
+    public BREAK_WITH_A_BANSHEE(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      bookType = O2BookType.BREAK_WITH_A_BANSHEE;
+        bookType = O2BookType.BREAK_WITH_A_BANSHEE;
 
-      spells.add(O2SpellType.EXPELLIARMUS);
-      spells.add(O2SpellType.OBLIVIATE);
-   }
+        spells.add(O2SpellType.OBLIVIATE);
+        // todo banshee banishment charm
+    }
 }

@@ -14,16 +14,26 @@ import java.util.UUID;
 
 /**
  * Negates fall damage.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Cushioning_Charm
- * <p>
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Cushioning_Charm">https://harrypotter.fandom.com/wiki/Cushioning_Charm</a>
  * {@link net.pottercraft.ollivanders2.spell.MOLLIARE}
  */
-public class MOLLIARE extends O2StationarySpell
-{
+public class MOLLIARE extends O2StationarySpell {
+    /**
+     * the min radius for this spell
+     */
     public static final int minRadiusConfig = 5;
+    /**
+     * the max radius for this spell
+     */
     public static final int maxRadiusConfig = 20;
+    /**
+     * the min duration for this spell
+     */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
+    /**
+     * the max duration for this spell
+     */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**
@@ -31,8 +41,7 @@ public class MOLLIARE extends O2StationarySpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public MOLLIARE(@NotNull Ollivanders2 plugin)
-    {
+    public MOLLIARE(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.MOLLIARE;
@@ -47,17 +56,14 @@ public class MOLLIARE extends O2StationarySpell
      * @param radius   the radius for this spell
      * @param duration the duration of the spell
      */
-    public MOLLIARE(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
-    {
-        super(plugin);
+    public MOLLIARE(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
+        super(plugin, pid, location);
         spellType = O2StationarySpellType.MOLLIARE;
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         minDuration = minDurationConfig;
         maxDuration = maxDurationConfig;
 
-        setPlayerID(pid);
-        setLocation(location);
         setRadius(radius);
         setDuration(duration);
 
@@ -68,8 +74,7 @@ public class MOLLIARE extends O2StationarySpell
      * Age the spell by a tick
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         age();
     }
 
@@ -79,15 +84,13 @@ public class MOLLIARE extends O2StationarySpell
      * @param event the event
      */
     @Override
-    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event)
-    {
+    void doOnEntityDamageEvent(@NotNull EntityDamageEvent event) {
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL)
             return;
 
         Entity entity = event.getEntity(); // entity and location will never be null
 
-        if (isLocationInside(entity.getLocation()))
-        {
+        if (isLocationInside(entity.getLocation())) {
             event.setCancelled(true);
             common.printDebugMessage("MOLLIARE: canceled EntityDamageEvent", null, null, false);
         }
@@ -95,13 +98,14 @@ public class MOLLIARE extends O2StationarySpell
 
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
+
+    @Override
+    void doCleanUp() {}
 }

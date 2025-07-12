@@ -18,8 +18,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Spawns magma cubes, blazes, and ghasts and is capable of destroying horcruxes.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Fiendfyre
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Fiendfyre">https://harrypotter.fandom.com/wiki/Fiendfyre</a>
  */
 public final class FIENDFYRE extends O2Spell
 {

@@ -9,8 +9,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  */
-public class AddPotionEffectInRadius extends AddPotionEffect
-{
+public abstract class AddPotionEffectInRadius extends AddPotionEffect {
     /**
      * Radius of the spell from the caster.
      */
@@ -21,8 +20,7 @@ public class AddPotionEffectInRadius extends AddPotionEffect
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public AddPotionEffectInRadius(Ollivanders2 plugin)
-    {
+    public AddPotionEffectInRadius(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -33,8 +31,7 @@ public class AddPotionEffectInRadius extends AddPotionEffect
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public AddPotionEffectInRadius(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public AddPotionEffectInRadius(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         durationInSeconds = minDurationInSeconds;
@@ -44,8 +41,7 @@ public class AddPotionEffectInRadius extends AddPotionEffect
      * If a target player is within the radius of the caster, add the potion effect to the player.
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         if (isSpellAllowed())
             affectRadius(radius, true);
 

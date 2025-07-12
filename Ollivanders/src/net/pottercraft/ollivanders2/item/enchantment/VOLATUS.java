@@ -22,8 +22,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * Reference: https://harrypotter.fandom.com/wiki/Broomstick
  */
-public class VOLATUS extends Enchantment
-{
+public class VOLATUS extends Enchantment {
     /**
      * Constructor
      *
@@ -32,8 +31,7 @@ public class VOLATUS extends Enchantment
      * @param args     optional arguments for this enchantment
      * @param itemLore the optional lore for this enchantment
      */
-    public VOLATUS(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore)
-    {
+    public VOLATUS(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore) {
         super(plugin, mag, args, itemLore);
         enchantmentType = ItemEnchantmentType.VOLATUS;
     }
@@ -44,8 +42,7 @@ public class VOLATUS extends Enchantment
      * @param event the item pickup event
      */
     @Override
-    public void doItemPickup(@NotNull EntityPickupItemEvent event)
-    {
+    public void doItemPickup(@NotNull EntityPickupItemEvent event) {
         if (!EnchantedItems.enableBrooms)
             return;
 
@@ -53,11 +50,9 @@ public class VOLATUS extends Enchantment
         if (!(entity instanceof Player))
             return;
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 checkBroomStatus((Player) entity);
             }
         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
@@ -69,16 +64,13 @@ public class VOLATUS extends Enchantment
      * @param event the item drop event
      */
     @Override
-    public void doItemDrop(@NotNull PlayerDropItemEvent event)
-    {
+    public void doItemDrop(@NotNull PlayerDropItemEvent event) {
         if (!EnchantedItems.enableBrooms)
             return;
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 checkBroomStatus(event.getPlayer());
             }
         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
@@ -90,8 +82,7 @@ public class VOLATUS extends Enchantment
      * @param event the item despawn event
      */
     @Override
-    public void doItemDespawn(@NotNull ItemDespawnEvent event)
-    {
+    public void doItemDespawn(@NotNull ItemDespawnEvent event) {
         if (!EnchantedItems.enableBrooms)
             return;
 
@@ -107,8 +98,7 @@ public class VOLATUS extends Enchantment
             return;
 
         // someone is holding this - we don't know who so we need to iterate through all players to check broom flying
-        for (Player player : p.getServer().getOnlinePlayers())
-        {
+        for (Player player : p.getServer().getOnlinePlayers()) {
             checkBroomStatus(player);
         }
     }
@@ -118,18 +108,15 @@ public class VOLATUS extends Enchantment
      *
      * @param event the item drop event
      */
-    public void doItemHeld(@NotNull PlayerItemHeldEvent event)
-    {
+    public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
         if (!EnchantedItems.enableBrooms)
             return;
 
         Player player = event.getPlayer();
 
-        new BukkitRunnable()
-        {
+        new BukkitRunnable() {
             @Override
-            public void run()
-            {
+            public void run() {
                 checkBroomStatus(player);
             }
         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
@@ -140,20 +127,17 @@ public class VOLATUS extends Enchantment
      *
      * @param player the player to check
      */
-    void checkBroomStatus(Player player)
-    {
+    void checkBroomStatus(Player player) {
         if (!EnchantedItems.enableBrooms)
             return;
 
         // do they have a broom in either hand?
-        if (isHoldingEnchantedItem(player))
-        {
+        if (isHoldingEnchantedItem(player)) {
             common.printDebugMessage(player.getDisplayName() + " is holding a broom", null, null, false);
             BROOM_FLYING effect = new BROOM_FLYING(p, 5, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
         }
-        else
-        {
+        else {
             common.printDebugMessage(player.getDisplayName() + " is not holding a broom", null, null, false);
             Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.BROOM_FLYING);
         }

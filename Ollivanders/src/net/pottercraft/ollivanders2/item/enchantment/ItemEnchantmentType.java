@@ -9,12 +9,23 @@ import org.jetbrains.annotations.Nullable;
  *
  * @author Azami7
  */
-public enum ItemEnchantmentType
-{
-    FLAGRANTE("flagrante", FLAGRANTE.class, null, MagicLevel.EXPERT),
-    GEMINIO("geminio", GEMINIO.class, null, MagicLevel.EXPERT),
-    PORTUS("portus", PORTUS.class, null, MagicLevel.NEWT),
-    VOLATUS("volatus", VOLATUS.class, "Flying vehicle used by magical folk", MagicLevel.EXPERT),
+public enum ItemEnchantmentType {
+    /**
+     * {@link FLAGRANTE}
+     */
+    FLAGRANTE("flagrante", FLAGRANTE.class, null, MagicLevel.EXPERT, true),
+    /**
+     * {@link GEMINIO}
+     */
+    GEMINIO("geminio", GEMINIO.class, null, MagicLevel.EXPERT, true),
+    /**
+     * {@link PORTUS}
+     */
+    PORTUS("portus", PORTUS.class, null, MagicLevel.NEWT, false),
+    /**
+     * {@link VOLATUS}
+     */
+    VOLATUS("volatus", VOLATUS.class, "Flying vehicle used by magical folk", MagicLevel.EXPERT, false),
     ;
 
     /**
@@ -38,19 +49,25 @@ public enum ItemEnchantmentType
     private final MagicLevel level;
 
     /**
+     * Whether this enchantment type is a curse or not
+     */
+    private final boolean cursed;
+
+    /**
      * Constructor.
      *
      * @param displayName the name for this enchantment
      * @param cName       the class for the enchantment
      * @param itemLore    the lore for the enchanted item, can be null
      * @param level       the level of this enchantment
+     * @param cursed      whether this enchantment type is a curse
      */
-    ItemEnchantmentType(@NotNull String displayName, @NotNull Class<?> cName, @Nullable String itemLore, @NotNull MagicLevel level)
-    {
+    ItemEnchantmentType(@NotNull String displayName, @NotNull Class<?> cName, @Nullable String itemLore, @NotNull MagicLevel level, boolean cursed) {
         name = displayName;
         className = cName;
         lore = itemLore;
         this.level = level;
+        this.cursed = cursed;
     }
 
     /**
@@ -59,8 +76,7 @@ public enum ItemEnchantmentType
      * @return the display name
      */
     @NotNull
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -70,8 +86,7 @@ public enum ItemEnchantmentType
      * @return the class
      */
     @NotNull
-    public Class<?> getClassName()
-    {
+    public Class<?> getClassName() {
         return className;
     }
 
@@ -81,8 +96,7 @@ public enum ItemEnchantmentType
      * @return the lore
      */
     @Nullable
-    public String getLore()
-    {
+    public String getLore() {
         return lore;
     }
 
@@ -92,8 +106,16 @@ public enum ItemEnchantmentType
      * @return the level of this enchantment
      */
     @NotNull
-    public MagicLevel getLevel()
-    {
+    public MagicLevel getLevel() {
         return level;
+    }
+
+    /**
+     * Is this enchantment a curse or not
+     *
+     * @return true if a curse, false otherwise
+     */
+    public boolean isCursed() {
+        return cursed;
     }
 }

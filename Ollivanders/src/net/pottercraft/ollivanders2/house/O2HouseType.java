@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.house;
 
-import net.pottercraft.ollivanders2.O2Color;
-import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.O2Color;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
@@ -12,11 +11,22 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  * @since 2.2.8
  */
-public enum O2HouseType
-{
+public enum O2HouseType {
+    /**
+     * Gryffindor
+     */
     GRYFFINDOR("Gryffindor", O2Color.DARK_RED),
+    /**
+     * Hufflepuff
+     */
     HUFFLEPUFF("Hufflepuff", O2Color.GOLD),
+    /**
+     * Ravenclaw
+     */
     RAVENCLAW("Ravenclaw", O2Color.BLUE),
+    /**
+     * Slytherin
+     */
     SLYTHERIN("Slytherin", O2Color.DARK_GREEN);
 
     private String name;
@@ -29,8 +39,7 @@ public enum O2HouseType
      * @param name  the display name for this house
      * @param color the chat color for this house
      */
-    O2HouseType(@NotNull String name, @NotNull O2Color color)
-    {
+    O2HouseType(@NotNull String name, @NotNull O2Color color) {
         this.name = name;
         this.color = color;
         score = 0;
@@ -42,8 +51,7 @@ public enum O2HouseType
      * @return the name of this house
      */
     @NotNull
-    public String getName()
-    {
+    public String getName() {
         return name;
     }
 
@@ -52,9 +60,8 @@ public enum O2HouseType
      *
      * @param n the display name for this house
      */
-    void setName(@NotNull String n)
-    {
-        if (n.length() > 0)
+    void setName(@NotNull String n) {
+        if (!n.isEmpty())
             name = n;
     }
 
@@ -64,8 +71,7 @@ public enum O2HouseType
      * @return the ChatColor for this house
      */
     @NotNull
-    public ChatColor getChatColorCode ()
-    {
+    public ChatColor getChatColorCode() {
         return color.getChatColor();
     }
 
@@ -75,8 +81,7 @@ public enum O2HouseType
      * @return the string prefix that sets this color
      */
     @NotNull
-    public String getColorPrefix ()
-    {
+    public String getColorPrefix() {
         return color.getChatColorCode();
     }
 
@@ -86,16 +91,13 @@ public enum O2HouseType
      *
      * @param name the color as a string
      */
-    void setColor (@NotNull String name)
-    {
+    void setColor(@NotNull String name) {
         O2Color c = null;
 
-        try
-        {
+        try {
             c = O2Color.valueOf(name);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             Ollivanders2API.common.printDebugMessage(name + " is not a valid color", null, null, false);
         }
 
@@ -108,8 +110,7 @@ public enum O2HouseType
      *
      * @return the score for this house
      */
-    public int getScore()
-    {
+    public int getScore() {
         return score;
     }
 
@@ -119,14 +120,12 @@ public enum O2HouseType
      * @param houseType the house to get text for, cannot be null
      * @return a string like "in 4th place" or "tied for 3rd place"
      */
-    public static String getHousePlaceTxt(@NotNull O2HouseType houseType)
-    {
+    public static String getHousePlaceTxt(@NotNull O2HouseType houseType) {
         int score = houseType.getScore();
         boolean tied = false;
         int place = 1;
 
-        for (O2HouseType type : O2HouseType.values())
-        {
+        for (O2HouseType type : O2HouseType.values()) {
             if (type == houseType)
                 continue;
 
@@ -161,8 +160,7 @@ public enum O2HouseType
      *
      * @param s the score to set
      */
-    void setScore(int s)
-    {
+    void setScore(int s) {
         if (s < 0)
             s = 0;
 

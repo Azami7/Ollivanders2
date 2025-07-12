@@ -11,51 +11,48 @@ import org.jetbrains.annotations.NotNull;
 /**
  * The Antidote for Common Poisons is a potion which counteracts ordinary poisons, such as creature bites and stings.
  *
- * http://harrypotter.wikia.com/wiki/Antidote_to_Common_Poisons
+ * <p>Reference: http://harrypotter.wikia.com/wiki/Antidote_to_Common_Poisons</p>
  *
- * @since 2.2.7
  * @author Azami7
+ * @since 2.2.7
  */
-public final class COMMON_ANTIDOTE_POTION extends O2Potion
-{
-   /**
-    * Constructor
-    *
-    * @param plugin a callback to the plugin
-    */
-   public COMMON_ANTIDOTE_POTION(@NotNull Ollivanders2 plugin)
-   {
-      super(plugin);
+public final class COMMON_ANTIDOTE_POTION extends O2Potion {
+    // todo lower strength so that we can also have the stronger antidote to uncommon poisons for longer duration poison
 
-      potionType = O2PotionType.COMMON_ANTIDOTE_POTION;
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
+    public COMMON_ANTIDOTE_POTION(@NotNull Ollivanders2 plugin) {
+        super(plugin);
 
-      ingredients.put(O2ItemType.MISTLETOE_BERRIES, 2);
-      ingredients.put(O2ItemType.BEZOAR, 1);
-      ingredients.put(O2ItemType.UNICORN_HAIR, 1);
-      ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
+        potionType = O2PotionType.COMMON_ANTIDOTE_POTION;
 
-      text = "Counteracts ordinary poisons, such as creature bites and stings.";
+        ingredients.put(O2ItemType.MISTLETOE_BERRIES, 2);
+        ingredients.put(O2ItemType.BEZOAR, 1);
+        ingredients.put(O2ItemType.UNICORN_HAIR, 1);
+        ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 2);
 
-      potionColor = Color.TEAL;
-   }
+        text = "Counteracts ordinary poisons, such as creature bites and stings.";
 
-   /**
-    * Drink this potion and do effects
-    *
-    * @param player the player who drank the potion
-    */
-   @Override
-   public void drink(@NotNull Player player)
-   {
-      if (player.hasPotionEffect(PotionEffectType.POISON))
-      {
-         player.removePotionEffect(PotionEffectType.POISON);
+        potionColor = Color.TEAL;
+    }
 
-         player.sendMessage(Ollivanders2.chatColor + "A cool feeling flows through your body as the poison is removed.");
-      }
-      else
-      {
-         player.sendMessage(Ollivanders2.chatColor + "You smell a faint odor that reminds you of winter, then it is gone.");
-      }
-   }
+    /**
+     * Drink this potion and do effects
+     *
+     * @param player the player who drank the potion
+     */
+    @Override
+    public void drink(@NotNull Player player) {
+        if (player.hasPotionEffect(PotionEffectType.POISON)) {
+            player.removePotionEffect(PotionEffectType.POISON);
+
+            player.sendMessage(Ollivanders2.chatColor + "A cool feeling flows through your body as the poison is removed.");
+        }
+        else {
+            player.sendMessage(Ollivanders2.chatColor + "You smell a faint odor that reminds you of winter, then it is gone.");
+        }
+    }
 }

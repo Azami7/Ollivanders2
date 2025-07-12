@@ -13,70 +13,73 @@ import java.util.ArrayList;
  *
  * @author Azami7
  * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Wand-Lighting_Charm">https://harrypotter.fandom.com/wiki/Wand-Lighting_Charm</a>
  */
-public final class LUMOS extends AddPotionEffectInRadius
-{
-   public static int minRadius = 5;
-   public static int maxRadius = 20;
+public final class LUMOS extends AddPotionEffectInRadius {
+    /**
+     * the min radius of players affected by this spell
+     */
+    public static int minRadius = 5;
 
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public LUMOS(Ollivanders2 plugin)
-   {
-      super(plugin);
+    /**
+     * the max radius of players affected by this spell
+     */
+    public static int maxRadius = 20;
 
-      spellType = O2SpellType.LUMOS;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public LUMOS(Ollivanders2 plugin) {
+        super(plugin);
 
-      flavorText = new ArrayList<>()
-      {{
-         add("If in any doubt about your abilities you would do better to buy yourself a magic lantern.");
-         add("The Wand-Lighting Charm");
-         add("\"Ron, where are you? Oh this is stupid - lumos!\"  She illuminated her wand and directed its narrow beam across the path. Ron was lying sprawled on the ground.");
-         add("The Wand-Lighting Charm is simple, but requires concentration.  Take care not to accidentally set your wand alight as damage of this kind can be permanent.");
-      }};
+        spellType = O2SpellType.LUMOS;
+        branch = O2MagicBranch.CHARMS;
 
-      text = "Gives night vision.";
-   }
+        flavorText = new ArrayList<>() {{
+            add("If in any doubt about your abilities you would do better to buy yourself a magic lantern.");
+            add("The Wand-Lighting Charm");
+            add("\"Ron, where are you? Oh this is stupid - lumos!\"  She illuminated her wand and directed its narrow beam across the path. Ron was lying sprawled on the ground.");
+            add("The Wand-Lighting Charm is simple, but requires concentration.  Take care not to accidentally set your wand alight as damage of this kind can be permanent.");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public LUMOS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
+        text = "Gives night vision.";
+    }
 
-      spellType = O2SpellType.LUMOS;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public LUMOS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+        super(plugin, player, rightWand);
 
-      effectTypes.add(PotionEffectType.NIGHT_VISION);
-      amplifier = 1;
-      minDurationInSeconds = 30;
-      targetSelf = true;
+        spellType = O2SpellType.LUMOS;
+        branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-   }
+        effectTypes.add(PotionEffectType.NIGHT_VISION);
+        amplifier = 1;
+        minDurationInSeconds = 30;
+        targetSelf = true;
 
-   @Override
-   void doInitSpell()
-   {
-      durationInSeconds = (int) usesModifier;
-      if (durationInSeconds < minDurationInSeconds)
-         durationInSeconds = minDurationInSeconds;
-      else if (durationInSeconds > maxDurationInSeconds)
-         durationInSeconds = maxDurationInSeconds;
+        initSpell();
+    }
 
-      radius = ((int)usesModifier) / 10;
-      if (radius < minRadius)
-         radius = minRadius;
-      else if (radius > maxRadius)
-         radius = maxRadius;
-   }
+    @Override
+    void doInitSpell() {
+        durationInSeconds = (int) usesModifier;
+        if (durationInSeconds < minDurationInSeconds)
+            durationInSeconds = minDurationInSeconds;
+        else if (durationInSeconds > maxDurationInSeconds)
+            durationInSeconds = maxDurationInSeconds;
+
+        radius = ((int) usesModifier) / 10;
+        if (radius < minRadius)
+            radius = minRadius;
+        else if (radius > maxRadius)
+            radius = maxRadius;
+    }
 }

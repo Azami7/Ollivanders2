@@ -12,10 +12,15 @@ import java.util.UUID;
  * @author Azami7
  * @since 2.2.9
  */
-public class WEAKNESS extends PotionEffectSuper
-{
-    public WEAKNESS(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-    {
+public class WEAKNESS extends PotionEffectSuper {
+    /**
+     * Constructor
+     *
+     * @param plugin   a callback to the MC plugin
+     * @param duration the duration of the effect
+     * @param pid      the ID of the player this effect acts on
+     */
+    public WEAKNESS(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
 
         strength = 1;
@@ -33,5 +38,6 @@ public class WEAKNESS extends PotionEffectSuper
      * Do any cleanup related to removing this effect from the player
      */
     @Override
-    public void doRemove () { }
+    public void doRemove() {
+    }
 }

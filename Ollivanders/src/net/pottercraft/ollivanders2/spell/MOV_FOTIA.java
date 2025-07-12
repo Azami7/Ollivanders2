@@ -16,22 +16,21 @@ import java.util.ArrayList;
  * Seen/Mentioned: On 31 October 1991, Albus Dumbledore used this spell to get the attention of panicking diners in the
  * Great Hall when a troll was loose in the castle.
  */
-public final class MOV_FOTIA extends Pyrotechnia
-{
+public final class MOV_FOTIA extends Pyrotechnia {
+    // todo make this a sparks spell rather than a firework spell, should also pacify in a radius
+
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public MOV_FOTIA(Ollivanders2 plugin)
-    {
+    public MOV_FOTIA(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.MOV_FOTIA;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("It took several purple firecrackers exploding from the end of Professor Dumbledore's wand to bring silence.");
             add("Purple Firecrackers");
         }};
@@ -46,8 +45,7 @@ public final class MOV_FOTIA extends Pyrotechnia
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public MOV_FOTIA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public MOV_FOTIA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.MOV_FOTIA;
@@ -67,8 +65,7 @@ public final class MOV_FOTIA extends Pyrotechnia
      * Set the number of fireworks, will always be 1
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         setNumberOfFireworks();
     }
 }

@@ -14,11 +14,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Burns sun-sensitive entities with a radius.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Lumos_Solem_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Lumos_Solem_Spell">https://harrypotter.fandom.com/wiki/Lumos_Solem_Spell</a>
  */
-public final class LUMOS_SOLEM extends O2Spell
-{
+public final class LUMOS_SOLEM extends O2Spell {
+    //todo make it work like the book - https://harrypotter.fandom.com/wiki/Sunlight_Charm
     /**
      * How long the spell will last
      */
@@ -43,15 +43,13 @@ public final class LUMOS_SOLEM extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public LUMOS_SOLEM(Ollivanders2 plugin)
-    {
+    public LUMOS_SOLEM(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.LUMOS_SOLEM;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("Light of the Sun");
         }};
 
@@ -65,8 +63,7 @@ public final class LUMOS_SOLEM extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public LUMOS_SOLEM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public LUMOS_SOLEM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.LUMOS_SOLEM;
@@ -79,8 +76,7 @@ public final class LUMOS_SOLEM extends O2Spell
      * Set the duration, target count, and radius of this spell based on caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         // duration of fire damage
         duration = Ollivanders2Common.ticksPerSecond * (int) (usesModifier + 1);
         if (duration > maxDuration)
@@ -101,8 +97,7 @@ public final class LUMOS_SOLEM extends O2Spell
      * Set fire to undead entities within the radius of the caster.
      */
     @Override
-    public void checkEffect()
-    {
+    public void checkEffect() {
         kill();
 
         // create the bright flash and a sound
@@ -110,13 +105,11 @@ public final class LUMOS_SOLEM extends O2Spell
 
         List<LivingEntity> entities = getNearbyLivingEntities(radius);
 
-        for (LivingEntity entity : entities)
-        {
+        for (LivingEntity entity : entities) {
             if (entity.getUniqueId() == player.getUniqueId())
                 continue;
 
-            if (EntityCommon.undeadEntities.contains(entity.getType()))
-            {
+            if (EntityCommon.undeadEntities.contains(entity.getType())) {
                 entity.setFireTicks(duration);
                 targetCount = targetCount - 1;
             }
@@ -127,7 +120,6 @@ public final class LUMOS_SOLEM extends O2Spell
     }
 
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
     }
 }

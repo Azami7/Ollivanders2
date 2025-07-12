@@ -14,12 +14,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Conjures a flock of birds from the tip of the wand.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Bird-Conjuring_Charm
+ * Bird-Conjuring Charm - https://harrypotter.fandom.com/wiki/Bird-Conjuring_Charm - conjures a flock of birds from the
+ * tip of the wand.
  */
-public final class AVIS extends O2Spell
-{
+public final class AVIS extends O2Spell {
     /**
      * The number of birds remaining to be spawned
      */
@@ -35,15 +33,13 @@ public final class AVIS extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public AVIS(Ollivanders2 plugin)
-    {
+    public AVIS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.AVIS;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Bird-Conjuring Charm");
             add("Most of the class had already left, although several twittering yellow birds were still zooming around the room, all of Hermione's creation; nobody else had succeeded in conjuring so much as a feather from thin air.");
             add("\"Oh, hello, Harry ... I was just practicing.\" -Hermione Granger conjuring small golden birds just before sending them to attack Ron");
@@ -59,8 +55,7 @@ public final class AVIS extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public AVIS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public AVIS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.AVIS;
         branch = O2MagicBranch.CHARMS;
@@ -72,9 +67,11 @@ public final class AVIS extends O2Spell
         initSpell();
     }
 
+    /**
+     * Sets the number of birds that can be summoned based on the caster's experience
+     */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         birdsRemaining = (int) usesModifier / 4;
 
         if (birdsRemaining > maxBirds)
@@ -87,19 +84,15 @@ public final class AVIS extends O2Spell
      * Shoot a stream of birds from the caster's wand
      */
     @Override
-    public void checkEffect()
-    {
-        if (!isSpellAllowed())
-        {
+    public void checkEffect() {
+        if (!isSpellAllowed()) {
             kill();
             return;
         }
 
-        if (birdsRemaining > 0)
-        {
+        if (birdsRemaining > 0) {
             World world = location.getWorld();
-            if (world == null)
-            {
+            if (world == null) {
                 common.printDebugMessage("AVIS.checkEffect: world is null", null, null, true);
                 kill();
                 return;
@@ -118,7 +111,6 @@ public final class AVIS extends O2Spell
      * Nothing to do since we overrode checkEffect() itself
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
     }
 }

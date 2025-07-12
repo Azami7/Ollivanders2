@@ -12,15 +12,13 @@ import java.util.ArrayList;
 /**
  * Fanciest version of PORFYRO_ASTERI.
  */
-public final class PORFYRO_ASTERI_TRIA extends Pyrotechnia
-{
+public final class PORFYRO_ASTERI_TRIA extends Pyrotechnia {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public PORFYRO_ASTERI_TRIA(Ollivanders2 plugin)
-    {
+    public PORFYRO_ASTERI_TRIA(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.PORFYRO_ASTERI_TRIA;
@@ -36,8 +34,7 @@ public final class PORFYRO_ASTERI_TRIA extends Pyrotechnia
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public PORFYRO_ASTERI_TRIA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public PORFYRO_ASTERI_TRIA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.PORFYRO_ASTERI_TRIA;
@@ -62,8 +59,7 @@ public final class PORFYRO_ASTERI_TRIA extends Pyrotechnia
      * Set the number of fireworks that can be cast based on the user's experience.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         setNumberOfFireworks();
     }
 }

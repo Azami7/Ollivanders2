@@ -19,8 +19,8 @@ import java.util.ArrayList;
  * <p>
  * Baby foxes are used as the MC approximation of mice (since rabbits, which are probably closer, have their own
  * spell already - lapifors).
- * <p>
- * https://harrypotter.fandom.com/wiki/Snufflifors_Spell
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Snufflifors_Spell">https://harrypotter.fandom.com/wiki/Snufflifors_Spell</a>
  */
 public class SNUFFLIFORS extends ItemToEntityTransfiguration
 {

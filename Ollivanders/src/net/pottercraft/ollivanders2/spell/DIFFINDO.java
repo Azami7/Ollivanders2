@@ -15,9 +15,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Drops random items from a player's inventory. Also cuts down trees.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Severing_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Severing_Charm">https://harrypotter.fandom.com/wiki/Severing_Charm</a>
  */
+// todo why does this spell do two totally unrelated things? fix this to align with books
 public final class DIFFINDO extends O2Spell
 {
     private static final int maxRadius = 20;

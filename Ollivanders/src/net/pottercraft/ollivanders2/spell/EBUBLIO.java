@@ -15,59 +15,57 @@ import java.util.ArrayList;
  * @author lownes
  * @author Azami7
  * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Ebublio_Jinx">https://harrypotter.fandom.com/wiki/Ebublio_Jinx</a>
  */
-public final class EBUBLIO extends AddO2Effect
-{
-   /**
-    * Default constructor for use in generating spell text.  Do not use to cast the spell.
-    *
-    * @param plugin the Ollivanders2 plugin
-    */
-   public EBUBLIO(Ollivanders2 plugin)
-   {
-      super(plugin);
+public final class EBUBLIO extends AddO2Effect {
+    // todo this spell is wrong, ebublio is not the bubble-head charm
 
-      spellType = O2SpellType.EBUBLIO;
-      branch = O2MagicBranch.CHARMS;
+    /**
+     * Default constructor for use in generating spell text.  Do not use to cast the spell.
+     *
+     * @param plugin the Ollivanders2 plugin
+     */
+    public EBUBLIO(Ollivanders2 plugin) {
+        super(plugin);
 
-      flavorText = new ArrayList<>()
-      {{
-         add("The Bubble-Head Charm");
-         add("Fleur Delacour, though she demonstrated excellent use of the Bubble-Head Charm, was attacked by grindylows as she approached her goal, and failed to retrieve her hostage.");
-         add("Cedric Diggory, who also used the Bubble-Head Charm, was first to return with his hostage, though he returned one minute outside the time limit of an hour.");
-      }};
+        spellType = O2SpellType.EBUBLIO;
+        branch = O2MagicBranch.CHARMS;
 
-      text = "Gives target player the ability to breathe underwater.";
-   }
+        flavorText = new ArrayList<>() {{
+            add("The Bubble-Head Charm");
+            add("Fleur Delacour, though she demonstrated excellent use of the Bubble-Head Charm, was attacked by grindylows as she approached her goal, and failed to retrieve her hostage.");
+            add("Cedric Diggory, who also used the Bubble-Head Charm, was first to return with his hostage, though he returned one minute outside the time limit of an hour.");
+        }};
 
-   /**
-    * Constructor.
-    *
-    * @param plugin    a callback to the MC plugin
-    * @param player    the player who cast this spell
-    * @param rightWand which wand the player was using
-    */
-   public EBUBLIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-   {
-      super(plugin, player, rightWand);
-      spellType = O2SpellType.EBUBLIO;
-      branch = O2MagicBranch.CHARMS;
+        text = "Gives target player the ability to breathe underwater.";
+    }
 
-      effectsToAdd.add(O2EffectType.WATER_BREATHING);
-      strengthModifier = 1;
-      minDurationInSeconds = 30;
-      targetSelf = true;
+    /**
+     * Constructor.
+     *
+     * @param plugin    a callback to the MC plugin
+     * @param player    the player who cast this spell
+     * @param rightWand which wand the player was using
+     */
+    public EBUBLIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+        super(plugin, player, rightWand);
+        spellType = O2SpellType.EBUBLIO;
+        branch = O2MagicBranch.CHARMS;
 
-      initSpell();
-   }
+        effectsToAdd.add(O2EffectType.WATER_BREATHING);
+        strengthModifier = 1;
+        minDurationInSeconds = 30;
+        targetSelf = true;
 
-   @Override
-   void doInitSpell()
-   {
-      durationInSeconds = (int) usesModifier;
-      if (durationInSeconds < minDurationInSeconds)
-         durationInSeconds = minDurationInSeconds;
-      else if (durationInSeconds > maxDurationInSeconds)
-         durationInSeconds = maxDurationInSeconds;
-   }
+        initSpell();
+    }
+
+    @Override
+    void doInitSpell() {
+        durationInSeconds = (int) usesModifier;
+        if (durationInSeconds < minDurationInSeconds)
+            durationInSeconds = minDurationInSeconds;
+        else if (durationInSeconds > maxDurationInSeconds)
+            durationInSeconds = maxDurationInSeconds;
+    }
 }

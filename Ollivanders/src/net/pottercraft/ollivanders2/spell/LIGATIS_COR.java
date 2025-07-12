@@ -20,15 +20,13 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * {@link FRANGE_LIGNEA}
  */
-public final class LIGATIS_COR extends O2Spell
-{
+public final class LIGATIS_COR extends O2Spell {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public LIGATIS_COR(Ollivanders2 plugin)
-    {
+    public LIGATIS_COR(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.LIGATIS_COR;
@@ -44,16 +42,14 @@ public final class LIGATIS_COR extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public LIGATIS_COR(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public LIGATIS_COR(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.LIGATIS_COR;
         branch = O2MagicBranch.CHARMS;
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.ITEM_PICKUP);
             worldGuardFlags.add(Flags.ITEM_DROP);
         }
@@ -65,11 +61,9 @@ public final class LIGATIS_COR extends O2Spell
      * Look for any coreless wands near the projectile and try to make a wand.
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         // projectile has stopped, kill the spell
-        if (hasHitTarget())
-        {
+        if (hasHitTarget()) {
             player.sendMessage(Ollivanders2.chatColor + "Spell failed to find a coreless wand.");
             kill();
             return;
@@ -93,24 +87,20 @@ public final class LIGATIS_COR extends O2Spell
      *
      * @param baseWand a coreless wand
      */
-    private void createAndDropWand(@NotNull Item baseWand)
-    {
+    private void createAndDropWand(@NotNull Item baseWand) {
         ItemStack wand = null;
 
         // is there a core material nearby?
         Item coreItem = EntityCommon.getNearbyItemByMaterialList(baseWand.getLocation(), O2WandCoreType.getAllCoresByMaterial(), 2.0);
-        if (coreItem != null)
-        {
+        if (coreItem != null) {
             O2WandCoreType coreType = O2WandCoreType.getWandCoreTypeByMaterial(coreItem.getItemStack().getType());
-            if (coreType != null)
-            {
+            if (coreType != null) {
                 String core = coreType.getLabel();
                 wand = Ollivanders2API.getItems().getWands().makeWandFromCoreless(baseWand.getItemStack(), core, 1);
             }
         }
 
-        if (wand == null)
-        {
+        if (wand == null) {
             player.sendMessage(Ollivanders2.chatColor + "No wand cores items found.");
             return;
         }

@@ -10,26 +10,23 @@ import java.util.ArrayList;
 
 /**
  * Centaur divination is the most accurate form of divination, but requires the most skill to learn.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Divination?so=search#Centaur_divination
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Divination?so=search#Centaur_divination">https://harrypotter.fandom.com/wiki/Divination?so=search#Centaur_divination</a>
  */
-public class MANTEIA_KENTAVROS extends Divination
-{
+public class MANTEIA_KENTAVROS extends Divination {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public MANTEIA_KENTAVROS(Ollivanders2 plugin)
-    {
+    public MANTEIA_KENTAVROS(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.MANTEIA_KENTAVROS;
         divinationType = O2DivinationType.CENTAUR_DIVINATION;
         branch = O2MagicBranch.DIVINATION;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("\"Trivial hurts, tiny human accidents, these are of no more significance than the scurryings of ants to the wide universe, and are unaffected by planetary movements.\" -Firenze");
             add("\"I know that you have learned the names of the planets and their moons in Astronomy, and that you have mapped the stars’ progress through the heavens. Centaurs have unravelled the mysteries of these movements over centuries. Our findings teach us that the future may be glimpsed in the sky above us.\" -Firenze");
             add("\"I am here to explain the wisdom of centaurs, which is impersonal and impartial.\" -Firenze");
@@ -45,8 +42,7 @@ public class MANTEIA_KENTAVROS extends Divination
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public MANTEIA_KENTAVROS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public MANTEIA_KENTAVROS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.ASTROLOGIA;

@@ -17,11 +17,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Shoots one or more fireworks in to the air.
- * <p>
- * https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/Firework.html
+ *
+ * @see <a href = "https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/Firework.html">https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/entity/Firework.html</a>
  */
-public abstract class Pyrotechnia extends O2Spell
-{
+public abstract class Pyrotechnia extends O2Spell {
     /**
      * The maximum number of fireworks allowed for this type
      */
@@ -77,8 +76,7 @@ public abstract class Pyrotechnia extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public Pyrotechnia(Ollivanders2 plugin)
-    {
+    public Pyrotechnia(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -89,8 +87,7 @@ public abstract class Pyrotechnia extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public Pyrotechnia(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public Pyrotechnia(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         fireworksRemaining = 0;
         maxFireworks = 1;
@@ -100,19 +97,15 @@ public abstract class Pyrotechnia extends O2Spell
      * Shoot a firework in to the sky from caster's location.
      */
     @Override
-    public void checkEffect()
-    {
-        if (!isSpellAllowed())
-        {
+    public void checkEffect() {
+        if (!isSpellAllowed()) {
             kill();
             return;
         }
 
-        if (fireworksRemaining > 0)
-        {
+        if (fireworksRemaining > 0) {
             World world = location.getWorld();
-            if (world == null)
-            {
+            if (world == null) {
                 common.printDebugMessage("Pyrotechnia.checkEffect: world is null", null, null, true);
                 kill();
                 return;
@@ -129,8 +122,7 @@ public abstract class Pyrotechnia extends O2Spell
             else
                 builder.withColor(Color.WHITE);
 
-            if (shuffleTypes)
-            {
+            if (shuffleTypes) {
                 int rand = Ollivanders2Common.random.nextInt() % 4;
                 if (rand == 0)
                     fireworkType = Type.STAR;
@@ -150,8 +142,7 @@ public abstract class Pyrotechnia extends O2Spell
             builder.flicker(hasFlicker);
             builder.trail(hasTrails);
 
-            if (hasFade)
-            {
+            if (hasFade) {
                 if (fadeColors != null)
                     builder.withFade(fadeColors);
             }
@@ -168,8 +159,7 @@ public abstract class Pyrotechnia extends O2Spell
     /**
      * Set the number of fireworks that can be cast based on the user's experience.
      */
-    void setNumberOfFireworks()
-    {
+    void setNumberOfFireworks() {
         fireworksRemaining = (int) usesModifier / 10;
 
         if (fireworksRemaining < 1)
@@ -179,7 +169,6 @@ public abstract class Pyrotechnia extends O2Spell
     }
 
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
     }
 }

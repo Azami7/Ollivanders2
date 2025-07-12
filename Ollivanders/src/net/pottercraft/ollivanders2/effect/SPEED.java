@@ -6,10 +6,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class SPEED extends PotionEffectSuper
-{
-    public SPEED(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-    {
+/**
+ * Make a player move faster by adding the SPEED potion effect
+ */
+public class SPEED extends PotionEffectSuper {
+    /**
+     * Constructor
+     *
+     * @param plugin   a callback to the MC plugin
+     * @param duration the duration of the effect
+     * @param pid      the ID of the player this effect acts on
+     */
+    public SPEED(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
 
         strength = 1;
@@ -25,5 +33,6 @@ public class SPEED extends PotionEffectSuper
      * Do any cleanup related to removing this effect from the player
      */
     @Override
-    public void doRemove () { }
+    public void doRemove() {
+    }
 }

@@ -8,8 +8,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Creates or ends a storm for a variable duration.
  */
-public abstract class MetelojinxSuper extends O2Spell
-{
+public abstract class MetelojinxSuper extends O2Spell {
     /**
      * True to make a storm, false to clear the weather
      */
@@ -20,8 +19,7 @@ public abstract class MetelojinxSuper extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public MetelojinxSuper(Ollivanders2 plugin)
-    {
+    public MetelojinxSuper(Ollivanders2 plugin) {
         super(plugin);
     }
 
@@ -32,19 +30,16 @@ public abstract class MetelojinxSuper extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public MetelojinxSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public MetelojinxSuper(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
     }
 
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         kill();
 
         World world = location.getWorld();
-        if (world == null)
-        {
+        if (world == null) {
             common.printDebugMessage("MetelojinxSuper.doCheckEffect: world is null", null, null, true);
             kill();
             return;
@@ -58,15 +53,13 @@ public abstract class MetelojinxSuper extends O2Spell
         {
             duration = duration - (int) (usesModifier * 1200);
 
-            if (duration < 0)
-            {
+            if (duration < 0) {
                 duration = -duration;
                 world.setStorm(storm);
             }
             world.setWeatherDuration(duration);
         }
-        else
-        {
+        else {
             failureMessage = "You failed to change the weather.";
             sendFailureMessage();
         }

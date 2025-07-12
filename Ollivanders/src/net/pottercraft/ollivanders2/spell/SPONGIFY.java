@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 /**
  * The Softening Charm (Spongify) is a spell that softens a target area or object, making it rubbery and bouncy.
- * <p>
- * https://harrypotter.fandom.com/wiki/Softening_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Softening_Charm">https://harrypotter.fandom.com/wiki/Softening_Charm</a>
  */
 public class SPONGIFY extends BlockTransfiguration
 {

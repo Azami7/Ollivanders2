@@ -9,11 +9,11 @@ import java.util.ArrayList;
 
 /**
  * Makes certain entities grow into adults, slimes grow larger, and at usesModifier 10, zombies grow into giants
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Engorgement_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Engorgement_Charm">https://harrypotter.fandom.com/wiki/Engorgement_Charm</a>
  */
-public final class ENGORGIO extends ChangeEntitySizeSuper
-{
+public final class ENGORGIO extends ChangeEntitySizeSuper {
+    // todo rework with swelling solution potion
     private static final int maxRadiusConfig = 20;
     private static final int maxTargetsConfig = 10;
 
@@ -22,15 +22,13 @@ public final class ENGORGIO extends ChangeEntitySizeSuper
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public ENGORGIO(Ollivanders2 plugin)
-    {
+    public ENGORGIO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.ENGORGIO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Engorgement Charm");
             add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink.");
         }};
@@ -45,8 +43,7 @@ public final class ENGORGIO extends ChangeEntitySizeSuper
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public ENGORGIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public ENGORGIO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.ENGORGIO;
         branch = O2MagicBranch.CHARMS;
@@ -62,8 +59,7 @@ public final class ENGORGIO extends ChangeEntitySizeSuper
      * Set number of targets and spell radius based on caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         targets = (int) (usesModifier / 10) + 1;
         if (targets > maxTargets)
             targets = maxTargets;

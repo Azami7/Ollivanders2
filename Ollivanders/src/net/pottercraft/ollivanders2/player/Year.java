@@ -7,14 +7,34 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Represents the year this player is in school.
  */
-public enum Year
-{
+public enum Year {
+    /**
+     * "1st", MagicLevel.BEGINNER
+     */
     YEAR_1("1st", MagicLevel.BEGINNER),
+    /**
+     * "2nd", MagicLevel.BEGINNER
+     */
     YEAR_2("2nd", MagicLevel.BEGINNER),
+    /**
+     * "3rd", MagicLevel.OWL
+     */
     YEAR_3("3rd", MagicLevel.OWL),
+    /**
+     * "4th", MagicLevel.OWL
+     */
     YEAR_4("4th", MagicLevel.OWL),
+    /**
+     * "5th", MagicLevel.NEWT
+     */
     YEAR_5("5th", MagicLevel.NEWT),
+    /**
+     * "6th", MagicLevel.NEWT
+     */
     YEAR_6("6th", MagicLevel.NEWT),
+    /**
+     * "7th", MagicLevel.EXPERT
+     */
     YEAR_7("7th", MagicLevel.EXPERT);
 
     /**
@@ -32,8 +52,7 @@ public enum Year
      *
      * @param text the string for this year
      */
-    Year(@NotNull String text, @NotNull MagicLevel level)
-    {
+    Year(@NotNull String text, @NotNull MagicLevel level) {
         displayText = text;
         maxLevel = level;
     }
@@ -44,8 +63,7 @@ public enum Year
      * @return the display text for this year
      */
     @NotNull
-    public String getDisplayText()
-    {
+    public String getDisplayText() {
         return displayText;
     }
 
@@ -56,10 +74,8 @@ public enum Year
      * @return the Year if exists, null otherwise
      */
     @Nullable
-    public static Year getYearByValue(int value)
-    {
-        for (Year year : Year.values())
-        {
+    public static Year getYearByValue(int value) {
+        for (Year year : Year.values()) {
             if (year.ordinal() == value)
                 return year;
         }
@@ -72,8 +88,7 @@ public enum Year
      *
      * @return the maximum spell level
      */
-    public MagicLevel getHighestLevelForYear()
-    {
+    public MagicLevel getHighestLevelForYear() {
         return maxLevel;
     }
 }

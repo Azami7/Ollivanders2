@@ -10,17 +10,15 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public class BABBLING_ANTIDOTE_LESSER extends O2EffectAntidoteSuper
-{
+public class BABBLING_ANTIDOTE_LESSER extends O2EffectAntidoteSuper {
     /**
      * Constructor
      *
-     * @param plugin a reference to the plugin for logging
+     * @param plugin   a reference to the plugin for logging
      * @param duration the duration of this effect - not used for this effect type
-     * @param pid the target player
+     * @param pid      the target player
      */
-    public BABBLING_ANTIDOTE_LESSER (@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-    {
+    public BABBLING_ANTIDOTE_LESSER(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
 
         effectType = O2EffectType.BABBLING_ANTIDOTE_LESSER;
@@ -32,5 +30,6 @@ public class BABBLING_ANTIDOTE_LESSER extends O2EffectAntidoteSuper
      * Do any cleanup related to removing this effect from the player
      */
     @Override
-    public void doRemove () { }
+    public void doRemove() {
+    }
 }

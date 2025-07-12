@@ -26,12 +26,11 @@ import org.jetbrains.annotations.Nullable;
 /**
  * "While you are here, your house will be something like your family within Hogwarts.  You will have classes with the
  * rest of your house, sleep in your house dormitory, and spend free time in your house common room."
- * <p>
- * Reference: https://github.com/Azami7/Ollivanders2/wiki/Houses
- * Reference: https://harrypotter.fandom.com/wiki/Hogwarts_Houses
+ *
+ * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Houses</p>
+ * <p>Reference: https://harrypotter.fandom.com/wiki/Hogwarts_Houses</p>
  */
-public class O2Houses
-{
+public class O2Houses {
     /**
      * A reference to the plugin
      */
@@ -68,8 +67,8 @@ public class O2Houses
 
     /**
      * House points display using scoreboard
-     * <p>
-     * Reference: https://github.com/Azami7/Ollivanders2/wiki/Houses#points
+     *
+     * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Houses#points</p>
      */
     private Scoreboard scoreboard;
 
@@ -98,8 +97,7 @@ public class O2Houses
      *
      * @param plugin the callback for the plugin
      */
-    public O2Houses(@NotNull Ollivanders2 plugin)
-    {
+    public O2Houses(@NotNull Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(p);
     }
@@ -107,8 +105,7 @@ public class O2Houses
     /**
      * Set up houses on enable
      */
-    public void onEnable()
-    {
+    public void onEnable() {
         //
         // houses
         //
@@ -132,68 +129,59 @@ public class O2Houses
     /**
      * Read house config options
      */
-    private void readHouseConfig()
-    {
+    private void readHouseConfig() {
         //
         // house names
         //
         String s;
-        if (p.getConfig().isSet("gryffindorName"))
-        {
+        if (p.getConfig().isSet("gryffindorName")) {
             s = p.getConfig().getString("gryffindorName");
-            if (s != null && s.length() > 0)
+            if (s != null && !s.isEmpty())
                 O2HouseType.GRYFFINDOR.setName(s);
         }
 
-        if (p.getConfig().isSet("hufflepuffName"))
-        {
+        if (p.getConfig().isSet("hufflepuffName")) {
             s = p.getConfig().getString("hufflepuffName");
-            if (s != null && s.length() > 0)
+            if (s != null && !s.isEmpty())
                 O2HouseType.HUFFLEPUFF.setName(s);
         }
 
-        if (p.getConfig().isSet("ravenclawName"))
-        {
+        if (p.getConfig().isSet("ravenclawName")) {
             s = p.getConfig().getString("ravenclawName");
-            if (s != null && s.length() > 0)
+            if (s != null && !s.isEmpty())
                 O2HouseType.RAVENCLAW.setName(s);
         }
 
-        if (p.getConfig().isSet("slytherinName"))
-        {
+        if (p.getConfig().isSet("slytherinName")) {
             s = p.getConfig().getString("slytherinName");
-            if (s != null && s.length() > 0)
+            if (s != null && !s.isEmpty())
                 O2HouseType.SLYTHERIN.setName(s);
         }
 
         //
         // house colors
         //
-        if (p.getConfig().isSet("gryffindorColor"))
-        {
+        if (p.getConfig().isSet("gryffindorColor")) {
             s = p.getConfig().getString("gryffindorColor");
-            if (s != null && s.length() > 0)
+            if (s != null && !s.isEmpty())
                 O2HouseType.GRYFFINDOR.setColor(s);
         }
 
-        if (p.getConfig().isSet("hufflepuffColor"))
-        {
+        if (p.getConfig().isSet("hufflepuffColor")) {
             s = p.getConfig().getString("hufflepuffColor");
-            if (s != null && s.length() > 0)
+            if (s != null && !s.isEmpty())
                 O2HouseType.HUFFLEPUFF.setColor(s);
         }
 
-        if (p.getConfig().isSet("ravenclawColor"))
-        {
+        if (p.getConfig().isSet("ravenclawColor")) {
             s = p.getConfig().getString("ravenclawColor");
-            if (s != null && s.length() > 0)
+            if (s != null && !s.isEmpty())
                 O2HouseType.RAVENCLAW.setColor(s);
         }
 
-        if (p.getConfig().isSet("slytherinColor"))
-        {
+        if (p.getConfig().isSet("slytherinColor")) {
             s = p.getConfig().getString("slytherinColor");
-            if (s != null && s.length() > 0)
+            if (s != null && !s.isEmpty())
                 O2HouseType.SLYTHERIN.setColor(s);
         }
     }
@@ -201,10 +189,8 @@ public class O2Houses
     /**
      * Initialize the house points map.
      */
-    private void initHousePoints()
-    {
-        for (O2HouseType houseType : O2HouseType.values())
-        {
+    private void initHousePoints() {
+        for (O2HouseType houseType : O2HouseType.values()) {
             setHousePoints(houseType, 0);
         }
     }
@@ -216,10 +202,8 @@ public class O2Houses
      * @return the house type or null if the name is not valid.
      */
     @Nullable
-    public O2HouseType getHouseType(@Nullable String name)
-    {
-        if (name == null)
-        {
+    public O2HouseType getHouseType(@Nullable String name) {
+        if (name == null) {
             common.printDebugMessage("getHouseType: null house passed in", null, null, false);
             return null;
         }
@@ -227,8 +211,7 @@ public class O2Houses
         name = name.trim();
         common.printDebugMessage("getHouseType: getting type for " + name, null, null, false);
 
-        for (O2HouseType houseType : O2HouseType.values())
-        {
+        for (O2HouseType houseType : O2HouseType.values()) {
             if (name.equalsIgnoreCase(houseType.getName()))
                 return houseType;
         }
@@ -242,12 +225,10 @@ public class O2Houses
      * @return all house names
      */
     @NotNull
-    public ArrayList<String> getAllHouseNames()
-    {
+    public ArrayList<String> getAllHouseNames() {
         ArrayList<String> houseNames = new ArrayList<>();
 
-        for (O2HouseType houseType : O2HouseType.values())
-        {
+        for (O2HouseType houseType : O2HouseType.values()) {
             houseNames.add(houseType.getName());
         }
 
@@ -257,20 +238,16 @@ public class O2Houses
     /**
      * Load the house information saved to disk.
      */
-    private void loadHouses()
-    {
+    private void loadHouses() {
         GsonDAO gsonLayer = new GsonDAO();
         Map<UUID, O2HouseType> houses = gsonLayer.readHouses();
-        if (houses != null)
-        {
+        if (houses != null) {
             O2HouseMap = houses;
         }
 
         Map<O2HouseType, Integer> housePoints = gsonLayer.readHousePoints();
-        if (housePoints != null)
-        {
-            for (Entry<O2HouseType, Integer> e : housePoints.entrySet())
-            {
+        if (housePoints != null) {
+            for (Entry<O2HouseType, Integer> e : housePoints.entrySet()) {
                 O2HouseType houseType = e.getKey();
 
                 houseType.setScore(e.getValue());
@@ -282,8 +259,7 @@ public class O2Houses
     /**
      * Save the house information to disk.
      */
-    public void saveHouses()
-    {
+    public void saveHouses() {
         if (!useHouses)
             return;
 
@@ -292,8 +268,7 @@ public class O2Houses
         gsonLayer.writeHouses(O2HouseMap);
 
         Map<O2HouseType, Integer> housePoints = new HashMap<>();
-        for (O2HouseType houseType : O2HouseType.values())
-        {
+        for (O2HouseType houseType : O2HouseType.values()) {
             housePoints.put(houseType, houseType.getScore());
         }
 
@@ -307,8 +282,7 @@ public class O2Houses
      * @param houseType the house to sort them in to
      * @return true if the player is successfully sorted, false otherwise.
      */
-    public boolean sort(@NotNull Player player, @NotNull O2HouseType houseType)
-    {
+    public boolean sort(@NotNull Player player, @NotNull O2HouseType houseType) {
         //make sure player is not already sorted
         if (isSorted(player))
             return false;
@@ -317,8 +291,7 @@ public class O2Houses
         addPlayerToHouseTeam(player);
 
         // display sort message
-        if (displayMessageOnSort)
-        {
+        if (displayMessageOnSort) {
             String title = houseType.getChatColorCode() + player.getName();
             String subtitle = houseType.getChatColorCode() + "better be " + houseType.getName();
             Ollivanders2Common.sendTitleMessage(title, subtitle, Ollivanders2API.playerCommon.getAllOnlineSortedPlayers());
@@ -337,10 +310,8 @@ public class O2Houses
      *
      * @param player the player to unsort
      */
-    public void unsort(@NotNull Player player)
-    {
-        if (isSorted(player))
-        {
+    public void unsort(@NotNull Player player) {
+        if (isSorted(player)) {
             O2HouseType houseType = O2HouseMap.get(player.getUniqueId());
             updateTeam(player, houseType, false);
 
@@ -354,8 +325,7 @@ public class O2Houses
      * @param player the player to check
      * @return true if the player has been sorted, false otherwise.
      */
-    public boolean isSorted(@NotNull Player player)
-    {
+    public boolean isSorted(@NotNull Player player) {
         return isSorted(player.getUniqueId());
     }
 
@@ -365,22 +335,20 @@ public class O2Houses
      * @param pid the uuid of the player to check
      * @return true if the player has been sorted, false otherwise.
      */
-    public boolean isSorted(@NotNull UUID pid)
-    {
+    public boolean isSorted(@NotNull UUID pid) {
         return O2HouseMap.containsKey(pid);
     }
 
     /**
      * Force sets the players house to a house.
-     * <p>
-     * This will happen even if a player has been previously sorted.  This is a separate function so that sort() is not
-     * accidentally used once a player has been sorted.
+     *
+     * <p>This will happen even if a player has been previously sorted. This is a separate function so that sort() is not
+     * accidentally used once a player has been sorted.</p>
      *
      * @param player    the player to sort
      * @param houseType the house to add them to
      */
-    public void forceSetHouse(@NotNull Player player, @NotNull O2HouseType houseType)
-    {
+    public void forceSetHouse(@NotNull Player player, @NotNull O2HouseType houseType) {
         unsort(player);
         sort(player, houseType);
     }
@@ -392,8 +360,7 @@ public class O2Houses
      * @return the House the player is sorted in to, null otherwise.
      */
     @Nullable
-    public O2HouseType getHouse(@NotNull Player player)
-    {
+    public O2HouseType getHouse(@NotNull Player player) {
         return getHouse(player.getUniqueId());
     }
 
@@ -404,18 +371,14 @@ public class O2Houses
      * @return the House the player is sorted in to, null otherwise.
      */
     @Nullable
-    public O2HouseType getHouse(@NotNull UUID pid)
-    {
+    public O2HouseType getHouse(@NotNull UUID pid) {
         O2HouseType houseType = null;
 
-        if (O2HouseMap.containsKey(pid))
-        {
-            try
-            {
+        if (O2HouseMap.containsKey(pid)) {
+            try {
                 houseType = O2HouseMap.get(pid);
             }
-            catch (Exception e)
-            {
+            catch (Exception e) {
                 common.printDebugMessage("Failure retrieving player from O2HouseMap.", e, null, false);
             }
         }
@@ -430,15 +393,12 @@ public class O2Houses
      * @return the names of all members of the specified house.
      */
     @NotNull
-    public ArrayList<String> getHouseMembers(@NotNull O2HouseType houseType)
-    {
+    public ArrayList<String> getHouseMembers(@NotNull O2HouseType houseType) {
         ArrayList<String> houseMembers = new ArrayList<>();
         Server server = p.getServer();
 
-        for (Entry<UUID, O2HouseType> entry : O2HouseMap.entrySet())
-        {
-            if (entry.getValue() == houseType)
-            {
+        for (Entry<UUID, O2HouseType> entry : O2HouseMap.entrySet()) {
+            if (entry.getValue() == houseType) {
                 UUID playerID = entry.getKey();
                 String playerName = server.getOfflinePlayer(playerID).getName();
                 houseMembers.add(playerName);
@@ -455,8 +415,7 @@ public class O2Houses
      * @param points    the point value to set for this house
      * @return true if the operation was successful, false if house was not found
      */
-    public synchronized boolean setHousePoints(@NotNull O2HouseType houseType, int points)
-    {
+    public synchronized boolean setHousePoints(@NotNull O2HouseType houseType, int points) {
         houseType.setScore(points);
 
         return updateScoreboard();
@@ -464,9 +423,10 @@ public class O2Houses
 
     /**
      * Resets all house points to 0.
+     *
+     * @return true if reset was successful
      */
-    public boolean resetHousePoints()
-    {
+    public boolean resetHousePoints() {
         initHousePoints();
 
         return updateScoreboard();
@@ -474,9 +434,10 @@ public class O2Houses
 
     /**
      * Resets houses completely.
+     *
+     * @return true if reset was successful
      */
-    public boolean reset()
-    {
+    public boolean reset() {
         p.getLogger().info("Resetting houses...");
 
         O2HouseMap.clear();
@@ -492,8 +453,7 @@ public class O2Houses
      * @param points    the amount of points to add
      * @return true if the operation was successful, false if house was not found
      */
-    public boolean addHousePoints(@NotNull O2HouseType houseType, int points)
-    {
+    public boolean addHousePoints(@NotNull O2HouseType houseType, int points) {
         int pts = points + houseType.getScore();
 
         return setHousePoints(houseType, pts);
@@ -506,12 +466,10 @@ public class O2Houses
      * @param points    the amount of points to subtract, if this is greater than the total points, points will be set to 0
      * @return true if the operation was successful, false if house was not found
      */
-    public boolean subtractHousePoints(@NotNull O2HouseType houseType, int points)
-    {
+    public boolean subtractHousePoints(@NotNull O2HouseType houseType, int points) {
         int pts = 0;
 
-        if (points < houseType.getScore())
-        {
+        if (points < houseType.getScore()) {
             pts = houseType.getScore() - points;
         }
 
@@ -521,10 +479,8 @@ public class O2Houses
     /**
      * Creates the house points scoreboard.
      */
-    private void createScoreboard()
-    {
-        if (!useHouses)
-        {
+    private void createScoreboard() {
+        if (!useHouses) {
             // do not allow if houses is not enabled
             common.printDebugMessage("Attempted to create scoreboard when houses is not enabled.", null, null, false);
             return;
@@ -541,16 +497,14 @@ public class O2Houses
         // if there was a previous house points objective, remove it
         Objective objective = scoreboard.getObjective(objectiveName);
 
-        if (objective != null)
-        {
+        if (objective != null) {
             objective.unregister();
             common.printDebugMessage("Unregistered previous house points objective...", null, null, false);
         }
 
         // if there is another objective on the slot we want, remove it
         objective = scoreboard.getObjective(scoreboardSlot);
-        if (objective != null)
-        {
+        if (objective != null) {
             objective.unregister();
             common.printDebugMessage("Unregistered previous scoreboard objective...", null, null, false);
         }
@@ -558,8 +512,7 @@ public class O2Houses
         scoreboard.registerNewObjective(objectiveName, Criteria.DUMMY, scoreboardDisplayName);
 
         objective = scoreboard.getObjective(objectiveName);
-        if (objective == null)
-        {
+        if (objective == null) {
             common.printDebugMessage("createScoreboard: Failed to create scoreboard objective", null, null, false);
             return;
         }
@@ -568,8 +521,7 @@ public class O2Houses
         objective.setDisplaySlot(scoreboardSlot);
 
         // register houses on scoreboard
-        for (O2HouseType houseType : O2HouseType.values())
-        {
+        for (O2HouseType houseType : O2HouseType.values()) {
             registerHouseTeam(houseType);
         }
 
@@ -581,14 +533,12 @@ public class O2Houses
      *
      * @param houseType the house to register
      */
-    private void registerHouseTeam(@NotNull O2HouseType houseType)
-    {
+    private void registerHouseTeam(@NotNull O2HouseType houseType) {
         String houseName = houseType.getName();
 
         Team team = scoreboard.getTeam(houseName);
 
-        if (team == null)
-        {
+        if (team == null) {
             team = scoreboard.registerNewTeam(houseName);
             common.printDebugMessage("Added team " + houseName + " to scoreboard.", null, null, false);
         }
@@ -607,24 +557,19 @@ public class O2Houses
      *
      * @return true if the operation was successful, false otherwise
      */
-    private synchronized boolean updateScoreboard()
-    {
-        if (!useHouses)
-        {
+    private synchronized boolean updateScoreboard() {
+        if (!useHouses) {
             common.printDebugMessage("Tried to update scoreboard when houses are not enabled.", null, null, false);
             return false;
         }
 
-        if (scoreboard == null)
-        {
+        if (scoreboard == null) {
             createScoreboard();
         }
 
         Objective objective = scoreboard.getObjective(objectiveName);
-        if (objective != null)
-        {
-            for (O2HouseType houseType : O2HouseType.values())
-            {
+        if (objective != null) {
+            for (O2HouseType houseType : O2HouseType.values()) {
                 updateScoreboardScore(houseType);
             }
 
@@ -640,8 +585,7 @@ public class O2Houses
      *
      * @param houseType the house to update
      */
-    private void updateScoreboardScore(@NotNull O2HouseType houseType)
-    {
+    private void updateScoreboardScore(@NotNull O2HouseType houseType) {
         Objective objective = scoreboard.getObjective(objectiveName);
         if (objective == null)
             return;
@@ -651,13 +595,11 @@ public class O2Houses
         if (team == null)
             return;
 
-        try
-        {
+        try {
             Score score = objective.getScore(houseType.getName());
             score.setScore(houseType.getScore());
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             common.printDebugMessage("updateScoreboardScore: failed to update score for " + houseType.getName(), e, null, false);
         }
     }
@@ -667,10 +609,8 @@ public class O2Houses
      *
      * @return true if the operation was successful, false otherwise
      */
-    private boolean hideScoreboard()
-    {
-        if (!useHouses)
-        {
+    private boolean hideScoreboard() {
+        if (!useHouses) {
             common.printDebugMessage("Tried to hide scoreboard when houses are not enabled.", null, null, false);
             return false;
         }
@@ -688,10 +628,8 @@ public class O2Houses
     /**
      * Show the house points scoreboard.
      */
-    private void showScoreboard()
-    {
-        if (!useHouses)
-        {
+    private void showScoreboard() {
+        if (!useHouses) {
             common.printDebugMessage("Tried to show scoreboard when houses are not enabled.", null, null, false);
             return;
         }
@@ -709,28 +647,23 @@ public class O2Houses
      * @param houseType the team to update
      * @param add       true if an add action, false if it is a remove
      */
-    private synchronized void updateTeam(@NotNull Player player, @NotNull O2HouseType houseType, boolean add)
-    {
+    private synchronized void updateTeam(@NotNull Player player, @NotNull O2HouseType houseType, boolean add) {
         String name = player.getName();
         String displayName = player.getDisplayName();
         Team team = O2HouseTeamMap.get(houseType);
 
-        if (team == null)
-        {
+        if (team == null) {
             common.printDebugMessage("Team " + houseType + " does not exist.", null, null, false);
             return;
         }
 
-        if (add)
-        {
+        if (add) {
             team.addEntry(name);
             player.setDisplayName(houseType.getColorPrefix() + name);
         }
-        else
-        {
+        else {
             team.removeEntry(name);
-            if (displayName.startsWith("§"))
-            {
+            if (displayName.startsWith("§")) {
                 // we have set a color on their display name, change it back
                 player.setDisplayName(name);
             }
@@ -742,11 +675,9 @@ public class O2Houses
      *
      * @param player the player to add
      */
-    public void addPlayerToHouseTeam(@NotNull Player player)
-    {
+    public void addPlayerToHouseTeam(@NotNull Player player) {
         UUID pid = player.getUniqueId();
-        if (O2HouseMap.containsKey(pid))
-        {
+        if (O2HouseMap.containsKey(pid)) {
             updateTeam(player, O2HouseMap.get(pid), true);
         }
     }

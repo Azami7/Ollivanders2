@@ -13,15 +13,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * A fancier version of Bothynus.
  */
-public final class BOTHYNUS_DUO extends Pyrotechnia
-{
+public final class BOTHYNUS_DUO extends Pyrotechnia {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public BOTHYNUS_DUO(Ollivanders2 plugin)
-    {
+    public BOTHYNUS_DUO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.BOTHYNUS_DUO;
@@ -37,8 +35,7 @@ public final class BOTHYNUS_DUO extends Pyrotechnia
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public BOTHYNUS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public BOTHYNUS_DUO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.BOTHYNUS_DUO;
         branch = O2MagicBranch.CHARMS;
@@ -58,8 +55,7 @@ public final class BOTHYNUS_DUO extends Pyrotechnia
      * Set the number of fireworks that can be cast based on the user's experience.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         setNumberOfFireworks();
     }
 }

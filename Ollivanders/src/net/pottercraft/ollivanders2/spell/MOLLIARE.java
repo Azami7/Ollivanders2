@@ -11,25 +11,22 @@ import java.util.ArrayList;
 
 /**
  * Eliminates all fall damage.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Cushioning_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Cushioning_Charm">https://harrypotter.fandom.com/wiki/Cushioning_Charm</a>
  */
-public final class MOLLIARE extends StationarySpell
-{
+public final class MOLLIARE extends StationarySpell {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public MOLLIARE(Ollivanders2 plugin)
-    {
+    public MOLLIARE(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.MOLLIARE;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Cushioning Charm.");
             add("Harry felt himself glide back toward the ground as though weightless, landing painlessly on the rocky passage floor.");
         }};
@@ -44,8 +41,7 @@ public final class MOLLIARE extends StationarySpell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public MOLLIARE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public MOLLIARE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.MOLLIARE;
@@ -63,8 +59,7 @@ public final class MOLLIARE extends StationarySpell
     }
 
     @Override
-    protected O2StationarySpell createStationarySpell()
-    {
+    protected O2StationarySpell createStationarySpell() {
         return new net.pottercraft.ollivanders2.stationaryspell.MOLLIARE(p, player.getUniqueId(), location, radius, duration);
     }
 }

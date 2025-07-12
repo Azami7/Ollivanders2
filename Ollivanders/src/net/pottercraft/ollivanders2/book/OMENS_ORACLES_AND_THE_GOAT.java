@@ -5,22 +5,31 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Omens, Oracles & the Goat was a book by the celebrated magical historian, Bathilda Bagshot, covering a historical overview of Divination practises.
- * http://harrypotter.wikia.com/wiki/Omens,_Oracles_%26_the_Goat
+ * Omens, Oracles, and the Goat is a book by the celebrated magical historian, Bathilda Bagshot, covering a historical
+ * overview of Divination practises.
+ * <p>
+ * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.CARTOMANCIE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.MANTEIA_KENTAVROS}
+ * </p>
  *
+ * @see <a href = "http://harrypotter.wikia.com/wiki/Omens,_Oracles_%26_the_Goat">http://harrypotter.wikia.com/wiki/Omens,_Oracles_%26_the_Goat</a>
  * @author Azami7
  * @since 2.2.9
  */
-public class OMENS_ORACLES_AND_THE_GOAT extends O2Book
-{
-    public OMENS_ORACLES_AND_THE_GOAT(@NotNull Ollivanders2 plugin)
-    {
+public class OMENS_ORACLES_AND_THE_GOAT extends O2Book {
+    /**
+     * Constructor
+     *
+     * @param plugin a callback to the plugin
+     */
+    public OMENS_ORACLES_AND_THE_GOAT(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         bookType = O2BookType.OMENS_ORACLES_AND_THE_GOAT;
 
-        spells.add(O2SpellType.OVOGNOSIS);
         spells.add(O2SpellType.CARTOMANCIE);
         spells.add(O2SpellType.MANTEIA_KENTAVROS);
+        // todo rune stones - https://harrypotter.fandom.com/wiki/Rune_stone
     }
 }

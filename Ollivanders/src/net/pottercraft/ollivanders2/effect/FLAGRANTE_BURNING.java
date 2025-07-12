@@ -8,8 +8,7 @@ import java.util.UUID;
 /**
  * Burning effect from a flagrante-cursed item.
  */
-public class FLAGRANTE_BURNING extends BURNING
-{
+public class FLAGRANTE_BURNING extends BURNING {
     /**
      * Constructor
      *
@@ -17,8 +16,7 @@ public class FLAGRANTE_BURNING extends BURNING
      * @param duration the duration of the effect
      * @param pid      the player this effect acts on
      */
-    public FLAGRANTE_BURNING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-    {
+    public FLAGRANTE_BURNING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
 
         permanent = true;

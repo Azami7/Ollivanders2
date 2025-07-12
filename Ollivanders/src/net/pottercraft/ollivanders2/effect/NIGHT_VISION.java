@@ -12,26 +12,32 @@ import java.util.UUID;
  * @author Azami7
  * @since 2.2.9
  */
-public class NIGHT_VISION extends PotionEffectSuper
-{
-   public NIGHT_VISION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-   {
-      super(plugin, duration, pid);
+public class NIGHT_VISION extends PotionEffectSuper {
+    /**
+     * Constructor
+     *
+     * @param plugin   a callback to the MC plugin
+     * @param duration the duration of the effect
+     * @param pid      the ID of the player this effect acts on
+     */
+    public NIGHT_VISION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
+        super(plugin, duration, pid);
 
-      strength = 1;
+        strength = 1;
 
-      effectType = O2EffectType.NIGHT_VISION;
-      potionEffectType = PotionEffectType.NIGHT_VISION;
-      informousText = legilimensText = "can breath in water";
+        effectType = O2EffectType.NIGHT_VISION;
+        potionEffectType = PotionEffectType.NIGHT_VISION;
+        informousText = legilimensText = "can breath in water";
 
-      divinationText.add("will swim with the mermaids");
-      divinationText.add("will feel fishy");
-      divinationText.add("will no longer fear water");
-   }
+        divinationText.add("will swim with the mermaids");
+        divinationText.add("will feel fishy");
+        divinationText.add("will no longer fear water");
+    }
 
-   /**
-    * Do any cleanup related to removing this effect from the player
-    */
-   @Override
-   public void doRemove () { }
+    /**
+     * Do any cleanup related to removing this effect from the player
+     */
+    @Override
+    public void doRemove() {
+    }
 }

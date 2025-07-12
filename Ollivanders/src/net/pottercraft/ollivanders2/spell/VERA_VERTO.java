@@ -17,11 +17,10 @@ import java.util.ArrayList;
 
 /**
  * Turn animals to flower pots (approximation for water goblets).
- * <p>
- * https://harrypotter.fandom.com/wiki/Vera_Verto
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Vera_Verto">https://harrypotter.fandom.com/wiki/Vera_Verto</a>
  */
-public final class VERA_VERTO extends FriendlyMobDisguise
-{
+public final class VERA_VERTO extends FriendlyMobDisguise {
     private static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 15;
     private static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
@@ -30,15 +29,13 @@ public final class VERA_VERTO extends FriendlyMobDisguise
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public VERA_VERTO(Ollivanders2 plugin)
-    {
+    public VERA_VERTO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.VERA_VERTO;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("\"Could I have your attention please? Right, now, today, we will be transforming animals into water goblets. Like so. One, two, three. Vera Verto.\" -Minerva McGonagall");
         }};
 
@@ -52,8 +49,7 @@ public final class VERA_VERTO extends FriendlyMobDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public VERA_VERTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public VERA_VERTO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.VERA_VERTO;
         branch = O2MagicBranch.TRANSFIGURATION;

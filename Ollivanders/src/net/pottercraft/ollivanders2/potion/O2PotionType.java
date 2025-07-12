@@ -8,22 +8,70 @@ import org.jetbrains.annotations.Nullable;
 /**
  * All potions types
  */
-public enum O2PotionType
-{
+public enum O2PotionType {
+    /**
+     * {@link ANIMAGUS_POTION}
+     */
     ANIMAGUS_POTION(ANIMAGUS_POTION.class, MagicLevel.NEWT),
+    /**
+     * {@link BABBLING_BEVERAGE}
+     */
     BABBLING_BEVERAGE(BABBLING_BEVERAGE.class, MagicLevel.OWL),
+    /**
+     * {@link BARUFFIOS_BRAIN_ELIXIR}
+     */
     BARUFFIOS_BRAIN_ELIXIR(BARUFFIOS_BRAIN_ELIXIR.class, MagicLevel.EXPERT),
+    /**
+     * {@link COMMON_ANTIDOTE_POTION}
+     */
     COMMON_ANTIDOTE_POTION(COMMON_ANTIDOTE_POTION.class, MagicLevel.BEGINNER),
+    /**
+     * {@link CURE_FOR_BOILS}
+     */
     CURE_FOR_BOILS(CURE_FOR_BOILS.class, MagicLevel.BEGINNER),
+    /**
+     * {@link DRAUGHT_OF_LIVING_DEATH}
+     */
     DRAUGHT_OF_LIVING_DEATH(DRAUGHT_OF_LIVING_DEATH.class, MagicLevel.NEWT),
+    /**
+     * {@link FORGETFULLNESS_POTION}
+     */
     FORGETFULLNESS_POTION(FORGETFULLNESS_POTION.class, MagicLevel.OWL),
+    /**
+     * {@link HERBICIDE_POTION}
+     */
     HERBICIDE_POTION(HERBICIDE_POTION.class, MagicLevel.BEGINNER),
+    /**
+     * {@link MEMORY_POTION}
+     */
     MEMORY_POTION(MEMORY_POTION.class, MagicLevel.NEWT),
+    /**
+     * {@link OCULUS_FELIS}
+     */
+    OCULUS_FELIS(OCULUS_FELIS.class, MagicLevel.BEGINNER),
+    /**
+     * {@link REGENERATION_POTION}
+     */
     REGENERATION_POTION(REGENERATION_POTION.class, MagicLevel.NEWT),
+    /**
+     * {@link SLEEPING_DRAUGHT}
+     */
     SLEEPING_DRAUGHT(SLEEPING_DRAUGHT.class, MagicLevel.BEGINNER),
+    /**
+     * {@link WIDEYE_POTION}
+     */
     WIDEYE_POTION(WIDEYE_POTION.class, MagicLevel.BEGINNER),
+    /**
+     * {@link WIGGENWELD_POTION}
+     */
     WIGGENWELD_POTION(WIGGENWELD_POTION.class, MagicLevel.OWL),
+    /**
+     * {@link WIT_SHARPENING_POTION}
+     */
     WIT_SHARPENING_POTION(WIT_SHARPENING_POTION.class, MagicLevel.OWL),
+    /**
+     * {@link WOLFSBANE_POTION}
+     */
     WOLFSBANE_POTION(WOLFSBANE_POTION.class, MagicLevel.EXPERT);
 
     /**
@@ -42,8 +90,7 @@ public enum O2PotionType
      * @param className the class for this potion type
      * @param level     the level of this potion
      */
-    O2PotionType(@NotNull Class<?> className, MagicLevel level)
-    {
+    O2PotionType(@NotNull Class<?> className, MagicLevel level) {
         this.className = className;
         this.level = level;
     }
@@ -54,14 +101,12 @@ public enum O2PotionType
      * @return the class name for this type of potion.
      */
     @NotNull
-    public Class<?> getClassName()
-    {
+    public Class<?> getClassName() {
         return className;
     }
 
     @NotNull
-    public MagicLevel getLevel()
-    {
+    public MagicLevel getLevel() {
         return level;
     }
 
@@ -71,8 +116,7 @@ public enum O2PotionType
      * @return the spell name for this potion type.
      */
     @NotNull
-    public String getPotionName()
-    {
+    public String getPotionName() {
         String potionTypeString = this.toString().toLowerCase();
 
         return Ollivanders2Common.firstLetterCapitalize(potionTypeString.replace("_", " "));
@@ -85,16 +129,13 @@ public enum O2PotionType
      * @return the potion type
      */
     @Nullable
-    public static O2PotionType potionTypeFromString(@NotNull String potionString)
-    {
+    public static O2PotionType potionTypeFromString(@NotNull String potionString) {
         O2PotionType potionType = null;
 
-        try
-        {
+        try {
             potionType = O2PotionType.valueOf(potionString);
         }
-        catch (Exception e)
-        {
+        catch (Exception e) {
             // we don't do anything, this will happen if they send an invalid potion name
         }
 

@@ -5,8 +5,10 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class OllivandersPlayerSortedEvent extends PlayerEvent
-{
+/**
+ * Event registered when a player is sorted
+ */
+public class OllivandersPlayerSortedEvent extends PlayerEvent {
     private static final HandlerList handlers = new HandlerList();
 
     /**
@@ -14,20 +16,27 @@ public class OllivandersPlayerSortedEvent extends PlayerEvent
      *
      * @param player the player who found their wand
      */
-    public OllivandersPlayerSortedEvent (@NotNull Player player)
-    {
+    public OllivandersPlayerSortedEvent(@NotNull Player player) {
         super(player);
     }
 
+    /**
+     * Get the handlers for this Event
+     *
+     * @return the event handlers
+     */
     @NotNull
     @Override
-    public HandlerList getHandlers()
-    {
+    public HandlerList getHandlers() {
         return handlers;
     }
 
-    public static HandlerList getHandlerList()
-    {
+    /**
+     * Get the handlers for this Event
+     *
+     * @return the event handlers
+     */
+    public static HandlerList getHandlerList() {
         return handlers;
     }
 }

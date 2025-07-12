@@ -13,15 +13,13 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Turn target player in to a llama.
  */
-public final class LAMA extends PlayerDisguise
-{
+public final class LAMA extends PlayerDisguise {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public LAMA(Ollivanders2 plugin)
-    {
+    public LAMA(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.LAMA;
@@ -37,8 +35,7 @@ public final class LAMA extends PlayerDisguise
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public LAMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public LAMA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.LAMA;
@@ -58,8 +55,7 @@ public final class LAMA extends PlayerDisguise
      * Calculate success rate based on player skill level
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         calculateSuccessRate();
     }
 }

@@ -6,10 +6,20 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
 
-public class SPEED_SPEEDIER extends PotionEffectSuper
-{
-    public SPEED_SPEEDIER(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid)
-    {
+/**
+ * faster speed effect
+ *
+ * @see SPEED
+ */
+public class SPEED_SPEEDIER extends PotionEffectSuper {
+    /**
+     * Constructor
+     *
+     * @param plugin   a callback to the MC plugin
+     * @param duration the duration of the effect
+     * @param pid      the ID of the player this effect acts on
+     */
+    public SPEED_SPEEDIER(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
 
         strength = 2;
@@ -26,5 +36,6 @@ public class SPEED_SPEEDIER extends PotionEffectSuper
      * Do any cleanup related to removing this effect from the player
      */
     @Override
-    public void doRemove () { }
+    public void doRemove() {
+    }
 }

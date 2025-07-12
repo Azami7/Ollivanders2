@@ -17,15 +17,13 @@ import java.util.ArrayList;
  * @author Azami7
  * @see Pyrotechnia
  */
-public final class PERICULUM extends Pyrotechnia
-{
+public final class PERICULUM extends Pyrotechnia {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public PERICULUM(Ollivanders2 plugin)
-    {
+    public PERICULUM(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.PERICULUM;
@@ -41,8 +39,7 @@ public final class PERICULUM extends Pyrotechnia
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public PERICULUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public PERICULUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.PERICULUM;
@@ -61,8 +58,7 @@ public final class PERICULUM extends Pyrotechnia
      * Set the number of fireworks that can be cast based on the user's experience.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         setNumberOfFireworks();
     }
 }

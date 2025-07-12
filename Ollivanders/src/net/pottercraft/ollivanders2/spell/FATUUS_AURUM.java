@@ -14,8 +14,7 @@ import java.util.ArrayList;
 /**
  * Temporarily turns items to gold but this transition is not permanent.
  */
-public final class FATUUS_AURUM extends BlockTransfiguration
-{
+public final class FATUUS_AURUM extends BlockTransfiguration {
     private static final int minRadiusConfig = 1;
     private static final int maxRadiusConfig = 1;
     private static final int minDurationConfig = 15 * Ollivanders2Common.ticksPerSecond;
@@ -26,15 +25,13 @@ public final class FATUUS_AURUM extends BlockTransfiguration
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public FATUUS_AURUM(Ollivanders2 plugin)
-    {
+    public FATUUS_AURUM(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.FATUUS_AURUM;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("What glitters may not be gold; and even wolves may smile; and fools will be led by promises to their deaths.");
             add("There is thy gold, worse poison to men's souls.");
             add("Stone to Gold Charm");
@@ -50,8 +47,7 @@ public final class FATUUS_AURUM extends BlockTransfiguration
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public FATUUS_AURUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public FATUUS_AURUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.FATUUS_AURUM;
         branch = O2MagicBranch.CHARMS;

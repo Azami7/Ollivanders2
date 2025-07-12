@@ -12,6 +12,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 
 /**
+ * Quidditch arena
+ *
  * @author autumnwoz
  */
 public class Arena {

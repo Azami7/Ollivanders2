@@ -8,18 +8,16 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * A stronger version of Reparo for mending diamond and netherite items.
- * <p>
- * https://harrypotter.fandom.com/wiki/Mending_Charm
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Mending_Charm">https://harrypotter.fandom.com/wiki/Mending_Charm</a>
  */
-public final class DIAMAS_REPARO extends REPARO
-{
+public final class DIAMAS_REPARO extends REPARO {
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public DIAMAS_REPARO(Ollivanders2 plugin)
-    {
+    public DIAMAS_REPARO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.DIAMAS_REPARO;
@@ -36,16 +34,14 @@ public final class DIAMAS_REPARO extends REPARO
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public DIAMAS_REPARO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public DIAMAS_REPARO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.REPARO;
         branch = O2MagicBranch.CHARMS;
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.ITEM_DROP);
             worldGuardFlags.add(Flags.ITEM_PICKUP);
         }

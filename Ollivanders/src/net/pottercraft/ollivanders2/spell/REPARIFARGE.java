@@ -13,11 +13,10 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Reparifarge will untransfigure the target block or entity, does not work on Animagus transfigurations.
- * <p>
- * https://harrypotter.fandom.com/wiki/Reparifarge
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Reparifarge">https://harrypotter.fandom.com/wiki/Reparifarge</a>
  */
-public final class REPARIFARGE extends O2Spell
-{
+public final class REPARIFARGE extends O2Spell {
     static final int maxSuccessRate = 100;
     static final int minSuccessRate = 10;
     int successRate = minSuccessRate;
@@ -27,15 +26,13 @@ public final class REPARIFARGE extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public REPARIFARGE(Ollivanders2 plugin)
-    {
+    public REPARIFARGE(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.REPARIFARGE;
         branch = O2MagicBranch.TRANSFIGURATION;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("Incomplete Transfigurations are difficult to put right, but you must attempt to do so. Leaving the head of a rabbit on a footstool is irresponsible and dangerous. Say 'Reparifarge!' and the object or creature should return to its natural state.");
             add("The Untransfiguration Spell");
         }};
@@ -50,8 +47,7 @@ public final class REPARIFARGE extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public REPARIFARGE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public REPARIFARGE(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.REPARIFARGE;
@@ -67,8 +63,7 @@ public final class REPARIFARGE extends O2Spell
      * Set the success rate based on the caster's skill.
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         successRate = (int) usesModifier;
         if (successRate < minSuccessRate)
             successRate = minSuccessRate;
@@ -77,12 +72,9 @@ public final class REPARIFARGE extends O2Spell
     }
 
     @Override
-    public void doCheckEffect()
-    {
-        if (hasHitTarget())
-        {
-            if (getTargetBlock() == null)
-            {
+    public void doCheckEffect() {
+        if (hasHitTarget()) {
+            if (getTargetBlock() == null) {
                 common.printDebugMessage("Target block null in " + spellType.toString(), null, null, false);
                 return;
             }
@@ -93,19 +85,16 @@ public final class REPARIFARGE extends O2Spell
 
             kill();
         }
-        else
-        {
+        else {
             // check the area around the current projectile location for entities that can be targeted
-            for (Entity entity : getCloseEntities(1.5))
-            {
+            for (Entity entity : getCloseEntities(1.5)) {
                 if (entity.getUniqueId() == player.getUniqueId())
                     continue;
 
                 if (entity instanceof EnderDragonPart) // if this is part of an Ender Dragon, get the parent Dragon entity
                     entity = ((EnderDragonPart) entity).getParent();
 
-                if (reparifargeEntity(entity))
-                {
+                if (reparifargeEntity(entity)) {
                     player.sendMessage(Ollivanders2.chatColor + successMessage);
                     kill();
                     return;
@@ -120,15 +109,12 @@ public final class REPARIFARGE extends O2Spell
      * @param target the target transfigured entity
      * @return true if the spell reverted a transfiguration, false otherwise
      */
-    public boolean reparifargeEntity(@NotNull Entity target)
-    {
-        for (O2Spell spell : p.getProjectiles())
-        {
+    public boolean reparifargeEntity(@NotNull Entity target) {
+        for (O2Spell spell : p.getProjectiles()) {
             if (spell.isPermanent())
                 continue;
 
-            if (spell instanceof TransfigurationBase && ((TransfigurationBase) spell).isEntityTransfigured(target))
-            {
+            if (spell instanceof TransfigurationBase && ((TransfigurationBase) spell).isEntityTransfigured(target)) {
                 if ((spell.getLevel().ordinal() > this.spellType.getLevel().ordinal()) && checkSuccess())
                     spell.kill();
 
@@ -145,15 +131,12 @@ public final class REPARIFARGE extends O2Spell
      * @param target the target transfigured block
      * @return true if the spell reverted a transfiguration, false otherwise
      */
-    public boolean reparifargeBlock(@NotNull Block target)
-    {
-        for (O2Spell spell : p.getProjectiles())
-        {
+    public boolean reparifargeBlock(@NotNull Block target) {
+        for (O2Spell spell : p.getProjectiles()) {
             if (spell.isPermanent())
                 continue;
 
-            if (spell instanceof TransfigurationBase && ((TransfigurationBase) spell).isBlockTransfigured(target))
-            {
+            if (spell instanceof TransfigurationBase && ((TransfigurationBase) spell).isBlockTransfigured(target)) {
                 if (checkSuccess())
                     spell.kill();
                 return true;
@@ -168,8 +151,7 @@ public final class REPARIFARGE extends O2Spell
      *
      * @return true if succeeded, false otherwise
      */
-    boolean checkSuccess()
-    {
+    boolean checkSuccess() {
         int success = Math.abs(Ollivanders2Common.random.nextInt()) % 100;
 
         return (success < successRate);

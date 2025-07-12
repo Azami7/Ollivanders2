@@ -14,11 +14,10 @@ import java.util.ArrayList;
 
 /**
  * Causes a living entity to damage another living entity.
- * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Oppugno_Jinx
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Oppugno_Jinx">https://harrypotter.fandom.com/wiki/Oppugno_Jinx</a>
  */
-public final class OPPUGNO extends O2Spell
-{
+public final class OPPUGNO extends O2Spell {
     /**
      * The amount of damage to do
      */
@@ -39,15 +38,13 @@ public final class OPPUGNO extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public OPPUGNO(Ollivanders2 plugin)
-    {
+    public OPPUGNO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.OPPUGNO;
         branch = O2MagicBranch.DARK_ARTS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("Harry spun around to see Hermione pointing her wand at Ron, her expression wild: The little flock of birds was speeding like a hail of fat golden bullets toward Ron, who yelped and covered his face with his hands, but the birds attacked, pecking and clawing at every bit of flesh they could reach.");
             add("The Oppugno Jinx");
         }};
@@ -62,16 +59,14 @@ public final class OPPUGNO extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public OPPUGNO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public OPPUGNO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.OPPUGNO;
         branch = O2MagicBranch.DARK_ARTS;
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.PVP);
             worldGuardFlags.add(Flags.DAMAGE_ANIMALS);
         }
@@ -83,8 +78,7 @@ public final class OPPUGNO extends O2Spell
      * Set damage based on caster's spell experience
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         damage = usesModifier / 20;
         if (damage < minDamage)
             damage = minDamage;
@@ -93,13 +87,11 @@ public final class OPPUGNO extends O2Spell
     }
 
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         // get the target to be attacked
         LivingEntity target = null;
 
-        for (LivingEntity livingEntity : getNearbyLivingEntities(defaultRadius))
-        {
+        for (LivingEntity livingEntity : getNearbyLivingEntities(defaultRadius)) {
             if (livingEntity.getUniqueId() == player.getUniqueId())
                 continue;
 
@@ -107,24 +99,21 @@ public final class OPPUGNO extends O2Spell
             stopProjectile();
         }
 
-        if (target != null)
-        {
+        if (target != null) {
             if (hasHitTarget())
                 kill();
 
             // get an entity to attack the target
             LivingEntity attacker = null;
 
-            for (LivingEntity livingEntity : getNearbyLivingEntities(10))
-            {
+            for (LivingEntity livingEntity : getNearbyLivingEntities(10)) {
                 if (livingEntity.getUniqueId() == player.getUniqueId())
                     continue;
 
                 attacker = livingEntity;
             }
 
-            if (attacker == null)
-            {
+            if (attacker == null) {
                 kill();
                 return;
             }
