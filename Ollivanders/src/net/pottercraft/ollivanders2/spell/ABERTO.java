@@ -16,11 +16,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Opening charm - https://harrypotter.fandom.com/wiki/Opening_Charm - opens doors and trapdoors. It will not work on
- * doors that require power to stay open like iron doors ... well it does open them, they just close again so fast you cannot see it.
+ * Opening charm opens doors and trapdoors. It will not work on doors that require power to stay open like iron doors ...
+ * well it does open them, they just close again so fast you cannot see it.
  *
  * @author Azami7
  * @since 2.21
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Opening_Charm">https://harrypotter.fandom.com/wiki/Opening_Charm</a>
  */
 public class ABERTO extends O2Spell {
     /**
