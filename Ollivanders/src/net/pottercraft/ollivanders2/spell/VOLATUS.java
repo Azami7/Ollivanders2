@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Enchants a broomstick to fly.
+ * <p>
+ * {@link net.pottercraft.ollivanders2.item.enchantment.VOLATUS}
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Broomstick">https://harrypotter.fandom.com/wiki/Broomstick</a>
  */
@@ -53,7 +55,7 @@ public final class VOLATUS extends ItemEnchant {
         enchantmentType = ItemEnchantmentType.VOLATUS;
 
         // set to only work for broomsticks
-        itemTypeAllowlist.add(O2ItemType.BASIC_BROOM);
+        o2ItemTypeAllowList.add(O2ItemType.BASIC_BROOM);
 
         // magnitude = (int) ((usesModifier / 4) * strength)
         strength = 0.25;

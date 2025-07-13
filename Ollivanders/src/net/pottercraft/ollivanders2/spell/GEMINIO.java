@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Places a geminio effect on the item.
+ * <p>
+ * {@link net.pottercraft.ollivanders2.item.enchantment.GEMINIO}
  *
  * @author Azami7
  * @version Ollivanders2

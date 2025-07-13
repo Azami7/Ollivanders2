@@ -14,7 +14,9 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The unlocking spell - https://harrypotter.fandom.com/wiki/Unlocking_Charm
+ * The unlocking spell.
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Unlocking_Charm">https://harrypotter.fandom.com/wiki/Unlocking_Charm</a>
  */
 public final class ALOHOMORA extends O2Spell {
     /**

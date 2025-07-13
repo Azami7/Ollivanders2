@@ -11,6 +11,10 @@ import org.jetbrains.annotations.Nullable;
  */
 public enum ItemEnchantmentType {
     /**
+     * {@link CELATUM}
+     */
+    CELATUM("celatum", CELATUM.class, null, MagicLevel.BEGINNER, false),
+    /**
      * {@link FLAGRANTE}
      */
     FLAGRANTE("flagrante", FLAGRANTE.class, null, MagicLevel.EXPERT, true),

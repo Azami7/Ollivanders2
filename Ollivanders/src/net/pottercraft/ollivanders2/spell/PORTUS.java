@@ -12,6 +12,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Creates a port key.
+ * <p>
+ * {@link net.pottercraft.ollivanders2.item.enchantment.PORTUS}
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Portkey_Spell">https://harrypotter.fandom.com/wiki/Portkey_Spell</a>
  */
