@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 
 import org.jetbrains.annotations.NotNull;
@@ -90,10 +91,16 @@ public final class PORTUS extends ItemEnchant {
     void doInitSpell() {
         super.doInitSpell();
 
-        if (args == null || args.length() < 1) {
+        if (args == null || args.isEmpty()) {
             Location loc = player.getLocation();
 
-            args = player.getLocation().getWorld().getName() + " " + player.getLocation().getX() + " " + player.getLocation().getY() + " " + player.getLocation().getZ();
+            World world = loc.getWorld();
+            if (world == null) {
+                kill();
+                return;
+            }
+
+            args = world.getName() + " " + loc.getX() + " " + loc.getY() + " " + loc.getZ();
         }
     }
 }
