@@ -31,6 +31,7 @@ public class QUINTESSENCE_A_QUEST extends O2Book {
 
         spells.add(O2SpellType.CONFUNDUS_DUO);
         spells.add(O2SpellType.APARECIUM);
+        spells.add(O2SpellType.CELATUM);
         spells.add(O2SpellType.GLACIUS_TRIA);
         spells.add(O2SpellType.MOLLIARE);
     }

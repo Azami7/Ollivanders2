@@ -20,7 +20,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Add broom flight to an item
  * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Broomstick
+ * {@link net.pottercraft.ollivanders2.spell.VOLATUS}
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Broomstick">https://harrypotter.fandom.com/wiki/Broomstick</a>
  */
 public class VOLATUS extends Enchantment {
     /**

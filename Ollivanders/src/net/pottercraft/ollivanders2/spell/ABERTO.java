@@ -16,10 +16,11 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Opening charm - https://harrypotter.fandom.com/wiki/Opening_Charm - opens doors and trapdoors. It will not work on
- * doors that require power to stay open like iron doors ... well it does open them, they just close again so fast you cannot see it.
+ * Opening charm - opens doors and trapdoors. It will not work on doors that require power to stay open like iron doors
+ * ... well it does open them, they just close again so fast you cannot see it.
  *
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Opening_Charm">https://harrypotter.fandom.com/wiki/Opening_Charm</a>
  * @since 2.21
  */
 public class ABERTO extends O2Spell {
@@ -84,8 +85,7 @@ public class ABERTO extends O2Spell {
         }
 
         // is the door protected by colloportus?
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(target.getLocation()))
-        {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(target.getLocation())) {
             if (stationarySpell instanceof COLLOPORTUS) {
                 sendFailureMessage();
                 return;
