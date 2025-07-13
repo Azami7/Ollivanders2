@@ -55,6 +55,11 @@ public abstract class ItemEnchant extends O2Spell {
     String args = "";
 
     /**
+     * Whether the player holds the item to enchant it or casts a spell projectile at an item
+     */
+    boolean holdItemToEnchant = false;
+
+    /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
@@ -99,6 +104,18 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
+     * Override from O2Spell since some enchantments will not use a spell projectile but enchant an item in the player inv
+     */
+    @Override
+    public void checkEffect() {
+        if (holdItemToEnchant) {
+
+        }
+        else
+            super.checkEffect();
+    }
+
+    /**
      * Add the curse effect to an item stack in the projectile's location
      */
     @Override
@@ -129,6 +146,13 @@ public abstract class ItemEnchant extends O2Spell {
 
             break;
         }
+    }
+
+    protected boolean canBeEnchanted(Item item) {
+        if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)))
+            return false;
+
+        return true;
     }
 
     /**

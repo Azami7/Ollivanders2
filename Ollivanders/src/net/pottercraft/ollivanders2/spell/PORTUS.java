@@ -33,38 +33,10 @@ public final class PORTUS extends ItemEnchant {
         }};
 
         text = "Portus is a spell which creates a portkey. To cast it, hold a wand in your hand "
-                + "and look directly at the item you wish to enchant. Then say 'Portus x y z', where x y and z are the coordinates "
-                + "you wish the portkey to link to. When this item is picked up, the holder and the entities around them will be "
-                + "transported to the destination. Anti-apparition and anti-disapparition spells will stop this, but only if present "
-                + "during the creation of the portkey, and will cause the creation to fail. If the portkey is successfully made, then "
-                + "it can be used to go to that location regardless of the spells put on it. A portkey creation will not fail if the "
-                + "caster of the protective enchantments is the portkey maker. Portkeys can be used to cross worlds as well, if you use "
-                + "a portkey which was made in a different world. If the enchantment is said incorrectly, then the portkey will be created "
-                + "linking to the caster's current location.";
-    }
-
-    /**
-     * Constructor.
-     *
-     * @param plugin    a callback to the MC plugin
-     * @param player    the player who cast this spell
-     * @param rightWand which wand the player was using
-     * @param words     the location this portkey goes to
-     */
-    public PORTUS(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand, @NotNull String[] words) {
-        super(plugin, player, rightWand);
-
-        spellType = O2SpellType.PORTUS;
-        branch = O2MagicBranch.CHARMS;
-        enchantmentType = ItemEnchantmentType.PORTUS;
-
-        StringBuilder sb = new StringBuilder();
-        for (String word : words) {
-            sb.append(word).append(" ");
-        }
-        args = sb.toString().trim();
-
-        initSpell();
+                + "and hold the item you wish to enchant in your off hand, then say the spell and flick your wand. "
+                + "You can leave this item in world and when the enchanted item is picked up, the holder and the entities "
+                + "around them will be teleported to your current location. Anti-apparation spells in your location will "
+                + "will prevent a portkey being created for a location or from an existing portkey working.";
     }
 
     /**

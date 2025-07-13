@@ -243,8 +243,6 @@ public class OllivandersListener implements Listener {
 
                 if (spellType == O2SpellType.APPARATE)
                     addSpellProjectile(player, new APPARATE(p, player, 1.0, words));
-                else if (spellType == O2SpellType.PORTUS)
-                    addSpellProjectile(player, new PORTUS(p, player, 1.0, words));
                 else if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
                     addSpellProjectile(player, new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, player, 1.0));
                 else if (Divination.divinationSpells.contains(spellType)) {
