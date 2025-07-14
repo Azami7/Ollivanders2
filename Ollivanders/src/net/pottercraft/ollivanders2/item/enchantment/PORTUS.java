@@ -14,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Port key enchantment
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.PORTUS}
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Portkey">https://harrypotter.fandom.com/wiki/Portkey</a>
  */
@@ -113,12 +115,14 @@ public class PORTUS extends Enchantment {
      * @param event the item drop event
      */
     @Override
-    public void doItemDrop(@NotNull PlayerDropItemEvent event) { }
+    public void doItemDrop(@NotNull PlayerDropItemEvent event) {
+    }
 
     /**
      * Handle item held events
      *
      * @param event the item drop event
      */
-    public void doItemHeld(@NotNull PlayerItemHeldEvent event) { }
+    public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
+    }
 }

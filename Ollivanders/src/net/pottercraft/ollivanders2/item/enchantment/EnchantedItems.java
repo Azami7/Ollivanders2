@@ -158,7 +158,7 @@ public class EnchantedItems implements Listener {
         // store these in a hashmap for faster access later
         enchantedItems.put(eid, enchantment);
 
-        common.printDebugMessage("Added enchanted item " + itemMeta.getDisplayName() + " of type " + eType.getName(), null, null, false);
+        common.printDebugMessage("Added enchanted item " + itemStack.getType() + " of type " + eType.getName(), null, null, false);
     }
 
     /**

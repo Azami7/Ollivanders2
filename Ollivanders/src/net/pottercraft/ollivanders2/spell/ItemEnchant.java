@@ -11,6 +11,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +27,15 @@ public abstract class ItemEnchant extends O2Spell {
 
     /**
      * The list of item types that this can enchant, if limited. When empty, all item types can be enchanted
+     * Cannot be mixed and match with o2ItemTypeAllowList (only use one or the other)
      */
-    protected ArrayList<O2ItemType> itemTypeAllowlist = new ArrayList<>();
+    protected ArrayList<O2ItemType> o2ItemTypeAllowList = new ArrayList<>();
+
+    /**
+     * The list of item types that this can enchant, if limited. When empty, all item types can be enchanted.
+     * Cannot be mixed and match with o2ItemTypeAllowList (only use one or the other)
+     */
+    protected ArrayList<Material> itemTypeAllowlist = new ArrayList<>();
 
     /**
      * Minimum magnitude
@@ -114,22 +122,54 @@ public abstract class ItemEnchant extends O2Spell {
             if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)))
                 continue;
 
-            // if this enchantment has an allowed list, check it
-            if (!itemTypeAllowlist.isEmpty()) {
+            // if this enchantment has an allow lists, check them
+            if (!o2ItemTypeAllowList.isEmpty()) {
                 O2ItemType itemType = O2Item.getItemType(item.getItemStack());
-                if (itemType == null || !(itemTypeAllowlist.contains(itemType)))
+                if (itemType == null || !(o2ItemTypeAllowList.contains(itemType)))
+                    continue;
+            }
+            if (!itemTypeAllowlist.isEmpty()) {
+                Material material = item.getItemStack().getType();
+                if (!(itemTypeAllowlist.contains(material)))
                     continue;
             }
 
+            // init the enchantment args
+            initEnchantmentArgs(item);
+
+            // do any alterations on the item
+            item = alterItem(item);
+            if (item == null) {
+                kill();
+                return;
+            }
+
+            // enchant the item
             Item enchantedItem = enchantItem(item);
             Ollivanders2API.getItems().enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude, args);
 
+            // stop the spell projectile and kill the spell
             stopProjectile();
             kill();
 
             break;
         }
     }
+
+    /**
+     * Set the enchantment arg string. This needs to be overridden by the classes that need it.
+     *
+     * @param item the item being enchanted
+     */
+    protected void initEnchantmentArgs(Item item) { }
+
+    /**
+     * Do any after effects on the item. This needs to be overridden by the classes that need it.
+     *
+     * @param item the item to affect
+     */
+    @Nullable
+    protected Item alterItem(Item item) { return item; }
 
     /**
      * Enchant the item.

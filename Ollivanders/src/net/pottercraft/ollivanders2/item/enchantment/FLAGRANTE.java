@@ -15,8 +15,10 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Flagrante Curse causes objects to emit searing heat when touched.
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.FLAGRANTE}
  *
- * <p>Reference: https://harrypotter.fandom.com/wiki/Flagrante_Curse</p>
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Flagrante_Curse">https://harrypotter.fandom.com/wiki/Flagrante_Curse</a>
  */
 public class FLAGRANTE extends Enchantment {
     /**
@@ -93,7 +95,8 @@ public class FLAGRANTE extends Enchantment {
      *
      * @param event the item drop event
      */
-    public void doItemHeld(@NotNull PlayerItemHeldEvent event) { }
+    public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
+    }
 
     /**
      * A flagrante-cursed item was either held or stopped being held - check to see if the player is still holding at least 1 flagrante item

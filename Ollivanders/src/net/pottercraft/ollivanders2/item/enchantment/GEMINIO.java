@@ -14,8 +14,10 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Geminio Curse is used to curse an object into multiplying repeatedly when touched.
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.GEMINIO}
  *
- * <p>Reference: https://harrypotter.fandom.com/wiki/Doubling_Charm</p>
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Doubling_Charm">https://harrypotter.fandom.com/wiki/Doubling_Charm</a>
  */
 public class GEMINIO extends Enchantment {
     /**
@@ -59,7 +61,8 @@ public class GEMINIO extends Enchantment {
      * @param event the item drop event
      */
     @Override
-    public void doItemDrop(@NotNull PlayerDropItemEvent event) { }
+    public void doItemDrop(@NotNull PlayerDropItemEvent event) {
+    }
 
     /**
      * Handle item despawn events
@@ -76,5 +79,6 @@ public class GEMINIO extends Enchantment {
      *
      * @param event the item drop event
      */
-    public void doItemHeld(@NotNull PlayerItemHeldEvent event) { }
+    public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
+    }
 }

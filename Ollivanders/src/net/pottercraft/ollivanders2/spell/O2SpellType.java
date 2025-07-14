@@ -126,6 +126,10 @@ public enum O2SpellType {
      */
     CARTOMANCIE(CARTOMANCIE.class, MagicLevel.OWL),
     /**
+     * {@link CELATUM}
+     */
+    CELATUM(CELATUM.class, MagicLevel.BEGINNER),
+    /**
      * {@link CHARTIA}
      */
     CHARTIA(CHARTIA.class, MagicLevel.NEWT),
