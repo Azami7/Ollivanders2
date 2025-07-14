@@ -63,6 +63,11 @@ public abstract class ItemEnchant extends O2Spell {
     String args = "";
 
     /**
+     * Does this spell enchant a held item or cast a projectile to affect an Item in world
+     */
+    boolean enchantsHeldItem = false;
+
+    /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
@@ -107,7 +112,37 @@ public abstract class ItemEnchant extends O2Spell {
     }
 
     /**
-     * Add the curse effect to an item stack in the projectile's location
+     * Override checkEffect to handle the enchantments that target an item in the player's inventory.
+     */
+    @Override
+    public void checkEffect() {
+        if (enchantsHeldItem) {
+            enchantHeldItem();
+            stopProjectile();
+            kill();
+        }
+        else
+            super.checkEffect();
+    }
+
+    /**
+     * Enchants the item held in the player's off-hand
+     */
+    protected void enchantHeldItem () {
+        ItemStack targetItem = player.getInventory().getItemInOffHand();
+
+        // make sure they are actually holding something and that it can be enchanted
+        if ((targetItem.getType() == Material.AIR) || !canBeEnchanted(targetItem)) {
+            common.printDebugMessage("ItemStackEnchant: no item in off hand or item cannot be enchanted", null, null, false);
+            return;
+        }
+
+        // enchant the item
+        enchantItem(targetItem);
+    }
+
+    /**
+     * Add the enchantment to an item stack in the projectile's location
      */
     @Override
     protected void doCheckEffect() {
@@ -118,50 +153,105 @@ public abstract class ItemEnchant extends O2Spell {
 
         List<Item> items = getItems(1.5);
         for (Item item : items) {
-            // if this is a wand or an enchanted item, skip it, we cannot stack enchantments
-            if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)))
+            // check if this item can be enchanted
+            if (!canBeEnchanted(item))
                 continue;
 
-            // if this enchantment has an allow lists, check them
-            if (!o2ItemTypeAllowList.isEmpty()) {
-                O2ItemType itemType = O2Item.getItemType(item.getItemStack());
-                if (itemType == null || !(o2ItemTypeAllowList.contains(itemType)))
-                    continue;
-            }
-            if (!itemTypeAllowlist.isEmpty()) {
-                Material material = item.getItemStack().getType();
-                if (!(itemTypeAllowlist.contains(material)))
-                    continue;
-            }
-
-            // init the enchantment args
-            initEnchantmentArgs(item);
-
-            // do any alterations on the item
-            item = alterItem(item);
-            if (item == null) {
-                kill();
-                return;
-            }
-
             // enchant the item
-            Item enchantedItem = enchantItem(item);
-            Ollivanders2API.getItems().enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude, args);
+            enchantItem(item);
 
-            // stop the spell projectile and kill the spell
-            stopProjectile();
+            // kill the spell and return
             kill();
+            return;
+        }
+    }
 
-            break;
+    /**
+     * Can this item be enchanted by this spell?
+     *
+     * @param itemStack the item to check
+     * @return true if it can be enchanted, false otherwise
+     */
+    protected boolean canBeEnchanted(@NotNull ItemStack itemStack) {
+        // if this is a wand or an enchanted item, skip it, we cannot stack enchantments
+        if (Ollivanders2API.getItems().getWands().isWand(itemStack) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(itemStack))) {
+            common.printDebugMessage("ItemEnchant.canBeEnchanted: item is a want or an enchanted item", null, null, false);
+            return false;
+        }
+
+        // if this enchantment has an allow lists, check them
+        if (!o2ItemTypeAllowList.isEmpty()) {
+            O2ItemType itemType = O2Item.getItemType(itemStack);
+            if (itemType == null || !(o2ItemTypeAllowList.contains(itemType))) {
+                common.printDebugMessage("ItemEnchant.canBeEnchanted: item type " + itemType + " cannot be targeted by this spell", null, null, false);
+                return false;
+            }
+        }
+        if (!itemTypeAllowlist.isEmpty()) {
+            Material material = itemStack.getType();
+            if (!(itemTypeAllowlist.contains(material))) {
+                common.printDebugMessage("ItemEnchant.canBeEnchanted: material type " + material + " cannot be targeted by this spell", null, null, false);
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Can this item be enchanted by this spell?
+     *
+     * @param item the item to check
+     * @return true if it can be enchanted, false otherwise
+     */
+    protected boolean canBeEnchanted(@NotNull Item item) {
+        return canBeEnchanted(item.getItemStack());
+    }
+
+    /**
+     * Enchant the item, assumes the check to verify this item can be enchanted has been done.
+     *
+     * @param item the item to enchant
+     */
+    private void enchantItem(@NotNull Item item) {
+        enchantItem(item.getItemStack());
+    }
+
+    /**
+     * Enchant the item stack, assumes the check to verify this item can be enchanted has been done.
+     *
+     * @param itemStack the itemStack to enchant
+     */
+    private void enchantItem(@NotNull ItemStack itemStack) {
+        // init the enchantment args
+        initEnchantmentArgs(itemStack);
+
+        // split off the enchanted item from the rest of the stack by cloning it and then decrementing the original by 1
+        ItemStack enchantedItemStack = itemStack.clone();
+        // reduce the original item stack size by 1
+        itemStack.setAmount(itemStack.getAmount() - 1);
+        // set the amount to 1
+        enchantedItemStack.setAmount(1);
+
+        // do any alterations on the new item stack
+        enchantedItemStack = alterItem(enchantedItemStack);
+
+        // enchant item
+        Item enchantedItem = player.getWorld().dropItem(location, enchantedItemStack);
+        Ollivanders2API.getItems().enchantedItems.addEnchantedItem(enchantedItem, enchantmentType, magnitude, args);
+
+        // drop the remainder of the original stack in world where the player is
+        if (itemStack.getAmount() > 0) {
+            player.getWorld().dropItem(location, itemStack);
         }
     }
 
     /**
      * Set the enchantment arg string. This needs to be overridden by the classes that need it.
      *
-     * @param item the item being enchanted
+     * @param itemStack the item being enchanted
      */
-    protected void initEnchantmentArgs(Item item) { }
+    protected void initEnchantmentArgs(ItemStack itemStack) { }
 
     /**
      * Do any after effects on the item. This needs to be overridden by the classes that need it.
@@ -172,25 +262,9 @@ public abstract class ItemEnchant extends O2Spell {
     protected Item alterItem(Item item) { return item; }
 
     /**
-     * Enchant the item.
+     * Do any after effects on the item. This needs to be overridden by the classes that need it.
      *
-     * @param item the item to enchant
-     * @return the enchanted item
+     * @param itemStack the item to affect
      */
-    @NotNull
-    private Item enchantItem(@NotNull Item item) {
-        // clone the item stack
-        ItemStack enchantedItemStack = item.getItemStack().clone();
-
-        enchantedItemStack.setAmount(1);
-
-        // update original itemStack to remove 1 item, if it had more than one, or remove the original item if there is only 1
-        if (item.getItemStack().getAmount() > 1)
-            item.getItemStack().setAmount(item.getItemStack().getAmount() - 1);
-        else
-            item.remove();
-
-        // drop enchanted item in World
-        return item.getWorld().dropItem(item.getLocation(), enchantedItemStack);
-    }
+    protected ItemStack alterItem(ItemStack itemStack) { return itemStack; }
 }

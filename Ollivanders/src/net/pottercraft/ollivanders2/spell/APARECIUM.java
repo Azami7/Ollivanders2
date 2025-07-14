@@ -71,22 +71,25 @@ public final class APARECIUM extends O2Spell {
         for (Item item : items) {
             if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)) {
                 if (Ollivanders2API.getItems().enchantedItems.getEnchantmentType(item.getItemStack()) == ItemEnchantmentType.CELATUM) {
-                    ItemStack newBook = revealText(item);
+                    // remove the Celatum enchantment from the book
+                    ItemStack disenchantedItemStack = Ollivanders2API.getItems().enchantedItems.removeEnchantment(item);
+
+                    if (Ollivanders2API.getItems().enchantedItems.isEnchanted(disenchantedItemStack)) {
+                        common.printDebugMessage("APARECIUM.doCheckEffect: item still enchanted after removeEnchantment", null, null, true);
+                    }
+
+                    ItemStack newBook = revealText(disenchantedItemStack);
 
                     if (newBook == null) {
                         common.printDebugMessage("APARECIUM: failed to reveal text", null, null, false);
-                        Ollivanders2API.getItems().enchantedItems.removeEnchantment(item);
                         return;
                     }
 
                     // drop the new book
                     World world = item.getWorld();
-                    Item newItem = world.dropItem(location, newBook);
+                    world.dropItem(location, newBook);
 
-                    // make sure the new book does not have the celatum enchantment
-                    Ollivanders2API.getItems().enchantedItems.removeEnchantment(newItem);
-
-                    // remove the old item
+                    // remove the old book
                     item.remove();
 
                     // kill the spell
@@ -100,11 +103,10 @@ public final class APARECIUM extends O2Spell {
     /**
      * Reveal the hidden text and remove the concealment enchantment from this book.
      *
-     * @param item the concealed book
+     * @param bookItem the concealed book
      */
     @Nullable
-    private ItemStack revealText(Item item) {
-        ItemStack bookItem = item.getItemStack();
+    private ItemStack revealText(ItemStack bookItem) {
         if (bookItem.getType() != Material.WRITTEN_BOOK) {
             common.printDebugMessage("APARECIUM: celatum cast on a non-book item", null, null, true);
             return null;

@@ -15,7 +15,6 @@ import net.pottercraft.ollivanders2.spell.Divination;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.spell.AMATO_ANIMO_ANIMATO_ANIMAGUS;
-import net.pottercraft.ollivanders2.spell.PORTUS;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.potion.O2Potion;
 import net.pottercraft.ollivanders2.potion.O2SplashPotion;
@@ -243,13 +242,10 @@ public class OllivandersListener implements Listener {
 
                 if (spellType == O2SpellType.APPARATE)
                     addSpellProjectile(player, new APPARATE(p, player, 1.0, words));
-                else if (spellType == O2SpellType.PORTUS)
-                    addSpellProjectile(player, new PORTUS(p, player, 1.0, words));
                 else if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
                     addSpellProjectile(player, new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, player, 1.0));
                 else if (Divination.divinationSpells.contains(spellType)) {
-                    if (!divine(spellType, player, words))
-                        return;
+                    divine(spellType, player, words);
                 }
                 else {
                     O2Player o2p = p.getO2Player(player);

@@ -64,12 +64,10 @@ public final class CELATUM extends ItemEnchant {
     /**
      * Set the enchantment arg string to be the text of the book
      *
-     * @param item the item to enchant
+     * @param bookItem the item to enchant
      */
     @Override
-    protected void initEnchantmentArgs(Item item) {
-        ItemStack bookItem = item.getItemStack();
-
+    protected void initEnchantmentArgs(ItemStack bookItem) {
         BookMeta bookMeta = (BookMeta) bookItem.getItemMeta();
         if (bookMeta == null)
             return;

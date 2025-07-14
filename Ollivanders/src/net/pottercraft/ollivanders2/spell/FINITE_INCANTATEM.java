@@ -14,6 +14,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.jetbrains.annotations.NotNull;
 
@@ -149,11 +150,19 @@ public final class FINITE_INCANTATEM extends O2Spell {
      */
     private void finiteIncantatemItems() {
         for (Item item : getItems(1.5)) {
-            if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)) {
-                ItemEnchantmentType enchantmentType = Ollivanders2API.getItems().enchantedItems.getEnchantmentType(item.getItemStack());
+            ItemEnchantmentType enchantmentType = Ollivanders2API.getItems().enchantedItems.getEnchantmentType(item.getItemStack());
 
-                if (enchantmentType.getLevel().ordinal() <= spellType.getLevel().ordinal())
-                    Ollivanders2API.getItems().enchantedItems.removeEnchantment(item);
+            if (enchantmentType == null)
+                continue;
+
+            if (enchantmentType.getLevel().ordinal() <= spellType.getLevel().ordinal()) {
+                ItemStack disenchantedItemStack = Ollivanders2API.getItems().enchantedItems.removeEnchantment(item);
+
+                // remove the old item
+                item.remove();
+
+                // drop the new item in world
+                player.getWorld().dropItem(location, disenchantedItemStack);
             }
 
             kill();
