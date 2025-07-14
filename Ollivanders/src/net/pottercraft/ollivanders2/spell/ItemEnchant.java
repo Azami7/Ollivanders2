@@ -212,9 +212,7 @@ public abstract class ItemEnchant extends O2Spell {
      * Enchant the item, assumes the check to verify this item can be enchanted has been done.
      *
      * @param item the item to enchant
-     * @return the enchanted item
      */
-    @Nullable
     private void enchantItem(@NotNull Item item) {
         enchantItem(item.getItemStack());
     }
@@ -223,7 +221,6 @@ public abstract class ItemEnchant extends O2Spell {
      * Enchant the item stack, assumes the check to verify this item can be enchanted has been done.
      *
      * @param itemStack the itemStack to enchant
-     * @return the enchanted itemStack
      */
     private void enchantItem(@NotNull ItemStack itemStack) {
         // init the enchantment args

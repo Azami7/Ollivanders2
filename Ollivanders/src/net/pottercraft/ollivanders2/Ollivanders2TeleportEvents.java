@@ -17,7 +17,7 @@ import java.util.List;
  */
 public class Ollivanders2TeleportEvents {
     final private Ollivanders2 p;
-    private Ollivanders2Common common;
+    final private Ollivanders2Common common;
 
     /**
      * The list of all queued teleport events
@@ -129,7 +129,7 @@ public class Ollivanders2TeleportEvents {
     /**
      * Get all the teleport events.
      *
-     * @return an array of the pending teleport events
+     * @return a list of the pending teleport events
      */
     @NotNull
     public List<O2TeleportEvent> getTeleportEvents() {
@@ -158,7 +158,7 @@ public class Ollivanders2TeleportEvents {
     public void addTeleportEvent(@NotNull Player player, @NotNull Location from, @NotNull Location to, boolean explosionOnTeleport) {
         O2TeleportEvent teleportEvent = new O2TeleportEvent(player, from, to, explosionOnTeleport);
 
-        common.printDebugMessage("Created teleport event: " + player.getName() + " from " + from.toString() + " to " + to.toString(), null, null, false);
+        common.printDebugMessage("Created teleport event: " + player.getName() + " from " + from + " to " + to, null, null, false);
         teleportEvents.add(teleportEvent);
 
         to.getChunk().load();
