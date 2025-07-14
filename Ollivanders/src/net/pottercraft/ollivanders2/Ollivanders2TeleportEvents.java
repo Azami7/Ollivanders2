@@ -9,8 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * With MC 1.14, triggering PlayerTeleportEvents from other events is no longer thread-safe. Need to create a queue of teleport events like we use for
- * things like spell projectiles and effects.
+ * With MC 1.14, triggering PlayerTeleportEvents from other events is no longer thread-safe. Need to create a queue of
+ * teleport events like we use for things like spell projectiles and effects.
  *
  * @author Azami7
  * @since 2.4
@@ -158,7 +158,7 @@ public class Ollivanders2TeleportEvents {
     public void addTeleportEvent(@NotNull Player player, @NotNull Location from, @NotNull Location to, boolean explosionOnTeleport) {
         O2TeleportEvent teleportEvent = new O2TeleportEvent(player, from, to, explosionOnTeleport);
 
-        common.printDebugMessage("Created teleport event: " + player.getName() + " from " + from.toString() + " to " + to.toString(), null, null, true);
+        common.printDebugMessage("Created teleport event: " + player.getName() + " from " + from.toString() + " to " + to.toString(), null, null, false);
         teleportEvents.add(teleportEvent);
 
         to.getChunk().load();

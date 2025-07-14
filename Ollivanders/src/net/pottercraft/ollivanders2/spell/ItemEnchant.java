@@ -118,6 +118,7 @@ public abstract class ItemEnchant extends O2Spell {
     public void checkEffect() {
         if (enchantsHeldItem) {
             enchantHeldItem();
+            stopProjectile();
             kill();
         }
         else
@@ -173,19 +174,25 @@ public abstract class ItemEnchant extends O2Spell {
      */
     protected boolean canBeEnchanted(@NotNull ItemStack itemStack) {
         // if this is a wand or an enchanted item, skip it, we cannot stack enchantments
-        if (Ollivanders2API.getItems().getWands().isWand(itemStack) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(itemStack)))
+        if (Ollivanders2API.getItems().getWands().isWand(itemStack) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(itemStack))) {
+            common.printDebugMessage("ItemEnchant.canBeEnchanted: item is a want or an enchanted item", null, null, false);
             return false;
+        }
 
         // if this enchantment has an allow lists, check them
         if (!o2ItemTypeAllowList.isEmpty()) {
             O2ItemType itemType = O2Item.getItemType(itemStack);
-            if (itemType == null || !(o2ItemTypeAllowList.contains(itemType)))
+            if (itemType == null || !(o2ItemTypeAllowList.contains(itemType))) {
+                common.printDebugMessage("ItemEnchant.canBeEnchanted: item type " + itemType + " cannot be targeted by this spell", null, null, false);
                 return false;
+            }
         }
         if (!itemTypeAllowlist.isEmpty()) {
             Material material = itemStack.getType();
-            if (!(itemTypeAllowlist.contains(material)))
+            if (!(itemTypeAllowlist.contains(material))) {
+                common.printDebugMessage("ItemEnchant.canBeEnchanted: material type " + material + " cannot be targeted by this spell", null, null, false);
                 return false;
+            }
         }
 
         return true;

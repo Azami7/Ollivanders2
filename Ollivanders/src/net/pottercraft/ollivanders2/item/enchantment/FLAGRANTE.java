@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.jetbrains.annotations.NotNull;
@@ -61,12 +62,21 @@ public class FLAGRANTE extends Enchantment {
      * @param event the item pickup event
      */
     @Override
-    public void doItemPickup(@NotNull EntityPickupItemEvent event) {
+    public void doEntityPickupItem(@NotNull EntityPickupItemEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player))
             return;
 
         checkFlagranteStatus((Player) entity);
+    }
+
+    /**
+     * Handle item pickup events
+     *
+     * @param event the item pickup event
+     */
+    public void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event) {
+        event.setCancelled(true);
     }
 
     /**

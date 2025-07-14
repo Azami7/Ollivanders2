@@ -6,6 +6,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
@@ -39,7 +40,7 @@ public class GEMINIO extends Enchantment {
      * @param event the item pickup event
      */
     @Override
-    public void doItemPickup(@NotNull EntityPickupItemEvent event) {
+    public void doEntityPickupItem(@NotNull EntityPickupItemEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player))
             return;
@@ -53,6 +54,15 @@ public class GEMINIO extends Enchantment {
             ItemStack copy = item.getItemStack().clone();
             ((Player) entity).getInventory().addItem(copy);
         }
+    }
+
+    /**
+     * Handle item pickup events
+     *
+     * @param event the item pickup event
+     */
+    public void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event) {
+        event.setCancelled(true);
     }
 
     /**

@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
@@ -62,34 +63,6 @@ public abstract class Enchantment {
 
         common = new Ollivanders2Common(p);
     }
-
-    /**
-     * Handle item despawn events
-     *
-     * @param event the item despawn event
-     */
-    abstract public void doItemDespawn(@NotNull ItemDespawnEvent event);
-
-    /**
-     * Handle item pickup events
-     *
-     * @param event the item pickup event
-     */
-    abstract public void doItemPickup(@NotNull EntityPickupItemEvent event);
-
-    /**
-     * Handle item drop events
-     *
-     * @param event the item drop event
-     */
-    abstract public void doItemDrop(@NotNull PlayerDropItemEvent event);
-
-    /**
-     * Handle item held events
-     *
-     * @param event the item drop event
-     */
-    abstract public void doItemHeld(@NotNull PlayerItemHeldEvent event);
 
     /**
      * Get the name of this enchantment.
@@ -152,4 +125,39 @@ public abstract class Enchantment {
         // no NBT tag, this is not enchanted, return false
         return false;
     }
+
+    /**
+     * Handle item despawn events
+     *
+     * @param event the item despawn event
+     */
+    abstract public void doItemDespawn(@NotNull ItemDespawnEvent event);
+
+    /**
+     * Handle item pickup events
+     *
+     * @param event the item pickup event
+     */
+    abstract public void doEntityPickupItem(@NotNull EntityPickupItemEvent event);
+
+    /**
+     * Handle item pickup events
+     *
+     * @param event the item pickup event
+     */
+    abstract public void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event);
+
+    /**
+     * Handle item drop events
+     *
+     * @param event the item drop event
+     */
+    abstract public void doItemDrop(@NotNull PlayerDropItemEvent event);
+
+    /**
+     * Handle item held events
+     *
+     * @param event the item drop event
+     */
+    abstract public void doItemHeld(@NotNull PlayerItemHeldEvent event);
 }
