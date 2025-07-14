@@ -85,8 +85,7 @@ public class ABERTO extends O2Spell {
         }
 
         // is the door protected by colloportus?
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(target.getLocation()))
-        {
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(target.getLocation())) {
             if (stationarySpell instanceof COLLOPORTUS) {
                 sendFailureMessage();
                 return;

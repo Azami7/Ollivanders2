@@ -41,6 +41,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_2 extends O2Book {
         spells.add(O2SpellType.FINITE_INCANTATEM);
         spells.add(O2SpellType.ARRESTO_MOMENTUM);
         spells.add(O2SpellType.APARECIUM);
+        spells.add(O2SpellType.CELATUM);
         spells.add(O2SpellType.FLIPENDO);
         spells.add(O2SpellType.EXPELLIARMUS);
         spells.add(O2SpellType.SPONGIFY);

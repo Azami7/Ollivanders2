@@ -6,6 +6,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
@@ -14,8 +15,10 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Geminio Curse is used to curse an object into multiplying repeatedly when touched.
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.GEMINIO}
  *
- * <p>Reference: https://harrypotter.fandom.com/wiki/Doubling_Charm</p>
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Doubling_Charm">https://harrypotter.fandom.com/wiki/Doubling_Charm</a>
  */
 public class GEMINIO extends Enchantment {
     /**
@@ -37,7 +40,7 @@ public class GEMINIO extends Enchantment {
      * @param event the item pickup event
      */
     @Override
-    public void doItemPickup(@NotNull EntityPickupItemEvent event) {
+    public void doEntityPickupItem(@NotNull EntityPickupItemEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player))
             return;
@@ -54,12 +57,22 @@ public class GEMINIO extends Enchantment {
     }
 
     /**
+     * Handle item pickup events
+     *
+     * @param event the item pickup event
+     */
+    public void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event) {
+        event.setCancelled(true);
+    }
+
+    /**
      * Handle item drop events
      *
      * @param event the item drop event
      */
     @Override
-    public void doItemDrop(@NotNull PlayerDropItemEvent event) { }
+    public void doItemDrop(@NotNull PlayerDropItemEvent event) {
+    }
 
     /**
      * Handle item despawn events
@@ -76,5 +89,6 @@ public class GEMINIO extends Enchantment {
      *
      * @param event the item drop event
      */
-    public void doItemHeld(@NotNull PlayerItemHeldEvent event) { }
+    public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
+    }
 }

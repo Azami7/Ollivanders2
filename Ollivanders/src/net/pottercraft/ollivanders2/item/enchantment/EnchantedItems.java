@@ -11,6 +11,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
@@ -29,7 +30,7 @@ import java.util.List;
  *
  * <p>Enchantments are used to give items magical properties like broom flight, port keys, and cursed items.</p>
  *
- *  <p>Reference: https://minecraft.fandom.com/wiki/Tutorials/Command_NBT_tags</p>
+ * <p>Reference: https://minecraft.fandom.com/wiki/Tutorials/Command_NBT_tags</p>
  */
 public class EnchantedItems implements Listener {
     /**
@@ -107,7 +108,7 @@ public class EnchantedItems implements Listener {
      * @param magnitude the magnitude of enchantment
      * @param args      optional arguments for this enchantment
      */
-    public void addEnchantedItem(@NotNull Item item, @NotNull ItemEnchantmentType eType, int magnitude, @NotNull String args) {
+    public void addEnchantedItem(@NotNull Item item, @NotNull ItemEnchantmentType eType, int magnitude, @Nullable String args) {
         ItemMeta itemMeta = item.getItemStack().getItemMeta();
         if (itemMeta == null)
             return;
@@ -126,7 +127,7 @@ public class EnchantedItems implements Listener {
      * @param eid       the uniqueID for this enchantment
      * @param args      optional arguments for this enchantment
      */
-    public void addEnchantedItem(@NotNull ItemStack itemStack, @NotNull ItemEnchantmentType eType, int magnitude, @NotNull String eid, @NotNull String args) {
+    public void addEnchantedItem(@NotNull ItemStack itemStack, @NotNull ItemEnchantmentType eType, int magnitude, @NotNull String eid, @Nullable String args) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null)
             return;
@@ -136,7 +137,8 @@ public class EnchantedItems implements Listener {
         container.set(enchantmentID, PersistentDataType.STRING, eid);
         container.set(enchantmentMagnitude, PersistentDataType.INTEGER, magnitude);
         container.set(enchantmentType, PersistentDataType.STRING, eType.toString());
-        container.set(enchantmentArgs, PersistentDataType.STRING, args);
+        if (args != null)
+            container.set(enchantmentArgs, PersistentDataType.STRING, args);
 
         itemStack.setItemMeta(itemMeta);
 
@@ -158,7 +160,7 @@ public class EnchantedItems implements Listener {
         // store these in a hashmap for faster access later
         enchantedItems.put(eid, enchantment);
 
-        common.printDebugMessage("Added enchanted item " + itemMeta.getDisplayName() + " of type " + eType.getName(), null, null, false);
+        common.printDebugMessage("Added enchanted item " + itemStack.getType() + " of type " + eType.getName(), null, null, false);
     }
 
     /**
@@ -344,7 +346,7 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Get the enchantment object for this enchanted item - this will either get the existing or create one
+     * Get the enchantment object for this enchanted item
      *
      * @param itemStack the enchanted item
      * @return the Enchantment if enchantment NBT tags are present, null otherwise
@@ -354,15 +356,17 @@ public class EnchantedItems implements Listener {
         if (!isEnchanted(itemStack))
             return null;
 
+        // get the enchantmentID for this enchantment
         String eid = getEnchantmentID(itemStack);
 
         if (eid == null)
             return null;
 
-        // have we already loaded this one?
+        // look to see if this enchantment is in our lookup map
         if (enchantedItems.containsKey(eid))
             return enchantedItems.get(eid);
 
+        // create an enchantment from the NBT tags - this would happen when an item is loaded in to the game the first time
         Integer magnitude = getEnchantmentMagnitude(itemStack);
         String eType = getEnchantmentTypeKey(itemStack);
         String args = getEnchantmentArgs(itemStack);
@@ -372,7 +376,10 @@ public class EnchantedItems implements Listener {
             return null;
         }
 
-        return createEnchantment(eType, magnitude, args);
+        Enchantment enchantment = createEnchantment(eType, magnitude, args);
+        enchantedItems.put(eid, enchantment);
+
+        return enchantment;
     }
 
     /**
@@ -415,25 +422,42 @@ public class EnchantedItems implements Listener {
      * Remove the enchantment from an item
      *
      * @param item the item to remove the enchantment from
+     * @return the itemStack with the enchantment removed
      */
-    public void removeEnchantment(@NotNull Item item) {
-        if (!isEnchanted(item))
-            return;
-
+    public ItemStack removeEnchantment(@NotNull Item item) {
         ItemStack itemStack = item.getItemStack();
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta == null)
-            return;
+        if (!isEnchanted(item))
+            return itemStack;
 
         String eid = getEnchantmentID(itemStack);
         if (eid != null)
             enchantedItems.remove(eid);
+        else {
+            common.printDebugMessage("EnchantedItems.removeEnchantment: eid is null", null, null, true);
+            return itemStack;
+        }
+
+        // create a new item stack for the disenchanted item
+        ItemStack disenchantedItemStack = itemStack.clone();
+
+        // remove the enchantment NTB tags
+        ItemMeta itemMeta = disenchantedItemStack.getItemMeta();
+        if (itemMeta == null) {
+            common.printDebugMessage("EnchantedItems.removeEnchantment: item meta is null", null, null, true);
+            return itemStack;
+        }
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
         container.remove(enchantmentType);
         container.remove(enchantmentMagnitude);
         container.remove(enchantmentID);
         container.remove(enchantmentArgs);
+
+        // set the item meta on the disenchanted item
+        disenchantedItemStack.setItemMeta(itemMeta);
+
+        // return the disenchanted item
+        return disenchantedItemStack;
     }
 
     /**
@@ -463,7 +487,7 @@ public class EnchantedItems implements Listener {
      * @param event the item pickup event
      */
     @EventHandler(priority = EventPriority.LOWEST)
-    public void onItemPickup(@NotNull EntityPickupItemEvent event) {
+    public void onEntityPickupItem(@NotNull EntityPickupItemEvent event) {
         Item item = event.getItem();
         ItemStack itemStack = item.getItemStack();
 
@@ -474,7 +498,27 @@ public class EnchantedItems implements Listener {
         if (enchantment == null)
             return;
 
-        enchantment.doItemPickup(event);
+        enchantment.doEntityPickupItem(event);
+    }
+
+    /**
+     * Handle when an enchanted item is picked up by an inventory.
+     *
+     * @param event the item pickup event
+     */
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onInventoryItemPickup(@NotNull InventoryPickupItemEvent event) {
+        Item item = event.getItem();
+        ItemStack itemStack = item.getItemStack();
+
+        if (!isEnchanted(itemStack))
+            return;
+
+        Enchantment enchantment = getEnchantment(itemStack);
+        if (enchantment == null)
+            return;
+
+        enchantment.doInventoryPickupItem(event);
     }
 
     /**

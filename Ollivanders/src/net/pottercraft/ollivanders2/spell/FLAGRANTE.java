@@ -11,6 +11,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Places a flagrante effect on the item.
+ * <p>
+ * {@link net.pottercraft.ollivanders2.item.enchantment.FLAGRANTE}
  *
  * @author Azami7
  * @see <a href = "https://harrypotter.fandom.com/wiki/Flagrante_Curse">https://harrypotter.fandom.com/wiki/Flagrante_Curse</a>

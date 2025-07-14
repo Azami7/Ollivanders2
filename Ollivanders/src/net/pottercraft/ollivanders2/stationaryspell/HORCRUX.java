@@ -277,6 +277,9 @@ public class HORCRUX extends O2StationarySpell {
      */
     @Override
     void doOnItemDespawnEvent(@NotNull ItemDespawnEvent event) {
+        if (horcruxItem == null) //this can happen on restart when things are not fully loaded yet
+            return;
+
         Item eventItem = event.getEntity();
 
         if (eventItem.getUniqueId() == horcruxItem.getUniqueId())

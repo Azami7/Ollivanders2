@@ -55,6 +55,7 @@ years: false
 witchDrop: false
 enableBrooms: true
 broomstick: STICK
+portkeyRadius: 2
 
 # Divination
 #

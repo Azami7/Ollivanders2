@@ -256,7 +256,7 @@ public abstract class O2Spell {
     }
 
     /**
-     * Game tick update on this spell - must be overridden in child classes or the spell exits immediately.
+     * Game tick update on this spell - must be overridden in child classes if the spell exits immediately.
      */
     public void checkEffect() {
         // check whether this spell can exist up until it hits a target

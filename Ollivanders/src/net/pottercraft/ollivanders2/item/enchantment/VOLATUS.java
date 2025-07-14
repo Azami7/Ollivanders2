@@ -11,6 +11,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -20,7 +21,9 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Add broom flight to an item
  * <p>
- * Reference: https://harrypotter.fandom.com/wiki/Broomstick
+ * {@link net.pottercraft.ollivanders2.spell.VOLATUS}
+ *
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Broomstick">https://harrypotter.fandom.com/wiki/Broomstick</a>
  */
 public class VOLATUS extends Enchantment {
     /**
@@ -42,7 +45,7 @@ public class VOLATUS extends Enchantment {
      * @param event the item pickup event
      */
     @Override
-    public void doItemPickup(@NotNull EntityPickupItemEvent event) {
+    public void doEntityPickupItem(@NotNull EntityPickupItemEvent event) {
         if (!EnchantedItems.enableBrooms)
             return;
 
@@ -56,6 +59,14 @@ public class VOLATUS extends Enchantment {
                 checkBroomStatus((Player) entity);
             }
         }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+    }
+
+    /**
+     * Handle item pickup events
+     *
+     * @param event the item pickup event
+     */
+    public void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event) {
     }
 
     /**

@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.jetbrains.annotations.NotNull;
@@ -15,8 +16,10 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Flagrante Curse causes objects to emit searing heat when touched.
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.FLAGRANTE}
  *
- * <p>Reference: https://harrypotter.fandom.com/wiki/Flagrante_Curse</p>
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Flagrante_Curse">https://harrypotter.fandom.com/wiki/Flagrante_Curse</a>
  */
 public class FLAGRANTE extends Enchantment {
     /**
@@ -59,12 +62,21 @@ public class FLAGRANTE extends Enchantment {
      * @param event the item pickup event
      */
     @Override
-    public void doItemPickup(@NotNull EntityPickupItemEvent event) {
+    public void doEntityPickupItem(@NotNull EntityPickupItemEvent event) {
         Entity entity = event.getEntity();
         if (!(entity instanceof Player))
             return;
 
         checkFlagranteStatus((Player) entity);
+    }
+
+    /**
+     * Handle item pickup events
+     *
+     * @param event the item pickup event
+     */
+    public void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event) {
+        event.setCancelled(true);
     }
 
     /**
@@ -93,7 +105,8 @@ public class FLAGRANTE extends Enchantment {
      *
      * @param event the item drop event
      */
-    public void doItemHeld(@NotNull PlayerItemHeldEvent event) { }
+    public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
+    }
 
     /**
      * A flagrante-cursed item was either held or stopped being held - check to see if the player is still holding at least 1 flagrante item

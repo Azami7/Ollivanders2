@@ -1,19 +1,27 @@
 package net.pottercraft.ollivanders2.item.enchantment;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.EntityCommon;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Port key enchantment
+ * Portkey enchantment. A portkey teleports a player
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.PORTUS}
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Portkey">https://harrypotter.fandom.com/wiki/Portkey</a>
  */
@@ -21,7 +29,17 @@ public class PORTUS extends Enchantment {
     /**
      * The teleport destination for this portkey
      */
-    Location location;
+    Location destination;
+
+    /**
+     * The radius that a portkey will affect
+     */
+    int radius = 2;
+
+    /**
+     * Portkey radius config label
+     */
+    String portkeyRadiusConfigLabel = "portkeyRadius";
 
     /**
      * Constructor
@@ -33,9 +51,11 @@ public class PORTUS extends Enchantment {
      */
     public PORTUS(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore) {
         super(plugin, mag, args, itemLore);
-        enchantmentType = ItemEnchantmentType.GEMINIO;
+        enchantmentType = ItemEnchantmentType.PORTUS;
 
         parseLocation();
+        if (p.getConfig().isSet(portkeyRadiusConfigLabel))
+           radius = p.getConfig().getInt(portkeyRadiusConfigLabel);
     }
 
     /**
@@ -71,7 +91,7 @@ public class PORTUS extends Enchantment {
         if (world == null)
             return;
 
-        location = new Location(world, x, y, z);
+        destination = new Location(world, x, y, z);
     }
 
     /**
@@ -90,21 +110,59 @@ public class PORTUS extends Enchantment {
      * @param event the item pickup event
      */
     @Override
-    public void doItemPickup(@NotNull EntityPickupItemEvent event) {
+    public void doEntityPickupItem(@NotNull EntityPickupItemEvent event) {
         Entity entity = event.getEntity();
+
+        // prevent non-player entities picking this up
         if (!(entity instanceof Player)) {
             event.setCancelled(true);
             return;
         }
 
-        // teleport the player to the location
-        if (location == null)
-            location = ((Player) entity).getRespawnLocation();
+        Location location = entity.getLocation();
 
-        if (location != null) // location could still be null
-            p.addTeleportEvent((Player) entity, location, true);
-        else
-            common.printDebugMessage("Null location in PORTUS.doItemPickup()", null, null, false);
+        // can players teleport from this location?
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
+            if (stationarySpell.getSpellType() == O2StationarySpellType.NULLUM_EVANESCUNT)
+                return;
+        }
+
+        // can players teleport to the destination?
+        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(destination)) {
+            if (stationarySpell.getSpellType() == O2StationarySpellType.NULLUM_APPAREBIT)
+                return;
+        }
+
+        // if this location is within 3 blocks of player already is, don't activate the port key. This will prevent it trying
+        // to teleport the player that just created it and is trying to pick it up
+        if (location.distance(destination) <= 3)
+            return;
+
+        // set the return location for the portkey
+        Location portkeyReturn = event.getItem().getLocation();
+
+        // teleport the player and any other player in the radius
+        p.addTeleportEvent((Player)entity, destination, true);
+        for (LivingEntity livingEntity : EntityCommon.getLivingEntitiesInRadius(location, radius)) {
+            if (livingEntity instanceof Player) {
+                p.addTeleportEvent((Player)livingEntity, destination, true);
+            }
+            else {
+                livingEntity.teleport(destination);
+            }
+        }
+
+        // update the portkey's destination to return to its starting location
+        destination = portkeyReturn;
+    }
+
+    /**
+     * Handle item pickup events
+     *
+     * @param event the item pickup event
+     */
+    public void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event) {
+        event.setCancelled(true);
     }
 
     /**
@@ -113,12 +171,14 @@ public class PORTUS extends Enchantment {
      * @param event the item drop event
      */
     @Override
-    public void doItemDrop(@NotNull PlayerDropItemEvent event) { }
+    public void doItemDrop(@NotNull PlayerDropItemEvent event) {
+    }
 
     /**
      * Handle item held events
      *
      * @param event the item drop event
      */
-    public void doItemHeld(@NotNull PlayerItemHeldEvent event) { }
+    public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
+    }
 }
