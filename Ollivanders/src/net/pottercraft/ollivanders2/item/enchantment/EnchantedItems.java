@@ -372,7 +372,10 @@ public class EnchantedItems implements Listener {
             return null;
         }
 
-        return createEnchantment(eType, magnitude, args);
+        Enchantment enchantment = createEnchantment(eType, magnitude, args);
+        enchantedItems.put(eid, enchantment);
+
+        return enchantment;
     }
 
     /**
@@ -415,25 +418,40 @@ public class EnchantedItems implements Listener {
      * Remove the enchantment from an item
      *
      * @param item the item to remove the enchantment from
+     * @return the itemStack with the enchantment removed
      */
-    public void removeEnchantment(@NotNull Item item) {
-        if (!isEnchanted(item))
-            return;
-
+    public ItemStack removeEnchantment(@NotNull Item item) {
         ItemStack itemStack = item.getItemStack();
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        if (itemMeta == null)
-            return;
+        if (!isEnchanted(item))
+            return itemStack;
 
         String eid = getEnchantmentID(itemStack);
         if (eid != null)
             enchantedItems.remove(eid);
+        else {
+            common.printDebugMessage("EnchantedItems.removeEnchantment: eid is null", null, null, true);
+            return itemStack;
+        }
+
+        // create a new item stack for the disenchanted item
+        ItemStack disenchantedItemStack = itemStack.clone();
+
+        // remove the enchantment NTB tags
+        ItemMeta itemMeta = disenchantedItemStack.getItemMeta();
+        if (itemMeta == null)
+            return itemStack;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
         container.remove(enchantmentType);
         container.remove(enchantmentMagnitude);
         container.remove(enchantmentID);
         container.remove(enchantmentArgs);
+
+        // set the item meta on the disenchanted item
+        disenchantedItemStack.setItemMeta(itemMeta);
+
+        // return the disenchanted item
+        return disenchantedItemStack;
     }
 
     /**
