@@ -170,7 +170,7 @@ public final class APPARATE extends O2Spell {
     private void doApparate() {
         if (!apparateEvent.isCancelled()) {
             p.getServer().getLogger().info("adding teleport event");
-            p.addTeleportEvent(player, destination, true);
+            p.addTeleportAction(player, destination, true);
         }
     }
 

@@ -64,7 +64,8 @@ public enum O2DivinationType {
 
     /**
      * get the classname for this divination type
-     * @return
+     *
+     * @return the class for this divination
      */
     @NotNull
     public Class<?> getClassName() {

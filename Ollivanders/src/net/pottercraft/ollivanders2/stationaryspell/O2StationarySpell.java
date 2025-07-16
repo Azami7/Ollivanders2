@@ -39,6 +39,9 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Stationary spell object in Ollivanders2
+ *
+ * @author Azami7
+ * @version Ollivanders2
  */
 public abstract class O2StationarySpell implements Serializable {
     /**
@@ -364,6 +367,24 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
+     * Get the players inside this spell radius. We use eye radius to handle entities bigger than 1 block.
+     *
+     * @return a list of the players with an eye location within the radius
+     */
+    public List<Player> getPlayersInsideSpellRadius() {
+        Collection<LivingEntity> entities = getEntitiesInsideSpellRadius();
+        List<Player> players = new ArrayList<>();
+
+        for (LivingEntity livingEntity : entities) {
+            if (livingEntity instanceof Player) {
+                players.add((Player) livingEntity);
+            }
+        }
+
+        return players;
+    }
+
+    /**
      * Makes a particle effect at all points along the radius of spell and at spell loc
      * <p>
      * {@link Ollivanders2Common}
@@ -458,9 +479,9 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * This is the stationary spell's effect. age() must be called in this if you want the spell to age and die eventually.
+     * This is the stationary spell's upkeep, age() must be called in this if you want the spell to age and die eventually.
      */
-    abstract void checkEffect();
+    abstract void upkeep();
 
     /**
      * Serialize all data specific to this spell so it can be saved.
@@ -615,33 +636,38 @@ public abstract class O2StationarySpell implements Serializable {
      *
      * @param event the world load event
      */
-    void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) { }
+    void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+    }
 
     /**
      * Handle item despawn events
      *
      * @param event the item despawn event
      */
-    void doOnItemDespawnEvent(@NotNull ItemDespawnEvent event) {}
+    void doOnItemDespawnEvent(@NotNull ItemDespawnEvent event) {
+    }
 
     /**
      * Handle items being picked up by entities
      *
      * @param event the event
      */
-    void doOnEntityPickupItemEvent(@NotNull EntityPickupItemEvent event) {}
+    void doOnEntityPickupItemEvent(@NotNull EntityPickupItemEvent event) {
+    }
 
     /**
      * Handle items being picked up by things like hoppers
      *
      * @param event the event
      */
-    void doOnInventoryItemPickupEvent(@NotNull InventoryPickupItemEvent event ) {}
+    void doOnInventoryItemPickupEvent(@NotNull InventoryPickupItemEvent event) {
+    }
 
     /**
      * Handle player death event
      *
      * @param event the event
      */
-    void doOnPlayerDeathEvent(@NotNull PlayerDeathEvent event) {}
+    void doOnPlayerDeathEvent(@NotNull PlayerDeathEvent event) {
+    }
 }

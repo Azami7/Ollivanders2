@@ -15,19 +15,19 @@ import java.util.List;
  * @author Azami7
  * @since 2.4
  */
-public class Ollivanders2TeleportEvents {
+public class Ollivanders2TeleportActions {
     final private Ollivanders2 p;
     final private Ollivanders2Common common;
 
     /**
-     * The list of all queued teleport events
+     * The list of all queued teleport actions
      */
-    final private List<O2TeleportEvent> teleportEvents = new ArrayList<>();
+    final private List<O2TeleportAction> teleportActions = new ArrayList<>();
 
     /**
-     * A teleport event
+     * A teleport action
      */
-    static public class O2TeleportEvent {
+    static public class O2TeleportAction {
         /**
          * The player to teleport
          */
@@ -55,7 +55,7 @@ public class Ollivanders2TeleportEvents {
          * @param from the location they are teleporting from
          * @param to   the location they are teleporting to
          */
-        O2TeleportEvent(@NotNull Player p, @NotNull Location from, @NotNull Location to) {
+        O2TeleportAction(@NotNull Player p, @NotNull Location from, @NotNull Location to) {
             player = p;
             fromLocation = from;
             toLocation = to;
@@ -68,7 +68,7 @@ public class Ollivanders2TeleportEvents {
          * @param to        the location they are teleporting to
          * @param explosion should this teleport create an explosion effect when it happens
          */
-        O2TeleportEvent(@NotNull Player p, @NotNull Location from, @NotNull Location to, boolean explosion) {
+        O2TeleportAction(@NotNull Player p, @NotNull Location from, @NotNull Location to, boolean explosion) {
             player = p;
             fromLocation = from;
             toLocation = to;
@@ -121,7 +121,7 @@ public class Ollivanders2TeleportEvents {
      *
      * @param plugin a callback to the MC plugin
      */
-    public Ollivanders2TeleportEvents(@NotNull Ollivanders2 plugin) {
+    public Ollivanders2TeleportActions(@NotNull Ollivanders2 plugin) {
         p = plugin;
         common = new Ollivanders2Common(p);
     }
@@ -132,12 +132,12 @@ public class Ollivanders2TeleportEvents {
      * @return a list of the pending teleport events
      */
     @NotNull
-    public List<O2TeleportEvent> getTeleportEvents() {
-        return new ArrayList<>(teleportEvents);
+    public List<O2TeleportAction> getTeleportActions() {
+        return new ArrayList<>(teleportActions);
     }
 
     /**
-     * Add a teleport event to the list.
+     * Add a teleport action to the list.
      *
      * @param player the player teleporting
      * @param from   the location they are teleporting from
@@ -148,7 +148,7 @@ public class Ollivanders2TeleportEvents {
     }
 
     /**
-     * Add a teleport event to the list.
+     * Add a teleport action to the list.
      *
      * @param player              the player teleporting
      * @param from                the location they are teleporting from
@@ -156,26 +156,26 @@ public class Ollivanders2TeleportEvents {
      * @param explosionOnTeleport should there be an explosion effect on teleport
      */
     public void addTeleportEvent(@NotNull Player player, @NotNull Location from, @NotNull Location to, boolean explosionOnTeleport) {
-        O2TeleportEvent teleportEvent = new O2TeleportEvent(player, from, to, explosionOnTeleport);
+        O2TeleportAction teleportEvent = new O2TeleportAction(player, from, to, explosionOnTeleport);
 
-        common.printDebugMessage("Created teleport event: " + player.getName() + " from " + from + " to " + to, null, null, false);
-        teleportEvents.add(teleportEvent);
+        common.printDebugMessage("Created teleport action: " + player.getName() + " from " + from + " to " + to, null, null, false);
+        teleportActions.add(teleportEvent);
 
         to.getChunk().load();
     }
 
     /**
-     * Remove a teleport event from the list.
+     * Remove a teleport action from the list.
      *
-     * @param event the teleport event to remove
+     * @param teleportAction the teleport action to remove
      */
-    public void removeTeleportEvent(@NotNull O2TeleportEvent event) {
-        if (teleportEvents.contains(event)) {
-            common.printDebugMessage("Removing teleport event for " + event.getPlayer().getName(), null, null, false);
-            teleportEvents.remove(event);
+    public void removeTeleportEvent(@NotNull Ollivanders2TeleportActions.O2TeleportAction teleportAction) {
+        if (teleportActions.contains(teleportAction)) {
+            common.printDebugMessage("Removing teleport action for " + teleportAction.getPlayer().getName(), null, null, false);
+            teleportActions.remove(teleportAction);
         }
         else {
-            common.printDebugMessage("Unable to remove teleport event, not found.", null, null, false);
+            common.printDebugMessage("Unable to remove teleport action, not found.", null, null, false);
         }
     }
 }

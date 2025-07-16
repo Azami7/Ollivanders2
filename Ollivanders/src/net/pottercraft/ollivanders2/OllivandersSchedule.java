@@ -5,13 +5,11 @@ import java.util.List;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -19,6 +17,9 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Main scheduler for Ollivanders2
+ *
+ * @author Azami7
+ * @version Ollivanders2
  */
 public class OllivandersSchedule implements Runnable {
     /**
@@ -51,18 +52,18 @@ public class OllivandersSchedule implements Runnable {
     public void run() {
         // run every tick
         try {
-            projectileSched();
-            oeffectSched();
+            projectileScheduler();
+            effectScheduler();
             Ollivanders2API.getStationarySpells().upkeep();
             Ollivanders2API.getProphecies().upkeep();
-            teleportSched();
+            teleportScheduler();
             Ollivanders2API.getOwlPost().upkeep();
         }
         catch (Exception e) {
             Ollivanders2API.common.printDebugMessage("Exceoption running scheduled tasks.", e, null, true);
         }
 
-        // run invis functions every second, offset from itemCurse schedule
+        // run invisibility functions every second, offset from itemCurse schedule
         if (scheduleTimer % Ollivanders2Common.ticksPerSecond == 1) {
             handleInvisibilityCloaks();
         }
@@ -85,10 +86,10 @@ public class OllivandersSchedule implements Runnable {
      * Scheduling method that calls checkEffect() on all SpellProjectile objects
      * and removes those that have kill set to true.
      */
-    private void projectileSched() {
+    private void projectileScheduler() {
         List<O2Spell> projectiles = p.getProjectiles();
         List<O2Spell> projectiles2 = new ArrayList<>(projectiles);
-        if (projectiles2.size() > 0) {
+        if (!projectiles2.isEmpty()) {
             for (O2Spell proj : projectiles2) {
                 proj.checkEffect();
                 if (proj.isKilled()) {
@@ -102,7 +103,7 @@ public class OllivandersSchedule implements Runnable {
      * Scheduling method that calls checkEffect on all OEffect objects associated with every online player
      * and removes those that have kill set to true.
      */
-    private void oeffectSched() {
+    private void effectScheduler() {
         List<Player> onlinePlayers = new ArrayList<>();
 
         for (World world : p.getServer().getWorlds()) {
@@ -117,53 +118,39 @@ public class OllivandersSchedule implements Runnable {
     }
 
     /**
-     * Handles hiding and revealing players when they wear an invisibilty cloak. We cannot make this an
+     * Handles hiding and revealing players when they wear an invisibility cloak. We cannot make this an
      * item enchantment that can listen to events and react because MC doesn't have an event for a player
      * equipping an item, lame.
      */
     private void handleInvisibilityCloaks() {
         for (Player player : p.getServer().getOnlinePlayers()) {
-            boolean wearingInvisbilityCloak = wearingInvisibilityCloak(player);
-            boolean hasInvisiblityPotionEffect = O2PlayerCommon.hasPotionEffect(player, PotionEffectType.INVISIBILITY);
+            boolean wearingInvisibilityCloak = O2PlayerCommon.wearingInvisibilityCloak(player);
+            boolean hasInvisibilityPotionEffect = O2PlayerCommon.hasPotionEffect(player, PotionEffectType.INVISIBILITY);
 
             // if they are wearing the cloak but not invisible, make them invisible
-            if (wearingInvisbilityCloak && !hasInvisiblityPotionEffect) {
+            if (wearingInvisibilityCloak && !hasInvisibilityPotionEffect) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, Integer.MAX_VALUE, 1));
             }
             // if they are not wearing the cloak but are invisible, make them visible
-            else if (!wearingInvisbilityCloak && hasInvisiblityPotionEffect) {
+            else if (!wearingInvisibilityCloak && hasInvisibilityPotionEffect) {
                 player.removePotionEffect(PotionEffectType.INVISIBILITY);
             }
         }
     }
 
     /**
-     * Does the player have the Cloak of Invisibility
-     *
-     * @param player player to be checked
-     * @return true if yes, false if no
+     * Handle all teleport actions.
      */
-    private boolean wearingInvisibilityCloak(@NotNull Player player) {
-        ItemStack chestPlate = player.getInventory().getChestplate();
-        if (chestPlate != null) {
-            return O2ItemType.INVISIBILITY_CLOAK.isItemThisType(chestPlate);
-        }
-        return false;
-    }
+    private void teleportScheduler() {
+        List<Ollivanders2TeleportActions.O2TeleportAction> teleportActions = p.getTeleportActions();
 
-    /**
-     * Handle all teleport events.
-     */
-    private void teleportSched() {
-        List<Ollivanders2TeleportEvents.O2TeleportEvent> teleportEvents = p.getTeleportEvents();
-
-        for (Ollivanders2TeleportEvents.O2TeleportEvent event : teleportEvents) {
-            Player player = event.getPlayer();
+        for (Ollivanders2TeleportActions.O2TeleportAction action : teleportActions) {
+            Player player = action.getPlayer();
 
             Ollivanders2API.common.printDebugMessage("Teleporting " + player.getName(), null, null, false);
 
-            Location currentLocation = event.getFromLocation();
-            Location destination = event.getToLocation();
+            Location currentLocation = action.getFromLocation();
+            Location destination = action.getToLocation();
             destination.setPitch(currentLocation.getPitch());
             destination.setYaw(currentLocation.getYaw());
 
@@ -176,7 +163,7 @@ public class OllivandersSchedule implements Runnable {
                     Ollivanders2API.common.printDebugMessage("OllvandersSchedule.teleportSched: world is null", null, null, true);
                 }
                 else {
-                    if (event.isExplosionOnTeleport()) {
+                    if (action.isExplosionOnTeleport()) {
                         curWorld.createExplosion(currentLocation, 0);
                         destWorld.createExplosion(destination, 0);
                     }
@@ -186,7 +173,7 @@ public class OllivandersSchedule implements Runnable {
                 Ollivanders2API.common.printDebugMessage("Failed to teleport player.", e, null, true);
             }
 
-            p.removeTeleportEvent(event);
+            p.removeTeleportAction(action);
         }
     }
 }

@@ -40,6 +40,9 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Manager for all stationary spells
+ *
+ * @author Azami7
+ * @version Ollivanders2
  */
 public class O2StationarySpells implements Listener {
     /**
@@ -361,6 +364,11 @@ public class O2StationarySpells implements Listener {
         }
     }
 
+    /**
+     * Handle player deal events
+     *
+     * @param event the player death event
+     */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerDeathEvent(@NotNull PlayerDeathEvent event) {
         for (O2StationarySpell stationary : O2StationarySpells) {
@@ -487,7 +495,7 @@ public class O2StationarySpells implements Listener {
         List<O2StationarySpell> s = new ArrayList<>(O2StationarySpells);
 
         for (O2StationarySpell statSpell : s) {
-            statSpell.checkEffect();
+            statSpell.upkeep();
 
             if (statSpell.kill) {
                 common.printDebugMessage("O2StationarySpells.upkeep: removing " + statSpell.getSpellType(), null, null, false);

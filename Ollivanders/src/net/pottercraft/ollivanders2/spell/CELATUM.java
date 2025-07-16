@@ -19,9 +19,14 @@ import java.util.ArrayList;
  * <p>
  * {@link net.pottercraft.ollivanders2.item.enchantment.CELATUM}
  *
+ * @author Azami7
  * @see <a href = "https://harrypotter.fandom.com/wiki/Concealing_charms">https://harrypotter.fandom.com/wiki/Concealing_charms</a>
+ * @since 2.21
  */
 public final class CELATUM extends ItemEnchant {
+    /**
+     * The page delimiter used when the books pages get compressed to one string
+     */
     public static String pageDelimiter = "##PAGE##";
 
     /**

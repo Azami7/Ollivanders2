@@ -15,12 +15,14 @@ import java.util.UUID;
 
 /**
  * Hurts any entities within 0.5 meters of the spell wall.
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_Maxima">https://harrypotter.fandom.com/wiki/Protego_Maxima</a>
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_MAXIMA}
+ *
+ * @author Azami7
+ * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_Maxima">https://harrypotter.fandom.com/wiki/Protego_Maxima</a>
  */
-public class PROTEGO_MAXIMA extends ShieldSpell
-{
+public class PROTEGO_MAXIMA extends ShieldSpell {
     /**
      * min radius for this spell
      */
@@ -71,8 +73,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public PROTEGO_MAXIMA(@NotNull Ollivanders2 plugin)
-    {
+    public PROTEGO_MAXIMA(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.PROTEGO_MAXIMA;
@@ -88,8 +89,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell
      * @param duration the duration of the spell
      * @param damage   the damage done to other entities in this spell area
      */
-    public PROTEGO_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration, double damage)
-    {
+    public PROTEGO_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration, double damage) {
         super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO_MAXIMA;
         minRadius = minRadiusConfig;
@@ -108,20 +108,16 @@ public class PROTEGO_MAXIMA extends ShieldSpell
      * Age the spell and damage any entities nearby
      */
     @Override
-    public void checkEffect()
-    {
+    public void upkeep() {
         age();
 
         Collection<LivingEntity> nearbyEntities = EntityCommon.getLivingEntitiesInRadius(location, radius + 1);
 
         // only do damage twice per second
-        if (cooldown <= 0)
-        {
-            for (LivingEntity e : nearbyEntities)
-            {
+        if (cooldown <= 0) {
+            for (LivingEntity e : nearbyEntities) {
                 double distance = e.getLocation().distance(location);
-                if (distance > radius - 0.5 && distance < radius + 0.5)
-                {
+                if (distance > radius - 0.5 && distance < radius + 0.5) {
                     e.damage(damage);
                     flair(10);
                 }
@@ -140,8 +136,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell
      */
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         Map<String, String> spellData = new HashMap<>();
 
         spellData.put(damageLabel, Double.toString(damage));
@@ -155,20 +150,15 @@ public class PROTEGO_MAXIMA extends ShieldSpell
      * @param spellData a map of the saved spell data
      */
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData)
-    {
-        for (Map.Entry<String, String> e : spellData.entrySet())
-        {
-            try
-            {
-                if (e.getKey().equals(damageLabel))
-                {
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
+        for (Map.Entry<String, String> e : spellData.entrySet()) {
+            try {
+                if (e.getKey().equals(damageLabel)) {
                     double d = Double.parseDouble(e.getValue());
                     setDamage(d);
                 }
             }
-            catch (Exception exception)
-            {
+            catch (Exception exception) {
                 common.printDebugMessage("Unable to read Protego Maxima damage", exception, null, false);
             }
         }
@@ -179,8 +169,7 @@ public class PROTEGO_MAXIMA extends ShieldSpell
      *
      * @param damage the amount of damage the spell should do
      */
-    private void setDamage(double damage)
-    {
+    private void setDamage(double damage) {
         if (damage < minDamageConfig)
             damage = minDamageConfig;
         else if (damage > maxDamageConfig)
@@ -190,5 +179,6 @@ public class PROTEGO_MAXIMA extends ShieldSpell
     }
 
     @Override
-    void doCleanUp() {}
+    void doCleanUp() {
+    }
 }

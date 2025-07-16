@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * All supported spells.
+ *
+ * @author Azami7
  */
 public enum O2SpellType {
     /**
@@ -125,6 +127,10 @@ public enum O2SpellType {
      * {@link CARTOMANCIE}
      */
     CARTOMANCIE(CARTOMANCIE.class, MagicLevel.OWL),
+    /**
+     * {@link CAVE_INIMICUM}
+     */
+    CAVE_INIMICUM(CAVE_INIMICUM.class, MagicLevel.NEWT),
     /**
      * {@link CELATUM}
      */
@@ -720,7 +726,7 @@ public enum O2SpellType {
     /**
      * Get the class name associated with this spell type
      *
-     * @return the classname for this spell type
+     * @return the class name for this spell type
      */
     @NotNull
     public Class<?> getClassName() {

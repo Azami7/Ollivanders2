@@ -108,6 +108,7 @@ public class O2Players {
      * @param name the effectType of this player
      */
     public void addPlayer(@NotNull UUID pid, @NotNull String name) {
+        // todo make this return o2p so that Ollivanders2.getO2Player can guarantee NotNull
         O2Player o2p = new O2Player(pid, name, p);
 
         updatePlayer(pid, o2p);

@@ -18,12 +18,14 @@ import java.util.UUID;
 
 /**
  * Doesn't let entities pass into the protected area.
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_totalum">https://harrypotter.fandom.com/wiki/Protego_totalum</a>
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_TOTALUM}
+ *
+ * @author Azami7
+ * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_totalum">https://harrypotter.fandom.com/wiki/Protego_totalum</a>
  */
-public class PROTEGO_TOTALUM extends ShieldSpell
-{
+public class PROTEGO_TOTALUM extends ShieldSpell {
     /**
      * min radius for this spell
      */
@@ -46,8 +48,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell
      *
      * @param plugin a callback to the MC plugin
      */
-    public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin)
-    {
+    public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2StationarySpellType.PROTEGO_TOTALUM;
@@ -62,8 +63,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell
      * @param radius   the radius for this spell
      * @param duration the duration of the spell
      */
-    public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration)
-    {
+    public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO_TOTALUM;
 
@@ -82,8 +82,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell
      * Age the spell by 1 tick
      */
     @Override
-    void checkEffect()
-    {
+    void upkeep() {
         age();
     }
 
@@ -93,8 +92,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell
      * @param event the player move event
      */
     @Override
-    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event)
-    {
+    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
         Location toLoc = event.getTo();
         Location fromLoc = event.getFrom(); // will never be null
 
@@ -105,18 +103,14 @@ public class PROTEGO_TOTALUM extends ShieldSpell
         if (Ollivanders2Common.isInside(fromLoc, location, radius))
             return;
 
-        if (Ollivanders2Common.isInside(toLoc, location, radius))
-        {
+        if (Ollivanders2Common.isInside(toLoc, location, radius)) {
             event.setCancelled(true);
             common.printDebugMessage("PROTEGO_TOTALUM: canceled PlayerMoveEvent", null, null, false);
 
-            new BukkitRunnable()
-            {
+            new BukkitRunnable() {
                 @Override
-                public void run()
-                {
-                    if (event.isCancelled())
-                    {
+                public void run() {
+                    if (event.isCancelled()) {
                         flair(10);
                         event.getPlayer().sendMessage(Ollivanders2.chatColor + "A magical force prevents you moving here.");
                     }
@@ -131,13 +125,11 @@ public class PROTEGO_TOTALUM extends ShieldSpell
      * @param event the creature spawn event
      */
     @Override
-    void doOnCreatureSpawnEvent(@NotNull CreatureSpawnEvent event)
-    {
+    void doOnCreatureSpawnEvent(@NotNull CreatureSpawnEvent event) {
         Entity entity = event.getEntity(); // will never be null
         Location entityLocation = entity.getLocation();
 
-        if (Ollivanders2Common.isInside(entityLocation, location, radius))
-        {
+        if (Ollivanders2Common.isInside(entityLocation, location, radius)) {
             event.setCancelled(true);
             common.printDebugMessage("PROTEGO_TOTALUM: canceled CreatureSpawnEvent", null, null, false);
         }
@@ -149,26 +141,21 @@ public class PROTEGO_TOTALUM extends ShieldSpell
      * @param event the event
      */
     @Override
-    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event)
-    {
+    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
         Entity target = event.getTarget();
         if (target == null)
             return;
 
         Location targetLocation = target.getLocation();
 
-        if (isLocationInside(targetLocation))
-        {
+        if (isLocationInside(targetLocation)) {
             event.setCancelled(true);
             common.printDebugMessage("PROTEGO_TOTALUM: canceled EntityTargetEvent", null, null, false);
 
-            new BukkitRunnable()
-            {
+            new BukkitRunnable() {
                 @Override
-                public void run()
-                {
-                    if (event.isCancelled() && target instanceof Player)
-                    {
+                public void run() {
+                    if (event.isCancelled() && target instanceof Player) {
                         flair(10);
                         target.sendMessage(Ollivanders2.chatColor + "A magical force protects you.");
                     }
@@ -184,8 +171,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell
      */
     @Override
     @NotNull
-    public Map<String, String> serializeSpellData()
-    {
+    public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
@@ -195,8 +181,10 @@ public class PROTEGO_TOTALUM extends ShieldSpell
      * @param spellData a map of the saved spell data
      */
     @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData) {}
+    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
+    }
 
     @Override
-    void doCleanUp() {}
+    void doCleanUp() {
+    }
 }
