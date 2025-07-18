@@ -18,6 +18,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -366,6 +368,32 @@ public class O2StationarySpells implements Listener {
         for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnPlayerDeathEvent(event);
+        }
+    }
+
+    /**
+     * Handle block from to events (like water or lava flowing)
+     *
+     * @param event the event
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onBlockFromToEvent(@NotNull BlockFromToEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
+            if (stationary.isActive())
+                stationary.doOnBlockFromToEvent(event);
+        }
+    }
+
+    /**
+     * Handle player bucket empty events
+     *
+     * @param event the event
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerBucketEmptyEvent(@NotNull PlayerBucketEmptyEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
+            if (stationary.isActive())
+                stationary.doOnPlayerBucketEmptyEvent(event);
         }
     }
 

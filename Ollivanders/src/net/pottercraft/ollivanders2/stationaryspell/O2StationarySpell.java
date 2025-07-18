@@ -18,6 +18,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -615,33 +617,54 @@ public abstract class O2StationarySpell implements Serializable {
      *
      * @param event the world load event
      */
-    void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) { }
+    void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
+    }
 
     /**
      * Handle item despawn events
      *
      * @param event the item despawn event
      */
-    void doOnItemDespawnEvent(@NotNull ItemDespawnEvent event) {}
+    void doOnItemDespawnEvent(@NotNull ItemDespawnEvent event) {
+    }
 
     /**
      * Handle items being picked up by entities
      *
      * @param event the event
      */
-    void doOnEntityPickupItemEvent(@NotNull EntityPickupItemEvent event) {}
+    void doOnEntityPickupItemEvent(@NotNull EntityPickupItemEvent event) {
+    }
 
     /**
      * Handle items being picked up by things like hoppers
      *
      * @param event the event
      */
-    void doOnInventoryItemPickupEvent(@NotNull InventoryPickupItemEvent event ) {}
+    void doOnInventoryItemPickupEvent(@NotNull InventoryPickupItemEvent event) {
+    }
 
     /**
      * Handle player death event
      *
      * @param event the event
      */
-    void doOnPlayerDeathEvent(@NotNull PlayerDeathEvent event) {}
+    void doOnPlayerDeathEvent(@NotNull PlayerDeathEvent event) {
+    }
+
+    /**
+     * Handle block from to events (like water or lava flowing)
+     *
+     * @param event the event
+     */
+    void doOnBlockFromToEvent(@NotNull BlockFromToEvent event) {
+    }
+
+    /**
+     * Handle player bucket empty events
+     *
+     * @param event the event
+     */
+    void doOnPlayerBucketEmptyEvent(@NotNull PlayerBucketEmptyEvent event) {
+    }
 }

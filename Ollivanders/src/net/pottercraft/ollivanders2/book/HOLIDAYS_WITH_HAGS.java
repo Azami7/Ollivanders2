@@ -8,11 +8,11 @@ import org.jetbrains.annotations.NotNull;
  * Holidays with Hags - 2nd year Defense Against the Dark Arts book
  * <p>
  * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.LUMOS_FERVENS}
  * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
- * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Holidays_with_Hags">https://harrypotter.fandom.com/wiki/Holidays_with_Hags</a>
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Holidays_with_Hags">https://harrypotter.fandom.com/wiki/Holidays_with_Hags</a>
  * @since 2.2.4
  */
 public class HOLIDAYS_WITH_HAGS extends O2Book {
@@ -26,6 +26,7 @@ public class HOLIDAYS_WITH_HAGS extends O2Book {
 
         bookType = O2BookType.HOLIDAYS_WITH_HAGS;
 
+        spells.add(O2SpellType.LUMOS_FERVENS);
         spells.add(O2SpellType.OBLIVIATE);
         // todo some spell related to witches
     }
