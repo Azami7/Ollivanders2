@@ -492,16 +492,13 @@ public class O2StationarySpells implements Listener {
      * Run each spell's upkeep and clean up killed spells
      */
     public void upkeep() {
-        List<O2StationarySpell> s = new ArrayList<>(O2StationarySpells);
+        List<O2StationarySpell> stationarySpells = new ArrayList<>(O2StationarySpells);
 
-        for (O2StationarySpell statSpell : s) {
-            statSpell.upkeep();
+        for (O2StationarySpell stationarySpell : stationarySpells) {
+            stationarySpell.upkeep();
 
-            if (statSpell.kill) {
-                common.printDebugMessage("O2StationarySpells.upkeep: removing " + statSpell.getSpellType(), null, null, false);
-
-                O2StationarySpells.remove(statSpell);
-            }
+            if (stationarySpell.kill)
+                O2StationarySpells.remove(stationarySpell);
         }
     }
 

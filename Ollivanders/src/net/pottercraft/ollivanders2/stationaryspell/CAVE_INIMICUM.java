@@ -43,10 +43,8 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
      * @param duration the duration of the spell
      */
     public CAVE_INIMICUM(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
-        super(plugin, pid, location);
+        super(plugin, pid, location, radius, duration);
 
-        setRadius(radius);
-        setDuration(duration);
         alarmOnProximity = true;
         proximityRadiusModifier = 5; // alarm if a player or hostile entity gets within 5 blocks of the spell area
 

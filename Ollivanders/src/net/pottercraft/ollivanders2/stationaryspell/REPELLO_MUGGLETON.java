@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -29,6 +30,9 @@ public class REPELLO_MUGGLETON extends ConcealmentShieldSpell {
         super(plugin);
 
         spellType = O2StationarySpellType.REPELLO_MUGGLETON;
+
+        initMessages();
+
     }
 
     /**
@@ -41,13 +45,14 @@ public class REPELLO_MUGGLETON extends ConcealmentShieldSpell {
      * @param duration the duration of the spell
      */
     public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
-        super(plugin, pid, location);
-
-        setRadius(radius);
-        setDuration(duration);
+        super(plugin, pid, location, radius, duration);
 
         spellType = O2StationarySpellType.REPELLO_MUGGLETON;
 
+        initMessages();
+    }
+
+    private void initMessages() {
         messages.add("You just remembered you need to do something someplace else.");
         messages.add("You just recalled an important appointment you need to get to somewhere else.");
         messages.add("Why were you going that way? You want to go a different way.");
@@ -76,7 +81,14 @@ public class REPELLO_MUGGLETON extends ConcealmentShieldSpell {
      * @return true if the entity is not a Muggle, false otherwise
      */
     protected boolean canSee(@NotNull Entity entity) {
-        return !isMuggle(entity);
+        boolean isMuggle = isMuggle(entity);
+
+        if (isMuggle)
+            common.printDebugMessage(entity.getName() + " cannot see players in this area", null, null, false);
+        else
+            common.printDebugMessage(entity.getName() + " can see players in this area", null, null, false);
+
+        return !isMuggle;
     }
 
     /**

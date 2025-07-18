@@ -231,6 +231,7 @@ public class EntityCommon {
     @NotNull
     static public List<LivingEntity> getLivingEntitiesInRadius(@NotNull Location location, double radius) {
         Collection<Entity> entities = getEntitiesInRadius(location, radius);
+
         List<LivingEntity> close = new ArrayList<>();
 
         for (Entity e : entities) {

@@ -328,7 +328,7 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Is the location specified inside the object's radius?
+     * Is the location specified inside the stationary spell's radius?
      *
      * @param loc the location specified.
      * @return true if the location is inside of this spell radius, false otherwise
@@ -355,6 +355,7 @@ public abstract class O2StationarySpell implements Serializable {
     @NotNull
     public List<LivingEntity> getEntitiesInsideSpellRadius() {
         Collection<LivingEntity> entities = EntityCommon.getLivingEntitiesInRadius(location, radius);
+
         List<LivingEntity> close = new ArrayList<>();
 
         /* only add living entities if their eye location is within the radius */
@@ -372,13 +373,12 @@ public abstract class O2StationarySpell implements Serializable {
      * @return a list of the players with an eye location within the radius
      */
     public List<Player> getPlayersInsideSpellRadius() {
-        Collection<LivingEntity> entities = getEntitiesInsideSpellRadius();
         List<Player> players = new ArrayList<>();
 
-        for (LivingEntity livingEntity : entities) {
-            if (livingEntity instanceof Player) {
-                players.add((Player) livingEntity);
-            }
+        for (Player player : p.getServer().getOnlinePlayers())
+        {
+            if (isLocationInside(player.getLocation()))
+                players.add(player);
         }
 
         return players;

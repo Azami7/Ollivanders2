@@ -1,17 +1,16 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -69,9 +68,14 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
      * @param plugin   a callback to the MC plugin
      * @param pid      the player who cast the spell
      * @param location the center location of the spell
+     * @param radius   the radius for this spell
+     * @param duration the duration of the spell
      */
-    public ConcealmentShieldSpell(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location) {
+    public ConcealmentShieldSpell(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin, pid, location);
+
+        setRadius(radius);
+        setDuration(duration);
 
         hidePlayersInSpellArea();
     }
@@ -97,6 +101,7 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
      * Hide the players in the spell area
      */
     protected void hidePlayersInSpellArea() {
+        common.printDebugMessage("StationarySpell.ConcealmentShieldSpell: hiding players in the area", null, null, false);
         for (Player player : getPlayersInsideSpellRadius()) {
             hidePlayer(player);
         }
@@ -110,12 +115,24 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
      */
     protected void hidePlayer(@NotNull Player player) {
         // do not do anything if they are not inside the spell area or are otherwise invisible already
-        if (!isLocationInside(player.getLocation()) || O2PlayerCommon.isInvisible(player))
+        if (!isLocationInside(player.getLocation())) {
+            common.printDebugMessage("player is not inside the spell area", null, null, false);
             return;
+        }
+
+        if (O2PlayerCommon.isInvisible(player)) {
+            common.printDebugMessage("player is already invisible", null, null, false);
+            return;
+        }
 
         for (Player viewer : p.getServer().getOnlinePlayers()) {
+            // don't hide the player from themselves :)
+            if (viewer.getUniqueId() == player.getUniqueId()) {
+                continue;
+            }
+
             // if the viewer cannot see players in this spell area, hide the player from them
-            if (!canSee(player)) {
+            if (!canSee(viewer)) {
                 viewer.hidePlayer(p, player);
                 common.printDebugMessage("StationarySpell.ConcealmentShieldSpell: hid " + player.getName() + " from " + viewer.getName(), null, null, false);
             }
@@ -128,6 +145,7 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
     protected void unhidePlayersInSpellArea() {
         for (Player player : getPlayersInsideSpellRadius()) {
             unhidePlayer(player);
+            common.printDebugMessage("StationarySpell.ConcealmentShieldSpell: unhiding " + player.getName(), null, null, false);
         }
     }
 
@@ -137,9 +155,11 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
      * @param player the player to unhide
      */
     protected void unhidePlayer(@NotNull Player player) {
-        // do not do anything if they are inside the spell area or are invisible for other reasons
-        if (isLocationInside(player.getLocation()) || O2PlayerCommon.isInvisible(player))
+        // do not unhide them if they are otherwise invisible
+        if (O2PlayerCommon.isInvisible(player)) {
+            common.printDebugMessage("player was already invisible", null, null, false);
             return;
+        }
 
         for (Player viewer : p.getServer().getOnlinePlayers()) {
             viewer.showPlayer(p, player);
@@ -215,7 +235,14 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
         if (isLocationInside(toLocation) && !isLocationInside(fromLocation)) {
             // if they can enter the area, hide them
             if (canEnter(player)) {
-                hidePlayer(player);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        common.printDebugMessage(player.getName() + " entering spell area", null, null, false);
+                        if (!event.isCancelled())
+                            hidePlayer(player);
+                    }
+                }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
             }
             // if they cannot enter the area, cancel the move event
             else {
@@ -230,14 +257,28 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
         }
         // player moving out of the spell area from inside it, unhide them
         else if (!isLocationInside(toLocation) && isLocationInside(fromLocation)) {
-            unhidePlayer(player);
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    common.printDebugMessage(player.getName() + " leaving spell area", null, null, false);
+                    if (!event.isCancelled())
+                        unhidePlayer(player);
+                }
+            }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
         }
         // player is moving around outside the spell area
         else if (!isLocationInside(toLocation) && !isLocationInside(fromLocation)) {
-            if (alarmOnProximity)
-                doProximityCheck(toLocation);
+            if (alarmOnProximity) {
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        if (!event.isCancelled())
+                            doProximityCheck(toLocation);
+                    }
+                }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
+            }
         }
-        // else the player is moving around inside the spell area
+        // else the player is moving around inside the spell area, do nothing
     }
 
     /**
