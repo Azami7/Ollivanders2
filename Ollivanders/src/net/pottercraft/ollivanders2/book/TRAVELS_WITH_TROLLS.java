@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
  * Travels with Trolls - 2nd year Defense Against the Dark Arts book
  * <p>
  * Contents:<br>
- * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}<br>
  * {@link net.pottercraft.ollivanders2.spell.CONFUNDUS_DUO}<br>
  * {@link net.pottercraft.ollivanders2.spell.BRACKIUM_EMENDO}<br>
  * </p>
@@ -28,7 +27,6 @@ public class TRAVELS_WITH_TROLLS extends O2Book {
 
         bookType = O2BookType.TRAVELS_WITH_TROLLS;
 
-        spells.add(O2SpellType.OBLIVIATE);
         spells.add(O2SpellType.CONFUNDUS_DUO);
         spells.add(O2SpellType.BRACKIUM_EMENDO);
     }
