@@ -424,6 +424,10 @@ public enum O2SpellType {
      */
     LUMOS(LUMOS.class, MagicLevel.BEGINNER),
     /**
+     * {@link LUMOS_CAERULEUM}
+     */
+    LUMOS_CAERULEUM(LUMOS_CAERULEUM.class, MagicLevel.OWL),
+    /**
      * {@link LUMOS_DUO}
      */
     LUMOS_DUO(LUMOS_DUO.class, MagicLevel.OWL),
