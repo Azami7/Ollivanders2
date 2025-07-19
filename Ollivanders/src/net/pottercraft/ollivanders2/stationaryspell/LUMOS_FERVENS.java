@@ -254,10 +254,10 @@ public class LUMOS_FERVENS extends O2StationarySpell {
      * This is the stationary spell's effect. age() must be called in this if you want the spell to age and die eventually.
      */
     @Override
-    void checkEffect() {
+    void upkeep() {
         age();
     }
-    
+
     /**
      * Clean up needed for this spell when it ends.
      */

@@ -1,43 +1,42 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
-
-import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
 /**
- * The Muggle-Repelling -Repello Muggletum - is a charm that prevents Muggles from seeing or entering an area. Any
- * non-magic person gets close to the vicinity of the enchantment remembers something urgent to do and leave.
+ * Cave Inimicum produces a boundary that keeps the caster hidden from view. Those who were on the other side of the
+ * shield are not able to see, hear, or (if the spell was well cast) smell them.
  * <p>
- * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
+ * {@link net.pottercraft.ollivanders2.stationaryspell.CAVE_INIMICUM}
  *
  * @author Azami7
- * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm">https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm</a>
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Cave_inimicum">https://harrypotter.fandom.com/wiki/Cave_inimicum</a>
  * @since 2.21
  */
-public final class REPELLO_MUGGLETON extends StationarySpell {
+public class CAVE_INIMICUM extends StationarySpell {
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public REPELLO_MUGGLETON(Ollivanders2 plugin) {
+    public CAVE_INIMICUM(Ollivanders2 plugin) {
         super(plugin);
 
-        spellType = O2SpellType.REPELLO_MUGGLETON;
+        spellType = O2SpellType.CAVE_INIMICUM;
         branch = O2MagicBranch.CHARMS;
 
         flavorText = new ArrayList<>() {{
-            add("Muggle-Repelling Charms on every inch of it. Every time Muggles have got anywhere near here all year, they've suddenly remembered urgent appointments and had to dash away again.");
+            add("\"That's as much as I can do. At the very least, we should know they're coming, I can't guarantee it will keep out Vol—\" -Hermione Granger");
+            add("The Concealment Shield");
         }};
 
-        text = "Repello Muggleton will conceal players inside of it from Muggles and prevent them entering the area.";
+        text = "Cave Inimicum will hide players inside of it from players and hostile mobs outside the shield. It will also sound a proximity alarm if they get close to the shield area";
     }
 
     /**
@@ -47,10 +46,10 @@ public final class REPELLO_MUGGLETON extends StationarySpell {
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
+    public CAVE_INIMICUM(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
 
-        spellType = O2SpellType.REPELLO_MUGGLETON;
+        spellType = O2SpellType.CAVE_INIMICUM;
         branch = O2MagicBranch.CHARMS;
 
         durationModifierInSeconds = 15;
@@ -67,6 +66,8 @@ public final class REPELLO_MUGGLETON extends StationarySpell {
 
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.REPELLO_MUGGLETON(p, player.getUniqueId(), location, radius, duration);
+        return new net.pottercraft.ollivanders2.stationaryspell.CAVE_INIMICUM(p, player.getUniqueId(), location, radius, duration);
     }
 }
+
+

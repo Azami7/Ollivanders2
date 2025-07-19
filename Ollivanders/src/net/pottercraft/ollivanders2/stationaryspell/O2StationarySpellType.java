@@ -10,12 +10,19 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * Represents allowable stationary spells.
+ *
+ * @author Azami7
+ * @version Ollivanders2
  */
 public enum O2StationarySpellType {
     /**
      * {@link ALIQUAM_FLOO}
      */
     ALIQUAM_FLOO(ALIQUAM_FLOO.class, MagicLevel.EXPERT),
+    /**
+     * {@link CAVE_INIMICUM}
+     */
+    CAVE_INIMICUM(CAVE_INIMICUM.class, MagicLevel.NEWT),
     /**
      * {@link COLLOPORTUS}
      */
@@ -93,7 +100,7 @@ public enum O2StationarySpellType {
     /**
      * Get the class for this stationary spell
      *
-     * @return the classname for this spell
+     * @return the class name for this spell
      */
     @NotNull
     public Class<?> getClassName() {

@@ -21,12 +21,14 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The basic protection spell
+ * The basic protection spell.
+ * <p>
+ * {@link net.pottercraft.ollivanders2.spell.PROTEGO}
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Shield_Charm">https://harrypotter.fandom.com/wiki/Shield_Charm</a>
- * {@link net.pottercraft.ollivanders2.spell.PROTEGO}
  */
 public class PROTEGO extends ShieldSpell {
+    // todo rewrite based on HP canon
     /**
      * min radius for this spell
      */
@@ -83,7 +85,7 @@ public class PROTEGO extends ShieldSpell {
      * Age the spell by 1 tick,
      */
     @Override
-    public void checkEffect() {
+    public void upkeep() {
         age();
 
         Player ply = Bukkit.getPlayer(getCasterID());
@@ -165,5 +167,6 @@ public class PROTEGO extends ShieldSpell {
     }
 
     @Override
-    void doCleanUp() {}
+    void doCleanUp() {
+    }
 }

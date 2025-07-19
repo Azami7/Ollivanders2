@@ -16,9 +16,12 @@ import java.util.UUID;
 
 /**
  * Only players within this can hear other conversation from other players within. Duration depending on spell's level.
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Muffliato_Charm">https://harrypotter.fandom.com/wiki/Muffliato_Charm</a>
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.MUFFLIATO}
+ *
+ * @author Azami7
+ * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Muffliato_Charm">https://harrypotter.fandom.com/wiki/Muffliato_Charm</a>
  */
 public class MUFFLIATO extends ShieldSpell {
     /**
@@ -76,7 +79,7 @@ public class MUFFLIATO extends ShieldSpell {
      * Age the spell by 1 tick
      */
     @Override
-    public void checkEffect() {
+    public void upkeep() {
         age();
     }
 
@@ -111,5 +114,6 @@ public class MUFFLIATO extends ShieldSpell {
     }
 
     @Override
-    void doCleanUp() {}
+    void doCleanUp() {
+    }
 }

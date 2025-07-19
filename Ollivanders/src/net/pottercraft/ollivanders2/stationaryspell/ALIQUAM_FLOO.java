@@ -30,9 +30,11 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Makes a "fireplace" a floo network location
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Floo_Network">https://harrypotter.fandom.com/wiki/Floo_Network</a>
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.ALIQUAM_FLOO}
+ *
+ * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Floo_Network">https://harrypotter.fandom.com/wiki/Floo_Network</a>
  */
 public class ALIQUAM_FLOO extends O2StationarySpell {
     /**
@@ -139,7 +141,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
      * Check for players activating the floo
      */
     @Override
-    public void checkEffect() {
+    public void upkeep() {
         // if this fireplace is already active,
         if (isWorking()) {
             cooldown = cooldown - 1;
@@ -330,7 +332,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
                     return;
 
                 if (!flooNetworkEvent.isCancelled()) {
-                    p.addTeleportEvent(player, flooNetworkEvent.getDestination());
+                    p.addTeleportAction(player, flooNetworkEvent.getDestination());
                     player.sendMessage(Ollivanders2.chatColor + "Fire swirls around you.");
                 }
                 else

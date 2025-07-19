@@ -19,9 +19,12 @@ import java.util.UUID;
 
 /**
  * Checks for entities going into a vanishing cabinet
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Vanishing_Cabinet">https://harrypotter.fandom.com/wiki/Vanishing_Cabinet</a>
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.HARMONIA_NECTERE_PASSUS}
+ *
+ * @author Azami7
+ * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Vanishing_Cabinet">https://harrypotter.fandom.com/wiki/Vanishing_Cabinet</a>
  */
 public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     /**
@@ -79,8 +82,6 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
         super(plugin, pid, location);
 
         spellType = O2StationarySpellType.HARMONIA_NECTERE_PASSUS;
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
         permanent = true;
 
         radius = minRadius = maxRadius = minRadiusConfig;
@@ -93,7 +94,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
      * Disable the spell if the twin is broken
      */
     @Override
-    public void checkEffect() {
+    public void upkeep() {
         World world = location.getWorld();
         if (world == null) {
             common.printDebugMessage("HARMONIA_NECTERE_PASSUS.checkEffect: world is null", null, null, false);
@@ -155,10 +156,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
      * @return true if this player is using this cabinet, false otherwise
      */
     public boolean isUsing(Player player) {
-        if (inUseBy.containsKey(player))
-            return true;
-
-        return false;
+        return inUseBy.containsKey(player);
     }
 
     /**
@@ -243,7 +241,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
                 @Override
                 public void run() {
                     if (!event.isCancelled()) {
-                        p.addTeleportEvent(player, twinCabinetLocation, true);
+                        p.addTeleportAction(player, twinCabinetLocation, true);
                     }
                 }
             }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
@@ -251,5 +249,6 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     }
 
     @Override
-    void doCleanUp() {}
+    void doCleanUp() {
+    }
 }
