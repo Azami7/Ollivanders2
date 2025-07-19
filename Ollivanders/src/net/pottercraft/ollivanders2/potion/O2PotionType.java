@@ -7,6 +7,8 @@ import org.jetbrains.annotations.Nullable;
 
 /**
  * All potions types
+ *
+ * @author Azami7
  */
 public enum O2PotionType {
     /**
@@ -105,6 +107,11 @@ public enum O2PotionType {
         return className;
     }
 
+    /**
+     * Get the magic level of this potion
+     *
+     * @return the magic level
+     */
     @NotNull
     public MagicLevel getLevel() {
         return level;

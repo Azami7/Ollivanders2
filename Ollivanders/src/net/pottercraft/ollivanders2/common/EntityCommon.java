@@ -6,7 +6,9 @@ import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Bee;
 import org.bukkit.entity.Cat;
+import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
@@ -14,7 +16,9 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Parrot;
+import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Rabbit;
+import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -227,6 +231,7 @@ public class EntityCommon {
     @NotNull
     static public List<LivingEntity> getLivingEntitiesInRadius(@NotNull Location location, double radius) {
         Collection<Entity> entities = getEntitiesInRadius(location, radius);
+
         List<LivingEntity> close = new ArrayList<>();
 
         for (Entity e : entities) {
@@ -261,9 +266,9 @@ public class EntityCommon {
      * Gets item entities within bounding box of the projectile
      *
      * @param location the location to check
-     * @param x the x-limit to check
-     * @param y the y-limit to check
-     * @param z the z-limit to check
+     * @param x        the x-limit to check
+     * @param y        the y-limit to check
+     * @param z        the z-limit to check
      * @return List of item entities within bounding box of projectile
      */
     @NotNull
@@ -283,7 +288,7 @@ public class EntityCommon {
      * Gets item entities within radius of the projectile
      *
      * @param location the location to check
-     * @param radius the radius to check around the location
+     * @param radius   the radius to check around the location
      * @return List of item entities within radius of projectile
      */
     @NotNull
@@ -295,7 +300,7 @@ public class EntityCommon {
      * Gets item entities within radius of the projectile
      *
      * @param location the location to check
-     * @param radius radius within which to get entities
+     * @param radius   radius within which to get entities
      * @return List of item entities within one block of projectile
      */
     @NotNull
@@ -326,7 +331,7 @@ public class EntityCommon {
     /**
      * Get an item by material
      *
-     * @param location the location to check
+     * @param location  the location to check
      * @param materials the list of materials to look for
      * @param radius    the radius to look in
      * @return an item if found, null otherwise
@@ -680,5 +685,31 @@ public class EntityCommon {
             return potionEffectLevels.get(potionEffectType);
         else
             return MagicLevel.OWL;
+    }
+
+    /**
+     * Is this living entity a hostile? This assumes Player entities are not hostile.
+     *
+     * @return true if it is a hostile or angry mob, false otherwise
+     * @see <a href = "https://minecraft.fandom.com/wiki/Mob#Hostile_mobs">https://minecraft.fandom.com/wiki/Mob#Hostile_mobs</a>
+     */
+    static public boolean isHostile(@NotNull LivingEntity livingEntity) {
+        // are they an inherently hostile mob?
+        if (livingEntity instanceof Enemy)
+            return true;
+
+        // are they an angry bee?
+        if (livingEntity instanceof Bee && ((Bee) livingEntity).getAnger() > 0)
+            return true;
+
+        // are they an angry wolf?
+        if (livingEntity instanceof Wolf && ((Wolf) livingEntity).isAngry())
+            return true;
+
+        // are they an angry zombie piglin?
+        if (livingEntity instanceof PigZombie && ((PigZombie) livingEntity).isAngry())
+            return true;
+
+        return false;
     }
 }

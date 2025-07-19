@@ -271,16 +271,46 @@ public final class O2PlayerCommon {
     /**
      * Does a player have a particular potion effect?
      *
-     * @param player the player to check
+     * @param player     the player to check
      * @param effectType the potion effect type to check for
-     * @return
+     * @return true if the player has this potion effect, false otherwise
      */
     static public boolean hasPotionEffect(@NotNull Player player, @NotNull PotionEffectType effectType) {
-        for (PotionEffect effect: player.getActivePotionEffects()) {
+        for (PotionEffect effect : player.getActivePotionEffects()) {
             if (effect.getType() == effectType) {
                 return true;
             }
         }
+
+        return false;
+    }
+
+    /**
+     * Does the player have the Cloak of Invisibility
+     *
+     * @param player player to be checked
+     * @return true if yes, false if no
+     */
+    public static boolean wearingInvisibilityCloak(@NotNull Player player) {
+        ItemStack chestPlate = player.getInventory().getChestplate();
+        if (chestPlate != null) {
+            return O2ItemType.INVISIBILITY_CLOAK.isItemThisType(chestPlate);
+        }
+        return false;
+    }
+
+    /**
+     * Is this player invisible?
+     *
+     * @param player the player to check
+     * @return true if they are either wearing an invisibility cloak or have an invisibility potion effect, false otherwise
+     */
+    public static boolean isInvisible(@NotNull Player player) {
+        if (wearingInvisibilityCloak(player))
+            return true;
+
+        if (O2PlayerCommon.hasPotionEffect(player, PotionEffectType.INVISIBILITY))
+            return true;
 
         return false;
     }

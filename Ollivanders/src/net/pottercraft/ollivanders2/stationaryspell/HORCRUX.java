@@ -26,9 +26,13 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Player will spawn here when killed, with all of their spell levels intact. Only fiendfyre can destroy it.
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Horcrux-making_spell">https://harrypotter.fandom.com/wiki/Horcrux-making_spell</a>
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.ET_INTERFICIAM_ANIMAM_LIGAVERIS}
+ *
+ * @author Azami7
+ * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Horcrux-making_spell">https://harrypotter.fandom.com/wiki/Horcrux-making_spell</a>
+ * @since 2.21
  */
 public class HORCRUX extends O2StationarySpell {
     /**
@@ -96,6 +100,7 @@ public class HORCRUX extends O2StationarySpell {
      * @param plugin   a callback to the MC plugin
      * @param pid      the player who cast the spell
      * @param location the center location of the spell
+     * @param item     the horcrux object
      */
     public HORCRUX(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull Item item) {
         super(plugin);
@@ -120,7 +125,7 @@ public class HORCRUX extends O2StationarySpell {
      * Upkeep for the spell
      */
     @Override
-    public void checkEffect() {
+    public void upkeep() {
         // decrement all the affected cooldowns by a tick
         ArrayList<String> iterator = new ArrayList<>(affectedPlayers.keySet());
 
@@ -305,7 +310,7 @@ public class HORCRUX extends O2StationarySpell {
      * @param event the event
      */
     @Override
-    void doOnInventoryItemPickupEvent (@NotNull InventoryPickupItemEvent event ) {
+    void doOnInventoryItemPickupEvent(@NotNull InventoryPickupItemEvent event) {
         Item eventItem = event.getItem();
 
         if (eventItem.getUniqueId() == horcruxItem.getUniqueId())
@@ -313,5 +318,6 @@ public class HORCRUX extends O2StationarySpell {
     }
 
     @Override
-    void doCleanUp() { }
+    void doCleanUp() {
+    }
 }

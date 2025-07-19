@@ -19,6 +19,10 @@ import java.util.UUID;
  * Prevents opening of target door, trapdoor, or chest.
  * <p>
  * {@link net.pottercraft.ollivanders2.spell.COLLOPORTUS}
+ *
+ * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Locking_Spell">https://harrypotter.fandom.com/wiki/Locking_Spell</a>
+ * @since 2.21
  */
 public class COLLOPORTUS extends O2StationarySpell {
     /**
@@ -69,7 +73,7 @@ public class COLLOPORTUS extends O2StationarySpell {
      * No upkeep for this spell
      */
     @Override
-    public void checkEffect() {
+    public void upkeep() {
     }
 
     /**
@@ -160,5 +164,6 @@ public class COLLOPORTUS extends O2StationarySpell {
     }
 
     @Override
-    void doCleanUp() {}
+    void doCleanUp() {
+    }
 }

@@ -128,7 +128,7 @@ public abstract class ItemEnchant extends O2Spell {
     /**
      * Enchants the item held in the player's off-hand
      */
-    protected void enchantHeldItem () {
+    protected void enchantHeldItem() {
         ItemStack targetItem = player.getInventory().getItemInOffHand();
 
         // make sure they are actually holding something and that it can be enchanted
@@ -251,20 +251,27 @@ public abstract class ItemEnchant extends O2Spell {
      *
      * @param itemStack the item being enchanted
      */
-    protected void initEnchantmentArgs(ItemStack itemStack) { }
+    protected void initEnchantmentArgs(ItemStack itemStack) {
+    }
 
     /**
      * Do any after effects on the item. This needs to be overridden by the classes that need it.
      *
      * @param item the item to affect
+     * @return the altered item
      */
     @Nullable
-    protected Item alterItem(Item item) { return item; }
+    protected Item alterItem(Item item) {
+        return item;
+    }
 
     /**
      * Do any after effects on the item. This needs to be overridden by the classes that need it.
      *
      * @param itemStack the item to affect
+     * @return the altered item
      */
-    protected ItemStack alterItem(ItemStack itemStack) { return itemStack; }
+    protected ItemStack alterItem(ItemStack itemStack) {
+        return itemStack;
+    }
 }

@@ -41,6 +41,9 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Stationary spell object in Ollivanders2
+ *
+ * @author Azami7
+ * @version Ollivanders2
  */
 public abstract class O2StationarySpell implements Serializable {
     /**
@@ -327,7 +330,7 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Is the location specified inside the object's radius?
+     * Is the location specified inside the stationary spell's radius?
      *
      * @param loc the location specified.
      * @return true if the location is inside of this spell radius, false otherwise
@@ -354,6 +357,7 @@ public abstract class O2StationarySpell implements Serializable {
     @NotNull
     public List<LivingEntity> getEntitiesInsideSpellRadius() {
         Collection<LivingEntity> entities = EntityCommon.getLivingEntitiesInRadius(location, radius);
+
         List<LivingEntity> close = new ArrayList<>();
 
         /* only add living entities if their eye location is within the radius */
@@ -363,6 +367,23 @@ public abstract class O2StationarySpell implements Serializable {
         }
 
         return close;
+    }
+
+    /**
+     * Get the players inside this spell radius. We use eye radius to handle entities bigger than 1 block.
+     *
+     * @return a list of the players with an eye location within the radius
+     */
+    public List<Player> getPlayersInsideSpellRadius() {
+        List<Player> players = new ArrayList<>();
+
+        for (Player player : p.getServer().getOnlinePlayers())
+        {
+            if (isLocationInside(player.getLocation()))
+                players.add(player);
+        }
+
+        return players;
     }
 
     /**
@@ -460,9 +481,9 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * This is the stationary spell's effect. age() must be called in this if you want the spell to age and die eventually.
+     * This is the stationary spell's upkeep, age() must be called in this if you want the spell to age and die eventually.
      */
-    abstract void checkEffect();
+    abstract void upkeep();
 
     /**
      * Serialize all data specific to this spell so it can be saved.

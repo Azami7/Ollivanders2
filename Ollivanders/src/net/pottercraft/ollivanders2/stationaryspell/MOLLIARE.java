@@ -14,9 +14,12 @@ import java.util.UUID;
 
 /**
  * Negates fall damage.
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Cushioning_Charm">https://harrypotter.fandom.com/wiki/Cushioning_Charm</a>
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.MOLLIARE}
+ *
+ * @author Azami7
+ * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Cushioning_Charm">https://harrypotter.fandom.com/wiki/Cushioning_Charm</a>
  */
 public class MOLLIARE extends O2StationarySpell {
     /**
@@ -74,7 +77,7 @@ public class MOLLIARE extends O2StationarySpell {
      * Age the spell by a tick
      */
     @Override
-    public void checkEffect() {
+    public void upkeep() {
         age();
     }
 
@@ -107,5 +110,6 @@ public class MOLLIARE extends O2StationarySpell {
     }
 
     @Override
-    void doCleanUp() {}
+    void doCleanUp() {
+    }
 }

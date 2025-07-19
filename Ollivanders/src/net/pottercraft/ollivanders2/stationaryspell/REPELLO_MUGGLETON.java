@@ -1,57 +1,26 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.EntityCommon;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityTargetEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 
 /**
- * Hides all players within its area.
- *
+ * The Muggle-Repelling -Repello Muggletum - is a charm that prevents Muggles from seeing or entering an area. Any
+ * non-magic person gets close to the vicinity of the enchantment remembers something urgent to do and leave.
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.REPELLO_MUGGLETON}
+ *
+ * @author Azami7
+ * @version Ollivanders2
+ * @see <a href="https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm">https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm</a>
+ * @since 2.21
  */
-public class REPELLO_MUGGLETON extends ShieldSpell {
-    /**
-     * min radius for this spell
-     */
-    public static final int minRadiusConfig = 5;
-    /**
-     * max radius for this spell
-     */
-    public static final int maxRadiusConfig = 20;
-    /**
-     * min duration for this spell
-     */
-    public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
-    /**
-     * max duration for this spell
-     */
-    public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
-
-    public ArrayList<String> messages = new ArrayList<>() {{
-        add("You just remembered you need to do something someplace else.");
-        add("You just recalled an important appointment you need to get to somewhere else.");
-        add("Why were you going that way? You want to go a different way.");
-        add("You realize you don't actually want to go that way.");
-        add("You hear someone behind you calling your name.");
-    }};
-
+public class REPELLO_MUGGLETON extends ConcealmentShieldSpell {
     /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
      *
@@ -61,6 +30,9 @@ public class REPELLO_MUGGLETON extends ShieldSpell {
         super(plugin);
 
         spellType = O2StationarySpellType.REPELLO_MUGGLETON;
+
+        initMessages();
+
     }
 
     /**
@@ -73,223 +45,107 @@ public class REPELLO_MUGGLETON extends ShieldSpell {
      * @param duration the duration of the spell
      */
     public REPELLO_MUGGLETON(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
-        super(plugin, pid, location);
-
-        setRadius(radius);
-        setDuration(duration);
+        super(plugin, pid, location, radius, duration);
 
         spellType = O2StationarySpellType.REPELLO_MUGGLETON;
 
-        hidePlayersInSpellArea();
+        initMessages();
+    }
+
+    private void initMessages() {
+        messages.add("You just remembered you need to do something someplace else.");
+        messages.add("You just recalled an important appointment you need to get to somewhere else.");
+        messages.add("Why were you going that way? You want to go a different way.");
+        messages.add("You realize you don't actually want to go that way.");
+        messages.add("You hear someone behind you calling your name.");
     }
 
     /**
-     * Hide the players in the spell area
-     */
-    private void hidePlayersInSpellArea() {
-        World world = location.getWorld();
-        if (world == null) {
-            common.printDebugMessage("StationarySpell.REPELLO_MUGGLETON: world is null", null, null, true);
-            return;
-        }
-
-        for (Entity player : EntityCommon.getNearbyEntitiesByType(location, radius, EntityType.PLAYER)) {
-            if (isLocationInside(player.getLocation())) {
-                for (Player viewer : world.getPlayers()) {
-                    hidePlayer((Player)player, viewer);
-                }
-            }
-        }
-    }
-
-    /**
-     * Hide a player inside this stationary spell if the viewer is a muggle
+     * Is this entity a player and are they a Muggle?
      *
-     * @param player the player to hide
-     * @param viewer the viewer
+     * @param entity the entity to check
+     * @return true if they are a muggle, false otherwise
      */
-    private void hidePlayer (Player player, Player viewer) {
-        if (p.getO2Player(viewer).isMuggle()) {
-            viewer.hidePlayer(p, player);
-            common.printDebugMessage("StationarySpell.REPELLO_MUGGLETON: hid " + player.getName() + " from " + viewer.getName(), null, null, false);
+    private boolean isMuggle(Entity entity) {
+        if (entity instanceof Player) {
+            return p.getO2Player((Player) entity).isMuggle();
         }
+
+        return false;
     }
 
     /**
-     * Unhides the player from other players - for use in spell clean up and when players leave the spell area
+     * Can this entity see players inside the spell area? Assumes the entity being checked is outside the spell area.
      *
-     * @param player the player to unhide
-     * @param viewer the viewer
+     * @param entity the entity looking inside the area
+     * @return true if the entity is not a Muggle, false otherwise
      */
-    private void showPlayer (Player player, Player viewer) {
-        viewer.showPlayer(p, player);
-        common.printDebugMessage("REPELLO_MUGGLETON: unhid " + player.getName() + " from " + viewer.getName(), null, null, false);
+    protected boolean canSee(@NotNull LivingEntity entity) {
+        boolean isMuggle = isMuggle(entity);
+
+        if (isMuggle)
+            common.printDebugMessage(entity.getName() + " cannot see players in this area", null, null, false);
+        else
+            common.printDebugMessage(entity.getName() + " can see players in this area", null, null, false);
+
+        return !isMuggle;
     }
 
     /**
-     * Upkeep - age the spell
+     * Can this entity target players inside the spell area? Assumes the entity being checked is outside the spell area.
+     *
+     * @param entity the entity targeting inside the area
+     * @return true, this spell does not prevent targeting
      */
     @Override
-    public void checkEffect() {
-        age();
-
-        if (duration <= 1)
-            kill();
+    protected boolean canTarget(@NotNull LivingEntity entity) {
+        return true;
     }
 
     /**
-     * Prevent muggle players targeting a player inside the area.
+     * Can this entity enter the spell area? Assumes the entity being checked is outside the spell area.
      *
-     * @param event the event
+     * @param entity the entity entering the area
+     * @return true if the entity is not a Muggle, false otherwise
      */
-    @Override
-    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
-        Entity target = event.getTarget();
-        Entity entity = event.getEntity(); // will never be null
-
-        if (!(target instanceof Player))
-            return;
-
-        if (isLocationInside(target.getLocation()) && !isLocationInside(entity.getLocation())) {
-            event.setCancelled(true);
-            common.printDebugMessage("REPELLO_MUGGLETON: canceled target of " + target.getName() + " by " + entity.getName(),  null, null, false);
-        }
+    protected boolean canEnter(@NotNull LivingEntity entity) {
+        return !isMuggle(entity);
     }
 
     /**
-     * Hide the player from muggles if they go into the spell area
+     * Can this entity "hear" sounds from inside the spell area? Assumes the entity being checked is outside the spell area.
      *
-     * @see <a href = "https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html#hidePlayer(org.bukkit.plugin.Plugin,org.bukkit.entity.Player)">https://hub.spigotmc.org/javadocs/spigot/org/bukkit/entity/Player.html#hidePlayer(org.bukkit.plugin.Plugin,org.bukkit.entity.Player)</a>
-     * @param event the event
+     * @param entity the entity entering the area
+     * @return true if the entity is not a Muggle, false otherwise
      */
-    @Override
-    void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
-        Location toLocation = event.getTo();
-        Location fromLocation = event.getFrom();
-        Player player = event.getPlayer();
-
-        if (event.isCancelled() || toLocation == null)
-            return;
-
-        if (p.getO2Player(player).isMuggle()) {
-            // do not let muggles enter the spell area if they are outside of it
-            if (isLocationInside(toLocation) && !(isLocationInside(fromLocation))) {
-                event.setCancelled(true);
-                player.sendMessage(Ollivanders2.chatColor + getMessage());
-                common.printDebugMessage("REPELLO_MUGGLETON: prevented " + player.getName() + " entering area.", null, null, false);
-                return; // return because they never entered the area so we don't need to do the rest of the steps in this function
-            }
-
-            // if they were inside the area and move out, hide the players inside the spell area from them
-            else if (!(isLocationInside(toLocation)) && isLocationInside(fromLocation)) {
-                for (Entity hiddenPlayer : EntityCommon.getNearbyEntitiesByType(location, radius, EntityType.PLAYER)) {
-                    hidePlayer((Player)hiddenPlayer, player);
-                }
-            }
-        }
-
-        // handle toggling visibility for this player with muggles if they cross the spell area boundary
-        handleVisibility(toLocation, fromLocation, player);
+    protected boolean canHear(@NotNull LivingEntity entity) {
+        return !isMuggle(entity);
     }
 
     /**
-     * Get a random message to show muggles when they try to walk in to the spell area.
+     * Check the proximity alarm conditions at the location.
+     * Repello Muggleton does not have a proximity alarm.
      *
-     * @return one of the messages at random
+     * @param player the player that triggered the alarm
      */
-    private String getMessage() {
-        return messages.get(Math.abs(Ollivanders2Common.random.nextInt()) % messages.size());
+    protected boolean checkAlarm(@NotNull Player player) {
+        return false;
     }
 
     /**
-     * Handle hiding or unhiding the player from muggles if the player crosses the spell area boundary
+     * Check the proximity alarm conditions at the location. Assumes that a check to determine that a proximity alarm
+     * should go off for this location has happened and called this.
      *
-     * @param toLocation the location the player is moving to
-     * @param fromLocation the location the player is moving from
-     * @param player the player moving
+     * @param entity the entity that triggered the alarm
      */
-    private void handleVisibility(Location toLocation, Location fromLocation, Player player) {
-        // if they move from outside the spell area to inside of it, hide them from muggles
-        if (isLocationInside(toLocation) && !(isLocationInside(fromLocation))) {
-            for (Player viewer : p.getServer().getOnlinePlayers()) {
-                hidePlayer(player, viewer);
-            }
-        }
-        // if they move from inside the spell area to outside of it, unhide them from all players
-        else if (!(isLocationInside(toLocation)) && isLocationInside(fromLocation)) {
-            for (Player viewer : p.getServer().getOnlinePlayers()) {
-                showPlayer(player, viewer);
-            }
-        }
+    protected boolean checkAlarm(@NotNull LivingEntity entity) {
+        return false;
     }
 
     /**
-     * Remove muggles from the recipients of any chats by players in the spell area
-     *
-     * @param event the event
+     * Do the proximity alarm action for this spell.
+     * Repello Muggleton does not have a proximity alarm.
      */
-    @Override
-    void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
-        Player speaker = event.getPlayer();
-
-        if (!isLocationInside(speaker.getLocation()))
-            return;
-
-        Set<Player> recipients = new HashSet<>(event.getRecipients());
-        for (Player player : recipients) {
-            if (p.getO2Player(player).isMuggle()) {
-                event.getRecipients().remove(player);
-                common.printDebugMessage("REPELLO_MUGGLETON: removed " + player.getName() + " from chat recipients", null, null, false);
-            }
-        }
-    }
-
-    /**
-     * Unhide all players that were in the spell area
-     */
-    @Override
-    void doCleanUp() {
-        World world = location.getWorld();
-        if (world == null) {
-            common.printDebugMessage("StationarySpell.REPELLO_MUGGLETON: world is null", null, null, true);
-            return;
-        }
-
-        for (Player player : world.getPlayers()) {
-            if (isLocationInside(player.getLocation())) {
-                for (Player viewer : location.getWorld().getPlayers()) {
-                    showPlayer(player, viewer);
-                }
-            }
-        }
-    }
-
-    /**
-     * When players join, hide any players in this repello muggleton from them.
-     *
-     * @param event the player join event
-     */
-    @Override
-    void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-        if (!p.getO2Player(player).isMuggle())
-            return;
-
-        // hide any players inside this spell area from this player if they are a muggle
-        for (Entity hiddenPlayer : EntityCommon.getNearbyEntitiesByType(location, radius, EntityType.PLAYER)) {
-            if (hiddenPlayer instanceof Player) {
-                hidePlayer((Player) hiddenPlayer, player);
-            }
-        }
-    }
-
-    @Override
-    @NotNull
-    public Map<String, String> serializeSpellData() {
-        return new HashMap<>();
-    }
-
-    @Override
-    public void deserializeSpellData(@NotNull Map<String, String> spellData) {
+    protected void proximityAlarm() {
     }
 }

@@ -16,10 +16,11 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.LIBERACORPUS}<br>
  * {@link net.pottercraft.ollivanders2.spell.OPPUGNO}<br>
  * {@link net.pottercraft.ollivanders2.spell.VERDIMILLIOUS_TRIA}
+ * {@link net.pottercraft.ollivanders2.spell.CAVE_INIMICUM}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Confronting_the_Faceless">https://harrypotter.fandom.com/wiki/Confronting_the_Faceless</a>
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Confronting_the_Faceless">https://harrypotter.fandom.com/wiki/Confronting_the_Faceless</a>
  * @since 2.2.4
  */
 public class CONFRONTING_THE_FACELESS extends O2Book {
@@ -44,5 +45,6 @@ public class CONFRONTING_THE_FACELESS extends O2Book {
         // todo mov fotia rework - purple sparks + pacify
         // todo hex breaker
         spells.add(O2SpellType.VERDIMILLIOUS_TRIA);
+        spells.add(O2SpellType.CAVE_INIMICUM);
     }
 }

@@ -19,9 +19,12 @@ import java.util.UUID;
 
 /**
  * Nullum apparebit creates a stationary spell which will not allow apparition into it.
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx</a>
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.NULLUM_APPAREBIT}
+ *
+ * @author Azami7
+ * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx</a>
  */
 public class NULLUM_APPAREBIT extends O2StationarySpell {
     /**
@@ -80,7 +83,7 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
      * Age the spell by 1 tick
      */
     @Override
-    public void checkEffect() {
+    public void upkeep() {
         age();
     }
 
@@ -194,5 +197,6 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
     }
 
     @Override
-    void doCleanUp() {}
+    void doCleanUp() {
+    }
 }

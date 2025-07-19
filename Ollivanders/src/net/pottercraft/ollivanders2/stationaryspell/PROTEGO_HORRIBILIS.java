@@ -16,9 +16,12 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Destroys spell projectiles crossing the boundary.
- *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_horribilis">https://harrypotter.fandom.com/wiki/Protego_horribilis</a>
+ * <p>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_HORRIBILIS}
+ *
+ * @author Azami7
+ * @version Ollivanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_horribilis">https://harrypotter.fandom.com/wiki/Protego_horribilis</a>
  */
 public class PROTEGO_HORRIBILIS extends ShieldSpell {
     /**
@@ -76,7 +79,7 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
      * Age the spell by a tick and kill projectiles crossing the boundaries
      */
     @Override
-    public void checkEffect() {
+    public void upkeep() {
         age();
         List<O2Spell> projectiles = p.getProjectiles();
 
@@ -105,5 +108,6 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
     }
 
     @Override
-    void doCleanUp() {}
+    void doCleanUp() {
+    }
 }

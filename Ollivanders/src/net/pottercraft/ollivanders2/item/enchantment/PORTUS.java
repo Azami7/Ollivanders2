@@ -142,10 +142,10 @@ public class PORTUS extends Enchantment {
         Location portkeyReturn = event.getItem().getLocation();
 
         // teleport the player and any other player in the radius
-        p.addTeleportEvent((Player)entity, destination, true);
+        p.addTeleportAction((Player)entity, destination, true);
         for (LivingEntity livingEntity : EntityCommon.getLivingEntitiesInRadius(location, radius)) {
             if (livingEntity instanceof Player) {
-                p.addTeleportEvent((Player)livingEntity, destination, true);
+                p.addTeleportAction((Player)livingEntity, destination, true);
             }
             else {
                 livingEntity.teleport(destination);

@@ -54,6 +54,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Ollivanders2 plugin
+ *
+ * @author Azami7
  */
 public class Ollivanders2 extends JavaPlugin {
     /**
@@ -70,7 +72,7 @@ public class Ollivanders2 extends JavaPlugin {
     /**
      * All pending teleport events
      */
-    private Ollivanders2TeleportEvents teleportEvents;
+    private Ollivanders2TeleportActions teleportActions;
 
     /**
      * Spells
@@ -343,7 +345,7 @@ public class Ollivanders2 extends JavaPlugin {
         books.onEnable();
 
         // teleport events
-        teleportEvents = new Ollivanders2TeleportEvents(this);
+        teleportActions = new Ollivanders2TeleportActions(this);
 
         getLogger().info(this + " is now enabled!");
     }
@@ -876,7 +878,7 @@ public class Ollivanders2 extends JavaPlugin {
         if (debug)
             getLogger().info("Running house sort");
 
-        if (targetPlayer.length() < 1 || targetHouse.length() < 1) {
+        if (targetPlayer.isEmpty() || targetHouse.isEmpty()) {
             usageMessageHouseSort(sender);
             return (true);
         }
@@ -1236,43 +1238,43 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Get all pending teleport events.
+     * Get all pending teleport actions.
      *
-     * @return an array of teleport events
+     * @return a list of teleport actions
      */
     @NotNull
-    public List<Ollivanders2TeleportEvents.O2TeleportEvent> getTeleportEvents() {
-        return teleportEvents.getTeleportEvents();
+    public List<Ollivanders2TeleportActions.O2TeleportAction> getTeleportActions() {
+        return teleportActions.getTeleportActions();
     }
 
     /**
-     * Add a teleport event to the queue
+     * Add a teleport action to the queue
      *
      * @param p  the player to teleport
      * @param to teleport destination
      */
-    public void addTeleportEvent(@NotNull Player p, @NotNull Location to) {
-        addTeleportEvent(p, to, false);
+    public void addTeleportAction(@NotNull Player p, @NotNull Location to) {
+        addTeleportAction(p, to, false);
     }
 
     /**
-     * Add a teleport event with an explosion effect
+     * Add a teleport action with an explosion effect
      *
      * @param p                   the player to teleport
      * @param to                  teleport destination
      * @param explosionOnTeleport whether to do an explosion effect
      */
-    public void addTeleportEvent(@NotNull Player p, @NotNull Location to, boolean explosionOnTeleport) {
-        teleportEvents.addTeleportEvent(p, p.getLocation(), to, explosionOnTeleport);
+    public void addTeleportAction(@NotNull Player p, @NotNull Location to, boolean explosionOnTeleport) {
+        teleportActions.addTeleportEvent(p, p.getLocation(), to, explosionOnTeleport);
     }
 
     /**
-     * Remove a teleport event.
+     * Remove a teleport action.
      *
-     * @param event the event to remove
+     * @param action the action to remove
      */
-    public void removeTeleportEvent(@NotNull Ollivanders2TeleportEvents.O2TeleportEvent event) {
-        teleportEvents.removeTeleportEvent(event);
+    public void removeTeleportAction(@NotNull Ollivanders2TeleportActions.O2TeleportAction action) {
+        teleportActions.removeTeleportEvent(action);
     }
 
     /**
@@ -1692,7 +1694,7 @@ public class Ollivanders2 extends JavaPlugin {
         StringBuilder output = new StringBuilder();
         List<String> allProphecies = prophecies.getProphecies();
 
-        if (allProphecies.size() > 0) {
+        if (!allProphecies.isEmpty()) {
             output.append("Prophecies:\n");
 
             for (String prophecy : allProphecies) {

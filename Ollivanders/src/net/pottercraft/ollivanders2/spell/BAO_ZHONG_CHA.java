@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Tasseomancy is the art of reading tea leaves to predict events in the future.
  *
- * @see <a = href="http://harrypotter.wikia.com/wiki/Tessomancy">http://harrypotter.wikia.com/wiki/Tessomancy</a>
+ * @see <a href="http://harrypotter.wikia.com/wiki/Tessomancy">http://harrypotter.wikia.com/wiki/Tessomancy</a>
  * @author Azami7
  * @since 2.2.9
  */
