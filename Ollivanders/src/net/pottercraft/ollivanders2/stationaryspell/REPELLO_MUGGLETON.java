@@ -1,9 +1,9 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -17,7 +17,7 @@ import java.util.UUID;
  *
  * @author Azami7
  * @version Ollivanders2
- * @See <a href = "https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm">https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm">https://harrypotter.fandom.com/wiki/Muggle-Repelling_Charm</a>
  * @since 2.21
  */
 public class REPELLO_MUGGLETON extends ConcealmentShieldSpell {
@@ -80,7 +80,7 @@ public class REPELLO_MUGGLETON extends ConcealmentShieldSpell {
      * @param entity the entity looking inside the area
      * @return true if the entity is not a Muggle, false otherwise
      */
-    protected boolean canSee(@NotNull Entity entity) {
+    protected boolean canSee(@NotNull LivingEntity entity) {
         boolean isMuggle = isMuggle(entity);
 
         if (isMuggle)
@@ -98,7 +98,7 @@ public class REPELLO_MUGGLETON extends ConcealmentShieldSpell {
      * @return true, this spell does not prevent targeting
      */
     @Override
-    protected boolean canTarget(@NotNull Entity entity) {
+    protected boolean canTarget(@NotNull LivingEntity entity) {
         return true;
     }
 
@@ -108,7 +108,7 @@ public class REPELLO_MUGGLETON extends ConcealmentShieldSpell {
      * @param entity the entity entering the area
      * @return true if the entity is not a Muggle, false otherwise
      */
-    protected boolean canEnter(@NotNull Entity entity) {
+    protected boolean canEnter(@NotNull LivingEntity entity) {
         return !isMuggle(entity);
     }
 
@@ -118,15 +118,27 @@ public class REPELLO_MUGGLETON extends ConcealmentShieldSpell {
      * @param entity the entity entering the area
      * @return true if the entity is not a Muggle, false otherwise
      */
-    protected boolean canHear(@NotNull Entity entity) {
+    protected boolean canHear(@NotNull LivingEntity entity) {
         return !isMuggle(entity);
     }
 
     /**
      * Check the proximity alarm conditions at the location.
      * Repello Muggleton does not have a proximity alarm.
+     *
+     * @param player the player that triggered the alarm
      */
-    protected boolean checkAlarm(@NotNull Location alertLocation) {
+    protected boolean checkAlarm(@NotNull Player player) {
+        return false;
+    }
+
+    /**
+     * Check the proximity alarm conditions at the location. Assumes that a check to determine that a proximity alarm
+     * should go off for this location has happened and called this.
+     *
+     * @param entity the entity that triggered the alarm
+     */
+    protected boolean checkAlarm(@NotNull LivingEntity entity) {
         return false;
     }
 
