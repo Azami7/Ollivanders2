@@ -21,6 +21,7 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
@@ -531,7 +532,7 @@ public class Ollivanders2Common {
     /**
      * Determine if a player is facing a block type.
      *
-     * @param player the player to check
+     * @param player    the player to check
      * @param blockType the block type to check
      * @return the block if a player is facing a block of this type, null otherwise
      */
@@ -791,5 +792,22 @@ public class Ollivanders2Common {
         }
 
         return false;
+    }
+
+    /**
+     * Check if a block is adjacent to another block
+     *
+     * @param block1 the first block
+     * @param block2 the second block
+     * @return true if the blocks are adjacent, false otherwise
+     */
+    static public boolean isAdjacentTo(@NotNull Block block1, @NotNull Block block2) {
+        // Check all six faces
+        return block1.getRelative(BlockFace.UP).equals(block2) ||
+                block1.getRelative(BlockFace.DOWN).equals(block2) ||
+                block1.getRelative(BlockFace.NORTH).equals(block2) ||
+                block1.getRelative(BlockFace.SOUTH).equals(block2) ||
+                block1.getRelative(BlockFace.EAST).equals(block2) ||
+                block1.getRelative(BlockFace.WEST).equals(block2);
     }
 }

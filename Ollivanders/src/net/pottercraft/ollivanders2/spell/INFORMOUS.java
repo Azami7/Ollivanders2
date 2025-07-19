@@ -191,7 +191,7 @@ public final class INFORMOUS extends O2Spell {
             player.sendMessage(Ollivanders2.chatColor + "Vanishing Cabinet");
         }
         else {
-            player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.getLocation() + " has " + spell.getDuration() / Ollivanders2Common.ticksPerSecond + " seconds left.");
+            player.sendMessage(Ollivanders2.chatColor + spell.getSpellType().toString() + " of radius " + spell.getRadius() + " has " + spell.getDuration() / Ollivanders2Common.ticksPerSecond + " seconds left.");
         }
     }
 }

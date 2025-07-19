@@ -18,6 +18,8 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
@@ -669,5 +671,21 @@ public abstract class O2StationarySpell implements Serializable {
      * @param event the event
      */
     void doOnPlayerDeathEvent(@NotNull PlayerDeathEvent event) {
+    }
+
+    /**
+     * Handle block from to events (like water or lava flowing)
+     *
+     * @param event the event
+     */
+    void doOnBlockFromToEvent(@NotNull BlockFromToEvent event) {
+    }
+
+    /**
+     * Handle player bucket empty events
+     *
+     * @param event the event
+     */
+    void doOnPlayerBucketEmptyEvent(@NotNull PlayerBucketEmptyEvent event) {
     }
 }

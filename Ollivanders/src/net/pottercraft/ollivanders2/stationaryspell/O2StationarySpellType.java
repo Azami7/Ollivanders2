@@ -36,6 +36,10 @@ public enum O2StationarySpellType {
      */
     HORCRUX(HORCRUX.class, MagicLevel.EXPERT),
     /**
+     * {@link LUMOS_FERVENS}
+     */
+    LUMOS_FERVENS(LUMOS_FERVENS.class, MagicLevel.OWL),
+    /**
      * {@link MOLLIARE}
      */
     MOLLIARE(MOLLIARE.class, MagicLevel.OWL),
