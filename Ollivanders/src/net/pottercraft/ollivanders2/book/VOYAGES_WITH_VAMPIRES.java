@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Contents:<br>
  * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
+ * {@link net.pottercraft.ollivanders2.spell.LUMOS_CAERULEUM}
  * </p>
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Voyages_with_Vampires">https://harrypotter.fandom.com/wiki/Voyages_with_Vampires</a>
@@ -27,6 +28,7 @@ public class VOYAGES_WITH_VAMPIRES extends O2Book {
         bookType = O2BookType.VOYAGES_WITH_VAMPIRES;
 
         spells.add(O2SpellType.OBLIVIATE);
+        spells.add(O2SpellType.LUMOS_CAERULEUM);
         // todo Peskipiksi Pesternomi - https://harrypotter.fandom.com/wiki/Peskipiksi_Pesternomi
     }
 }
