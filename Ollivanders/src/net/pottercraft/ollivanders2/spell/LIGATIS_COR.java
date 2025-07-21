@@ -89,7 +89,7 @@ public final class LIGATIS_COR extends O2Spell {
      * @param baseWand a coreless wand
      */
     private void createAndDropWand(@NotNull Item baseWand) {
-        ItemStack wand = null;
+        ItemStack wand;
 
         // is there a core item type nearby?
         Item coreItem = getNearbyWandCore(baseWand.getLocation());
