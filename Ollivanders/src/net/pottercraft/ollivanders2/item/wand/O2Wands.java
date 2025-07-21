@@ -268,8 +268,10 @@ public class O2Wands {
 
         List<String> lore = new ArrayList<>();
         ItemStack wand = Ollivanders2API.getItems().getItemByType(O2ItemType.WAND, 1);
-        if (wand == null)
+        if (wand == null) {
+            common.printDebugMessage("O2Wands.makeWand: wand O2Item type missing", null, null, true);
             return null;
+        }
 
         ItemMeta meta = wand.getItemMeta();
 
@@ -304,22 +306,26 @@ public class O2Wands {
      * @return an item stack of the wand type, null if an error occurred
      */
     @Nullable
-    public ItemStack makeWandFromCoreless(@NotNull ItemStack corelessWand, @NotNull String core, int amount) {
+    public ItemStack makeWandFromCoreless(@NotNull ItemStack corelessWand, @NotNull O2WandCoreType core, int amount) {
         // determine the wand wood
         ItemMeta itemMeta = corelessWand.getItemMeta();
-        if (itemMeta == null)
+        if (itemMeta == null) {
+            common.printDebugMessage("O2Wands.makeWandFromCoreles: item meta is null", null, null, false);
             return null;
-
-        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if (container.has(wandWoodKey, PersistentDataType.STRING)) {
-            String wood = container.get(wandWoodKey, PersistentDataType.STRING);
-            if (wood == null)
-                wood = O2WandWoodType.getRandomWoodByName();
-
-            return makeWand(core, wood, amount);
         }
 
-        return null;
+        String wood = null;
+        PersistentDataContainer container = itemMeta.getPersistentDataContainer();
+        if (container.has(wandWoodKey, PersistentDataType.STRING)) {
+            wood = container.get(wandWoodKey, PersistentDataType.STRING);
+            if (wood == null)
+                wood = O2WandWoodType.getRandomWoodByName();
+        }
+
+        if (wood == null)
+            wood = O2WandWoodType.getRandomWoodByName();
+
+        return makeWand(wood, core.getLabel(), amount);
     }
 
     /**
