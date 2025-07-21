@@ -1,7 +1,11 @@
 package net.pottercraft.ollivanders2.item.wand;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.item.O2ItemType;
 import org.bukkit.Material;
+import org.bukkit.entity.Item;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -10,70 +14,73 @@ import java.util.List;
 
 /**
  * Wand cores
+ *
+ * @see <a href="https://harrypotter.fandom.com/wiki/Wand_core">https://harrypotter.fandom.com/wiki/Wand_core</a>
  */
 public enum O2WandCoreType {
-    // todo add more core types, use o2items for cores
     /**
-     * spider eye
+     * dragon heartstring
      */
-    SPIDER_EYE(Material.SPIDER_EYE, "Spider Eye"),
+    DRAGON_HEARTSTRING(O2ItemType.DRAGON_HEARTSTRING),
     /**
-     * bone
+     * kelpie hair
      */
-    BONE(Material.BONE, "Bone"),
+    KELPIE_HAIR(O2ItemType.KELPIE_HAIR),
     /**
-     * rotten flesh
+     * phoenix feather
      */
-    ROTTEN_FLESH(Material.ROTTEN_FLESH, "Rotten Flesh"),
+    PHOENIX_FEATHER(O2ItemType.PHOENIX_FEATHER),
     /**
-     * gunpowder
+     * unicorn hair
      */
-    GUNPOWDER(Material.GUNPOWDER, "Gunpowder");
+    UNICORN_HAIR(O2ItemType.UNICORN_HAIR),
+    /**
+     * veela hair
+     */
+    VEELA_HAIR(O2ItemType.VEELA_HAIR),
+    ;
 
-    private final Material material;
-    private final String label;
+    private final O2ItemType o2ItemType;
 
     /**
      * Constructor
      *
-     * @param m the core material type
-     * @param l the label for the core material type
+     * @param item the core item type
      */
-    O2WandCoreType(@NotNull Material m, @NotNull String l) {
-        material = m;
-        label = l;
+    O2WandCoreType(@NotNull O2ItemType item) {
+        o2ItemType = item;
     }
 
     /**
-     * Get the material for this type
+     * Get the O2ItemType for this wand core type
      *
-     * @return the material
+     * @return the item type
      */
     @NotNull
-    public Material getMaterial() {
-        return material;
+    public O2ItemType getO2ItemType() {
+        return o2ItemType;
     }
 
     /**
-     * Get the label for this type
+     * Get the label for this wand core type
      *
      * @return the label
      */
     @NotNull
     public String getLabel() {
-        return label;
+        return o2ItemType.getName();
     }
 
     /**
      * Get the wand core type for this material.
      *
-     * @param m the material to check
+     * @param type the O2ItemType to check
      * @return the wand core type if found, null otherwise
      */
     @Nullable
-    public static O2WandCoreType getWandCoreTypeByMaterial(@NotNull Material m) {
+    public static O2WandCoreType getWandCoreTypeByItemType(@NotNull O2ItemType type) {
         for (O2WandCoreType coreType : O2WandCoreType.values()) {
-            if (coreType.material == m)
+            if (coreType.o2ItemType == type)
                 return coreType;
         }
 
@@ -96,16 +103,16 @@ public enum O2WandCoreType {
     }
 
     /**
-     * Get a list of all the wand core types by material type.
+     * Get a list of all the wand core types by O2ItemType type.
      *
-     * @return the names of all wand cores as a list
+     * @return the types of all wand cores as a list
      */
     @NotNull
-    public static ArrayList<Material> getAllCoresByMaterial() {
-        ArrayList<Material> cores = new ArrayList<>();
+    public static ArrayList<O2ItemType> getAllCoresByO2ItemType() {
+        ArrayList<O2ItemType> cores = new ArrayList<>();
 
         for (O2WandCoreType coreType : O2WandCoreType.values())
-            cores.add(coreType.getMaterial());
+            cores.add(coreType.getO2ItemType());
 
         return cores;
     }
@@ -122,5 +129,33 @@ public enum O2WandCoreType {
 
         int index = Math.abs(rand % cores.size());
         return cores.get(index);
+    }
+
+    /**
+     * Is this Item a wand core?
+     *
+     * @param item the Item to check
+     * @return true if it is a wand core, false otherwise
+     */
+    public static boolean isWandCore(Item item) {
+        return isWandCore(item.getItemStack());
+    }
+
+    /**
+     * Is this ItemStack a wand core?
+     *
+     * @param itemStack the ItemStack to check
+     * @return true if it is a wand core, false otherwise
+     */
+    public static boolean isWandCore(ItemStack itemStack) {
+        O2ItemType itemType = Ollivanders2API.getItems().getItemTypeByItemStack(itemStack);
+
+        if (itemType == null)
+            return false;
+
+        if (getWandCoreTypeByItemType(itemType) == null)
+            return false;
+        else
+            return true;
     }
 }

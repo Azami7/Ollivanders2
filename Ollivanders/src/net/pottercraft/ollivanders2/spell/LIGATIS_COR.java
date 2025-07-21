@@ -13,6 +13,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * If a coreless wand is near enough a core material, makes a wand of the wand wood type and core type. Itemstack amount
@@ -90,24 +91,29 @@ public final class LIGATIS_COR extends O2Spell {
     private void createAndDropWand(@NotNull Item baseWand) {
         ItemStack wand = null;
 
-        // is there a core material nearby?
-        Item coreItem = EntityCommon.getNearbyItemByMaterialList(baseWand.getLocation(), O2WandCoreType.getAllCoresByMaterial(), 2.0);
-        if (coreItem != null) {
-            O2WandCoreType coreType = O2WandCoreType.getWandCoreTypeByMaterial(coreItem.getItemStack().getType());
-            if (coreType != null) {
-                String core = coreType.getLabel();
-                wand = Ollivanders2API.getItems().getWands().makeWandFromCoreless(baseWand.getItemStack(), core, 1);
-            }
-        }
-
-        if (wand == null) {
-            player.sendMessage(Ollivanders2.chatColor + "No wand cores items found.");
+        // is there a core item type nearby?
+        Item coreItem = getNearbyWandCore(baseWand.getLocation());
+        if (coreItem == null)
             return;
-        }
+
+        O2ItemType coreItemType = Ollivanders2API.getItems().getItemTypeByItem(coreItem);
+        if (coreItemType == null)
+            return;
+
+        O2WandCoreType coreType = O2WandCoreType.getWandCoreTypeByItemType(coreItemType);
+        if (coreType == null)
+            return;
+
+        wand = Ollivanders2API.getItems().getWands().makeWandFromCoreless(baseWand.getItemStack(), coreType, 1);
+
+        if (wand == null)
+            return;
 
         Location dropLocation = player.getLocation();
-        if (dropLocation.getWorld() == null)
+        if (dropLocation.getWorld() == null) {
+            common.printDebugMessage("LIGATIS_COR.createAndDropWand: world is null", null, null, true);
             return;
+        }
 
         int amount = baseWand.getItemStack().getAmount();
 
@@ -126,5 +132,23 @@ public final class LIGATIS_COR extends O2Spell {
 
         // drop the wand
         dropLocation.getWorld().dropItemNaturally(dropLocation, wand);
+    }
+
+    /**
+     * Get a wand core near the base wand.
+     *
+     * @param location the location of the base wand
+     * @return the Item if a wand core was found nearby, null otherwise
+     */
+    @Nullable
+    private Item getNearbyWandCore(Location location) {
+        for (Item item : EntityCommon.getItemsInRadius(location, 2)) {
+            if (O2WandCoreType.isWandCore(item)) {
+                common.printDebugMessage("ligatis cor: found core item near wand", null, null, false);
+                return item;
+            }
+        }
+
+        return null;
     }
 }
