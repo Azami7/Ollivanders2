@@ -255,13 +255,14 @@ public class O2Potions {
       for (Entity e : cauldron.getWorld().getNearbyEntities(location, 1, 1, 1)) {
          if (e instanceof Item) {
             Material material = ((Item) e).getItemStack().getType();
-            ItemMeta meta = ((Item) e).getItemStack().getItemMeta();
-            if (meta == null)
+
+            // get the O2Item name, if it is an O2Item
+            String ingredientName = Ollivanders2API.getItems().getO2ItemNameFromItem(((Item) e).getItemStack());
+            if (ingredientName == null)
                continue;
 
-            String ingredientName = getIngredientName(meta);
+            // get the O2ItemType, if it is an O2Item
             O2ItemType ingredientType = Ollivanders2API.getItems().getTypeByDisplayName(ingredientName);
-
             if (ingredientType == null || material != Ollivanders2API.getItems().getItemMaterialByType(ingredientType))
                continue;
 
@@ -277,30 +278,6 @@ public class O2Potions {
       }
 
       return ingredientsInCauldron;
-   }
-
-   @NotNull
-   private String getIngredientName(@NotNull ItemMeta itemMeta) {
-      String name = null;
-
-      // check NBT first
-      PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-      if (container.has(O2Items.o2ItemTypeKey, PersistentDataType.STRING))
-         name = container.get(O2Items.o2ItemTypeKey, PersistentDataType.STRING);
-
-      if (name != null && !name.isEmpty())
-         return name;
-
-      // TODO remove this once we can deprecate lore-based items in next major rev
-      List<String> itemLore = itemMeta.getLore();
-      if (itemLore == null)
-         return "";
-
-      name = itemLore.getFirst();
-      if (name == null)
-         return "";
-
-      return name;
    }
 
    /**

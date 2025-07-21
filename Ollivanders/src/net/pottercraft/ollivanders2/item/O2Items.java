@@ -1,20 +1,27 @@
 package net.pottercraft.ollivanders2.item;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.common.TimeCommon;
 import net.pottercraft.ollivanders2.item.enchantment.EnchantedItems;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import net.pottercraft.ollivanders2.item.wand.O2Wands;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -234,6 +241,26 @@ public class O2Items {
     }
 
     /**
+     * Get an O2Item name from the NBT o2ItemTypeKey tag in the item metadata
+     *
+     * @param itemStack the item stack to check
+     * @return the O2Item name if found, null otherwise
+     */
+    @Nullable
+    public String getO2ItemNameFromItem (@NotNull ItemStack itemStack) {
+        String name = null;
+        ItemMeta meta = itemStack.getItemMeta();
+
+        if (meta != null) {
+            PersistentDataContainer container = meta.getPersistentDataContainer();
+            if (container.has(O2Items.o2ItemTypeKey, PersistentDataType.STRING))
+                name = container.get(O2Items.o2ItemTypeKey, PersistentDataType.STRING);
+        }
+
+        return name;
+    }
+
+    /**
      * Get the names of all items.
      *
      * @return an array of the item names
@@ -250,6 +277,52 @@ public class O2Items {
 
         Collections.sort(itemNames);
         return itemNames;
+    }
+
+    /**
+     * Get an item within the radius that matches the specified O2ItemType.
+     *
+     * @param location the location to check for the item
+     * @param type the O2ItemType to check for
+     * @param radius the radius from the location to check
+     * @return a nearby item of the type, if found, null otherwise
+     */
+    public Item getNearbyItemByO2ItemType(@NotNull Location location, @NotNull O2ItemType type, double radius) {
+        List<Item> items = EntityCommon.getItems(location, radius);
+
+        for (Item item : items) {
+            // is this item the O2ItemType?
+            if (getItemTypeByItem(item) == type)
+                return item;
+        }
+
+        return null;
+    }
+
+    /**
+     * Get the O2ItemType of an Item
+     *
+     * @param item the item to check
+     * @return the O2ItemType if it is an O2Item, null otherwise
+     */
+    @Nullable
+    public O2ItemType getItemTypeByItem(@NotNull Item item) {
+        return getItemTypeByItemStack(item.getItemStack());
+    }
+
+    /**
+     * Get the O2ItemType of an Item
+     *
+     * @param itemStack the ItemStack to check
+     * @return the O2ItemType if it is an O2Item, null otherwise
+     */
+    @Nullable
+    public O2ItemType getItemTypeByItemStack(@NotNull ItemStack itemStack) {
+        String itemName = getO2ItemNameFromItem(itemStack);
+        if (itemName == null)
+            return null;
+
+        return O2ItemType.getTypeByName(itemName);
     }
 
     /**
