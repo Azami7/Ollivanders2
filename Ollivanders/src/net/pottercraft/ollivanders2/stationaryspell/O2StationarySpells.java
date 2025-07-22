@@ -628,7 +628,7 @@ public class O2StationarySpells implements Listener {
             if (spellType == null)
                 continue;
 
-            O2StationarySpell statSpell = getStationarySpellByType(spellType);
+            O2StationarySpell statSpell = createStationarySpellByType(spellType);
             if (statSpell == null)
                 continue;
 
@@ -689,7 +689,7 @@ public class O2StationarySpells implements Listener {
      * @return the spell if it could be created, null otherwise
      */
     @Nullable
-    public O2StationarySpell getStationarySpellByType(@NotNull O2StationarySpellType spellType) {
+    public O2StationarySpell createStationarySpellByType(@NotNull O2StationarySpellType spellType) {
         O2StationarySpell statSpell;
 
         Class<?> spellClass = spellType.getClassName();

@@ -56,10 +56,6 @@ public enum O2StationarySpellType {
      */
     NULLUM_EVANESCUNT(NULLUM_EVANESCUNT.class, MagicLevel.EXPERT),
     /**
-     * {@link PROTEGO}
-     */
-    PROTEGO(PROTEGO.class, MagicLevel.OWL),
-    /**
      * {@link PROTEGO_HORRIBILIS}
      */
     PROTEGO_HORRIBILIS(PROTEGO_HORRIBILIS.class, MagicLevel.EXPERT),
