@@ -140,6 +140,10 @@ public enum O2EffectType {
      */
     POISON_ANTIDOTE_LESSER(POISON_ANTIDOTE_LESSER.class, MagicLevel.OWL),
     /**
+     * {@link PROTEGO}
+     */
+    PROTEGO(PROTEGO.class, MagicLevel.OWL),
+    /**
      * {@link SLEEP_SPEECH}
      */
     SLEEP_SPEECH(SLEEP_SPEECH.class, MagicLevel.BEGINNER),

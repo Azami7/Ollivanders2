@@ -13,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -263,7 +265,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Take effect actions when a player is damaged
+     * Listen to entity damage entity events
      *
      * @param event the event
      */
@@ -280,7 +282,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Take effect actions when a player interacts with an item
+     * Listen to player interact events
      *
      * @param event the event
      */
@@ -295,7 +297,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to players speaking.
+     * Listen to player chat events
      *
      * @param event the event
      */
@@ -310,7 +312,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to players sleeping.
+     * Listen to player sleep events
      *
      * @param event the event
      */
@@ -325,7 +327,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to players flying.
+     * Listen to player toggle flight events.
      *
      * @param event the event
      */
@@ -340,7 +342,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to players sneaking.
+     * Listen to player toggle sneak events.
      *
      * @param event the event
      */
@@ -355,7 +357,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to players sprinting.
+     * Listen to player toggle sprint events.
      *
      * @param event the event
      */
@@ -370,7 +372,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to players velocity changes
+     * Listen to player velocity change events
      *
      * @param event the event
      */
@@ -385,7 +387,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to players picking up items
+     * Listen to entity pickup item events
      *
      * @param event the event
      */
@@ -402,7 +404,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to player holds an item
+     * Listen to player hold item events
      *
      * @param event the event
      */
@@ -417,7 +419,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to player consumes an item
+     * Listen to player consume item events
      *
      * @param event the event
      */
@@ -432,7 +434,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to player drops an item
+     * Listen to player drop item events
      *
      * @param event the event
      */
@@ -447,7 +449,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handles all effects related to the player moving
+     * Listen to player move events
      *
      * @param event the event
      */
@@ -462,12 +464,12 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handle spell projectile move event
+     * Listen to spell projectile move events
      *
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGH)
-    public void omOllivandersSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
+    public void onOllivandersSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
         for (Map<O2EffectType, O2Effect> avtiveEffects : effectsData.activeEffects.values()) {
             for (O2Effect effect : avtiveEffects.values()) {
                 effect.doOnOllivandersSpellProjectileMoveEvent(event);
@@ -476,7 +478,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handle entity target event
+     * Listen to entity target events
      *
      * @param event the event
      */
@@ -496,7 +498,7 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Handle player quit event
+     * Listen to player quit events
      *
      * @param event the event
      */
@@ -507,6 +509,34 @@ public class O2Effects implements Listener {
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
         for (O2Effect effect : activeEffects.values()) {
             effect.doOnPlayerQuitEvent(event);
+        }
+    }
+
+    /**
+     * Listen to projectile launch events
+     *
+     * @param event the event
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onProjectileLaunchEvent(@NotNull ProjectileLaunchEvent event) {
+        for (Map<O2EffectType, O2Effect> avtiveEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : avtiveEffects.values()) {
+                effect.doOnProjectileLaunchEvent(event);
+            }
+        }
+    }
+
+    /**
+     * Listen to projectile hit events
+     *
+     * @param event the event
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onProjectileHitEvent(@NotNull ProjectileHitEvent event) {
+        for (Map<O2EffectType, O2Effect> avtiveEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : avtiveEffects.values()) {
+                effect.doOnProjectileHitEvent(event);
+            }
         }
     }
 
