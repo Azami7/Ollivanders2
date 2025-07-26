@@ -357,7 +357,7 @@ public abstract class O2StationarySpell implements Serializable {
      * @return a list of living entities with an eye location within radius
      */
     @NotNull
-    public List<LivingEntity> getEntitiesInsideSpellRadius() {
+    public List<LivingEntity> getLivingEntitiesInsideSpellRadius() {
         Collection<LivingEntity> entities = EntityCommon.getLivingEntitiesInRadius(location, radius);
 
         List<LivingEntity> close = new ArrayList<>();
@@ -379,8 +379,7 @@ public abstract class O2StationarySpell implements Serializable {
     public List<Player> getPlayersInsideSpellRadius() {
         List<Player> players = new ArrayList<>();
 
-        for (Player player : p.getServer().getOnlinePlayers())
-        {
+        for (Player player : p.getServer().getOnlinePlayers()) {
             if (isLocationInside(player.getLocation()))
                 players.add(player);
         }

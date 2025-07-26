@@ -31,8 +31,8 @@ import java.util.UUID;
  *
  * @author Azami7
  * @version Ollivanders2
- * @since 2.21
  * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_Maxima">https://harrypotter.fandom.com/wiki/Protego_Maxima</a>
+ * @since 2.21
  */
 public class PROTEGO_MAXIMA extends ShieldSpell {
     /**
