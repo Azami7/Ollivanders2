@@ -9,6 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Contents:<br>
  * {@link net.pottercraft.ollivanders2.spell.SKURGE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.TARANTALLEGRA}<br>
  * {@link net.pottercraft.ollivanders2.spell.ENGORGIO}<br>
  * {@link net.pottercraft.ollivanders2.spell.REDUCIO}<br>
  * {@link net.pottercraft.ollivanders2.spell.FINITE_INCANTATEM}<br>
@@ -35,7 +36,7 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_2 extends O2Book {
         bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_2;
 
         spells.add(O2SpellType.SKURGE);
-        //todo Tarantallegra - https://harrypotter.fandom.com/wiki/Dancing_Feet_Spell
+        spells.add(O2SpellType.TARANTALLEGRA);
         //todo Rictusempra - https://harrypotter.fandom.com/wiki/Tickling_Charm
         spells.add(O2SpellType.ENGORGIO);
         spells.add(O2SpellType.REDUCIO);

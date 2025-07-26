@@ -341,6 +341,5 @@ public abstract class O2Effect {
      * @param event the event
      */
     void doOnProjectileHitEvent(@NotNull ProjectileHitEvent event) {
-
     }
 }

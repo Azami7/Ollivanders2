@@ -11,7 +11,6 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
-import net.pottercraft.ollivanders2.item.O2Items;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;

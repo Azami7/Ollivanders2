@@ -664,6 +664,10 @@ public enum O2SpellType {
      */
     SUS(SUS.class, MagicLevel.NEWT),
     /**
+     * {@link TARANTALLEGRA}
+     */
+    TARANTALLEGRA(TARANTALLEGRA.class, MagicLevel.BEGINNER),
+    /**
      * {@link TERGEO}
      */
     TERGEO(TERGEO.class, MagicLevel.OWL),
