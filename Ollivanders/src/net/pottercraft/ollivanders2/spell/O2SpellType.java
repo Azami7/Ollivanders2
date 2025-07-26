@@ -644,6 +644,10 @@ public enum O2SpellType {
      */
     SILENCIO(SILENCIO.class, MagicLevel.OWL),
     /**
+     * {@link SKURGE}
+     */
+    SKURGE(SKURGE.class, MagicLevel.BEGINNER),
+    /**
      * {@link SNUFFLIFORS}
      */
     SNUFFLIFORS(SNUFFLIFORS.class, MagicLevel.BEGINNER),

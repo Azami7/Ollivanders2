@@ -15,11 +15,10 @@ import java.util.ArrayList;
  * to handle controlling entity movement.
  * <p>
  * {@link net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA}
- * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_Maxima">https://harrypotter.fandom.com/wiki/Protego_Maxima</a>
  * @author Azami7
  * @version Ollicanders2
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_Maxima">https://harrypotter.fandom.com/wiki/Protego_Maxima</a>
  * @since 2.21
  */
 public final class PROTEGO_MAXIMA extends StationarySpell {
