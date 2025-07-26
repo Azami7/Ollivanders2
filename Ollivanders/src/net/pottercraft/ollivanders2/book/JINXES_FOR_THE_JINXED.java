@@ -13,7 +13,9 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.LEVICORPUS}<br>
  * {@link net.pottercraft.ollivanders2.spell.LACARNUM_INFLAMARI}<br>
  * {@link net.pottercraft.ollivanders2.spell.LAGOMORPHA}<br>
- * {@link net.pottercraft.ollivanders2.spell.EBUBLIO}
+ * {@link net.pottercraft.ollivanders2.spell.EBUBLIO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.METELOJINX}<br>
+ * {@link net.pottercraft.ollivanders2.spell.METELOJINX_RECANTO}<br>
  * </p>
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed">https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed</a>
@@ -37,6 +39,8 @@ public class JINXES_FOR_THE_JINXED extends O2Book {
         spells.add(O2SpellType.LACARNUM_INFLAMARI);
         spells.add(O2SpellType.LAGOMORPHA);
         spells.add(O2SpellType.EBUBLIO);
+        spells.add(O2SpellType.METELOJINX);
+        spells.add(O2SpellType.METELOJINX_RECANTO);
         // todo jelly legs jinx https://harrypotter.fandom.com/wiki/Jelly-Legs_Jinx
         // todo trip jinx - https://harrypotter.fandom.com/wiki/Trip_Jinx
         // todo anti-jinx spell

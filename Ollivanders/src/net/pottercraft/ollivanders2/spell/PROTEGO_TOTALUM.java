@@ -31,7 +31,7 @@ public final class PROTEGO_TOTALUM extends StationarySpell {
             add("Raising her wand, she began to walk in a wide circle around Harry and Ron, murmuring incantations as she went. Harry saw little disturbances in the surrounding air: it was as if Hermione had cast a heat haze across their clearing.");
         }};
 
-        text = "Protego totalum is a stationary spell which will prevent any entities from crossing its boundary.";
+        text = "Protego totalum is a stationary spell which will prevent players or hostile entities from crossing its boundary and any living entity spawning in the area.";
     }
 
     /**

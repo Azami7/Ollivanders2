@@ -10,18 +10,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Makes a spell projectile that creates a shield that hurts any entities within 0.5 meters of the spell wall.
+ * A stronger version of Protego that covers an area (rather than the caster) and protects against stronger spells. In HP this
+ * spell would also repel hostile entities like dementors but Spigot does not provide an entity move event so we have no way
+ * to handle controlling entity movement.
+ * <p>
+ * {@link net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA}
+ * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_Maxima">https://harrypotter.fandom.com/wiki/Protego_Maxima</a>
- * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
+ * @author Azami7
+ * @version Ollicanders2
+ * @since 2.21
  */
 public final class PROTEGO_MAXIMA extends StationarySpell {
-    // todo make this match the book - https://harrypotter.fandom.com/wiki/Protego_Maxima
-    private static int minDamage;
-    private static int maxDamage;
-
-    double damage;
-
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
      *
@@ -62,27 +63,12 @@ public final class PROTEGO_MAXIMA extends StationarySpell {
         maxRadius = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.maxRadiusConfig;
         minDuration = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.minDurationConfig;
         maxDuration = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.maxDurationConfig;
-        minDamage = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.minDamageConfig;
-        maxDamage = net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA.maxDamageConfig;
 
         initSpell();
     }
 
-    /**
-     * Set the damage this shield does based on caster's experience.
-     */
-    @Override
-    void doInitSpell() {
-        damage = (usesModifier / 4);
-
-        if (damage < minDamage)
-            damage = minDamage;
-        else if (damage > maxDamage)
-            damage = maxDamage;
-    }
-
     @Override
     protected O2StationarySpell createStationarySpell() {
-        return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA(p, player.getUniqueId(), location, radius, duration, damage);
+        return new net.pottercraft.ollivanders2.stationaryspell.PROTEGO_MAXIMA(p, player.getUniqueId(), location, radius, duration);
     }
 }
