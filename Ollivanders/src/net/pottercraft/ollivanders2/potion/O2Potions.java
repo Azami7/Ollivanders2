@@ -288,7 +288,7 @@ public class O2Potions {
     */
    @Nullable
    public O2Potion findPotionByItemMeta(@NotNull ItemMeta meta) {
-      // check NBT first
+      // check NBT
       O2PotionType potionType = null;
       String potionTypeString = null;
 
@@ -307,21 +307,6 @@ public class O2Potions {
             return getPotionFromType(potionType);
          else
             return null;
-      }
-
-      // TODO remove this once we can deprecate lore-based items in next major rev
-      if (meta.hasLore()) {
-         List<String> lore = meta.getLore();
-
-         // we search on lore rather than item name so that players cannot use anvils to create potions
-         if (lore == null)
-            return null;
-
-         for (String l : lore) {
-            if (O2PotionMap.containsKey(l.toLowerCase())) {
-               return getPotionFromType(O2PotionMap.get(l.toLowerCase()));
-            }
-         }
       }
 
       return null;

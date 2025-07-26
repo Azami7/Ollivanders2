@@ -362,7 +362,6 @@ public abstract class O2Spell {
      *
      * @return true if the spell can exist here, false otherwise
      */
-    // todo centralize this check so it does not have to be repeated in all the overrides of checkEffect()
     boolean isSpellAllowed() {
         boolean isAllowed = true;
 
