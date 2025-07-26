@@ -14,6 +14,10 @@ import java.util.ArrayList;
 /**
  * Skurge can be used to clean up the sticky green ectoplasm created by passing ghosts - for minecraft it cleans up
  * slime.
+ *
+ * @author Azami7
+ * @since 2.21
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Skurge_Charm">https://harrypotter.fandom.com/wiki/Skurge_Charm</a>
  */
 public class SKURGE extends O2Spell {
     /**

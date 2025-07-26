@@ -52,6 +52,10 @@ public enum O2EffectType {
      */
     CONFUSION(CONFUSION.class, MagicLevel.OWL),
     /**
+     * {@link DANCING_FEET}
+     */
+    DANCING_FEET(DANCING_FEET.class, MagicLevel.BEGINNER),
+    /**
      * {@link FAST_LEARNING}
      */
     FAST_LEARNING(FAST_LEARNING.class, MagicLevel.NEWT),
