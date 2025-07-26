@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Protego horribilis stops spells entering the protected area, except the Killing Curse (which is too strong).
+ * Protego horribilis stops dark arts spells entering the protected area, except the Killing Curse (which is too strong).
  *
  * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_horribilis">https://harrypotter.fandom.com/wiki/Protego_horribilis</a>
  * {@link net.pottercraft.ollivanders2.stationaryspell.ShieldSpell}
@@ -31,7 +31,7 @@ public final class PROTEGO_HORRIBILIS extends StationarySpell {
             add(" [...] although he could barely see out of it, he pointed his wand through the smashed window and started muttering incantations of great complexity. Harry heard a weird rushing noise, as though Flitwick had unleashed the power of the wind into the grounds.");
         }};
 
-        text = "Protego horribilis is a stationary spell which will destroy any spells crossing it's barrier.";
+        text = "Protego horribilis is a stationary spell which protects against dark arts spells.";
     }
 
     /**

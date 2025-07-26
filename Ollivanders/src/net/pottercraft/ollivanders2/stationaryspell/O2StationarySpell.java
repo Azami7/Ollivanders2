@@ -19,6 +19,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
@@ -629,11 +631,6 @@ public abstract class O2StationarySpell implements Serializable {
     }
 
     /**
-     * Clean up needed for this spell when it ends.
-     */
-    abstract void doCleanUp();
-
-    /**
      * Handle spell world load events
      *
      * @param event the world load event
@@ -688,4 +685,25 @@ public abstract class O2StationarySpell implements Serializable {
      */
     void doOnPlayerBucketEmptyEvent(@NotNull PlayerBucketEmptyEvent event) {
     }
+
+    /**
+     * Handle projectile launch events
+     *
+     * @param event the event
+     */
+    void doOnProjectileLaunchEvent(@NotNull ProjectileLaunchEvent event) {
+    }
+
+    /**
+     * Handle projectile hit events
+     *
+     * @param event the event
+     */
+    void doOnProjectileHitEvent(@NotNull ProjectileHitEvent event) {
+    }
+
+    /**
+     * Clean up needed for this spell when it ends.
+     */
+    abstract void doCleanUp();
 }

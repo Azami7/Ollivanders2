@@ -23,7 +23,7 @@ public final class LIBERACORPUS extends RemoveO2Effect {
         super(plugin);
 
         spellType = O2SpellType.LIBERACORPUS;
-        branch = O2MagicBranch.COUNTER_SPELL;
+        branch = O2MagicBranch.DEFENSE_AGAINST_THE_DARK_ARTS;
 
         flavorText = new ArrayList<>() {{
             add("The Levicorpus Counter-Spell");
@@ -44,7 +44,7 @@ public final class LIBERACORPUS extends RemoveO2Effect {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.LIBERACORPUS;
-        branch = O2MagicBranch.COUNTER_SPELL;
+        branch = O2MagicBranch.DEFENSE_AGAINST_THE_DARK_ARTS;
 
         effectsAllowList.add(O2EffectType.SUSPENSION);
 

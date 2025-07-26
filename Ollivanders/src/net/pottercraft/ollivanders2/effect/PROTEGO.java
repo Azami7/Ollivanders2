@@ -14,8 +14,7 @@ import java.util.ArrayList;
 import java.util.UUID;
 
 /**
- * The Shield Charm - Protego - was a charm that protected the caster with an invisible shield that reflected spells
- * and blocked physical entities.
+ * The Shield Charm - Protego - was a charm that protected the caster with an invisible shield that deflected spells.
  * <p>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO}
  *
@@ -93,6 +92,7 @@ public class PROTEGO extends SpellShieldEffect {
 
         // this spell only stops basic projectiles like arrows, snowballs, eggs, and thrown potions
         if (type == EntityType.ARROW || type == EntityType.SNOWBALL || type == EntityType.EGG || type == EntityType.POTION) {
+            // is this projectile within maxDistance of this spell center?
             if (Ollivanders2Common.isInside(player.getLocation(), projectile.getLocation(), maxDistance)) {
                 common.printDebugMessage("adding projectile " + type, null, null, false);
                 projectiles.add(projectile);
@@ -101,7 +101,6 @@ public class PROTEGO extends SpellShieldEffect {
     }
 
     /**
-     * `
      * In case we miss killing projectiles that cross the shield, cancel any projectile hit events to the player
      *
      * @param event the event
