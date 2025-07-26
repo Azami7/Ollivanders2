@@ -9,6 +9,8 @@ import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveE
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -323,5 +325,21 @@ public abstract class O2Effect {
      * @param event the event
      */
     void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
+    }
+
+    /**
+     * handle projectile launch events
+     *
+     * @param event the event
+     */
+    void doOnProjectileLaunchEvent(@NotNull ProjectileLaunchEvent event) {
+    }
+
+    /**
+     * handle projectile hit events
+     *
+     * @param event the event
+     */
+    void doOnProjectileHitEvent(@NotNull ProjectileHitEvent event) {
     }
 }

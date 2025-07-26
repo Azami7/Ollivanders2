@@ -93,6 +93,10 @@ public enum O2ItemType {
      */
     DRAGON_BLOOD(Material.POTION, (short) 1, "Dragon Blood", null, null),
     /**
+     * Wand core
+     */
+    DRAGON_HEARTSTRING(Material.FERMENTED_SPIDER_EYE, (short) 0, "Dragon Heartstring", null, null),
+    /**
      * potion ingredient
      */
     DRAGONFLY_THORAXES(Material.BEETROOT_SEEDS, (short) 0, "Dragonfly Thoraxes", null, null),
@@ -185,6 +189,10 @@ public enum O2ItemType {
      */
     JOBBERKNOLL_FEATHER(Material.FEATHER, (short) 0, "Jobberknoll Feather", null, null),
     /**
+     * wand core
+     */
+    KELPIE_HAIR(Material.PALE_HANGING_MOSS, (short) 0, "Kelpie Hair", null, null),
+    /**
      * potion ingredient
      */
     KNOTGRASS(Material.TALL_GRASS, (short) 0, "Knotgrass", null, null),
@@ -240,6 +248,10 @@ public enum O2ItemType {
      * cauldron for making potions
      */
     PEWTER_CAULDRON(Material.CAULDRON, (short) 0, "Pewter Cauldron", null, null),
+    /**
+     * wand core
+     */
+    PHOENIX_FEATHER(Material.FEATHER, (short) 0, "Phoenix Feather", null, null),
     /**
      * divination object
      */
@@ -305,7 +317,7 @@ public enum O2ItemType {
      */
     TEA_LEAVES(Material.GREEN_DYE, (short) 0, "Tea Leaves", null, null),
     /**
-     * potion ingredient
+     * potion ingredient, wand core
      */
     UNICORN_HAIR(Material.STRING, (short) 0, "Unicorn Hair", null, null),
     /**
@@ -320,6 +332,10 @@ public enum O2ItemType {
      * potion ingredient
      */
     VALERIAN_ROOT(Material.GOLDEN_CARROT, (short) 0, "Valerian Root", null, null),
+    /**
+     * wand core
+     */
+    VEELA_HAIR(Material.STRING, (short) 0, "Veela Hair", null, null),
     /**
      * unenchanted wand
      */

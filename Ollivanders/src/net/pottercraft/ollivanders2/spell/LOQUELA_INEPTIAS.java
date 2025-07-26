@@ -10,9 +10,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Babbling curse
+ * Babbling curse is a curse that causes uncontrollable babbling.
  *
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Babbling_Curse">https://harrypotter.fandom.com/wiki/Babbling_Curse</a>
  * @since 2.2.7
  */
 public class LOQUELA_INEPTIAS extends AddO2Effect {

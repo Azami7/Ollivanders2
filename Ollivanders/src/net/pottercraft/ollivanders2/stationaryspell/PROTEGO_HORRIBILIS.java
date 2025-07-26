@@ -1,21 +1,20 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.spell.AVADA_KEDAVRA;
+import net.pottercraft.ollivanders2.spell.O2SpellType;
+import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.Location;
 
-import net.pottercraft.ollivanders2.spell.O2Spell;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Destroys spell projectiles crossing the boundary.
+ * Protego horribilis stops dark arts spells entering the protected area, except the Killing Curse (which is too strong).
  * <p>
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_HORRIBILIS}
  *
@@ -81,20 +80,6 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
     @Override
     public void upkeep() {
         age();
-        List<O2Spell> projectiles = p.getProjectiles();
-
-        List<O2Spell> projectiles2 = new ArrayList<>(projectiles);
-        for (O2Spell proj : projectiles2) {
-            // https://harrypotter.fandom.com/wiki/Shield_Charm
-            // "However, this shield isn't completely impenetrable, as it cannot block a Killing Curse."
-            if (proj instanceof AVADA_KEDAVRA)
-                continue;
-
-            if (isLocationInside(proj.location)) {
-                if (location.distance(proj.location) > radius - 1)
-                    p.removeProjectile(proj);
-            }
-        }
     }
 
     @Override
@@ -105,6 +90,27 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
 
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
+    }
+
+    /**
+     * Stop any dark arts spells from crossing the shield boundary, except avada kadavra
+     */
+    @Override
+    void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
+        O2SpellType type = event.getSpell().spellType;
+        if (type == O2SpellType.AVADA_KEDAVRA)
+            return;
+
+        O2MagicBranch branch = event.getSpell().getMagicBranch();
+        if (branch != O2MagicBranch.DARK_ARTS)
+            return;
+
+        Location toLocation = event.getTo();
+        Location fromLocation = event.getFrom();
+
+        if (isLocationInside(toLocation) && !isLocationInside(fromLocation)) {
+            event.setCancelled(true);
+        }
     }
 
     @Override

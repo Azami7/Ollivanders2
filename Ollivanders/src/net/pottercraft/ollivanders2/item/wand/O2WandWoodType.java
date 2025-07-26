@@ -12,23 +12,26 @@ import java.util.List;
  * Wand wood types
  */
 public enum O2WandWoodType {
-    //todo add more wood types
     /**
-     * Spruce
+     * Acacia
      */
-    SPRUCE(Material.SPRUCE_LOG, "Spruce"),
-    /**
-     * Jungle
-     */
-    JUNGLE(Material.JUNGLE_LOG, "Jungle"),
+    ACACIA(Material.ACACIA_LOG, "Acacia"),
     /**
      * Birch
      */
     BIRCH(Material.BIRCH_LOG, "Birch"),
     /**
+     * Cherry
+     */
+    CHERRY(Material.CHERRY_LOG, "Cherry"),
+    /**
      * Oak
      */
-    OAK(Material.OAK_LOG, "Oak");
+    OAK(Material.OAK_LOG, "Oak"),
+    /**
+     * Spruce
+     */
+    SPRUCE(Material.SPRUCE_LOG, "Spruce");
 
     private final Material material;
     private final String label;

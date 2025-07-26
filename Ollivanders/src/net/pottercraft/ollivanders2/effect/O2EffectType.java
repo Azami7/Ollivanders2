@@ -52,6 +52,10 @@ public enum O2EffectType {
      */
     CONFUSION(CONFUSION.class, MagicLevel.OWL),
     /**
+     * {@link DANCING_FEET}
+     */
+    DANCING_FEET(DANCING_FEET.class, MagicLevel.BEGINNER),
+    /**
      * {@link FAST_LEARNING}
      */
     FAST_LEARNING(FAST_LEARNING.class, MagicLevel.NEWT),
@@ -139,6 +143,10 @@ public enum O2EffectType {
      * {@link POISON_ANTIDOTE_LESSER}
      */
     POISON_ANTIDOTE_LESSER(POISON_ANTIDOTE_LESSER.class, MagicLevel.OWL),
+    /**
+     * {@link PROTEGO}
+     */
+    PROTEGO(PROTEGO.class, MagicLevel.OWL),
     /**
      * {@link SLEEP_SPEECH}
      */

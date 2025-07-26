@@ -644,6 +644,10 @@ public enum O2SpellType {
      */
     SILENCIO(SILENCIO.class, MagicLevel.OWL),
     /**
+     * {@link SKURGE}
+     */
+    SKURGE(SKURGE.class, MagicLevel.BEGINNER),
+    /**
      * {@link SNUFFLIFORS}
      */
     SNUFFLIFORS(SNUFFLIFORS.class, MagicLevel.BEGINNER),
@@ -659,6 +663,10 @@ public enum O2SpellType {
      * {@link SUS}
      */
     SUS(SUS.class, MagicLevel.NEWT),
+    /**
+     * {@link TARANTALLEGRA}
+     */
+    TARANTALLEGRA(TARANTALLEGRA.class, MagicLevel.BEGINNER),
     /**
      * {@link TERGEO}
      */

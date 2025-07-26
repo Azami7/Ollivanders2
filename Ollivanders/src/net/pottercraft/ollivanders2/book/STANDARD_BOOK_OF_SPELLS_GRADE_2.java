@@ -8,6 +8,8 @@ import org.jetbrains.annotations.NotNull;
  * Standard Book of Spells Grade 2
  * <p>
  * Contents:<br>
+ * {@link net.pottercraft.ollivanders2.spell.SKURGE}<br>
+ * {@link net.pottercraft.ollivanders2.spell.TARANTALLEGRA}<br>
  * {@link net.pottercraft.ollivanders2.spell.ENGORGIO}<br>
  * {@link net.pottercraft.ollivanders2.spell.REDUCIO}<br>
  * {@link net.pottercraft.ollivanders2.spell.FINITE_INCANTATEM}<br>
@@ -18,8 +20,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.SPONGIFY}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_2">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_2</a>
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_2">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_2</a>
  * @since 2.2.4
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_2 extends O2Book {
@@ -33,8 +35,8 @@ public class STANDARD_BOOK_OF_SPELLS_GRADE_2 extends O2Book {
 
         bookType = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_2;
 
-        //todo skurge - gets rid of slime
-        //todo Tarantallegra - https://harrypotter.fandom.com/wiki/Dancing_Feet_Spell
+        spells.add(O2SpellType.SKURGE);
+        spells.add(O2SpellType.TARANTALLEGRA);
         //todo Rictusempra - https://harrypotter.fandom.com/wiki/Tickling_Charm
         spells.add(O2SpellType.ENGORGIO);
         spells.add(O2SpellType.REDUCIO);
