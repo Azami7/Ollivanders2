@@ -1,10 +1,12 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
@@ -12,6 +14,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -24,6 +27,7 @@ import java.util.UUID;
  * @author Azami7
  * @version Ollivanders2
  * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_totalum">https://harrypotter.fandom.com/wiki/Protego_totalum</a>
+ * @since 2.21
  */
 public class PROTEGO_TOTALUM extends ShieldSpell {
     /**
@@ -33,7 +37,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
     /**
      * max radius for this spell
      */
-    public static final int maxRadiusConfig = 30;
+    public static final int maxRadiusConfig = 40;
     /**
      * min duration for this spell
      */
@@ -42,6 +46,11 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
      * max duration for this spell
      */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
+
+    /**
+     * Keep track of the living entities we have turned the AI off for
+     */
+    ArrayList<LivingEntity> entitiesAffected = new ArrayList<>();
 
     /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -84,6 +93,15 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
     @Override
     void upkeep() {
         age();
+
+        // check for hostile entities in the spell area and remove their AI do they do not move or attack
+        for (LivingEntity entity : getLivingEntitiesInsideSpellRadius()) {
+            if (EntityCommon.isHostile(entity) || entitiesAffected.contains(entity))
+                continue;
+
+            entity.setAI(false);
+            entitiesAffected.add(entity);
+        }
     }
 
     /**
@@ -136,36 +154,8 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
     }
 
     /**
-     * Prevent entities inside the protected area from being targeted
-     *
-     * @param event the event
-     */
-    @Override
-    void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
-        Entity target = event.getTarget();
-        if (target == null)
-            return;
-
-        Location targetLocation = target.getLocation();
-
-        if (isLocationInside(targetLocation)) {
-            event.setCancelled(true);
-            common.printDebugMessage("PROTEGO_TOTALUM: canceled EntityTargetEvent", null, null, false);
-
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    if (event.isCancelled() && target instanceof Player) {
-                        flair(10);
-                        target.sendMessage(Ollivanders2.chatColor + "A magical force protects you.");
-                    }
-                }
-            }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
-        }
-    }
-
-    /**
-     * Serialize all data specific to this spell so it can be saved.
+     * Serialize all data specific to this spell so it can be saved. We do not need to save information about the entuties we
+     * affected because we'll reset them and then reaffect them when the server restarts.
      *
      * @return a map of the serialized data
      */
@@ -184,7 +174,15 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 
+    /**
+     * Turn the AI back on for all the entities we affected that are still alive.
+     */
     @Override
     void doCleanUp() {
+        // turn back on the AI for the entities we affected by this spell
+        for (LivingEntity entity : entitiesAffected) {
+            if (!entity.isDead())
+                entity.setAI(true);
+        }
     }
 }

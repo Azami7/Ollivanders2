@@ -19,6 +19,8 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityBreakDoorEvent;
@@ -402,6 +404,32 @@ public class O2StationarySpells implements Listener {
         for (O2StationarySpell stationary : O2StationarySpells) {
             if (stationary.isActive())
                 stationary.doOnPlayerBucketEmptyEvent(event);
+        }
+    }
+
+    /**
+     * Handle projectile launch events
+     *
+     * @param event the event
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onProjectileLaunchEvent(@NotNull ProjectileLaunchEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
+            if (stationary.isActive())
+                stationary.doOnProjectileLaunchEvent(event);
+        }
+    }
+
+    /**
+     * Handle projectile hit events
+     *
+     * @param event the event
+     */
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onProjectileHitEvent(@NotNull ProjectileHitEvent event) {
+        for (O2StationarySpell stationary : O2StationarySpells) {
+            if (stationary.isActive())
+                stationary.doOnProjectileHitEvent(event);
         }
     }
 

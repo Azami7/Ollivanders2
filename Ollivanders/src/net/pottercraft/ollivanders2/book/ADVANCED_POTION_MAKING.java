@@ -35,7 +35,7 @@ public class ADVANCED_POTION_MAKING extends O2Book {
         // todo everlasting elixir - https://harrypotter.fandom.com/wiki/Everlasting_Elixirs
         // todo befuddlement draught - slowness potion effect - https://harrypotter.fandom.com/wiki/Befuddlement_Draught
         // todo blindness potion effect
-        // todo occulua potion - reverses blindness - https://harrypotter.fandom.com/wiki/Oculus_Potion
+        // todo occulua potion - reverses blindness - https://harrypotter.fandom.com/wiki/Oculus_Potion (cures conjunctivitis curse)
         // todo jump boost potion effect
         // todo wither potion effect
         // todo Hiccoughing Solution

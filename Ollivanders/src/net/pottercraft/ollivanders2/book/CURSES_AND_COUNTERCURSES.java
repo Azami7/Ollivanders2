@@ -8,9 +8,6 @@ import org.jetbrains.annotations.NotNull;
  * Curses and Counter-Curses
  * <p>
  * Contents:<br>
- * {@link net.pottercraft.ollivanders2.spell.METELOJINX}<br>
- * {@link net.pottercraft.ollivanders2.spell.METELOJINX_RECANTO}<br>
- * {@link net.pottercraft.ollivanders2.spell.SILENCIO}<br>
  * {@link net.pottercraft.ollivanders2.spell.PETRIFICUS_TOTALUS}<br>
  * {@link net.pottercraft.ollivanders2.spell.GEMINIO}<br>
  * {@link net.pottercraft.ollivanders2.spell.LOQUELA_INEPTIAS}
@@ -33,12 +30,16 @@ public class CURSES_AND_COUNTERCURSES extends O2Book {
 
         openingPage = "Bewitch your friends and befuddle your enemies with the latest revenges: Hair loss, Jelly-Legs, Tongue-Tying, and much, much more.";
 
-        spells.add(O2SpellType.METELOJINX);
-        spells.add(O2SpellType.METELOJINX_RECANTO);
-        spells.add(O2SpellType.SILENCIO);
         spells.add(O2SpellType.PETRIFICUS_TOTALUS);
         spells.add(O2SpellType.GEMINIO);
         spells.add(O2SpellType.LOQUELA_INEPTIAS);
         // todo counter-curse - https://harrypotter.fandom.com/wiki/Counter-curse
+        // todo jelly-legs curse - https://harrypotter.fandom.com/wiki/Jelly-Legs_Curse
+        // todo leg-locking curse - https://harrypotter.fandom.com/wiki/Leg-Locker_Curse
+        // todo mimblewinble - https://harrypotter.fandom.com/wiki/Tongue-Tying_Curse
+        // todo confringo - https://harrypotter.fandom.com/wiki/Blasting_Curse
+        // todo conjuntivitis curse - https://harrypotter.fandom.com/wiki/Conjunctivitis_Curse
+        // todo expluso - https://harrypotter.fandom.com/wiki/Expulso_Curse
+        // slugus eructo - https://harrypotter.fandom.com/wiki/Slug-Vomiting_Charm
     }
 }

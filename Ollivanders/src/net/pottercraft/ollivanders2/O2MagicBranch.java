@@ -17,9 +17,9 @@ public enum O2MagicBranch {
      */
     CHARMS,
     /**
-     * counter spell
+     * defense against the dark arts
      */
-    COUNTER_SPELL,
+    DEFENSE_AGAINST_THE_DARK_ARTS,
     /**
      * dark arts - jinxes, hexes, and curses
      */
