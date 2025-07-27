@@ -64,6 +64,10 @@ public enum O2PotionType {
      */
     SLEEPING_DRAUGHT(SLEEPING_DRAUGHT.class, MagicLevel.BEGINNER),
     /**
+     * {@link STRENGTHENING_SOLUTION}
+     */
+    STRENGTHENING_SOLUTION(STRENGTHENING_SOLUTION.class, MagicLevel.OWL),
+    /**
      * {@link WIDEYE_POTION}
      */
     WIDEYE_POTION(WIDEYE_POTION.class, MagicLevel.BEGINNER),

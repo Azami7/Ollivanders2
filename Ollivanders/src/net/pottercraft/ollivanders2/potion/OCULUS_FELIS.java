@@ -39,6 +39,7 @@ public class OCULUS_FELIS extends O2Potion {
         // potion duration - last 5 minutes, which is longer than night vision II lasts
         duration = Ollivanders2Common.ticksPerMinute * 5;
 
+        // Night Vision II
         minecraftPotionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, duration, 1);
     }
 
