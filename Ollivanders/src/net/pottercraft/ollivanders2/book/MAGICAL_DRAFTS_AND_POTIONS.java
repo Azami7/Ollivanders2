@@ -13,13 +13,14 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.potion.CURE_FOR_BOILS}<br>
  * {@link net.pottercraft.ollivanders2.potion.OCULUS_FELIS}<br>
  * {@link net.pottercraft.ollivanders2.potion.WIGGENWELD_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.ICE_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.WIDEYE_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.SLEEPING_DRAUGHT}<br>
  * {@link net.pottercraft.ollivanders2.potion.WIT_SHARPENING_POTION}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions">https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions</a>
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions">https://harrypotter.fandom.com/wiki/Magical_Drafts_and_Potions</a>
  * @since 2.2.7
  */
 public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book {
@@ -42,7 +43,7 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book {
 
         // 2nd year
         potions.add(O2PotionType.WIGGENWELD_POTION);
-        // todo fire protection potion - fire resistance potion effect
+        potions.add(O2PotionType.ICE_POTION);
         // todo strengthening solution - strength potion effect
         // todo weakness potion - weakness potion effect
         // todo swelling solution - https://harrypotter.fandom.com/wiki/Swelling_Solution - must be different than engorgio

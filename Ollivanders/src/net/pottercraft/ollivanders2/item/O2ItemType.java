@@ -67,6 +67,10 @@ public enum O2ItemType {
     /**
      * potion ingredient
      */
+    BURSTING_MUSHROOM(Material.RED_MUSHROOM, (short) 0, "Bursting Mushroom", null, null),
+    /**
+     * potion ingredient
+     */
     CHIZPURFLE_FANGS(Material.PUMPKIN_SEEDS, (short) 0, "Chizpurfle Fangs", null, null),
     /**
      * potion ingredient
@@ -175,7 +179,7 @@ public enum O2ItemType {
     /**
      * potion ingredient
      */
-    HORN_OF_BICORN(Material.BLAZE_ROD, (short) 0, "Horn of Bicorn", null, null),
+    HORN_OF_BICORN(Material.GOAT_HORN, (short) 0, "Horn of Bicorn", null, null),
     /**
      * potion ingredient
      */
@@ -323,7 +327,7 @@ public enum O2ItemType {
     /**
      * potion ingredient
      */
-    UNICORN_HORN(Material.BLAZE_ROD, (short) 0, "Unicorn Horn", null, null),
+    UNICORN_HORN(Material.BREEZE_ROD, (short) 0, "Unicorn Horn", null, null),
     /**
      * potion ingredient
      */
@@ -340,6 +344,10 @@ public enum O2ItemType {
      * unenchanted wand
      */
     WAND(Material.STICK, (short) 0, "Wand", null, null),
+    /**
+     * potion ingredient
+     */
+    WARTCAP_POWDER(Material.BROWN_DYE, (short) 0, "Wartcap Powder", null, null),
     /**
      * potion ingredient
      */
@@ -389,6 +397,7 @@ public enum O2ItemType {
 
     /**
      * get the name of this item
+     *
      * @return the name of this item
      */
     @NotNull
@@ -398,6 +407,7 @@ public enum O2ItemType {
 
     /**
      * get the lore for this item
+     *
      * @return the lore for this item or its name if there is no lore
      */
     @NotNull
@@ -410,6 +420,7 @@ public enum O2ItemType {
 
     /**
      * get the material for this item
+     *
      * @return the material type for this item
      */
     @NotNull
@@ -419,6 +430,7 @@ public enum O2ItemType {
 
     /**
      * get the enchantment on this item
+     *
      * @return the enchantment for this item if there is one, null otherwise
      */
     @Nullable
@@ -452,7 +464,7 @@ public enum O2ItemType {
     }
 
     /**
-     * Is the specified itemstack this item type
+     * Is the specified ItemStack this item type
      *
      * @param item the item to check
      * @return true if it is this type, false otherwise
@@ -462,7 +474,7 @@ public enum O2ItemType {
     }
 
     /**
-     * Is the specified itemstack this item type
+     * Is the specified ItemStack this item type
      *
      * @param itemStack the item stack to check
      * @return true if it is this type, false otherwise

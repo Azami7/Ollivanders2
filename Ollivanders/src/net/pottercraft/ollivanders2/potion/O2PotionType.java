@@ -44,6 +44,10 @@ public enum O2PotionType {
      */
     HERBICIDE_POTION(HERBICIDE_POTION.class, MagicLevel.BEGINNER),
     /**
+     * {@link ICE_POTION}
+     */
+    ICE_POTION(ICE_POTION.class, MagicLevel.OWL),
+    /**
      * {@link MEMORY_POTION}
      */
     MEMORY_POTION(MEMORY_POTION.class, MagicLevel.NEWT),

@@ -1,10 +1,9 @@
 package net.pottercraft.ollivanders2.potion;
 
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
-import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
-import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.PotionSplashEvent;
@@ -18,6 +17,7 @@ import org.jetbrains.annotations.NotNull;
  * entities, including players, though not as much as Creepers.
  *
  * @author Azami7
+ * @see <a href = "https://harrypotter.fandom.com/wiki/Herbicide_Potion">https://harrypotter.fandom.com/wiki/Herbicide_Potion</a>
  * @since 2.2.7
  */
 public final class HERBICIDE_POTION extends O2SplashPotion {
@@ -40,10 +40,13 @@ public final class HERBICIDE_POTION extends O2SplashPotion {
 
         text = "The Herbicide Potion is damages or kills Creepers. It is also harmful to other living creatures.";
 
-        // set duration of potion effect to 30 seconds
-        duration = 600;
-        minecraftPotionEffect = new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, 1);
+        // potion color
         potionColor = Color.fromRGB(51, 102, 0);
+
+        // set duration of potion effect to 30 seconds
+        duration = 30 * Ollivanders2Common.ticksPerSecond;
+
+        minecraftPotionEffect = new PotionEffect(PotionEffectType.INSTANT_DAMAGE, duration, 1);
     }
 
     /**

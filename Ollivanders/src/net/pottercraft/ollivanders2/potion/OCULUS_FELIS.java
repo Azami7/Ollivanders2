@@ -34,11 +34,12 @@ public class OCULUS_FELIS extends O2Potion {
 
         text = "Oculus Felis is a potion which gives the drinker a cat’s ability to see in near-total darkness.";
 
-        minecraftPotionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, duration, 1);
+        // potion color
         potionColor = Color.fromRGB(255, 191, 0); // amber
-
-        // last 5 minutes, which is longer than night vision II lasts
+        // potion duration - last 5 minutes, which is longer than night vision II lasts
         duration = Ollivanders2Common.ticksPerMinute * 5;
+
+        minecraftPotionEffect = new PotionEffect(PotionEffectType.NIGHT_VISION, duration, 1);
     }
 
     /**
