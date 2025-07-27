@@ -68,6 +68,10 @@ public enum O2PotionType {
      */
     STRENGTHENING_SOLUTION(STRENGTHENING_SOLUTION.class, MagicLevel.OWL),
     /**
+     * {@link WEAKNESS_POTION}
+     */
+    WEAKNESS_POTION(WEAKNESS_POTION.class, MagicLevel.BEGINNER),
+    /**
      * {@link WIDEYE_POTION}
      */
     WIDEYE_POTION(WIDEYE_POTION.class, MagicLevel.BEGINNER),
