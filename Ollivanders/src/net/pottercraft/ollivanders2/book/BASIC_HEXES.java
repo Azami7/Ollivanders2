@@ -11,7 +11,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.MUCUS_AD_NAUSEAM}<br>
  * {@link net.pottercraft.ollivanders2.spell.IMPEDIMENTA}<br>
  * {@link net.pottercraft.ollivanders2.spell.IMMOBULUS}<br>
- * {@link net.pottercraft.ollivanders2.spell.OBSCURO}
+ * {@link net.pottercraft.ollivanders2.spell.OBSCURO}<br>
+ * {@link net.pottercraft.ollivanders2.spell.TITILLANDO}
  * </p>
  *
  * @see <a href="https://harrypotter.wikia.com/wiki/Basic_Hexes_for_the_Busy_and_Vexed">https://harrypotter.wikia.com/wiki/Basic_Hexes_for_the_Busy_and_Vexed</a>
@@ -31,6 +32,7 @@ public class BASIC_HEXES extends O2Book {
         spells.add(O2SpellType.IMPEDIMENTA);
         spells.add(O2SpellType.IMMOBULUS);
         spells.add(O2SpellType.OBSCURO);
+        spells.add(O2SpellType.TITILLANDO);
         // todo pepper breath - https://harrypotter.fandom.com/wiki/Pepper_Breath
         // todo counter-hex spell
         // todo weakening hex - https://harrypotter.fandom.com/wiki/Weakening_Hex

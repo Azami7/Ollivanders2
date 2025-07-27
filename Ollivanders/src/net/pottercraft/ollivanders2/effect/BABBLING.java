@@ -16,6 +16,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BABBLING extends O2Effect {
     /**
+     * What percent of speech is affected? 100 means all chat messages affected
+     */
+    int affectPercent = 100;
+
+    /**
      * dictionary of nonsense words
      */
     public ArrayList<String> dictionary = new ArrayList<>() {{
@@ -128,6 +133,14 @@ public class BABBLING extends O2Effect {
      */
     @Override
     void doOnAsyncPlayerChatEvent(@NotNull AsyncPlayerChatEvent event) {
+        // check to see if we will replace this chat with babbling chat
+        // generate a random number between 0-99
+        int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
+
+        if (rand > affectPercent)
+            return;
+
+        // replace the chat message with the babbling message
         String message = event.getMessage();
         String newMessage = getNonsense();
 

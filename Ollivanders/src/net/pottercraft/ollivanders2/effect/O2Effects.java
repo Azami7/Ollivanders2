@@ -27,6 +27,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -470,8 +471,8 @@ public class O2Effects implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void onOllivandersSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
-        for (Map<O2EffectType, O2Effect> avtiveEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : avtiveEffects.values()) {
+        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : activeEffects.values()) {
                 effect.doOnOllivandersSpellProjectileMoveEvent(event);
             }
         }
@@ -519,8 +520,8 @@ public class O2Effects implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onProjectileLaunchEvent(@NotNull ProjectileLaunchEvent event) {
-        for (Map<O2EffectType, O2Effect> avtiveEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : avtiveEffects.values()) {
+        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : activeEffects.values()) {
                 effect.doOnProjectileLaunchEvent(event);
             }
         }
@@ -533,8 +534,8 @@ public class O2Effects implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onProjectileHitEvent(@NotNull ProjectileHitEvent event) {
-        for (Map<O2EffectType, O2Effect> avtiveEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : avtiveEffects.values()) {
+        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : activeEffects.values()) {
                 effect.doOnProjectileHitEvent(event);
             }
         }
@@ -725,6 +726,23 @@ public class O2Effects implements Listener {
 
         effectsData.updatePlayerActiveEffects(pid, playerEffects);
         common.printDebugMessage("Added effect " + effect.effectType.toString() + " to " + pid, null, null, false);
+
+        String affectedPlayerMessage = effect.getAffectedPlayerText();
+        if (affectedPlayerMessage != null) {
+            Player player = p.getServer().getPlayer(pid);
+            if (player == null) {
+                common.printDebugMessage("O2Effects.addEffect: player is null", null, null, true);
+                effect.kill();
+                return;
+            }
+
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    player.sendMessage(Ollivanders2.chatColor + affectedPlayerMessage);
+                }
+            }.runTaskLater(p, 5);
+        }
     }
 
     /**
@@ -865,7 +883,7 @@ public class O2Effects implements Listener {
      */
     @Nullable
     public String detectEffectWithInformous(@NotNull UUID pid) {
-        common.printDebugMessage("O2Effects.detectEffectWithInformous: detecting effcts with Informous", null, null, false);
+        common.printDebugMessage("O2Effects.detectEffectWithInformous: detecting effects with Informous", null, null, false);
         String infoText = null;
 
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
@@ -957,9 +975,9 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Toggle an effect on a player.
+     * Toggle an effect on a player - admin command
      *
-     * @param sender     the player that issued the command
+     * @param sender     the admin that issued the command
      * @param player     the target player
      * @param effectType the effect type
      * @param p          a callback to the plugin

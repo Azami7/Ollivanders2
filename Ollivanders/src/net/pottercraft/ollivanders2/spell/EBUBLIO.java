@@ -55,17 +55,9 @@ public final class EBUBLIO extends AddO2Effect {
         effectsToAdd.add(O2EffectType.WATER_BREATHING);
         strengthModifier = 1;
         minDurationInSeconds = 30;
+        durationModifier = 0;
         targetSelf = true;
 
         initSpell();
-    }
-
-    @Override
-    void doInitSpell() {
-        durationInSeconds = (int) usesModifier;
-        if (durationInSeconds < minDurationInSeconds)
-            durationInSeconds = minDurationInSeconds;
-        else if (durationInSeconds > maxDurationInSeconds)
-            durationInSeconds = maxDurationInSeconds;
     }
 }

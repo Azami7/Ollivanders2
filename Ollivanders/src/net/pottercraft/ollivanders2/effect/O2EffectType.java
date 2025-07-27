@@ -108,6 +108,10 @@ public enum O2EffectType {
      */
     IMPROVED_BOOK_LEARNING(IMPROVED_BOOK_LEARNING.class, MagicLevel.NEWT),
     /**
+     * {@link LAUGHING}
+     */
+    LAUGHING(LAUGHING.class, MagicLevel.BEGINNER),
+    /**
      * {@link LUCK}
      */
     LUCK(LUCK.class, MagicLevel.BEGINNER),
@@ -175,6 +179,10 @@ public enum O2EffectType {
      * {@link SUSPENSION}
      */
     SUSPENSION(SUSPENSION.class, MagicLevel.OWL),
+    /**
+     * {@link TICKLING}
+     */
+    TICKLING(TICKLING.class, MagicLevel.BEGINNER),
     /**
      * {@link UNLUCK}
      */

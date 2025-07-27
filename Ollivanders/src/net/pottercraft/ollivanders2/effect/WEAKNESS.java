@@ -28,6 +28,7 @@ public class WEAKNESS extends PotionEffectSuper {
         effectType = O2EffectType.WEAKNESS;
         potionEffectType = PotionEffectType.WEAKNESS;
         informousText = legilimensText = "feels weak";
+        affectedPlayerText = "You feel weak.";
 
         divinationText.add("shall be cursed");
         divinationText.add("will be cursed by weakness");

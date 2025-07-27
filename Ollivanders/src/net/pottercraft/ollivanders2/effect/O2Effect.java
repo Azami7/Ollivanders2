@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
 import org.bukkit.event.player.PlayerVelocityEvent;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An effect is either a temporary or semi-permanent alteration of an O2Player.
@@ -77,6 +78,11 @@ public abstract class O2Effect {
      * a sentence that starts with the player's name and should not include ending punctuation. Example: "feels aggressive"
      */
     protected String legilimensText;
+
+    /**
+     * The text to be shown to a player when they become affected by the effect. If not set, no message is sent.
+     */
+    protected String affectedPlayerText;
 
     /**
      * The output to be shown for prophecies that use this effect. This should be in future tense.
@@ -197,6 +203,16 @@ public abstract class O2Effect {
             int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % divinationText.size());
             return divinationText.get(rand);
         }
+    }
+
+    /**
+     * Get the text to be shown to a player when they become affected by this effect.
+     *
+     * @return the message to show or null if there isn't one.
+     */
+    @Nullable
+    public String getAffectedPlayerText() {
+        return affectedPlayerText;
     }
 
     /**

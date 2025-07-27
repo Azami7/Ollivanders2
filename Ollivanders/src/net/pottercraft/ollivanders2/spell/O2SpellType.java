@@ -632,6 +632,10 @@ public enum O2SpellType {
      */
     REPELLO_MUGGLETON(REPELLO_MUGGLETON.class, MagicLevel.NEWT),
     /**
+     * {@link RICTUSEMPRA}
+     */
+    RICTUSEMPRA(RICTUSEMPRA.class, MagicLevel.BEGINNER),
+    /**
      * {@link SCARABAEUS_FIBULUM}
      */
     SCARABAEUS_FIBULUM(SCARABAEUS_FIBULUM.class, MagicLevel.BEGINNER),
@@ -671,6 +675,10 @@ public enum O2SpellType {
      * {@link TERGEO}
      */
     TERGEO(TERGEO.class, MagicLevel.OWL),
+    /**
+     * {@link TITILLANDO}
+     */
+    TITILLANDO(TITILLANDO.class, MagicLevel.OWL),
     /**
      * {@link URSUS}
      */

@@ -33,6 +33,16 @@ public abstract class AddO2Effect extends O2Spell {
     int minDurationInSeconds = 5; // 5 seconds
 
     /**
+     * Duration modifier
+     */
+    int durationModifier = 10;
+
+    /**
+     * Duration multiplier - this is multiplied with the usesModifier
+     */
+    double durationMultiplier = 1;
+
+    /**
      * Strength modifier, 1 is no modifier.
      */
     int strengthModifier = 1;
@@ -98,11 +108,6 @@ public abstract class AddO2Effect extends O2Spell {
      */
     @Override
     protected void doCheckEffect() {
-        if (durationInSeconds > maxDurationInSeconds)
-            durationInSeconds = maxDurationInSeconds;
-        else if (durationInSeconds < minDurationInSeconds)
-            durationInSeconds = minDurationInSeconds;
-
         if (targetSelf) {
             addEffectsToTarget(player);
             kill();
@@ -132,8 +137,17 @@ public abstract class AddO2Effect extends O2Spell {
      * @param target the player to add spells to
      */
     private void addEffectsToTarget(@NotNull Player target) {
+        // calculate the duration based on the experience with this spell
+        durationInSeconds = ((int)(usesModifier * durationMultiplier) + durationModifier);
+
+        if (durationInSeconds > maxDurationInSeconds)
+            durationInSeconds = maxDurationInSeconds;
+        else if (durationInSeconds < minDurationInSeconds)
+            durationInSeconds = minDurationInSeconds;
+
         int duration = durationInSeconds * Ollivanders2Common.ticksPerSecond;
 
+        // add the effect
         for (O2EffectType effectType : effectsToAdd) {
             if (effectBlacklist.contains(effectType))
                 continue;

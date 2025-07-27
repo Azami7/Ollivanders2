@@ -60,13 +60,9 @@ public final class LEVICORPUS extends AddO2Effect
 
       effectsToAdd.add(O2EffectType.SUSPENSION);
 
-      initSpell();
-   }
-
-   @Override
-   void doInitSpell()
-   {
       maxDurationInSeconds = 180; // 3 minutes
-      durationInSeconds = ((int) usesModifier + 30);
+      durationModifier = 30;
+
+      initSpell();
    }
 }

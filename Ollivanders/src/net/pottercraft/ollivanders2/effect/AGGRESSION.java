@@ -44,6 +44,7 @@ public class AGGRESSION extends O2Effect {
 
         effectType = O2EffectType.AGGRESSION;
         legilimensText = "feels aggressive";
+        affectedPlayerText = "You feel angry.";
 
         divinationText.add("will suffer from an insatiable rage");
         divinationText.add("will succomb to a primal fear");
