@@ -53,9 +53,9 @@ public class TARANTALLEGRA extends AddO2Effect {
 
         effectsToAdd.add(O2EffectType.DANCING_FEET);
 
-        // duration
+        // duration limits
+        minDurationInSeconds = 10;
         maxDurationInSeconds = 180;
-        durationInSeconds = ((int) usesModifier + 10);
 
         // pass-through materials
         projectilePassThrough.remove(Material.WATER);

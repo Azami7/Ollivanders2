@@ -28,6 +28,7 @@ public class UNLUCK extends PotionEffectSuper {
         effectType = O2EffectType.UNLUCK;
         potionEffectType = PotionEffectType.UNLUCK;
         informousText = legilimensText = "feels unlucky";
+        affectedPlayerText = "You feel unlucky.";
 
         divinationText.add("will be cursed by misfortune");
         divinationText.add("shall be cursed");

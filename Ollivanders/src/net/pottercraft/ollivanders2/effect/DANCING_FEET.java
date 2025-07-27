@@ -41,6 +41,7 @@ public class DANCING_FEET extends O2Effect {
 
         effectType = O2EffectType.DANCING_FEET;
         informousText = "cannot control their feet.";
+        affectedPlayerText = "You start dancing.";
     }
 
     /**

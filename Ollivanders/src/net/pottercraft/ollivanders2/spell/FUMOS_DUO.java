@@ -53,21 +53,9 @@ public final class FUMOS_DUO extends AddO2Effect {
         strengthModifier = 1;
         minDurationInSeconds = 30;
         maxDurationInSeconds = 90;
+        durationModifier = 0;
         targetSelf = true;
 
         initSpell();
-    }
-
-    /**
-     * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
-     * constants.
-     */
-    @Override
-    void doInitSpell() {
-        durationInSeconds = (int) usesModifier;
-        if (durationInSeconds < minDurationInSeconds)
-            durationInSeconds = minDurationInSeconds;
-        else if (durationInSeconds > maxDurationInSeconds)
-            durationInSeconds = maxDurationInSeconds;
     }
 }

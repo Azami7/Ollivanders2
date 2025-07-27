@@ -53,7 +53,6 @@ public class LOQUELA_INEPTIAS extends AddO2Effect {
 
         // duration
         maxDurationInSeconds = 300;
-        durationInSeconds = ((int) usesModifier + 30);
 
         // pass-through materials
         projectilePassThrough.remove(Material.WATER);

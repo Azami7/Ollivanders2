@@ -22,6 +22,7 @@ public class MUTED_SPEECH extends O2Effect {
 
         effectType = O2EffectType.MUTED_SPEECH;
         informousText = legilimensText = "is unable to speak";
+        affectedPlayerText = "You feel tongue-tied.";
 
         divinationText.add("will be struck mute");
         divinationText.add("shall lose their mind to insanity");

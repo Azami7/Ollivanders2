@@ -52,15 +52,12 @@ public final class MUCUS_AD_NAUSEAM extends AddO2Effect {
         // effect
         effectsToAdd.add(O2EffectType.MUCUS);
 
+        maxDurationInSeconds = 180;
+        durationModifier = 30;
+
         // pass-through materials
         projectilePassThrough.remove(Material.WATER);
 
         initSpell();
-    }
-
-    @Override
-    void doInitSpell() {
-        durationInSeconds = ((int) usesModifier + 30);
-        maxDurationInSeconds = 180; // 3 minutes
     }
 }

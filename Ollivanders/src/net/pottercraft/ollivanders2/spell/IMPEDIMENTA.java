@@ -35,6 +35,7 @@ public final class IMPEDIMENTA extends AddPotionEffect
 
         flavorText = new ArrayList<>()
         {{
+            add("The Impediment Hex");
             add("Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal.");
             add("\"I like the look of this one, this Impediment Jinx. Should slow down anything that’s trying to attack you, Harry. We’ll start with that one.\" -Hermione Granger");
         }};
