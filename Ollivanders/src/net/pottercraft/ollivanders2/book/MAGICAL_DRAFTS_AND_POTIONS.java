@@ -46,7 +46,7 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book {
         potions.add(O2PotionType.WIGGENWELD_POTION);
         potions.add(O2PotionType.ICE_POTION);
         potions.add(O2PotionType.STRENGTHENING_SOLUTION);
-        // todo weakness potion - weakness potion effect
+        potions.add(O2PotionType.WEAKNESS_POTION);
         // todo swelling solution - https://harrypotter.fandom.com/wiki/Swelling_Solution - must be different than engorgio
         // todo shrinking solution - https://harrypotter.fandom.com/wiki/Shrinking_Solution - must be different than reducio
         // todo hunger potion effect

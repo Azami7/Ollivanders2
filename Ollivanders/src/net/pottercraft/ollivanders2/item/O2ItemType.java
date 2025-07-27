@@ -95,6 +95,10 @@ public enum O2ItemType {
     /**
      * potion ingredient
      */
+    DOXY_VENOM(Material.POTION, (short) 11, "Doxy Venom", null, null),
+    /**
+     * potion ingredient
+     */
     DRAGON_BLOOD(Material.POTION, (short) 1, "Dragon Blood", null, null),
     /**
      * Wand core
@@ -212,6 +216,10 @@ public enum O2ItemType {
      * potion ingredient
      */
     LAVENDER_SPRIG(Material.LILAC, (short) 0, "Lavender Sprig", null, null),
+    /**
+     * potion ingredient
+     */
+    LEECH_JUICE(Material.POTION, (short) 7, "Leech Juice", null, null),
     /**
      * potion ingredient
      */
