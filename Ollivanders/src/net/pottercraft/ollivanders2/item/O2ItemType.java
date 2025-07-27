@@ -67,11 +67,15 @@ public enum O2ItemType {
     /**
      * potion ingredient
      */
-    BURSTING_MUSHROOM(Material.RED_MUSHROOM, (short) 0, "Bursting Mushroom", null, null),
+    BURSTING_MUSHROOM(Material.CRIMSON_FUNGUS, (short) 0, "Bursting Mushroom", null, null),
     /**
      * potion ingredient
      */
     CHIZPURFLE_FANGS(Material.PUMPKIN_SEEDS, (short) 0, "Chizpurfle Fangs", null, null),
+    /**
+     * potion ingredient
+     */
+    CHOPPED_MALLOW_LEAVES(Material.GREEN_DYE, (short) 0, "Chopped Mallow Leaves", null, null),
     /**
      * potion ingredient
      */
@@ -80,6 +84,10 @@ public enum O2ItemType {
      * potion ingredient
      */
     CRUSHED_FIRE_SEEDS(Material.REDSTONE, (short) 0, "Crushed Fire Seeds", null, null),
+    /**
+     * potion ingredient
+     */
+    CRUSHED_GURDYROOT(Material.BROWN_DYE, (short) 0, "Crushed Gurdyroot", null, null),
     /**
      * potion ingredient
      */

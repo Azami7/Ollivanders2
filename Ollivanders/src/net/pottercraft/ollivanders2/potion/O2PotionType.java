@@ -44,6 +44,10 @@ public enum O2PotionType {
      */
     HERBICIDE_POTION(HERBICIDE_POTION.class, MagicLevel.BEGINNER),
     /**
+     * {@link HUNGER_POTION}
+     */
+    HUNGER_POTION(HUNGER_POTION.class, MagicLevel.BEGINNER),
+    /**
      * {@link ICE_POTION}
      */
     ICE_POTION(ICE_POTION.class, MagicLevel.OWL),
@@ -59,6 +63,10 @@ public enum O2PotionType {
      * {@link REGENERATION_POTION}
      */
     REGENERATION_POTION(REGENERATION_POTION.class, MagicLevel.NEWT),
+    /**
+     * {@link SATIATION_POTION}
+     */
+    SATIATION_POTION(SATIATION_POTION.class, MagicLevel.BEGINNER),
     /**
      * {@link SLEEPING_DRAUGHT}
      */
