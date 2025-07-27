@@ -471,8 +471,8 @@ public class O2Effects implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGH)
     public void onOllivandersSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
-        for (Map<O2EffectType, O2Effect> avtiveEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : avtiveEffects.values()) {
+        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : activeEffects.values()) {
                 effect.doOnOllivandersSpellProjectileMoveEvent(event);
             }
         }
@@ -520,8 +520,8 @@ public class O2Effects implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onProjectileLaunchEvent(@NotNull ProjectileLaunchEvent event) {
-        for (Map<O2EffectType, O2Effect> avtiveEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : avtiveEffects.values()) {
+        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : activeEffects.values()) {
                 effect.doOnProjectileLaunchEvent(event);
             }
         }
@@ -534,8 +534,8 @@ public class O2Effects implements Listener {
      */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onProjectileHitEvent(@NotNull ProjectileHitEvent event) {
-        for (Map<O2EffectType, O2Effect> avtiveEffects : effectsData.activeEffects.values()) {
-            for (O2Effect effect : avtiveEffects.values()) {
+        for (Map<O2EffectType, O2Effect> activeEffects : effectsData.activeEffects.values()) {
+            for (O2Effect effect : activeEffects.values()) {
                 effect.doOnProjectileHitEvent(event);
             }
         }
@@ -883,7 +883,7 @@ public class O2Effects implements Listener {
      */
     @Nullable
     public String detectEffectWithInformous(@NotNull UUID pid) {
-        common.printDebugMessage("O2Effects.detectEffectWithInformous: detecting effcts with Informous", null, null, false);
+        common.printDebugMessage("O2Effects.detectEffectWithInformous: detecting effects with Informous", null, null, false);
         String infoText = null;
 
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);

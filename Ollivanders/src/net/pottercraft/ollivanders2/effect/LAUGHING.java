@@ -9,8 +9,8 @@ import java.util.UUID;
 /**
  * Causes a player to laugh uncontrollably
  *
- * @since 2.21
  * @author Azami7
+ * @since 2.21
  */
 public class LAUGHING extends BABBLING {
     /**

@@ -80,7 +80,7 @@ public abstract class O2Effect {
     protected String legilimensText;
 
     /**
-     * The text to be shown to a plyer when they become affected by the effect. If not set, no message is sent.
+     * The text to be shown to a player when they become affected by the effect. If not set, no message is sent.
      */
     protected String affectedPlayerText;
 

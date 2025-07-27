@@ -38,7 +38,7 @@ public abstract class AddO2Effect extends O2Spell {
     int durationModifier = 10;
 
     /**
-     * Duration multiplier - this is multplied with the usesModifier
+     * Duration multiplier - this is multiplied with the usesModifier
      */
     double durationMultiplier = 1;
 

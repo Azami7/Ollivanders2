@@ -12,10 +12,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Slows any living entity by an amount and time depending on the player's spell level.
  *
+ * @autnor Azami7
  * @see <a href = "https://harrypotter.fandom.com/wiki/Impediment_Jinx">https://harrypotter.fandom.com/wiki/Impediment_Jinx</a>
  */
-public final class IMPEDIMENTA extends AddPotionEffect
-{
+public final class IMPEDIMENTA extends AddPotionEffect {
     private static final int minDurationInSecondsConfig = 5;
     private static final int maxDurationInSecondsConfig = 60;
     private static final int minAmplifierConfig = 0;
@@ -26,15 +26,13 @@ public final class IMPEDIMENTA extends AddPotionEffect
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public IMPEDIMENTA(Ollivanders2 plugin)
-    {
+    public IMPEDIMENTA(Ollivanders2 plugin) {
         super(plugin);
 
         branch = O2MagicBranch.DARK_ARTS;
         spellType = O2SpellType.IMPEDIMENTA;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Impediment Hex");
             add("Swift use of this jinx can freeze an attacker for a few moments, or stop a magical beast in its tracks. The jinx is a vital part of any duellist’s arsenal.");
             add("\"I like the look of this one, this Impediment Jinx. Should slow down anything that’s trying to attack you, Harry. We’ll start with that one.\" -Hermione Granger");
@@ -50,8 +48,7 @@ public final class IMPEDIMENTA extends AddPotionEffect
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public IMPEDIMENTA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public IMPEDIMENTA(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         branch = O2MagicBranch.DARK_ARTS;
         spellType = O2SpellType.IMPEDIMENTA;
@@ -72,23 +69,12 @@ public final class IMPEDIMENTA extends AddPotionEffect
      * Set the amplifier and duration based on caster's skill
      */
     @Override
-    void doInitSpell()
-    {
+    void doInitSpell() {
         // Amplifier
         maxAmplifier = 4;
 
         amplifier = (int) (usesModifier / 50);
         if (amplifier > maxAmplifier)
             amplifier = maxAmplifier;
-
-        // Duration
-        minDurationInSeconds = 5;
-        maxDurationInSeconds = 60;
-
-        durationInSeconds = (int) (usesModifier / 2);
-        if (durationInSeconds < minDurationInSeconds)
-            durationInSeconds = minDurationInSeconds;
-        else if (durationInSeconds > maxDurationInSeconds)
-            durationInSeconds = maxDurationInSeconds;
     }
 }

@@ -11,8 +11,8 @@ import java.util.UUID;
 /**
  * Causes the target to squat (sneak) due to being tickled
  *
- * @since 2.21
  * @author Azami7
+ * @since 2.21
  */
 public class TICKLING extends O2Effect {
     /**
@@ -33,7 +33,6 @@ public class TICKLING extends O2Effect {
         if (player == null) {
             common.printDebugMessage("TICKLING.constructor: player is null", null, null, true);
             kill();
-            return;
         }
         else {
             new BukkitRunnable() {
