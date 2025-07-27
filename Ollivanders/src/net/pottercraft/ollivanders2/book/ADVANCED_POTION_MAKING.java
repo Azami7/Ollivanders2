@@ -39,6 +39,7 @@ public class ADVANCED_POTION_MAKING extends O2Book {
         // todo jump boost potion effect
         // todo wither potion effect
         // todo Hiccoughing Solution
+        // todo stronger strengthening solution
         // todo lingering potions
 
         // 6th year

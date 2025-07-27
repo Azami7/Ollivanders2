@@ -14,6 +14,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.potion.OCULUS_FELIS}<br>
  * {@link net.pottercraft.ollivanders2.potion.WIGGENWELD_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.ICE_POTION}<br>
+ * {@link net.pottercraft.ollivanders2.potion.STRENGTHENING_SOLUTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.WIDEYE_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.SLEEPING_DRAUGHT}<br>
  * {@link net.pottercraft.ollivanders2.potion.WIT_SHARPENING_POTION}
@@ -44,7 +45,7 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book {
         // 2nd year
         potions.add(O2PotionType.WIGGENWELD_POTION);
         potions.add(O2PotionType.ICE_POTION);
-        // todo strengthening solution - strength potion effect
+        potions.add(O2PotionType.STRENGTHENING_SOLUTION);
         // todo weakness potion - weakness potion effect
         // todo swelling solution - https://harrypotter.fandom.com/wiki/Swelling_Solution - must be different than engorgio
         // todo shrinking solution - https://harrypotter.fandom.com/wiki/Shrinking_Solution - must be different than reducio

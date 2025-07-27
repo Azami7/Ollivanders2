@@ -271,6 +271,10 @@ public enum O2ItemType {
     /**
      * potion ingredient
      */
+    POWDERED_GRIFFIN_CLAW(Material.LIGHT_GRAY_DYE, (short) 0, "Powdered Griffin Claw", null, null),
+    /**
+     * potion ingredient
+     */
     POWDERED_SAGE(Material.LIME_DYE, (short) 0, "Powdered Sage", null, null),
     /**
      * potion ingredient

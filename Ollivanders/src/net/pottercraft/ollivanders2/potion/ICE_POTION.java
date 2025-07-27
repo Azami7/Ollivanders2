@@ -39,7 +39,7 @@ public class ICE_POTION extends O2Potion {
         // potion color
         potionColor = Color.fromRGB(176, 224, 230); // powder blue
 
-        // last 5 minutes, which is longer than night vision II lasts
+        // last 5 minutes, which is longer than fire resistance II lasts
         duration = Ollivanders2Common.ticksPerMinute * 5;
 
         minecraftPotionEffect = new PotionEffect(PotionEffectType.FIRE_RESISTANCE, duration, 1);
