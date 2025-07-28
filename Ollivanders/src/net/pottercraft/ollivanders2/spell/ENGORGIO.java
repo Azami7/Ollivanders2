@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Makes certain entities grow into adults, slimes grow larger, and at usesModifier 10, zombies grow into giants
+ * Makes certain entities grow into adults, slimes and magma cubes grow larger
  *
+ * @author Azami7
  * @see <a href = "https://harrypotter.fandom.com/wiki/Engorgement_Charm">https://harrypotter.fandom.com/wiki/Engorgement_Charm</a>
  */
 public final class ENGORGIO extends ChangeEntitySizeSuper {
-    // todo rework with swelling solution potion
     private static final int maxRadiusConfig = 20;
     private static final int maxTargetsConfig = 10;
 
@@ -30,10 +30,10 @@ public final class ENGORGIO extends ChangeEntitySizeSuper {
 
         flavorText = new ArrayList<>() {{
             add("The Engorgement Charm");
-            add("These straightforward but surprisingly dangerous charms cause certain things to swell or shrink.");
+            add("These straightforward but surprisingly dangerous charms cause certain entities to swell or shrink.");
         }};
 
-        text = "Makes baby entities adults and small slimes larger.";
+        text = "Makes baby peaceful and neutral entities adults and small slimes and magma cubes larger. At higher skill levels it will affect hostile entities and makes slimes and magma cubes even bigger.";
     }
 
     /**

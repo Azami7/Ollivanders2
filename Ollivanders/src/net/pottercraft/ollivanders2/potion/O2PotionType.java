@@ -68,6 +68,10 @@ public enum O2PotionType {
      */
     SATIATION_POTION(SATIATION_POTION.class, MagicLevel.BEGINNER),
     /**
+     * {@link SHRINKING_SOLUTION}
+     */
+    SHRINKING_SOLUTION(SHRINKING_SOLUTION.class, MagicLevel.OWL),
+    /**
      * {@link SLEEPING_DRAUGHT}
      */
     SLEEPING_DRAUGHT(SLEEPING_DRAUGHT.class, MagicLevel.BEGINNER),
@@ -75,6 +79,10 @@ public enum O2PotionType {
      * {@link STRENGTHENING_SOLUTION}
      */
     STRENGTHENING_SOLUTION(STRENGTHENING_SOLUTION.class, MagicLevel.OWL),
+    /**
+     * {@link SWELLING_SOLUTION}
+     */
+    SWELLING_SOLUTION(SWELLING_SOLUTION.class, MagicLevel.OWL),
     /**
      * {@link WEAKNESS_POTION}
      */
