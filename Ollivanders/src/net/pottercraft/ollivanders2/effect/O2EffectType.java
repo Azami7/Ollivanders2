@@ -152,6 +152,10 @@ public enum O2EffectType {
      */
     PROTEGO(PROTEGO.class, MagicLevel.OWL),
     /**
+     *
+     */
+    SHRINKING(SHRINKING.class, MagicLevel.OWL),
+    /**
      * {@link SLEEP_SPEECH}
      */
     SLEEP_SPEECH(SLEEP_SPEECH.class, MagicLevel.BEGINNER),
@@ -179,6 +183,10 @@ public enum O2EffectType {
      * {@link SUSPENSION}
      */
     SUSPENSION(SUSPENSION.class, MagicLevel.OWL),
+    /**
+     * {@link PlayerChangeSizeSuper}
+     */
+    SWELLING(PlayerChangeSizeSuper.class, MagicLevel.OWL),
     /**
      * {@link TICKLING}
      */

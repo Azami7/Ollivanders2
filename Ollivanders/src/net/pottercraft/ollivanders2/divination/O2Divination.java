@@ -83,6 +83,7 @@ public abstract class O2Divination {
         add(O2EffectType.UNLUCK);
         add(O2EffectType.WEAKNESS);
         add(O2EffectType.WEALTH);
+        add(O2EffectType.SWELLING);
     }};
 
     /**

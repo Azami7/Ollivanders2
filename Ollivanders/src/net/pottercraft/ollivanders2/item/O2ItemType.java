@@ -39,6 +39,10 @@ public enum O2ItemType {
     /**
      * potion ingredient
      */
+    BAT_SPLEEN(Material.BEEF, (short) 0, "Bat Spleen", null, null),
+    /**
+     * potion ingredient
+     */
     BEZOAR(Material.COAL, (short) 1, "Bezoar", null, null), // charcoal
     /**
      * potion ingredient
@@ -292,6 +296,10 @@ public enum O2ItemType {
      * potion ingredient
      */
     POWDERED_SAGE(Material.LIME_DYE, (short) 0, "Powdered Sage", null, null),
+    /**
+     * potion ingredient
+     */
+    PUFFERFISH_EYE(Material.SPIDER_EYE, (short) 0, "Pufferfish Eye", null, null),
     /**
      * potion ingredient
      */

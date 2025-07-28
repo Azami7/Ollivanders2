@@ -51,8 +51,8 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book {
         potions.add(O2PotionType.WEAKNESS_POTION);
         potions.add(O2PotionType.HUNGER_POTION);
         potions.add(O2PotionType.SATIATION_POTION);
-        // todo swelling solution - https://harrypotter.fandom.com/wiki/Swelling_Solution - must be different than engorgio
-        // todo shrinking solution - https://harrypotter.fandom.com/wiki/Shrinking_Solution - must be different than reducio
+        potions.add(O2PotionType.SWELLING_SOLUTION);
+        potions.add(O2PotionType.SHRINKING_SOLUTION);
 
         // 3rd year
         potions.add(O2PotionType.WIDEYE_POTION);

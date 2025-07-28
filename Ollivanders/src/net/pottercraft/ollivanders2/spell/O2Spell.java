@@ -721,6 +721,9 @@ public abstract class O2Spell {
      * @return true if it can be targeted, false otherwise
      */
     boolean entityHarmWGCheck(Entity entity) {
+        if (!Ollivanders2.worldGuardEnabled) // short circuit this if WG is not enabled
+            return true;
+
         // players
         if (entity instanceof Player && !Ollivanders2.worldGuardO2.checkWGFlag(player, location, Flags.PVP))
             return false;

@@ -21,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
  * @since 2.2.7
  */
 public final class HERBICIDE_POTION extends O2SplashPotion {
+    // todo rework to HP canon
     private final double minimumEffect = 0.1;
 
     /**

@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -9,6 +10,8 @@ import org.jetbrains.annotations.NotNull;
 
 /**
  * Change the size of growing entity
+ *
+ * @author Azami7
  */
 public abstract class ChangeEntitySizeSuper extends O2Spell {
     /**
@@ -96,10 +99,7 @@ public abstract class ChangeEntitySizeSuper extends O2Spell {
                 continue;
 
             if (livingEntity instanceof Ageable) {
-                if (growing)
-                    ((Ageable) livingEntity).setAdult();
-                else
-                    ((Ageable) livingEntity).setBaby();
+                changeEntityAge((Ageable)livingEntity);
             }
             else if (livingEntity instanceof Slime)
                 changeSlimeSize((Slime) livingEntity);
@@ -108,6 +108,21 @@ public abstract class ChangeEntitySizeSuper extends O2Spell {
 
             targets = targets - 1;
         }
+    }
+
+    /**
+     *
+     * @param entity
+     */
+    private void changeEntityAge(@NotNull Ageable entity) {
+        // only change hostile mob sizes when skill level is above 100
+        if (EntityCommon.isHostile(entity) && usesModifier < 100)
+            return;
+
+        if (growing)
+            entity.setAdult();
+        else
+            entity.setBaby();
     }
 
     /**

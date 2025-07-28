@@ -10,10 +10,10 @@ import java.util.ArrayList;
 /**
  * Shrinks a giant to a normal zombie, makes certain entities babies and slimes smaller.
  *
+ * @author Azami7
  * @see <a href = "https://harrypotter.fandom.com/wiki/Shrinking_Charm">https://harrypotter.fandom.com/wiki/Shrinking_Charm</a>
  */
 public final class REDUCIO extends ChangeEntitySizeSuper {
-    // todo rework with shrinking solution potion
     private static final int maxRadiusConfig = 20;
     private static final int maxTargetsConfig = 10;
 
