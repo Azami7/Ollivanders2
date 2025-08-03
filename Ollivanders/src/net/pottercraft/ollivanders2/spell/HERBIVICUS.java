@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
 
+import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
@@ -64,6 +65,10 @@ public final class HERBIVICUS extends O2Spell {
 
         // pass-through materials
         projectilePassThrough.add(Material.WATER);
+
+        // required worldGuard state flags
+        if (Ollivanders2.worldGuardEnabled)
+            worldGuardFlags.add(Flags.BUILD);
 
         initSpell();
     }
