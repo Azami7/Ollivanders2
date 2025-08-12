@@ -82,6 +82,9 @@ soulFireFlooEffect: true
 # /olli debug
 debug: false
 #
+# Turns off all potion brewing success checks
+overrideBrewSuccessCheck: false
+#
 # Override version checks. This will force the plugin to load regardless of MC api version.
 # **IMPORTANT** Backup your plugins/Ollivanders2 directory before enabling this option - running unsupported versions may corrupt plugin data
 overrideVersionCheck: false

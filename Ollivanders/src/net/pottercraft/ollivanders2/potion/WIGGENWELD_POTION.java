@@ -68,7 +68,7 @@ public class WIGGENWELD_POTION extends O2SplashPotion {
      * @param event the splash potion thrown event
      */
     @Override
-    public void thrownEffect(@NotNull PotionSplashEvent event) {
+    public void doOnPotionSplashEvent(@NotNull PotionSplashEvent event) {
         for (LivingEntity e : event.getAffectedEntities()) {
             if (e instanceof Player) {
                 Player player = (Player) e;

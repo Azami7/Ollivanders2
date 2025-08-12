@@ -312,6 +312,9 @@ public abstract class O2Potion
      */
     private boolean canBrew(@NotNull Player brewer)
     {
+        if (p.getConfig().isSet("overrideBrewSuccessCheck") && p.getConfig().getBoolean("overrideBrewSuccessCheck"))
+            return true;
+
         // When maxSpellLevel is on, potions are always successful
         if (Ollivanders2.maxSpellLevel)
             return true;

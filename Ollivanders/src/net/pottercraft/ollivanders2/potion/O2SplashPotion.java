@@ -28,5 +28,5 @@ public abstract class O2SplashPotion extends O2Potion {
      *
      * @param event the splash potion thrown event
      */
-    public abstract void thrownEffect(@NotNull PotionSplashEvent event);
+    public abstract void doOnPotionSplashEvent(@NotNull PotionSplashEvent event);
 }

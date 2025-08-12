@@ -5,9 +5,11 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
@@ -16,39 +18,35 @@ import java.util.UUID;
 
 public class HERBICIDE extends ThrownPotionStationarySpell {
     Map<Material, Material> blocksReplacements = new HashMap<>() {{
-        put(Material.ACACIA_LEAVES, Material.LEAF_LITTER);
-        put(Material.ACACIA_SAPLING, Material.STICK);
+        put(Material.ACACIA_LEAVES, Material.AIR);
         put(Material.ALLIUM, Material.AIR);
         put(Material.AZALEA, Material.DEAD_BUSH);
-        put(Material.AZALEA_LEAVES, Material.LEAF_LITTER);
+        put(Material.AZALEA_LEAVES, Material.AIR);
         put(Material.AZURE_BLUET, Material.AIR);
-        put(Material.BIG_DRIPLEAF, Material.LEAF_LITTER);
+        put(Material.BAMBOO_SAPLING, Material.AIR);
+        put(Material.BIG_DRIPLEAF, Material.AIR);
         put(Material.BIG_DRIPLEAF_STEM, Material.AIR);
-        put(Material.BIRCH_LEAVES, Material.LEAF_LITTER);
-        put(Material.BIRCH_SAPLING, Material.STICK);
+        put(Material.BIRCH_LEAVES, Material.AIR);
         put(Material.BLUE_ORCHID, Material.AIR);
         put(Material.BROWN_MUSHROOM, Material.AIR);
         put(Material.CAVE_VINES_PLANT, Material.AIR);
-        put(Material.CHERRY_LEAVES, Material.LEAF_LITTER);
-        put(Material.CHERRY_SAPLING, Material.STICK);
+        put(Material.CHERRY_LEAVES, Material.AIR);
         put(Material.CHORUS_PLANT, Material.DEAD_BUSH);
         put(Material.CHORUS_FLOWER, Material.AIR);
         put(Material.CORNFLOWER, Material.AIR);
         put(Material.DANDELION, Material.AIR);
-        put(Material.DARK_OAK_LEAVES, Material.LEAF_LITTER);
-        put(Material.DARK_OAK_SAPLING, Material.STICK);
-        put(Material.FERN, Material.LEAF_LITTER);
+        put(Material.DARK_OAK_LEAVES, Material.AIR);
+        put(Material.FERN, Material.AIR);
         put(Material.FLOWERING_AZALEA, Material.DEAD_BUSH);
-        put(Material.FLOWERING_AZALEA_LEAVES, Material.LEAF_LITTER);
+        put(Material.FLOWERING_AZALEA_LEAVES, Material.AIR);
         put(Material.GLOW_LICHEN, Material.AIR);
         put(Material.GRASS_BLOCK, Material.DIRT);
-        put(Material.JUNGLE_LEAVES, Material.LEAF_LITTER);
-        put(Material.JUNGLE_SAPLING, Material.STICK);
-        put(Material.LARGE_FERN, Material.LEAF_LITTER);
+        put(Material.JUNGLE_LEAVES, Material.AIR);
+        put(Material.LARGE_FERN, Material.AIR);
         put(Material.LILAC, Material.AIR);
         put(Material.LILY_OF_THE_VALLEY, Material.AIR);
         put(Material.LILY_PAD, Material.AIR);
-        put(Material.MANGROVE_LEAVES, Material.LEAF_LITTER);
+        put(Material.MANGROVE_LEAVES, Material.AIR);
         put(Material.MOSS_BLOCK, Material.AIR);
         put(Material.MOSS_CARPET, Material.AIR);
         put(Material.MOSSY_COBBLESTONE, Material.COBBLESTONE);
@@ -61,15 +59,13 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
         put(Material.MOSSY_STONE_BRICKS, Material.STONE_BRICKS);
         put(Material.MUSHROOM_STEM, Material.AIR);
         put(Material.MYCELIUM, Material.DIRT);
-        put(Material.OAK_LEAVES, Material.LEAF_LITTER);
-        put(Material.OAK_SAPLING, Material.STICK);
+        put(Material.OAK_LEAVES, Material.AIR);
         put(Material.ORANGE_TULIP, Material.AIR);
         put(Material.OXEYE_DAISY, Material.AIR);
         put(Material.PALE_HANGING_MOSS, Material.AIR);
         put(Material.PALE_MOSS_BLOCK, Material.DIRT);
         put(Material.PALE_MOSS_CARPET, Material.DIRT);
-        put(Material.PALE_OAK_LEAVES, Material.LEAF_LITTER);
-        put(Material.PALE_OAK_SAPLING, Material.STICK);
+        put(Material.PALE_OAK_LEAVES, Material.AIR);
         put(Material.PEONY, Material.AIR);
         put(Material.PINK_PETALS, Material.AIR);
         put(Material.PINK_TULIP, Material.AIR);
@@ -117,8 +113,7 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
         put(Material.SHORT_GRASS, Material.AIR);
         put(Material.SMALL_DRIPLEAF, Material.AIR);
         put(Material.SPORE_BLOSSOM, Material.AIR);
-        put(Material.SPRUCE_LEAVES, Material.LEAF_LITTER);
-        put(Material.SPRUCE_SAPLING, Material.STICK);
+        put(Material.SPRUCE_LEAVES, Material.AIR);
         put(Material.SUNFLOWER, Material.AIR);
         put(Material.SWEET_BERRY_BUSH, Material.DEAD_BUSH);
         put(Material.TALL_DRY_GRASS, Material.AIR);
@@ -132,6 +127,18 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
         put(Material.WHITE_TULIP, Material.AIR);
         put(Material.WILDFLOWERS, Material.AIR);
         put(Material.WITHER_ROSE, Material.AIR);
+    }};
+
+    Map<Material, Material> blocksToItemReplacements = new HashMap<>() {{
+        put(Material.ACACIA_SAPLING, Material.STICK);
+        put(Material.BAMBOO, Material.BAMBOO);
+        put(Material.BIRCH_SAPLING, Material.STICK);
+        put(Material.CHERRY_SAPLING, Material.STICK);
+        put(Material.DARK_OAK_SAPLING, Material.STICK);
+        put(Material.JUNGLE_SAPLING, Material.STICK);
+        put(Material.OAK_SAPLING, Material.STICK);
+        put(Material.PALE_OAK_SAPLING, Material.STICK);
+        put(Material.SPRUCE_SAPLING, Material.STICK);
     }};
 
     /**
@@ -166,9 +173,6 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
 
         // check that world guard permissions allow this stationary spell at every location in the spell radius
         checkWorldGuard();
-
-        if (!isKilled()) // possible if the world guard check failed
-           common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     /**
@@ -176,24 +180,36 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
      */
     @Override
     public void upkeep() {
-        age();
+        if (duration % 10 == 0) {
+            // kill any plant blocks in the radius
+            for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius)) {
+                // replace plant blocks with "dead" alternatives
+                Material blockType = block.getType();
+                if (blocksReplacements.containsKey(blockType)) {
+                    block.setType(blocksReplacements.get(blockType));
+                    continue;
+                }
+                else if (blocksToItemReplacements.containsKey(blockType)) {
+                    World world = block.getLocation().getWorld();
+                    if (world == null) {
+                        common.printDebugMessage("HERBICIDE: null world", null, null, true);
+                        continue;
+                    }
 
-        // kill any plant blocks in the radius
-        for (Block block : Ollivanders2Common.getBlocksInRadius(location, radius)) {
-            // kill crops
-            BlockData blockData = block.getBlockData();
-            if (blockData instanceof Ageable) {
-                ((Ageable)blockData).setAge(0);
-                block.setBlockData(blockData);
-                continue;
-            }
+                    world.dropItemNaturally(block.getLocation(), new ItemStack(blocksToItemReplacements.get(blockType)));
+                    continue;
+                }
 
-            // replace other plant blocks with "dead" alternatives
-            Material blockType = block.getType();
-            if (blocksReplacements.containsKey(blockType)) {
-                block.setType(blocksReplacements.get(blockType));
+                // kill crops
+                BlockData blockData = block.getBlockData();
+                if (blockData instanceof Ageable) {
+                    ((Ageable) blockData).setAge(0);
+                    block.setBlockData(blockData);
+                }
             }
         }
+
+        age();
     }
 
     @Override

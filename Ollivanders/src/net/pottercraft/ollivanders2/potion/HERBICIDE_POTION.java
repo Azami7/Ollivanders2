@@ -72,12 +72,9 @@ public final class HERBICIDE_POTION extends O2SplashPotion {
      * @param event the splash potion thrown event
      */
     @Override
-    public void thrownEffect(@NotNull PotionSplashEvent event) {
+    public void doOnPotionSplashEvent(@NotNull PotionSplashEvent event) {
         Entity thrower = event.getEntity();
         Location eventLocation = event.getPotion().getLocation();
-
-        if (!(thrower instanceof Player))
-            return;
 
         // minimize the effect on non-creeper or creaking
         for (LivingEntity e : event.getAffectedEntities()) {

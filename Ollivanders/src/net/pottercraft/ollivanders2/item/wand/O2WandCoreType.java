@@ -18,6 +18,7 @@ import java.util.List;
  * @see <a href="https://harrypotter.fandom.com/wiki/Wand_core">https://harrypotter.fandom.com/wiki/Wand_core</a>
  */
 public enum O2WandCoreType {
+    // todo fix legacy wand core types
     /**
      * dragon heartstring
      */
