@@ -181,6 +181,10 @@ public enum O2ItemType {
      */
     GROUND_SNAKE_FANGS(Material.LIGHT_GRAY_DYE, (short) 0, "Ground Snake Fangs", null, null),
     /**
+     * legacy wand core
+     */
+    GUNPOWDER(Material.GUNPOWDER, (short) 0, "Gunpowder", null, null),
+    /**
      * potion ingredient
      */
     HONEYWATER(Material.POTION, (short) 0, "Honeywater", null, null),

@@ -3,14 +3,12 @@ package net.pottercraft.ollivanders2.item.wand;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
-import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Wand cores
@@ -18,38 +16,55 @@ import java.util.List;
  * @see <a href="https://harrypotter.fandom.com/wiki/Wand_core">https://harrypotter.fandom.com/wiki/Wand_core</a>
  */
 public enum O2WandCoreType {
-    // todo fix legacy wand core types
+    /**
+     * bone - legacy
+     */
+    BONE(O2ItemType.BONE, true),
     /**
      * dragon heartstring
      */
-    DRAGON_HEARTSTRING(O2ItemType.DRAGON_HEARTSTRING),
+    DRAGON_HEARTSTRING(O2ItemType.DRAGON_HEARTSTRING, false),
+    /**
+     * Gunpowder - legacy
+     */
+    GUNPOWDER(O2ItemType.GUNPOWDER, true),
     /**
      * kelpie hair
      */
-    KELPIE_HAIR(O2ItemType.KELPIE_HAIR),
+    KELPIE_HAIR(O2ItemType.KELPIE_HAIR, false),
     /**
      * phoenix feather
      */
-    PHOENIX_FEATHER(O2ItemType.PHOENIX_FEATHER),
+    PHOENIX_FEATHER(O2ItemType.PHOENIX_FEATHER, false),
+    /**
+     * Rotten flesh - legacy
+     */
+    ROTTEN_FLESH(O2ItemType.ROTTEN_FLESH, true),
+    /**
+     * Spider Eye - legacy
+     */
+    SPIDER_EYE(O2ItemType.SPIDER_EYE, true),
     /**
      * unicorn hair
      */
-    UNICORN_HAIR(O2ItemType.UNICORN_HAIR),
+    UNICORN_HAIR(O2ItemType.UNICORN_HAIR, true),
     /**
      * veela hair
      */
-    VEELA_HAIR(O2ItemType.VEELA_HAIR),
+    VEELA_HAIR(O2ItemType.VEELA_HAIR, true),
     ;
 
     private final O2ItemType o2ItemType;
+    private final boolean isLegacy;
 
     /**
      * Constructor
      *
      * @param item the core item type
      */
-    O2WandCoreType(@NotNull O2ItemType item) {
+    O2WandCoreType(@NotNull O2ItemType item, boolean isLegacy) {
         o2ItemType = item;
+        this.isLegacy = isLegacy;
     }
 
     /**
@@ -121,15 +136,46 @@ public enum O2WandCoreType {
     /**
      * Get a random wand core by name
      *
-     * @return a random wand core name
+     * @return a random wand core name, will not send a legacy core
      */
     @NotNull
     public static String getRandomCoreByName() {
-        int rand = Ollivanders2Common.random.nextInt();
-        List<String> cores = getAllCoresByName();
+        O2WandCoreType[] cores = O2WandCoreType.values();
+        O2WandCoreType core;
+        
+        do {
+            int rand = Ollivanders2Common.random.nextInt(cores.length);
+            core = cores[rand];
+        } while (core.isLegacy);
+        
+        return core.getLabel();
+    }
 
-        int index = Math.abs(rand % cores.size());
-        return cores.get(index);
+    /**
+     * Set a player's destined wand core by seed.
+     *
+     * @param seed the seed to determine their destined core
+     * @return the wand core
+     */
+    public static String setDestinedWandCore (int seed)
+    {
+        O2WandCoreType[] cores = O2WandCoreType.values();
+        O2WandCoreType core;
+
+        core = cores[seed % O2WandCoreType.getAllCoresByName().size()];
+
+        // if the core would be a legacy core, pick one of the 3 common cores
+        if (core.isLegacy) {
+            int seed2 = seed % 3;
+            if (seed2 == 0)
+                core = UNICORN_HAIR;
+            else if (seed2 == 1)
+                core = KELPIE_HAIR;
+            else
+                core = DRAGON_HEARTSTRING;
+        }
+
+        return core.getLabel();
     }
 
     /**

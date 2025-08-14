@@ -164,13 +164,19 @@ public class O2Player {
      * Initialize the player's destined wand seeded with their pid
      */
     private void initDestinedWand() {
+        common.printDebugMessage("initDestinedWand", null, null, false);
         // set destined wand
-        int seed = Math.abs(pid.hashCode() % 16);
-        int wood = seed / O2WandWoodType.getAllWoodsByName().size();
-        int core = seed % O2WandCoreType.getAllCoresByName().size();
+        int seed = Math.abs(pid.hashCode());
 
+        // get destined wand wood
+        int wood = seed % O2WandWoodType.getAllWoodsByName().size();
         wandWood = O2WandWoodType.getAllWoodsByName().get(wood);
-        wandCore = O2WandCoreType.getAllCoresByName().get(core);
+        common.printDebugMessage(wandWood, null, null, false);
+
+        // get destined wand core
+        // moved to a function in O2WandCoreType to handle legacy core types that we do not want to be used going forward
+        wandCore = O2WandCoreType.setDestinedWandCore(seed);
+        common.printDebugMessage(wandCore, null, null, false);
     }
 
     /**
