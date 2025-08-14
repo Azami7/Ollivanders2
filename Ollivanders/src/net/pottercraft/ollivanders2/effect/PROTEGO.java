@@ -91,7 +91,7 @@ public class PROTEGO extends SpellShieldEffect {
         EntityType type = event.getEntityType();
 
         // this spell only stops basic projectiles like arrows, snowballs, eggs, and thrown potions
-        if (type == EntityType.ARROW || type == EntityType.SNOWBALL || type == EntityType.EGG || type == EntityType.POTION) {
+        if (type == EntityType.ARROW || type == EntityType.SNOWBALL || type == EntityType.EGG || type == EntityType.SPLASH_POTION || type == EntityType.LINGERING_POTION) {
             // is this projectile within maxDistance of this spell center?
             if (Ollivanders2Common.isInside(player.getLocation(), projectile.getLocation(), maxDistance)) {
                 common.printDebugMessage("adding projectile " + type, null, null, false);

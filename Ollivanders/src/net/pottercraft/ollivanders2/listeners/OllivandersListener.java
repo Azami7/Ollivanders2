@@ -846,7 +846,7 @@ public class OllivandersListener implements Listener {
 
         if (potion != null) {
             if (potion instanceof O2SplashPotion)
-                ((O2SplashPotion) potion).thrownEffect(event);
+                ((O2SplashPotion) potion).doOnPotionSplashEvent(event);
         }
     }
 

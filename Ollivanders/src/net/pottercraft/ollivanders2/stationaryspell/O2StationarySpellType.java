@@ -32,6 +32,10 @@ public enum O2StationarySpellType {
      */
     HARMONIA_NECTERE_PASSUS(HARMONIA_NECTERE_PASSUS.class, MagicLevel.EXPERT),
     /**
+     * {@link HERBICIDE}
+     */
+    HERBICIDE(HERBICIDE.class, MagicLevel.BEGINNER),
+    /**
      * {@link HORCRUX}
      */
     HORCRUX(HORCRUX.class, MagicLevel.EXPERT),
