@@ -238,7 +238,7 @@ public abstract class O2Potion
             // is this ingredient in the recipe?
             if (!cauldronIngredients.containsKey(ingredientType))
             {
-                common.printDebugMessage("   recipe does not contain " + ingredientType.getName(), null, null, false);
+                common.printDebugMessage("   cauldron does not contain " + ingredientType.getName(), null, null, false);
                 return false;
             }
 
