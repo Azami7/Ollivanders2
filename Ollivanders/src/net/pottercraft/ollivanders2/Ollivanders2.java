@@ -24,7 +24,6 @@ import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells;
 import org.bukkit.World;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import quidditch.Arena;
 
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.house.O2HouseType;
@@ -44,8 +43,6 @@ import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.NPC;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.command.Command;
 import org.bukkit.plugin.Plugin;
@@ -555,15 +552,10 @@ public class Ollivanders2 extends JavaPlugin {
      * @param args         the arguments to the command, if any
      * @return true if the command was successful, false otherwise
      */
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @Override
     public boolean onCommand(@NotNull CommandSender sender, Command cmd, @NotNull String commandLabel, @NotNull String[] args) {
         if (cmd.getName().equalsIgnoreCase("Ollivanders2") || cmd.getName().equalsIgnoreCase("Olli"))
             return runOllivanders(sender, args);
-        else if (cmd.getName().equalsIgnoreCase("Quidd")) {
-            if (sender.hasPermission("Ollivanders2.admin"))
-                return false;
-            return runQuidd(sender, args);
-        }
 
         return false;
     }
@@ -1031,33 +1023,6 @@ public class Ollivanders2 extends JavaPlugin {
                 + "\nreset - reset all house points to 0"
                 + "\n\nExample: /ollivanders2 house points add Slytherin 5"
                 + "\nExample: /ollivanders2 house points reset");
-    }
-
-    /**
-     * The quidditch setup command.
-     *
-     * @param sender the player that issued the command
-     * @param args   the arguments for the command, if any
-     * @return true unless an error occurred
-     */
-    private boolean runQuidd(@NotNull CommandSender sender, @NotNull String[] args) {
-        if (!sender.hasPermission("Ollivanders2.admin"))
-            return false;
-
-        if (args.length >= 1) {
-            Player player;
-            if (sender instanceof Player) {
-                player = (Player) sender;
-                Arena arena = new Arena(args[0], player.getLocation(), Arena.Size.MEDIUM);
-                sender.sendMessage(chatColor + "The following arena was made: " + arena);
-            }
-            else
-                sender.sendMessage(chatColor + "Only players can use the /Quidd command.");
-        }
-        else
-            sender.sendMessage(chatColor + "Please include a name for your arena.");
-
-        return true;
     }
 
     /**
