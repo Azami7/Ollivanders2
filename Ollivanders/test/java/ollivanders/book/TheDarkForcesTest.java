@@ -1,7 +1,7 @@
 package ollivanders.book;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.book.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION;
+import net.pottercraft.ollivanders2.book.THE_DARK_FORCES;
 import org.bukkit.inventory.meta.BookMeta;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockbukkit.mockbukkit.MockBukkit;
@@ -9,7 +9,7 @@ import org.mockbukkit.mockbukkit.MockBukkit;
 import java.io.File;
 
 /**
- * Unit tests for A_BEGINNERS_GUIDE_TO_TRANSFIGURATION that focus on Minecraft book constraints.
+ * Unit tests for THE_DARK_FORCES that focus on Minecraft book constraints.
  * <p>
  * Minecraft Book Limits:<br>
  * - Title: 32 characters max<br>
@@ -18,13 +18,13 @@ import java.io.File;
  * - Lines per page: 14 max<br>
  * </p>
  */
-public class ABeginnersGuideToTransfigurationTest extends BookTestSuper {
+public class TheDarkForcesTest extends BookTestSuper {
     @BeforeEach
     void setUp() {
         MockBukkit.mock();
         Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
 
-        book = new A_BEGINNERS_GUIDE_TO_TRANSFIGURATION(testPlugin);
+        book = new THE_DARK_FORCES(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();
     }
 }
