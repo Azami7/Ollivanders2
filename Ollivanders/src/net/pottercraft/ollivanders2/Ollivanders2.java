@@ -575,7 +575,6 @@ public class Ollivanders2 extends JavaPlugin {
 
         String subCommand = args[0];
 
-
         //
         // Help
         //
