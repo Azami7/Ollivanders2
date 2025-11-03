@@ -384,4 +384,22 @@ public abstract class O2Book {
     public O2MagicBranch getBranch() {
         return bookType.getBranch();
     }
+
+    /**
+     * Get the number of spells in this book.
+     *
+     * @return number of spells
+     */
+    public int getNumberOfSpells() {
+        return spells.size();
+    }
+
+    /**
+     * Get the number of potions in this book.
+     *
+     * @return number of potions
+     */
+    public int getNumberOfPotions() {
+        return potions.size();
+    }
 }

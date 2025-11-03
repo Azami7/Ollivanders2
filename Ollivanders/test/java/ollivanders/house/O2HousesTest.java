@@ -25,6 +25,10 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class O2HousesTest {
+    // Constants
+    private static final String SCOREBOARD_OBJECTIVE = "o2_hpoints";
+    private static final int INITIAL_POINTS = 0;
+
     static World testWorld;
     static Ollivanders2 testPlugin;
     static ServerMock mockServer;
@@ -36,6 +40,23 @@ public class O2HousesTest {
     static final String player2Name = "Fred";
     static PlayerMock player3;
     static final String player3Name = "Joe";
+
+    // Helper methods
+    private void assertPlayerInHouse(PlayerMock player, O2HouseType house, String message) {
+        assertTrue(testHouses.getHouseMembers(house).contains(player.getName()), message);
+    }
+
+    private void assertPlayerNotInHouse(PlayerMock player, O2HouseType house, String message) {
+        assertFalse(testHouses.getHouseMembers(house).contains(player.getName()), message);
+    }
+
+    private void assertHouseScore(O2HouseType house, int expectedScore, String message) {
+        assertEquals(expectedScore, house.getScore(), message);
+    }
+
+    private void assertScoreboardScore(ObjectiveMock objective, O2HouseType house, int expectedScore, String message) {
+        assertEquals(expectedScore, objective.getScore(house.getName()).getScore(), message);
+    }
 
     @BeforeEach
     void setUp () {
@@ -60,14 +81,14 @@ public class O2HousesTest {
      */
     @Test
     void testHouseSettings() {
-        assertTrue(O2Houses.useHouses);
-        assertEquals(4, testHouses.getAllHouseNames().size());
-        assertTrue(testHouses.getAllHouseNames().contains("Gryffindor"));
+        assertTrue(O2Houses.useHouses, "Houses should be enabled");
+        assertEquals(4, testHouses.getAllHouseNames().size(), "Should have 4 houses");
+        assertTrue(testHouses.getAllHouseNames().contains("Gryffindor"), "Should contain Gryffindor house");
 
         O2HouseType gryffindor = testHouses.getHouseType("Gryffindor");
-        assertNotNull(gryffindor);
-        assertEquals(0, gryffindor.getScore());
-        assertEquals(0, testHouses.getHouseMembers(gryffindor).size());
+        assertNotNull(gryffindor, "Gryffindor house should exist");
+        assertHouseScore(gryffindor, INITIAL_POINTS, "Gryffindor should start with 0 points");
+        assertEquals(0, testHouses.getHouseMembers(gryffindor).size(), "Gryffindor should start with 0 members");
     }
 
     /**
@@ -76,45 +97,52 @@ public class O2HousesTest {
     @Test
     void testSorting() {
         // player1 is sorted in to ravenclaw
-        assertTrue(testHouses.sort(player1, O2HouseType.RAVENCLAW));
-        assertTrue(testHouses.getHouseMembers(O2HouseType.RAVENCLAW).contains(player1Name));
+        assertTrue(testHouses.sort(player1, O2HouseType.RAVENCLAW), "Player1 should be sorted into Ravenclaw");
+        assertPlayerInHouse(player1, O2HouseType.RAVENCLAW, "Ravenclaw should contain player1");
 
         // player does not appear in any other house
-        assertFalse(testHouses.getHouseMembers(O2HouseType.HUFFLEPUFF).contains(player1Name));
-        assertFalse(testHouses.getHouseMembers(O2HouseType.GRYFFINDOR).contains(player1Name));
-        assertFalse(testHouses.getHouseMembers(O2HouseType.SLYTHERIN).contains(player1Name));
+        assertPlayerNotInHouse(player1, O2HouseType.HUFFLEPUFF, "Hufflepuff should not contain player1");
+        assertPlayerNotInHouse(player1, O2HouseType.GRYFFINDOR, "Gryffindor should not contain player1");
+        assertPlayerNotInHouse(player1, O2HouseType.SLYTHERIN, "Slytherin should not contain player1");
 
         // a sort event is fired for player being sorted
-        assertTrue(testHouses.sort(player2, O2HouseType.HUFFLEPUFF));
+        assertTrue(testHouses.sort(player2, O2HouseType.HUFFLEPUFF), "Player2 should be sorted into Hufflepuff");
         assertTrue(mockServer.getPluginManager()
                 .getFiredEvents()
                 .filter(e -> e instanceof OllivandersPlayerSortedEvent)
                 .map(e -> (OllivandersPlayerSortedEvent) e)
-                .anyMatch(ev -> ev.getPlayer().getName().equals(player2Name))
+                .anyMatch(ev -> ev.getPlayer().getName().equals(player2Name)),
+                "Sort event should have been fired for player2"
         );
 
         // a player cannot be sorted again in to their own house
-        assertFalse(testHouses.sort(player1, O2HouseType.RAVENCLAW));
-        assertFalse(testHouses.sort(player2, O2HouseType.HUFFLEPUFF));
+        assertFalse(testHouses.sort(player1, O2HouseType.RAVENCLAW),
+                "Player1 should not be able to be sorted into Ravenclaw again");
+        assertFalse(testHouses.sort(player2, O2HouseType.HUFFLEPUFF),
+                "Player2 should not be able to be sorted into Hufflepuff again");
 
         // a player cannot be sorted in to another house
-        assertFalse(testHouses.sort(player1, O2HouseType.HUFFLEPUFF));
-        assertFalse(testHouses.sort(player2, O2HouseType.RAVENCLAW));
+        assertFalse(testHouses.sort(player1, O2HouseType.HUFFLEPUFF),
+                "Player1 should not be able to be sorted into a different house");
+        assertFalse(testHouses.sort(player2, O2HouseType.RAVENCLAW),
+                "Player2 should not be able to be sorted into a different house");
 
         // players can be unsorted
-        assertTrue(testHouses.getHouseMembers(O2HouseType.RAVENCLAW).contains(player1Name));
+        assertPlayerInHouse(player1, O2HouseType.RAVENCLAW, "Ravenclaw should contain player1 before unsorting");
         testHouses.unsort(player1);
-        assertFalse(testHouses.getHouseMembers(O2HouseType.RAVENCLAW).contains(player1Name));
+        assertPlayerNotInHouse(player1, O2HouseType.RAVENCLAW, "Ravenclaw should not contain player1 after unsorting");
 
-        assertTrue(testHouses.getHouseMembers(O2HouseType.HUFFLEPUFF).contains(player2Name));
+        assertPlayerInHouse(player2, O2HouseType.HUFFLEPUFF, "Hufflepuff should contain player2 before unsorting");
         testHouses.unsort(player2);
-        assertFalse(testHouses.getHouseMembers(O2HouseType.HUFFLEPUFF).contains(player2Name));
+        assertPlayerNotInHouse(player2, O2HouseType.HUFFLEPUFF, "Hufflepuff should not contain player2 after unsorting");
 
         // a player can be sorted in to a new house
-        assertTrue(testHouses.sort(player1, O2HouseType.HUFFLEPUFF));
+        assertTrue(testHouses.sort(player1, O2HouseType.HUFFLEPUFF),
+                "Player1 should be able to be sorted into a new house after being unsorted");
 
         // a player can ge resorted in to their previous house
-        assertTrue(testHouses.sort(player2, O2HouseType.HUFFLEPUFF));
+        assertTrue(testHouses.sort(player2, O2HouseType.HUFFLEPUFF),
+                "Player2 should be able to be resorted into their previous house");
     }
 
     /**
@@ -122,21 +150,22 @@ public class O2HousesTest {
      */
     @Test
     void testIsSortedAndGetHouse() {
-        assertTrue(testHouses.sort(player1, O2HouseType.RAVENCLAW));
-        assertTrue(testHouses.sort(player2, O2HouseType.HUFFLEPUFF));
+        assertTrue(testHouses.sort(player1, O2HouseType.RAVENCLAW), "Player1 should sort into Ravenclaw");
+        assertTrue(testHouses.sort(player2, O2HouseType.HUFFLEPUFF), "Player2 should sort into Hufflepuff");
 
         // isSorted check works by player
-        assertTrue(testHouses.isSorted(player1));
+        assertTrue(testHouses.isSorted(player1), "Player1 should be sorted");
         // isSorted check works by UUID
-        assertTrue(testHouses.isSorted(player2.getUniqueId()));
-        assertFalse(testHouses.isSorted(player3));
+        assertTrue(testHouses.isSorted(player2.getUniqueId()), "Player2 should be sorted (checked by UUID)");
+        assertFalse(testHouses.isSorted(player3), "Player3 should not be sorted");
 
         // getHouse works by player
-        assertSame(O2HouseType.RAVENCLAW, testHouses.getHouse(player1));
+        assertSame(O2HouseType.RAVENCLAW, testHouses.getHouse(player1), "Player1 should be in Ravenclaw");
         // getHouse works by UUID
-        assertSame(O2HouseType.HUFFLEPUFF, testHouses.getHouse(player2.getUniqueId()));
+        assertSame(O2HouseType.HUFFLEPUFF, testHouses.getHouse(player2.getUniqueId()),
+                "Player2 should be in Hufflepuff (checked by UUID)");
         // getHouse returns null when the player is not sorted
-        assertNull(testHouses.getHouse(player3));
+        assertNull(testHouses.getHouse(player3), "Player3 should not have a house");
     }
 
     /**
@@ -144,15 +173,15 @@ public class O2HousesTest {
      */
     @Test
     void testForceSorting() {
-        assertTrue(testHouses.sort(player1, O2HouseType.RAVENCLAW));
+        assertTrue(testHouses.sort(player1, O2HouseType.RAVENCLAW), "Player1 should sort into Ravenclaw");
 
         // a player who is already sorted will have their house changed
         testHouses.forceSetHouse(player1, O2HouseType.RAVENCLAW);
-        assertTrue(testHouses.getHouseMembers(O2HouseType.RAVENCLAW).contains(player1Name));
+        assertPlayerInHouse(player1, O2HouseType.RAVENCLAW, "Player1 should still be in Ravenclaw after force sorting");
 
         // a player who is not sorted will get sorted
         testHouses.forceSetHouse(player3, O2HouseType.RAVENCLAW);
-        assertTrue(testHouses.getHouseMembers(O2HouseType.RAVENCLAW).contains(player3Name));
+        assertPlayerInHouse(player3, O2HouseType.RAVENCLAW, "Player3 should be in Ravenclaw after force sorting");
     }
 
     /**
@@ -161,18 +190,18 @@ public class O2HousesTest {
     @Test
     void testHousePoints() {
         // set house points to an explicit value
-        assertTrue(testHouses.setHousePoints(O2HouseType.RAVENCLAW, 5));
-        assertEquals(5, O2HouseType.RAVENCLAW.getScore());
-        assertTrue(testHouses.setHousePoints(O2HouseType.HUFFLEPUFF, 10));
-        assertEquals(10, O2HouseType.HUFFLEPUFF.getScore());
+        assertTrue(testHouses.setHousePoints(O2HouseType.RAVENCLAW, 5), "Should be able to set Ravenclaw points to 5");
+        assertHouseScore(O2HouseType.RAVENCLAW, 5, "Ravenclaw should have 5 points");
+        assertTrue(testHouses.setHousePoints(O2HouseType.HUFFLEPUFF, 10), "Should be able to set Hufflepuff points to 10");
+        assertHouseScore(O2HouseType.HUFFLEPUFF, 10, "Hufflepuff should have 10 points");
 
         // add points
-        assertTrue(testHouses.addHousePoints(O2HouseType.RAVENCLAW, 10));
-        assertEquals(15, O2HouseType.RAVENCLAW.getScore());
+        assertTrue(testHouses.addHousePoints(O2HouseType.RAVENCLAW, 10), "Should be able to add 10 points to Ravenclaw");
+        assertHouseScore(O2HouseType.RAVENCLAW, 15, "Ravenclaw should have 15 points after adding 10");
 
         // subtract points
-        assertTrue(testHouses.subtractHousePoints(O2HouseType.HUFFLEPUFF, 5));
-        assertEquals(5, O2HouseType.HUFFLEPUFF.getScore());
+        assertTrue(testHouses.subtractHousePoints(O2HouseType.HUFFLEPUFF, 5), "Should be able to subtract 5 points from Hufflepuff");
+        assertHouseScore(O2HouseType.HUFFLEPUFF, 5, "Hufflepuff should have 5 points after subtracting 5");
     }
 
     /**
@@ -181,34 +210,42 @@ public class O2HousesTest {
     @Test
     void testScoreboard() {
         // scoreboard has expected objective
-        ObjectiveMock mockObjective = mockServer.getScoreboardManager().getMainScoreboard().getObjective("o2_hpoints");
-        assertNotNull(mockObjective);
+        ObjectiveMock mockObjective = mockServer.getScoreboardManager().getMainScoreboard().getObjective(SCOREBOARD_OBJECTIVE);
+        assertNotNull(mockObjective, "House points objective should exist");
 
         // scoreboard has expected teams
         ScoreboardMock mockScoreboard = mockObjective.getScoreboard();
-        assertNotNull(mockScoreboard);
+        assertNotNull(mockScoreboard, "Scoreboard should exist");
 
-        assertNotNull(mockScoreboard.getTeam(O2HouseType.GRYFFINDOR.getName()));
-        assertNotNull(mockScoreboard.getTeam(O2HouseType.HUFFLEPUFF.getName()));
-        assertNotNull(mockScoreboard.getTeam(O2HouseType.RAVENCLAW.getName()));
-        assertNotNull(mockScoreboard.getTeam(O2HouseType.SLYTHERIN.getName()));
+        assertNotNull(mockScoreboard.getTeam(O2HouseType.GRYFFINDOR.getName()), "Gryffindor team should exist");
+        assertNotNull(mockScoreboard.getTeam(O2HouseType.HUFFLEPUFF.getName()), "Hufflepuff team should exist");
+        assertNotNull(mockScoreboard.getTeam(O2HouseType.RAVENCLAW.getName()), "Ravenclaw team should exist");
+        assertNotNull(mockScoreboard.getTeam(O2HouseType.SLYTHERIN.getName()), "Slytherin team should exist");
 
         // scores start at 0
-        assertEquals(0, mockObjective.getScore(O2HouseType.GRYFFINDOR.getName()).getScore());
-        assertEquals(0, mockObjective.getScore(O2HouseType.SLYTHERIN.getName()).getScore());
+        assertScoreboardScore(mockObjective, O2HouseType.GRYFFINDOR, INITIAL_POINTS,
+                "Gryffindor should start with 0 points on scoreboard");
+        assertScoreboardScore(mockObjective, O2HouseType.SLYTHERIN, INITIAL_POINTS,
+                "Slytherin should start with 0 points on scoreboard");
 
         // scores change when points added/removed/set
         testHouses.addHousePoints(O2HouseType.GRYFFINDOR, 10);
-        assertEquals(10, mockObjective.getScore(O2HouseType.GRYFFINDOR.getName()).getScore());
-        assertEquals(0, mockObjective.getScore(O2HouseType.SLYTHERIN.getName()).getScore());
+        assertScoreboardScore(mockObjective, O2HouseType.GRYFFINDOR, 10,
+                "Gryffindor should have 10 points on scoreboard after adding 10");
+        assertScoreboardScore(mockObjective, O2HouseType.SLYTHERIN, INITIAL_POINTS,
+                "Slytherin should still have 0 points on scoreboard");
         testHouses.subtractHousePoints(O2HouseType.GRYFFINDOR, 5);
-        assertEquals(5, mockObjective.getScore(O2HouseType.GRYFFINDOR.getName()).getScore());
-        assertEquals(0, mockObjective.getScore(O2HouseType.SLYTHERIN.getName()).getScore());
+        assertScoreboardScore(mockObjective, O2HouseType.GRYFFINDOR, 5,
+                "Gryffindor should have 5 points on scoreboard after subtracting 5");
+        assertScoreboardScore(mockObjective, O2HouseType.SLYTHERIN, INITIAL_POINTS,
+                "Slytherin should still have 0 points on scoreboard");
 
         // resetting scores sets them all back to 0
         testHouses.resetHousePoints();
-        assertEquals(0, mockObjective.getScore(O2HouseType.GRYFFINDOR.getName()).getScore());
-        assertEquals(0, mockObjective.getScore(O2HouseType.SLYTHERIN.getName()).getScore());
+        assertScoreboardScore(mockObjective, O2HouseType.GRYFFINDOR, INITIAL_POINTS,
+                "Gryffindor should have 0 points on scoreboard after reset");
+        assertScoreboardScore(mockObjective, O2HouseType.SLYTHERIN, INITIAL_POINTS,
+                "Slytherin should have 0 points on scoreboard after reset");
     }
 
     /**
@@ -216,13 +253,15 @@ public class O2HousesTest {
      */
     @Test
     void testHousePlaceText() {
-        assertTrue(testHouses.setHousePoints(O2HouseType.RAVENCLAW, 15));
-        assertTrue(testHouses.setHousePoints(O2HouseType.HUFFLEPUFF, 10));
-        assertTrue(testHouses.setHousePoints(O2HouseType.SLYTHERIN, 5));
-        assertTrue(testHouses.setHousePoints(O2HouseType.GRYFFINDOR, 5));
+        assertTrue(testHouses.setHousePoints(O2HouseType.RAVENCLAW, 15), "Should set Ravenclaw points");
+        assertTrue(testHouses.setHousePoints(O2HouseType.HUFFLEPUFF, 10), "Should set Hufflepuff points");
+        assertTrue(testHouses.setHousePoints(O2HouseType.SLYTHERIN, 5), "Should set Slytherin points");
+        assertTrue(testHouses.setHousePoints(O2HouseType.GRYFFINDOR, 5), "Should set Gryffindor points");
 
-        assertTrue(O2HouseType.getHousePlaceText(O2HouseType.RAVENCLAW).equals("in 1st place"));
-        assertTrue(O2HouseType.getHousePlaceText(O2HouseType.SLYTHERIN).equals("tied for 3rd place"));
+        assertEquals("in 1st place", O2HouseType.getHousePlaceText(O2HouseType.RAVENCLAW),
+                "Ravenclaw with 15 points should be in 1st place");
+        assertEquals("tied for 3rd place", O2HouseType.getHousePlaceText(O2HouseType.SLYTHERIN),
+                "Slytherin with 5 points should be tied for 3rd place");
     }
 
     @AfterEach

@@ -59,7 +59,7 @@ public class ADVANCED_TRANSFIGURATION extends O2Book {
         // todo camel
         // todo donkey
         // todo goat
-        // due to dragons only being huge mobs in MC, this is now a NEWT-level spell
+        // due to dragons being huge mobs in MC, this is now a NEWT-level spell
         spells.add(O2SpellType.DRACONIFORS);
     }
 }

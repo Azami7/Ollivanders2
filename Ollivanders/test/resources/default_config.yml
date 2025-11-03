@@ -130,7 +130,7 @@ zones:
     disallowed-spells:
       -
 
-#
-# Strings
-#
+        #
+        # Strings
+      #
 useTranslations: false
