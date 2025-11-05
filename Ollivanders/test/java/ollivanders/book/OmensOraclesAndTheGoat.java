@@ -1,15 +1,19 @@
 package ollivanders.book;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.book.A_BEGINNERS_GUIDE_TO_TRANSFIGURATION;
+import net.pottercraft.ollivanders2.book.OMENS_ORACLES_AND_THE_GOAT;
 import org.bukkit.inventory.meta.BookMeta;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockbukkit.mockbukkit.MockBukkit;
 
 import java.io.File;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 /**
- * Unit tests for A_BEGINNERS_GUIDE_TO_TRANSFIGURATION that focus on Minecraft book constraints.
+ * Unit tests for OMENS_ORACLES_AND_THE_GOAT that focus on Minecraft book constraints.
  * <p>
  * Minecraft Book Limits:<br>
  * - Title: 32 characters max<br>
@@ -18,13 +22,13 @@ import java.io.File;
  * - Lines per page: 14 max<br>
  * </p>
  */
-public class ABeginnersGuideToTransfigurationTest extends BookTestSuper {
+public class OmensOraclesAndTheGoat extends BookTestSuper {
     @BeforeEach
     void setUp() {
         MockBukkit.mock();
         Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
 
-        book = new A_BEGINNERS_GUIDE_TO_TRANSFIGURATION(testPlugin);
+        book = new OMENS_ORACLES_AND_THE_GOAT(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();
     }
 }
