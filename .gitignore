@@ -2,6 +2,7 @@
 Ollivanders/Ollivanders.iml
 out
 *.iml
+lib
 
 # Ignore Gradle project-specific cache directory
 .gradle
