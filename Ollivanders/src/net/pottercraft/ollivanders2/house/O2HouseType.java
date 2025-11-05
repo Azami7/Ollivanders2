@@ -120,7 +120,7 @@ public enum O2HouseType {
      * @param houseType the house to get text for, cannot be null
      * @return a string like "in 4th place" or "tied for 3rd place"
      */
-    public static String getHousePlaceTxt(@NotNull O2HouseType houseType) {
+    public static String getHousePlaceText(@NotNull O2HouseType houseType) {
         int score = houseType.getScore();
         boolean tied = false;
         int place = 1;

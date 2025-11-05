@@ -1,0 +1,136 @@
+#
+# Configuration for the Ollivanders2 plugin.
+#
+# Details for configuring the Ollivanders2 plugin can be found on our wiki at https://github.com/Azami7/Ollivanders2/wiki/Configuration
+#
+# *** READ THE INSTRUCTIONS BEFORE CHANGING THE DEFAULT CONFIGURATION ***
+#
+# Some of the configurations below will alter your MC server. When in doubt, use the default config, which is
+# always on the safe option.
+#
+# *** BACKUP OF YOUR SERVER BEFORE ALTERING CONFIGURATION ***
+#
+# This should be standard practice for any change you make to your server.
+
+# Chat options
+#
+# https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat
+chatDropoff: 15
+chatColor: 5
+
+# Spell Casting
+#
+# https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-casting
+bookLearning: true
+nonVerbalSpellCasting: false
+spellJournal: true
+hostileMobAnimagi: false
+useStrictAnimagusConditions: true
+deathExpLoss: false
+apparateLocations: false
+maxSpellLevel: false
+maxApparateDistance: 10000
+enableLycanthropy: true
+# Fast spells. This increases the speed spell projectiles are created. Can overload server and cause performance issues.
+fastSpells: false
+
+# Houses
+#
+# https://github.com/Azami7/Ollivanders2/wiki/Configuration#houses-and-years
+houses: false
+displayMessageOnSort: false
+gryffindorName: "Gryffindor"
+hufflepuffName: "Hufflepuff"
+ravenclawName: "Ravenclaw"
+slytherinName: "Slytherin"
+gryffindorColor: DARK_RED
+hufflepuffColor: GOLD
+ravenclawColor: BLUE
+slytherinColor: DARK_GREEN
+years: false
+
+# Magical Items
+#
+# https://github.com/Azami7/Ollivanders2/wiki/Configuration#magical-items
+witchDrop: false
+enableBrooms: true
+broomstick: STICK
+portkeyRadius: 2
+
+# Divination
+#
+# https://github.com/Azami7/Ollivanders2/wiki/Configuration#divination
+divinationMaxDays: 4
+
+# Save options
+#
+# Whether the plugin should save data hourly in addition to saving data on disable. Recommended
+hourlyBackup: false
+#
+# Whether the plugin should archive previous saves before writing data. Recommended
+archivePreviousBackup: false
+
+# Floo network options
+#
+# the material for floo powder
+flooPowder: REDSTONE
+soulFireFlooEffect: true
+
+# Experimental and Debug options
+#
+# Turns on debug output in your logs. This can also be toggled on and off in game by using the command
+# /olli debug
+debug: false
+#
+# Turns off all potion brewing success checks
+overrideBrewSuccessCheck: false
+#
+# Override version checks. This will force the plugin to load regardless of MC api version.
+# **IMPORTANT** Backup your plugins/Ollivanders2 directory before enabling this option - running unsupported versions may corrupt plugin data
+overrideVersionCheck: false
+
+#
+# Zones
+#
+# https://github.com/Azami7/Ollivanders2/wiki/Configuration#zones
+#
+# zones:
+#  global:
+#    allowed-spells:
+#      -
+#    disallowed-spells:
+#      - AVADA_KEDAVRA
+#  example-wg-region:
+#    type: World_Guard
+#    allowed-spells:
+#      - LUMOS
+#      - NOX
+#      - INFORMOUS
+#    disallowed-spells:
+#      -
+#  example-world:
+#    type: World
+#    world: nether
+#    allowed-spells:
+#      -
+#    disallowed-spells:
+#      - APPARATE
+#  example-cuboid:
+#    type: Cuboid
+#    world: world
+#    area: 100 0 300 400 100 700
+#    allowed-spells:
+#      -
+#    disallowed-spells:
+#      - VOLATUS
+zones:
+  global:
+    allowed-spells:
+      -
+    disallowed-spells:
+      -
+
+#
+# Strings
+#
+useTranslations: false

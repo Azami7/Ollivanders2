@@ -56,7 +56,7 @@ public class O2Houses {
     public static boolean displayMessageOnSort = false;
 
     /**
-     * A map of all houses loaded
+     * A map of all house memberships for players on- and offline
      */
     private Map<UUID, O2HouseType> O2HouseMap = new HashMap<>();
 
@@ -113,8 +113,10 @@ public class O2Houses {
 
         if (useHouses)
             p.getLogger().info("Enabling school houses.");
-        else
+        else {
+            p.getLogger().info("Disabling school houses.");
             return;
+        }
 
         displayMessageOnSort = p.getConfig().getBoolean("displayMessageOnSort");
 
@@ -284,11 +286,15 @@ public class O2Houses {
      */
     public boolean sort(@NotNull Player player, @NotNull O2HouseType houseType) {
         //make sure player is not already sorted
-        if (isSorted(player))
+        if (isSorted(player)) {
+            common.printDebugMessage("O2Houses.sort(): " + player.getName() + " is already sorted", null, null, false);
             return false;
+        }
 
         O2HouseMap.put(player.getUniqueId(), houseType);
         addPlayerToHouseTeam(player);
+
+        common.printDebugMessage("O2Houses.sort(): " + player.getName() + " sorted to " + houseType.getName(), null, null, false);
 
         // display sort message
         if (displayMessageOnSort) {
@@ -300,7 +306,7 @@ public class O2Houses {
         // throw the sort event
         OllivandersPlayerSortedEvent event = new OllivandersPlayerSortedEvent(player);
         p.getServer().getPluginManager().callEvent(event);
-        common.printDebugMessage("Fired OllivandersPlayerSortedEvent", null, null, false);
+        common.printDebugMessage("O2Houses.sort(): Fired OllivandersPlayerSortedEvent", null, null, false);
 
         return true;
     }
