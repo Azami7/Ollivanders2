@@ -2,6 +2,7 @@ package ollivanders.book;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.book.ADVANCED_TRANSFIGURATION;
+import ollivanders.pluginDependencies.LibsDisguisesMock;
 import org.bukkit.inventory.meta.BookMeta;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockbukkit.mockbukkit.MockBukkit;
@@ -22,6 +23,11 @@ public class AdvancedTransfigurationTest extends BookTestSuper {
     @BeforeEach
     void setUp() {
         MockBukkit.mock();
+
+        // load dependency plugins first
+        MockBukkit.loadWith(LibsDisguisesMock.class, new File("Ollivanders/test/resources/mocks/LibsDisguises/plugin.yml"));
+
+        // load plugin
         Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
 
         book = new ADVANCED_TRANSFIGURATION(testPlugin);

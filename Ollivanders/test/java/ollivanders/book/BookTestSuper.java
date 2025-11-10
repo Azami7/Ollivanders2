@@ -16,7 +16,6 @@ abstract public class BookTestSuper {
     O2Book book;
     BookMeta meta;
 
-    @BeforeEach
     abstract void setUp();
 
     /**

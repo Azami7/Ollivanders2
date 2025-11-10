@@ -19,8 +19,16 @@ import org.mockbukkit.mockbukkit.ServerMock;
 
 import java.io.File;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Unit tests for O2Book.java
+ */
 public class O2BookTest {
     static World testWorld;
     static Ollivanders2 testPlugin;
