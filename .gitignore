@@ -4,6 +4,9 @@ out
 *.iml
 lib
 
+# Ignore third-party dependency plugins (paid/licensed plugins)
+dependency-plugins
+
 # Ignore Gradle project-specific cache directory
 .gradle
 

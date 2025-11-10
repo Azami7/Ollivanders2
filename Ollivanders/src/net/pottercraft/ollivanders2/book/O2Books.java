@@ -79,8 +79,6 @@ public final class O2Books implements Listener {
         spellText = new BookTexts(plugin);
 
         p.getServer().getPluginManager().registerEvents(this, p);
-
-        common.printLogMessage("Created Ollivanders2 books.", null, null, false);
     }
 
     /**
@@ -89,8 +87,12 @@ public final class O2Books implements Listener {
      * This needs to be run after spells and potions are loaded or the text for these will not be loaded.
      */
     public void onEnable() {
+        // in case the plugin was disabled and then re-enabled, reset the book map
+        O2BookMap.clear();
+
         // add all books
         addBooks();
+        common.printLogMessage("Added " + O2BookMap.keySet().size() + " books.", null, null, false);
 
         // add all spell texts for quick book item creation
         spellText.onEnable();
@@ -262,7 +264,7 @@ public final class O2Books implements Listener {
      * @param itemMeta the item meta
      * @param player   the player reading the book
      */
-    public void readNBT(@NotNull ItemMeta itemMeta, @NotNull Player player) {
+    private void readNBT(@NotNull ItemMeta itemMeta, @NotNull Player player) {
         if (!Ollivanders2.bookLearning)
             return;
 
@@ -442,16 +444,6 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Get all loaded books.
-     *
-     * @return the map of loaded book types and titles
-     */
-    @NotNull
-    public Map<String, O2BookType> getLoadedBooks() {
-        return new HashMap<>(O2BookMap);
-    }
-
-    /**
      * Run the books subcommands
      *
      * @param sender the player that issued the command
@@ -574,7 +566,7 @@ public final class O2Books implements Listener {
      *
      * @param sender the player to display the list to
      */
-    public void listAllBooks(@NotNull CommandSender sender) {
+    private void listAllBooks(@NotNull CommandSender sender) {
         StringBuilder titleList = new StringBuilder();
         titleList.append("Book Titles:");
 
@@ -583,46 +575,5 @@ public final class O2Books implements Listener {
         }
 
         sender.sendMessage(Ollivanders2.chatColor + titleList.toString());
-    }
-
-    /**
-     * Is this book a specific O2Book?
-     *
-     * @param book     the book item to check
-     * @param bookType the type to match
-     * @param p        Ollivanders2 plugin
-     * @return true if the book matches, false otherwise
-     */
-    public static boolean matchesO2Book(@NotNull ItemStack book, @NotNull O2BookType bookType, @NotNull Ollivanders2 p) {
-        if (book.getType() != Material.WRITTEN_BOOK)
-            return false;
-
-        ItemMeta bookMeta = book.getItemMeta();
-        if (bookMeta == null)
-            return false;
-
-        // new books use NBT, which is better for preventing players making fake books
-        PersistentDataContainer container = bookMeta.getPersistentDataContainer();
-        if (container.has(O2Book.o2BookTypeKey, PersistentDataType.STRING)) {
-            String bookTypeString = container.get(O2Book.o2BookTypeKey, PersistentDataType.STRING);
-            if (bookTypeString == null)
-                return false;
-
-            return bookTypeString.equalsIgnoreCase(bookType.toString());
-        }
-
-        // they don't have the NBT tag, fall back to checking title and author
-        String title = ((BookMeta) bookMeta).getTitle();
-        if (title == null)
-            return false;
-
-        if (!(title.equalsIgnoreCase(bookType.getShortTitle(p))))
-            return false;
-
-        String author = ((BookMeta) bookMeta).getAuthor();
-        if (author == null)
-            return false;
-
-        return author.equalsIgnoreCase(bookType.getAuthor());
     }
 }

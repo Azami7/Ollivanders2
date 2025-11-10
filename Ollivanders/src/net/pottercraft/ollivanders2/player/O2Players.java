@@ -579,8 +579,7 @@ public class O2Players {
      */
     public void usageSummaryPlayer(CommandSender sender) {
         sender.sendMessage(Ollivanders2.chatColor
-                + "\nUsage:"
-                + "\n/olli summary - gives a summary of wand type, house, year, and known spells\n");
+                + "Usage: /olli summary - gives a summary of wand type, house, year, and known spells\n");
     }
 
     /**

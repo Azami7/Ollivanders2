@@ -26,7 +26,7 @@ public class BOOK_OF_POTIONS extends O2Book {
     public BOOK_OF_POTIONS(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
-        // bookType = O2BookType.BOOK_OF_POTIONS;
+        bookType = O2BookType.BOOK_OF_POTIONS;
 
         openingPage = "You, young potioneer, hold in your hands my masterpiece. With it, my place in history is assured. -Zygmunt Budge";
 

@@ -41,7 +41,16 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
                     "\"Not until Montague reappears, and that could take weeks, I dunno where we sent him...\" -Fred Weasley and Hermione Granger");
         }};
 
-        text = "Harmonia Nectere Passus will create a pair of vanishing cabinets if the cabinets on both ends are configured correctly.";
+        text = "Harmonia Nectere Passus will create a pair of vanishing cabinets if the cabinets on both ends are configured correctly."
+                + "\n\nVanishing cabinet construction is very precise and the cabinets will only work if the directions are followed exactly."
+                + "\n\nStep 1 - determine the XYZ coordinates for the cabinets. These must be in whole numbers."
+                + "\n\nStep 2 - create a sign at each XYZ coordinate that contains the coordinates for the other cabinet."
+                + "Write the world name on the first line, the X coordinate on the second, Y on the third, and Z on the fourth."
+                + "\n\nStep 3 - place any type of solid block 2-blocks high on each side, in front, and in back of the sign - 4 blocks total."
+                + "\n\nStep 4 - leave an air block above the sign and place any type of solid block above that air block."
+                + "\n\nStep 5 - construct the other cabinet following steps 3 and 4."
+                + "\n\nStep 6 - cast the vanishing cabinet repair spell, Harmonia Nectere Passus, at either of the two signs."
+                + "\n\nYou can now walk in to the cabinet and appear in the other.";
     }
 
     /**

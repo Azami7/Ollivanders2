@@ -1,0 +1,4 @@
+name: LibsDisguises
+version: 1.0.0
+main: test.mocks.LibsDisguisesMock
+api-version: 1.21

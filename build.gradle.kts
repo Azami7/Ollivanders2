@@ -16,9 +16,6 @@ sourceSets {
         }
         resources {
             setSrcDirs(listOf("Ollivanders/src"))
-            //resources.srcDirs("Ollivanders/test/resources")
-            // Optional: only expose plugin-test.yml to tests
-            //resources.include("plugin-test.yml")
         }
     }
     test {
