@@ -1,4 +1,4 @@
-package ollivanders;
+package ollivanders.testcommon;
 
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -9,7 +9,6 @@ import org.jetbrains.annotations.Nullable;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -22,12 +21,26 @@ public class TestCommon {
      *
      * @param expected the message we expected
      * @param message the message received
-     * @return
+     * @return strippedMessage.startsWith(expected)
      */
     public static boolean messageStartsWith(@NotNull String expected, @NotNull String message) {
         String strippedMessage = message.replaceAll("§.", "");
 
         return strippedMessage.startsWith(expected);
+    }
+
+    /**
+     * Compare the message received by a player to the expected message. This needs a helper because
+     * we need to strip chat color codes from the messages sent by the plugin.
+     *
+     * @param expected the message we expected
+     * @param message the message received
+     * @return strippedMessage.equals(expected)
+     */
+    public static boolean messageEquals(@NotNull String expected, @NotNull String message) {
+        String strippedMessage = message.replaceAll("§.", "");
+
+        return strippedMessage.equals(expected);
     }
 
     /**
@@ -92,4 +105,6 @@ public class TestCommon {
 
         return false;
     }
+
+
 }

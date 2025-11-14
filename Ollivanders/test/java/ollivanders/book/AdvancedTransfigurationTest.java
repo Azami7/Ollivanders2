@@ -22,14 +22,6 @@ import java.io.File;
 public class AdvancedTransfigurationTest extends BookTestSuper {
     @BeforeEach
     void setUp() {
-        MockBukkit.mock();
-
-        // load dependency plugins first
-        MockBukkit.loadWith(LibsDisguisesMock.class, new File("Ollivanders/test/resources/mocks/LibsDisguises/plugin.yml"));
-
-        // load plugin
-        Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
-
         book = new ADVANCED_TRANSFIGURATION(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();
     }

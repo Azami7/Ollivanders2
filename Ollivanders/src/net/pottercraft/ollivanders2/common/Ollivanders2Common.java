@@ -31,27 +31,26 @@ import org.jetbrains.annotations.Nullable;
 /**
  * A collection of common functions and data.
  */
-
 public class Ollivanders2Common {
     /**
      * Default world label used for serializing and unserializing locations
      */
-    private static final String locationWorldLabel = "World";
+    public static final String locationWorldLabel = "World";
 
     /**
      * Default x-coordinate label used for serializing and unserializing locations
      */
-    private static final String locationXLabel = "X-Value";
+    public static final String locationXLabel = "X-Value";
 
     /**
      * Default y-coordinate label used for serializing and unserializing locations
      */
-    private static final String locationYLabel = "Y-Value";
+    public static final String locationYLabel = "Y-Value";
 
     /**
      * Default z-coordinate label used for serializing and unserializing locations
      */
-    private static final String locationZLabel = "Z-Value";
+    public static final String locationZLabel = "Z-Value";
 
     /**
      * The number of ticks per second for an MC server.
@@ -232,6 +231,7 @@ public class Ollivanders2Common {
         add(Material.WAXED_COPPER_DOOR);
         add(Material.WAXED_EXPOSED_COPPER_DOOR);
         add(Material.WAXED_WEATHERED_COPPER_DOOR);
+        add(Material.WAXED_OXIDIZED_COPPER_DOOR);
         add(Material.WEATHERED_COPPER_DOOR);
     }};
 
@@ -256,8 +256,9 @@ public class Ollivanders2Common {
         add(Material.PALE_OAK_TRAPDOOR);
         add(Material.SPRUCE_TRAPDOOR);
         add(Material.WARPED_TRAPDOOR);
-        add(Material.WAXED_COPPER_DOOR);
-        add(Material.WAXED_OXIDIZED_COPPER_DOOR);
+        add(Material.WAXED_COPPER_TRAPDOOR);
+        add(Material.WAXED_EXPOSED_COPPER_TRAPDOOR);
+        add(Material.WAXED_OXIDIZED_COPPER_TRAPDOOR);
         add(Material.WAXED_WEATHERED_COPPER_TRAPDOOR);
         add(Material.WEATHERED_COPPER_TRAPDOOR);
     }};
@@ -270,6 +271,22 @@ public class Ollivanders2Common {
         add(Material.FIRE);
         add(Material.CAMPFIRE);
         add(Material.MAGMA_BLOCK);
+        add(Material.SOUL_CAMPFIRE);
+        add(Material.SOUL_FIRE);
+    }};
+
+    public static final List<Material> naturalLogs = new ArrayList<>() {{
+        add(Material.ACACIA_LOG);
+        add(Material.BIRCH_LOG);
+        add(Material.CHERRY_LOG);
+        add(Material.CRIMSON_STEM);
+        add(Material.DARK_OAK_LOG);
+        add(Material.JUNGLE_LOG);
+        add(Material.MANGROVE_LOG);
+        add(Material.OAK_LOG);
+        add(Material.PALE_OAK_LOG);
+        add(Material.SPRUCE_LOG);
+        add(Material.WARPED_STEM);
     }};
 
     /**
@@ -339,18 +356,9 @@ public class Ollivanders2Common {
      * @param boolString the boolean as a string
      * @return the Boolean or null if an exception occurred
      */
-    @Nullable
+    @NotNull
     public Boolean booleanFromString(@NotNull String boolString) {
-        Boolean b = null;
-
-        try {
-            b = Boolean.valueOf(boolString);
-        }
-        catch (Exception e) {
-            printDebugMessage("Failed to parse boolean " + boolString, e, null, true);
-        }
-
-        return b;
+        return Boolean.valueOf(boolString);
     }
 
     /**
@@ -388,7 +396,7 @@ public class Ollivanders2Common {
     @NotNull
     static public List<Block> getBlocksInRadius(@NotNull Location loc, double radius) {
         Block center = loc.getBlock();
-        int blockRadius = (int) (radius + 1);
+        int blockRadius = (int) (radius);
         List<Block> blockList = new ArrayList<>();
         for (int x = -blockRadius; x <= blockRadius; x++) {
             for (int y = -blockRadius; y <= blockRadius; y++) {
@@ -490,6 +498,24 @@ public class Ollivanders2Common {
         double z = 0.0;
         String worldName = "world";
 
+        // make sure the serialized data contains all keys
+        if (!locData.containsKey(labelPrefix + "_" + locationWorldLabel)) {
+            printLogMessage("Ollivanders2Common.deserializeLocation(): locData does not contain world name", null, null, true);
+            return null;
+        }
+        else if (!locData.containsKey(labelPrefix + "_" + locationXLabel)) {
+            printLogMessage("Ollivanders2Common.deserializeLocation(): locData does not contail X coord", null, null, true);
+            return null;
+        }
+        else if (!locData.containsKey(labelPrefix + "_" + locationYLabel)) {
+            printLogMessage("Ollivanders2Common.deserializeLocation(): locData does not contain Y coord", null, null, true);
+            return null;
+        }
+        else if (!locData.containsKey(labelPrefix + "_" + locationZLabel)) {
+            printLogMessage("Ollivanders2Common.deserializeLocation(): locData does not contain Z coord", null, null, true);
+            return null;
+        }
+
         for (Entry<String, String> e : locData.entrySet()) {
             try {
                 if (e.getKey().equals(labelPrefix + "_" + locationWorldLabel))
@@ -502,31 +528,18 @@ public class Ollivanders2Common {
                     z = Double.parseDouble(e.getValue());
             }
             catch (Exception exception) {
-                printDebugMessage("Unable to deserialize location", exception, null, true);
+                printDebugMessage("Ollivanders2Common.deserializeLocation(): Unable to deserialize location", exception, null, true);
                 return null;
             }
         }
 
         World world = Bukkit.getServer().getWorld(worldName);
-
-        return new Location(world, x, y, z);
-    }
-
-    /**
-     * Convert an array of strings to a single string.
-     *
-     * @param strArray the array to convert
-     * @return the array as a single string
-     */
-    @NotNull
-    static public String stringArrayToString(@NotNull String[] strArray) {
-        StringBuilder newString = new StringBuilder();
-
-        for (String str : strArray) {
-            newString.append(" ").append(str);
+        if (world == null) {
+            printDebugMessage("Ollivanders2Common.deserializeLocation(): location world is null", null, null, true);
+            return null;
         }
 
-        return newString.toString().trim();
+        return new Location(world, x, y, z);
     }
 
     /**
@@ -548,20 +561,6 @@ public class Ollivanders2Common {
         }
 
         return target;
-    }
-
-    /**
-     * Is this material a natural log (i.e. living tree)
-     *
-     * @param block the block to check
-     * @return true if it is a natural log, false otherwise
-     */
-    static public boolean isNaturalLog(@NotNull Block block) {
-        Material material = block.getType();
-
-        return (material == Material.OAK_LOG || material == Material.BIRCH_LOG || material == Material.ACACIA_LOG
-                || material == Material.DARK_OAK_LOG || material == Material.JUNGLE_LOG || material == Material.SPRUCE_LOG
-                || material == Material.CHERRY_LOG || material == Material.MANGROVE_LOG || material == Material.PALE_OAK_LOG);
     }
 
     /**
@@ -632,22 +631,6 @@ public class Ollivanders2Common {
                     effectLocation.getWorld().spawnParticle(particleType, effectLocation, 4, 0, 0, 0, 0);
             }
         }
-    }
-
-    /**
-     * Translates vector to spherical coordinates
-     *
-     * @param vector Vector to be translated
-     * @return Spherical coordinates in double array with indexes 0=inclination 1=azimuth
-     */
-    public static double[] vectorToSphere(@NotNull Vector vector) {
-        double inclusion = Math.acos(vector.getZ());
-        double azimuth = Math.atan2(vector.getY(), vector.getX());
-        double[] sphere = new double[2];
-        sphere[0] = inclusion;
-        sphere[1] = azimuth;
-
-        return sphere;
     }
 
     /**

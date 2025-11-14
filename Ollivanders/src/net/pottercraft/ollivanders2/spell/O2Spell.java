@@ -445,7 +445,7 @@ public abstract class O2Spell {
      */
     @NotNull
     public List<Item> getItems(double radius) {
-        return EntityCommon.getItems(location, radius);
+        return EntityCommon.getItemsInRadius(location, radius);
     }
 
     /**

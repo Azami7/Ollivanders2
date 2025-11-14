@@ -7,7 +7,7 @@ import net.pottercraft.ollivanders2.book.O2Books;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
-import ollivanders.TestCommon;
+import ollivanders.testcommon.TestCommon;
 import ollivanders.pluginDependencies.LibsDisguisesMock;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -33,15 +33,20 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Unit tests for O2Books.java
+ * Unit tests for O2Books.java.
+ * Tests book retrieval, book learning mechanics, and book-related commands.
  */
 public class O2BooksTest {
     static Ollivanders2 testPlugin;
     static ServerMock mockServer;
     static O2Books books;
 
+    /**
+     * Set up the mock server, load dependency plugins, load the main plugin with test config,
+     * and get the books instance from the plugin.
+     */
     @BeforeAll
-    static void setUp () {
+    static void globalSetUp () {
         mockServer = MockBukkit.mock();
 
         // load dependency plugins first
@@ -64,6 +69,12 @@ public class O2BooksTest {
         assertTrue(mockServer.getPluginManager().isPluginEnabled("LibsDisguises"));
     }
 
+    /**
+     * Test that reading a book triggers the book learning mechanic and increases
+     * the player's spell level for spells contained in that book.
+     * This test simulates a player right-clicking with a book and verifies the
+     * spell count increases after scheduled tasks execute.
+     */
     @Test
     void onBookReadTest() throws InterruptedException {
         // make sure bookLearning is on in the config
@@ -96,6 +107,10 @@ public class O2BooksTest {
         assertNotEquals(spellLevel, o2p.getSpellCount(O2SpellType.LUMOS), "Spell level did not change after book was read.");
     }
 
+    /**
+     * Test that getBookByTitle correctly retrieves a book by its full title
+     * and returns a valid WRITTEN_BOOK item with correct metadata.
+     */
     @Test
     void getBookByTitleTest() {
         String title = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1.getTitle(testPlugin);
@@ -107,6 +122,10 @@ public class O2BooksTest {
         assertEquals(title, bookMeta.getTitle(), "book title incorrect.");
     }
 
+    /**
+     * Test that getBookByType correctly retrieves a book by its O2BookType enum value
+     * and returns a valid WRITTEN_BOOK item with correct metadata.
+     */
     @Test
     void getBookByTypeTest() {
         String title = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1.getTitle(testPlugin);
@@ -118,6 +137,11 @@ public class O2BooksTest {
         assertEquals(title, bookMeta.getTitle(), "book title incorrect.");
     }
 
+    /**
+     * Test that getBookTypeByTitle correctly retrieves a book type by title using
+     * various search methods: full title (case-sensitive), partial title, and
+     * case-insensitive matching.
+     */
     @Test
     void getBookTypeByTitleTest() {
         // try full title, case-sensitive
@@ -139,6 +163,10 @@ public class O2BooksTest {
         assertEquals(title, bookType.getTitle(testPlugin), "bookType.getTitle() does not match expected title");
     }
 
+    /**
+     * Test that getAllBooks returns a non-empty list containing all book types
+     * defined in the O2BookType enum.
+     */
     @Test
     void getAllBooksTest() {
         List<ItemStack> bookStack = books.getAllBooks();
@@ -146,6 +174,10 @@ public class O2BooksTest {
         assertEquals(O2BookType.values().length, bookStack.size(), "books.getAllBooks() did not return a list with all books");
     }
 
+    /**
+     * Test that getAllBookTitles returns a non-empty list containing the titles
+     * of all books defined in the O2BookType enum.
+     */
     @Test
     void getAllBookTitles() {
         List<String> bookTitles = books.getAllBookTitles();
@@ -197,6 +229,10 @@ public class O2BooksTest {
         assertTrue(TestCommon.isInPlayerInventory(player, Material.WRITTEN_BOOK));
     }
 
+    /**
+     * Test that the "/olli books list" command returns a list of all available books.
+     * The response should contain book titles from the loaded books.
+     */
     @Test
     void runCommandListTest() {
         PlayerMock player = mockServer.addPlayer("Steve");
@@ -207,6 +243,10 @@ public class O2BooksTest {
         assertTrue(commandResponse.contains("Standard Book of Spells"), "Ollivanders2 books list did not return list of loaded books");
     }
 
+    /**
+     * Test that the "/olli books give [player] [book title]" command successfully
+     * gives the specified book to the target player's inventory.
+     */
     @Test
     void runCommandGiveTest() {
         PlayerMock player = mockServer.addPlayer("Steve");
@@ -217,6 +257,10 @@ public class O2BooksTest {
         assertTrue(TestCommon.isInPlayerInventory(player2, Material.WRITTEN_BOOK, "Basic Hexes"), "Did not find the book in the player's inventory");
     }
 
+    /**
+     * Test that the "/olli books give [player] [book title]" command returns an
+     * appropriate error message when the specified player is not found on the server.
+     */
     @Test
     void runCommandGivePlayerNotFoundTest() {
         PlayerMock player = mockServer.addPlayer("Steve");
@@ -227,6 +271,10 @@ public class O2BooksTest {
         assertTrue(TestCommon.messageStartsWith("Did not find player", commandResponse), "Unexpected command response. Expected: \"Did not find player\", Actual: " + commandResponse);
     }
 
+    /**
+     * Test that the "/olli books give [player]" command (without book title)
+     * returns a usage message indicating the correct command syntax.
+     */
     @Test
     void runCommandGiveUsageTest() {
         PlayerMock player = mockServer.addPlayer("Steve");
@@ -237,6 +285,10 @@ public class O2BooksTest {
         assertTrue(TestCommon.messageStartsWith("Usage:", commandResponse), "Unexpected command response. Expected: \"Usage:\", Actual: " + commandResponse);
     }
 
+    /**
+     * Test that the "/olli books [book title]" command successfully gives the
+     * specified book to the command sender's inventory.
+     */
     @Test
     void runCommandBookTitleTest() {
         PlayerMock player = mockServer.addPlayer("Steve");
@@ -246,6 +298,10 @@ public class O2BooksTest {
         assertTrue(TestCommon.isInPlayerInventory(player, Material.WRITTEN_BOOK, "Basic Hexes"), "Did not find the book in the player's inventory");
     }
 
+    /**
+     * Test that the "/olli books [invalid book title]" command returns an
+     * appropriate error message when the specified book title doesn't exist.
+     */
     @Test
     void runCommandBookTitleDoesntExistTest() {
         PlayerMock player = mockServer.addPlayer("Steve");
@@ -256,8 +312,11 @@ public class O2BooksTest {
         assertTrue(TestCommon.messageStartsWith("No book named", commandResponse), "Unexpected command response. Expected: \"No book named\", Actual: " + commandResponse);
     }
 
+    /**
+     * Clean up the mock server after all tests have run.
+     */
     @AfterAll
-    static void tearDown() {
+    static void globalTearDown() {
         MockBukkit.unmock();
     }
 }

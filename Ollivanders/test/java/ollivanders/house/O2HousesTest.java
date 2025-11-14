@@ -6,7 +6,8 @@ import net.pottercraft.ollivanders2.house.O2HouseType;
 import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.house.events.OllivandersPlayerSortedEvent;
 import org.bukkit.World;
-import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
@@ -32,7 +33,7 @@ public class O2HousesTest {
     static World testWorld;
     static Ollivanders2 testPlugin;
     static ServerMock mockServer;
-    static O2Houses testHouses;
+    O2Houses testHouses;
 
     static PlayerMock player1;
     static final String player1Name = "Bob";
@@ -58,22 +59,24 @@ public class O2HousesTest {
         assertEquals(expectedScore, objective.getScore(house.getName()).getScore(), message);
     }
 
-    @BeforeEach
-    void setUp () {
+    @BeforeAll
+    static void globalSetUp() {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/houses_config.yml"));
-
         // set up world
         testWorld = mockServer.addSimpleWorld("world");
-
-        // get O2Houses
-        testHouses = Ollivanders2API.getHouses();
-        testHouses.reset();
 
         // create some players we will need
         player1 = mockServer.addPlayer(player1Name);
         player2 = mockServer.addPlayer(player2Name);
         player3 = mockServer.addPlayer(player3Name);
+    }
+
+    @BeforeEach
+    void setUp() {
+        // get O2Houses
+        testHouses = Ollivanders2API.getHouses();
+        testHouses.reset();
     }
 
     /**
@@ -264,8 +267,8 @@ public class O2HousesTest {
                 "Slytherin with 5 points should be tied for 3rd place");
     }
 
-    @AfterEach
-    void tearDown () {
+    @AfterAll
+    static void globalTearDown () {
         MockBukkit.unmock();
     }
 }

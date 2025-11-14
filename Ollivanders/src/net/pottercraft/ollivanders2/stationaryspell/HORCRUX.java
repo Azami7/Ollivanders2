@@ -194,7 +194,7 @@ public class HORCRUX extends O2StationarySpell {
     void doOnPlayerJoinEvent(@NotNull PlayerJoinEvent event) {
         if (!itemLoaded) {
             // did the game respawn the item?
-            for (Item itemsAtLocation : EntityCommon.getItems(location, 1)) {
+            for (Item itemsAtLocation : EntityCommon.getItemsInRadius(location, 1)) {
                 if (itemsAtLocation.getItemStack().getType() == horcruxMaterial) {
                     horcruxItem = itemsAtLocation;
                     return;

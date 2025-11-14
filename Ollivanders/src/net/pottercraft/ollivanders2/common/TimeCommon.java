@@ -59,7 +59,7 @@ public enum TimeCommon {
      * @return the time for the default world
      */
     static public long getDefaultWorldTime() {
-        return Bukkit.getServer().getWorlds().get(0).getFullTime();
+        return Bukkit.getServer().getWorlds().getFirst().getFullTime();
     }
 
     /**

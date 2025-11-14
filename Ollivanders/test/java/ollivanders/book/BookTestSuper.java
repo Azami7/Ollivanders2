@@ -1,12 +1,17 @@
 package ollivanders.book;
 
+import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.book.O2Book;
+import ollivanders.pluginDependencies.LibsDisguisesMock;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
+
+import java.io.File;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -15,6 +20,16 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 abstract public class BookTestSuper {
     O2Book book;
     BookMeta meta;
+    static Ollivanders2 testPlugin;
+
+    @BeforeAll
+    static void globalSetUp() {
+        MockBukkit.mock();
+        // load dependency plugins first
+        MockBukkit.loadWith(LibsDisguisesMock.class, new File("Ollivanders/test/resources/mocks/LibsDisguises/plugin.yml"));
+        // load plugin
+        testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
+    }
 
     abstract void setUp();
 
@@ -122,8 +137,8 @@ abstract public class BookTestSuper {
         assertFalse(meta.getAuthor().isEmpty(), "Author should not be empty");
     }
 
-    @AfterEach
-    void tearDown() {
+    @AfterAll
+    static void globalTearDown() {
         MockBukkit.unmock();
     }
 }

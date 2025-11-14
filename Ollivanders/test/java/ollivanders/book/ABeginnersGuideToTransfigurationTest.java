@@ -21,9 +21,6 @@ import java.io.File;
 public class ABeginnersGuideToTransfigurationTest extends BookTestSuper {
     @BeforeEach
     void setUp() {
-        MockBukkit.mock();
-        Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
-
         book = new A_BEGINNERS_GUIDE_TO_TRANSFIGURATION(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();
     }

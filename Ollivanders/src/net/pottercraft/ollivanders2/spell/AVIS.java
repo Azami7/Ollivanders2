@@ -99,7 +99,7 @@ public final class AVIS extends O2Spell {
             }
 
             Parrot bird = (Parrot) (world.spawnEntity(location, EntityType.PARROT));
-            bird.setVariant(EntityCommon.getRandomParrotColor());
+            bird.setVariant(EntityCommon.getRandomParrotVariant());
 
             birdsRemaining = birdsRemaining - 1;
         }

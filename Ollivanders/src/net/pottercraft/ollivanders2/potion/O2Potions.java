@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.List;
 
+import net.pottercraft.ollivanders2.common.MagicLevel;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
@@ -22,6 +23,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -115,6 +117,53 @@ public class O2Potions {
         add(O2ItemType.VALERIAN_SPRIGS);
         add(O2ItemType.VALERIAN_ROOT);
         add(O2ItemType.WOLFSBANE);
+    }};
+
+    /**
+     * The magic level for every minecraft potion effect type, primarily for use with Finite Incantatum
+     * <p>
+     * {@link net.pottercraft.ollivanders2.spell.FINITE_INCANTATEM}
+     */
+    static HashMap<PotionEffectType, MagicLevel> potionEffectLevels = new HashMap<>() {{
+        put(PotionEffectType.ABSORPTION, MagicLevel.OWL);
+        put(PotionEffectType.BAD_OMEN, MagicLevel.NEWT);
+        put(PotionEffectType.BLINDNESS, MagicLevel.OWL);
+        put(PotionEffectType.CONDUIT_POWER, MagicLevel.NEWT);
+        put(PotionEffectType.DARKNESS, MagicLevel.OWL);
+        put(PotionEffectType.DOLPHINS_GRACE, MagicLevel.NEWT);
+        put(PotionEffectType.FIRE_RESISTANCE, MagicLevel.NEWT);
+        put(PotionEffectType.GLOWING, MagicLevel.BEGINNER);
+        put(PotionEffectType.HASTE, MagicLevel.BEGINNER);
+        put(PotionEffectType.HEALTH_BOOST, MagicLevel.NEWT);
+        put(PotionEffectType.HERO_OF_THE_VILLAGE, MagicLevel.NEWT);
+        put(PotionEffectType.HUNGER, MagicLevel.BEGINNER);
+        put(PotionEffectType.INFESTED, MagicLevel.OWL);
+        put(PotionEffectType.INSTANT_DAMAGE, MagicLevel.OWL);
+        put(PotionEffectType.INSTANT_HEALTH, MagicLevel.OWL);
+        put(PotionEffectType.INVISIBILITY, MagicLevel.EXPERT);
+        put(PotionEffectType.JUMP_BOOST, MagicLevel.BEGINNER);
+        put(PotionEffectType.LEVITATION, MagicLevel.OWL);
+        put(PotionEffectType.LUCK, MagicLevel.BEGINNER);
+        put(PotionEffectType.MINING_FATIGUE, MagicLevel.BEGINNER);
+        put(PotionEffectType.NAUSEA, MagicLevel.OWL);
+        put(PotionEffectType.NIGHT_VISION, MagicLevel.BEGINNER);
+        put(PotionEffectType.OOZING, MagicLevel.OWL);
+        put(PotionEffectType.POISON, MagicLevel.OWL);
+        put(PotionEffectType.RAID_OMEN, MagicLevel.NEWT);
+        put(PotionEffectType.REGENERATION, MagicLevel.NEWT);
+        put(PotionEffectType.RESISTANCE, MagicLevel.NEWT);
+        put(PotionEffectType.SATURATION, MagicLevel.BEGINNER);
+        put(PotionEffectType.SLOW_FALLING, MagicLevel.NEWT);
+        put(PotionEffectType.SLOWNESS, MagicLevel.BEGINNER);
+        put(PotionEffectType.SPEED, MagicLevel.BEGINNER);
+        put(PotionEffectType.STRENGTH, MagicLevel.NEWT);
+        put(PotionEffectType.TRIAL_OMEN, MagicLevel.NEWT);
+        put(PotionEffectType.UNLUCK, MagicLevel.BEGINNER);
+        put(PotionEffectType.WATER_BREATHING, MagicLevel.NEWT);
+        put(PotionEffectType.WEAKNESS, MagicLevel.OWL);
+        put(PotionEffectType.WEAVING, MagicLevel.OWL);
+        put(PotionEffectType.WIND_CHARGED, MagicLevel.OWL);
+        put(PotionEffectType.WITHER, MagicLevel.NEWT);
     }};
 
     /**
@@ -371,5 +420,19 @@ public class O2Potions {
      */
     public boolean isLoaded(@NotNull O2PotionType potionType) {
         return O2PotionMap.containsValue(potionType);
+    }
+
+    /**
+     * Get the magic effect level for MC Potion Effects.
+     *
+     * @param potionEffectType the effect type to get the level of
+     * @return the effect type level or OWL if it is not explicitly defined
+     */
+    @NotNull
+    static public MagicLevel getPotionEffectMagicLevel(@NotNull PotionEffectType potionEffectType) {
+        if (potionEffectLevels.containsKey(potionEffectType))
+            return potionEffectLevels.get(potionEffectType);
+        else
+            return MagicLevel.OWL;
     }
 }

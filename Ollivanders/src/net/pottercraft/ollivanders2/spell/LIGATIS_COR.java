@@ -71,7 +71,7 @@ public final class LIGATIS_COR extends O2Spell {
         }
 
         // is there a wand nearby?
-        Item baseWand = EntityCommon.getNearbyItemByType(location, O2ItemType.WAND, 1.5);
+        Item baseWand = EntityCommon.getNearbyO2ItemByType(location, O2ItemType.WAND, 1.5);
         if (baseWand == null)
             return;
 

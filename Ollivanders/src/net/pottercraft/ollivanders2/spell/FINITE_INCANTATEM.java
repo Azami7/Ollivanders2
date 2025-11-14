@@ -5,10 +5,10 @@ import java.util.Collection;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.MagicLevel;
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
+import net.pottercraft.ollivanders2.potion.O2Potions;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -129,7 +129,7 @@ public final class FINITE_INCANTATEM extends O2Spell {
                 Collection<PotionEffect> potionEffects = live.getActivePotionEffects();
 
                 for (PotionEffect effect : potionEffects) {
-                    MagicLevel level = EntityCommon.getPotionEffectMagicLevel(effect.getType());
+                    MagicLevel level = O2Potions.getPotionEffectMagicLevel(effect.getType());
 
                     if (level.ordinal() <= spellType.getLevel().ordinal())
                         player.removePotionEffect(effect.getType());

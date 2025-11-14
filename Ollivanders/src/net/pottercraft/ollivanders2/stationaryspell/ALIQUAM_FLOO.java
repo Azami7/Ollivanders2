@@ -155,7 +155,7 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
             }
         }
         else {
-            for (Item item : EntityCommon.getItems(location, 1)) {
+            for (Item item : EntityCommon.getItemsInRadius(location, 1)) {
                 if (!O2ItemType.FLOO_POWDER.isItemThisType(item))
                     continue;
 

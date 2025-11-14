@@ -21,9 +21,6 @@ import java.io.File;
 public class TheHealersHelpmateTest extends BookTestSuper {
     @BeforeEach
     void setUp() {
-        MockBukkit.mock();
-        Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
-
         book = new THE_HEALERS_HELPMATE(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();
     }
