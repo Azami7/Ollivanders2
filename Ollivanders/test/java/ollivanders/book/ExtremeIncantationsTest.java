@@ -21,9 +21,6 @@ import java.io.File;
 public class ExtremeIncantationsTest extends BookTestSuper {
    @BeforeEach
     void setUp() {
-        MockBukkit.mock();
-        Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
-
         book = new EXTREME_INCANTATIONS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();
     }

@@ -21,9 +21,6 @@ import java.io.File;
 public class ChadwicksCharmsVolume1Test extends BookTestSuper {
     @BeforeEach
     void setUp() {
-        MockBukkit.mock();
-        Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
-
         book = new CHADWICKS_CHARMS_VOLUME_1(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();
     }

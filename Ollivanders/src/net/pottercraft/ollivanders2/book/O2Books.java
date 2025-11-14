@@ -534,7 +534,7 @@ public final class O2Books implements Listener {
      */
     @Nullable
     private ItemStack getBookFromArgs(@NotNull String[] args, @NotNull CommandSender sender) {
-        String title = Ollivanders2Common.stringArrayToString(args);
+        String title = String.join(" ", args);
 
         ItemStack bookItem = getBookByTitle(title);
 

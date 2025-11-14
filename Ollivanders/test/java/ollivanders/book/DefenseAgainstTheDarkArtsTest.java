@@ -21,9 +21,6 @@ import java.io.File;
 public class DefenseAgainstTheDarkArtsTest extends BookTestSuper {
     @BeforeEach
     void setUp() {
-        MockBukkit.mock();
-        Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
-
         book = new DEFENSE_AGAINST_THE_DARK_ARTS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();
     }

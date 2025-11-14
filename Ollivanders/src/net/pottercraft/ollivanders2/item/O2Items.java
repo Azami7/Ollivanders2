@@ -288,7 +288,7 @@ public class O2Items {
      * @return a nearby item of the type, if found, null otherwise
      */
     public Item getNearbyItemByO2ItemType(@NotNull Location location, @NotNull O2ItemType type, double radius) {
-        List<Item> items = EntityCommon.getItems(location, radius);
+        List<Item> items = EntityCommon.getItemsInRadius(location, radius);
 
         for (Item item : items) {
             // is this item the O2ItemType?

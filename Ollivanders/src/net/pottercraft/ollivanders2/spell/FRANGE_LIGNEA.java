@@ -75,7 +75,7 @@ public final class FRANGE_LIGNEA extends O2Spell {
         if (target == null)
             return;
 
-        if (Ollivanders2Common.isNaturalLog(target)) {
+        if (Ollivanders2Common.naturalLogs.contains(target)) {
             // break the log in to the correct wand core type
             O2WandWoodType woodType = O2WandWoodType.getWandWoodTypeByMaterial(target.getType());
             if (woodType == null) {

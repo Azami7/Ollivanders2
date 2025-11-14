@@ -19,8 +19,7 @@ import org.jetbrains.annotations.NotNull;
  * @see <a href = "https://harrypotter.fandom.com/wiki/Severing_Charm">https://harrypotter.fandom.com/wiki/Severing_Charm</a>
  */
 // todo why does this spell do two totally unrelated things? fix this to align with books
-public final class DIFFINDO extends O2Spell
-{
+public final class DIFFINDO extends O2Spell {
     private static final int maxRadius = 20;
 
     /**
@@ -28,15 +27,13 @@ public final class DIFFINDO extends O2Spell
      *
      * @param plugin the Ollivanders2 plugin
      */
-    public DIFFINDO(Ollivanders2 plugin)
-    {
+    public DIFFINDO(Ollivanders2 plugin) {
         super(plugin);
 
         spellType = O2SpellType.DIFFINDO;
         branch = O2MagicBranch.CHARMS;
 
-        flavorText = new ArrayList<>()
-        {{
+        flavorText = new ArrayList<>() {{
             add("The Severing Charm");
             add("With the Severing Charm, cutting or tearing objects is a simple matter of wand control.");
             add("The spell can be quite precise in skilled hands, and the Severing Charm is widely used in a variety of wizarding trades.");
@@ -52,15 +49,13 @@ public final class DIFFINDO extends O2Spell
      * @param player    the player who cast this spell
      * @param rightWand which wand the player was using
      */
-    public DIFFINDO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand)
-    {
+    public DIFFINDO(@NotNull Ollivanders2 plugin, @NotNull Player player, @NotNull Double rightWand) {
         super(plugin, player, rightWand);
         spellType = O2SpellType.DIFFINDO;
         branch = O2MagicBranch.CHARMS;
 
         // world guard flags
-        if (Ollivanders2.worldGuardEnabled)
-        {
+        if (Ollivanders2.worldGuardEnabled) {
             worldGuardFlags.add(Flags.PVP);
             worldGuardFlags.add(Flags.BUILD);
             worldGuardFlags.add(Flags.ITEM_DROP);
@@ -73,14 +68,12 @@ public final class DIFFINDO extends O2Spell
      * Split a log or a player's inventory
      */
     @Override
-    protected void doCheckEffect()
-    {
+    protected void doCheckEffect() {
         // first check for players
         splitBackpack();
 
         // next check for log
-        if (hasHitTarget() && !isKilled())
-        {
+        if (hasHitTarget() && !isKilled()) {
             splitLogs();
             kill();
         }
@@ -89,25 +82,21 @@ public final class DIFFINDO extends O2Spell
     /**
      * Split a player's inventory open and make items fall out
      */
-    private void splitBackpack()
-    {
+    private void splitBackpack() {
         List<Player> players = getNearbyPlayers(defaultRadius);
 
-        for (Player plyr : players)
-        {
+        for (Player plyr : players) {
             if (plyr.getUniqueId() == player.getUniqueId())
                 continue;
 
             PlayerInventory inv = plyr.getInventory();
             ArrayList<ItemStack> remStack = new ArrayList<>();
-            for (ItemStack stack : inv.getContents())
-            {
+            for (ItemStack stack : inv.getContents()) {
                 // 0-99% chance of this item being dropped, based on usesModifier where 200 casts gives 99% chance
                 if ((usesModifier / 2) > ((Math.abs(Ollivanders2Common.random.nextInt()) % 100) + 1))
                     remStack.add(stack);
             }
-            for (ItemStack rem : remStack)
-            {
+            for (ItemStack rem : remStack) {
                 inv.remove(rem);
                 plyr.getWorld().dropItemNaturally(plyr.getLocation(), rem);
             }
@@ -120,8 +109,7 @@ public final class DIFFINDO extends O2Spell
     /**
      * Split logs within a radius of the spell target location
      */
-    private void splitLogs()
-    {
+    private void splitLogs() {
         double radius = usesModifier / 4;
         if (radius < 1)
             radius = 1;
@@ -130,21 +118,16 @@ public final class DIFFINDO extends O2Spell
 
 
         Block target = getTargetBlock();
-        if (target == null)
-        {
+        if (target == null) {
             common.printDebugMessage("DIFFINDO.doCheckEffect: target block is null", null, null, false);
             kill();
             return;
         }
 
-        if (Ollivanders2Common.isNaturalLog(target))
-        {
-            for (Block nearbyBlock : Ollivanders2Common.getBlocksInRadius(location, radius))
-            {
-                if (Ollivanders2Common.isNaturalLog(nearbyBlock))
-                {
+        if (Ollivanders2Common.naturalLogs.contains(target)) {
+            for (Block nearbyBlock : Ollivanders2Common.getBlocksInRadius(location, radius)) {
+                if (Ollivanders2Common.naturalLogs.contains(nearbyBlock))
                     nearbyBlock.breakNaturally();
-                }
             }
         }
     }

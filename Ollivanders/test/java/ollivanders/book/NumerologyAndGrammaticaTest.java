@@ -21,9 +21,6 @@ import java.io.File;
 public class NumerologyAndGrammaticaTest extends BookTestSuper {
     @BeforeEach
     void setUp() {
-        MockBukkit.mock();
-        Ollivanders2 testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
-
         book = new NUMEROLOGY_AND_GRAMMATICA(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();
     }

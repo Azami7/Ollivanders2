@@ -1093,7 +1093,7 @@ public class Ollivanders2 extends JavaPlugin {
             if (amount > 64)
                 amount = 64;
 
-            String itemName = Ollivanders2Common.stringArrayToString(Arrays.copyOfRange(args, 3, args.length));
+            String itemName = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
             ItemStack item = items.getItemStartsWith(itemName, amount);
 
             if (item == null) {
@@ -1446,7 +1446,7 @@ public class Ollivanders2 extends JavaPlugin {
                     else if (sender instanceof Player) {
                         // potion ingredient mandrake leaf
                         String[] subArgs = Arrays.copyOfRange(args, 2, args.length);
-                        return giveItem((Player) sender, Ollivanders2Common.stringArrayToString(subArgs));
+                        return giveItem((Player) sender, String.join(" ", subArgs));
                     }
                     else
                         return false;
@@ -1468,7 +1468,7 @@ public class Ollivanders2 extends JavaPlugin {
 
                         if (targetPlayer != null) {
                             String[] subArgs = Arrays.copyOfRange(args, 3, args.length);
-                            return givePotion((Player) sender, targetPlayer, Ollivanders2Common.stringArrayToString(subArgs));
+                            return givePotion((Player) sender, targetPlayer, String.join(" ", subArgs));
                         }
                     }
                 }
@@ -1479,7 +1479,7 @@ public class Ollivanders2 extends JavaPlugin {
                 if (sender instanceof Player) {
                     // potions memory potion
                     String[] subArgs = Arrays.copyOfRange(args, 1, args.length);
-                    return givePotion((Player) sender, (Player) sender, Ollivanders2Common.stringArrayToString(subArgs));
+                    return givePotion((Player) sender, (Player) sender, String.join(" ", subArgs));
                 }
                 else
                     return false;

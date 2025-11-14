@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
@@ -34,14 +34,16 @@ public class O2BookTest {
     static Ollivanders2 testPlugin;
     static ServerMock mockServer;
 
-    @BeforeEach
-    void setUp () {
+    @BeforeAll
+    static void globalSetUp() {
         mockServer = MockBukkit.mock();
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/book_config.yml"));
 
         // set up world
         testWorld = mockServer.addSimpleWorld("world");
     }
+
+    void setUp() {}
 
     /**
      * Basic Constructor & Initialization Tests
@@ -276,8 +278,8 @@ public class O2BookTest {
         assertTrue(found);
     }
 
-    @AfterEach
-    void tearDown () {
+    @AfterAll
+    static void globalTearDown () {
         MockBukkit.unmock();
     }
 }

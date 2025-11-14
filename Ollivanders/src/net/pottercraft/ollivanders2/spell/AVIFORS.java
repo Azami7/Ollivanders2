@@ -59,7 +59,7 @@ public final class AVIFORS extends FriendlyMobDisguise {
         disguiseType = DisguiseType.getType(targetType);
         disguise = new MobDisguise(disguiseType);
         ParrotWatcher watcher = (ParrotWatcher) disguise.getWatcher();
-        watcher.setVariant(EntityCommon.getRandomParrotColor());
+        watcher.setVariant(EntityCommon.getRandomParrotVariant());
         watcher.setFlyingWithElytra(true);
 
         initSpell();

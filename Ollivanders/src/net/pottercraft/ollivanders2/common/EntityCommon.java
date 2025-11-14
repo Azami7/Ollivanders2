@@ -6,7 +6,6 @@ import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.Bee;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
@@ -15,18 +14,15 @@ import org.bukkit.entity.Horse;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Llama;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Parrot;
-import org.bukkit.entity.PigZombie;
 import org.bukkit.entity.Rabbit;
-import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -62,8 +58,12 @@ public class EntityCommon {
         add(EntityDamageEvent.DamageCause.ENTITY_ATTACK);
         add(EntityDamageEvent.DamageCause.ENTITY_SWEEP_ATTACK);
         add(EntityDamageEvent.DamageCause.ENTITY_EXPLOSION);
+        add(EntityDamageEvent.DamageCause.MAGIC);
+        add(EntityDamageEvent.DamageCause.POISON);
         add(EntityDamageEvent.DamageCause.PROJECTILE);
+        add(EntityDamageEvent.DamageCause.SONIC_BOOM);
         add(EntityDamageEvent.DamageCause.THORNS);
+        add(EntityDamageEvent.DamageCause.WITHER);
     }};
 
     /**
@@ -90,7 +90,7 @@ public class EntityCommon {
         add(EntityType.CHERRY_BOAT);
         add(EntityType.CHERRY_CHEST_BOAT);
         add(EntityType.DARK_OAK_BOAT);
-        add(EntityType.DARK_OAK_BOAT);
+        add(EntityType.DARK_OAK_CHEST_BOAT);
         add(EntityType.JUNGLE_BOAT);
         add(EntityType.JUNGLE_CHEST_BOAT);
         add(EntityType.MANGROVE_BOAT);
@@ -103,53 +103,6 @@ public class EntityCommon {
         add(EntityType.SPRUCE_CHEST_BOAT);
         add(EntityType.BAMBOO_RAFT);
         add(EntityType.BAMBOO_CHEST_RAFT);
-    }};
-
-    /**
-     * The magic level for every potion effect type, primarily for use with Finite Incantatum
-     * <p>
-     * {@link net.pottercraft.ollivanders2.spell.FINITE_INCANTATEM}
-     */
-    static HashMap<PotionEffectType, MagicLevel> potionEffectLevels = new HashMap<>() {{
-        put(PotionEffectType.ABSORPTION, MagicLevel.OWL);
-        put(PotionEffectType.BAD_OMEN, MagicLevel.NEWT);
-        put(PotionEffectType.BLINDNESS, MagicLevel.OWL);
-        put(PotionEffectType.CONDUIT_POWER, MagicLevel.NEWT);
-        put(PotionEffectType.DARKNESS, MagicLevel.OWL);
-        put(PotionEffectType.DOLPHINS_GRACE, MagicLevel.NEWT);
-        put(PotionEffectType.FIRE_RESISTANCE, MagicLevel.NEWT);
-        put(PotionEffectType.GLOWING, MagicLevel.BEGINNER);
-        put(PotionEffectType.HASTE, MagicLevel.BEGINNER);
-        put(PotionEffectType.HEALTH_BOOST, MagicLevel.NEWT);
-        put(PotionEffectType.HERO_OF_THE_VILLAGE, MagicLevel.NEWT);
-        put(PotionEffectType.HUNGER, MagicLevel.BEGINNER);
-        put(PotionEffectType.INFESTED, MagicLevel.OWL);
-        put(PotionEffectType.INSTANT_DAMAGE, MagicLevel.OWL);
-        put(PotionEffectType.INSTANT_HEALTH, MagicLevel.OWL);
-        put(PotionEffectType.INVISIBILITY, MagicLevel.EXPERT);
-        put(PotionEffectType.JUMP_BOOST, MagicLevel.BEGINNER);
-        put(PotionEffectType.LEVITATION, MagicLevel.OWL);
-        put(PotionEffectType.LUCK, MagicLevel.BEGINNER);
-        put(PotionEffectType.MINING_FATIGUE, MagicLevel.BEGINNER);
-        put(PotionEffectType.NAUSEA, MagicLevel.OWL);
-        put(PotionEffectType.NIGHT_VISION, MagicLevel.BEGINNER);
-        put(PotionEffectType.OOZING, MagicLevel.OWL);
-        put(PotionEffectType.POISON, MagicLevel.OWL);
-        put(PotionEffectType.RAID_OMEN, MagicLevel.NEWT);
-        put(PotionEffectType.REGENERATION, MagicLevel.NEWT);
-        put(PotionEffectType.RESISTANCE, MagicLevel.NEWT);
-        put(PotionEffectType.SATURATION, MagicLevel.BEGINNER);
-        put(PotionEffectType.SLOW_FALLING, MagicLevel.NEWT);
-        put(PotionEffectType.SLOWNESS, MagicLevel.BEGINNER);
-        put(PotionEffectType.SPEED, MagicLevel.BEGINNER);
-        put(PotionEffectType.STRENGTH, MagicLevel.NEWT);
-        put(PotionEffectType.TRIAL_OMEN, MagicLevel.NEWT);
-        put(PotionEffectType.UNLUCK, MagicLevel.BEGINNER);
-        put(PotionEffectType.WATER_BREATHING, MagicLevel.NEWT);
-        put(PotionEffectType.WEAKNESS, MagicLevel.OWL);
-        put(PotionEffectType.WEAVING, MagicLevel.OWL);
-        put(PotionEffectType.WIND_CHARGED, MagicLevel.OWL);
-        put(PotionEffectType.WITHER, MagicLevel.NEWT);
     }};
 
     /**
@@ -297,18 +250,6 @@ public class EntityCommon {
     }
 
     /**
-     * Gets item entities within radius of the projectile
-     *
-     * @param location the location to check
-     * @param radius   radius within which to get entities
-     * @return List of item entities within one block of projectile
-     */
-    @NotNull
-    static public List<Item> getItems(@NotNull Location location, double radius) {
-        return getItemsInBounds(location, radius, radius, radius);
-    }
-
-    /**
      * Get an item by material
      *
      * @param location the location to check
@@ -318,7 +259,7 @@ public class EntityCommon {
      */
     @Nullable
     static public Item getNearbyItemByMaterial(@NotNull Location location, @NotNull Material material, double radius) {
-        List<Item> items = getItems(location, radius);
+        List<Item> items = getItemsInRadius(location, radius);
 
         for (Item item : items) {
             if (item.getItemStack().getType() == material)
@@ -338,7 +279,7 @@ public class EntityCommon {
      */
     @Nullable
     static public Item getNearbyItemByMaterialList(@NotNull Location location, @NotNull ArrayList<Material> materials, double radius) {
-        List<Item> items = getItems(location, radius);
+        List<Item> items = getItemsInRadius(location, radius);
 
         for (Item item : items) {
             if (materials.contains(item.getItemStack().getType()))
@@ -357,8 +298,8 @@ public class EntityCommon {
      * @return the item if found, null otherwise
      */
     @Nullable
-    static public Item getNearbyItemByType(@NotNull Location location, @NotNull O2ItemType itemType, double radius) {
-        List<Item> items = getItems(location, radius);
+    static public Item getNearbyO2ItemByType(@NotNull Location location, @NotNull O2ItemType itemType, double radius) {
+        List<Item> items = getItemsInRadius(location, radius);
 
         for (Item item : items) {
             if (itemType.isItemThisType(item))
@@ -376,6 +317,10 @@ public class EntityCommon {
      */
     @NotNull
     static public Cat.Type getRandomCatType(int seed) {
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
+
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 11;
 
         Cat.Type type;
@@ -426,7 +371,7 @@ public class EntityCommon {
      */
     @NotNull
     static public Cat.Type getRandomCatType() {
-        return getRandomCatType((int) TimeCommon.getDefaultWorldTime());
+        return getRandomCatType((int)TimeCommon.getDefaultWorldTime());
     }
 
     /**
@@ -438,6 +383,10 @@ public class EntityCommon {
     @NotNull
     static public Rabbit.Type getRandomRabbitType(int seed) {
         Rabbit.Type type;
+
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 61;
 
@@ -478,6 +427,10 @@ public class EntityCommon {
     @NotNull
     static public Horse.Style getRandomHorseStyle(int seed) {
         Horse.Style style;
+
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 20;
 
@@ -521,6 +474,10 @@ public class EntityCommon {
     @NotNull
     static public Horse.Color getRandomHorseColor(int seed) {
         Horse.Color color;
+
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 7;
 
@@ -571,6 +528,10 @@ public class EntityCommon {
     static public Llama.Color getRandomLlamaColor(int seed) {
         Llama.Color color;
 
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
+
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 4;
 
         switch (rand) {
@@ -608,8 +569,12 @@ public class EntityCommon {
      * @return the color
      */
     @NotNull
-    static public Parrot.Variant getRandomParrotColor(int seed) {
+    static public Parrot.Variant getRandomParrotVariant(int seed) {
         Parrot.Variant variant;
+
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
 
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 5;
 
@@ -639,8 +604,8 @@ public class EntityCommon {
      * @return the color
      */
     @NotNull
-    static public Parrot.Variant getRandomParrotColor() {
-        return getRandomParrotColor((int) TimeCommon.getDefaultWorldTime());
+    static public Parrot.Variant getRandomParrotVariant() {
+        return getRandomParrotVariant((int) TimeCommon.getDefaultWorldTime());
     }
 
     /**
@@ -651,6 +616,10 @@ public class EntityCommon {
      */
     @NotNull
     static public DyeColor getRandomNaturalSheepColor(int seed) {
+        seed = Math.abs(seed);
+        if (seed == 0)
+            seed = 1;
+
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 100;
 
         if (rand < 2) // 2% chance
@@ -674,20 +643,6 @@ public class EntityCommon {
     }
 
     /**
-     * Get the magic effect level for MC Potion Effects.
-     *
-     * @param potionEffectType the effect type to get the level of
-     * @return the effect type level or OWL if it is not explicitly defined
-     */
-    @NotNull
-    static public MagicLevel getPotionEffectMagicLevel(@NotNull PotionEffectType potionEffectType) {
-        if (potionEffectLevels.containsKey(potionEffectType))
-            return potionEffectLevels.get(potionEffectType);
-        else
-            return MagicLevel.OWL;
-    }
-
-    /**
      * Is this living entity a hostile? This assumes Player entities are not hostile.
      *
      * @return true if it is a hostile or angry mob, false otherwise
@@ -698,16 +653,8 @@ public class EntityCommon {
         if (livingEntity instanceof Enemy)
             return true;
 
-        // are they an angry bee?
-        if (livingEntity instanceof Bee && ((Bee) livingEntity).getAnger() > 0)
-            return true;
-
-        // are they an angry wolf?
-        if (livingEntity instanceof Wolf && ((Wolf) livingEntity).isAngry())
-            return true;
-
-        // are they an angry zombie piglin?
-        if (livingEntity instanceof PigZombie && ((PigZombie) livingEntity).isAngry())
+        // are they a mob with a target set?
+        if (livingEntity instanceof Mob && ((Mob)livingEntity).getTarget() != null)
             return true;
 
         return false;
