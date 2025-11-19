@@ -526,7 +526,7 @@ public class OllivandersListener implements Listener {
         o2p.shiftMasterSpell(reverse);
         O2SpellType spell = o2p.getMasterSpell();
         if (spell != null) {
-            String spellName = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(spell.toString()));
+            String spellName = spell.getSpellName();
             player.sendMessage(Ollivanders2.chatColor + "Wand master spell set to " + spellName);
         }
         else {

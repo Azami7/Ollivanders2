@@ -13,9 +13,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.SPONGIFY}
  * </p>
  *
- * @see <a href="https://harrypotter.fandom.com/wiki/Achievements_in_Charming">https://harrypotter.fandom.com/wiki/Achievements_in_Charming</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Achievements_in_Charming">https://harrypotter.fandom.com/wiki/Achievements_in_Charming</a>
  */
 public class ACHIEVEMENTS_IN_CHARMING extends O2Book {
     /**

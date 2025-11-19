@@ -11,9 +11,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Break_with_a_Banshee">https://harrypotter.fandom.com/wiki/Break_with_a_Banshee</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Break_with_a_Banshee">https://harrypotter.fandom.com/wiki/Break_with_a_Banshee</a>
  */
 public class BREAK_WITH_A_BANSHEE extends O2Book {
     /**

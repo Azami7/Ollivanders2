@@ -26,10 +26,6 @@ public class SWELLING extends PlayerChangeSizeSuper {
         scaleMultiplier = 2; // increase the player's by double
 
         informousText = "is unnaturally large";
-        divinationText.add("has a big future");
-        divinationText.add("shall find a dreadful inflation drawing near");
-        divinationText.add("will be full of themselves");
-        divinationText.add("has a bloated future");
 
         startEffect();
     }

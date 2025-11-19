@@ -15,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.TITILLANDO}
  * </p>
  *
+ * @author Azami7
  * @see <a href="https://harrypotter.wikia.com/wiki/Basic_Hexes_for_the_Busy_and_Vexed">https://harrypotter.wikia.com/wiki/Basic_Hexes_for_the_Busy_and_Vexed</a>
  */
 public class BASIC_HEXES extends O2Book {

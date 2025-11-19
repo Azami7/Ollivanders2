@@ -26,11 +26,6 @@ public class SHRINKING extends PlayerChangeSizeSuper {
         scaleMultiplier = 0.5; // makes the player half size
 
         informousText = "is unnaturally small";
-        divinationText.add("will learn it is the little things that matter");
-        divinationText.add("shall find a dreadful deflation drawing near");
-        divinationText.add("shall be greatly reduced");
-        divinationText.add("will find their footsteps diminished");
-        divinationText.add("will become more grounded");
 
         startEffect();
     }

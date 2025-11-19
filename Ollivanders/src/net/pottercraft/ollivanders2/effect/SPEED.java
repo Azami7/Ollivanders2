@@ -25,8 +25,6 @@ public class SPEED extends PotionEffectSuper {
         effectType = O2EffectType.SPEED;
         potionEffectType = PotionEffectType.SPEED;
         informousText = legilimensText = "is moving fast";
-
-        divinationText.add("will make haste");
     }
 
     /**

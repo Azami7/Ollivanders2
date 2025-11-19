@@ -12,9 +12,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.LUMOS_CAERULEUM}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Voyages_with_Vampires">https://harrypotter.fandom.com/wiki/Voyages_with_Vampires</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Voyages_with_Vampires">https://harrypotter.fandom.com/wiki/Voyages_with_Vampires</a>
  */
 public class VOYAGES_WITH_VAMPIRES extends O2Book {
     /**

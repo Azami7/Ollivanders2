@@ -14,9 +14,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.potion.ANIMAGUS_POTION}
  * </p>
  *
- * @see <a href = "http://harrypotter.wikia.com/wiki/Moste_Potente_Potions">http://harrypotter.wikia.com/wiki/Moste_Potente_Potions</a>
  * @author Azami7
- * @since 2.2.7
+ * @see <a href="http://harrypotter.wikia.com/wiki/Moste_Potente_Potions">http://harrypotter.wikia.com/wiki/Moste_Potente_Potions</a>
  */
 public class MOSTE_POTENTE_POTIONS extends O2Book {
     /**

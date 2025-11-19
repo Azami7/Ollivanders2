@@ -27,11 +27,7 @@ public class NIGHT_VISION extends PotionEffectSuper {
 
         effectType = O2EffectType.NIGHT_VISION;
         potionEffectType = PotionEffectType.NIGHT_VISION;
-        informousText = legilimensText = "can breath in water";
-
-        divinationText.add("will swim with the mermaids");
-        divinationText.add("will feel fishy");
-        divinationText.add("will no longer fear water");
+        informousText = legilimensText = "can see in darkness";
     }
 
     /**

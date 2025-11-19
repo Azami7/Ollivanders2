@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @since 2.2.4
  */
 public class MODERN_MAGICAL_TRANSPORTATION extends O2Book {
     /**

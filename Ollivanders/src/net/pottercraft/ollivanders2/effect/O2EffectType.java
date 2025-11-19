@@ -64,6 +64,10 @@ public enum O2EffectType {
      */
     FLAGRANTE_BURNING(FLAGRANTE_BURNING.class, MagicLevel.EXPERT),
     /**
+     * {@link FLYING}
+     */
+    FLYING(FLYING.class, MagicLevel.EXPERT),
+    /**
      * {@link FUMOS}
      */
     FUMOS(FUMOS.class, MagicLevel.BEGINNER),
@@ -71,10 +75,6 @@ public enum O2EffectType {
      * {@link FUMOS_DUO}
      */
     FUMOS_DUO(FUMOS.class, MagicLevel.OWL),
-    /**
-     * {@link FLYING}
-     */
-    FLYING(FLYING.class, MagicLevel.EXPERT),
     /**
      * {@link HARM}
      */
@@ -92,13 +92,13 @@ public enum O2EffectType {
      */
     HEALTH_BOOST(HEALTH_BOOST.class, MagicLevel.NEWT),
     /**
-     * {@link HUNGER}
-     */
-    HUNGER(HUNGER.class, MagicLevel.BEGINNER),
-    /**
      * {@link HIGHER_SKILL}
      */
     HIGHER_SKILL(HIGHER_SKILL.class, MagicLevel.NEWT),
+    /**
+     * {@link HUNGER}
+     */
+    HUNGER(HUNGER.class, MagicLevel.BEGINNER),
     /**
      * {@link IMMOBILIZE}
      */
@@ -164,6 +164,10 @@ public enum O2EffectType {
      */
     SLEEPING(SLEEPING.class, MagicLevel.BEGINNER),
     /**
+     * {@link SLOWNESS}
+     */
+    SLOWNESS(SLOWNESS.class, MagicLevel.BEGINNER),
+    /**
      * {@link SPEED}
      */
     SPEED(SPEED.class, MagicLevel.BEGINNER),
@@ -175,10 +179,6 @@ public enum O2EffectType {
      * {@link SPEED_SPEEDIEST}
      */
     SPEED_SPEEDIEST(SPEED_SPEEDIEST.class, MagicLevel.NEWT),
-    /**
-     * {@link SLOWNESS}
-     */
-    SLOWNESS(SLOWNESS.class, MagicLevel.BEGINNER),
     /**
      * {@link SUSPENSION}
      */

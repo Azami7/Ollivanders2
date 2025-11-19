@@ -29,7 +29,20 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A collection of common functions and data.
+ * Utility class providing common functionality and constants for Ollivanders2.
+ * <p>
+ * Contains static collections of Minecraft material constants (doors, trapdoors, chests, signs, etc.),
+ * shared static utility methods for location operations, string transformations, particle effects,
+ * and player messaging. Also manages the global Random instance for consistent random number generation
+ * across the plugin.
+ * </p>
+ * <p>
+ * This class serves as a central repository for shared data structures and utility methods that don't
+ * require state-specific to individual game objects. Instance methods use the plugin reference to access
+ * the logger and configuration.
+ * </p>
+ *
+ * @author Azami7
  */
 public class Ollivanders2Common {
     /**
@@ -275,6 +288,11 @@ public class Ollivanders2Common {
         add(Material.SOUL_FIRE);
     }};
 
+    /**
+     * All natural wood log materials in Minecraft.
+     * Includes logs from all wood types (oak, birch, spruce, jungle, acacia, dark oak, mangrove, pale oak, cherry)
+     * and nether stems (crimson stem, warped stem). Used to simplify checks for wood-based blocks.
+     */
     public static final List<Material> naturalLogs = new ArrayList<>() {{
         add(Material.ACACIA_LOG);
         add(Material.BIRCH_LOG);
@@ -290,7 +308,12 @@ public class Ollivanders2Common {
     }};
 
     /**
-     * For generating random numbers
+     * Global Random instance for generating random numbers across the plugin.
+     * <p>
+     * Seeded with {@link System#currentTimeMillis()} in the constructor to ensure different sequences
+     * across plugin reloads. All plugin components should use this shared instance rather than creating
+     * their own to maintain consistency in random number generation.
+     * </p>
      */
     public final static Random random = new Random();
 
@@ -300,9 +323,13 @@ public class Ollivanders2Common {
     final private Ollivanders2 p;
 
     /**
-     * Constructor
+     * Constructor that initializes the common utility class.
+     * <p>
+     * Stores a reference to the plugin for accessing the logger and configuration, and seeds the global
+     * Random instance with the current system time to ensure different random sequences across plugin reloads.
+     * </p>
      *
-     * @param plugin a reference to the plugin using this common
+     * @param plugin a reference to the Ollivanders2 plugin instance
      */
     public Ollivanders2Common(@NotNull Ollivanders2 plugin) {
         p = plugin;
@@ -401,45 +428,43 @@ public class Ollivanders2Common {
         for (int x = -blockRadius; x <= blockRadius; x++) {
             for (int y = -blockRadius; y <= blockRadius; y++) {
                 for (int z = -blockRadius; z <= blockRadius; z++) {
-                    blockList.add(center.getRelative(x, y, z));
+                    Block block = center.getRelative(x, y, z);
+                    if (block.getLocation().distance(center.getLocation()) < radius) { // make sure we aee still in the radius since we're rounding a square
+                        blockList.add(block);
+                    }
                 }
             }
         }
-        ArrayList<Block> returnList = new ArrayList<>();
-        for (Block block : blockList) {
-            if (block.getLocation().distance(center.getLocation()) < radius) {
-                returnList.add(block);
-            }
-        }
-        return returnList;
+
+        return blockList;
     }
 
     /**
-     * Find the lowercase string that corresponds to an enum
+     * Transform an enum name string to a human-readable format.
+     * <p>
+     * Converts the input to lowercase, splits on underscores, and joins the parts with spaces.
+     * For example: "AVADA_KEDAVRA" → "avada kedavra"
+     * </p>
      *
-     * @param s the enum as a string
-     * @return string such that it is the lowercase version of the spell minus underscores
+     * @param s the enum name as a string (typically in CONSTANT_CASE format)
+     * @return a space-separated lowercase string with underscores removed
      */
     @NotNull
     static public String enumRecode(@NotNull String s) {
-        String nameLow = s.toLowerCase();
-        String[] words = nameLow.split("_");
-        String comp = "";
-
-        for (String st : words) {
-            comp = comp.concat(st);
-            comp = comp.concat(" ");
-        }
-
-        comp = comp.substring(0, comp.length() - 1);
-        return comp;
+        String[] words = s.toLowerCase().split("_");
+        return String.join(" ", words);
     }
 
     /**
-     * Converts a string to have it's first letter of each word be in upper case, and all other letters lower case.
+     * Capitalize the first letter of each word while lowercasing the rest.
+     * <p>
+     * Transforms each word in the string so that only the first letter is uppercase
+     * and all subsequent letters are lowercase. Words are separated by spaces.
+     * For example: "hello world" → "Hello World", "HELLO" → "Hello"
+     * </p>
      *
-     * @param str String to convert.
-     * @return String with correct formatting.
+     * @param str the string to convert
+     * @return a string with proper title case formatting
      */
     @NotNull
     static public String firstLetterCapitalize(@NotNull String str) {
@@ -564,11 +589,16 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Makes a particle effect at all points along the radius of spell and at spell loc.
+     * Create a particle flair effect around a location using SMOKE particles.
+     * <p>
+     * Spawns particles in a spherical pattern around the given location. The particles are distributed
+     * evenly across the sphere using spherical coordinates (inclination and azimuth angles).
+     * Defaults to SMOKE particles by calling {@link #flair(Location, int, int, Particle)}.
+     * </p>
      *
-     * @param location  the location for the center of the flair
-     * @param radius    the radius of the flair
-     * @param intensity intensity of the flair. If greater than 10, is reduced to 10.
+     * @param location  the center location for the particle effect
+     * @param radius    the radius of the sphere in blocks
+     * @param intensity the density of particles (0-10+, capped at 10). Higher intensity means more particles.
      */
     public static void flair(Location location, int radius, int intensity) {
         if (location == null)
@@ -578,12 +608,19 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Makes a particle effect at all points along the radius of spell and at spell loc.
+     * Create a particle flair effect around a location using the Bukkit Effect API.
+     * <p>
+     * Spawns particles in a spherical pattern around the given location using legacy Effect objects.
+     * Particles are distributed evenly across the sphere by iterating through spherical coordinates:
+     * inclination (polar angle, 0 to π) and azimuth (horizontal angle, 0 to 2π). The step size
+     * between points is determined by dividing π (or 2π) by the intensity value.
+     * </p>
      *
-     * @param location   the location for the center of the flair
-     * @param radius     the radius of the flair
-     * @param intensity  intensity of the flair. If greater than 10, is reduced to 10.
-     * @param effectType the particle effect to use
+     * @param location   the center location for the particle effect
+     * @param radius     the radius of the sphere in blocks
+     * @param intensity  the density of particles (0-10+, capped at 10). Higher intensity means more particles
+     *                   spaced closer together
+     * @param effectType the legacy Bukkit Effect to spawn at each point
      */
     public static void flair(Location location, int radius, int intensity, Effect effectType) {
         if (location == null)
@@ -592,6 +629,7 @@ public class Ollivanders2Common {
         if (intensity > 10)
             intensity = 10;
 
+        // Random offset prevents aligned grid patterns; starts at random point instead of 0
         for (double inclusion = (Math.random() * Math.PI) / intensity; inclusion < Math.PI; inclusion += Math.PI / intensity) {
             for (double azimuth = (Math.random() * Math.PI) / intensity; azimuth < 2 * Math.PI; azimuth += Math.PI / intensity) {
                 double[] sphere = new double[2];
@@ -606,12 +644,19 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Makes a particle effect at all points along the radius of spell and at spell loc.
+     * Create a particle flair effect around a location using Bukkit Particle API.
+     * <p>
+     * Spawns particles in a spherical pattern around the given location. Particles are distributed
+     * evenly across the sphere by iterating through spherical coordinates: inclination (polar angle,
+     * 0 to π) and azimuth (horizontal angle, 0 to 2π). The step size between points is determined
+     * by dividing π (or 2π) by the intensity value. This is the modern particle spawning method.
+     * </p>
      *
-     * @param location     the location for the center of the flair
-     * @param radius       the radius of the flair
-     * @param intensity    intensity of the flair. If greater than 10, is reduced to 10.
-     * @param particleType the particle to use
+     * @param location     the center location for the particle effect
+     * @param radius       the radius of the sphere in blocks
+     * @param intensity    the density of particles (0-10+, capped at 10). Higher intensity means more particles
+     *                     spaced closer together
+     * @param particleType the particle type to spawn at each point (e.g., SMOKE, FLAME, SPARK)
      */
     public static void flair(Location location, int radius, int intensity, Particle particleType) {
         if (location == null)
@@ -620,6 +665,7 @@ public class Ollivanders2Common {
         if (intensity > 10)
             intensity = 10;
 
+        // Random offset prevents aligned grid patterns; starts at random point instead of 0
         for (double inc = (Math.random() * Math.PI) / intensity; inc < Math.PI; inc += Math.PI / intensity) {
             for (double azi = (Math.random() * Math.PI) / intensity; azi < 2 * Math.PI; azi += Math.PI / intensity) {
                 double[] sphere = new double[2];
@@ -634,18 +680,30 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Translates spherical coordinates to vector
+     * Convert spherical coordinates to a Cartesian vector.
+     * <p>
+     * Transforms spherical coordinates (inclination and azimuth) into a 3D Cartesian vector
+     * relative to the origin. The inclination angle is the polar angle measured from the positive Y-axis,
+     * and the azimuth angle is measured from the positive X-axis in the horizontal plane.
+     * </p>
+     * <p>
+     * Used by flair effects to distribute particles in a spherical pattern around a center location.
+     * </p>
      *
-     * @param sphere array with indexes 0=inclination 1=azimuth
-     * @param radius the radius of the sphere
-     * @return Vector
+     * @param sphere a 2-element array where:
+     *               - sphere[0] is the inclination (polar angle in radians, 0 to π)
+     *               - sphere[1] is the azimuth (horizontal angle in radians, 0 to 2π)
+     * @param radius the radius of the sphere, determining the distance from the origin
+     * @return a Vector representing the 3D position in Cartesian coordinates
      */
     @NotNull
     public static Vector sphereToVector(double[] sphere, int radius) {
         double inclusion = sphere[0];
         double azimuth = sphere[1];
+        // X and Z form the horizontal plane (radius from Y-axis), azimuth determines direction
         double x = radius * Math.sin(inclusion) * Math.cos(azimuth);
         double z = radius * Math.sin(inclusion) * Math.sin(azimuth);
+        // Y is the vertical component; cos(inclusion) ranges from -1 to 1 as inclusion goes 0 to π
         double y = radius * Math.cos(inclusion);
 
         return new Vector(x, y, z);
@@ -727,11 +785,20 @@ public class Ollivanders2Common {
     }
 
     /**
-     * Get the recipients for this chat based on the dropoff distance
+     * Filter the recipient set to only include players within the dropoff distance.
+     * <p>
+     * Modifies the recipients set in-place, removing all players who are outside the specified distance
+     * from the source location. This is used to implement chat distance limitations where players too far
+     * away cannot hear spell or magic-related messages.
+     * </p>
+     * <p>
+     * A copy of the original recipient set is iterated to safely remove players from the original set
+     * without causing concurrent modification exceptions.
+     * </p>
      *
-     * @param recipients the original list of recipients
-     * @param dropoff    the dropoff distance
-     * @param location   the source location of the speaker
+     * @param recipients the set of players to filter (modified by this method)
+     * @param dropoff    the maximum distance in blocks for a player to remain in the recipient set
+     * @param location   the source location from which to measure distance
      */
     static public void chatDropoff(Set<Player> recipients, int dropoff, Location location) {
         // handle spell chat dropoff

@@ -28,10 +28,6 @@ public class WATER_BREATHING extends PotionEffectSuper {
         effectType = O2EffectType.WATER_BREATHING;
         potionEffectType = PotionEffectType.WATER_BREATHING;
         informousText = legilimensText = "can breath in water";
-
-        divinationText.add("will swim with the mermaids");
-        divinationText.add("will feel fishy");
-        divinationText.add("will no longer fear water");
     }
 
     /**

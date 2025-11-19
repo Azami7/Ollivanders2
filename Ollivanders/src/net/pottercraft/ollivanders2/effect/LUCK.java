@@ -29,11 +29,6 @@ public class LUCK extends PotionEffectSuper {
         potionEffectType = PotionEffectType.LUCK;
         informousText = legilimensText = "feels lucky";
         affectedPlayerText = "You feel lucky.";
-
-        divinationText.add("will be blessed by fortune");
-        divinationText.add("will have unnatural luck");
-        divinationText.add("shall find success in everything they do");
-        divinationText.add("will become infallible");
     }
 
     /**

@@ -20,9 +20,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.STUPEFY}<br>
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_5">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_5</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_5">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_5</a>
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_5 extends O2Book {
     /**

@@ -210,7 +210,9 @@ public class LUMOS_FERVENS extends O2StationarySpell {
         }
     }
 
-    // Label for serialization
+    /**
+     * Label for serialization
+     */
     private final String originalMaterialLabel = "original_material";
     
     /**

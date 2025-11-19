@@ -20,7 +20,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.DELETRIUS}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration">https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration">https://harrypotter.fandom.com/wiki/Intermediate_Transfiguration</a>
  */
 public class INTERMEDIATE_TRANSFIGURATION extends O2Book {
     /**

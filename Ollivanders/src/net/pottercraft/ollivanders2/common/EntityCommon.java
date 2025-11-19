@@ -26,7 +26,17 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * Common functions that deal with MC entities
+ * Utility class providing static lists and methods for working with Minecraft entities.
+ * <p>
+ * Provides:
+ * <ul>
+ * <li>Pre-defined entity type lists (undead, minecarts, boats)</li>
+ * <li>Methods to find entities by type, material, or location</li>
+ * <li>Random entity attribute generators (colors, styles, types)</li>
+ * <li>Entity classification methods (hostile detection)</li>
+ * </ul>
+ *
+ * @author Azami7
  */
 public class EntityCommon {
     /**
@@ -111,7 +121,7 @@ public class EntityCommon {
     final private Ollivanders2 p;
 
     /**
-     * Common functions
+     * Utility class for common operations and debug message printing
      */
     final private Ollivanders2Common common;
 
@@ -216,13 +226,13 @@ public class EntityCommon {
     }
 
     /**
-     * Gets item entities within bounding box of the projectile
+     * Gets item entities within a bounding box around a location.
      *
-     * @param location the location to check
-     * @param x        the x-limit to check
-     * @param y        the y-limit to check
-     * @param z        the z-limit to check
-     * @return List of item entities within bounding box of projectile
+     * @param location the center location for the bounding box
+     * @param x        the distance +/- on the x-plane
+     * @param y        the distance +/- on the y-plane
+     * @param z        the distance +/- on the z-plane
+     * @return list of item entities within the bounding box
      */
     @NotNull
     static public List<Item> getItemsInBounds(@NotNull Location location, double x, double y, double z) {
@@ -238,11 +248,11 @@ public class EntityCommon {
     }
 
     /**
-     * Gets item entities within radius of the projectile
+     * Gets item entities within a radius of a location.
      *
-     * @param location the location to check
-     * @param radius   the radius to check around the location
-     * @return List of item entities within radius of projectile
+     * @param location the center location
+     * @param radius   the radius to search within
+     * @return list of item entities within the radius
      */
     @NotNull
     static public List<Item> getItemsInRadius(@NotNull Location location, double radius) {
@@ -317,10 +327,13 @@ public class EntityCommon {
      */
     @NotNull
     static public Cat.Type getRandomCatType(int seed) {
+        // Ensure seed is positive. nextInt() cannot accept 0 as an argument, so convert 0 to 1.
+        // Use Math.abs() to handle negative seed values.
         seed = Math.abs(seed);
         if (seed == 0)
             seed = 1;
 
+        // Modulo 11 because there are 11 cat types available
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 11;
 
         Cat.Type type;
@@ -371,7 +384,7 @@ public class EntityCommon {
      */
     @NotNull
     static public Cat.Type getRandomCatType() {
-        return getRandomCatType((int)TimeCommon.getDefaultWorldTime());
+        return getRandomCatType((int) TimeCommon.getDefaultWorldTime());
     }
 
     /**
@@ -384,10 +397,12 @@ public class EntityCommon {
     static public Rabbit.Type getRandomRabbitType(int seed) {
         Rabbit.Type type;
 
+        // nextInt() cannot accept 0, so ensure seed is positive and non-zero
         seed = Math.abs(seed);
         if (seed == 0)
             seed = 1;
 
+        // Modulo 61 to make THE_KILLER_BUNNY rare (1/60 chance, cases 60)
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 61;
 
         if (rand < 10)
@@ -428,10 +443,12 @@ public class EntityCommon {
     static public Horse.Style getRandomHorseStyle(int seed) {
         Horse.Style style;
 
+        // nextInt() cannot accept 0, so ensure seed is positive and non-zero
         seed = Math.abs(seed);
         if (seed == 0)
             seed = 1;
 
+        // Modulo 20 to make Horse.Style.NONE most common (16 out of 20 cases, 80% chance)
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 20;
 
         switch (rand) {
@@ -479,6 +496,7 @@ public class EntityCommon {
         if (seed == 0)
             seed = 1;
 
+        // Modulo 7 because there are 7 different horse colors
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 7;
 
         switch (rand) {
@@ -532,6 +550,7 @@ public class EntityCommon {
         if (seed == 0)
             seed = 1;
 
+        // Modulo 4 because there are 4 different llama colors
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 4;
 
         switch (rand) {
@@ -563,10 +582,10 @@ public class EntityCommon {
     }
 
     /**
-     * Genenrate a random parrot color.
+     * Generates a random parrot variant.
      *
-     * @param seed the base value that the percentile check will use
-     * @return the color
+     * @param seed the base value used with random number generation for variant selection
+     * @return a random parrot variant
      */
     @NotNull
     static public Parrot.Variant getRandomParrotVariant(int seed) {
@@ -576,6 +595,7 @@ public class EntityCommon {
         if (seed == 0)
             seed = 1;
 
+        // Modulo 5 because there are 5 parrot color variants
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 5;
 
         switch (rand) {
@@ -599,9 +619,9 @@ public class EntityCommon {
     }
 
     /**
-     * Genenrate a random parrot color.
+     * Generates a random parrot variant using the default world time as seed.
      *
-     * @return the color
+     * @return a random parrot variant
      */
     @NotNull
     static public Parrot.Variant getRandomParrotVariant() {
@@ -620,6 +640,7 @@ public class EntityCommon {
         if (seed == 0)
             seed = 1;
 
+        // Modulo 100 provides a percentile range (0-99). Sheep should generally be white (68% chance).
         int rand = Math.abs(Ollivanders2Common.random.nextInt(seed)) % 100;
 
         if (rand < 2) // 2% chance
@@ -628,7 +649,7 @@ public class EntityCommon {
             return DyeColor.BROWN;
         else if (rand < 32) // 10% chance
             return DyeColor.LIGHT_GRAY;
-        else
+        else // 68% chance - white is the most common natural sheep color
             return DyeColor.WHITE;
     }
 
@@ -654,7 +675,7 @@ public class EntityCommon {
             return true;
 
         // are they a mob with a target set?
-        if (livingEntity instanceof Mob && ((Mob)livingEntity).getTarget() != null)
+        if (livingEntity instanceof Mob && ((Mob) livingEntity).getTarget() != null)
             return true;
 
         return false;

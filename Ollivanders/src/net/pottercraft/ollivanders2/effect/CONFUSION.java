@@ -28,11 +28,6 @@ public class CONFUSION extends PotionEffectSuper {
         informousText = legilimensText = "feels confused";
 
         strength = 1;
-
-        divinationText.add("shall be cursed");
-        divinationText.add("will be afflicted in the mind");
-        divinationText.add("will be struck by a terrible affliction");
-        divinationText.add("will suffer a mental breakdown");
     }
 
     /**

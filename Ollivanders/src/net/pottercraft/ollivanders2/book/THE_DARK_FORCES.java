@@ -23,9 +23,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.SPONGIFY}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/The_Dark_Forces:_A_Guide_to_Self-Protection">https://harrypotter.fandom.com/wiki/The_Dark_Forces:_A_Guide_to_Self-Protection</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/The_Dark_Forces:_A_Guide_to_Self-Protection">https://harrypotter.fandom.com/wiki/The_Dark_Forces:_A_Guide_to_Self-Protection</a>
  */
 public class THE_DARK_FORCES extends O2Book {
     /**

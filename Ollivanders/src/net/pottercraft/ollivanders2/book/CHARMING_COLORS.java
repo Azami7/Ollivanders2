@@ -19,7 +19,6 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @since 2.2.4
  */
 public final class CHARMING_COLORS extends O2Book {
     /**

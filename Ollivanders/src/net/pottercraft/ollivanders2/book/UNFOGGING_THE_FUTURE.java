@@ -16,9 +16,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.OVOGNOSIS}
  * </p>
  *
- * @see <a href = "http://harrypotter.wikia.com/wiki/Unfogging_the_Future">http://harrypotter.wikia.com/wiki/Unfogging_the_Future</a>
  * @author Azami7
- * @since 2.2.9
+ * @see <a href="http://harrypotter.wikia.com/wiki/Unfogging_the_Future">http://harrypotter.wikia.com/wiki/Unfogging_the_Future</a>
  */
 public class UNFOGGING_THE_FUTURE extends O2Book {
     /**

@@ -15,11 +15,18 @@ import org.jetbrains.annotations.Nullable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The text and flavor text for all Ollivanders2 magic.
+ * Caches and manages the text content for all Ollivanders2 spells and potions.
+ * <p>
+ * This class loads spell and potion text once during plugin initialization and maintains a map
+ * of all spell/potion enum names to their corresponding book page content. This caching prevents
+ * regenerating the same text repeatedly, since many spells and potions can appear in multiple books.
+ * </p>
+ *
+ * @author Azami7
  */
 public final class BookTexts {
     /**
-     * Common functions
+     * Utility class for common operations and debug message printing
      */
     Ollivanders2Common common;
 
@@ -102,9 +109,9 @@ public final class BookTexts {
     private final Ollivanders2 p;
 
     /**
-     * Constructor.
+     * Constructor that initializes the BookTexts manager.
      *
-     * @param plugin the MC plugin
+     * @param plugin the Ollivanders2 plugin instance
      */
     BookTexts(@NotNull Ollivanders2 plugin) {
         p = plugin;
@@ -125,7 +132,11 @@ public final class BookTexts {
     }
 
     /**
-     * Add the learnable text for every registered spell projectile.
+     * Loads and caches the text for every registered spell.
+     * <p>
+     * Instantiates each spell type and extracts its display name, description text, and flavor text
+     * for storage in the text cache. Skips spells with missing or invalid text.
+     * </p>
      */
     private void addSpells() {
         for (O2SpellType spellType : O2Spells.getAllSpellTypes()) {
@@ -140,21 +151,8 @@ public final class BookTexts {
                 continue;
             }
 
-            String text = null;
-            String flavorText = null;
-
-            try {
-                text = spell.getText();
-                flavorText = spell.getFlavorText();
-            }
-            catch (Exception e) {
-                common.printDebugMessage("BookTexts: exception getting book text for " + spellType, e, null, true);
-            }
-
-            if (text == null) {
-                common.printDebugMessage("BookTexts: no book text for " + spellType, null, null, false);
-                continue;
-            }
+            String text = spell.getText();
+            String flavorText = spell.getFlavorText();
 
             String name = spell.getName();
 
@@ -182,7 +180,7 @@ public final class BookTexts {
             String text = potion.getText();
             String flavorText = potion.getFlavorText();
 
-            String name = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(potionType.toString().toLowerCase()));
+            String name = potion.getName();
 
             BookPage sText = new BookPage(name, text, flavorText);
             O2MagicTextMap.put(potionType.toString(), sText);
@@ -190,50 +188,44 @@ public final class BookTexts {
     }
 
     /**
-     * Get the flavor text for a specific magic.
+     * Retrieves the flavor text for a spell or potion by its enum name.
      *
-     * @param magic the name of the magic topic
-     * @return the flavor text for that spell or null if it has none.
+     * @param magic the spell or potion enum name (e.g., "EXPELLIARMUS")
+     * @return the flavor text for that spell/potion, or null if none is present or not found
      */
     @Nullable
     String getFlavorText(@NotNull String magic) {
-        String flavorText = null;
-
         if (O2MagicTextMap.containsKey(magic))
-            flavorText = O2MagicTextMap.get(magic).getFlavorText();
-
-        return flavorText;
+            return O2MagicTextMap.get(magic).getFlavorText();
+        else
+            return null;
     }
 
     /**
-     * Get the description text for a specific magic.
+     * Retrieves the description text for a spell or potion by its enum name.
      *
-     * @param magic the name of the magic topic
-     * @return the description text for this spell
+     * @param magic the spell or potion enum name (e.g., "EXPELLIARMUS")
+     * @return the description text for that spell/potion, or null if not found
      */
     @Nullable
     String getText(@NotNull String magic) {
-        String text = null;
-
         if (O2MagicTextMap.containsKey(magic))
-            text = O2MagicTextMap.get(magic).getText();
-
-        return text;
+            return O2MagicTextMap.get(magic).getText();
+        else
+            return null;
     }
 
     /**
-     * Get the printable name for a specific magic.
+     * Retrieves the display name (heading) for a spell or potion by its enum name.
      *
-     * @param magic the name of the magic topic
-     * @return the printable name for this magic
+     * @param magic the spell or potion enum name (e.g., "EXPELLIARMUS")
+     * @return the display name for that spell/potion, or null if not found
      */
     @Nullable
     public String getName(@NotNull String magic) {
-        String name = null;
-
         if (O2MagicTextMap.containsKey(magic))
-            name = O2MagicTextMap.get(magic).getHeading();
-
-        return name;
+            return O2MagicTextMap.get(magic).getHeading();
+        else
+            return null;
     }
 }

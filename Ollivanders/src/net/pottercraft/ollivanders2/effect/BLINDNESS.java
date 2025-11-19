@@ -28,11 +28,6 @@ public class BLINDNESS extends PotionEffectSuper {
         informousText = legilimensText = "cannot see";
 
         strength = 1;
-
-        divinationText.add("shall be cursed");
-        divinationText.add("shall be afflicted in the mind");
-        divinationText.add("will become unable to see");
-        divinationText.add("will be struck by a terrible affliction");
     }
 
     /**

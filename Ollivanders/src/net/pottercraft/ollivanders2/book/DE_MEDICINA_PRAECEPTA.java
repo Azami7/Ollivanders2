@@ -11,9 +11,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.REPARIFORS}
  * </p>
  *
- * @see <a href = "https://en.wikipedia.org/wiki/Serenus_Sammonicus">https://en.wikipedia.org/wiki/Serenus_Sammonicus</a>
  * @author Azami7
- * @since 2.2.9
+ * @see <a href="https://en.wikipedia.org/wiki/Serenus_Sammonicus">https://en.wikipedia.org/wiki/Serenus_Sammonicus</a>
  */
 public class DE_MEDICINA_PRAECEPTA extends O2Book {
     /**

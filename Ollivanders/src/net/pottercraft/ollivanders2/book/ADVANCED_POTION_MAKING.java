@@ -14,9 +14,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.potion.MEMORY_POTION}
  * </p>
  *
- * @see <a href = "http://harrypotter.wikia.com/wiki/Advanced_Potion-Making">http://harrypotter.wikia.com/wiki/Advanced_Potion-Making</a>
  * @author Azami7
- * @since 2.2.7
+ * @see <a href="http://harrypotter.wikia.com/wiki/Advanced_Potion-Making">http://harrypotter.wikia.com/wiki/Advanced_Potion-Making</a>
  */
 public class ADVANCED_POTION_MAKING extends O2Book {
     /**

@@ -12,9 +12,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.potion.FORGETFULLNESS_POTION}
  * </p>
  *
- * @see <a href = "http://harrypotter.wikia.com/wiki/Potion_Opuscule">http://harrypotter.wikia.com/wiki/Potion_Opuscule</a>
  * @author Azami7
- * @since 2.2.7
+ * @see <a href="http://harrypotter.wikia.com/wiki/Potion_Opuscule">http://harrypotter.wikia.com/wiki/Potion_Opuscule</a>
  */
 public class POTION_OPUSCULE extends O2Book {
     /**

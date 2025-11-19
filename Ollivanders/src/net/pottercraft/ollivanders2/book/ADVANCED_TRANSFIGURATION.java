@@ -21,9 +21,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.DRACONIFORS}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/A_Guide_to_Advanced_Transfiguration">https://harrypotter.fandom.com/wiki/A_Guide_to_Advanced_Transfiguration</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/A_Guide_to_Advanced_Transfiguration">https://harrypotter.fandom.com/wiki/A_Guide_to_Advanced_Transfiguration</a>
  */
 public class ADVANCED_TRANSFIGURATION extends O2Book {
     /**

@@ -14,9 +14,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.MOLLIARE}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest">https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest">https://harrypotter.fandom.com/wiki/Quintessence:_A_Quest</a>
  */
 public class QUINTESSENCE_A_QUEST extends O2Book {
     /**

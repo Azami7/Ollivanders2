@@ -17,9 +17,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.FUMOS_DUO}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/The_Essential_Defence_Against_the_Dark_Arts">https://harrypotter.fandom.com/wiki/The_Essential_Defence_Against_the_Dark_Arts</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/The_Essential_Defence_Against_the_Dark_Arts">https://harrypotter.fandom.com/wiki/The_Essential_Defence_Against_the_Dark_Arts</a>
  */
 public class ESSENTIAL_DARK_ARTS extends O2Book {
     /**

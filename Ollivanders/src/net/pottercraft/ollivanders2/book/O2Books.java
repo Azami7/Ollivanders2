@@ -18,6 +18,7 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -27,7 +28,6 @@ import org.bukkit.inventory.ItemStack;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.player.O2Player;
-import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -36,29 +36,30 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * All magic books.
+ * Manages all Ollivanders2 magic books and handles book learning mechanics.
  *
  * <p>When bookLearning is enabled, reading a book will increase the reader's spell level by 1 to a maximum of 10. This can
  * be used for classes, creating lessons, or other in-game magic learning.</p>
  *
- * <p>When bookLEarning is enabled, every Ollivanders2 spell must be in a WrittenBook with lore or NBT set up correctly
+ * <p>When bookLearning is enabled, every Ollivanders2 spell must be in a WrittenBook with lore or NBT set up correctly
  * or players will not be able to learn them.</p>
  *
- * @see <a href = "https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning">https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning</a>
+ * @author Azami7
+ * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning">https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning</a>
  */
 public final class O2Books implements Listener {
     /**
-     * Collection of all the books available by title
+     * Map of all available books with their titles as keys and book types as values
      */
     private final Map<String, O2BookType> O2BookMap = new HashMap<>();
 
     /**
-     * Reference to the plugin
+     * Reference to the Ollivanders2 plugin instance
      */
     Ollivanders2 p;
 
     /**
-     * Common functions
+     * Utility class for common operations and message printing
      */
     Ollivanders2Common common;
 
@@ -68,9 +69,13 @@ public final class O2Books implements Listener {
     BookTexts spellText;
 
     /**
-     * Constructor
+     * Constructor that initializes the O2Books manager.
+     * <p>
+     * Initializes book text management, common utilities, and registers this class as a Bukkit event listener
+     * to handle book learning events.
+     * </p>
      *
-     * @param plugin the MC plugin
+     * @param plugin the Ollivanders2 plugin instance
      */
     public O2Books(@NotNull Ollivanders2 plugin) {
         p = plugin;
@@ -103,6 +108,7 @@ public final class O2Books implements Listener {
      *
      * @param event the player interact event
      */
+    // Using LOWEST priority so other plugins (at NORMAL, HIGH, HIGHEST) can potentially modify or cancel it before we process book learning
     @EventHandler(priority = EventPriority.LOWEST)
     public void onBookRead(@NotNull PlayerInteractEvent event) {
         // only run this if bookLearning is enabled
@@ -115,10 +121,15 @@ public final class O2Books implements Listener {
 
             ItemStack heldItem = player.getInventory().getItemInMainHand();
             if (heldItem.getType() == Material.WRITTEN_BOOK) {
+                // Delay processing to allow the game to handle the right-click event and any immediate effects
+                // before we trigger the book learning event
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        readBook(player, heldItem);
+                        // Only read the book if the event wasn't denied by another plugin
+                        if (event.useItemInHand() != Event.Result.DENY) {
+                            readBook(player, heldItem);
+                        }
                     }
                 }.runTaskLater(p, Ollivanders2Common.ticksPerSecond * 2);
             }
@@ -143,7 +154,10 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Add all books in the O2BookType enum to the O2BooksMap.
+     * Adds all books from the O2BookType enum to the book map.
+     * <p>
+     * Instantiates each book type and registers it in the map using the book's title as the key.
+     * </p>
      */
     private void addBooks() {
         common.printDebugMessage("O2Books: adding all books...", null, null, false);
@@ -157,10 +171,14 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Get an O2Book by book type.
+     * Creates and returns an O2Book instance for the given book type.
+     * <p>
+     * Uses reflection to instantiate the book class associated with the book type.
+     * Returns null if instantiation fails.
+     * </p>
      *
-     * @param bookType the book to be returned
-     * @return the BookItem if found bookType was found, null otherwise.
+     * @param bookType the book type to instantiate
+     * @return an O2Book instance for the given type, or null if creation failed
      */
     @Nullable
     private O2Book getO2BookByType(@NotNull O2BookType bookType) {
@@ -179,10 +197,10 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Get a book item of this book.
+     * Returns a book item for the book with the given title.
      *
-     * @param title the title of the book
-     * @return a book item version of this book if it exists, null otherwise.
+     * @param title the title of the book to retrieve
+     * @return an ItemStack representing the book, or null if not found
      */
     @Nullable
     public ItemStack getBookByTitle(@NotNull String title) {
@@ -195,10 +213,10 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Get a book item of this book.
+     * Returns a book item for the given book type.
      *
-     * @param bookType the type of book
-     * @return a book item version of this book
+     * @param bookType the type of book to retrieve
+     * @return an ItemStack representing the book, or null if creation failed
      */
     @Nullable
     public ItemStack getBookByType(@NotNull O2BookType bookType) {
@@ -211,10 +229,14 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Get a book type by book title
+     * Retrieves a book type by its title using case-insensitive, partial matching.
+     * <p>
+     * Supports case-insensitive lookup and allows partial title matching to accommodate
+     * users not typing the full title.
+     * </p>
      *
-     * @param title the book title to search for
-     * @return the book type, if found, null otherwise
+     * @param title the book title or partial title to search for
+     * @return the book type if a match is found, null otherwise
      */
     @Nullable
     public O2BookType getBookTypeByTitle(String title) {
@@ -232,6 +254,7 @@ public final class O2Books implements Listener {
 
             if (bookTitle.startsWith(searchFor)) {
                 match = O2BookMap.get(key);
+                break;
             }
         }
 
@@ -239,9 +262,9 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Gets all Ollivanders2 books.
+     * Returns a list of ItemStacks for all available Ollivanders2 books.
      *
-     * @return a ArrayList of all O2Book objects.
+     * @return a list of book ItemStacks for all book types, empty if none found
      */
     @NotNull
     public List<ItemStack> getAllBooks() {
@@ -259,9 +282,13 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Read the NBT tags for a magic book
+     * Extracts spells and potions from NBT tags and triggers book learning events.
+     * <p>
+     * Reads the persistent data container for spell and potion NBT keys and triggers
+     * learning for each found spell and potion type.
+     * </p>
      *
-     * @param itemMeta the item meta
+     * @param itemMeta the item metadata containing the NBT tags
      * @param player   the player reading the book
      */
     private void readNBT(@NotNull ItemMeta itemMeta, @NotNull Player player) {
@@ -304,7 +331,8 @@ public final class O2Books implements Listener {
         OllivandersBookLearningSpellEvent event = new OllivandersBookLearningSpellEvent(player, spellType);
         p.getServer().getPluginManager().callEvent(event);
 
-        // check to see if the event was canceled
+        // Delay the increment to allow other plugins to react to the event before it's marked as processed.
+        // Also allows the game to handle any immediate effects. Only increment if the event wasn't canceled.
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -329,7 +357,8 @@ public final class O2Books implements Listener {
         OllivandersBookLearningPotionEvent event = new OllivandersBookLearningPotionEvent(player, potionType);
         p.getServer().getPluginManager().callEvent(event);
 
-        // check to see if the event was canceled
+        // Delay the increment to allow other plugins to react to the event before it's marked as processed.
+        // Also allows the game to handle any immediate effects. Only increment if the event wasn't canceled.
         new BukkitRunnable() {
             @Override
             public void run() {
@@ -356,6 +385,8 @@ public final class O2Books implements Listener {
                 spellType = O2SpellType.valueOf(s);
             }
             catch (Exception e) {
+                // Silently skip if spell no longer exists or has been renamed.
+                // This handles backwards compatibility for older book items with outdated NBT tags.
                 continue;
             }
 
@@ -401,6 +432,8 @@ public final class O2Books implements Listener {
                 potionType = O2PotionType.valueOf(s);
             }
             catch (Exception e) {
+                // Silently skip if potion no longer exists or has been renamed.
+                // This handles backwards compatibility for older book items with outdated NBT tags.
                 continue;
             }
 
@@ -411,15 +444,19 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Increment the experience level of a potion for a player
+     * Increments the experience level of a potion for a player.
+     * <p>
+     * Increments the potion count up to a max of 25. If the player has the IMPROVED_BOOK_LEARNING
+     * effect, the potion count is incremented twice instead of once.
+     * </p>
      *
-     * @param o2p        the player
-     * @param potionType the spell
+     * @param o2p        the player to increment for
+     * @param potionType the potion to increment
      */
     private static void incrementPotion(@NotNull O2Player o2p, @NotNull O2PotionType potionType) {
         int potionLevel = o2p.getPotionCount(potionType);
 
-        // if spell count is less than 25, learn this spell
+        // if potion count is less than 25, learn this potion
         if (potionLevel < 25) {
             o2p.incrementPotionCount(potionType);
 
@@ -431,9 +468,9 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Get all the titles for all loaded O2 books
+     * Returns all book titles, sorted alphabetically.
      *
-     * @return a list of the titles for all loaded books
+     * @return a sorted list of all book titles
      */
     @NotNull
     public List<String> getAllBookTitles() {
@@ -444,11 +481,15 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Run the books subcommands
+     * Handles the /olli books subcommands.
+     * <p>
+     * Supports: "allbooks" - gives all books, "list" - shows book list,
+     * "give [player] [title]" - gives a book to a player, or directly retrieve a book by title.
+     * </p>
      *
-     * @param sender the player that issued the command
-     * @param args   the arguments to the book command
-     * @return true if successful, false otherwise
+     * @param sender the command sender
+     * @param args   the command arguments (args[1] is the subcommand)
+     * @return always true
      * @since 2.2.4
      */
     public boolean runCommand(@NotNull CommandSender sender, @NotNull String[] args) {
@@ -478,6 +519,7 @@ public final class O2Books implements Listener {
             // olli books give <player> <book name>
             if (args.length < 4) {
                 usageMessageBooks(sender);
+                return true;
             }
 
             //next arg is the target player
@@ -526,11 +568,14 @@ public final class O2Books implements Listener {
     }
 
     /**
-     * Get the book
+     * Retrieves a book by joining command arguments and searching by title.
+     * <p>
+     * If the book is not found, sends an error message and usage info to the sender.
+     * </p>
      *
-     * @param args   the arguments for the book command
-     * @param sender the player that issued the command
-     * @return true unless an error occurred
+     * @param args   the command arguments to join as a book title
+     * @param sender the command sender to notify on error
+     * @return an ItemStack for the book if found, null otherwise
      */
     @Nullable
     private ItemStack getBookFromArgs(@NotNull String[] args, @NotNull CommandSender sender) {
