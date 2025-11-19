@@ -10,6 +10,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -295,7 +296,7 @@ public class Ollivanders2CommonTest {
         assertNull(facingBlock, "Ollivanders2Common.playerFacingBlockType() should return null when not facing the block type");
     }
 
-    Block playerFacingBlockTypeHelper(Material originBlockType, Material checkBlockType) {
+    Block playerFacingBlockTypeHelper(@NotNull Material originBlockType, @NotNull Material checkBlockType) {
         // make the block at origin type STONE
         Block block = testWorld.getBlockAt(origin);
         block.setType(originBlockType);
@@ -420,7 +421,7 @@ public class Ollivanders2CommonTest {
         assertNull(received, "player3.nextMessage() was not null");
     }
 
-    Handler logHandlerHelper(List<LogRecord> logRecords) {
+    Handler logHandlerHelper(@NotNull List<LogRecord> logRecords) {
         Handler testLogHandler = new Handler() {
             @Override
             public void publish(LogRecord record) {

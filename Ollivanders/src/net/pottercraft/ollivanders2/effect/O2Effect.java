@@ -45,7 +45,7 @@ public abstract class O2Effect {
     /**
      * The minimum duration for this effect
      */
-    private int minDuration = 5 * Ollivanders2Common.ticksPerSecond;
+    static public final int minDuration = 5 * Ollivanders2Common.ticksPerSecond;
 
     /**
      * A callback to the MC plugin

@@ -94,7 +94,7 @@ public abstract class O2Divination {
      * @param target     the player the prophecy is about
      * @param experience the experience level of the prophet with this divination
      */
-    O2Divination(@NotNull Ollivanders2 plugin, @NotNull Player prophet, @NotNull Player target, int experience) {
+    public O2Divination(@NotNull Ollivanders2 plugin, @NotNull Player prophet, @NotNull Player target, int experience) {
         p = plugin;
         this.target = target;
         this.prophet = prophet;
