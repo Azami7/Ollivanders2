@@ -92,7 +92,7 @@ public class O2Prophecies {
     @Nullable
     public O2Prophecy getProphecyAboutPlayer(@NotNull UUID pid) {
         for (O2Prophecy prophecy : activeProphecies) {
-            if (prophecy.getTargetID() == pid) {
+            if (prophecy.getTargetID().equals(pid)) {
                 return prophecy;
             }
         }
@@ -129,7 +129,7 @@ public class O2Prophecies {
     @Nullable
     public O2Prophecy getProphecyByPlayer(@NotNull UUID pid) {
         for (O2Prophecy prophecy : activeProphecies) {
-            if (prophecy.getProphetID() == pid) {
+            if (prophecy.getProphetID().equals(pid)) {
                 return prophecy;
             }
         }
@@ -157,6 +157,7 @@ public class O2Prophecies {
             }
 
             if (prophecy.isKilled()) {
+                common.printDebugMessage("Removing prophecy", null, null, false);
                 activeProphecies.remove(prophecy);
             }
         }
@@ -173,9 +174,9 @@ public class O2Prophecies {
     }
 
     /**
-     * Load saved prophecies
+     * Load saved prophecies, this shouldn't be called by anything except the O2Prophecies onEnable() and unit tests.
      */
-    private void loadProphecies() {
+    public void loadProphecies() {
         GsonDAO gsonLayer = new GsonDAO();
         List<Map<String, String>> prophecies = gsonLayer.readSavedDataListMap(GsonDAO.o2PropheciesJSONFile);
 
@@ -187,9 +188,8 @@ public class O2Prophecies {
         for (Map<String, String> prophecyData : prophecies) {
             O2Prophecy prophecy = deserializeProphecy(prophecyData);
 
-            if (prophecy != null) {
+            if (prophecy != null)
                 activeProphecies.add(prophecy);
-            }
         }
 
         p.getLogger().info("Loaded " + activeProphecies.size() + " prophecies.");
@@ -337,7 +337,7 @@ public class O2Prophecies {
         ArrayList<O2Prophecy> prophecies = new ArrayList<>(offlineProphecies);
 
         for (O2Prophecy prophecy : prophecies) {
-            if (prophecy.getTargetID() == pid) {
+            if (prophecy.getTargetID().equals(pid)) {
                 activeProphecies.add(prophecy);
                 offlineProphecies.remove(prophecy);
 
@@ -359,7 +359,7 @@ public class O2Prophecies {
         String prophecy = null;
 
         for (O2Prophecy prop : activeProphecies) {
-            if (prop.getTargetID() == targetID) {
+            if (prop.getTargetID().equals(targetID)) {
                 prophecy = prop.getProphecyMessage();
             }
         }
@@ -369,11 +369,28 @@ public class O2Prophecies {
         }
 
         for (O2Prophecy prop : offlineProphecies) {
-            if (prop.getTargetID() == targetID) {
+            if (prop.getTargetID().equals(targetID)) {
                 prophecy = prop.getProphecyMessage();
             }
         }
 
         return prophecy;
+    }
+
+    /**
+     * Clear all pending prophecies.
+     */
+    public void resetProphecies() {
+        activeProphecies.clear();
+        offlineProphecies.clear();
+    }
+
+    /**
+     * The count of active prophecies
+     *
+     * @return the count of active prophecies
+     */
+    public int activeProphecyCount() {
+        return activeProphecies.size();
     }
 }

@@ -57,6 +57,9 @@ public class O2BooksTest {
 
         // Get the books instance from the plugin (initialized in onEnable)
         books = Ollivanders2API.getBooks();
+
+        // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
+        mockServer.getScheduler().performTicks(TestCommon.startupTicks);
     }
 
     /**

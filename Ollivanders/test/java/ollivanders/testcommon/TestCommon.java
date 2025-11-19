@@ -9,12 +9,19 @@ import org.jetbrains.annotations.Nullable;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Common functions for tests
  */
 public class TestCommon {
+    /**
+     * Number of ticks needed after server start to make sure the scheduler, etc are running
+     */
+    static public int startupTicks = 100;
+
     /**
      * Compare the message received by a player to the expected message. This needs a helper because
      * we need to strip chat color codes from the messages sent by the plugin.
@@ -52,7 +59,7 @@ public class TestCommon {
      * @return the server response for the command
      */
     @Nullable
-    public static String runCommand (PlayerMock player, String command, ServerMock mockServer) {
+    public static String runCommand (@NotNull PlayerMock player, @NotNull String command, @NotNull ServerMock mockServer) {
         assertTrue(player.performCommand(command), "Player cannot run the " + command + " command");
         mockServer.getScheduler().performTicks(10);
         String commandResponse = player.nextMessage();
@@ -66,7 +73,7 @@ public class TestCommon {
      * @param itemType the type to check for
      * @return true if found, false otherwise
      */
-    public static boolean isInPlayerInventory(PlayerMock player, Material itemType) {
+    public static boolean isInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType) {
         for (ItemStack itemStack : player.getInventory().getContents()) {
             if (itemStack.getType() == itemType) {
                 return true;
@@ -84,7 +91,7 @@ public class TestCommon {
      * @param name the name the item needs to have
      * @return true if found, false otherwise
      */
-    public static boolean isInPlayerInventory(PlayerMock player, Material itemType, String name) {
+    public static boolean isInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType, @NotNull String name) {
         for (ItemStack itemStack : player.getInventory().getContents()) {
             if (itemStack == null)
                 continue;
@@ -106,5 +113,19 @@ public class TestCommon {
         return false;
     }
 
+    /**
+     * Determine if any string in a list contains the specified substring.
+     *
+     * @param stringList the string list to check
+     * @param subString the substring to match
+     * @return true if found, false otherwise
+     */
+    static public boolean containsStringMatch(List<String> stringList, String subString) {
+        for (String string : stringList) {
+            if (string.contains(subString))
+                return true;
+        }
 
+        return false;
+    }
 }

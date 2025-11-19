@@ -22,6 +22,11 @@ public class O2Prophecy {
     final private Ollivanders2 p;
 
     /**
+     * Maximum accuracy for a prophecy
+     */
+    static public final int maxAccuracy = 99;
+
+    /**
      * The effect that will happen to the player
      */
     private final O2EffectType effectType;
@@ -64,14 +69,16 @@ public class O2Prophecy {
     /**
      * Constructor
      *
+     * @param plugin         a reference to the plugin
      * @param effectType     the effect that will happen to the player
+     * @param message        the message to be displayed for the prophecy
      * @param targetID       the id of the player that will be affected
      * @param prophetID      the id of the player that made this prophecy
      * @param delayTime      the time, in game ticks, until the prophecy will come to pass, less than 1200 (1 minute) will be rounded up to 1200
-     * @param effectDuration the duration of the effect, 0 for permanent
+     * @param effectDuration the duration of the effect
      * @param accuracy       the accuracy of this prophecy as a percent from 0 to 99, greater than 99 will be rounded down to 99
      */
-    O2Prophecy(@NotNull Ollivanders2 plugin, @NotNull O2EffectType effectType, @NotNull String message, @NotNull UUID targetID, @NotNull UUID prophetID, long delayTime, int effectDuration, int accuracy) {
+    public O2Prophecy(@NotNull Ollivanders2 plugin, @NotNull O2EffectType effectType, @NotNull String message, @NotNull UUID targetID, @NotNull UUID prophetID, long delayTime, int effectDuration, int accuracy) {
         p = plugin;
         this.effectType = effectType;
         this.targetID = targetID;
@@ -80,9 +87,9 @@ public class O2Prophecy {
         this.time = delayTime;
         this.duration = effectDuration;
 
-        if (accuracy > 99)
-            this.accuracy = 99;
-        else if (accuracy < 0)
+        if (accuracy > maxAccuracy) // accuracy cannot be higher than maxAccuracy
+            this.accuracy = maxAccuracy;
+        else if (accuracy < 0) // accuracy cannot be negative
             this.accuracy = 0;
         else
             this.accuracy = accuracy;
@@ -114,7 +121,7 @@ public class O2Prophecy {
      * @return the target player's unique ID
      */
     @NotNull
-    UUID getProphetID() {
+    public UUID getProphetID() {
         return prophetID;
     }
 
@@ -141,7 +148,7 @@ public class O2Prophecy {
      *
      * @return the prophecy message
      */
-    String getProphecyMessage() {
+    public String getProphecyMessage() {
         return prophecyMessage;
     }
 
@@ -159,7 +166,7 @@ public class O2Prophecy {
      *
      * @return true if killed, false otherwise
      */
-    boolean isKilled() {
+    public boolean isKilled() {
         return kill;
     }
 
@@ -180,12 +187,12 @@ public class O2Prophecy {
     /**
      * Execute this prophecy.
      */
-    void fulfill() {
+    public void fulfill() {
         if (Ollivanders2.debug) {
             p.getLogger().info("Fulfilling prophecy");
         }
 
-        // this should only be called when the prophecy time has expired
+        // do nothing if the prophecy is already killed
         if (kill) {
             return;
         }
@@ -216,10 +223,10 @@ public class O2Prophecy {
             effect.setPermanent(false);
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-            O2Player player = Ollivanders2API.getPlayers().getPlayer(prophetID);
-            if (player != null) {
-                String playerName = player.getPlayerName();
-                p.getServer().broadcastMessage(Ollivanders2.chatColor + "And so came to pass the prophecy of " + playerName + ", \"" + prophecyMessage + "\"");
+            O2Player prophet = Ollivanders2API.getPlayers().getPlayer(prophetID);
+            if (prophet != null) {
+                String prophetName = prophet.getPlayerName();
+                p.getServer().broadcastMessage(Ollivanders2.chatColor + "And so came to pass the prophecy of " + prophetName + ", \"" + prophecyMessage + "\"");
             }
         }
         else {
