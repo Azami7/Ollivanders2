@@ -20,8 +20,7 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Confronting_the_Faceless">https://harrypotter.fandom.com/wiki/Confronting_the_Faceless</a>
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Confronting_the_Faceless">https://harrypotter.fandom.com/wiki/Confronting_the_Faceless</a>
  */
 public class CONFRONTING_THE_FACELESS extends O2Book {
     /**

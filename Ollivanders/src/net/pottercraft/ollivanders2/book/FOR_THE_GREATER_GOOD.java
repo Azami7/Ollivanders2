@@ -16,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @since 2.2.8
  */
 public class FOR_THE_GREATER_GOOD extends O2Book {
     /**

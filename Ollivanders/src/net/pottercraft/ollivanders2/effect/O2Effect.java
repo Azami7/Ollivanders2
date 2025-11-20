@@ -85,11 +85,6 @@ public abstract class O2Effect {
     protected String affectedPlayerText;
 
     /**
-     * The output to be shown for prophecies that use this effect. This should be in future tense.
-     */
-    protected ArrayList<String> divinationText = new ArrayList<>();
-
-    /**
      * Common functions
      */
     Ollivanders2Common common;
@@ -187,22 +182,6 @@ public abstract class O2Effect {
      */
     public boolean isKilled() {
         return kill;
-    }
-
-    /**
-     * Get the text to be used for this effect in a prophecy
-     *
-     * @return a random divination text for this effect
-     */
-    @NotNull
-    public String getDivinationText() {
-        if (divinationText.isEmpty()) {
-            return "will be affected by an unseen affliction";
-        }
-        else {
-            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % divinationText.size());
-            return divinationText.get(rand);
-        }
     }
 
     /**

@@ -28,11 +28,6 @@ public class POISON extends PotionEffectSuper {
         effectType = O2EffectType.POISON;
         potionEffectType = PotionEffectType.POISON;
         informousText = legilimensText = "feels sick";
-
-        divinationText.add("will be struck by a terrible affliction");
-        divinationText.add("shall come to harm");
-        divinationText.add("will be cursed");
-        divinationText.add("will be possessed by a demon spirit");
     }
 
     /**

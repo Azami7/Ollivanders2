@@ -16,9 +16,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.REPELLO_MUGGLETON}<br>
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_7">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_7</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_7">https://harrypotter.fandom.com/wiki/The_Standard_Book_of_Spells,_Grade_7</a>
  */
 public class STANDARD_BOOK_OF_SPELLS_GRADE_7 extends O2Book {
     /**

@@ -51,10 +51,6 @@ public class BURNING extends O2Effect {
         effectType = O2EffectType.BURNING;
         informousText = legilimensText = "is afflicted with a terrible burning";
 
-        divinationText.add("shall be cursed");
-        divinationText.add("will be consumed by fire");
-        divinationText.add("will burn from within");
-
         damage = (double) duration / 100;
     }
 

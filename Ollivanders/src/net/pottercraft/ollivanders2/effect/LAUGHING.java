@@ -26,10 +26,6 @@ public class LAUGHING extends BABBLING {
         effectType = O2EffectType.LAUGHING;
         informousText = "cannot stop laughing";
 
-        divinationText.add("must beware the hand unseen, the agent of giddy doom");
-        divinationText.add("is marked not by lightning but by feather and folly");
-        divinationText.add("shall fall victim to uncontrollable mirth");
-
         dictionary = new ArrayList<>() {{
             add("hahahahahahahaha");
             add("hehehehe");

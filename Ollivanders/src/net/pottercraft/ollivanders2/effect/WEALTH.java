@@ -40,11 +40,6 @@ public class WEALTH extends O2Effect {
         informousText = legilimensText = "feels fortunate";
 
         target = p.getServer().getPlayer(targetID);
-
-        divinationText.add("will be blessed by fortune");
-        divinationText.add("will have unnatural luck");
-        divinationText.add("shall be granted a wish");
-        divinationText.add("will be gifted by a leprechaun");
     }
 
     /**

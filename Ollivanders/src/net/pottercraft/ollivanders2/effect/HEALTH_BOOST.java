@@ -28,11 +28,6 @@ public class HEALTH_BOOST extends PotionEffectSuper {
         effectType = O2EffectType.HEALTH_BOOST;
         potionEffectType = PotionEffectType.HEALTH_BOOST;
         informousText = legilimensText = "feels stronger";
-
-        divinationText.add("will become stonger");
-        divinationText.add("will be blessed by fortune");
-        divinationText.add("shall be blessed");
-        divinationText.add("will rise to become more powerful");
     }
 
     /**

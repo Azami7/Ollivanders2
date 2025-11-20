@@ -18,9 +18,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.PROTEGO_HORRIBILIS}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Defence_Against_the_Dark_Arts_(book)">https://harrypotter.fandom.com/wiki/Defence_Against_the_Dark_Arts_(book)</a>
  * @author Azami7
- * @since 2.21
+ * @see <a href="https://harrypotter.fandom.com/wiki/Defence_Against_the_Dark_Arts_(book)">https://harrypotter.fandom.com/wiki/Defence_Against_the_Dark_Arts_(book)</a>
  */
 public class DEFENSE_AGAINST_THE_DARK_ARTS extends O2Book {
     /**

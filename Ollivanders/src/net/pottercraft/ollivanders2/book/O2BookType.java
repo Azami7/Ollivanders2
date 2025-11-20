@@ -5,10 +5,17 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * All Ollivanders2 book types.
+ * Enum of all available Ollivanders2 books.
+ * <p>
+ * Each book type contains metadata including:
+ * <ul>
+ * <li>The implementing class that defines the book's spells/potions</li>
+ * <li>Full and short display titles (configurable via translations)</li>
+ * <li>Author name</li>
+ * <li>Magic branch (Charms, Potions, Transfiguration, etc.)</li>
+ * </ul>
  *
  * @author Azami7
- * @since 2.2.4
  */
 public enum O2BookType {
     /**
@@ -42,7 +49,7 @@ public enum O2BookType {
     /**
      * {@link BOOK_OF_POTIONS}
      */
-    BOOK_OF_POTIONS (BOOK_OF_POTIONS.class, "Book Of Potions", "Book Of Potions", "Zygmunt Budge", O2MagicBranch.POTIONS),
+    BOOK_OF_POTIONS(BOOK_OF_POTIONS.class, "Book Of Potions", "Book Of Potions", "Zygmunt Budge", O2MagicBranch.POTIONS),
     /**
      * {@link BREAK_WITH_A_BANSHEE}
      */
@@ -221,12 +228,13 @@ public enum O2BookType {
     private final String author;
 
     /**
-     * The full book title
+     * The full book title, configurable via translations
      */
     final private String title;
 
     /**
-     * label for book title string
+     * Label appended to the enum name to form the configuration key for the full book title.
+     * For example: STANDARD_BOOK_OF_SPELLS_GRADE_1_title
      */
     final static String titleLabel = "_title";
 
@@ -236,7 +244,8 @@ public enum O2BookType {
     final private String shortTitle;
 
     /**
-     * label for short title string
+     * Label appended to the enum name to form the configuration key for the short book title.
+     * For example: STANDARD_BOOK_OF_SPELLS_GRADE_1_shortTitle
      */
     final static String shortTitleLabel = "_shortTitle";
 
@@ -246,13 +255,13 @@ public enum O2BookType {
     private final O2MagicBranch branch;
 
     /**
-     * Constructor
+     * Constructor that initializes a book type with its metadata.
      *
-     * @param className the name of the class this type represents
-     * @param author the author
-     * @param branch the branch of magic
-     * @param title the book title
-     * @param shortTitle the short title for the book for item meta
+     * @param className  the implementing class that defines the book's spells/potions
+     * @param title      the full book title
+     * @param shortTitle the short title for display in item lore (truncated to 32 characters if needed)
+     * @param author     the author of the book
+     * @param branch     the magic branch this book covers
      */
     O2BookType(@NotNull Class<?> className, @NotNull String title, @NotNull String shortTitle, @NotNull String author, @NotNull O2MagicBranch branch) {
         this.className = className;
@@ -278,13 +287,19 @@ public enum O2BookType {
     }
 
     /**
-     * Return the short title for a book. This is the display name title for the book item.
+     * Returns the short title for the book's item lore display.
+     * <p>
+     * Checks configuration for translations first. Falls back to the default short title
+     * which is truncated to 32 characters if needed.
+     * </p>
      *
      * @param p the Ollivanders2 plugin
      * @return the short title of the book
      */
     public String getShortTitle(@NotNull Ollivanders2 p) {
-        // first check to see if it has been set with config
+        // Check for a custom short title in the configuration (via translations feature).
+        // The configuration key is formed by concatenating the enum name with "_shortTitle"
+        // (e.g., "STANDARD_BOOK_OF_SPELLS_GRADE_1_shortTitle")
         if (Ollivanders2.useTranslations && p.getConfig().isSet(this + shortTitleLabel)) {
             String s = p.getConfig().getString(this + shortTitleLabel);
             if (s != null && !(s.isEmpty()))
@@ -295,13 +310,18 @@ public enum O2BookType {
     }
 
     /**
-     * Return the title for a book. This is the display name title for the book item.
+     * Returns the full title for the book.
+     * <p>
+     * Checks configuration for translations first. Falls back to the default full title.
+     * </p>
      *
      * @param p the Ollivanders2 plugin
-     * @return the title of the book
+     * @return the full title of the book
      */
     public String getTitle(@NotNull Ollivanders2 p) {
-        // first check to see if it has been set with config
+        // Check for a custom full title in the configuration (via translations feature).
+        // The configuration key is formed by concatenating the enum name with "_title"
+        // (e.g., "STANDARD_BOOK_OF_SPELLS_GRADE_1_title")
         String identifier = this + titleLabel;
 
         if (Ollivanders2.useTranslations && p.getConfig().isSet(identifier)) {
@@ -315,7 +335,7 @@ public enum O2BookType {
     }
 
     /**
-     * Return the author for a book. This is the display name title for the book item.
+     * Returns the author of the book.
      *
      * @return the author of the book
      */

@@ -16,9 +16,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.potion.WIDEYE_POTION}<br>
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate">https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate">https://harrypotter.fandom.com/wiki/The_Healer's_Helpmate</a>
  */
 public class THE_HEALERS_HELPMATE extends O2Book {
     /**

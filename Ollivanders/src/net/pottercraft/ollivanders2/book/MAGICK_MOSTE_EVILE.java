@@ -16,9 +16,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.AMATO_ANIMO_ANIMATO_ANIMAGUS}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Magick_Moste_Evile">https://harrypotter.fandom.com/wiki/Magick_Moste_Evile</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Magick_Moste_Evile">https://harrypotter.fandom.com/wiki/Magick_Moste_Evile</a>
  */
 public class MAGICK_MOSTE_EVILE extends O2Book {
     /**

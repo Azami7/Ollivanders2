@@ -12,9 +12,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.POINT_ME}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica">https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica">https://harrypotter.fandom.com/wiki/Numerology_and_Grammatica</a>
  */
 public class NUMEROLOGY_AND_GRAMMATICA extends O2Book {
     /**

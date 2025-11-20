@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.SCUTO_CONTERAM}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art">https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art</a>
- * @since 2.2.4
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art">https://harrypotter.fandom.com/wiki/Secrets_of_the_Darkest_Art</a>
  */
 public class SECRETS_OF_THE_DARKEST_ART extends O2Book {
     /**

@@ -780,7 +780,7 @@ public class O2Players {
 
                 O2SpellType masterSpell = o2p.getMasterSpell();
                 if (masterSpell != null)
-                    summary.append("\nMaster Spell: ").append(Ollivanders2Common.enumRecode(masterSpell.toString().toLowerCase()));
+                    summary.append("\nMaster Spell: ").append(masterSpell.getSpellName());
 
                 summary.append("\n");
             }

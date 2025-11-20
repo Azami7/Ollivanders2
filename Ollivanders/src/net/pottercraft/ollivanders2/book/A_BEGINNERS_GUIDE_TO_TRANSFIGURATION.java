@@ -20,7 +20,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.SNUFFLIFORS}<br>
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration">https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration">https://harrypotter.fandom.com/wiki/A_Beginner's_Guide_to_Transfiguration</a>
  */
 public class A_BEGINNERS_GUIDE_TO_TRANSFIGURATION extends O2Book {
     /**

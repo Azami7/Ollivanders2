@@ -12,9 +12,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.BRACKIUM_EMENDO}<br>
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Travels_with_Trolls">https://harrypotter.fandom.com/wiki/Travels_with_Trolls</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Travels_with_Trolls">https://harrypotter.fandom.com/wiki/Travels_with_Trolls</a>
  */
 public class TRAVELS_WITH_TROLLS extends O2Book {
     /**

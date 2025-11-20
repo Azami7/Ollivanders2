@@ -29,11 +29,6 @@ public class HUNGER extends PotionEffectSuper {
         potionEffectType = PotionEffectType.HUNGER;
         informousText = legilimensText = "is hungry";
         affectedPlayerText = "You feel hungry.";
-
-        divinationText.add("shall be struck by a terrible affliction");
-        divinationText.add("will starve");
-        divinationText.add("shall be cursed");
-        divinationText.add("will become insatiable");
     }
 
     /**

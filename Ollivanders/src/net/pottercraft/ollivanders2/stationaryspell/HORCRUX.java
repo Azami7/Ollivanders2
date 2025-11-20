@@ -75,9 +75,6 @@ public class HORCRUX extends O2StationarySpell {
      */
     private boolean itemLoaded = false;
 
-    //
-    // save data labels
-    //
     private final String materialLabel = "itemType";
     private final String worldLabel = "world";
 

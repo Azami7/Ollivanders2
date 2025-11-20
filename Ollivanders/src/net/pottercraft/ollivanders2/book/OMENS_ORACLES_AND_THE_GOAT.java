@@ -13,9 +13,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.MANTEIA_KENTAVROS}
  * </p>
  *
- * @see <a href = "http://harrypotter.wikia.com/wiki/Omens,_Oracles_%26_the_Goat">http://harrypotter.wikia.com/wiki/Omens,_Oracles_%26_the_Goat</a>
  * @author Azami7
- * @since 2.2.9
+ * @see <a href="http://harrypotter.wikia.com/wiki/Omens,_Oracles_%26_the_Goat">http://harrypotter.wikia.com/wiki/Omens,_Oracles_%26_the_Goat</a>
  */
 public class OMENS_ORACLES_AND_THE_GOAT extends O2Book {
     /**

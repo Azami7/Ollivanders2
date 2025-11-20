@@ -13,9 +13,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.PROPHETEIA}
  * </p>
  *
- * @see <a href = "https://en.wikipedia.org/wiki/Tetrabiblos">https://en.wikipedia.org/wiki/Tetrabiblos</a>
  * @author Azami7
- * @since 2.2.9
+ * @see <a href="https://en.wikipedia.org/wiki/Tetrabiblos">https://en.wikipedia.org/wiki/Tetrabiblos</a>
  */
 public class TETRABIBLIOS extends O2Book {
     /**

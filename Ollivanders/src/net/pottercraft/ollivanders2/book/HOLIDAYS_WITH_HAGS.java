@@ -12,8 +12,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Holidays_with_Hags">https://harrypotter.fandom.com/wiki/Holidays_with_Hags</a>
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Holidays_with_Hags">https://harrypotter.fandom.com/wiki/Holidays_with_Hags</a>
  */
 public class HOLIDAYS_WITH_HAGS extends O2Book {
     /**

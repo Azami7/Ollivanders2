@@ -12,9 +12,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}<br>
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Year_with_the_Yeti">https://harrypotter.fandom.com/wiki/Year_with_the_Yeti</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Year_with_the_Yeti">https://harrypotter.fandom.com/wiki/Year_with_the_Yeti</a>
  */
 public class YEAR_WITH_A_YETI extends O2Book {
     /**

@@ -680,7 +680,7 @@ public class O2Player {
             if (lineCount != 0)
                 content.append("\n");
 
-            String spell = Ollivanders2Common.firstLetterCapitalize(Ollivanders2Common.enumRecode(e.getKey().toString().toLowerCase()));
+            String spell = e.getKey().getSpellName();
             String count = e.getValue().toString();
             String line = spell + " " + count;
             content.append(spell).append(" ").append(count);

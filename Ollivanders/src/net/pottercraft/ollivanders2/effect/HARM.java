@@ -28,11 +28,6 @@ public class HARM extends PotionEffectSuper {
         informousText = legilimensText = "feels unwell";
 
         strength = 1;
-
-        divinationText.add("shall be struck by a terrible affliction");
-        divinationText.add("will come to harm");
-        divinationText.add("shall be cursed");
-        divinationText.add("will be develop a terrible illness");
     }
 
     /**

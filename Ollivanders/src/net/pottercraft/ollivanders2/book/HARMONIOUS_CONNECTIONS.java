@@ -12,7 +12,6 @@ import org.jetbrains.annotations.NotNull;
  * </p>
  *
  * @author Azami7
- * @since 2.2.4
  */
 public class HARMONIOUS_CONNECTIONS extends O2Book {
     /**

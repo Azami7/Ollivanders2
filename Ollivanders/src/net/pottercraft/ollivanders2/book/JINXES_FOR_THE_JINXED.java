@@ -18,7 +18,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.METELOJINX_RECANTO}<br>
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed">https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed</a>
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed">https://harrypotter.fandom.com/wiki/Jinxes_for_the_Jinxed</a>
  */
 public class JINXES_FOR_THE_JINXED extends O2Book {
     /**

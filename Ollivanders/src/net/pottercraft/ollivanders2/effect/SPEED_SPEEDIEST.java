@@ -27,9 +27,6 @@ public class SPEED_SPEEDIEST extends PotionEffectSuper {
         effectType = O2EffectType.SPEED_SPEEDIEST;
         potionEffectType = PotionEffectType.SPEED;
         informousText = legilimensText = "is moving extremely fast";
-
-        divinationText.add("will wear the boots of Mercury");
-        divinationText.add("will move with the power of the gods");
     }
 
     /**

@@ -14,10 +14,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.LUMOS_MAXIMA}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Extreme_Incantations">https://harrypotter.fandom.com/wiki/Extreme_Incantations</a>
- *
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Extreme_Incantations">https://harrypotter.fandom.com/wiki/Extreme_Incantations</a>
  */
 public class EXTREME_INCANTATIONS extends O2Book {
     /**

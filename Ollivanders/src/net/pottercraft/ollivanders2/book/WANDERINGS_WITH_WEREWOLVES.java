@@ -12,9 +12,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves">https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves">https://harrypotter.fandom.com/wiki/Wanderings_with_Werewolves</a>
  */
 public class WANDERINGS_WITH_WEREWOLVES extends O2Book {
     /**

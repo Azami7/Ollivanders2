@@ -11,9 +11,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.OBLIVIATE}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls">https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls">https://harrypotter.fandom.com/wiki/Gadding_with_Ghouls</a>
  */
 public class GADDING_WITH_GHOULS extends O2Book {
     /**

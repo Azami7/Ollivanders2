@@ -13,9 +13,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.potion.CURE_FOR_BOILS}<br>
  * </p>
  *
- * @see <a href = "https://harrypotter.wikia.com/wiki/Book_of_Potions">https://harrypotter.wikia.com/wiki/Book_of_Potions</a>
  * @author Azami7
- * @since 2.2.7
+ * @see <a href="https://harrypotter.wikia.com/wiki/Book_of_Potions">https://harrypotter.wikia.com/wiki/Book_of_Potions</a>
  */
 public class BOOK_OF_POTIONS extends O2Book {
     /**

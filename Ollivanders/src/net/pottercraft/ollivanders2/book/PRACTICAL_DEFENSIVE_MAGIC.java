@@ -20,9 +20,8 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.VERMILLIOUS_TRIA}
  * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Practical_Defensive_Magic_and_Its_Use_Against_the_Dark_Arts">https://harrypotter.fandom.com/wiki/Practical_Defensive_Magic_and_Its_Use_Against_the_Dark_Arts</a>
  * @author Azami7
- * @since 2.2.4
+ * @see <a href="https://harrypotter.fandom.com/wiki/Practical_Defensive_Magic_and_Its_Use_Against_the_Dark_Arts">https://harrypotter.fandom.com/wiki/Practical_Defensive_Magic_and_Its_Use_Against_the_Dark_Arts</a>
  */
 public class PRACTICAL_DEFENSIVE_MAGIC extends O2Book {
     /**
