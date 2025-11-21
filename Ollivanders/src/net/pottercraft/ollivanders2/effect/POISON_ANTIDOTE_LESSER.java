@@ -7,17 +7,29 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Minor antidote to poison potion effect
+ * Reduced-potency antidote to the POISON potion effect.
+ *
+ * <p>POISON_ANTIDOTE_LESSER is a partial antidote that counteracts the POISON potion effect with
+ * reduced potency. As an antidote with strength 0.25, it reduces the duration of any active POISON
+ * effects on the player by 25%. This allows for incomplete recovery from poison-based attacks,
+ * leaving some residual poison effect that requires additional healing or stronger antidotes to
+ * fully remove.</p>
  *
  * @author Azami7
+ * @see PotionEffectAntidoteSuper for the antidote strength mechanism
+ * @see POISON for the poison potion effect this antidote counteracts
  */
 public class POISON_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper {
     /**
-     * Constructor
+     * Constructor for creating a reduced-potency poison antidote.
+     *
+     * <p>Creates an antidote effect that reduces the duration of active POISON potion effects by
+     * 25% (strength 0.25). The duration parameter is accepted for API consistency with other effects
+     * but is not used by antidote effects.</p>
      *
      * @param plugin   a reference to the plugin for logging
-     * @param duration the duration of this effect - not used for this effect type
-     * @param pid      the target player
+     * @param duration the duration parameter (unused for antidote effects)
+     * @param pid      the unique ID of the player to treat with the antidote
      */
     public POISON_ANTIDOTE_LESSER(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
@@ -28,7 +40,11 @@ public class POISON_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper {
     }
 
     /**
-     * Do any cleanup related to removing this effect from the player
+     * Perform cleanup when the antidote effect is removed.
+     *
+     * <p>The default implementation does nothing, as antidote effects have no persistent state to
+     * clean up. When removed, the player's remaining POISON effect duration remains at its reduced
+     * value.</p>
      */
     @Override
     public void doRemove() {

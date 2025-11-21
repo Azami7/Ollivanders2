@@ -7,18 +7,29 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Give a player hunger
+ * Hunger potion effect that increases the target player's hunger and food depletion.
+ *
+ * <p>HUNGER applies Minecraft's HUNGER potion effect to increase the target player's hunger
+ * level and cause them to deplete food faster while active. The effect is powered by the
+ * Minecraft potion effect system with strength (amplifier) set to 1, determining the hunger
+ * intensity. The effect is detectable by mind-reading spells (Legilimens) and information
+ * spells (Informous) which report the target "is hungry". The player receives an affectation
+ * notification of "You feel hungry." when the effect is applied.</p>
  *
  * @author Azami7
- * @since 2.2.9
+ * @see PotionEffectSuper for the potion effect application mechanism
  */
 public class HUNGER extends PotionEffectSuper {
     /**
-     * Constructor
+     * Constructor for creating a hunger potion effect.
+     *
+     * <p>Creates a potion effect that causes hunger and accelerated food depletion to the target
+     * player using Minecraft's HUNGER potion effect type. The effect is detected by information
+     * spells as the target "is hungry" and notifies the player "You feel hungry."</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect
-     * @param pid      the ID of the player this effect acts on
+     * @param duration the duration of the hunger effect in game ticks
+     * @param pid      the unique ID of the player to afflict with hunger
      */
     public HUNGER(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
@@ -32,7 +43,11 @@ public class HUNGER extends PotionEffectSuper {
     }
 
     /**
-     * Do any cleanup related to removing this effect from the player
+     * Perform cleanup when the hunger effect is removed.
+     *
+     * <p>The default implementation does nothing, as HUNGER is a potion effect whose effects
+     * are automatically managed by the Minecraft potion system. When the effect expires or is
+     * manually removed, the player's hunger depletion rate returns to normal.</p>
      */
     @Override
     public void doRemove() {

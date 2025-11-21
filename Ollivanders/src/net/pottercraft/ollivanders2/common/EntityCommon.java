@@ -667,7 +667,7 @@ public class EntityCommon {
      * Is this living entity a hostile? This assumes Player entities are not hostile.
      *
      * @return true if it is a hostile or angry mob, false otherwise
-     * @see <a href = "https://minecraft.fandom.com/wiki/Mob#Hostile_mobs">https://minecraft.fandom.com/wiki/Mob#Hostile_mobs</a>
+     * @see <a href="https://minecraft.fandom.com/wiki/Mob#Hostile_mobs">https://minecraft.fandom.com/wiki/Mob#Hostile_mobs</a>
      */
     static public boolean isHostile(@NotNull LivingEntity livingEntity) {
         // are they an inherently hostile mob?

@@ -41,21 +41,45 @@ import java.util.UUID;
 import java.util.concurrent.Semaphore;
 
 /**
- * Class for managing all effects on players.
+ * Central manager for all magical effects applied to players.
+ *
+ * <p>O2Effects manages the complete effect lifecycle: adding effects, processing them each game tick,
+ * removing effects, and persisting effects across player logouts. This class implements Bukkit's Listener
+ * interface to hook into server events and distribute them to active effects.</p>
+ *
+ * <p>Thread Safety: This class uses a Semaphore and EffectsData wrapper to ensure thread-safe access to
+ * effect maps, preventing race conditions when multiple threads access player effects simultaneously.
+ * All public methods are synchronized or use the internal EffectsData synchronization.</p>
+ *
+ * <p>Data Structure: Effects are stored in two separate maps:</p>
+ * <ul>
+ * <li><strong>Active Effects:</strong> O2Effect objects for online players, actively processed each tick</li>
+ * <li><strong>Saved Effects:</strong> Effect type and duration pairs for offline players, restored on login</li>
+ * </ul>
+ *
+ * <p>Effect Stacking: When an effect is added to a player who already has that effect type,
+ * the durations are combined rather than replacing the effect, allowing effect stacking.</p>
+ *
+ * @author Azami7
+ * @see O2Effect for the abstract base class of all effects
+ * @see O2EffectType for available effect types
  */
 public class O2Effects implements Listener {
     /**
-     * A reference to the plugin
+     * Reference to the plugin for server API access and configuration.
      */
     final Ollivanders2 p;
 
     /**
-     * Common functions
+     * Common utility functions for the plugin.
      */
     final Ollivanders2Common common;
 
     /**
-     * Semaphore for thread-safe function locking
+     * Shared semaphore for thread-safe access to effect data maps.
+     * Static and shared across all O2Effects instances to provide consistent locking
+     * for the EffectsData internal maps. Prevents race conditions when multiple threads
+     * read/write effect maps simultaneously.
      */
     final static Semaphore semaphore = new Semaphore(1);
 
@@ -348,7 +372,7 @@ public class O2Effects implements Listener {
      * @param event the event
      */
     @EventHandler(priority = EventPriority.HIGH)
-    public void onPlayerToggleSleepEvent(@NotNull PlayerToggleSneakEvent event) {
+    public void onPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
 
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(player.getUniqueId());
@@ -704,23 +728,25 @@ public class O2Effects implements Listener {
 
         Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
 
-        // do not allow multiple shape-shifting effects at the same time
+        // Prevent multiple shape-shifting effects: only one transformation allowed at a time
+        // Shape-shifting effects are mutually exclusive to prevent conflicting appearance changes
         if (effect instanceof ShapeShiftSuper) {
             for (O2Effect ef : playerEffects.values()) {
                 if (ef instanceof ShapeShiftSuper) {
-                    return;
+                    return;  // Already has a shape-shift effect, reject this new one
                 }
             }
         }
 
         if (playerEffects.containsKey(effect.effectType)) {
-            // increase effect duration by the amount of this effect's
+            // Effect stacking: if player already has this effect, combine durations
+            // This allows multiple casts of the same spell to extend the effect's duration
             O2Effect ef = playerEffects.get(effect.effectType);
             effect.duration += ef.duration;
             playerEffects.replace(effect.effectType, effect);
         }
         else {
-            // add this effect
+            // New effect: add it to the player's active effects
             playerEffects.put(effect.effectType, effect);
         }
 

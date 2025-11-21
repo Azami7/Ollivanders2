@@ -15,21 +15,51 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Turns player into a werewolf during the full moon. Doesn't go away until death (if deathExpLoss is set to
- * true).
+ * Permanent lycanthropy curse that transforms player into a werewolf during full moons.
+ *
+ * <p>LYCANTHROPY is a permanent curse that transforms the affected player into a werewolf during
+ * full moons (every 8 in-game days). The curse is tied to the lunar cycle: the player transforms
+ * into wolf form after moonrise (game time > 13000) on full moon days and reverts to human form
+ * before moonrise or after sunrise on full moon days, or on any non-full-moon day. While transformed,
+ * additional effects are automatically applied: aggressive behavior (AGGRESSION with level 10) and
+ * wolf-like speech (LYCANTHROPY_SPEECH). The effect is always permanent and cannot be modified
+ * via setPermanent(). The curse can spread through damage dealt by angry wolves transformed by this
+ * effect. Detectable by mind-reading spells (Legilimens) which report the player "is a werewolf".</p>
+ *
+ * <p>Transformation Cycle (based on in-game full moon every 8 days):</p>
+ * <ul>
+ * <li>Checks for full moon day and time after sunset (game time > 13000)</li>
+ * <li>On full moon after moonrise: transforms to wolf, applies AGGRESSION and LYCANTHROPY_SPEECH</li>
+ * <li>Before moonrise on full moon or after sunrise: reverts to human form, removes additional effects</li>
+ * <li>On non-full-moon days: reverts to human form, removes additional effects</li>
+ * </ul>
+ *
+ * <p>Infection Mechanism:</p>
+ * <ul>
+ * <li>Angry wolves transformed by this effect can infect other players through damage</li>
+ * <li>Infection occurs 1 tick after damage is dealt</li>
+ * <li>New infection creates new LYCANTHROPY effect on the damaged player</li>
+ * </ul>
  *
  * @author azami7
- * @since 2.2.8
+ * @see AGGRESSION for the aggressive behavior applied during transformation
+ * @see LYCANTHROPY_SPEECH for the wolf-like speech applied during transformation
+ * @see ShapeShiftSuper for the shape-shifting transformation mechanism
  */
 public class LYCANTHROPY extends ShapeShiftSuper {
     ArrayList<O2EffectType> additionalEffects = new ArrayList<>();
 
     /**
-     * Constructor
+     * Constructor for creating a permanent lycanthropy curse effect.
+     *
+     * <p>Creates a permanent curse that ties the player's form to the lunar cycle. The player will
+     * transform into a wolf during full moons and revert to human form otherwise. Sets the detection
+     * text for mind-reading spells to "is a werewolf". The effect is always permanent and transformation
+     * is controlled by the upkeep() method based on in-game time and moon phase.</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect
-     * @param pid      the ID of the player this effect acts on
+     * @param duration duration parameter (ignored - lycanthropy is always permanent)
+     * @param pid      the unique ID of the player to curse with lycanthropy
      */
     public LYCANTHROPY(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
@@ -43,7 +73,11 @@ public class LYCANTHROPY extends ShapeShiftSuper {
     }
 
     /**
-     * Transfigure the player back to human form and kill this effect.
+     * Kill the lycanthropy effect and restore the player to human form.
+     *
+     * <p>Reverts the player to human form if currently transformed, removes any additional effects
+     * (AGGRESSION, LYCANTHROPY_SPEECH) that were applied, and marks the effect for removal from
+     * the player's effect list.</p>
      */
     @Override
     public void kill() {
@@ -54,9 +88,13 @@ public class LYCANTHROPY extends ShapeShiftSuper {
     }
 
     /**
-     * Change player in to a wolf for 1 day when the full moon occurs.
+     * Age the lycanthropy effect and manage transformation based on lunar cycle.
      *
-     * <p>Reference: https://minecraft.gamepedia.com/Moon</p>
+     * <p>Called each game tick. This method checks the in-game time and full moon cycle (every 8 days).
+     * On full moon days after sunset (game time > 13000), the player transforms into wolf form and
+     * aggressive/speech effects are applied. On other times or non-full-moon days, the player reverts
+     * to human form and additional effects are removed. Transformation is automatically managed by
+     * this upkeep cycle and persists indefinitely until the effect is manually killed.</p>
      */
     @Override
     protected void upkeep() {
@@ -105,7 +143,11 @@ public class LYCANTHROPY extends ShapeShiftSuper {
     }
 
     /**
-     * Add additional effects of lycanthropy such as aggression and speaking like a wolf
+     * Add secondary effects that accompany werewolf transformation.
+     *
+     * <p>Applies two effects during werewolf transformation: AGGRESSION (with aggression level 10) and
+     * LYCANTHROPY_SPEECH (with 5 tick duration). These effects are tracked in additionalEffects list
+     * for removal when the player reverts to human form.</p>
      */
     private void addAdditionalEffects() {
         AGGRESSION aggression = new AGGRESSION(p, 5, targetID);
@@ -119,7 +161,10 @@ public class LYCANTHROPY extends ShapeShiftSuper {
     }
 
     /**
-     * Remove additional effects of Lycanthropy
+     * Remove secondary effects when player reverts to human form.
+     *
+     * <p>Removes all effects tracked in additionalEffects list (AGGRESSION, LYCANTHROPY_SPEECH) when
+     * the player transforms back to human form outside of full moon periods.</p>
      */
     private void removeAdditionalEffect() {
         for (O2EffectType effectType : additionalEffects) {
@@ -128,23 +173,36 @@ public class LYCANTHROPY extends ShapeShiftSuper {
     }
 
     /**
-     * Override setPermanent so that no code can inadvertently make lycanthropy effect age.
+     * Prevent any code from modifying the permanent status of lycanthropy.
      *
-     * @param perm true if this is permanent, false otherwise
+     * <p>Overrides the parent method to ensure lycanthropy always remains permanent. The duration
+     * parameter is ignored and the effect cannot be made temporary through this method.</p>
+     *
+     * @param perm ignored - lycanthropy is always permanent
      */
     @Override
     public void setPermanent(boolean perm) {
     }
 
     /**
-     * Do any cleanup related to removing this effect from the player
+     * Perform cleanup when the lycanthropy effect is removed.
+     *
+     * <p>The default implementation does nothing. The main cleanup is handled by the kill() method
+     * which restores the player to human form and removes additional effects. Once killed, the player
+     * is no longer affected by the lunar cycle transformation.</p>
      */
     @Override
     public void doRemove() {
     }
 
     /**
-     * Do any on damage effects
+     * Handle damage events to propagate lycanthropy infection through angry wolves.
+     *
+     * <p>When an angry wolf (transformed by this effect) damages a player, the target player is infected
+     * with lycanthropy after a 1 tick delay (if they don't already have the effect). This allows the
+     * curse to spread from player-controlled werewolves to other players.</p>
+     *
+     * @param event the entity damage event where a wolf damages another entity
      */
     @Override
     void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {
@@ -172,9 +230,13 @@ public class LYCANTHROPY extends ShapeShiftSuper {
     }
 
     /**
-     * Infect this player with Lycanthropy
+     * Infect a player with the lycanthropy curse.
      *
-     * @param player the player to infect
+     * <p>Creates and applies a new LYCANTHROPY effect to the specified player if they don't already
+     * have the curse. The new effect has a duration of 100 ticks, though this is ignored due to the
+     * permanent nature of lycanthropy.</p>
+     *
+     * @param player the player to infect with lycanthropy
      */
     private void infectPlayer(Player player) {
         if (!Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.LYCANTHROPY)) {

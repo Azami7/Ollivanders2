@@ -24,34 +24,51 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * "While you are here, your house will be something like your family within Hogwarts.  You will have classes with the
+ * "While you are here, your house will be something like your family within Hogwarts. You will have classes with the
  * rest of your house, sleep in your house dormitory, and spend free time in your house common room."
  *
- * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Houses</p>
- * <p>Reference: https://harrypotter.fandom.com/wiki/Hogwarts_Houses</p>
+ * <p>O2Houses manages the Hogwarts house system including sorting players, tracking house membership, managing house
+ * points, and displaying a scoreboard with house standings. Houses are optional and configurable, allowing servers to
+ * customize house names and chat colors. The class persists house data to disk and fires events when players are sorted.</p>
+ *
+ * <p>House Features:</p>
+ * <ul>
+ * <li>Player sorting into four Hogwarts houses</li>
+ * <li>House membership persistence across server restarts</li>
+ * <li>House points system with scoreboard display</li>
+ * <li>Customizable house names and colors via configuration</li>
+ * <li>Team-based player grouping with colored display names</li>
+ * <li>OllivandersPlayerSortedEvent fire on successful sorting</li>
+ * </ul>
+ *
+ * @author Azami7
+ * @see O2HouseType for the house type enumeration
+ * @see OllivandersPlayerSortedEvent for the event fired on sorting
+ * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Houses">House Configuration Wiki</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Hogwarts_Houses">Hogwarts Houses - Harry Potter Wiki</a>
  */
 public class O2Houses {
     /**
-     * A reference to the plugin
+     * Reference to the plugin for accessing configuration, logging, and server API.
      */
     private final Ollivanders2 p;
 
     /**
-     * Common functions
+     * Common utility functions for the plugin.
      */
     private final Ollivanders2Common common;
 
     /**
-     * Whether houses are enabled
-     * <p>
-     * Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#houses
+     * Whether houses are enabled.
+     *
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#houses">Houses Configuration Wiki</a>
      */
     public static boolean useHouses = false;
 
     /**
-     * Whether to display sorting messages on broadcast to all players
-     * <p>
-     * Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#sorting-announcements
+     * Whether to display sorting messages on broadcast to all players.
+     *
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#sorting-announcements">Sorting Announcements Configuration Wiki</a>
      */
     public static boolean displayMessageOnSort = false;
 
@@ -66,9 +83,9 @@ public class O2Houses {
     private final Map<O2HouseType, Team> O2HouseTeamMap = new HashMap<>();
 
     /**
-     * House points display using scoreboard
+     * House points display using scoreboard.
      *
-     * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Houses#points</p>
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Houses#points">House Points Configuration Wiki</a>
      */
     private Scoreboard scoreboard;
 
@@ -93,9 +110,12 @@ public class O2Houses {
     private final DisplaySlot scoreboardSlot = DisplaySlot.SIDEBAR;
 
     /**
-     * Constructor.
+     * Constructor for the house management system.
      *
-     * @param plugin the callback for the plugin
+     * <p>Initializes the O2Houses manager with a reference to the Ollivanders2 plugin and creates common utility instances
+     * for logging and debugging.</p>
+     *
+     * @param plugin the Ollivanders2 plugin instance
      */
     public O2Houses(@NotNull Ollivanders2 plugin) {
         p = plugin;
@@ -103,7 +123,11 @@ public class O2Houses {
     }
 
     /**
-     * Set up houses on enable
+     * Initialize and enable the house system on plugin startup.
+     *
+     * <p>Reads house configuration options, creates the scoreboard infrastructure, initializes house points, loads
+     * persisted house data from disk, and displays the house points scoreboard to players. If houses are disabled in
+     * the configuration, this method returns early without performing initialization.</p>
      */
     public void onEnable() {
         //
@@ -129,7 +153,11 @@ public class O2Houses {
     }
 
     /**
-     * Read house config options
+     * Read customizable house configuration from the plugin config file.
+     *
+     * <p>Loads custom names and chat colors for each house from the plugin configuration. If custom names or colors are
+     * set in the configuration and are not empty, they override the default values for Gryffindor, Hufflepuff, Ravenclaw,
+     * and Slytherin houses.</p>
      */
     private void readHouseConfig() {
         //
@@ -189,7 +217,10 @@ public class O2Houses {
     }
 
     /**
-     * Initialize the house points map.
+     * Initialize all house points to zero.
+     *
+     * <p>Sets the initial score for each house type to 0 points. This is called during startup and
+     * when resetting the house system.</p>
      */
     private void initHousePoints() {
         for (O2HouseType houseType : O2HouseType.values()) {
@@ -200,8 +231,11 @@ public class O2Houses {
     /**
      * Get the house type by name.
      *
-     * @param name the name of the house
-     * @return the house type or null if the name is not valid.
+     * <p>Performs case-insensitive matching against all house types. The input name is automatically
+     * trimmed of whitespace before comparison. Returns null if no matching house is found.</p>
+     *
+     * @param name the name of the house (case-insensitive, spaces are trimmed)
+     * @return the matching house type, or null if no match is found
      */
     @Nullable
     public O2HouseType getHouseType(@Nullable String name) {
@@ -224,7 +258,10 @@ public class O2Houses {
     /**
      * Get all the house names.
      *
-     * @return all house names
+     * <p>Returns a fresh list of all house names. The list reflects the current names of each house type,
+     * which may have been customized via configuration. This method returns a new list each time it is called.</p>
+     *
+     * @return a new ArrayList containing all house names in order
      */
     @NotNull
     public ArrayList<String> getAllHouseNames() {
@@ -238,7 +275,11 @@ public class O2Houses {
     }
 
     /**
-     * Load the house information saved to disk.
+     * Load all persisted house data from disk.
+     *
+     * <p>Reads player-to-house mappings and house point scores from JSON files via GsonDAO. Both the
+     * player house assignments and the current house points are restored from disk. If either file does
+     * not exist or is empty, that data is skipped.</p>
      */
     private void loadHouses() {
         GsonDAO gsonLayer = new GsonDAO();
@@ -259,7 +300,11 @@ public class O2Houses {
     }
 
     /**
-     * Save the house information to disk.
+     * Save all house data to disk as JSON files.
+     *
+     * <p>Persists the current player-to-house mappings and house point scores to disk via GsonDAO.
+     * This method writes two JSON files: one containing player house assignments and one containing
+     * house points. Does nothing if houses are disabled via configuration.</p>
      */
     public void saveHouses() {
         if (!useHouses)
@@ -278,11 +323,16 @@ public class O2Houses {
     }
 
     /**
-     * Sort a player in to a house.
+     * Sort a player into a house.
+     *
+     * <p>Assigns the player to the specified house if they are not already sorted. Adds the player
+     * to the house team with house-colored display name, broadcasts a title message to all sorted
+     * players (if configured), and fires an OllivandersPlayerSortedEvent. Returns false if the
+     * player is already sorted.</p>
      *
      * @param player    the player to sort
-     * @param houseType the house to sort them in to
-     * @return true if the player is successfully sorted, false otherwise.
+     * @param houseType the house to sort them into
+     * @return true if the player is successfully sorted, false if already sorted
      */
     public boolean sort(@NotNull Player player, @NotNull O2HouseType houseType) {
         //make sure player is not already sorted
@@ -312,7 +362,11 @@ public class O2Houses {
     }
 
     /**
-     * Remove a player from any house, making them unsorted. This should only be used on a player reset.
+     * Remove a player from their house, making them unsorted.
+     *
+     * <p>Removes the player from their current house team and the house map. This should only be used
+     * on a player reset or when explicitly removing a player from the house system. If the player is
+     * not currently sorted, this method does nothing.</p>
      *
      * @param player the player to unsort
      */
@@ -378,18 +432,11 @@ public class O2Houses {
      */
     @Nullable
     public O2HouseType getHouse(@NotNull UUID pid) {
-        O2HouseType houseType = null;
-
         if (O2HouseMap.containsKey(pid)) {
-            try {
-                houseType = O2HouseMap.get(pid);
-            }
-            catch (Exception e) {
-                common.printDebugMessage("Failure retrieving player from O2HouseMap.", e, null, false);
-            }
+            return O2HouseMap.get(pid);
         }
 
-        return houseType;
+        return null;
     }
 
     /**
@@ -415,11 +462,14 @@ public class O2Houses {
     }
 
     /**
-     * Sets the points for a house.
+     * Set the house points for a specific house.
      *
-     * @param houseType the house to add points to
-     * @param points    the point value to set for this house
-     * @return true if the operation was successful, false if house was not found
+     * <p>Updates the point score for the specified house and refreshes the scoreboard display.
+     * This is a thread-safe operation that sets the exact point value (not an increment).</p>
+     *
+     * @param houseType the house to set points for
+     * @param points    the new point value to set for this house
+     * @return true if the scoreboard was successfully updated, false otherwise
      */
     public synchronized boolean setHousePoints(@NotNull O2HouseType houseType, int points) {
         houseType.setScore(points);
@@ -428,9 +478,15 @@ public class O2Houses {
     }
 
     /**
-     * Resets all house points to 0.
+     * Reset all house points to zero.
      *
-     * @return true if reset was successful
+     * <p>Sets the point score for each house back to 0 and refreshes the scoreboard display to reflect
+     * the changes. This method does not affect player house membership; only the accumulated house points
+     * are cleared. The scoreboard is immediately updated to show the reset values to all players.</p>
+     *
+     * @return true if the scoreboard was successfully updated after resetting points, false otherwise
+     * @see #initHousePoints() for internal point initialization
+     * @see #reset() for a complete house system reset including membership clearing
      */
     public boolean resetHousePoints() {
         initHousePoints();
@@ -439,9 +495,16 @@ public class O2Houses {
     }
 
     /**
-     * Resets houses completely.
+     * Reset the complete house system to its initial state.
      *
-     * @return true if reset was successful
+     * <p>Performs a full reset of the house management system by clearing all player-to-house mappings and
+     * resetting all house points to zero. This removes all players from their assigned houses and clears the
+     * accumulated points for all houses. The scoreboard display is updated immediately to reflect the reset
+     * state. Use this when you need a complete wipe of all house data.</p>
+     *
+     * @return true if the scoreboard was successfully updated after the reset, false otherwise
+     * @see #resetHousePoints() for resetting only house points while keeping player assignments
+     * @see #unsort(Player) for removing a single player from their house
      */
     public boolean reset() {
         p.getLogger().info("Resetting houses...");
@@ -455,9 +518,16 @@ public class O2Houses {
     /**
      * Add points to a specific house.
      *
+     * <p>Increments the point score for the specified house by the given amount. The new total is calculated
+     * by adding the points parameter to the house's current score. The scoreboard is automatically updated to
+     * display the new point value to all players. This is equivalent to calling setHousePoints() with the
+     * sum of the current score and the increment value.</p>
+     *
      * @param houseType the house to add points to
-     * @param points    the amount of points to add
-     * @return true if the operation was successful, false if house was not found
+     * @param points    the amount of points to add (can be positive or negative)
+     * @return true if the scoreboard was successfully updated, false otherwise
+     * @see #setHousePoints(O2HouseType, int) for setting an exact point value
+     * @see #subtractHousePoints(O2HouseType, int) for subtracting points with floor clamping
      */
     public boolean addHousePoints(@NotNull O2HouseType houseType, int points) {
         int pts = points + houseType.getScore();
@@ -466,24 +536,49 @@ public class O2Houses {
     }
 
     /**
-     * Remove points from a specific house.
+     * Subtract points from a specific house.
+     *
+     * <p>Decrements the point score for the specified house by the given amount. The new total is calculated
+     * by subtracting the points parameter from the house's current score. If the subtraction would result in a
+     * negative value, the house points are clamped to zero instead. The scoreboard is automatically updated to
+     * display the new point value to all players.</p>
      *
      * @param houseType the house to subtract points from
-     * @param points    the amount of points to subtract, if this is greater than the total points, points will be set to 0
-     * @return true if the operation was successful, false if house was not found
+     * @param points    the amount of points to subtract; if this is greater than or equal to the house's total,
+     *                  points are set to 0
+     * @return true if the scoreboard was successfully updated, false otherwise
+     * @see #setHousePoints(O2HouseType, int) for setting an exact point value
+     * @see #addHousePoints(O2HouseType, int) for adding points without floor clamping
      */
     public boolean subtractHousePoints(@NotNull O2HouseType houseType, int points) {
-        int pts = 0;
+        int pts = houseType.getScore() - points;
 
-        if (points < houseType.getScore()) {
-            pts = houseType.getScore() - points;
-        }
+        if (pts < 0)
+            pts = 0; // house points cannot go negative
 
         return setHousePoints(houseType, pts);
     }
 
     /**
-     * Creates the house points scoreboard.
+     * Create and initialize the house points scoreboard infrastructure.
+     *
+     * <p>Initializes the main Bukkit scoreboard for displaying house standings. This method removes any
+     * previous house points objective and clears the sidebar display slot before registering a new
+     * objective with DUMMY criteria. The scoreboard is configured with house teams and their color codes
+     * for visual distinction. After initialization, all house scores are populated from the current
+     * house points state.</p>
+     *
+     * <p>Scoreboard Configuration:</p>
+     * <ul>
+     * <li>Objective name: "o2_hpoints" (internal identifier)</li>
+     * <li>Objective display name: "House Points"</li>
+     * <li>Scoring criteria: DUMMY (manual score control)</li>
+     * <li>Display location: SIDEBAR (right side of HUD)</li>
+     * <li>House teams: registered with house-specific colors and options</li>
+     * </ul>
+     *
+     * @see #registerHouseTeam(O2HouseType) for team initialization
+     * @see #updateScoreboard() for score updates after initialization
      */
     private void createScoreboard() {
         if (!useHouses) {
@@ -500,7 +595,8 @@ public class O2Houses {
 
         common.printDebugMessage("Created scoreboard...", null, null, false);
 
-        // if there was a previous house points objective, remove it
+        // reset the scoreboard - we don't know what may have been saved on it
+        // 1. if there was a previous house points objective, remove it
         Objective objective = scoreboard.getObjective(objectiveName);
 
         if (objective != null) {
@@ -508,7 +604,7 @@ public class O2Houses {
             common.printDebugMessage("Unregistered previous house points objective...", null, null, false);
         }
 
-        // if there is another objective on the slot we want, remove it
+        // 2. if there is another objective on the slot we want, remove it
         objective = scoreboard.getObjective(scoreboardSlot);
         if (objective != null) {
             objective.unregister();
@@ -535,9 +631,25 @@ public class O2Houses {
     }
 
     /**
-     * Register a team with the scoreboard.
+     * Register a house team on the scoreboard with configuration.
      *
-     * @param houseType the house to register
+     * <p>Creates or retrieves a team for the specified house on the scoreboard and configures its
+     * display and team options. If the team does not already exist, it is created with the house name.
+     * The team's color is set to the house's configured chat color for visual identification. Team
+     * options are configured to allow friendly fire and restrict death messages to only team members,
+     * creating appropriate team-based gameplay behavior.</p>
+     *
+     * <p>Team Configuration:</p>
+     * <ul>
+     * <li>Team name: house display name (customizable via configuration)</li>
+     * <li>Color code: house-specific chat color</li>
+     * <li>Friendly fire: enabled</li>
+     * <li>Death message visibility: FOR_OWN_TEAM (visible only to team members)</li>
+     * </ul>
+     *
+     * @param houseType the house type to register as a team
+     * @see O2HouseType for house names and colors
+     * @see #updateTeam(Player, O2HouseType, boolean) for adding/removing players from teams
      */
     private void registerHouseTeam(@NotNull O2HouseType houseType) {
         String houseName = houseType.getName();
@@ -559,9 +671,17 @@ public class O2Houses {
     }
 
     /**
-     * Updates the scores on the scoreboard to match the current house points standing.
+     * Synchronize and refresh all house scores on the scoreboard display.
      *
-     * @return true if the operation was successful, false otherwise
+     * <p>Updates the scoreboard objective and refreshes all house point scores to match the current
+     * standings. If the scoreboard has not yet been initialized, this method performs lazy initialization
+     * by calling createScoreboard(). This is a thread-safe operation that ensures all house scores
+     * displayed to players are synchronized with the internal house points state.</p>
+     *
+     * @return true if the scoreboard was successfully updated, false if houses are disabled, the
+     * scoreboard is not initialized, or the objective cannot be found
+     * @see #createScoreboard() for scoreboard initialization
+     * @see #updateScoreboardScore(O2HouseType) for individual score updates
      */
     private synchronized boolean updateScoreboard() {
         if (!useHouses) {
@@ -587,9 +707,15 @@ public class O2Houses {
     }
 
     /**
-     * Update the scoreboard for a specific house
+     * Update the score display for a single house on the scoreboard.
      *
-     * @param houseType the house to update
+     * <p>Retrieves the objective and team for the specified house type and updates its score on the
+     * scoreboard to match the house's current point value. If the objective or team cannot be found,
+     * this method returns silently. Errors during score updates are caught and logged as debug messages,
+     * allowing the operation to continue gracefully even if individual score updates fail.</p>
+     *
+     * @param houseType the house type whose score should be updated
+     * @see #setHousePoints(O2HouseType, int) for changing house point values
      */
     private void updateScoreboardScore(@NotNull O2HouseType houseType) {
         Objective objective = scoreboard.getObjective(objectiveName);
@@ -611,9 +737,16 @@ public class O2Houses {
     }
 
     /**
-     * Hide the house points scoreboard.
+     * Hide the house points scoreboard from display.
      *
-     * @return true if the operation was successful, false otherwise
+     * <p>Clears the SIDEBAR display slot, removing the house points scoreboard from the player's HUD.
+     * This is a visibility toggle independent of the scoreboard's internal state. The scoreboard data
+     * is not cleared or deleted; only its display is toggled. This method does nothing if houses are
+     * disabled or the scoreboard objective cannot be found.</p>
+     *
+     * @return true if the scoreboard display was successfully hidden, false if houses are disabled or
+     * the scoreboard objective does not exist
+     * @see #showScoreboard() to display the scoreboard again
      */
     private boolean hideScoreboard() {
         if (!useHouses) {
@@ -632,7 +765,15 @@ public class O2Houses {
     }
 
     /**
-     * Show the house points scoreboard.
+     * Display the house points scoreboard on the HUD.
+     *
+     * <p>Sets the SIDEBAR display slot to show the house points scoreboard to all players. This makes
+     * the scoreboard visible on the right side of the player's screen. If the scoreboard objective has
+     * not been initialized, this method returns silently without throwing errors. This method does
+     * nothing if houses are disabled.</p>
+     *
+     * @see #hideScoreboard() to remove the scoreboard from display
+     * @see #updateScoreboard() for score synchronization
      */
     private void showScoreboard() {
         if (!useHouses) {
@@ -647,11 +788,18 @@ public class O2Houses {
     }
 
     /**
-     * Update player team membership - either add or remove.
+     * Update player team membership on the scoreboard.
      *
-     * @param player    the player to update
-     * @param houseType the team to update
-     * @param add       true if an add action, false if it is a remove
+     * <p>Adds a player to or removes a player from the specified house team on the scoreboard. When adding,
+     * the player's display name is prefixed with the house's color code. When removing, the display name
+     * is reverted to its original name if it previously had a color code applied (indicated by the § character).
+     * If the house team cannot be found on the scoreboard, this method returns silently.</p>
+     *
+     * @param player    the player whose team membership should be updated
+     * @param houseType the house team to update
+     * @param add       true to add the player to the team with colored display name, false to remove the player
+     * @see #addPlayerToHouseTeam(Player) for adding players with automatic house lookup
+     * @see O2HouseType for house color information
      */
     private synchronized void updateTeam(@NotNull Player player, @NotNull O2HouseType houseType, boolean add) {
         String name = player.getName();
@@ -670,16 +818,23 @@ public class O2Houses {
         else {
             team.removeEntry(name);
             if (displayName.startsWith("§")) {
-                // we have set a color on their display name, change it back
+                // we have set a team color on their display name, change it back when we remove them from the team
                 player.setDisplayName(name);
             }
         }
     }
 
     /**
-     * Add a player to their house team.
+     * Add a player to their assigned house team with colored display name.
      *
-     * @param player the player to add
+     * <p>Convenience method that automatically retrieves the player's assigned house from the house map
+     * and adds them to the corresponding team with house-colored display name. This method is called during
+     * player sorting and when players rejoin the server. If the player is not in the house map or their house
+     * team does not exist, this method returns silently.</p>
+     *
+     * @param player the player to add to their house team
+     * @see #updateTeam(Player, O2HouseType, boolean) for manual team updates
+     * @see #sort(Player, O2HouseType) for initial player sorting
      */
     public void addPlayerToHouseTeam(@NotNull Player player) {
         UUID pid = player.getUniqueId();

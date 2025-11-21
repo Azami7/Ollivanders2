@@ -7,46 +7,83 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Effect type that is an antidote to O2Effects
+ * Abstract base class for antidote effects that counteract other magical effects.
+ *
+ * <p>An antidote is a special type of effect that, when applied, immediately reduces or completely cancels
+ * another active effect on the target player. Antidotes work on a strength scale (0.0 to 1.0+):</p>
+ * <ul>
+ * <li>strength = 1.0: Completely removes the target effect</li>
+ * <li>strength = 0.5: Reduces the target effect's duration by 50%</li>
+ * <li>strength = 0.25: Reduces the target effect's duration by 25%</li>
+ * <li>strength > 1.0: Completely removes the target effect (same as 1.0)</li>
+ * </ul>
+ *
+ * <p>Antidotes execute their effect immediately in checkEffect() on the first tick, then kill themselves.
+ * If the target player does not have the effect being countered, the antidote simply expires without doing anything.</p>
+ *
+ * @author Azami7
+ * @see O2EffectType for available effect types that can be countered
  */
 public abstract class O2EffectAntidoteSuper extends O2Effect {
     /**
-     * the o2effect type this effect is the antidote for
+     * The O2EffectType that this antidote counteracts.
+     * Subclasses should override this to specify which effect type they neutralize.
      */
     O2EffectType o2EffectType = O2EffectType.BABBLING;
 
     /**
-     * strength of this antidote - strength of 1 will cancel the potion effect entirely, 0.5 reduced by half-time, 0.25 reduced by quarter time, etc.
+     * The potency of this antidote on a scale from 0.0 to 1.0+.
+     * Values >= 1.0 completely remove the target effect.
+     * Values < 1.0 reduce the target effect's duration by that percentage (e.g., 0.5 = 50% reduction).
+     * Default is 0.25 (25% reduction).
      */
     double strength = 0.25;
 
     /**
-     * Constructor
+     * Constructor for creating an antidote effect.
      *
-     * @param plugin   a reference to the plugin for logging
-     * @param duration how much time does this antidote cut from the effect's duration
-     * @param pid      the target player
+     * <p>Creates an antidote that will immediately neutralize a target effect on the first tick.
+     * The duration parameter is provided for API consistency but antidotes are instant-acting effects
+     * that kill themselves immediately after application.</p>
+     *
+     * @param plugin   a reference to the plugin for API access and logging
+     * @param duration the duration parameter (not used, provided for constructor signature consistency)
+     * @param pid      the unique ID of the target player who will receive the antidote
      */
     public O2EffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        // hard-code duration because these are instant effects
         super(plugin, duration, pid);
     }
 
     /**
-     * Do the effect immediately on the target and kill.
+     * Apply the antidote effect and immediately kill this effect.
+     *
+     * <p>Checks if the target player has the effect specified in o2EffectType active.
+     * If found, applies the antidote based on strength:
+     * <ul>
+     * <li>If strength &ge; 1.0: Completely removes the target effect</li>
+     * <li>If strength &lt; 1.0: Reduces the target effect's remaining duration by the percentage specified</li>
+     * </ul>
+     * <p>
+     * If the target effect is not found on the player, does nothing.
+     * In either case, this antidote effect immediately kills itself to prevent re-execution.</p>
      */
     @Override
     public void checkEffect() {
+        // Check if the target player has the effect this antidote counteracts
         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, o2EffectType)) {
             if (strength < 1) {
+                // Partial antidote: reduce the target effect's duration by the strength percentage
+                // Example: strength = 0.5 means reduce by 50%, strength = 0.25 means reduce by 25%
                 int percent = (int) (strength * 100);
                 Ollivanders2API.getPlayers().playerEffects.ageEffectByPercent(targetID, o2EffectType, percent);
             }
             else {
+                // Full antidote (strength >= 1.0): completely remove the target effect
                 Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, o2EffectType);
             }
         }
 
+        // Antidotes are instant effects - kill immediately to prevent re-execution on next tick
         kill();
     }
 }
