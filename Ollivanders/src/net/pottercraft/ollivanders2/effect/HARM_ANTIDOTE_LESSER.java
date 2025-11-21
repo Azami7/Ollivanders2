@@ -28,7 +28,7 @@ public class HARM_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper {
      * with other effects but is not used by antidote effects.</p>
      *
      * @param plugin   a reference to the plugin for logging
-     * @param duration the duration parameter (unused for antidote effects)
+     * @param duration ignored - antidotes apply immediately and are resolved
      * @param pid      the unique ID of the player to treat with the antidote
      */
     public HARM_ANTIDOTE_LESSER(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

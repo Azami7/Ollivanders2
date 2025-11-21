@@ -302,7 +302,7 @@ public class Ollivanders2CommonTest {
         block.setType(originBlockType);
 
         // create a player and have them stand 3 blocks away facing the block at origin
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
         Location playerLocation = new Location(testWorld, 0, 4, 3);
         player.setLocation(playerLocation);
 
@@ -396,9 +396,9 @@ public class Ollivanders2CommonTest {
     @Test
     void sendMessageInRadius() {
         // create multiple mock players
-        PlayerMock player1 = mockServer.addPlayer("Autumn");
-        PlayerMock player2 = mockServer.addPlayer("Laura");
-        PlayerMock player3 = mockServer.addPlayer("Mae");
+        PlayerMock player1 = mockServer.addPlayer();
+        PlayerMock player2 = mockServer.addPlayer();
+        PlayerMock player3 = mockServer.addPlayer();
 
         player1.setLocation(new Location(testWorld, 200, 4, 100));
         player2.setLocation(new Location(testWorld, 200, 4, 102));

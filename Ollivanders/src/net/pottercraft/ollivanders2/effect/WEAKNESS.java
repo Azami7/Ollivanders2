@@ -29,7 +29,7 @@ public class WEAKNESS extends PotionEffectSuper {
      * "You feel weak." when the effect is applied.</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the weakness effect in game ticks
+     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
      * @param pid      the unique ID of the player to weaken
      */
     public WEAKNESS(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

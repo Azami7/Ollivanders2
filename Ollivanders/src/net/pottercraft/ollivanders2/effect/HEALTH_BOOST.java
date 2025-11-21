@@ -30,7 +30,7 @@ public class HEALTH_BOOST extends PotionEffectSuper {
      * spells as the target "feels stronger".</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the health boost effect in game ticks
+     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
      * @param pid      the unique ID of the player to boost
      */
     public HEALTH_BOOST(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

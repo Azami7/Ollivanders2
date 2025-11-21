@@ -36,7 +36,7 @@ public class BLINDNESS extends PotionEffectSuper {
      * blindness amplification and detection text to "cannot see".</p>
      *
      * @param plugin   a callback to the plugin
-     * @param duration the base duration for the effect in game ticks (will be randomized)
+     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
      * @param pid      the unique ID of the player to blind
      */
     public BLINDNESS(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

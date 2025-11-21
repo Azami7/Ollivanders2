@@ -47,8 +47,8 @@ abstract public class DivinationTestSuper {
         assertEquals(0, prophecies.size(), "Tests did not start out with empty prophecies list.");
 
         // create a prophet and a target
-        PlayerMock prophet = mockServer.addPlayer("Jiji");
-        PlayerMock target = mockServer.addPlayer("Rajah");
+        PlayerMock prophet = mockServer.addPlayer();
+        PlayerMock target = mockServer.addPlayer();
 
         // do the divination with high experience
         O2Divination divination = createDivination(prophet, target, 100);

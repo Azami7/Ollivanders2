@@ -49,6 +49,16 @@ public abstract class PotionEffectSuper extends O2Effect {
     int strength = 1;
 
     /**
+     * Minimum duration for a potion effect
+     */
+    public static int minDuration = 2400; // 2 minutes
+
+    /**
+     * Maximum duration for a potion effect
+     */
+    public static int maxDuration = 6000; // 5 minutes
+
+    /**
      * The type of Minecraft potion effect to apply.
      *
      * <p>Subclasses override this field to specify which potion effect (POISON, WEAKNESS, GLOWING, etc.)
@@ -64,11 +74,19 @@ public abstract class PotionEffectSuper extends O2Effect {
      * is added to a player's effect list.</p>
      *
      * @param plugin   a reference to the plugin
-     * @param duration the duration parameter (typically ignored for instant potion effects)
+     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
      * @param pid      the unique ID of the target player
      */
     public PotionEffectSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
+
+        permanent = false;
+
+        // make sure duration is between the min and max allowed
+        if (duration < minDuration)
+            duration = minDuration;
+        else if (duration > maxDuration)
+            duration = maxDuration;
     }
 
     /**
@@ -91,11 +109,7 @@ public abstract class PotionEffectSuper extends O2Effect {
         Player target = p.getServer().getPlayer(targetID);
 
         if (target != null) {
-            // base time is 2 minutes
-            int base_time = 2400;
-            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 5) + 1;
-
-            target.addPotionEffect(new PotionEffect(potionEffectType, base_time * rand, strength));
+            target.addPotionEffect(new PotionEffect(potionEffectType, duration, strength));
         }
 
         kill();

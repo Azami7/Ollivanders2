@@ -47,7 +47,7 @@ public abstract class O2EffectAntidoteSuper extends O2Effect {
      * that kill themselves immediately after application.</p>
      *
      * @param plugin   a reference to the plugin for API access and logging
-     * @param duration the duration parameter (not used, provided for constructor signature consistency)
+     * @param duration ignored - antidotes apply immediately and do not persist
      * @param pid      the unique ID of the target player who will receive the antidote
      */
     public O2EffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

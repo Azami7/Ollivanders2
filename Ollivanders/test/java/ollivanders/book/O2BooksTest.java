@@ -87,7 +87,7 @@ public class O2BooksTest {
         ItemStack book = books.getBookByType(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1);
 
         // get an O2Player
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
 
         // set the book in the player's inventory
         player.getInventory().setItemInMainHand(book);
@@ -197,7 +197,7 @@ public class O2BooksTest {
      */
     @Test
     void runCommandUsageTest() {
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
         player.setOp(true);
 
         // admin should get a usage message running the subcommand with no args
@@ -211,7 +211,7 @@ public class O2BooksTest {
      */
     @Test
     void runCommandNonAdmin() {
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
         player.setOp(false);
 
         // a non-admin should get a usage message if they try to run the /olli books command
@@ -225,7 +225,7 @@ public class O2BooksTest {
      */
     @Test
     void runCommandAllBooksTest() {
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
         player.setOp(true);
 
         TestCommon.runCommand(player, "Ollivanders2 books allbooks", mockServer);
@@ -238,7 +238,7 @@ public class O2BooksTest {
      */
     @Test
     void runCommandListTest() {
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
         player.setOp(true);
 
         String commandResponse = TestCommon.runCommand(player, "Ollivanders2 books list", mockServer);
@@ -252,11 +252,11 @@ public class O2BooksTest {
      */
     @Test
     void runCommandGiveTest() {
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
         player.setOp(true);
-        PlayerMock player2 = mockServer.addPlayer("Fred");
+        PlayerMock player2 = mockServer.addPlayer();
 
-        TestCommon.runCommand(player, "Ollivanders2 books give Fred Basic Hexes", mockServer);
+        TestCommon.runCommand(player, "Ollivanders2 books give " + player2.getName() + " Basic Hexes", mockServer);
         assertTrue(TestCommon.isInPlayerInventory(player2, Material.WRITTEN_BOOK, "Basic Hexes"), "Did not find the book in the player's inventory");
     }
 
@@ -266,7 +266,7 @@ public class O2BooksTest {
      */
     @Test
     void runCommandGivePlayerNotFoundTest() {
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
         player.setOp(true);
 
         String commandResponse = TestCommon.runCommand(player, "Ollivanders2 books give Bob Basic Hexes", mockServer);
@@ -280,7 +280,7 @@ public class O2BooksTest {
      */
     @Test
     void runCommandGiveUsageTest() {
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
         player.setOp(true);
 
         String commandResponse = TestCommon.runCommand(player, "Ollivanders2 books give Fred", mockServer);
@@ -294,7 +294,7 @@ public class O2BooksTest {
      */
     @Test
     void runCommandBookTitleTest() {
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
         player.setOp(true);
 
         TestCommon.runCommand(player, "Ollivanders2 books Basic Hexes", mockServer);
@@ -307,7 +307,7 @@ public class O2BooksTest {
      */
     @Test
     void runCommandBookTitleDoesntExistTest() {
-        PlayerMock player = mockServer.addPlayer("Steve");
+        PlayerMock player = mockServer.addPlayer();
         player.setOp(true);
 
         String commandResponse = TestCommon.runCommand(player, "Ollivanders2 books Lord of the Rings", mockServer);

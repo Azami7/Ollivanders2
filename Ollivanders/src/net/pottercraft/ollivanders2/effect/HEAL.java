@@ -28,7 +28,7 @@ public class HEAL extends PotionEffectSuper {
      * information spells as the target "feels healthy".</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect in game ticks (unused for instant healing)
+     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
      * @param pid      the unique ID of the player to heal
      */
     public HEAL(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

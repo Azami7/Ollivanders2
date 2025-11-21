@@ -71,7 +71,7 @@ public abstract class PotionEffectAntidoteSuper extends O2Effect {
      * to a player's effect list.</p>
      *
      * @param plugin   a reference to the plugin for logging
-     * @param duration the duration parameter (typically ignored for instant antidotes)
+     * @param duration ignored - antidotes apply immediately and are resolved
      * @param pid      the unique ID of the target player to receive this antidote
      */
     public PotionEffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

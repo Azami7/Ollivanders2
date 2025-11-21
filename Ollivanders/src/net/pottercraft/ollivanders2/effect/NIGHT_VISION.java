@@ -27,7 +27,7 @@ public class NIGHT_VISION extends PotionEffectSuper {
      * (Legilimens) and information spells (Informous) to "can see in darkness".</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the night vision effect in game ticks
+     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
      * @param pid      the unique ID of the player to grant night vision
      */
     public NIGHT_VISION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

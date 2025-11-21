@@ -274,8 +274,9 @@ public class O2Prophecy {
 
             try {
                 // Use reflection to dynamically instantiate the effect class without a factory method
-                // Constructor signature: (Ollivanders2, int duration, UUID targetID)
-                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration, targetID);
+                // Constructor signature: (Ollivanders2, int duration, boolean isPermanent, UUID targetID)
+                // prophecy effects are always temporary so isPermanent is always false
+                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, boolean.class, UUID.class).newInstance(p, duration, false, targetID);
             }
             catch (Exception e) {
                 e.printStackTrace();

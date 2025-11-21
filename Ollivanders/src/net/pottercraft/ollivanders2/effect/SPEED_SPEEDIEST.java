@@ -31,7 +31,7 @@ public class SPEED_SPEEDIEST extends PotionEffectSuper {
      * (Informous) to "is moving extremely fast".</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the maximum speed effect in game ticks
+     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
      * @param pid      the unique ID of the player to enhance with extreme speed
      */
     public SPEED_SPEEDIEST(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

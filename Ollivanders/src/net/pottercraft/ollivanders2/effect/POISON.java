@@ -28,7 +28,7 @@ public class POISON extends PotionEffectSuper {
      * information spells (Informous) to "feels sick".</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the poison effect in game ticks
+     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
      * @param pid      the unique ID of the player to poison
      */
     public POISON(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

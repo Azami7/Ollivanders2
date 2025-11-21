@@ -36,11 +36,8 @@ public class O2HousesTest {
     O2Houses testHouses;
 
     static PlayerMock player1;
-    static final String player1Name = "Bob";
     static PlayerMock player2;
-    static final String player2Name = "Fred";
     static PlayerMock player3;
-    static final String player3Name = "Joe";
 
     // Helper methods
     private void assertPlayerInHouse(PlayerMock player, O2HouseType house, String message) {
@@ -67,9 +64,9 @@ public class O2HousesTest {
         testWorld = mockServer.addSimpleWorld("world");
 
         // create some players we will need
-        player1 = mockServer.addPlayer(player1Name);
-        player2 = mockServer.addPlayer(player2Name);
-        player3 = mockServer.addPlayer(player3Name);
+        player1 = mockServer.addPlayer();
+        player2 = mockServer.addPlayer();
+        player3 = mockServer.addPlayer();
     }
 
     @BeforeEach
@@ -114,7 +111,7 @@ public class O2HousesTest {
                 .getFiredEvents()
                 .filter(e -> e instanceof OllivandersPlayerSortedEvent)
                 .map(e -> (OllivandersPlayerSortedEvent) e)
-                .anyMatch(ev -> ev.getPlayer().getName().equals(player2Name)),
+                .anyMatch(ev -> ev.getPlayer().getName().equals(player2.getName())),
                 "Sort event should have been fired for player2"
         );
 

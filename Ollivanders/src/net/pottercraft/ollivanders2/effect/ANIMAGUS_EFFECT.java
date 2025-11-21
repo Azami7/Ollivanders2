@@ -80,7 +80,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
      * O2Player cannot be found or the form is null, the effect is killed.</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect (typically ignored for permanent transformations)
+     * @param duration not used - animagus effect is always permanent
      * @param pid      the unique ID of the player to transform
      */
     public ANIMAGUS_EFFECT(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {

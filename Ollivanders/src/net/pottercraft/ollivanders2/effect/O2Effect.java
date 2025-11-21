@@ -142,11 +142,11 @@ public abstract class O2Effect {
         common = new Ollivanders2Common(p);
 
         duration = durationInTicks;
-        // Negative duration is a signal to create a permanent effect
+
+        // Enforce minimum duration for non-permanent effects to prevent ephemeral effects
         if (duration < 0)
             permanent = true;
 
-        // Enforce minimum duration for non-permanent effects to prevent ephemeral effects
         if (!permanent && duration < minDuration)
             duration = minDuration;
 
@@ -154,6 +154,15 @@ public abstract class O2Effect {
         targetID = pid;
 
         informousText = null;
+    }
+
+    /**
+     * Get the ticks remaining for this effect
+     *
+     * @return duration remaining for this effect
+     */
+    public int getRemainingDuration() {
+        return duration;
     }
 
     /**
