@@ -4,7 +4,24 @@ import net.pottercraft.ollivanders2.common.MagicLevel;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * All effect types
+ * Enumeration of all available magical effects in Ollivanders2.
+ *
+ * <p>O2EffectType defines every magical effect that can be applied to players, from beneficial effects
+ * (HEAL, LUCK, NIGHT_VISION) to harmful effects (POISON, HARM, WEAKNESS) to utility effects
+ * (FLYING, PROTECTION). Each effect type maps to:</p>
+ * <ul>
+ * <li>An O2Effect implementation class used for instantiation via reflection</li>
+ * <li>A MagicLevel indicating the spell's difficulty and for counter-spell matching</li>
+ * <li>An enabled flag allowing runtime configuration of which effects are active</li>
+ * </ul>
+ *
+ * <p>Effects are created by spells and divination, managed by O2Effects, and applied to players
+ * through the effect system. Each effect type has a corresponding O2Effect subclass that implements
+ * the specific behavior of that effect.</p>
+ *
+ * @author Azami7
+ * @see O2Effect for the abstract base class of all effect implementations
+ * @see O2Effects for the central effects management system
  */
 public enum O2EffectType {
     /**
@@ -152,7 +169,7 @@ public enum O2EffectType {
      */
     PROTEGO(PROTEGO.class, MagicLevel.OWL),
     /**
-     *
+     * {@link SHRINKING}
      */
     SHRINKING(SHRINKING.class, MagicLevel.OWL),
     /**
@@ -214,25 +231,34 @@ public enum O2EffectType {
     ;
 
     /**
-     * The class of effect to create
+     * The O2Effect implementation class for this effect type.
+     * Used with reflection to dynamically instantiate the correct effect class
+     * when the effect is applied to a player. See O2Effects.addEffect() for usage.
      */
     final private Class<?> className;
 
     /**
-     * The level of magic this effect is, for use in counter-spells and antidotes
+     * The magic level (difficulty) of this effect.
+     * Used for counter-spell and antidote matching to ensure appropriate power levels.
+     * For example, a high-level antidote cannot neutralize a low-level effect.
      */
     final private MagicLevel level;
 
     /**
-     * Is this effect type enabled
+     * Runtime configuration flag indicating whether this effect type is currently enabled.
+     * Disabled effects cannot be applied to players. Can be toggled via setEnabled() based
+     * on server configuration (e.g., lycanthropy can be disabled in server config).
      */
     boolean enabled = true;
 
     /**
-     * Enum constructor.
+     * Constructor for creating an effect type enumeration constant.
      *
-     * @param className the name of the effect class this type represents.
-     * @param level     the level of this effect
+     * <p>Associates the effect type with its implementation class and magic level.
+     * The className is used with reflection to instantiate O2Effect objects at runtime.</p>
+     *
+     * @param className the O2Effect subclass corresponding to this effect type
+     * @param level     the magic level (difficulty) of this effect
      */
     O2EffectType(@NotNull Class<?> className, @NotNull MagicLevel level) {
         this.className = className;
@@ -240,9 +266,13 @@ public enum O2EffectType {
     }
 
     /**
-     * Get the class name for the O2Effect class that this type represents.
+     * Get the O2Effect implementation class for this effect type.
      *
-     * @return the effect class
+     * <p>The returned class is used with reflection to dynamically instantiate the correct
+     * effect object when the effect is applied to a player. See O2Effects.addEffect() and
+     * O2Prophecy.fulfill() for usage examples.</p>
+     *
+     * @return the O2Effect subclass for this effect type
      */
     @NotNull
     public Class<?> getClassName() {
@@ -250,9 +280,12 @@ public enum O2EffectType {
     }
 
     /**
-     * Get the level of this effect.
+     * Get the magic level (difficulty) of this effect.
      *
-     * @return the level of this effect
+     * <p>The magic level is used to match effects with appropriate counter-spells and antidotes.
+     * For example, an antidote's level must be >= the effect's level to successfully neutralize it.</p>
+     *
+     * @return the magic level of this effect
      */
     @NotNull
     public MagicLevel getLevel() {
@@ -260,18 +293,24 @@ public enum O2EffectType {
     }
 
     /**
-     * Is this effect currently enabled
+     * Check whether this effect type is currently enabled.
      *
-     * @return true if this effect is enabled, false otherwise
+     * <p>Disabled effects cannot be applied to players. Effects can be disabled via server
+     * configuration (e.g., setting enableLycanthropy to false in the config).</p>
+     *
+     * @return true if the effect is enabled and can be applied, false if disabled
      */
     public boolean isEnabled() {
         return enabled;
     }
 
     /**
-     * Set whether this effect is currently enabled
+     * Enable or disable this effect type at runtime.
      *
-     * @param enabled true to enable this effect, false to disable
+     * <p>Disabled effects cannot be applied to players via spells or divination.
+     * This setting can be changed dynamically without restarting the server.</p>
+     *
+     * @param enabled true to enable the effect, false to disable it
      */
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;

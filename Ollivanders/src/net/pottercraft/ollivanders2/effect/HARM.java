@@ -7,18 +7,30 @@ import org.jetbrains.annotations.NotNull;
 import java.util.UUID;
 
 /**
- * Harm a player
+ * Instant damage potion effect that harms the affected player.
+ *
+ * <p>HARM applies Minecraft's INSTANT_DAMAGE potion effect to inflict sudden damage
+ * to the target player. Unlike the BURNING effect which inflicts periodic damage over
+ * time, HARM delivers its damage instantly when applied. The effect is powered by the
+ * Minecraft potion effect system with strength (amplifier) set to 1, determining the
+ * damage magnitude. The effect is detectable by mind-reading spells (Legilimens) which
+ * report the target "feels unwell".</p>
  *
  * @author Azami7
- * @since 2.2.9
+ * @see PotionEffectSuper for the potion effect application mechanism
+ * @see BURNING for a time-based damage alternative
  */
 public class HARM extends PotionEffectSuper {
     /**
-     * Constructor
+     * Constructor for creating an instant damage potion effect.
+     *
+     * <p>Creates a potion effect that applies instant damage to the target player using
+     * Minecraft's INSTANT_DAMAGE potion effect type. The effect is detected by
+     * information spells as the target "feels unwell".</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect
-     * @param pid      the ID of the player this effect acts on
+     * @param duration the duration of the effect in game ticks (unused for instant damage)
+     * @param pid      the unique ID of the player to harm
      */
     public HARM(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
@@ -31,7 +43,11 @@ public class HARM extends PotionEffectSuper {
     }
 
     /**
-     * Do any cleanup related to removing this effect from the player
+     * Perform cleanup when the instant damage effect is removed.
+     *
+     * <p>The default implementation does nothing, as INSTANT_DAMAGE is an instant potion
+     * effect with no persistent state to clean up. The damage is applied immediately when
+     * the effect is created, so no additional cleanup is required on removal.</p>
      */
     @Override
     public void doRemove() {

@@ -15,47 +15,95 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Change the form of a player in to another entity.
- * <p>
- * Requires libDisguises
+ * Parent class for effects that transform a player into another entity form.
+ *
+ * <p>ShapeShiftSuper provides a transformation mechanism using the libDisguises plugin to disguise players
+ * as various Minecraft entities (animals, monsters, etc.). Transformations are visual-only and do not change
+ * the player's actual capabilities (they still fly, use commands, etc.).
+ * </p>
+ *
+ * <p>Transformation Lifecycle:</p>
+ * <ol>
+ * <li>A subclass creates an instance and sets the target form (entity type)</li>
+ * <li>checkEffect() calls transform() to apply the disguise using libDisguises</li>
+ * <li>transform() creates a MobDisguise, customizes the watcher (appearance), and disguises the player</li>
+ * <li>checkEffect() calls upkeep() each tick to maintain the transformation (subclasses can override)</li>
+ * <li>When the effect expires or is killed, restore() undisguises the player back to human form</li>
+ * </ol>
+ *
+ * <p>Mutual Exclusion:
+ * Only one shape-shift effect can be active on a player at a time. When a new transformation is applied,
+ * any existing shape-shift effect is removed by the effects system.</p>
+ *
+ * <p>Dependencies:
+ * This effect requires the LibDisguises plugin to be enabled on the server. If LibDisguises is disabled,
+ * the effect is automatically killed with no transformation applied.</p>
  *
  * @author Azami7
- * @since 2.2.8
  */
 public abstract class ShapeShiftSuper extends O2Effect {
     /**
-     * is the player currently transformed
+     * Tracks whether the player is currently transformed into another form.
+     *
+     * <p>This flag is set to true when transform() successfully applies a disguise to the player,
+     * and is set to false when restore() removes the disguise. Used to ensure restoration only
+     * occurs when a transformation is active.</p>
      */
     boolean transformed = false;
 
     /**
-     * the disguise for the player
+     * The active libDisguises disguise applied to the player.
+     *
+     * <p>This reference holds the MobDisguise object that disguises the player. It is used by
+     * restore() to undisguise the player when the effect expires. The disguise contains the
+     * entity type, appearance modifications, and visual properties.</p>
      */
     TargetedDisguise disguise;
 
     /**
-     * the entity type to shift to
+     * The target entity type for this transformation.
+     *
+     * <p>Subclasses must set this field to specify which entity the player will transform into
+     * (e.g., EntityType.WOLF, EntityType.SPIDER, EntityType.PARROT). This field is checked
+     * before transformation and must not be null for the transformation to succeed.</p>
      */
     EntityType form;
 
     /**
-     * the disguise watcher
+     * The appearance watcher for customizing the disguise.
+     *
+     * <p>The LivingWatcher provides access to customize specific appearance properties of the
+     * transformed entity, such as size, color, equipment, and other visual attributes.
+     * Subclasses override customizeWatcher() to modify these properties after the disguise
+     * is created but before it is applied to the player.</p>
      */
     LivingWatcher watcher;
 
     /**
-     * Constructor
+     * Constructor for creating a shape shift effect.
+     *
+     * <p>Creates an effect that will transform the player into another entity form using
+     * the LibDisguises plugin. Requires LibDisguises to be enabled on the server.
+     * Subclasses must set the form field to specify the target entity type before
+     * this effect is added to the player's effect list.</p>
      *
      * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect
-     * @param pid      the player this effect acts on
+     * @param duration the duration of the effect in game ticks
+     * @param pid      the unique ID of the player to transform
      */
     public ShapeShiftSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
         super(plugin, duration, pid);
     }
 
     /**
-     * Handle upkeep of this effect.
+     * Check the effect each game tick and perform transformations.
+     *
+     * <p>This method executes once per tick and performs the following:</p>
+     * <ol>
+     * <li>Verifies that LibDisguises is still enabled; kills the effect if disabled</li>
+     * <li>Ages the effect by 1 tick (for non-permanent effects)</li>
+     * <li>Calls upkeep() to allow subclasses to maintain or modify the transformation</li>
+     * </ol>
      */
     @Override
     public void checkEffect() {
@@ -74,14 +122,29 @@ public abstract class ShapeShiftSuper extends O2Effect {
     }
 
     /**
-     * Do the upkeep for this specific shape shift effect.
+     * Perform upkeep on the active transformation each game tick.
+     *
+     * <p>This is a template method that subclasses can override to maintain or modify the
+     * transformation on each tick. By default, this method does nothing. Subclasses can override
+     * to refresh the disguise, apply potion effects, play animations, or other tick-based behavior.</p>
      */
     protected void upkeep() {
         // by default, do nothing, this needs to be written in the child classes
     }
 
     /**
-     * Transfigure the player to the new form.
+     * Apply the disguise and transform the player into the specified form.
+     *
+     * <p>This method performs the following steps:</p>
+     * <ol>
+     * <li>Locates the target player on the server</li>
+     * <li>Creates a new MobDisguise based on the form entity type</li>
+     * <li>Retrieves the living entity watcher for appearance customization</li>
+     * <li>Calls customizeWatcher() to allow subclasses to modify appearance properties</li>
+     * <li>Applies the disguise to all players using DisguiseAPI</li>
+     * <li>Sets the transformed flag to true</li>
+     * </ol>
+     * If the player or form is null, kills the effect without applying a disguise.
      */
     protected void transform() {
         Player target = p.getServer().getPlayer(targetID);
@@ -105,7 +168,10 @@ public abstract class ShapeShiftSuper extends O2Effect {
     }
 
     /**
-     * Transfigure the player back to human form and kill this effect.
+     * Kill this effect and restore the player to human form.
+     *
+     * <p>Called when the effect expires or is being removed. This method calls restore()
+     * to undisguise the player, then marks the effect as killed to prevent further processing.</p>
      */
     @Override
     public void kill() {
@@ -115,7 +181,11 @@ public abstract class ShapeShiftSuper extends O2Effect {
     }
 
     /**
-     * Restore the player back to their human form.
+     * Restore the player to their original human form.
+     *
+     * <p>Undisguises the player using LibDisguises, removing the transformation. Only performs
+     * undisguise if the player is currently transformed. Safely handles cases where the
+     * disguised entity no longer exists by catching exceptions.</p>
      */
     public void restore() {
         if (transformed) {
@@ -134,7 +204,14 @@ public abstract class ShapeShiftSuper extends O2Effect {
     }
 
     /**
-     * Override this to set the specific form this player will transfigure in to.
+     * Customize the appearance of the transformed entity.
+     *
+     * <p>This is a template method that subclasses can override to modify specific appearance
+     * properties of the disguise, such as size, color, age, equipment, or other visual attributes
+     * provided by the watcher. This method is called during transform() after the disguise is
+     * created but before it is applied to the player. By default, this method does nothing
+     * (uses the disguise's default appearance).</p>
      */
-    protected void customizeWatcher() { }
+    protected void customizeWatcher() {
+    }
 }

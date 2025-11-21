@@ -6,26 +6,43 @@ import org.bukkit.ChatColor;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * House types
+ * Enumeration of Hogwarts houses with customizable names, colors, and points tracking.
+ *
+ * <p>O2HouseType defines the four houses of Hogwarts: Gryffindor, Hufflepuff, Ravenclaw, and Slytherin.
+ * Each house has a customizable display name, an associated chat color for player identification, and a
+ * points score that tracks performance in the house cup. Houses are customizable via configuration, allowing
+ * servers to use alternative names and colors while maintaining the house system structure.</p>
+ *
+ * <p>House Properties:</p>
+ * <ul>
+ * <li>Display name: customizable via configuration (default: traditional house names)</li>
+ * <li>Chat color: customizable via O2Color enum, used for team display names</li>
+ * <li>Score: points accumulated for house cup standings, clamped to non-negative values</li>
+ * </ul>
  *
  * @author Azami7
- * @since 2.2.8
+ * @see O2Color for available color options
+ * @see O2Houses for house management and score tracking
  */
 public enum O2HouseType {
     /**
-     * Gryffindor
+     * Gryffindor - The house of the brave, associated with red and gold.
+     * Default color: Dark Red
      */
     GRYFFINDOR("Gryffindor", O2Color.DARK_RED),
     /**
-     * Hufflepuff
+     * Hufflepuff - The house of the loyal and hardworking, associated with yellow and black.
+     * Default color: Gold
      */
     HUFFLEPUFF("Hufflepuff", O2Color.GOLD),
     /**
-     * Ravenclaw
+     * Ravenclaw - The house of the wise and intelligent, associated with blue and bronze.
+     * Default color: Blue
      */
     RAVENCLAW("Ravenclaw", O2Color.BLUE),
     /**
-     * Slytherin
+     * Slytherin - The house of the ambitious and cunning, associated with green and silver.
+     * Default color: Dark Green
      */
     SLYTHERIN("Slytherin", O2Color.DARK_GREEN);
 
@@ -46,9 +63,12 @@ public enum O2HouseType {
     }
 
     /**
-     * Get the display name for this house
+     * Get the display name for this house.
      *
-     * @return the name of this house
+     * <p>Returns the name of this house. This name is customizable via server configuration and may differ
+     * from the default house name (e.g., a server might rename "Gryffindor" to a custom name).</p>
+     *
+     * @return the customizable display name of this house
      */
     @NotNull
     public String getName() {
@@ -117,8 +137,14 @@ public enum O2HouseType {
     /**
      * Get text for displaying the ranking of a specific house in the house cup.
      *
-     * @param houseType the house to get text for, cannot be null
-     * @return a string like "in 4th place" or "tied for 3rd place"
+     * <p>Calculates the current ranking of this house compared to all other houses based on their scores.
+     * Returns text such as "in 1st place", "tied for 2nd place", or "in 4th place". Ties are detected by
+     * comparing scores with other houses; the ranking is determined by counting how many other houses have
+     * a higher score than this house. Ordinal suffixes (1st, 2nd, 3rd, 4th) are applied appropriately.</p>
+     *
+     * @param houseType the house to calculate ranking for
+     * @return a human-readable string describing this house's ranking in the house cup,
+     *         formatted as either "in Nth place" or "tied for Nth place"
      */
     public static String getHousePlaceText(@NotNull O2HouseType houseType) {
         int score = houseType.getScore();
