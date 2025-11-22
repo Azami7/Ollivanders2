@@ -92,7 +92,7 @@ public final class OPPUGNO extends O2Spell {
         LivingEntity target = null;
 
         for (LivingEntity livingEntity : getNearbyLivingEntities(defaultRadius)) {
-            if (livingEntity.getUniqueId() == player.getUniqueId())
+            if (livingEntity.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             target = livingEntity;
@@ -107,7 +107,7 @@ public final class OPPUGNO extends O2Spell {
             LivingEntity attacker = null;
 
             for (LivingEntity livingEntity : getNearbyLivingEntities(10)) {
-                if (livingEntity.getUniqueId() == player.getUniqueId())
+                if (livingEntity.getUniqueId().equals(player.getUniqueId()))
                     continue;
 
                 attacker = livingEntity;

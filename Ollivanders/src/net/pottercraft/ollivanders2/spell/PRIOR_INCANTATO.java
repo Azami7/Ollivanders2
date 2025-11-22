@@ -68,7 +68,7 @@ public class PRIOR_INCANTATO extends O2Spell {
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId() == player.getUniqueId())
+            if (target.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);
@@ -107,7 +107,7 @@ public class PRIOR_INCANTATO extends O2Spell {
         List<Entity> nearbyPlayers = EntityCommon.getNearbyEntitiesByType(target.getLocation(), visibleRadius, EntityType.PLAYER);
 
         for (Entity entity : nearbyPlayers) {
-            if (!(entity instanceof Player) || entity.getUniqueId() == target.getUniqueId())
+            if (!(entity instanceof Player) || entity.getUniqueId().equals(target.getUniqueId()))
                 continue;
 
             entity.sendMessage(Ollivanders2.chatColor + "The shadowy echo of the spell " + prior.getSpellName() + " emits from " + target.getName() + "'s wand.");

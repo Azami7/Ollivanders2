@@ -88,7 +88,7 @@ public final class REPARIFARGE extends O2Spell {
         else {
             // check the area around the current projectile location for entities that can be targeted
             for (Entity entity : getCloseEntities(1.5)) {
-                if (entity.getUniqueId() == player.getUniqueId())
+                if (entity.getUniqueId().equals(player.getUniqueId()))
                     continue;
 
                 if (entity instanceof EnderDragonPart) // if this is part of an Ender Dragon, get the parent Dragon entity

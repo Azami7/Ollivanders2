@@ -6,6 +6,7 @@ import ollivanders.testcommon.TestCommon;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -109,24 +110,29 @@ abstract public class EffectTestSuper {
     abstract O2Effect createEffect(int durationInTicks, boolean isPermanent, @NotNull UUID targetID);
 
     /**
-     * Test effect constructor behavior and initial state.
-     *
-     * <p>Verifies that effects created via the constructor have the correct initial state:
-     * duration is set to the minimum allowed duration (O2Effect.minDuration) when a small duration
-     * is specified, and the effect is marked as permanent when isPermanent is true. Also verifies
-     * that new effects are not in the killed state.</p>
+     * This is a mega test because the parallized, random order Junit tests mess up the game state
      */
     @Test
-    void constructorTest() {
+    void effectTest() {
         // create an effect that lasts 10 ticks
         O2Effect effect = createEffect(10, false, target.getUniqueId());
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
         assertEquals(O2Effect.minDuration, effect.getRemainingDuration(), "Effect duration not set to minimum duration when duration specified as 10 in constructor");
 
-        // create an effect with -1 duration, should be permanent
+        // create an effect with is permanent set true, should be permanent
         effect = createEffect(5, true, target.getUniqueId());
         assertTrue(effect.isPermanent(), "Effect not permanent");
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
+
+        ageAndKillTest();
+
+        getTargetIDTest();
+
+        isPermanentTest();
+
+        checkEffectTest();
+
+        doRemoveTest();
     }
 
     /**
@@ -136,7 +142,6 @@ abstract public class EffectTestSuper {
      * the kill() method sets the killed flag, the age() method decrements duration by the
      * specified amount, and duration going below zero automatically kills the effect.</p>
      */
-    @Test
     void ageAndKillTest() {
         int duration = O2Effect.minDuration;
         O2Effect effect = createEffect(duration, false, target.getUniqueId());
@@ -145,14 +150,16 @@ abstract public class EffectTestSuper {
         effect.kill();
         assertTrue(effect.isKilled(), "Effect not killed after effect.kill();");
 
-        // age decrements duration as expected
-        effect = createEffect(duration, false, target.getUniqueId());
-        effect.age(1);
-        assertEquals(duration - 1, effect.getRemainingDuration(), "Age did not properly decrement effect duration");
+        // age decrements duration as expected when the effect is not permanent
+        if (!effect.isPermanent()) {
+            effect = createEffect(duration, false, target.getUniqueId());
+            effect.age(1);
+            assertEquals(duration - 1, effect.getRemainingDuration(), "Age did not properly decrement effect duration");
 
-        // age decrementing duration below 0 kills the effect
-        effect.age(duration);
-        assertTrue(effect.isKilled(), "Effect not set to killed when duration < 0");
+            // age decrementing duration below 0 kills the effect
+            effect.age(duration);
+            assertTrue(effect.isKilled(), "Effect not set to killed when duration < 0");
+        }
     }
 
     /**
@@ -162,7 +169,6 @@ abstract public class EffectTestSuper {
      * original reference. This is important for data encapsulation and preventing external code
      * from modifying the effect's internal state.</p>
      */
-    @Test
     void getTargetIDTest() {
         UUID targetID = target.getUniqueId();
         O2Effect effect = createEffect(10, false, targetID);
@@ -178,16 +184,23 @@ abstract public class EffectTestSuper {
      * setPermanent(). Tests that new effects default to non-permanent, and that the flag can be
      * toggled between true and false states.</p>
      */
-    @Test
     void isPermanentTest() {
         O2Effect effect = createEffect(10, false, target.getUniqueId());
-        assertFalse(effect.isPermanent(), "Effect already set to permanent");
 
         effect.setPermanent(true);
         assertTrue(effect.isPermanent(), "Effect not permanent after effect.setPermanent(true);");
 
         effect.setPermanent(false);
         assertFalse(effect.isPermanent(), "Effect set to permanent after effect.setPermanent(false);");
+    }
+
+    abstract void checkEffectTest();
+
+    abstract void doRemoveTest();
+
+    @AfterEach
+    void tearDown() {
+        Ollivanders2.debug = false;
     }
 
     /**

@@ -92,7 +92,7 @@ abstract public class RemoveO2Effect extends O2Spell {
             Ollivanders2Common.flair(location, (int) radius, 10);
 
         for (Player target : getNearbyPlayers(radius)) {
-            if (target.getUniqueId() == player.getUniqueId())
+            if (target.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             removeEffects(target);

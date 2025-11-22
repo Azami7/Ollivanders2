@@ -92,7 +92,7 @@ public class PERMURATE extends ItemToItemTransfiguration {
         // now find a second item near the first to swap with
         Item itemTwo = null;
         for (Entity entity : EntityCommon.getEntitiesInRadius(itemOne.getLocation(), 4)) {
-            if (entity.getUniqueId() == itemOne.getUniqueId())
+            if (entity.getUniqueId().equals(itemOne.getUniqueId()))
                 continue;
 
             if ((entity instanceof Item) && canTransfigure(entity)) {

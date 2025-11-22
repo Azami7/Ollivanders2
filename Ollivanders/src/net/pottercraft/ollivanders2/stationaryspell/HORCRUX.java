@@ -232,7 +232,7 @@ public class HORCRUX extends O2StationarySpell {
     void doOnPlayerDeathEvent(@NotNull PlayerDeathEvent event) {
         Player player = event.getEntity();
 
-        if (player.getUniqueId() == playerUUID) {
+        if (player.getUniqueId().equals(playerUUID)) {
             event.setDeathMessage("Death approaches but cannot claim your split soul.");
             event.setKeepInventory(true);
             event.setKeepLevel(true);
@@ -284,7 +284,7 @@ public class HORCRUX extends O2StationarySpell {
 
         Item eventItem = event.getEntity();
 
-        if (eventItem.getUniqueId() == horcruxItem.getUniqueId())
+        if (eventItem.getUniqueId().equals(horcruxItem.getUniqueId()))
             event.setCancelled(true);
     }
 
@@ -297,7 +297,7 @@ public class HORCRUX extends O2StationarySpell {
     void doOnEntityPickupItemEvent(@NotNull EntityPickupItemEvent event) {
         Item eventItem = event.getItem();
 
-        if (eventItem.getUniqueId() == horcruxItem.getUniqueId())
+        if (eventItem.getUniqueId().equals(horcruxItem.getUniqueId()))
             event.setCancelled(true);
     }
 
@@ -310,7 +310,7 @@ public class HORCRUX extends O2StationarySpell {
     void doOnInventoryItemPickupEvent(@NotNull InventoryPickupItemEvent event) {
         Item eventItem = event.getItem();
 
-        if (eventItem.getUniqueId() == horcruxItem.getUniqueId())
+        if (eventItem.getUniqueId().equals(horcruxItem.getUniqueId()))
             event.setCancelled(true);
     }
 

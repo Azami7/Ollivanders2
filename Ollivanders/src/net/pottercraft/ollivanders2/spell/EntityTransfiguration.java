@@ -110,7 +110,7 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
             return;
 
         for (Entity entity : getCloseEntities(radius)) {
-            if (entity.getUniqueId() == player.getUniqueId())
+            if (entity.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             if (isTransfigured) {
@@ -322,7 +322,7 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
         if (transfiguredEntity == null)
             return false;
 
-        return transfiguredEntity.getUniqueId() == entity.getUniqueId();
+        return transfiguredEntity.getUniqueId().equals(entity.getUniqueId());
     }
 
     /**

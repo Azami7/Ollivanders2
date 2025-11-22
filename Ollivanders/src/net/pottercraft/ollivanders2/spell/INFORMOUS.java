@@ -71,7 +71,7 @@ public final class INFORMOUS extends O2Spell {
         boolean gaveInfo = false;
 
         for (LivingEntity entity : getNearbyLivingEntities(1.5)) {
-            if (entity.getUniqueId() == player.getUniqueId())
+            if (entity.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             entityInfo(entity);

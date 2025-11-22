@@ -88,7 +88,7 @@ public final class SILENCIO extends O2Spell {
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId() == player.getUniqueId())
+            if (target.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             MUTED_SPEECH effect = new MUTED_SPEECH(p, duration, false, target.getUniqueId());

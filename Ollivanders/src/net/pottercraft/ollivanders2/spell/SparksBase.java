@@ -85,7 +85,7 @@ public abstract class SparksBase extends O2Spell {
         List<LivingEntity> entities = getNearbyLivingEntities(radius);
         for (LivingEntity entity : entities) {
             // don't damage the caster
-            if (entity.getUniqueId() == player.getUniqueId())
+            if (entity.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             entity.damage(damage);

@@ -92,7 +92,7 @@ public abstract class RemovePotionEffect extends O2Spell {
                 return;
             }
 
-            if (livingEntity.getUniqueId() == player.getUniqueId()) // already handled self above
+            if (livingEntity.getUniqueId().equals(player.getUniqueId())) // already handled self above
                 continue;
 
             removePotionEffects(livingEntity);

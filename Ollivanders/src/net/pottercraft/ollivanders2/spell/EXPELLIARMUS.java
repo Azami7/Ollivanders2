@@ -89,7 +89,7 @@ public final class EXPELLIARMUS extends O2Spell {
 
         if (livingEntities.size() > 0) {
             for (LivingEntity entity : livingEntities) {
-                if (entity.getUniqueId() == player.getUniqueId())
+                if (entity.getUniqueId().equals(player.getUniqueId()))
                     continue;
 
                 // is entity holding something

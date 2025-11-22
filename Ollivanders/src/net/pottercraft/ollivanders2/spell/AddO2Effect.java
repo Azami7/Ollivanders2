@@ -115,7 +115,7 @@ public abstract class AddO2Effect extends O2Spell {
         }
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if ((target.getUniqueId() == player.getUniqueId()))
+            if ((target.getUniqueId().equals(player.getUniqueId())))
                 continue;
 
             addEffectsToTarget(target);

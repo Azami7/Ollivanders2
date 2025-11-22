@@ -60,7 +60,7 @@ public class PROPHETEIA extends O2Spell {
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId() == player.getUniqueId())
+            if (target.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 10);

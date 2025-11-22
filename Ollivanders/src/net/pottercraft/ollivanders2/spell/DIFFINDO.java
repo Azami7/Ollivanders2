@@ -86,7 +86,7 @@ public final class DIFFINDO extends O2Spell {
         List<Player> players = getNearbyPlayers(defaultRadius);
 
         for (Player plyr : players) {
-            if (plyr.getUniqueId() == player.getUniqueId())
+            if (plyr.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             PlayerInventory inv = plyr.getInventory();

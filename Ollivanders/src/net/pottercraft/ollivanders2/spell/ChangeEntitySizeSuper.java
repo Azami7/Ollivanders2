@@ -92,7 +92,7 @@ public abstract class ChangeEntitySizeSuper extends O2Spell {
 
             common.printDebugMessage("Checking " + livingEntity.getName(), null, null, false);
 
-            if (livingEntity.getUniqueId() == player.getUniqueId())
+            if (livingEntity.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             if (!entityHarmWGCheck(livingEntity))

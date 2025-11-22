@@ -108,7 +108,7 @@ public abstract class Knockback extends O2Spell {
             return false;
 
         // do not knockback the caster or any block listed entity
-        if (entity.getUniqueId() == player.getUniqueId() || entityBlockedList.contains(entity.getType()))
+        if (entity.getUniqueId().equals(player.getUniqueId()) || entityBlockedList.contains(entity.getType()))
             return false;
 
         //

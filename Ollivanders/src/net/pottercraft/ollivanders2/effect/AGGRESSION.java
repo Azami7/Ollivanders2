@@ -52,6 +52,9 @@ public class AGGRESSION extends O2Effect {
      */
     int aggressionLevel = 5;
 
+    static int minAggression = 1;
+    static int maxAggression = 10;
+
     /**
      * The player affected by this aggression effect.
      *
@@ -59,6 +62,16 @@ public class AGGRESSION extends O2Effect {
      * Cached at construction time for quick access during effect processing.</p>
      */
     Player target;
+
+    /**
+     * Every n ticks aggression has an effect.
+     */
+    static public final int cooldownLimit = 120;
+
+    /**
+     * Aggression cooldown
+     */
+    int cooldown;
 
     /**
      * Constructor for creating an aggression effect.
@@ -81,8 +94,7 @@ public class AGGRESSION extends O2Effect {
 
         permanent = true;
         target = p.getServer().getPlayer(targetID);
-
-        aggressionLevel = duration;
+        cooldown = cooldownLimit;
     }
 
     /**
@@ -102,13 +114,16 @@ public class AGGRESSION extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        age(1);
+        cooldown = cooldown - 1;
 
         // only take action once per 10 seconds, which is every 120 ticks
-        if ((duration % 120) == 0) {
-            int rand = Math.abs(Ollivanders2Common.random.nextInt()) % 10;
+        if (cooldown <= 0) {
+            common.printDebugMessage("doing aggression", null, null, false);
+
+            int rand = Math.abs(Ollivanders2Common.random.nextInt()) % maxAggression;
 
             if (rand < aggressionLevel) {
+                common.printDebugMessage("taking aggression action", null, null, false);
                 // damage nearby entity
                 Collection<LivingEntity> nearby = EntityCommon.getLivingEntitiesInRadius(target.getLocation(), 3);
                 damageRandomEntity(nearby);
@@ -117,6 +132,8 @@ public class AGGRESSION extends O2Effect {
                 nearby = EntityCommon.getLivingEntitiesInRadius(target.getLocation(), 6);
                 provoke(nearby);
             }
+
+            cooldown = cooldownLimit;
         }
     }
 
@@ -143,13 +160,17 @@ public class AGGRESSION extends O2Effect {
             return;
 
         if (!nearby.isEmpty()) {
-            int rand = Math.abs(Ollivanders2Common.random.nextInt());
-            LivingEntity[] nArray = nearby.toArray(new LivingEntity[nearby.size()]);
+            LivingEntity toDamage = null;
+            for (LivingEntity entity : nearby) {
+                // don't let the player hit themselves
+                if (!entity.getUniqueId().equals(targetID)) {
+                    toDamage = entity;
+                    break;
+                }
+            }
 
-            LivingEntity toDamage = nArray[rand % nearby.size()];
-
-            // don't let the player hit themselves
-            if (toDamage.getUniqueId() != targetID)
+            // no nearby entities that were not the target player
+            if (toDamage == null)
                 return;
 
             // don't do damage if worldguard is protecting where the entity is
@@ -162,9 +183,11 @@ public class AGGRESSION extends O2Effect {
 
             double curHealth = toDamage.getHealth();
             // damage is entities current health divided by 2, 3, or 4
-            rand = Math.abs(Ollivanders2Common.random.nextInt());
+            int rand = Math.abs(Ollivanders2Common.random.nextInt());
             double damage = curHealth / ((rand % 3) + 2);
             toDamage.damage(damage, target);
+
+            common.printDebugMessage("aggression affected player " + target.getName() + " damaged nearby entity " + toDamage.getName(), null, null, false);
         }
     }
 
@@ -192,13 +215,13 @@ public class AGGRESSION extends O2Effect {
      *
      * @param level the aggression level, will be clamped to range 1-10
      */
-    void setAggressionLevel(int level) {
+    public void setAggressionLevel(int level) {
         aggressionLevel = level;
 
-        if (aggressionLevel < 1)
-            aggressionLevel = 1;
-        else if (aggressionLevel > 10)
-            aggressionLevel = 10;
+        if (aggressionLevel < minAggression)
+            aggressionLevel = minAggression;
+        else if (aggressionLevel > maxAggression)
+            aggressionLevel = maxAggression;
 
         duration = aggressionLevel;
     }

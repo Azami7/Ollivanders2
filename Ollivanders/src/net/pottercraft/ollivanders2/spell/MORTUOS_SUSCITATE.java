@@ -131,10 +131,10 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
         if (!EntityCommon.attackDamageCauses.contains(cause))
             return;
 
-        if (attacker.getUniqueId() == transfiguredEntity.getUniqueId() && target.getUniqueId() == player.getUniqueId())
+        if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(player.getUniqueId()))
             // prevent the inferi attacking its creator
             event.setCancelled(true);
-        else if (target.getUniqueId() == player.getUniqueId() && transfiguredEntity instanceof LivingEntity)
+        else if (target.getUniqueId().equals(player.getUniqueId()) && transfiguredEntity instanceof LivingEntity)
             // attack anyone who attacks the creator
             ((LivingEntity) transfiguredEntity).attack(attacker);
     }
@@ -155,7 +155,7 @@ public final class MORTUOS_SUSCITATE extends ItemToEntityTransfiguration {
         if (target == null)
             return;
 
-        if (attacker.getUniqueId() == transfiguredEntity.getUniqueId() && target.getUniqueId() == player.getUniqueId())
+        if (attacker.getUniqueId().equals(transfiguredEntity.getUniqueId()) && target.getUniqueId().equals(player.getUniqueId()))
             event.setCancelled(true);
     }
 }

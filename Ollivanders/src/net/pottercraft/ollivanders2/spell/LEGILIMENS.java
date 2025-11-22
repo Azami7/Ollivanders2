@@ -66,7 +66,7 @@ public final class LEGILIMENS extends O2Spell {
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId() == player.getUniqueId())
+            if (target.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             int targetExperience = p.getO2Player(target).getSpellCount(O2SpellType.LEGILIMENS) / 10;

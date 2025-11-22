@@ -83,9 +83,10 @@ public abstract class PotionEffectSuper extends O2Effect {
         permanent = false;
 
         // make sure duration is between the min and max allowed
-        if (duration < minDuration)
+        this.duration = duration;
+        if (this.duration < minDuration)
             this.duration = minDuration;
-        else if (duration > maxDuration)
+        else if (this.duration > maxDuration)
             this.duration = maxDuration;
     }
 

@@ -83,7 +83,7 @@ public final class PARTIS_TEMPORUS extends O2Spell {
             if (stationarySpell.isKilled())
                 continue;
 
-            if (stationarySpell.getCasterID() == player.getUniqueId()) {
+            if (stationarySpell.getCasterID().equals(player.getUniqueId())) {
                 stopProjectile();
 
                 stationarySpell.setActive(false);
@@ -108,7 +108,7 @@ public final class PARTIS_TEMPORUS extends O2Spell {
     @Override
     protected void revert() {
         for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location)) {
-            if (stationarySpell.getCasterID() == player.getUniqueId()) {
+            if (stationarySpell.getCasterID().equals(player.getUniqueId())) {
                 if (!stationarySpell.isKilled()) {
                     stationarySpell.setActive(true);
                     stationarySpell.flair(10);

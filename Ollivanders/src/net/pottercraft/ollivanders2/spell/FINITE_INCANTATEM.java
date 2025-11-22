@@ -102,7 +102,7 @@ public final class FINITE_INCANTATEM extends O2Spell {
      */
     private void finiteIncantatemEntities() {
         for (LivingEntity live : getNearbyLivingEntities(defaultRadius)) {
-            if (live.getUniqueId() == player.getUniqueId())
+            if (live.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             common.printDebugMessage("finite incantatem targeting " + live.getName(), null, null, false);

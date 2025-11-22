@@ -120,7 +120,7 @@ public abstract class ConcealmentShieldSpell extends ShieldSpell {
 
         for (Player viewer : p.getServer().getOnlinePlayers()) {
             // don't hide the player from themselves :)
-            if (viewer.getUniqueId() == player.getUniqueId()) {
+            if (viewer.getUniqueId().equals(player.getUniqueId())) {
                 continue;
             }
 

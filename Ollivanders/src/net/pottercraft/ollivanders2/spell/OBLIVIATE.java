@@ -72,7 +72,7 @@ public final class OBLIVIATE extends O2Spell {
             kill();
 
         for (Player target : getNearbyPlayers(defaultRadius)) {
-            if (target.getUniqueId() == player.getUniqueId())
+            if (target.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             O2Player o2player = Ollivanders2API.getPlayers().getPlayer(target.getUniqueId());

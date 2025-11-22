@@ -154,7 +154,7 @@ public abstract class ItemToEntityTransfiguration extends EntityTransfiguration 
             return;
 
         Entity entity = event.getEntity();
-        if (entity.getUniqueId() == transfiguredEntity.getUniqueId())
+        if (entity.getUniqueId().equals(transfiguredEntity.getUniqueId()))
             // the entity was killed, kill this spell
             kill();
     }

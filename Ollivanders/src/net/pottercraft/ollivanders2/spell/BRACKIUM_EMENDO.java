@@ -75,7 +75,7 @@ public final class BRACKIUM_EMENDO extends O2Spell {
 
         if (entities.size() > 0) {
             for (LivingEntity entity : entities) {
-                if (entity.getUniqueId() == player.getUniqueId())
+                if (entity.getUniqueId().equals(player.getUniqueId()))
                     continue;
 
                 EntityType type = entity.getType();

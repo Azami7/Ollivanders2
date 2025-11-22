@@ -193,7 +193,7 @@ public abstract class SpellShieldEffect extends O2Effect {
      * @param event the player quit event
      */
     void doOnPlayerQuitEvent(@NotNull PlayerQuitEvent event) {
-        if (event.getPlayer().getUniqueId() == targetID)
+        if (event.getPlayer().getUniqueId().equals(targetID))
             kill();
     }
 
@@ -211,7 +211,7 @@ public abstract class SpellShieldEffect extends O2Effect {
         if (target == null)
             return;
 
-        if (target.getUniqueId() == targetID)
+        if (target.getUniqueId().equals(targetID))
             event.setCancelled(true);
     }
 }

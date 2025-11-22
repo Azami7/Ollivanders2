@@ -78,7 +78,7 @@ public final class AVADA_KEDAVRA extends O2Spell
         {
             for (Damageable entity : entities)
             {
-                if (entity.getUniqueId() == player.getUniqueId())
+                if (entity.getUniqueId().equals(player.getUniqueId()))
                     continue;
 
                 entity.damage(usesModifier * 2, player);

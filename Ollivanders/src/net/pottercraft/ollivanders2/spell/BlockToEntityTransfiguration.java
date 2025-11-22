@@ -175,7 +175,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
         if (transfiguredEntity == null)
             return false;
 
-        return transfiguredEntity.getUniqueId() == entity.getUniqueId();
+        return transfiguredEntity.getUniqueId().equals(entity.getUniqueId());
     }
 
     /**
@@ -206,7 +206,7 @@ public abstract class BlockToEntityTransfiguration extends BlockTransfiguration 
             return;
 
         Entity entity = event.getEntity();
-        if (entity.getUniqueId() == transfiguredEntity.getUniqueId())
+        if (entity.getUniqueId().equals(transfiguredEntity.getUniqueId()))
             // the entity was killed, kill this spell
             kill();
     }

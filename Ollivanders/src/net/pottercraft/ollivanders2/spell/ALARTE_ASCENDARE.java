@@ -95,7 +95,7 @@ public final class ALARTE_ASCENDARE extends O2Spell {
         Collection<Entity> entities = EntityCommon.getEntitiesInRadius(location, defaultRadius);
 
         for (Entity entity : entities) {
-            if (entity.getUniqueId() == player.getUniqueId())
+            if (entity.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             // check entity to see if it can be targeted

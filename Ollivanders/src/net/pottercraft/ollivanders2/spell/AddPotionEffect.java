@@ -133,7 +133,7 @@ public abstract class AddPotionEffect extends O2Spell {
                 return;
             }
 
-            if (!targetSelf && livingEntity.getUniqueId() == player.getUniqueId())
+            if (!targetSelf && livingEntity.getUniqueId().equals(player.getUniqueId()))
                 continue;
 
             addEffectsToTarget(livingEntity);
