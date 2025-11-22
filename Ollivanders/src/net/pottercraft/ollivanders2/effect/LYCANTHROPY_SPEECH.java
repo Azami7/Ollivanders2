@@ -41,12 +41,13 @@ public class LYCANTHROPY_SPEECH extends BABBLING {
      * typically applied as a secondary symptom of werewolf transformation during LYCANTHROPY curse
      * activation.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the speech effect in game ticks
-     * @param pid      the unique ID of the player to afflict with wolf-like speech
+     * @param plugin      a callback to the MC plugin
+     * @param duration    ignored - lycanthropy speech is always permament
+     * @param isPermanent ignored - lycanthropy speech is always permament
+     * @param pid         the unique ID of the player to afflict with wolf-like speech
      */
-    public LYCANTHROPY_SPEECH(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public LYCANTHROPY_SPEECH(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, true, pid);
 
         effectType = O2EffectType.LYCANTHROPY_SPEECH;
 
@@ -57,7 +58,6 @@ public class LYCANTHROPY_SPEECH extends BABBLING {
             add("§osnarl");
         }};
 
-        permanent = true;
         maxWords = 3;
     }
 

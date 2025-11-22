@@ -98,7 +98,7 @@ public class O2Player {
     /**
      * The mastered spell set for silent casting - is cast anytime a player left-clicks their wand in their primary hand.
      *
-     * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#non-verbal-spell-casting</p>
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#non-verbal-spell-casting">https://github.com/Azami7/Ollivanders2/wiki/Configuration#non-verbal-spell-casting</a>
      */
     private O2SpellType masterSpell = null;
 
@@ -954,5 +954,14 @@ public class O2Player {
             animagusColor = Cat.Type.RED.toString();
         else // siamese
             animagusColor = Cat.Type.SIAMESE.toString();
+    }
+
+    public boolean isOnline() {
+        Player player = p.getServer().getPlayer(pid);
+
+        if (player == null)
+            return false;
+        else
+            return true;
     }
 }

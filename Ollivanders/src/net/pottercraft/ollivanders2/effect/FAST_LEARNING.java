@@ -33,12 +33,13 @@ public class FAST_LEARNING extends O2Effect {
      * does not apply modifications directly; the skill system checks for its presence to apply an experience
      * multiplier. Sets the detection text for mind-reading spells to "feels more mentally alert than usual".</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect in game ticks
-     * @param pid      the unique ID of the player to grant fast learning
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to grant fast learning
      */
-    public FAST_LEARNING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public FAST_LEARNING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.FAST_LEARNING;
         legilimensText = "feels more mentally alert than usual";

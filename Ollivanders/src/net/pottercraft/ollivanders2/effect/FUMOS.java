@@ -39,12 +39,13 @@ public class FUMOS extends SpellShieldEffect {
      * <li>flairOnSpellImpact = false: No additional impact particles when spells are blocked</li>
      * </ul>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the shield effect in game ticks
-     * @param pid      the unique ID of the player to shield with smoke protection
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the shield effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to shield with smoke protection
      */
-    public FUMOS(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public FUMOS(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.FUMOS;
         flairPulse = true;

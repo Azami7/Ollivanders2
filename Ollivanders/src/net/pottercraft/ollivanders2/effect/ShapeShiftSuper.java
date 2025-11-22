@@ -87,12 +87,13 @@ public abstract class ShapeShiftSuper extends O2Effect {
      * Subclasses must set the form field to specify the target entity type before
      * this effect is added to the player's effect list.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect in game ticks
-     * @param pid      the unique ID of the player to transform
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to transform
      */
-    public ShapeShiftSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public ShapeShiftSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
     }
 
     /**

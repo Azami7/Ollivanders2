@@ -58,12 +58,13 @@ public class SUSPENSION extends O2Effect {
      * (FLYING and IMMOBILIZE) will be applied to maintain the suspension state. The original location
      * is recorded for restoration when the effect is removed.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the suspension effect in game ticks
-     * @param pid      the unique ID of the player to suspend
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the suspension effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to suspend
      */
-    public SUSPENSION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public SUSPENSION(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.SUSPENSION;
     }
@@ -119,12 +120,12 @@ public class SUSPENSION extends O2Effect {
      */
     private void addAdditionalEffects() {
         // make them fly so they do not fall from suspension
-        FLYING flying = new FLYING(p, duration + 10, targetID);
+        FLYING flying = new FLYING(p, 5, true, targetID);
         Ollivanders2API.getPlayers().playerEffects.addEffect(flying);
         additionalEffects.add(O2EffectType.FLYING);
 
-        // add an immobilize effect with a duration slightly longer than this one so that they cannot move while suspended
-        IMMOBILIZE immobilize = new IMMOBILIZE(p, duration + 10, targetID);
+        // add an immobilize effect so they cannot move
+        IMMOBILIZE immobilize = new IMMOBILIZE(p, 5, true, targetID);
         Ollivanders2API.getPlayers().playerEffects.addEffect(immobilize);
         additionalEffects.add(O2EffectType.IMMOBILIZE);
     }

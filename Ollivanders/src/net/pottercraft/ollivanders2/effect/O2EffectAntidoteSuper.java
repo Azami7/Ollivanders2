@@ -46,12 +46,14 @@ public abstract class O2EffectAntidoteSuper extends O2Effect {
      * The duration parameter is provided for API consistency but antidotes are instant-acting effects
      * that kill themselves immediately after application.</p>
      *
-     * @param plugin   a reference to the plugin for API access and logging
-     * @param duration ignored - antidotes apply immediately and do not persist
-     * @param pid      the unique ID of the target player who will receive the antidote
+     * @param plugin      a reference to the plugin for API access and logging
+     * @param duration    ignored - antidotes apply immediately and do not persist
+     * @param isPermanent ignored - antidotes are immediately applied and resolved
+     * @param pid         the unique ID of the target player who will receive the antidote
      */
-    public O2EffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public O2EffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        // set isPermanent to true so we do not need to worry about what duration was set to, checkEffect() will kill it
+        super(plugin, duration, true, pid);
     }
 
     /**

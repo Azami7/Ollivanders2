@@ -72,7 +72,7 @@ public final class ANIMAGUS_POTION extends O2Potion {
             o2p.setIsAnimagus();
             Ollivanders2API.getPlayers().playerEffects.removeEffect(o2p.getID(), O2EffectType.ANIMAGUS_INCANTATION);
 
-            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
+            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, true, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(animagusEffect);
 
             player.sendMessage(Ollivanders2.chatColor + "You feel transformed.");

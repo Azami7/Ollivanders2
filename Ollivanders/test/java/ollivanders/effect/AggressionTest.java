@@ -12,13 +12,10 @@ import org.junit.jupiter.api.Test;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class AggressionTest extends EffectTestSuper {
     O2Effect createEffect(int durationInTicks, boolean isPermanent, @NotNull UUID targetID) {
-        AGGRESSION effect = new AGGRESSION(testPlugin, durationInTicks, targetID);
-
-        return effect;
+        return new AGGRESSION(testPlugin, durationInTicks, true, targetID);
     }
 
     @Test
@@ -32,6 +29,6 @@ public class AggressionTest extends EffectTestSuper {
         Entity bee4 = testWorld.spawn(new Location(testWorld, 2, 4, 1), Bee.class);
 
         // confirm the bees are not currently hostile
-        assertFalse(EntityCommon.isHostile((Bee)bee1), "bee1 is already hostile");
+        assertFalse(EntityCommon.isHostile((Bee) bee1), "bee1 is already hostile");
     }
 }

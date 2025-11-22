@@ -26,12 +26,13 @@ public class NIGHT_VISION extends PotionEffectSuper {
      * Minecraft's NIGHT_VISION potion effect type. Sets detection text for both mind-reading spells
      * (Legilimens) and information spells (Informous) to "can see in darkness".</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
-     * @param pid      the unique ID of the player to grant night vision
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param isPermanent ignored - potion effects cannot be permanent
+     * @param pid         the unique ID of the player to grant night vision
      */
-    public NIGHT_VISION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public NIGHT_VISION(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         strength = 1;
 

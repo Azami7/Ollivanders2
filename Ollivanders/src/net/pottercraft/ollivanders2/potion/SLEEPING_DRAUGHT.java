@@ -53,7 +53,7 @@ public class SLEEPING_DRAUGHT extends O2Potion {
         }
         else {
             // put them asleep for ~2 minutes
-            SLEEPING effect = new SLEEPING(p, 2400, player.getUniqueId());
+            SLEEPING effect = new SLEEPING(p, 2400, false, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             player.sendMessage(Ollivanders2.chatColor + "You fall in to a deep, dreamless, enchanted sleep.");

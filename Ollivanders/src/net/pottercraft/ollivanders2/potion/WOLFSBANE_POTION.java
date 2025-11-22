@@ -45,7 +45,7 @@ public final class WOLFSBANE_POTION extends O2Potion {
      */
     @Override
     public void drink(@NotNull Player player) {
-        LYCANTHROPY_RELIEF effect = new LYCANTHROPY_RELIEF(p, duration, player.getUniqueId());
+        LYCANTHROPY_RELIEF effect = new LYCANTHROPY_RELIEF(p, duration, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
         player.sendMessage(Ollivanders2.chatColor + "You feel a sense of relief.");

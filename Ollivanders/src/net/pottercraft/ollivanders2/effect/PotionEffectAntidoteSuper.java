@@ -70,13 +70,14 @@ public abstract class PotionEffectAntidoteSuper extends O2Effect {
      * Subclasses should initialize potionEffectType and strength fields before the effect is added
      * to a player's effect list.</p>
      *
-     * @param plugin   a reference to the plugin for logging
-     * @param duration ignored - antidotes apply immediately and are resolved
-     * @param pid      the unique ID of the target player to receive this antidote
+     * @param plugin      a reference to the plugin for logging
+     * @param duration    ignored - antidotes apply immediately and are resolved
+     * @param isPermanent ignored - antidotes are immediately applied and resolved
+     * @param pid         the unique ID of the target player to receive this antidote
      */
-    public PotionEffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        // hard-code duration because these are instant effects
-        super(plugin, duration, pid);
+    public PotionEffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        // set isPermanent to true so we do not need to worry about what duration was set to, checkEffect() will kill it
+        super(plugin, duration, true, pid);
     }
 
     /**

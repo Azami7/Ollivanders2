@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -73,20 +72,21 @@ public abstract class PotionEffectSuper extends O2Effect {
      * game tick. Subclasses should initialize potionEffectType and strength fields before the effect
      * is added to a player's effect list.</p>
      *
-     * @param plugin   a reference to the plugin
-     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
-     * @param pid      the unique ID of the target player
+     * @param plugin      a reference to the plugin
+     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param isPermanent ignored - potion effects cannot be permanent
+     * @param pid         the unique ID of the target player
      */
-    public PotionEffectSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public PotionEffectSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, false, pid);
 
         permanent = false;
 
         // make sure duration is between the min and max allowed
         if (duration < minDuration)
-            duration = minDuration;
+            this.duration = minDuration;
         else if (duration > maxDuration)
-            duration = maxDuration;
+            this.duration = maxDuration;
     }
 
     /**

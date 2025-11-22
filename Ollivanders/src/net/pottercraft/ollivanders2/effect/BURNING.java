@@ -79,12 +79,13 @@ public class BURNING extends O2Effect {
      * at this point but will be clamped to [0.5, 10] range when adjusted via addDamage(). Detection text is set to
      * "is afflicted with a terrible burning" for both information and mind-reading spells.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect in game ticks (used to calculate initial damage as duration / 100)
-     * @param pid      the unique ID of the player to burn
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the effect in game ticks (used to calculate initial damage as duration / 100)
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to burn
      */
-    public BURNING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public BURNING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.BURNING;
         informousText = legilimensText = "is afflicted with a terrible burning";

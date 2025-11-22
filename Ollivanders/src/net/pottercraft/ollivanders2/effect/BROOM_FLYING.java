@@ -30,16 +30,16 @@ public class BROOM_FLYING extends FLYING {
      * accepted for API consistency with other effects but is ignored - broom flight is always permanent.
      * Smoke particle effects are disabled to provide cleaner visuals during broom flight.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration ignored - broom flight is always permanent
-     * @param pid      the unique ID of the player to give broom flight
+     * @param plugin      a callback to the MC plugin
+     * @param duration    ignored - broom flight is always permanent
+     * @param isPermanent ignored - broom flight is always permanent
+     * @param pid         the unique ID of the player to give broom flight
      */
-    public BROOM_FLYING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public BROOM_FLYING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, true, pid);
 
         effectType = O2EffectType.FLYING;
 
         doSmokeEffect = false;
-        permanent = true;
     }
 }

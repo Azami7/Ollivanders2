@@ -36,12 +36,13 @@ public class SLEEP_SPEECH extends BABBLING {
      * instead of normal chat messages. Sets up the custom sleep sound dictionary with snoring, mumbling,
      * and sleep vocalizations. The effect is permanent and applies immediately when created.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration parameter (unused for permanent effects)
-     * @param pid      the unique ID of the sleeping player to affect
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration parameter (unused for permanent effects)
+     * @param isPermanent ignored - sleep speech is always permanent
+     * @param pid         the unique ID of the sleeping player to affect
      */
-    public SLEEP_SPEECH(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public SLEEP_SPEECH(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, true, pid);
 
         effectType = O2EffectType.SLEEP_SPEECH;
 
@@ -52,7 +53,6 @@ public class SLEEP_SPEECH extends BABBLING {
             add("§ozzzz zzz zzzzzz");
         }};
 
-        permanent = true;
         maxWords = 1;
     }
 

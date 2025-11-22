@@ -109,12 +109,13 @@ public class BABBLING extends O2Effect {
      * <p>Creates an effect that forces a player to speak gibberish by replacing their chat messages with
      * nonsense. Sets both information and mind-reading detection text to "is unable to speak clearly".</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the babbling effect in game ticks
-     * @param pid      the unique ID of the player to affect with babbling
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the babbling effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to affect with babbling
      */
-    public BABBLING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public BABBLING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.BABBLING;
         informousText = "is unable to speak clearly";
@@ -198,6 +199,6 @@ public class BABBLING extends O2Effect {
 
         event.setMessage(newMessage);
 
-        common.printDebugMessage("Changed " + event.getPlayer().getDisplayName() + "'s chat from \"" + message + "\" to \"" + newMessage + "\"", null, null, false);
+        common.printDebugMessage("Changed " + event.getPlayer().displayName() + "'s chat from \"" + message + "\" to \"" + newMessage + "\"", null, null, false);
     }
 }

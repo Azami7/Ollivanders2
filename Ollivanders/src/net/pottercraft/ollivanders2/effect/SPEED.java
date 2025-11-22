@@ -26,12 +26,13 @@ public class SPEED extends PotionEffectSuper {
      * SPEED potion effect type with strength 1. Sets detection text for both mind-reading spells
      * (Legilimens) and information spells (Informous) to "is moving fast".</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
-     * @param pid      the unique ID of the player to enhance with speed
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param isPermanent ignored - potion effects cannot be permanent
+     * @param pid         the unique ID of the player to enhance with speed
      */
-    public SPEED(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public SPEED(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         strength = 1;
 

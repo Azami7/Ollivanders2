@@ -36,12 +36,13 @@ public class IMPROVED_BOOK_LEARNING extends O2Effect {
      * its presence to apply a learning effectiveness multiplier. Sets the detection text for
      * mind-reading spells to "feels more studious than usual".</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect in game ticks
-     * @param pid      the unique ID of the player to grant improved book learning
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to grant improved book learning
      */
-    public IMPROVED_BOOK_LEARNING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public IMPROVED_BOOK_LEARNING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.IMPROVED_BOOK_LEARNING;
         legilimensText = "feels more studious than usual";

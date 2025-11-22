@@ -39,12 +39,13 @@ public class LYCANTHROPY_RELIEF extends O2Effect {
      * determines whether to apply AGGRESSION and LYCANTHROPY_SPEECH based on whether this relief
      * effect is present. Sets the detection text for information spells to "looks unwell".</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the relief effect in game ticks
-     * @param pid      the unique ID of the player to provide lycanthropy relief
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the relief effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to provide lycanthropy relief
      */
-    public LYCANTHROPY_RELIEF(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public LYCANTHROPY_RELIEF(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.LYCANTHROPY_RELIEF;
         informousText = "looks unwell";

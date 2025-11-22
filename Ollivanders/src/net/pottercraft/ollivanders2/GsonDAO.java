@@ -61,6 +61,11 @@ public class GsonDAO implements GenericDAO {
     public static final String o2PropheciesJSONFile = "O2Prophecies.txt";
 
     /**
+     * the effects save file name
+     */
+    public static final String o2EffectsJSONFile = "O2Effects.txt";
+
+    /**
      * Constructor
      */
     public GsonDAO() {

@@ -16,13 +16,13 @@ import java.util.ArrayList;
  * Tom Riddle is the first wizard known to achieve unassisted flying and only one other wizard learned it from him,
  * Severus Snape. Unassisted flying is against magical law.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Unsupported_flight">https://harrypotter.fandom.com/wiki/Unsupported_flight</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Unsupported_flight">https://harrypotter.fandom.com/wiki/Unsupported_flight</a>
  */
 public final class VENTO_FOLIO extends O2Spell {
     /**
      * The percent chance this spell will succeed each casting.
      */
-    protected int successRate = 0;
+    int successRate = 0;
 
     /**
      * Default constructor for use in generating spell text. Do not use to cast the spell.
@@ -103,7 +103,7 @@ public final class VENTO_FOLIO extends O2Spell {
             duration = 100;
 
         if (rand < successRate) {
-            FLYING effect = new FLYING(p, duration, player.getUniqueId());
+            FLYING effect = new FLYING(p, duration, false, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             common.printDebugMessage("VENTO_FOLIO: Adding effect ", null, null, false);

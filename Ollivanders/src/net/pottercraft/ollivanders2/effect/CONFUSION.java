@@ -35,12 +35,13 @@ public class CONFUSION extends PotionEffectSuper {
      * (baseTime × random multiplier between 1-5). Sets strength to 1 for full nausea effect amplification and
      * detection text to "feels confused".</p>
      *
-     * @param plugin   a callback to the plugin
-     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
-     * @param pid      the unique ID of the player to confuse
+     * @param plugin      a callback to the plugin
+     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param isPermanent ignored - potion effects cannot be permanent
+     * @param pid         the unique ID of the player to confuse
      */
-    public CONFUSION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public CONFUSION(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.CONFUSION;
         potionEffectType = PotionEffectType.NAUSEA;

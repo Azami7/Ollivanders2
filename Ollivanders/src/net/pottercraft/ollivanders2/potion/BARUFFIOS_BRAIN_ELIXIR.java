@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.potion;
 import net.pottercraft.ollivanders2.effect.HIGHER_SKILL;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
@@ -43,7 +42,7 @@ public final class BARUFFIOS_BRAIN_ELIXIR extends O2Potion {
      */
     @Override
     public void drink(@NotNull Player player) {
-        HIGHER_SKILL effect = new HIGHER_SKILL(p, duration, player.getUniqueId());
+        HIGHER_SKILL effect = new HIGHER_SKILL(p, duration, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
         player.sendMessage(Ollivanders2.chatColor + "You feel clarity of thought.");

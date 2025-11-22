@@ -33,12 +33,13 @@ public class SHRINKING extends PlayerChangeSizeSuper {
      * size. The effect applies immediately, causing the player to appear physically smaller in the
      * game world with a correspondingly reduced hitbox.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the shrinking effect in game ticks
-     * @param pid      the unique ID of the player to shrink
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the shrinking effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to shrink
      */
-    public SHRINKING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public SHRINKING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.SHRINKING;
         scaleMultiplier = 0.5; // makes the player half size

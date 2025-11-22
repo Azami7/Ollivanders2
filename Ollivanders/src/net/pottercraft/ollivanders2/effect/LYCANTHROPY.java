@@ -57,12 +57,13 @@ public class LYCANTHROPY extends ShapeShiftSuper {
      * text for mind-reading spells to "is a werewolf". The effect is always permanent and transformation
      * is controlled by the upkeep() method based on in-game time and moon phase.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration duration parameter (ignored - lycanthropy is always permanent)
-     * @param pid      the unique ID of the player to curse with lycanthropy
+     * @param plugin      a callback to the MC plugin
+     * @param duration    duration parameter (ignored - lycanthropy is always permanent)
+     * @param isPermanent ignored - lycanthropy is always permanent
+     * @param pid         the unique ID of the player to curse with lycanthropy
      */
-    public LYCANTHROPY(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public LYCANTHROPY(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, true, pid);
 
         effectType = O2EffectType.LYCANTHROPY;
         legilimensText = "is a werewolf";
@@ -150,12 +151,12 @@ public class LYCANTHROPY extends ShapeShiftSuper {
      * for removal when the player reverts to human form.</p>
      */
     private void addAdditionalEffects() {
-        AGGRESSION aggression = new AGGRESSION(p, 5, targetID);
+        AGGRESSION aggression = new AGGRESSION(p, 5, true, targetID);
         aggression.setAggressionLevel(10);
         Ollivanders2API.getPlayers().playerEffects.addEffect(aggression);
         additionalEffects.add(O2EffectType.AGGRESSION);
 
-        LYCANTHROPY_SPEECH speech = new LYCANTHROPY_SPEECH(p, 5, targetID);
+        LYCANTHROPY_SPEECH speech = new LYCANTHROPY_SPEECH(p, 5, true, targetID);
         Ollivanders2API.getPlayers().playerEffects.addEffect(speech);
         additionalEffects.add(O2EffectType.LYCANTHROPY_SPEECH);
     }
@@ -233,14 +234,13 @@ public class LYCANTHROPY extends ShapeShiftSuper {
      * Infect a player with the lycanthropy curse.
      *
      * <p>Creates and applies a new LYCANTHROPY effect to the specified player if they don't already
-     * have the curse. The new effect has a duration of 100 ticks, though this is ignored due to the
-     * permanent nature of lycanthropy.</p>
+     * have the curse.</p>
      *
      * @param player the player to infect with lycanthropy
      */
     private void infectPlayer(Player player) {
         if (!Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.LYCANTHROPY)) {
-            LYCANTHROPY effect = new LYCANTHROPY(p, 100, player.getUniqueId());
+            LYCANTHROPY effect = new LYCANTHROPY(p, 5, true, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
         }
     }

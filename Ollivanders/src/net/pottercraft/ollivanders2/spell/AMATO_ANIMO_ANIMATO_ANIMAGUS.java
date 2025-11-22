@@ -91,11 +91,11 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
 
         if (o2p.isAnimagus()) {
             // If the player is already an animagus, the incantation changes them to and from their animal form.
-            common.printDebugMessage(player.getDisplayName() + " is an Animagus.", null, null, false);
+            common.printDebugMessage(player.displayName() + " is an Animagus.", null, null, false);
             transform(o2p);
         }
         else {
-            common.printDebugMessage(player.getDisplayName() + " is not an Animagus.", null, null, false);
+            common.printDebugMessage(player.displayName() + " is not an Animagus.", null, null, false);
             setAnimagusIncantation();
         }
 
@@ -118,7 +118,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
             success = true;
 
         if (success) {
-            ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, player.getUniqueId());
+            ANIMAGUS_INCANTATION effect = new ANIMAGUS_INCANTATION(p, 300, false, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             player.sendMessage(Ollivanders2.chatColor + "You feel slightly different.");
@@ -160,7 +160,7 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
             successRate = 100;
 
         if (rand < successRate) {
-            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, player.getUniqueId());
+            ANIMAGUS_EFFECT animagusEffect = new ANIMAGUS_EFFECT(p, 5, true, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(animagusEffect);
 
             player.sendMessage(Ollivanders2.chatColor + "You feel very different.");

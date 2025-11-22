@@ -34,13 +34,12 @@ public class FLAGRANTE_BURNING extends BURNING {
      * All burning mechanics (damage calculation, visual effects, etc.) are inherited from the parent BURNING
      * class and applied with permanent status.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration ignored - flagrante burning is always permanent
-     * @param pid      the unique ID of the player affected by the cursed item
+     * @param plugin      a callback to the MC plugin
+     * @param duration    ignored - flagrante burning is always permanent
+     * @param isPermanent ignored - flagrante burning is always permanent
+     * @param pid         the unique ID of the player affected by the cursed item
      */
-    public FLAGRANTE_BURNING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
-
-        permanent = true;
+    public FLAGRANTE_BURNING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, true, pid);
     }
 }

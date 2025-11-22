@@ -1,8 +1,10 @@
 package net.pottercraft.ollivanders2.effect;
 
+import net.pottercraft.ollivanders2.GsonDAO;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -86,7 +88,10 @@ public class O2Effects implements Listener {
     /**
      * Prefix for effects for serializing
      */
-    public static final String effectLabelPrefix = "Effect_";
+    public static final String effectPIDLabel = "Effect_target_pid";
+    public static final String effectPermanentLabel = "Effect_is_permanent";
+    public static final String effectDurationLabel = "Effect_duration";
+    public static final String effectTypeLabel = "Effect_type";
 
     /**
      * Thread-safe storage container for active and saved player effects.
@@ -116,7 +121,7 @@ public class O2Effects implements Listener {
         /**
          * A list of all saved effects for all offline players
          */
-        final private Map<UUID, Map<O2EffectType, Integer>> savedEffects = new HashMap<>();
+        final private Map<UUID, Map<O2EffectType, O2Effect>> savedEffects = new HashMap<>();
 
         /**
          * Constructor
@@ -187,8 +192,8 @@ public class O2Effects implements Listener {
          * @return a map of all the saved effects for this player
          */
         @NotNull
-        synchronized Map<O2EffectType, Integer> getPlayerSavedEffects(@NotNull UUID pid) {
-            Map<O2EffectType, Integer> effects = new HashMap<>();
+        synchronized Map<O2EffectType, O2Effect> getPlayerSavedEffects(@NotNull UUID pid) {
+            Map<O2EffectType, O2Effect> effects = new HashMap<>();
 
             try {
                 semaphore.acquire();
@@ -212,7 +217,7 @@ public class O2Effects implements Listener {
          * @param pid     the id of the player
          * @param effects the map of effects and durations
          */
-        synchronized void updatePlayerSavedEffects(@NotNull UUID pid, @NotNull Map<O2EffectType, Integer> effects) {
+        synchronized void updatePlayerSavedEffects(@NotNull UUID pid, @NotNull Map<O2EffectType, O2Effect> effects) {
             try {
                 semaphore.acquire();
                 savedEffects.remove(pid);
@@ -336,6 +341,8 @@ public class O2Effects implements Listener {
      * servers to disable specific effects if they conflict with gameplay or other plugins.</p>
      */
     public void onEnable() {
+        loadEffects();
+
         //
         // lycanthropy
         //
@@ -741,51 +748,28 @@ public class O2Effects implements Listener {
     /**
      * Apply all saved effects when a player joins the server.
      *
-     * <p>When a player logs back in, this method retrieves any effects that were active when they
-     * logged out and reinstantiates them. Each saved effect is reconstructed with its remaining duration.
-     * Effects are only applied if they are currently enabled via configuration. This method is called
-     * by the player management system when a player enters the server.</p>
+     * <p>When a player logs back in, this method retrieves any effect objects that were saved
+     * when they logged out and re-adds them to the player via addEffect(). The saved effects
+     * are then cleared from persistent storage. Each saved effect retains its remaining duration
+     * from when it was saved, allowing players to have their effects restored exactly as they
+     * left them. This method is called by the player management system when a player enters
+     * the server.</p>
      *
      * @param pid the unique ID of the joining player
      */
     public synchronized void onJoin(@NotNull UUID pid) {
-        Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
-        Map<O2EffectType, O2Effect> activeEffects = new HashMap<>();
-
+        // find any saved effects for the player
+        Map<O2EffectType, O2Effect> savedEffects = effectsData.getPlayerSavedEffects(pid);
         if (savedEffects.isEmpty())
             return;
 
-        Player player = p.getServer().getPlayer(pid);
-        if (player == null) {
-            common.printDebugMessage("O2Effects.onJoin: player is null", null, null, true);
-            return;
+        // re-add them to the player
+        for (O2Effect effect : savedEffects.values()) {
+            addEffect(effect);
         }
 
-        common.printDebugMessage("Applying effects for " + player.getDisplayName(), null, null, false);
-
-        for (Entry<O2EffectType, Integer> entry : savedEffects.entrySet()) {
-            O2EffectType effectType = entry.getKey();
-            int duration = entry.getValue();
-
-            Class<?> effectClass = effectType.getClassName();
-
-            O2Effect effect;
-            try {
-                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration, pid);
-            }
-            catch (Exception e) {
-                common.printDebugMessage("O2Effects.onJoin: failed to create class for " + effectType, e, null, true);
-
-                continue;
-            }
-
-            if (effectType.isEnabled()) {
-                activeEffects.put(effectType, effect);
-                common.printDebugMessage("   added " + effectType, null, null, false);
-            }
-        }
-
-        effectsData.updatePlayerActiveEffects(pid, activeEffects);
+        // remove them from the saved effects list by updating saved effects with an empty list
+        effectsData.updatePlayerSavedEffects(pid, new HashMap<>());
     }
 
     /**
@@ -793,21 +777,34 @@ public class O2Effects implements Listener {
      *
      * <p>When a player logs out, this method persists all their currently active effects to saved storage.
      * Each active effect's type and remaining duration are recorded, allowing the effects to be
-     * restored when the player logs back in via the onJoin() method. Effects that have no duration
-     * or have been killed will not be saved. This method is called by the player management system
-     * when a player leaves the server.</p>
+     * restored when the player logs back in via the onJoin() method. Effects that have been killed will not be saved.
+     * This method is called by the player management system when a player leaves the server.</p>
      *
      * @param pid the unique ID of the departing player
      */
     public synchronized void onQuit(@NotNull UUID pid) {
-        Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
-        Map<O2EffectType, Integer> savedEffects = new HashMap<>();
+        moveActiveEffectsToSaved(pid);
+    }
 
+    /**
+     * Move all the active events for a player to saved events.
+     *
+     * @param pid the player ID
+     */
+    private void moveActiveEffectsToSaved(@NotNull UUID pid) {
+        Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
+        if (activeEffects.isEmpty())
+            return;
+
+        effectsData.updatePlayerSavedEffects(pid, activeEffects);
+
+        HashMap<O2EffectType, O2Effect> savedEffects = new HashMap<>();
         for (Entry<O2EffectType, O2Effect> entry : activeEffects.entrySet()) {
-            savedEffects.put(entry.getKey(), entry.getValue().duration);
+            if (!entry.getValue().isKilled())
+                savedEffects.put(entry.getKey(), entry.getValue());
         }
 
-        effectsData.updatePlayerSavedEffects(pid, savedEffects);
+        effectsData.updatePlayerActiveEffects(pid, savedEffects);
     }
 
     /**
@@ -825,58 +822,204 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Serialize all saved effects for a player to string format.
+     * Persist all active and saved effects to disk in JSON format.
      *
-     * <p>Converts a player's saved effects into a string map suitable for persistence and storage.
-     * Each effect type is prefixed with "Effect_" to distinguish effect entries from other persisted data.
-     * The effect type name and duration are both stored as strings for serialization. This method is
-     * typically called when saving player data to persistent storage.</p>
-     *
-     * @param pid the unique ID of the player whose effects should be serialized
-     * @return a map of serialized effect strings (keys like "Effect_EFFECTNAME", values are durations as strings)
+     * <p>Serializes all magical effects currently active across all players (both online and offline)
+     * and writes them to the effects JSON file for persistent storage. This is typically called during
+     * server shutdown or periodic autosaves to ensure no effects are lost if the server crashes.</p>
      */
-    @NotNull
-    public Map<String, String> serializeEffects(@NotNull UUID pid) {
-        Map<String, String> serialized = new HashMap<>();
+    public void saveEffects() {
+        List<Map<String, String>> effects = serializeEffects();
 
-        Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
-        for (Entry<O2EffectType, Integer> entry : savedEffects.entrySet()) {
-            serialized.put(effectLabelPrefix + entry.getKey().toString(), entry.getValue().toString());
-        }
-
-        return serialized;
+        GsonDAO gsonLayer = new GsonDAO();
+        gsonLayer.writeSaveData(effects, GsonDAO.o2EffectsJSONFile);
     }
 
     /**
-     * Deserialize an effect from string representation and add it to the player's saved effects.
+     * Load all saved effects from disk on server startup.
      *
-     * <p>Reconstructs an effect from its serialized string form and adds it to the player's saved effects
-     * map. The effect string is expected to have the "Effect_" prefix which is stripped to retrieve the
-     * actual effect type name. If the duration string cannot be parsed as an integer or the effect type
-     * is not found, the deserialization fails silently without throwing exceptions. This method is
-     * typically called when loading player data from persistent storage.</p>
-     *
-     * @param pid            the unique ID of the player to deserialize effects for
-     * @param effectsString  the serialized effect string (format: "Effect_EFFECTNAME")
-     * @param durationString the effect duration as a string (must parse to valid integer)
+     * <p>Reads the effects JSON file and reconstructs all previously saved effects, restoring them to the
+     * game state. Each effect is deserialized and added back to its target player. If the file doesn't exist
+     * or is empty, logs an informational message and continues without error. This is called by onEnable()
+     * during server initialization.</p>
      */
-    public void deserializeEffect(@NotNull UUID pid, @NotNull String effectsString, @NotNull String durationString) {
-        Map<O2EffectType, Integer> savedEffects = effectsData.getPlayerSavedEffects(pid);
+    public void loadEffects() {
+        GsonDAO gsonLayer = new GsonDAO();
+        List<Map<String, String>> effects = gsonLayer.readSavedDataListMap(GsonDAO.o2EffectsJSONFile);
 
-        String effectName = effectsString.replaceFirst(effectLabelPrefix, "");
-        Integer duration = Ollivanders2API.common.integerFromString(durationString);
+        int count = 0;
 
-        if (duration != null) {
-            try {
-                O2EffectType effectType = O2EffectType.valueOf(effectName);
-                savedEffects.put(effectType, duration);
-            }
-            catch (Exception e) {
-                common.printDebugMessage("Failed to deserialize effect " + effectName, null, null, false);
+        if (effects == null) {
+            p.getLogger().info("No saved effects.");
+            return;
+        }
+
+        for (Map<String, String> effectAttributes : effects) {
+            O2Effect effect = deserializeEffect(effectAttributes);
+
+            if (effect != null) {
+                addEffect(effect);
+                count = count + 1;
             }
         }
 
-        effectsData.updatePlayerSavedEffects(pid, savedEffects);
+        p.getLogger().info("Loaded " + count + " saved effects.");
+    }
+
+
+    /**
+     * Serialize all active and saved effects across all players in the game.
+     *
+     * <p>Converts all magical effects currently active on all online players and all saved effects
+     * for offline players into a serialized list format suitable for persistence and storage.
+     * Each effect is individually serialized into a map with its type and remaining duration as strings.
+     * This method iterates through all effect maps (both active and saved) and serializes each effect.
+     * This is typically called when saving global game state or during server shutdown to persist
+     * all active effects.</p>
+     *
+     * @return a list of serialized effect maps, where each map contains effect type and duration as strings
+     */
+    @NotNull
+    public List<Map<String, String>> serializeEffects() {
+        List<Map<String, String>> serializedEffects = new ArrayList<>();
+
+        // get all effects
+        List<Map<O2EffectType, O2Effect>> allEffects = getAllEffects();
+        for (Map<O2EffectType, O2Effect> effectMap : allEffects) {
+            for (O2Effect effect : effectMap.values()) {
+                Map<String, String> serializedEffect = serializeEffect(effect);
+
+                serializedEffects.add(serializedEffect);
+            }
+        }
+
+        return serializedEffects;
+    }
+
+    /**
+     * Get a list of all active and saved effects across all players.
+     *
+     * <p>Retrieves effect maps for all players in the game, returning either active effects
+     * for online players or saved effects for offline players. A player has either active
+     * or saved effects at any given time, never both. This is used for global serialization
+     * and persistence operations.</p>
+     *
+     * @return a list of effect maps, one per player, containing either active or saved effects
+     */
+    @NotNull
+    private List<Map<O2EffectType, O2Effect>> getAllEffects() {
+        List<Map<O2EffectType, O2Effect>> effects = new ArrayList<>();
+
+        for (UUID playerID : Ollivanders2API.getPlayers().getPlayerIDs()) {
+            Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(playerID);
+
+            if (!activeEffects.isEmpty()) {
+                effects.add(activeEffects);
+            }
+            // a player has either active or saved effects, never both
+            else
+                // either put the saved effects or, if the player has no effects, an empty map
+                effects.add(effectsData.getPlayerSavedEffects(playerID));
+        }
+
+        return effects;
+    }
+
+    /**
+     * Serialize a single effect to a string attribute map.
+     *
+     * <p>Converts an O2Effect object into a map of string key-value pairs suitable for
+     * persistence. The map includes the effect type, target player ID, permanent status, and
+     * remaining duration. This is used during global serialization for saving effects to disk.</p>
+     *
+     * @param effect the O2Effect object to serialize (must not be null)
+     * @return a map of string attributes with keys: Effect_type, Effect_target_pid, Effect_is_permanent, Effect_duration
+     */
+    private Map<String, String> serializeEffect(@NotNull O2Effect effect) {
+        Map<String, String> effectAttributes = new HashMap<>();
+
+        // populate the map with all the effect data
+        effectAttributes.put(effectTypeLabel, effect.effectType.toString());
+        effectAttributes.put(effectPIDLabel, effect.getTargetID().toString());
+        effectAttributes.put(effectPermanentLabel, Boolean.toString(effect.isPermanent()));
+        effectAttributes.put(effectDurationLabel, Integer.toString(effect.getRemainingDuration()));
+
+        return effectAttributes;
+    }
+
+    /**
+     * Deserialize an effect from a string attribute map.
+     *
+     * <p>Reconstructs an O2Effect object from its serialized string representation. Parses
+     * the effect type, target player ID, duration, and permanent status from the attribute map.
+     * All required fields must be present for successful deserialization; if any are missing or
+     * invalid, returns null. This is used when loading effects from persistent storage.</p>
+     *
+     * @param effectAttributes a map of effect attributes (type, PID, permanent flag, duration) expected keys: Effect_type, Effect_target_pid, Effect_is_permanent, Effect_duration
+     * @return the reconstructed O2Effect object, or null if deserialization fails due to missing or invalid fields
+     */
+    @Nullable
+    public O2Effect deserializeEffect(@NotNull Map<String, String> effectAttributes) {
+        UUID targetID = null;
+        Integer duration = null;
+        Boolean isPermanent = null;
+        O2EffectType effectType = null;
+
+        for (Map.Entry<String, String> entry : effectAttributes.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            try {
+                switch (key) {
+                    case String s when s.equals(effectTypeLabel) -> effectType = O2EffectType.valueOf(value);
+                    case String s when s.equals(effectDurationLabel) -> duration = Integer.valueOf(value);
+                    case String s when s.equals(effectPermanentLabel) -> isPermanent = Boolean.valueOf(value);
+                    case String s when s.equals(effectPIDLabel) -> targetID = UUID.fromString(value);
+                    default -> {
+                    } // ignore unknown fields
+                }
+            }
+            catch (Exception e) {
+                common.printDebugMessage("Failure reading saved effect data.", e, null, true);
+            }
+        }
+
+        // only try to create the effect if all required fields were present
+        if (effectType != null && targetID != null && duration != null && isPermanent != null) {
+            return createEffectFromSavedData(effectType, targetID, duration, isPermanent);
+        }
+
+        return null;
+    }
+
+    /**
+     * Create an effect instance from saved data using reflection.
+     *
+     * <p>Dynamically instantiates an effect class using reflection based on the effect type.
+     * Calls the effect constructor with the provided parameters: plugin reference, duration in ticks,
+     * permanent flag, and target player ID. If instantiation fails due to missing constructor or
+     * other reflection errors, logs the error and returns null.</p>
+     *
+     * @param effectType  the O2EffectType enum value specifying which effect class to instantiate (must not be null)
+     * @param targetID    the unique ID of the player affected by this effect (must not be null)
+     * @param duration    the remaining duration of the effect in game ticks (must not be null)
+     * @param isPermanent true if the effect should not expire, false if it has a limited duration (must not be null)
+     * @return the instantiated O2Effect object, or null if creation fails due to reflection errors or invalid parameters
+     */
+    @Nullable
+    private O2Effect createEffectFromSavedData(@NotNull O2EffectType effectType, @NotNull UUID targetID, @NotNull Integer duration, @NotNull Boolean isPermanent) {
+        O2Effect effect;
+
+        Class<?> effectClass = effectType.getClassName();
+        try {
+            effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, boolean.class, UUID.class).newInstance(p, duration, isPermanent, targetID);
+        }
+        catch (Exception e) {
+            common.printDebugMessage("Exception trying to create new instance of " + effectType, e, null, true);
+            return null;
+        }
+
+        return effect;
     }
 
     /**
@@ -899,6 +1042,15 @@ public class O2Effects implements Listener {
             return;
 
         UUID pid = effect.getTargetID();
+
+        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(pid);
+        if (o2p == null)
+            return;
+
+        if (!o2p.isOnline()) {
+            addSavedEffect(effect);
+            return;
+        }
 
         Map<O2EffectType, O2Effect> playerEffects = effectsData.getPlayerActiveEffects(pid);
 
@@ -943,6 +1095,24 @@ public class O2Effects implements Listener {
                 }
             }.runTaskLater(p, 5);
         }
+    }
+
+    /**
+     * Add an effect to a player's saved effects for offline storage.
+     *
+     * <p>Stores an effect in the saved effects map for players who are currently offline.
+     * When the player rejoins the server, these saved effects will be restored via onJoin().
+     * This is called by addEffect() when a player is offline and an effect is applied to them.</p>
+     *
+     * @param effect the O2Effect object to save for the offline player (must not be null)
+     */
+    private void addSavedEffect(@NotNull O2Effect effect) {
+        UUID pid = effect.getTargetID();
+
+        Map<O2EffectType, O2Effect> savedEffects = effectsData.getPlayerSavedEffects(pid);
+        savedEffects.put(effect.effectType, effect);
+
+        effectsData.updatePlayerSavedEffects(pid, savedEffects);
     }
 
     /**
@@ -1265,7 +1435,7 @@ public class O2Effects implements Listener {
             O2Effect effect;
 
             try {
-                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, 1200, player.getUniqueId());
+                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, boolean.class, UUID.class).newInstance(p, 1200, false, player.getUniqueId());
             }
             catch (Exception e) {
                 sender.sendMessage(Ollivanders2.chatColor + "Failed to add effect " + effectType + " to " + player.getName() + ".\n");

@@ -28,12 +28,13 @@ public class LUCK extends PotionEffectSuper {
      * rates using Minecraft's LUCK potion effect type. The effect is detected by information spells
      * as the target "feels lucky" and notifies the player "You feel lucky."</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
-     * @param pid      the unique ID of the player to bless with luck
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param isPermanent ignored - potion effects cannot be permanent
+     * @param pid         the unique ID of the player to bless with luck
      */
-    public LUCK(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public LUCK(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         strength = 1;
 

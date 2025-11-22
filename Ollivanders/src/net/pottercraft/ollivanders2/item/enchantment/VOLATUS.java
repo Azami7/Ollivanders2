@@ -23,7 +23,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * {@link net.pottercraft.ollivanders2.spell.VOLATUS}
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Broomstick">https://harrypotter.fandom.com/wiki/Broomstick</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Broomstick">https://harrypotter.fandom.com/wiki/Broomstick</a>
  */
 public class VOLATUS extends Enchantment {
     /**
@@ -144,12 +144,12 @@ public class VOLATUS extends Enchantment {
 
         // do they have a broom in either hand?
         if (isHoldingEnchantedItem(player)) {
-            common.printDebugMessage(player.getDisplayName() + " is holding a broom", null, null, false);
-            BROOM_FLYING effect = new BROOM_FLYING(p, 5, player.getUniqueId());
+            common.printDebugMessage(player.displayName() + " is holding a broom", null, null, false);
+            BROOM_FLYING effect = new BROOM_FLYING(p, 5, true, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
         }
         else {
-            common.printDebugMessage(player.getDisplayName() + " is not holding a broom", null, null, false);
+            common.printDebugMessage(player.displayName() + " is not holding a broom", null, null, false);
             Ollivanders2API.getPlayers().playerEffects.removeEffect(player.getUniqueId(), O2EffectType.BROOM_FLYING);
         }
     }

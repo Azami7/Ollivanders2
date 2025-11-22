@@ -39,7 +39,7 @@ public class SHRINKING_SOLUTION extends O2Potion {
     @Override
     public void drink(@NotNull Player player) {
         // add the swelling effect
-        SHRINKING effect = new SHRINKING(p, duration, player.getUniqueId());
+        SHRINKING effect = new SHRINKING(p, duration, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
         player.sendMessage(Ollivanders2.chatColor + "You feel yourself compressing.");

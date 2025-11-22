@@ -137,7 +137,7 @@ public abstract class O2Effect {
      * @param durationInTicks the duration in game ticks. Negative values create permanent effects
      * @param pid             the unique ID of the target player for this effect
      */
-    public O2Effect(@NotNull Ollivanders2 plugin, int durationInTicks, @NotNull UUID pid) {
+    public O2Effect(@NotNull Ollivanders2 plugin, int durationInTicks, @NotNull boolean isPermanent, @NotNull UUID pid) {
         p = plugin;
         common = new Ollivanders2Common(p);
 

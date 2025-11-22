@@ -19,7 +19,7 @@ import org.jetbrains.annotations.Nullable;
  * <p>
  * {@link net.pottercraft.ollivanders2.spell.FLAGRANTE}
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Flagrante_Curse">https://harrypotter.fandom.com/wiki/Flagrante_Curse</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Flagrante_Curse">https://harrypotter.fandom.com/wiki/Flagrante_Curse</a>
  */
 public class FLAGRANTE extends Enchantment {
     /**
@@ -115,7 +115,7 @@ public class FLAGRANTE extends Enchantment {
      */
     void checkFlagranteStatus(Player player) {
         if (isHoldingEnchantedItem(player)) {
-            FLAGRANTE_BURNING burning = new FLAGRANTE_BURNING(p, 0, player.getUniqueId());
+            FLAGRANTE_BURNING burning = new FLAGRANTE_BURNING(p, 5, true, player.getUniqueId());
             burning.addDamage(damage);
 
             Ollivanders2API.getPlayers().playerEffects.addEffect(burning);

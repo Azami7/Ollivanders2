@@ -27,12 +27,13 @@ public class ANIMAGUS_INCANTATION extends O2Effect {
      * <p>Creates a temporary effect that marks the player as actively reciting the Animagus spell.
      * The duration parameter specifies how long the incantation remains active before expiring.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the incantation state in game ticks
-     * @param pid      the unique ID of the player reciting the Animagus incantation
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the incantation state in game ticks
+     * @param isPermanent ignored - animagus incantation is always temporary
+     * @param pid         the unique ID of the player reciting the Animagus incantation
      */
-    public ANIMAGUS_INCANTATION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public ANIMAGUS_INCANTATION(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, false, pid);
 
         effectType = O2EffectType.ANIMAGUS_INCANTATION;
     }

@@ -156,7 +156,7 @@ public abstract class AddO2Effect extends O2Spell {
 
             O2Effect effect;
             try {
-                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, UUID.class).newInstance(p, duration * strengthModifier, target.getUniqueId());
+                effect = (O2Effect) effectClass.getConstructor(Ollivanders2.class, int.class, boolean.class, UUID.class).newInstance(p, duration * strengthModifier, permanent, target.getUniqueId());
             }
             catch (Exception e) {
                 common.printDebugMessage("Failed to create class for " + effectType, e, null, true);

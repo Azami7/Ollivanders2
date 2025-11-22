@@ -27,12 +27,13 @@ public class HEAL extends PotionEffectSuper {
      * Minecraft's INSTANT_HEALTH potion effect type. The effect is detected by
      * information spells as the target "feels healthy".</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
-     * @param pid      the unique ID of the player to heal
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param isPermanent ignored - potion effects cannot be permanent
+     * @param pid         the unique ID of the player to heal
      */
-    public HEAL(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public HEAL(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         strength = 1;
 

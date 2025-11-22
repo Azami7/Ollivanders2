@@ -28,12 +28,13 @@ public class UNLUCK extends PotionEffectSuper {
      * (Legilimens) and information spells (Informous) to "feels unlucky", and notifies the player
      * "You feel unlucky." when the effect is applied.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
-     * @param pid      the unique ID of the player to curse with unluck
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
+     * @param isPermanent ignored - potion effects cannot be permanent
+     * @param pid         the unique ID of the player to curse with unluck
      */
-    public UNLUCK(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public UNLUCK(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         strength = 1;
 

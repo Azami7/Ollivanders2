@@ -58,12 +58,13 @@ public class DANCING_FEET extends O2Effect {
      * state and teleporting them with random rotations. Sets information detection text to "cannot control their feet"
      * and affected player text to "You start dancing" to notify the player they are affected.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect in game ticks
-     * @param pid      the unique ID of the player to affect with dancing
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to affect with dancing
      */
-    public DANCING_FEET(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public DANCING_FEET(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.DANCING_FEET;
         informousText = "cannot control their feet.";

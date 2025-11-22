@@ -79,17 +79,17 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
      * The constructor retrieves the animal form and color variant from the target player's O2Player data. If the
      * O2Player cannot be found or the form is null, the effect is killed.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration not used - animagus effect is always permanent
-     * @param pid      the unique ID of the player to transform
+     * @param plugin      a callback to the MC plugin
+     * @param duration    not used - animagus effect is always permanent
+     * @param isPermanent ignored - animagus effect is always permanent
+     * @param pid         the unique ID of the player to transform
      */
-    public ANIMAGUS_EFFECT(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public ANIMAGUS_EFFECT(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, true, pid);
 
         effectType = O2EffectType.ANIMAGUS_EFFECT;
 
         transformed = false;
-        permanent = true;
 
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(pid);
         if (o2p == null) {

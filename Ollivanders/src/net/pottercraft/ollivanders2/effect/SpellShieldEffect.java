@@ -97,12 +97,13 @@ public abstract class SpellShieldEffect extends O2Effect {
      * player entity and kills the effect if the player is not found online. Subclasses should set shield
      * configuration fields (radius, flairPulse, flairOnSpellImpact, particles) during initialization.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the shield in game ticks
-     * @param pid      the unique ID of the player to protect
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the shield in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to protect
      */
-    public SpellShieldEffect(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public SpellShieldEffect(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         player = p.getServer().getPlayer(pid);
         if (player == null) {

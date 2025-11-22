@@ -45,12 +45,13 @@ public class FLYING extends O2Effect {
      * expiring. Smoke effects are disabled by default (doSmokeEffect = false) but can be enabled by subclasses
      * for visually distinctive flight mechanics.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect in game ticks
-     * @param pid      the unique ID of the player to grant flight
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to grant flight
      */
-    public FLYING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public FLYING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.FLYING;
     }
@@ -88,7 +89,7 @@ public class FLYING extends O2Effect {
                     target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
             }
             else {
-                common.printDebugMessage("Adding flight for " + target.getDisplayName(), null, null, false);
+                common.printDebugMessage("Adding flight for " + target.displayName(), null, null, false);
                 target.setAllowFlight(false);
             }
         }
@@ -113,7 +114,7 @@ public class FLYING extends O2Effect {
         if (player != null) {
             // if the player is not an admin, remove flight ability
             if (!player.hasPermission("Ollivanders2.admin")) {
-                common.printDebugMessage("Removing flight for " + player.getDisplayName(), null, null, false);
+                common.printDebugMessage("Removing flight for " + player.displayName(), null, null, false);
                 player.setAllowFlight(false);
                 player.setFlying(false);
             }

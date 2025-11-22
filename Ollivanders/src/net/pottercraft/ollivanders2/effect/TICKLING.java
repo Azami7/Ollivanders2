@@ -29,12 +29,13 @@ public class TICKLING extends O2Effect {
      * information spells and player notifications are configured. If the player is offline when the
      * effect is created, the effect is immediately terminated.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the tickling effect in game ticks
-     * @param pid      the unique ID of the player to tickle
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the tickling effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to tickle
      */
-    public TICKLING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public TICKLING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.TICKLING;
         informousText = "is doubled-over from tickling.";

@@ -27,12 +27,13 @@ public class HARM_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper {
      * effects by 25% (strength 0.25). The duration parameter is accepted for API consistency
      * with other effects but is not used by antidote effects.</p>
      *
-     * @param plugin   a reference to the plugin for logging
-     * @param duration ignored - antidotes apply immediately and are resolved
-     * @param pid      the unique ID of the player to treat with the antidote
+     * @param plugin      a reference to the plugin for logging
+     * @param duration    ignored - antidotes apply immediately and are resolved
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to treat with the antidote
      */
-    public HARM_ANTIDOTE_LESSER(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public HARM_ANTIDOTE_LESSER(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.HARM_ANTIDOTE_LESSER;
         potionEffectType = PotionEffectType.INSTANT_DAMAGE;

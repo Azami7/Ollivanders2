@@ -5,7 +5,6 @@ import net.pottercraft.ollivanders2.effect.SLEEPING;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.Color;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -53,7 +52,7 @@ public class DRAUGHT_OF_LIVING_DEATH extends O2Potion {
             player.sendMessage(Ollivanders2.chatColor + "You yawn, close your eyes for a moment, then feel fine.");
         }
         else {
-            SLEEPING effect = new SLEEPING(p, 5, player.getUniqueId());
+            SLEEPING effect = new SLEEPING(p, 5, true, player.getUniqueId());
             effect.setPermanent(true);
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 

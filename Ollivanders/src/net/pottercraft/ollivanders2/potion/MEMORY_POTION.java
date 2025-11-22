@@ -41,7 +41,7 @@ public final class MEMORY_POTION extends O2Potion {
      * @param player the player who drank the potion
      */
     public void drink(@NotNull Player player) {
-        FAST_LEARNING effect = new FAST_LEARNING(p, duration, player.getUniqueId());
+        FAST_LEARNING effect = new FAST_LEARNING(p, duration, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
         player.sendMessage(Ollivanders2.chatColor + "You feel more alert.");

@@ -327,14 +327,6 @@ public class O2Players {
             playerData.put(yearLabel, year.toString());
 
             //
-            // Effects
-            //
-            Map<String, String> effects = Ollivanders2API.getPlayers().playerEffects.serializeEffects(pid);
-            for (Entry<String, String> entry : effects.entrySet()) {
-                playerData.put(entry.getKey(), entry.getValue());
-            }
-
-            //
             // Spell Experience
             //
             Map<O2SpellType, Integer> knownSpells = o2p.getKnownSpells();
@@ -462,8 +454,6 @@ public class O2Players {
                             o2p.setYear(year);
                     }
                 }
-                else if (label.startsWith(O2Effects.effectLabelPrefix))
-                    playerEffects.deserializeEffect(pid, label, value);
                 else if (label.startsWith(spellLabelPrefix)) {
                     String spellName = label.replaceFirst(spellLabelPrefix, "");
                     deserializeSpell(o2p, spellName, value);

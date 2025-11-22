@@ -31,12 +31,13 @@ public class AWAKE extends O2Effect {
      * <p>Creates a temporary effect that prevents the player from sleeping for the specified duration.
      * Sets both information and mind-reading detection texts to indicate the player is unnaturally alert.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the awake state in game ticks
-     * @param pid      the unique ID of the player to keep awake
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the awake state in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to keep awake
      */
-    public AWAKE(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public AWAKE(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.AWAKE;
         informousText = legilimensText = "is unnaturally alert";

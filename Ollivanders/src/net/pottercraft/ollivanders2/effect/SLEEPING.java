@@ -46,17 +46,16 @@ public class SLEEPING extends O2Effect {
      * vocalizations will begin, and they will receive a notification. The sleep persists until the
      * duration expires or the AWAKE effect is applied to break the sleep.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the sleep effect in game ticks
-     * @param pid      the unique ID of the player to put to sleep
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the sleep effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to put to sleep
      */
-    public SLEEPING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public SLEEPING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.SLEEPING;
         informousText = legilimensText = "is affected by an unnatural sleep";
-
-        permanent = false;
     }
 
     /**
@@ -107,10 +106,10 @@ public class SLEEPING extends O2Effect {
         target.teleport(newLoc);
 
         // add sleep speech
-        Ollivanders2API.getPlayers().playerEffects.addEffect(new SLEEP_SPEECH(p, -1, targetID));
+        Ollivanders2API.getPlayers().playerEffects.addEffect(new SLEEP_SPEECH(p, -1, true, targetID));
 
         // immobilize them
-        Ollivanders2API.getPlayers().playerEffects.addEffect(new IMMOBILIZE(p, -1, targetID));
+        Ollivanders2API.getPlayers().playerEffects.addEffect(new IMMOBILIZE(p, -1, true, targetID));
 
         sleeping = true;
         target.sendMessage(Ollivanders2.chatColor + "You fall in to a deep sleep.");

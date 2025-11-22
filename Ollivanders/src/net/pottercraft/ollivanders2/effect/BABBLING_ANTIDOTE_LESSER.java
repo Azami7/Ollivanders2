@@ -34,12 +34,13 @@ public class BABBLING_ANTIDOTE_LESSER extends O2EffectAntidoteSuper {
      * for antidote processing. The antidote immediately processes and removes itself after applying
      * its effect to any active BABBLING effect on the target.</p>
      *
-     * @param plugin   a reference to the plugin for logging
-     * @param duration ignored - antidotes apply immediately and do not persist
-     * @param pid      the unique ID of the target player
+     * @param plugin      a reference to the plugin for logging
+     * @param duration    ignored - antidotes apply immediately and do not persist
+     * @param isPermanent ignored - antidotes are immediately applied and resolved
+     * @param pid         the unique ID of the target player
      */
-    public BABBLING_ANTIDOTE_LESSER(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public BABBLING_ANTIDOTE_LESSER(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.BABBLING_ANTIDOTE_LESSER;
         o2EffectType = O2EffectType.BABBLING;

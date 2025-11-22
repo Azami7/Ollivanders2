@@ -13,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * Silences a player for a duration depending on the spell's level. The target player can only use nonverbal spells.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Silencing_Charm">https://harrypotter.fandom.com/wiki/Silencing_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Silencing_Charm">https://harrypotter.fandom.com/wiki/Silencing_Charm</a>
  */
 public final class SILENCIO extends O2Spell {
     /**
@@ -91,7 +91,7 @@ public final class SILENCIO extends O2Spell {
             if (target.getUniqueId() == player.getUniqueId())
                 continue;
 
-            MUTED_SPEECH effect = new MUTED_SPEECH(p, duration, target.getUniqueId());
+            MUTED_SPEECH effect = new MUTED_SPEECH(p, duration, false, target.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
             kill();

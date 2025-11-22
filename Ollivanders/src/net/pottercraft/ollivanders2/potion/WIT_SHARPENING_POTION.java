@@ -44,7 +44,7 @@ public final class WIT_SHARPENING_POTION extends O2Potion {
      */
     @Override
     public void drink(@NotNull Player player) {
-        IMPROVED_BOOK_LEARNING effect = new IMPROVED_BOOK_LEARNING(p, duration, player.getUniqueId());
+        IMPROVED_BOOK_LEARNING effect = new IMPROVED_BOOK_LEARNING(p, duration, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
         player.sendMessage(Ollivanders2.chatColor + "You feel ready to learn.");

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Full Body-Bind Curse - Used to temporarily bind the victim's body in a position much like that of a soldier at attention.
  *
- * @see <a href = "http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse">http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse</a>
+ * @see <a href="http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse">http://harrypotter.wikia.com/wiki/Full_Body-Bind_Curse</a>
  */
 public class PETRIFICUS_TOTALUS extends O2Spell {
     /**
@@ -74,7 +74,7 @@ public class PETRIFICUS_TOTALUS extends O2Spell {
             if (durationInSeconds > maxDurationInSeconds)
                 durationInSeconds = maxDurationInSeconds;
 
-            IMMOBILIZE immobilize = new IMMOBILIZE(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, target.getUniqueId());
+            IMMOBILIZE immobilize = new IMMOBILIZE(p, durationInSeconds * Ollivanders2Common.ticksPerSecond, false, target.getUniqueId());
 
             Ollivanders2API.getPlayers().playerEffects.addEffect(immobilize);
 

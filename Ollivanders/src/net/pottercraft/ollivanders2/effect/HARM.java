@@ -28,12 +28,13 @@ public class HARM extends PotionEffectSuper {
      * Minecraft's INSTANT_DAMAGE potion effect type. The effect is detected by
      * information spells as the target "feels unwell".</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
-     * @param pid      the unique ID of the player to harm
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param isPermanent ignored - potion effects cannot be permanent
+     * @param pid         the unique ID of the player to harm
      */
-    public HARM(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public HARM(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.HARM;
         potionEffectType = PotionEffectType.INSTANT_DAMAGE;

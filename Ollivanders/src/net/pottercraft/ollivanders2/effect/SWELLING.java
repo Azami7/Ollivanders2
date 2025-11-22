@@ -32,12 +32,13 @@ public class SWELLING extends PlayerChangeSizeSuper {
      * The effect applies immediately, causing the player to appear physically larger in the game world
      * with a correspondingly expanded hitbox.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the swelling effect in game ticks
-     * @param pid      the unique ID of the player to enlarge
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the swelling effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to enlarge
      */
-    public SWELLING(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public SWELLING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.SWELLING;
         scaleMultiplier = 2; // increase the player's by double

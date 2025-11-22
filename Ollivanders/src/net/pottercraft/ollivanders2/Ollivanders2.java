@@ -23,7 +23,6 @@ import net.pottercraft.ollivanders2.spell.APPARATE;
 import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells;
 import org.bukkit.World;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
 import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.house.O2HouseType;
@@ -118,97 +117,97 @@ public class Ollivanders2 extends JavaPlugin {
 
     // file config
     /**
-     * https://https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-dropoff
+     * See <a href="https://https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-dropoff">https://https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-dropoff</a>
      */
     public static int chatDropoff = 15;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-color
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-color">https://github.com/Azami7/Ollivanders2/wiki/Configuration#chat-color</a>
      */
     public static ChatColor chatColor;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#log-in-message
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#log-in-message">https://github.com/Azami7/Ollivanders2/wiki/Configuration#log-in-message</a>
      */
     public static boolean showLogInMessage;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning">https://github.com/Azami7/Ollivanders2/wiki/Configuration#book-learning</a>
      */
     public static boolean bookLearning;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#max-spell-level
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#max-spell-level">https://github.com/Azami7/Ollivanders2/wiki/Configuration#max-spell-level</a>
      */
     public static boolean maxSpellLevel;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#non-verbal-spell-casting
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#non-verbal-spell-casting">https://github.com/Azami7/Ollivanders2/wiki/Configuration#non-verbal-spell-casting</a>
      */
     public static boolean enableNonVerbalSpellCasting;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-journal
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-journal">https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-journal</a>
      */
     public static boolean useSpellJournal;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#hostile-mob-animagi
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#hostile-mob-animagi">https://github.com/Azami7/Ollivanders2/wiki/Configuration#hostile-mob-animagi</a>
      */
     public static boolean useHostileMobAnimagi;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#death-exp-loss
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#death-exp-loss">https://github.com/Azami7/Ollivanders2/wiki/Configuration#death-exp-loss</a>
      */
     public static boolean enableDeathExpLoss;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#apparate-locations
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#apparate-locations">https://github.com/Azami7/Ollivanders2/wiki/Configuration#apparate-locations</a>
      */
     public static boolean apparateLocations;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#divination-1
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#divination-1">https://github.com/Azami7/Ollivanders2/wiki/Configuration#divination-1</a>
      */
     public static int divinationMaxDays = 4;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#years
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#years">https://github.com/Azami7/Ollivanders2/wiki/Configuration#years</a>
      */
     public static boolean useYears;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#debug-mode
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#debug-mode">https://github.com/Azami7/Ollivanders2/wiki/Configuration#debug-mode</a>
      */
     public static boolean debug;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#override-mc-version-check
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#override-mc-version-check">https://github.com/Azami7/Ollivanders2/wiki/Configuration#override-mc-version-check</a>
      */
     public static boolean overrideVersionCheck;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#floo-powder
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#floo-powder">https://github.com/Azami7/Ollivanders2/wiki/Configuration#floo-powder</a>
      */
     public static Material flooPowderMaterial;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#broomstick
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#broomstick">https://github.com/Azami7/Ollivanders2/wiki/Configuration#broomstick</a>
      */
     public static Material broomstickMaterial;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#witch-wand-drop
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#witch-wand-drop">https://github.com/Azami7/Ollivanders2/wiki/Configuration#witch-wand-drop</a>
      */
     public static boolean enableWitchDrop;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#hourly-backup
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#hourly-backup">https://github.com/Azami7/Ollivanders2/wiki/Configuration#hourly-backup</a>
      */
     public static boolean hourlyBackup;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#archive-previous-backup
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#archive-previous-backup">https://github.com/Azami7/Ollivanders2/wiki/Configuration#archive-previous-backup</a>
      */
     public static boolean archivePreviousBackup;
 
@@ -218,7 +217,7 @@ public class Ollivanders2 extends JavaPlugin {
     public static boolean useTranslations;
 
     /**
-     * https://github.com/Azami7/Ollivanders2/wiki/Configuration#animagus-transformation-rules
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#animagus-transformation-rules">https://github.com/Azami7/Ollivanders2/wiki/Configuration#animagus-transformation-rules</a>
      */
     public static boolean useStrictAnimagusConditions;
 
@@ -269,8 +268,11 @@ public class Ollivanders2 extends JavaPlugin {
             prophecies.saveProphecies();
         if (houses != null)
             houses.saveHouses();
-        if (players != null)
+        if (players != null) {
             players.saveO2Players();
+            if (players.playerEffects != null)
+                players.playerEffects.saveEffects();
+        }
 
         APPARATE.saveApparateLocations();
     }
@@ -1300,7 +1302,7 @@ public class Ollivanders2 extends JavaPlugin {
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(pid);
 
         if (o2p == null) {
-            Ollivanders2API.getPlayers().addPlayer(pid, player.getDisplayName());
+            Ollivanders2API.getPlayers().addPlayer(pid, player.displayName().toString());
 
             o2p = Ollivanders2API.getPlayers().getPlayer(pid);
         }

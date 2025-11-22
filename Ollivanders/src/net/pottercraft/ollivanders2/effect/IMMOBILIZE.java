@@ -41,12 +41,13 @@ public class IMMOBILIZE extends O2Effect {
      * <p>Creates an effect that completely paralyzes the target player, preventing all movement
      * and interaction. Sets the detection text for mind-reading spells to "is unable to move".</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the immobilization effect in game ticks
-     * @param pid      the unique ID of the player to immobilize
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the immobilization effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to immobilize
      */
-    public IMMOBILIZE(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public IMMOBILIZE(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.IMMOBILIZE;
         informousText = legilimensText = "is unable to move";

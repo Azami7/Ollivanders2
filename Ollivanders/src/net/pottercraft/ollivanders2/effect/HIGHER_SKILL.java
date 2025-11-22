@@ -36,12 +36,13 @@ public class HIGHER_SKILL extends O2Effect {
      * for its presence to apply an effective level boost. Sets the detection text for mind-reading
      * spells to "feels more skillful than usual".</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect in game ticks
-     * @param pid      the unique ID of the player to grant higher skill
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to grant higher skill
      */
-    public HIGHER_SKILL(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public HIGHER_SKILL(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.HIGHER_SKILL;
         legilimensText = "feels more skillful than usual";

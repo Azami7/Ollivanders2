@@ -35,12 +35,13 @@ public class BLINDNESS extends PotionEffectSuper {
      * by the parent class (baseTime × random multiplier between 1-5). Sets strength to 1 for full
      * blindness amplification and detection text to "cannot see".</p>
      *
-     * @param plugin   a callback to the plugin
-     * @param duration the duration in ticks, snapped to min of 2 minutes, max of 10 minutes
-     * @param pid      the unique ID of the player to blind
+     * @param plugin      a callback to the plugin
+     * @param duration    the duration in ticks, snapped to min of 2 minutes, max of 5 minutes
+     * @param isPermanent ignored - potion effects cannot be permanent
+     * @param pid         the unique ID of the player to blind
      */
-    public BLINDNESS(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public BLINDNESS(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.BLINDNESS;
         potionEffectType = PotionEffectType.BLINDNESS;

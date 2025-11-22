@@ -50,7 +50,7 @@ public class PROTEGO extends SpellShieldEffect {
     /**
      * The maximum distance for an arrow, which is the furthest flying projectile.
      *
-     * @see <a href = "https://minecraft.fandom.com/wiki/Arrow">https://minecraft.fandom.com/wiki/Arrow</a>
+     * @see <a href="https://minecraft.fandom.com/wiki/Arrow">https://minecraft.fandom.com/wiki/Arrow</a>
      */
     private final int maxDistance = 120;
 
@@ -62,12 +62,13 @@ public class PROTEGO extends SpellShieldEffect {
      * and displays an initial visual flair at the shield location. Tracked projectiles within 120 blocks
      * are continuously monitored and removed when they cross the shield boundary.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the shield effect in game ticks
-     * @param pid      the unique ID of the player to shield with projectile protection
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the shield effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to shield with projectile protection
      */
-    public PROTEGO(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public PROTEGO(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.PROTEGO;
         flairPulse = false;

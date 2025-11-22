@@ -39,12 +39,13 @@ public class MUCUS extends O2Effect {
      * Sets the detection text for information spells to "is unnaturally congested". Slimes are spawned
      * at the player's eye level every 15 seconds throughout the effect duration.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the mucus effect in game ticks
-     * @param pid      the unique ID of the player to afflict with mucus spawning
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the mucus effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to afflict with mucus spawning
      */
-    public MUCUS(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public MUCUS(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.MUCUS;
         informousText = "is unnaturally congested";

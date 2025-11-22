@@ -36,12 +36,13 @@ public class MUTED_SPEECH extends O2Effect {
      * text for both mind-reading spells (Legilimens) and information spells (Informous) to "is unable to
      * speak", and notifies the player "You feel tongue-tied." when the effect is applied.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the muted speech effect in game ticks
-     * @param pid      the unique ID of the player to mute
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the muted speech effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to mute
      */
-    public MUTED_SPEECH(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public MUTED_SPEECH(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.MUTED_SPEECH;
         informousText = legilimensText = "is unable to speak";

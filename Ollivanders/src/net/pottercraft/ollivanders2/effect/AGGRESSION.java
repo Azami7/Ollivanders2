@@ -67,12 +67,13 @@ public class AGGRESSION extends O2Effect {
      * and provoke mobs. The aggressionLevel is set from the duration parameter and controls the probability
      * of attacks (1-10 range).</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the aggression level (1-10), which will be clamped to valid range
-     * @param pid      the unique ID of the affected player
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the aggression level (1-10), which will be clamped to valid range
+     * @param isPermanent ignored - aggression is always permanent
+     * @param pid         the unique ID of the affected player
      */
-    public AGGRESSION(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public AGGRESSION(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, true, pid);
 
         effectType = O2EffectType.AGGRESSION;
         legilimensText = "feels aggressive";

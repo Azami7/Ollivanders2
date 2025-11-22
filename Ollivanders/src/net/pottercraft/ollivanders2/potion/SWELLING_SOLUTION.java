@@ -13,8 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * The Swelling Solution is a potion which causes whatever it touched to swell in size.
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Swelling_Solution">https://harrypotter.fandom.com/wiki/Swelling_Solution</a>
- * @since 2.21
+ * @see <a href="https://harrypotter.fandom.com/wiki/Swelling_Solution">https://harrypotter.fandom.com/wiki/Swelling_Solution</a>
  */
 public class SWELLING_SOLUTION extends O2Potion {
     /**
@@ -51,7 +50,7 @@ public class SWELLING_SOLUTION extends O2Potion {
     @Override
     public void drink(@NotNull Player player) {
         // add the swelling effect
-        SWELLING effect = new SWELLING(p, duration, player.getUniqueId());
+        SWELLING effect = new SWELLING(p, duration, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
         player.sendMessage(Ollivanders2.chatColor + "You feel yourself expanding.");

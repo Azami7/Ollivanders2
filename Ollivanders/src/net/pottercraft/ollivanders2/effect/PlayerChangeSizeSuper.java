@@ -63,12 +63,13 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
     /**
      * Constructor
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the effect
-     * @param pid      the ID of the player this effect acts on
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the effect
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the ID of the player this effect acts on
      */
-    public PlayerChangeSizeSuper(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public PlayerChangeSizeSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
     }
 
     /**

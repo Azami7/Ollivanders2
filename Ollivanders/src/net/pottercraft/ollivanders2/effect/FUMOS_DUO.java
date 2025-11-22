@@ -37,12 +37,13 @@ public class FUMOS_DUO extends FUMOS {
      * magical protection compared to the standard FUMOS effect. All smoke shield particle
      * effects and spell blocking mechanics are inherited from the parent FUMOS class.</p>
      *
-     * @param plugin   a callback to the MC plugin
-     * @param duration the duration of the shield effect in game ticks
-     * @param pid      the unique ID of the player to shield with enhanced smoke protection
+     * @param plugin      a callback to the MC plugin
+     * @param duration    the duration of the shield effect in game ticks
+     * @param isPermanent is this effect permanent (does not age)
+     * @param pid         the unique ID of the player to shield with enhanced smoke protection
      */
-    public FUMOS_DUO(@NotNull Ollivanders2 plugin, int duration, @NotNull UUID pid) {
-        super(plugin, duration, pid);
+    public FUMOS_DUO(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+        super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.FUMOS_DUO;
         radius = 5;
