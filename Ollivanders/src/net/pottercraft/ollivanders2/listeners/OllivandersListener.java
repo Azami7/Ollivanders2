@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.Ollivanders2OwlPost;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.events.OllivandersPlayerFoundWandEvent;
@@ -241,9 +240,9 @@ public class OllivandersListener implements Listener {
                 common.printDebugMessage("doSpellCasting: begin casting " + spellType, null, null, false);
 
                 if (spellType == O2SpellType.APPARATE)
-                    addSpellProjectile(player, new APPARATE(p, player, 1.0, words));
+                    Ollivanders2API.getSpells().addSpell(player, new APPARATE(p, player, 1.0, words));
                 else if (spellType == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
-                    addSpellProjectile(player, new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, player, 1.0));
+                    Ollivanders2API.getSpells().addSpell(player, new AMATO_ANIMO_ANIMATO_ANIMAGUS(p, player, 1.0));
                 else if (Divination.divinationSpells.contains(spellType)) {
                     divine(spellType, player, words);
                 }
@@ -256,21 +255,6 @@ public class OllivandersListener implements Listener {
         else {
             common.printDebugMessage("doSpellCasting: Either no spell cast attempted or not allowed to cast", null, null, false);
         }
-    }
-
-    /**
-     * Add the spell and increment cast count
-     *
-     * @param player the player who cast the spell
-     * @param spell  the spell cast
-     */
-    private void addSpellProjectile(@NotNull Player player, @NotNull O2Spell spell) {
-        p.addProjectile(spell);
-
-        p.incrementSpellCount(player, spell.spellType);
-
-        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
-            p.incrementSpellCount(player, spell.spellType);
     }
 
     /**
@@ -367,7 +351,7 @@ public class OllivandersListener implements Listener {
                 return;
             }
 
-            addSpellProjectile(player, castSpell);
+            Ollivanders2API.getSpells().addSpell(player, castSpell);
 
             o2p.setSpellRecentCastTime(spellType);
             if (!nonverbal) {
@@ -671,7 +655,7 @@ public class OllivandersListener implements Listener {
     /**
      * This drops a random wand when a witch dies
      *
-     * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#witch-wand-drop</p>
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#witch-wand-drop">https://github.com/Azami7/Ollivanders2/wiki/Configuration#witch-wand-drop</a>
      *
      * @param event the entity death event
      */
@@ -722,7 +706,7 @@ public class OllivandersListener implements Listener {
     /**
      * When a user holds their spell journal, replace it with an updated version of the book.
      *
-     * <p>Reference: https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-journal</p>
+     * @see <a href="https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-journal">https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-journal</a>
      *
      * @param event the player item held event
      */
@@ -882,7 +866,7 @@ public class OllivandersListener implements Listener {
             return false;
 
         ((Divination) spell).setTarget(target);
-        addSpellProjectile(sender, spell);
+        Ollivanders2API.getSpells().addSpell(sender, spell);
 
         return true;
     }

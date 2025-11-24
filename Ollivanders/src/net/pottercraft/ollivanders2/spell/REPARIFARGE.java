@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EnderDragonPart;
@@ -12,9 +13,24 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Reparifarge will untransfigure the target block or entity, does not work on Animagus transfigurations.
+ * The Reparifarge spell - an untransfiguration counter-spell.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Reparifarge">https://harrypotter.fandom.com/wiki/Reparifarge</a>
+ * <p>Reparifarge reverses active transfigurations cast by other spells, returning transfigured blocks
+ * and entities back to their original state. This spell is primarily useful for countering incomplete
+ * or unwanted transfigurations. It does not work on permanent transfigurations or Animagus transformations.</p>
+ *
+ * <p><strong>Success Mechanics:</strong> The spell has a variable success rate based on the caster's
+ * skill level with Reparifarge (number of uses). The success rate ranges from {@link #minSuccessRate}%
+ * to {@link #maxSuccessRate}%. Block transfigurations can always be reverted with a successful cast,
+ * but entity transfigurations can only be reverted if the source transfiguration spell has an equal or
+ * lower level than Reparifarge.</p>
+ *
+ * <p><strong>Target Detection:</strong> The spell projectile searches for both blocks and entities
+ * at the impact location. Ender Dragon parts are automatically converted to their parent dragon entity
+ * for targeting consistency.</p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Reparifarge">Reparifarge on Harry Potter Wiki</a>
  */
 public final class REPARIFARGE extends O2Spell {
     static final int maxSuccessRate = 100;
@@ -71,6 +87,16 @@ public final class REPARIFARGE extends O2Spell {
             successRate = maxSuccessRate;
     }
 
+    /**
+     * Executes the Reparifarge spell effect.
+     *
+     * <p>When the projectile hits a target block, attempts to revert any active transfiguration on that block.
+     * When the projectile is in flight near entities, searches nearby entities and attempts to revert
+     * transfigurations on the first valid target found. Ender Dragon parts are automatically converted to
+     * their parent dragon entity before checking for transfigurations.</p>
+     *
+     * <p>Sends success or failure message to the caster and terminates the spell after attempting reversion.</p>
+     */
     @Override
     public void doCheckEffect() {
         if (hasHitTarget()) {
@@ -104,16 +130,21 @@ public final class REPARIFARGE extends O2Spell {
     }
 
     /**
-     * Revert this transfiguration, if it is not permanent and the level of this transfiguration spell is less than the level of Reparifarge.
+     * Attempts to revert any active entity transfiguration affecting the target entity.
      *
-     * @param target the target transfigured entity
-     * @return true if the spell reverted a transfiguration, false otherwise
+     * <p>Searches for active transfiguration spells that have transfigured the target entity.
+     * If a matching transfiguration is found, checks if Reparifarge's level is equal to or greater than
+     * the source transfiguration spell's level. If so, performs a success check and kills the source spell
+     * if successful, reverting the transfiguration.</p>
+     *
+     * <p>Returns true if a transfiguration was found (regardless of whether it was reverted), false otherwise.
+     * This distinguishes between "no transfiguration found" and "transfiguration found but revert failed".</p>
+     *
+     * @param target the target entity to check for transfiguration
+     * @return true if any transfiguration was found affecting this entity, false otherwise
      */
     public boolean reparifargeEntity(@NotNull Entity target) {
-        for (O2Spell spell : p.getProjectiles()) {
-            if (spell.isPermanent())
-                continue;
-
+        for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
             if (spell instanceof TransfigurationBase && ((TransfigurationBase) spell).isEntityTransfigured(target)) {
                 if ((spell.getLevel().ordinal() > this.spellType.getLevel().ordinal()) && checkSuccess())
                     spell.kill();
@@ -126,16 +157,21 @@ public final class REPARIFARGE extends O2Spell {
     }
 
     /**
-     * Revert this transfiguration, if it is not permanent and the level of this transfiguration spell is less than the level of Reparifarge.
+     * Attempts to revert any active block transfiguration affecting the target block.
      *
-     * @param target the target transfigured block
-     * @return true if the spell reverted a transfiguration, false otherwise
+     * <p>Searches for active transfiguration spells that have transfigured the target block.
+     * If a matching transfiguration is found, performs a success check and kills the source spell
+     * if successful, reverting the transfiguration. Unlike entity transfigurations, block transfigurations
+     * have no level requirement - they can always be reverted if the success check passes.</p>
+     *
+     * <p>Returns true if a transfiguration was found (regardless of whether it was reverted), false otherwise.
+     * This distinguishes between "no transfiguration found" and "transfiguration found but revert failed".</p>
+     *
+     * @param target the target block to check for transfiguration
+     * @return true if any transfiguration was found affecting this block, false otherwise
      */
     public boolean reparifargeBlock(@NotNull Block target) {
-        for (O2Spell spell : p.getProjectiles()) {
-            if (spell.isPermanent())
-                continue;
-
+        for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
             if (spell instanceof TransfigurationBase && ((TransfigurationBase) spell).isBlockTransfigured(target)) {
                 if (checkSuccess())
                     spell.kill();
