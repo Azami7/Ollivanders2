@@ -197,12 +197,6 @@ public class Ollivanders2CommonTest {
     @Test
     void serializeLocationTest() {
         String labelPrefix = "test";
-        Map<String, String> expected = new HashMap<>() {{
-            put(labelPrefix + "_" + Ollivanders2Common.locationWorldLabel, worldName);
-            put(labelPrefix + "_" + Ollivanders2Common.locationXLabel, "0");
-            put(labelPrefix + "_" + Ollivanders2Common.locationYLabel, "4");
-            put(labelPrefix + "_" + Ollivanders2Common.locationZLabel, "0");
-        }};
 
         Map<String, String> actual = o2common.serializeLocation(origin, labelPrefix);
         assertNotNull(actual, "o2common.serializeLocation(origin, labelPrefix) returned null");
@@ -421,8 +415,9 @@ public class Ollivanders2CommonTest {
         assertNull(received, "player3.nextMessage() was not null");
     }
 
+    @NotNull
     Handler logHandlerHelper(@NotNull List<LogRecord> logRecords) {
-        Handler testLogHandler = new Handler() {
+        return new Handler() {
             @Override
             public void publish(LogRecord record) {
                 logRecords.add(record);
@@ -434,8 +429,6 @@ public class Ollivanders2CommonTest {
             @Override
             public void close() {}
         };
-
-        return testLogHandler;
     }
 
     /**

@@ -3,8 +3,8 @@ package ollivanders.effect;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.effect.O2Effect;
 import ollivanders.testcommon.TestCommon;
+import org.bukkit.Location;
 import org.bukkit.World;
-import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -78,11 +78,30 @@ abstract public class EffectTestSuper {
      */
     PlayerMock target;
 
+    /**
+     * Origin location
+     */
+    Location origin;
+
+    /**
+     * Initialize the mock Bukkit server before all tests.
+     *
+     * <p>Static setup method called once before all tests in this class. Creates the shared
+     * MockBukkit server instance that is reused across all test methods to avoid expensive
+     * server creation/destruction overhead.</p>
+     */
     @BeforeAll
     static void globalSetUp() {
         mockServer = MockBukkit.mock();
     }
 
+    /**
+     * Initialize test fixtures before each test method.
+     *
+     * <p>Creates fresh test fixtures for each test: loads the plugin with default configuration,
+     * creates a test world, advances the scheduler past the initial startup delay, and creates
+     * a test player to be the target of effects.</p>
+     */
     @BeforeEach
     void setUp() {
         testPlugin = MockBukkit.loadWithConfig(Ollivanders2.class, new File("Ollivanders/test/resources/default_config.yml"));
@@ -93,6 +112,8 @@ abstract public class EffectTestSuper {
 
         // create the player this effect will target
         target = mockServer.addPlayer();
+
+        origin = new Location(testWorld, 0, 4, 0);
     }
 
     /**
@@ -104,23 +125,39 @@ abstract public class EffectTestSuper {
      *
      * @param durationInTicks the duration of the effect in game ticks
      * @param isPermanent     true if the effect should be permanent, false for limited duration
-     * @param targetID        the unique ID of the player this effect will target
      * @return the newly created O2Effect instance of the type being tested
      */
-    abstract O2Effect createEffect(int durationInTicks, boolean isPermanent, @NotNull UUID targetID);
+    abstract O2Effect createEffect(int durationInTicks, boolean isPermanent);
 
     /**
-     * This is a mega test because the parallized, random order Junit tests mess up the game state
+     * Comprehensive effect test combining all core behavior validations.
+     *
+     * <p>This is a mega test that runs all effect tests in sequence within a single @Test method.
+     * This approach is necessary because parallelized, random-order JUnit tests mess up the shared
+     * game state (MockBukkit server). By running all tests in order within effectTest(), we ensure
+     * the game state remains consistent throughout all validations.</p>
+     *
+     * <p>Tests performed in sequence:</p>
+     * <ul>
+     * <li>Constructor validation with short duration and minimum duration enforcement</li>
+     * <li>Constructor validation with permanent effects</li>
+     * <li>Effect aging and killing behavior</li>
+     * <li>Target ID copy semantics</li>
+     * <li>Permanent flag initialization and toggling</li>
+     * <li>Effect-specific behavior (implemented by subclasses)</li>
+     * <li>Effect-specific cleanup behavior (implemented by subclasses)</li>
+     * </ul>
      */
     @Test
     void effectTest() {
+        Ollivanders2.debug = true;
         // create an effect that lasts 10 ticks
-        O2Effect effect = createEffect(10, false, target.getUniqueId());
+        O2Effect effect = createEffect(10, false);
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
         assertEquals(O2Effect.minDuration, effect.getRemainingDuration(), "Effect duration not set to minimum duration when duration specified as 10 in constructor");
 
         // create an effect with is permanent set true, should be permanent
-        effect = createEffect(5, true, target.getUniqueId());
+        effect = createEffect(5, true);
         assertTrue(effect.isPermanent(), "Effect not permanent");
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
 
@@ -132,7 +169,11 @@ abstract public class EffectTestSuper {
 
         checkEffectTest();
 
+        eventHandlerTests();
+
         doRemoveTest();
+
+        Ollivanders2.debug = false;
     }
 
     /**
@@ -144,7 +185,7 @@ abstract public class EffectTestSuper {
      */
     void ageAndKillTest() {
         int duration = O2Effect.minDuration;
-        O2Effect effect = createEffect(duration, false, target.getUniqueId());
+        O2Effect effect = createEffect(duration, false);
 
         // kill() kills the effect
         effect.kill();
@@ -152,7 +193,7 @@ abstract public class EffectTestSuper {
 
         // age decrements duration as expected when the effect is not permanent
         if (!effect.isPermanent()) {
-            effect = createEffect(duration, false, target.getUniqueId());
+            effect = createEffect(duration, false);
             effect.age(1);
             assertEquals(duration - 1, effect.getRemainingDuration(), "Age did not properly decrement effect duration");
 
@@ -171,7 +212,7 @@ abstract public class EffectTestSuper {
      */
     void getTargetIDTest() {
         UUID targetID = target.getUniqueId();
-        O2Effect effect = createEffect(10, false, targetID);
+        O2Effect effect = createEffect(10, false);
 
         UUID id = effect.getTargetID();
         assertFalse(id == targetID, "effect.getTargetID() returned same UUID object");
@@ -185,7 +226,7 @@ abstract public class EffectTestSuper {
      * toggled between true and false states.</p>
      */
     void isPermanentTest() {
-        O2Effect effect = createEffect(10, false, target.getUniqueId());
+        O2Effect effect = createEffect(10, false);
 
         effect.setPermanent(true);
         assertTrue(effect.isPermanent(), "Effect not permanent after effect.setPermanent(true);");
@@ -194,10 +235,35 @@ abstract public class EffectTestSuper {
         assertFalse(effect.isPermanent(), "Effect set to permanent after effect.setPermanent(false);");
     }
 
+    /**
+     * Effect-specific behavior test to be implemented by subclasses.
+     *
+     * <p>Abstract method that subclasses must implement to test effect-specific behaviors beyond
+     * the core O2Effect functionality. This is where effect-specific mechanics like potion application,
+     * entity targeting, or other custom behaviors should be tested.</p>
+     */
     abstract void checkEffectTest();
 
+    /**
+     *
+     */
+    abstract void eventHandlerTests();
+
+    /**
+     * Effect-specific cleanup test to be implemented by subclasses.
+     *
+     * <p>Abstract method that subclasses must implement to test that doRemove() cleanup logic works
+     * correctly for the specific effect type. If the effect has no special cleanup, the implementation
+     * should be empty but still present to satisfy the abstract contract.</p>
+     */
     abstract void doRemoveTest();
 
+    /**
+     * Reset effect system state after each test.
+     *
+     * <p>Called after each test method to clean up state. Currently disables debug mode that may
+     * have been enabled during testing.</p>
+     */
     @AfterEach
     void tearDown() {
         Ollivanders2.debug = false;

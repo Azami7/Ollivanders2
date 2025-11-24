@@ -20,7 +20,7 @@ public class TestCommon {
     /**
      * Number of ticks needed after server start to make sure the scheduler, etc are running
      */
-    static public int startupTicks = 100;
+    static public final int startupTicks = 100;
 
     /**
      * Compare the message received by a player to the expected message. This needs a helper because
@@ -62,9 +62,8 @@ public class TestCommon {
     public static String runCommand (@NotNull PlayerMock player, @NotNull String command, @NotNull ServerMock mockServer) {
         assertTrue(player.performCommand(command), "Player cannot run the " + command + " command");
         mockServer.getScheduler().performTicks(10);
-        String commandResponse = player.nextMessage();
 
-        return commandResponse;
+        return player.nextMessage();
     }
 
     /**
@@ -75,6 +74,9 @@ public class TestCommon {
      */
     public static boolean isInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType) {
         for (ItemStack itemStack : player.getInventory().getContents()) {
+            if (itemStack == null)
+                return false;
+
             if (itemStack.getType() == itemType) {
                 return true;
             }
@@ -102,7 +104,9 @@ public class TestCommon {
                     continue;
 
                 if (itemStack.getType() == Material.WRITTEN_BOOK) {
-                    if (((BookMeta)itemMeta).getTitle().equals(name))
+                    String bookTitle = ((BookMeta)itemMeta).getTitle();
+
+                    if (bookTitle != null && bookTitle.equals(name))
                         return true;
                 }
                 else if (itemMeta.getDisplayName().equals(name))

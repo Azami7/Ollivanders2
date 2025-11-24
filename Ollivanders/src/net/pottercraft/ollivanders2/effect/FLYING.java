@@ -89,7 +89,7 @@ public class FLYING extends O2Effect {
                     target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
             }
             else {
-                common.printDebugMessage("Adding flight for " + target.displayName(), null, null, false);
+                common.printDebugMessage("Adding flight for " + target.getDisplayName(), null, null, false);
                 target.setAllowFlight(false);
             }
         }
@@ -114,7 +114,7 @@ public class FLYING extends O2Effect {
         if (player != null) {
             // if the player is not an admin, remove flight ability
             if (!player.hasPermission("Ollivanders2.admin")) {
-                common.printDebugMessage("Removing flight for " + player.displayName(), null, null, false);
+                common.printDebugMessage("Removing flight for " + player.getDisplayName(), null, null, false);
                 player.setAllowFlight(false);
                 player.setFlying(false);
             }
