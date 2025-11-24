@@ -104,6 +104,15 @@ public final class O2Books implements Listener {
     }
 
     /**
+     * Cleanup when the plugin disables.
+     *
+     * <p>Called when the Ollivanders2 plugin is being shut down. The O2Books manager performs
+     * no cleanup on disable because book data is read-only and does not require persistence.
+     * The book map will be repopulated when the plugin is re-enabled via onEnable().</p>
+     */
+    public void onDisable() {}
+
+    /**
      * Process book read events when bookLearning is enabled.
      *
      * @param event the player interact event

@@ -822,6 +822,14 @@ public class O2Effects implements Listener {
     }
 
     /**
+     * plugin disable, save effects
+     */
+    public void onDisable() {
+        p.getLogger().info("Saving players effects.");
+        saveEffects();
+    }
+
+    /**
      * Persist all active and saved effects to disk in JSON format.
      *
      * <p>Serializes all magical effects currently active across all players (both online and offline)
