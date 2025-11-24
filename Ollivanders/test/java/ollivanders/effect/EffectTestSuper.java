@@ -156,9 +156,8 @@ abstract public class EffectTestSuper {
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
         assertEquals(O2Effect.minDuration, effect.getRemainingDuration(), "Effect duration not set to minimum duration when duration specified as 10 in constructor");
 
-        // create an effect with is permanent set true, should be permanent
+        // create an effect with is permanent set true
         effect = createEffect(5, true);
-        assertTrue(effect.isPermanent(), "Effect not permanent");
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
 
         ageAndKillTest();

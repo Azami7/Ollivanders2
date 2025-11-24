@@ -60,4 +60,16 @@ public class ANIMAGUS_INCANTATION extends O2Effect {
     @Override
     public void doRemove() {
     }
+
+    /**
+     * Overridden to prevent permanent status - animagus incantation is always temporary.
+     *
+     * <p>ANIMAGUS_INCANTATION enforces non-permanent behavior by ignoring all setPermanent() calls.
+     * This effect is designed as a temporary marker for the incantation spell casting state and cannot
+     * be converted to permanent status. Attempts to set this effect to permanent are silently ignored.</p>
+     *
+     * @param perm the requested permanent status (ignored - effect remains temporary regardless)
+     */
+    @Override
+    public void setPermanent(boolean perm) {}
 }
