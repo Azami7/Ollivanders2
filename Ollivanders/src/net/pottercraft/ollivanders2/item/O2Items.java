@@ -87,6 +87,15 @@ public class O2Items {
     }
 
     /**
+     * Cleanup when the plugin disables.
+     *
+     * <p>Called when the Ollivanders2 plugin is being shut down. The O2Items manager performs
+     * no cleanup on disable because item data is read-only and loaded from configuration on
+     * startup. No persistent state needs to be saved.</p>
+     */
+    public void onDisable() {}
+
+    /**
      * Get an item by type
      *
      * @param itemType the type of item to get

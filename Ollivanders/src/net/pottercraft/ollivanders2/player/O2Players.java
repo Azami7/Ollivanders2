@@ -94,10 +94,29 @@ public class O2Players {
     }
 
     /**
-     * Save player data on disable
+     * Cleanup when the plugin disables.
+     *
+     * <p>Called when the Ollivanders2 plugin is being shut down. The O2Players manager persists all player-specific
+     * data to disk and delegates effect cleanup to the player effects manager. This ensures that player progress,
+     * achievements, and active effects are preserved across server restarts.</p>
+     *
+     * <p>Shutdown Operations:</p>
+     * <ul>
+     * <li>Serialize all player data to JSON (names, wand data, souls, spells, potions, etc.)</li>
+     * <li>Write player data to persistent storage via GsonDAO</li>
+     * <li>Delegate player effect cleanup to O2Effects.onDisable()</li>
+     * <li>Player effects saves all active magical effects applied to players</li>
+     * </ul>
+     *
+     * @see #saveO2Players() for player data persistence implementation
+     * @see #loadO2Players() for restoring player data on plugin startup
+     * @see O2Effects#onDisable() for player effect cleanup and persistence
      */
     public void onDisable() {
+        p.getLogger().info("Saving " + O2PlayerMap.size() + " players.");
         saveO2Players();
+
+        playerEffects.onDisable();
     }
 
     /**

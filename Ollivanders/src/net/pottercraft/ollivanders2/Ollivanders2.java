@@ -242,18 +242,43 @@ public class Ollivanders2 extends JavaPlugin {
     public static final String pluginDir = "plugins/Ollivanders2/";
 
     /**
-     * onDisable runs when the Minecraft server is shutting down.
-     * <p>
-     * Primary functions are to reset transfigured blocks back to their correct type and save plugin data to disk.
+     * Cleanup when the Minecraft server shuts down.
+     *
+     * <p>Called when the Ollivanders2 plugin is being disabled. Orchestrates the complete shutdown
+     * process by killing active spell projectiles, delegating cleanup to all resource managers,
+     * saving persistent data, and reverting temporary world changes.</p>
+     *
+     * <p>Shutdown Operations:</p>
+     * <ul>
+     * <li>Kill all active spell projectiles to prevent dangling effects</li>
+     * <li>Delegate shutdown to all resource managers (spells, potions, books, items, houses, players, stationary spells, prophecies, owl post)</li>
+     * <li>Save APPARATE teleport locations</li>
+     * <li>Revert all temporary block changes made by spells</li>
+     * <li>Ensure plugin config file exists</li>
+     * <li>Log plugin shutdown completion</li>
+     * </ul>
      */
     public void onDisable() {
+        // kill all spell projectiles running
         for (O2Spell proj : projectiles) {
             proj.kill();
         }
 
+        // call on disable for all resources
+        spells.onDisable();
+        potions.onDisable();
+        books.onDisable();
+        items.onDisable();
+        houses.onDisable();
+        players.onDisable();
+        stationarySpells.onDisable();
+        prophecies.onDisable();
+        owlPost.onDisable();
+
+        APPARATE.saveApparateLocations();
+
         revertAllTempBlocks();
         savePluginConfig();
-        savePluginData();
 
         getLogger().info(this + " is now disabled!");
     }

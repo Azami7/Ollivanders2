@@ -109,6 +109,31 @@ public class O2StationarySpells implements Listener {
     }
 
     /**
+     * Cleanup when the plugin disables.
+     *
+     * <p>Called when the Ollivanders2 plugin is being shut down. The O2StationarySpells manager persists all active
+     * stationary spell data to disk. Stationary spells (such as enchanted areas or persistent magical effects) are
+     * serialized and saved so they can be restored when the server restarts, maintaining long-term magical effects
+     * in the world.</p>
+     *
+     * <p>Saved Data:</p>
+     * <ul>
+     * <li>All active stationary spells in their current state</li>
+     * <li>Spell location, duration, and radius information</li>
+     * <li>Caster UUID and spell-specific properties</li>
+     * <li>Data is persisted as JSON via GsonDAO for restoration on server startup</li>
+     * </ul>
+     *
+     * @see #saveO2StationarySpells() for stationary spell persistence implementation
+     * @see #loadO2StationarySpells() for restoring stationary spells on plugin startup
+     */
+    public void onDisable() {
+        p.getLogger().info("Saving " + O2StationarySpells.size() + " stationary spells.");
+
+        saveO2StationarySpells();
+    }
+
+    /**
      * Handle when players move
      *
      * @param event the player move event

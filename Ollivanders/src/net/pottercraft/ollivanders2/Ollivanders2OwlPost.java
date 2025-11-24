@@ -237,4 +237,22 @@ public class Ollivanders2OwlPost {
             }
         }.runTaskLater(p, 5 * Ollivanders2Common.ticksPerSecond);
     }
+
+    /**
+     * Cleanup when the plugin disables.
+     *
+     * <p>Called when the Ollivanders2 plugin is being shut down. Currently, the Ollivanders2OwlPost manager does not
+     * perform any persistence of pending deliveries. Owl post deliveries are queued in memory only and will be lost
+     * when the server shuts down. This is a temporary limitation that may be addressed in future versions.</p>
+     *
+     * <p>Future Enhancement:</p>
+     * <ul>
+     * <li>Persist pending delivery queue to disk via JSON serialization</li>
+     * <li>Restore deliveries on server startup to maintain delivery continuity</li>
+     * <li>See GitHub issue: <a href="https://github.com/Azami7/Ollivanders2/issues/506">Persist owl post deliveries across restarts</a></li>
+     * </ul>
+     *
+     * @see #upkeep() for the owl post delivery processing loop
+     */
+    public void onDisable() { }
 }

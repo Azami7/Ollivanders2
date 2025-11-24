@@ -220,6 +220,30 @@ public class O2Prophecies {
     }
 
     /**
+     * Cleanup when the plugin disables.
+     *
+     * <p>Called when the Ollivanders2 plugin is being shut down. The O2Prophecies manager persists all pending
+     * prophecies to disk before the plugin terminates. This ensures that divination prophecies created by players
+     * are preserved across server restarts, maintaining continuity of long-term prophecy mechanics.</p>
+     *
+     * <p>Saved Data:</p>
+     * <ul>
+     * <li>All active prophecies (scheduled for online players)</li>
+     * <li>All offline prophecies (waiting for players to log back in)</li>
+     * <li>Prophecy metadata: target player, prophet, effect type, duration, accuracy</li>
+     * <li>Prophecy aging state: remaining time until fulfillment</li>
+     * <li>Data is persisted as JSON via GsonDAO for restoration on server startup</li>
+     * </ul>
+     *
+     * @see #saveProphecies() for prophecy data persistence implementation
+     * @see #loadProphecies() for restoring prophecies on plugin startup
+     */
+    public void onDisable() {
+        p.getLogger().info("Saving prophecies.");
+        saveProphecies();
+    }
+
+    /**
      * Persist all prophecies to disk in JSON format.
      *
      * <p>Called when the server shuts down (via the prophecy save scheduler). Serializes all active and offline

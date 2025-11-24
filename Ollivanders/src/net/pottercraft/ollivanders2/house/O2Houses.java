@@ -300,6 +300,29 @@ public class O2Houses {
     }
 
     /**
+     * Cleanup when the plugin disables.
+     *
+     * <p>Called when the Ollivanders2 plugin is being shut down. The O2Houses manager persists all house-related
+     * data to disk before the plugin terminates. This ensures that house memberships and point scores are preserved
+     * across server restarts.</p>
+     *
+     * <p>Saved Data:</p>
+     * <ul>
+     * <li>Player-to-house mappings: which players are sorted into which houses</li>
+     * <li>House point scores: accumulated points for each of the four houses</li>
+     * <li>All data is persisted as JSON files via GsonDAO</li>
+     * </ul>
+     *
+     * @see #saveHouses() for the house data persistence implementation
+     * @see #loadHouses() for restoring house data on plugin startup
+     */
+    public void onDisable() {
+        p.getLogger().info("Saving house data.");
+
+        saveHouses();
+    }
+
+    /**
      * Save all house data to disk as JSON files.
      *
      * <p>Persists the current player-to-house mappings and house point scores to disk via GsonDAO.

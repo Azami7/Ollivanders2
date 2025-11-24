@@ -94,6 +94,24 @@ public class O2Spells {
     }
 
     /**
+     * Cleanup when the plugin disables.
+     *
+     * <p>Called when the Ollivanders2 plugin is being shut down. Spell projectile management
+     * (killing active projectiles) is currently handled by the main Ollivanders2.onDisable()
+     * method. When projectile management is moved to this class, cleanup will be performed here.</p>
+     *
+     * <p>TODO: Move spell projectile management from main plugin class to this class.</p>
+     */
+    public void onDisable() {
+        // kill all spell projectiles running
+        /*
+        for (O2Spell proj : projectiles) {
+            proj.kill();
+        }
+         */
+    }
+
+    /**
      * Get all loaded spells
      *
      * @return a list of all loaded spell types

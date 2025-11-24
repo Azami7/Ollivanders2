@@ -191,6 +191,15 @@ public class O2Potions {
     }
 
     /**
+     * Cleanup when the plugin disables.
+     *
+     * <p>Called when the Ollivanders2 plugin is being shut down. The O2Potions manager
+     * performs no cleanup on disable because potion data is read-only and loaded from
+     * configuration on startup. No persistent state needs to be saved.</p>
+     */
+    public void onDisable() {}
+
+    /**
      * Get all potions loaded
      *
      * @return a list of all potion types loaded
