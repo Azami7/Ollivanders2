@@ -1,11 +1,14 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.common.Cuboid;
+import net.pottercraft.ollivanders2.effect.O2EffectType;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -15,7 +18,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Manages all spells
+ * Central manager for all Ollivanders2 spells.
+ *
+ * <p>Manages spell registration, loading, and lifecycle. Maintains active spell projectiles and
+ * performs per-tick updates. Coordinates spell permission validation through a zone-based system that
+ * supports global, world-wide, WorldGuard region, and cuboid-based allow/disallow lists.</p>
+ *
+ * <p><strong>Spell Permission Hierarchy:</strong></p>
+ * <ol>
+ * <li>If a global allow list is defined, only globally allowed spells can be cast</li>
+ * <li>Check zone-specific allow lists (WORLD, WORLD_GUARD, CUBOID) - if found, only zone-allowed spells pass</li>
+ * <li>Check zone-specific disallow lists - if spell is found in any zone's disallow list, deny it</li>
+ * <li>Check global disallow list - if spell is found, deny it</li>
+ * <li>If no restrictions apply, allow the spell</li>
+ * </ol>
+ *
+ * @author Azami7
  */
 public class O2Spells {
     /**
@@ -27,6 +45,11 @@ public class O2Spells {
      * Common functions
      */
     private final Ollivanders2Common common;
+
+    /**
+     * All active spells
+     */
+    final private List<O2Spell> activeSpells = new ArrayList<>();
 
     /**
      * List of loaded spells
@@ -71,7 +94,17 @@ public class O2Spells {
     }
 
     /**
-     * Load spell data on plugin start
+     * Initializes spell data when the plugin is enabled.
+     *
+     * <p>Called during plugin startup. Performs the following initialization steps:</p>
+     * <ul>
+     * <li>Loads all available spell types from {@link O2SpellType}, skipping spells that depend on
+     *     unavailable plugins (e.g., LibsDisguises spells if LibsDisguises is not installed)</li>
+     * <li>Logs the total number of loaded spells</li>
+     * <li>Loads spell-specific static data (e.g., Apparate locations)</li>
+     * <li>Loads zone-based spell permission configuration from config.yml</li>
+     * <li>Adds divination spells to the wandless spells list</li>
+     * </ul>
      */
     public void onEnable() {
         // load enabled spells
@@ -99,16 +132,36 @@ public class O2Spells {
      * <p>Called when the Ollivanders2 plugin is being shut down. Spell projectile management
      * (killing active projectiles) is currently handled by the main Ollivanders2.onDisable()
      * method. When projectile management is moved to this class, cleanup will be performed here.</p>
-     *
-     * <p>TODO: Move spell projectile management from main plugin class to this class.</p>
      */
     public void onDisable() {
-        // kill all spell projectiles running
-        /*
-        for (O2Spell proj : projectiles) {
-            proj.kill();
+        // kill all active spells
+        for (O2Spell spell : activeSpells) {
+            spell.kill();
         }
-         */
+    }
+
+    /**
+     * Updates all active spell projectiles for one game tick.
+     *
+     * <p>Called each server tick by the main scheduler. Iterates through all active spells and:</p>
+     * <ul>
+     * <li>Calls {@link O2Spell#checkEffect()} to update each spell's state</li>
+     * <li>Removes spells that have been killed from the active spell list</li>
+     * </ul>
+     *
+     * <p>Uses a temporary copy of the active spells list to safely remove spells during iteration.</p>
+     */
+    public void upkeep() {
+        if (activeSpells.isEmpty())
+            return;
+
+        List<O2Spell> spellsTemp = new ArrayList<>(activeSpells);
+        for (O2Spell spell : spellsTemp) {
+            spell.checkEffect();
+            if (spell.isKilled()) {
+                activeSpells.remove(spell);
+            }
+        }
     }
 
     /**
@@ -372,5 +425,30 @@ public class O2Spells {
         }
 
         return false;
+    }
+
+    /**
+     * Add the spell and increment cast count
+     *
+     * @param player the player who cast the spell
+     * @param spell  the spell cast
+     */
+    public void addSpell(@NotNull Player player, @NotNull O2Spell spell) {
+        activeSpells.add(spell);
+
+        p.incrementSpellCount(player, spell.spellType);
+
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.FAST_LEARNING))
+            p.incrementSpellCount(player, spell.spellType);
+    }
+
+    /**
+     * Get all the active spell projectiles
+     *
+     * @return a list of all active spell projectiles
+     */
+    @NotNull
+    public List<O2Spell> getActiveSpells() {
+        return new ArrayList<>(activeSpells);
     }
 }

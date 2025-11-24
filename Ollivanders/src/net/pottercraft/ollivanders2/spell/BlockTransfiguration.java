@@ -1,13 +1,12 @@
 package net.pottercraft.ollivanders2.spell;
 
 import java.util.HashMap;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 
 import org.bukkit.block.Block;
@@ -17,7 +16,22 @@ import org.bukkit.entity.Entity;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The super class for transfiguration of objects. Not for use on players or entities.
+ * Abstract base class for block transfiguration spells.
+ *
+ * <p>Manages the transfiguration of blocks and terrain into other material types. Provides core
+ * transfiguration logic including block targeting, type validation, success rate checking, and
+ * reversion. Block transfigurations can be temporary (reverted after spell duration) or permanent.</p>
+ *
+ * <p>Subclasses must override this class to define specific block transformation behavior.
+ * Configuration of {@link #transfigureType} (target material) and optionally {@link #transfigurationMap}
+ * (mapping of source materials to different targets) should be done in subclass constructors.</p>
+ *
+ * <p>Affected blocks are validated against WorldGuard BUILD flag if enabled, and against material
+ * block and allow lists defined in the configuration.</p>
+ *
+ * @author Azami7
+ * @see EntityTransfiguration for entity transfiguration alternative
+ * @see TransfigurationBase for base transfiguration mechanics
  */
 public abstract class BlockTransfiguration extends TransfigurationBase {
     static int minRadius = 1;
@@ -87,8 +101,25 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
     }
 
     /**
-     * Transfigure the target block or blocks. Will not change the block if it is on the materialBlacklist list or if the
-     * target block is already the transfiguration type.
+     * Transfigures blocks in a radius around the spell's target location.
+     *
+     * <p>This method is called each tick while the spell is active. It identifies all blocks within
+     * the spell's radius from the target location and attempts to transfigure them. The radius is
+     * modified by {@link #radiusModifier} and clamped between {@link #minRadius} and {@link #maxRadius}.</p>
+     *
+     * <p>For permanent spells, the spell is immediately killed after transfiguration. For temporary
+     * spells, the spell continues until its duration expires.</p>
+     *
+     * <p>Validation checks are performed via {@link #canTransfigure(Block)} for each block:</p>
+     * <ul>
+     * <li>Success rate check must pass (based on player skill)</li>
+     * <li>Block cannot already be the target material type</li>
+     * <li>Block cannot be on the material blocked list (unbreakable materials)</li>
+     * <li>Block must be on the allow list if one is populated</li>
+     * <li>Block cannot already be transfigured by another active spell</li>
+     * </ul>
+     *
+     * <p>If no blocks are successfully transfigured, the spell fails and is killed.</p>
      */
     protected void transfigure() {
         if (isTransfigured || !hasHitTarget() || getTargetBlock() == null)
@@ -131,10 +162,23 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
     }
 
     /**
-     * Determines if this block can be changed by this Transfiguration spell.
+     * Determines if this block can be transfigured by this spell.
+     *
+     * <p>Performs comprehensive validation checks to ensure the block meets all requirements for
+     * transfiguration. Checks are performed in the following order:
+     * <ol>
+     * <li><strong>Success Rate:</strong> Random chance based on player skill level (successRate)</li>
+     * <li><strong>Target Type Check:</strong> Block is not already the target material type
+     *     (checked via transfigurationMap if populated, or direct type comparison)</li>
+     * <li><strong>Blocked List:</strong> Block material is not on the blocked list
+     *     (e.g., unbreakable materials)</li>
+     * <li><strong>Allow List:</strong> If an allow list is configured, block must be on it</li>
+     * <li><strong>Existing Transfigurations:</strong> Block is not already transfigured by another
+     *     active spell</li>
+     * </ol></p>
      *
      * @param block the block to check
-     * @return true if the block can be changed, false otherwise.
+     * @return true if the block passes all validation checks and can be transfigured, false otherwise
      */
     boolean canTransfigure(@NotNull Block block) {
         common.printDebugMessage("BlockTransfigure.canTranfigure: Checking if this block can be transfigured.", null, null, false);
@@ -149,7 +193,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
         // get block type
         Material blockType = block.getType();
 
-        if (transfigurationMap.size() > 0 && transfigurationMap.containsKey(transfigureType) && transfigurationMap.get(transfigureType) == blockType) {
+        if (!transfigurationMap.isEmpty() && transfigurationMap.containsKey(transfigureType) && transfigurationMap.get(transfigureType) == blockType) {
             // do not change if this block is already the target type
             common.printDebugMessage("Block is already type " + transfigureType.toString(), null, null, false);
             return false;
@@ -171,7 +215,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
         }
         else {
             // do not change if this block is already the subject of a temporary transfiguration
-            for (O2Spell spell : p.getProjectiles()) {
+            for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
                 if (spell instanceof TransfigurationBase) {
                     if (((TransfigurationBase) spell).isBlockTransfigured(block)) {
                         common.printDebugMessage("Block is already a non-permanent transfiguration", null, null, false);
@@ -185,7 +229,15 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
     }
 
     /**
-     * Restore the block to its original type if this was not a permanent change
+     * Restores all transfigured blocks to their original material types.
+     *
+     * <p>Called when the spell duration expires or the spell is explicitly ended. This method only
+     * applies to temporary (non-permanent) transfigurations. Permanent transfigurations are not reverted
+     * and the spell should be killed immediately after transfiguration.</p>
+     *
+     * <p>Iterates through all blocks stored in {@link #changedBlocks} and restores each block to its
+     * original material type. After all blocks are reverted, clears the changedBlocks map and calls
+     * {@link #doRevert()} for any subclass-specific cleanup.</p>
      */
     @Override
     public void revert() {
@@ -204,7 +256,13 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
     }
 
     /**
-     * Spell specific revert actions beyond changing the block type back. Needs to be overridden by child classes.
+     * Performs spell-specific revert actions beyond block restoration.
+     *
+     * <p>Called at the end of the revert process after all blocks have been restored to their original
+     * material types. Override this method in subclasses to perform any additional cleanup or restoration
+     * logic specific to the spell (e.g., removing applied effects, adjusting neighbor blocks, etc.).</p>
+     *
+     * <p>Default implementation does nothing. Subclasses should override if needed.</p>
      */
     void doRevert() {
     }

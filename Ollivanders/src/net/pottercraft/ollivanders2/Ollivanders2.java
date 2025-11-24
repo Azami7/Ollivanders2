@@ -31,7 +31,6 @@ import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.potion.O2Potions;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
-import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.potion.O2Potion;
 
 import org.bukkit.Bukkit;
@@ -49,16 +48,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Ollivanders2 plugin
+ * Ollivanders2 plugin - Main plugin class for Ollivanders2.
+ *
+ * <p>Manages the lifecycle of the Ollivanders2 plugin including initialization, configuration,
+ * and shutdown. Coordinates all resource managers (spells, potions, books, items, houses, players,
+ * stationary spells, prophecies, and owl post). Handles player spell casting permissions, cooldowns,
+ * and animagus form restrictions.</p>
  *
  * @author Azami7
  */
 public class Ollivanders2 extends JavaPlugin {
-    /**
-     * All active spell projectiles
-     */
-    final private List<O2Spell> projectiles = new ArrayList<>();
-
     /**
      * All blocks temporarily changed by spells
      */
@@ -245,12 +244,11 @@ public class Ollivanders2 extends JavaPlugin {
      * Cleanup when the Minecraft server shuts down.
      *
      * <p>Called when the Ollivanders2 plugin is being disabled. Orchestrates the complete shutdown
-     * process by killing active spell projectiles, delegating cleanup to all resource managers,
-     * saving persistent data, and reverting temporary world changes.</p>
+     * process by delegating cleanup to all resource managers, saving persistent data, and reverting
+     * temporary world changes.</p>
      *
      * <p>Shutdown Operations:</p>
      * <ul>
-     * <li>Kill all active spell projectiles to prevent dangling effects</li>
      * <li>Delegate shutdown to all resource managers (spells, potions, books, items, houses, players, stationary spells, prophecies, owl post)</li>
      * <li>Save APPARATE teleport locations</li>
      * <li>Revert all temporary block changes made by spells</li>
@@ -259,11 +257,6 @@ public class Ollivanders2 extends JavaPlugin {
      * </ul>
      */
     public void onDisable() {
-        // kill all spell projectiles running
-        for (O2Spell proj : projectiles) {
-            proj.kill();
-        }
-
         // call on disable for all resources
         spells.onDisable();
         potions.onDisable();
@@ -284,7 +277,10 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Save plugin data
+     * Save persistent plugin data to disk.
+     *
+     * <p>Saves stationary spells, prophecies, houses, players, player effects, and APPARATE
+     * teleport locations to their respective data files.</p>
      */
     public void savePluginData() {
         if (stationarySpells != null)
@@ -312,9 +308,22 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * onEnable runs when the Minecraft server is starting up.
-     * <p>
-     * Primary function is to set up static plugin data and load saved configs and data from disk.
+     * Plugin initialization when the Minecraft server is starting up.
+     *
+     * <p>Orchestrates the complete plugin startup process:</p>
+     * <ul>
+     * <li>Initializes all resource managers (spells, potions, books, items, houses, players, stationary spells, prophecies, owl post)</li>
+     * <li>Loads and initializes the plugin API</li>
+     * <li>Ensures plugin data directory exists</li>
+     * <li>Reads and applies configuration settings</li>
+     * <li>Registers event listeners</li>
+     * <li>Schedules the main plugin scheduler</li>
+     * <li>Loads dependency plugins (LibsDisguises, WorldGuard)</li>
+     * <li>Initializes player data and houses</li>
+     * <li>Initializes items, stationary spells, and spells</li>
+     * <li>Initializes potions and books</li>
+     * <li>Logs plugin startup completion</li>
+     * </ul>
      */
     public void onEnable() {
         spells = new O2Spells(this);
@@ -341,7 +350,7 @@ public class Ollivanders2 extends JavaPlugin {
         ollivandersListener.onEnable();
 
         // set up scheduler
-        OllivandersSchedule schedule = new OllivandersSchedule(this);
+        Ollivanders2Schedule schedule = new Ollivanders2Schedule(this);
         Bukkit.getScheduler().scheduleSyncRepeatingTask(this, schedule, 20L, 1L);
 
         // set up dependencies
@@ -412,6 +421,8 @@ public class Ollivanders2 extends JavaPlugin {
 
         //
         // maxSpells, can only be enabled when bookLearning is off.
+        // These are mutually exclusive features: when bookLearning is enabled, maxSpellLevel
+        // must be disabled to avoid conflicting spell progression systems
         //
         if (!bookLearning)
             maxSpellLevel = getConfig().getBoolean("maxSpellLevel");
@@ -1201,34 +1212,6 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * Get all the active spell projectiles
-     *
-     * @return a list of all active spell projectiles
-     */
-    @NotNull
-    public List<O2Spell> getProjectiles() {
-        return projectiles;
-    }
-
-    /**
-     * Add a new spell projectile
-     *
-     * @param spell the spell projectile
-     */
-    public void addProjectile(@NotNull O2Spell spell) {
-        projectiles.add(spell);
-    }
-
-    /**
-     * Remove a spell projectile. This will make it stop if it has not already been killed.
-     *
-     * @param spell the spell projectile
-     */
-    public void removeProjectile(@NotNull O2Spell spell) {
-        projectiles.remove(spell);
-    }
-
-    /**
      * Get all pending teleport actions.
      *
      * @return a list of teleport actions
@@ -1363,7 +1346,8 @@ public class Ollivanders2 extends JavaPlugin {
      * @return True if the player can cast this spell, false if not
      */
     public boolean canCast(@NotNull Player player, @NotNull O2SpellType spell, boolean verbose) {
-        // players cannot cast spells when in animagus form, except the spell to change form
+        // Animagus form restriction: players cannot cast spells when in animagus form, except the
+        // AMATO_ANIMO_ANIMATO_ANIMAGUS spell which is used to toggle animagus form
         if (Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.ANIMAGUS_EFFECT)) {
             if (spell == O2SpellType.AMATO_ANIMO_ANIMATO_ANIMAGUS)
                 return true;
@@ -1372,6 +1356,7 @@ public class Ollivanders2 extends JavaPlugin {
             return false;
         }
 
+        // Check Ollivanders2 permissions. Only validate if the permission is explicitly set for this player
         if (player.isPermissionSet("Ollivanders2." + spell)) {
             if (!player.hasPermission("Ollivanders2." + spell)) {
                 if (verbose)
@@ -1380,10 +1365,13 @@ public class Ollivanders2 extends JavaPlugin {
             }
         }
 
+        // Retrieve player data; if no O2Player exists for this player, they cannot cast
         O2Player p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
         if (p == null)
             return false;
 
+        // Check cooldown: if the current time is less than the spell's last cast time (plus cooldown duration),
+        // the spell is still on cooldown
         boolean coolDown = System.currentTimeMillis() < p.getSpellLastCastTime(spell);
 
         if (coolDown) {
@@ -1392,6 +1380,7 @@ public class Ollivanders2 extends JavaPlugin {
             return false;
         }
 
+        // Check if spell is allowed at this location (e.g., WorldGuard protection checks)
         boolean cast = spells.isSpellTypeAllowed(player.getLocation(), spell);
 
         if (!cast && verbose)
@@ -1421,30 +1410,36 @@ public class Ollivanders2 extends JavaPlugin {
     }
 
     /**
-     * When a spell is not allowed be cast, such as from WorldGuard protection, send a message.
-     * This is not the message to use for bookLearning enforcement.
+     * Send a message when a player attempts to cast a spell in a protected location (e.g., WorldGuard).
      *
-     * @param player the player that cast the spell
+     * <p>This is not the message to use for bookLearning enforcement. Used when
+     * {@link net.pottercraft.ollivanders2.spell.O2Spells#isSpellTypeAllowed(org.bukkit.Location, O2SpellType)} returns false.</p>
+     *
+     * @param player the player that attempted to cast the spell
      */
     public void spellCannotBeCastMessage(@NotNull Player player) {
         player.sendMessage(chatColor + "A powerful protective magic prevents you from casting this spell here.");
     }
 
     /**
-     * When a spell cannot be used in a location, such as from WorldGuard protection, send a message.
-     * This is not the message to use for bookLearning enforcement.
+     * Send a message when a spell's effect is blocked by protective magic (e.g., WorldGuard).
      *
-     * @param player the player that cast the spell
+     * <p>This is used when a spell is cast but its effects are blocked at the target location,
+     * not when the initial casting is prevented. This is not the message to use for bookLearning enforcement.</p>
+     *
+     * @param player the player whose spell effect was blocked
      */
     public void spellFailedMessage(@NotNull Player player) {
         player.sendMessage(chatColor + "A powerful protective magic blocks your spell.");
     }
 
     /**
-     * When a spell is not allowed be cast, such as from WorldGuard protection, send a message.
-     * This is not the message to use for bookLearning enforcement.
+     * Send a cooldown message when a player attempts to cast a spell too quickly.
      *
-     * @param player the player to send the cooldown message to
+     * <p>Used when a spell is on cooldown and the player cannot cast it yet. The cooldown time is
+     * stored in the player's O2Player data.</p>
+     *
+     * @param player the player who attempted to cast while on cooldown
      */
     public void spellCoolDownMessage(@NotNull Player player) {
         player.sendMessage(chatColor + "You are too tired to cast this spell right now.");

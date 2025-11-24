@@ -38,7 +38,26 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * A cast spell
+ * Abstract base class for all Ollivanders2 spells.
+ *
+ * <p>Provides core spell functionality including projectile movement, collision detection, validation,
+ * cooldowns, and basic lifecycle management. All spells cast by players extend this class and must
+ * implement spell-specific behavior in {@link #doCheckEffect()}.</p>
+ *
+ * <p><strong>Spell Lifecycle:</strong></p>
+ * <ol>
+ * <li>Spell is instantiated with player and wand information</li>
+ * <li>{@link #initSpell()} is called to perform player-based initialization (uses, skills, etc.)</li>
+ * <li>Each game tick, {@link #checkEffect()} is called to update spell state</li>
+ * <li>Projectile moves via {@link #move()} until it hits a block or reaches max distance</li>
+ * <li>Spell-specific effects are applied via {@link #doCheckEffect()}</li>
+ * <li>Spell is terminated via {@link #kill()}, which calls {@link #revert()} for cleanup</li>
+ * </ol>
+ *
+ * <p><strong>Spell Validation:</strong> Spells are validated against Ollivanders2 configuration settings
+ * and WorldGuard permissions. Invalid spells are automatically terminated.</p>
+ *
+ * @author Azami7
  */
 public abstract class O2Spell {
     /**
@@ -81,11 +100,6 @@ public abstract class O2Spell {
      * Whether this spell should be terminated.
      */
     private boolean kill = false;
-
-    /**
-     * Whether the effects of this spell should be permanent
-     */
-    protected boolean permanent = false;
 
     /**
      * The callback to the MC plugin
@@ -256,7 +270,18 @@ public abstract class O2Spell {
     }
 
     /**
-     * Game tick update on this spell - must be overridden in child classes if the spell exits immediately.
+     * Main game tick update called every server tick while the spell is active.
+     *
+     * <p>Handles core spell lifecycle logic:</p>
+     * <ul>
+     * <li>Validates spell is allowed at current location; kills if not</li>
+     * <li>Increments spell lifetime and kills if exceeding max lifetime</li>
+     * <li>Moves projectile via {@link #move()} if projectile hasn't hit a target</li>
+     * <li>Executes spell-specific effects via {@link #doCheckEffect()}</li>
+     * </ul>
+     *
+     * <p>Subclasses typically override {@link #doCheckEffect()} instead of this method.
+     * Only override this method if you need to customize the spell's entire tick behavior.</p>
      */
     public void checkEffect() {
         // check whether this spell can exist up until it hits a target
@@ -284,7 +309,20 @@ public abstract class O2Spell {
     }
 
     /**
-     * Moves the projectile forward, creating a particle effect
+     * Advances the spell projectile one block in its direction of travel.
+     *
+     * <p>Called each game tick while the spell is active and hasn't hit a target. Performs the following:</p>
+     * <ul>
+     * <li>Checks if spell has been killed or already hit target; exits early if so</li>
+     * <li>Checks if projectile has exceeded max travel distance; kills spell if so</li>
+     * <li>Updates projectile location and fires {@link OllivandersSpellProjectileMoveEvent}</li>
+     * <li>Validates spell is still allowed at new location per config and WorldGuard</li>
+     * <li>Plays movement visual effect at new location</li>
+     * <li>Checks if projectile hit a solid block; stops projectile and validates block target if so</li>
+     * </ul>
+     *
+     * <p>The projectile travels in the direction specified by {@link #vector} and can travel up to
+     * {@link #maxProjectileDistance} blocks before being automatically terminated.</p>
      */
     public void move() {
         // if this is somehow called when the spell is set to killed, or we've already hit a target, do nothing
@@ -589,8 +627,7 @@ public abstract class O2Spell {
     public void kill() {
         stopProjectile();
 
-        if (!permanent)
-            revert();
+        revert();
 
         kill = true;
     }
@@ -749,15 +786,6 @@ public abstract class O2Spell {
             return false;
 
         return true;
-    }
-
-    /**
-     * Is this spell a permanent spell?
-     *
-     * @return whether this spell is permanent or not
-     */
-    public boolean isPermanent() {
-        return permanent;
     }
 
     /**

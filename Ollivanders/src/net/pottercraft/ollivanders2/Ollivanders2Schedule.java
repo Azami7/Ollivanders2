@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
-import net.pottercraft.ollivanders2.spell.O2Spell;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -16,12 +15,17 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Main scheduler for Ollivanders2
+ * Main scheduler for Ollivanders2.
+ *
+ * <p>This scheduler runs every game tick and is responsible for the recurring upkeep of all active
+ * game systems including spell projectiles, player effects, stationary spells, prophecies, and
+ * pending teleport actions. Additionally, it manages periodic tasks such as invisibility cloak
+ * visibility checks (every second) and plugin data persistence (hourly).</p>
  *
  * @author Azami7
  * @version Ollivanders2
  */
-public class OllivandersSchedule implements Runnable {
+public class Ollivanders2Schedule implements Runnable {
     /**
      * A callback to the plugin
      */
@@ -42,17 +46,28 @@ public class OllivandersSchedule implements Runnable {
      *
      * @param plugin a callback to the plugin
      */
-    OllivandersSchedule(@NotNull Ollivanders2 plugin) {
+    Ollivanders2Schedule(@NotNull Ollivanders2 plugin) {
         p = plugin;
     }
 
     /**
-     * Primary plugin thread
+     * Primary plugin scheduler that runs every game tick.
+     *
+     * <p>Executes the following operations:</p>
+     * <ul>
+     * <li>Updates active spell projectiles via O2Spells.upkeep()</li>
+     * <li>Updates player effects</li>
+     * <li>Updates stationary spells</li>
+     * <li>Updates prophecies</li>
+     * <li>Processes pending teleport actions</li>
+     * <li>Handles invisibility cloak visibility every second</li>
+     * <li>Saves plugin data hourly</li>
+     * </ul>
      */
     public void run() {
         // run every tick
         try {
-            projectileScheduler();
+            Ollivanders2API.getSpells().upkeep();
             effectScheduler();
             Ollivanders2API.getStationarySpells().upkeep();
             Ollivanders2API.getProphecies().upkeep();
@@ -83,25 +98,9 @@ public class OllivandersSchedule implements Runnable {
     }
 
     /**
-     * Scheduling method that calls checkEffect() on all SpellProjectile objects
-     * and removes those that have kill set to true.
-     */
-    private void projectileScheduler() {
-        List<O2Spell> projectiles = p.getProjectiles();
-        List<O2Spell> projectiles2 = new ArrayList<>(projectiles);
-        if (!projectiles2.isEmpty()) {
-            for (O2Spell proj : projectiles2) {
-                proj.checkEffect();
-                if (proj.isKilled()) {
-                    p.removeProjectile(proj);
-                }
-            }
-        }
-    }
-
-    /**
-     * Scheduling method that calls checkEffect on all OEffect objects associated with every online player
-     * and removes those that have kill set to true.
+     * Calls upkeep on player effects for all online players.
+     *
+     * <p>This triggers the effect system to update all active effects and remove those marked for removal.</p>
      */
     private void effectScheduler() {
         List<Player> onlinePlayers = new ArrayList<>();
@@ -139,7 +138,15 @@ public class OllivandersSchedule implements Runnable {
     }
 
     /**
-     * Handle all teleport actions.
+     * Processes all pending teleport actions.
+     *
+     * <p>For each pending teleport action, this method:</p>
+     * <ul>
+     * <li>Preserves the player's original pitch and yaw orientation</li>
+     * <li>Teleports the player to the destination location</li>
+     * <li>Creates explosion effects at both origin and destination (if enabled)</li>
+     * <li>Removes the action from the pending teleport queue</li>
+     * </ul>
      */
     private void teleportScheduler() {
         List<Ollivanders2TeleportActions.O2TeleportAction> teleportActions = p.getTeleportActions();

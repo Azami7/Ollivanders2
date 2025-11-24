@@ -23,7 +23,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * The super class for transfiguration of all entities.
+ * Abstract base class for entity transfiguration spells.
+ *
+ * <p>Manages the transfiguration of living entities (mobs, animals) into other entity types.
+ * Provides core transfiguration logic including entity targeting, type validation, and reversion.
+ * Entity transfigurations are always temporary (non-permanent) and will be reverted when the
+ * spell duration expires or the spell is explicitly reverted.</p>
+ *
+ * <p>Subclasses must implement {@link #transfigureEntity(Entity)} to define the actual transformation logic.</p>
+ *
+ * @author Azami7
+ * @see TransfigurationBase for base transfiguration mechanics
+ * @see BlockTransfiguration for block transfiguration alternative
  */
 public abstract class EntityTransfiguration extends TransfigurationBase {
     /**
@@ -90,9 +101,22 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
     }
 
     /**
-     * Look for an entity to transfigure at the current projectile location.
-     * <p>
-     * Will not change the entity if it is on the entity blocked list list or if the target entity is already the transfiguration type.
+     * Searches for and transfigures an entity at the current spell projectile location.
+     *
+     * <p>This method is called each tick while the spell is active. It scans nearby entities within
+     * the spell's radius to find a valid target. Skips entities that are already transfigured by other
+     * active spells and applies success rate checks during the transfiguration attempt.</p>
+     *
+     * <p>If the projectile has hit a block (stopped) but no entity was transfigured, the spell fails.
+     * Once an entity is successfully transfigured, subsequent calls return immediately.</p>
+     *
+     * <p>Validation checks include:
+     * <ul>
+     * <li>Entity type must match the spell's target type (unless allow list is populated)</li>
+     * <li>Entity cannot be on the blocked list</li>
+     * <li>Entity cannot already be transfigured by another spell</li>
+     * <li>Success rate check must pass (based on player skill)</li>
+     * </ul></p>
      */
     @Override
     void transfigure() {
@@ -158,7 +182,7 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
             return false;
 
         // is this entity already transfigured?
-        for (O2Spell spell : p.getProjectiles()) {
+        for (O2Spell spell : Ollivanders2API.getSpells().getActiveSpells()) {
             if (spell instanceof TransfigurationBase) {
                 if (((TransfigurationBase) spell).isEntityTransfigured(entity)) {
                     common.printDebugMessage(entity.getName() + " is already transfigured", null, null, false);
@@ -213,7 +237,16 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
     }
 
     /**
-     * Revert the transfigured entity back to its original type
+     * Revert the transfigured entity back to its original state.
+     *
+     * <p>Removes the transfigured entity from the world and restores the original entity if the
+     * spell was not set to consume the original. For regular entities, respawns the original entity
+     * with preserved properties. For Items and FallingBlocks, drops or respawns them appropriately.
+     * If the transfigured entity has inventory (is an InventoryHolder), drops all inventory contents
+     * before removal.</p>
+     *
+     * <p>This method also calls {@link #doRevert()} to allow subclasses to perform spell-specific
+     * cleanup beyond basic reversion.</p>
      */
     @Override
     protected void revert() {
@@ -224,6 +257,9 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
         if (transfiguredEntity != null) {
             if (transfiguredEntity instanceof InventoryHolder) {
                 for (ItemStack stack : ((InventoryHolder) transfiguredEntity).getInventory().getContents()) {
+                    if (stack == null)
+                        continue;
+
                     transfiguredEntity.getWorld().dropItemNaturally(transfiguredEntity.getLocation(), stack);
                 }
             }
@@ -262,7 +298,13 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
     }
 
     /**
-     * Spawn an entity like the original entity
+     * Respawn the original entity with attributes as close to the original as possible.
+     *
+     * <p>Called during reversion to restore the original entity in place of the transfigured entity.
+     * Attempts to preserve entity properties including custom name, velocity, gravity, invulnerability,
+     * and age (ticks lived). For Items and Enchanted Items, restores item meta and enchantments.</p>
+     *
+     * <p>The respawned entity is positioned at the transfigured entity's current location.</p>
      */
     void respawnEntity() {
         Entity respawn = transfiguredEntity.getWorld().spawnEntity(transfiguredEntity.getLocation(), originalEntity.getType());
@@ -292,7 +334,13 @@ public abstract class EntityTransfiguration extends TransfigurationBase {
     }
 
     /**
-     * Do spell-specific revert functions beyond spawning the replacement entity
+     * Performs spell-specific revert functions beyond basic entity respawning.
+     *
+     * <p>Called at the end of the revert process after the original entity has been restored.
+     * Override this method in subclasses to perform any additional cleanup or restoration logic
+     * specific to the spell (e.g., removing applied effects, adjusting entity properties, etc.).</p>
+     *
+     * <p>Default implementation does nothing. Subclasses should override if needed.</p>
      */
     void doRevert() {
     }
