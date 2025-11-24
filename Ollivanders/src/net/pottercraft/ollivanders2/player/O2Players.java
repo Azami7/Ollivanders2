@@ -61,7 +61,6 @@ public class O2Players {
     private final String woodLabel = "Wood";
     private final String coreLabel = "Core";
     private final String soulsLabel = "Souls";
-    private final String invisibleLabel = "Invisible";
     private final String foundWandLabel = "Found_Wand";
     private final String masterSpellLabel = "Master_Spell";
     private final String animagusLabel = "Animagus";
@@ -107,11 +106,13 @@ public class O2Players {
      * @param pid  the UUID of this player
      * @param name the effectType of this player
      */
-    public void addPlayer(@NotNull UUID pid, @NotNull String name) {
-        // todo make this return o2p so that Ollivanders2.getO2Player can guarantee NotNull
+    @NotNull
+    public O2Player addPlayer(@NotNull UUID pid, @NotNull String name) {
         O2Player o2p = new O2Player(pid, name, p);
 
         updatePlayer(pid, o2p);
+
+        return o2p;
     }
 
     /**

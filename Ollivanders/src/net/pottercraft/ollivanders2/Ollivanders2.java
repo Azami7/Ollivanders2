@@ -1302,9 +1302,7 @@ public class Ollivanders2 extends JavaPlugin {
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(pid);
 
         if (o2p == null) {
-            Ollivanders2API.getPlayers().addPlayer(pid, player.displayName().toString());
-
-            o2p = Ollivanders2API.getPlayers().getPlayer(pid);
+            o2p = Ollivanders2API.getPlayers().addPlayer(pid, player.getDisplayName());
         }
 
         return o2p;

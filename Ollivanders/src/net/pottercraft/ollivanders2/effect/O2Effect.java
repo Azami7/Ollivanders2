@@ -88,7 +88,7 @@ public abstract class O2Effect {
      * Permanent effects do not age (duration stays at -1) and are only removed when explicitly killed or
      * when a specific game action triggers their removal via doRemove().
      */
-    protected boolean permanent = false;
+    protected boolean permanent;
 
     /**
      * The unique identifier of the player affected by this effect.
@@ -137,17 +137,14 @@ public abstract class O2Effect {
      * @param durationInTicks the duration in game ticks. Negative values create permanent effects
      * @param pid             the unique ID of the target player for this effect
      */
-    public O2Effect(@NotNull Ollivanders2 plugin, int durationInTicks, @NotNull boolean isPermanent, @NotNull UUID pid) {
+    public O2Effect(@NotNull Ollivanders2 plugin, int durationInTicks, boolean isPermanent, @NotNull UUID pid) {
         p = plugin;
         common = new Ollivanders2Common(p);
 
         duration = durationInTicks;
+        permanent = isPermanent;
 
-        // Enforce minimum duration for non-permanent effects to prevent ephemeral effects
-        if (duration < 0)
-            permanent = true;
-
-        if (!permanent && duration < minDuration)
+        if (duration < minDuration)
             duration = minDuration;
 
         kill = false;

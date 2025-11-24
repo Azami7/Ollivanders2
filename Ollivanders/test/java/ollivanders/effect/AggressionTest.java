@@ -6,20 +6,47 @@ import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.effect.AGGRESSION;
 import org.bukkit.Location;
 import org.bukkit.entity.Bee;
-import org.jetbrains.annotations.NotNull;
-import org.junit.jupiter.api.Test;
-
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+/**
+ * Test suite for the AGGRESSION spell effect.
+ *
+ * <p>AggressionTest verifies that the AGGRESSION effect correctly implements spell mechanics for
+ * causing nearby neutral entities to become hostile and attack the targeted player. The test creates
+ * AGGRESSION effects as permanent effects and validates that aggression level properly controls the
+ * effectiveness of the spell.</p>
+ *
+ * @see AGGRESSION for the effect being tested
+ * @see PermanentEffectTestSuper for the testing framework
+ */
 public class AggressionTest extends PermanentEffectTestSuper {
+    /**
+     * Create an AGGRESSION effect for testing.
+     *
+     * <p>Creates a permanent AGGRESSION effect. The isPermanent parameter is ignored as
+     * AGGRESSION effects are always permanent by design.</p>
+     *
+     * @param durationInTicks the duration parameter (unused for permanent effects)
+     * @param isPermanent     ignored; AGGRESSION effects are always permanent
+     * @return the newly created AGGRESSION effect instance
+     */
     @Override
-    AGGRESSION createEffect(int durationInTicks, boolean isPermanent, @NotNull UUID targetID) {
-        return new AGGRESSION(testPlugin, durationInTicks, true, targetID);
+    AGGRESSION createEffect(int durationInTicks, boolean isPermanent) {
+        return new AGGRESSION(testPlugin, durationInTicks, true, target.getUniqueId());
     }
 
+    /**
+     * Test AGGRESSION effect behavior on nearby neutral entities.
+     *
+     * <p>Verifies that the AGGRESSION effect correctly:
+     * - Spawns nearby neutral entities (bees) in a known non-hostile state
+     * - Applies the AGGRESSION effect to the target player with maximum aggression level
+     * - Runs the server scheduler for one aggression cooldown cycle
+     * - Confirms that nearby entities become hostile and target the player
+     * - Confirms that nearby entities take damage from the aggression effect</p>
+     */
     @Override
     void checkEffectTest() {
         Ollivanders2.debug = true;
@@ -33,7 +60,7 @@ public class AggressionTest extends PermanentEffectTestSuper {
         assertFalse(EntityCommon.isHostile(bee1), "bee1 is already hostile"); //assume if 1 is not they are all not
 
         // add the aggression effect to the target player with max aggression level so we have 100% chance effects will happen
-        AGGRESSION effect = createEffect(10, true, target.getUniqueId());
+        AGGRESSION effect = createEffect(10, true);
         effect.setAggressionLevel(10);
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
@@ -46,8 +73,17 @@ public class AggressionTest extends PermanentEffectTestSuper {
     }
 
     /**
-     * doRemove() in AGGRESSION doesn't do anything
+     * Verify doRemove() cleanup for AGGRESSION effect.
+     *
+     * <p>The AGGRESSION effect does not perform any special cleanup when removed, so this test
+     * is empty. All state changes (hostile entities, damage) are already persistent in the world
+     * and do not need to be reverted.</p>
      */
     @Override
     void doRemoveTest() {}
+
+    /**
+     * Aggression has no event handlers
+     */
+    void eventHandlerTests() {}
 }

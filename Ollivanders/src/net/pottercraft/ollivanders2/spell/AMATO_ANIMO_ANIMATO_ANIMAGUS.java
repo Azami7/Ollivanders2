@@ -91,11 +91,11 @@ public class AMATO_ANIMO_ANIMATO_ANIMAGUS extends O2Spell {
 
         if (o2p.isAnimagus()) {
             // If the player is already an animagus, the incantation changes them to and from their animal form.
-            common.printDebugMessage(player.displayName() + " is an Animagus.", null, null, false);
+            common.printDebugMessage(player.getDisplayName() + " is an Animagus.", null, null, false);
             transform(o2p);
         }
         else {
-            common.printDebugMessage(player.displayName() + " is not an Animagus.", null, null, false);
+            common.printDebugMessage(player.getDisplayName() + " is not an Animagus.", null, null, false);
             setAnimagusIncantation();
         }
 

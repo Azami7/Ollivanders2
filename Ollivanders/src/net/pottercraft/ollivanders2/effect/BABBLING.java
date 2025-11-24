@@ -199,6 +199,6 @@ public class BABBLING extends O2Effect {
 
         event.setMessage(newMessage);
 
-        common.printDebugMessage("Changed " + event.getPlayer().displayName() + "'s chat from \"" + message + "\" to \"" + newMessage + "\"", null, null, false);
+        common.printDebugMessage("Changed " + event.getPlayer().getDisplayName() + "'s chat from \"" + message + "\" to \"" + newMessage + "\"", null, null, false);
     }
 }
