@@ -93,12 +93,12 @@ public abstract class O2EffectAntidoteSuper extends O2Effect {
      * Get the strength/potency of this antidote effect.
      *
      * <p>Returns a value between 0.0 and 1.0+ that determines how effectively this antidote
-     * counteracts the target effect:
+     * counteracts the target effect:</p>
      * <ul>
      * <li><strong>strength &ge; 1.0:</strong> Full-strength antidote - completely removes the target effect</li>
      * <li><strong>0.5 &le; strength &lt; 1.0:</strong> Medium-strength antidote - reduces target effect duration by 50-99%</li>
      * <li><strong>0.0 &lt; strength &lt; 0.5:</strong> Weak antidote - reduces target effect duration by less than 50%</li>
-     * </ul></p>
+     * </ul>
      *
      * @return the antidote strength as a decimal value (0.0 to 1.0+)
      */

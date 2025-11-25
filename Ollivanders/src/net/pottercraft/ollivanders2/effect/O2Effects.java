@@ -1251,11 +1251,11 @@ public class O2Effects implements Listener {
      * Reduce the duration of a specific effect on a player by a percentage of its current duration.
      *
      * <p>Decrements the duration of a specific effect by reducing it based on a percentage of its current
-     * value. The calculation works as follows:
+     * value. The calculation works as follows:</p>
      * <ul>
      * <li>Reduction amount = current duration × (percent / 100)</li>
      * <li>New duration = current duration - reduction amount</li>
-     * </ul></p>
+     * </ul>
      *
      * <p>The percent parameter is clamped to a minimum of 1; values less than 1 are set to 1.
      * Values of 100 or greater completely set the duration to 0. Permanent effects are skipped and remain
