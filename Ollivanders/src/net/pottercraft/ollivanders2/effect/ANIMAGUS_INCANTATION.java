@@ -39,15 +39,14 @@ public class ANIMAGUS_INCANTATION extends O2Effect {
     }
 
     /**
-     * No active processing for incantation state.
+     * Age the incantation effect to track its remaining duration.
      *
-     * <p>This incantation marker effect is passive and does not perform any active behavior during each tick.
-     * The state is managed externally by spell completion logic or natural expiration when the duration reaches zero.
-     * To complete or modify the incantation, the player must interact with the spell system directly
-     * (e.g., repeating the incantation).</p>
+     * <p>Called every game tick by the effect system. Decrements the effect's duration by 1 tick.
+     * When the duration reaches zero or below, the effect is automatically killed and removed.</p>
      */
     @Override
     public void checkEffect() {
+        age(1);
     }
 
     /**

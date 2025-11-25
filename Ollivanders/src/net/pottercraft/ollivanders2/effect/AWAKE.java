@@ -28,7 +28,7 @@ public class AWAKE extends O2Effect {
     /**
      * Constructor for creating an awake-state effect.
      *
-     * <p>Creates a temporary effect that prevents the player from sleeping for the specified duration.
+     * <p>Creates an effect that prevents the player from sleeping for the specified duration.
      * Sets both information and mind-reading detection texts to indicate the player is unnaturally alert.</p>
      *
      * @param plugin      a callback to the MC plugin
