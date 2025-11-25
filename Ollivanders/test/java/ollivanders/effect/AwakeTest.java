@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -23,19 +22,7 @@ public class AwakeTest extends EffectTestSuper {
     }
 
     void checkEffectTest() {
-        int duration = 100;
-
-        // add effect to the manager so that its upkeep is run
-        AWAKE awake = createEffect(duration, false);
-        Ollivanders2API.getPlayers().playerEffects.addEffect(awake);
-
-        // checkEffect() ages AWAKE by 1 every tick
-        mockServer.getScheduler().performTicks(1);
-        assertEquals(duration - 1, awake.getRemainingDuration(), "AWAKE did not age after 1 tick");
-
-        // AWAKE is killed when its duration ticks have passed
-        mockServer.getScheduler().performTicks(duration);
-        assertTrue(awake.isKilled(), "AWAKE not killed after duration ticks have passed.");
+        checkEffectTestAgingHelper();
     }
 
     void eventHandlerTests() {
