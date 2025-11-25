@@ -132,4 +132,20 @@ public class TestCommon {
 
         return false;
     }
+
+    /**
+     * Determine if a string contains any of the strings in a list.
+     *
+     * @param stringList the string list of substrings to match
+     * @param string the string to check
+     * @return true if found, false otherwise
+     */
+    static public boolean stringContainsListMatch(List<String> stringList, String string) {
+        for (String subString : stringList) {
+            if (string.contains(subString))
+                return true;
+        }
+
+        return false;
+    }
 }

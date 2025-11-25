@@ -1,6 +1,7 @@
 package ollivanders.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.O2Effect;
 import ollivanders.testcommon.TestCommon;
 import org.bukkit.Location;
@@ -256,6 +257,24 @@ abstract public class EffectTestSuper {
      * should be empty but still present to satisfy the abstract contract.</p>
      */
     abstract void doRemoveTest();
+
+    /**
+     * Test that aging correctly happens - for use in checkEffectTest
+     */
+    void checkEffectTestAgingHelper() {
+        int duration = 100;
+
+        O2Effect effect = createEffect(duration, false);
+        Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+
+        // checkEffect() ages effect by 1 every tick
+        mockServer.getScheduler().performTicks(1);
+        assertEquals(duration - 1, effect.getRemainingDuration(), effect.effectType.toString() + " did not age after 1 tick");
+
+        // effect is killed when its duration ticks have passed
+        mockServer.getScheduler().performTicks(duration);
+        assertTrue(effect.isKilled(), effect.effectType.toString() + " not killed after duration ticks have passed.");
+    }
 
     /**
      * Reset effect system state after each test.

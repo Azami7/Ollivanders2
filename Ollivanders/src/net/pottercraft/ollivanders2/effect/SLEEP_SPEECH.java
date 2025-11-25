@@ -65,4 +65,12 @@ public class SLEEP_SPEECH extends BABBLING {
     @Override
     public void doRemove() {
     }
+
+    /**
+     * always permanent
+     * @param perm ignored - this is always true
+     */
+    @Override
+    public void setPermanent(boolean perm) {
+    }
 }
