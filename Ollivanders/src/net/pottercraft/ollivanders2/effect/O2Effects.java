@@ -1251,29 +1251,47 @@ public class O2Effects implements Listener {
      * Reduce the duration of a specific effect on a player by a percentage of its current duration.
      *
      * <p>Decrements the duration of a specific effect by reducing it based on a percentage of its current
-     * value. The percent parameter is clamped to a valid range of 1-100; values outside this range are
-     * automatically adjusted. Permanent effects are skipped and remain unaffected. If the effect is not
-     * found on the player, this method does nothing. If the effect's duration reaches zero or below after
-     * percentage reduction, it will be removed during the next upkeep cycle.</p>
+     * value. The calculation works as follows:
+     * <ul>
+     * <li>Reduction amount = current duration × (percent / 100)</li>
+     * <li>New duration = current duration - reduction amount</li>
+     * </ul></p>
+     *
+     * <p>The percent parameter is clamped to a minimum of 1; values less than 1 are set to 1.
+     * Values of 100 or greater completely set the duration to 0. Permanent effects are skipped and remain
+     * unaffected. If the effect is not found on the player, this method does nothing. If the effect's
+     * duration reaches zero or below after percentage reduction, it will be removed during the next upkeep cycle.</p>
      *
      * @param pid        the unique ID of the player whose effect should be aged
      * @param effectType the type of effect to age by percentage
-     * @param percent    the percentage of the effect's current duration to subtract (1-100; values outside
-     *                   this range are automatically clamped)
+     * @param percent    the percentage of the effect's current duration to subtract (clamped to minimum 1,
+     *                   values ≥ 100 completely remove the effect)
      * @see #ageEffect(UUID, O2EffectType, int) for aging by absolute amount instead of percentage
      */
     public void ageEffectByPercent(@NotNull UUID pid, @NotNull O2EffectType effectType, int percent) {
-        if (percent > 100)
-            percent = 100;
-        else if (percent < 1)
+        // Setting minimum percent to 1 to ensure at least some reduction occurs
+        if (percent < 1)
             percent = 1;
 
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
         if (activeEffects.containsKey(effectType)) {
             O2Effect effect = activeEffects.get(effectType);
 
-            if (!effect.isPermanent())
-                effect.duration = effect.duration - (effect.duration * (percent / 100));
+            if (!effect.isPermanent()) {
+                if (percent >= 100) {
+                    // Full reduction: completely remove the effect (percent >= 100 means at least 100% reduction)
+                    effect.duration = 0;
+                }
+                else {
+                    // Partial reduction: calculate the percentage of duration to subtract
+                    // Example: duration=100, percent=25 => reduction = 100 * (25/100) = 25 ticks
+                    double durationDouble = effect.duration;
+                    double percentReduction = ((double) percent / 100);
+
+                    double reduction = durationDouble * percentReduction;
+                    effect.duration = effect.duration - (int) reduction;
+                }
+            }
         }
 
         effectsData.updatePlayerActiveEffects(pid, activeEffects);
