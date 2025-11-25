@@ -88,4 +88,35 @@ public abstract class O2EffectAntidoteSuper extends O2Effect {
         // Antidotes are instant effects - kill immediately to prevent re-execution on next tick
         kill();
     }
+
+    /**
+     * Get the strength/potency of this antidote effect.
+     *
+     * <p>Returns a value between 0.0 and 1.0+ that determines how effectively this antidote
+     * counteracts the target effect:
+     * <ul>
+     * <li><strong>strength &ge; 1.0:</strong> Full-strength antidote - completely removes the target effect</li>
+     * <li><strong>0.5 &le; strength &lt; 1.0:</strong> Medium-strength antidote - reduces target effect duration by 50-99%</li>
+     * <li><strong>0.0 &lt; strength &lt; 0.5:</strong> Weak antidote - reduces target effect duration by less than 50%</li>
+     * </ul></p>
+     *
+     * @return the antidote strength as a decimal value (0.0 to 1.0+)
+     */
+    public double getStrength() {
+        return strength;
+    }
+
+    /**
+     * Overridden to prevent changing permanent status - antidotes are always permanent during execution.
+     *
+     * <p>Antidotes are designed as instant-acting effects that apply their counter-effect immediately
+     * and then kill themselves on the first tick. The permanent flag is set internally to ensure the
+     * effect is not aged or expired prematurely before checkEffect() has a chance to execute.
+     * Attempts to change the permanent status are silently ignored.</p>
+     *
+     * @param perm the requested permanent status (ignored - antidotes are always internally set as permanent)
+     */
+    @Override
+    public void setPermanent(boolean perm) {
+    }
 }
