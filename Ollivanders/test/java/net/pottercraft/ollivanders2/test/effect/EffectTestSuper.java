@@ -155,11 +155,12 @@ abstract public class EffectTestSuper {
         // create an effect that lasts 10 ticks
         O2Effect effect = createEffect(10, false);
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
-        assertEquals(O2Effect.minDuration, effect.getRemainingDuration(), "Effect duration not set to minimum duration when duration specified as 10 in constructor");
 
         // create an effect with is permanent set true
         effect = createEffect(5, true);
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
+
+        minDurationBoundsTest();
 
         ageAndKillTest();
 
@@ -174,6 +175,11 @@ abstract public class EffectTestSuper {
         doRemoveTest();
 
         Ollivanders2.debug = false;
+    }
+
+    void minDurationBoundsTest() {
+        O2Effect effect = createEffect(10, false);
+        assertEquals(O2Effect.minDuration, effect.getRemainingDuration(), "Effect duration not set to minimum duration when duration specified as 10 in constructor");
     }
 
     /**
