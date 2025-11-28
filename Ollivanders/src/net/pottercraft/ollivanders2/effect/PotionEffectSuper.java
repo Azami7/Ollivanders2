@@ -11,20 +11,18 @@ import java.util.UUID;
 /**
  * Parent class for effects that apply Minecraft potion effects to players.
  *
- * <p>PotionEffectSuper provides a potion effect application mechanism with randomized duration.
- * Potion effects are applied as instant effects: they apply immediately in checkEffect() and then
- * kill themselves in the same tick.
+ * <p>PotionEffectSuper provides a potion effect application mechanism that applies effects
+ * immediately and then expires. Potion effects are applied in checkEffect() and the effect
+ * kills itself in the same tick.
  * </p>
  *
  * <p>Duration Mechanism:</p>
- * When a potion effect is applied, its duration is calculated as:
- * duration = baseTime × randomMultiplier, where:
+ * Potion effects are applied with a duration clamped to a valid range:
  * <ul>
- * <li>baseTime = 2400 ticks (120 seconds / 2 minutes)</li>
- * <li>randomMultiplier = random value between 1 and 5 (inclusive)</li>
- * <li>Resulting duration range: 2400-12000 ticks (2-10 minutes)</li>
+ * <li>Minimum duration: 2400 ticks (2 minutes)</li>
+ * <li>Maximum duration: 6000 ticks (5 minutes)</li>
+ * <li>The duration specified in the constructor is clamped to this range</li>
  * </ul>
- * The randomized duration adds variety to the effect duration without making it unpredictable.
  *
  * <p>Effect Configuration:
  * Subclasses set potionEffectType to specify which Minecraft potion effect (POISON, WEAKNESS, etc.)
@@ -46,11 +44,6 @@ public abstract class PotionEffectSuper extends O2Effect {
      * Subclasses typically set this value before the effect is applied.</p>
      */
     int strength = 1;
-
-    /**
-     * Minimum duration for a potion effect
-     */
-    public static int minDuration = 2400; // 2 minutes
 
     /**
      * Maximum duration for a potion effect
@@ -80,7 +73,7 @@ public abstract class PotionEffectSuper extends O2Effect {
     public PotionEffectSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, false, pid);
 
-        permanent = false;
+        minDuration = 2400; // minDuration for a potion effect is 2 minutes
 
         // make sure duration is between the min and max allowed
         this.duration = duration;
@@ -96,14 +89,13 @@ public abstract class PotionEffectSuper extends O2Effect {
      * <p>This method executes in a single game tick and performs the following:</p>
      * <ol>
      * <li>Locates the target player on the server</li>
-     * <li>Calculates a randomized duration: 2400 ticks × (random 1-5) = 2400-12000 ticks (2-10 minutes)</li>
-     * <li>Creates a new potion effect with the specified type, randomized duration, and strength (amplifier)</li>
+     * <li>Creates a new potion effect with the specified type, duration, and strength (amplifier)</li>
      * <li>Applies the potion effect to the target</li>
      * <li>Kills the effect so it doesn't persist</li>
      * </ol>
      *
-     * <p>Example: A POISON effect with strength 2 will create a poison effect with amplifier 2 and a random
-     * duration between 2 and 10 minutes.</p>
+     * <p>Example: A POISON effect with strength 2 will create a poison effect with amplifier 2 and the
+     * duration specified when the effect was created (clamped to 2400-6000 ticks).</p>
      */
     @Override
     public void checkEffect() {
@@ -126,5 +118,32 @@ public abstract class PotionEffectSuper extends O2Effect {
      */
     public void setStrength(int s) {
         strength = s;
+    }
+
+    /**
+     * Get the strength for this potion effect
+     *
+     * @return the potion strength
+     */
+    public int getStrength() {
+        return strength;
+    }
+
+    /**
+     * Get the PotionEffectType this PotionEffect effect adds
+     *
+     * @return the PotionEffectType
+     */
+    public PotionEffectType getPotionEffectType() {
+        return potionEffectType;
+    }
+
+    /**
+     * Potion effects cannot ever be permanent
+     *
+     * @param perm ignored - potion effects are always temporary
+     */
+    @Override
+    public void setPermanent(boolean perm) {
     }
 }

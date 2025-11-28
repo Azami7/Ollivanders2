@@ -70,7 +70,7 @@ public abstract class O2Effect {
      * Currently set to 5 seconds. Effects created with durations shorter than this will be extended
      * to meet the minimum, ensuring effects are not too ephemeral.
      */
-    static public final int minDuration = 5 * Ollivanders2Common.ticksPerSecond;
+    static public int minDuration = 5 * Ollivanders2Common.ticksPerSecond;
 
     /**
      * Reference to the plugin for accessing configuration, logging, and server API.
