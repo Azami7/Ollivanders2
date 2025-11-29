@@ -43,6 +43,8 @@ public class BABBLING_ANTIDOTE_LESSER extends O2EffectAntidoteSuper {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.BABBLING_ANTIDOTE_LESSER;
+        checkDurationBounds();
+
         o2EffectType = O2EffectType.BABBLING;
         strength = 0.25;
     }

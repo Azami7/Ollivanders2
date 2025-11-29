@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.effect.LUCK;
+import org.bukkit.entity.Player;
 
 /**
  * Test suite for the LUCK potion effect.
@@ -34,11 +35,12 @@ public class LuckTest extends PotionEffectSuperTest {
      * <p>Instantiates a new LUCK effect with the specified parameters. This method is called
      * by the inherited test methods to create fresh effect instances for each test scenario.</p>
      *
+     * @param target          the player to add the effect to
      * @param durationInTicks the duration of the effect in game ticks, will be clamped to 2400-6000 ticks
      * @param isPermanent     ignored - LUCK effects cannot be permanent
      * @return a new LUCK effect targeting the test player
      */
-    LUCK createEffect(int durationInTicks, boolean isPermanent) {
+    LUCK createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new LUCK(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 }

@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.effect.NIGHT_VISION;
+import org.bukkit.entity.Player;
 
 /**
  * Test suite for the NIGHT_VISION potion effect.
@@ -34,11 +35,12 @@ public class NightVisionTest extends PotionEffectSuperTest {
      * <p>Instantiates a new NIGHT_VISION effect with the specified parameters. This method is called
      * by the inherited test methods to create fresh effect instances for each test scenario.</p>
      *
+     * @param target          the player to add the effect to
      * @param durationInTicks the duration of the effect in game ticks, will be clamped to 2400-6000 ticks
      * @param isPermanent     ignored - NIGHT_VISION effects cannot be permanent
      * @return a new NIGHT_VISION effect targeting the test player
      */
-    NIGHT_VISION createEffect(int durationInTicks, boolean isPermanent) {
+    NIGHT_VISION createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new NIGHT_VISION(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 }

@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.effect.UNLUCK;
+import org.bukkit.entity.Player;
 
 /**
  * Test suite for the UNLUCK potion effect.
@@ -34,11 +35,12 @@ public class UnluckTest extends PotionEffectSuperTest {
      * <p>Instantiates a new UNLUCK effect with the specified parameters. This method is called
      * by the inherited test methods to create fresh effect instances for each test scenario.</p>
      *
+     * @param target          the player to add the effect to
      * @param durationInTicks the duration of the effect in game ticks, will be clamped to 2400-6000 ticks
      * @param isPermanent     ignored - UNLUCK effects cannot be permanent
      * @return a new UNLUCK effect targeting the test player
      */
-    UNLUCK createEffect(int durationInTicks, boolean isPermanent) {
+    UNLUCK createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new UNLUCK(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 }

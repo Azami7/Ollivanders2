@@ -45,6 +45,8 @@ public class IMPROVED_BOOK_LEARNING extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.IMPROVED_BOOK_LEARNING;
+        checkDurationBounds();
+
         legilimensText = "feels more studious than usual";
     }
 

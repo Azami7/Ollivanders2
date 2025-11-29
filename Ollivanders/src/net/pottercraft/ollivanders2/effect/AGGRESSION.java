@@ -89,10 +89,11 @@ public class AGGRESSION extends O2Effect {
         super(plugin, duration, true, pid);
 
         effectType = O2EffectType.AGGRESSION;
+        checkDurationBounds();
+
         legilimensText = "feels aggressive";
         affectedPlayerText = "You feel angry.";
 
-        permanent = true;
         target = p.getServer().getPlayer(targetID);
         cooldown = cooldownLimit;
     }

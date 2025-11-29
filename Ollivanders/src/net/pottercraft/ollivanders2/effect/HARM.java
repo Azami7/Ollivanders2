@@ -37,9 +37,11 @@ public class HARM extends PotionEffectSuper {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.HARM;
-        potionEffectType = PotionEffectType.INSTANT_DAMAGE;
+        checkDurationBounds();
+
         informousText = legilimensText = "feels unwell";
 
+        potionEffectType = PotionEffectType.INSTANT_DAMAGE;
         strength = 1;
     }
 

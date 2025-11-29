@@ -35,10 +35,12 @@ public class WATER_BREATHING extends PotionEffectSuper {
     public WATER_BREATHING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, isPermanent, pid);
 
-        strength = 1;
-
         effectType = O2EffectType.WATER_BREATHING;
+        checkDurationBounds();
+
+        strength = 1;
         potionEffectType = PotionEffectType.WATER_BREATHING;
+
         informousText = legilimensText = "can breath in water";
     }
 

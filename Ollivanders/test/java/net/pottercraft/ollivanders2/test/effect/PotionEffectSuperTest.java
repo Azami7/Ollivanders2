@@ -3,7 +3,9 @@ package net.pottercraft.ollivanders2.test.effect;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.PotionEffectSuper;
+import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -28,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
  * inherited from {@link NotPermanentEffectTestSuper}</li>
  * </ul>
  *
- * <p>Concrete test implementations should extend this class and implement {@link #createEffect(int, boolean)}
+ * <p>Concrete test implementations should extend this class and implement {@link #createEffect(Player, int, boolean)}
  * to instantiate the specific PotionEffectSuper subclass being tested. All other test methods are inherited
  * and will validate the effect's behavior automatically.</p>
  *
@@ -44,11 +46,12 @@ abstract public class PotionEffectSuperTest extends NotPermanentEffectTestSuper 
      * specific PotionEffectSuper subclass being tested. This allows each test class to test a
      * different potion effect type while reusing the common testing framework.</p>
      *
+     * @param target          the player to add the effect to
      * @param durationInTicks the duration of the effect in game ticks
      * @param isPermanent     ignored - potion effects cannot be permanent
      * @return the newly created PotionEffectSuper instance of the type being tested
      */
-    abstract PotionEffectSuper createEffect(int durationInTicks, boolean isPermanent);
+    abstract PotionEffectSuper createEffect(Player target, int durationInTicks, boolean isPermanent);
 
     /**
      * Test that the potion effect is properly applied to the target player with correct parameters.
@@ -73,8 +76,10 @@ abstract public class PotionEffectSuperTest extends NotPermanentEffectTestSuper 
      * </p>
      */
     void checkEffectTest() {
+        PlayerMock target = mockServer.addPlayer();
+
         // create the potion effect and add it to the effect manager
-        PotionEffectSuper potionEffect = createEffect(PotionEffectSuper.minDuration, false);
+        PotionEffectSuper potionEffect = createEffect(target, 100, false);
         Ollivanders2API.getPlayers().playerEffects.addEffect(potionEffect);
         int strength = potionEffect.getStrength();
 
@@ -85,31 +90,8 @@ abstract public class PotionEffectSuperTest extends NotPermanentEffectTestSuper 
         PotionEffect appliedEffect = target.getPotionEffect(potionEffect.getPotionEffectType());
         assertNotNull(appliedEffect, potionEffect.getPotionEffectType().toString() + " did not apply " + potionEffect.getPotionEffectType());
 
-        assertEquals(PotionEffectSuper.minDuration, appliedEffect.getDuration(), "Potion effect did not have expected duration");
+        assertEquals(potionEffect.getMinDuration(), appliedEffect.getDuration(), "Potion effect did not have expected duration");
         assertEquals(strength, appliedEffect.getAmplifier(), "Potion effect amplifier was not expected value");
-    }
-
-    /**
-     * Test that potion effect duration is clamped to valid bounds.
-     *
-     * <p>Verifies that PotionEffectSuper correctly enforces duration constraints:
-     * <ul>
-     * <li>Duration below 2400 ticks (2 minutes) is clamped to the minimum of 2400 ticks</li>
-     * <li>Duration above 6000 ticks (5 minutes) is clamped to the maximum of 6000 ticks</li>
-     * </ul>
-     * </p>
-     *
-     * <p>This override provides PotionEffectSuper-specific bounds. The parent class tests for
-     * {@link O2Effect#minDuration} bounds, but potion effects have their own specific minimum
-     * and maximum values.</p>
-     */
-    @Override
-    void minDurationBoundsTest() {
-        O2Effect effect = createEffect(PotionEffectSuper.minDuration - 100, false);
-        assertEquals(PotionEffectSuper.minDuration, effect.getRemainingDuration(), "Effect duration not set to minimum duration when duration less than minDuration in constructor");
-
-        effect = createEffect(PotionEffectSuper.maxDuration + 100, false);
-        assertEquals(PotionEffectSuper.maxDuration, effect.getRemainingDuration(), "Effect duration not set to maximum duration when duration greater than maxDuration in constructor");
     }
 
     /**

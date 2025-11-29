@@ -38,8 +38,11 @@ public class HUNGER extends PotionEffectSuper {
         strength = 1;
 
         effectType = O2EffectType.HUNGER;
-        potionEffectType = PotionEffectType.HUNGER;
+        checkDurationBounds();
+
         informousText = legilimensText = "is hungry";
+
+        potionEffectType = PotionEffectType.HUNGER;
         affectedPlayerText = "You feel hungry.";
     }
 

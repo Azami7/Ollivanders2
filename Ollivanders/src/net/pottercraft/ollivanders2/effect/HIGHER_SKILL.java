@@ -45,6 +45,8 @@ public class HIGHER_SKILL extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.HIGHER_SKILL;
+        checkDurationBounds();
+
         legilimensText = "feels more skillful than usual";
     }
 

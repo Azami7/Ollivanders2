@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.effect.BLINDNESS;
+import org.bukkit.entity.Player;
 
 /**
  * Test suite for the BLINDNESS potion effect.
@@ -34,11 +35,12 @@ public class BlindnessTest extends PotionEffectSuperTest {
      * <p>Instantiates a new BLINDNESS effect with the specified parameters. This method is called
      * by the inherited test methods to create fresh effect instances for each test scenario.</p>
      *
+     * @param target
      * @param durationInTicks the duration of the effect in game ticks, will be clamped to 2400-6000 ticks
      * @param isPermanent     ignored - BLINDNESS effects cannot be permanent
      * @return a new BLINDNESS effect targeting the test player
      */
-    BLINDNESS createEffect(int durationInTicks, boolean isPermanent) {
+    BLINDNESS createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new BLINDNESS(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 }

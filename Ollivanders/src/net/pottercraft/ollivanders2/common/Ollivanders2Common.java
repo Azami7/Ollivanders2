@@ -67,22 +67,22 @@ public class Ollivanders2Common {
 
     /**
      * The number of ticks per second for an MC server.
-     * <p>
-     * Reference: https://minecraft.fandom.com/el/wiki/Tick
+     *
+     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">https://minecraft.fandom.com/el/wiki/Tick</a>
      */
     public static final int ticksPerSecond = 20;
 
     /**
      * The number of ticks per minute for an MC server.
-     * <p>
-     * Reference: https://minecraft.fandom.com/el/wiki/Tick
+     *
+     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">https://minecraft.fandom.com/el/wiki/Tick</a>
      */
     public static final int ticksPerMinute = 20 * 60;
 
     /**
      * The number of ticks per hour for an MC server.
-     * <p>
-     * Reference: https://minecraft.fandom.com/el/wiki/Tick
+     *
+     * @see <a href="https://minecraft.fandom.com/el/wiki/Tick">https://minecraft.fandom.com/el/wiki/Tick</a>
      */
     public static final int ticksPerHour = 20 * 60 * 60;
 

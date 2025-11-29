@@ -6,6 +6,8 @@ import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.effect.AGGRESSION;
 import org.bukkit.Location;
 import org.bukkit.entity.Bee;
+import org.bukkit.entity.Player;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,12 +30,13 @@ public class AggressionTest extends PermanentEffectTestSuper {
      * <p>Creates a permanent AGGRESSION effect. The isPermanent parameter is ignored as
      * AGGRESSION effects are always permanent by design.</p>
      *
+     * @param target
      * @param durationInTicks the duration parameter (unused for permanent effects)
      * @param isPermanent     ignored; AGGRESSION effects are always permanent
      * @return the newly created AGGRESSION effect instance
      */
     @Override
-    AGGRESSION createEffect(int durationInTicks, boolean isPermanent) {
+    AGGRESSION createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new AGGRESSION(testPlugin, durationInTicks, true, target.getUniqueId());
     }
 
@@ -49,7 +52,8 @@ public class AggressionTest extends PermanentEffectTestSuper {
      */
     @Override
     void checkEffectTest() {
-        Ollivanders2.debug = true;
+        PlayerMock target = mockServer.addPlayer();
+
         target.setLocation(new Location(testWorld, 500, 4, 0));
 
         // spawn some neutral entities near the target
@@ -60,7 +64,7 @@ public class AggressionTest extends PermanentEffectTestSuper {
         assertFalse(EntityCommon.isHostile(bee1), "bee1 is already hostile"); //assume if 1 is not they are all not
 
         // add the aggression effect to the target player with max aggression level so we have 100% chance effects will happen
-        AGGRESSION effect = createEffect(10, true);
+        AGGRESSION effect = createEffect(target, 10, true);
         effect.setAggressionLevel(10);
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 

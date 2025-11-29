@@ -41,10 +41,10 @@ public class SWELLING extends PlayerChangeSizeSuper {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.SWELLING;
+        checkDurationBounds();
+
         scaleMultiplier = 2; // increase the player's by double
 
         informousText = "is unnaturally large";
-
-        startEffect();
     }
 }

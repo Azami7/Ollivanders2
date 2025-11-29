@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.effect.HARM;
+import org.bukkit.entity.Player;
 
 /**
  * Test suite for the HARM potion effect.
@@ -34,11 +35,12 @@ public class HarmTest extends PotionEffectSuperTest {
      * <p>Instantiates a new HARM effect with the specified parameters. This method is called
      * by the inherited test methods to create fresh effect instances for each test scenario.</p>
      *
+     * @param target          the player to add the effect to
      * @param durationInTicks the duration of the effect in game ticks, will be clamped to 2400-6000 ticks
      * @param isPermanent     ignored - HARM effects cannot be permanent
      * @return a new HARM effect targeting the test player
      */
-    HARM createEffect(int durationInTicks, boolean isPermanent) {
+    HARM createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new HARM(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 }

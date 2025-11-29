@@ -66,13 +66,6 @@ public abstract class O2Effect {
     public int duration;
 
     /**
-     * The minimum duration for non-permanent effects (in game ticks).
-     * Currently set to 5 seconds. Effects created with durations shorter than this will be extended
-     * to meet the minimum, ensuring effects are not too ephemeral.
-     */
-    static public int minDuration = 5 * Ollivanders2Common.ticksPerSecond;
-
-    /**
      * Reference to the plugin for accessing configuration, logging, and server API.
      */
     final protected Ollivanders2 p;
@@ -144,13 +137,38 @@ public abstract class O2Effect {
         duration = durationInTicks;
         permanent = isPermanent;
 
-        if (duration < minDuration)
-            duration = minDuration;
-
         kill = false;
         targetID = pid;
 
         informousText = null;
+    }
+
+    /**
+     * Check and adjust duration to the min/max bounds for this effect type.
+     */
+    void checkDurationBounds() {
+        if (duration < effectType.getMinDuration())
+            duration = effectType.getMinDuration();
+        else if (duration > effectType.getMaxDuration())
+            duration = effectType.getMaxDuration();
+    }
+
+    /**
+     * Get the minimum duration, in ticks, for this effect type
+     *
+     * @return the minimum duration
+     */
+    public int getMinDuration() {
+        return effectType.getMinDuration();
+    }
+
+    /**
+     * Get the maximum duration, in ticks, for this effect type
+     *
+     * @return the maximum duration
+     */
+    public int getMaxDuration() {
+        return effectType.getMaxDuration();
     }
 
     /**

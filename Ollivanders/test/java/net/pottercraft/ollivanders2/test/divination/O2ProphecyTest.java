@@ -72,7 +72,7 @@ public class O2ProphecyTest {
         Ollivanders2.debug = true;
         String prophecyMessage = "test prophecy message";
         O2EffectType prophecyEffect = O2EffectType.FAST_LEARNING;
-        int effectDuration = O2Effect.minDuration; // must be > 5
+        int effectDuration = prophecyEffect.getMinDuration();
 
         // test age()
         O2Prophecy prophecy = new O2Prophecy(testPlugin, prophecyEffect, prophecyMessage, target.getUniqueId(), prophet.getUniqueId(), 10, effectDuration, 99);

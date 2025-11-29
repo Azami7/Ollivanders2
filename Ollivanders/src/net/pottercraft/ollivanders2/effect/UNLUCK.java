@@ -39,7 +39,10 @@ public class UNLUCK extends PotionEffectSuper {
         strength = 1;
 
         effectType = O2EffectType.UNLUCK;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.UNLUCK;
+
         informousText = legilimensText = "feels unlucky";
         affectedPlayerText = "You feel unlucky.";
     }

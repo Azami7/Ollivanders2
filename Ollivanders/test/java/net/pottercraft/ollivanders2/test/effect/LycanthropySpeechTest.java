@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.effect.LYCANTHROPY_SPEECH;
 import net.pottercraft.ollivanders2.effect.O2Effect;
+import org.bukkit.entity.Player;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,7 +20,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * beyond the base O2Effect class.</p>
  */
 public class LycanthropySpeechTest extends BabblingTest {
-    LYCANTHROPY_SPEECH createEffect(int durationInTicks, boolean isPermanent) {
+    /**
+     * Create a LYCANTHROPY_SPEECH effect for testing.
+     *
+     * <p>Creates a permanent LYCANTHROPY_SPEECH effect. The isPermanent parameter is ignored as
+     * LYCANTHROPY_SPEECH effects are always permanent by design.</p>
+     *
+     * @param target          the player to add the effect to
+     * @param durationInTicks the duration parameter (unused for permanent effects)
+     * @param isPermanent     ignored; LYCANTHROPY_SPEECH effects are always permanent
+     * @return the newly created LYCANTHROPY_SPEECH effect instance
+     */
+    LYCANTHROPY_SPEECH createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new LYCANTHROPY_SPEECH(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 
@@ -33,7 +45,7 @@ public class LycanthropySpeechTest extends BabblingTest {
      */
     @Override
     void isPermanentTest() {
-        O2Effect effect = createEffect(10, false);
+        O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);
         assertTrue(effect.isPermanent(), "Effect not permanent when created;");
 
         effect.setPermanent(false);

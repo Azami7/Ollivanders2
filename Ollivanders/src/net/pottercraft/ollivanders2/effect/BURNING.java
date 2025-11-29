@@ -88,6 +88,8 @@ public class BURNING extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.BURNING;
+        checkDurationBounds();
+
         informousText = legilimensText = "is afflicted with a terrible burning";
 
         damage = (double) duration / 100;

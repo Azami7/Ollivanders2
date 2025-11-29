@@ -39,7 +39,10 @@ public class SLOWNESS extends PotionEffectSuper {
         strength = 1;
 
         effectType = O2EffectType.SLOWNESS;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.SLOWNESS;
+
         informousText = legilimensText = "feels sluggish";
         affectedPlayerText = "You feel sluggish.";
     }

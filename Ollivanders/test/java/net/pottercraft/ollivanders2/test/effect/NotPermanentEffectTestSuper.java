@@ -29,7 +29,7 @@ abstract public class NotPermanentEffectTestSuper extends EffectTestSuper {
      */
     @Override
     void isPermanentTest() {
-        O2Effect effect = createEffect(10, true);
+        O2Effect effect = createEffect(mockServer.addPlayer(), 10, true);
         assertFalse(effect.isPermanent(), "Effect permanent when created;");
 
         effect.setPermanent(true);

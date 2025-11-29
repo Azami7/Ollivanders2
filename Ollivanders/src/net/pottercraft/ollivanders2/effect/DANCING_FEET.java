@@ -67,6 +67,8 @@ public class DANCING_FEET extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.DANCING_FEET;
+        checkDurationBounds();
+
         informousText = "cannot control their feet.";
         affectedPlayerText = "You start dancing.";
     }

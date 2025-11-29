@@ -50,6 +50,7 @@ public class LYCANTHROPY_SPEECH extends BABBLING {
         super(plugin, duration, true, pid);
 
         effectType = O2EffectType.LYCANTHROPY_SPEECH;
+        checkDurationBounds();
 
         dictionary = new ArrayList<>() {{
             add("§oHOOOOOOWLLLLLL");

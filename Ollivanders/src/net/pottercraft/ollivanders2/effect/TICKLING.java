@@ -1,9 +1,10 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -21,6 +22,8 @@ import java.util.UUID;
  * @author Azami7
  */
 public class TICKLING extends O2Effect {
+    Player target = null;
+
     /**
      * Constructor for creating a tickling effect.
      *
@@ -38,34 +41,38 @@ public class TICKLING extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.TICKLING;
+        checkDurationBounds();
+
         informousText = "is doubled-over from tickling.";
         affectedPlayerText = "You buckle due to excessive tickling.";
-
-        Player player = p.getServer().getPlayer(targetID);
-        if (player == null) {
-            common.printDebugMessage("TICKLING.constructor: player is null", null, null, true);
-            kill();
-        }
-        else {
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    player.setSneaking(true);
-                }
-            }.runTaskLater(p, 5);
-        }
     }
 
     /**
-     * Age the tickling effect each game tick.
      *
-     * <p>Called each game tick. This method simply ages the effect counter, allowing the duration to
-     * expire naturally. The forced sneak state is maintained by cancelling toggle sneak events.</p>
      */
     @Override
     public void checkEffect() {
+        // on first pass, keep track of the target player so we do not have to call getPlayer() every tick, and add
+        // the laughing effect as well
+        if (target == null) {
+            Player player = p.getServer().getPlayer(targetID);
+
+            // if player is still null, player not found, kill and return
+            if (player == null) {
+                kill();
+                return;
+            }
+
+            Ollivanders2API.getPlayers().playerEffects.addEffect(new LAUGHING(p, -1, true, targetID));
+        }
+
         // age this effect
         age(1);
+
+        // every 5 seconds, make the player sneak to "double-over" with laughter
+        if ((duration % (5 * Ollivanders2Common.ticksPerSecond)) == 0) {
+            target.setSneaking(true);
+        }
     }
 
     /**
@@ -84,18 +91,13 @@ public class TICKLING extends O2Effect {
     }
 
     /**
-     * Restore the tickled player to normal standing state.
      *
-     * <p>When the tickling effect is removed, this method stops the player's sneak state, allowing them
-     * to return to normal standing. If the player is offline, the operation is gracefully skipped.</p>
      */
     @Override
     public void doRemove() {
         Player player = p.getServer().getPlayer(targetID);
 
-        if (player == null)
-            common.printDebugMessage("TICKLING.doRemove: player is null", null, null, true);
-        else
-            player.setSneaking(false);
+        // remove laughing effect
+        Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.LAUGHING);
     }
 }

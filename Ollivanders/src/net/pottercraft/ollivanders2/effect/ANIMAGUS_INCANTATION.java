@@ -36,6 +36,7 @@ public class ANIMAGUS_INCANTATION extends O2Effect {
         super(plugin, duration, false, pid);
 
         effectType = O2EffectType.ANIMAGUS_INCANTATION;
+        checkDurationBounds();
     }
 
     /**

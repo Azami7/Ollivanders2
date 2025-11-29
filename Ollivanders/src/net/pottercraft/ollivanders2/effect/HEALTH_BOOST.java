@@ -40,6 +40,8 @@ public class HEALTH_BOOST extends PotionEffectSuper {
         strength = 1;
 
         effectType = O2EffectType.HEALTH_BOOST;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.HEALTH_BOOST;
         informousText = legilimensText = "feels stronger";
     }

@@ -200,7 +200,7 @@ public abstract class O2Divination {
         long delayTicks = getDelayTicks(numDays, timeOfDay);
 
         // get the duration of the effect (max 10 minutes)
-        int effectDuration = getEffectDuration();
+        int effectDuration = getEffectDuration(effectType);
 
         // get the prophecy message
         String prophecyMessage = createProphecyMessage(numDays, timeOfDay, effectType);
@@ -387,14 +387,18 @@ public abstract class O2Divination {
      *
      * @return the effect duration in game ticks, ranging from O2Effect.minDuration to 12000
      */
-    private int getEffectDuration() {
+    private int getEffectDuration(O2EffectType effectType) {
         // Calculate duration based on prophet's experience: 120 ticks per experience level
         // (20 ticks per second: 30 seconds = 600 ticks, 10 minutes = 12000 ticks)
         int effectDuration = 120 * experience;
         if (effectDuration > 12000)
             effectDuration = 12000;  // Cap at 10 minutes
-        else if (effectDuration < O2Effect.minDuration)
-            effectDuration = O2Effect.minDuration;    // Floor at O2Effect.minDuration
+
+        // snap the duration to boundaries for the effect type
+        if (effectDuration < effectType.getMinDuration())
+            effectDuration = effectType.getMinDuration();
+        else if (effectDuration > effectType.getMaxDuration())
+            effectDuration = effectType.getMaxDuration();
 
         return effectDuration;
     }

@@ -43,6 +43,8 @@ public class AWAKE_ANTIDOTE_LESSER extends O2EffectAntidoteSuper {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.AWAKE_ANTIDOTE_LESSER;
+        checkDurationBounds();
+
         o2EffectType = O2EffectType.AWAKE;
         strength = 0.25;
     }

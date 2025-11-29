@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.common.MagicLevel;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -27,207 +28,207 @@ public enum O2EffectType {
     /**
      * {@link AGGRESSION}
      */
-    AGGRESSION(AGGRESSION.class, MagicLevel.OWL),
+    AGGRESSION(AGGRESSION.class, MagicLevel.OWL, 100, 100),
     /**
      * {@link ANIMAGUS_EFFECT}
      */
-    ANIMAGUS_EFFECT(ANIMAGUS_EFFECT.class, MagicLevel.EXPERT),
+    ANIMAGUS_EFFECT(ANIMAGUS_EFFECT.class, MagicLevel.EXPERT, 100, 100),
     /**
      * {@link ANIMAGUS_INCANTATION}
      */
-    ANIMAGUS_INCANTATION(ANIMAGUS_INCANTATION.class, MagicLevel.EXPERT),
+    ANIMAGUS_INCANTATION(ANIMAGUS_INCANTATION.class, MagicLevel.EXPERT, 5 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link AWAKE}
      */
-    AWAKE(AWAKE.class, MagicLevel.BEGINNER),
+    AWAKE(AWAKE.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link AWAKE_ANTIDOTE_LESSER}
      */
-    AWAKE_ANTIDOTE_LESSER(AWAKE_ANTIDOTE_LESSER.class, MagicLevel.BEGINNER),
+    AWAKE_ANTIDOTE_LESSER(AWAKE_ANTIDOTE_LESSER.class, MagicLevel.BEGINNER, 100, 100),
     /**
      * {@link BABBLING}
      */
-    BABBLING(BABBLING.class, MagicLevel.BEGINNER),
+    BABBLING(BABBLING.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link BABBLING_ANTIDOTE_LESSER}
      */
-    BABBLING_ANTIDOTE_LESSER(BABBLING_ANTIDOTE_LESSER.class, MagicLevel.BEGINNER),
+    BABBLING_ANTIDOTE_LESSER(BABBLING_ANTIDOTE_LESSER.class, MagicLevel.BEGINNER, 100, 100),
     /**
      * {@link BLINDNESS}
      */
-    BLINDNESS(BLINDNESS.class, MagicLevel.OWL),
+    BLINDNESS(BLINDNESS.class, MagicLevel.OWL, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link BROOM_FLYING}
      */
-    BROOM_FLYING(BROOM_FLYING.class, MagicLevel.EXPERT),
+    BROOM_FLYING(BROOM_FLYING.class, MagicLevel.EXPERT, 100, 100),
     /**
      * {@link BURNING}
      */
-    BURNING(BURNING.class, MagicLevel.NEWT),
+    BURNING(BURNING.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link CONFUSION}
      */
-    CONFUSION(CONFUSION.class, MagicLevel.OWL),
+    CONFUSION(CONFUSION.class, MagicLevel.OWL, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link DANCING_FEET}
      */
-    DANCING_FEET(DANCING_FEET.class, MagicLevel.BEGINNER),
+    DANCING_FEET(DANCING_FEET.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link FAST_LEARNING}
      */
-    FAST_LEARNING(FAST_LEARNING.class, MagicLevel.NEWT),
+    FAST_LEARNING(FAST_LEARNING.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link FLAGRANTE_BURNING}
      */
-    FLAGRANTE_BURNING(FLAGRANTE_BURNING.class, MagicLevel.EXPERT),
+    FLAGRANTE_BURNING(FLAGRANTE_BURNING.class, MagicLevel.EXPERT, 100, 100),
     /**
      * {@link FLYING}
      */
-    FLYING(FLYING.class, MagicLevel.EXPERT),
+    FLYING(FLYING.class, MagicLevel.EXPERT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link FUMOS}
      */
-    FUMOS(FUMOS.class, MagicLevel.BEGINNER),
+    FUMOS(FUMOS.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link FUMOS_DUO}
      */
-    FUMOS_DUO(FUMOS.class, MagicLevel.OWL),
+    FUMOS_DUO(FUMOS.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link HARM}
      */
-    HARM(HARM.class, MagicLevel.OWL),
+    HARM(HARM.class, MagicLevel.OWL, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link HARM_ANTIDOTE_LESSER}
      */
-    HARM_ANTIDOTE_LESSER(HARM_ANTIDOTE_LESSER.class, MagicLevel.OWL),
+    HARM_ANTIDOTE_LESSER(HARM_ANTIDOTE_LESSER.class, MagicLevel.OWL, 100, 100),
     /**
      * {@link HEAL}
      */
-    HEAL(HEAL.class, MagicLevel.OWL),
+    HEAL(HEAL.class, MagicLevel.OWL, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link HEALTH_BOOST}
      */
-    HEALTH_BOOST(HEALTH_BOOST.class, MagicLevel.NEWT),
+    HEALTH_BOOST(HEALTH_BOOST.class, MagicLevel.NEWT, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link HIGHER_SKILL}
      */
-    HIGHER_SKILL(HIGHER_SKILL.class, MagicLevel.NEWT),
+    HIGHER_SKILL(HIGHER_SKILL.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link HUNGER}
      */
-    HUNGER(HUNGER.class, MagicLevel.BEGINNER),
+    HUNGER(HUNGER.class, MagicLevel.BEGINNER, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link IMMOBILIZE}
      */
-    IMMOBILIZE(IMMOBILIZE.class, MagicLevel.BEGINNER),
+    IMMOBILIZE(IMMOBILIZE.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link IMPROVED_BOOK_LEARNING}
      */
-    IMPROVED_BOOK_LEARNING(IMPROVED_BOOK_LEARNING.class, MagicLevel.NEWT),
+    IMPROVED_BOOK_LEARNING(IMPROVED_BOOK_LEARNING.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link LAUGHING}
      */
-    LAUGHING(LAUGHING.class, MagicLevel.BEGINNER),
+    LAUGHING(LAUGHING.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link LUCK}
      */
-    LUCK(LUCK.class, MagicLevel.BEGINNER),
+    LUCK(LUCK.class, MagicLevel.BEGINNER, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link LYCANTHROPY}
      */
-    LYCANTHROPY(LYCANTHROPY.class, MagicLevel.EXPERT),
+    LYCANTHROPY(LYCANTHROPY.class, MagicLevel.EXPERT, 100, 100),
     /**
      * {@link LYCANTHROPY_RELIEF}
      */
-    LYCANTHROPY_RELIEF(LYCANTHROPY_RELIEF.class, MagicLevel.EXPERT),
+    LYCANTHROPY_RELIEF(LYCANTHROPY_RELIEF.class, MagicLevel.EXPERT, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link LYCANTHROPY_SPEECH}
      */
-    LYCANTHROPY_SPEECH(LYCANTHROPY_SPEECH.class, MagicLevel.EXPERT),
+    LYCANTHROPY_SPEECH(LYCANTHROPY_SPEECH.class, MagicLevel.EXPERT, 100, 100),
     /**
      * {@link MUCUS}
      */
-    MUCUS(MUCUS.class, MagicLevel.BEGINNER),
+    MUCUS(MUCUS.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link MUTED_SPEECH}
      */
-    MUTED_SPEECH(MUTED_SPEECH.class, MagicLevel.OWL),
+    MUTED_SPEECH(MUTED_SPEECH.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link NIGHT_VISION}
      */
-    NIGHT_VISION(NIGHT_VISION.class, MagicLevel.BEGINNER),
+    NIGHT_VISION(NIGHT_VISION.class, MagicLevel.BEGINNER, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link POISON}
      */
-    POISON(POISON.class, MagicLevel.OWL),
+    POISON(POISON.class, MagicLevel.OWL, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link POISON_ANTIDOTE_LESSER}
      */
-    POISON_ANTIDOTE_LESSER(POISON_ANTIDOTE_LESSER.class, MagicLevel.OWL),
+    POISON_ANTIDOTE_LESSER(POISON_ANTIDOTE_LESSER.class, MagicLevel.OWL, 100, 100),
     /**
      * {@link PROTEGO}
      */
-    PROTEGO(PROTEGO.class, MagicLevel.OWL),
+    PROTEGO(PROTEGO.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link SHRINKING}
      */
-    SHRINKING(SHRINKING.class, MagicLevel.OWL),
+    SHRINKING(SHRINKING.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link SLEEP_SPEECH}
      */
-    SLEEP_SPEECH(SLEEP_SPEECH.class, MagicLevel.BEGINNER),
+    SLEEP_SPEECH(SLEEP_SPEECH.class, MagicLevel.BEGINNER, 100, 100),
     /**
      * {@link SLEEPING}
      */
-    SLEEPING(SLEEPING.class, MagicLevel.BEGINNER),
+    SLEEPING(SLEEPING.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link SLOWNESS}
      */
-    SLOWNESS(SLOWNESS.class, MagicLevel.BEGINNER),
+    SLOWNESS(SLOWNESS.class, MagicLevel.BEGINNER, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link SPEED}
      */
-    SPEED(SPEED.class, MagicLevel.BEGINNER),
+    SPEED(SPEED.class, MagicLevel.BEGINNER, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link SPEED_SPEEDIER}
      */
-    SPEED_SPEEDIER(SPEED_SPEEDIER.class, MagicLevel.OWL),
+    SPEED_SPEEDIER(SPEED_SPEEDIER.class, MagicLevel.OWL, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link SPEED_SPEEDIEST}
      */
-    SPEED_SPEEDIEST(SPEED_SPEEDIEST.class, MagicLevel.NEWT),
+    SPEED_SPEEDIEST(SPEED_SPEEDIEST.class, MagicLevel.NEWT, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link SUSPENSION}
      */
-    SUSPENSION(SUSPENSION.class, MagicLevel.OWL),
+    SUSPENSION(SUSPENSION.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link PlayerChangeSizeSuper}
      */
-    SWELLING(PlayerChangeSizeSuper.class, MagicLevel.OWL),
+    SWELLING(PlayerChangeSizeSuper.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link TICKLING}
      */
-    TICKLING(TICKLING.class, MagicLevel.BEGINNER),
+    TICKLING(TICKLING.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link UNLUCK}
      */
-    UNLUCK(UNLUCK.class, MagicLevel.BEGINNER),
+    UNLUCK(UNLUCK.class, MagicLevel.BEGINNER, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link UNLUCK_ANTIDOTE_LESSER}
      */
-    UNLUCK_ANTIDOTE_LESSER(UNLUCK_ANTIDOTE_LESSER.class, MagicLevel.BEGINNER),
+    UNLUCK_ANTIDOTE_LESSER(UNLUCK_ANTIDOTE_LESSER.class, MagicLevel.BEGINNER, 100, 100),
     /**
      * {@link WATER_BREATHING}
      */
-    WATER_BREATHING(WATER_BREATHING.class, MagicLevel.NEWT),
+    WATER_BREATHING(WATER_BREATHING.class, MagicLevel.NEWT, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link WEAKNESS}
      */
-    WEAKNESS(WEAKNESS.class, MagicLevel.OWL),
+    WEAKNESS(WEAKNESS.class, MagicLevel.OWL, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
     /**
      * {@link WEALTH}
      */
-    WEALTH(WEALTH.class, MagicLevel.OWL),
+    WEALTH(WEALTH.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     ;
 
     /**
@@ -245,6 +246,16 @@ public enum O2EffectType {
     final private MagicLevel level;
 
     /**
+     * The minimum duration, in ticks, for this effect type
+     */
+    final private int minDuration;
+
+    /**
+     * The maximum duration, in ticks, for this effect type
+     */
+    final private int maxDuration;
+
+    /**
      * Runtime configuration flag indicating whether this effect type is currently enabled.
      * Disabled effects cannot be applied to players. Can be toggled via setEnabled() based
      * on server configuration (e.g., lycanthropy can be disabled in server config).
@@ -257,12 +268,16 @@ public enum O2EffectType {
      * <p>Associates the effect type with its implementation class and magic level.
      * The className is used with reflection to instantiate O2Effect objects at runtime.</p>
      *
-     * @param className the O2Effect subclass corresponding to this effect type
-     * @param level     the magic level (difficulty) of this effect
+     * @param className   the O2Effect subclass corresponding to this effect type
+     * @param level       the magic level (difficulty) of this effect
+     * @param minDuration the minimum duration, in ticks, for this effect type
+     * @param maxDuration the maximum duration, in ticks, for this effect type
      */
-    O2EffectType(@NotNull Class<?> className, @NotNull MagicLevel level) {
+    O2EffectType(@NotNull Class<?> className, @NotNull MagicLevel level, int minDuration, int maxDuration) {
         this.className = className;
         this.level = level;
+        this.minDuration = minDuration;
+        this.maxDuration = maxDuration;
     }
 
     /**
@@ -290,6 +305,24 @@ public enum O2EffectType {
     @NotNull
     public MagicLevel getLevel() {
         return level;
+    }
+
+    /**
+     * Get the minimum duration, in ticks, for this effect type
+     *
+     * @return the minimum duration
+     */
+    public int getMinDuration() {
+        return minDuration;
+    }
+
+    /**
+     * Get the maximum duration, in ticks, for this effect type
+     *
+     * @return the maximum duration
+     */
+    public int getMaxDuration() {
+        return maxDuration;
     }
 
     /**

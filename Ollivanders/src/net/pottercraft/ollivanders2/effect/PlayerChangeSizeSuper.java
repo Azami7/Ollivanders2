@@ -61,6 +61,11 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
     double scaleMultiplier = 0;
 
     /**
+     * Is the effect currently changing the target's scale?
+     */
+    boolean isTransformed = false;
+
+    /**
      * Constructor
      *
      * @param plugin      a callback to the MC plugin
@@ -100,6 +105,10 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
      */
     @Override
     public void checkEffect() {
+        if (!isTransformed) {
+            startEffect();
+        }
+
         if (!permanent) {
             age(1);
         }
@@ -142,6 +151,8 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
             // we can just kill the effect because this will set them to normal size, then end and set them to normal size - no point
             kill();
         }
+
+        isTransformed = true;
     }
 
     /**
@@ -202,7 +213,6 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
     public void doRemove() {
         AttributeInstance scaleAttribute = getScaleAttribute();
         if (scaleAttribute == null) {
-            common.printLogMessage("", null, null, true);
             kill();
             return;
         }
