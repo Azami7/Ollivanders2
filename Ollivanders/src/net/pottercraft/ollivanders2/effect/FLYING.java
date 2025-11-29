@@ -32,10 +32,11 @@ public class FLYING extends O2Effect {
      *
      * <p>When true, SMOKE particle effects (intensity 4) are played at the player's location each tick
      * while the player is flying (duration > 1). This creates a visual trail during flight. Default is false
-     * to avoid excessive particle effects. Subclasses can set this to true for visually distinctive flight
-     * (e.g., BROOM_FLYING sets this to false for clean broom flight, while regular FLYING has smoke disabled).</p>
+     * to avoid excessive particle effects. Subclasses can set this to true for visually distinctive flight.</p>
      */
     boolean doSmokeEffect = false;
+
+    private Player target = null;
 
     /**
      * Constructor for creating a flight effect.
@@ -54,6 +55,7 @@ public class FLYING extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.FLYING;
+        checkDurationBounds();
     }
 
     /**
@@ -79,22 +81,34 @@ public class FLYING extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        Player target = p.getServer().getPlayer(targetID);
+        // age the effect
+        age(1);
 
-        if (target != null) {
-            age(1);
-            if (duration > 1) {
-                target.setAllowFlight(true);
-                if (doSmokeEffect)
-                    target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
+        // on first pass, set target so we do not have to do a player lookup every game tick
+        if (target == null) {
+            target = p.getServer().getPlayer(targetID);
+
+            // if target still null, player not found in online players, kill and return
+            if (target == null) {
+                kill();
+                return;
             }
-            else {
-                common.printDebugMessage("Adding flight for " + target.getDisplayName(), null, null, false);
-                target.setAllowFlight(false);
-            }
+
         }
-        else
+
+        if (duration > 0) {
+            if (!target.getAllowFlight()) { // if player does not have allowFlight, enable it
+                common.printDebugMessage("Adding flight for " + target.getDisplayName(), null, null, false);
+                target.setAllowFlight(true);
+            }
+            if (doSmokeEffect)
+                target.getWorld().playEffect(target.getLocation(), org.bukkit.Effect.SMOKE, 4);
+        }
+        else { // effect has aged out, remove allowFlight and kill
+            common.printDebugMessage("Removing flight for " + target.getDisplayName(), null, null, false);
+            target.setAllowFlight(false);
             kill();
+        }
     }
 
     /**

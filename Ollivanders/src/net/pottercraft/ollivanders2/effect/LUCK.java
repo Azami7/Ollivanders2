@@ -39,7 +39,10 @@ public class LUCK extends PotionEffectSuper {
         strength = 1;
 
         effectType = O2EffectType.LUCK;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.LUCK;
+
         informousText = legilimensText = "feels lucky";
         affectedPlayerText = "You feel lucky.";
     }

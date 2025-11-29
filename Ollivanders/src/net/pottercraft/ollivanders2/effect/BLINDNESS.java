@@ -44,6 +44,8 @@ public class BLINDNESS extends PotionEffectSuper {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.BLINDNESS;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.BLINDNESS;
         informousText = legilimensText = "cannot see";
 

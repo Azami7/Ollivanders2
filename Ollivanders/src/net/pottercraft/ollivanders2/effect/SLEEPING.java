@@ -55,6 +55,8 @@ public class SLEEPING extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.SLEEPING;
+        checkDurationBounds();
+
         informousText = legilimensText = "is affected by an unnatural sleep";
     }
 

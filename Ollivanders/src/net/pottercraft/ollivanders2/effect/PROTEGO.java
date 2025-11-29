@@ -71,6 +71,8 @@ public class PROTEGO extends SpellShieldEffect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.PROTEGO;
+        checkDurationBounds();
+
         flairPulse = false;
         flairOnSpellImpact = true;
         impactFlairParticle = Particle.INSTANT_EFFECT;

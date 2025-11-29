@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.effect.SPEED_SPEEDIEST;
+import org.bukkit.entity.Player;
 
 /**
  * Test suite for the SPEED_SPEEDIEST potion effect.
@@ -34,11 +35,12 @@ public class SpeedSpeediestTest extends PotionEffectSuperTest {
      * <p>Instantiates a new SPEED_SPEEDIEST effect with the specified parameters. This method is called
      * by the inherited test methods to create fresh effect instances for each test scenario.</p>
      *
+     * @param target          the player to add the effect to
      * @param durationInTicks the duration of the effect in game ticks, will be clamped to 2400-6000 ticks
      * @param isPermanent     ignored - SPEED_SPEEDIEST effects cannot be permanent
      * @return a new SPEED_SPEEDIEST effect targeting the test player
      */
-    SPEED_SPEEDIEST createEffect(int durationInTicks, boolean isPermanent) {
+    SPEED_SPEEDIEST createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new SPEED_SPEEDIEST(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 }

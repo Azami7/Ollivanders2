@@ -48,6 +48,8 @@ public class FUMOS extends SpellShieldEffect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.FUMOS;
+        checkDurationBounds();
+
         flairPulse = true;
         pulseFlairParticle = Particle.CAMPFIRE_COSY_SMOKE;
         flairOnSpellImpact = false;

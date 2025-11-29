@@ -41,5 +41,12 @@ public class FLAGRANTE_BURNING extends BURNING {
      */
     public FLAGRANTE_BURNING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, true, pid);
+
+        effectType = O2EffectType.FLAGRANTE_BURNING;
+        checkDurationBounds();
+    }
+
+    @Override
+    public void setPermanent(boolean perm) {
     }
 }

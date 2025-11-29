@@ -36,6 +36,8 @@ public class POISON_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.POISON_ANTIDOTE_LESSER;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.POISON;
         strength = 0.25;
     }

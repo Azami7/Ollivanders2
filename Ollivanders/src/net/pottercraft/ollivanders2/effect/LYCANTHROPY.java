@@ -66,6 +66,8 @@ public class LYCANTHROPY extends ShapeShiftSuper {
         super(plugin, duration, true, pid);
 
         effectType = O2EffectType.LYCANTHROPY;
+        checkDurationBounds();
+
         legilimensText = "is a werewolf";
 
         form = EntityType.WOLF;

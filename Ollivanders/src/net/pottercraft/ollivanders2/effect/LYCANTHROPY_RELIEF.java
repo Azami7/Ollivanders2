@@ -48,6 +48,8 @@ public class LYCANTHROPY_RELIEF extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.LYCANTHROPY_RELIEF;
+        checkDurationBounds();
+
         informousText = "looks unwell";
     }
 

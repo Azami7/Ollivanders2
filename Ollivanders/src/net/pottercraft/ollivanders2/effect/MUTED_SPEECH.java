@@ -45,6 +45,8 @@ public class MUTED_SPEECH extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.MUTED_SPEECH;
+        checkDurationBounds();
+
         informousText = legilimensText = "is unable to speak";
         affectedPlayerText = "You feel tongue-tied.";
     }

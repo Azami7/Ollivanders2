@@ -46,6 +46,8 @@ public class FUMOS_DUO extends FUMOS {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.FUMOS_DUO;
+        checkDurationBounds();
+
         radius = 5;
     }
 }

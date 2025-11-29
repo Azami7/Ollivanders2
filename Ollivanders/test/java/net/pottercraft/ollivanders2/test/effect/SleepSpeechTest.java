@@ -2,6 +2,7 @@ package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.SLEEP_SPEECH;
+import org.bukkit.entity.Player;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,7 +20,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * beyond the base O2Effect class.</p>
  */
 public class SleepSpeechTest extends BabblingTest {
-    SLEEP_SPEECH createEffect(int durationInTicks, boolean isPermanent) {
+    /**
+     * Create a SLEEP_SPEECH effect for testing.
+     *
+     * <p>Creates a permanent SLEEP_SPEECH effect. The isPermanent parameter is ignored as
+     * SLEEP_SPEECH effects are always permanent by design.</p>
+     *
+     * @param target          the player to add the effect to
+     * @param durationInTicks the duration parameter (unused for permanent effects)
+     * @param isPermanent     ignored; SLEEP_SPEECH effects are always permanent
+     * @return the newly created SLEEP_SPEECH effect instance
+     */
+    SLEEP_SPEECH createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new SLEEP_SPEECH(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 
@@ -33,7 +45,7 @@ public class SleepSpeechTest extends BabblingTest {
      */
     @Override
     void isPermanentTest() {
-        O2Effect effect = createEffect(10, false);
+        O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);
         assertTrue(effect.isPermanent(), "Effect not permanent when created;");
 
         effect.setPermanent(false);

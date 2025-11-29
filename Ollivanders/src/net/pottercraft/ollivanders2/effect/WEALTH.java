@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
@@ -62,9 +63,9 @@ public class WEALTH extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.WEALTH;
-        informousText = legilimensText = "feels fortunate";
+        checkDurationBounds();
 
-        target = p.getServer().getPlayer(targetID);
+        informousText = legilimensText = "feels fortunate";
     }
 
     /**
@@ -77,12 +78,24 @@ public class WEALTH extends O2Effect {
      */
     @Override
     public void checkEffect() {
+        // on first pass, keep track of the target player so we do not have to call getPlayer() every tick
+        if (target == null) {
+            Player player = p.getServer().getPlayer(targetID);
+
+            // if player is still null, player not found, kill and return
+            if (player == null) {
+                kill();
+                return;
+            }
+        }
+
+        // age the effect
         age(1);
 
         int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) * strength;
 
         // only take action once per 10 seconds, which is every 120 ticks
-        if ((duration % 120) == 0) {
+        if ((duration % (Ollivanders2Common.ticksPerSecond * 10)) == 0) {
             List<ItemStack> kit = new ArrayList<>();
 
             ItemStack money;

@@ -36,10 +36,12 @@ public class WEAKNESS extends PotionEffectSuper {
     public WEAKNESS(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, isPermanent, pid);
 
+        effectType = O2EffectType.WEAKNESS;
+        checkDurationBounds();
+
+        potionEffectType = PotionEffectType.WEAKNESS;
         strength = 1;
 
-        effectType = O2EffectType.WEAKNESS;
-        potionEffectType = PotionEffectType.WEAKNESS;
         informousText = legilimensText = "feels weak";
         affectedPlayerText = "You feel weak.";
     }

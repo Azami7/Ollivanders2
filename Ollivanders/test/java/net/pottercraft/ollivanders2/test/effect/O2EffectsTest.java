@@ -12,6 +12,16 @@ import org.mockbukkit.mockbukkit.ServerMock;
 
 import java.io.File;
 
+/**
+ * Base test class for O2 effect testing.
+ *
+ * <p>Provides common setup and teardown methods for all effect test classes. This class manages
+ * the MockBukkit server lifecycle, plugin loading, and ensures proper cleanup of effects between
+ * test runs to prevent state pollution.</p>
+ *
+ * <p>All effect test classes should extend one of the specialized test superclasses (EffectTestSuper,
+ * PotionEffectSuperTest, etc.) which in turn extend this base class.</p>
+ */
 public class O2EffectsTest {
     static ServerMock mockServer;
     Ollivanders2 testPlugin;

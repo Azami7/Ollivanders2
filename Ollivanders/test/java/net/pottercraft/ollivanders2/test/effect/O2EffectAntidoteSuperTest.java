@@ -4,6 +4,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.ANIMAGUS_INCANTATION;
 import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.O2EffectAntidoteSuper;
+import org.bukkit.entity.Player;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -46,17 +47,18 @@ abstract public class O2EffectAntidoteSuperTest extends PermanentEffectTestSuper
      * </ol>
      */
     void checkEffectTest() {
-        int duration = 100;
+        Player target = mockServer.addPlayer();
 
         // add the specific effect to the target and event manager
-        O2Effect effect = addEffectToTarget(duration);
+        O2Effect effect = addEffectToTarget(target, 100);
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+        int duration = effect.getMinDuration();
 
         // advance the server 1 tick
         mockServer.getScheduler().performTicks(1);
 
         // create the antidote and add it to the event manager
-        O2EffectAntidoteSuper antidote = createEffect(5, false);
+        O2EffectAntidoteSuper antidote = createEffect(target, 5, false);
         Ollivanders2API.getPlayers().playerEffects.addEffect(antidote);
 
         // advance the server 1 tick
@@ -81,11 +83,11 @@ abstract public class O2EffectAntidoteSuperTest extends PermanentEffectTestSuper
         mockServer.getScheduler().performTicks(1);
 
         // add an effect not affected by this antidote type
-        effect = addUnrelatedEffectToTarget(duration);
+        effect = addUnrelatedEffectToTarget(target, duration);
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
         // add the antidote
-        antidote = createEffect(5, false);
+        antidote = createEffect(target, 5, false);
         Ollivanders2API.getPlayers().playerEffects.addEffect(antidote);
 
         // advance the server 1 tick
@@ -99,27 +101,30 @@ abstract public class O2EffectAntidoteSuperTest extends PermanentEffectTestSuper
     /**
      * Create an antidote effect with the specified duration and permanence.
      *
+     * @param target the player to add the antidote to
      * @param durationInTicks the duration of the antidote in ticks
      * @param isPermanent     whether the antidote is permanent
      * @return the created antidote effect
      */
-    abstract O2EffectAntidoteSuper createEffect(int durationInTicks, boolean isPermanent);
+    abstract O2EffectAntidoteSuper createEffect(Player target, int durationInTicks, boolean isPermanent);
 
     /**
      * Add the effect this antidote counters to the target.
      *
+     * @param target the player to add the effect to
      * @param duration the duration of the target effect in ticks
      * @return the created target effect
      */
-    abstract O2Effect addEffectToTarget(int duration);
+    abstract O2Effect addEffectToTarget(Player target, int duration);
 
     /**
      * Add an effect this antidote does not counter to the target.
      *
+     * @param target the player to add this effect to
      * @param duration the duration of the unrelated effect in ticks
      * @return the created unrelated effect
      */
-    O2Effect addUnrelatedEffectToTarget(int duration) {
+    O2Effect addUnrelatedEffectToTarget(Player target, int duration) {
         // add animagus incantation since it has no antidote
         return new ANIMAGUS_INCANTATION(testPlugin, duration, false, target.getUniqueId());
     }
@@ -129,14 +134,12 @@ abstract public class O2EffectAntidoteSuperTest extends PermanentEffectTestSuper
      *
      * <p>Antidotes do not have event handlers, so this test is intentionally empty.</p>
      */
-    void eventHandlerTests() {
-    }
+    void eventHandlerTests() {}
 
     /**
      * Override of cleanup tests.
      *
      * <p>Antidotes do not have cleanup functions, so this test is intentionally empty.</p>
      */
-    void doRemoveTest() {
-    }
+    void doRemoveTest() {}
 }

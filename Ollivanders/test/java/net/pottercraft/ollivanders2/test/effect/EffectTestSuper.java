@@ -6,6 +6,7 @@ import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.entity.Player;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
-import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.File;
 import java.util.UUID;
@@ -72,15 +72,11 @@ abstract public class EffectTestSuper {
     World testWorld;
 
     /**
-     * The target player for effect testing.
+     * Origin location for spatial tests.
      *
-     * <p>A mock player created for each test method. This player is the target of all effects
-     * created in the test, allowing effect-to-player interactions to be verified.</p>
-     */
-    PlayerMock target;
-
-    /**
-     * Origin location
+     * <p>Provides a default location at coordinates (0, 4, 0) in the test world.
+     * Used by tests that require location context for spawning entities or validating
+     * position-based effect behaviors.</p>
      */
     Location origin;
 
@@ -111,9 +107,6 @@ abstract public class EffectTestSuper {
         // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
 
-        // create the player this effect will target
-        target = mockServer.addPlayer();
-
         origin = new Location(testWorld, 0, 4, 0);
     }
 
@@ -124,11 +117,12 @@ abstract public class EffectTestSuper {
      * specific O2Effect subclass being tested. This allows each test class to test a different
      * effect type while reusing the common testing framework.</p>
      *
+     * @param target          the player to add the effect to
      * @param durationInTicks the duration of the effect in game ticks
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return the newly created O2Effect instance of the type being tested
      */
-    abstract O2Effect createEffect(int durationInTicks, boolean isPermanent);
+    abstract O2Effect createEffect(Player target, int durationInTicks, boolean isPermanent);
 
     /**
      * Comprehensive effect test combining all core behavior validations.
@@ -153,14 +147,14 @@ abstract public class EffectTestSuper {
     void effectTest() {
         Ollivanders2.debug = true;
         // create an effect that lasts 10 ticks
-        O2Effect effect = createEffect(10, false);
+        O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
 
         // create an effect with is permanent set true
-        effect = createEffect(5, true);
+        effect = createEffect(mockServer.addPlayer(),5, true);
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
 
-        minDurationBoundsTest();
+        durationBoundsTest();
 
         ageAndKillTest();
 
@@ -177,9 +171,20 @@ abstract public class EffectTestSuper {
         Ollivanders2.debug = false;
     }
 
-    void minDurationBoundsTest() {
-        O2Effect effect = createEffect(10, false);
-        assertEquals(O2Effect.minDuration, effect.getRemainingDuration(), "Effect duration not set to minimum duration when duration specified as 10 in constructor");
+    /**
+     * Test that effect duration is properly bounded by minimum and maximum duration constraints.
+     *
+     * <p>Validates that when an effect is created with a duration below the minimum, it is clamped
+     * to the minimum duration. Similarly, when created with a duration above the maximum, it is
+     * clamped to the maximum duration. This ensures effects never have invalid duration values.</p>
+     */
+    void durationBoundsTest() {
+        O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);
+        assertEquals(effect.getMinDuration(), effect.getRemainingDuration(), "Effect duration not set to minimum duration when duration specified as 10 in constructor");
+
+        // max duration is 1 hour, at 20 ticks per second, or 72000 ticks
+        effect = createEffect(mockServer.addPlayer(), 72100, false);
+        assertEquals(effect.getMaxDuration(), effect.getRemainingDuration(), "Effect duration not set to maximum duration when duration greater than maxDuration in constructor");
     }
 
     /**
@@ -190,8 +195,8 @@ abstract public class EffectTestSuper {
      * specified amount, and duration going below zero automatically kills the effect.</p>
      */
     void ageAndKillTest() {
-        int duration = O2Effect.minDuration;
-        O2Effect effect = createEffect(duration, false);
+        O2Effect effect = createEffect(mockServer.addPlayer(), 100, false);
+        int duration = effect.getMinDuration();
 
         // kill() kills the effect
         effect.kill();
@@ -199,7 +204,7 @@ abstract public class EffectTestSuper {
 
         // age decrements duration as expected when the effect is not permanent
         if (!effect.isPermanent()) {
-            effect = createEffect(duration, false);
+            effect = createEffect(mockServer.addPlayer(), duration, false);
             effect.age(1);
             assertEquals(duration - 1, effect.getRemainingDuration(), "Age did not properly decrement effect duration");
 
@@ -217,8 +222,10 @@ abstract public class EffectTestSuper {
      * from modifying the effect's internal state.</p>
      */
     void getTargetIDTest() {
+        Player target = mockServer.addPlayer();
+
         UUID targetID = target.getUniqueId();
-        O2Effect effect = createEffect(10, false);
+        O2Effect effect = createEffect(target, 10, false);
 
         UUID id = effect.getTargetID();
         assertFalse(id == targetID, "effect.getTargetID() returned same UUID object");
@@ -232,7 +239,7 @@ abstract public class EffectTestSuper {
      * toggled between true and false states.</p>
      */
     void isPermanentTest() {
-        O2Effect effect = createEffect(10, false);
+        O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);
 
         effect.setPermanent(true);
         assertTrue(effect.isPermanent(), "Effect not permanent after effect.setPermanent(true);");
@@ -251,7 +258,11 @@ abstract public class EffectTestSuper {
     abstract void checkEffectTest();
 
     /**
+     * Effect-specific event handler test to be implemented by subclasses.
      *
+     * <p>Abstract method that subclasses must implement to test that event handlers work correctly
+     * for the specific effect type. If the effect does not handle any events, the implementation
+     * should be empty but still present to satisfy the abstract contract.</p>
      */
     abstract void eventHandlerTests();
 
@@ -268,12 +279,11 @@ abstract public class EffectTestSuper {
      * Test that aging correctly happens - for use in checkEffectTest
      */
     void checkEffectTestAgingHelper() {
-        int duration = 100;
-
-        O2Effect effect = createEffect(duration, false);
+        O2Effect effect = createEffect(mockServer.addPlayer(), 100, false);
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
         // checkEffect() ages effect by 1 every tick
+        int duration = effect.getRemainingDuration();
         mockServer.getScheduler().performTicks(1);
         assertEquals(duration - 1, effect.getRemainingDuration(), effect.effectType.toString() + " did not age after 1 tick");
 

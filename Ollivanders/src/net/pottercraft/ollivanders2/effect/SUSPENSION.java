@@ -67,6 +67,7 @@ public class SUSPENSION extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.SUSPENSION;
+        checkDurationBounds();
     }
 
     /**

@@ -38,6 +38,8 @@ public class HEAL extends PotionEffectSuper {
         strength = 1;
 
         effectType = O2EffectType.HEAL;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.INSTANT_HEALTH;
         informousText = legilimensText = "feels healthy";
     }

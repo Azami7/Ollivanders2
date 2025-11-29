@@ -42,10 +42,10 @@ public class SHRINKING extends PlayerChangeSizeSuper {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.SHRINKING;
-        scaleMultiplier = 0.5; // makes the player half size
+        checkDurationBounds();
 
         informousText = "is unnaturally small";
 
-        startEffect();
+        scaleMultiplier = 0.5; // makes the player half size
     }
 }

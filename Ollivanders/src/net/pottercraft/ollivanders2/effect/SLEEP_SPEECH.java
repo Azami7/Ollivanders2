@@ -45,6 +45,7 @@ public class SLEEP_SPEECH extends BABBLING {
         super(plugin, duration, true, pid);
 
         effectType = O2EffectType.SLEEP_SPEECH;
+        checkDurationBounds();
 
         dictionary = new ArrayList<>() {{
             add("§ozzzzzzzz");

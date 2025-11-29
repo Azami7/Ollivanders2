@@ -88,6 +88,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
         super(plugin, duration, true, pid);
 
         effectType = O2EffectType.ANIMAGUS_EFFECT;
+        checkDurationBounds();
 
         transformed = false;
 

@@ -36,6 +36,8 @@ public class UNLUCK_ANTIDOTE_LESSER extends PotionEffectAntidoteSuper {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.UNLUCK_ANTIDOTE_LESSER;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.UNLUCK;
         strength = 0.25;
     }

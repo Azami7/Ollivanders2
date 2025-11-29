@@ -46,11 +46,6 @@ public abstract class PotionEffectSuper extends O2Effect {
     int strength = 1;
 
     /**
-     * Maximum duration for a potion effect
-     */
-    public static int maxDuration = 6000; // 5 minutes
-
-    /**
      * The type of Minecraft potion effect to apply.
      *
      * <p>Subclasses override this field to specify which potion effect (POISON, WEAKNESS, GLOWING, etc.)
@@ -72,15 +67,6 @@ public abstract class PotionEffectSuper extends O2Effect {
      */
     public PotionEffectSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, false, pid);
-
-        minDuration = 2400; // minDuration for a potion effect is 2 minutes
-
-        // make sure duration is between the min and max allowed
-        this.duration = duration;
-        if (this.duration < minDuration)
-            this.duration = minDuration;
-        else if (this.duration > maxDuration)
-            this.duration = maxDuration;
     }
 
     /**

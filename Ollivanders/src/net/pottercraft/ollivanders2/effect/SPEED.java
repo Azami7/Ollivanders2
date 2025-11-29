@@ -37,7 +37,10 @@ public class SPEED extends PotionEffectSuper {
         strength = 1;
 
         effectType = O2EffectType.SPEED;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.SPEED;
+
         informousText = legilimensText = "is moving fast";
     }
 

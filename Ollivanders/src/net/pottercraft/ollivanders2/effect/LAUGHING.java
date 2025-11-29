@@ -50,6 +50,8 @@ public class LAUGHING extends BABBLING {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.LAUGHING;
+        checkDurationBounds();
+
         informousText = "cannot stop laughing";
 
         dictionary = new ArrayList<>() {{

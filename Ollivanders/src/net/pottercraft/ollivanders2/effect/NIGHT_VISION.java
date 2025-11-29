@@ -37,6 +37,8 @@ public class NIGHT_VISION extends PotionEffectSuper {
         strength = 1;
 
         effectType = O2EffectType.NIGHT_VISION;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.NIGHT_VISION;
         informousText = legilimensText = "can see in darkness";
     }

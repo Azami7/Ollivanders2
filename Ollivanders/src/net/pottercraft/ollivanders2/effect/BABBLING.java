@@ -118,6 +118,8 @@ public class BABBLING extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.BABBLING;
+        checkDurationBounds();
+
         informousText = "is unable to speak clearly";
     }
 

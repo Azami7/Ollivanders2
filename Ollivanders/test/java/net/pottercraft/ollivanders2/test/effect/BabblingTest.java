@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.test.effect;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.BABBLING;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import java.util.HashSet;
@@ -21,20 +22,52 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * of the effect and ensures at least one message is modified.</p>
  */
 public class BabblingTest extends EffectTestSuper {
-    BABBLING createEffect(int durationInTicks, boolean isPermanent) {
+    /**
+     * Create a BABBLING effect for testing.
+     *
+     * <p>Instantiates a new BABBLING effect with the specified parameters. This method is called
+     * by the test methods to create fresh effect instances for each test scenario.</p>
+     *
+     * @param target          the player to add the effect to
+     * @param durationInTicks the duration of the effect in game ticks
+     * @param isPermanent     true if the effect should be permanent, false for limited duration
+     * @return a new BABBLING effect targeting the specified player
+     */
+    BABBLING createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new BABBLING(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
 
+    /**
+     * Test basic BABBLING effect behavior and aging.
+     *
+     * <p>Validates that the BABBLING effect properly ages over time and is automatically killed
+     * when its duration expires. Uses the common aging helper to verify standard effect lifecycle.</p>
+     */
     void checkEffectTest() {
         checkEffectTestAgingHelper();
     }
 
+    /**
+     * Run all event handler tests for the BABBLING effect.
+     *
+     * <p>Executes the chat event test to verify that the effect correctly intercepts and
+     * modifies player chat messages with dictionary words.</p>
+     */
     void eventHandlerTests() {
         doOnAsyncPlayerChatEventTest();
     }
 
+    /**
+     * Test that BABBLING effect replaces chat messages with dictionary words.
+     *
+     * <p>Creates a player with the BABBLING effect, simulates multiple chat events, and verifies
+     * that at least one message is replaced with a word from the effect's dictionary. The test runs
+     * 10 iterations to account for the probabilistic nature of the effect (affectPercent).</p>
+     */
     void doOnAsyncPlayerChatEventTest() {
-        BABBLING babbling = createEffect(100, false);
+        Player target = mockServer.addPlayer();
+
+        BABBLING babbling = createEffect(target, 100, false);
         Ollivanders2API.getPlayers().playerEffects.addEffect(babbling);
 
         // Perform one tick to ensure the effect is processed into the active effects system

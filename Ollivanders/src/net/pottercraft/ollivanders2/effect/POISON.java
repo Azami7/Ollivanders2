@@ -38,6 +38,8 @@ public class POISON extends PotionEffectSuper {
         strength = 1;
 
         effectType = O2EffectType.POISON;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.POISON;
         informousText = legilimensText = "feels sick";
     }

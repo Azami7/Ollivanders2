@@ -39,7 +39,12 @@ public class BROOM_FLYING extends FLYING {
         super(plugin, duration, true, pid);
 
         effectType = O2EffectType.FLYING;
+        checkDurationBounds();
 
         doSmokeEffect = false;
+    }
+
+    @Override
+    public void setPermanent(boolean perm) {
     }
 }

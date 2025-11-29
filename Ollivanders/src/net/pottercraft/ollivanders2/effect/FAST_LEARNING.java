@@ -42,6 +42,8 @@ public class FAST_LEARNING extends O2Effect {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.FAST_LEARNING;
+        checkDurationBounds();
+
         legilimensText = "feels more mentally alert than usual";
     }
 

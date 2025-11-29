@@ -44,6 +44,8 @@ public class CONFUSION extends PotionEffectSuper {
         super(plugin, duration, isPermanent, pid);
 
         effectType = O2EffectType.CONFUSION;
+        checkDurationBounds();
+
         potionEffectType = PotionEffectType.NAUSEA;
         informousText = legilimensText = "feels confused";
 
