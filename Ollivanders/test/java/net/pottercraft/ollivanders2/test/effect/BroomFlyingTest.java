@@ -35,7 +35,7 @@ public class BroomFlyingTest extends FlyingTest {
     @Override
     void isPermanentTest() {
         O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);
-        assertTrue(effect.isPermanent(), "Effect not permanent when created;");
+        assertTrue(effect.isPermanent(), "Effect not permanent when created.");
 
         effect.setPermanent(false);
         assertTrue(effect.isPermanent(), "Permanent effect not permanent after effect.setPermanent(false)");

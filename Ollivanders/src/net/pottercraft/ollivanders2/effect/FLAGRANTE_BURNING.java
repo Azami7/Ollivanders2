@@ -46,6 +46,15 @@ public class FLAGRANTE_BURNING extends BURNING {
         checkDurationBounds();
     }
 
+    /**
+     * Override permanent status modification to prevent changing flagrante burning permanence.
+     *
+     * <p>This method intentionally does nothing. Flagrante burning effects are always permanent
+     * and cannot be modified to temporary status. Any attempt to change the permanent flag is
+     * silently ignored to maintain the invariant that flagrante burning never expires.</p>
+     *
+     * @param perm ignored - flagrante burning is always permanent
+     */
     @Override
     public void setPermanent(boolean perm) {
     }
