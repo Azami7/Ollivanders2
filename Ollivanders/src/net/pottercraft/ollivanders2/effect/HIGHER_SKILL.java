@@ -38,7 +38,7 @@ public class HIGHER_SKILL extends O2Effect {
      *
      * @param plugin      a callback to the MC plugin
      * @param duration    the duration of the effect in game ticks
-     * @param isPermanent is this effect permanent (does not age)
+     * @param isPermanent true if this effect is permanent, false if it is not
      * @param pid         the unique ID of the player to grant higher skill
      */
     public HIGHER_SKILL(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
