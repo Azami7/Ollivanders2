@@ -282,14 +282,16 @@ abstract public class EffectTestSuper {
         O2Effect effect = createEffect(mockServer.addPlayer(), 100, false);
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-        // checkEffect() ages effect by 1 every tick
-        int duration = effect.getRemainingDuration();
-        mockServer.getScheduler().performTicks(1);
-        assertEquals(duration - 1, effect.getRemainingDuration(), effect.effectType.toString() + " did not age after 1 tick");
+        if (!effect.isPermanent()) {
+            // checkEffect() ages effect by 1 every tick
+            int duration = effect.getRemainingDuration();
+            mockServer.getScheduler().performTicks(1);
+            assertEquals(duration - 1, effect.getRemainingDuration(), effect.effectType.toString() + " did not age after 1 tick");
 
-        // effect is killed when its duration ticks have passed
-        mockServer.getScheduler().performTicks(duration);
-        assertTrue(effect.isKilled(), effect.effectType.toString() + " not killed after duration ticks have passed.");
+            // effect is killed when its duration ticks have passed
+            mockServer.getScheduler().performTicks(duration);
+            assertTrue(effect.isKilled(), effect.effectType.toString() + " not killed after duration ticks have passed.");
+        }
     }
 
     /**

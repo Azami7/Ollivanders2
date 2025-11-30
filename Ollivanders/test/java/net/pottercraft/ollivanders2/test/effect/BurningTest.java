@@ -1,7 +1,11 @@
 package net.pottercraft.ollivanders2.test.effect;
 
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.BURNING;
 import org.bukkit.entity.Player;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test suite for the BURNING effect.
@@ -21,6 +25,7 @@ public class BurningTest extends EffectTestSuper {
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return a new BURNING effect targeting the specified player
      */
+    @Override
     BURNING createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new BURNING(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -28,15 +33,34 @@ public class BurningTest extends EffectTestSuper {
     /**
      * Test basic BURNING effect behavior.
      *
-     * <p>BURNING has no special checkEffect behavior beyond base O2Effect.</p>
+     * <p>Validates that the BURNING effect correctly applies damage over time. Tests two aspects:
+     * the effect aging mechanism (duration decrements each tick) and the damage application
+     * (verifies the target's health decreases after the effect duration expires).</p>
      */
-    void checkEffectTest() {}
+    @Override
+    void checkEffectTest() {
+        // check aging works
+        checkEffectTestAgingHelper();
+
+        PlayerMock target = mockServer.addPlayer();
+
+        // verify burning does damage
+        BURNING burning = createEffect(target, 100, false);
+        double targetHealth = target.getHealth();
+
+        Ollivanders2API.getPlayers().playerEffects.addEffect(burning);
+
+        mockServer.getScheduler().performTicks(burning.getRemainingDuration());
+
+        assertTrue(targetHealth > target.getHealth(), "Target not damaged by burning effect");
+    }
 
     /**
      * Run all event handler tests for the BURNING effect.
      *
      * <p>BURNING has no event handlers to test.</p>
      */
+    @Override
     void eventHandlerTests() {}
 
     /**
@@ -44,5 +68,6 @@ public class BurningTest extends EffectTestSuper {
      *
      * <p>doRemove for BURNING doesn't do anything.</p>
      */
+    @Override
     void doRemoveTest() {}
 }

@@ -194,23 +194,10 @@ public class BURNING extends O2Effect {
     }
 
     /**
-     * Override to prevent external modification that could corrupt the duration/damage serialization.
-     *
-     * <p>The BURNING effect uses the duration field to store damage information (damage × 100) for
-     * serialization purposes. This override prevents setPermanent() from being called, which could
-     * alter the duration field and lose the damage value.</p>
-     *
-     * @param perm ignored - this method does nothing
-     */
-    @Override
-    public void setPermanent(boolean perm) {
-    }
-
-    /**
      * Perform cleanup when the burning effect is removed.
      *
-     * <p>The default implementation does nothing, as the burning effect has no persistent state
-     * to clean up. The fire damage simply ceases when the effect is removed.</p>
+     * <p>The burning effect has no persistent state to clean up. The fire damage simply ceases
+     * when the effect is removed, and no additional cleanup is required.</p>
      */
     @Override
     public void doRemove() {
