@@ -74,6 +74,7 @@ public class LYCANTHROPY_SPEECH extends BABBLING {
 
     /**
      * always permanent
+     *
      * @param perm ignored - this is always true
      */
     @Override

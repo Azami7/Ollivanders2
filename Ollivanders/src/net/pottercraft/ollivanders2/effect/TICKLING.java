@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.effect;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,8 +21,6 @@ import java.util.UUID;
  * @author Azami7
  */
 public class TICKLING extends O2Effect {
-    Player target = null;
-
     /**
      * Constructor for creating a tickling effect.
      *
@@ -45,6 +42,9 @@ public class TICKLING extends O2Effect {
 
         informousText = "is doubled-over from tickling.";
         affectedPlayerText = "You buckle due to excessive tickling.";
+
+        // add LAUGHING effect as well
+        Ollivanders2API.getPlayers().playerEffects.addEffect(new LAUGHING(p, -1, true, targetID));
     }
 
     /**
@@ -52,20 +52,6 @@ public class TICKLING extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        // on first pass, keep track of the target player so we do not have to call getPlayer() every tick, and add
-        // the laughing effect as well
-        if (target == null) {
-            Player player = p.getServer().getPlayer(targetID);
-
-            // if player is still null, player not found, kill and return
-            if (player == null) {
-                kill();
-                return;
-            }
-
-            Ollivanders2API.getPlayers().playerEffects.addEffect(new LAUGHING(p, -1, true, targetID));
-        }
-
         // age this effect
         age(1);
 
@@ -85,9 +71,8 @@ public class TICKLING extends O2Effect {
      */
     @Override
     void doOnPlayerToggleSneakEvent(@NotNull PlayerToggleSneakEvent event) {
-        if (event.getPlayer().getUniqueId().equals(targetID)) {
+        if (event.getPlayer().getUniqueId().equals(targetID))
             event.setCancelled(true);
-        }
     }
 
     /**
@@ -95,8 +80,6 @@ public class TICKLING extends O2Effect {
      */
     @Override
     public void doRemove() {
-        Player player = p.getServer().getPlayer(targetID);
-
         // remove laughing effect
         Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.LAUGHING);
     }

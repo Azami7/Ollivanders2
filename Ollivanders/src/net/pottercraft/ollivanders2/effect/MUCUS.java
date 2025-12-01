@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import org.bukkit.World;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Slime;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
@@ -64,15 +63,9 @@ public class MUCUS extends O2Effect {
     public void checkEffect() {
         age(1);
         if (duration % 300 == 0) {
-            Player target = p.getServer().getPlayer(targetID);
-
-            if (target != null) {
-                World world = target.getWorld();
-                Slime slime = (Slime) world.spawnEntity(target.getEyeLocation(), EntityType.SLIME);
-                slime.setSize(1);
-            }
-            else
-                kill();
+            World world = target.getWorld();
+            Slime slime = (Slime) world.spawnEntity(target.getEyeLocation(), EntityType.SLIME);
+            slime.setSize(1);
         }
     }
 

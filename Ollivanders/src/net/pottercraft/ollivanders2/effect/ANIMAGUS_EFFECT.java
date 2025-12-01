@@ -92,7 +92,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
 
         transformed = false;
 
-        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(pid);
+        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(targetID);
         if (o2p == null) {
             common.printDebugMessage("o2player cannot be found", null, null, false);
             kill();

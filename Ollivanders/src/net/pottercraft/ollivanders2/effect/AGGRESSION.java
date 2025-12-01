@@ -52,24 +52,33 @@ public class AGGRESSION extends O2Effect {
      */
     int aggressionLevel = 5;
 
+    /**
+     * The minimum aggression level supported (1).
+     *
+     * <p>Prevents the aggressionLevel from being set below this threshold.</p>
+     */
     static int minAggression = 1;
+
+    /**
+     * The maximum aggression level supported (10).
+     *
+     * <p>Prevents the aggressionLevel from being set above this threshold.</p>
+     */
     static int maxAggression = 10;
 
     /**
-     * The player affected by this aggression effect.
+     * The cooldown period between aggression checks in game ticks (120 ticks = 6 seconds).
      *
-     * <p>Reference to the player who is forced to attack nearby entities and provoke creatures.
-     * Cached at construction time for quick access during effect processing.</p>
-     */
-    Player target;
-
-    /**
-     * Every n ticks aggression has an effect.
+     * <p>The aggression effect checks for activation every 120 ticks (6 seconds). When the cooldown
+     * reaches 0, an attack probability check is performed, then the cooldown is reset.</p>
      */
     static public final int cooldownLimit = 120;
 
     /**
-     * Aggression cooldown
+     * Tick counter for the aggression attack cooldown.
+     *
+     * <p>Counts down from cooldownLimit (120 ticks) to 0 each cycle. When it reaches 0 or below,
+     * an aggression attack check is performed and the counter is reset. Decrements by 1 each tick.</p>
      */
     int cooldown;
 
@@ -94,7 +103,6 @@ public class AGGRESSION extends O2Effect {
         legilimensText = "feels aggressive";
         affectedPlayerText = "You feel angry.";
 
-        target = p.getServer().getPlayer(targetID);
         cooldown = cooldownLimit;
     }
 
@@ -156,10 +164,6 @@ public class AGGRESSION extends O2Effect {
      * @param nearby a collection of nearby living entities to choose from
      */
     private void damageRandomEntity(@NotNull Collection<LivingEntity> nearby) {
-        Player target = p.getServer().getPlayer(targetID);
-        if (target == null)
-            return;
-
         if (!nearby.isEmpty()) {
             LivingEntity toDamage = null;
             for (LivingEntity entity : nearby) {
@@ -198,8 +202,6 @@ public class AGGRESSION extends O2Effect {
      * @param nearby collection of nearby living entities
      */
     private void provoke(@NotNull Collection<LivingEntity> nearby) {
-        Player target = p.getServer().getPlayer(targetID);
-
         if (!nearby.isEmpty()) {
             for (LivingEntity entity : nearby) {
                 if (entity instanceof Creature)

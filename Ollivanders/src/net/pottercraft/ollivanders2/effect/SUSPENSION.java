@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.event.player.PlayerVelocityEvent;
@@ -94,12 +93,6 @@ public class SUSPENSION extends O2Effect {
      * offline when this is called, the effect is terminated.</p>
      */
     private void suspend() {
-        Player target = p.getServer().getPlayer(targetID);
-        if (target == null) {
-            kill();
-            return;
-        }
-
         addAdditionalEffects();
 
         // suspend them in the air
@@ -140,10 +133,6 @@ public class SUSPENSION extends O2Effect {
      */
     @Override
     public void doRemove() {
-        Player target = p.getServer().getPlayer(targetID);
-        if (target == null)
-            return;
-
         // teleport them back to their original location
         target.teleport(originalLocation);
 

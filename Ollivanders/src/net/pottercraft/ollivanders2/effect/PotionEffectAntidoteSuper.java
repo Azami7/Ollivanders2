@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -85,8 +84,7 @@ public abstract class PotionEffectAntidoteSuper extends O2Effect {
      *
      * <p>This method executes in a single game tick and performs the following steps:</p>
      * <ol>
-     * <li>Locates the target player on the server</li>
-     * <li>Checks if the target has an active potion effect matching potionEffectType</li>
+     * <li>Checks if the target has an active potion effect matching potionEffectType (target initialized in O2Effect constructor)</li>
      * <li>If found: removes the potion effect completely</li>
      * <li>If strength is less than 1.0: re-applies the same potion effect with reduced duration
      *     (newDuration = originalDuration × strength)</li>
@@ -98,19 +96,15 @@ public abstract class PotionEffectAntidoteSuper extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        Player target = p.getServer().getPlayer(targetID);
+        PotionEffect targetEffect = target.getPotionEffect(potionEffectType);
 
-        if (target != null) {
-            PotionEffect targetEffect = target.getPotionEffect(potionEffectType);
+        if (targetEffect != null) {
+            target.removePotionEffect(potionEffectType);
 
-            if (targetEffect != null) {
-                target.removePotionEffect(potionEffectType);
+            if (strength < 1) {
+                int newDuration = (int) (targetEffect.getDuration() * strength);
 
-                if (strength < 1) {
-                    int newDuration = (int) (targetEffect.getDuration() * strength);
-
-                    target.addPotionEffect(new PotionEffect(potionEffectType, newDuration, targetEffect.getAmplifier()));
-                }
+                target.addPotionEffect(new PotionEffect(potionEffectType, newDuration, targetEffect.getAmplifier()));
             }
         }
 

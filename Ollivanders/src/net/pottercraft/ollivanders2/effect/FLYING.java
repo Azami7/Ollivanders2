@@ -4,7 +4,6 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,8 +34,6 @@ public class FLYING extends O2Effect {
      * to avoid excessive particle effects. Subclasses can set this to true for visually distinctive flight.</p>
      */
     boolean doSmokeEffect = false;
-
-    private Player target = null;
 
     /**
      * Constructor for creating a flight effect.
@@ -84,18 +81,6 @@ public class FLYING extends O2Effect {
         // age the effect
         age(1);
 
-        // on first pass, set target so we do not have to do a player lookup every game tick
-        if (target == null) {
-            target = p.getServer().getPlayer(targetID);
-
-            // if target still null, player not found in online players, kill and return
-            if (target == null) {
-                kill();
-                return;
-            }
-
-        }
-
         if (duration > 0) {
             if (!target.getAllowFlight()) { // if player does not have allowFlight, enable it
                 common.printDebugMessage("Adding flight for " + target.getDisplayName(), null, null, false);
@@ -124,14 +109,11 @@ public class FLYING extends O2Effect {
      */
     @Override
     public void doRemove() {
-        Player player = p.getServer().getPlayer(targetID);
-        if (player != null) {
-            // if the player is not an admin, remove flight ability
-            if (!player.hasPermission("Ollivanders2.admin")) {
-                common.printDebugMessage("Removing flight for " + player.getDisplayName(), null, null, false);
-                player.setAllowFlight(false);
-                player.setFlying(false);
-            }
+        // if target is not an admin, remove flight ability
+        if (!target.hasPermission("Ollivanders2.admin")) {
+            common.printDebugMessage("Removing flight for " + target.getDisplayName(), null, null, false);
+            target.setAllowFlight(false);
+            target.setFlying(false);
         }
     }
 }

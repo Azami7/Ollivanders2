@@ -132,9 +132,7 @@ public class BABBLING extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        if (!permanent) {
-            age(1);
-        }
+        age(1);
     }
 
     /**

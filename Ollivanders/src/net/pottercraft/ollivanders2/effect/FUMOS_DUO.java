@@ -26,7 +26,7 @@ import java.util.UUID;
  *
  * @author Azami7
  * @see FUMOS for the base smoke shield effect
- * @see SpellShieldEffect for the spell blocking mechanism and protection behavior
+ * @see ShieldSpellEffect for the spell blocking mechanism and protection behavior
  */
 public class FUMOS_DUO extends FUMOS {
     /**

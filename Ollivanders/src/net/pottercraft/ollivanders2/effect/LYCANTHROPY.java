@@ -9,7 +9,6 @@ import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Wolf;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +46,13 @@ import org.jetbrains.annotations.NotNull;
  * @see ShapeShiftSuper for the shape-shifting transformation mechanism
  */
 public class LYCANTHROPY extends ShapeShiftSuper {
+    /**
+     * Tracks additional effects applied during werewolf transformation.
+     *
+     * <p>Stores the O2EffectType values of effects that are added when the player transforms
+     * into wolf form (AGGRESSION and LYCANTHROPY_SPEECH). These effects are tracked for easy
+     * removal when the player reverts to human form.</p>
+     */
     ArrayList<O2EffectType> additionalEffects = new ArrayList<>();
 
     /**
@@ -101,13 +107,6 @@ public class LYCANTHROPY extends ShapeShiftSuper {
      */
     @Override
     protected void upkeep() {
-        Player target = p.getServer().getPlayer(targetID);
-
-        if (target == null) {
-            kill();
-            return;
-        }
-
         long curTime = target.getWorld().getTime();
         if (!transformed) {
             // only need to check after sunset
@@ -199,36 +198,34 @@ public class LYCANTHROPY extends ShapeShiftSuper {
     }
 
     /**
-     * Handle damage events to propagate lycanthropy infection through angry wolves.
+     * Spread lycanthropy curse to players damaged by transformed werewolf.
      *
-     * <p>When an angry wolf (transformed by this effect) damages a player, the target player is infected
-     * with lycanthropy after a 1 tick delay (if they don't already have the effect). This allows the
-     * curse to spread from player-controlled werewolves to other players.</p>
+     * <p>When the affected player is transformed into wolf form, any damage they deal to other players
+     * can spread the lycanthropy curse. This method checks if the damage event should spread infection
+     * and schedules the infection to occur 1 second after the damage event (allowing time for the event
+     * to be processed and verified it wasn't cancelled).</p>
      *
-     * @param event the entity damage event where a wolf damages another entity
+     * @param event the entity damage event that may spread lycanthropy
      */
     @Override
     void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {
+        // make sure lycanthropy is enabled
         if (!O2EffectType.LYCANTHROPY.isEnabled())
             return;
 
-        if (event.getDamager() instanceof Wolf) {
-            Wolf wolf = (Wolf) event.getDamager();
-            Player damaged = p.getServer().getPlayer(targetID);
-            if (damaged == null) {
-                common.printDebugMessage("Null player in Lycanthropy.doOnDamage", null, null, true);
-                return;
-            }
+        // make sure the damaged entity is a player
+        if (!(event.getEntity() instanceof Player))
+            return;
 
-            if (wolf.isAngry()) {
-                new BukkitRunnable() {
-                    @Override
-                    public void run() {
-                        if (!event.isCancelled())
-                            infectPlayer(damaged);
-                    }
-                }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
-            }
+        // if this effect's target is currently transformed, infect the damaged player
+        if (transformed) {
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (!event.isCancelled())
+                        infectPlayer((Player) event.getEntity());
+                }
+            }.runTaskLater(p, Ollivanders2Common.ticksPerSecond);
         }
     }
 

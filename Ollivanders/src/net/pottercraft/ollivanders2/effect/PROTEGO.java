@@ -38,10 +38,10 @@ import java.util.UUID;
  * that deflected spells.</p>
  *
  * @see <a href="https://harrypotter.fandom.com/wiki/Shield_Charm">Shield Charm on Harry Potter Wiki</a>
- * @see SpellShieldEffect for the base spell blocking mechanism and protection behavior
+ * @see ShieldSpellEffect for the base spell blocking mechanism and protection behavior
  * @see net.pottercraft.ollivanders2.spell.PROTEGO for the spell that applies this effect
  */
-public class PROTEGO extends SpellShieldEffect {
+public class PROTEGO extends ShieldSpellEffect {
     /**
      * The projectiles this spell needs to track because there is no entity move or projectile move event to listen to
      */
@@ -77,7 +77,8 @@ public class PROTEGO extends SpellShieldEffect {
         flairOnSpellImpact = true;
         impactFlairParticle = Particle.INSTANT_EFFECT;
 
-        Ollivanders2Common.flair(player.getLocation(), radius, 10, Particle.INSTANT_EFFECT);
+        if (!isKilled()) // case where target == null from constructor
+            Ollivanders2Common.flair(target.getLocation(), radius, 10, Particle.INSTANT_EFFECT);
     }
 
     /**
@@ -100,11 +101,11 @@ public class PROTEGO extends SpellShieldEffect {
         ArrayList<Projectile> projectileIterator = new ArrayList<>(projectiles);
         for (Projectile projectile : projectileIterator) {
             if (!projectile.isDead()) {
-                if (Ollivanders2Common.isInside(player.getLocation(), projectile.getLocation(), radius)) {
+                if (Ollivanders2Common.isInside(target.getLocation(), projectile.getLocation(), radius)) {
                     common.printDebugMessage("projectile in shield area", null, null, false);
                     projectile.remove();
                     if (flairOnSpellImpact)
-                        Ollivanders2Common.flair(player.getLocation(), radius, 10, impactFlairParticle);
+                        Ollivanders2Common.flair(target.getLocation(), radius, 10, impactFlairParticle);
                 }
                 else
                     continue;
@@ -133,7 +134,7 @@ public class PROTEGO extends SpellShieldEffect {
         // this spell only stops basic projectiles like arrows, snowballs, eggs, and thrown potions
         if (type == EntityType.ARROW || type == EntityType.SNOWBALL || type == EntityType.EGG || type == EntityType.SPLASH_POTION || type == EntityType.LINGERING_POTION) {
             // is this projectile within maxDistance of this spell center?
-            if (Ollivanders2Common.isInside(player.getLocation(), projectile.getLocation(), maxDistance)) {
+            if (Ollivanders2Common.isInside(target.getLocation(), projectile.getLocation(), maxDistance)) {
                 common.printDebugMessage("adding projectile " + type, null, null, false);
                 projectiles.add(projectile);
             }
@@ -154,7 +155,7 @@ public class PROTEGO extends SpellShieldEffect {
     void doOnProjectileHitEvent(@NotNull ProjectileHitEvent event) {
         Entity entity = event.getHitEntity();
 
-        if (entity != null && (entity.getUniqueId().equals(player.getUniqueId())))
+        if (entity != null && (entity.getUniqueId().equals(targetID)))
             event.setCancelled(true);
     }
 }

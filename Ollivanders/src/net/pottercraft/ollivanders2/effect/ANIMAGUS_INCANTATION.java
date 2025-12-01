@@ -71,5 +71,6 @@ public class ANIMAGUS_INCANTATION extends O2Effect {
      * @param perm the requested permanent status (ignored - effect remains temporary regardless)
      */
     @Override
-    public void setPermanent(boolean perm) {}
+    public void setPermanent(boolean perm) {
+    }
 }

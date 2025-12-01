@@ -5,6 +5,7 @@ import java.util.UUID;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
@@ -117,6 +118,15 @@ public abstract class O2Effect {
     Ollivanders2Common common;
 
     /**
+     * The player affected by this effect.
+     *
+     * <p>This reference is initialized in the constructor and guaranteed to be non-null or the effect
+     * will be killed immediately. All child classes use this inherited field instead of maintaining
+     * their own local Player reference.</p>
+     */
+    Player target;
+
+    /**
      * Constructor for creating a new magical effect.
      *
      * <p>Creates an effect with the given duration and target player. If the duration is negative,
@@ -141,6 +151,10 @@ public abstract class O2Effect {
         targetID = pid;
 
         informousText = null;
+
+        target = p.getServer().getPlayer(targetID);
+        if (target == null)
+            kill();
     }
 
     /**

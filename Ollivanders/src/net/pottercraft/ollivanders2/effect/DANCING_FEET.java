@@ -3,7 +3,6 @@ package net.pottercraft.ollivanders2.effect;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.player.PlayerToggleSprintEvent;
@@ -51,8 +50,6 @@ public class DANCING_FEET extends O2Effect {
      */
     final int cooldown = Ollivanders2Common.ticksPerSecond / 2;
 
-    Player target = null;
-
     /**
      * Constructor for creating a dancing feet uncontrollable movement effect.
      *
@@ -94,16 +91,6 @@ public class DANCING_FEET extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        if (target == null) {
-            // save the player so we don't have to keep calling getPlayer()
-            target = p.getServer().getPlayer(targetID);
-
-            if (target == null) {
-                kill();
-                return;
-            }
-        }
-
         // age this effect
         age(1);
 

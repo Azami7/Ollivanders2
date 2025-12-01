@@ -24,9 +24,9 @@ import java.util.UUID;
  * </ul>
  *
  * @author Azami7
- * @see SpellShieldEffect for the spell blocking mechanism and protection behavior
+ * @see ShieldSpellEffect for the spell blocking mechanism and protection behavior
  */
-public class FUMOS extends SpellShieldEffect {
+public class FUMOS extends ShieldSpellEffect {
     /**
      * Constructor for creating a smoke shield spell barrier effect.
      *

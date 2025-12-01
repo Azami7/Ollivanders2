@@ -138,14 +138,14 @@ public abstract class ShapeShiftSuper extends O2Effect {
      *
      * <p>This method performs the following steps:</p>
      * <ol>
-     * <li>Locates the target player on the server</li>
+     * <li>Verifies the target player is available (initialized in O2Effect constructor)</li>
      * <li>Creates a new MobDisguise based on the form entity type</li>
      * <li>Retrieves the living entity watcher for appearance customization</li>
      * <li>Calls customizeWatcher() to allow subclasses to modify appearance properties</li>
      * <li>Applies the disguise to all players using DisguiseAPI</li>
      * <li>Sets the transformed flag to true</li>
      * </ol>
-     * If the player or form is null, kills the effect without applying a disguise.
+     * If the form is null, kills the effect without applying a disguise.
      */
     protected void transform() {
         Player target = p.getServer().getPlayer(targetID);

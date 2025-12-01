@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
@@ -74,10 +73,9 @@ public abstract class PotionEffectSuper extends O2Effect {
      *
      * <p>This method executes in a single game tick and performs the following:</p>
      * <ol>
-     * <li>Locates the target player on the server</li>
      * <li>Creates a new potion effect with the specified type, duration, and strength (amplifier)</li>
-     * <li>Applies the potion effect to the target</li>
-     * <li>Kills the effect so it doesn't persist</li>
+     * <li>Applies the potion effect to the target player (initialized in O2Effect constructor)</li>
+     * <li>Kills the effect so it doesn't persist beyond the single tick</li>
      * </ol>
      *
      * <p>Example: A POISON effect with strength 2 will create a poison effect with amplifier 2 and the
@@ -85,11 +83,7 @@ public abstract class PotionEffectSuper extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        Player target = p.getServer().getPlayer(targetID);
-
-        if (target != null) {
-            target.addPotionEffect(new PotionEffect(potionEffectType, duration, strength));
-        }
+        target.addPotionEffect(new PotionEffect(potionEffectType, duration, strength));
 
         kill();
     }

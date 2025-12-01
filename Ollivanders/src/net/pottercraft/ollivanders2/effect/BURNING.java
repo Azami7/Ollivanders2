@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.Effect;
 import org.bukkit.Sound;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -111,13 +110,6 @@ public class BURNING extends O2Effect {
     public void checkEffect() {
         age(1);
 
-        Player target = p.getServer().getPlayer(targetID);
-
-        if (target == null) {
-            kill();
-            return;
-        }
-
         if (damageCooldown <= 0) {
             doDamage();
             damageCooldown = damageFrequencyInSeconds * Ollivanders2Common.ticksPerSecond;
@@ -138,16 +130,11 @@ public class BURNING extends O2Effect {
      * If the player is not found, kills the effect.</p>
      */
     private void doDamage() {
-        Player target = p.getServer().getPlayer(targetID);
-        if (target != null) {
-            if ((target.getHealth() - damage) > 1)
-                target.damage(damage);
+        if ((target.getHealth() - damage) > 1)
+            target.damage(damage);
 
-            target.getWorld().playEffect(target.getLocation(), Effect.SMOKE, 4);
-            target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_HURT_ON_FIRE, 1, 0);
-        }
-        else
-            kill();
+        target.getWorld().playEffect(target.getLocation(), Effect.SMOKE, 4);
+        target.getWorld().playSound(target.getLocation(), Sound.ENTITY_PLAYER_HURT_ON_FIRE, 1, 0);
     }
 
     /**

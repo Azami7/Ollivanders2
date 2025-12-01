@@ -6,8 +6,6 @@ import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.Location;
 import org.bukkit.Particle;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +15,7 @@ import java.util.UUID;
 /**
  * Parent class for all shield effects that block incoming spells.
  *
- * <p>SpellShieldEffect provides a protective barrier that blocks spell projectiles from hitting the protected
+ * <p>ShieldSpellEffect provides a protective barrier that blocks spell projectiles from hitting the protected
  * player. The shield operates within a specified radius around the player and prevents spells based on a
  * spell level comparison: the shield can only block spells up to one level higher than the shield spell itself.
  * For example, a shield at level OWL can block spells up to level NEWT (one level higher), but cannot block
@@ -41,15 +39,7 @@ import java.util.UUID;
  *
  * @author Azami7
  */
-public abstract class SpellShieldEffect extends O2Effect {
-    /**
-     * The protected player that this shield effect is protecting.
-     *
-     * <p>Spell projectiles within the shield's radius will be blocked from hitting this player.
-     * The shield also prevents entity targeting events against this player.</p>
-     */
-    Player player;
-
+public abstract class ShieldSpellEffect extends O2Effect {
     /**
      * The protection radius of this shield, measured in blocks from the player's location.
      *
@@ -102,14 +92,8 @@ public abstract class SpellShieldEffect extends O2Effect {
      * @param isPermanent is this effect permanent (does not age)
      * @param pid         the unique ID of the player to protect
      */
-    public SpellShieldEffect(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
+    public ShieldSpellEffect(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, isPermanent, pid);
-
-        player = p.getServer().getPlayer(pid);
-        if (player == null) {
-            common.printDebugMessage("O2Effect.ShieldEffect: target player is null", null, null, false);
-            kill();
-        }
     }
 
     /**
@@ -134,7 +118,7 @@ public abstract class SpellShieldEffect extends O2Effect {
 
         // flair
         if (flairPulse && (duration % 10) == 0) {
-            Ollivanders2Common.flair(player.getLocation(), radius, 10, pulseFlairParticle);
+            Ollivanders2Common.flair(target.getLocation(), radius, 10, pulseFlairParticle);
         }
     }
 
@@ -165,12 +149,12 @@ public abstract class SpellShieldEffect extends O2Effect {
      */
     void doOnOllivandersSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
         // don't stop this player's spells from going across the spell boundary
-        if (event.getPlayer().getUniqueId().equals(player.getUniqueId()))
+        if (event.getPlayer().getUniqueId().equals(targetID))
             return;
 
         Location projectileLocation = event.getTo();
 
-        if (Ollivanders2Common.isInside(projectileLocation, player.getLocation(), radius)) {
+        if (Ollivanders2Common.isInside(projectileLocation, target.getLocation(), radius)) {
             boolean canceled = true;
 
             // this spell can only protect against spells up to one level higher than this spell
@@ -180,7 +164,7 @@ public abstract class SpellShieldEffect extends O2Effect {
 
             event.setCancelled(canceled);
             if (flairOnSpellImpact)
-                Ollivanders2Common.flair(player.getLocation(), radius, 20, impactFlairParticle);
+                Ollivanders2Common.flair(target.getLocation(), radius, 20, impactFlairParticle);
         }
     }
 
@@ -207,11 +191,10 @@ public abstract class SpellShieldEffect extends O2Effect {
      * @param event the entity target event
      */
     void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
-        Entity target = event.getTarget();
-        if (target == null)
+        if (event.getTarget() == null)
             return;
 
-        if (target.getUniqueId().equals(targetID))
+        if (event.getTarget().getUniqueId().equals(targetID))
             event.setCancelled(true);
     }
 }

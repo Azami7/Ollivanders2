@@ -1,11 +1,9 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -42,11 +40,6 @@ public class WEALTH extends O2Effect {
     int strength = 1;
 
     /**
-     * The player affected by this effect
-     */
-    Player target;
-
-    /**
      * Constructor for creating a wealth effect.
      *
      * <p>Creates a wealth effect that periodically generates magical coins for the target player.
@@ -78,17 +71,6 @@ public class WEALTH extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        // on first pass, keep track of the target player so we do not have to call getPlayer() every tick
-        if (target == null) {
-            Player player = p.getServer().getPlayer(targetID);
-
-            // if player is still null, player not found, kill and return
-            if (player == null) {
-                kill();
-                return;
-            }
-        }
-
         // age the effect
         age(1);
 

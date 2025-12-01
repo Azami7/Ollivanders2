@@ -4,7 +4,6 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -71,17 +70,13 @@ public class SLEEPING extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        if (!sleeping) {
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, O2EffectType.AWAKE)) {
-                kill();
-            }
-            else {
-                playerSleep();
-            }
-        }
+        age(1);
 
-        if (!permanent) {
-            age(1);
+        if (!sleeping) {
+            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, O2EffectType.AWAKE))
+                kill();
+            else
+                playerSleep();
         }
     }
 
@@ -96,12 +91,6 @@ public class SLEEPING extends O2Effect {
      * effect is terminated.</p>
      */
     private void playerSleep() {
-        Player target = p.getServer().getPlayer(targetID);
-        if (target == null) {
-            kill();
-            return;
-        }
-
         // tilt player head down
         Location loc = target.getLocation();
         Location newLoc = new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 45);
@@ -131,9 +120,7 @@ public class SLEEPING extends O2Effect {
             Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.IMMOBILIZE);
             sleeping = false;
 
-            Player target = p.getServer().getPlayer(targetID);
-            if (target != null)
-                target.sendMessage(Ollivanders2.chatColor + "You awaken from a deep sleep.");
+            target.sendMessage(Ollivanders2.chatColor + "You awaken from a deep sleep.");
         }
     }
 }
