@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.FLYING;
 import org.bukkit.entity.Player;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
@@ -51,7 +50,7 @@ public class FlyingTest extends EffectTestSuper {
         Ollivanders2.debug = true;
 
         PlayerMock target = mockServer.addPlayer();
-        FLYING flying = addEffectHelper(target, 100, false);
+        FLYING flying = (FLYING) addEffect(target, 100, false);
         int duration = flying.getRemainingDuration();
 
         assertTrue(target.getAllowFlight(), "Target not set to flying when effect added.");
@@ -69,31 +68,10 @@ public class FlyingTest extends EffectTestSuper {
     }
 
     /**
-     * Helper method to create a FLYING effect, add it to the effect manager, and process one tick.
-     *
-     * <p>This method simplifies test setup by combining effect creation, registration, and initial
-     * processing into a single call. The effect is added to the player effect manager and then
-     * advanced by one tick to ensure it's fully processed into the active effects system.</p>
-     *
-     * @param target      the player to add the effect to
-     * @param duration    the duration of the effect in game ticks
-     * @param isPermanent true if the effect should be permanent, false for limited duration
-     * @return the created and registered FLYING effect
-     */
-    FLYING addEffectHelper(Player target, int duration, boolean isPermanent) {
-        FLYING flying = createEffect(target, duration, false);
-        Ollivanders2API.getPlayers().playerEffects.addEffect(flying);
-
-        // Perform one tick to ensure the effect is processed into the active effects system
-        mockServer.getScheduler().performTicks(1);
-
-        return flying;
-    }
-
-    /**
      * FLYING effect does not handle events.
      */
-    void eventHandlerTests() {}
+    void eventHandlerTests() {
+    }
 
     /**
      * Tests for the doRemove() cleanup. checkEffectTest() already does this for non-admins so this test just needs to test for admins.
@@ -103,7 +81,7 @@ public class FlyingTest extends EffectTestSuper {
         PlayerMock admin = mockServer.addPlayer();
         admin.setOp(true);
 
-        FLYING flying = addEffectHelper(admin, 10, false);
+        FLYING flying = (FLYING) addEffect(admin, 10, false);
 
         // verify they are flying
         assertTrue(admin.getAllowFlight(), "Admin not set to flying when effect added.");

@@ -125,6 +125,28 @@ abstract public class EffectTestSuper {
     abstract O2Effect createEffect(Player target, int durationInTicks, boolean isPermanent);
 
     /**
+     * Helper method to create an effect, add it to the effect manager, and process one tick.
+     *
+     * <p>This method simplifies test setup by combining effect creation, registration, and initial
+     * processing into a single call. The effect is added to the player effect manager and then
+     * advanced by one tick to ensure it's fully processed into the active effects system.</p>
+     *
+     * @param target      the player to add the effect to
+     * @param duration    the duration of the effect in game ticks
+     * @param isPermanent true if the effect should be permanent, false for limited duration
+     * @return the created and registered effect
+     */
+    O2Effect addEffect(Player target, int duration, boolean isPermanent) {
+        O2Effect effect = createEffect(target, duration, isPermanent);
+        Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+
+        // Perform one tick to ensure the effect is processed into the active effects system
+        mockServer.getScheduler().performTicks(1);
+
+        return effect;
+    }
+
+    /**
      * Comprehensive effect test combining all core behavior validations.
      *
      * <p>This is a mega test that runs all effect tests in sequence within a single @Test method.
@@ -151,7 +173,7 @@ abstract public class EffectTestSuper {
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
 
         // create an effect with is permanent set true
-        effect = createEffect(mockServer.addPlayer(),5, true);
+        effect = createEffect(mockServer.addPlayer(), 5, true);
         assertFalse(effect.isKilled(), "Effect set to killed at creation");
 
         durationBoundsTest();

@@ -51,6 +51,8 @@ public class DANCING_FEET extends O2Effect {
      */
     final int cooldown = Ollivanders2Common.ticksPerSecond / 2;
 
+    Player target = null;
+
     /**
      * Constructor for creating a dancing feet uncontrollable movement effect.
      *
@@ -92,43 +94,44 @@ public class DANCING_FEET extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        // age this effect
-        age(1);
+        if (target == null) {
+            // save the player so we don't have to keep calling getPlayer()
+            target = p.getServer().getPlayer(targetID);
 
-        // decrement cooldown counter
-        if (cooldownCounter > 0)
-            cooldownCounter = cooldownCounter - 1;
-            // move the player if the cooldown counter is complete
-        else {
-            Player player = p.getServer().getPlayer(targetID);
-            if (player == null) {
-                common.printDebugMessage("DANCING_FEET.checkEffect(): player is null", null, null, true);
+            if (target == null) {
                 kill();
                 return;
             }
+        }
 
+        // age this effect
+        age(1);
+
+        if (cooldownCounter > 0) // decrement cooldown counter
+            cooldownCounter = cooldownCounter - 1;
+        else { // move the player if the cooldown counter is complete
             cooldownCounter = cooldown;
 
-            // toggle sneaking
-            if (player.isSneaking()) {
-                player.setSneaking(false);
+            // toggle sneaking - so if they are sneaking make them stand, if standing make them sneak
+            if (target.isSneaking()) {
+                target.setSneaking(false);
             }
             else {
-                player.setSneaking(true);
+                target.setSneaking(true);
                 return;
             }
 
             // pick a random direction to face
             int rand = Math.abs(Ollivanders2Common.random.nextInt() % 360);
-            float currentYaw = player.getLocation().getYaw();
-            Location newLocation = player.getLocation();
+            float currentYaw = target.getLocation().getYaw();
+            Location newLocation = target.getLocation();
             newLocation.setYaw(currentYaw + rand);
 
             // teleport the player 5 ticks later so that their movements do not seem to all happen at once
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    player.teleport(newLocation);
+                    target.teleport(newLocation);
                 }
             }.runTaskLater(p, 5);
         }
