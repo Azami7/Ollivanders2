@@ -134,6 +134,15 @@ public abstract class ShieldSpellEffect extends O2Effect {
     }
 
     /**
+     * Get the radius for this shield spell effect.
+     *
+     * @return the radius for this shield spell effect.
+     */
+    public int getRadius() {
+        return radius;
+    }
+
+    /**
      * Block spell projectiles that hit the shield boundary.
      *
      * <p>This method is called when a spell projectile moves and checks if it has entered the shield radius.
@@ -152,9 +161,9 @@ public abstract class ShieldSpellEffect extends O2Effect {
         if (event.getPlayer().getUniqueId().equals(targetID))
             return;
 
-        Location projectileLocation = event.getTo();
+        Location projectileToLocation = event.getTo();
 
-        if (Ollivanders2Common.isInside(projectileLocation, target.getLocation(), radius)) {
+        if (Ollivanders2Common.isInside(projectileToLocation, target.getLocation(), radius)) {
             boolean canceled = true;
 
             // this spell can only protect against spells up to one level higher than this spell

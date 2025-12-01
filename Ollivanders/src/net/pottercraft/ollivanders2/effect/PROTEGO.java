@@ -158,4 +158,17 @@ public class PROTEGO extends ShieldSpellEffect {
         if (entity != null && (entity.getUniqueId().equals(targetID)))
             event.setCancelled(true);
     }
+
+    /**
+     * Check if a specific projectile is currently being tracked by this shield.
+     *
+     * <p>This method is primarily used for testing to verify that projectiles launched within
+     * range are properly added to the tracking list.</p>
+     *
+     * @param projectile the projectile to check
+     * @return true if the projectile is in the tracking list, false otherwise
+     */
+    public boolean isProjectileTracked(@NotNull Projectile projectile) {
+        return projectiles.contains(projectile);
+    }
 }
