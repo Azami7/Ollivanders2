@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.MagicLevel;
 import net.pottercraft.ollivanders2.effect.ShieldSpellEffect;
 import net.pottercraft.ollivanders2.spell.ALOHOMORA;
@@ -81,19 +82,19 @@ abstract public class ShieldSpellEffectTestSuper extends EffectTestSuper {
      * </ul>
      */
     void doOnOllivandersSpellProjectileMoveEventTest() {
-        Ollivanders2.debug = true;
-
         PlayerMock target = mockServer.addPlayer();
         Location targetLocation = new Location(testWorld, 0, 4, 0);
         target.setLocation(targetLocation);
-        ShieldSpellEffect effect = (ShieldSpellEffect) addEffect(target, 100, false);
+        ShieldSpellEffect shieldSpellEffect = (ShieldSpellEffect) addEffect(target, 100, false);
+        Ollivanders2API.getPlayers().playerEffects.addEffect(shieldSpellEffect);
+        mockServer.getScheduler().performTicks(10);
 
         // create a separate player who will cast the spells
         PlayerMock caster = mockServer.addPlayer();
 
         // check that a BEGINNER level spell moving from outside to inside the shield is stopped
-        Location outsideLocation = new Location(targetLocation.getWorld(), targetLocation.getX() + effect.getRadius() + 1, targetLocation.getY(), targetLocation.getZ());
-        Location insideLocation = new Location(targetLocation.getWorld(), targetLocation.getX() + effect.getRadius() - 1, targetLocation.getY(), targetLocation.getZ());
+        Location outsideLocation = new Location(targetLocation.getWorld(), targetLocation.getX() + shieldSpellEffect.getRadius() + 1, targetLocation.getY(), targetLocation.getZ());
+        Location insideLocation = new Location(targetLocation.getWorld(), targetLocation.getX() + shieldSpellEffect.getRadius() - 1, targetLocation.getY(), targetLocation.getZ());
         OllivandersSpellProjectileMoveEvent event = new OllivandersSpellProjectileMoveEvent(caster, new ALOHOMORA(testPlugin, caster, 1.0), outsideLocation, insideLocation);
         mockServer.getPluginManager().callEvent(event);
         assertTrue(event.isCancelled(), "OllivandersSpellProjectileMoveEvent was not canceled when ALOHOMORA moved from outside to inside the shield area");
@@ -104,7 +105,7 @@ abstract public class ShieldSpellEffectTestSuper extends EffectTestSuper {
         assertFalse(event.isCancelled(), "OllivandersSpellProjectileMoveEvent was canceled when ALOHOMORA moved from inside to outside the shield area");
 
         // check that a EXPERT level spell moving from outside to inside the shield is not stopped when the shield level is 2 or more lower than EXPERT
-        if ((effect.effectType.getLevel().ordinal() + 1) < MagicLevel.EXPERT.ordinal()) {
+        if ((shieldSpellEffect.effectType.getLevel().ordinal() + 1) < MagicLevel.EXPERT.ordinal()) {
             event = new OllivandersSpellProjectileMoveEvent(caster, new AVADA_KEDAVRA(testPlugin, caster, 1.0), insideLocation, outsideLocation);
             mockServer.getPluginManager().callEvent(event);
             assertFalse(event.isCancelled(), "OllivandersSpellProjectileMoveEvent was canceled when AVADA_KEDAVRA moved from inside to outside the shield area");

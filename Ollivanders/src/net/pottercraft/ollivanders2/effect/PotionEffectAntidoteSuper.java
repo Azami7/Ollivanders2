@@ -75,8 +75,7 @@ public abstract class PotionEffectAntidoteSuper extends O2Effect {
      * @param pid         the unique ID of the target player to receive this antidote
      */
     public PotionEffectAntidoteSuper(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
-        // set isPermanent to true so we do not need to worry about what duration was set to, checkEffect() will kill it
-        super(plugin, duration, true, pid);
+        super(plugin, duration, false, pid);
     }
 
     /**
@@ -109,5 +108,31 @@ public abstract class PotionEffectAntidoteSuper extends O2Effect {
         }
 
         kill();
+    }
+
+    /**
+     * Get the strength/potency of this antidote effect.
+     *
+     * <p>Returns a value between 0.0 and 1.0+ that determines how effectively this antidote
+     * reduces the target potion effect's duration:</p>
+     * <ul>
+     * <li><strong>strength &ge; 1.0:</strong> Full-strength antidote - completely removes the target effect</li>
+     * <li><strong>0.5 &le; strength &lt; 1.0:</strong> Medium-strength antidote - reduces target effect duration by 50-99%</li>
+     * <li><strong>0.0 &lt; strength &lt; 0.5:</strong> Weak antidote - reduces target effect duration by less than 50%</li>
+     * </ul>
+     *
+     * @return the antidote strength as a decimal value (0.0 to 1.0+)
+     */
+    public double getStrength() {
+        return strength;
+    }
+
+    /**
+     * Potion antidote effects cannot ever be permanent
+     *
+     * @param perm ignored - potion effects are always temporary
+     */
+    @Override
+    public void setPermanent(boolean perm) {
     }
 }

@@ -47,8 +47,6 @@ public class FlyingTest extends EffectTestSuper {
      * Flying effect check. There is no way with MockBukkit to test for spawned particles so we cannot test that part.
      */
     void checkEffectTest() {
-        Ollivanders2.debug = true;
-
         PlayerMock target = mockServer.addPlayer();
         FLYING flying = (FLYING) addEffect(target, 100, false);
         int duration = flying.getRemainingDuration();

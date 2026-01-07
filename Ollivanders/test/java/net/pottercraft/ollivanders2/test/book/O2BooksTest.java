@@ -5,6 +5,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.book.O2BookType;
 import net.pottercraft.ollivanders2.book.O2Books;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.effect.IMPROVED_BOOK_LEARNING;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
@@ -313,6 +314,59 @@ public class O2BooksTest {
         String commandResponse = TestCommon.runCommand(player, "Ollivanders2 books Lord of the Rings", mockServer);
         assertNotNull(commandResponse, "command response was null");
         assertTrue(TestCommon.messageStartsWith("No book named", commandResponse), "Unexpected command response. Expected: \"No book named\", Actual: " + commandResponse);
+    }
+
+    /**
+     * Test that the IMPROVED_BOOK_LEARNING effect increases skill gain from reading books.
+     *
+     * <p>This test verifies that the IMPROVED_BOOK_LEARNING passive marker effect correctly
+     * boosts the player's skill gain when reading a book. The test compares skill gain with
+     * and without the effect to ensure the effect provides a meaningful learning boost.</p>
+     */
+    @Test
+    void improvedBookLearningTest() throws InterruptedException {
+        // make sure bookLearning is on in the config
+        assertTrue(Ollivanders2.bookLearning, "bookLearning is not enabled.");
+
+        // create a book
+        ItemStack book = books.getBookByType(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1);
+
+        // Test 1: Read book without IMPROVED_BOOK_LEARNING effect
+        PlayerMock player1 = mockServer.addPlayer();
+        player1.getInventory().setItemInMainHand(book);
+        O2Player o2p1 = testPlugin.getO2Player(player1);
+        int spellLevelBefore1 = o2p1.getSpellCount(O2SpellType.LUMOS);
+
+        PlayerInteractEvent event1 = new PlayerInteractEvent(player1, Action.RIGHT_CLICK_BLOCK, book, null, BlockFace.UP, EquipmentSlot.HAND);
+        mockServer.getPluginManager().callEvent(event1);
+
+        mockServer.getScheduler().performTicks(Ollivanders2Common.ticksPerSecond * 5);
+        Thread.sleep(500);
+        int spellLevelAfter1 = o2p1.getSpellCount(O2SpellType.LUMOS);
+        int gainWithout = spellLevelAfter1 - spellLevelBefore1;
+
+        // Test 2: Read book with IMPROVED_BOOK_LEARNING effect
+        PlayerMock player2 = mockServer.addPlayer();
+        player2.getInventory().setItemInMainHand(book);
+        O2Player o2p2 = testPlugin.getO2Player(player2);
+
+        // Add IMPROVED_BOOK_LEARNING effect
+        IMPROVED_BOOK_LEARNING effect = new IMPROVED_BOOK_LEARNING(testPlugin, 6000, false, player2.getUniqueId());
+        Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
+
+        int spellLevelBefore2 = o2p2.getSpellCount(O2SpellType.LUMOS);
+
+        PlayerInteractEvent event2 = new PlayerInteractEvent(player2, Action.RIGHT_CLICK_BLOCK, book, null, BlockFace.UP, EquipmentSlot.HAND);
+        mockServer.getPluginManager().callEvent(event2);
+
+        mockServer.getScheduler().performTicks(Ollivanders2Common.ticksPerSecond * 5);
+        Thread.sleep(500);
+        int spellLevelAfter2 = o2p2.getSpellCount(O2SpellType.LUMOS);
+        int gainWith = spellLevelAfter2 - spellLevelBefore2;
+
+        // Verify that skill gain with effect is greater than without
+        assertTrue(gainWithout > 0, "Player without effect gained no skill from book");
+        assertTrue(gainWith > gainWithout, "IMPROVED_BOOK_LEARNING effect did not increase skill gain. Gain without: " + gainWithout + ", Gain with: " + gainWith);
     }
 
     /**
