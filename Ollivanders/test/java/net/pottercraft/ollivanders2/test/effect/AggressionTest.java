@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.test.effect;
 
-import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.effect.AGGRESSION;

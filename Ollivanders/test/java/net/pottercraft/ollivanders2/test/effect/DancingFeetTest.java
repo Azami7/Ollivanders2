@@ -77,7 +77,8 @@ public class DancingFeetTest extends EffectTestSuper {
      */
     @Override
     void eventHandlerTests() {
-        doOnPlayerToggleSneakEventTest();
+        // PlayerToggleSneakEvent not yet implemented in MockBukkit and including this causes the whole test to be skipped
+        //doOnPlayerToggleSneakEventTest();
         doOnPlayerToggleSprintEventTest();
         doOnPlayerMoveEventTest();
     }

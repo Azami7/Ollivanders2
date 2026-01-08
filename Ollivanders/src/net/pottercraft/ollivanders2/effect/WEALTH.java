@@ -74,13 +74,12 @@ public class WEALTH extends O2Effect {
         // age the effect
         age(1);
 
-        int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) * strength;
-
         // only take action once per 10 seconds, which is every 120 ticks
         if ((duration % (Ollivanders2Common.ticksPerSecond * 10)) == 0) {
             List<ItemStack> kit = new ArrayList<>();
 
             ItemStack money;
+            int rand = (Math.abs(Ollivanders2Common.random.nextInt()) % 100) * strength;
 
             if (rand > 90)
                 money = O2ItemType.GALLEON.getItem(1);
@@ -90,7 +89,6 @@ public class WEALTH extends O2Effect {
                 money = O2ItemType.KNUT.getItem(1);
 
             kit.add(money);
-
             O2PlayerCommon.givePlayerKit(target, kit);
         }
     }

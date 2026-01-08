@@ -73,16 +73,12 @@ public class TestCommon {
      * @return true if found, false otherwise
      */
     public static boolean isInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType) {
-        for (ItemStack itemStack : player.getInventory().getContents()) {
-            if (itemStack == null)
-                return false;
+        ItemStack itemStack = getPlayerInventoryItem(player, itemType);
 
-            if (itemStack.getType() == itemType) {
-                return true;
-            }
-        }
-
-        return false;
+        if (itemStack == null)
+            return false;
+        else
+            return true;
     }
 
     /**
@@ -94,6 +90,43 @@ public class TestCommon {
      * @return true if found, false otherwise
      */
     public static boolean isInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType, @NotNull String name) {
+        ItemStack itemStack = getPlayerInventoryItem(player, itemType, name);
+
+        if (itemStack == null)
+            return false;
+        else
+            return true;
+    }
+
+    /**
+     *
+     * @param player
+     * @param itemType
+     * @return
+     */
+    @Nullable
+    public static ItemStack getPlayerInventoryItem(@NotNull PlayerMock player, @NotNull Material itemType) {
+        for (ItemStack itemStack : player.getInventory().getContents()) {
+            if (itemStack == null)
+                continue;
+
+            if (itemStack.getType() == itemType) {
+                return itemStack;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     *
+     * @param player
+     * @param itemType
+     * @param name
+     * @return
+     */
+    @Nullable
+    public static ItemStack getPlayerInventoryItem(@NotNull PlayerMock player, @NotNull Material itemType, @NotNull String name) {
         for (ItemStack itemStack : player.getInventory().getContents()) {
             if (itemStack == null)
                 continue;
@@ -107,14 +140,29 @@ public class TestCommon {
                     String bookTitle = ((BookMeta)itemMeta).getTitle();
 
                     if (bookTitle != null && bookTitle.equals(name))
-                        return true;
+                        return itemStack;
                 }
                 else if (itemMeta.getDisplayName().equals(name))
-                        return true;
+                    return itemStack;
             }
         }
 
-        return false;
+        return null;
+    }
+
+    /**
+     *
+     * @param player
+     * @param itemType
+     * @param name
+     * @return
+     */
+    public static int amountInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType, @NotNull String name) {
+        if (!isInPlayerInventory(player, itemType, name))
+            return 0;
+
+        ItemStack itemStack = getPlayerInventoryItem(player, itemType, name);
+        return itemStack.getAmount();
     }
 
     /**

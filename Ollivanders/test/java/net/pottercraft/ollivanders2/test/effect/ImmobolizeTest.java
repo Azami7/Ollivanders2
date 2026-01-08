@@ -73,12 +73,12 @@ public class ImmobolizeTest extends EffectTestSuper {
     void eventHandlerTests() {
         PlayerMock target = mockServer.addPlayer();
         IMMOBILIZE immobilize = (IMMOBILIZE) addEffect(target, 100, false);
-        Ollivanders2API.getPlayers().playerEffects.addEffect(immobilize);
         mockServer.getScheduler().performTicks(10);
 
         doOnPlayerInteractEventTest(target);
         doOnPlayerToggleFlightEventTest(target);
-        doOnPlayerToggleSneakEventTest(target);
+        // PlayerToggleSneakEvent not yet implemented in MockBukkit and including this causes the whole test to be skipped
+        //doOnPlayerToggleSneakEventTest(target);
         doOnPlayerToggleSprintEventTest(target);
         doOnPlayerVelocityEventTest(target);
         doOnPlayerMoveEventTest(target);
