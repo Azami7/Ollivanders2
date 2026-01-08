@@ -14,7 +14,13 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
- * Common functions for tests
+ * Common utility functions for tests.
+ *
+ * <p>Provides helper methods for common testing operations including message comparison, command execution,
+ * inventory item lookup, and string matching utilities. These utilities handle MockBukkit-specific details
+ * and simplify common test assertions.</p>
+ *
+ * @author Azami7
  */
 public class TestCommon {
     /**
@@ -99,10 +105,14 @@ public class TestCommon {
     }
 
     /**
+     * Get an item from the player's inventory matching the specified material type.
      *
-     * @param player
-     * @param itemType
-     * @return
+     * <p>Searches the player's inventory for the first item with a matching material type.
+     * Returns null if no matching item is found.</p>
+     *
+     * @param player the player whose inventory to search
+     * @param itemType the material type to match
+     * @return the first matching ItemStack, or null if not found
      */
     @Nullable
     public static ItemStack getPlayerInventoryItem(@NotNull PlayerMock player, @NotNull Material itemType) {
@@ -119,11 +129,16 @@ public class TestCommon {
     }
 
     /**
+     * Get an item from the player's inventory matching the specified material type and display name.
      *
-     * @param player
-     * @param itemType
-     * @param name
-     * @return
+     * <p>Searches the player's inventory for the first item with a matching material type and display name.
+     * For written books, matches against the book title. For other items, matches against the display name.
+     * Returns null if no matching item is found.</p>
+     *
+     * @param player the player whose inventory to search
+     * @param itemType the material type to match
+     * @param name the display name or title to match
+     * @return the first matching ItemStack, or null if not found
      */
     @Nullable
     public static ItemStack getPlayerInventoryItem(@NotNull PlayerMock player, @NotNull Material itemType, @NotNull String name) {
@@ -151,17 +166,24 @@ public class TestCommon {
     }
 
     /**
+     * Get the total amount of items in the player's inventory matching the specified type and name.
      *
-     * @param player
-     * @param itemType
-     * @param name
-     * @return
+     * <p>Searches the player's inventory for items matching both the material type and display name,
+     * and returns the total stack amount. Returns 0 if no matching items are found.</p>
+     *
+     * @param player the player whose inventory to search
+     * @param itemType the material type to match
+     * @param name the display name or title to match
+     * @return the amount of matching items, or 0 if none are found
      */
     public static int amountInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType, @NotNull String name) {
         if (!isInPlayerInventory(player, itemType, name))
             return 0;
 
         ItemStack itemStack = getPlayerInventoryItem(player, itemType, name);
+        if (itemStack == null)
+            return 0;
+
         return itemStack.getAmount();
     }
 

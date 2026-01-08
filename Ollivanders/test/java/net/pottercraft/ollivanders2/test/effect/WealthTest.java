@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.test.effect;
 
-import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.WEALTH;
 import net.pottercraft.ollivanders2.item.O2ItemType;
@@ -68,8 +67,6 @@ public class WealthTest extends EffectTestSuper {
      */
     @Override
     void checkEffectTest() {
-        Ollivanders2.debug = true;
-
         PlayerMock target = mockServer.addPlayer();
         WEALTH wealth = (WEALTH) addEffect(target, Ollivanders2Common.ticksPerSecond * 30, false);
         // advance the server to register the effect and make sure it is running

@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.test.effect;
 
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.IMMOBILIZE;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
