@@ -69,8 +69,7 @@ public class AwakeTest extends EffectTestSuper {
 
         target.setLocation(new Location(testWorld, 200, 4, 300));
 
-        AWAKE awake = createEffect(target, 100, false);
-        Ollivanders2API.getPlayers().playerEffects.addEffect(awake);
+        AWAKE awake = (AWAKE)addEffect(target, 100, false);
 
         // call a player bed enter event
         PlayerBedEnterEvent event = new PlayerBedEnterEvent(target, bed, PlayerBedEnterEvent.BedEnterResult.OK);

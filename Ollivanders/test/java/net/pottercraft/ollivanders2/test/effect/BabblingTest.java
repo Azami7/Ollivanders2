@@ -66,12 +66,7 @@ public class BabblingTest extends EffectTestSuper {
      */
     void doOnAsyncPlayerChatEventTest() {
         Player target = mockServer.addPlayer();
-
-        BABBLING babbling = createEffect(target, 100, false);
-        Ollivanders2API.getPlayers().playerEffects.addEffect(babbling);
-
-        // Perform one tick to ensure the effect is processed into the active effects system
-        mockServer.getScheduler().performTicks(1);
+        BABBLING babbling = (BABBLING) addEffect(target, 100, false);
 
         String chat = "hello world";
 

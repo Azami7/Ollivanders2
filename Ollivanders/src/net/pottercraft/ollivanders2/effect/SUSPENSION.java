@@ -95,10 +95,11 @@ public class SUSPENSION extends O2Effect {
     private void suspend() {
         addAdditionalEffects();
 
-        // suspend them in the air
+        // suspend them in the air and set them flying so they don't fall from the new location
         originalLocation = target.getLocation();
         Location newLoc = target.getEyeLocation();
         Location suspendLoc = new Location(newLoc.getWorld(), newLoc.getX(), newLoc.getY(), newLoc.getZ(), originalLocation.getYaw(), 45);
+        target.setFlying(true);
         target.teleport(suspendLoc);
 
         suspended = true;
@@ -133,8 +134,9 @@ public class SUSPENSION extends O2Effect {
      */
     @Override
     public void doRemove() {
-        // teleport them back to their original location
+        // teleport them back to their original location and turn off flying
         target.teleport(originalLocation);
+        target.setFlying(false);
 
         // remove flying and immobilize effects
         for (O2EffectType effectType : additionalEffects) {
@@ -153,5 +155,17 @@ public class SUSPENSION extends O2Effect {
     void doOnPlayerVelocityEvent(@NotNull PlayerVelocityEvent event) {
         event.setCancelled(true);
         common.printDebugMessage("SUSPENSION: cancelling PlayerVelocityEvent", null, null, false);
+    }
+
+    /**
+     * Check if the player is currently suspended in the air.
+     *
+     * <p>Returns true after the player has been hoisted into the air via the suspend() method.
+     * This flag is used to ensure the suspension mechanism runs exactly once per effect.</p>
+     *
+     * @return true if the player has been suspended, false if the suspension is still pending
+     */
+    public boolean isSuspended() {
+        return suspended;
     }
 }
