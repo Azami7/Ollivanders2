@@ -63,7 +63,7 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
     /**
      * Is the effect currently changing the target's scale?
      */
-    boolean isTransformed = false;
+    boolean transformed = false;
 
     /**
      * Constructor
@@ -105,7 +105,7 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
      */
     @Override
     public void checkEffect() {
-        if (!isTransformed) {
+        if (!transformed) {
             startEffect();
         }
 
@@ -130,6 +130,7 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
         // Get the player's scale attribute
         AttributeInstance scaleAttribute = getScaleAttribute();
         if (scaleAttribute == null) {
+            common.printDebugMessage("PlayerChangeSizeSuper.changePlayerSize(): Player's scale attribute was null", null, null, false);
             kill();
             return;
         }
@@ -146,13 +147,14 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
 
         // Make player the new size
         scaleAttribute.setBaseValue(newScale);
+        common.printDebugMessage("PlayerChangeSizeSuper.changePlayerSize(): new scale is " + newScale, null, null, false);
 
         if (newScale == 1.0) { // returned the player to normal size
             // we can just kill the effect because this will set them to normal size, then end and set them to normal size - no point
             kill();
         }
 
-        isTransformed = true;
+        transformed = true;
     }
 
     /**
@@ -218,5 +220,34 @@ public abstract class PlayerChangeSizeSuper extends O2Effect {
         }
         // change player back to normal size
         scaleAttribute.setBaseValue(1.0);
+    }
+
+    /**
+     * Check if this effect has successfully transformed the player's size.
+     *
+     * <p>Returns true after the size change has been applied to the player (i.e., after the
+     * asynchronous startEffect() runnable has executed and changePlayerSize() has been called).
+     * This flag is used to ensure the size change runs exactly once per effect.</p>
+     *
+     * @return true if the player has been transformed, false if the transformation is still pending
+     */
+    public boolean isTransformed() {
+        return transformed;
+    }
+
+    /**
+     * Get the scale multiplier for this size-changing effect.
+     *
+     * <p>Returns the multiplier used to calculate the new player scale. Values above 1.0 increase
+     * the player's size, while values below 1.0 decrease it. For example:</p>
+     * <ul>
+     * <li>2.0 doubles the player's size (SWELLING)</li>
+     * <li>0.5 halves the player's size (SHRINKING)</li>
+     * </ul>
+     *
+     * @return the scale multiplier value
+     */
+    public double getScaleMultiplier() {
+        return scaleMultiplier;
     }
 }
