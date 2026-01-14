@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.test.effect;
 
-import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.BABBLING;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.entity.Player;
@@ -38,13 +37,12 @@ public class BabblingTest extends EffectTestSuper {
     }
 
     /**
-     * Test basic BABBLING effect behavior and aging.
+     * BABBLING effect does not have special checkEffect behavior.
      *
-     * <p>Validates that the BABBLING effect properly ages over time and is automatically killed
-     * when its duration expires. Uses the common aging helper to verify standard effect lifecycle.</p>
+     * <p>The BABBLING effect has no unique behavior to test in checkEffectTest(). Aging and duration
+     * management are tested in the base ageAndKillTest() method.</p>
      */
     void checkEffectTest() {
-        checkEffectTestAgingHelper();
     }
 
     /**

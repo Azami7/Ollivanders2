@@ -71,6 +71,12 @@ public class SuspensionTest extends EffectTestSuper {
         assertTrue(suspendLoc.getY() > origin.getY(), "SUSPENSION did not move player up on Y axis");
     }
 
+    /**
+     * Run all event handler tests for SUSPENSION.
+     *
+     * <p>Executes tests for event handlers that the SUSPENSION effect listens to,
+     * ensuring that velocity events are properly cancelled during suspension.</p>
+     */
     @Override
     void eventHandlerTests() {
         doOnPlayerVelocityEventTest();

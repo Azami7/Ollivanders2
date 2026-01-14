@@ -27,14 +27,13 @@ public class ImprovedBookLearningTest extends EffectTestSuper {
     }
 
     /**
-     * Test basic IMPROVED_BOOK_LEARNING effect behavior.
+     * IMPROVED_BOOK_LEARNING effect does not have special checkEffect behavior.
      *
-     * <p>IMPROVED_BOOK_LEARNING is a passive marker effect with no active behavior. This test validates
-     * that the effect properly ages and expires without side effects.</p>
+     * <p>The IMPROVED_BOOK_LEARNING effect has no unique behavior to test in checkEffectTest(). Aging and duration
+     * management are tested in the base ageAndKillTest() method.</p>
      */
     @Override
     void checkEffectTest() {
-        checkEffectTestAgingHelper();
     }
 
     /**

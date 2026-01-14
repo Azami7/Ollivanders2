@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.test.effect;
 
-import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.MagicLevel;
 import net.pottercraft.ollivanders2.effect.ShieldSpellEffect;
@@ -46,14 +45,12 @@ abstract public class ShieldSpellEffectTestSuper extends EffectTestSuper {
     /**
      * Test basic shield spell effect behavior.
      *
-     * <p>Validates that the shield effect properly ages and manages duration. Subclasses can override
-     * this method to add effect-specific testing (e.g., PROTEGO tests projectile removal in checkEffectTest()).
+     * <p>Validates shield-specific behavior. Subclasses can override this method to add effect-specific
+     * testing (e.g., PROTEGO tests projectile removal in checkEffectTest()).
      * Note: Particle effects cannot be fully tested with MockBukkit.</p>
      */
     @Override
     void checkEffectTest() {
-        checkEffectTestAgingHelper();
-
         // cannot test flair with MockBukkit because they haven't implemented checking for particles
     }
 

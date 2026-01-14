@@ -8,27 +8,26 @@ import org.bukkit.Location;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * Suspension effect that hoists the affected player into the air and maintains them there.
  *
- * <p>SUSPENSION is a debilitating effect that suspends the target player approximately 1.5 blocks
- * into the air by teleporting them to a suspended location. The effect applies two additional effects
- * to maintain the suspension state: FLYING (to prevent falling due to gravity) and IMMOBILIZE (to
- * prevent any movement that could break the suspension). Both secondary effects have durations slightly
- * longer than the main effect to ensure the player remains suspended throughout. The player's original
- * location is recorded and restored when the effect is removed. This effect replaced the original
- * LEVICORPUS implementation.</p>
+ * <p>SUSPENSION is a debilitating effect that suspends the target player at eye level by teleporting
+ * them to a suspended location. The effect applies two additional permanent effects to maintain the
+ * suspension state: FLYING (to prevent falling due to gravity) and IMMOBILIZE (to prevent any movement
+ * that could break the suspension). The player's original location is recorded and restored when the
+ * effect is removed. This effect replaced the original LEVICORPUS implementation.</p>
  *
  * <p>Suspension Configuration:</p>
  * <ul>
- * <li>Suspension height: 1.5 blocks above eye level</li>
+ * <li>Suspension height: at player eye level</li>
  * <li>Head pitch: 45 degrees (downward tilt)</li>
- * <li>Secondary effects: FLYING (prevents falling) and IMMOBILIZE (prevents movement)</li>
- * <li>Secondary effect duration: main duration + 10 ticks</li>
+ * <li>Secondary effects: FLYING (permanent, prevents falling) and IMMOBILIZE (permanent, prevents movement)</li>
+ * <li>Suspension initialization: delayed 5 ticks after effect activation to allow secondary effects to activate</li>
  * <li>Suspension state: tracked via boolean flag</li>
- * <li>Velocity events: cancelled to maintain suspension</li>
+ * <li>Velocity events: cancelled to maintain suspension stability</li>
  * </ul>
  *
  * @author Azami7
@@ -73,32 +72,49 @@ public class SUSPENSION extends O2Effect {
      * Age the suspension effect and initialize suspension on first tick.
      *
      * <p>Called each game tick. This method ages the effect counter and checks if the player has been
-     * suspended yet. If not, it calls suspend() to hoist the player into the air and apply secondary
-     * effects on the first activation.</p>
+     * suspended yet via the suspended flag. If not, it performs the suspension initialization in two steps:</p>
+     * <ol>
+     * <li>Immediately adds the secondary effects (FLYING and IMMOBILIZE) to allow them to activate</li>
+     * <li>Delays the actual suspension (teleport and setFlying) by 5 ticks to ensure the secondary effects
+     * have time to start working before the player is moved</li>
+     * </ol>
+     *
+     * <p>This delay is necessary because the FLYING effect must be initialized before calling setFlying(true),
+     * otherwise the player could briefly fall before the effect prevents gravity.</p>
      */
     @Override
     public void checkEffect() {
         age(1);
 
-        if (!suspended)
-            suspend();
+        if (!suspended) {
+            // we need to add the additional effects first so that flying gets enabled for the player before we then try to set them flying
+            addAdditionalEffects();
+
+            // delay the suspend action until the other effects have time to start working
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    suspend();
+                }
+            }.runTaskLater(p, 5);
+        }
     }
 
     /**
      * Hoist the player into the air and apply suspension effects.
      *
-     * <p>Teleports the player to a suspension location approximately 1.5 blocks above their eye level,
-     * records their original location for later restoration, applies FLYING and IMMOBILIZE effects to
-     * maintain the suspension state, and marks the suspension flag as initialized. If the player is
-     * offline when this is called, the effect is terminated.</p>
+     * <p>Teleports the player to a suspension location at their eye level with a head pitch of 45 degrees,
+     * records their original location for later restoration, enables flying mode to prevent falling,
+     * and marks the suspension flag as initialized. This method is called 5 ticks after checkEffect()
+     * to ensure secondary effects have activated. If the player is offline when this is called, the
+     * effect is terminated.</p>
      */
     private void suspend() {
-        addAdditionalEffects();
-
         // suspend them in the air and set them flying so they don't fall from the new location
         originalLocation = target.getLocation();
         Location newLoc = target.getEyeLocation();
         Location suspendLoc = new Location(newLoc.getWorld(), newLoc.getX(), newLoc.getY(), newLoc.getZ(), originalLocation.getYaw(), 45);
+
         target.setFlying(true);
         target.teleport(suspendLoc);
 
@@ -108,10 +124,10 @@ public class SUSPENSION extends O2Effect {
     /**
      * Apply secondary effects necessary to maintain suspension.
      *
-     * <p>Applies two effects to keep the player suspended: FLYING (prevents falling from gravity) with
-     * duration extended by 10 ticks to outlast the main effect, and IMMOBILIZE (prevents all movement)
-     * also with extended duration. These effects work together to ensure the player remains suspended
-     * and unable to escape the suspension state.</p>
+     * <p>Applies two permanent effects to keep the player suspended: FLYING (prevents falling from gravity)
+     * and IMMOBILIZE (prevents all movement). Both effects are created as permanent to ensure the player
+     * remains suspended and unable to escape the suspension state. These secondary effects are tracked in
+     * the additionalEffects list so they can be removed when the suspension effect is cleaned up via doRemove().</p>
      */
     private void addAdditionalEffects() {
         // make them fly so they do not fall from suspension

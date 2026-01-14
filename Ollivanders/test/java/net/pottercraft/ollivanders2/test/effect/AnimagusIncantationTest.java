@@ -27,13 +27,12 @@ public class AnimagusIncantationTest extends NotPermanentEffectTestSuper {
     }
 
     /**
-     * Test basic ANIMAGUS_INCANTATION effect behavior and aging.
+     * ANIMAGUS_INCANTATION effect does not have special checkEffect behavior.
      *
-     * <p>Validates that the ANIMAGUS_INCANTATION effect properly ages over time and is automatically killed
-     * when its duration expires. Uses the common aging helper to verify standard effect lifecycle.</p>
+     * <p>The ANIMAGUS_INCANTATION effect has no unique behavior to test in checkEffectTest(). Aging and duration
+     * management are tested in the base ageAndKillTest() method.</p>
      */
     void checkEffectTest() {
-        checkEffectTestAgingHelper();
     }
 
     /**

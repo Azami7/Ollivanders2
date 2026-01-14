@@ -35,7 +35,20 @@ import java.util.UUID;
  * @see AWAKE for the effect that breaks the sleep state
  */
 public class SLEEPING extends O2Effect {
-    boolean sleeping = false;
+    /**
+     * Message sent to the player when they fall asleep.
+     */
+    public static final String SLEEP_MESSAGE = "You fall in to a deep sleep.";
+
+    /**
+     * Message sent to the player when they wake up.
+     */
+    public static final String SLEEP_WAKEUP_MESSAGE = "You awaken from a deep sleep.";
+
+    /**
+     * Track if we put them in to sleep, real or simulated
+     */
+    private boolean sleeping = false;
 
     /**
      * Constructor for creating a sleep induction effect.
@@ -62,48 +75,62 @@ public class SLEEPING extends O2Effect {
     /**
      * Age the sleep effect and apply sleep state once per effect lifetime.
      *
-     * <p>Called each game tick. This method checks if the sleep state has been initialized. If not,
-     * it first checks whether the AWAKE effect is present on the player. If AWAKE is detected, the
-     * sleep effect is immediately terminated. Otherwise, the playerSleep() method is called once to
-     * initialize the sleep state (applying secondary effects and head tilt). The effect duration is
-     * then aged each tick until expiration.</p>
+     * <p>Called each game tick. This method first ages the effect by 1 tick. Then it checks if the sleep
+     * state has been initialized via the sleeping flag. If not, it calls playerSleep() once to initialize
+     * the sleep state (applying secondary effects, head tilt, and messaging). The sleep persists each tick
+     * until the effect duration expires or is explicitly removed.</p>
      */
     @Override
     public void checkEffect() {
         age(1);
 
+        // if the player is not sleeping, put them to sleep
         if (!sleeping) {
-            if (Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, O2EffectType.AWAKE))
-                kill();
-            else
-                playerSleep();
+            playerSleep();
         }
     }
 
     /**
      * Initialize the sleep state by applying effects and visual changes.
      *
-     * <p>Applies the complete sleep transformation to the target player: tilts their head downward
-     * (pitch = 45 degrees), applies the SLEEP_SPEECH effect for sleep vocalizations, applies the
-     * IMMOBILIZE effect for complete paralysis, and notifies the player they have fallen into a deep
-     * sleep. This method is called once when the sleep effect first activates and marks the sleeping
-     * flag as true to prevent re-application. If the player is offline when this is called, the sleep
-     * effect is terminated.</p>
+     * <p>Applies the complete sleep transformation to the target player in multiple steps:</p>
+     * <ol>
+     * <li>Attempts to put the player to sleep via Bukkit API (skipped in test mode)</li>
+     * <li>If the player is not actually sleeping after the attempt, simulates sleep by tilting their head
+     * downward (pitch = 45 degrees) and applying the IMMOBILIZE effect for paralysis</li>
+     * <li>Always applies the SLEEP_SPEECH effect for sleep vocalizations</li>
+     * <li>Notifies the player they have fallen into a deep sleep</li>
+     * <li>Marks the sleeping flag as true to prevent re-application</li>
+     * </ol>
+     *
+     * <p>This method is called once when the sleep effect first activates via checkEffect(). The head tilt
+     * and IMMOBILIZE are conditional to handle both real sleep (via Bukkit API) and simulated sleep
+     * (when the player is not actually in a bed).</p>
      */
     private void playerSleep() {
-        // tilt player head down
-        Location loc = target.getLocation();
-        Location newLoc = new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 45);
-        target.teleport(newLoc);
+        if (!Ollivanders2.testMode) { // MockBukkit does not have player sleep and doing this will cause an UnimplementedOperationException
+            // attempt to put them to sleep, may not work if there is no bed
+            target.sleep(target.getLocation(), true);
+        }
+
+        // simulate sleeping since the sleep() call did not actually force sleep. This way they act asleep regardless of location.
+        if (!target.isSleeping()) {
+            // tilt player head down
+            Location loc = target.getLocation();
+            Location newLoc = new Location(loc.getWorld(), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), 45);
+            target.teleport(newLoc);
+
+            // immobilize them so they cannot move out of this position
+            Ollivanders2API.getPlayers().playerEffects.addEffect(new IMMOBILIZE(p, -1, true, targetID));
+        }
 
         // add sleep speech
         Ollivanders2API.getPlayers().playerEffects.addEffect(new SLEEP_SPEECH(p, -1, true, targetID));
 
-        // immobilize them
-        Ollivanders2API.getPlayers().playerEffects.addEffect(new IMMOBILIZE(p, -1, true, targetID));
+        // send the sleeping message
+        target.sendMessage(Ollivanders2.chatColor + SLEEP_MESSAGE);
 
         sleeping = true;
-        target.sendMessage(Ollivanders2.chatColor + "You fall in to a deep sleep.");
     }
 
     /**
@@ -115,12 +142,17 @@ public class SLEEPING extends O2Effect {
      */
     @Override
     public void doRemove() {
-        if (sleeping) {
-            Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
-            Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.IMMOBILIZE);
-            sleeping = false;
+        // if we simulated sleep, remove those effects
+        Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.SLEEP_SPEECH);
+        Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.IMMOBILIZE);
 
-            target.sendMessage(Ollivanders2.chatColor + "You awaken from a deep sleep.");
-        }
+        // if the player was properly put to sleep, wake them up
+        if (!Ollivanders2.testMode) // MockBukkit does not have player sleep and doing this will cause an UnimplementedOperationException
+            target.wakeup(true);
+
+        // send the player a message that they awaken
+        target.sendMessage(Ollivanders2.chatColor + SLEEP_WAKEUP_MESSAGE);
+
+        sleeping = false;
     }
 }

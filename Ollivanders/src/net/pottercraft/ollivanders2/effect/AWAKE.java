@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.jetbrains.annotations.NotNull;
 
@@ -14,15 +15,30 @@ import java.util.UUID;
  * would otherwise put the player to sleep. The effect persists for its specified duration and automatically
  * expires when the duration reaches zero.</p>
  *
- * <p>Mechanism:</p>
+ * <p>Effect Lifecycle:</p>
+ * <ol>
+ * <li>On each game tick, checkEffect() checks if the player is sleeping and wakes them if needed</li>
+ * <li>If the player has a SLEEPING effect active, AWAKE removes it (AWAKE overrides SLEEPING)</li>
+ * <li>PlayerBedEnterEvent is cancelled to prevent the player from entering beds</li>
+ * <li>When the effect expires, the player can naturally sleep again; no cleanup required</li>
+ * </ol>
+ *
+ * <p>Interaction with SLEEPING:</p>
  * <ul>
- * <li>Blocks all sleep state changes by cancelling PlayerBedEnterEvent</li>
- * <li>Detectable by both information spells (Informous) and mind-reading spells (Legilimens)</li>
- * <li>Detection text: "is unnaturally alert" - indicating forced wakefulness</li>
- * <li>Expires naturally when duration reaches zero; no special cleanup required</li>
+ * <li>AWAKE and SLEEPING are mutually exclusive - only one can be active at a time</li>
+ * <li>If SLEEPING detects AWAKE, it immediately kills itself</li>
+ * <li>If AWAKE detects SLEEPING, it removes that effect and wakes the player</li>
+ * <li>This bidirectional interaction prevents conflicting sleep states</li>
+ * </ul>
+ *
+ * <p>Detection:</p>
+ * <ul>
+ * <li>Detectable by the Informous spell with text: "is unnaturally alert"</li>
+ * <li>Detectable by the Legilimens spell with text: "is unnaturally alert"</li>
  * </ul>
  *
  * @author Azami7
+ * @see SLEEPING for the sleep-inducing effect that AWAKE counters
  */
 public class AWAKE extends O2Effect {
     /**
@@ -46,15 +62,34 @@ public class AWAKE extends O2Effect {
     }
 
     /**
-     * Age the awake effect to track its remaining duration.
+     * Check the awake effect each game tick and wake sleeping players.
      *
-     * <p>Called each game tick to decrement the effect's duration. The actual sleep prevention is handled
-     * by the event handler method (doOnPlayerBedEnterEvent). When the duration reaches zero, the effect
-     * is automatically killed and removed from the player.</p>
+     * <p>Called each game tick to decrement the effect's duration and ensure the player remains awake.
+     * This method performs three key functions:</p>
+     * <ol>
+     * <li>Ages the effect by 1 tick (when duration reaches zero, the effect is automatically killed)</li>
+     * <li>Removes any active SLEEPING effect to enforce AWAKE override (only if SLEEPING is currently active)</li>
+     * <li>Wakes the player if they are sleeping (skipped in test mode to avoid MockBukkit limitations)</li>
+     * </ol>
+     *
+     * <p>The active waking mechanism ensures that even if a SLEEPING effect was applied before AWAKE,
+     * the player will be immediately woken on the next game tick. This works in conjunction with
+     * doOnPlayerBedEnterEvent() which prevents new sleep attempts. In test mode, the wakeup() call is skipped
+     * because MockBukkit does not implement player sleep functionality.</p>
      */
     @Override
     public void checkEffect() {
         age(1);
+
+        // AWAKE overrides SLEEPING so remove it if the player has it
+        if (Ollivanders2API.getPlayers().playerEffects.hasEffect(targetID, O2EffectType.SLEEPING))
+            Ollivanders2API.getPlayers().playerEffects.removeEffect(targetID, O2EffectType.SLEEPING);
+
+        // make sure target is not sleeping
+        if (target.isSleeping()) {
+            if (!Ollivanders2.testMode) // MockBukkit does not have player sleep and doing this will cause an UnimplementedOperationException
+                target.wakeup(true);
+        }
     }
 
     /**
@@ -79,6 +114,5 @@ public class AWAKE extends O2Effect {
     @Override
     void doOnPlayerBedEnterEvent(@NotNull PlayerBedEnterEvent event) {
         event.setCancelled(true);
-        common.printDebugMessage("AWAKE: cancelling PlayerBedEnterEvent", null, null, false);
     }
 }

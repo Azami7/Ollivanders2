@@ -31,17 +31,13 @@ public class BurningTest extends EffectTestSuper {
     }
 
     /**
-     * Test basic BURNING effect behavior.
+     * Test BURNING effect behavior.
      *
-     * <p>Validates that the BURNING effect correctly applies damage over time. Tests two aspects:
-     * the effect aging mechanism (duration decrements each tick) and the damage application
-     * (verifies the target's health decreases after the effect duration expires).</p>
+     * <p>Validates that the BURNING effect correctly applies damage over time.
+     * Verifies the target's health decreases after the effect duration expires.</p>
      */
     @Override
     void checkEffectTest() {
-        // check aging works
-        checkEffectTestAgingHelper();
-
         PlayerMock target = mockServer.addPlayer();
 
         // verify burning does damage

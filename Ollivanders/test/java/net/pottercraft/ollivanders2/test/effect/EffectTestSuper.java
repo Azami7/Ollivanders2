@@ -89,6 +89,8 @@ abstract public class EffectTestSuper {
      */
     @BeforeAll
     static void globalSetUp() {
+        Ollivanders2.testMode = true;
+
         mockServer = MockBukkit.mock();
     }
 
@@ -234,6 +236,9 @@ abstract public class EffectTestSuper {
             effect.age(duration);
             assertTrue(effect.isKilled(), "Effect not set to killed when duration < 0");
         }
+
+        // make sure that non-permanent effects properly age as the game loop runs
+        checkEventAging();
     }
 
     /**
@@ -250,6 +255,7 @@ abstract public class EffectTestSuper {
         O2Effect effect = createEffect(target, 10, false);
 
         UUID id = effect.getTargetID();
+        // we use == comparator here, not .equals() or assertNotSame, because we want to compare the object pointers not the values
         assertFalse(id == targetID, "effect.getTargetID() returned same UUID object");
     }
 
@@ -298,13 +304,16 @@ abstract public class EffectTestSuper {
     abstract void doRemoveTest();
 
     /**
-     * Test that aging correctly happens - for use in checkEffectTest
+     * Test that aging correctly happens
      */
-    void checkEffectTestAgingHelper() {
+    void checkEventAging() {
         O2Effect effect = createEffect(mockServer.addPlayer(), 100, false);
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-        if (!effect.isPermanent()) {
+        // advance the game ticks so that immediate effects which are then killed are completed
+        mockServer.getScheduler().performTicks(5);
+
+        if (!effect.isKilled() && !effect.isPermanent()) {
             // checkEffect() ages effect by 1 every tick
             int duration = effect.getRemainingDuration();
             mockServer.getScheduler().performTicks(1);

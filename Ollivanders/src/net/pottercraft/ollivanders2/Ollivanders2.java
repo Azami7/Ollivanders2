@@ -241,6 +241,11 @@ public class Ollivanders2 extends JavaPlugin {
     public static final String pluginDir = "plugins/Ollivanders2/";
 
     /**
+     * For use by tests only
+     */
+    public static boolean testMode = false;
+
+    /**
      * Cleanup when the Minecraft server shuts down.
      *
      * <p>Called when the Ollivanders2 plugin is being disabled. Orchestrates the complete shutdown
