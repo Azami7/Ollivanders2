@@ -109,7 +109,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
         colorVariant = o2p.getAnimagusColor();
 
         if (form == null) {
-            common.printDebugMessage("Unable to get animagus form for " + Ollivanders2API.getPlayers().getPlayer(pid).getPlayerName(), null, null, false);
+            common.printDebugMessage("Unable to get animagus form for " + o2p.getPlayerName(), null, null, false);
             kill();
         }
     }

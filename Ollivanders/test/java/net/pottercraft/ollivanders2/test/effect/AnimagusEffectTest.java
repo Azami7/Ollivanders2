@@ -4,6 +4,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.effect.ANIMAGUS_EFFECT;
 import net.pottercraft.ollivanders2.player.O2Player;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -175,12 +176,12 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
 
         // Test right-click block interaction
         Block block = target.getLocation().getBlock();
-        PlayerInteractEvent rightClickEvent = new PlayerInteractEvent(target, org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK, null, block, null);
+        PlayerInteractEvent rightClickEvent = new PlayerInteractEvent(target, org.bukkit.event.block.Action.RIGHT_CLICK_BLOCK, null, block, BlockFace.DOWN);
         mockServer.getPluginManager().callEvent(rightClickEvent);
         assertTrue(rightClickEvent.isCancelled(), "Right-click block interaction should be cancelled");
 
         // Test left-click block interaction
-        PlayerInteractEvent leftClickEvent = new PlayerInteractEvent(target, Action.LEFT_CLICK_BLOCK, null, block, null);
+        PlayerInteractEvent leftClickEvent = new PlayerInteractEvent(target, Action.LEFT_CLICK_BLOCK, null, block, BlockFace.DOWN);
         mockServer.getPluginManager().callEvent(leftClickEvent);
         assertTrue(leftClickEvent.isCancelled(), "Left-click block interaction should be cancelled");
     }

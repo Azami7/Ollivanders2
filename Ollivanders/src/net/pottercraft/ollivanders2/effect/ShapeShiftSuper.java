@@ -125,7 +125,7 @@ public abstract class ShapeShiftSuper extends O2Effect {
      * Perform specific checkEffect actions on the active transformation each game tick.
      *
      * <p>This is a template method that subclasses can override to maintain or modify the
-     * transformation on each tick. ubclasses can override to refresh the disguise, apply potion effects, play
+     * transformation on each tick. Subclasses can override to refresh the disguise, apply potion effects, play
      * animations, or other tick-based behavior.</p>
      */
     abstract protected void doCheckEffect();
@@ -215,8 +215,13 @@ public abstract class ShapeShiftSuper extends O2Effect {
     abstract void customizeWatcher();
 
     /**
+     * Check if the player is currently transformed into another entity form.
      *
-     * @return
+     * <p>Returns whether the player is actively disguised as another entity. This is useful for
+     * subclasses to determine if the transformation is currently active (e.g., to prevent applying
+     * additional effects during transformation or to perform tick-based behavior only while transformed).</p>
+     *
+     * @return true if the player is currently transformed, false if in human form
      */
     public boolean isTransformed() {
         return transformed;
