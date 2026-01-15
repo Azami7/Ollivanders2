@@ -41,7 +41,11 @@ public enum TimeCommon {
     /**
      * Sunset (12000 ticks) - evening when the sun begins to set and darkness is approaching.
      */
-    SUNSET(12000);
+    SUNSET(12000),
+    /**
+     * Moonrise (13000 ticks)
+     */
+    MOONRISE(13000);
 
     /**
      * The day-relative tick for this enumerated time of day

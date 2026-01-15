@@ -562,6 +562,8 @@ public class Ollivanders2 extends JavaPlugin {
             getLogger().info("LibsDisguises found, enabled entity transfiguration spells.");
         }
         else
+            if (Ollivanders2.testMode)
+                libsDisguisesEnabled = true;
             getLogger().info("LibsDisguises not found, disabling entity transfiguration spells.");
 
         // set up WorldGuard manager

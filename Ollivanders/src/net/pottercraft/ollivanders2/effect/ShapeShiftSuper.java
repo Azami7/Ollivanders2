@@ -115,23 +115,20 @@ public abstract class ShapeShiftSuper extends O2Effect {
             return;
         }
 
-        if (!permanent) {
+        if (!permanent)
             age(1);
-        }
 
-        upkeep();
+        doCheckEffect();
     }
 
     /**
-     * Perform upkeep on the active transformation each game tick.
+     * Perform specific checkEffect actions on the active transformation each game tick.
      *
      * <p>This is a template method that subclasses can override to maintain or modify the
-     * transformation on each tick. By default, this method does nothing. Subclasses can override
-     * to refresh the disguise, apply potion effects, play animations, or other tick-based behavior.</p>
+     * transformation on each tick. ubclasses can override to refresh the disguise, apply potion effects, play
+     * animations, or other tick-based behavior.</p>
      */
-    protected void upkeep() {
-        // by default, do nothing, this needs to be written in the child classes
-    }
+    abstract protected void doCheckEffect();
 
     /**
      * Apply the disguise and transform the player into the specified form.
@@ -147,20 +144,23 @@ public abstract class ShapeShiftSuper extends O2Effect {
      * </ol>
      * If the form is null, kills the effect without applying a disguise.
      */
-    protected void transform() {
+    void transform() {
         Player target = p.getServer().getPlayer(targetID);
 
         if (target != null && form != null) {
             common.printDebugMessage("transforming " + target.getName(), null, null, false);
 
-            // disguisePlayer the player
-            DisguiseType disguiseType = DisguiseType.getType(form);
-            disguise = new MobDisguise(disguiseType);
-            watcher = (LivingWatcher) disguise.getWatcher();
+            if (!Ollivanders2.testMode) {
+                // disguisePlayer the player
+                DisguiseType disguiseType = DisguiseType.getType(form);
+                disguise = new MobDisguise(disguiseType);
+                watcher = (LivingWatcher) disguise.getWatcher();
 
-            customizeWatcher();
+                customizeWatcher();
 
-            DisguiseAPI.disguiseToAll(target, disguise);
+                DisguiseAPI.disguiseToAll(target, disguise);
+            }
+
             transformed = true;
         }
         else {
@@ -190,7 +190,7 @@ public abstract class ShapeShiftSuper extends O2Effect {
      */
     public void restore() {
         if (transformed) {
-            if (disguise != null) {
+            if (!Ollivanders2.testMode && disguise != null) {
                 Entity entity = disguise.getEntity();
                 try {
                     DisguiseAPI.undisguiseToAll(entity);
@@ -210,9 +210,15 @@ public abstract class ShapeShiftSuper extends O2Effect {
      * <p>This is a template method that subclasses can override to modify specific appearance
      * properties of the disguise, such as size, color, age, equipment, or other visual attributes
      * provided by the watcher. This method is called during transform() after the disguise is
-     * created but before it is applied to the player. By default, this method does nothing
-     * (uses the disguise's default appearance).</p>
+     * created but before it is applied to the player.</p>
      */
-    protected void customizeWatcher() {
+    abstract void customizeWatcher();
+
+    /**
+     *
+     * @return
+     */
+    public boolean isTransformed() {
+        return transformed;
     }
 }

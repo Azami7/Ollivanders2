@@ -5,7 +5,9 @@ import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.common.MoonPhase;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
+import net.pottercraft.ollivanders2.common.TimeCommon;
 import org.bukkit.Sound;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -36,8 +38,15 @@ import org.jetbrains.annotations.NotNull;
  * <p>Infection Mechanism:</p>
  * <ul>
  * <li>Angry wolves transformed by this effect can infect other players through damage</li>
- * <li>Infection occurs 1 tick after damage is dealt</li>
+ * <li>Infection occurs 1 second (20 ticks) after damage is dealt to allow event processing</li>
  * <li>New infection creates new LYCANTHROPY effect on the damaged player</li>
+ * </ul>
+ *
+ * <p>Relief Mechanism:</p>
+ * <ul>
+ * <li>LYCANTHROPY_RELIEF effect can temporarily suppress transformation</li>
+ * <li>When relief is active, player does not transform even during full moon periods</li>
+ * <li>Relief flag is managed by setRelief() and getRelief() methods</li>
  * </ul>
  *
  * @author azami7
@@ -54,6 +63,15 @@ public class LYCANTHROPY extends ShapeShiftSuper {
      * removal when the player reverts to human form.</p>
      */
     ArrayList<O2EffectType> additionalEffects = new ArrayList<>();
+
+    /**
+     * Relief flag that suppresses werewolf transformation.
+     *
+     * <p>When set to true by LYCANTHROPY_RELIEF, this flag prevents the player from transforming
+     * into wolf form even during full moon periods. The relief effect checks this flag during
+     * doCheckEffect() to suppress transformation symptoms.</p>
+     */
+    boolean relief = false;
 
     /**
      * Constructor for creating a permanent lycanthropy curse effect.
@@ -97,50 +115,45 @@ public class LYCANTHROPY extends ShapeShiftSuper {
     }
 
     /**
-     * Age the lycanthropy effect and manage transformation based on lunar cycle.
+     * Age the lycanthropy effect and manage transformation based on lunar cycle and relief status.
      *
-     * <p>Called each game tick. This method checks the in-game time and full moon cycle (every 8 days).
-     * On full moon days after sunset (game time > 13000), the player transforms into wolf form and
-     * aggressive/speech effects are applied. On other times or non-full-moon days, the player reverts
-     * to human form and additional effects are removed. Transformation is automatically managed by
-     * this upkeep cycle and persists indefinitely until the effect is manually killed.</p>
+     * <p>Called each game tick. This method performs transformation checks in the following priority:</p>
+     * <ol>
+     * <li>If relief flag is active: revert to human form and remove secondary effects</li>
+     * <li>If on full moon day and time is between moonrise (13000) and dawn (23000): transform to wolf
+     * and apply AGGRESSION and LYCANTHROPY_SPEECH effects</li>
+     * <li>Otherwise: revert to human form and remove secondary effects</li>
+     * </ol>
+     *
+     * <p>Transformation is automatically managed by this check cycle and persists indefinitely until
+     * the effect is manually killed or relief is applied.</p>
      */
     @Override
-    protected void upkeep() {
+    protected void doCheckEffect() {
         long curTime = target.getWorld().getTime();
-        if (!transformed) {
-            // only need to check after sunset
-            if (curTime > 13000) {
-                long day = target.getWorld().getFullTime() / 24000;
-                if ((day % 8) == 0) {
-                    // moonrise on a full moon day
+
+        // does this player have lycanthropy relief?
+        if (relief) {
+            if (transformed) {
+                restore();
+                removeAdditionalEffect();
+            }
+        }
+        // if it is a time they should be transformed, transform them
+        // transformation time is on a full moon day between Moonrise and Dawn
+        else if ((MoonPhase.getMoonPhase(target.getWorld()) == MoonPhase.FULL_MOON)) {
+            if ((curTime > TimeCommon.MOONRISE.getTick()) && (curTime < TimeCommon.DAWN.getTick())){
+                if (!transformed) {
                     transform();
-
                     addAdditionalEffects();
-
                     target.playSound(target.getEyeLocation(), Sound.ENTITY_WOLF_AMBIENT, 1, 0);
                 }
             }
         }
-        else {
-            long day = target.getWorld().getFullTime() / 24000;
-            boolean restore = false;
-
-            if ((day % 8) == 0) {
-                // if it is a full moon day before moonrise or after sunrise
-                if (curTime < 13000 || curTime > 23500) {
-                    restore = true;
-                }
-            }
-            else {
-                // it is not a full moon day
-                restore = true;
-            }
-
-            if (restore) {
-                restore();
-                removeAdditionalEffect();
-            }
+        // player is transformed and it is outside of the transformation time, restore them
+        else if (transformed) {
+            restore();
+            removeAdditionalEffect();
         }
     }
 
@@ -183,8 +196,7 @@ public class LYCANTHROPY extends ShapeShiftSuper {
      * @param perm ignored - lycanthropy is always permanent
      */
     @Override
-    public void setPermanent(boolean perm) {
-    }
+    public void setPermanent(boolean perm) { }
 
     /**
      * Perform cleanup when the lycanthropy effect is removed.
@@ -194,8 +206,7 @@ public class LYCANTHROPY extends ShapeShiftSuper {
      * is no longer affected by the lunar cycle transformation.</p>
      */
     @Override
-    public void doRemove() {
-    }
+    public void doRemove() { }
 
     /**
      * Spread lycanthropy curse to players damaged by transformed werewolf.
@@ -209,16 +220,27 @@ public class LYCANTHROPY extends ShapeShiftSuper {
      */
     @Override
     void doOnEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {
-        // make sure lycanthropy is enabled
-        if (!O2EffectType.LYCANTHROPY.isEnabled())
+        common.printDebugMessage("doOnEntityDamageByEntityEvent", null, null, false);
+
+        // if something, like a protective effect, canceled this effect, we do nothing
+        if (event.isCancelled())
             return;
 
-        // make sure the damaged entity is a player
-        if (!(event.getEntity() instanceof Player))
+        // make sure lycanthropy is enabled
+        if (!O2EffectType.LYCANTHROPY.isEnabled()) {
+            common.printDebugMessage("lycanthropy not enabled", null, null, false);
             return;
+        }
+
+        // make sure the damaged entity is a player
+        if (!(event.getEntity() instanceof Player)) {
+            common.printDebugMessage("attacked entity not a player", null, null, false);
+            return;
+        }
 
         // if this effect's target is currently transformed, infect the damaged player
         if (transformed) {
+            common.printDebugMessage("infecting player", null, null, false);
             new BukkitRunnable() {
                 @Override
                 public void run() {
@@ -242,5 +264,38 @@ public class LYCANTHROPY extends ShapeShiftSuper {
             LYCANTHROPY effect = new LYCANTHROPY(p, 5, true, player.getUniqueId());
             Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
         }
+    }
+
+    /**
+     * No custom watcher needed for LYCANTHROPY effect.
+     *
+     * <p>The lycanthropy transformation is managed through the checkEffect() mechanism based on
+     * world time and moon phase, so no custom event watchers are needed.</p>
+     */
+    @Override
+    void customizeWatcher() {}
+
+    /**
+     * Set the relief flag to suppress or allow werewolf transformation.
+     *
+     * <p>When relief is set to true, the player will revert to human form and will not transform
+     * even during full moon periods. When set to false, normal transformation behavior resumes.
+     * This method is called by LYCANTHROPY_RELIEF effect to toggle relief state.</p>
+     *
+     * @param relief true to suppress transformation, false to allow normal transformation
+     */
+    public void setRelief (boolean relief) {
+        this.relief = relief;
+    }
+
+    /**
+     * Get the current relief flag status.
+     *
+     * <p>Returns whether the lycanthropy transformation is currently suppressed by relief.</p>
+     *
+     * @return true if relief is active and transformation is suppressed, false otherwise
+     */
+    public boolean getRelief() {
+        return relief;
     }
 }

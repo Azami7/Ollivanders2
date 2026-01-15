@@ -3,6 +3,7 @@ package net.pottercraft.ollivanders2.effect;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -54,26 +55,47 @@ public class LYCANTHROPY_RELIEF extends O2Effect {
     }
 
     /**
-     * Age the lycanthropy relief marker effect each game tick.
+     * Age the lycanthropy relief marker effect and set relief flag on lycanthropy.
      *
-     * <p>Called each game tick. This effect is passive and only needs to track its remaining duration.
-     * The actual suppression of secondary effects is handled by the LYCANTHROPY effect when it checks
-     * for this effect's presence during transformation. When the duration reaches zero, the effect is
-     * automatically killed and removed from the player.</p>
+     * <p>Called each game tick. This method ages the effect by 1 tick and performs two key functions:</p>
+     * <ol>
+     * <li>Checks if the player still has the LYCANTHROPY effect. If not found, kills this relief effect
+     * since it cannot function without an active lycanthropy curse to suppress.</li>
+     * <li>Sets the relief flag on the LYCANTHROPY effect to true, signaling that secondary effects
+     * (AGGRESSION and LYCANTHROPY_SPEECH) should be suppressed during transformation. The LYCANTHROPY
+     * effect checks this flag during checkEffect() to prevent applying secondary effects.</li>
+     * </ol>
+     *
+     * <p>When the duration reaches zero, the effect is automatically killed and removed from the player.</p>
      */
     @Override
     public void checkEffect() {
         age(1);
+
+        LYCANTHROPY lycanthropy = (LYCANTHROPY) Ollivanders2API.getPlayers().playerEffects.getEffect(target.getUniqueId(), O2EffectType.LYCANTHROPY);
+        if (lycanthropy == null) {
+            kill();
+            return;
+        }
+
+        if (!lycanthropy.getRelief())
+            lycanthropy.setRelief(true);
     }
 
     /**
      * Perform cleanup when the lycanthropy relief effect is removed.
      *
-     * <p>The default implementation does nothing, as the lycanthropy relief effect is a passive marker
-     * with no state to clean up. When removed, the player's secondary lycanthropy symptoms will resume
-     * on the next full moon transformation if the underlying LYCANTHROPY curse is still active.</p>
+     * <p>When the relief effect is removed (either by duration expiration or manual removal),
+     * this method clears the relief flag on the LYCANTHROPY effect. This allows the lycanthropy
+     * curse to resume applying its secondary effects (AGGRESSION and LYCANTHROPY_SPEECH) during
+     * future transformations at moonrise. If the player no longer has the LYCANTHROPY effect,
+     * no cleanup is needed.</p>
      */
     @Override
     public void doRemove() {
+        LYCANTHROPY lycanthropy = (LYCANTHROPY) Ollivanders2API.getPlayers().playerEffects.getEffect(target.getUniqueId(), O2EffectType.LYCANTHROPY);
+        if (lycanthropy != null) {
+            lycanthropy.setRelief(false);
+        }
     }
 }

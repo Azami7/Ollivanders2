@@ -56,10 +56,15 @@ import org.jetbrains.annotations.NotNull;
  * <p>Supported Animal Forms: Cats, Rabbits, Wolves, Horses, Llamas, Pandas, Polar Bears, Creepers, Foxes, Pigs,
  * Sheep, Slimes, Spiders, Shulkers, and Turtles - each with form-specific appearance customization.</p>
  *
+ * <p>Behavior Restrictions: While transformed, the player cannot interact with blocks, toggle flight, pick up items,
+ * select items in hotbar, consume items, or drop items. These restrictions prevent behaviors inconsistent with animal
+ * form and are enforced through event cancellation.</p>
+ *
  * <p>This effect is permanent and cannot be modified via setPermanent(). Use kill() to revert the player to
  * human form.</p>
  *
  * @author Azami7
+ * @see ShapeShiftSuper for the parent class handling transformation mechanics
  */
 public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
     /**
@@ -92,6 +97,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
 
         transformed = false;
 
+        // technically possible to return a null but this should never happen
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(targetID);
         if (o2p == null) {
             common.printDebugMessage("o2player cannot be found", null, null, false);
@@ -116,7 +122,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
      * is applied.</p>
      */
     @Override
-    protected void upkeep() {
+    protected void doCheckEffect() {
         if (!transformed && !kill) {
             transform();
         }
@@ -136,7 +142,10 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
      * </ul>
      */
     @Override
-    protected void customizeWatcher() {
+    void customizeWatcher() {
+        if (Ollivanders2.testMode)
+            return;
+
         // in case the variant doesn't work, this can be used to fix the value at the end of this method
         String correctedVariant = null;
         if (watcher == null)
@@ -354,7 +363,7 @@ public class ANIMAGUS_EFFECT extends ShapeShiftSuper {
     @Override
     void doOnPlayerPickupItemEvent(@NotNull EntityPickupItemEvent event) {
         event.setCancelled(true);
-        common.printDebugMessage("ANIMAGUS_EFFECT: cancelling cancelling EntityPickupItemEvent", null, null, false);
+        common.printDebugMessage("ANIMAGUS_EFFECT: cancelling EntityPickupItemEvent", null, null, false);
     }
 
     /**

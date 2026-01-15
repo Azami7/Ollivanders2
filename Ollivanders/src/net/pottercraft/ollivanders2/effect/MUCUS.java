@@ -31,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
  * @author Azami7
  */
 public class MUCUS extends O2Effect {
+    public final static int mucusFrequency = 300;
+
     /**
      * Constructor for creating a mucus spawning effect.
      *
@@ -53,16 +55,17 @@ public class MUCUS extends O2Effect {
     }
 
     /**
-     * Spawn a slime entity on the player's head every 15 seconds.
+     * Age the mucus effect and spawn slime entities periodically.
      *
-     * <p>Called each game tick. This method ages the effect and checks if it's time to spawn a new slime
-     * (every 300 ticks = 15 seconds). When spawn time arrives, a size-1 slime entity is spawned at the
-     * player's eye location. If the player goes offline or is null, the effect is killed.</p>
+     * <p>Called each game tick. This method ages the effect by 1 tick and checks if the remaining duration
+     * is evenly divisible by mucusFrequency (300 ticks). When this condition is true (every 300 ticks),
+     * a size-1 slime entity is spawned at the player's eye location. If the player is offline or null,
+     * the effect is killed.</p>
      */
     @Override
     public void checkEffect() {
         age(1);
-        if (duration % 300 == 0) {
+        if (duration % mucusFrequency == 0) {
             World world = target.getWorld();
             Slime slime = (Slime) world.spawnEntity(target.getEyeLocation(), EntityType.SLIME);
             slime.setSize(1);

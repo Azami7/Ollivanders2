@@ -127,12 +127,9 @@ public class AGGRESSION extends O2Effect {
 
         // only take action once per 10 seconds, which is every 120 ticks
         if (cooldown <= 0) {
-            common.printDebugMessage("doing aggression", null, null, false);
-
             int rand = Math.abs(Ollivanders2Common.random.nextInt()) % maxAggression;
 
             if (rand < aggressionLevel) {
-                common.printDebugMessage("taking aggression action", null, null, false);
                 // damage nearby entity
                 Collection<LivingEntity> nearby = EntityCommon.getLivingEntitiesInRadius(target.getLocation(), 3);
                 damageRandomEntity(nearby);
@@ -191,8 +188,6 @@ public class AGGRESSION extends O2Effect {
             int rand = Math.abs(Ollivanders2Common.random.nextInt());
             double damage = curHealth / ((rand % 3) + 2);
             toDamage.damage(damage, target);
-
-            common.printDebugMessage("aggression affected player " + target.getName() + " damaged nearby entity " + toDamage.getName(), null, null, false);
         }
     }
 

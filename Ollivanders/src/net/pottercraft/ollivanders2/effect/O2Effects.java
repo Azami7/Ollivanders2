@@ -86,7 +86,11 @@ public class O2Effects implements Listener {
     final static Semaphore semaphore = new Semaphore(1);
 
     /**
-     * Prefix for effects for serializing
+     * Labels for serializing effect data to JSON format.
+     *
+     * <p>String keys used when converting O2Effect objects to and from JSON representation for
+     * persistent storage. These constants are used in serialization and deserialization methods
+     * to maintain consistent field naming across saves and loads.</p>
      */
     public static final String effectPIDLabel = "Effect_target_pid";
     public static final String effectPermanentLabel = "Effect_is_permanent";
@@ -370,10 +374,18 @@ public class O2Effects implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onEntityDamageByEntityEvent(@NotNull EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
-        if (!(entity instanceof Player))
-            return;
+        Entity damager = event.getDamager();
 
+        // did this event affect someone with an effect
+        // we check the affected player first so that if they have a protective effect that may change/cancel
+        // this damage event, it happens first.
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(entity.getUniqueId());
+        for (O2Effect effect : activeEffects.values()) {
+            effect.doOnEntityDamageByEntityEvent(event);
+        }
+
+        // was this event caused by someone with an effect (like lycanthropy)
+        activeEffects = effectsData.getPlayerActiveEffects(damager.getUniqueId());
         for (O2Effect effect : activeEffects.values()) {
             effect.doOnEntityDamageByEntityEvent(event);
         }
@@ -787,9 +799,15 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * Move all the active events for a player to saved events.
+     * Move all active effects for a player to saved effects storage.
      *
-     * @param pid the player ID
+     * <p>Transfers a player's currently active effects to the saved effects map, preserving their
+     * state and duration for offline storage. This is called during logout to persist effects that
+     * will be restored when the player rejoins. Only non-killed effects are saved; killed effects
+     * are filtered out to prevent restoring terminated effects. The active effects map is then cleared
+     * for the player, separating online and offline effect storage.</p>
+     *
+     * @param pid the unique ID of the player whose effects should be saved
      */
     private void moveActiveEffectsToSaved(@NotNull UUID pid) {
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
@@ -822,7 +840,13 @@ public class O2Effects implements Listener {
     }
 
     /**
-     * plugin disable, save effects
+     * Clean up the effects system when the plugin is disabled.
+     *
+     * <p>Called when the plugin is being shut down or unloaded by the server. This method persists
+     * all currently active effects to disk to ensure they are not lost if the server is restarted.
+     * All effects across all players (both online and offline) are serialized and saved to the effects
+     * JSON file via the saveEffects() method. This guarantees that the game state can be recovered
+     * when the plugin is re-enabled.</p>
      */
     public void onDisable() {
         p.getLogger().info("Saving players effects.");
