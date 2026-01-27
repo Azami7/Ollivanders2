@@ -46,7 +46,7 @@ public class VOLATUS extends Enchantment {
      */
     @Override
     public void doEntityPickupItem(@NotNull EntityPickupItemEvent event) {
-        if (!EnchantedItems.enableBrooms)
+        if (!EnchantedItems.areBroomsEnabled())
             return;
 
         Entity entity = event.getEntity();
@@ -76,7 +76,7 @@ public class VOLATUS extends Enchantment {
      */
     @Override
     public void doItemDrop(@NotNull PlayerDropItemEvent event) {
-        if (!EnchantedItems.enableBrooms)
+        if (!EnchantedItems.areBroomsEnabled())
             return;
 
         new BukkitRunnable() {
@@ -94,7 +94,7 @@ public class VOLATUS extends Enchantment {
      */
     @Override
     public void doItemDespawn(@NotNull ItemDespawnEvent event) {
-        if (!EnchantedItems.enableBrooms)
+        if (!EnchantedItems.areBroomsEnabled())
             return;
 
         Item despawnedItem = event.getEntity();
@@ -120,7 +120,7 @@ public class VOLATUS extends Enchantment {
      * @param event the item drop event
      */
     public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
-        if (!EnchantedItems.enableBrooms)
+        if (!EnchantedItems.areBroomsEnabled())
             return;
 
         Player player = event.getPlayer();
@@ -139,7 +139,7 @@ public class VOLATUS extends Enchantment {
      * @param player the player to check
      */
     void checkBroomStatus(Player player) {
-        if (!EnchantedItems.enableBrooms)
+        if (!EnchantedItems.areBroomsEnabled())
             return;
 
         // do they have a broom in either hand?

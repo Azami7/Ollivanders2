@@ -1139,7 +1139,7 @@ public class Ollivanders2 extends JavaPlugin {
                 amount = 64;
 
             String itemName = String.join(" ", Arrays.copyOfRange(args, 3, args.length));
-            ItemStack item = items.getItemStartsWith(itemName, amount);
+            ItemStack item = items.getItemByNameStartsWith(itemName, amount);
 
             if (item == null) {
                 sender.sendMessage("Unable to find an item \"" + itemName + "\"");
@@ -1181,7 +1181,7 @@ public class Ollivanders2 extends JavaPlugin {
 
         stringBuilder.append("Item list:\n");
 
-        for (String item : items.getAllItems()) {
+        for (String item : items.getAllItemNames()) {
             stringBuilder.append("   ");
             stringBuilder.append(item);
             stringBuilder.append("\n");
@@ -1636,7 +1636,7 @@ public class Ollivanders2 extends JavaPlugin {
      */
     private boolean giveItem(@NotNull Player player, @NotNull String name) {
         List<ItemStack> kit = new ArrayList<>();
-        ItemStack item = items.getItemStartsWith(name, 1);
+        ItemStack item = items.getItemByNameStartsWith(name, 1);
 
         if (item != null) {
             kit.add(item);

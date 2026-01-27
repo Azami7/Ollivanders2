@@ -1,13 +1,11 @@
 package net.pottercraft.ollivanders2.item;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.EntityCommon;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.common.TimeCommon;
 import net.pottercraft.ollivanders2.item.enchantment.EnchantedItems;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import net.pottercraft.ollivanders2.item.wand.O2Wands;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Item;
@@ -21,7 +19,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,11 +41,6 @@ public class O2Items {
     public EnchantedItems enchantedItems;
 
     /**
-     * Common functions
-     */
-    final private Ollivanders2Common common;
-
-    /**
      * The wand manager - wands being complex items with special logic
      */
     static O2Wands wands;
@@ -65,13 +57,12 @@ public class O2Items {
      */
     public O2Items(@NotNull Ollivanders2 plugin) {
         p = plugin;
-        common = new Ollivanders2Common(p);
         wands = new O2Wands(p);
 
         enchantedItems = new EnchantedItems(p);
         p.getServer().getPluginManager().registerEvents(enchantedItems, p);
 
-        o2ItemTypeKey = new NamespacedKey(p, "o2enchantment_id");
+        o2ItemTypeKey = new NamespacedKey(p, "o2item_type");
     }
 
     /**
@@ -138,15 +129,16 @@ public class O2Items {
     }
 
     /**
-     * Get an item by display name - set in the metadata of the item
+     * Get an item that name starts with a substring
      *
-     * @param name   the display name for the item
+     * @param name   the substring of the name starts with
      * @param amount the amount of the item to get
      * @return an item stack of the item and amount, null if item not found
      */
     @Nullable
-    public ItemStack getItemByDisplayName(@NotNull String name, int amount) {
-        O2ItemType itemType = getTypeByDisplayName(name);
+    public ItemStack getItemByNameStartsWith(@NotNull String name, int amount) {
+        O2ItemType itemType = getItemTypeByNameStartsWith(name);
+
         if (itemType == null)
             return null;
 
@@ -160,7 +152,7 @@ public class O2Items {
      * @return the item type if found, null otherwise
      */
     @Nullable
-    public O2ItemType getTypeByDisplayName(@NotNull String name) {
+    public O2ItemType getItemTypeByName(@NotNull String name) {
         O2ItemType itemType = null;
 
         for (O2Item item : O2ItemMap.values()) {
@@ -174,52 +166,14 @@ public class O2Items {
     }
 
     /**
-     * Get an item that name starts with a substring
-     *
-     * @param name   the substring of the name starts with
-     * @param amount the amount of the item to get
-     * @return an item stack of the item and amount, null if item not found
-     */
-    @Nullable
-    public ItemStack getItemStartsWith(@NotNull String name, int amount) {
-        O2ItemType itemType = getItemTypeByStartsWith(name);
-
-        if (itemType == null)
-            return null;
-
-        return getItemByType(itemType, amount);
-    }
-
-    /**
      * Get the name of an item by type.
      *
      * @param itemType the item type
      * @return the name of this item or null if not found
      */
     @Nullable
-    public String getItemDisplayNameByType(@NotNull O2ItemType itemType) {
+    public String getItemNameByType(@NotNull O2ItemType itemType) {
         return O2ItemMap.get(itemType).getName();
-    }
-
-    /**
-     * Get the type of item from the name. This must be a full match on the string.
-     *
-     * @param name the name of the item type as a string
-     * @return the item type if found, null otherwise
-     */
-    @Nullable
-    public O2ItemType getItemTypeByName(@NotNull String name) {
-        String itemTypeString = name.trim().toUpperCase().replaceAll(" ", "_");
-        O2ItemType itemType = null;
-
-        try {
-            itemType = O2ItemType.valueOf(itemTypeString);
-        }
-        catch (Exception e) {
-            common.printDebugMessage("No item type " + itemTypeString + " found.", null, null, false);
-        }
-
-        return itemType;
     }
 
     /**
@@ -229,7 +183,7 @@ public class O2Items {
      * @return the item type if found, null otherwise
      */
     @Nullable
-    public O2ItemType getItemTypeByStartsWith(@NotNull String name) {
+    public O2ItemType getItemTypeByNameStartsWith(@NotNull String name) {
         for (O2Item item : O2ItemMap.values()) {
             if (item.getName().toLowerCase().startsWith(name.trim().toLowerCase()))
                 return item.getType();
@@ -256,7 +210,7 @@ public class O2Items {
      * @return the O2Item name if found, null otherwise
      */
     @Nullable
-    public String getO2ItemNameFromItem (@NotNull ItemStack itemStack) {
+    public String getO2ItemNameFromItemStack(@NotNull ItemStack itemStack) {
         String name = null;
         ItemMeta meta = itemStack.getItemMeta();
 
@@ -275,7 +229,7 @@ public class O2Items {
      * @return an array of the item names
      */
     @NotNull
-    public ArrayList<String> getAllItems() {
+    public ArrayList<String> getAllItemNames() {
         Set<O2ItemType> itemKeys = O2ItemMap.keySet();
 
         ArrayList<String> itemNames = new ArrayList<>();
@@ -286,26 +240,6 @@ public class O2Items {
 
         Collections.sort(itemNames);
         return itemNames;
-    }
-
-    /**
-     * Get an item within the radius that matches the specified O2ItemType.
-     *
-     * @param location the location to check for the item
-     * @param type the O2ItemType to check for
-     * @param radius the radius from the location to check
-     * @return a nearby item of the type, if found, null otherwise
-     */
-    public Item getNearbyItemByO2ItemType(@NotNull Location location, @NotNull O2ItemType type, double radius) {
-        List<Item> items = EntityCommon.getItemsInRadius(location, radius);
-
-        for (Item item : items) {
-            // is this item the O2ItemType?
-            if (getItemTypeByItem(item) == type)
-                return item;
-        }
-
-        return null;
     }
 
     /**
@@ -327,7 +261,7 @@ public class O2Items {
      */
     @Nullable
     public O2ItemType getItemTypeByItemStack(@NotNull ItemStack itemStack) {
-        String itemName = getO2ItemNameFromItem(itemStack);
+        String itemName = getO2ItemNameFromItemStack(itemStack);
         if (itemName == null)
             return null;
 

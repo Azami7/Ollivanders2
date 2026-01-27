@@ -314,12 +314,12 @@ public class O2Potions {
                 Material material = ((Item) e).getItemStack().getType();
 
                 // get the O2Item name, if it is an O2Item
-                String ingredientName = Ollivanders2API.getItems().getO2ItemNameFromItem(((Item) e).getItemStack());
+                String ingredientName = Ollivanders2API.getItems().getO2ItemNameFromItemStack(((Item) e).getItemStack());
                 if (ingredientName == null)
                     continue;
 
                 // get the O2ItemType, if it is an O2Item
-                O2ItemType ingredientType = Ollivanders2API.getItems().getTypeByDisplayName(ingredientName);
+                O2ItemType ingredientType = Ollivanders2API.getItems().getItemTypeByName(ingredientName);
                 if (ingredientType == null || material != Ollivanders2API.getItems().getItemMaterialByType(ingredientType))
                     continue;
 
@@ -414,7 +414,7 @@ public class O2Potions {
         ArrayList<String> ingredientList = new ArrayList<>();
 
         for (O2ItemType i : ingredients) {
-            ingredientList.add(Ollivanders2API.getItems().getItemDisplayNameByType(i));
+            ingredientList.add(Ollivanders2API.getItems().getItemNameByType(i));
         }
 
         return ingredientList;

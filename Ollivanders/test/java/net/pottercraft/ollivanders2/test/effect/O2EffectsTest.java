@@ -130,8 +130,6 @@ public class O2EffectsTest {
      */
     @Test
     void o2effectsTest() {
-        Ollivanders2.debug = true;
-
         testAddEffect();
         testEffectStacking();
         testRemoveEffect();

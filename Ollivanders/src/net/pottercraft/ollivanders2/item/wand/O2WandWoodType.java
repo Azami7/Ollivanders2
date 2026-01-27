@@ -6,10 +6,11 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Wand wood types
+ *
+ * @see <a href="https://harrypotter.fandom.com/wiki/Wand_wood">Wand wood on Harry Potter Wiki</a>
  */
 public enum O2WandWoodType {
     /**
@@ -38,12 +39,13 @@ public enum O2WandWoodType {
 
     /**
      * Constructor
-     * @param m the wood material for the wand
-     * @param l the label string for the wood material
+     *
+     * @param material the wood material for the wand
+     * @param label    the label string for the wood material
      */
-    O2WandWoodType(@NotNull Material m, @NotNull String l) {
-        material = m;
-        label = l;
+    O2WandWoodType(@NotNull Material material, @NotNull String label) {
+        this.material = material;
+        this.label = label;
     }
 
     /**
@@ -70,7 +72,7 @@ public enum O2WandWoodType {
      * Get the wand wood type for this material.
      *
      * @param m the material to check
-     * @return the wand core type if found, null otherwise
+     * @return the wand wood type if found, null otherwise
      */
     @Nullable
     public static O2WandWoodType getWandWoodTypeByMaterial(@NotNull Material m) {
@@ -83,12 +85,32 @@ public enum O2WandWoodType {
     }
 
     /**
+     * Get the wand wood type matching the given name.
+     * <p>
+     * Name comparison is case-sensitive using {@link String#equals(Object)}.
+     * </p>
+     *
+     * @param name the name to look up
+     * @return the wand wood type if found, null otherwise
+     */
+    @Nullable
+    public static O2WandWoodType getWandWoodTypeByName(@NotNull String name) {
+        for (O2WandWoodType woodType : O2WandWoodType.values()) {
+            if (woodType.getLabel().equals(name)) {
+                return woodType;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get a list of all the wand wood types by name.
      *
      * @return the names of all wand woods as a list
      */
     @NotNull
-    public static ArrayList<String> getAllWoodsByName() {
+    public static ArrayList<String> getAllWandWoodsByName() {
         ArrayList<String> woods = new ArrayList<>();
 
         for (O2WandWoodType woodType : O2WandWoodType.values())
@@ -103,11 +125,29 @@ public enum O2WandWoodType {
      * @return a random wand wood name
      */
     @NotNull
-    public static String getRandomWoodByName() {
-        int rand = Ollivanders2Common.random.nextInt();
-        List<String> woods = getAllWoodsByName();
+    public static String getRandomWood() {
+        O2WandWoodType[] woods = O2WandWoodType.values();
+        return woods[Ollivanders2Common.random.nextInt(woods.length)].getLabel();
+    }
 
-        int index = Math.abs(rand % woods.size());
-        return woods.get(index);
+    /**
+     * Get a player's destined wand wood by seed.
+     *
+     * @param seed the seed to determine their destined wood
+     * @return the wand wood name
+     */
+    public static String getWandWoodBySeed(int seed) {
+        O2WandWoodType[] woods = O2WandWoodType.values();
+        return woods[Math.abs(seed) % woods.length].getLabel();
+    }
+
+    /**
+     * Is this ItemStack a wand wood?
+     *
+     * @param material the ItemStack to check
+     * @return true if it is a wand wood, false otherwise
+     */
+    public static boolean isWandWood(Material material) {
+       return getWandWoodTypeByMaterial(material) != null;
     }
 }

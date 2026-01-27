@@ -35,7 +35,7 @@ public enum O2ItemType {
     /**
      * unenchanted broomstick
      */
-    BASIC_BROOM(Material.STICK, (short) 0, "Broomstick", null, null),
+    BASIC_BROOM(Material.STICK, (short) 0, "Broom", null, null),
     /**
      * potion ingredient
      */
@@ -524,14 +524,15 @@ public enum O2ItemType {
         }
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        if (container.has(O2Items.o2ItemTypeKey, PersistentDataType.STRING)) {
-            String itemTypeKey = container.get(O2Items.o2ItemTypeKey, PersistentDataType.STRING);
-            if (itemTypeKey == null)
-                return false;
+        if (!container.has(O2Items.o2ItemTypeKey, PersistentDataType.STRING))
+            return false;
 
-            if (!(itemTypeKey.equalsIgnoreCase(name)))
-                return false;
-        }
+        String itemTypeKey = container.get(O2Items.o2ItemTypeKey, PersistentDataType.STRING);
+        if (itemTypeKey == null)
+            return false;
+
+        if (!(itemTypeKey.equalsIgnoreCase(name)))
+            return false;
 
         return true;
     }

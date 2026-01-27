@@ -292,6 +292,7 @@ public final class O2PlayerCommon {
      * @return true if yes, false if no
      */
     public static boolean wearingInvisibilityCloak(@NotNull Player player) {
+        // todo move this to an item enchantment
         ItemStack chestPlate = player.getInventory().getChestplate();
         if (chestPlate != null) {
             return O2ItemType.INVISIBILITY_CLOAK.isItemThisType(chestPlate);

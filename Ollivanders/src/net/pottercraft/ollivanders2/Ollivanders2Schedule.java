@@ -122,6 +122,7 @@ public class Ollivanders2Schedule implements Runnable {
      * equipping an item, lame.
      */
     private void handleInvisibilityCloaks() {
+        // todo move this to an item enchantment
         for (Player player : p.getServer().getOnlinePlayers()) {
             boolean wearingInvisibilityCloak = O2PlayerCommon.wearingInvisibilityCloak(player);
             boolean hasInvisibilityPotionEffect = O2PlayerCommon.hasPotionEffect(player, PotionEffectType.INVISIBILITY);

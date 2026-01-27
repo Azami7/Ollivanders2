@@ -120,7 +120,7 @@ public abstract class O2Potion
         for (Entry<O2ItemType, Integer> e : ingredients.entrySet())
         {
             O2ItemType ingredientType = e.getKey();
-            String name = Ollivanders2API.getItems().getItemDisplayNameByType(ingredientType);
+            String name = Ollivanders2API.getItems().getItemNameByType(ingredientType);
 
             stringBuilder.append("\n").append(e.getValue().toString()).append(" ").append(name);
         }

@@ -29,18 +29,18 @@ public class O2Wands {
     /**
      * plugin callback
      */
-    Ollivanders2 p;
+    private final Ollivanders2 p;
 
     /**
      * common functions
      */
-    Ollivanders2Common common;
+    private final Ollivanders2Common common;
 
     /**
      * Namespace keys for NBT tags
      */
-    NamespacedKey wandWoodKey;
-    NamespacedKey wandCoreKey;
+    private final NamespacedKey wandWoodKey;
+    private final NamespacedKey wandCoreKey;
 
     /**
      * Wand conjunction for wand lore
@@ -94,14 +94,9 @@ public class O2Wands {
         if (itemMeta == null)
             return false;
 
-        // check NBT
+        // assume if something is set, this is good enough since players cannot set NBT this shouldn't be faked
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if (container.has(wandWoodKey, PersistentDataType.STRING) && container.has(wandCoreKey, PersistentDataType.STRING)) {
-            // assume if something is set, this is good enough since players cannot set NBT this shouldn't be faked
-            return true;
-        }
-
-        return false;
+        return container.has(wandWoodKey, PersistentDataType.STRING) && container.has(wandCoreKey, PersistentDataType.STRING);
     }
 
     /**
@@ -153,7 +148,7 @@ public class O2Wands {
     /**
      * Does this core match what is set on the NBT for this wand?
      *
-     * @param core      the wood type
+     * @param core      the core type
      * @param itemStack the item to check
      * @return true if it matches, false otherwise
      */
@@ -200,7 +195,7 @@ public class O2Wands {
      * Does the player hold a wand item in their primary hand?
      *
      * @param player player to check.
-     * @return True if the player holds a wand. False if not or if player is null.
+     * @return true if the player holds a wand, false otherwise
      */
     public boolean holdsWand(@NotNull Player player) {
         return holdsWand(player, EquipmentSlot.HAND);
@@ -211,16 +206,16 @@ public class O2Wands {
      *
      * @param player player to check.
      * @param hand   the equipment slot to check for this player
-     * @return True if the player holds a wand. False if not or if player is null.
+     * @return true if the player holds a wand, false otherwise
      */
     public boolean holdsWand(@NotNull Player player, @NotNull EquipmentSlot hand) {
         ItemStack held;
         if (hand == EquipmentSlot.HAND) {
-            common.printDebugMessage("O2PlayerCommon.holdsWand: checking for wand in main hand", null, null, false);
+            common.printDebugMessage("O2Wands.holdsWand: checking for wand in main hand", null, null, false);
             held = player.getInventory().getItemInMainHand();
         }
         else if (hand == EquipmentSlot.OFF_HAND) {
-            common.printDebugMessage("O2PlayerCommon.holdsWand: checking for wand in off hand", null, null, false);
+            common.printDebugMessage("O2Wands.holdsWand: checking for wand in off hand", null, null, false);
             held = player.getInventory().getItemInOffHand();
         }
         else {
@@ -228,7 +223,7 @@ public class O2Wands {
         }
 
         if (held.getType() == Material.AIR) {
-            common.printDebugMessage("O2PlayerCommon.holdsWand: player not holding an item", null, null, false);
+            common.printDebugMessage("O2Wands.holdsWand: player not holding an item", null, null, false);
             return false;
         }
 
@@ -244,8 +239,8 @@ public class O2Wands {
     public List<ItemStack> getAllWands() {
         ArrayList<ItemStack> wands = new ArrayList<>();
 
-        for (String wood : O2WandWoodType.getAllWoodsByName()) {
-            for (String core : O2WandCoreType.getAllCoresByName()) {
+        for (String wood : O2WandWoodType.getAllWandWoodsByName()) {
+            for (String core : O2WandCoreType.getAllWandCoreNames()) {
                 wands.add(makeWand(wood, core, 1));
             }
         }
@@ -259,12 +254,15 @@ public class O2Wands {
      * @param wood   the wand wood
      * @param core   the wand core
      * @param amount the number of wands to make
-     * @return an ItemStack of wands or null if an error
+     * @return an ItemStack of wands or null if wood or core is not valid
      */
     @Nullable
     public ItemStack makeWand(@NotNull String wood, @NotNull String core, int amount) {
         if (amount < 1)
             amount = 1;
+
+        if (!O2WandWoodType.getAllWandWoodsByName().contains(wood) || !O2WandCoreType.getAllWandCoreNames().contains(core))
+            return null;
 
         List<String> lore = new ArrayList<>();
         ItemStack wand = Ollivanders2API.getItems().getItemByType(O2ItemType.WAND, 1);
@@ -284,7 +282,7 @@ public class O2Wands {
         container.set(wandCoreKey, PersistentDataType.STRING, core);
 
         // set the lore
-        lore.add(wood + wandLoreConjunction + core);
+        lore.add(createLore(wood, core));
         meta.setLore(lore);
 
         // make wands not look like sticks
@@ -310,7 +308,7 @@ public class O2Wands {
         // determine the wand wood
         ItemMeta itemMeta = corelessWand.getItemMeta();
         if (itemMeta == null) {
-            common.printDebugMessage("O2Wands.makeWandFromCoreles: item meta is null", null, null, false);
+            common.printDebugMessage("O2Wands.makeWandFromCoreless: item meta is null", null, null, false);
             return null;
         }
 
@@ -319,11 +317,11 @@ public class O2Wands {
         if (container.has(wandWoodKey, PersistentDataType.STRING)) {
             wood = container.get(wandWoodKey, PersistentDataType.STRING);
             if (wood == null)
-                wood = O2WandWoodType.getRandomWoodByName();
+                wood = O2WandWoodType.getRandomWood();
         }
 
         if (wood == null)
-            wood = O2WandWoodType.getRandomWoodByName();
+            wood = O2WandWoodType.getRandomWood();
 
         return makeWand(wood, core.getLabel(), amount);
     }
@@ -381,8 +379,11 @@ public class O2Wands {
      */
     @Nullable
     public ItemStack createRandomWand() {
-        String wood = O2WandWoodType.getAllWoodsByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandWoodType.getAllWoodsByName().size()));
-        String core = O2WandCoreType.getAllCoresByName().get(Math.abs(Ollivanders2Common.random.nextInt() % O2WandCoreType.getAllCoresByName().size()));
+        ArrayList<String> woods = O2WandWoodType.getAllWandWoodsByName();
+        ArrayList<String> cores = O2WandCoreType.getAllWandCoreNames();
+
+        String wood = woods.get(Ollivanders2Common.random.nextInt(woods.size()));
+        String core = cores.get(Ollivanders2Common.random.nextInt(cores.size()));
 
         return makeWand(wood, core, 1);
     }

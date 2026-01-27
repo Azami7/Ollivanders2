@@ -13,15 +13,15 @@ import java.util.ArrayList;
 /**
  * Wand cores
  *
- * @see <a href="https://harrypotter.fandom.com/wiki/Wand_core">https://harrypotter.fandom.com/wiki/Wand_core</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Wand_core">Wand core on Harry Potter Wiki</a>
  */
 public enum O2WandCoreType {
     /**
-     * bone - legacy
+     * Bone - legacy
      */
     BONE(O2ItemType.BONE, true),
     /**
-     * dragon heartstring
+     * Dragon heartstring
      */
     DRAGON_HEARTSTRING(O2ItemType.DRAGON_HEARTSTRING, false),
     /**
@@ -29,11 +29,11 @@ public enum O2WandCoreType {
      */
     GUNPOWDER(O2ItemType.GUNPOWDER, true),
     /**
-     * kelpie hair
+     * Kelpie hair
      */
     KELPIE_HAIR(O2ItemType.KELPIE_HAIR, false),
     /**
-     * phoenix feather
+     * Phoenix feather
      */
     PHOENIX_FEATHER(O2ItemType.PHOENIX_FEATHER, false),
     /**
@@ -41,17 +41,17 @@ public enum O2WandCoreType {
      */
     ROTTEN_FLESH(O2ItemType.ROTTEN_FLESH, true),
     /**
-     * Spider Eye - legacy
+     * Spider eye - legacy
      */
     SPIDER_EYE(O2ItemType.SPIDER_EYE, true),
     /**
-     * unicorn hair
+     * Unicorn hair
      */
-    UNICORN_HAIR(O2ItemType.UNICORN_HAIR, true),
+    UNICORN_HAIR(O2ItemType.UNICORN_HAIR, false),
     /**
-     * veela hair
+     * Veela hair
      */
-    VEELA_HAIR(O2ItemType.VEELA_HAIR, true),
+    VEELA_HAIR(O2ItemType.VEELA_HAIR, false),
     ;
 
     private final O2ItemType o2ItemType;
@@ -60,7 +60,8 @@ public enum O2WandCoreType {
     /**
      * Constructor
      *
-     * @param item the core item type
+     * @param item     the core item type
+     * @param isLegacy whether this is a legacy core type
      */
     O2WandCoreType(@NotNull O2ItemType item, boolean isLegacy) {
         o2ItemType = item;
@@ -88,6 +89,19 @@ public enum O2WandCoreType {
     }
 
     /**
+     * Check if this wand core type is a legacy core.
+     * <p>
+     * Legacy cores are older core types that were used before the current wand core system was
+     * introduced. They are excluded from random core selection and destined wand assignment.
+     * </p>
+     *
+     * @return true if this is a legacy core type, false otherwise
+     */
+    public boolean isLegacy() {
+        return isLegacy;
+    }
+
+    /**
      * Get the wand core type for this material.
      *
      * @param type the O2ItemType to check
@@ -104,12 +118,32 @@ public enum O2WandCoreType {
     }
 
     /**
+     * Get the wand core type matching the given name.
+     * <p>
+     * Name comparison is case-sensitive using {@link String#equals(Object)}.
+     * </p>
+     *
+     * @param name the name to look up
+     * @return the wand core type if found, null otherwise
+     */
+    @Nullable
+    public static O2WandCoreType getWandCoreTypeByName(@NotNull String name) {
+        for (O2WandCoreType coreType : O2WandCoreType.values()) {
+            if (coreType.getLabel().equals(name)) {
+                return coreType;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Get a list of all the wand core types by name.
      *
      * @return the names of all wand cores as a list
      */
     @NotNull
-    public static ArrayList<String> getAllCoresByName() {
+    public static ArrayList<String> getAllWandCoreNames() {
         ArrayList<String> cores = new ArrayList<>();
 
         for (O2WandCoreType coreType : O2WandCoreType.values())
@@ -139,30 +173,32 @@ public enum O2WandCoreType {
      * @return a random wand core name, will not send a legacy core
      */
     @NotNull
-    public static String getRandomCoreByName() {
+    public static String getRandomCore() {
         O2WandCoreType[] cores = O2WandCoreType.values();
         O2WandCoreType core;
-        
-        do {
+
+        for (int i = 0; i < cores.length; i++) {
             int rand = Ollivanders2Common.random.nextInt(cores.length);
             core = cores[rand];
-        } while (core.isLegacy);
-        
-        return core.getLabel();
+            if (!core.isLegacy()) {
+                return core.getLabel();
+            }
+        }
+
+        return UNICORN_HAIR.getLabel();
     }
 
     /**
-     * Set a player's destined wand core by seed.
+     * Get a player's destined wand core by seed.
      *
      * @param seed the seed to determine their destined core
-     * @return the wand core
+     * @return the wand core name
      */
-    public static String setDestinedWandCore (int seed)
-    {
+    public static String getWandCoreBySeed(int seed) {
         O2WandCoreType[] cores = O2WandCoreType.values();
         O2WandCoreType core;
 
-        core = cores[seed % O2WandCoreType.getAllCoresByName().size()];
+        core = cores[Math.abs(seed) % cores.length];
 
         // if the core would be a legacy core, pick one of the 3 common cores
         if (core.isLegacy) {
@@ -200,9 +236,6 @@ public enum O2WandCoreType {
         if (itemType == null)
             return false;
 
-        if (getWandCoreTypeByItemType(itemType) == null)
-            return false;
-        else
-            return true;
+        return getWandCoreTypeByItemType(itemType) != null;
     }
 }

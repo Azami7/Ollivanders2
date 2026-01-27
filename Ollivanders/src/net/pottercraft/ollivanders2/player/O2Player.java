@@ -167,13 +167,9 @@ public class O2Player {
         // set destined wand
         int seed = Math.abs(pid.hashCode());
 
-        // get destined wand wood
-        int wood = seed % O2WandWoodType.getAllWoodsByName().size();
-        wandWood = O2WandWoodType.getAllWoodsByName().get(wood);
-
-        // get destined wand core
-        // moved to a function in O2WandCoreType to handle legacy core types that we do not want to be used going forward
-        wandCore = O2WandCoreType.setDestinedWandCore(seed);
+        // get destined wand wood and core
+        wandWood = O2WandWoodType.getWandWoodBySeed(seed);
+        wandCore = O2WandCoreType.getWandCoreBySeed(seed);
     }
 
     /**
@@ -208,7 +204,7 @@ public class O2Player {
      * @param wood sets the destined wand wood type
      */
     public void setWandWood(@NotNull String wood) {
-        if (O2WandWoodType.getAllWoodsByName().contains(wood)) {
+        if (O2WandWoodType.getAllWandWoodsByName().contains(wood)) {
             wandWood = wood;
         }
     }
@@ -219,7 +215,7 @@ public class O2Player {
      * @param core set the destined wand core type
      */
     public void setWandCore(@NotNull String core) {
-        if (O2WandCoreType.getAllCoresByName().contains(core)) {
+        if (O2WandCoreType.getAllWandCoreNames().contains(core)) {
             wandCore = core;
         }
     }

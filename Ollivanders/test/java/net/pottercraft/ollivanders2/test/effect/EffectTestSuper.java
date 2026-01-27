@@ -169,7 +169,6 @@ abstract public class EffectTestSuper {
      */
     @Test
     void effectTest() {
-        Ollivanders2.debug = true;
         // create an effect that lasts 10 ticks
         O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);
         assertFalse(effect.isKilled(), "Effect set to killed at creation");

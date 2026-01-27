@@ -46,32 +46,32 @@ public class EnchantedItems implements Listener {
     /**
      * Namespace keys for NBT tags
      */
-    static NamespacedKey enchantmentType;
+    static public NamespacedKey enchantmentType;
 
     /**
      * Namespace keys for NBT tags
      */
-    static NamespacedKey enchantmentMagnitude;
+    static public NamespacedKey enchantmentMagnitude;
 
     /**
      * Namespace keys for NBT tags
      */
-    static NamespacedKey enchantmentID;
+    static public NamespacedKey enchantmentID;
 
     /**
      * Namespace keys for NBT tags
      */
-    static NamespacedKey enchantmentArgs;
+    static public NamespacedKey enchantmentArgs;
 
     /**
      * Lookup of known enchanted items to speed up handlers
      */
-    HashMap<String, Enchantment> enchantedItems = new HashMap<>();
+    private final HashMap<String, Enchantment> enchantedItems = new HashMap<>();
 
     /**
      * Enchantment related config
      */
-    public static boolean enableBrooms;
+    private static boolean enableBrooms;
 
     /**
      * Constructor
@@ -313,6 +313,7 @@ public class EnchantedItems implements Listener {
      * @param itemStack the item stack to get the key from
      * @return the id if present, -1 otherwise
      */
+    @Nullable
     public Integer getEnchantmentMagnitude(@NotNull ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null)
@@ -566,5 +567,14 @@ public class EnchantedItems implements Listener {
             return;
 
         enchantment.doItemHeld(event);
+    }
+
+    /**
+     * Are brooms currently enabled
+     *
+     * @return true if they are, false otherwise
+     */
+    public static boolean areBroomsEnabled() {
+        return enableBrooms;
     }
 }
