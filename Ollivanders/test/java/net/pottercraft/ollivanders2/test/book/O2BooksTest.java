@@ -80,7 +80,7 @@ public class O2BooksTest {
      * spell count increases after scheduled tasks execute.
      */
     @Test
-    void onBookReadTest() throws InterruptedException {
+    void onBookReadTest() {
         // make sure bookLearning is on in the config
         assertTrue(Ollivanders2.bookLearning, "bookLearning is not enabled.");
 
@@ -105,8 +105,6 @@ public class O2BooksTest {
         // then the incrementSpell runnable will execute (another 2 seconds)
         // total of 4 seconds of scheduled delays
         mockServer.getScheduler().performTicks(Ollivanders2Common.ticksPerSecond * 5);
-        // now sleep so we give the runnable time to run
-        Thread.sleep(500);
         // check player spell level
         assertNotEquals(spellLevel, o2p.getSpellCount(O2SpellType.LUMOS), "Spell level did not change after book was read.");
     }
@@ -119,6 +117,7 @@ public class O2BooksTest {
     void getBookByTitleTest() {
         String title = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1.getTitle(testPlugin);
         ItemStack book = books.getBookByTitle(title);
+        assertNotNull(book);
 
         assertNotNull(book.getType(), "book.getType() returned null.");
         assertEquals(Material.WRITTEN_BOOK, book.getType(), "book is not type WRITTEN_BOOK.");
@@ -134,6 +133,7 @@ public class O2BooksTest {
     void getBookByTypeTest() {
         String title = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1.getTitle(testPlugin);
         ItemStack book = books.getBookByType(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1);
+        assertNotNull(book);
 
         assertNotNull(book.getType(), "book.getType() returned null.");
         assertEquals(Material.WRITTEN_BOOK, book.getType(), "book is not type WRITTEN_BOOK.");
@@ -151,18 +151,21 @@ public class O2BooksTest {
         // try full title, case-sensitive
         String title = "The Essential Defence Against the Dark Arts";
         O2BookType bookType = books.getBookTypeByTitle(title);
+        assertNotNull(bookType);
         assertNotNull(bookType.getTitle(testPlugin));
         assertEquals(title, bookType.getTitle(testPlugin), "bookType.getTitle() does not match expected title");
 
         // try partial title
         String partialTitle = "The Essential";
         bookType = books.getBookTypeByTitle(partialTitle);
+        assertNotNull(bookType);
         assertNotNull(bookType.getTitle(testPlugin));
         assertEquals(title, bookType.getTitle(testPlugin), "bookType.getTitle() does not match expected title");
 
         // try case-insensitive
         String lowercaseTitle = "the essential defence against the dark arts";
         bookType = books.getBookTypeByTitle(partialTitle);
+        assertNotNull(bookType);
         assertNotNull(bookType.getTitle(testPlugin));
         assertEquals(title, bookType.getTitle(testPlugin), "bookType.getTitle() does not match expected title");
     }
@@ -324,7 +327,7 @@ public class O2BooksTest {
      * and without the effect to ensure the effect provides a meaningful learning boost.</p>
      */
     @Test
-    void improvedBookLearningTest() throws InterruptedException {
+    void improvedBookLearningTest() {
         // make sure bookLearning is on in the config
         assertTrue(Ollivanders2.bookLearning, "bookLearning is not enabled.");
 
@@ -341,7 +344,6 @@ public class O2BooksTest {
         mockServer.getPluginManager().callEvent(event1);
 
         mockServer.getScheduler().performTicks(Ollivanders2Common.ticksPerSecond * 5);
-        Thread.sleep(500);
         int spellLevelAfter1 = o2p1.getSpellCount(O2SpellType.LUMOS);
         int gainWithout = spellLevelAfter1 - spellLevelBefore1;
 
@@ -360,7 +362,6 @@ public class O2BooksTest {
         mockServer.getPluginManager().callEvent(event2);
 
         mockServer.getScheduler().performTicks(Ollivanders2Common.ticksPerSecond * 5);
-        Thread.sleep(500);
         int spellLevelAfter2 = o2p2.getSpellCount(O2SpellType.LUMOS);
         int gainWith = spellLevelAfter2 - spellLevelBefore2;
 

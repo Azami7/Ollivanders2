@@ -23,6 +23,7 @@ public class PoisonAntidoteLesserTest extends PotionEffectAntidoteSuperTest {
      * @param isPermanent     whether the antidote is permanent
      * @return a new POISON_ANTIDOTE_LESSER effect targeting the specified player
      */
+    @Override
     POISON_ANTIDOTE_LESSER createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new POISON_ANTIDOTE_LESSER(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

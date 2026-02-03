@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class AdvancedFireworksTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new ADVANCED_FIREWORKS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

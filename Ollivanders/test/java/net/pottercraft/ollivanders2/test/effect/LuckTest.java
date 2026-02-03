@@ -40,6 +40,7 @@ public class LuckTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - LUCK effects cannot be permanent
      * @return a new LUCK effect targeting the test player
      */
+    @Override
     LUCK createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new LUCK(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

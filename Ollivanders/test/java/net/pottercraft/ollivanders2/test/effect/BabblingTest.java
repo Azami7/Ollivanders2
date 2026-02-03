@@ -32,6 +32,7 @@ public class BabblingTest extends EffectTestSuper {
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return a new BABBLING effect targeting the specified player
      */
+    @Override
     BABBLING createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new BABBLING(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -42,6 +43,7 @@ public class BabblingTest extends EffectTestSuper {
      * <p>The BABBLING effect has no unique behavior to test in checkEffectTest(). Aging and duration
      * management are tested in the base ageAndKillTest() method.</p>
      */
+    @Override
     void checkEffectTest() {
     }
 
@@ -51,6 +53,7 @@ public class BabblingTest extends EffectTestSuper {
      * <p>Executes the chat event test to verify that the effect correctly intercepts and
      * modifies player chat messages with dictionary words.</p>
      */
+    @Override
     void eventHandlerTests() {
         doOnAsyncPlayerChatEventTest();
     }
@@ -86,5 +89,6 @@ public class BabblingTest extends EffectTestSuper {
     /**
      * doRemove() for BABBLING does nothing
      */
+    @Override
     void doRemoveTest() {}
 }

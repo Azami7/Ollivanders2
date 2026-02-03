@@ -40,6 +40,7 @@ public class HealthBoostTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - HEALTH_BOOST effects cannot be permanent
      * @return a new HEALTH_BOOST effect targeting the test player
      */
+    @Override
     HEALTH_BOOST createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new HEALTH_BOOST(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

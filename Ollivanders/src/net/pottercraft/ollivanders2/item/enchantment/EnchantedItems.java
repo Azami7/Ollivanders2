@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.item.enchantment;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.MagicLevel;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import org.bukkit.NamespacedKey;
@@ -26,57 +27,95 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * Enchantment effect on items.
+ * Manager for enchanted items and their magical properties.
+ * <p>
+ * Enchantments are magical effects applied to items using NBT (Named Binary Tag) data stored in item metadata.
+ * This class handles:
+ * <ul>
+ * <li>Creating and tracking enchanted items with unique identifiers</li>
+ * <li>Storing enchantment metadata (type, magnitude, arguments) as NBT tags</li>
+ * <li>Retrieving enchantment objects from items</li>
+ * <li>Handling enchantment event listeners (pickup, drop, despawn, item held)</li>
+ * <li>Managing cursed item detection with level-based awareness</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Enchantments are stored as NBT tags on ItemStack metadata, allowing them to persist across server
+ * restarts and item operations. Each enchantment is cached by its unique ID for efficient event handling.
+ * </p>
+ * <p>
+ * Examples: broom flight (VOLATUS), port keys (PORTUS), item duplication (GEMINO), concealment (CELATUM).
+ * </p>
  *
- * <p>Enchantments are used to give items magical properties like broom flight, port keys, and cursed items.</p>
- *
- * <p>Reference: https://minecraft.fandom.com/wiki/Tutorials/Command_NBT_tags</p>
+ * @see Enchantment the abstract base class for all enchantment implementations
+ * @see ItemEnchantmentType the enumeration of available enchantment types
  */
 public class EnchantedItems implements Listener {
     /**
-     * Reference to the plugin
+     * Reference to the Ollivanders2 plugin instance.
      */
-    Ollivanders2 p;
+    private Ollivanders2 p;
 
     /**
-     * Common functions
+     * Utility functions for common operations across the plugin.
      */
     private final Ollivanders2Common common;
 
     /**
-     * Namespace keys for NBT tags
+     * Namespace key for storing enchantment type in item NBT tags.
+     * <p>
+     * Stores the ItemEnchantmentType enum name as a string (e.g., "GEMINO", "VOLATUS", "PORTUS").
+     * </p>
      */
     static public NamespacedKey enchantmentType;
 
     /**
-     * Namespace keys for NBT tags
+     * Namespace key for storing enchantment magnitude in item NBT tags.
+     * <p>
+     * Stores the power level of the enchantment as an integer (1 or greater).
+     * </p>
      */
     static public NamespacedKey enchantmentMagnitude;
 
     /**
-     * Namespace keys for NBT tags
+     * Namespace key for storing enchantment ID in item NBT tags.
+     * <p>
+     * Stores the unique identifier (typically a UUID string) used to look up the enchantment in the cache.
+     * </p>
      */
     static public NamespacedKey enchantmentID;
 
     /**
-     * Namespace keys for NBT tags
+     * Namespace key for storing enchantment arguments in item NBT tags.
+     * <p>
+     * Stores optional enchantment-specific configuration arguments as a string (e.g., PORTUS destination coordinates).
+     * </p>
      */
     static public NamespacedKey enchantmentArgs;
 
     /**
-     * Lookup of known enchanted items to speed up handlers
+     * Cache of enchantment objects indexed by their unique ID.
+     * <p>
+     * Maps enchantment IDs to their corresponding Enchantment instances for fast lookup during event handling.
+     * This avoids recreating Enchantment objects on every item interaction.
+     * </p>
      */
     private final HashMap<String, Enchantment> enchantedItems = new HashMap<>();
 
     /**
-     * Enchantment related config
+     * Whether broomstick items are enabled in the plugin configuration
      */
     private static boolean enableBrooms;
 
     /**
-     * Constructor
+     * Constructor for creating a new EnchantedItems manager.
+     * <p>
+     * Initializes the enchantment system and sets up the NamespacedKey instances used to store
+     * enchantment metadata in item NBT tags. The keys use the plugin as their namespace to avoid
+     * conflicts with other plugins.
+     * </p>
      *
-     * @param plugin a callback to the plugin
+     * @param plugin the Ollivanders2 plugin instance providing access to configuration and logging
      */
     public EnchantedItems(@NotNull Ollivanders2 plugin) {
         p = plugin;
@@ -89,24 +128,30 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Initialization steps to run when the plugin is enabled
+     * Initialize enchantment configuration when the plugin is enabled.
+     * <p>
+     * Loads configuration settings from the plugin's config file, such as whether broomstick
+     * items should be enabled. This method is called once during plugin startup.
+     * </p>
      */
     public void onEnable() {
-        //
-        // brooms
-        //
         enableBrooms = p.getConfig().getBoolean("enableBrooms");
         if (enableBrooms)
             p.getLogger().info("Enabling brooms.");
     }
 
     /**
-     * Add enchanted item
+     * Apply an enchantment to an Item entity in the world.
+     * <p>
+     * This convenience method applies an enchantment to a dropped Item entity by delegating to
+     * {@link #addEnchantedItem(ItemStack, ItemEnchantmentType, int, String, String)} using the
+     * item's unique ID as the enchantment ID.
+     * </p>
      *
-     * @param item      the enchanted item
-     * @param eType     the type of enchantment
-     * @param magnitude the magnitude of enchantment
-     * @param args      optional arguments for this enchantment
+     * @param item      the item entity to enchant
+     * @param eType     the type of enchantment to apply
+     * @param magnitude the power level of the enchantment (1+)
+     * @param args      optional enchantment-specific arguments (null if not needed)
      */
     public void addEnchantedItem(@NotNull Item item, @NotNull ItemEnchantmentType eType, int magnitude, @Nullable String args) {
         ItemMeta itemMeta = item.getItemStack().getItemMeta();
@@ -119,13 +164,25 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Add enchanted item
+     * Apply an enchantment to an ItemStack and register it in the enchantment cache.
+     * <p>
+     * This method:
+     * <ul>
+     * <li>Stores enchantment metadata (type, magnitude, ID, args) as NBT tags in the item's metadata</li>
+     * <li>Creates an Enchantment object from the enchantment type and caches it by ID</li>
+     * <li>Adds custom lore to the item if the enchantment has associated text</li>
+     * </ul>
+     * </p>
+     * <p>
+     * The enchantment ID uniquely identifies this enchanted item instance and is used for efficient
+     * lookup during event handling. It should typically be a UUID or unique identifier.
+     * </p>
      *
-     * @param itemStack the enchanted item
-     * @param eType     the type of enchantment
-     * @param magnitude the magnitude of enchantment
-     * @param eid       the uniqueID for this enchantment
-     * @param args      optional arguments for this enchantment
+     * @param itemStack the ItemStack to enchant
+     * @param eType     the type of enchantment to apply
+     * @param magnitude the power level of the enchantment (1+)
+     * @param eid       the unique identifier for this enchantment instance
+     * @param args      optional enchantment-specific arguments (null if not needed)
      */
     public void addEnchantedItem(@NotNull ItemStack itemStack, @NotNull ItemEnchantmentType eType, int magnitude, @NotNull String eid, @Nullable String args) {
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -148,13 +205,16 @@ public class EnchantedItems implements Listener {
 
         // optional lore for the item such as for a broom or floo powder
         if (enchantment.lore != null) {
-            List<String> lore = itemMeta.getLore();
-            if (lore == null) {
-                lore = new ArrayList<>();
+            itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null) {
+                List<String> lore = itemMeta.getLore();
+                if (lore == null) {
+                    lore = new ArrayList<>();
+                }
+                lore.add(enchantment.lore);
+                itemMeta.setLore(lore);
+                itemStack.setItemMeta(itemMeta);
             }
-            lore.add(enchantment.lore);
-            itemMeta.setLore(lore);
-            itemStack.setItemMeta(itemMeta);
         }
 
         // store these in a hashmap for faster access later
@@ -164,20 +224,24 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Determine if an item stack is enchanted.
+     * Check if an Item entity has an enchantment applied.
      *
-     * @param item the item to check
-     * @return true if the item stack has the NBT tag, false otherwise
+     * @param item the item entity to check
+     * @return true if the item has enchantment NBT tags, false otherwise
      */
     public boolean isEnchanted(@NotNull Item item) {
         return isEnchanted(item.getItemStack());
     }
 
     /**
-     * Determine if an item stack is enchanted.
+     * Check if an ItemStack has an enchantment applied.
+     * <p>
+     * Examines the item's NBT metadata to determine if any enchantment has been applied.
+     * This is a quick check that doesn't require creating an Enchantment object.
+     * </p>
      *
-     * @param itemStack the item to check
-     * @return true if the item stack has the NBT tag, false otherwise
+     * @param itemStack the ItemStack to check
+     * @return true if the ItemStack has enchantment NBT tags, false otherwise
      */
     public boolean isEnchanted(@NotNull ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
@@ -189,20 +253,27 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Is this item cursed
+     * Check if an Item entity is cursed.
+     * <p>
+     * A cursed item has an enchantment that is marked as a curse (harmful magical effect).
+     * </p>
      *
-     * @param item the item to check
-     * @return true if it is cursed, false otherwise
+     * @param item the item entity to check
+     * @return true if the item is cursed, false otherwise
      */
     public boolean isCursed(@NotNull Item item) {
         return isCursed(item.getItemStack());
     }
 
     /**
-     * Is this item stack cursed
+     * Check if an ItemStack is cursed.
+     * <p>
+     * A cursed item has an enchantment that is marked as a curse (harmful magical effect).
+     * Examples: GEMINO (duplication), FLAGRANTE (burning).
+     * </p>
      *
-     * @param itemStack the item stack to check
-     * @return true if cursed, false otherwise
+     * @param itemStack the ItemStack to check
+     * @return true if the ItemStack is cursed, false otherwise
      */
     public boolean isCursed(@NotNull ItemStack itemStack) {
         if (!isEnchanted(itemStack))
@@ -217,39 +288,42 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Is this item cursed - level based check. If the curse is too high a level, this check will return false even if
-     * there is a curse.
+     * Check if an Item is cursed and if the curse can be detected by the given magic level.
+     * <p>
+     * This method determines not only if an item is cursed, but also whether the detecting spell or
+     * person is powerful enough to recognize the curse. Curses that are too high-level will not be
+     * detected by lower-level detection spells.
+     * </p>
+     * <p>
+     * Detection succeeds if: curse_level &lt;= detection_level + 1
+     * </p>
      *
-     * @param item  the item to check
-     * @param level the level of the spell or person doing the checking
-     * @return true if it is cursed and the level of the enchantment is less than or equal to level + 1, false otherwise
+     * @param item  the item to check for curses
+     * @param level the magic level attempting to detect the curse
+     * @return true if the item is cursed AND the curse level is detectable by the given level, false otherwise
      */
     public boolean isCursedLevelBased(@NotNull Item item, @NotNull MagicLevel level) {
-        boolean cursed = isCursed(item);
+        // if an item is not cursed, always return false regardless of level
+        if (!isCursed(item))
+            return false;
 
-        if (cursed) {
-            // it is cursed, but can they tell based on the level of the spell checking for it?
-            ItemEnchantmentType enchantmentType = getEnchantmentType(item.getItemStack());
+        ItemEnchantmentType enchantmentType = getEnchantmentType(item.getItemStack());
+        if (enchantmentType == null) // this should never happen because isCursed would have been false, this is to make the linter happy
+            return false;
 
-            if (enchantmentType == null)
-                return false;
-
-            // ignore npe warning, if it is cursed then enchantmentType cannot be null
-            if (enchantmentType.getLevel().ordinal() <= (level.ordinal() + 1)) {
-                return false;
-            }
-            else
-                return true;
-        }
-
-        return false;
+        // Can they detect this curse? Return true if curse level is not too high
+        return enchantmentType.getLevel().ordinal() <= (level.ordinal() + 1);
     }
 
     /**
-     * Get the enchantment key for this item
+     * Get the enchantment type string from an ItemStack's NBT tags.
+     * <p>
+     * Returns the string name of the enchantment type (e.g., "GEMINO", "VOLATUS", "PORTUS") without
+     * parsing it into an enum. Useful for quick checks or for storing the type.
+     * </p>
      *
-     * @param itemStack the item stack to get the key from
-     * @return the key if present, null otherwise
+     * @param itemStack the ItemStack to retrieve the enchantment type from
+     * @return the enchantment type string if present, null if item is not enchanted
      */
     @Nullable
     public String getEnchantmentTypeKey(@NotNull ItemStack itemStack) {
@@ -258,18 +332,20 @@ public class EnchantedItems implements Listener {
             return null;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if (container.has(enchantmentType, PersistentDataType.STRING)) {
-            return container.get(enchantmentType, PersistentDataType.STRING);
-        }
-        else
-            return null;
+        return container.has(enchantmentType, PersistentDataType.STRING) ?
+            container.get(enchantmentType, PersistentDataType.STRING) : null;
     }
 
     /**
-     * Get the enchantment type for this item
+     * Get the enchantment type enum from an ItemStack.
+     * <p>
+     * Retrieves and parses the enchantment type from the item's NBT tags, returning the corresponding
+     * {@link ItemEnchantmentType} enum value. Returns null if the item is not enchanted or if the
+     * stored type string is invalid.
+     * </p>
      *
-     * @param itemStack the item stack to get the key from
-     * @return the enchantment type if present, null otherwise
+     * @param itemStack the ItemStack to retrieve the enchantment type from
+     * @return the ItemEnchantmentType enum if present and valid, null otherwise
      */
     @Nullable
     public ItemEnchantmentType getEnchantmentType(@NotNull ItemStack itemStack) {
@@ -289,10 +365,29 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Get the enchantment id for this item
+     * Get the unique ID of an enchantment from an Item entity.
+     * <p>
+     * This convenience method retrieves the enchantment ID from a dropped Item entity by delegating to
+     * {@link #getEnchantmentID(ItemStack)}.
+     * </p>
      *
-     * @param itemStack the item stack to get the key from
-     * @return the id if present, null otherwise
+     * @param item the item entity to retrieve the enchantment ID from
+     * @return the unique enchantment ID if present, null if item is not enchanted
+     */
+    @Nullable
+    public String getEnchantmentID(@NotNull Item item) {
+        return getEnchantmentID(item.getItemStack());
+    }
+
+    /**
+     * Get the unique ID of an enchantment from an ItemStack.
+     * <p>
+     * Each enchanted item has a unique ID that is used to look up the cached Enchantment object.
+     * This ID is typically a UUID string that uniquely identifies this specific enchantment instance.
+     * </p>
+     *
+     * @param itemStack the ItemStack to retrieve the enchantment ID from
+     * @return the unique enchantment ID if present, null if item is not enchanted
      */
     @Nullable
     public String getEnchantmentID(@NotNull ItemStack itemStack) {
@@ -301,36 +396,41 @@ public class EnchantedItems implements Listener {
             return null;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if (container.has(enchantmentID, PersistentDataType.STRING))
-            return container.get(enchantmentID, PersistentDataType.STRING);
-        else
-            return null;
+        return container.has(enchantmentID, PersistentDataType.STRING) ?
+            container.get(enchantmentID, PersistentDataType.STRING) : null;
     }
 
     /**
-     * Get the enchantment magnitude for this item
+     * Get the enchantment magnitude from an ItemStack.
+     * <p>
+     * Magnitude represents the power level of the enchantment (1+ for valid enchantments).
+     * </p>
      *
-     * @param itemStack the item stack to get the key from
-     * @return the id if present, -1 otherwise
+     * @param itemStack the ItemStack to retrieve the enchantment magnitude from
+     * @return the magnitude (1+) if the item is enchanted, null otherwise
      */
     @Nullable
     public Integer getEnchantmentMagnitude(@NotNull ItemStack itemStack) {
         ItemMeta itemMeta = itemStack.getItemMeta();
         if (itemMeta == null)
-            return -1;
+            return null;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
         if (container.has(enchantmentMagnitude, PersistentDataType.INTEGER))
             return container.get(enchantmentMagnitude, PersistentDataType.INTEGER);
         else
-            return -1;
+            return null;
     }
 
     /**
-     * Get the enchantment args for this item
+     * Get the optional arguments for an enchantment from an ItemStack.
+     * <p>
+     * Enchantments can have optional configuration arguments that customize their behavior.
+     * For example, PORTUS portkey enchantments use args to store the destination coordinates.
+     * </p>
      *
-     * @param itemStack the item stack to get the key from
-     * @return the args if present, null otherwise
+     * @param itemStack the ItemStack to retrieve the enchantment arguments from
+     * @return the enchantment arguments string if present, null if item is not enchanted or has no args
      */
     @Nullable
     public String getEnchantmentArgs(@NotNull ItemStack itemStack) {
@@ -339,18 +439,23 @@ public class EnchantedItems implements Listener {
             return null;
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
-        if (container.has(enchantmentArgs, PersistentDataType.STRING)) {
-            return container.get(enchantmentArgs, PersistentDataType.STRING);
-        }
-        else
-            return null;
+        return container.has(enchantmentArgs, PersistentDataType.STRING) ?
+            container.get(enchantmentArgs, PersistentDataType.STRING) : null;
     }
 
     /**
-     * Get the enchantment object for this enchanted item
+     * Get the Enchantment object for an ItemStack.
+     * <p>
+     * Looks up the Enchantment in the cache by ID, or creates a new one from NBT tags if not cached.
+     * This method is the primary way to retrieve an Enchantment object that can handle item events.
+     * </p>
+     * <p>
+     * Creation from NBT is used when an enchanted item is first loaded (e.g., from a player's inventory
+     * on login), allowing enchantments to be persistent across server restarts.
+     * </p>
      *
-     * @param itemStack the enchanted item
-     * @return the Enchantment if enchantment NBT tags are present, null otherwise
+     * @param itemStack the ItemStack to retrieve the enchantment from
+     * @return the Enchantment object if the item is enchanted, null if not enchanted or invalid
      */
     @Nullable
     public Enchantment getEnchantment(@NotNull ItemStack itemStack) {
@@ -384,12 +489,21 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Create the enchantment object for an enchanted item
+     * Create an Enchantment object from type, magnitude, and arguments.
+     * <p>
+     * Uses reflection to instantiate the correct Enchantment subclass for the given type.
+     * Returns null if the type is invalid, magnitude is less than 1, or the subclass cannot
+     * be instantiated.
+     * </p>
+     * <p>
+     * This is typically called when an enchanted item is loaded from NBT data for the first time,
+     * or when creating enchantments on-the-fly.
+     * </p>
      *
-     * @param eType     the type of enchantment
-     * @param magnitude the magnitude of the enchantment
-     * @param args      optional arguments for the enchantment
-     * @return the enchantment if type and magnitude were valid, null otherwise
+     * @param eType     the enchantment type string (e.g., "GEMINO", "VOLATUS")
+     * @param magnitude the power level of the enchantment (must be 1 or greater)
+     * @param args      optional enchantment-specific configuration arguments
+     * @return the created Enchantment object if valid, null if type is invalid or instantiation fails
      */
     @Nullable
     public Enchantment createEnchantment(@NotNull String eType, @NotNull Integer magnitude, @Nullable String args) {
@@ -420,32 +534,77 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Remove the enchantment from an item
+     * Remove an enchantment from an Item entity.
+     * <p>
+     * This convenience method removes the enchantment from an Item entity by delegating to
+     * {@link #removeEnchantment(ItemStack)}. Also removes the enchantment from the cache.
+     * </p>
      *
-     * @param item the item to remove the enchantment from
-     * @return the itemStack with the enchantment removed
+     * @param enchantedItem the enchanted item entity to remove the enchantment from
+     * @return the ItemStack with the enchantment removed
      */
-    public ItemStack removeEnchantment(@NotNull Item item) {
-        ItemStack itemStack = item.getItemStack();
-        if (!isEnchanted(item))
-            return itemStack;
+    @NotNull
+    public ItemStack removeEnchantment(@NotNull Item enchantedItem) {
+        return removeEnchantment(enchantedItem.getItemStack());
+    }
 
-        String eid = getEnchantmentID(itemStack);
+    /**
+     * Remove an enchantment from an ItemStack completely.
+     * <p>
+     * This method:
+     * <ul>
+     * <li>Removes the Enchantment object from the cache</li>
+     * <li>Removes all enchantment NBT tags from the item's metadata</li>
+     * </ul>
+     * </p>
+     * <p>
+     * Use this to completely disenchant an item. For simply removing NBT tags without touching the
+     * cache, use {@link #removeEnchantmentNBT(ItemStack)} instead.
+     * </p>
+     *
+     * @param enchantedItemStack the ItemStack to remove the enchantment from
+     * @return the ItemStack with the enchantment removed
+     */
+    @NotNull
+    public ItemStack removeEnchantment(@NotNull ItemStack enchantedItemStack) {
+        if (!isEnchanted(enchantedItemStack)) {
+            common.printDebugMessage("EnchantedItems.removeEnchantment: itemStack not enchanted", null, null, false);
+            return enchantedItemStack;
+        }
+
+        String eid = getEnchantmentID(enchantedItemStack);
         if (eid != null)
             enchantedItems.remove(eid);
         else {
             common.printDebugMessage("EnchantedItems.removeEnchantment: eid is null", null, null, true);
-            return itemStack;
         }
 
-        // create a new item stack for the disenchanted item
-        ItemStack disenchantedItemStack = itemStack.clone();
+        // return the disenchanted enchantedItemStack
+        return removeEnchantmentNBT(enchantedItemStack);
+    }
 
-        // remove the enchantment NTB tags
+    /**
+     * Remove enchantment NBT tags from an ItemStack without affecting the cache.
+     * <p>
+     * This method strips all enchantment metadata from an item without removing the Enchantment object
+     * from the cache. Use this for creating unenchanted copies of enchanted items, such as GEMINO
+     * duplicates that should not trigger further duplication.
+     * </p>
+     * <p>
+     * For complete enchantment removal (both cache and NBT), use {@link #removeEnchantment(ItemStack)} instead.
+     * </p>
+     *
+     * @param enchantedItemStack the ItemStack with enchantment NBT tags to remove
+     * @return a new ItemStack with all enchantment NBT tags removed
+     */
+    public static ItemStack removeEnchantmentNBT(ItemStack enchantedItemStack) {
+        Ollivanders2API.common.printDebugMessage("EnchantedItem.removeEnchantmentNBT: cleaning NBT tags", null, null, false);
+        ItemStack disenchantedItemStack = enchantedItemStack.clone();
+
+        // remove the enchantment NBT tags
         ItemMeta itemMeta = disenchantedItemStack.getItemMeta();
         if (itemMeta == null) {
-            common.printDebugMessage("EnchantedItems.removeEnchantment: item meta is null", null, null, true);
-            return itemStack;
+            return enchantedItemStack;
         }
 
         PersistentDataContainer container = itemMeta.getPersistentDataContainer();
@@ -454,15 +613,20 @@ public class EnchantedItems implements Listener {
         container.remove(enchantmentID);
         container.remove(enchantmentArgs);
 
-        // set the item meta on the disenchanted item
+        // set the enchantedItemStack meta on the disenchanted enchantedItemStack
         disenchantedItemStack.setItemMeta(itemMeta);
 
-        // return the disenchanted item
+        // return the disenchanted enchantedItemStack
         return disenchantedItemStack;
     }
 
     /**
-     * Handle enchanted items despawning.
+     * Handle item despawn events for enchanted items.
+     * <p>
+     * When an enchanted item is about to despawn (due to inactivity timeout), this handler
+     * prevents the despawn by cancelling the event and setting unlimited lifetime.
+     * Enchanted items are too valuable to be lost to despawning.
+     * </p>
      *
      * @param event the item despawn event
      */
@@ -483,9 +647,14 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Handle when an enchanted item is picked up.
+     * Handle entity pickup events for enchanted items.
+     * <p>
+     * When a player or entity picks up an enchanted item, this handler retrieves the corresponding
+     * Enchantment object and delegates to its {@link Enchantment#doEntityPickupItem(EntityPickupItemEvent)}
+     * method to trigger the enchantment's pickup effect.
+     * </p>
      *
-     * @param event the item pickup event
+     * @param event the entity item pickup event
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onEntityPickupItem(@NotNull EntityPickupItemEvent event) {
@@ -503,9 +672,14 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Handle when an enchanted item is picked up by an inventory.
+     * Handle inventory pickup events for enchanted items.
+     * <p>
+     * When a hopper or other block-based inventory attempts to pick up an enchanted item, this handler
+     * retrieves the Enchantment and delegates to its {@link Enchantment#doInventoryPickupItem(InventoryPickupItemEvent)}
+     * method. Most enchantments prevent hoppers from picking up items to protect them from automated systems.
+     * </p>
      *
-     * @param event the item pickup event
+     * @param event the inventory item pickup event
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onInventoryItemPickup(@NotNull InventoryPickupItemEvent event) {
@@ -523,9 +697,13 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Handle when an enchanted item is dropped.
+     * Handle item drop events for enchanted items.
+     * <p>
+     * When a player drops an enchanted item, this handler retrieves the Enchantment and delegates to
+     * its {@link Enchantment#doItemDrop(PlayerDropItemEvent)} method to trigger any drop-related effects.
+     * </p>
      *
-     * @param event the item drop event
+     * @param event the player item drop event
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onItemDrop(@NotNull PlayerDropItemEvent event) {
@@ -543,9 +721,15 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Handle when an enchanted item is held.
+     * Handle item held events (hotbar slot changes) for enchanted items.
+     * <p>
+     * When a player changes which item slot is active in their hotbar, this handler checks both
+     * the newly held item and the previously held item. If either contains an enchantment, the
+     * Enchantment's {@link Enchantment#doItemHeld(PlayerItemHeldEvent)} method is called to trigger
+     * any hold-related effects (e.g., toggling broom flight).
+     * </p>
      *
-     * @param event the player item held event
+     * @param event the player item held event (slot change event)
      */
     @EventHandler(priority = EventPriority.LOWEST)
     public void onItemHeld(@NotNull PlayerItemHeldEvent event) {
@@ -570,9 +754,14 @@ public class EnchantedItems implements Listener {
     }
 
     /**
-     * Are brooms currently enabled
+     * Check if broomstick enchantments are enabled in the plugin configuration.
+     * <p>
+     * Broomstick items (using VOLATUS enchantments) are optional and can be disabled via the
+     * plugin config. This method provides a quick way to check if they are enabled before
+     * triggering broom-related effects.
+     * </p>
      *
-     * @return true if they are, false otherwise
+     * @return true if broomstick enchantments are enabled, false otherwise
      */
     public static boolean areBroomsEnabled() {
         return enableBrooms;

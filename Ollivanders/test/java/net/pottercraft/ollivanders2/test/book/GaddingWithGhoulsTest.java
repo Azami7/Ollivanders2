@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class GaddingWithGhoulsTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new GADDING_WITH_GHOULS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

@@ -40,6 +40,7 @@ public class WeaknessTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - WEAKNESS effects cannot be permanent
      * @return a new WEAKNESS effect targeting the test player
      */
+    @Override
     WEAKNESS createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new WEAKNESS(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

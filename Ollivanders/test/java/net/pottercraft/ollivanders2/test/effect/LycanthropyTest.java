@@ -48,6 +48,7 @@ public class LycanthropyTest extends PermanentEffectTestSuper {
      * @param isPermanent     ignored - lycanthropy is always permanent
      * @return a new LYCANTHROPY effect targeting the specified player
      */
+    @Override
     LYCANTHROPY createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new LYCANTHROPY(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

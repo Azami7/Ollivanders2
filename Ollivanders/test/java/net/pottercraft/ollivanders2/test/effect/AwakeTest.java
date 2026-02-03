@@ -41,6 +41,7 @@ public class AwakeTest extends EffectTestSuper {
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return a new AWAKE effect targeting the specified player
      */
+    @Override
     AWAKE createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new AWAKE(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -122,6 +123,7 @@ public class AwakeTest extends EffectTestSuper {
      * <p>Executes the bed enter event test to verify that the effect correctly intercepts
      * and cancels attempts by affected players to enter beds.</p>
      */
+    @Override
     void eventHandlerTests() {
         doOnPlayerBedEnterEventTest();
     }

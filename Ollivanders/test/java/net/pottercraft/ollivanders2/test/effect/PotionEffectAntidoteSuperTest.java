@@ -8,7 +8,6 @@ import net.pottercraft.ollivanders2.effect.PotionEffectSuper;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -49,6 +48,7 @@ abstract public class PotionEffectAntidoteSuperTest extends NotPermanentEffectTe
      * <li>Verify unrelated effect is not affected by the antidote</li>
      * </ol>
      */
+    @Override
     void checkEffectTest() {
         Player target = mockServer.addPlayer();
 

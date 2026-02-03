@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class YearWithAYetiTest extends  BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new YEAR_WITH_A_YETI(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

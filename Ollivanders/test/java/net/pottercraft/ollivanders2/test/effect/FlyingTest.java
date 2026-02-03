@@ -1,6 +1,5 @@
 package net.pottercraft.ollivanders2.test.effect;
 
-import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.effect.FLYING;
 import org.bukkit.entity.Player;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
@@ -39,6 +38,7 @@ public class FlyingTest extends EffectTestSuper {
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return a new FLYING effect targeting the specified player
      */
+    @Override
     FLYING createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new FLYING(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -46,6 +46,7 @@ public class FlyingTest extends EffectTestSuper {
     /**
      * Flying effect check. There is no way with MockBukkit to test for spawned particles so we cannot test that part.
      */
+    @Override
     void checkEffectTest() {
         PlayerMock target = mockServer.addPlayer();
         FLYING flying = (FLYING) addEffect(target, 100, false);
@@ -68,12 +69,14 @@ public class FlyingTest extends EffectTestSuper {
     /**
      * FLYING effect does not handle events.
      */
+    @Override
     void eventHandlerTests() {
     }
 
     /**
      * Tests for the doRemove() cleanup. checkEffectTest() already does this for non-admins so this test just needs to test for admins.
      */
+    @Override
     void doRemoveTest() {
         // make an admin
         PlayerMock admin = mockServer.addPlayer();

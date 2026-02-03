@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class TheHealersHelpmateTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new THE_HEALERS_HELPMATE(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

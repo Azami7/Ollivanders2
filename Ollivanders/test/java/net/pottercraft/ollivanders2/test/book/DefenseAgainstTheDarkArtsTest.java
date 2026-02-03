@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class DefenseAgainstTheDarkArtsTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new DEFENSE_AGAINST_THE_DARK_ARTS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

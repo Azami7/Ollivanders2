@@ -40,6 +40,7 @@ public class NightVisionTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - NIGHT_VISION effects cannot be permanent
      * @return a new NIGHT_VISION effect targeting the test player
      */
+    @Override
     NIGHT_VISION createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new NIGHT_VISION(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

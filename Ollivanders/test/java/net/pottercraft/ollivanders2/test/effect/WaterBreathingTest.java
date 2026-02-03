@@ -40,6 +40,7 @@ public class WaterBreathingTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - WATER_BREATHING effects cannot be permanent
      * @return a new WATER_BREATHING effect targeting the test player
      */
+    @Override
     WATER_BREATHING createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new WATER_BREATHING(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

@@ -23,6 +23,7 @@ public class AwakeAntidoteLesserTest extends O2EffectAntidoteSuperTest {
      * @param isPermanent     whether the antidote is permanent
      * @return a new AWAKE_ANTIDOTE_LESSER effect targeting the specified player
      */
+    @Override
     AWAKE_ANTIDOTE_LESSER createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new AWAKE_ANTIDOTE_LESSER(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -37,6 +38,7 @@ public class AwakeAntidoteLesserTest extends O2EffectAntidoteSuperTest {
      * @param duration the duration of the target effect in ticks
      * @return the created AWAKE effect
      */
+    @Override
     O2Effect addEffectToTarget(Player target, int duration) {
         return new AWAKE(testPlugin, duration, false, target.getUniqueId());
     }

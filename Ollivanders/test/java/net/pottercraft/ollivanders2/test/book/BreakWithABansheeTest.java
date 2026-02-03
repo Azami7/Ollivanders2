@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class BreakWithABansheeTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new BREAK_WITH_A_BANSHEE(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

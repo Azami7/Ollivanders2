@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class EssentialDarkArtsTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new ESSENTIAL_DARK_ARTS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

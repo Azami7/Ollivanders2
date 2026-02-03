@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class HarmoniousConnectionsTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new HARMONIOUS_CONNECTIONS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class JinxesForTheJinxedTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new JINXES_FOR_THE_JINXED(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

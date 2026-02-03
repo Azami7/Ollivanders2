@@ -40,6 +40,7 @@ public class SpeedTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - SPEED effects cannot be permanent
      * @return a new SPEED effect targeting the test player
      */
+    @Override
     SPEED createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new SPEED(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

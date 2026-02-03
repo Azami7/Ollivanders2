@@ -29,7 +29,7 @@ public class AggressionTest extends PermanentEffectTestSuper {
      * <p>Creates a permanent AGGRESSION effect. The isPermanent parameter is ignored as
      * AGGRESSION effects are always permanent by design.</p>
      *
-     * @param target
+     * @param target the player to be affected by AGGRESSION
      * @param durationInTicks the duration parameter (unused for permanent effects)
      * @param isPermanent     ignored; AGGRESSION effects are always permanent
      * @return the newly created AGGRESSION effect instance
@@ -88,5 +88,6 @@ public class AggressionTest extends PermanentEffectTestSuper {
     /**
      * Aggression has no event handlers
      */
+    @Override
     void eventHandlerTests() {}
 }

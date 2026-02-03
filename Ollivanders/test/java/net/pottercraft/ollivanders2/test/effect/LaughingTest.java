@@ -25,6 +25,7 @@ public class LaughingTest extends BabblingTest {
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return a new LAUGHING effect targeting the specified player
      */
+    @Override
     LAUGHING createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new LAUGHING(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

@@ -40,6 +40,7 @@ public class HungerTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - HUNGER effects cannot be permanent
      * @return a new HUNGER effect targeting the test player
      */
+    @Override
     HUNGER createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new HUNGER(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

@@ -40,6 +40,7 @@ public class HarmTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - HARM effects cannot be permanent
      * @return a new HARM effect targeting the test player
      */
+    @Override
     HARM createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new HARM(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

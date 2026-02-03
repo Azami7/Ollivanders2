@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.item.enchantment;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.bukkit.event.entity.EntityPickupItemEvent;
-import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -10,65 +9,89 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Hides the text on a book or sign.
- * {@link net.pottercraft.ollivanders2.spell.CELATUM}
+ * The concealment charm - used to hide secret messages in books.
+ * <p>
+ * Enchantment behavior:
+ * <ul>
+ * <li>Player pickup: no special behavior, players can pick up celatum items normally</li>
+ * <li>Hopper pickup: blocked, hoppers cannot collect celatum-enchanted items</li>
+ * <li>Drop events: no special behavior, items can be dropped normally</li>
+ * <li>Slot switching: no special behavior, celatum status is independent of player actions</li>
+ * </ul>
+ * </p>
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Revealing_Charm">https://harrypotter.fandom.com/wiki/Revealing_Charm</a>
+ * @see net.pottercraft.ollivanders2.spell.CELATUM the spell that casts this enchantment
+ * @see <a href="https://harrypotter.fandom.com/wiki/Revealing_Charm">https://harrypotter.fandom.com/wiki/Revealing_Charm</a>
  */
 public class CELATUM extends Enchantment {
     /**
-     * Constructor
+     * Constructor for creating a CELATUM enchantment instance.
      *
-     * @param plugin   a callback to the plugin
-     * @param mag      the magnitude of this enchantment
-     * @param args     optional arguments for this enchantment
-     * @param itemLore the optional lore for this enchantment
+     * @param plugin   the Ollivanders2 plugin instance
+     * @param mag      the magnitude (power level) of this enchantment
+     * @param args     optional configuration arguments specific to this enchantment instance
+     * @param itemLore optional custom lore to display on the enchanted item
      */
     public CELATUM(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore) {
         super(plugin, mag, args, itemLore);
         enchantmentType = ItemEnchantmentType.CELATUM;
+
+        if (args == null)
+            common.printDebugMessage("CELATUM enchantment created with null arguments", null, null, true);
     }
 
     /**
-     * Do not allow flagrante items to be despawned
+     * No special handling for player item pickup events.
+     * <p>
+     * CELATUM enchantments do not respond to players picking up items. Players can freely pick up
+     * celatum-enchanted items without any restrictions or special effects. The enchantment only
+     * affects whether hoppers and other block inventories can collect the items.
+     * </p>
      *
-     * @param event the item despawn event
-     */
-    public void doItemDespawn(@NotNull ItemDespawnEvent event) {
-        event.setCancelled(true);
-    }
-
-    /**
-     * Handle item pickup events
-     *
-     * @param event the item pickup event
+     * @param event the entity item pickup event (not used)
      */
     @Override
     public void doEntityPickupItem(@NotNull EntityPickupItemEvent event) {
     }
 
     /**
-     * Handle item pickup events
+     * Prevent hoppers and block inventories from picking up celatum-enchanted items.
+     * <p>
+     * Celatum-enchanted items cannot be picked up by hoppers or other automated inventory systems.
+     * This prevents the items from being automatically collected, allowing them to persist in
+     * specific world locations without being moved into storage systems.
+     * </p>
      *
-     * @param event the item pickup event
+     * @param event the inventory pickup item event
      */
+    @Override
     public void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event) {
         event.setCancelled(true);
     }
 
     /**
-     * Flagrante effect the player as soon as the item enters their inventory so we do not need to check for held
+     * No special handling for item held events.
+     * <p>
+     * CELATUM enchantments do not respond to players switching between hotbar slots. The enchantment's
+     * concealment behavior is independent of what the player is currently holding and applies to
+     * the item at all times.
+     * </p>
      *
-     * @param event the item drop event
+     * @param event the player item held event (not used)
      */
     @Override
     public void doItemHeld(@NotNull PlayerItemHeldEvent event) {
     }
 
     /**
-     * A flagrante-cursed item was either held or stopped being held - check to see if the player is still holding at least 1 flagrante item
+     * No special handling for item drop events.
+     * <p>
+     * CELATUM enchantments do not respond to players dropping items. The enchantment's concealment
+     * behavior applies to the item whether it's in a player's inventory or dropped in the world.
+     * Items can be dropped freely without any restrictions.
+     * </p>
      *
-     * @param event the item drop event
+     * @param event the player drop item event (not used)
      */
     @Override
     public void doItemDrop(@NotNull PlayerDropItemEvent event) {

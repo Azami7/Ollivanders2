@@ -45,6 +45,7 @@ public class TicklingTest extends EffectTestSuper {
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return a new TICKLING effect targeting the specified player
      */
+    @Override
     TICKLING createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new TICKLING(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

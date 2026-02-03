@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class StandardBookOfSpellsGrade5Test extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new STANDARD_BOOK_OF_SPELLS_GRADE_5(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

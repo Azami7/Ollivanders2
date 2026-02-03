@@ -40,6 +40,7 @@ public class HealTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - HEAL effects cannot be permanent
      * @return a new HEAL effect targeting the test player
      */
+    @Override
     HEAL createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new HEAL(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
