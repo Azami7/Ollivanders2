@@ -31,6 +31,7 @@ public class SleepSpeechTest extends BabblingTest {
      * @param isPermanent     ignored; SLEEP_SPEECH effects are always permanent
      * @return the newly created SLEEP_SPEECH effect instance
      */
+    @Override
     SLEEP_SPEECH createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new SLEEP_SPEECH(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -38,6 +39,7 @@ public class SleepSpeechTest extends BabblingTest {
     /**
      * checkEffect() does nothing in SLEEP_SPEECH
      */
+    @Override
     void checkEffectTest() {}
 
     /**

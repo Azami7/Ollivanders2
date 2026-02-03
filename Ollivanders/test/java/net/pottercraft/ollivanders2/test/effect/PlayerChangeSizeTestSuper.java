@@ -15,6 +15,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -52,6 +53,22 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
     @Override
     abstract PlayerChangeSizeSuper createEffect(Player target, int durationInTicks, boolean isPermanent);
 
+    /**
+     * Test that size-changing effects correctly modify a player's scale attribute.
+     * <p>
+     * This test validates the core functionality of size-changing effects (SWELLING, SHRINKING):
+     * <ul>
+     * <li>Creates a player and registers the SCALE attribute (MockBukkit doesn't provide this by default)</li>
+     * <li>Records the original scale (1.0, normal size)</li>
+     * <li>Applies a size-changing effect with a 5-second duration</li>
+     * <li>Advances the server scheduler by 5 ticks to allow the effect's startEffect runnable to execute</li>
+     * <li>Verifies the effect's internal state reflects transformation via {@link PlayerChangeSizeSuper#isTransformed()}</li>
+     * <li>Verifies the player's actual scale attribute changed</li>
+     * <li>Verifies the new scale equals the effect's scale multiplier (when starting from 1.0)</li>
+     * <li>Calls {@link #changeSizeEffectStacking()} to validate stacking behavior with multiple effects</li>
+     * </ul>
+     * </p>
+     */
     @Override
     void checkEffectTest() {
         Ollivanders2.debug = true;
@@ -83,6 +100,26 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
         changeSizeEffectStacking();
     }
 
+    /**
+     * Test that applying multiple size-changing effects causes proper stacking and conflict resolution.
+     * <p>
+     * This test validates how size-changing effects interact when multiple effects are applied to the same player:
+     * <ul>
+     * <li>Creates a player and registers the SCALE attribute</li>
+     * <li>Applies a first size effect and verifies it changes the player's scale</li>
+     * <li>Records the first effect's multiplier and the resulting scale</li>
+     * <li>Applies a second conflicting size effect</li>
+     * <li>Verifies the first effect was automatically removed (killed) when the second was applied</li>
+     * <li>Verifies the new scale equals: first_effect_scale × second_effect_multiplier (clamped to [0.25, 4.0])</li>
+     * <li>Confirms the second effect is now active with its multiplier applied</li>
+     * </ul>
+     * </p>
+     * <p>
+     * Key behavior being tested: When a second size effect is applied, it multiplies against the CURRENT scale
+     * (which already includes the first effect's change), not the original 1.0 scale. This allows for multiplicative
+     * stacking. Conflicting size effects automatically remove the old effect to prevent overlapping transformations.
+     * </p>
+     */
     void changeSizeEffectStacking() {
         // Test: Applying a new size effect should remove any existing size effect
         // The second effect's multiplier is applied to the CURRENT scale (which includes the first effect's change)
@@ -95,6 +132,7 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
 
         // Verify the first effect applied
         AttributeInstance scaleAttribute = target.getAttribute(Attribute.SCALE);
+        assertNotNull(scaleAttribute);
         double scale1 = scaleAttribute.getBaseValue();
         assertNotEquals(1.0, scale1, "First effect did not change scale");
         double effect1Multiplier = effect1.getScaleMultiplier();
@@ -109,6 +147,7 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
         // Verify the new scale is effect1's scale * effect2's multiplier
         // (since the second effect multiplies the current scale, which was already modified by the first)
         scaleAttribute = target.getAttribute(Attribute.SCALE);
+        assertNotNull(scaleAttribute);
         double expectedScale = scale1 * effect2.getScaleMultiplier();
         // Clamp to [0.25, 4.0] to match the implementation
         if (expectedScale < 0.25) expectedScale = 0.25;
@@ -121,6 +160,27 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
         assertNotEquals(1.0, effect2.getScaleMultiplier(), "Second effect should have a non-default scale multiplier");
     }
 
+    /**
+     * Register the SCALE attribute on a MockBukkit player for testing.
+     * <p>
+     * MockBukkit does not provide the SCALE attribute by default, so this helper method uses reflection
+     * to manually add it to a player's attributes map. This is necessary to test size-changing effects
+     * which depend on modifying the player's scale attribute.
+     * </p>
+     * <p>
+     * Implementation details:
+     * <ul>
+     * <li>Uses reflection to access the private {@code attributes} field in the PlayerMock class hierarchy</li>
+     * <li>Searches up the class hierarchy since the field may be inherited from parent classes</li>
+     * <li>Creates a new AttributeInstanceMock with SCALE attribute and default value of 1.0 (normal size)</li>
+     * <li>Adds the SCALE attribute to the player's attributes map</li>
+     * <li>Prints debug output confirming the attribute was added</li>
+     * <li>Catches and prints any exceptions that occur during reflection</li>
+     * </ul>
+     * </p>
+     *
+     * @param target the MockBukkit player to register the SCALE attribute on
+     */
     void registerScaleAttribute(PlayerMock target) {
         // we need to register the scale attribute since it is not set by default by MockBukkit
         // Directly add SCALE attribute with default value of 1.0
@@ -158,7 +218,12 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
     }
 
     /**
-     * PlayerChangeSizeSuper does not handle effects
+     * No event handler tests for size-changing effects.
+     * <p>
+     * Size-changing effects (SWELLING, SHRINKING) do not respond to player events for triggering
+     * or modifying their behavior. They only respond to being added, removed, and aging over time.
+     * Therefore, this test method is left empty as there are no event-based interactions to test.
+     * </p>
      */
     @Override
     void eventHandlerTests() {}
@@ -180,6 +245,7 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
 
         // Verify the effect changed the player's scale
         AttributeInstance scaleAttribute = target.getAttribute(Attribute.SCALE);
+        assertNotNull(scaleAttribute);
         double changedScale = scaleAttribute.getBaseValue();
         assertNotEquals(1.0, changedScale, "Effect did not change the player's scale");
 
@@ -188,6 +254,7 @@ public abstract class PlayerChangeSizeTestSuper extends EffectTestSuper {
 
         // Verify the player's scale was reset to 1.0
         scaleAttribute = target.getAttribute(Attribute.SCALE);
+        assertNotNull(scaleAttribute);
         assertEquals(1.0, scaleAttribute.getBaseValue(), "Player's scale was not reset to 1.0 when effect was removed");
     }
 }

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class PotionOpusculeTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new POTION_OPUSCULE(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

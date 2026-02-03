@@ -35,11 +35,12 @@ public class BlindnessTest extends PotionEffectSuperTest {
      * <p>Instantiates a new BLINDNESS effect with the specified parameters. This method is called
      * by the inherited test methods to create fresh effect instances for each test scenario.</p>
      *
-     * @param target
+     * @param target the target to be affected by BLINDNESS
      * @param durationInTicks the duration of the effect in game ticks, will be clamped to 2400-6000 ticks
      * @param isPermanent     ignored - BLINDNESS effects cannot be permanent
      * @return a new BLINDNESS effect targeting the test player
      */
+    @Override
     BLINDNESS createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new BLINDNESS(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

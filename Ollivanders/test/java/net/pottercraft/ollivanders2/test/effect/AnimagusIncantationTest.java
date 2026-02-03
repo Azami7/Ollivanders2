@@ -22,6 +22,7 @@ public class AnimagusIncantationTest extends NotPermanentEffectTestSuper {
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return a new ANIMAGUS_INCANTATION effect targeting the specified player
      */
+    @Override
     ANIMAGUS_INCANTATION createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new ANIMAGUS_INCANTATION(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -32,6 +33,7 @@ public class AnimagusIncantationTest extends NotPermanentEffectTestSuper {
      * <p>The ANIMAGUS_INCANTATION effect has no unique behavior to test in checkEffectTest(). Aging and duration
      * management are tested in the base ageAndKillTest() method.</p>
      */
+    @Override
     void checkEffectTest() {
     }
 
@@ -40,6 +42,7 @@ public class AnimagusIncantationTest extends NotPermanentEffectTestSuper {
      *
      * <p>ANIMAGUS_INCANTATION has no event handlers to test.</p>
      */
+    @Override
     void eventHandlerTests() {}
 
     /**
@@ -47,5 +50,6 @@ public class AnimagusIncantationTest extends NotPermanentEffectTestSuper {
      *
      * <p>doRemove for ANIMAGUS_INCANTATION doesn't do anything.</p>
      */
+    @Override
     void doRemoveTest() {}
 }

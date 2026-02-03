@@ -23,6 +23,7 @@ public class BabblingAntidoteLesserTest extends O2EffectAntidoteSuperTest {
      * @param isPermanent     whether the antidote is permanent
      * @return a new BABBLING_ANTIDOTE_LESSER effect targeting the specified player
      */
+    @Override
     BABBLING_ANTIDOTE_LESSER createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new BABBLING_ANTIDOTE_LESSER(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -37,6 +38,7 @@ public class BabblingAntidoteLesserTest extends O2EffectAntidoteSuperTest {
      * @param duration the duration of the target effect in ticks
      * @return the created BABBLING effect
      */
+    @Override
     O2Effect addEffectToTarget(Player target, int duration) {
         return new BABBLING(testPlugin, duration, false, target.getUniqueId());
     }

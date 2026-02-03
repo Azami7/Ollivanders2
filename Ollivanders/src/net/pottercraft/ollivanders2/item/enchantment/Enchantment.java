@@ -14,46 +14,81 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Item enchantment
+ * Abstract base class for all item enchantments.
+ * <p>
+ * Provides a template for enchantment behavior using event handlers for item interactions
+ * (pickup, drop, despawn, item held). Subclasses must implement all abstract event handler methods
+ * and set the {@link #enchantmentType} field to identify the specific enchantment type.
+ * </p>
+ * <p>
+ * Enchantments are defined by their type ({@link ItemEnchantmentType}), magnitude (power level),
+ * optional item lore, and optional arguments for custom behavior.
+ * </p>
  */
 public abstract class Enchantment {
     /**
-     * The type of enchantment
+     * The type of enchantment.
+     * <p>
+     * Defaults to GEMINIO but should be set by subclasses to the appropriate {@link ItemEnchantmentType}.
+     * Determines the enchantment's identity and is used for NBT tag identification and lookup.
+     * </p>
      */
-    ItemEnchantmentType enchantmentType = ItemEnchantmentType.GEMINIO;
+    protected ItemEnchantmentType enchantmentType = ItemEnchantmentType.GEMINO;
 
     /**
-     * A callback to the plugin
+     * A reference to the plugin.
+     * <p>
+     * Provides access to the Ollivanders2 plugin instance for server and logging operations.
+     * </p>
      */
-    Ollivanders2 p;
+    protected Ollivanders2 p;
 
     /**
-     * The magnitude of this enchantment
+     * The power level of this enchantment.
+     * <p>
+     * Represents the magnitude or intensity of the enchantment effect. Higher values typically indicate
+     * stronger or more frequent enchantment behavior.
+     * </p>
      */
-    int magnitude;
+    protected int magnitude;
 
     /**
-     * Optional lore to add to the item for this enchantment, such as for a broom
+     * Optional custom lore to display on the enchanted item.
+     * <p>
+     * Can be used to add descriptive text to the item's lore, such as descriptions for enchanted
+     * broomsticks. Null if no custom lore is needed.
+     * </p>
      */
-    String lore;
+    protected String lore;
 
     /**
-     * Optional arguments for this enchantment
+     * Optional configuration arguments for enchantment behavior.
+     * <p>
+     * Allows enchantments to be configured with custom parameters without requiring subclass changes.
+     * Format and interpretation are enchantment-specific. Null if no arguments are provided.
+     * </p>
      */
-    String args;
+    protected String args;
 
     /**
-     * Common functions
+     * Utility functions for common operations.
+     * <p>
+     * Provides access to shared functionality such as debug logging and random number generation.
+     * </p>
      */
-    Ollivanders2Common common;
+    protected Ollivanders2Common common;
 
     /**
-     * Constructor
+     * Constructor for creating a new enchantment instance.
+     * <p>
+     * Initializes the enchantment with a plugin reference, magnitude, and optional configuration.
+     * Subclasses should call this constructor and set {@link #enchantmentType} to their specific type.
+     * </p>
      *
-     * @param plugin   a callback to the plugin
-     * @param mag      the magnitude of this enchantment
-     * @param args     optional arguments for this enchantment
-     * @param itemLore the optional lore for this enchantment
+     * @param plugin   the Ollivanders2 plugin instance
+     * @param mag      the magnitude (power level) of this enchantment instance
+     * @param args     optional configuration arguments specific to this enchantment instance
+     * @param itemLore optional custom lore to display on the enchanted item
      */
     public Enchantment(@NotNull Ollivanders2 plugin, int mag, @Nullable String args, @Nullable String itemLore) {
         p = plugin;
@@ -66,8 +101,12 @@ public abstract class Enchantment {
 
     /**
      * Get the name of this enchantment.
+     * <p>
+     * Retrieves the display name from the {@link #enchantmentType}, which identifies this enchantment
+     * for UI and logging purposes.
+     * </p>
      *
-     * @return the enchantment name
+     * @return the enchantment name, never null
      */
     @NotNull
     public String getName() {
@@ -75,18 +114,25 @@ public abstract class Enchantment {
     }
 
     /**
-     * Get the magnitude for this enchantment
+     * Get the magnitude (power level) of this enchantment.
+     * <p>
+     * The magnitude determines the intensity or frequency of the enchantment effect.
+     * </p>
      *
-     * @return the magnitude
+     * @return the magnitude value
      */
     public int getMagnitude() {
         return magnitude;
     }
 
     /**
-     * Get the type of enchantment
+     * Get the type of this enchantment.
+     * <p>
+     * The enchantment type is used for NBT tag identification and determines which enchantment
+     * behaviors are triggered.
+     * </p>
      *
-     * @return the enchantment type
+     * @return the enchantment type, never null
      */
     @NotNull
     public ItemEnchantmentType getType() {
@@ -94,9 +140,13 @@ public abstract class Enchantment {
     }
 
     /**
-     * Get the optional arguments for this enchantment
+     * Get the optional configuration arguments for this enchantment.
+     * <p>
+     * Returns the custom arguments passed during enchantment creation, allowing enchantments
+     * to be configured with behavior parameters. The format is enchantment-specific.
+     * </p>
      *
-     * @return the args string
+     * @return the arguments string, or null if no arguments were provided
      */
     @Nullable
     public String getArgs() {
@@ -104,60 +154,88 @@ public abstract class Enchantment {
     }
 
     /**
-     * Is the player holding an item enchanted with this enchantment type?
+     * Check if the player is holding an item enchanted with this enchantment type.
+     * <p>
+     * Examines both the main hand and off-hand inventory slots to determine if either contains
+     * an item matching this enchantment type.
+     * </p>
      *
      * @param player the player to check
-     * @return true if they are holding an item with this enchantment type, false otherwise
+     * @return true if the player is holding an item with this enchantment type in either hand, false otherwise
      */
-    boolean isHoldingEnchantedItem(Player player) {
-        // first check NBT tag of item in primary hand
+    public boolean isHoldingEnchantedItem(Player player) {
+        // check NBT tag of item in primary hand
         ItemStack primaryItem = player.getInventory().getItemInMainHand();
         String eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(primaryItem);
-        if (eTypeStr != null)
-            return eTypeStr.equalsIgnoreCase(enchantmentType.toString());
+        if (eTypeStr != null && eTypeStr.equalsIgnoreCase(enchantmentType.toString()))
+            return true;
 
         // check NBT tag in item in player's off-hand
         ItemStack secondaryItem = player.getInventory().getItemInOffHand();
         eTypeStr = Ollivanders2API.getItems().enchantedItems.getEnchantmentTypeKey(secondaryItem);
-        if (eTypeStr != null)
-            return eTypeStr.equalsIgnoreCase(enchantmentType.toString());
+        if (eTypeStr != null && eTypeStr.equalsIgnoreCase(enchantmentType.toString()))
+            return true;
 
-        // no NBT tag, this is not enchanted, return false
         return false;
     }
 
     /**
-     * Handle item despawn events
+     * Handle item despawn events.
+     * <p>
+     * Called when an enchanted item despawns from the world. Prevent enchanted items from despawning.
+     * </p>
      *
      * @param event the item despawn event
      */
-    abstract public void doItemDespawn(@NotNull ItemDespawnEvent event);
+    public void doItemDespawn(@NotNull ItemDespawnEvent event) {
+        // cancel the event
+        event.setCancelled(true);
+
+        // give the item unlimited lifetime so it will not try to despawn again
+        event.getEntity().setUnlimitedLifetime(true);
+    }
 
     /**
-     * Handle item pickup events
+     * Handle entity item pickup events.
+     * <p>
+     * Called when a living entity (not a player) picks up an enchanted item. Implement to trigger
+     * enchantment effects specific to non-player entities.
+     * </p>
      *
-     * @param event the item pickup event
+     * @param event the entity item pickup event
      */
-    abstract public void doEntityPickupItem(@NotNull EntityPickupItemEvent event);
+    public abstract void doEntityPickupItem(@NotNull EntityPickupItemEvent event);
 
     /**
-     * Handle item pickup events
+     * Handle inventory item pickup events.
+     * <p>
+     * Called when a hopper or other block inventory picks up an enchanted item. Implement to trigger
+     * enchantment effects related to block-based inventory interactions.
+     * </p>
      *
-     * @param event the item pickup event
+     * @param event the inventory item pickup event
      */
-    abstract public void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event);
+    public abstract void doInventoryPickupItem(@NotNull InventoryPickupItemEvent event);
 
     /**
-     * Handle item drop events
+     * Handle item drop events.
+     * <p>
+     * Called when a player drops an enchanted item. Implement to trigger enchantment effects
+     * related to item dropping.
+     * </p>
      *
      * @param event the item drop event
      */
-    abstract public void doItemDrop(@NotNull PlayerDropItemEvent event);
+    public abstract void doItemDrop(@NotNull PlayerDropItemEvent event);
 
     /**
-     * Handle item held events
+     * Handle item held events.
+     * <p>
+     * Called when a player changes which item is held (switches slots in hotbar). Implement to trigger
+     * enchantment effects related to item selection.
+     * </p>
      *
-     * @param event the item drop event
+     * @param event the item held event
      */
-    abstract public void doItemHeld(@NotNull PlayerItemHeldEvent event);
+    public abstract void doItemHeld(@NotNull PlayerItemHeldEvent event);
 }

@@ -40,6 +40,7 @@ public class ConfusionTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - CONFUSION effects cannot be permanent
      * @return a new CONFUSION effect targeting the test player
      */
+    @Override
     CONFUSION createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new CONFUSION(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

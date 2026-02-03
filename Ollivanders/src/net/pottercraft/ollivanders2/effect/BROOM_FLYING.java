@@ -38,7 +38,7 @@ public class BROOM_FLYING extends FLYING {
     public BROOM_FLYING(@NotNull Ollivanders2 plugin, int duration, boolean isPermanent, @NotNull UUID pid) {
         super(plugin, duration, true, pid);
 
-        effectType = O2EffectType.FLYING;
+        effectType = O2EffectType.BROOM_FLYING;
         checkDurationBounds();
 
         doSmokeEffect = false;

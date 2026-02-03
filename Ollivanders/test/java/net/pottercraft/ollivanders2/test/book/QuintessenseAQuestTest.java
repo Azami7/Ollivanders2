@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class QuintessenseAQuestTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new QUINTESSENCE_A_QUEST(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

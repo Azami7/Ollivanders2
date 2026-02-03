@@ -47,6 +47,7 @@ public class AnimagusEffectTest extends PermanentEffectTestSuper {
      * @param isPermanent     ignored; ANIMAGUS_EFFECT instances are always permanent
      * @return the newly created ANIMAGUS_EFFECT instance
      */
+    @Override
     ANIMAGUS_EFFECT createEffect(Player target, int durationInTicks, boolean isPermanent) {
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(target.getUniqueId());
 

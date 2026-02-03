@@ -35,6 +35,7 @@ public class MucusTest extends EffectTestSuper {
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return a new MUCUS effect targeting the specified player
      */
+    @Override
     MUCUS createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new MUCUS(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class BasicHexesTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new BASIC_HEXES(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

@@ -31,6 +31,7 @@ public class LycanthropySpeechTest extends BabblingTest {
      * @param isPermanent     ignored; LYCANTHROPY_SPEECH effects are always permanent
      * @return the newly created LYCANTHROPY_SPEECH effect instance
      */
+    @Override
     LYCANTHROPY_SPEECH createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new LYCANTHROPY_SPEECH(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -38,6 +39,7 @@ public class LycanthropySpeechTest extends BabblingTest {
     /**
      * checkEffect() does nothing in LYCANTHROPY_SPEECH
      */
+    @Override
     void checkEffectTest() {}
 
     /**

@@ -1,5 +1,6 @@
 package net.pottercraft.ollivanders2.book;
 
+import net.pottercraft.ollivanders2.spell.GEMINO;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Contents:<br>
  * {@link net.pottercraft.ollivanders2.spell.PETRIFICUS_TOTALUS}<br>
- * {@link net.pottercraft.ollivanders2.spell.GEMINIO}<br>
+ * {@link GEMINO}<br>
  * {@link net.pottercraft.ollivanders2.spell.LOQUELA_INEPTIAS}
  * </p>
  *
@@ -30,7 +31,7 @@ public class CURSES_AND_COUNTERCURSES extends O2Book {
         openingPage = "Bewitch your friends and befuddle your enemies with the latest revenges: Hair loss, Jelly-Legs, Tongue-Tying, and much, much more.";
 
         spells.add(O2SpellType.PETRIFICUS_TOTALUS);
-        spells.add(O2SpellType.GEMINIO);
+        spells.add(O2SpellType.GEMINO);
         spells.add(O2SpellType.LOQUELA_INEPTIAS);
         // todo counter-curse - https://harrypotter.fandom.com/wiki/Counter-curse
         // todo jelly-legs curse - https://harrypotter.fandom.com/wiki/Jelly-Legs_Curse

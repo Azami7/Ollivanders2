@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class ChadwicksCharmsVolume1Test extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new CHADWICKS_CHARMS_VOLUME_1(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

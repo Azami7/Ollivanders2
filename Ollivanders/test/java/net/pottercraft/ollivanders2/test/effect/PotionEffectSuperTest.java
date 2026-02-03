@@ -1,7 +1,6 @@
 package net.pottercraft.ollivanders2.test.effect;
 
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.effect.O2Effect;
 import net.pottercraft.ollivanders2.effect.PotionEffectSuper;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -75,6 +74,7 @@ abstract public class PotionEffectSuperTest extends NotPermanentEffectTestSuper 
      * </ol>
      * </p>
      */
+    @Override
     void checkEffectTest() {
         PlayerMock target = mockServer.addPlayer();
 

@@ -46,6 +46,7 @@ abstract public class O2EffectAntidoteSuperTest extends PermanentEffectTestSuper
      * <li>Verify unrelated effect is not affected by the antidote</li>
      * </ol>
      */
+    @Override
     void checkEffectTest() {
         Player target = mockServer.addPlayer();
 

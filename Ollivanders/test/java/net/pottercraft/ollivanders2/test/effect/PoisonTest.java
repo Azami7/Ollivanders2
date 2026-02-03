@@ -40,6 +40,7 @@ public class PoisonTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - POISON effects cannot be permanent
      * @return a new POISON effect targeting the test player
      */
+    @Override
     POISON createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new POISON(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

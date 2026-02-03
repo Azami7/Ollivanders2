@@ -87,6 +87,21 @@ public class ProtegoTest extends ShieldSpellEffectTestSuper {
         assertFalse(effect.isProjectileTracked(deadArrow), "Dead projectile not cleaned from tracking list");
     }
 
+    /**
+     * Test event handlers for PROTEGO projectile tracking and blocking.
+     * <p>
+     * This test method executes all PROTEGO-specific event handler tests:
+     * <ul>
+     * <li>Calls parent {@link ShieldSpellEffectTestSuper#eventHandlerTests()} for inherited shield behavior tests</li>
+     * <li>Calls {@link #doOnProjectileLaunchEventTest()} to validate projectile tracking within 120-block range</li>
+     * <li>Calls {@link #doOnProjectileHitEvent()} to validate projectile hit cancellation on shielded players</li>
+     * </ul>
+     * </p>
+     * <p>
+     * These tests validate the core event-driven behavior of PROTEGO: detecting when projectiles are launched
+     * near the shielded player and blocking them when they would hit.
+     * </p>
+     */
     @Override
     void eventHandlerTests() {
         super.eventHandlerTests();

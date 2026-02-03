@@ -40,6 +40,7 @@ public class UnluckTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - UNLUCK effects cannot be permanent
      * @return a new UNLUCK effect targeting the test player
      */
+    @Override
     UNLUCK createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new UNLUCK(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

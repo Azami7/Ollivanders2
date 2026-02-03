@@ -23,6 +23,7 @@ public class HarmAntidoteLesserTest extends PotionEffectAntidoteSuperTest {
      * @param isPermanent     whether the antidote is permanent
      * @return a new HARM_ANTIDOTE_LESSER effect targeting the specified player
      */
+    @Override
     HARM_ANTIDOTE_LESSER createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new HARM_ANTIDOTE_LESSER(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -37,6 +38,7 @@ public class HarmAntidoteLesserTest extends PotionEffectAntidoteSuperTest {
      * @param duration the duration of the target effect in ticks
      * @return the created HARM effect
      */
+    @Override
     O2Effect addEffectToTarget(Player target, int duration) {
         return new HARM(testPlugin, duration, false, target.getUniqueId());
     }

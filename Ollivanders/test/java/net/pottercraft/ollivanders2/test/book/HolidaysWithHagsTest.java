@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class HolidaysWithHagsTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new HOLIDAYS_WITH_HAGS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

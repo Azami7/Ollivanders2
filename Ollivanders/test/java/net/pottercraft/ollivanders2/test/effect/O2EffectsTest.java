@@ -154,12 +154,7 @@ public class O2EffectsTest {
 
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
         // Advance multiple ticks to ensure the effect is fully processed into the active effects system
-        mockServer.getScheduler().performTicks(10);
-        try {
-            // now sleep so we give the runnable time to run
-            Thread.sleep(500);
-        }
-        catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         O2Effect retrieved = Ollivanders2API.getPlayers().playerEffects.getEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL);
         assertNotNull(retrieved, "Effect should be retrievable after adding");
@@ -178,18 +173,12 @@ public class O2EffectsTest {
         // Add first HIGHER_SKILL effect with 1000 ticks
         O2Effect effect1 = new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect1);
-        mockServer.getScheduler().performTicks(10);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         // Add second HIGHER_SKILL effect with 500 ticks - should stack
         O2Effect effect2 = new HIGHER_SKILL(testPlugin, 500, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect2);
-        mockServer.getScheduler().performTicks(10);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         O2Effect combined = Ollivanders2API.getPlayers().playerEffects.getEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL);
         // Minimum duration is enforced so we verify it's greater than just the first effect
@@ -207,10 +196,7 @@ public class O2EffectsTest {
         O2Effect effect = new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId());
 
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
-        mockServer.getScheduler().performTicks(10);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         assertNotNull(Ollivanders2API.getPlayers().playerEffects.getEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL),
                 "Effect should exist before removal");
@@ -238,10 +224,7 @@ public class O2EffectsTest {
 
         O2Effect effect = new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
-        mockServer.getScheduler().performTicks(10);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL),
                 "Player should have HIGHER_SKILL after adding");
@@ -259,10 +242,7 @@ public class O2EffectsTest {
 
         O2Effect effect1 = new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect1);
-        mockServer.getScheduler().performTicks(10);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         List<O2EffectType> effects = Ollivanders2API.getPlayers().playerEffects.getEffects(player.getUniqueId());
         assertEquals(1, effects.size(), "Player should have 1 effect");
@@ -280,10 +260,7 @@ public class O2EffectsTest {
         O2Effect effect = new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId());
 
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
-        mockServer.getScheduler().performTicks(10);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         int duration = Ollivanders2API.getPlayers().playerEffects.getEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL).getRemainingDuration();
 
@@ -304,10 +281,7 @@ public class O2EffectsTest {
         O2Effect effect = new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId());
 
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
-        mockServer.getScheduler().performTicks(10);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         int duration = Ollivanders2API.getPlayers().playerEffects.getEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL).getRemainingDuration();
 
@@ -328,10 +302,7 @@ public class O2EffectsTest {
         O2Effect effect = new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId());
 
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
-        mockServer.getScheduler().performTicks(10);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         int duration = Ollivanders2API.getPlayers().playerEffects.getEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL).getRemainingDuration();
 
@@ -356,10 +327,7 @@ public class O2EffectsTest {
         O2Effect effect = new HIGHER_SKILL(testPlugin, 1000, false, player.getUniqueId());
 
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
-        mockServer.getScheduler().performTicks(10);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         assertNotNull(Ollivanders2API.getPlayers().playerEffects.getEffect(player.getUniqueId(), O2EffectType.HIGHER_SKILL),
                 "Effect should exist before upkeep");
@@ -389,10 +357,7 @@ public class O2EffectsTest {
 
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect1);
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect2);
-        mockServer.getScheduler().performTicks(10);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {}
+        mockServer.getScheduler().performTicks(20);
 
         assertTrue(Ollivanders2API.getPlayers().playerEffects.hasEffects(player1.getUniqueId()),
                 "Player 1 should have effects");

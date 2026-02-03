@@ -320,9 +320,10 @@ public enum O2SpellType {
      */
     FUMOS_DUO(FUMOS_DUO.class, MagicLevel.OWL),
     /**
-     * {@link GEMINIO}
+     * {@link GEMINO}
      */
-    GEMINIO(GEMINIO.class, MagicLevel.NEWT),
+    GEMINO(GEMINO.class, MagicLevel.NEWT),
+    // todo add GEMINIO the charm - https://harrypotter.fandom.com/wiki/Doubling_Charm
     /**
      * {@link GLACIUS}
      */

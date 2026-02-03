@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class ConfrontingTheFacelessTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new CONFRONTING_THE_FACELESS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

@@ -49,6 +49,7 @@ public class ImmobolizeTest extends EffectTestSuper {
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return a new IMMOBILIZE effect targeting the specified player
      */
+    @Override
     IMMOBILIZE createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new IMMOBILIZE(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
@@ -60,6 +61,7 @@ public class ImmobolizeTest extends EffectTestSuper {
      * This test does not need to verify any active behavior during checkEffect(), as all
      * immobilization is handled through event handlers.</p>
      */
+    @Override
     void checkEffectTest() {
     }
 
@@ -69,6 +71,7 @@ public class ImmobolizeTest extends EffectTestSuper {
      * <p>Tests all movement and interaction prevention mechanisms by creating an immobilized player
      * and firing various events to verify they are properly cancelled.</p>
      */
+    @Override
     void eventHandlerTests() {
         PlayerMock target = mockServer.addPlayer();
         IMMOBILIZE immobilize = (IMMOBILIZE) addEffect(target, 100, false);
@@ -190,6 +193,7 @@ public class ImmobolizeTest extends EffectTestSuper {
      * <p>The IMMOBILIZE effect has no persistent state to clean up when removed. All immobilization
      * is handled through event cancellation, so there is nothing to verify during cleanup.</p>
      */
+    @Override
     void doRemoveTest() {
     }
 }

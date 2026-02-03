@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.item;
 
 import net.pottercraft.ollivanders2.common.O2Color;
+import net.pottercraft.ollivanders2.common.TimeCommon;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import org.bukkit.Material;
@@ -572,6 +573,12 @@ public enum O2ItemType {
         container.set(O2Items.o2ItemTypeKey, PersistentDataType.STRING, name);
 
         o2Item.setItemMeta(meta);
+
+        // apply enchantment if this item type has one
+        if (itemEnchantment != null) {
+            String eid = TimeCommon.getCurrentTimestamp() + " " + name + " " + itemEnchantment.getName();
+            Ollivanders2API.getItems().enchantedItems.addEnchantedItem(o2Item, itemEnchantment, 1, eid, "");
+        }
 
         return o2Item;
     }

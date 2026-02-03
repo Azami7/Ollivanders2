@@ -14,8 +14,8 @@ import org.junit.jupiter.api.BeforeEach;
  * - Lines per page: 14 max<br>
  * </p>
  */
-public class MostePotentePotions extends BookTestSuper {
-    @BeforeEach
+public class MostePotentePotionsTest extends BookTestSuper {
+    @Override @BeforeEach
     void setUp() {
         book = new MOSTE_POTENTE_POTIONS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class SecretsOfWandloreTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new SECRETS_OF_WANDLORE(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class TravelsWithTrollsTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new TRAVELS_WITH_TROLLS(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

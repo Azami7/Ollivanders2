@@ -41,6 +41,7 @@ public class LycanthropyReliefTest extends EffectTestSuper {
      * @param isPermanent     true if the effect should be permanent, false for limited duration
      * @return a new LYCANTHROPY_RELIEF effect targeting the specified player
      */
+    @Override
     LYCANTHROPY_RELIEF createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new LYCANTHROPY_RELIEF(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }

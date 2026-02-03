@@ -28,10 +28,33 @@ public class BroomFlyingTest extends FlyingTest {
      * @param isPermanent     ignored; BROOM_FLYING effects are always permanent
      * @return the newly created BROOM_FLYING effect instance
      */
+    @Override
     BROOM_FLYING createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new BROOM_FLYING(testPlugin, durationInTicks, true, target.getUniqueId());
     }
 
+    /**
+     * Test that BROOM_FLYING effects are always permanent and cannot be changed.
+     * <p>
+     * This test overrides the parent {@link FlyingTest#isPermanentTest()} to validate BROOM_FLYING's
+     * special behavior: unlike regular FLYING effects which can be temporary or permanent, BROOM_FLYING
+     * effects are always permanent regardless of configuration. This is by design - once a player has
+     * a broom with flight capability, the flight effect persists until explicitly removed.
+     * </p>
+     * <p>
+     * Test flow:
+     * <ul>
+     * <li>Creates a BROOM_FLYING effect (which ignores the isPermanent parameter)</li>
+     * <li>Verifies the effect reports as permanent via {@link O2Effect#isPermanent()}</li>
+     * <li>Attempts to set the effect as non-permanent via {@link O2Effect#setPermanent(boolean)}</li>
+     * <li>Verifies the effect still reports as permanent (ignores the change)</li>
+     * </ul>
+     * </p>
+     * <p>
+     * This test ensures BROOM_FLYING cannot be accidentally configured as a temporary effect,
+     * maintaining the integrity of broom flight mechanics.
+     * </p>
+     */
     @Override
     void isPermanentTest() {
         O2Effect effect = createEffect(mockServer.addPlayer(), 10, false);

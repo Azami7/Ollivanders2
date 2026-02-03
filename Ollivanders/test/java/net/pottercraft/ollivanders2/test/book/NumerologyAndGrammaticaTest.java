@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class NumerologyAndGrammaticaTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new NUMEROLOGY_AND_GRAMMATICA(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

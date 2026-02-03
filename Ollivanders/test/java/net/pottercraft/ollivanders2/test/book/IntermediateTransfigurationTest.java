@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
  * </p>
  */
 public class IntermediateTransfigurationTest extends BookTestSuper {
-    @BeforeEach
+    @Override @BeforeEach
     void setUp() {
         book = new INTERMEDIATE_TRANSFIGURATION(testPlugin);
         meta = (BookMeta) book.getBookItem().getItemMeta();

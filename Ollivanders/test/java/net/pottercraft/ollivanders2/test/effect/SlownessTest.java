@@ -40,6 +40,7 @@ public class SlownessTest extends PotionEffectSuperTest {
      * @param isPermanent     ignored - SLOWNESS effects cannot be permanent
      * @return a new SLOWNESS effect targeting the test player
      */
+    @Override
     SLOWNESS createEffect(Player target, int durationInTicks, boolean isPermanent) {
         return new SLOWNESS(testPlugin, durationInTicks, isPermanent, target.getUniqueId());
     }
