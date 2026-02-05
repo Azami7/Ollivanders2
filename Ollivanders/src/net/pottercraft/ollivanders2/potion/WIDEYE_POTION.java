@@ -9,16 +9,29 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Wideye potion prevents the drinker from falling asleep.
+ * Wideye Potion (Awakening Potion) - grants immunity to sleep effects.
+ *
+ * <p>When consumed, this potion applies the AWAKE effect to the player, preventing them from
+ * being put to sleep by sleep-inducing potions such as the Sleeping Draught or Draught of Living
+ * Death. While the AWAKE effect is active, the player is immune to all sleep-related magical
+ * effects and cannot be forced into sleep.</p>
+ *
+ * <p>This potion serves as a critical counter to sleeping potions and is essential for survival
+ * in situations where sleep effects might be used as an attack or punishment. Players with the
+ * AWAKE effect remain fully conscious and able to act.</p>
  *
  * @author Azami7
  * @since 2.2.8
  */
 public class WIDEYE_POTION extends O2Potion {
     /**
-     * Constructor
+     * Constructor for Wideye Potion (Awakening Potion).
      *
-     * @param plugin a callback to the plugin
+     * <p>Initializes the potion with its ingredients (Ground Snake Fangs, Billywig Sting Slime,
+     * Wolfsbane, and Standard Potion Ingredients), description text, and potion color. Sets up
+     * the AWAKE effect that will be applied when the potion is consumed to grant sleep immunity.</p>
+     *
+     * @param plugin a callback to the plugin instance
      */
     public WIDEYE_POTION(@NotNull Ollivanders2 plugin) {
         super(plugin);
@@ -30,13 +43,19 @@ public class WIDEYE_POTION extends O2Potion {
         ingredients.put(O2ItemType.WOLFSBANE, 2);
         ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 4);
 
-        text = "The Wideye Potion, also known as the Awakening Potion, is used to prevent the drinker from falling asleep.";
-
         potionColor = Color.fromRGB(13, 55, 13);
+        potionSuccessMessage = "You feel alert.";
+
+        text = "The Wideye Potion, also known as the Awakening Potion, is used to prevent the drinker from falling asleep.";
     }
 
     /**
-     * Drink this potion and do effects
+     * Drink the Wideye Potion and become immune to sleep effects.
+     *
+     * <p>Applies the AWAKE effect to the player for the default potion duration. While this effect
+     * is active, the player is completely immune to all sleep-inducing potions and effects,
+     * including the Sleeping Draught and Draught of Living Death. The AWAKE effect is a critical
+     * defensive tool for countering sleep-based attacks and protecting against magical incapacitation.</p>
      *
      * @param player the player who drank the potion
      */
@@ -45,6 +64,6 @@ public class WIDEYE_POTION extends O2Potion {
         AWAKE effect = new AWAKE(p, duration, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-        player.sendMessage(Ollivanders2.chatColor + "You feel alert.");
+        player.sendMessage(Ollivanders2.chatColor + potionSuccessMessage);
     }
 }

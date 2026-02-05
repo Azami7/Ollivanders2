@@ -28,33 +28,52 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Manages all Ollivanders2 potions.
+ * Manager for all Ollivanders2 potions and potion-related operations.
+ * <p>
+ * Handles potion brewing in cauldrons, potion instantiation from types, ingredient management,
+ * and mapping of Minecraft potion effects to magic difficulty levels.
+ * </p>
+ * <p>
+ * Potions can be disabled if they depend on optional plugins (e.g., LibsDisguises).
+ * </p>
  *
  * @author Azami7
+ * @see O2PotionType enumeration of all available potion types
+ * @see O2Potion abstract base class for all potion implementations
  */
 public class O2Potions {
     /**
-     * callback to plugin
+     * Reference to the Ollivanders2 plugin instance.
      */
     final private Ollivanders2 p;
 
     /**
-     * common functions
+     * Utility functions for common operations across the plugin.
      */
     final private Ollivanders2Common common;
 
     /**
-     * a map of all the potions loaded in the game
+     * Cache of loaded potion types indexed by name (lowercase).
+     * <p>
+     * Maps potion display names to their corresponding O2PotionType enum values for fast lookup.
+     * Only includes potion types that are currently loaded (not disabled by missing dependencies).
+     * </p>
      */
     final static private Map<String, O2PotionType> O2PotionMap = new HashMap<>();
 
     /**
-     * Namespace keys for NBT tags
+     * Namespace key for storing potion type in item NBT tags.
+     * <p>
+     * Used to store the potion type name on potion ItemStack metadata to identify potions when retrieved from player inventory.
+     * </p>
      */
     static public NamespacedKey potionTypeKey;
 
     /**
-     * Potion ingredients
+     * List of all valid potion ingredients.
+     * <p>
+     * These are the O2ItemType values that can be used in cauldron recipes to brew potions.
+     * </p>
      */
     public static final List<O2ItemType> ingredients = new ArrayList<>() {{
         add(O2ItemType.ACONITE);
@@ -120,9 +139,13 @@ public class O2Potions {
     }};
 
     /**
-     * The magic level for every minecraft potion effect type, primarily for use with Finite Incantatum
+     * Magic difficulty levels for each Minecraft potion effect type.
      * <p>
-     * {@link net.pottercraft.ollivanders2.spell.FINITE_INCANTATEM}
+     * Used primarily by FINITE_INCANTATEM counter-spell to determine if a spell can dispel an effect
+     * based on the caster's magic level. Maps each Minecraft PotionEffectType to its corresponding MagicLevel.
+     * </p>
+     *
+     * @see net.pottercraft.ollivanders2.spell.FINITE_INCANTATEM
      */
     static HashMap<PotionEffectType, MagicLevel> potionEffectLevels = new HashMap<>() {{
         put(PotionEffectType.ABSORPTION, MagicLevel.OWL);
@@ -167,9 +190,13 @@ public class O2Potions {
     }};
 
     /**
-     * Constructor
+     * Constructor for initializing the O2Potions manager.
+     * <p>
+     * Creates the NamespacedKey used for storing potion type information in item NBT tags.
+     * Call {@link #onEnable()} during plugin startup to load all available potions.
+     * </p>
      *
-     * @param plugin a reference to the plugin
+     * @param plugin the Ollivanders2 plugin instance
      */
     public O2Potions(@NotNull Ollivanders2 plugin) {
         p = plugin;
@@ -179,11 +206,15 @@ public class O2Potions {
     }
 
     /**
-     * Load all potions on plugin start
+     * Load all potions when the plugin enables.
+     * <p>
+     * Populates the potion cache with all available potion types from O2PotionType enum,
+     * excluding any that depend on optional plugins (e.g., LibsDisguises) that are not loaded except in test mode.
+     * </p>
      */
     public void onEnable() {
         for (O2PotionType potionType : O2PotionType.values()) {
-            if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potionType))
+            if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potionType) && !Ollivanders2.testMode)
                 continue;
 
             O2PotionMap.put(potionType.getPotionName().toLowerCase(), potionType);
@@ -197,21 +228,30 @@ public class O2Potions {
      * performs no cleanup on disable because potion data is read-only and loaded from
      * configuration on startup. No persistent state needs to be saved.</p>
      */
-    public void onDisable() {}
+    public void onDisable() {
+    }
 
     /**
-     * Get all potions loaded
+     * Get all currently loaded potion types.
+     * <p>
+     * Returns the potion types that are active in the O2PotionMap (may exclude potions
+     * that depend on unavailable optional plugins).
+     * </p>
      *
-     * @return a list of all potion types loaded
+     * @return a list of all currently loaded potion types
      */
     public static List<O2PotionType> getAllPotionTypes() {
         return new ArrayList<>(O2PotionMap.values());
     }
 
     /**
-     * Return the set of all the potions
+     * Get instances of all currently loaded potions.
+     * <p>
+     * Creates one instance of each O2Potion subclass for all loaded potion types.
+     * Excludes potions that depend on optional plugins that are not loaded.
+     * </p>
      *
-     * @return a Collection of 1 of each O2Potion
+     * @return a collection containing one instance of each loaded potion
      */
     @NotNull
     public Collection<O2Potion> getAllPotions() {
@@ -233,9 +273,13 @@ public class O2Potions {
     }
 
     /**
-     * Get the names of all potions loaded in the game.
+     * Get the display names of all potion types.
+     * <p>
+     * Returns the display names for all potion types defined in the O2PotionType enum,
+     * including those that may be disabled due to missing optional dependencies.
+     * </p>
      *
-     * @return the list of active potion names
+     * @return a list of all potion display names
      */
     @NotNull
     public List<String> getAllPotionNames() {
@@ -250,14 +294,19 @@ public class O2Potions {
 
     /**
      * Brew a potion in a cauldron.
+     * <p>
+     * Attempts to match cauldron ingredients to a known potion recipe. Returns null if the
+     * cauldron is not a water cauldron or contains no ingredients. If ingredients don't match
+     * any known recipe, returns a bad potion and sends a message to the brewer.
+     * </p>
      *
-     * @param cauldron the cauldron with the potion ingredients
+     * @param cauldron the cauldron block containing the ingredients
      * @param brewer   the player brewing this potion
-     * @return the brewed potion if the recipe matches a known potion, null otherwise
+     * @return a potion ItemStack if successful, a bad potion if recipe unknown, or null if cauldron is invalid/empty
      */
     @Nullable
     public ItemStack brewPotion(@NotNull Block cauldron, @NotNull Player brewer) {
-        // make sure the block passed to us is a cauldron
+        // make sure the block passed to us is a cauldron with water
         if (cauldron.getType() != Material.WATER_CAULDRON)
             return null;
 
@@ -269,7 +318,7 @@ public class O2Potions {
             return null;
 
         // match the ingredients in this potion to a known potion
-        O2Potion potion = matchPotion(ingredientsInCauldron);
+        O2Potion potion = findPotionByIngredients(ingredientsInCauldron);
         if (potion == null || (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getPotionType()))) {
             brewer.sendMessage(Ollivanders2.chatColor + "You feel somewhat uncertain about this recipe.");
             // make them a bad potion
@@ -280,13 +329,17 @@ public class O2Potions {
     }
 
     /**
-     * Match the ingredients in this cauldron to a known potion.
+     * Match ingredient amounts to a known potion recipe.
+     * <p>
+     * Compares the provided ingredients against all known potion recipes to find an exact match.
+     * Both ingredient types and amounts must match a recipe exactly for the match to succeed.
+     * </p>
      *
-     * @param ingredientsInCauldron the ingredients in this cauldron
-     * @return the matching potion if found, null otherwise
+     * @param ingredientsInCauldron a map of ingredient types to their amounts
+     * @return the matching potion if found, null if no recipe matches
      */
     @Nullable
-    private O2Potion matchPotion(@NotNull Map<O2ItemType, Integer> ingredientsInCauldron) {
+    public O2Potion findPotionByIngredients(@NotNull Map<O2ItemType, Integer> ingredientsInCauldron) {
         // compare ingredients in the cauldron to the recipe for each potion
         for (O2PotionType potionType : O2PotionType.values()) {
             O2Potion potion = getPotionFromType(potionType);
@@ -299,13 +352,18 @@ public class O2Potions {
     }
 
     /**
-     * Creates a map of all the ingredients in this cauldron.
+     * Get all O2Item ingredients near a cauldron.
+     * <p>
+     * Searches for O2Items in a 1-block radius around the cauldron. Only counts items that are
+     * valid potion ingredients (items in the ingredients list). Non-O2Items are ignored.
+     * Aggregates multiple stacks of the same ingredient by amount.
+     * </p>
      *
-     * @param cauldron the brewing cauldron
-     * @return a Map of the ingredients and count of each ingredient
+     * @param cauldron the brewing cauldron block
+     * @return a map of ingredient types to their total amounts
      */
     @NotNull
-    private Map<O2ItemType, Integer> getIngredientsInCauldron(@NotNull Block cauldron) {
+    public Map<O2ItemType, Integer> getIngredientsInCauldron(@NotNull Block cauldron) {
         Map<O2ItemType, Integer> ingredientsInCauldron = new HashMap<>();
         Location location = cauldron.getLocation();
 
@@ -338,42 +396,82 @@ public class O2Potions {
     }
 
     /**
-     * Get an O2Potion from ItemMeta
+     * Find an O2Potion by looking up an ItemStack's NBT metadata.
+     * <p>
+     * Extracts the ItemMeta from the ItemStack and looks up the potion type from its
+     * persistent data container. This is a convenience method that delegates to
+     * {@link #findPotionByItemMeta(ItemMeta)}.
+     * </p>
      *
-     * @param meta the metadata for this item
-     * @return the O2Potion, if one was found, null otherwise
+     * @param itemStack the ItemStack to look up
+     * @return the O2Potion if found and loaded, null otherwise
+     */
+    @Nullable
+    public O2Potion findPotionByItemStack(@NotNull ItemStack itemStack) {
+        ItemMeta itemMeta = itemStack.getItemMeta();
+        if (itemMeta == null)
+            return null;
+        else
+            return findPotionByItemMeta(itemMeta);
+    }
+
+    /**
+     * Find an O2Potion by looking up its type in item NBT tags.
+     * <p>
+     * Retrieves the potion type from the item's persistent data container, handling both current
+     * (display name) and legacy (enum name) potion type formats.
+     * </p>
+     *
+     * @param meta the ItemMeta containing the potion type NBT tag
+     * @return the O2Potion instance if the type is found and currently loaded, null otherwise
      */
     @Nullable
     public O2Potion findPotionByItemMeta(@NotNull ItemMeta meta) {
         // check NBT
         O2PotionType potionType = null;
-        String potionTypeString = null;
+        String potionName = null;
 
         PersistentDataContainer container = meta.getPersistentDataContainer();
-        if (container.has(potionTypeKey, PersistentDataType.STRING)) {
-            potionTypeString = container.get(potionTypeKey, PersistentDataType.STRING);
-        }
+        if (container.has(potionTypeKey, PersistentDataType.STRING))
+            potionName = container.get(potionTypeKey, PersistentDataType.STRING);
 
-        if (potionTypeString != null && !potionTypeString.isEmpty()) {
-            potionType = O2PotionType.potionTypeFromString(potionTypeString);
+        if (potionName != null && !potionName.isEmpty()) {
+            common.printDebugMessage("O2Potions.findPotionByItemMeta: potion name is " + potionName, null, null, false);
+            potionType = O2PotionType.getPotionTypeByName(potionName);
+
+            // handle the case of legacy potions created before potion name was added
+            if (potionType == null)
+                potionType = O2PotionType.getPotionTypeFromString(potionName);
+
+        }
+        else {
+            common.printDebugMessage("O2Potions.findPotionByItemMeta: potion name not found in NBT", null, null, false);
         }
 
         // if the type was found and this type is currently loaded
         if (potionType != null) {
-            if (O2PotionMap.containsValue(potionType))
+            if (O2PotionMap.containsValue(potionType)) {
+                common.printDebugMessage("O2Potions.findPotionByItemMeta: found potion", null, null, false);
                 return getPotionFromType(potionType);
-            else
+            }
+            else {
+                common.printDebugMessage("O2Potions.findPotionByItemMeta: did not find potion", null, null, false);
                 return null;
+            }
         }
 
         return null;
     }
 
     /**
-     * Get an O2Potions object from its type.
+     * Create an O2Potion instance from its type using reflection.
+     * <p>
+     * Instantiates the potion class defined in the O2PotionType enum using reflection,
+     * calling the constructor that takes an Ollivanders2 plugin parameter.
+     * </p>
      *
-     * @param potionType the type of potion to get
-     * @return the O2Potion object, if it could be created, or null otherwise
+     * @param potionType the potion type to instantiate
+     * @return the O2Potion instance if created successfully, null if instantiation fails
      */
     @Nullable
     public O2Potion getPotionFromType(@NotNull O2PotionType potionType) {
@@ -394,20 +492,9 @@ public class O2Potions {
     }
 
     /**
-     * Get a potion type by name.
+     * Get the display names of all valid potion ingredients.
      *
-     * @param name the name of the potion
-     * @return the type if found, null otherwise
-     */
-    @Nullable
-    public O2PotionType getPotionTypeByName(@NotNull String name) {
-        return O2PotionMap.getOrDefault(name.toLowerCase(), null);
-    }
-
-    /**
-     * Get a list of the names of every potion ingredient.
-     *
-     * @return a list of all potions ingredients
+     * @return a list of all potion ingredient display names
      */
     @NotNull
     public static List<String> getAllIngredientNames() {
@@ -421,21 +508,28 @@ public class O2Potions {
     }
 
     /**
-     * Verify this potion type is loaded. A potion may not be loaded if it depends on something such as LibsDisguises and that
-     * dependency plugin does not exist.
+     * Check if a potion type is currently loaded.
+     * <p>
+     * A potion may not be loaded if it depends on an optional plugin (e.g., LibsDisguises)
+     * that is not installed on the server.
+     * </p>
      *
      * @param potionType the potion type to check
-     * @return true if this potion type is loaded, false otherwise
+     * @return true if the potion type is loaded, false if disabled due to missing dependencies
      */
     public boolean isLoaded(@NotNull O2PotionType potionType) {
         return O2PotionMap.containsValue(potionType);
     }
 
     /**
-     * Get the magic effect level for MC Potion Effects.
+     * Get the magic difficulty level for a Minecraft potion effect type.
+     * <p>
+     * Used by FINITE_INCANTATEM counter-spell to determine if a potion effect can be dispelled.
+     * If an effect is not explicitly defined, defaults to OWL level.
+     * </p>
      *
-     * @param potionEffectType the effect type to get the level of
-     * @return the effect type level or OWL if it is not explicitly defined
+     * @param potionEffectType the Minecraft potion effect type to get the level of
+     * @return the magic difficulty level (defaults to OWL if not explicitly defined)
      */
     @NotNull
     static public MagicLevel getPotionEffectMagicLevel(@NotNull PotionEffectType potionEffectType) {
@@ -443,5 +537,26 @@ public class O2Potions {
             return potionEffectLevels.get(potionEffectType);
         else
             return MagicLevel.OWL;
+    }
+
+    /**
+     * Create an ItemStack for a potion type without brewing checks.
+     * <p>
+     * Creates a potion ItemStack of the specified amount. This bypasses all brewing requirements
+     * and experience checks. For player-initiated brewing, use {@link #brewPotion(Block, Player)}
+     * instead, which validates player experience levels and handles bad potions.
+     * </p>
+     *
+     * @param potionType the type of potion to create
+     * @param amount the number of potions in the ItemStack
+     * @return a potion ItemStack with the specified amount, or null if instantiation fails
+     */
+    @Nullable
+    public ItemStack getPotionItemStackByType(@NotNull O2PotionType potionType, int amount) {
+        O2Potion potion = getPotionFromType(potionType);
+        if (potion == null)
+            return null;
+
+        return potion.createPotionItemStack(amount);
     }
 }

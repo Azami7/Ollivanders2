@@ -522,7 +522,7 @@ public class O2Players {
      * @param value the serialized count of potion experience
      */
     private void deserializePotion(@NotNull O2Player o2p, @NotNull String label, @NotNull String value) {
-        O2PotionType potionType = O2PotionType.potionTypeFromString(label);
+        O2PotionType potionType = O2PotionType.getPotionTypeFromString(label);
         if (potionType == null)
             return;
 

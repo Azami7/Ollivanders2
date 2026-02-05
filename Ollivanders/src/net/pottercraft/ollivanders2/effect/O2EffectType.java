@@ -78,6 +78,10 @@ public enum O2EffectType {
      */
     FAST_LEARNING(FAST_LEARNING.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
+     * {@link FIRE_RESISTANCE}
+     */
+    FIRE_RESISTANCE(FIRE_RESISTANCE.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
+    /**
      * {@link FLAGRANTE_BURNING}
      */
     FLAGRANTE_BURNING(FLAGRANTE_BURNING.class, MagicLevel.EXPERT, 100, 100),
@@ -170,6 +174,14 @@ public enum O2EffectType {
      */
     PROTEGO(PROTEGO.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, 10 * Ollivanders2Common.ticksPerMinute),
     /**
+     * {@link REGENERATION}
+     */
+    REGENERATION(REGENERATION.class, MagicLevel.NEWT, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
+    /**
+     * {@link SATIATION}
+     */
+    SATIATION(SATIATION.class, MagicLevel.BEGINNER, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
+    /**
      * {@link SHRINKING}
      */
     SHRINKING(SHRINKING.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
@@ -197,6 +209,10 @@ public enum O2EffectType {
      * {@link SPEED_SPEEDIEST}
      */
     SPEED_SPEEDIEST(SPEED_SPEEDIEST.class, MagicLevel.NEWT, 2 * Ollivanders2Common.ticksPerMinute, 5 * Ollivanders2Common.ticksPerMinute),
+    /**
+     * {@link STRENGTH}
+     */
+    STRENGTH(STRENGTH.class, MagicLevel.OWL, 30 * Ollivanders2Common.ticksPerSecond, Ollivanders2Common.ticksPerHour),
     /**
      * {@link SUSPENSION}
      */

@@ -13,17 +13,36 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The Wiggenweld Potion is a healing potion with the power to awaken a person from a magically-induced sleep, which
- * gives it the ability to reverse the effects of potions like the Sleeping Draught and the Draught of Living Death.
+ * Wiggenweld Potion - a powerful healing potion that awakens sleeping players.
+ *
+ * <p>This splash potion is a critical tool for reversing sleep effects. When thrown, it removes
+ * the SLEEPING effect from all affected players, instantly awakening them from magically-induced
+ * sleep such as that caused by the Sleeping Draught or Draught of Living Death. The potion
+ * provides both healing through an Instant Health effect and awakening functionality.</p>
+ *
+ * <p>As a splash potion, the Wiggenweld Potion is thrown rather than consumed directly. The healing
+ * effect affects all entities in the splash radius, while the awakening effect specifically targets
+ * and wakes sleeping players. This makes it an essential potion for countering sleep-based attacks
+ * and rescuing incapacitated allies.</p>
+ *
+ * <p>The complex recipe with many rare ingredients reflects the potion's powerful dual-purpose
+ * effects.</p>
  *
  * @author Azami7
  * @since 2.2.8
  */
 public class WIGGENWELD_POTION extends O2SplashPotion {
     /**
-     * Constructor
+     * Constructor for Wiggenweld Potion.
      *
-     * @param plugin a callback to the plugin
+     * <p>Initializes the splash potion with its complex recipe of many rare ingredients (Horklump
+     * Juice, Flobberworm Mucus, Chizpurfle Fangs, Billywig Sting Slime, Mint Sprig, Boom Berry
+     * Juice, Mandrake Leaf, Honeywater, Sloth Brain Mucus, Moondew Drop, Salamander Blood,
+     * Lionfish Spines, Unicorn Horn, Wolfsbane, and Standard Potion Ingredients), description text,
+     * flavor text, potion color, and the Instant Health effect. Sets up the dual awakening and
+     * healing functionality of this powerful potion.</p>
+     *
+     * @param plugin a callback to the plugin instance
      */
     public WIGGENWELD_POTION(@NotNull Ollivanders2 plugin) {
         super(plugin);
@@ -54,18 +73,29 @@ public class WIGGENWELD_POTION extends O2SplashPotion {
     }
 
     /**
-     * Drink this potion and do effects
+     * Drink the Wiggenweld Potion - no effect when consumed directly.
+     *
+     * <p>This is a splash potion intended to be thrown, not consumed. Drinking it has no special
+     * effect. The potion's primary functionality is triggered through the splash event when thrown,
+     * which removes the SLEEPING effect from affected players and applies the healing effect.</p>
      *
      * @param player the player who drank the potion
      */
     @Override
     public void drink(@NotNull Player player) {
+        // No effect when drunk - this is a splash potion
     }
 
     /**
-     * Do the effect this potion has when thrown.
+     * Handle the splash potion event and awaken sleeping players.
      *
-     * @param event the splash potion thrown event
+     * <p>When the Wiggenweld Potion splashes, it removes the SLEEPING effect from all affected
+     * players in the splash radius. This instantly wakes any players who are magically asleep due
+     * to the Sleeping Draught, Draught of Living Death, or other sleep-inducing effects. The
+     * potion's healing effect (Instant Health II) is automatically applied through the standard
+     * Minecraft potion system.</p>
+     *
+     * @param event the splash potion event containing affected entities and splash location
      */
     @Override
     public void doOnPotionSplashEvent(@NotNull PotionSplashEvent event) {

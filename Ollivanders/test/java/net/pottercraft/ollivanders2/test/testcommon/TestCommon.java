@@ -1,6 +1,11 @@
 package net.pottercraft.ollivanders2.test.testcommon;
 
+import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.potion.O2PotionType;
+import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -11,6 +16,7 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
@@ -43,17 +49,17 @@ public class TestCommon {
     }
 
     /**
-     * Compare the message received by a player to the expected message. This needs a helper because
-     * we need to strip chat color codes from the messages sent by the plugin.
+     * Remove Minecraft chat color codes from a message string.
      *
-     * @param expected the message we expected
-     * @param message the message received
-     * @return strippedMessage.equals(expected)
+     * <p>Strips all color codes (format: section sign followed by a hex digit) from the message
+     * to allow direct comparison with expected message text. This is necessary because the plugin
+     * adds color codes to messages, but tests need to compare the actual text content.</p>
+     *
+     * @param message the message received from the plugin
+     * @return the message with all chat color codes removed
      */
-    public static boolean messageEquals(@NotNull String expected, @NotNull String message) {
-        String strippedMessage = message.replaceAll("§.", "");
-
-        return strippedMessage.equals(expected);
+    public static String cleanChatMessage(@NotNull String message) {
+        return message.replaceAll("§.", "");
     }
 
     /**
@@ -217,5 +223,71 @@ public class TestCommon {
         }
 
         return false;
+    }
+
+    /**
+     * Set a players experience level with a specific potion
+     *
+     * @param testPlugin the plugin
+     * @param player the player
+     * @param potionType the potion type
+     * @param count the count to set experience to
+     */
+    static public void setPlayerPotionExperience(@NotNull Ollivanders2 testPlugin, @NotNull Player player, @NotNull O2PotionType potionType, int count) {
+        O2Player o2player = testPlugin.getO2Player(player);
+        assertNotNull(o2player, "Failed to find O2Player");
+
+        o2player.setPotionCount(potionType, count);
+    }
+
+    /**
+     * Get a player's experience count for a specific potion type.
+     *
+     * <p>Retrieves the player's experience level with a specific potion type from their O2Player profile.
+     * Used in tests to verify that potion experience has been correctly updated or modified.</p>
+     *
+     * @param testPlugin the plugin instance
+     * @param player the player to query
+     * @param potionType the potion type to get experience for
+     * @return the player's experience count for the specified potion type
+     */
+    static public int getPlayerPotionExperience(@NotNull Ollivanders2 testPlugin, @NotNull Player player, @NotNull O2PotionType potionType) {
+        O2Player o2player = testPlugin.getO2Player(player);
+        assertNotNull(o2player, "Failed to find O2Player");
+
+        return o2player.getPotionCount(potionType);
+    }
+
+    /**
+     * Set a players experience level with a specific spell
+     *
+     * @param testPlugin the plugin
+     * @param player the player
+     * @param spellType the spell type
+     * @param count the count to set experience to
+     */
+    static public void setPlayerSpellExperience(@NotNull Ollivanders2 testPlugin, @NotNull Player player, @NotNull O2SpellType spellType, int count) {
+        O2Player o2player = testPlugin.getO2Player(player);
+        assertNotNull(o2player, "Failed to find O2Player");
+
+        o2player.setSpellCount(spellType, count);
+    }
+
+    /**
+     * Get a player's experience count for a specific spell type.
+     *
+     * <p>Retrieves the player's experience level with a specific spell type from their O2Player profile.
+     * Used in tests to verify that spell experience has been correctly updated or modified.</p>
+     *
+     * @param testPlugin the plugin instance
+     * @param player the player to query
+     * @param spellType the spell type to get experience for
+     * @return the player's experience count for the specified spell type
+     */
+    static public int getPlayerSpellExperience(@NotNull Ollivanders2 testPlugin, @NotNull Player player, @NotNull O2SpellType spellType) {
+        O2Player o2player = testPlugin.getO2Player(player);
+        assertNotNull(o2player, "Failed to find O2Player");
+
+        return o2player.getSpellCount(spellType);
     }
 }

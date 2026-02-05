@@ -679,6 +679,7 @@ public class OllivandersListener implements Listener {
      */
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerDrink(@NotNull PlayerItemConsumeEvent event) {
+        //todo move this to O2Potions
         ItemStack item = event.getItem();
         if (item.getType() == Material.POTION) {
             Player player = event.getPlayer();

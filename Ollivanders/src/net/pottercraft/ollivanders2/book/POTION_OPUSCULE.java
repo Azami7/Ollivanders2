@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.book;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.potion.FORGETFULNESS_POTION;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * <p>
  * Contents:<br>
  * {@link net.pottercraft.ollivanders2.potion.BABBLING_BEVERAGE}<br>
- * {@link net.pottercraft.ollivanders2.potion.FORGETFULLNESS_POTION}
+ * {@link FORGETFULNESS_POTION}
  * </p>
  *
  * @author Azami7
@@ -27,7 +28,7 @@ public class POTION_OPUSCULE extends O2Book {
         bookType = O2BookType.POTION_OPUSCULE;
 
         potions.add(O2PotionType.BABBLING_BEVERAGE);
-        potions.add(O2PotionType.FORGETFULLNESS_POTION);
+        potions.add(O2PotionType.FORGETFULNESS_POTION);
         // todo hunger potion effect
         // todo mining fatigue potion effect - https://harrypotter.fandom.com/wiki/Fatiguing_Fusion
         // todo weaving potion effect

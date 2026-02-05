@@ -1,9 +1,9 @@
 package net.pottercraft.ollivanders2.item;
 
-import net.pottercraft.ollivanders2.common.O2Color;
 import net.pottercraft.ollivanders2.common.TimeCommon;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemFlag;
@@ -24,367 +24,387 @@ public enum O2ItemType {
     /**
      * potion ingredient
      */
-    ACONITE(Material.ALLIUM, (short) 0, "Aconite", null, null),
+    ACONITE(Material.ALLIUM, null, "Aconite", null, null),
     /**
      * potion ingredient
      */
-    ARMADILLO_BILE(Material.POTION, (short) 9, "Armadillo Bile", null, null),
+    ARMADILLO_BILE(Material.POTION, Color.OLIVE, "Armadillo Bile", null, null),
     /**
      * potion ingredient
      */
-    ASPHODEL(Material.LILY_OF_THE_VALLEY, (short) 0, "Asphodel", null, null),
+    ASPHODEL(Material.LILY_OF_THE_VALLEY, null, "Asphodel", null, null),
     /**
      * unenchanted broomstick
      */
-    BASIC_BROOM(Material.STICK, (short) 0, "Broom", null, null),
+    BASIC_BROOM(Material.STICK, null, "Broom", null, null),
     /**
      * potion ingredient
      */
-    BAT_SPLEEN(Material.BEEF, (short) 0, "Bat Spleen", null, null),
+    BAT_SPLEEN(Material.BEEF, null, "Bat Spleen", null, null),
     /**
      * potion ingredient
      */
-    BEZOAR(Material.COAL, (short) 1, "Bezoar", null, null), // charcoal
+    BEZOAR(Material.COAL, null, "Bezoar", null, null), // charcoal
     /**
      * potion ingredient
      */
-    BILLYWIG_STING_SLIME(Material.SLIME_BALL, (short) 0, "Billywig Sting Slime", null, null),
+    BILLYWIG_STING_SLIME(Material.SLIME_BALL, null, "Billywig Sting Slime", null, null),
     /**
      * potion ingredient
      */
-    BLOOD(Material.POTION, (short) 7, "Blood", null, null),
+    BLOOD(Material.POTION, Color.fromRGB(120, 6, 6), "Blood", null, null),
     /**
      * potion ingredient
      */
-    BOOM_BERRY_JUICE(Material.POTION, (short) 11, "Boom Berry Juice", null, null),
+    BOOM_BERRY_JUICE(Material.POTION, Color.fromRGB(70, 65, 150), "Boom Berry Juice", null, null),
     /**
      * potion ingredient
      */
-    BOOMSLANG_SKIN(Material.ROTTEN_FLESH, (short) 0, "Boomslang Skin", null, null),
+    BOOMSLANG_SKIN(Material.ROTTEN_FLESH, null, "Boomslang Skin", null, null),
     /**
      * potion ingredient
      */
-    BONE(Material.BONE, (short) 0, "Bone", null, null),
+    BONE(Material.BONE, null, "Bone", null, null),
     /**
      * enchanted broomstick
      */
-    BROOMSTICK(Material.STICK, (short) 0, "Broomstick", null, ItemEnchantmentType.VOLATUS),
+    BROOMSTICK(Material.STICK, null, "Broomstick", null, ItemEnchantmentType.VOLATUS),
     /**
      * potion ingredient
      */
-    BURSTING_MUSHROOM(Material.CRIMSON_FUNGUS, (short) 0, "Bursting Mushroom", null, null),
+    BURSTING_MUSHROOM(Material.CRIMSON_FUNGUS, null, "Bursting Mushroom", null, null),
     /**
      * potion ingredient
      */
-    CHIZPURFLE_FANGS(Material.PUMPKIN_SEEDS, (short) 0, "Chizpurfle Fangs", null, null),
+    CHIZPURFLE_FANGS(Material.PUMPKIN_SEEDS, null, "Chizpurfle Fangs", null, null),
     /**
      * potion ingredient
      */
-    CHOPPED_MALLOW_LEAVES(Material.GREEN_DYE, (short) 0, "Chopped Mallow Leaves", null, null),
+    CHOPPED_MALLOW_LEAVES(Material.GREEN_DYE, null, "Chopped Mallow Leaves", null, null),
     /**
      * potion ingredient
      */
-    CRUSHED_CATS_EYE_OPAL(Material.ORANGE_DYE, (short) 0, "Crushed Cat's Eye Opal", null, null),
+    CRUSHED_CATS_EYE_OPAL(Material.ORANGE_DYE, null, "Crushed Cat's Eye Opal", null, null),
     /**
      * potion ingredient
      */
-    CRUSHED_FIRE_SEEDS(Material.REDSTONE, (short) 0, "Crushed Fire Seeds", null, null),
+    CRUSHED_FIRE_SEEDS(Material.REDSTONE, null, "Crushed Fire Seeds", null, null),
     /**
      * potion ingredient
      */
-    CRUSHED_GURDYROOT(Material.BROWN_DYE, (short) 0, "Crushed Gurdyroot", null, null),
+    CRUSHED_GURDYROOT(Material.BROWN_DYE, null, "Crushed Gurdyroot", null, null),
     /**
      * potion ingredient
      */
-    DEATHS_HEAD_MOTH_CHRYSALIS(Material.COAL, (short) 0, "Death's Head Moth Chrysalis", null, null),
+    DAISY_ROOTS(Material.SHORT_GRASS, null, "Daisy Roots", null, null),
     /**
      * potion ingredient
      */
-    DEW_DROP(Material.GHAST_TEAR, (short) 0, "Dew Drop", null, null),
+    DEATHS_HEAD_MOTH_CHRYSALIS(Material.COAL, null, "Death's Head Moth Chrysalis", null, null),
     /**
      * potion ingredient
      */
-    DITTANY(Material.BIRCH_SAPLING, (short) 0, "Dittany", null, null),
+    DEW_DROP(Material.GHAST_TEAR, null, "Dew Drop", null, null),
     /**
      * potion ingredient
      */
-    DOXY_VENOM(Material.POTION, (short) 11, "Doxy Venom", null, null),
+    DITTANY(Material.BIRCH_SAPLING, null, "Dittany", null, null),
     /**
      * potion ingredient
      */
-    DRAGON_BLOOD(Material.POTION, (short) 1, "Dragon Blood", null, null),
+    DOXY_VENOM(Material.POTION, Color.PURPLE, "Doxy Venom", null, null),
+    /**
+     * potion ingredient
+     */
+    DRAGON_BLOOD(Material.POTION, Color.BLACK, "Dragon Blood", null, null),
     /**
      * Wand core
      */
-    DRAGON_HEARTSTRING(Material.FERMENTED_SPIDER_EYE, (short) 0, "Dragon Heartstring", null, null),
+    DRAGON_HEARTSTRING(Material.FERMENTED_SPIDER_EYE, null, "Dragon Heartstring", null, null),
     /**
      * potion ingredient
      */
-    DRAGONFLY_THORAXES(Material.BEETROOT_SEEDS, (short) 0, "Dragonfly Thoraxes", null, null),
+    DRAGONFLY_THORAXES(Material.BEETROOT_SEEDS, null, "Dragonfly Thoraxes", null, null),
     /**
      * potion ingredient
      */
-    DRIED_NETTLES(Material.OAK_SAPLING, (short) 0, "Dried Nettles", null, null),
+    DRIED_NETTLES(Material.OAK_SAPLING, null, "Dried Nettles", null, null),
     /**
      * divination object
      */
-    EGG(Material.EGG, (short) 0, "Egg", null, null),
+    EGG(Material.EGG, null, "Egg", null, null),
     /**
      * the elder wand
      */
-    ELDER_WAND(Material.BLAZE_ROD, (short) 0, "Elder Wand", "Blaze and Ender Pearl", null),
+    ELDER_WAND(Material.BLAZE_ROD, null, "Elder Wand", "Blaze and Ender Pearl", null),
     /**
      * potion ingredient
      */
-    FAIRY_WING(Material.GOLD_NUGGET, (short) 0, "Fairy Wing", null, null),
+    FAIRY_WING(Material.GOLD_NUGGET, null, "Fairy Wing", null, null),
     /**
      * potion ingredient
      */
-    FLOBBERWORM_MUCUS(Material.SLIME_BALL, (short) 0, "Flobberworm Mucus", null, null),
+    FLOBBERWORM_MUCUS(Material.SLIME_BALL, null, "Flobberworm Mucus", null, null),
     /**
      * potion ingredient
      */
-    FLUXWEED(Material.VINE, (short) 0, "Fluxweed", null, null),
+    FLUXWEED(Material.VINE, null, "Fluxweed", null, null),
     /**
      * floo powder
      */
-    FLOO_POWDER(Material.REDSTONE, (short) 0, "Floo Powder", "Glittery, silver powder", null),
+    FLOO_POWDER(Material.REDSTONE, null, "Floo Powder", "Glittery, silver powder", null),
     /**
      * potion ingredient
      */
-    FULGURITE(Material.GLOWSTONE_DUST, (short) 0, "Fulgurite", null, null),
+    FULGURITE(Material.GLOWSTONE_DUST, null, "Fulgurite", null, null),
     /**
      * potion ingredient
      */
-    GALANTHUS_NIVALIS(Material.AZURE_BLUET, (short) 0, "Galanthus Nivalis", null, null),
+    GALANTHUS_NIVALIS(Material.AZURE_BLUET, null, "Galanthus Nivalis", null, null),
     /**
      * wizard money
      */
-    GALLEON(Material.GOLD_INGOT, (short) 0, "Galleon", "Galleon", null),
+    GALLEON(Material.GOLD_INGOT, null, "Galleon", "Galleon", null),
     /**
      * potion ingredient
      */
-    GINGER_ROOT(Material.BEETROOT, (short) 0, "Ginger Root", null, null),
+    GINGER_ROOT(Material.BEETROOT, null, "Ginger Root", null, null),
     /**
      * potion ingredient
      */
-    GROUND_DRAGON_HORN(Material.GLOWSTONE_DUST, (short) 0, "Ground Dragon Horn", null, null),
+    GROUND_DRAGON_HORN(Material.GLOWSTONE_DUST, null, "Ground Dragon Horn", null, null),
     /**
      * potion ingredient
      */
-    GROUND_PORCUPINE_QUILLS(Material.GRAY_DYE, (short) 0, "Ground Porcupine Quills", null, null),
+    GROUND_PORCUPINE_QUILLS(Material.GRAY_DYE, null, "Ground Porcupine Quills", null, null),
     /**
      * potion ingredient
      */
-    GROUND_SCARAB_BEETLE(Material.GUNPOWDER, (short) 0, "Ground Scarab Beetle", null, null),
+    GROUND_SCARAB_BEETLE(Material.GUNPOWDER, null, "Ground Scarab Beetle", null, null),
     /**
      * potion ingredient
      */
-    GROUND_SNAKE_FANGS(Material.LIGHT_GRAY_DYE, (short) 0, "Ground Snake Fangs", null, null),
+    GROUND_SNAKE_FANGS(Material.LIGHT_GRAY_DYE, null, "Ground Snake Fangs", null, null),
     /**
      * legacy wand core
      */
-    GUNPOWDER(Material.GUNPOWDER, (short) 0, "Gunpowder", null, null),
+    GUNPOWDER(Material.GUNPOWDER, null, "Gunpowder", null, null),
     /**
      * potion ingredient
      */
-    HONEYWATER(Material.POTION, (short) 0, "Honeywater", null, null),
+    HONEYWATER(Material.POTION, Color.fromRGB(247, 110, 2), "Honeywater", null, null),
     /**
      * potion ingredient
      */
-    HORKLUMP_JUICE(Material.DRAGON_BREATH, (short) 0, "Horklump Juice", null, null),
+    HORKLUMP_JUICE(Material.DRAGON_BREATH, null, "Horklump Juice", null, null),
     /**
      * potion ingredient
      */
-    HORNED_SLUG_MUCUS(Material.SLIME_BALL, (short) 0, "Horned Slug Mucus", null, null),
+    HORNED_SLUG_MUCUS(Material.SLIME_BALL, null, "Horned Slug Mucus", null, null),
     /**
      * potion ingredient
      */
-    HORN_OF_BICORN(Material.GOAT_HORN, (short) 0, "Horn of Bicorn", null, null),
+    HORN_OF_BICORN(Material.GOAT_HORN, null, "Horn of Bicorn", null, null),
     /**
      * potion ingredient
      */
-    INFUSION_OF_WORMWOOD(Material.POTION, (short) 5, "Infusion of Wormwood", null, null),
+    INFUSION_OF_COWBANE(Material.POTION, Color.fromRGB(255, 248, 220), "Infusion of Cowbane", null, null),
+    /**
+     * potion ingredient
+     */
+    INFUSION_OF_WORMWOOD(Material.POTION, Color.fromRGB(138, 154, 91), "Infusion of Wormwood", null, null),
     /**
      * an invisibility cloak
      */
-    INVISIBILITY_CLOAK(Material.CHAINMAIL_CHESTPLATE, (short) 0, "Cloak of Invisibility", "Silvery Transparent Cloak", null),
+    INVISIBILITY_CLOAK(Material.CHAINMAIL_CHESTPLATE, null, "Cloak of Invisibility", "Silvery Transparent Cloak", null),
     /**
      * potion ingredient
      */
-    JOBBERKNOLL_FEATHER(Material.FEATHER, (short) 0, "Jobberknoll Feather", null, null),
+    JOBBERKNOLL_FEATHER(Material.FEATHER, null, "Jobberknoll Feather", null, null),
     /**
      * wand core
      */
-    KELPIE_HAIR(Material.PALE_HANGING_MOSS, (short) 0, "Kelpie Hair", null, null),
+    KELPIE_HAIR(Material.PALE_HANGING_MOSS, null, "Kelpie Hair", null, null),
     /**
      * potion ingredient
      */
-    KNOTGRASS(Material.TALL_GRASS, (short) 0, "Knotgrass", null, null),
+    KNOTGRASS(Material.TALL_GRASS, null, "Knotgrass", null, null),
     /**
      * wizard money
      */
-    KNUT(Material.NETHERITE_INGOT, (short) 0, "Knut", "Knut", null),
+    KNUT(Material.NETHERITE_INGOT, null, "Knut", "Knut", null),
     /**
      * potion ingredient
      */
-    LACEWING_FLIES(Material.PUMPKIN_SEEDS, (short) 0, "Lacewing Flies", null, null),
+    LACEWING_FLIES(Material.PUMPKIN_SEEDS, null, "Lacewing Flies", null, null),
     /**
      * potion ingredient
      */
-    LAVENDER_SPRIG(Material.LILAC, (short) 0, "Lavender Sprig", null, null),
+    LAVENDER_SPRIG(Material.LILAC, null, "Lavender Sprig", null, null),
     /**
      * potion ingredient
      */
-    LEECH_JUICE(Material.POTION, (short) 7, "Leech Juice", null, null),
+    LEECH_JUICE(Material.POTION, Color.MAROON, "Leech Juice", null, null),
     /**
      * potion ingredient
      */
-    LEECHES(Material.INK_SAC, (short) 0, "Leeches", null, null),
+    LEECHES(Material.INK_SAC, null, "Leeches", null, null),
     /**
      * potion ingredient
      */
-    LETHE_RIVER_WATER(Material.POTION, (short) 0, "Lethe River Water", null, null), //bottle of water
+    LETHE_RIVER_WATER(Material.POTION, Color.AQUA, "Lethe River Water", null, null), //bottle of water
     /**
      * potion ingredient
      */
-    LIONFISH_SPINES(Material.PUMPKIN_SEEDS, (short) 0, "Lionfish Spines", null, null),
+    LIONFISH_SPINES(Material.PUMPKIN_SEEDS, null, "Lionfish Spines", null, null),
     /**
      * potion ingredient
      */
-    MANDRAKE_LEAF(Material.LILY_PAD, (short) 0, "Mandrake Leaf", null, null),
+    MANDRAKE_LEAF(Material.LILY_PAD, null, "Mandrake Leaf", null, null),
     /**
      * potion ingredient
      */
-    MERCURY(Material.POTION, (short) 13, "Mercury", null, null), // silver liquid
+    MERCURY(Material.POTION, Color.SILVER, "Mercury", null, null), // silver liquid
     /**
      * potion ingredient
      */
-    MINT_SPRIG(Material.KELP, (short) 0, "Mint Sprig", null, null),
+    MINT_SPRIG(Material.KELP, null, "Mint Sprig", null, null),
     /**
      * potion ingredient
      */
-    MISTLETOE_BERRIES(Material.NETHER_WART, (short) 0, "Mistletoe Berries", null, null),
+    MISTLETOE_BERRIES(Material.NETHER_WART, null, "Mistletoe Berries", null, null),
     /**
      * potion ingredient
      */
-    MOONCALF_MILK(Material.POTION, (short) -1, "Moonclaf Milk", null, null),
+    MOONCALF_MILK(Material.POTION, Color.WHITE, "Moonclaf Milk", null, null),
     /**
      * potion ingredient
      */
-    MOONDEW_DROP(Material.GHAST_TEAR, (short) 0, "Moondew Drop", null, null),
+    MOONDEW_DROP(Material.GHAST_TEAR, null, "Moondew Drop", null, null),
     /**
      * cauldron for making potions
      */
-    PEWTER_CAULDRON(Material.CAULDRON, (short) 0, "Pewter Cauldron", null, null),
+    PEWTER_CAULDRON(Material.CAULDRON, null, "Pewter Cauldron", null, null),
     /**
      * wand core
      */
-    PHOENIX_FEATHER(Material.FEATHER, (short) 0, "Phoenix Feather", null, null),
+    PHOENIX_FEATHER(Material.FEATHER, null, "Phoenix Feather", null, null),
     /**
      * divination object
      */
-    PLAYING_CARDS(Material.PAPER, (short) 0, "Playing Cards", null, null),
+    PLAYING_CARDS(Material.PAPER, null, "Playing Cards", null, null),
     /**
      * potion ingredient
      */
-    POISONOUS_POTATO(Material.POISONOUS_POTATO, (short) 0, "Poisonous Potato", null, null),
+    POISONOUS_POTATO(Material.POISONOUS_POTATO, null, "Poisonous Potato", null, null),
     /**
      * potion ingredient
      */
-    POWDERED_ASHPODEL_ROOT(Material.ORANGE_DYE, (short) 0, "Powdered Root of Asphodel", null, null),
+    POWDERED_ASHPODEL_ROOT(Material.ORANGE_DYE, null, "Powdered Root of Asphodel", null, null),
     /**
      * potion ingredient
      */
-    POWDERED_GRIFFIN_CLAW(Material.LIGHT_GRAY_DYE, (short) 0, "Powdered Griffin Claw", null, null),
+    POWDERED_GRIFFIN_CLAW(Material.LIGHT_GRAY_DYE, null, "Powdered Griffin Claw", null, null),
     /**
      * potion ingredient
      */
-    POWDERED_SAGE(Material.LIME_DYE, (short) 0, "Powdered Sage", null, null),
+    POWDERED_SAGE(Material.LIME_DYE, null, "Powdered Sage", null, null),
     /**
      * potion ingredient
      */
-    PUFFERFISH_EYE(Material.SPIDER_EYE, (short) 0, "Pufferfish Eye", null, null),
+    PUFFERFISH_EYE(Material.SPIDER_EYE, null, "Pufferfish Eye", null, null),
     /**
      * potion ingredient
      */
-    ROTTEN_FLESH(Material.ROTTEN_FLESH, (short) 0, "Rotten Flesh", null, null),
+    RAT_SPLEEN(Material.INK_SAC, null, "Rat Spleen", null, null),
     /**
      * potion ingredient
      */
-    RUNESPOOR_EGG(Material.EGG, (short) 0, "Runespoor Egg", null, null),
+    ROTTEN_FLESH(Material.ROTTEN_FLESH, null, "Rotten Flesh", null, null),
     /**
      * potion ingredient
      */
-    SALAMANDER_BLOOD(Material.POTION, (short) 7, "Salamander Blood", null, null),
+    RUNESPOOR_EGG(Material.EGG, null, "Runespoor Egg", null, null),
     /**
      * potion ingredient
      */
-    SALAMANDER_FIRE(Material.BLAZE_POWDER, (short) 0, "Salamander Fire", null, null),
+    SALAMANDER_BLOOD(Material.POTION, Color.fromRGB(136, 8, 8), "Salamander Blood", null, null),
+    /**
+     * potion ingredient
+     */
+    SALAMANDER_FIRE(Material.BLAZE_POWDER, null, "Salamander Fire", null, null),
+    /**
+     * potion ingredient
+     */
+    SHRIVELIG(Material.CHORUS_FRUIT, null, "Shrivelfig", null, null),
     /**
      * wizard money
      */
-    SICKLE(Material.IRON_INGOT, (short) 0, "Sickle", "Sickle", null),
+    SICKLE(Material.IRON_INGOT, null, "Sickle", "Sickle", null),
     /**
      * potion ingredient
      */
-    SLOTH_BRAIN(Material.FERMENTED_SPIDER_EYE, (short) 0, "Sloth Brain", null, null),
+    SLICED_CATERPILLARS(Material.WHEAT_SEEDS, null, "Sliced Caterpillar", null, null),
     /**
      * potion ingredient
      */
-    SLOTH_BRAIN_MUCUS(Material.POTION, (short) 4, "Sloth Brain Mucus", null, null),
+    SLOTH_BRAIN(Material.FERMENTED_SPIDER_EYE, null, "Sloth Brain", null, null),
     /**
      * potion ingredient
      */
-    SOPOPHORUS_BEAN_JUICE(Material.POTION, (short) 13, "Sopophorus Bean Juice", null, null),
+    SLOTH_BRAIN_MUCUS(Material.POTION, Color.GRAY, "Sloth Brain Mucus", null, null),
     /**
      * potion ingredient
      */
-    SPIDER_EYE(Material.SPIDER_EYE, (short) 0, "Spider Eye", null, null),
+    SOPOPHORUS_BEAN_JUICE(Material.POTION, Color.SILVER, "Sopophorus Bean Juice", null, null),
     /**
      * potion ingredient
      */
-    STANDARD_POTION_INGREDIENT(Material.SUGAR, (short) 0, "Standard Potion Ingredient", null, null),
+    SPIDER_EYE(Material.SPIDER_EYE, null, "Spider Eye", null, null),
+    /**
+     * potion ingredient
+     */
+    STANDARD_POTION_INGREDIENT(Material.SUGAR, null, "Standard Potion Ingredient", null, null),
     /**
      * divination object
      */
-    TAROT_CARDS(Material.PAPER, (short) 0, "Tarot Cards", null, null),
+    TAROT_CARDS(Material.PAPER, null, "Tarot Cards", null, null),
     /**
      * divination object
      */
-    TEA_LEAVES(Material.GREEN_DYE, (short) 0, "Tea Leaves", null, null),
+    TEA_LEAVES(Material.GREEN_DYE, null, "Tea Leaves", null, null),
     /**
      * potion ingredient, wand core
      */
-    UNICORN_HAIR(Material.STRING, (short) 0, "Unicorn Hair", null, null),
+    UNICORN_HAIR(Material.STRING, null, "Unicorn Hair", null, null),
     /**
      * potion ingredient
      */
-    UNICORN_HORN(Material.BREEZE_ROD, (short) 0, "Unicorn Horn", null, null),
+    UNICORN_HORN(Material.BREEZE_ROD, null, "Unicorn Horn", null, null),
     /**
      * potion ingredient
      */
-    VALERIAN_SPRIGS(Material.VINE, (short) 0, "Valerian Sprigs", null, null),
+    VALERIAN_SPRIGS(Material.VINE, null, "Valerian Sprigs", null, null),
     /**
      * potion ingredient
      */
-    VALERIAN_ROOT(Material.GOLDEN_CARROT, (short) 0, "Valerian Root", null, null),
+    VALERIAN_ROOT(Material.GOLDEN_CARROT, null, "Valerian Root", null, null),
     /**
      * wand core
      */
-    VEELA_HAIR(Material.STRING, (short) 0, "Veela Hair", null, null),
+    VEELA_HAIR(Material.STRING, null, "Veela Hair", null, null),
     /**
      * unenchanted wand
      */
-    WAND(Material.STICK, (short) 0, "Wand", null, null),
+    WAND(Material.STICK, null, "Wand", null, null),
     /**
      * potion ingredient
      */
-    WARTCAP_POWDER(Material.BROWN_DYE, (short) 0, "Wartcap Powder", null, null),
+    WARTCAP_POWDER(Material.BROWN_DYE, null, "Wartcap Powder", null, null),
     /**
      * potion ingredient
      */
-    WOLFSBANE(Material.ALLIUM, (short) 0, "Wolfsbane", null, null);
+    WOLFSBANE(Material.ALLIUM, null, "Wolfsbane", null, null);
 
     /**
      * Item material
@@ -404,7 +424,7 @@ public enum O2ItemType {
     /**
      * Item variant
      */
-    final private short variant;
+    final private Color color;
 
     /**
      * Item enchantment
@@ -415,15 +435,15 @@ public enum O2ItemType {
      * Constructor
      *
      * @param material    the material type
-     * @param variant     the variant information, this is 0 for most items but for things like potions it can control color
+     * @param color     the variant information, this is 0 for most items but for things like potions it can control color
      * @param name        the name of the item
      * @param lore        the lore for this item
      * @param enchantment the optional enchantment for this item
      */
-    O2ItemType(@NotNull Material material, short variant, @NotNull String name, @Nullable String lore, @Nullable ItemEnchantmentType enchantment) {
+    O2ItemType(@NotNull Material material, @Nullable Color color, @NotNull String name, @Nullable String lore, @Nullable ItemEnchantmentType enchantment) {
         this.material = material;
         this.name = name;
-        this.variant = variant;
+        this.color = color;
         this.lore = lore;
         this.itemEnchantment = enchantment;
     }
@@ -565,7 +585,10 @@ public enum O2ItemType {
         // if potion, set potion meta
         if (material == Material.POTION) {
             meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-            ((PotionMeta) meta).setColor(O2Color.getBukkitColorByNumber(variant).getBukkitColor());
+            if (color != null)
+                ((PotionMeta) meta).setColor(color);
+            else
+                ((PotionMeta) meta).setColor(Color.WHITE);
         }
 
         // add custom NBT tag
