@@ -1529,9 +1529,8 @@ public class Ollivanders2 extends JavaPlugin {
         if (!sender.hasPermission("Ollivanders2.admin"))
             return false;
 
-        O2PotionType potionType = null;
-
         // need to iterate rather than call potions.getPotionTypeByName so we can do startsWith
+        O2PotionType potionType = null;
         for (O2PotionType p : O2PotionType.values()) {
             if (p.getPotionName().toLowerCase().startsWith(potionName.toLowerCase())) {
                 potionType = p;
@@ -1541,19 +1540,13 @@ public class Ollivanders2 extends JavaPlugin {
 
         if (potionType == null) {
             sender.sendMessage(chatColor + "Unable to find potion " + potionName);
-
             return true;
         }
 
-        O2Potion potion = potions.getPotionFromType(potionType);
+        ItemStack brewedPotion = Ollivanders2API.getPotions().getPotionItemStackByType(potionType, 1);
 
-        if (potion == null)
-            return true;
-
-        ItemStack brewedPotion = potion.brew(sender, false);
         List<ItemStack> kit = new ArrayList<>();
         kit.add(brewedPotion);
-
         O2PlayerCommon.givePlayerKit(player, kit);
 
         return true;

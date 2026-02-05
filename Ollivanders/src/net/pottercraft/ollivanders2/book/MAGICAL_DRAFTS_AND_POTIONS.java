@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.book;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.potion.FORGETFULNESS_POTION;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import org.jetbrains.annotations.NotNull;
 
@@ -8,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
  * Magical Drafts and Potions - OWL potions book
  * <p>
  * {@link net.pottercraft.ollivanders2.potion.COMMON_ANTIDOTE_POTION}<br>
- * {@link net.pottercraft.ollivanders2.potion.FORGETFULLNESS_POTION}<br>
+ * {@link FORGETFULNESS_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.HERBICIDE_POTION}<br>
  * {@link net.pottercraft.ollivanders2.potion.CURE_FOR_BOILS}<br>
  * {@link net.pottercraft.ollivanders2.potion.OCULUS_FELIS}<br>
@@ -38,7 +39,7 @@ public class MAGICAL_DRAFTS_AND_POTIONS extends O2Book {
 
         // 1st year
         potions.add(O2PotionType.COMMON_ANTIDOTE_POTION);
-        potions.add(O2PotionType.FORGETFULLNESS_POTION);
+        potions.add(O2PotionType.FORGETFULNESS_POTION);
         potions.add(O2PotionType.HERBICIDE_POTION);
         potions.add(O2PotionType.CURE_FOR_BOILS);
         potions.add(O2PotionType.OCULUS_FELIS);

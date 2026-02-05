@@ -21,7 +21,7 @@ chatColor: 5
 # Spell Casting
 #
 # https://github.com/Azami7/Ollivanders2/wiki/Configuration#spell-casting
-bookLearning: true
+bookLearning: false
 nonVerbalSpellCasting: false
 spellJournal: true
 hostileMobAnimagi: false

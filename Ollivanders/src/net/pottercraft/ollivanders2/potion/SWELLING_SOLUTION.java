@@ -10,30 +10,45 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The Swelling Solution is a potion which causes whatever it touched to swell in size.
+ * Swelling Solution - causes the drinker to grow in size.
+ *
+ * <p>When consumed, this potion applies the SWELLING effect to the player for 5 minutes,
+ * causing them to become larger in physical size. The swelling effect can impact movement,
+ * interactions with the world, and overall gameplay mechanics. Players affected by this potion
+ * will experience difficulty navigating tight spaces and may have altered physics.</p>
+ *
+ * <p>The swelling effect is temporary and will wear off after the duration expires, returning
+ * the player to their normal size. This potion is primarily a transformative or debilitating
+ * effect useful for puzzle-solving, exploration challenges, or roleplay scenarios.</p>
  *
  * @author Azami7
- * @see <a href="https://harrypotter.fandom.com/wiki/Swelling_Solution">https://harrypotter.fandom.com/wiki/Swelling_Solution</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Swelling_Solution">Swelling Solution</a>
  */
 public class SWELLING_SOLUTION extends O2Potion {
     /**
-     * Constructor
+     * Constructor for Swelling Solution potion.
      *
-     * @param plugin a callback to the plugin
+     * <p>Initializes the potion with its ingredients (Dried Nettles, Pufferfish Eye, Bat Spleen,
+     * and Standard Potion Ingredients), description text, flavor text, and potion color. Sets up
+     * the SWELLING effect that will be applied when the potion is consumed for 5 minutes.</p>
+     *
+     * @param plugin a callback to the plugin instance
      */
     public SWELLING_SOLUTION(@NotNull Ollivanders2 plugin) {
         super(plugin);
 
-        // potion config
         potionType = O2PotionType.SWELLING_SOLUTION;
-        potionColor = Color.fromRGB(218, 165, 32); // goldenrod
-        duration = Ollivanders2Common.ticksPerMinute * 5;
 
         // ingredients
         ingredients.put(O2ItemType.DRIED_NETTLES, 3);
         ingredients.put(O2ItemType.PUFFERFISH_EYE, 3);
         ingredients.put(O2ItemType.BAT_SPLEEN, 1);
         ingredients.put(O2ItemType.STANDARD_POTION_INGREDIENT, 3);
+
+        // potion config
+        potionColor = Color.fromRGB(218, 165, 32); // goldenrod
+        duration = Ollivanders2Common.ticksPerMinute * 5;
+        potionSuccessMessage = "You feel yourself expanding.";
 
         // spellbook text
         text = "The Swelling Solution will cause the drinker to grow in size.";
@@ -43,7 +58,13 @@ public class SWELLING_SOLUTION extends O2Potion {
     }
 
     /**
-     * Drink this potion and do effects
+     * Drink the Swelling Solution and grow in size.
+     *
+     * <p>Applies the SWELLING effect to the player for 5 minutes. This effect causes the player
+     * to physically grow in size, which can affect their movement, interactions with the world,
+     * and overall gameplay mechanics. The player will experience difficulty navigating tight spaces
+     * and may encounter altered physics while swollen. The swelling effect is temporary and will
+     * wear off after the duration expires.</p>
      *
      * @param player the player who drank the potion
      */
@@ -53,6 +74,6 @@ public class SWELLING_SOLUTION extends O2Potion {
         SWELLING effect = new SWELLING(p, duration, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(effect);
 
-        player.sendMessage(Ollivanders2.chatColor + "You feel yourself expanding.");
+        player.sendMessage(Ollivanders2.chatColor + potionSuccessMessage);
     }
 }

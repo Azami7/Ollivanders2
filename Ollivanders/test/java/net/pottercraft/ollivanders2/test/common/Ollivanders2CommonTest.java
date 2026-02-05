@@ -405,11 +405,11 @@ public class Ollivanders2CommonTest {
 
         String received = player1.nextMessage();
         assertNotNull(received, "player1.nextMessage() was null");
-        assertTrue(TestCommon.messageEquals(testMessage, received), "Player1 did not receive correct message, expected: " + testMessage + ", actual: " + received);
+        assertEquals(testMessage, TestCommon.cleanChatMessage(received), "Player1 did not receive correct message");
 
         received = player2.nextMessage();
         assertNotNull(received, "player2.nextMessage() was null");
-        assertTrue(TestCommon.messageEquals(testMessage, received), "Player2 did not receive correct message, expected: " + testMessage + ", actual: " + received);
+        assertEquals(testMessage, TestCommon.cleanChatMessage(received), "Player2 did not receive correct message");
 
         received = player3.nextMessage();
         assertNull(received, "player3.nextMessage() was not null");
