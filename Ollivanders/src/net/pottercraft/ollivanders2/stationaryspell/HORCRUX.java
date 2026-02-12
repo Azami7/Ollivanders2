@@ -31,7 +31,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Horcrux-making_spell">https://harrypotter.fandom.com/wiki/Horcrux-making_spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Horcrux-making_spell">https://harrypotter.fandom.com/wiki/Horcrux-making_spell</a>
  * @since 2.21
  */
 public class HORCRUX extends O2StationarySpell {
@@ -44,6 +44,16 @@ public class HORCRUX extends O2StationarySpell {
      * the max radius for this spell
      */
     public static final int maxRadiusConfig = 3;
+
+    /**
+     * min duration for this spell - not used, horcrux is permanent
+     */
+    public static final int minDurationConfig = 1000;
+
+    /**
+     * max duration for this spell - not used, horcrux is permanent
+     */
+    public static final int maxDurationConfig = 1000;
 
     /**
      * The material type of the horcrux item
@@ -116,6 +126,13 @@ public class HORCRUX extends O2StationarySpell {
         itemLoaded = true;
 
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
+
+    void initRadiusAndDurationMinMax() {
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig; // not used - horcrux floo is permanent
+        maxDuration = maxDurationConfig; // not used - horcrux floo is permanent
     }
 
     /**
@@ -249,7 +266,7 @@ public class HORCRUX extends O2StationarySpell {
     void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
         Location toLocation = event.getTo();
 
-        if (toLocation == null || !isLocationInside(toLocation))
+        if (!isLocationInside(toLocation))
             return;
 
         Player target = event.getPlayer();
@@ -316,5 +333,9 @@ public class HORCRUX extends O2StationarySpell {
 
     @Override
     void doCleanUp() {
+    }
+
+    public boolean checkSpellDeserialization() {
+        return playerUUID != null && location != null && horcruxMaterial != null;
     }
 }

@@ -21,7 +21,7 @@ import java.util.UUID;
  *
  * @author Azami7
  * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Muffliato_Charm">https://harrypotter.fandom.com/wiki/Muffliato_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Muffliato_Charm">https://harrypotter.fandom.com/wiki/Muffliato_Charm</a>
  */
 public class MUFFLIATO extends ShieldSpell {
     /**
@@ -64,15 +64,18 @@ public class MUFFLIATO extends ShieldSpell {
     public MUFFLIATO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin, pid, location);
         spellType = O2StationarySpellType.MUFFLIATO;
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig;
-        maxDuration = maxDurationConfig;
 
         setRadius(radius);
         setDuration(duration);
 
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
+
+    void initRadiusAndDurationMinMax() {
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
     }
 
     /**

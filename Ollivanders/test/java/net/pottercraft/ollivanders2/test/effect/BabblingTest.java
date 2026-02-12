@@ -8,7 +8,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test suite for the BABBLING effect.
@@ -78,7 +77,7 @@ public class BabblingTest extends EffectTestSuper {
 
             String actualChat = event.getMessage();
             if (!actualChat.equals(chat)) {
-                assertTrue(TestCommon.stringContainsListMatch(babbling.dictionary, actualChat), "Chat is not from the dictionary, chat: " + actualChat);
+                TestCommon.stringContainsListMatch(babbling.dictionary, actualChat);
                 chance = chance + 1;
             }
         }

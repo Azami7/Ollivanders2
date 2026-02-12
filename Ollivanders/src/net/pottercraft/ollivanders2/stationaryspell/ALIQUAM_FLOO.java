@@ -34,7 +34,7 @@ import org.jetbrains.annotations.NotNull;
  * {@link net.pottercraft.ollivanders2.spell.ALIQUAM_FLOO}
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Floo_Network">https://harrypotter.fandom.com/wiki/Floo_Network</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Floo_Network">https://harrypotter.fandom.com/wiki/Floo_Network</a>
  */
 public class ALIQUAM_FLOO extends O2StationarySpell {
     /**
@@ -46,6 +46,15 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
      * Radius for this spell is always 4
      */
     public static final int maxRadiusConfig = 4;
+
+    /**
+     * min duration for this spell - not used, aliquam floo is permanent
+     */
+    public static final int minDurationConfig = 1000;
+    /**
+     * max duration for this spell - not used, aliquam floo is permanent
+     */
+    public static final int maxDurationConfig = 1000;
 
     /**
      * The name of this floo location
@@ -89,8 +98,14 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
      */
     public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin) {
         super(plugin);
+        spellType = O2StationarySpellType.ALIQUAM_FLOO;
 
-        init();
+        permanent = true;
+
+        if (p.getConfig().isSet("soulFireFlooEffect"))
+            soulFireFlooEffect = p.getConfig().getBoolean("soulFireFlooEffect");
+
+        flooNetworkLocations.add(this);
     }
 
     /**
@@ -103,29 +118,24 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
      */
     public ALIQUAM_FLOO(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, @NotNull String flooName) {
         super(plugin, pid, location);
-
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
-        this.flooName = flooName;
-
-        init();
-
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
-    }
-
-    /**
-     * Common constructor steps
-     */
-    private void init() {
         spellType = O2StationarySpellType.ALIQUAM_FLOO;
+        permanent = true;
 
         if (p.getConfig().isSet("soulFireFlooEffect"))
             soulFireFlooEffect = p.getConfig().getBoolean("soulFireFlooEffect");
 
-        this.radius = minRadius = maxRadius = minRadiusConfig;
-        permanent = true;
+        this.flooName = flooName;
 
         flooNetworkLocations.add(this);
+
+        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
+
+    void initRadiusAndDurationMinMax() {
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig; // not used - aliquam floo is permanent
+        maxDuration = maxDurationConfig; // not used - aliquam floo is permanent
     }
 
     /**
@@ -379,5 +389,10 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     @Override
     void doCleanUp() {
         stopWorking();
+    }
+
+    @Override
+    public boolean checkSpellDeserialization() {
+        return playerUUID != null && location != null && flooName != null && !flooName.isEmpty();
     }
 }

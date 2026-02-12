@@ -87,10 +87,7 @@ public class TestCommon {
     public static boolean isInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType) {
         ItemStack itemStack = getPlayerInventoryItem(player, itemType);
 
-        if (itemStack == null)
-            return false;
-        else
-            return true;
+        return itemStack == null;
     }
 
     /**
@@ -104,10 +101,7 @@ public class TestCommon {
     public static boolean isInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType, @NotNull String name) {
         ItemStack itemStack = getPlayerInventoryItem(player, itemType, name);
 
-        if (itemStack == null)
-            return false;
-        else
-            return true;
+        return itemStack == null;
     }
 
     /**
@@ -214,15 +208,18 @@ public class TestCommon {
      *
      * @param stringList the string list of substrings to match
      * @param string the string to check
-     * @return true if found, false otherwise
      */
-    static public boolean stringContainsListMatch(List<String> stringList, String string) {
+    static public void stringContainsListMatch(List<String> stringList, String string) {
+        boolean found = false;
+
         for (String subString : stringList) {
-            if (string.contains(subString))
-                return true;
+            if (string.contains(subString)) {
+                found = true;
+                break;
+            }
         }
 
-        return false;
+        assertTrue(found, "Did not find \"" + string + "\" in list.");
     }
 
     /**

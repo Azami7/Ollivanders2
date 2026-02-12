@@ -17,6 +17,26 @@ import java.util.Map;
 import java.util.UUID;
 
 public class HERBICIDE extends ThrownPotionStationarySpell {
+    /**
+     * min radius for this spell
+     */
+    public static final int minRadiusConfig = 5;
+    /**
+     * max radius for this spell
+     */
+    public static final int maxRadiusConfig = 20;
+    /**
+     * min duration for this spell
+     */
+    public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
+    /**
+     * max duration for this spell
+     */
+    public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
+
+    /**
+     *
+     */
     Map<Material, Material> blocksReplacements = new HashMap<>() {{
         put(Material.ACACIA_LEAVES, Material.AIR);
         put(Material.ALLIUM, Material.AIR);
@@ -129,6 +149,9 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
         put(Material.WITHER_ROSE, Material.AIR);
     }};
 
+    /**
+     *
+     */
     Map<Material, Material> blocksToItemReplacements = new HashMap<>() {{
         put(Material.ACACIA_SAPLING, Material.STICK);
         put(Material.BAMBOO, Material.BAMBOO);
@@ -173,6 +196,13 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
 
         // check that world guard permissions allow this stationary spell at every location in the spell radius
         checkWorldGuard();
+    }
+
+    void initRadiusAndDurationMinMax() {
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
     }
 
     /**

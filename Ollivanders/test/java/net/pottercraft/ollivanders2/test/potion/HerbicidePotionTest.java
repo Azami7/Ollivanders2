@@ -7,7 +7,6 @@ import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.entity.PotionSplashEvent;
 import org.bukkit.inventory.ItemStack;
@@ -85,11 +84,11 @@ public class HerbicidePotionTest {
         ThrownPotion thrownPotion = testWorld.spawn(location, ThrownPotion.class);
         thrownPotion.setItem(potionItemStack);
 
-        PotionSplashEvent event = new PotionSplashEvent(thrownPotion, new HashMap<LivingEntity, Double>());
+        PotionSplashEvent event = new PotionSplashEvent(thrownPotion, new HashMap<>());
         mockServer.getPluginManager().callEvent(event);
         mockServer.getScheduler().performTicks(20);
 
-        assertTrue(Ollivanders2API.getStationarySpells().checkLocationForSpell(location, O2StationarySpellType.HERBICIDE), "Herbicide potion did not create herbicide stationary spell");
+        assertTrue(Ollivanders2API.getStationarySpells().checkLocationForStationarySpell(location, O2StationarySpellType.HERBICIDE), "Herbicide potion did not create herbicide stationary spell");
     }
 
     /**

@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  *
  * @author Azami7
  * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_horribilis">https://harrypotter.fandom.com/wiki/Protego_horribilis</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Protego_horribilis">https://harrypotter.fandom.com/wiki/Protego_horribilis</a>
  */
 public class PROTEGO_HORRIBILIS extends ShieldSpell {
     /**
@@ -63,15 +63,18 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
     public PROTEGO_HORRIBILIS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO_HORRIBILIS;
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig;
-        maxDuration = maxDurationConfig;
 
         setRadius(radius);
         setDuration(duration);
 
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
+
+    void initRadiusAndDurationMinMax() {
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
     }
 
     /**

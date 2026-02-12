@@ -24,7 +24,7 @@ import java.util.UUID;
  *
  * @author Azami7
  * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx</a>
  */
 public class NULLUM_APPAREBIT extends O2StationarySpell {
     /**
@@ -68,15 +68,17 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
         super(plugin, pid, location);
         spellType = O2StationarySpellType.NULLUM_APPAREBIT;
 
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig;
-        maxDuration = maxDurationConfig;
-
         setRadius(radius);
         setDuration(duration);
 
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
+
+    void initRadiusAndDurationMinMax() {
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
     }
 
     /**
@@ -168,8 +170,6 @@ public class NULLUM_APPAREBIT extends O2StationarySpell {
     @Override
     void doOnPlayerTeleportEvent(@NotNull PlayerTeleportEvent event) {
         Location destination = event.getTo();
-        if (destination == null)
-            return;
 
         if (isLocationInside(destination)) {
             event.setCancelled(true);

@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
  * {@link net.pottercraft.ollivanders2.stationaryspell.CAVE_INIMICUM}
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Cave_inimicum">https://harrypotter.fandom.com/wiki/Cave_inimicum</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Cave_inimicum">https://harrypotter.fandom.com/wiki/Cave_inimicum</a>
  * @since 2.21
  */
 public class CAVE_INIMICUM extends StationarySpell {
@@ -56,10 +55,10 @@ public class CAVE_INIMICUM extends StationarySpell {
         radiusModifier = 1;
         flairSize = 10;
         centerOnCaster = true;
-        minRadius = 5;
-        maxRadius = 20;
-        minDuration = Ollivanders2Common.ticksPerSecond * 30;
-        maxDuration = Ollivanders2Common.ticksPerMinute * 30;
+        minRadius = net.pottercraft.ollivanders2.stationaryspell.CAVE_INIMICUM.minRadiusConfig;
+        maxRadius = net.pottercraft.ollivanders2.stationaryspell.CAVE_INIMICUM.maxRadiusConfig;
+        minDuration = net.pottercraft.ollivanders2.stationaryspell.CAVE_INIMICUM.minDurationConfig;
+        maxDuration = net.pottercraft.ollivanders2.stationaryspell.CAVE_INIMICUM.maxDurationConfig;
 
         initSpell();
     }

@@ -24,7 +24,7 @@ import java.util.UUID;
  *
  * @author Azami7
  * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Protego_totalum">https://harrypotter.fandom.com/wiki/Protego_totalum</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Protego_totalum">https://harrypotter.fandom.com/wiki/Protego_totalum</a>
  * @since 2.21
  */
 public class PROTEGO_TOTALUM extends ShieldSpell {
@@ -74,22 +74,24 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
         super(plugin, pid, location);
         spellType = O2StationarySpellType.PROTEGO_TOTALUM;
 
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig;
-        maxDuration = maxDurationConfig;
-
         setRadius(radius);
         setDuration(duration);
 
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
+    void initRadiusAndDurationMinMax() {
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
+    }
+
     /**
      * Age the spell by 1 tick
      */
     @Override
-    void upkeep() {
+    public void upkeep() {
         age();
 
         // check for hostile entities in the spell area and remove their AI do they do not move or attack
@@ -112,7 +114,7 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
         Location toLoc = event.getTo();
         Location fromLoc = event.getFrom(); // will never be null
 
-        if (toLoc == null || toLoc.getWorld() == null || fromLoc.getWorld() == null)
+        if (toLoc.getWorld() == null || fromLoc.getWorld() == null)
             return;
 
         // they are already inside the protected area

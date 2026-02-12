@@ -24,7 +24,7 @@ import java.util.UUID;
  *
  * @author Azami7
  * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx">https://harrypotter.fandom.com/wiki/Anti-Disapparition_Jinx</a>
  */
 public class NULLUM_EVANESCUNT extends O2StationarySpell {
     /**
@@ -51,16 +51,18 @@ public class NULLUM_EVANESCUNT extends O2StationarySpell {
         super(plugin, pid, location);
         spellType = O2StationarySpellType.NULLUM_EVANESCUNT;
 
+        setRadius(radius);
+        setDuration(duration);
+
+        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
+
+    void initRadiusAndDurationMinMax() {
         // make min/max radius and duration the same as Nullum Apparebit
         minRadius = NULLUM_APPAREBIT.minRadiusConfig;
         maxRadius = NULLUM_APPAREBIT.maxRadiusConfig;
         minDuration = NULLUM_APPAREBIT.minDurationConfig;
         maxDuration = NULLUM_APPAREBIT.maxDurationConfig;
-
-        setRadius(radius);
-        setDuration(duration);
-
-        common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
     /**

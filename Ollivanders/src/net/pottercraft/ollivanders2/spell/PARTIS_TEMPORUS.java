@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Temporarily disables a stationary spell's effects if it is your spell.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Partis_Temporus">https://harrypotter.fandom.com/wiki/Partis_Temporus</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Partis_Temporus">https://harrypotter.fandom.com/wiki/Partis_Temporus</a>
  */
 public final class PARTIS_TEMPORUS extends O2Spell {
     // todo rework to actually match the books - part fire or water - https://harrypotter.fandom.com/wiki/Partis_Temporus
@@ -89,8 +89,8 @@ public final class PARTIS_TEMPORUS extends O2Spell {
                 stationarySpell.setActive(false);
                 stationarySpell.flair(10);
 
-                if (duration > stationarySpell.getDurationRemaining())
-                    duration = stationarySpell.getDurationRemaining();
+                if (duration > stationarySpell.getDuration())
+                    duration = stationarySpell.getDuration();
             }
         }
 
