@@ -24,7 +24,7 @@ import java.util.UUID;
  *
  * @author Azami7
  * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Vanishing_Cabinet">https://harrypotter.fandom.com/wiki/Vanishing_Cabinet</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Vanishing_Cabinet">https://harrypotter.fandom.com/wiki/Vanishing_Cabinet</a>
  */
 public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
     /**
@@ -36,6 +36,15 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
      * the max radius for this spell
      */
     public static final int maxRadiusConfig = 1;
+
+    /**
+     * min duration for this spell - not used, harmonia is permanent
+     */
+    public static final int minDurationConfig = 1000;
+    /**
+     * max duration for this spell - not used, harmonia is permanent
+     */
+    public static final int maxDurationConfig = 1000;
 
     /**
      * The location of this cabinet's twin
@@ -66,7 +75,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
         super(plugin);
 
         spellType = O2StationarySpellType.HARMONIA_NECTERE_PASSUS;
-        this.radius = minRadius = maxRadius = minRadiusConfig;
+        this.radius = minRadius;
         permanent = true;
     }
 
@@ -84,10 +93,17 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
         spellType = O2StationarySpellType.HARMONIA_NECTERE_PASSUS;
         permanent = true;
 
-        radius = minRadius = maxRadius = minRadiusConfig;
+        radius = minRadius;
         duration = 10;
 
         this.twinCabinetLocation = twin;
+    }
+
+    void initRadiusAndDurationMinMax() {
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig; // not used, harmonia is permanent
+        maxDuration = maxDurationConfig; // not used, harmonia is permanent
     }
 
     /**
@@ -221,7 +237,7 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
         Location fromLoc = event.getFrom(); // will never be null
 
         // make sure they actually moved locations, not turned head, etc
-        if (toLoc == null || Ollivanders2Common.locationEquals(toLoc, fromLoc))
+        if (Ollivanders2Common.locationEquals(toLoc, fromLoc))
             return;
 
         HARMONIA_NECTERE_PASSUS twin = getTwin();
@@ -250,5 +266,10 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
 
     @Override
     void doCleanUp() {
+    }
+
+    @Override
+    public boolean checkSpellDeserialization() {
+        return playerUUID != null && location != null && twinCabinetLocation != null;
     }
 }

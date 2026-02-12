@@ -69,11 +69,6 @@ public class LUMOS_FERVENS extends O2StationarySpell {
         super(plugin);
 
         spellType = O2StationarySpellType.LUMOS_FERVENS;
-        
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig;
-        maxDuration = maxDurationConfig;
     }
 
     /**
@@ -90,16 +85,21 @@ public class LUMOS_FERVENS extends O2StationarySpell {
 
         spellType = O2StationarySpellType.LUMOS_FERVENS;
         
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig;
-        maxDuration = maxDurationConfig;
-        
         setRadius(radius);
         setDuration(duration);
         
         // Create the initial soul fire
         createSoulFire();
+    }
+
+    /**
+     * Set the min/max values for radius and duration.
+     */
+    void initRadiusAndDurationMinMax() {
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig;
+        maxDuration = maxDurationConfig;
     }
 
     /**
@@ -256,7 +256,7 @@ public class LUMOS_FERVENS extends O2StationarySpell {
      * This is the stationary spell's effect. age() must be called in this if you want the spell to age and die eventually.
      */
     @Override
-    void upkeep() {
+    public void upkeep() {
         age();
     }
 
@@ -274,5 +274,9 @@ public class LUMOS_FERVENS extends O2StationarySpell {
         if (baseBlock != null && originalMaterial != null) {
             baseBlock.setType(originalMaterial);
         }
+    }
+
+    public boolean checkSpellDeserialization() {
+        return playerUUID != null && location != null && originalMaterial != null;
     }
 }

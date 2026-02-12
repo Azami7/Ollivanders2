@@ -17,26 +17,28 @@ import java.util.UUID;
  * {@link net.pottercraft.ollivanders2.spell.CAVE_INIMICUM}
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Cave_inimicum">https://harrypotter.fandom.com/wiki/Cave_inimicum</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Cave_inimicum">https://harrypotter.fandom.com/wiki/Cave_inimicum</a>
  * @since 2.21
  */
 public class CAVE_INIMICUM extends ConcealmentShieldSpell {
     /**
-     * the min radius for this spell
+     * min radius for this spell
      */
     public static final int minRadiusConfig = 5;
     /**
-     * the max radius for this spell
+     * max radius for this spell
      */
     public static final int maxRadiusConfig = 20;
     /**
-     * the min duration for this spell
+     * min duration for this spell
      */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
     /**
-     * the max duration for this spell
+     * max duration for this spell
      */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
+
+    private final String proximityAlarmMessage = "A hostile entity approaches.";
 
     /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -47,11 +49,6 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
         super(plugin);
 
         spellType = O2StationarySpellType.CAVE_INIMICUM;
-
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
-        minDuration = minDurationConfig;
-        maxDuration = maxDurationConfig;
     }
 
     /**
@@ -70,7 +67,12 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
         proximityRadiusModifier = 5; // alarm if a player or hostile entity gets within 5 blocks of the spell area
 
         spellType = O2StationarySpellType.CAVE_INIMICUM;
+    }
 
+    /**
+     * Set the min/max values for radius and duration.
+     */
+    void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
         minDuration = minDurationConfig;
@@ -84,10 +86,7 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
      * @return false, this spell conceals players in the area from everyone
      */
     protected boolean canSee(@NotNull LivingEntity entity) {
-        if (isLocationInside(entity.getLocation()))
-            return true;
-        else
-            return false;
+        return isLocationInside(entity.getLocation());
     }
 
     /**
@@ -97,7 +96,7 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
      * @return true, this spell does not affect targeting
      */
     @Override
-    protected boolean canTarget(@NotNull LivingEntity entity) {
+    public boolean canTarget(@NotNull LivingEntity entity) {
         return true;
     }
 
@@ -107,7 +106,7 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
      * @param entity the entity entering the area
      * @return true, this spell does not block entry in to the spell area
      */
-    protected boolean canEnter(@NotNull LivingEntity entity) {
+    public boolean canEnter(@NotNull LivingEntity entity) {
         return true;
     }
 
@@ -138,11 +137,7 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
      * @param entity the entity that triggered the alarm
      */
     protected boolean checkAlarm(@NotNull LivingEntity entity) {
-        if (EntityCommon.isHostile(entity)) {
-            return true;
-        }
-
-        return false;
+        return EntityCommon.isHostile(entity);
     }
 
     /**
@@ -153,9 +148,13 @@ public class CAVE_INIMICUM extends ConcealmentShieldSpell {
             return;
 
         for (Player player : getPlayersInsideSpellRadius()) {
-            player.sendMessage(Ollivanders2.chatColor + "A hostile entity approaches.");
+            player.sendMessage(Ollivanders2.chatColor + proximityAlarmMessage);
         }
 
         proximityCooldownTimer = proximityCooldownLimit;
+    }
+
+    public String getProximityAlarmMessage() {
+        return proximityAlarmMessage;
     }
 }

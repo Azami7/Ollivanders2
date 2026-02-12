@@ -21,7 +21,7 @@ import java.util.UUID;
  * {@link net.pottercraft.ollivanders2.spell.COLLOPORTUS}
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Locking_Spell">https://harrypotter.fandom.com/wiki/Locking_Spell</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Locking_Spell">https://harrypotter.fandom.com/wiki/Locking_Spell</a>
  * @since 2.21
  */
 public class COLLOPORTUS extends O2StationarySpell {
@@ -29,11 +29,19 @@ public class COLLOPORTUS extends O2StationarySpell {
      * the min radius for this spell
      */
     public static final int minRadiusConfig = 5;
-
     /**
      * the max radius for this spell
      */
     public static final int maxRadiusConfig = 5;
+    /**
+     * min duration for this spell - not used, colloportus is permanent
+     */
+    public static final int minDurationConfig = 1000;
+    /**
+     * max duration for this spell - not used, colloportus is permanent
+     */
+    public static final int maxDurationConfig = 1000;
+
 
     /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -45,7 +53,6 @@ public class COLLOPORTUS extends O2StationarySpell {
 
         spellType = O2StationarySpellType.COLLOPORTUS;
         permanent = true;
-        this.radius = minRadius = maxRadius = minRadiusConfig;
     }
 
     /**
@@ -59,14 +66,20 @@ public class COLLOPORTUS extends O2StationarySpell {
         super(plugin, pid, location);
 
         spellType = O2StationarySpellType.COLLOPORTUS;
-        minRadius = minRadiusConfig;
-        maxRadius = maxRadiusConfig;
+
         permanent = true;
 
-        radius = minRadius = maxRadius = minRadiusConfig;
-        duration = 10;
+        radius = minRadius;
+        duration = minDuration;
 
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
+    }
+
+    void initRadiusAndDurationMinMax() {
+        minRadius = minRadiusConfig;
+        maxRadius = maxRadiusConfig;
+        minDuration = minDurationConfig; // not used, colloportus is permanent
+        maxDuration = maxDurationConfig; // not used, colloportus is permanent
     }
 
     /**
