@@ -308,7 +308,7 @@ public class O2StationarySpellsTest {
         }
 
         // clean up any floo spells that were added to the static list
-        ALIQUAM_FLOO.flooNetworkLocations.clear();
+        ALIQUAM_FLOO.clearFlooNetwork();
     }
 
     /**
@@ -320,12 +320,17 @@ public class O2StationarySpellsTest {
     @AfterEach
     void cleanUp() {
         // kill all active stationary spells
-        for (O2StationarySpell spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
-            spell.kill();
-        }
+        if (Ollivanders2API.getStationarySpells() != null) {
+            for (O2StationarySpell spell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
+                spell.kill();
+            }
 
         // run upkeep to remove killed spells from the list
         mockServer.getScheduler().performTicks(20);
+    }
+
+        // clear the static floo network list
+        ALIQUAM_FLOO.clearFlooNetwork();
     }
 
     /**

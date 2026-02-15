@@ -71,6 +71,11 @@ abstract public class O2StationarySpellTest {
         PlayerMock player = mockServer.addPlayer();
         O2StationarySpell stationarySpell = createStationarySpell(player, location);
 
+        // skip test for permanent spells
+        if (stationarySpell.isPermanent()) {
+            return;
+        }
+
         int duration = stationarySpell.getDuration();
         assertTrue(duration <= stationarySpell.getMaxDuration(), "");
         assertTrue(duration >= stationarySpell.getMinDuration(), "");
@@ -254,7 +259,7 @@ abstract public class O2StationarySpellTest {
         Location location = new Location(testWorld, 200, 4, 100);
         PlayerMock player = mockServer.addPlayer();
         stationarySpell = createStationarySpell(player, location);
-        assertTrue(stationarySpell.checkSpellDeserialization(), "");
+        assertTrue(stationarySpell.checkSpellDeserialization(), "Failed to deserialize spell");
     }
 
     /**

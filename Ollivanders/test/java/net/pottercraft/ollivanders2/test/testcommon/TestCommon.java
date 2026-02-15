@@ -87,7 +87,7 @@ public class TestCommon {
     public static boolean isInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType) {
         ItemStack itemStack = getPlayerInventoryItem(player, itemType);
 
-        return itemStack == null;
+        return itemStack != null;
     }
 
     /**
@@ -101,7 +101,7 @@ public class TestCommon {
     public static boolean isInPlayerInventory(@NotNull PlayerMock player, @NotNull Material itemType, @NotNull String name) {
         ItemStack itemStack = getPlayerInventoryItem(player, itemType, name);
 
-        return itemStack == null;
+        return itemStack != null;
     }
 
     /**
