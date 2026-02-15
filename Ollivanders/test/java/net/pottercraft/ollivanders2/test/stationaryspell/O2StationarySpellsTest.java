@@ -325,9 +325,9 @@ public class O2StationarySpellsTest {
                 spell.kill();
             }
 
-            // run upkeep to remove killed spells from the list
-            mockServer.getScheduler().performTicks(20);
-        }
+        // run upkeep to remove killed spells from the list
+        mockServer.getScheduler().performTicks(20);
+    }
 
         // clear the static floo network list
         ALIQUAM_FLOO.clearFlooNetwork();
