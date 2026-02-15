@@ -68,9 +68,9 @@ public class O2BooksTest {
      */
     @Test
     void onEnableTest() {
-        assertNotEquals(0, books.getAllBooks().size());
-        assertNotNull(mockServer.getPluginManager().getPlugin("LibsDisguises"));
-        assertTrue(mockServer.getPluginManager().isPluginEnabled("LibsDisguises"));
+        assertNotEquals(0, books.getAllBooks().size(), "books.getAllBooks() returned empty size");
+        assertNotNull(mockServer.getPluginManager().getPlugin("LibsDisguises"), "LibsDisguises plugin not loaded");
+        assertTrue(mockServer.getPluginManager().isPluginEnabled("LibsDisguises"), "LibsDisguises plugin not enabled");
     }
 
     /**
@@ -117,7 +117,7 @@ public class O2BooksTest {
     void getBookByTitleTest() {
         String title = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1.getTitle(testPlugin);
         ItemStack book = books.getBookByTitle(title);
-        assertNotNull(book);
+        assertNotNull(book, "books.getBookByTitle() returned null");
 
         assertNotNull(book.getType(), "book.getType() returned null.");
         assertEquals(Material.WRITTEN_BOOK, book.getType(), "book is not type WRITTEN_BOOK.");
@@ -133,7 +133,7 @@ public class O2BooksTest {
     void getBookByTypeTest() {
         String title = O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1.getTitle(testPlugin);
         ItemStack book = books.getBookByType(O2BookType.STANDARD_BOOK_OF_SPELLS_GRADE_1);
-        assertNotNull(book);
+        assertNotNull(book, "books.getBookByType() returned null");
 
         assertNotNull(book.getType(), "book.getType() returned null.");
         assertEquals(Material.WRITTEN_BOOK, book.getType(), "book is not type WRITTEN_BOOK.");
@@ -151,22 +151,22 @@ public class O2BooksTest {
         // try full title, case-sensitive
         String title = "The Essential Defence Against the Dark Arts";
         O2BookType bookType = books.getBookTypeByTitle(title);
-        assertNotNull(bookType);
-        assertNotNull(bookType.getTitle(testPlugin));
+        assertNotNull(bookType, "getBookTypeByTitle() returned null for full title");
+        assertNotNull(bookType.getTitle(testPlugin), "bookType.getTitle() returned null for full title");
         assertEquals(title, bookType.getTitle(testPlugin), "bookType.getTitle() does not match expected title");
 
         // try partial title
         String partialTitle = "The Essential";
         bookType = books.getBookTypeByTitle(partialTitle);
-        assertNotNull(bookType);
-        assertNotNull(bookType.getTitle(testPlugin));
+        assertNotNull(bookType, "getBookTypeByTitle() returned null for partial title");
+        assertNotNull(bookType.getTitle(testPlugin), "bookType.getTitle() returned null for partial title");
         assertEquals(title, bookType.getTitle(testPlugin), "bookType.getTitle() does not match expected title");
 
         // try case-insensitive
         String lowercaseTitle = "the essential defence against the dark arts";
         bookType = books.getBookTypeByTitle(partialTitle);
-        assertNotNull(bookType);
-        assertNotNull(bookType.getTitle(testPlugin));
+        assertNotNull(bookType, "getBookTypeByTitle() returned null for case-insensitive search");
+        assertNotNull(bookType.getTitle(testPlugin), "bookType.getTitle() returned null for case-insensitive search");
         assertEquals(title, bookType.getTitle(testPlugin), "bookType.getTitle() does not match expected title");
     }
 
@@ -188,7 +188,7 @@ public class O2BooksTest {
     @Test
     void getAllBookTitles() {
         List<String> bookTitles = books.getAllBookTitles();
-        assertFalse(bookTitles.isEmpty());
+        assertFalse(bookTitles.isEmpty(), "books.getAllBookTitles() returned empty list");
         for (O2BookType bookType : O2BookType.values())
         {
             String title = bookType.getTitle(testPlugin);
@@ -233,7 +233,7 @@ public class O2BooksTest {
         player.setOp(true);
 
         TestCommon.runCommand(player, "Ollivanders2 books allbooks", mockServer);
-        assertTrue(TestCommon.isInPlayerInventory(player, Material.WRITTEN_BOOK));
+        assertTrue(TestCommon.isInPlayerInventory(player, Material.WRITTEN_BOOK), "Player did not receive books from allbooks command");
     }
 
     /**
@@ -261,6 +261,7 @@ public class O2BooksTest {
         PlayerMock player2 = mockServer.addPlayer();
 
         TestCommon.runCommand(player, "Ollivanders2 books give " + player2.getName() + " Basic Hexes", mockServer);
+        mockServer.getScheduler().performTicks(200);
         assertTrue(TestCommon.isInPlayerInventory(player2, Material.WRITTEN_BOOK, "Basic Hexes"), "Did not find the book in the player's inventory");
     }
 
