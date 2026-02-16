@@ -16,9 +16,20 @@ import java.util.HashMap;
 import java.util.UUID;
 
 /**
- * Prevents opening of target door, trapdoor, or chest.
- * <p>
- * {@link net.pottercraft.ollivanders2.spell.COLLOPORTUS}
+ * A stationary locking spell that prevents access to doors, trapdoors, and chests.
+ *
+ * <p>The Colloportus charm (Locking Spell) creates a protective barrier that prevents entities from
+ * opening, breaking, or interacting with doors, trapdoors, and chests within the spell's protected area.
+ * The spell is permanent and cannot be dispelled by normal means. Any attempt to open or break a protected
+ * door or trapdoor will fail silently.</p>
+ *
+ * <p>Spell characteristics:
+ * <ul>
+ *   <li>Radius: 5 blocks (fixed)</li>
+ *   <li>Duration: Permanent (cannot be dispelled)</li>
+ *   <li>Effect: Prevents opening/breaking doors, trapdoors, and chests within the protected area</li>
+ * </ul>
+ * </p>
  *
  * @author Azami7
  * @see <a href="https://harrypotter.fandom.com/wiki/Locking_Spell">https://harrypotter.fandom.com/wiki/Locking_Spell</a>
@@ -26,19 +37,22 @@ import java.util.UUID;
  */
 public class COLLOPORTUS extends O2StationarySpell {
     /**
-     * the min radius for this spell
+     * Minimum spell radius (5 blocks).
      */
-    public static final int minRadiusConfig = 5;
+    public static final int minRadiusConfig = 2;
+
     /**
-     * the max radius for this spell
+     * Maximum spell radius (5 blocks).
      */
-    public static final int maxRadiusConfig = 5;
+    public static final int maxRadiusConfig = 2;
+
     /**
-     * min duration for this spell - not used, colloportus is permanent
+     * Minimum spell duration (not used - colloportus is permanent).
      */
     public static final int minDurationConfig = 1000;
+
     /**
-     * max duration for this spell - not used, colloportus is permanent
+     * Maximum spell duration (not used - colloportus is permanent).
      */
     public static final int maxDurationConfig = 1000;
 
@@ -56,11 +70,14 @@ public class COLLOPORTUS extends O2StationarySpell {
     }
 
     /**
-     * Constructor
+     * Constructs a new COLLOPORTUS spell cast by a player.
      *
-     * @param plugin   a callback to the MC plugin
-     * @param pid      the player who cast the spell
-     * @param location the center location of the spell
+     * <p>Creates a colloportus charm at the specified location. The spell prevents opening and breaking
+     * of doors, trapdoors, and chests within a 5-block radius.</p>
+     *
+     * @param plugin   a callback to the MC plugin (not null)
+     * @param pid      the UUID of the player who cast the spell (not null)
+     * @param location the center location of the spell (not null)
      */
     public COLLOPORTUS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location) {
         super(plugin, pid, location);
@@ -75,6 +92,13 @@ public class COLLOPORTUS extends O2StationarySpell {
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
+    /**
+     * Initializes the radius and duration constraints for this spell.
+     *
+     * <p>Sets the spell's radius to 5 blocks (fixed - not configurable) and duration constraints
+     * which are not used since colloportus is permanent.</p>
+     */
+    @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
@@ -166,16 +190,36 @@ public class COLLOPORTUS extends O2StationarySpell {
         }
     }
 
+    /**
+     * Serializes the colloportus spell data for persistence.
+     *
+     * <p>The colloportus spell has no extra data to serialize beyond the base spell properties,
+     * so this method returns an empty map.</p>
+     *
+     * @return an empty map (the spell has no custom data to serialize)
+     */
     @Override
     @NotNull
     public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
+    /**
+     * Deserializes colloportus spell data from saved state.
+     *
+     * <p>The colloportus spell has no extra data to deserialize, so this method does nothing.</p>
+     *
+     * @param spellData the serialized spell data map (not used)
+     */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 
+    /**
+     * Cleans up when the colloportus spell ends.
+     *
+     * <p>The colloportus spell requires no special cleanup on termination.</p>
+     */
     @Override
     void doCleanUp() {
     }
