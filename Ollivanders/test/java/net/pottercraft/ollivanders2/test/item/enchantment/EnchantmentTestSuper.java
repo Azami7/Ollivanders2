@@ -2,7 +2,6 @@ package net.pottercraft.ollivanders2.test.item.enchantment;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.item.enchantment.Enchantment;
 import net.pottercraft.ollivanders2.item.enchantment.ItemEnchantmentType;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
@@ -211,7 +210,7 @@ public abstract class EnchantmentTestSuper {
      */
     @NotNull
     Enchantment addEnchantment(@NotNull ItemStack itemStack, int magnitude, @Nullable String args) {
-        String eid = Integer.toString(Ollivanders2Common.random.nextInt());
+        String eid = java.util.UUID.randomUUID().toString();
         Ollivanders2API.getItems().enchantedItems.addEnchantedItem(itemStack, enchantmentType, magnitude, eid, args);
 
         Enchantment enchantment = Ollivanders2API.getItems().enchantedItems.getEnchantment(itemStack);

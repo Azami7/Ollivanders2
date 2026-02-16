@@ -64,7 +64,8 @@ public class MolliareTest extends O2StationarySpellTest {
      * <p>The molliare spell's upkeep method only performs aging, which is already tested
      * comprehensively by the inherited ageAndKillTest() from the base test class.</p>
      */
-    @Override @Test
+    @Override
+    @Test
     void upkeepTest() {
         // upkeep only does age, which is covered by ageAndKillTest()
     }
