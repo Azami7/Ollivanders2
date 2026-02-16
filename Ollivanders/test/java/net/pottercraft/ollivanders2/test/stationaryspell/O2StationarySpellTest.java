@@ -130,17 +130,17 @@ abstract public class O2StationarySpellTest {
         }
 
         int duration = stationarySpell.getDuration();
-        assertTrue(duration <= stationarySpell.getMaxDuration(), "");
-        assertTrue(duration >= stationarySpell.getMinDuration(), "");
+        assertTrue(duration <= stationarySpell.getMaxDuration(), "Spell duration exceeds maximum");
+        assertTrue(duration >= stationarySpell.getMinDuration(), "Spell duration below minimum");
 
         // increase the duration to just under the max
         int newDuration = stationarySpell.getMaxDuration() - 1;
         stationarySpell.increaseDuration(newDuration - duration); // increase by the difference
-        assertEquals(newDuration, stationarySpell.getDuration(), "");
+        assertEquals(newDuration, stationarySpell.getDuration(), "Duration not increased correctly");
         // increase over the max
         newDuration = stationarySpell.getMaxDuration() + 1;
         stationarySpell.increaseDuration(newDuration - duration); // increase by the difference
-        assertEquals(stationarySpell.getMaxDuration(), stationarySpell.getDuration(), "");
+        assertEquals(stationarySpell.getMaxDuration(), stationarySpell.getDuration(), "Duration not clamped to maximum");
     }
 
     /**
@@ -158,22 +158,22 @@ abstract public class O2StationarySpellTest {
         O2StationarySpell stationarySpell = createStationarySpell(player, location);
 
         int radius = stationarySpell.getRadius();
-        assertTrue(radius <= stationarySpell.getMaxRadius(), "");
-        assertTrue(radius >= stationarySpell.getMinRadius(), "");
+        assertTrue(radius <= stationarySpell.getMaxRadius(), "Spell radius exceeds maximum");
+        assertTrue(radius >= stationarySpell.getMinRadius(), "Spell radius below minimum");
 
         // increase to just over the max
         int newRadius = stationarySpell.getMaxRadius() + 1;
         stationarySpell.increaseRadius(newRadius - radius); // increase by difference
-        assertEquals(stationarySpell.getMaxRadius(), stationarySpell.getRadius(), "");
+        assertEquals(stationarySpell.getMaxRadius(), stationarySpell.getRadius(), "Radius not clamped to maximum");
 
         // decrease to the min radius
         newRadius = stationarySpell.getMinRadius();
         stationarySpell.decreaseRadius(stationarySpell.getRadius() - newRadius); // decrease by difference
-        assertEquals(stationarySpell.getMinRadius(), stationarySpell.getRadius(), "");
+        assertEquals(stationarySpell.getMinRadius(), stationarySpell.getRadius(), "Radius not equal to minimum");
 
         // decrease below the min radius, this should cause the spell to be killed
         stationarySpell.decreaseRadius(1);
-        assertTrue(stationarySpell.isKilled(), "");
+        assertTrue(stationarySpell.isKilled(), "Spell not killed when radius decreased below minimum");
     }
 
     /**
@@ -215,22 +215,22 @@ abstract public class O2StationarySpellTest {
         int duration = stationarySpell.getDuration();
         stationarySpell.age();
         if (stationarySpell.isPermanent())
-            assertEquals(duration, stationarySpell.getDuration(), "");
+            assertEquals(duration, stationarySpell.getDuration(), "Permanent spell duration changed after aging");
         else
-            assertEquals(duration - 1, stationarySpell.getDuration(), "");
+            assertEquals(duration - 1, stationarySpell.getDuration(), "Spell duration not decreased by 1 tick");
 
         duration = stationarySpell.getDuration();
         stationarySpell.age(duration - 1);
         if (stationarySpell.isPermanent())
-            assertEquals(duration, stationarySpell.getDuration(), "");
+            assertEquals(duration, stationarySpell.getDuration(), "Permanent spell duration changed after aging multiple ticks");
         else
-            assertEquals(1, stationarySpell.getDuration(), "");
+            assertEquals(1, stationarySpell.getDuration(), "Spell duration not correctly decreased by multiple ticks");
 
         stationarySpell.age(stationarySpell.getDuration());
         if (stationarySpell.isPermanent())
-            assertFalse(stationarySpell.isKilled(), "");
+            assertFalse(stationarySpell.isKilled(), "Permanent spell was killed when duration reached zero");
         else
-            assertTrue(stationarySpell.isKilled(), "");
+            assertTrue(stationarySpell.isKilled(), "Spell not killed when duration reached zero");
     }
 
     /**
@@ -252,9 +252,9 @@ abstract public class O2StationarySpellTest {
 
         stationarySpell.ageByPercent(percent);
         if (stationarySpell.isPermanent())
-            assertEquals(duration, stationarySpell.getDuration(), "");
+            assertEquals(duration, stationarySpell.getDuration(), "Permanent spell duration changed after percentage aging");
         else
-            assertEquals(newDuration, stationarySpell.getDuration(), "");
+            assertEquals(newDuration, stationarySpell.getDuration(), "Spell duration not correctly reduced by percentage");
     }
 
     /**
@@ -270,8 +270,8 @@ abstract public class O2StationarySpellTest {
         PlayerMock player = mockServer.addPlayer();
         O2StationarySpell stationarySpell = createStationarySpell(player, location);
 
-        assertTrue(stationarySpell.isLocationInside(location), "");
-        assertFalse(stationarySpell.isLocationInside(new Location(location.getWorld(), location.getX(), location.getY() + stationarySpell.getMaxRadius() + 1, location.getZ())), "");
+        assertTrue(stationarySpell.isLocationInside(location), "Spell location not detected as inside spell radius");
+        assertFalse(stationarySpell.isLocationInside(new Location(location.getWorld(), location.getX(), location.getY() + stationarySpell.getMaxRadius() + 1, location.getZ())), "Location outside spell radius incorrectly detected as inside");
     }
 
     /**
@@ -300,28 +300,28 @@ abstract public class O2StationarySpellTest {
         O2StationarySpell stationarySpell = createStationarySpell(player, location);
 
         List<LivingEntity> entitiesInRadius = stationarySpell.getLivingEntitiesInsideSpellRadius();
-        assertTrue(entitiesInRadius.isEmpty(), "");
+        assertTrue(entitiesInRadius.isEmpty(), "Entities list should be empty before adding any entities");
         List<Player> playersInRadius = stationarySpell.getPlayersInsideSpellRadius();
-        assertTrue(playersInRadius.isEmpty(), "");
+        assertTrue(playersInRadius.isEmpty(), "Players list should be empty before adding any players");
 
         player.setLocation(location);
         entitiesInRadius = stationarySpell.getLivingEntitiesInsideSpellRadius();
-        assertEquals(1, entitiesInRadius.size(), "");
+        assertEquals(1, entitiesInRadius.size(), "Should have 1 entity in radius after placing player");
         playersInRadius = stationarySpell.getPlayersInsideSpellRadius();
-        assertEquals(1, playersInRadius.size(), "");
+        assertEquals(1, playersInRadius.size(), "Should have 1 player in radius after placing player");
 
         testWorld.spawn(location, Cow.class);
         entitiesInRadius = stationarySpell.getLivingEntitiesInsideSpellRadius();
-        assertEquals(2, entitiesInRadius.size(), "");
+        assertEquals(2, entitiesInRadius.size(), "Should have 2 entities in radius after spawning cow");
         playersInRadius = stationarySpell.getPlayersInsideSpellRadius();
-        assertEquals(1, playersInRadius.size(), "");
+        assertEquals(1, playersInRadius.size(), "Should still have only 1 player in radius after spawning non-player entity");
 
         PlayerMock player2 = mockServer.addPlayer();
         player2.setLocation(new Location(location.getWorld(), location.getX(), location.getY(), location.getZ() + stationarySpell.getMaxRadius() + 1));
         entitiesInRadius = stationarySpell.getLivingEntitiesInsideSpellRadius();
-        assertEquals(2, entitiesInRadius.size(), "");
+        assertEquals(2, entitiesInRadius.size(), "Should still have 2 entities in radius (player2 is outside)");
         playersInRadius = stationarySpell.getPlayersInsideSpellRadius();
-        assertEquals(1, playersInRadius.size(), "");
+        assertEquals(1, playersInRadius.size(), "Should still have only 1 player in radius (player2 is outside)");
     }
 
     /**
@@ -400,7 +400,7 @@ abstract public class O2StationarySpellTest {
         O2StationarySpell stationarySpell = Ollivanders2API.getStationarySpells().createStationarySpellByType(getSpellType());
         assertNotNull(stationarySpell);
 
-        assertFalse(stationarySpell.checkSpellDeserialization(), "");
+        assertFalse(stationarySpell.checkSpellDeserialization(), "Deserialized spell should fail deserialization check without required data");
 
         World testWorld = mockServer.addSimpleWorld("world");
         Location location = new Location(testWorld, 200, 4, 100);

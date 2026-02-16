@@ -7,7 +7,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockFromToEvent;
+import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -29,19 +31,22 @@ import java.util.UUID;
  */
 public class LUMOS_FERVENS extends O2StationarySpell {
     /**
-     * Min radius for this spell
+     * Minimum spell radius (2 blocks).
      */
-    public static final int minRadiusConfig = 1;
+    public static final int minRadiusConfig = 2;
+
     /**
-     * Max radius for this spell
+     * Maximum spell radius (2 blocks).
      */
-    public static final int maxRadiusConfig = 5;
+    public static final int maxRadiusConfig = 2;
+
     /**
-     * Min duration for this spell
+     * Minimum spell duration (5 minutes).
      */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
+
     /**
-     * Max duration for this spell
+     * Maximum spell duration (2 hours).
      */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerHour * 2;
 
@@ -49,16 +54,31 @@ public class LUMOS_FERVENS extends O2StationarySpell {
      * The block that was changed to soul sand
      */
     private Block baseBlock;
-    
+
+    /**
+     * The material for the base block when spell is active
+     */
+    public static final Material baseBlockMaterial = Material.SOUL_SAND;
+
     /**
      * The original material of the base block
      */
     private Material originalMaterial;
-    
+
     /**
      * The block where the soul fire is placed
      */
     private Block fireBlock;
+
+    /**
+     * The material for the fire when spell is active
+     */
+    public static final Material fireBlockMaterial = Material.SOUL_FIRE;
+
+    /**
+     * Label for serialization
+     */
+    private static final String originalMaterialLabel = "original_material";
 
     /**
      * Simple constructor used for deserializing saved stationary spells at server start. Do not use to cast spell.
@@ -72,22 +92,25 @@ public class LUMOS_FERVENS extends O2StationarySpell {
     }
 
     /**
-     * Constructor
+     * Constructs a new LUMOS_FERVENS spell cast by a player.
      *
-     * @param plugin   a callback to the MC plugin
-     * @param pid      the player who cast the spell
-     * @param location the center location of the spell
-     * @param radius   the radius for this spell
-     * @param duration the duration of the spell
+     * <p>Creates bluebell flames (soul fire) at the specified location with the given radius and duration.
+     * The flames are waterproof and prevent fire damage to entities within the protected area.</p>
+     *
+     * @param plugin   a callback to the MC plugin (not null)
+     * @param pid      the UUID of the player who cast the spell (not null)
+     * @param location the center location of the spell (not null)
+     * @param radius   the radius for this spell (will be clamped to min/max values)
+     * @param duration the duration of the spell in ticks (will be clamped to min/max values)
      */
     public LUMOS_FERVENS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin, pid, location);
 
         spellType = O2StationarySpellType.LUMOS_FERVENS;
-        
+
         setRadius(radius);
         setDuration(duration);
-        
+
         // Create the initial soul fire
         createSoulFire();
     }
@@ -95,6 +118,7 @@ public class LUMOS_FERVENS extends O2StationarySpell {
     /**
      * Set the min/max values for radius and duration.
      */
+    @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
@@ -103,26 +127,56 @@ public class LUMOS_FERVENS extends O2StationarySpell {
     }
 
     /**
+     * Get the base block for this spell
+     *
+     * @return the base block
+     */
+    public Block getBaseBlock() {
+        return baseBlock;
+    }
+
+    /**
+     * Get the fire block for this spell
+     *
+     * @return the fire block
+     */
+    public Block getFireBlock() {
+        return fireBlock;
+    }
+
+    /**
+     * Start the flames if they have not been and age the spell each tick
+     */
+    @Override
+    public void upkeep() {
+        if (isKilled())
+            return;
+
+        if (duration % 10 == 0) { // check every 10 ticks
+            if (fireBlock.getType() != fireBlockMaterial) { // we have not run createSoulFire()
+                createSoulFire();
+            }
+        }
+        age();
+    }
+
+    /**
      * Create soul fire at the target location
      */
     private void createSoulFire() {
-        Block targetBlock = location.getBlock();
-        Block blockAbove = targetBlock.getRelative(BlockFace.UP);
-        
+        baseBlock = location.getBlock();
+        originalMaterial = baseBlock.getType();
+        fireBlock = baseBlock.getRelative(BlockFace.UP);
+
         // Check if the block above is air so we can place fire
-        if (blockAbove.getType() == Material.AIR) {
+        if (fireBlock.getType() == Material.AIR) {
             // Change the target block to soul sand to support soul fire
-            Material material = targetBlock.getType();
-            if (material != Material.SOUL_SAND && material != Material.SOUL_SOIL) {
-                baseBlock = targetBlock;
-                originalMaterial = material;
-                targetBlock.setType(Material.SOUL_SAND);
-            }
-            
+            baseBlock.setType(baseBlockMaterial);
+
             // Set the block above to soul fire
-            blockAbove.setType(Material.SOUL_FIRE);
-            fireBlock = blockAbove;
-        } else {
+            fireBlock.setType(fireBlockMaterial);
+        }
+        else {
             // If we can't place fire, kill the spell
             kill();
         }
@@ -142,8 +196,8 @@ public class LUMOS_FERVENS extends O2StationarySpell {
         Entity entity = event.getEntity();
         if (isLocationInside(entity.getLocation())) {
             // Prevent fire damage within the spell radius
-            if (event.getCause() == EntityDamageEvent.DamageCause.FIRE || 
-                event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
+            if (event.getCause() == EntityDamageEvent.DamageCause.FIRE ||
+                    event.getCause() == EntityDamageEvent.DamageCause.FIRE_TICK) {
                 event.setCancelled(true);
             }
         }
@@ -166,7 +220,7 @@ public class LUMOS_FERVENS extends O2StationarySpell {
             event.setCancelled(true);
         }
     }
-    
+
     /**
      * Handle block from to events - prevent water from extinguishing the bluebell flames
      *
@@ -177,18 +231,17 @@ public class LUMOS_FERVENS extends O2StationarySpell {
         if (!active || fireBlock == null) {
             return;
         }
-        
+
         // Check if this is water flowing
         Material fromType = event.getBlock().getType();
         if (fromType == Material.WATER) {
-            
             // If water is flowing to our fire block, cancel the event
             if (event.getToBlock().equals(fireBlock)) {
                 event.setCancelled(true);
             }
         }
     }
-    
+
     /**
      * Handle bucket empty events - prevent players from placing water on or near the bluebell flames
      *
@@ -199,10 +252,10 @@ public class LUMOS_FERVENS extends O2StationarySpell {
         if (!active || fireBlock == null) {
             return;
         }
-        
+
         // Get the block where water would be placed
         Block targetBlock = event.getBlock();
-        
+
         // Check if the target block is at or adjacent to the fire block
         if (targetBlock.equals(fireBlock) || Ollivanders2Common.isAdjacentTo(targetBlock, fireBlock)) {
             event.setCancelled(true);
@@ -211,25 +264,56 @@ public class LUMOS_FERVENS extends O2StationarySpell {
     }
 
     /**
-     * Label for serialization
+     * Handle block break events - kill the spell if the fire or base block is broken.
+     *
+     * <p>When a player attempts to break the soul fire block or the base block that supports it,
+     * this spell is immediately terminated and cleaned up.</p>
+     *
+     * @param event the block break event (not null)
      */
-    private final String originalMaterialLabel = "original_material";
-    
+    @Override
+    void doOnBlockBreakEvent(@NotNull BlockBreakEvent event) {
+        // kill this spell if the fire block or base block is broken
+        if (event.getBlock().equals(baseBlock) || event.getBlock().equals(fireBlock)) {
+            kill();
+        }
+    }
+
+    /**
+     * Handle entity change block events - prevent entities from changing the fire or base block.
+     *
+     * <p>When entities (such as endermen or falling sand) attempt to change the soul fire block
+     * or the base block that supports it, this event is cancelled to protect the spell structure.</p>
+     *
+     * @param event the entity change block event (not null)
+     */
+    @Override
+    void doOnEntityChangeBlockEvent(@NotNull EntityChangeBlockEvent event) {
+        if (!active) {
+            return;
+        }
+
+        // cancel the event if the fire block or base block get changed
+        if (event.getBlock().equals(baseBlock) || event.getBlock().equals(fireBlock)) {
+            event.setCancelled(true);
+        }
+    }
+
     /**
      * Serialize all data specific to this spell so it can be saved.
      *
      * @return a map of the serialized data
      */
-    @NotNull
     @Override
-    Map<String, String> serializeSpellData() {
+    @NotNull
+    public Map<String, String> serializeSpellData() {
         Map<String, String> spellData = new HashMap<>();
-        
+
         // Save original material
         if (originalMaterial != null) {
             spellData.put(originalMaterialLabel, originalMaterial.toString());
         }
-        
+
         return spellData;
     }
 
@@ -242,22 +326,14 @@ public class LUMOS_FERVENS extends O2StationarySpell {
     void deserializeSpellData(@NotNull Map<String, String> spellData) {
         // Set the base block to the location block
         baseBlock = location.getBlock();
-        
+
         // Set up the fire block
         fireBlock = baseBlock.getRelative(BlockFace.UP);
-        
+
         // Get the original material
         if (spellData.containsKey(originalMaterialLabel)) {
             originalMaterial = Material.getMaterial(spellData.get(originalMaterialLabel));
         }
-    }
-
-    /**
-     * This is the stationary spell's effect. age() must be called in this if you want the spell to age and die eventually.
-     */
-    @Override
-    public void upkeep() {
-        age();
     }
 
     /**
@@ -269,13 +345,22 @@ public class LUMOS_FERVENS extends O2StationarySpell {
         if (fireBlock != null) {
             fireBlock.setType(Material.AIR);
         }
-        
+
         // Restore original block that was changed to soul sand
         if (baseBlock != null && originalMaterial != null) {
             baseBlock.setType(originalMaterial);
         }
     }
 
+    /**
+     * Checks if the spell was properly deserialized and has all required data.
+     *
+     * <p>Verifies that the spell's player UUID, location, and original material have been properly
+     * restored from serialized data during server startup.</p>
+     *
+     * @return true if the spell has all required deserialized data, false otherwise
+     */
+    @Override
     public boolean checkSpellDeserialization() {
         return playerUUID != null && location != null && originalMaterial != null;
     }
