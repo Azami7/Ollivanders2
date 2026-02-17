@@ -1,6 +1,7 @@
 package net.pottercraft.ollivanders2.stationaryspell;
 
 import net.pottercraft.ollivanders2.common.EntityCommon;
+import net.pottercraft.ollivanders2.common.MagicLevel;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.spell.events.OllivandersSpellProjectileMoveEvent;
 import org.bukkit.Location;
@@ -19,15 +20,26 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * A stronger version of Protego that covers an area (rather than the caster) and protects against stronger spells. In HP this
- * spell would also repel hostile entities like dementors but Spigot does not provide an entity move event so we have no way
- * to handle controlling entity movement.
- * <p>
- * {@link net.pottercraft.ollivanders2.spell.PROTEGO_MAXIMA}
+ * A stationary shield spell that creates a comprehensive protective barrier over an area.
+ *
+ * <p>Protego Maxima is a powerful defensive charm that provides multiple layers of protection:
+ * <ul>
+ *   <li>Kills tracked projectiles that enter the protected area</li>
+ *   <li>Prevents living entities outside the area from targeting players or passive mobs inside</li>
+ *   <li>Blocks lower-level spell projectiles from crossing into the protected area</li>
+ *   <li>Allows all spells cast by players inside the area to exit freely</li>
+ *   <li>Prevents projectiles from hitting players or non-hostile mobs inside the area</li>
+ *   <li>Allows projectiles to hit hostile mobs inside the area</li>
+ * </ul>
+ * </p>
+ *
+ * <p>Note: In the Harry Potter universe, this spell would also repel hostile entities like Dementors,
+ * but Spigot does not provide an entity move event for this functionality.</p>
  *
  * @author Azami7
  * @version Ollivanders2
@@ -36,27 +48,30 @@ import java.util.UUID;
  */
 public class PROTEGO_MAXIMA extends ShieldSpell {
     /**
-     * min radius for this spell
+     * Minimum spell radius (5 blocks).
      */
     public static final int minRadiusConfig = 5;
 
     /**
-     * max radius for this spell
+     * Maximum spell radius (30 blocks).
      */
     public static final int maxRadiusConfig = 30;
 
     /**
-     * min duration for this spell
+     * Minimum spell duration (5 minutes).
      */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
 
     /**
-     * max duration for this spell
+     * Maximum spell duration (30 minutes).
      */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**
-     * The projectiles this spell needs to track because there is no entity move or projectile move event to listen to
+     * The projectiles this spell tracks for killing when they enter the protected area.
+     *
+     * <p>Spigot does not provide a ProjectileMoveEvent, so projectiles must be manually tracked
+     * and checked during upkeep() to determine if they've entered the spell area.</p>
      */
     ArrayList<Projectile> projectiles = new ArrayList<>();
 
@@ -79,13 +94,17 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
     }
 
     /**
-     * Constructor
+     * Constructs a new PROTEGO_MAXIMA spell cast by a player.
      *
-     * @param plugin   a callback to the MC plugin
-     * @param pid      the player who cast the spell
-     * @param location the center location of the spell
-     * @param radius   the radius for this spell
-     * @param duration the duration of the spell
+     * <p>Creates a protective shield at the specified location with the given radius and duration.
+     * The shield will protect against projectiles, block lower-level spells, and prevent hostile
+     * targeting of players and passive mobs inside the protected area.</p>
+     *
+     * @param plugin   a callback to the MC plugin (not null)
+     * @param pid      the UUID of the player who cast the spell (not null)
+     * @param location the center location of the spell (not null)
+     * @param radius   the radius for this spell (will be clamped to min/max values)
+     * @param duration the duration of the spell in ticks (will be clamped to min/max values)
      */
     public PROTEGO_MAXIMA(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin, pid, location);
@@ -97,6 +116,12 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
+    /**
+     * Initializes the radius and duration constraints for this spell.
+     *
+     * <p>Sets the spell's radius boundaries (5-30 blocks) and duration boundaries (5 to 30 minutes).</p>
+     */
+    @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
@@ -105,13 +130,30 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
     }
 
     /**
-     * Age the spell and damage any entities nearby
+     * Gets the projectiles currently being tracked by this spell.
+     *
+     * <p>Returns a copy of the tracked projectiles list to prevent external modifications.</p>
+     *
+     * @return a list of projectiles being tracked (not null, may be empty)
+     */
+    @NotNull
+    public List<Projectile> getTrackedProjectiles() {
+        return new ArrayList<>(projectiles);
+    }
+
+    /**
+     * Ages the spell and kills tracked projectiles that enter the protected area.
+     *
+     * <p>Checks each tracked projectile to see if it has entered the spell area. If so, removes
+     * the projectile and creates a non-damaging explosion at that location. Dead or escaped projectiles
+     * are removed from the tracking list.</p>
      */
     @Override
     public void upkeep() {
         age();
 
-        // check to see if any of the projectiles we're tracking have crossed the shield boundary
+        // we need to track projectile objects such as arrows and kill them when they hit the spell boundary. There
+        // is no ProjectileMoveEvent in spigot like there is in Paper so we have to do this manually.
         ArrayList<Projectile> projectileIterator = new ArrayList<>(projectiles);
         for (Projectile projectile : projectileIterator) {
             if (!projectile.isDead()) {
@@ -134,32 +176,46 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
     }
 
     /**
-     * Prevent living entities outside the spell area targeting players inside the spell area
+     * Prevents living entities outside the spell area from targeting players or passive mobs inside.
      *
-     * @param event the event
+     * <p>When a living entity targets another entity, this method checks if the target is inside
+     * the spell area. If the target is a player or passive mob inside the area, the targeting event
+     * is cancelled. Hostile mobs inside the area can still be targeted. Entities outside the area
+     * are not affected by this protection.</p>
+     *
+     * @param event the entity target event (not null)
      */
     void doOnEntityTargetEvent(@NotNull EntityTargetEvent event) {
-        Entity entity = event.getEntity();
         Entity target = event.getTarget();
 
-        // stop if the entity and target are not both living entities
-        if (!(entity instanceof LivingEntity) || !(target instanceof LivingEntity))
+        // stop if the target is not in the spell area
+        if (target == null || !isLocationInside(target.getLocation()))
             return;
 
         // stop if the targeted entity is not either a player or a passive mob
-        if (!(target instanceof Player) || EntityCommon.isHostile((LivingEntity) target))
-            return;
-
-        if (isLocationInside(entity.getLocation()) && isLocationInside(target.getLocation()))
+        if ((target instanceof Player) || !EntityCommon.isHostile((LivingEntity) target))
             event.setCancelled(true);
     }
 
     /**
-     * Stop spell projectiles when they hit the boundary of the spell.
+     * Blocks lower-level spell projectiles from crossing into the protected area.
      *
-     * @param event the spell projectile move event
+     * <p>When a spell projectile moves, this method checks if:
+     * <ul>
+     *   <li>The spell is higher level (above OWL level) - if yes, allows it through</li>
+     *   <li>The spell caster is inside the spell area - if yes, allows the spell to exit freely</li>
+     *   <li>The spell is moving into the protected area - if yes, blocks it and creates a non-damaging explosion</li>
+     * </ul>
+     * </p>
+     *
+     * @param event the spell projectile move event (not null)
      */
     void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
+        // do not stop higher level spells
+        if (event.getSpell().getLevel().ordinal() > MagicLevel.OWL.ordinal()) {
+            return;
+        }
+
         // don't stop spells of players inside the spell area from going across the spell boundary
         for (Player player : getPlayersInsideSpellRadius()) {
             if (event.getPlayer().getUniqueId().equals(player.getUniqueId()))
@@ -190,9 +246,13 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
     }
 
     /**
-     * Start tracking any projectiles that are launched near the player.
+     * Starts tracking projectiles launched within range of the spell center.
      *
-     * @param event the event
+     * <p>When a projectile is launched, this method checks if it is within 120 blocks of the spell
+     * center (the maximum range of an arrow). If so, the projectile is added to the tracked projectiles
+     * list so it can be intercepted if it enters the protected area during upkeep.</p>
+     *
+     * @param event the projectile launch event (not null)
      */
     @Override
     void doOnProjectileLaunchEvent(@NotNull ProjectileLaunchEvent event) {
@@ -207,30 +267,59 @@ public class PROTEGO_MAXIMA extends ShieldSpell {
     }
 
     /**
-     * In case we miss killing projectiles that cross the shield, cancel any projectile hit events to the player
+     * Prevents projectiles from hitting players or passive mobs inside the protected area.
      *
-     * @param event the event
+     * <p>This is a backup protection in case tracked projectiles slip through the upkeep() checks.
+     * When a projectile hits an entity inside the spell area, this method checks if the hit target
+     * is a player or non-hostile mob. If so, the hit event is cancelled to prevent damage. Hostile
+     * mobs inside the area can still be hit by projectiles. Entities outside the area are not protected.</p>
+     *
+     * @param event the projectile hit event (not null)
      */
     @Override
     void doOnProjectileHitEvent(@NotNull ProjectileHitEvent event) {
-        Entity entity = event.getHitEntity();
+        Entity target = event.getHitEntity();
 
-        for (Player player : getPlayersInsideSpellRadius()) {
-            if (entity != null && (entity.getUniqueId().equals(player.getUniqueId())))
-                event.setCancelled(true);
-        }
+        // stop if the target is not in the spell area
+        if (target == null || !isLocationInside(target.getLocation()))
+            return;
+
+        // stop if the targeted entity is not either a player or a passive mob
+        if ((target instanceof Player) || !EntityCommon.isHostile((LivingEntity) target))
+            event.setCancelled(true);
     }
 
+    /**
+     * Serializes the protego maxima spell data for persistence.
+     *
+     * <p>The protego maxima spell has no extra data to serialize beyond the base spell properties,
+     * so this method returns an empty map.</p>
+     *
+     * @return an empty map (the spell has no custom data to serialize)
+     */
     @Override
     @NotNull
     public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
+    /**
+     * Deserializes protego maxima spell data from saved state.
+     *
+     * <p>The protego maxima spell has no extra data to deserialize, so this method does nothing.</p>
+     *
+     * @param spellData the serialized spell data map (not used)
+     */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 
+    /**
+     * Cleans up when the protego maxima spell ends.
+     *
+     * <p>The protego maxima spell requires no special cleanup on termination. The tracked projectiles
+     * are released when the spell is killed, and no other resources need to be freed.</p>
+     */
     @Override
     void doCleanUp() {
     }

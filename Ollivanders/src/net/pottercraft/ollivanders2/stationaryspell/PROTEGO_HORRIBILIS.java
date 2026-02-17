@@ -14,29 +14,43 @@ import org.bukkit.Location;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Protego horribilis stops dark arts spells entering the protected area, except the Killing Curse (which is too strong).
- * <p>
- * {@link net.pottercraft.ollivanders2.spell.PROTEGO_HORRIBILIS}
+ * A stationary shield spell that blocks Dark Arts spells from entering the protected area.
+ *
+ * <p>Protego Horribilis creates a protective barrier that prevents Dark Arts spells from crossing the shield boundary.
+ * The spell is a powerful defensive charm that intercepts malicious magic before it can reach those inside the protected
+ * area. However, the spell is not powerful enough to stop the Killing Curse (Avada Kedavra), which bypasses the shield
+ * due to its overwhelming dark magic.</p>
+ *
+ * <p>Spell characteristics:
+ * <ul>
+ *   <li>Radius: 5-30 blocks (configurable)</li>
+ *   <li>Duration: 30 seconds to 30 minutes (configurable)</li>
+ *   <li>Effect: Blocks Dark Arts spells from entering the protected area</li>
+ *   <li>Exception: Avada Kedavra (Killing Curse) bypasses the shield</li>
+ * </ul>
+ * </p>
  *
  * @author Azami7
- * @version Ollivanders2
  * @see <a href="https://harrypotter.fandom.com/wiki/Protego_horribilis">https://harrypotter.fandom.com/wiki/Protego_horribilis</a>
  */
 public class PROTEGO_HORRIBILIS extends ShieldSpell {
     /**
-     * min radius for this spell
+     * Minimum spell radius (5 blocks).
      */
     public static final int minRadiusConfig = 5;
+
     /**
-     * max radius for this spell
+     * Maximum spell radius (30 blocks).
      */
     public static final int maxRadiusConfig = 30;
+
     /**
-     * min duration for this spell
+     * Minimum spell duration (30 seconds).
      */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
+
     /**
-     * max duration for this spell
+     * Maximum spell duration (30 minutes).
      */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
@@ -52,13 +66,16 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
     }
 
     /**
-     * Constructor
+     * Constructs a new PROTEGO_HORRIBILIS spell cast by a player.
      *
-     * @param plugin   a callback to the MC plugin
-     * @param pid      the player who cast the spell
-     * @param location the center location of the spell
-     * @param radius   the radius for this spell
-     * @param duration the duration of the spell
+     * <p>Creates a protective shield at the specified location with the given radius and duration.
+     * The shield will block Dark Arts spells from entering the protected area.</p>
+     *
+     * @param plugin   a callback to the MC plugin (not null)
+     * @param pid      the UUID of the player who cast the spell (not null)
+     * @param location the center location of the spell (not null)
+     * @param radius   the radius for this spell (will be clamped to min/max values)
+     * @param duration the duration of the spell in ticks (will be clamped to min/max values)
      */
     public PROTEGO_HORRIBILIS(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin, pid, location);
@@ -70,6 +87,12 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
+    /**
+     * Initializes the radius and duration constraints for this spell.
+     *
+     * <p>Sets the spell's radius boundaries (5-30 blocks) and duration boundaries (30 seconds to 30 minutes).</p>
+     */
+    @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
@@ -78,25 +101,50 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
     }
 
     /**
-     * Age the spell by a tick and kill projectiles crossing the boundaries
+     * Age the spell by a tick.
      */
     @Override
     public void upkeep() {
         age();
     }
 
+    /**
+     * Serializes the protego horribilis spell data for persistence.
+     *
+     * <p>The protego horribilis spell has no extra data to serialize beyond the base spell properties,
+     * so this method returns an empty map.</p>
+     *
+     * @return an empty map (the spell has no custom data to serialize)
+     */
     @Override
     @NotNull
     public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
+    /**
+     * Deserializes protego horribilis spell data from saved state.
+     *
+     * <p>The protego horribilis spell has no extra data to deserialize, so this method does nothing.</p>
+     *
+     * @param spellData the serialized spell data map (not used)
+     */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 
     /**
-     * Stop any dark arts spells from crossing the shield boundary, except avada kadavra
+     * Blocks Dark Arts spells from crossing the shield boundary.
+     *
+     * <p>When a spell projectile moves across the shield boundary, this method checks if it is:
+     * <ul>
+     *   <li>A Dark Arts spell - if yes, blocks it (cancels the event)</li>
+     *   <li>Avada Kedavra (Killing Curse) - if yes, allows it through (too powerful to stop)</li>
+     *   <li>Any other spell - if yes, allows it through</li>
+     * </ul>
+     * </p>
+     *
+     * @param event the spell projectile movement event (not null)
      */
     @Override
     void doOnSpellProjectileMoveEvent(@NotNull OllivandersSpellProjectileMoveEvent event) {
@@ -116,6 +164,11 @@ public class PROTEGO_HORRIBILIS extends ShieldSpell {
         }
     }
 
+    /**
+     * Cleans up when the protego horribilis spell ends.
+     *
+     * <p>The protego horribilis spell requires no special cleanup on termination.</p>
+     */
     @Override
     void doCleanUp() {
     }
