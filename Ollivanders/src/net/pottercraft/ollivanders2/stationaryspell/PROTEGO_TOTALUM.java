@@ -14,39 +14,54 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * Doesn't let entities pass into the protected area.
- * <p>
- * {@link net.pottercraft.ollivanders2.spell.PROTEGO_TOTALUM}
+ * A stationary shield spell that creates a protective barrier preventing entities from entering.
+ *
+ * <p>Protego Totalum creates an area where:
+ * <ul>
+ *   <li>Players cannot move into the protected area from outside</li>
+ *   <li>Hostile mobs that enter have their AI disabled so they cannot move or attack</li>
+ *   <li>Creatures cannot spawn inside the protected area</li>
+ *   <li>Entities already inside the area can move freely, including leaving</li>
+ * </ul>
+ * </p>
+ *
+ * <p>Note: There is no EntityMoveEvent in Spigot, so hostile mobs are handled by disabling
+ * their AI rather than blocking their movement directly.</p>
  *
  * @author Azami7
- * @version Ollivanders2
  * @see <a href="https://harrypotter.fandom.com/wiki/Protego_totalum">https://harrypotter.fandom.com/wiki/Protego_totalum</a>
  * @since 2.21
  */
 public class PROTEGO_TOTALUM extends ShieldSpell {
     /**
-     * min radius for this spell
+     * Minimum spell radius (5 blocks).
      */
     public static final int minRadiusConfig = 5;
+
     /**
-     * max radius for this spell
+     * Maximum spell radius (40 blocks).
      */
     public static final int maxRadiusConfig = 40;
+
     /**
-     * min duration for this spell
+     * Minimum spell duration (5 minutes).
      */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerMinute * 5;
+
     /**
-     * max duration for this spell
+     * Maximum spell duration (30 minutes).
      */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**
-     * Keep track of the living entities we have turned the AI off for
+     * Tracks hostile entities that have had their AI disabled by this spell.
+     *
+     * <p>Used to restore AI to affected entities when the spell ends.</p>
      */
     ArrayList<LivingEntity> entitiesAffected = new ArrayList<>();
 
@@ -62,13 +77,17 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
     }
 
     /**
-     * Constructor
+     * Constructs a new PROTEGO_TOTALUM spell cast by a player.
      *
-     * @param plugin   a callback to the MC plugin
-     * @param pid      the player who cast the spell
-     * @param location the center location of the spell
-     * @param radius   the radius for this spell
-     * @param duration the duration of the spell
+     * <p>Creates a protective barrier at the specified location with the given radius and duration.
+     * The barrier will block players from entering, disable AI on hostile mobs, and prevent
+     * creature spawns inside the protected area.</p>
+     *
+     * @param plugin   a callback to the MC plugin (not null)
+     * @param pid      the UUID of the player who cast the spell (not null)
+     * @param location the center location of the spell (not null)
+     * @param radius   the radius for this spell (will be clamped to min/max values)
+     * @param duration the duration of the spell in ticks (will be clamped to min/max values)
      */
     public PROTEGO_TOTALUM(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin, pid, location);
@@ -80,6 +99,12 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
         common.printDebugMessage("Creating stationary spell type " + spellType.name(), null, null, false);
     }
 
+    /**
+     * Initializes the radius and duration constraints for this spell.
+     *
+     * <p>Sets the spell's radius boundaries (5-40 blocks) and duration boundaries (5 to 30 minutes).</p>
+     */
+    @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
@@ -88,15 +113,30 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
     }
 
     /**
-     * Age the spell by 1 tick
+     * Gets the entities currently affected by this spell (AI disabled).
+     *
+     * <p>Returns a copy of the affected entities list to prevent external modifications.</p>
+     *
+     * @return a list of entities with disabled AI (not null, may be empty)
+     */
+    public List<Entity> getTrackedAffectedEntities() {
+        return new ArrayList<>(entitiesAffected);
+    }
+
+    /**
+     * Ages the spell and manages hostile mobs inside the protected area.
+     *
+     * <p>Checks for hostile entities inside the spell area and disables their AI so they cannot
+     * move or attack. Affected entities are tracked so their AI can be restored when the spell ends.</p>
      */
     @Override
     public void upkeep() {
         age();
 
-        // check for hostile entities in the spell area and remove their AI do they do not move or attack
+        // there is no EntityMoveEvent in spigot so we need to track hostile mobs manually
+        // check for hostile entities in the spell area and remove their AI so they do not move or attack
         for (LivingEntity entity : getLivingEntitiesInsideSpellRadius()) {
-            if (EntityCommon.isHostile(entity) || entitiesAffected.contains(entity))
+            if (!EntityCommon.isHostile(entity) || entitiesAffected.contains(entity))
                 continue;
 
             entity.setAI(false);
@@ -105,9 +145,13 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
     }
 
     /**
-     * Prevent players from entering the protected area
+     * Prevents players from entering the protected area.
      *
-     * @param event the player move event
+     * <p>When a player attempts to move from outside the spell area to inside it, the movement
+     * is cancelled and the player receives a message explaining they cannot enter. Players already
+     * inside the protected area can move freely, including leaving the area.</p>
+     *
+     * @param event the player move event (not null)
      */
     @Override
     void doOnPlayerMoveEvent(@NotNull PlayerMoveEvent event) {
@@ -138,26 +182,31 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
     }
 
     /**
-     * Prevent entities from spawning in the protected area
+     * Prevents creatures from spawning inside the protected area.
      *
-     * @param event the creature spawn event
+     * <p>When a creature spawn event occurs inside the spell area, the spawn is cancelled
+     * to maintain the sanctity of the protected space.</p>
+     *
+     * @param event the creature spawn event (not null)
      */
     @Override
     void doOnCreatureSpawnEvent(@NotNull CreatureSpawnEvent event) {
         Entity entity = event.getEntity(); // will never be null
-        Location entityLocation = entity.getLocation();
 
-        if (Ollivanders2Common.isInside(entityLocation, location, radius)) {
+        if (isLocationInside(entity.getLocation())) {
             event.setCancelled(true);
             common.printDebugMessage("PROTEGO_TOTALUM: canceled CreatureSpawnEvent", null, null, false);
         }
     }
 
     /**
-     * Serialize all data specific to this spell so it can be saved. We do not need to save information about the entuties we
-     * affected because we'll reset them and then reaffect them when the server restarts.
+     * Serializes the protego totalum spell data for persistence.
      *
-     * @return a map of the serialized data
+     * <p>The spell has no extra data to serialize beyond the base spell properties. Affected
+     * entities are not saved because they will be re-detected and re-affected when the server
+     * restarts and the spell resumes.</p>
+     *
+     * @return an empty map (the spell has no custom data to serialize)
      */
     @Override
     @NotNull
@@ -166,16 +215,21 @@ public class PROTEGO_TOTALUM extends ShieldSpell {
     }
 
     /**
-     * Deserialize the data for this spell and load the data to this spell.
+     * Deserializes protego totalum spell data from saved state.
      *
-     * @param spellData a map of the saved spell data
+     * <p>The spell has no extra data to deserialize, so this method does nothing.</p>
+     *
+     * @param spellData the serialized spell data map (not used)
      */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 
     /**
-     * Turn the AI back on for all the entities we affected that are still alive.
+     * Cleans up when the protego totalum spell ends.
+     *
+     * <p>Restores AI to all affected entities that are still alive, allowing them to move
+     * and attack normally again.</p>
      */
     @Override
     void doCleanUp() {
