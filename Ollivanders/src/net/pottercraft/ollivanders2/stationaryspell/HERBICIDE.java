@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Item;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
@@ -16,26 +17,48 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * A stationary spell that destroys plants and vegetation within a protected area.
+ *
+ * <p>Herbicide creates a powerful killing field that eliminates all plant life by:
+ * <ul>
+ *   <li>Replacing plants with dead alternatives (leaves become air, grass becomes dirt, etc.)</li>
+ *   <li>Dropping items for saplings and vegetation</li>
+ *   <li>Resetting crop growth to age 0</li>
+ *   <li>Checking WorldGuard permissions to prevent griefing</li>
+ * </ul>
+ * </p>
+ *
+ * <p>The spell targets a comprehensive list of plant materials including flowers, crops, leaves,
+ * mossy blocks, potted plants, and mushrooms.</p>
+ *
+ * @author Azami7
+ */
 public class HERBICIDE extends ThrownPotionStationarySpell {
     /**
-     * min radius for this spell
+     * Minimum spell radius (5 blocks).
      */
     public static final int minRadiusConfig = 5;
+
     /**
-     * max radius for this spell
+     * Maximum spell radius (20 blocks).
      */
     public static final int maxRadiusConfig = 20;
+
     /**
-     * min duration for this spell
+     * Minimum spell duration (30 seconds).
      */
     public static final int minDurationConfig = Ollivanders2Common.ticksPerSecond * 30;
+
     /**
-     * max duration for this spell
+     * Maximum spell duration (30 minutes).
      */
     public static final int maxDurationConfig = Ollivanders2Common.ticksPerMinute * 30;
 
     /**
+     * Mapping of plant materials to their dead/destroyed replacements.
      *
+     * <p>Used to determine what material each plant block becomes after herbicide effect.</p>
      */
     Map<Material, Material> blocksReplacements = new HashMap<>() {{
         put(Material.ACACIA_LEAVES, Material.AIR);
@@ -150,7 +173,9 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
     }};
 
     /**
+     * Mapping of vegetation materials to the items they drop when destroyed.
      *
+     * <p>Saplings drop sticks, bamboo drops bamboo items. The block itself is then removed.</p>
      */
     Map<Material, Material> blocksToItemReplacements = new HashMap<>() {{
         put(Material.ACACIA_SAPLING, Material.STICK);
@@ -176,13 +201,16 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
     }
 
     /**
-     * Constructor
+     * Constructs a new HERBICIDE spell cast by a player.
      *
-     * @param plugin   a callback to the MC plugin
-     * @param pid      the player who cast the spell
-     * @param location the center location of the spell
-     * @param radius   the radius for this spell
-     * @param duration the duration of the spell
+     * <p>Creates a herbicide field at the specified location with the given radius and duration.
+     * All plant life within the radius will be destroyed or transformed into dead alternatives.</p>
+     *
+     * @param plugin   a callback to the MC plugin (not null)
+     * @param pid      the UUID of the player who cast the spell (not null)
+     * @param location the center location of the spell (not null)
+     * @param radius   the radius for this spell (will be clamped to min/max values)
+     * @param duration the duration of the spell in ticks (will be clamped to min/max values)
      */
     public HERBICIDE(@NotNull Ollivanders2 plugin, @NotNull UUID pid, @NotNull Location location, int radius, int duration) {
         super(plugin, pid, location);
@@ -198,6 +226,12 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
         checkWorldGuard();
     }
 
+    /**
+     * Initializes the radius and duration constraints for this spell.
+     *
+     * <p>Sets the spell's radius boundaries (5-20 blocks) and duration boundaries (30 seconds to 30 minutes).</p>
+     */
+    @Override
     void initRadiusAndDurationMinMax() {
         minRadius = minRadiusConfig;
         maxRadius = maxRadiusConfig;
@@ -206,7 +240,15 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
     }
 
     /**
-     * Age the spell by 1 tick
+     * Ages the spell and eliminates plant life within the protected area.
+     *
+     * <p>Every 10 ticks, processes all blocks in the spell radius:
+     * <ul>
+     *   <li>Replaces plant blocks with dead alternatives (leaves→air, grass→dirt, etc.)</li>
+     *   <li>Drops items for saplings/bamboo and removes the block</li>
+     *   <li>Resets crop age to 0 for immature crops</li>
+     * </ul>
+     * </p>
      */
     @Override
     public void upkeep() {
@@ -217,6 +259,7 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
                 Material blockType = block.getType();
                 if (blocksReplacements.containsKey(blockType)) {
                     block.setType(blocksReplacements.get(blockType));
+                    common.printDebugMessage("HERBICIDE: changing " + blockType + " to " + block.getType(), null, null, false);
                     continue;
                 }
                 else if (blocksToItemReplacements.containsKey(blockType)) {
@@ -226,7 +269,9 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
                         continue;
                     }
 
-                    world.dropItemNaturally(block.getLocation(), new ItemStack(blocksToItemReplacements.get(blockType)));
+                    Item item = world.dropItemNaturally(block.getLocation(), new ItemStack(blocksToItemReplacements.get(blockType)));
+                    common.printDebugMessage("HERBICIDE: replacing " + blockType + " with " + item.getItemStack().getType(), null, null, false);
+                    block.setType(Material.AIR);
                     continue;
                 }
 
@@ -242,16 +287,36 @@ public class HERBICIDE extends ThrownPotionStationarySpell {
         age();
     }
 
+    /**
+     * Serializes the herbicide spell data for persistence.
+     *
+     * <p>The herbicide spell has no extra data to serialize beyond the base spell properties,
+     * so this method returns an empty map.</p>
+     *
+     * @return an empty map (the spell has no custom data to serialize)
+     */
     @Override
     @NotNull
     public Map<String, String> serializeSpellData() {
         return new HashMap<>();
     }
 
+    /**
+     * Deserializes herbicide spell data from saved state.
+     *
+     * <p>The herbicide spell has no extra data to deserialize, so this method does nothing.</p>
+     *
+     * @param spellData the serialized spell data map (not used)
+     */
     @Override
     public void deserializeSpellData(@NotNull Map<String, String> spellData) {
     }
 
+    /**
+     * Cleans up when the herbicide spell ends.
+     *
+     * <p>The herbicide spell requires no special cleanup on termination.</p>
+     */
     @Override
     void doCleanUp() {
     }

@@ -64,8 +64,7 @@ public class ProtegoHorribilisTest extends O2StationarySpellTest {
      * <p>The upkeep method only performs aging, which is already tested comprehensively by the inherited
      * ageAndKillTest() from the base test class.</p>
      */
-    @Override
-    @Test
+    @Override @Test
     void upkeepTest() {
         // upkeep just calls age(), which is tested by ageAndKillTest()
     }

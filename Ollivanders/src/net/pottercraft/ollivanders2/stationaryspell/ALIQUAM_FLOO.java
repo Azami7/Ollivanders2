@@ -73,6 +73,16 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
     public static final int maxDurationConfig = 1000;
 
     /**
+     * Message sent to player when the floo event happens successfully
+     */
+    public static final String successMessage = "Fire swirls around you.";
+
+    /**
+     * Message sent to player when the floo event is cancelled
+     */
+    public static final String cancelledMessage = "Nothing seems to happen.";
+
+    /**
      * The unique name of this floo network location (for teleportation destinations).
      */
     private String flooName;
@@ -419,10 +429,10 @@ public class ALIQUAM_FLOO extends O2StationarySpell {
 
                 if (!flooNetworkEvent.isCancelled()) {
                     p.addTeleportAction(player, flooNetworkEvent.getDestination());
-                    player.sendMessage(Ollivanders2.chatColor + "Fire swirls around you.");
+                    player.sendMessage(Ollivanders2.chatColor + successMessage);
                 }
                 else
-                    player.sendMessage(Ollivanders2.chatColor + "Nothing seems to happen.");
+                    player.sendMessage(Ollivanders2.chatColor + cancelledMessage);
 
                 stopWorking();
                 flooNetworkEvents.remove(player.getUniqueId());

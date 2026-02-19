@@ -5,6 +5,9 @@ import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
@@ -14,6 +17,7 @@ import org.jetbrains.annotations.Nullable;
 import org.mockbukkit.mockbukkit.ServerMock;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -287,4 +291,24 @@ public class TestCommon {
 
         return o2player.getSpellCount(spellType);
     }
+
+    /**
+     * Get all items in the world.
+     *
+     * @param world the world
+     * @return a list of all item entities found
+     */
+    @NotNull
+    public static List<Item> getAllItems(@NotNull World world) {
+        ArrayList<Item> items = new ArrayList<>();
+
+        for (Entity entity : world.getEntities()) {
+            if (entity instanceof Item)
+                items.add((Item)entity);
+        }
+
+        return items;
+    }
+
+
 }

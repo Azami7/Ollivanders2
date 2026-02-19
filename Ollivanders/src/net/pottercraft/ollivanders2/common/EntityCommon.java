@@ -226,6 +226,23 @@ public class EntityCommon {
     }
 
     /**
+     * Get the item entity at a specific location
+     *
+     * @param location the location to get the item from
+     * @return the Item entity or null if none present at the location
+     */
+    @Nullable
+    public static Item getItemAtLocation(@NotNull Location location) {
+        for (Entity entity : location.getWorld().getEntities()) {
+            if (entity instanceof Item && entity.getLocation().equals(location)) {
+                return (Item) entity;
+            }
+        }
+
+        return null;
+    }
+
+    /**
      * Gets item entities within a bounding box around a location.
      *
      * @param location the center location for the bounding box
