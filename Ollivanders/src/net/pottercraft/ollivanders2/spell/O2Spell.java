@@ -325,12 +325,15 @@ public abstract class O2Spell {
      * {@link #maxProjectileDistance} blocks before being automatically terminated.</p>
      */
     public void move() {
+        common.printDebugMessage("O2Spell.move: location is " + location.getX() + " , " + location.getY() + ", " + location.getZ(), null, null, false);
+
         // if this is somehow called when the spell is set to killed, or we've already hit a target, do nothing
         if (isKilled() || hasHitTarget())
             return;
 
         // if we have gone beyond the max distance, kill this spell
         if (projectileDistance > maxProjectileDistance) {
+            common.printDebugMessage("O2Spell.move: projectile reached max distance without hitting a target", null, null, false);
             kill();
             return;
         }
@@ -344,6 +347,7 @@ public abstract class O2Spell {
 
         // determine if this spell is allowed in this location per Ollivanders2 config and WorldGuard
         if (!isSpellAllowed()) {
+            common.printDebugMessage("O2Spell.move: spell not allowed here", null, null, false);
             kill();
             return;
         }
@@ -357,11 +361,13 @@ public abstract class O2Spell {
             return;
         }
 
-        world.playEffect(location, moveEffect, moveEffectData);
+        if (!Ollivanders2.testMode)
+            world.playEffect(location, moveEffect, moveEffectData);
 
         // check the block at this location, if it is not a pass-through block, stop the projectile and check the target
         Material targetBlockType = location.getBlock().getType();
         if (!projectilePassThrough.contains(targetBlockType)) {
+            common.printDebugMessage("O2Spell.move: spell hit " + targetBlockType, null, null, false);
             stopProjectile();
             checkTargetBlock();
         }
@@ -804,5 +810,12 @@ public abstract class O2Spell {
             player.sendMessage(Ollivanders2.chatColor + failureMessage);
         else
             common.printDebugMessage("failure message unset or 0 length", null, null, false);
+    }
+
+    /**
+     * For use by unit tests only so we can aim the spell since MockBukkit has not implemented player look at
+     */
+    public void setVector(Vector vector) {
+        this.vector = vector;
     }
 }

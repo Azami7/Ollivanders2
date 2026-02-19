@@ -114,8 +114,8 @@ public class AliquamFlooTest {
     @Test
     void aliquamFlooTest() {
         World testWorld = mockServer.addSimpleWorld("world");
-        Location location1 = new Location(testWorld, 100, 4, 100);
-        Location location2 = new Location(testWorld, 200, 4, 200);
+        Location location1 = new Location(testWorld, 100, 40, 100);
+        Location location2 = new Location(testWorld, 200, 40, 200);
         String floo1Name = "One";
         String floo2Name = "Two";
         PlayerMock player = mockServer.addPlayer();
@@ -189,6 +189,9 @@ public class AliquamFlooTest {
         mockServer.getScheduler().performTicks(500);
         assertFalse(aliquamFloo1.isWorking(), "floo1 not disabled");
         assertEquals(location2, player.getLocation(), "Player not teleported to floo2");
+        String message = player.nextMessage();
+        assertNotNull(message, "Player did not receive successful floo event message");
+        assertEquals(ALIQUAM_FLOO.successMessage, TestCommon.cleanChatMessage(message), "Player did not receive expected success message");
 
         // player chatting floo name when fireplace inactive does nothing
         player.chat(floo1Name);
@@ -220,7 +223,7 @@ public class AliquamFlooTest {
         assertEquals(location1, player.getLocation(), "Player not teleported back to floo1");
 
         // player gets a message when teleport is successful
-        String message = player.nextMessage();
+        message = player.nextMessage();
         assertNotNull(message, "Player did not get message on floo event");
 
         // doCleanUp - fireplace is deactivated if floo spell is killed

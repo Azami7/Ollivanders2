@@ -7,6 +7,8 @@ import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.Cow;
@@ -45,8 +47,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 /**
  * Unit tests for EntityCommon class.
  *
- * Tests entity search methods, item search methods, random entity type generation,
- * and hostility detection for various mob types.
+ * <p>Tests entity search methods, item search methods, random entity type generation,
+ * and hostility detection for various mob types.</p>
  */
 public class EntityCommonTest {
     static ServerMock mockServer;
@@ -440,6 +442,21 @@ public class EntityCommonTest {
         Bee bee = testWorld.spawn(new Location(testWorld, 930, 4, 930), Bee.class);
         bee.setTarget(null);
         assertFalse(EntityCommon.isHostile(bee), "EntityCommon.isHostile() should return false for mobs without targets");
+    }
+
+    @Test
+    void getItemAtLocationTest() {
+        Location location = new Location(testWorld, 1030, 40, 1030);
+        Block baseBlock = testWorld.getBlockAt(location).getRelative(BlockFace.DOWN);
+        baseBlock.setType(Material.DIRT);
+
+        testWorld.dropItem(location, new ItemStack(Material.COMPASS, 1));
+
+        Item item = EntityCommon.getItemAtLocation(location);
+        assertNotNull(item, "failed to find item at location");
+
+        item = EntityCommon.getItemAtLocation(baseBlock.getLocation());
+        assertNull(item, "found item at location where there is not an item");
     }
 
     /**

@@ -70,6 +70,9 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
         if (Ollivanders2.worldGuardEnabled)
             worldGuardFlags.add(Flags.BUILD);
 
+        if (Ollivanders2.testMode)
+            projectilePassThrough.addAll(Ollivanders2Common.doors);
+
         initSpell();
     }
 
