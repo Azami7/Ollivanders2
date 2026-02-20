@@ -54,6 +54,9 @@ public final class FRANGE_LIGNEA extends O2Spell {
         // material black list
         materialBlockedList.add(Material.WATER);
 
+        // make sure none of these are on the pass-through list
+        projectilePassThrough.removeAll(materialBlockedList);
+
         // world-guard flags
         if (Ollivanders2.worldGuardEnabled)
             worldGuardFlags.add(Flags.BUILD);

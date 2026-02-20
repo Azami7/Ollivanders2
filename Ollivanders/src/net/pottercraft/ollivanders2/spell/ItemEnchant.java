@@ -151,7 +151,7 @@ public abstract class ItemEnchant extends O2Spell {
             return;
         }
 
-        List<Item> items = getItems(1.5);
+        List<Item> items = getNearbyItems(defaultRadius);
         for (Item item : items) {
             // check if this item can be enchanted
             if (!canBeEnchanted(item))

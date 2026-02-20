@@ -85,6 +85,9 @@ public abstract class EntityDisguise extends EntityTransfiguration {
      */
     @Override
     public void revert() {
+        if (Ollivanders2.testMode)
+            return;
+
         Entity entity = disguise.getEntity();
         try {
             DisguiseAPI.undisguiseToAll(entity);

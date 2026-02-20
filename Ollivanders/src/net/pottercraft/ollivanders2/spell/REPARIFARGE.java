@@ -113,7 +113,7 @@ public final class REPARIFARGE extends O2Spell {
         }
         else {
             // check the area around the current projectile location for entities that can be targeted
-            for (Entity entity : getCloseEntities(1.5)) {
+            for (Entity entity : getCloseEntities(defaultRadius)) {
                 if (entity.getUniqueId().equals(player.getUniqueId()))
                     continue;
 

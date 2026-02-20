@@ -106,6 +106,8 @@ public final class WINGARDIUM_LEVIOSA extends O2Spell {
         materialBlockedList.add(Material.SAND);
         materialBlockedList.add(Material.GRAVEL);
 
+        // make sure none of these are on the pass-through list
+        projectilePassThrough.removeAll(materialBlockedList);
 
         // world guard flags
         if (Ollivanders2.worldGuardEnabled) {

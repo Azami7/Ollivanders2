@@ -79,10 +79,8 @@ public final class DEFODIO extends O2Spell {
         materialBlockedList.add(Material.LAVA);
         materialBlockedList.add(Material.FIRE);
 
-        for (Material material : Ollivanders2Common.unbreakableMaterials) {
-            if (!materialBlockedList.contains(material))
-                materialBlockedList.add(material);
-        }
+        // make sure none of these are on the pass-through list
+        projectilePassThrough.removeAll(materialBlockedList);
 
         initSpell();
     }

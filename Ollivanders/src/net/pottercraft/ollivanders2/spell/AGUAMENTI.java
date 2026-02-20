@@ -75,6 +75,9 @@ public final class AGUAMENTI extends BlockTransfiguration
         materialBlockedList.add(Material.SOUL_FIRE);
         materialBlockedList.add(Material.WATER);
 
+        // make sure none of these are on the pass-through list
+        projectilePassThrough.removeAll(materialBlockedList);
+
         // what type blocks transfigure in to for this spell
         transfigureType = Material.WATER;
 

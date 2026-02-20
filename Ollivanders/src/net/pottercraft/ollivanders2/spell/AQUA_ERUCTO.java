@@ -57,12 +57,12 @@ public final class AQUA_ERUCTO extends BlockTransfiguration {
 
         moveEffectData = Material.BLUE_ICE;
 
-        // remove fire as a pass-through material
-        projectilePassThrough.remove(Material.FIRE);
-
         // materials that can be transfigured by this spell
         materialAllowList.add(Material.LAVA);
         materialAllowList.add(Material.FIRE);
+
+        // make sure none of these are on the pass-through list
+        projectilePassThrough.remove(materialAllowList);
 
         // the map of what each material transfigures in to for this spell
         transfigurationMap.put(Material.LAVA, Material.OBSIDIAN);

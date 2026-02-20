@@ -149,7 +149,7 @@ public final class FINITE_INCANTATEM extends O2Spell {
      * Finite Incantatem on items.
      */
     private void finiteIncantatemItems() {
-        for (Item item : getItems(1.5)) {
+        for (Item item : getNearbyItems(defaultRadius)) {
             ItemEnchantmentType enchantmentType = Ollivanders2API.getItems().enchantedItems.getEnchantmentType(item.getItemStack());
 
             if (enchantmentType == null)

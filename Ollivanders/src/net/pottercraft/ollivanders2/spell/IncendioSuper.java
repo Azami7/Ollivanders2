@@ -126,7 +126,7 @@ public abstract class IncendioSuper extends O2Spell {
             }
 
             // items
-            List<Item> items = getItems(radius);
+            List<Item> items = getNearbyItems(radius);
             for (Item item : items) {
                 item.setFireTicks((int) timeRemaining);
 

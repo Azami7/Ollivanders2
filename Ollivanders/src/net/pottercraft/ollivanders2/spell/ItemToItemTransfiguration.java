@@ -69,7 +69,7 @@ public abstract class ItemToItemTransfiguration extends EntityTransfiguration {
             // we've already transfigured something
             return;
 
-        for (Entity entity : getCloseEntities(1.5)) {
+        for (Entity entity : getCloseEntities(defaultRadius)) {
             common.printDebugMessage("checking " + entity.getName(), null, null, false);
 
             if (!(entity instanceof Item)) {

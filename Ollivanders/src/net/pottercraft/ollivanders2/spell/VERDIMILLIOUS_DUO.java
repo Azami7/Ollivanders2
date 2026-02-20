@@ -71,7 +71,7 @@ public class VERDIMILLIOUS_DUO extends SparksBase {
         super.doCheckEffect();
 
         // highlight cursed items
-        List<Item> items = getItems(radius);
+        List<Item> items = getNearbyItems(radius);
 
         for (Item item : items) {
             // check for cursed items based on the level of this spell

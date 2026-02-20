@@ -51,9 +51,11 @@ public final class DUCKLIFORS extends FriendlyMobDisguise {
 
         targetType = EntityType.CHICKEN;
         disguiseType = DisguiseType.getType(targetType);
-        disguise = new MobDisguise(disguiseType);
-        AgeableWatcher watcher = (AgeableWatcher) disguise.getWatcher();
-        watcher.setAdult();
+        if (!Ollivanders2.testMode) {
+            disguise = new MobDisguise(disguiseType);
+            AgeableWatcher watcher = (AgeableWatcher) disguise.getWatcher();
+            watcher.setAdult();
+        }
 
         initSpell();
 

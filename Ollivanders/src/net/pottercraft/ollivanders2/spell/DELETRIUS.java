@@ -70,7 +70,7 @@ public final class DELETRIUS extends O2Spell {
         if (hasHitTarget())
             kill();
 
-        List<Item> items = getItems(defaultRadius);
+        List<Item> items = getNearbyItems(defaultRadius);
 
         if (items.size() > 0) {
             // handle success chance
