@@ -22,9 +22,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Animals;
 import org.bukkit.entity.Damageable;
-import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Giant;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
@@ -69,7 +67,7 @@ public abstract class O2Spell {
     /**
      * The max distance a spell projectile can travel
      */
-    static final int maxProjectileDistance = 50;
+    public static final int maxProjectileDistance = 50;
 
     /**
      * The currently traveled distance for the projectile
@@ -205,7 +203,7 @@ public abstract class O2Spell {
     /**
      * The default radius for spells when checking for conditions
      */
-    static final double defaultRadius = 1.5;
+    public static final double defaultRadius = 1.5;
 
     /**
      * Default constructor should only be used for fake instances of the spell such as when initializing the book
@@ -245,9 +243,11 @@ public abstract class O2Spell {
     }
 
     /**
-     * Initialize the parts of the spell that are based on experience, the player, etc. and not on class
-     * constants. This must be called by the child-most spell constructor since usage is based on the specific class
-     * type and cannot be determined in the super-class constructors.
+     * Initialize player-dependent spell properties that cannot be determined in the constructor.
+     *
+     * <p>Called once during spell setup to calculate spell type, usage modifier, and perform spell-specific
+     * initialization. Must be called from the most-derived spell class constructor since usage depends on
+     * the specific spell type which is only available after full object construction.</p>
      */
     void initSpell() {
         if (spellType == null) {
@@ -263,10 +263,22 @@ public abstract class O2Spell {
     }
 
     /**
-     * The spell-specific initialization based on usage, etc. Must be overridden by each spell class that
-     * has any initializations.
+     * Spell-specific initialization logic performed once during setup.
+     *
+     * <p>Called from {@link #initSpell()} after general initialization. Subclasses should override this
+     * to perform custom setup such as loading spell-specific data, initializing effect parameters, or
+     * setting up spell behavior. The default implementation does nothing.</p>
      */
     void doInitSpell() {
+    }
+
+    /**
+     * Get the world guard flags for this spell.
+     *
+     * @return a copy of the world guard flags
+     */
+    public List<StateFlag> getWorldGuardFlags () {
+        return new ArrayList<>(worldGuardFlags);
     }
 
     /**
@@ -332,7 +344,7 @@ public abstract class O2Spell {
             return;
 
         // if we have gone beyond the max distance, kill this spell
-        if (projectileDistance > maxProjectileDistance) {
+        if (isAtMaxDistance()) {
             common.printDebugMessage("O2Spell.move: projectile reached max distance without hitting a target", null, null, false);
             kill();
             return;
@@ -374,6 +386,15 @@ public abstract class O2Spell {
     }
 
     /**
+     * Check if the projectile has exceeded its maximum travel distance.
+     *
+     * @return true if projectile distance exceeds max distance, false otherwise
+     */
+    public boolean isAtMaxDistance() {
+        return projectileDistance > maxProjectileDistance;
+    }
+
+    /**
      * Check the current block for use with this spell.
      * <p>
      * If the block is not on the allow list, is on the blocked list, or the spell cannot be cast in this location, kills the spell
@@ -385,17 +406,13 @@ public abstract class O2Spell {
 
         Block target = location.getBlock();
 
-        p.getLogger().info("Checking " + target.getType());
-
-        // check blockAllowList, if it ia empty then all block types are allowed
+        // check blockAllowList, if it is empty then all block types are allowed
         if ((!materialAllowList.isEmpty()) && !(materialAllowList.contains(target.getType()))) {
             common.printDebugMessage(target.getType() + " is not in the material allow list", null, null, false);
             kill();
-            return;
         }
-
         // check deny list
-        if (materialBlockedList.contains(target.getType())) {
+        else if (materialBlockedList.contains(target.getType())) {
             common.printDebugMessage(target.getType() + " is in the material deny list", null, null, false);
             kill();
         }
@@ -406,7 +423,7 @@ public abstract class O2Spell {
      *
      * @return true if the spell can exist here, false otherwise
      */
-    boolean isSpellAllowed() {
+    public boolean isSpellAllowed() {
         boolean isAllowed = true;
 
         // determine if this spell is allowed in this location per Ollivanders2 config
@@ -447,37 +464,36 @@ public abstract class O2Spell {
     }
 
     /**
-     * Gets entities within a radius of current spell projectile location
+     * Gets entities within a radius of current spell projectile location, excluding the caster
      *
      * @param radius radius within which to get entities
      * @return a list of entities within the radius of the projectile
      */
     @NotNull
-    List<Entity> getCloseEntities(double radius) {
+    public List<Entity> getCloseEntities(double radius) {
         if (radius <= 0)
             radius = 1.0;
 
         Collection<Entity> entities = EntityCommon.getEntitiesInRadius(location, radius);
+
         List<Entity> close = new ArrayList<>();
 
         for (Entity e : entities) {
             if (e instanceof LivingEntity) {
-                if (((LivingEntity) e).getEyeLocation().distance(location) < radius
-                        || ((e instanceof EnderDragon
-                        || e instanceof Giant) && ((LivingEntity) e).getEyeLocation().distance(location) < (radius + 5))) {
+                if (((LivingEntity) e).getEyeLocation().distance(location) <= radius) {
                     if (!e.equals(player))
                         close.add(e);
                     else {
-                        if (lifeTicks > 1)
+                        if (lifeTicks > 1) // get at least 2 blocks away from the caster
                             close.add(e);
                     }
                 }
             }
             else
                 close.add(e);
-
-            close.add(e);
         }
+
+
         return close;
     }
 
@@ -488,7 +504,7 @@ public abstract class O2Spell {
      * @return a list of item entities within the radius of projectile
      */
     @NotNull
-    public List<Item> getItems(double radius) {
+    public List<Item> getNearbyItems(double radius) {
         return EntityCommon.getItemsInRadius(location, radius);
     }
 
@@ -507,18 +523,19 @@ public abstract class O2Spell {
                 living.add((LivingEntity) e);
         }
 
-        // handle also adding the current player when the projectile is at its first position
-        if (lifeTicks <= radius && !entities.contains(player))
+        // handle also adding the current player when the projectile is close to the player since getCloseEntities()
+        // excludes the player
+        if (Ollivanders2Common.isInside(player.getLocation(), location, (int)radius) && !entities.contains(player) && lifeTicks > 1)
             living.add(player);
 
         return living;
     }
 
     /**
-     * Get all players within the radius of projectile, including the caster if within the radius
+     * Get all players within the radius of projectile, including the caster if within the radius.
      *
      * @param radius radius within which to get entities
-     * @return a list of players within one block of projectile
+     * @return a list of players within the specified radius of projectile
      */
     @NotNull
     public List<Player> getNearbyPlayers(double radius) {
@@ -529,8 +546,9 @@ public abstract class O2Spell {
                 players.add((Player) e);
         }
 
-        // handle also adding the current player when the projectile is at its first position
-        if (lifeTicks <= radius && !entities.contains(player))
+        // handle also adding the current player when the projectile is close to the player since getCloseEntities()
+        // excludes the player
+        if (Ollivanders2Common.isInside(player.getLocation(), location, (int)radius) && !entities.contains(player) && lifeTicks > 1)
             players.add(player);
 
         return players;
@@ -551,15 +569,24 @@ public abstract class O2Spell {
                 damageable.add((Damageable) e);
         }
 
-        // handle also adding the current player when the projectile is at its first position
-        if (lifeTicks <= radius && !entities.contains(player))
+        // handle also adding the current player when the projectile is close to the player since getCloseEntities()
+        // excludes the player
+        if (Ollivanders2Common.isInside(player.getLocation(), location, (int)radius) && !entities.contains(player) && lifeTicks > 1)
             damageable.add(player);
 
         return damageable;
     }
 
     /**
-     * Sets the uses modifier that takes into account spell uses, wand type, and spell level if years are enabled. Returns 100 if the uses are 100 and the right wand is held.
+     * Calculate and set the {@link #usesModifier} based on spell experience, wand type, and player level.
+     *
+     * <p>The modifier accounts for:</p>
+     * <ul>
+     * <li>Spell usage count (or max level if enabled)</li>
+     * <li>Wand correctness (halved if wrong wand, doubled if elder wand)</li>
+     * <li>HIGHER_SKILL effect (doubles modifier)</li>
+     * <li>Player year/level compared to spell level (if years enabled)</li>
+     * </ul>
      */
     protected void setUsesModifier() {
         O2Player o2p = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
@@ -622,13 +649,19 @@ public abstract class O2Spell {
     }
 
     /**
-     * The spell-specific actions taken for each check effect. This must be overridden by each spell or the spell
-     * will do nothing.
+     * Spell-specific effects and behavior executed each game tick.
+     *
+     * <p>Called each tick from {@link #checkEffect()} after validation and movement logic.
+     * Subclasses must override this method to implement the spell's unique effects such as
+     * damage, block changes, particle effects, or other gameplay mechanics.</p>
      */
     abstract protected void doCheckEffect();
 
     /**
-     * This kills the spell.
+     * Terminates this spell, stopping projectile movement and performing cleanup.
+     *
+     * <p>Stops the projectile via {@link #stopProjectile()}, performs spell-specific cleanup via {@link #revert()},
+     * and marks the spell as killed so it will no longer be processed.</p>
      */
     public void kill() {
         stopProjectile();
@@ -639,8 +672,11 @@ public abstract class O2Spell {
     }
 
     /**
-     * Reverts any changes made to blocks if the effects are temporary. This must be overridden by each spell that has
-     * a revert action.
+     * Reverts any temporary changes made to the world by this spell.
+     *
+     * <p>Called when the spell is terminated via {@link #kill()}. Subclasses should override this method
+     * to undo any temporary block changes, entity modifications, or other side effects. The default
+     * implementation does nothing.</p>
      */
     protected void revert() {
     }
@@ -655,10 +691,15 @@ public abstract class O2Spell {
     }
 
     /**
-     * Stops the spell projectile from moving further
+     * Stops the spell projectile from moving further and marks it as having hit a target.
+     *
+     * <p>Sets {@link #hitTarget} to true only if the projectile has not already exceeded max distance.
+     * This prevents marking as "hit target" when the spell is killed due to reaching max distance.</p>
      */
     void stopProjectile() {
-        hitTarget = true;
+        if (!isAtMaxDistance()) {
+            hitTarget = true;
+        }
     }
 
     /**
@@ -692,6 +733,9 @@ public abstract class O2Spell {
             if (t != null && !(t.isEmpty()))
                 return t;
         }
+
+        if (text == null)
+            return "";
 
         return text;
     }
@@ -758,10 +802,13 @@ public abstract class O2Spell {
     }
 
     /**
-     * Determine if this entity can be targeted for a potentially harmful spell
+     * Check if a potentially harmful spell can target this entity based on WorldGuard permissions.
      *
-     * @param entity the entity to check
-     * @return true if it can be targeted, false otherwise
+     * <p>Validates spell targeting against WorldGuard flags for PvP, animal damage, item pickup, vehicle destruction,
+     * item frame destruction, and painting destruction. Bypasses checks if WorldGuard is disabled.</p>
+     *
+     * @param entity the entity to check for targeting eligibility
+     * @return true if the entity can be targeted, false if WorldGuard blocks the action
      */
     boolean entityHarmWGCheck(Entity entity) {
         if (!Ollivanders2.worldGuardEnabled) // short circuit this if WG is not enabled
@@ -803,6 +850,15 @@ public abstract class O2Spell {
     }
 
     /**
+     * Get the success message string
+     *
+     * @return the success message string if set, or an empty string if not set
+     */
+    public String getSuccessMessage() {
+        return successMessage;
+    }
+
+    /**
      * Send the player the failure message, if it exists, for this spell
      */
     public void sendFailureMessage() {
@@ -813,9 +869,11 @@ public abstract class O2Spell {
     }
 
     /**
-     * For use by unit tests only so we can aim the spell since MockBukkit has not implemented player look at
+     * Get the failure message string
+     *
+     * @return the failure message string if set, or an empty string if not set
      */
-    public void setVector(Vector vector) {
-        this.vector = vector;
+    public String getFailureMessage() {
+        return failureMessage;
     }
 }

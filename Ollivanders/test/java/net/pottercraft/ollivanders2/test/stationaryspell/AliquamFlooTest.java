@@ -5,6 +5,7 @@ import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.item.O2ItemType;
 import net.pottercraft.ollivanders2.stationaryspell.ALIQUAM_FLOO;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
+import net.pottercraft.ollivanders2.stationaryspell.events.FlooNetworkEvent;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,10 +29,12 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import java.io.File;
 import java.util.HashSet;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockbukkit.mockbukkit.matcher.plugin.PluginManagerFiredEventClassMatcher.hasFiredEventInstance;
 
 /**
  * Comprehensive test suite for the {@link ALIQUAM_FLOO} stationary spell.
@@ -192,6 +195,7 @@ public class AliquamFlooTest {
         String message = player.nextMessage();
         assertNotNull(message, "Player did not receive successful floo event message");
         assertEquals(ALIQUAM_FLOO.successMessage, TestCommon.cleanChatMessage(message), "Player did not receive expected success message");
+        assertThat(mockServer.getPluginManager(), hasFiredEventInstance(FlooNetworkEvent.class));
 
         // player chatting floo name when fireplace inactive does nothing
         player.chat(floo1Name);

@@ -103,7 +103,7 @@ public class REPARO extends O2Spell {
         if (hasHitTarget())
             kill();
 
-        List<Item> items = getItems(1.5);
+        List<Item> items = getNearbyItems(defaultRadius);
 
         for (Item item : items) {
             ItemStack stack = item.getItemStack();

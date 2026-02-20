@@ -67,7 +67,7 @@ public final class APARECIUM extends O2Spell {
             return;
         }
 
-        List<Item> items = getItems(1.5);
+        List<Item> items = getNearbyItems(defaultRadius);
         for (Item item : items) {
             if (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)) {
                 if (Ollivanders2API.getItems().enchantedItems.getEnchantmentType(item.getItemStack()) == ItemEnchantmentType.CELATUM) {

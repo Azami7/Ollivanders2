@@ -35,6 +35,10 @@ public final class O2PlayerCommon {
      */
     final Ollivanders2Common common;
 
+    public static final double rightWand = 1.0;
+    public static final double wrongWand = 2.0;
+    public static final double elderWand = 0.5;
+
     /**
      * Constructor
      *
@@ -191,7 +195,7 @@ public final class O2PlayerCommon {
 
         if (O2ItemType.ELDER_WAND.isItemThisType(itemStack))
             // elder wand
-            return 0.5;
+            return O2PlayerCommon.elderWand;
 
         if (!O2ItemType.WAND.isItemThisType(itemStack))
             // not a wand
@@ -207,12 +211,12 @@ public final class O2PlayerCommon {
         if (!(Ollivanders2API.getItems().getWands().isDestinedWand(o2p, itemStack))) {
             // not the player's destined wand
             common.printDebugMessage("O2PlayerCommon.doWandCheck: player holds a wand which is not their destined wand", null, null, false);
-            return 2;
+            return O2PlayerCommon.wrongWand;
         }
 
         // player's destined wand
         common.printDebugMessage("O2PlayerCommon.doWandCheck: player holds their destined wand", null, null, false);
-        return 1;
+        return O2PlayerCommon.rightWand;
     }
 
     /**

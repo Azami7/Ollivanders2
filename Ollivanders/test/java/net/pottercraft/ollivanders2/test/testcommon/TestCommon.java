@@ -4,6 +4,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.player.O2Player;
 import net.pottercraft.ollivanders2.potion.O2PotionType;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -12,6 +13,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BookMeta;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.mockbukkit.mockbukkit.ServerMock;
@@ -293,6 +295,29 @@ public class TestCommon {
     }
 
     /**
+     * Creates a new location with yaw and pitch set so a player at that position faces the target block.
+     *
+     * <p>Positions the player at the center of their block (X+0.5, Z+0.5) and computes the direction
+     * from their approximate eye position (Y rounded up from the 1.62 eye height offset) toward the
+     * center of the target block (X+0.5, Y+0.5, Z+0.5). The eye Y is rounded to remove fractional
+     * values for cleaner trajectory calculations.</p>
+     *
+     * @param playerLocation the player's feet position (not null)
+     * @param targetLocation the location of the target block (not null)
+     * @return a new location at block center with yaw and pitch set to face the target (not null)
+     */
+    @NotNull
+    public static Location faceTarget(@NotNull Location playerLocation, @NotNull Location targetLocation) {
+        Location result = playerLocation.clone().add(0.5, 0, 0.5);
+        Location eyeLocation = result.clone();
+        eyeLocation.setY(Math.round(result.getY() + 1.62));
+        Vector targetCenter = targetLocation.toVector().add(new Vector(0.5, 0.5, 0.5));
+        result.setDirection(targetCenter.subtract(eyeLocation.toVector()));
+
+        return result;
+    }
+
+    /**
      * Get all items in the world.
      *
      * @param world the world
@@ -309,6 +334,4 @@ public class TestCommon {
 
         return items;
     }
-
-
 }

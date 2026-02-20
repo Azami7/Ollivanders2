@@ -4,6 +4,7 @@ import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.book.O2BookType;
 import net.pottercraft.ollivanders2.book.O2Books;
+import net.pottercraft.ollivanders2.book.events.OllivandersBookLearningSpellEvent;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.effect.IMPROVED_BOOK_LEARNING;
 import net.pottercraft.ollivanders2.player.O2Player;
@@ -27,11 +28,13 @@ import org.mockbukkit.mockbukkit.entity.PlayerMock;
 import java.io.File;
 import java.util.List;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockbukkit.mockbukkit.matcher.plugin.PluginManagerFiredEventClassMatcher.hasFiredEventInstance;
 
 /**
  * Unit tests for O2Books.java.
@@ -107,6 +110,9 @@ public class O2BooksTest {
         mockServer.getScheduler().performTicks(Ollivanders2Common.ticksPerSecond * 5);
         // check player spell level
         assertNotEquals(spellLevel, o2p.getSpellCount(O2SpellType.LUMOS), "Spell level did not change after book was read.");
+
+        // make sure the OllivandersBookLearningSpellEvent event fired
+        assertThat(mockServer.getPluginManager(), hasFiredEventInstance(OllivandersBookLearningSpellEvent.class));
     }
 
     /**

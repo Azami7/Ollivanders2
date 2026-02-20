@@ -170,7 +170,7 @@ public class HarmoniaNecterePassusTest {
      */
     @Test
     void upkeepInUseByTest() {
-        World testWorld = mockServer.addSimpleWorld("world1");
+        World testWorld = mockServer.addSimpleWorld("world2");
         Location location1 = new Location(testWorld, 200, 40, 100);
         Location location2 = new Location(testWorld, 220, 40, 100);
         PlayerMock caster = mockServer.addPlayer();
@@ -215,7 +215,7 @@ public class HarmoniaNecterePassusTest {
      */
     @Test
     void getTwinTest() {
-        World testWorld = mockServer.addSimpleWorld("world1");
+        World testWorld = mockServer.addSimpleWorld("world3");
         Location location1 = new Location(testWorld, 300, 40, 100);
         Location location2 = new Location(testWorld, 320, 40, 100);
         PlayerMock caster = mockServer.addPlayer();
@@ -248,7 +248,7 @@ public class HarmoniaNecterePassusTest {
      */
     @Test
     void doOnPlayerMoveEventTest () {
-        World testWorld = mockServer.addSimpleWorld("world1");
+        World testWorld = mockServer.addSimpleWorld("world4");
         Location location1 = new Location(testWorld, 400, 40, 100);
         Location location2 = new Location(testWorld, 420, 40, 100);
         PlayerMock caster = mockServer.addPlayer();
@@ -295,7 +295,7 @@ public class HarmoniaNecterePassusTest {
      */
     @Test
     void serializeAndDeserializeSpellDataTest() {
-        World testWorld = mockServer.addSimpleWorld("world1");
+        World testWorld = mockServer.addSimpleWorld("world5");
         Location location1 = new Location(testWorld, 500, 40, 100);
         Location location2 = new Location(testWorld, 520, 40, 100);
         PlayerMock caster = mockServer.addPlayer();
@@ -334,7 +334,7 @@ public class HarmoniaNecterePassusTest {
         assertNotNull(stationarySpell);
         assertFalse(stationarySpell.checkSpellDeserialization(), "Deserialized spell should fail check without required data");
 
-        World testWorld = mockServer.addSimpleWorld("world1");
+        World testWorld = mockServer.addSimpleWorld("world6");
         Location location1 = new Location(testWorld, 600, 40, 100);
         Location location2 = new Location(testWorld, 620, 40, 100);
         PlayerMock caster = mockServer.addPlayer();

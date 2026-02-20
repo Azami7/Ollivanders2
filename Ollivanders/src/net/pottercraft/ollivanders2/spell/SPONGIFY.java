@@ -72,6 +72,9 @@ public class SPONGIFY extends BlockTransfiguration
         materialBlockedList.add(Material.LAVA);
         materialBlockedList.add(Material.FIRE);
 
+        // make sure none of these are on the pass-through list
+        projectilePassThrough.removeAll(materialBlockedList);
+
         // world guard flags
         if (Ollivanders2.worldGuardEnabled)
             worldGuardFlags.add(Flags.BUILD);

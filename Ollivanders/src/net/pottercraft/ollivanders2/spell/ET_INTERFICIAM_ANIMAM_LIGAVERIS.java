@@ -76,7 +76,7 @@ public final class ET_INTERFICIAM_ANIMAM_LIGAVERIS extends O2Spell {
         }
 
         // check for an item
-        List<Item> items = getItems(1.5);
+        List<Item> items = getNearbyItems(defaultRadius);
         for (Item item : items) {
             // if this is a wand or enchanted item, we cannot use it
             if (Ollivanders2API.getItems().getWands().isWand(item.getItemStack()) || (Ollivanders2API.getItems().enchantedItems.isEnchanted(item)))
