@@ -20,6 +20,7 @@ import net.pottercraft.ollivanders2.listeners.OllivandersListener;
 import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.player.O2Players;
 import net.pottercraft.ollivanders2.spell.APPARATE;
+import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2Spells;
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpells;
 import org.bukkit.World;
@@ -1425,19 +1426,7 @@ public class Ollivanders2 extends JavaPlugin {
      * @param player the player that attempted to cast the spell
      */
     public void spellCannotBeCastMessage(@NotNull Player player) {
-        player.sendMessage(chatColor + "A powerful protective magic prevents you from casting this spell here.");
-    }
-
-    /**
-     * Send a message when a spell's effect is blocked by protective magic (e.g., WorldGuard).
-     *
-     * <p>This is used when a spell is cast but its effects are blocked at the target location,
-     * not when the initial casting is prevented. This is not the message to use for bookLearning enforcement.</p>
-     *
-     * @param player the player whose spell effect was blocked
-     */
-    public void spellFailedMessage(@NotNull Player player) {
-        player.sendMessage(chatColor + "A powerful protective magic blocks your spell.");
+        player.sendMessage(chatColor + O2Spell.isAllowedFailureMessage);
     }
 
     /**
@@ -1449,7 +1438,7 @@ public class Ollivanders2 extends JavaPlugin {
      * @param player the player who attempted to cast while on cooldown
      */
     public void spellCoolDownMessage(@NotNull Player player) {
-        player.sendMessage(chatColor + "You are too tired to cast this spell right now.");
+        player.sendMessage(chatColor + O2Spell.cooldownMessage);
     }
 
     /**

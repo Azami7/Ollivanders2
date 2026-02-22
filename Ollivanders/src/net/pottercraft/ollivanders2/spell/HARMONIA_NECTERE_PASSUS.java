@@ -3,7 +3,7 @@ package net.pottercraft.ollivanders2.spell;
 import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.*;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,13 +13,26 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 
 /**
- * Creates a pair of vanishing cabinets and teleports between them.
+ * Creates a pair of vanishing cabinets for teleportation between two locations.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Harmonia_Nectere_Passus">https://harrypotter.fandom.com/wiki/Harmonia_Nectere_Passus</a>
+ * <p>The spell requires two properly configured vanishing cabinet signs. Each sign must contain
+ * the world name and XYZ coordinates of the other cabinet on four separate lines. When cast on a sign,
+ * the spell creates a pair of stationary vanishing cabinets that allow players to teleport between them.
+ *
+ * <p>The spell validates:
+ * <ul>
+ * <li>Target block is a sign</li>
+ * <li>Sign contains valid destination coordinates</li>
+ * <li>To and from locations are different</li>
+ * <li>No vanishing cabinet already exists at either location</li>
+ * </ul>
+ *
+ * @see <a href="https://harrypotter.fandom.com/wiki/Harmonia_Nectere_Passus">Harmonia Nectere Passus</a>
  */
 public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
     /**
@@ -77,7 +90,21 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
     }
 
     /**
-     * Specific logic for targeting the vanishing cabinet sign
+     * Create vanishing cabinets when spell hits a valid sign target.
+     *
+     * <p>Validates the target sign and creates a pair of stationary vanishing cabinets if all
+     * requirements are met. Sends appropriate failure messages to the caster if validation fails.</p>
+     *
+     * <p>Validation checks:
+     * <ul>
+     * <li>Target block is a sign ({@link #getTargetBlock()})</li>
+     * <li>Sign contains valid destination coordinates via {@link #getSignLocation(Block)}</li>
+     * <li>From and to locations are different (cannot create self-referential cabinet)</li>
+     * <li>No stationary vanishing cabinet already exists at either location</li>
+     * </ul>
+     *
+     * <p>If all checks pass, creates two stationary HARMONIA_NECTERE_PASSUS spells (one at each location)
+     * that enable bidirectional teleportation.</p>
      */
     @Override
     protected void doCheckEffect() {
@@ -86,52 +113,43 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
 
         kill();
 
-        Block fromBlock = getTargetBlock();
-        if (fromBlock == null) {
+        Block signBlock = getTargetBlock();
+        if (signBlock == null) {
             common.printDebugMessage("HARMONIA_NECTERE_PASSUS.doCheckEffect: from block is null", null, null, true);
+            failureMessage = "Nothing seems to happen";
+            sendFailureMessage();
             return;
         }
 
-        Material blockType = fromBlock.getType();
+        Material blockType = signBlock.getType();
         if (!Ollivanders2Common.signs.contains(blockType)) {
             common.printDebugMessage("Block is not a sign", null, null, false);
+            failureMessage = "Nothing seems to happen";
+            sendFailureMessage();
             return;
         }
 
         // determine the location of the other vanishing cabinet
-        Location toLoc = getSignLocation(fromBlock);
+        Location toLoc = getSignLocation(signBlock);
         if (toLoc == null) {
             common.printDebugMessage("Unable to get toLoc from sign.", null, null, false);
+            failureMessage = "Sign does not have the location of the twin cabinet";
+            sendFailureMessage();
             return;
         }
 
-        Block toBlock = toLoc.getBlock();
-        Material toBlockType = toBlock.getType();
-        if (!Ollivanders2Common.signs.contains(toBlockType)) {
-            common.printDebugMessage("Block at toLoc is not a sign block", null, null, false);
-            return;
-        }
-
-        Location fromLoc = getSignLocation(toBlock);
-        if (fromLoc == null) {
-            common.printDebugMessage("Unable to get fromLoc from sign.", null, null, false);
-            return;
-        }
-
+        Location fromLoc = signBlock.getLocation(); // this is slightly different from the location of the projectile (in fractions)
         if (Ollivanders2Common.locationEquals(toLoc, fromLoc)) {
             common.printDebugMessage("Vanishing cabinet to and from locations are the same", null, null, false);
-            player.sendMessage(Ollivanders2.chatColor + "To and from locations on vanishing cabinet signs are the same.");
+            failureMessage = "To and from locations on vanishing cabinet signs are the same.";
+            sendFailureMessage();
             return;
         }
 
-        for (O2StationarySpell statSpell : Ollivanders2API.getStationarySpells().getActiveStationarySpells()) {
-            if (statSpell instanceof net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS) {
-                net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS harmonia = (net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS) statSpell;
-                if (harmonia.getBlock().equals(fromLoc.getBlock()) || harmonia.getBlock().equals(toLoc.getBlock())) {
-                    player.sendMessage(Ollivanders2.chatColor + "There is already a vanishing cabinet here.");
-                    return;
-                }
-            }
+        if (!Ollivanders2API.getStationarySpells().getActiveStationarySpellsAtLocationByType(fromLoc, O2StationarySpellType.HARMONIA_NECTERE_PASSUS).isEmpty() || !Ollivanders2API.getStationarySpells().getActiveStationarySpellsAtLocationByType(toLoc, O2StationarySpellType.HARMONIA_NECTERE_PASSUS).isEmpty()) {
+            failureMessage = "There is already a vanishing cabinet here.";
+            sendFailureMessage();
+            return;
         }
 
         net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS harmoniaFrom = new net.pottercraft.ollivanders2.stationaryspell.HARMONIA_NECTERE_PASSUS(p, player.getUniqueId(), fromLoc, toLoc);
@@ -145,11 +163,21 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
     }
 
     /**
-     * Get the world from the sign block.
+     * Extract destination coordinates from a vanishing cabinet sign.
      *
-     * @param block the sign to check
-     * @return the location or null if one could not be created
+     * <p>Reads the four lines of text from the sign's front face:
+     * <ul>
+     * <li>Line 0: World name</li>
+     * <li>Line 1: X coordinate</li>
+     * <li>Line 2: Y coordinate</li>
+     * <li>Line 3: Z coordinate</li>
+     * </ul>
+     *
+     * @param block the sign block to parse
+     * @return a Location constructed from the sign's coordinates, or null if the sign is missing
+     * coordinates, coordinates are not integers, or the world does not exist
      */
+    @Nullable
     private Location getSignLocation(Block block) {
         Location location = null;
 

@@ -267,7 +267,7 @@ public class O2Prophecy {
         // Example: 50% accuracy needs to roll < 50 to succeed
         int rand = Math.abs(Ollivanders2Common.random.nextInt() % 100);
 
-        if (accuracy > rand) {
+        if (accuracy > rand || (Ollivanders2.testMode && Ollivanders2.maxSpellLevel)) { // make sure this always succeeds in test mode
             // Prophecy succeeds: apply the effect to the target
             O2Effect effect;
             Class<?> effectClass = effectType.getClassName();

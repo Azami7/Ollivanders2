@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.lang.reflect.Constructor;
 import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.List;
@@ -450,5 +451,41 @@ public class O2Spells {
     @NotNull
     public List<O2Spell> getActiveSpells() {
         return new ArrayList<>(activeSpells);
+    }
+
+    /**
+     * This creates the spell projectile.
+     *
+     * @param player the player that cast the spell
+     * @param name   the name of the spell cast
+     * @param wandC  the wand check value for the held wand
+     */
+    @Nullable
+    public O2Spell createSpell(@NotNull Player player, @NotNull O2SpellType name, double wandC) {
+        common.printDebugMessage("OllivandersListener.createSpellProjectile: enter", null, null, false);
+
+        //spells go here, using any of the three types of magic
+        String spellClass = "net.pottercraft.ollivanders2.spell." + name;
+
+        Constructor<?> c;
+        try {
+            c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, Double.class);
+        }
+        catch (Exception e) {
+            common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell constructor", e, null, true);
+            return null;
+        }
+
+        O2Spell spell;
+
+        try {
+            spell = (O2Spell) c.newInstance(p, player, wandC);
+        }
+        catch (Exception e) {
+            common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell", e, null, true);
+            return null;
+        }
+
+        return spell;
     }
 }

@@ -222,6 +222,7 @@ public class O2ProphecyTest {
 
         // test fulfill
         // a prophecy with max accuracy - so should succeed
+        Ollivanders2.maxSpellLevel = true;
         prophecy = new O2Prophecy(testPlugin, prophecyEffect, prophecyMessage, target.getUniqueId(), prophet.getUniqueId(), 10, effectDuration, 99);
         prophecy.fulfill();
         mockServer.getScheduler().performTicks(5);
@@ -251,6 +252,7 @@ public class O2ProphecyTest {
         assertFalse(Ollivanders2API.getPlayers().playerEffects.hasEffect(target.getUniqueId(), prophecyEffect), "Target still has the prophecy effect after expected duration");
 
         // low accuracy prophecy sends failure message to prophet and nothing to target, no effect added to target
+        Ollivanders2.maxSpellLevel = false;
         prophecyMessage = "low accuracy prophecy";
         prophecy = new O2Prophecy(testPlugin, prophecyEffect, prophecyMessage, target.getUniqueId(), prophet.getUniqueId(), 10, 10, 0);
         prophecy.fulfill();

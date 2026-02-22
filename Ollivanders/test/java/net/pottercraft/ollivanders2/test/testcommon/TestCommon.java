@@ -7,6 +7,8 @@ import net.pottercraft.ollivanders2.spell.O2SpellType;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -333,5 +335,18 @@ public class TestCommon {
         }
 
         return items;
+    }
+
+    /**
+     * Get the location relative to a location.
+     *
+     * @param location the starting location
+     * @param relativeTo the relative position to get a location for
+     * @return the relative location
+     */
+    public static Location getRelativeLocation(Location location, BlockFace relativeTo) {
+        Block blockAt = location.getBlock();
+
+        return blockAt.getRelative(relativeTo).getLocation();
     }
 }

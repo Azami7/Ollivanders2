@@ -70,6 +70,21 @@ public abstract class O2Spell {
     public static final int maxProjectileDistance = 50;
 
     /**
+     * A spell is considered mastered at level 100
+     */
+    public static final int spellMasteryLevel = 100;
+
+    /**
+     * The message for an isAllowed failure
+     */
+    public static final String isAllowedFailureMessage = "A powerful protective magic prevents you from casting this spell here.";
+
+    /**
+     * The message for cooldown spell failures
+     */
+    public static final String cooldownMessage = "You are too tired to cast this spell right now.";
+
+    /**
      * The currently traveled distance for the projectile
      */
     int projectileDistance = 0;
@@ -437,8 +452,10 @@ public abstract class O2Spell {
             isAllowed = false;
         }
 
-        if (!isAllowed)
-            p.spellFailedMessage(player);
+        if (!isAllowed) {
+            failureMessage = isAllowedFailureMessage;
+            sendFailureMessage();
+        }
 
         return isAllowed;
     }
@@ -633,6 +650,8 @@ public abstract class O2Spell {
                 // half skill when 1 level below
                 usesModifier *= 0.5;
         }
+
+        common.printDebugMessage("O2Spell.setUsesModifier: usesModifier = " + usesModifier, null, null, false);
     }
 
     /**

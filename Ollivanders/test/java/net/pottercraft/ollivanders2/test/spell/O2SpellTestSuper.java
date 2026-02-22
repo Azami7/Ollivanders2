@@ -1,16 +1,51 @@
 package net.pottercraft.ollivanders2.test.spell;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
+import net.pottercraft.ollivanders2.Ollivanders2API;
+import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.player.O2PlayerCommon;
+import net.pottercraft.ollivanders2.spell.O2Spell;
+import net.pottercraft.ollivanders2.spell.O2SpellType;
 import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
+import org.bukkit.Location;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.MockBukkit;
 import org.mockbukkit.mockbukkit.ServerMock;
+import org.mockbukkit.mockbukkit.entity.PlayerMock;
 
 import java.io.File;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+/**
+ * Abstract base class for spell unit tests.
+ *
+ * <p>Provides shared test infrastructure for testing O2Spell implementations including:
+ * <ul>
+ * <li>MockBukkit server setup and teardown</li>
+ * <li>Plugin instance initialization with default configuration</li>
+ * <li>Helper methods for casting spells in tests</li>
+ * <li>Abstract test methods that subclasses must implement</li>
+ * </ul>
+ *
+ * <p><strong>Test Structure:</strong> A shared MockBukkit server and plugin instance are created
+ * once before all tests and reused across test methods for performance. Each test class extending
+ * this base must implement {@link #spellConstructionTest()} and {@link #doCheckEffectTest()}.
+ *
+ * @author Azami7
+ */
 public abstract class O2SpellTestSuper {
+    /**
+     * Default spell experience level for test casting.
+     *
+     * <p>Used by {@link #castSpell(PlayerMock, Location, O2SpellType)} and overloads
+     * when no explicit experience is provided.</p>
+     */
+    static final int defaultExperience = 20;
+
     /**
      * Shared mock Bukkit server instance for all tests.
      *
@@ -22,7 +57,7 @@ public abstract class O2SpellTestSuper {
     /**
      * The plugin instance being tested.
      *
-     * <p>Loaded fresh before each test method with the default configuration. Provides access to
+     * <p>Loaded before all test methods with the default configuration. Provides access to
      * logger, scheduler, and other plugin API methods during tests.</p>
      */
     static Ollivanders2 testPlugin;
@@ -43,6 +78,59 @@ public abstract class O2SpellTestSuper {
 
         // advance the server by 20 ticks to let the scheduler start (it has an initial delay of 20 ticks)
         mockServer.getScheduler().performTicks(TestCommon.startupTicks);
+    }
+
+    /**
+     * Cast a spell with default wand and experience.
+     *
+     * @param caster the player casting the spell
+     * @param targetLocation the location the spell should target
+     * @param spellType the type of spell to cast
+     * @return the created and added spell
+     */
+    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location targetLocation, @NotNull O2SpellType spellType) {
+        return castSpell(caster, targetLocation, spellType, O2PlayerCommon.rightWand, defaultExperience);
+    }
+
+    /**
+     * Cast a spell with custom wand and default experience.
+     *
+     * @param caster the player casting the spell
+     * @param targetLocation the location the spell should target
+     * @param spellType the type of spell to cast
+     * @param wand the wand correctness factor (rightWand, wrongWand, elderWand, etc.)
+     * @return the created and added spell
+     */
+    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location targetLocation, @NotNull O2SpellType spellType, double wand) {
+        return castSpell(caster, targetLocation, spellType, wand, defaultExperience);
+    }
+
+    /**
+     * Cast a spell with custom wand and experience.
+     *
+     * <p>Sets up the player's experience with the spell type, positions them to face the target,
+     * creates the spell, and adds it to the active spell list.</p>
+     *
+     * @param caster the player casting the spell
+     * @param targetLocation the location the spell should target
+     * @param spellType the type of spell to cast
+     * @param wand the wand correctness factor (rightWand, wrongWand, elderWand, etc.)
+     * @param experience the spell experience level to set on the player
+     * @return the created and added spell
+     */
+    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location targetLocation, @NotNull O2SpellType spellType, double wand, int experience) {
+        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(caster.getUniqueId());
+        assertNotNull(o2p, "Unable to get O2Player");
+        o2p.setSpellCount(spellType, experience);
+
+        caster.setLocation(TestCommon.faceTarget(caster.getLocation(), targetLocation));
+
+        O2Spell spell = Ollivanders2API.getSpells().createSpell(caster, spellType, wand);
+        assertNotNull(spell, "Unable to create spell");
+
+        Ollivanders2API.getSpells().addSpell(caster, spell);
+
+        return spell;
     }
 
     /**

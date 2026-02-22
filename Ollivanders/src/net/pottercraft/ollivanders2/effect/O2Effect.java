@@ -195,6 +195,24 @@ public abstract class O2Effect {
     }
 
     /**
+     * Get the legiliments text for this effect
+     *
+     * @return the legilimens text
+     */
+    public String getLegilimensText() {
+        return legilimensText;
+    }
+
+    /**
+     * Get the informous text for this effect
+     *
+     * @return the informous text
+     */
+    public String getInformousText() {
+        return informousText;
+    }
+
+    /**
      * Decrement the effect's duration by the specified amount.
      *
      * <p>Called by the player effects system each game tick to age the effect. Permanent effects
