@@ -1373,12 +1373,14 @@ public class O2Effects implements Listener {
      */
     @Nullable
     public String detectEffectWithLegilimens(@NotNull UUID pid) {
+        common.printDebugMessage("O2Effects.detectEffectWithLegilimens", null, null, false);
         String infoText = null;
 
         Map<O2EffectType, O2Effect> activeEffects = effectsData.getPlayerActiveEffects(pid);
         Collection<O2Effect> effects = activeEffects.values();
 
         for (O2Effect effect : effects) {
+            common.printDebugMessage("O2Effects.detectEffectWithLegilimens: found " + effect.effectType.toString(), null, null, false);
             if (effect.legilimensText != null) {
                 infoText = effect.legilimensText;
                 break;

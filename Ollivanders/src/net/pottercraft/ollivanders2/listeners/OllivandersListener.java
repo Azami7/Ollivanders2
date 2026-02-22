@@ -68,7 +68,6 @@ import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.lang.reflect.Constructor;
 import java.util.Set;
 
 /**
@@ -278,42 +277,6 @@ public class OllivandersListener implements Listener {
     }
 
     /**
-     * This creates the spell projectile.
-     *
-     * @param player the player that cast the spell
-     * @param name   the name of the spell cast
-     * @param wandC  the wand check value for the held wand
-     */
-    @Nullable
-    private O2Spell createSpellProjectile(@NotNull Player player, @NotNull O2SpellType name, double wandC) {
-        common.printDebugMessage("OllivandersListener.createSpellProjectile: enter", null, null, false);
-
-        //spells go here, using any of the three types of magic
-        String spellClass = "net.pottercraft.ollivanders2.spell." + name;
-
-        Constructor<?> c;
-        try {
-            c = Class.forName(spellClass).getConstructor(Ollivanders2.class, Player.class, Double.class);
-        }
-        catch (Exception e) {
-            common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell constructor", e, null, true);
-            return null;
-        }
-
-        O2Spell spell;
-
-        try {
-            spell = (O2Spell) c.newInstance(p, player, wandC);
-        }
-        catch (Exception e) {
-            common.printDebugMessage("OllivandersListener.createSpellProjectile: exception creating spell", e, null, true);
-            return null;
-        }
-
-        return spell;
-    }
-
-    /**
      * Action by player to cast a spell
      *
      * @param player the player casting the spell
@@ -346,7 +309,7 @@ public class OllivandersListener implements Listener {
                 return;
             }
 
-            O2Spell castSpell = createSpellProjectile(player, spellType, wandCheck);
+            O2Spell castSpell = Ollivanders2API.getSpells().createSpell(player, spellType, wandCheck);
             if (castSpell == null) {
                 return;
             }
@@ -861,7 +824,7 @@ public class OllivandersListener implements Listener {
             return false;
         }
 
-        O2Spell spell = createSpellProjectile(sender, spellType, 1.0);
+        O2Spell spell = Ollivanders2API.getSpells().createSpell(sender, spellType, O2PlayerCommon.rightWand);
 
         if (!(spell instanceof Divination))
             return false;

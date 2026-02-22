@@ -119,7 +119,8 @@ public final class APPARATE extends O2Spell {
             destinationParsed = true;
         else {
             if (Ollivanders2.apparateLocations) {
-                player.sendMessage(Ollivanders2.chatColor + "That location does not exist.");
+                failureMessage = "That location does not exist.";
+                sendFailureMessage();
                 kill();
                 return;
             }
@@ -129,7 +130,8 @@ public final class APPARATE extends O2Spell {
 
         // are they allowed to apparate to that location?
         if (!canApparateTo(destination)) {
-            p.spellFailedMessage(player);
+            failureMessage = "A powerful protective magic blocks your spell.";
+            sendFailureMessage();
             kill();
             return;
         }
@@ -137,14 +139,16 @@ public final class APPARATE extends O2Spell {
         // are they allowed to apparate from this location?
         Location source = player.getLocation();
         if (!canApparateFrom(source)) {
-            p.spellFailedMessage(player);
+            failureMessage = "A powerful protective magic blocks your spell.";
+            sendFailureMessage();
             kill();
             return;
         }
 
         // does this exceed the max apparate distance?
         if (exceedsMaxDistance(source, destination)) {
-            player.sendMessage(Ollivanders2.chatColor + "Your magic is not powerful enough to apparate that far.");
+            failureMessage = "Your magic is not powerful enough to apparate that far.";
+            sendFailureMessage();
             kill();
             return;
         }
