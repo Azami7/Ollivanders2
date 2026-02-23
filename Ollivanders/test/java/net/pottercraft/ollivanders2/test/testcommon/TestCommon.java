@@ -349,4 +349,89 @@ public class TestCommon {
 
         return blockAt.getRelative(relativeTo).getLocation();
     }
+
+    /**
+     * Creates a base of stone blocks at the specified location that is size blocks out from the location
+     *
+     * @param location the location to create a base
+     * @param size the number of blocks out from the location to create the size
+     */
+    public static void createBlockBase(Location location, int size) {
+        createBlockBase(location, size, Material.STONE);
+    }
+
+    /**
+     * Creates a base of blocks at the specified location that is size blocks out from the location
+     *
+     * @param location the location to create a base
+     * @param size the number of blocks out from the location to create the size
+     * @param material the material to make the base
+     */
+    public static void createBlockBase(Location location, int size, Material material) {
+        for (int x = 0; x <= size; x++) {
+            for (int z = 0; z <= size; z++) {
+                location.getBlock().getRelative(x, 0, z).setType(material);
+                location.getBlock().getRelative(-x, 0, z).setType(material);
+                location.getBlock().getRelative(x, 0, -z).setType(material);
+                location.getBlock().getRelative(-x, 0, -z).setType(material);
+            }
+        }
+    }
+
+    /**
+     * Creates a north-south wall of stone blocks at the specified location that is size blocks out from the location
+     *
+     * @param location the location to create a wall
+     * @param size the number of blocks out from the location to create the size
+     */
+    public static void createNorthSouthBlockWall(Location location, int size) {
+        createNorthSouthBlockWall(location, size, Material.STONE);
+    }
+
+    /**
+     * Creates a north-south wall of blocks at the specified location that is size blocks out from the location
+     *
+     * @param location the location to create a wall
+     * @param size the number of blocks out from the location to create the size
+     * @param material the material to make the wall
+     */
+    public static void createNorthSouthBlockWall(Location location, int size, Material material) {
+        for (int y = 0; y <= size; y++) {
+            for (int z = 0; z <= size; z++) {
+                location.getBlock().getRelative(0, y, z).setType(material);
+                location.getBlock().getRelative(0, -y, z).setType(material);
+                location.getBlock().getRelative(0, y, -z).setType(material);
+                location.getBlock().getRelative(0, -y, -z).setType(material);
+            }
+        }
+    }
+
+    /**
+     * Creates an east-west wall of stone blocks at the specified location that is size blocks out from the location
+     *
+     * @param location the location to create a wall
+     * @param size the number of blocks out from the location to create the size
+     */
+    public static void createEastWestBlockWall(Location location, int size) {
+        createEastWestBlockWall(location, size, Material.STONE);
+    }
+
+    /**
+     * Creates an east-west wall of blocks at the specified location that is size blocks out from the location
+     *
+     * @param location the location to create a wall
+     * @param size the number of blocks out from the location to create the size
+     * @param material the material to make the wall
+     */
+    public static void createEastWestBlockWall(Location location, int size, Material material) {
+        for (int x = 0; x <= size; x++) {
+            for (int y = 0; y <= size; y++) {
+                location.getBlock().getRelative(x, y, 0).setType(material);
+                location.getBlock().getRelative(x, -y, 0).setType(material);
+                location.getBlock().getRelative(-x, y, 0).setType(material);
+                location.getBlock().getRelative(-x, -y, 0).setType(material);
+            }
+        }
+    }
+
 }

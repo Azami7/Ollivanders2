@@ -1,35 +1,30 @@
 package net.pottercraft.ollivanders2.spell;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
-import net.pottercraft.ollivanders2.common.EntityCommon;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.util.Vector;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
- * Winged-Ascent Charm - https://harrypotter.fandom.com/wiki/Alarte_Ascendare - Shoots target high into air.
+ * Winged-Ascent Charm that launches living entities high into the air.
+ *
+ * <p>When the projectile hits an entity, the spell adds an upward velocity based on the caster's skill level.
+ * Horizontal velocity components (X and Z) remain unchanged.</p>
+ *
+ * <p>The spell targets entities within the projectile's detection radius and checks worldGuard permissions
+ * before applying velocity. The projectile stops after hitting an entity or solid block.</p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Alarte_Ascendare">Alarte Ascendare</a>
  */
-public final class ALARTE_ASCENDARE extends O2Spell {
-    /**
-     * The max speed this spell can move the target
-     */
-    int maxVelocity = 5;
-
-    /**
-     * The min velocity the spell can move the target
-     */
-    int minVelocity = 0;
-
-    /**
-     * The move direction
-     */
-    Vector vector;
+public final class ALARTE_ASCENDARE extends Knockback {
+    public static int minDistanceConfig = 0;
+    public static int maxDistanceConfig = 10;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -47,7 +42,7 @@ public final class ALARTE_ASCENDARE extends O2Spell {
                     + "flew ten feet into the air and fell back to the floor with a loud smack.");
         }};
 
-        text = "Shoots target entity in to the air.";
+        text = "Shoots target living entity in to the air.";
     }
 
     /**
@@ -63,50 +58,20 @@ public final class ALARTE_ASCENDARE extends O2Spell {
         spellType = O2SpellType.ALARTE_ASCENDARE;
         branch = O2MagicBranch.CHARMS;
 
+        minDistance = minDistanceConfig;
+        maxDistance = maxDistanceConfig;
+        isVertical = true;
+
         initSpell();
     }
 
     /**
-     * Set the upward vector speed based on caster's skill
+     * Can this spell target this entity?
+     *
+     * @param entity the entity to check
+     * @return true if it can target the entity, false otherwise
      */
-    @Override
-    void doInitSpell() {
-        double up = usesModifier / 20;
-        if (up < minVelocity)
-            up = minVelocity;
-        else if (up > maxVelocity)
-            up = maxVelocity;
-
-        vector = new Vector(0, up, 0);
-    }
-
-    /**
-     * Search for entities or items at the projectile's current location
-     */
-    @Override
-    protected void doCheckEffect() {
-        // projectile has stopped, kill the spell
-        if (hasHitTarget()) {
-            kill();
-            return;
-        }
-
-        // check for entities first
-        Collection<Entity> entities = EntityCommon.getEntitiesInRadius(location, defaultRadius);
-
-        for (Entity entity : entities) {
-            if (entity.getUniqueId().equals(player.getUniqueId()))
-                continue;
-
-            // check entity to see if it can be targeted
-            if (!entityHarmWGCheck(entity))
-                continue;
-
-            common.printDebugMessage("targeting entity " + entity.getName(), null, null, false);
-            entity.setVelocity(entity.getVelocity().add(vector));
-
-            kill();
-            return;
-        }
+    boolean canTarget(Entity entity) {
+        return entity instanceof LivingEntity;
     }
 }

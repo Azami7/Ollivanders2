@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Mind-reading spell that reveals information about a target player.
  *
- * <p>When cast at a nearby player, the spell attempts to read their mind and reveal various information
+ * <p>The spell attempts to read the mind of a nearby player and reveal various information
  * depending on the caster's experience level and the target's resistance. Success depends on comparing
  * the caster's Legilimens skill against the target's skill.</p>
  *
@@ -80,6 +80,8 @@ public final class LEGILIMENS extends O2Spell {
         spellType = O2SpellType.LEGILIMENS;
         branch = O2MagicBranch.DARK_ARTS;
 
+        noProjectile = true; // legilimens works in a radius from the caster
+
         initSpell();
     }
 
@@ -93,7 +95,7 @@ public final class LEGILIMENS extends O2Spell {
      * <p>Special handling for animagus form: only level 10+ casters can attempt reading, with 10% success.</p>
      */
     @Override
-    public void checkEffect() {
+    protected void doCheckEffect() {
         kill();
 
         if (!isSpellAllowed()) {
@@ -271,12 +273,5 @@ public final class LEGILIMENS extends O2Spell {
                 }
             }
         }
-    }
-
-    /**
-     * Does nothing in this class because this spell is not a projectile so we override checkEffect itself
-     */
-    @Override
-    protected void doCheckEffect() {
     }
 }

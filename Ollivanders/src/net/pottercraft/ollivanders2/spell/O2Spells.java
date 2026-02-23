@@ -110,7 +110,7 @@ public class O2Spells {
     public void onEnable() {
         // load enabled spells
         for (O2SpellType spellType : O2SpellType.values()) {
-            if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType))
+            if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.requiresLibsDisguises(spellType))
                 continue;
 
             O2SpellMap.put(spellType.getSpellName().toLowerCase(), spellType);

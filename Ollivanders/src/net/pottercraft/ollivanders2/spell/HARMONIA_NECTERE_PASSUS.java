@@ -84,7 +84,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
             worldGuardFlags.add(Flags.BUILD);
 
         if (Ollivanders2.testMode)
-            projectilePassThrough.addAll(Ollivanders2Common.doors);
+            projectilePassThrough.addAll(Ollivanders2Common.getDoorsStrict());
 
         initSpell();
     }
@@ -122,7 +122,7 @@ public final class HARMONIA_NECTERE_PASSUS extends O2Spell {
         }
 
         Material blockType = signBlock.getType();
-        if (!Ollivanders2Common.signs.contains(blockType)) {
+        if (!Ollivanders2Common.isSign(blockType)) {
             common.printDebugMessage("Block is not a sign", null, null, false);
             failureMessage = "Nothing seems to happen";
             sendFailureMessage();

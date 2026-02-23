@@ -272,7 +272,7 @@ public class O2SpellTest {
         assertTrue(deprimo.isKilled(), "deprimo not killed when it hit a blocked type");
 
         // test no spell can target an unbreakable
-        testWorld.getBlockAt(targetLocation).setType(Ollivanders2Common.unbreakableMaterials.getFirst());
+        testWorld.getBlockAt(targetLocation).setType(Ollivanders2Common.getUnbreakableMaterials().getFirst());
         DEFODIO defodio = new DEFODIO(testPlugin, caster, O2PlayerCommon.rightWand);
         Ollivanders2API.getSpells().addSpell(caster, defodio);
         mockServer.getScheduler().performTicks(20);

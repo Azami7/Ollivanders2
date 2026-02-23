@@ -18,7 +18,14 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Registers a new floo network entry - https://harrypotter.fandom.com/wiki/Floo_Network
+ * Spell that registers fireplaces with the Floo Network for magical transportation.
+ *
+ * <p>When cast at a fire or campfire with a sign above it, the spell reads the sign (4 lines) to get the fireplace
+ * name and registers it as a permanent Floo Network entry. Players can then use Floo Powder to travel to this
+ * fireplace. The fireplace name is checked for duplicates to prevent overwriting existing entries.</p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Floo_Network">Floo Network</a>
  */
 public final class ALIQUAM_FLOO extends O2Spell {
     /**
@@ -70,7 +77,11 @@ public final class ALIQUAM_FLOO extends O2Spell {
     }
 
     /**
-     * Creates an aliquam floo stationary spell at this location if it is a fire with a sign over it.
+     * Registers a fireplace with the Floo Network if the target is a fire/campfire with a sign above it.
+     *
+     * <p>Checks that the projectile hit a fire or campfire block, reads the four-line sign above it for the
+     * fireplace name, verifies no duplicate names exist, and creates a permanent stationary spell to represent
+     * the registered fireplace on the network.</p>
      */
     @Override
     protected void doCheckEffect() {
@@ -83,7 +94,7 @@ public final class ALIQUAM_FLOO extends O2Spell {
             Location statLocation = new Location(location.getWorld(), target.getX() + 0.5, target.getY() + 0.125, target.getZ() + 0.5);
 
             // find the sign above the fire
-            if (Ollivanders2Common.wallSigns.contains(target.getRelative(BlockFace.UP).getType())) {
+            if (Ollivanders2Common.isWallSign(target.getRelative(BlockFace.UP))) {
                 Sign sign = (Sign) target.getRelative(BlockFace.UP).getState();
                 String flooName = sign.getSide(Side.FRONT).getLine(0).trim() + " " + sign.getSide(Side.FRONT).getLine(1).trim() + " " + sign.getSide(Side.FRONT).getLine(2).trim() + " " + sign.getSide(Side.FRONT).getLine(3).trim();
                 flooName = flooName.trim();

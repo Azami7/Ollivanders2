@@ -658,7 +658,7 @@ public class OllivandersListener implements Listener {
                 O2Potion potion = Ollivanders2API.getPotions().findPotionByItemMeta(meta);
 
                 if (potion != null) {
-                    if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getPotionType()))
+                    if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.requiresLibsDisguises(potion.getPotionType()))
                         return;
 
                     potion.drink(player);
@@ -751,8 +751,7 @@ public class OllivandersListener implements Listener {
     private void brewPotion(@NotNull Player player, @NotNull Block cauldron) {
         common.printDebugMessage("OllivandersListener:brewPotion: brewing potion", null, null, false);
 
-        Block under = cauldron.getRelative(BlockFace.DOWN);
-        if (Ollivanders2Common.hotBlocks.contains(under.getType())) {
+        if (Ollivanders2Common.isHotBlock(cauldron.getRelative(BlockFace.DOWN))) {
             ItemStack potion = Ollivanders2API.getPotions().brewPotion(cauldron, player);
 
             if (potion == null) {

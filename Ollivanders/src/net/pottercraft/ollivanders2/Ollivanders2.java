@@ -12,6 +12,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import net.pottercraft.ollivanders2.book.O2Books;
+import net.pottercraft.ollivanders2.common.Ollivanders2Common;
 import net.pottercraft.ollivanders2.divination.O2Prophecies;
 import net.pottercraft.ollivanders2.effect.O2Effects;
 import net.pottercraft.ollivanders2.house.O2Houses;
@@ -549,6 +550,11 @@ public class Ollivanders2 extends JavaPlugin {
         useStrictAnimagusConditions = getConfig().getBoolean("useStrictAnimagusConditions");
         if (useStrictAnimagusConditions)
             getLogger().info("Enabling strict animagus conditions.");
+
+        //
+        // init material lists
+        //
+        Ollivanders2Common.initMaterials();
     }
 
     /**
@@ -562,10 +568,9 @@ public class Ollivanders2 extends JavaPlugin {
             libsDisguisesEnabled = true;
             getLogger().info("LibsDisguises found, enabled entity transfiguration spells.");
         }
-        else
-            if (Ollivanders2.testMode)
-                libsDisguisesEnabled = true;
-            getLogger().info("LibsDisguises not found, disabling entity transfiguration spells.");
+        else if (Ollivanders2.testMode)
+            libsDisguisesEnabled = true;
+        getLogger().info("LibsDisguises not found, disabling entity transfiguration spells.");
 
         // set up WorldGuard manager
         Plugin worldGuard = Bukkit.getServer().getPluginManager().getPlugin("WorldGuard");

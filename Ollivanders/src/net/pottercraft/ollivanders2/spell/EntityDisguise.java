@@ -11,9 +11,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Super class for all disguise-based transfigurations
+ * Abstract base class for disguise-based entity transfigurations.
  *
- * @see <a href = "https://www.spigotmc.org/wiki/lib-s-disguises-disguising-the-entity/">https://www.spigotmc.org/wiki/lib-s-disguises-disguising-the-entity/</a>
+ * <p>Uses the LibsDisguises plugin to transform entities into other entity types. Handles applying and
+ * reverting disguises to entities when the spell duration expires.</p>
+ *
+ * @author Azami7
+ * @see <a href="https://www.spigotmc.org/wiki/lib-s-disguises-disguising-the-entity/">LibsDisguises Documentation</a>
  */
 public abstract class EntityDisguise extends EntityTransfiguration {
     /**
@@ -60,19 +64,22 @@ public abstract class EntityDisguise extends EntityTransfiguration {
     }
 
     /**
-     * Determine if this entity be transfigured by this spell.
-     * <p>
-     * Entity can transfigure if:
-     * 1. The entity is not already the target type
-     * 2. It is not in the blocked list
-     * 3. It is in the allowed list, if the allowed list exists
+     * Determine if this entity can be transfigured by this spell.
+     *
+     * <p>Checks if LibsDisguises is enabled for spells that require it, then delegates to parent validation.
+     * Entity can be transfigured if:
+     * <ul>
+     * <li>The entity is not already the target type</li>
+     * <li>It is not in the blocked list</li>
+     * <li>It is in the allowed list, if the allowed list exists</li>
+     * </ul></p>
      *
      * @param entity the entity to check
-     * @return true if it can be changed
+     * @return true if the entity can be transfigured, false otherwise
      */
     @Override
     protected boolean canTransfigure(@NotNull Entity entity) {
-        if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libsDisguisesSpells.contains(spellType)) {
+        if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.requiresLibsDisguises(spellType)) {
             common.printDebugMessage("LibsDisguises not enabled.", null, null, false);
             return false;
         }

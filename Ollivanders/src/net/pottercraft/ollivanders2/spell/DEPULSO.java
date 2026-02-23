@@ -2,21 +2,25 @@ package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
 
-import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Shoots the hit entity away from you.
+ * Banishing Charm that pushes entities away from the caster.
  *
- * @author lownes
+ * <p>When the projectile hits an entity, the spell pushes it away with force based on the caster's skill level.
+ * This spell can target any entity type.</p>
+ *
  * @author Azami7
- * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Banishing_Charm">https://harrypotter.fandom.com/wiki/Banishing_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Banishing_Charm">Banishing Charm</a>
  */
 public final class DEPULSO extends Knockback {
+    public static int minDistanceConfig = 0;
+    public static int maxDistanceConfig = 10;
+
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
@@ -48,8 +52,19 @@ public final class DEPULSO extends Knockback {
         spellType = O2SpellType.DEPULSO;
         branch = O2MagicBranch.CHARMS;
 
-        strengthReducer = 20;
+        minDistance = minDistanceConfig;
+        maxDistance = maxDistanceConfig;
 
         initSpell();
+    }
+
+    /**
+     * Can this spell target this entity?
+     *
+     * @param entity the entity to check
+     * @return true if it can target the entity, false otherwise
+     */
+    boolean canTarget(Entity entity) {
+        return true; // depulso can target any entity type
     }
 }
