@@ -65,6 +65,8 @@ public class AlarteAscendareTest extends KnockbackTest {
         assertTrue(alarteAscendare.isVertical(), "not set to is vertical");
         assertEquals(ALARTE_ASCENDARE.minDistanceConfig, alarteAscendare.getMinDistance(), "unexpected minDistance");
         assertEquals(ALARTE_ASCENDARE.maxDistanceConfig, alarteAscendare.getMaxDistance(), "unexpected maxDistance");
+        assertEquals(ALARTE_ASCENDARE.maxRadiusConfig, alarteAscendare.getMaxRadius(), "unexpected maxRadius");
+        assertEquals(ALARTE_ASCENDARE.maxTargetConfig, alarteAscendare.getMaxTargets(), "unexpected maxTargets");
     }
 
     /**

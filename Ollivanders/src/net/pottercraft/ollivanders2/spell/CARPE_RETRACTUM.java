@@ -24,6 +24,8 @@ public final class CARPE_RETRACTUM extends Knockback {
     public static int minDistanceConfig = 1;
     public static int maxDistanceConfig = 5;
     public static int strengthReducerConfig = 4;
+    public static double maxRadiusConfig = 10;
+    public static int maxTargetConfig = 3;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -60,6 +62,8 @@ public final class CARPE_RETRACTUM extends Knockback {
         minDistance = minDistanceConfig;
         maxDistance = maxDistanceConfig;
         strengthReducer = strengthReducerConfig;
+        maxRadius = maxRadiusConfig;
+        maxTargets = maxTargetConfig;
 
         pull = true;
 

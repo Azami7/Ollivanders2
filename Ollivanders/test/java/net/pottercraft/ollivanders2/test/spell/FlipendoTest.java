@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * <li>Velocity application (horizontal push, more powerful than Depulso)</li>
  * </ul>
  *
+ * @author autumnwoz
  * @author Azami7
  */
 public class FlipendoTest extends KnockbackTest {

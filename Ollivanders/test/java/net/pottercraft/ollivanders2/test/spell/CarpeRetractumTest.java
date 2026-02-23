@@ -64,5 +64,7 @@ public class CarpeRetractumTest extends KnockbackTest {
         assertEquals(CARPE_RETRACTUM.minDistanceConfig, carpeRetractum.getMinDistance(), "unexpected minDistance");
         assertEquals(CARPE_RETRACTUM.maxDistanceConfig, carpeRetractum.getMaxDistance(), "unexpected maxDistance");
         assertEquals(CARPE_RETRACTUM.strengthReducerConfig, carpeRetractum.getStrengthReducer(), "unexpected strengthReducer");
+        assertEquals(CARPE_RETRACTUM.maxRadiusConfig, carpeRetractum.getMaxRadius(), "unexpected maxRadius");
+        assertEquals(CARPE_RETRACTUM.maxTargetConfig, carpeRetractum.getMaxTargets(), "unexpected maxTargets");
     }
 }

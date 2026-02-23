@@ -62,5 +62,7 @@ public class AraniaExumaiTest extends KnockbackTest {
         assertEquals(ARANIA_EXUMAI.minDistanceConfig, araniaExumai.getMinDistance(), "unexpected minDistance");
         assertEquals(ARANIA_EXUMAI.maxDistanceConfig, araniaExumai.getMaxDistance(), "unexpected maxDistance");
         assertEquals(ARANIA_EXUMAI.strengthReducerConfig, araniaExumai.getStrengthReducer(), "unexpected strengthReducer");
+        assertEquals(ARANIA_EXUMAI.maxRadiusConfig, araniaExumai.getMaxRadius(), "unexpected maxRadius");
+        assertEquals(ARANIA_EXUMAI.maxTargetConfig, araniaExumai.getMaxTargets(), "unexpected maxTargets");
     }
 }

@@ -22,6 +22,8 @@ public final class ARANIA_EXUMAI extends Knockback {
     public static int minDistanceConfig = 0;
     public static int maxDistanceConfig = 10;
     public static int strengthReducerConfig = 10;
+    public static double maxRadiusConfig = 10;
+    public static int maxTargetConfig = 5;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -58,6 +60,8 @@ public final class ARANIA_EXUMAI extends Knockback {
 
         minDistance = minDistanceConfig;
         maxDistance = maxDistanceConfig;
+        maxRadius = maxRadiusConfig;
+        maxTargets = maxTargetConfig;
 
         initSpell();
     }
