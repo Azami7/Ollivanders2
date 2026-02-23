@@ -61,5 +61,7 @@ public class DepulsoTest extends KnockbackTest {
 
         assertEquals(DEPULSO.minDistanceConfig, depulso.getMinDistance(), "unexpected minDistance");
         assertEquals(DEPULSO.maxDistanceConfig, depulso.getMaxDistance(), "unexpected maxDistance");
+        assertEquals(DEPULSO.maxRadiusConfig, depulso.getMaxRadius(), "unexpected maxRadius");
+        assertEquals(DEPULSO.maxTargetConfig, depulso.getMaxTargets(), "unexpected maxTargets");
     }
 }

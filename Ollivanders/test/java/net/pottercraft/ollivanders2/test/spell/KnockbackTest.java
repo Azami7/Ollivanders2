@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.test.testcommon.TestCommon;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
@@ -219,6 +220,61 @@ public abstract class KnockbackTest extends O2SpellTestSuper {
                 assertTrue(velocity.getX() < 0, "velocity not set to -X for horizontal pull, Y velocity = " + velocity.getX()); // we know it will be in X because location and targetLocation only differ in X
             else
                 assertTrue(velocity.getX() > 0, "velocity not set to +X for horizontal push, Y velocity = " + velocity.getX());
+        }
+    }
+
+    @Test
+    void doCheckEffectTargetMultipleTest() {
+        World testWorld = mockServer.addSimpleWorld("world");
+        Location location = new Location(testWorld, 700, 40, 100);
+        Location targetLocation = new Location(testWorld, 710, 40, 100);
+        PlayerMock caster = mockServer.addPlayer();
+
+        TestCommon.createBlockBase(new Location(targetLocation.getWorld(), targetLocation.getX(), targetLocation.getY() - 1, targetLocation.getZ()), 3); // create a base for the entities to stand on
+
+        O2Spell spell = castSpell(caster, location, targetLocation, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel);
+        assertInstanceOf(Knockback.class, spell);
+        Knockback knockbackSpell = (Knockback)spell;
+
+        if (knockbackSpell.isTargetsMultiple()) {
+            EntityType validType = getValidEntityType();
+
+            Entity entity1;
+            Entity entity2;
+            Entity entity3;
+
+            // spawn
+            if (validType == EntityType.ITEM) {
+                entity1 = testWorld.dropItem(targetLocation, new ItemStack(Material.WOODEN_AXE, 1));
+                entity2 = testWorld.dropItem(targetLocation.getBlock().getRelative(BlockFace.NORTH).getLocation(), new ItemStack(Material.WOODEN_AXE, 1));
+                entity3 = testWorld.dropItem(targetLocation.getBlock().getRelative(BlockFace.EAST).getLocation(), new ItemStack(Material.WOODEN_AXE, 1));
+            }
+            else {
+                entity1 = testWorld.spawnEntity(targetLocation, validType);
+                entity2 = testWorld.spawnEntity(targetLocation.getBlock().getRelative(BlockFace.SOUTH).getLocation(), validType);
+                entity3 = testWorld.spawnEntity(targetLocation.getBlock().getRelative(BlockFace.WEST).getLocation(), validType);
+            }
+
+            mockServer.getScheduler().performTicks(20);
+
+            Vector velocity = knockbackSpell.getVelocity();
+
+            if (knockbackSpell.isVertical()) {
+                if (knockbackSpell.isPull())
+                    assertTrue(velocity.getY() < 0, "velocity not set to -Y for vertical pull, Y velocity = " + velocity.getY());
+                else
+                    assertTrue(velocity.getY() > 0, "velocity not set to +Y for vertical push, Y velocity = " + velocity.getY());
+            }
+            else {
+                if (knockbackSpell.isPull())
+                    assertTrue(velocity.getX() < 0, "velocity not set to -X for horizontal pull, Y velocity = " + velocity.getX()); // we know it will be in X because location and targetLocation only differ in X
+                else
+                    assertTrue(velocity.getX() > 0, "velocity not set to +X for horizontal push, Y velocity = " + velocity.getX());
+            }
+
+            assertEquals(velocity, entity1.getVelocity(), "entity1 velocity not set");
+            assertEquals(velocity, entity2.getVelocity(), "entity2 velocity not set");
+            assertEquals(velocity, entity3.getVelocity(), "entity3 velocity not set");
         }
     }
 }

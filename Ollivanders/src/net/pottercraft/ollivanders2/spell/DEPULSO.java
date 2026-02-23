@@ -20,6 +20,8 @@ import org.jetbrains.annotations.NotNull;
 public final class DEPULSO extends Knockback {
     public static int minDistanceConfig = 0;
     public static int maxDistanceConfig = 10;
+    public static double maxRadiusConfig = 10;
+    public static int maxTargetConfig = 5;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -54,6 +56,8 @@ public final class DEPULSO extends Knockback {
 
         minDistance = minDistanceConfig;
         maxDistance = maxDistanceConfig;
+        maxRadius = maxRadiusConfig;
+        maxTargets = maxTargetConfig;
 
         initSpell();
     }

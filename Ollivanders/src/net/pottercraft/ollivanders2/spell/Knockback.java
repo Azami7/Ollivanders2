@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +37,11 @@ public abstract class Knockback extends O2Spell {
     protected int maxDistance = 5;
 
     /**
+     * The maximum number of targets
+     */
+    protected int maxTargets = 1;
+
+    /**
      * The velocity this knockback will add to the target
      */
     protected Vector velocity = new Vector(0, 0, 0);
@@ -54,6 +60,16 @@ public abstract class Knockback extends O2Spell {
      * Does this spell target the caster?
      */
     boolean targetsSelf = false;
+
+    /**
+     * Can this spell target multiple entities? This will be ignored for spells that target self
+     */
+    boolean targetsMultiple = false;
+
+    /**
+     * The maximum radius this spell will search for targets in.
+     */
+    double maxRadius = defaultRadius;
 
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
@@ -90,23 +106,28 @@ public abstract class Knockback extends O2Spell {
         //
         // get target entity
         //
-        Entity target = null;
+        List<Entity> targets = new ArrayList<>();
 
         if (targetsSelf) {
-            target = player;
+            targets.add(player);
         }
         else { // look for a valid target at the location
-            List<Entity> entities = getCloseEntities(defaultRadius);
+            int numberOfTargets = calculateNumberOfTargets();
+            double radius = calculateRadius();
+
+            List<Entity> entities = getCloseEntities(radius);
             for (Entity entity : entities) {
                 if (!entityTargetCheck(entity)) // we cannot target this entity
                     continue;
 
-                target = entity;
-                break;
+                targets.add(entity);
+
+                if (targets.size() == numberOfTargets)
+                    break;
             }
         }
 
-        if (target == null)
+        if (targets.isEmpty())
             return;
         else
             kill(); // stop the spell from continuing to search for targets
@@ -115,25 +136,27 @@ public abstract class Knockback extends O2Spell {
         // calculate velocity
         //
 
-        // determine distance to send the target
-        double distance = calculateDistance(target);
-        if (distance <= 0) // spell will have no effect so exit
-            return;
+        for (Entity target : targets) {
+            // determine distance to send the target
+            double distance = calculateDistance(target);
+            if (distance <= 0) // spell will have no effect so exit
+                return;
 
-        // determine the magnitude of the velocity
-        double magnitude = calculateVelocityMagnitude(target, distance);
-        if (magnitude == 0) // spell will have no effect so exit
-            return;
+            // determine the magnitude of the velocity
+            double magnitude = calculateVelocityMagnitude(target, distance);
+            if (magnitude == 0) // spell will have no effect so exit
+                return;
 
-        if (pull) // make velocity negative to move towards rather than away from the caster location
-            magnitude = magnitude * -1;
+            if (pull) // make velocity negative to move towards rather than away from the caster location
+                magnitude = magnitude * -1;
 
-        if (isVertical) // velocity is in the Y direction (up or down)
-            velocity = new Vector(0.0, magnitude, 0.0);
-        else // velocity is towards or away from the direction the caster is facing
-            velocity = player.getLocation().getDirection().normalize().multiply(magnitude);
+            if (isVertical) // velocity is in the Y direction (up or down)
+                velocity = new Vector(0.0, magnitude, 0.0);
+            else // velocity is towards or away from the direction the caster is facing
+                velocity = player.getLocation().getDirection().normalize().multiply(magnitude);
 
-        target.setVelocity(velocity);
+            target.setVelocity(velocity);
+        }
     }
 
     /**
@@ -158,6 +181,45 @@ public abstract class Knockback extends O2Spell {
      * @return true if it can target the entity, false otherwise
      */
     abstract boolean canTarget(Entity entity);
+
+    /**
+     * Calculate the number of targets based on the caster's skill
+     *
+     * @return the number of targets, bounded by 1 <= targets <= maxTargets
+     */
+    int calculateNumberOfTargets() {
+        if (!targetsMultiple)
+            return 1;
+
+        // to calculate number of targets, divide usesModifier by mastery to get % of mastery
+        // and then multiply by maxTargets. Example: 5 maxTarget, usesModifier of 20 is (20 / 100) * 5 = 1
+        int numTargets = (int)((usesModifier / O2Spell.spellMasteryLevel) * maxTargets);
+
+        if (numTargets < 1)
+            numTargets = 1;
+        else if (numTargets > maxTargets) // in the case of usesModifier > mastery
+            numTargets = maxTargets;
+
+        return numTargets;
+    }
+
+    /**
+     * Calculate the effect radius for this spell based on the caster's skill
+     *
+     * @return the radius, bounded by defaultRadius <= radius <= maxRadius
+     */
+    double calculateRadius() {
+        // to calculate the radius, divide usesModifier by mastery to get % of mastery
+        // and then multiply by maxRadius. Example: 5 maxTarget, usesModifier of 40 is (40 / 100) * 5 = 2
+        double radius = (usesModifier / O2Spell.spellMasteryLevel) * maxRadius;
+
+        if (radius < defaultRadius)
+            radius = defaultRadius;
+        else if (radius > maxRadius)
+            radius = maxRadius;
+
+        return radius;
+    }
 
     /**
      * Calculate the distance to move the target based on the caster's skill.
@@ -249,6 +311,15 @@ public abstract class Knockback extends O2Spell {
     }
 
     /**
+     * Check if this spell can target multiple entities.
+     *
+     * @return true if it can target multiple, false otherwise
+     */
+    public boolean isTargetsMultiple() {
+        return targetsMultiple;
+    }
+
+    /**
      * Get the strength reducer for this spell.
      *
      * @return the strength reducer value (higher values reduce knockback strength)
@@ -273,5 +344,23 @@ public abstract class Knockback extends O2Spell {
      */
     public int getMaxDistance() {
         return maxDistance;
+    }
+
+    /**
+     * Get the maximum radius
+     *
+     * @return the max radius
+     */
+    public double getMaxRadius() {
+        return maxRadius;
+    }
+
+    /**
+     * Get the maximum number of targets
+     *
+     * @return the max targets
+     */
+    public int getMaxTargets () {
+        return maxTargets;
     }
 }
