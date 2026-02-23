@@ -5,8 +5,7 @@ import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
 import net.pottercraft.ollivanders2.common.Ollivanders2Common;
-import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
-import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Openable;
@@ -16,11 +15,22 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 
 /**
- * Opening charm - opens doors and trapdoors. It will not work on doors that require power to stay open like iron doors
- * ... well it does open them, they just close again so fast you cannot see it.
+ * Opening charm that unlocks and opens doors and trapdoors.
+ *
+ * <p>When cast at a door or trapdoor, the spell sets the block's Openable state to open. The spell fails if:</p>
+ * <ul>
+ * <li>The target block is not a door or trapdoor</li>
+ * <li>The door is protected by a COLLOPORTUS stationary spell (magical lock)</li>
+ * </ul>
+ *
+ * <p><strong>Note:</strong> Doors requiring continuous power to remain open (such as iron doors) will
+ * open momentarily but close again immediately when the redstone power applies. This is Minecraft's
+ * standard behavior, not a limitation of the spell.</p>
+ *
+ * <p><strong>World Guard:</strong> Requires the INTERACT flag when WorldGuard is enabled.</p>
  *
  * @author Azami7
- * @see <a href = "https://harrypotter.fandom.com/wiki/Opening_Charm">https://harrypotter.fandom.com/wiki/Opening_Charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Opening_Charm">Opening Charm</a>
  * @since 2.21
  */
 public class ABERTO extends O2Spell {
@@ -62,8 +72,11 @@ public class ABERTO extends O2Spell {
     }
 
     /**
-     * Opens the target door or trapdoor. If the door is magically locked by something like Colloportus, the spell
-     * will fail to open the door.
+     * Open the target door or trapdoor when the spell hits.
+     *
+     * <p>Validates that the target is a door, checks for COLLOPORTUS protection, and if all checks pass,
+     * sets the door's Openable state to true. Sends a failure message if the target is not a door or if
+     * a COLLOPORTUS stationary spell protects the door.</p>
      */
     @Override
     protected void doCheckEffect() {
@@ -76,8 +89,6 @@ public class ABERTO extends O2Spell {
         if (target == null)
             return;
 
-        failureMessage = "Nothing seems to happen.";
-
         // is it a door?
         if (!Ollivanders2Common.isDoor(target)) {
             sendFailureMessage();
@@ -85,11 +96,9 @@ public class ABERTO extends O2Spell {
         }
 
         // is the door protected by colloportus?
-        for (O2StationarySpell stationarySpell : Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(target.getLocation())) {
-            if (stationarySpell instanceof COLLOPORTUS) {
-                sendFailureMessage();
-                return;
-            }
+        if (!Ollivanders2API.getStationarySpells().getActiveStationarySpellsAtLocationByType(location, O2StationarySpellType.COLLOPORTUS).isEmpty()) {
+            sendFailureMessage();
+            return;
         }
 
         BlockData blockData = target.getBlockData();

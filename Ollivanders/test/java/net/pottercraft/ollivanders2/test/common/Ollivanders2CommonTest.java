@@ -672,7 +672,7 @@ public class Ollivanders2CommonTest {
         Block doorBlock = testWorld.getBlockAt(new Location(testWorld, 200, 4, 300));
         doorBlock.setType(Material.DARK_OAK_DOOR);
 
-        assertTrue(Ollivanders2Common.isDoor(doorBlock), "Ollivanders2Common.isDoor(doorBlock) returned false when block is Material.DARK_OAK_DOOR");
+        assertTrue(Ollivanders2Common.isDoor(doorBlock), "Ollivanders2Common.isDoor() returned false when block is Material.DARK_OAK_DOOR");
     }
 
     /**
@@ -684,7 +684,15 @@ public class Ollivanders2CommonTest {
         Block trapdoorBlock = testWorld.getBlockAt(new Location(testWorld, 201, 4, 300));
         trapdoorBlock.setType(Material.DARK_OAK_TRAPDOOR);
 
-        assertTrue(Ollivanders2Common.isDoor(trapdoorBlock), "Ollivanders2Common.isDoor(doorBlock) returned false when block is Material.DARK_OAK_TRAPDOOR");
+        assertTrue(Ollivanders2Common.isDoor(trapdoorBlock), "Ollivanders2Common.isDoor() returned false when block is Material.DARK_OAK_TRAPDOOR");
+    }
+
+    @Test
+    void isDoorGateTest() {
+        Block trapdoorBlock = testWorld.getBlockAt(new Location(testWorld, 201, 4, 500));
+        trapdoorBlock.setType(Material.DARK_OAK_TRAPDOOR);
+
+        assertTrue(Ollivanders2Common.isDoor(trapdoorBlock), "Ollivanders2Common.isDoor() returned false when block is Material.DARK_OAK_TRAPDOOR");
     }
 
     /**
@@ -693,10 +701,10 @@ public class Ollivanders2CommonTest {
      */
     @Test
     void isDoorNotDoorTest() {
-        Block notDoorBlock = testWorld.getBlockAt(new Location(testWorld, 202, 4, 300));
-        notDoorBlock.setType(Material.DARK_OAK_FENCE);
+        Block block = testWorld.getBlockAt(new Location(testWorld, 202, 4, 600));
+        block.setType(Material.DARK_OAK_FENCE_GATE);
 
-        assertFalse(Ollivanders2Common.isDoor(notDoorBlock), "Ollivanders2Common.isDoor(notDoorBlock) returned true when block is Material.DARK_OAK_FENCE");
+        assertTrue(Ollivanders2Common.isDoor(block), "Ollivanders2Common.isDoor() returned false when block is Material.DARK_OAK_FENCE_GATE");
     }
 
     /**
@@ -708,7 +716,7 @@ public class Ollivanders2CommonTest {
         Block chestBlock = testWorld.getBlockAt(new Location(testWorld, 200, 4, 301));
         chestBlock.setType(Material.CHEST);
 
-        assertTrue(Ollivanders2Common.isChest(chestBlock), "Ollivanders2Common.isChest(chestBlock) returned false when block is Material.CHEST");
+        assertTrue(Ollivanders2Common.isChest(chestBlock), "Ollivanders2Common.isChest() returned false when block is Material.CHEST");
     }
 
     /**
@@ -717,10 +725,10 @@ public class Ollivanders2CommonTest {
      */
     @Test
     void isChestShulkerBoxTest() {
-        Block shulkerBoxBlock = testWorld.getBlockAt(new Location(testWorld, 200, 4, 302));
-        shulkerBoxBlock.setType(Material.BLUE_SHULKER_BOX);
+        Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 302));
+        block.setType(Material.BLUE_SHULKER_BOX);
 
-        assertTrue(Ollivanders2Common.isChest(shulkerBoxBlock), "Ollivanders2Common.isChest(chestBlock) returned false when block is Material.CHEST");
+        assertTrue(Ollivanders2Common.isChest(block), "Ollivanders2Common.isChest() returned false when block is Material.BLUE_SHULKER_BOX");
     }
 
     /**
@@ -732,7 +740,63 @@ public class Ollivanders2CommonTest {
         Block notChestBlock = testWorld.getBlockAt(new Location(testWorld, 200, 4, 303));
         notChestBlock.setType(Material.BARREL);
 
-        assertFalse(Ollivanders2Common.isChest(notChestBlock), "Ollivanders2Common.isChest(notChestBlock) returned true when block is Material.BARREL");
+        assertFalse(Ollivanders2Common.isChest(notChestBlock), "Ollivanders2Common.isChest() returned true when block is Material.BARREL");
+    }
+
+    @Test
+    void isSignStandingSignTest() {
+        Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 400));
+        block.setType(Material.OAK_SIGN);
+
+        assertTrue(Ollivanders2Common.isSign(block), "Ollivanders2Common.isSign() returned false when block is Material.OAK_SIGN");
+    }
+
+    @Test
+    void isSignWallSignTest() {
+        Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 401));
+        block.setType(Material.OAK_WALL_SIGN);
+
+        assertTrue(Ollivanders2Common.isSign(block), "Ollivanders2Common.isSign() returned false when block is Material.OAK_WALL_SIGN");
+    }
+
+    @Test
+    void isSignHangingSignTest() {
+        Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 402));
+        block.setType(Material.OAK_HANGING_SIGN);
+
+        assertTrue(Ollivanders2Common.isSign(block), "Ollivanders2Common.isSign() returned false when block is Material.OAK_HANGING_SIGN");
+    }
+
+    @Test
+    void isSignNotSignTest() {
+        Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 403));
+        block.setType(Material.BARREL);
+
+        assertFalse(Ollivanders2Common.isSign(block), "Ollivanders2Common.isSign() returned true when block is Material.BARREL");
+    }
+
+    @Test
+    void isNaturalLogLogTest() {
+        Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 404));
+        block.setType(Material.OAK_LOG);
+
+        assertTrue(Ollivanders2Common.isNaturalLog(block), "Ollivanders2Common.isNaturalLog() returned true when block is Material.OAK_LOG");
+    }
+
+    @Test
+    void isNaturalLogStemTest() {
+        Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 405));
+        block.setType(Material.WARPED_STEM);
+
+        assertTrue(Ollivanders2Common.isNaturalLog(block), "Ollivanders2Common.isNaturalLog() returned true when block is Material.WARPED_STEM");
+    }
+
+    @Test
+    void isNaturalLogNotLogTest() {
+        Block block = testWorld.getBlockAt(new Location(testWorld, 200, 4, 406));
+        block.setType(Material.BARREL);
+
+        assertFalse(Ollivanders2Common.isNaturalLog(block), "Ollivanders2Common.isNaturalLog() returned true when block is Material.BARREL");
     }
 
     /**
@@ -813,6 +877,20 @@ public class Ollivanders2CommonTest {
         block.setType(Material.STONE);
 
         assertFalse(Ollivanders2Common.isAdjacentTo(block, block), "A block should not be adjacent to itself");
+    }
+
+    /**
+     * Test to make sure we do not miss initializing materials lists
+     */
+    @Test
+    void chestMaterialsTest() {
+        Ollivanders2Common.initMaterials();
+
+        for (Material material : Material.values()) {
+            if (material.toString().endsWith("_CHEST") || material.toString().endsWith("_SHULKER_BOX")) {
+                assertTrue(Ollivanders2Common.isChest(material), "Missing chest material " + material);
+            }
+        }
     }
 
     /**

@@ -145,6 +145,12 @@ public abstract class O2Spell {
     private boolean hitTarget = false;
 
     /**
+     * Does this spell do a spell projectile or not. Generally spells will send a projectile but any spell that targets
+     * the caster, such as apparate, should not.
+     */
+    public boolean noProjectile = false;
+
+    /**
      * The sound this projectile makes as it moves.
      */
     Effect moveEffect = Effect.STEP_SOUND;
@@ -213,7 +219,7 @@ public abstract class O2Spell {
     /**
      * Message to display to the user on a failed cast of this spell.
      */
-    String failureMessage = null;
+    String failureMessage = "Nothing seems to happen.";
 
     /**
      * The default radius for spells when checking for conditions
@@ -248,7 +254,7 @@ public abstract class O2Spell {
         this.rightWand = rightWand;
 
         // block types that cannot be affected by any spell
-        materialBlockedList.addAll(Ollivanders2Common.unbreakableMaterials);
+        materialBlockedList.addAll(Ollivanders2Common.getUnbreakableMaterials());
 
         // block types that this spell's projectiles pass through
         projectilePassThrough.add(Material.AIR);
@@ -292,7 +298,7 @@ public abstract class O2Spell {
      *
      * @return a copy of the world guard flags
      */
-    public List<StateFlag> getWorldGuardFlags () {
+    public List<StateFlag> getWorldGuardFlags() {
         return new ArrayList<>(worldGuardFlags);
     }
 
@@ -357,6 +363,12 @@ public abstract class O2Spell {
         // if this is somehow called when the spell is set to killed, or we've already hit a target, do nothing
         if (isKilled() || hasHitTarget())
             return;
+
+        // if this spell should not do a projectile, stop the projectile and return from move
+        if (noProjectile) {
+            stopProjectile();
+            return;
+        }
 
         // if we have gone beyond the max distance, kill this spell
         if (isAtMaxDistance()) {
@@ -542,7 +554,7 @@ public abstract class O2Spell {
 
         // handle also adding the current player when the projectile is close to the player since getCloseEntities()
         // excludes the player
-        if (Ollivanders2Common.isInside(player.getLocation(), location, (int)radius) && !entities.contains(player) && lifeTicks > 1)
+        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && lifeTicks > 1)
             living.add(player);
 
         return living;
@@ -565,7 +577,7 @@ public abstract class O2Spell {
 
         // handle also adding the current player when the projectile is close to the player since getCloseEntities()
         // excludes the player
-        if (Ollivanders2Common.isInside(player.getLocation(), location, (int)radius) && !entities.contains(player) && lifeTicks > 1)
+        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && lifeTicks > 1)
             players.add(player);
 
         return players;
@@ -588,7 +600,7 @@ public abstract class O2Spell {
 
         // handle also adding the current player when the projectile is close to the player since getCloseEntities()
         // excludes the player
-        if (Ollivanders2Common.isInside(player.getLocation(), location, (int)radius) && !entities.contains(player) && lifeTicks > 1)
+        if (Ollivanders2Common.isInside(player.getLocation(), location, (int) radius) && !entities.contains(player) && lifeTicks > 1)
             damageable.add(player);
 
         return damageable;
@@ -614,7 +626,7 @@ public abstract class O2Spell {
 
         // if max skill is set, set usesModifier to max level
         if (Ollivanders2.maxSpellLevel)
-            usesModifier = 200;
+            usesModifier = spellMasteryLevel * 2;
         else {
             // uses modifier is the number of times the spell has been cast
             usesModifier = o2p.getSpellCount(spellType);

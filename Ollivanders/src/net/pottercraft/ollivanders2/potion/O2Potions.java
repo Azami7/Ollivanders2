@@ -214,7 +214,7 @@ public class O2Potions {
      */
     public void onEnable() {
         for (O2PotionType potionType : O2PotionType.values()) {
-            if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potionType) && !Ollivanders2.testMode)
+            if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.requiresLibsDisguises(potionType) && !Ollivanders2.testMode)
                 continue;
 
             O2PotionMap.put(potionType.getPotionName().toLowerCase(), potionType);
@@ -261,7 +261,7 @@ public class O2Potions {
             O2Potion potion = getPotionFromType(potionType);
 
             if (potion != null) {
-                if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getPotionType())) {
+                if (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.requiresLibsDisguises(potion.getPotionType())) {
                     continue;
                 }
 
@@ -319,7 +319,7 @@ public class O2Potions {
 
         // match the ingredients in this potion to a known potion
         O2Potion potion = findPotionByIngredients(ingredientsInCauldron);
-        if (potion == null || (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.libDisguisesPotions.contains(potion.getPotionType()))) {
+        if (potion == null || (!Ollivanders2.libsDisguisesEnabled && Ollivanders2Common.requiresLibsDisguises(potion.getPotionType()))) {
             brewer.sendMessage(Ollivanders2.chatColor + "You feel somewhat uncertain about this recipe.");
             // make them a bad potion
             return O2Potion.brewBadPotion();

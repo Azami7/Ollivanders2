@@ -7,16 +7,24 @@ import com.sk89q.worldguard.protection.flags.Flags;
 import net.pottercraft.ollivanders2.O2MagicBranch;
 import net.pottercraft.ollivanders2.Ollivanders2;
 import net.pottercraft.ollivanders2.Ollivanders2API;
-import net.pottercraft.ollivanders2.stationaryspell.COLLOPORTUS;
+import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpellType;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.stationaryspell.O2StationarySpell;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * The unlocking spell.
+ * Unlocking charm that removes COLLOPORTUS magical locks.
  *
- * @see <a href = "https://harrypotter.fandom.com/wiki/Unlocking_Charm">https://harrypotter.fandom.com/wiki/Unlocking_Charm</a>
+ * <p>When the projectile hits a COLLOPORTUS stationary spell, the spell removes (kills) all COLLOPORTUS
+ * spells at that location and displays a visual flair effect for player feedback. The projectile stops
+ * when it hits a solid block via hasHitTarget(), but continues searching for COLLOPORTUS spells each tick
+ * until it hits a block.</p>
+ *
+ * <p><strong>World Guard:</strong> Requires the INTERACT flag when WorldGuard is enabled.</p>
+ *
+ * @author Azami7
+ * @see <a href="https://harrypotter.fandom.com/wiki/Unlocking_Charm">Unlocking Charm</a>
  */
 public final class ALOHOMORA extends O2Spell {
     /**
@@ -58,7 +66,11 @@ public final class ALOHOMORA extends O2Spell {
     }
 
     /**
-     * Checks for colloportus stationary spells and ages them, if found
+     * Search for and remove COLLOPORTUS stationary spells at the projectile's location.
+     *
+     * <p>Each tick, checks if the projectile hit a solid block. If COLLOPORTUS spells are found at the
+     * projectile's current location, kills them and displays a visual flair effect. The spell does not
+     * stop the projectile on its own; it only stops when hasHitTarget() returns true (solid block hit).</p>
      */
     @Override
     protected void doCheckEffect() {
@@ -66,29 +78,18 @@ public final class ALOHOMORA extends O2Spell {
             kill();
 
         // check all the stationary spells in the location of the projectile for a Colloportus
-        List<O2StationarySpell> inside = new ArrayList<>();
-        List<O2StationarySpell> stationarySpellsAtLocation = Ollivanders2API.getStationarySpells().getStationarySpellsAtLocation(location);
+        List<O2StationarySpell> colloportusSpellsAtLocation = Ollivanders2API.getStationarySpells().getActiveStationarySpellsAtLocationByType(location, O2StationarySpellType.COLLOPORTUS);
 
-        if (stationarySpellsAtLocation.isEmpty()) {
-            common.printDebugMessage("No stationary spells found at location", null, null, false);
+        if (colloportusSpellsAtLocation.isEmpty()) {
+            common.printDebugMessage("No colloportus spells found at location", null, null, false);
+            sendFailureMessage();
             return;
         }
 
-        for (O2StationarySpell spell : stationarySpellsAtLocation) {
-            if (spell instanceof COLLOPORTUS) {
-                common.printDebugMessage("Found a COLLOPORTUS spell", null, null, false);
-                inside.add(spell);
-            }
-        }
-
-        // remove the colloportus spells found
-        if (!inside.isEmpty()) {
-            for (O2StationarySpell spell : inside) {
-                spell.kill();
-                spell.flair(10);
-            }
-
-            kill();
+        // kill the spells and flair for player feedback
+        for (O2StationarySpell colloportus : colloportusSpellsAtLocation) {
+            colloportus.kill();
+            colloportus.flair(10);
         }
     }
 }

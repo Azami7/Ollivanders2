@@ -8,6 +8,7 @@ import net.pottercraft.ollivanders2.effect.O2EffectType;
 import net.pottercraft.ollivanders2.house.O2HouseType;
 import net.pottercraft.ollivanders2.house.O2Houses;
 import net.pottercraft.ollivanders2.player.O2Player;
+import net.pottercraft.ollivanders2.player.O2PlayerCommon;
 import net.pottercraft.ollivanders2.spell.LEGILIMENS;
 import net.pottercraft.ollivanders2.spell.O2Spell;
 import net.pottercraft.ollivanders2.spell.O2SpellType;
@@ -16,6 +17,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.EntityType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
 import org.mockbukkit.mockbukkit.entity.PlayerMock;
@@ -47,6 +49,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * @author Azami7
  */
 public class LegilimensTest extends O2SpellTestSuper {
+    @Override @NotNull
+    O2SpellType getSpellType() {
+        return O2SpellType.LEGILIMENS;
+    }
+
     @Override @Test
     void spellConstructionTest() {
         // legilimens has no spell-specific settings
@@ -69,15 +76,13 @@ public class LegilimensTest extends O2SpellTestSuper {
         PlayerMock player = mockServer.addPlayer("Player1");
 
         caster.setLocation(location);
-        player.setLocation(TestCommon.getRelativeLocation(caster.getLocation(), BlockFace.EAST));
+        player.setLocation(TestCommon.getRelativeLocation(location, BlockFace.EAST));
 
-        O2Player casterO2P = Ollivanders2API.getPlayers().getPlayer(caster.getUniqueId());
-        assertNotNull(casterO2P);
         O2Player playerO2P = Ollivanders2API.getPlayers().getPlayer(player.getUniqueId());
         assertNotNull(playerO2P);
 
         // when spell fail to read the player's mind, a failure message is sent
-        LEGILIMENS legilimens = (LEGILIMENS) castSpell(caster, location, O2SpellType.LEGILIMENS);
+        LEGILIMENS legilimens = (LEGILIMENS) castSpell(caster, location, location, O2PlayerCommon.rightWand, 0);
         mockServer.getScheduler().performTicks(5);
         assertTrue(legilimens.isKilled(), "Legilimens not immediately killed");
         String message = getWholeMessage(caster);
@@ -86,8 +91,7 @@ public class LegilimensTest extends O2SpellTestSuper {
 
         // when the player is a muggle, we should get the muggle message
         Ollivanders2.maxSpellLevel = true;
-        caster.setLocation(location); // handle caster drift
-        castSpell(caster, location, O2SpellType.LEGILIMENS);
+        castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
         message = getWholeMessage(caster);
         assertNotNull(message);
@@ -96,8 +100,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         // when the player is not a muggle, we should get a wizard message
         playerO2P.setMuggle(false);
         O2Houses.useHouses = true;
-        caster.setLocation(location); // handle caster drift
-        castSpell(caster, location, O2SpellType.LEGILIMENS);
+        castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
         message = getWholeMessage(caster);
         assertNotNull(message);
@@ -113,8 +116,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         Ollivanders2API.getHouses().sort(player, O2HouseType.HUFFLEPUFF);
         playerO2P.setFoundWand(true);
         Ollivanders2.useYears = true;
-        caster.setLocation(location); // handle caster drift
-        castSpell(caster, location, O2SpellType.LEGILIMENS);
+        castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
         message = getWholeMessage(caster);
         assertNotNull(message);
@@ -131,8 +133,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         playerO2P.setSpellRecentCastTime(O2SpellType.ACCIO);
         playerO2P.setMasterSpell(O2SpellType.LUMOS);
         Ollivanders2.enableNonVerbalSpellCasting = true;
-        caster.setLocation(location); // handle caster drift
-        castSpell(caster, location, O2SpellType.LEGILIMENS);
+        castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
         message = getWholeMessage(caster);
         assertNotNull(message);
@@ -147,8 +148,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         AWAKE awake = new AWAKE(testPlugin, 200, false, player.getUniqueId());
         Ollivanders2API.getPlayers().playerEffects.addEffect(awake);
         mockServer.getScheduler().performTicks(20);
-        caster.setLocation(location); // handle caster drift
-        castSpell(caster, location, O2SpellType.LEGILIMENS);
+        castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
         message = getWholeMessage(caster);
         assertNotNull(message);
@@ -161,8 +161,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         // when player is an animagus
         playerO2P.setIsAnimagus();
         playerO2P.setAnimagusForm(EntityType.RABBIT);
-        caster.setLocation(location); // handle caster drift
-        castSpell(caster, location, O2SpellType.LEGILIMENS);
+        castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
         message = getWholeMessage(caster);
         assertNotNull(message);
@@ -172,17 +171,14 @@ public class LegilimensTest extends O2SpellTestSuper {
         Ollivanders2API.getPlayers().playerEffects.addEffect(new ANIMAGUS_EFFECT(testPlugin, 100, true, player.getUniqueId()));
         mockServer.getScheduler().performTicks(5);
         Ollivanders2.maxSpellLevel = false;
-        casterO2P.setSpellCount(O2SpellType.LEGILIMENS, O2Spell.spellMasteryLevel - 10);
-        caster.setLocation(location); // handle caster drift
-        castSpell(caster, location, O2SpellType.LEGILIMENS);
+        castSpell(caster, location, location, O2PlayerCommon.rightWand, O2Spell.spellMasteryLevel - 10);
         mockServer.getScheduler().performTicks(5);
         assertNull(caster.nextMessage(), "caster unexpectedly got a failure message when target in animagus form and skill level below mastery");
 
         // when player is in animagus form when spell level is expert
         Ollivanders2.maxSpellLevel = true;
 
-        caster.setLocation(location); // handle caster drift
-        castSpell(caster, location, O2SpellType.LEGILIMENS);
+        castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
         message = getWholeMessage(caster);
         assertNotNull(message, "caster did not get a result message when target in animagus form and skill level above mastery"); // they'll either get a failure message or the legilmens data
@@ -190,8 +186,7 @@ public class LegilimensTest extends O2SpellTestSuper {
 
         // spell cannot target a player if none are in range
         player.setLocation(new Location(location.getWorld(), location.getX() + LEGILIMENS.radius + 100, location.getY(), location.getZ()));
-        caster.setLocation(location); // handle caster drift
-        castSpell(caster, location, O2SpellType.LEGILIMENS);
+        castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
         assertNull(caster.nextMessage(), "caster unexpectedly got a failure message when no players in range");
 
@@ -201,8 +196,7 @@ public class LegilimensTest extends O2SpellTestSuper {
         testPlugin.getConfig().set("zones.test-world.disallowed-spells", List.of("LEGILIMENS"));
         Ollivanders2API.getSpells().loadZoneConfig();
 
-        caster.setLocation(location); // handle caster drift
-        castSpell(caster, location, O2SpellType.LEGILIMENS);
+        castSpell(caster, location, location);
         mockServer.getScheduler().performTicks(5);
         message = caster.nextMessage();
         assertNotNull(message, "caster did not get isAllowed failure message");

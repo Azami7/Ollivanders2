@@ -124,9 +124,9 @@ public final class DIFFINDO extends O2Spell {
             return;
         }
 
-        if (Ollivanders2Common.naturalLogs.contains(target)) {
+        if (Ollivanders2Common.isNaturalLog(target)) {
             for (Block nearbyBlock : Ollivanders2Common.getBlocksInRadius(location, radius)) {
-                if (Ollivanders2Common.naturalLogs.contains(nearbyBlock))
+                if (Ollivanders2Common.isNaturalLog(nearbyBlock))
                     nearbyBlock.breakNaturally();
             }
         }

@@ -208,13 +208,14 @@ public class HARMONIA_NECTERE_PASSUS extends O2StationarySpell {
      * Checks the structural integrity of a vanishing cabinet.
      *
      * <p>Verifies the cabinet has the correct structure: a 3x3 space with solid walls on all sides,
-     * air space for a player, and a solid top. The feet position must be air or a sign (for labeling).</p>
+     * space for a player, and a solid top. The feet position must be air or a sign (for labeling).</p>
      *
      * @param feet the block at the player's feet position in the cabinet
      * @return true if the cabinet structure is valid, false if not
      */
     private boolean cabinetCheck(@NotNull Block feet) {
-        if (feet.getType() != Material.AIR && !Ollivanders2Common.signs.contains(feet.getType()))
+        // feet block can either be air or a sign block
+        if (feet.getType() != Material.AIR && !Ollivanders2Common.isSign(feet))
             return false;
 
         return (feet.getRelative(1, 0, 0).getType() != Material.AIR && feet.getRelative(1, 1, 0).getType() != Material.AIR

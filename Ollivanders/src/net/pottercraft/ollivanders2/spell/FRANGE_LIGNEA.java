@@ -15,9 +15,14 @@ import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Bursts a log into a stack of coreless wands, whose number depends on the player's spell level.
- * <p>
- * {@link LIGATIS_COR}
+ * Spell that converts natural logs into coreless wands.
+ *
+ * <p>When cast at a suitable log block, the spell breaks it into a stack of coreless wands. The number of wands
+ * created depends on the caster's skill level with the spell. Only logs of types suitable for wand making can
+ * be transfigured.</p>
+ *
+ * @author Azami7
+ * @see LIGATIS_COR for the complementary wand-to-log spell
  */
 public final class FRANGE_LIGNEA extends O2Spell {
     /**
@@ -65,7 +70,11 @@ public final class FRANGE_LIGNEA extends O2Spell {
     }
 
     /**
-     * Break a natural log in to coreless wands
+     * Converts a natural log block into coreless wands.
+     *
+     * <p>If the target block is a natural log suitable for wand making, the spell calculates the number of
+     * coreless wands to create based on the caster's skill (usesModifier * 0.1, capped at maxAmount),
+     * creates them, and drops them at the log location. The log block is then destroyed.</p>
      */
     @Override
     protected void doCheckEffect() {
@@ -80,7 +89,7 @@ public final class FRANGE_LIGNEA extends O2Spell {
 
         Material blockType = target.getType();
 
-        if (Ollivanders2Common.naturalLogs.contains(blockType)) {
+        if (Ollivanders2Common.isNaturalLog(blockType)) {
             if (O2WandWoodType.isWandWood(blockType)) {
                 player.sendMessage(Ollivanders2.chatColor + "The targeted log is not suitable for wand making.");
                 return;

@@ -86,7 +86,7 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
         branch = O2MagicBranch.TRANSFIGURATION;
 
         // material black list
-        materialBlockedList.addAll(Ollivanders2Common.unbreakableMaterials);
+        materialBlockedList.addAll(Ollivanders2Common.getUnbreakableMaterials());
 
         // required worldGuard state flags
         if (Ollivanders2.worldGuardEnabled)
@@ -284,10 +284,13 @@ public abstract class BlockTransfiguration extends TransfigurationBase {
     }
 
     /**
-     * Is this entity transfigured by this spell
+     * Check if an entity is transfigured by this spell.
+     *
+     * <p>Always returns false for block transfiguration spells, as they only affect blocks.
+     * Entity transfigurations are handled by {@link EntityTransfiguration}.</p>
      *
      * @param entity the entity to check
-     * @return true if transfigured, false otherwise
+     * @return false, as block transfiguration spells do not affect entities
      */
     @Override
     public boolean isEntityTransfigured(@NotNull Entity entity) {

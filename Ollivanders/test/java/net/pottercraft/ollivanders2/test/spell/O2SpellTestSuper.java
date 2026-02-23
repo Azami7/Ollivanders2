@@ -41,7 +41,7 @@ public abstract class O2SpellTestSuper {
     /**
      * Default spell experience level for test casting.
      *
-     * <p>Used by {@link #castSpell(PlayerMock, Location, O2SpellType)} and overloads
+     * <p>Used by {@link #castSpell(PlayerMock, Location, Location)} and overloads
      * when no explicit experience is provided.</p>
      */
     static final int defaultExperience = 20;
@@ -81,28 +81,36 @@ public abstract class O2SpellTestSuper {
     }
 
     /**
+     * Get the spell type being tested.
+     *
+     * @return the spell type
+     */
+    @NotNull
+    abstract O2SpellType getSpellType();
+
+    /**
      * Cast a spell with default wand and experience.
      *
      * @param caster the player casting the spell
+     * @param fromLocation the location to cast the spell from
      * @param targetLocation the location the spell should target
-     * @param spellType the type of spell to cast
      * @return the created and added spell
      */
-    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location targetLocation, @NotNull O2SpellType spellType) {
-        return castSpell(caster, targetLocation, spellType, O2PlayerCommon.rightWand, defaultExperience);
+    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location fromLocation, @NotNull Location targetLocation) {
+        return castSpell(caster, fromLocation, targetLocation, O2PlayerCommon.rightWand, defaultExperience);
     }
 
     /**
      * Cast a spell with custom wand and default experience.
      *
      * @param caster the player casting the spell
+     * @param fromLocation the location to cast the spell from
      * @param targetLocation the location the spell should target
-     * @param spellType the type of spell to cast
      * @param wand the wand correctness factor (rightWand, wrongWand, elderWand, etc.)
      * @return the created and added spell
      */
-    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location targetLocation, @NotNull O2SpellType spellType, double wand) {
-        return castSpell(caster, targetLocation, spellType, wand, defaultExperience);
+    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location fromLocation, @NotNull Location targetLocation, double wand) {
+        return castSpell(caster, fromLocation, targetLocation, wand, defaultExperience);
     }
 
     /**
@@ -112,20 +120,24 @@ public abstract class O2SpellTestSuper {
      * creates the spell, and adds it to the active spell list.</p>
      *
      * @param caster the player casting the spell
+     * @param fromLocation the location to cast the spell from
      * @param targetLocation the location the spell should target
-     * @param spellType the type of spell to cast
      * @param wand the wand correctness factor (rightWand, wrongWand, elderWand, etc.)
      * @param experience the spell experience level to set on the player
      * @return the created and added spell
      */
-    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location targetLocation, @NotNull O2SpellType spellType, double wand, int experience) {
-        O2Player o2p = Ollivanders2API.getPlayers().getPlayer(caster.getUniqueId());
-        assertNotNull(o2p, "Unable to get O2Player");
-        o2p.setSpellCount(spellType, experience);
+    O2Spell castSpell(@NotNull PlayerMock caster, @NotNull Location fromLocation, @NotNull Location targetLocation, double wand, int experience) {
+        caster.setLocation(fromLocation);
 
-        caster.setLocation(TestCommon.faceTarget(caster.getLocation(), targetLocation));
+        if (!fromLocation.equals(targetLocation)) {
+            O2Player o2p = Ollivanders2API.getPlayers().getPlayer(caster.getUniqueId());
+            assertNotNull(o2p, "Unable to get O2Player");
+            o2p.setSpellCount(getSpellType(), experience);
 
-        O2Spell spell = Ollivanders2API.getSpells().createSpell(caster, spellType, wand);
+            caster.setLocation(TestCommon.faceTarget(caster.getLocation(), targetLocation));
+        }
+
+        O2Spell spell = Ollivanders2API.getSpells().createSpell(caster, getSpellType(), wand);
         assertNotNull(spell, "Unable to create spell");
 
         Ollivanders2API.getSpells().addSpell(caster, spell);

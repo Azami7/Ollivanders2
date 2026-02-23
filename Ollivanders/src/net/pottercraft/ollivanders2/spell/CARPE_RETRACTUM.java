@@ -3,20 +3,28 @@ package net.pottercraft.ollivanders2.spell;
 import java.util.ArrayList;
 
 import net.pottercraft.ollivanders2.O2MagicBranch;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Pulls an item towards the caster.
+ * Seize and Pull Charm that pulls non-living entities toward the caster.
  *
- * @author lownes
+ * <p>When the projectile hits a non-living entity, the spell pulls it toward the caster with velocity based on
+ * the caster's skill level. This spell is guaranteed to work (minimum distance of 1) and has lower overall
+ * distance and strength compared to similar spells.</p>
+ *
  * @author Azami7
- * @version Ollivanders2
- * @see <a href = "https://harrypotter.fandom.com/wiki/Seize_and_pull_charm">https://harrypotter.fandom.com/wiki/Seize_and_pull_charm</a>
+ * @see <a href="https://harrypotter.fandom.com/wiki/Seize_and_pull_charm">Seize and Pull Charm</a>
  */
 public final class CARPE_RETRACTUM extends Knockback {
+    public static int minDistanceConfig = 1;
+    public static int maxDistanceConfig = 5;
+    public static int strengthReducerConfig = 4;
+
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
@@ -48,10 +56,23 @@ public final class CARPE_RETRACTUM extends Knockback {
         spellType = O2SpellType.CARPE_RETRACTUM;
         branch = O2MagicBranch.CHARMS;
 
-        minVelocity = 0.25;
-        maxVelocity = 3;
+        // guananteed to work, lower overall distance, lower strengthReducer
+        minDistance = minDistanceConfig;
+        maxDistance = maxDistanceConfig;
+        strengthReducer = strengthReducerConfig;
+
         pull = true;
 
         initSpell();
+    }
+
+    /**
+     * Can this spell target this entity?
+     *
+     * @param entity the entity to check
+     * @return true if it can target the entity, false otherwise
+     */
+    boolean canTarget(Entity entity) {
+        return !(entity instanceof LivingEntity);
     }
 }

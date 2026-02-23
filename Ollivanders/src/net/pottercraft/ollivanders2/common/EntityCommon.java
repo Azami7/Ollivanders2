@@ -6,6 +6,8 @@ import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
@@ -696,5 +698,30 @@ public class EntityCommon {
             return true;
 
         return false;
+    }
+
+    /**
+     * Get the distance to the water surface if an entity is underwater.
+     *
+     * @param entity the player to measure
+     * @return the distance from the player to the surface of the water, to a max of 100 blocks
+     * @see <a href="https://minecraft.wiki/w/Altitude">https://minecraft.wiki/w/Altitude</a>
+     */
+    public static int distanceToSurface(Entity entity) {
+        if (!entity.isUnderWater())
+            return 0;
+
+        Block above = entity.getLocation().getBlock().getRelative(BlockFace.UP);
+
+        // limit to 128 since this is the smallest world max height (being the max height of The Nether)
+        int loopLimit = 128;
+
+        int distance = 0;
+        while (above.getType() == Material.WATER && distance < loopLimit) {
+            distance = distance + 1;
+            above = above.getRelative(BlockFace.UP);
+        }
+
+        return distance;
     }
 }

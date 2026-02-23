@@ -2,19 +2,28 @@ package net.pottercraft.ollivanders2.spell;
 
 import java.util.ArrayList;
 
+import net.pottercraft.ollivanders2.O2MagicBranch;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 
 import net.pottercraft.ollivanders2.Ollivanders2;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Summoning Charm - https://harrypotter.fandom.com/wiki/Summoning_Charm - which will grab the targeted item and pull it
- * toward you with a force determined by your level in the spell.
+ * Summoning Charm that pulls items toward the caster.
+ *
+ * <p>When the projectile hits an item, the spell pulls it toward the caster based on the caster's skill level.
+ * The strength and distance of the pull are determined by the caster's experience with the spell.</p>
  *
  * @author Azami7
- * @version Ollivanders2
+ * @see <a href="https://harrypotter.fandom.com/wiki/Summoning_Charm">Summoning Charm</a>
  */
 public final class ACCIO extends Knockback {
+    public static int minDistanceConfig = 0;
+    public static int maxDistanceConfig = 20;
+    public static int strengthReducerConfig = 10;
+
     /**
      * Default constructor for use in generating spell text.  Do not use to cast the spell.
      *
@@ -30,7 +39,7 @@ public final class ACCIO extends Knockback {
             add("The Summoning Charm");
         }};
 
-        text = "Can use used to pull an item towards you. The strength of the pull is determined by your experience. "
+        text = "Can be used to pull an item towards you. The strength of the pull is determined by your experience. "
                 + "This can only be used on items.";
     }
 
@@ -45,9 +54,23 @@ public final class ACCIO extends Knockback {
         super(plugin, player, rightWand);
 
         spellType = O2SpellType.ACCIO;
+        branch = O2MagicBranch.CHARMS;
+
         pull = true;
-        strengthReducer = 10;
+        strengthReducer = strengthReducerConfig;
+        minDistance = minDistanceConfig;
+        maxDistance = maxDistanceConfig;
 
         initSpell();
+    }
+
+    /**
+     * Can this spell target this entity?
+     *
+     * @param entity the entity to check
+     * @return true if it can target the entity, false otherwise
+     */
+    boolean canTarget(Entity entity) {
+        return entity instanceof Item;
     }
 }
